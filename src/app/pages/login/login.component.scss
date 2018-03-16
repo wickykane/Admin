@@ -1,0 +1,84 @@
+$topnav-background-color: #222;
+$bg-login-image: url("/assets/images/bg_login.jpg");
+
+:host {
+    display: block;
+}
+
+.login-page {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: auto;
+    background-color: #f9f9f9;
+    background-position: 0 50%;
+    background-size: cover;
+    background-image: $bg-login-image;
+    text-align: center;
+    color: #fff;
+    padding: 3em;
+
+    .col-lg-4 {
+        padding: 0;
+    }
+
+    .input-lg, .input-group-text {
+        border-radius: 0;
+        font-size: 14px;
+    }
+
+    .input-underline {
+        background: 0 0;
+        border: none;
+        box-shadow: none;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+        color: #fff;
+        border-radius: 0;
+    }
+
+    .input-underline:focus {
+        border-bottom: 2px solid #fff;
+        box-shadow: none;
+    }
+
+    .rounded-btn {
+        -webkit-border-radius: 50px;
+        border-radius: 50px;
+        color: rgba(255, 255, 255, 0.8);
+        background: $topnav-background-color;
+        border: 2px solid rgba(255, 255, 255, 0.8);
+        font-size: 18px;
+        line-height: 40px;
+        padding: 0 25px;
+    }
+
+    .rectangle-btn {
+        color: rgba(255, 255, 255, 0.8);
+        background: $topnav-background-color;
+        border: 2px solid rgba(255, 255, 255, 0.8);
+        font-size: 14px;
+    }
+
+    .rounded-btn:active,
+    .rounded-btn:focus,
+    .rounded-btn:hover,
+    .rounded-btn:visited {
+        color: rgba(255, 255, 255, 1);
+        border: 2px solid rgba(255, 255, 255, 1);
+        outline: none;
+    }
+
+    .row:first-child {
+        margin-top: 5%;
+        margin-bottom: 2%;
+    }
+
+    .row {
+        .class-form {
+            background: #fff;
+            padding: 30px;
+        }
+    }
+}

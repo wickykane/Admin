@@ -1,0 +1,46 @@
+{
+  "name": "oli-new",
+  "version": "4.0.0",
+  "license": "",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "gitbuild": "ng build --prod --base"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/animations": "^5.2.5",
+    "@angular/common": "^5.2.5",
+    "@angular/compiler": "^5.2.5",
+    "@angular/core": "^5.2.5",
+    "@angular/forms": "^5.2.5",
+    "@angular/http": "^5.2.5",
+    "@angular/platform-browser": "^5.2.5",
+    "@angular/platform-browser-dynamic": "^5.2.5",
+    "@angular/router": "^5.2.5",
+    "@ng-bootstrap/ng-bootstrap": "^1.0.0",
+    "@ngx-translate/core": "^9.1.1",
+    "@ngx-translate/http-loader": "^2.0.1",
+    "bootstrap": "^4.0.0-beta.3",
+    "chart.js": "^2.7.1",
+    "core-js": "^2.5.3",
+    "font-awesome": "^4.7.0",
+    "ng-http-loader": "^0.7.1",
+    "ng2-charts": "^1.6.0",
+    "ng2-select": "^2.0.0",
+    "rxjs": "^5.5.6",
+    "zone.js": "^0.8.20"
+  },
+  "devDependencies": {
+    "@angular/cli": "1.7.0",
+    "@angular/compiler-cli": "^5.2.5",
+    "@angular/language-service": "^5.2.5",
+    "@types/node": "^9.4.6",
+    "codelyzer": "~4.1.0",
+    "protractor": "~5.3.0",
+    "ts-node": "~4.1.0",
+    "tslint": "~5.9.1",
+    "typescript": "~2.6.2"
+  }
+}

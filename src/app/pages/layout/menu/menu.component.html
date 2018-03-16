@@ -1,0 +1,108 @@
+<!-- <nav class="topbar">
+    <div class="list-menu">
+        <a routerLink="/dashbodard" [routerLinkActive]="['router-link-active']" class="list-group-menu">
+            <i class="fa fa-fw fa-dashboard"></i>&nbsp;{{ 'Dashboard' |  }}
+        </a>
+        <div class="nested-menu">
+            <a class="list-group-menu" [class.open]="showMenu === 'pages'" (click)="addExpandClass('pages')">
+                <span><i class="fa fa-plus"></i>&nbsp; {{ 'Menu' |  }}</span>
+            </a>
+            <li class="nested" [class.expand]="showMenu === 'pages'">
+                <ul class="submenu">
+                    <li>
+                        <a routerLink="/dashboard" [routerLinkActive]="['router-link-active']"><span>{{ 'Dashboard' |  }}</span></a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)"><span>{{ 'Submenu' |  }}</span></a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)"><span>{{ 'Submenu' |  }}</span></a>
+                    </li>
+                </ul>
+            </li>
+        </div>
+        <a [routerLink]="['/blank-page']" [routerLinkActive]="['router-link-active']" class="list-group-menu">
+            <i class="fa fa-file-o"></i>&nbsp;{{ 'Blank Page' |  }}
+        </a>
+
+    </div>
+</nav> -->
+
+
+<nav id="topbar" class="custom">
+    <!-- topbar Scroll Container -->
+    <!-- Adding .topbar-mini-hide to an element will hide it when the topbar is in mini mode -->
+    <div class="topbar-content" style="background:#fff">
+        <!-- Side Content -->
+        <div class="top-content">
+            <ul class="nav-main main-menu">
+                <li  routerLinkActive="active">
+                    <a routerLink="/home" [routerLinkActive]="['router-link-active']">
+                        <i class="fa fa-home"></i>
+                    </a>
+                </li>
+                <!-- Item -->
+                <li>
+                    <a class="nav-submenu" [class.active]="showMenu === 'pages'" (click)="addExpandClass('pages')">
+                        <span class="topbar-mini-hide" >Dashboard</span>
+                    </a>
+                    <ul class="dropdown-content" [class.expand]="showMenu === 'pages'">
+                        <li routerLinkActive="active">
+                            <a routerLink="/dashboard" [routerLinkActive]="['router-link-active']">
+                                <span class="topbar-mini-hide">Promotion Dashboard</span>
+                            </a>
+
+                        </li>
+                        <li data-ng-class="{open: $state.includes('app.dashboard.overall')}">
+                            <a data-ui-sref="app.dashboard.overall" ng-class="{active: $state.includes('app.dashboard.overall')}">
+
+                                <span class="topbar-mini-hide" >Overall Dashboard</span>
+                            </a>
+
+                        </li>
+                    </ul>
+                </li>
+                <!-- Purchasing Management -->
+                <li data-ng-class="{open: $state.includes('app.purchasing')}">
+                    <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+                        <span class="topbar-mini-hide" >Purchasing Management</span>
+                    </a>
+                    <ul class="dropdown-content">
+                        <li data-ng-class="{open: $state.includes('app.purchasing.quotation')}">
+                            <a data-ui-sref="app.purchasing.quotation.manage" ng-class="{active: $state.includes('app.purchasing.quotation')}">
+                                <span class="topbar-mini-hide" >Purchase Quotation</span>
+                            </a>
+                        </li>
+                        <li data-ng-class="{open: $state.includes('app.purchasing.order')}">
+                            <a data-ui-sref="app.purchasing.order.manage" ng-class="{active: $state.includes('app.purchasing.order')}">
+                                <span class="topbar-mini-hide" >Purchase Orders</span>
+                            </a>
+                        </li>
+                        <li data-ng-class="{open: $state.includes('app.purchasing.inbound')}">
+                            <a data-ui-sref="app.purchasing.inbound.manage" ng-class="{active: $state.includes('app.purchasing.inbound')}">
+                                <span class="topbar-mini-hide" >Inbound Delivery Orders</span>
+                            </a>
+                        </li>
+
+                        <li data-ng-class="{open: $state.includes('app.purchasing.receipt')}">
+                            <a data-ui-sref="app.purchasing.receipt.manage" ng-class="{active: $state.includes('app.purchasing.receipt')}">
+                                <span class="topbar-mini-hide" >Warehouse Receipt</span>
+                            </a>
+                        </li>
+                        <li data-ng-class="{open: $state.includes('app.purchasing.supplier')}">
+                            <a data-ui-sref="app.purchasing.supplier.manage" ng-class="{active: $state.includes('app.purchasing.supplier')}">
+
+                                <span class="topbar-mini-hide" >Suppliers</span>
+                            </a>
+
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+        <!-- END Side Content -->
+    </div>
+
+    <!-- END topbar Scroll Container -->
+</nav>
