@@ -71,7 +71,7 @@
 
             &:focus,
             &:hover {
-                background-color: $red-menu;
+                background-color: $red;
                 color: $white !important;
                 text-decoration: none;
             }
@@ -83,7 +83,7 @@
 
             &.active {
                 &:hover,&:focus {
-                    background-color: $red-menu;
+                    background-color: $red;
                     color: $white !important;
                     text-decoration: none;
                     > i {
@@ -239,7 +239,7 @@
 
         ul.nav-main {
             li.active {
-                background: $red-menu;
+                background: $red;
 
                 a {
                     color: $white;
@@ -253,7 +253,7 @@
 
 
                     li.active-li {
-                        background: $red-menu;
+                        background: $red;
                         // margin-right: -15px;
                         a,
                         span {
@@ -273,7 +273,7 @@
 
                 ul.active-ul.expand {
                     li.active {
-                        background-color: $red-menu;
+                        background-color: $red;
                         text-decoration: none;
 
                         a,
@@ -290,7 +290,7 @@
                     }
 
                     li.active-li {
-                        background-color: $red-menu;
+                        background-color: $red;
 
                         a,
                         span {
@@ -311,7 +311,7 @@
                 // margin-left: 1px;
                 margin-right: -2px;
                 &:hover,&:focus {
-                    background-color: $red-menu;
+                    background-color: $red;
                     font-size: 12px;
                     text-decoration: none;
                     a {
