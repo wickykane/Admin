@@ -1,13 +1,53 @@
-<nav class="navbar navbar-expand-lg fixed-top">
+<div class="top-head">
+            <ul class=" clearfix">
+                <li class="pull-left">
+                    <!-- END Header Navigation Left -->
+                    <ul class="nav-header">
+                        <li class="nav-item dropdown" ngbDropdown>
+                            <a href="javascript:void(0)" class="nav-link" ngbDropdownToggle>
+                                <i class="fa fa-language"></i> {{ 'Language' | translate }} <b class="caret"></b>
+                            </a>
+                            <div class="dropdown-menu-right" ngbDropdownMenu>
+                                <a class="dropdown-item" href="javascript:void(0)" (click)="changeLang('en')">
+                                    {{ 'English' | translate }}
+                                </a>
+                                <a class="dropdown-item" href="javascript:void(0)" (click)="changeLang('fr')">
+                                    {{ 'French' | translate }}
+                                </a>
+                                <a class="dropdown-item" href="javascript:void(0)" (click)="changeLang('ur')">
+                                    {{ 'Urdu' | translate }}
+                                </a>
+                                <a class="dropdown-item" href="javascript:void(0)" (click)="changeLang('es')">
+                                    {{ 'Spanish' | translate }}
+                                </a>
+                                <a class="dropdown-item" href="javascript:void(0)" (click)="changeLang('it')">
+                                    {{ 'Italian' | translate }}
+                                </a>
+                                <a class="dropdown-item" href="javascript:void(0)" (click)="changeLang('fa')">
+                                    {{ 'Farsi' | translate }}
+                                </a>
+                                <a class="dropdown-item" href="javascript:void(0)" (click)="changeLang('de')">
+                                    {{ 'German' | translate }}
+                                </a>
+                                <a class="dropdown-item" href="javascript:void(0)" (click)="changeLang('zh-CHS')">
+                                    {{ 'Simplified Chinese' | translate }}
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <li class="pull-right"><p class="phone">Support(+08)0979240977</p></li>
+            </ul>
+        </div>
+
+
+<nav class="navbar navbar-expand-lg">
     <a class="navbar-brand" href="#">Admin Angular5 BS4 </a>
     <button class="navbar-toggler" type="button" (click)="toggleSidebar()">
         <!-- <span class="navbar-toggler-icon"></span> -->
         <i class="fa fa-bars text-muted" aria-hidden="true"></i>
     </button>
     <div class="collapse navbar-collapse">
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="text" placeholder="{{ 'Search' | translate }}" >
-        </form>
         <ul class="navbar-nav ml-auto">
             <!-- <li class="nav-item d-none d-xl-block">
                 <a
@@ -20,13 +60,24 @@
             </li> &nbsp; -->
             <li class="nav-item">
                 <a href="javascript:void(0)" class="nav-link mt-1"
-                    style="padding: 0.375rem 1rem !important; border-color: #999;"
-                    (click)="rltAndLtr()"
-                >
+                    style="border-color: #999;"
+                    (click)="rltAndLtr()">
                     RTL/LTR
                 </a>
-            </li> &nbsp;
-            <li class="nav-item dropdown" ngbDropdown>
+            </li>
+            <li class="nav-item">
+                <a href="javascript:void(0)" class="nav-link mt-1"
+                    style="border-color: #999;" >
+                    Welcome, adminb2b
+                </a>
+            </li>
+            <li class="nav-item">
+                    <a style="border-color: #999;"
+                     class="nav-link mt-1" [routerLink]="['/login']" (click)="onLoggedout()">
+                        <i class="fa fa-sign-out"></i>
+                    </a>
+            </li>
+            <!-- <li class="nav-item dropdown" ngbDropdown>
                 <a class="nav-link" href="javascript:void(0)" ngbDropdownToggle>
                     <i class="fa fa-envelope"></i> <b class="caret"></b><span class="sr-only">(current)</span>
                 </a>
@@ -84,8 +135,8 @@
                         {{ 'View All' | translate }}
                     </a>
                 </div>
-            </li>
-            <li class="nav-item dropdown" ngbDropdown>
+            </li> -->
+            <!-- <li class="nav-item dropdown" ngbDropdown>
                 <a href="javascript:void(0)" class="nav-link" ngbDropdownToggle>
                     <i class="fa fa-language"></i> {{ 'Language' | translate }} <b class="caret"></b>
                 </a>
@@ -115,8 +166,8 @@
                         {{ 'Simplified Chinese' | translate }}
                     </a>
                 </div>
-            </li>
-            <li class="nav-item dropdown" ngbDropdown>
+            </li> -->
+            <!-- <li class="nav-item dropdown" ngbDropdown>
                 <a href="javascript:void(0)" class="nav-link" ngbDropdownToggle>
                     <i class="fa fa-user"></i> adminb2b <b class="caret"></b>
                 </a>
@@ -134,7 +185,7 @@
                         <i class="fa fa-fw fa-power-off"></i> {{ 'Log Out' | translate }}
                     </a>
                 </div>
-            </li>
+            </li> -->
         </ul>
     </div>
 </nav>

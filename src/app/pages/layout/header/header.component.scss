@@ -1,38 +1,77 @@
 $topnav-background-color: #222;
 $topnav-background-color-white: #fff;
+
 :host {
     .navbar {
         background-color: $topnav-background-color-white;
+
         .navbar-brand {
             color: #999;
         }
+
         .nav-item > a {
             color: #999;
+            // padding: 10px 6px 0px 4px;
             &:hover {
                 color: #000;
             }
         }
     }
+
     .messages {
         width: 300px;
+
         .media {
             border-bottom: 1px solid #ddd;
             padding: 5px 10px;
+
             &:last-child {
                 border-bottom: none;
             }
         }
+
         .media-body {
             h5 {
                 font-size: 13px;
                 font-weight: 600;
             }
+
             .small {
                 margin: 0;
             }
+
             .last {
                 font-size: 12px;
                 margin: 0;
+            }
+        }
+    }
+
+    .top-head {
+        background: #ccc;
+        margin: 0 auto;
+        padding: 0;
+        max-width: 100%;
+        overflow-x: visible;
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+
+            li {
+                p.phone {
+                    margin-bottom: 0;
+                    padding: 3px 5px 0 0;
+                }
+
+                ul {
+                    li {
+                        a {
+                            padding: 4px 0 4px 25px;
+                        }
+                    }
+                }
             }
         }
     }

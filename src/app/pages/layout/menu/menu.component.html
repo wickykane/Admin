@@ -1,24 +1,26 @@
 <nav id="topbar" class="custom">
-    <div class="topbar-content" style="background:#fff">
+    <div class="topbar-content">
         <div class="top-content">
             <ul class="nav-main main-menu">
-                <li routerLinkActive="active" *ngFor="let item of MENU_CONSTANT">
-                    <a *ngIf="!item.sub" routerLink="{{item.link}}" [routerLinkActive]="['router-link-active']">
+                <ng-container *ngFor="let item of MENU_CONSTANT">
+                    <li routerLinkActive="active"  *ngIf="!item.sub">
+                        <a routerLink="{{item.link}}" [routerLinkActive]="['router-link-active']">
                         <i class="{{item.icon}}"></i>
                     </a>
-                </li>
-                <li routerLinkActive="active" *ngFor="let item of MENU_CONSTANT">
-                    <a  *ngIf="item.sub" class="nav-submenu" [class.active]="showMenu === item.flag" (click)="addExpandClass(item.flag)">
+                    </li>
+                    <li routerLinkActive="active"  *ngIf="item.sub">
+                        <a class="nav-submenu" [class.active]="showMenu === item.flag" (click)="addExpandClass(item.flag)">
                         <span class="topbar-mini-hide" >{{item.main_name}}</span>
                     </a>
-                    <ul *ngIf="item.sub" class="dropdown-content" routerLinkActive="active-ul" [class.expand]="showMenu === item.flag">
-                        <li routerLinkActive="active-li" *ngFor="let it of item.child">
-                            <a routerLink="{{it.link}}" [routerLinkActive]="['router-link-active']">
+                        <ul *ngIf="item.sub" class="dropdown-content" routerLinkActive="active-ul" [class.expand]="showMenu === item.flag">
+                            <li routerLinkActive="active-li" *ngFor="let it of item.child">
+                                <a routerLink="{{it.link}}" [routerLinkActive]="['router-link-active']">
                                 <span class="topbar-mini-hide">{{it.name}}</span>
                             </a>
-                        </li>
-                    </ul>
-                </li>
+                            </li>
+                        </ul>
+                    </li>
+                </ng-container>
             </ul>
         </div>
     </div>

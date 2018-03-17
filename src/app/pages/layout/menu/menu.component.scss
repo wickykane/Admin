@@ -1,13 +1,16 @@
 @import "~styles/bootstrap/bootstrap";
 
 #topbar.custom {
-    margin-top: 50px;
     border-top: 1px solid #ccc;
     width: 100%;
     height: 51px;
     top: 0;
     border-bottom: 1px solid #ccc;
     background: #ddd;
+
+    .topbar-content {
+        background: $white;
+    }
 
     .nav-main {
         margin: 0 -20px;
@@ -156,19 +159,6 @@
         }
     }
 
-    .rtl-direction-be .nav-main a.nav-submenu:before {
-        position: absolute;
-        top: 50%;
-        -webkit-transform: translateY(-50%);
-        -ms-transform: translateY(-50%);
-        transform: translateY(-50%);
-        left: 5px;
-        display: inline-block;
-        font-family: 'FontAwesome';
-        color: $white;
-        content: "\f104";
-    }
-
     .nav-main {
         ul.active-ul.expand {
             height: auto;
@@ -272,6 +262,7 @@
                     }
 
                     li {
+                        margin-right: 1px;
                         a,
                         span {
                             color: $black;
@@ -309,17 +300,6 @@
                 }
             }
 
-            li {
-                // &:hover {
-                //     .dropdown-content.expand {
-                //         li {
-                //             a {
-                //                 color: $black;
-                //             }
-                //         }
-                //     }
-                // }
-            }
         }
     }
 
@@ -328,8 +308,8 @@
             li {
                 display: inline-block;
                 cursor: pointer;
-                margin-left: 1px;
-                margin-right: 1px;
+                // margin-left: 1px;
+                margin-right: -2px;
                 &:hover,&:focus {
                     background-color: $red-menu;
                     font-size: 12px;
@@ -363,15 +343,13 @@
         display: none;
         position: absolute;
         background-color: #f9f9f9;
-        /*min-width: 100%;*/
-        // box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
         z-index: 1000;
     }
 
     .dropdown-content.expand {
         display: block !important;
         z-index: 1000;
-        margin:0;
+        margin:1px 0 0 0;
         padding: 0;
         &:hover {
             li {
@@ -381,8 +359,4 @@
             }
         }
     };
-    // ul li.open .dropdown-content {
-    //     display: block;
-    //     z-index: 1000;
-    // }
 }
