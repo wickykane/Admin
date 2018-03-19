@@ -1,4 +1,17 @@
 .rtl {
+    #topbar.custom {
+        .topbar-content {
+            background: $white;
+            text-align: right;
+        }
+    }
+    .navbar-brand {
+        margin-right: 0px;
+    }
+
+    .navbar-nav.ml-auto {
+        margin-left: 0 !important;
+    }
     .sidebar {
         left: auto !important;
         right: 0 !important;
@@ -8,7 +21,7 @@
     }
     .main-container {
         margin-left: 0 !important;
-        margin-right: 235px;
+        // margin-right: 235px;
     }
     /*rtl dropdown items correction*/
     .dropdown-menu {

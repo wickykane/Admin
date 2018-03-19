@@ -9,6 +9,7 @@ import { LayoutComponent } from './layout.component';
 import { SidebarComponent } from '../pages/layout/sidebar/sidebar.component';
 import { HeaderComponent } from '../pages/layout/header/header.component';
 import { MenuComponent } from './layout/menu/menu.component';
+import { FooterComponent } from './layout/footer/footer.component';
 
 
 @NgModule({
@@ -19,6 +20,6 @@ import { MenuComponent } from './layout/menu/menu.component';
         NgbDropdownModule.forRoot(),
         NgbModule.forRoot()
     ],
-    declarations: [LayoutComponent, SidebarComponent, HeaderComponent, MenuComponent]
+    declarations: [LayoutComponent, SidebarComponent, HeaderComponent, MenuComponent, FooterComponent]
 })
 export class LayoutModule {}
