@@ -4,7 +4,8 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false,
-  api_url: 'https://apigw.seldatdirect.com/staging/sel2b-nab/api',
-  url: 'http://nab.dev.seldatdirect.com/sel2b/admin/'
-};
+    production: false,
+    api_url: 'https://apigw.seldatdirect.com/qc/sel2b-nab/api',
+    url: 'http://nab.dev.seldatdirect.com/sel2b/admin/'
+  };
+  
