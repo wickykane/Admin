@@ -27,6 +27,8 @@
             "environmentSource": "environments/environment.ts",
             "environments": {
                 "dev": "environments/environment.ts",
+                "stag": "environments/environment.stag.ts",
+                "qc": "environments/environment.qc.ts",
                 "prod": "environments/environment.prod.ts"
             }
         }

@@ -8,6 +8,7 @@
 node_modules/
 dist/
 package-lock.json
+src/environments/*
 
 # IDEs and editors
 /.idea
