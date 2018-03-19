@@ -21,9 +21,5 @@
   ],
   "exclude": [
     "node_modules"
-  ], 
-  "angularCompilerOptions": {
-    "fullTemplateTypeCheck": true,
-    "preserveWhitespaces": true  
-  }
+  ],  
 }
