@@ -12,9 +12,10 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthGuard } from './shared';
+import { JwtService } from './shared';
 import { AuthenticationService } from './services/index';
+import { ApiService } from './services/index';
 
-import { Constant } from '../environments/constant';
 
 
 // AoT requires an exported function for factories
@@ -50,8 +51,9 @@ export function createTranslateLoader(http: HttpClient) {
     ],
     providers: [
         AuthGuard,
+        JwtService,
         AuthenticationService,
-        Constant
+        ApiService,
     ],
     bootstrap: [AppComponent]
 })
