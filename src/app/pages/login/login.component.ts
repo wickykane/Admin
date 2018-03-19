@@ -34,19 +34,18 @@ export class LoginComponent implements OnInit {
             password: this.nameForm.value.password
         };
 
-        this.authenticationService.doLogin(_data).subscribe(
+        this.authenticationService.login(_data).subscribe(
             res => {
+                this.router.navigate(['/dashboard']);
             },
             err => {
                 console.log(err);
-                localStorage.setItem('isLoggedin', 'true');
-                this.router.navigate(['/dashboard']);
-
 
             },
             () => {}
 
         );
+
 
     }
 
