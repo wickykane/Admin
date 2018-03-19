@@ -10,6 +10,7 @@ import { JwtService } from '../../../shared';
 })
 export class HeaderComponent implements OnInit {
     pushRightClass: string = 'push-right';
+    infoUser: any = {};
 
     constructor(private translate: TranslateService, public router: Router, private JwtService:JwtService) {
 
@@ -29,7 +30,10 @@ export class HeaderComponent implements OnInit {
         });
     }
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.infoUser = JSON.parse(localStorage.getItem('currentUser'))
+        console.log(this.infoUser);
+    }
 
     isToggled(): boolean {
         const dom: Element = document.querySelector('body');

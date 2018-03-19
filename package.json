@@ -10,7 +10,7 @@
     "build-qc": "npm run clean && ng build --prod --env=qc --base-href \"/sel2b/admin/\" --output-hashing=all",
     "build-pro": "npm run clean && ng build --prod --env=prod --base-href \"/sel2b/admin/\" --output-hashing=all",
     "test": "ng test",
-    "lint": "ng lint",    
+    "lint": "ng lint",
     "e2e": "ng e2e",
     "clean": "rm -rf dist"
   },
@@ -37,16 +37,17 @@
     "ng-http-loader": "^0.7.1",
     "ng2-charts": "^1.6.0",
     "ng2-select": "^2.0.0",
+    "ng2-toastr": "^4.1.2",
     "typescript": "~2.6.2",
     "rxjs": "^5.5.6",
     "zone.js": "^0.8.20"
   },
-  "devDependencies": {   
+  "devDependencies": {
     "@angular/language-service": "^5.2.5",
     "@types/node": "^9.4.6",
     "codelyzer": "~4.1.0",
     "protractor": "~5.3.0",
     "ts-node": "~4.1.0",
-    "tslint": "~5.9.1"    
+    "tslint": "~5.9.1"
   }
 }
