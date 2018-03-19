@@ -1,0 +1,6 @@
+export const environment = {
+    production: true,
+    api_url: 'https://apigw.seldatdirect.com/qc/sel2b-nab/api',
+    url: 'http://nab.qc.seldatdirect.com/sel2b/'
+  };
+  
