@@ -18,9 +18,12 @@
             "styles": [
                 "../node_modules/font-awesome/css/font-awesome.css",
                  "../node_modules/bootstrap/dist/css/bootstrap.min.css",
-                "styles/app.scss"
+                 "../node_modules/ng2-toastr/bundles/ng2-toastr.min.css",
+                 "styles/app.scss"
             ],
-            "scripts": ["../node_modules/chart.js/dist/Chart.js"],
+            "scripts": [
+                "../node_modules/chart.js/dist/Chart.js",
+                "../node_modules/ng2-toastr/bundles/ng2-toastr.min.js"],
             "environmentSource": "environments/environment.ts",
             "environments": {
                 "dev": "environments/environment.ts",

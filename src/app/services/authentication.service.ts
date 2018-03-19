@@ -23,10 +23,10 @@ export class AuthenticationService {
     }
 
     login( params ) {
-        let url = environment.api_url + '/auth/login';
+        let url = environment.api_url + 'auth/login';
         return this.http.post( url, params ).map(
             ( response:Response )=> {
-                let results = response.json().data;
+                let results = response.json().results;
                 let token = results.token;
                 if( token ) {
                     this.token = token;
@@ -34,7 +34,7 @@ export class AuthenticationService {
                     // console.log( this.jwtHelper.getTokenExpirationDate( this.token ) );
                     // console.log( this.jwtHelper.isTokenExpired( this.token ) );
                     this.JwtService.saveToken( this.token );
-                    localStorage.setItem( 'currentUser', JSON.stringify( results.user) );
+                    localStorage.setItem( 'currentUser', JSON.stringify( results.info) );
 
                     return true;
                 } else {
@@ -43,7 +43,8 @@ export class AuthenticationService {
                 }
 
             }
-        );
+        ).do(data => console.log('server data:', data))  // debug
+        .catch(this._serverError);
     }
 
     logout():void {
