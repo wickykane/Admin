@@ -12,10 +12,8 @@ import {ToastModule} from 'ng2-toastr/ng2-toastr';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AuthGuard } from './shared';
-import { JwtService } from './shared';
-import { AuthenticationService } from './services/index';
-import { ApiService } from './services/index';
+import { AuthGuard, JwtService} from './shared';
+import { AuthenticationService, ApiService } from './services/index';
 
 
 

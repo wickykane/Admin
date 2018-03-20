@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, Response, RequestOptions } from '@angular/http';
-import { Observable } from 'rxjs';
-import 'rxjs/Rx';
+import { Observable } from 'rxjs/Rx';
 
 import { environment } from '../../environments/environment';
 import { JwtService } from '../shared';
