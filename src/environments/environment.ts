@@ -5,6 +5,7 @@
 
 export const environment = {
   production: false,
-  api_url: 'https://apigw.seldatdirect.com/dev/sel2b-nab/api',
+  // api_url: 'https://apigw.seldatdirect.com/dev/sel2b-nab/api',
+  api_url: 'https://apigw.seldatdirect.com/dev/sel2b-haca/api/api/v1/',
   url: 'http://nab.dev.seldatdirect.com/sel2b/'
 };
