@@ -5,10 +5,10 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build-dev": "npm run clean && ng build --dev --env=dev --base-href \"/sel2b/admin/\" --output-hashing=all",
-    "build-stag": "npm run clean && ng build --prod --env=stag --base-href \"/sel2b/admin/\" --output-hashing=all",
-    "build-qc": "npm run clean && ng build --prod --env=qc --base-href \"/sel2b/admin/\" --output-hashing=all",
-    "build-pro": "npm run clean && ng build --prod --env=prod --base-href \"/sel2b/admin/\" --output-hashing=all",
+    "build-dev": "ng build --prod --env=dev --base-href \"/sel2b/admin/\" --output-hashing=all && rimraf dist && mv dist-temp dist",
+    "build-stag": "ng build --prod --env=stag --base-href \"/sel2b/admin/\" --output-hashing=all && rimraf dist && mv dist-temp dist",
+    "build-qc": "ng build --prod --env=qc --base-href \"/sel2b/admin/\" --output-hashing=all && rimraf dist && mv dist-temp dist",
+    "build-pro": "ng build --prod --env=prod --base-href \"/sel2b/admin/\" --output-hashing=all && rimraf dist && mv dist-temp dist",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
@@ -16,11 +16,11 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/cli": "~1.7.3",
-    "@angular/compiler-cli": "^5.2.0",
     "@angular/animations": "^5.2.0",
+    "@angular/cli": "~1.7.3",
     "@angular/common": "^5.2.0",
     "@angular/compiler": "^5.2.0",
+    "@angular/compiler-cli": "^5.2.0",
     "@angular/core": "^5.2.0",
     "@angular/forms": "^5.2.0",
     "@angular/http": "^5.2.0",
@@ -34,15 +34,17 @@
     "chart.js": "^2.7.1",
     "core-js": "^2.5.3",
     "font-awesome": "^4.7.0",
+    "mv": "^2.1.1",
     "ng-http-loader": "^0.7.1",
     "ng2-charts": "^1.6.0",
     "ng2-select": "^2.0.0",
     "ng2-toastr": "^4.1.2",
+    "rimraf": "^2.6.2",
     "rxjs": "^5.5.6",
     "typescript": "^2.5.3",
     "zone.js": "^0.8.20"
   },
-  "devDependencies": {   
+  "devDependencies": {
     "@angular/language-service": "^5.2.0",
     "@types/jasmine": "~2.8.3",
     "@types/jasminewd2": "~2.0.2",
@@ -57,6 +59,6 @@
     "karma-jasmine-html-reporter": "^0.2.2",
     "protractor": "~5.1.2",
     "ts-node": "~4.1.0",
-    "tslint": "~5.9.1"    
+    "tslint": "~5.9.1"
   }
 }
