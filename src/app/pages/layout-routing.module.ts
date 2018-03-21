@@ -7,10 +7,11 @@ const routes: Routes = [
         path: '',
         component: LayoutComponent,
         children: [
-            { path: '', redirectTo: 'dashboard' },
+            { path: '', redirectTo: 'guide' },
             { path: 'dashboard', loadChildren: '../pages/dashboard/dashboard.module#DashboardModule' },
             { path: 'blank-page', loadChildren: '../pages/blank-page/blank-page.module#BlankPageModule' },
-            { path: 'admin-panel', loadChildren: '../pages/admin-panel/admin-panel.module#AdminPanelModule' }
+            { path: 'admin-panel', loadChildren: '../pages/admin-panel/admin-panel.module#AdminPanelModule' },
+            { path: 'guide', loadChildren: '../pages/guide/guide.module#GuideModule'}
         ]
     }
 ];

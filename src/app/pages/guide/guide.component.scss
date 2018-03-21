@@ -1,0 +1,101 @@
+@import "~styles/bootstrap/bootstrap";
+
+.block {
+    margin-bottom: 10px;
+    background-color: #fff;
+    .block-header {
+        padding: 4px 15px;
+        -webkit-transition: opacity 0.2s ease-out;
+        transition: opacity 0.2s ease-out;
+    }
+
+    .block-content {
+        margin: 0 auto;
+        max-width: 100%;
+        overflow-x: visible;
+        -webkit-transition: opacity 0.2s ease-out;
+        transition: opacity 0.2s ease-out;
+
+        .guide {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-orient: horizontal;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: row;
+            flex-direction: row;
+            margin-top: 15px;
+
+            .box-guide {
+                background: #fff;
+                border: 1px solid #ccc;
+                padding: 0 15px;
+                display: block;
+                height: 100%;
+                margin-bottom: 10px;
+
+                .mg-top15 {
+                    margin-top: 15px;
+                }
+
+                h4 {
+                    width: 100%;
+                    color: #000;
+                    font-size: 14px;
+                    padding: 5px;
+                    display: inline-block;
+                    font-weight: 600;
+                }
+
+                .block-custom {
+                    padding-left: 0;
+                    padding-right: 0;
+                    margin-left: 15px;
+                }
+
+                .block-link {
+                    width: 100%;
+                    display: block;
+                    background: #fff;
+                    border: 1px solid #ddd;
+
+                    h5 {
+                        display: inline-block;
+                        width: 100%;
+                        text-align: center;
+                        font-size: 11px;
+                        font-weight: 400;
+                        background: #edf1f7;
+                        color: #000;
+                        height: 17px;
+                        padding-top: 3px;
+                        margin-bottom: 0;
+                    }
+
+                    a {
+                        text-decoration: none;
+                        color: #fff;
+                        font-size: 12px;
+                        width: 100%;
+                    }
+
+                    .block-img {
+                        width: 100%;
+                        height: 65px;
+                        position: relative;
+
+                        img {
+                            top: 12px;
+                            left: 0;
+                            right: 0;
+                            margin: auto;
+                            position: absolute;
+                            width: 55px;
+                            height: 50px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
