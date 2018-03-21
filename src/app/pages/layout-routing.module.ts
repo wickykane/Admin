@@ -10,7 +10,7 @@ const routes: Routes = [
             { path: '', redirectTo: 'dashboard' },
             { path: 'dashboard', loadChildren: '../pages/dashboard/dashboard.module#DashboardModule' },
             { path: 'blank-page', loadChildren: '../pages/blank-page/blank-page.module#BlankPageModule' },
-            { path: 'guide', loadChildren: '../pages/guide/guide.module#GuideModule' }
+            { path: 'admin-panel', loadChildren: '../pages/admin-panel/admin-panel.module#AdminPanelModule' }
         ]
     }
 ];
