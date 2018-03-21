@@ -9,7 +9,13 @@ import {
     NotificationComponent,
     ChatComponent
 } from './components';
-import { StatModule } from '../../shared/index';
+
+
+//TEST
+import { StatModule , cdArrowTable, SortColumnDirective} from '../../shared/index';
+import { TableService } from "../../services/index";
+import { FormsModule }   from '@angular/forms';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
     imports: [
@@ -17,13 +23,18 @@ import { StatModule } from '../../shared/index';
         NgbCarouselModule.forRoot(),
         NgbAlertModule.forRoot(),
         DashboardRoutingModule,
-        StatModule
+        StatModule,
+        NgbModule.forRoot(),
+        FormsModule
     ],
     declarations: [
         DashboardComponent,
         TimelineComponent,
         NotificationComponent,
-        ChatComponent
-    ]
+        ChatComponent,
+        cdArrowTable,
+        SortColumnDirective
+    ],
+    providers: [TableService]
 })
 export class DashboardModule {}

@@ -30,6 +30,7 @@
     "@ng-bootstrap/ng-bootstrap": "^1.0.0",
     "@ngx-translate/core": "^9.1.1",
     "@ngx-translate/http-loader": "^2.0.1",
+    "angular2-hotkeys": "^2.0.4",
     "bootstrap": "^4.0.0-beta.3",
     "chart.js": "^2.7.1",
     "core-js": "^2.5.3",
