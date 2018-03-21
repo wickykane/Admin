@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { routerTransition } from '../../router.animations';
+import { TableService } from "../../services/index";
+
 
 @Component({
     selector: 'app-dashboard',
@@ -10,8 +12,26 @@ import { routerTransition } from '../../router.animations';
 export class DashboardComponent implements OnInit {
     public alerts: Array<any> = [];
     public sliders: Array<any> = [];
+    public list = {
+        items :[ {}, {}, {}]
+    };
 
-    constructor() {
+    
+    public sortParams = {
+        order: "",
+        sort: ""
+    }
+
+    public sortAction(param) {
+        console.log("sort data: ", param);
+    }
+    
+    public selectedIndex = 0;
+
+    selectData(data) {
+        console.log("id :", data);
+    }
+    constructor(private tableService: TableService) {
         this.sliders.push(
             {
                 imagePath: 'assets/images/slider1.jpg',

@@ -8,6 +8,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {HotkeyModule} from 'angular2-hotkeys';
 import {ToastModule} from 'ng2-toastr/ng2-toastr';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -42,7 +43,8 @@ export function createTranslateLoader(http: HttpClient) {
         HttpModule,
         FormsModule,
         ReactiveFormsModule,
-        ToastModule.forRoot()
+        ToastModule.forRoot(),
+        HotkeyModule.forRoot()
     ],
     declarations: [
         AppComponent,
