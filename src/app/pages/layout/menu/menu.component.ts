@@ -201,7 +201,7 @@ export class MenuComponent implements OnInit {
             },
             {
                 flag: '',
-                link: '/d',
+                link: '/admin-panel',
                 main_name: 'Admin Panel',
                 icon: '',
                 sub: false,

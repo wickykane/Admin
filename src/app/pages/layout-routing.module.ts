@@ -9,7 +9,8 @@ const routes: Routes = [
         children: [
             { path: '', redirectTo: 'dashboard' },
             { path: 'dashboard', loadChildren: '../pages/dashboard/dashboard.module#DashboardModule' },
-            { path: 'blank-page', loadChildren: '../pages/blank-page/blank-page.module#BlankPageModule' }
+            { path: 'blank-page', loadChildren: '../pages/blank-page/blank-page.module#BlankPageModule' },
+            { path: 'admin-panel', loadChildren: '../pages/admin-panel/admin-panel.module#AdminPanelModule' }
         ]
     }
 ];
