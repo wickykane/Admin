@@ -22,7 +22,7 @@ export class MenuComponent implements OnInit {
         this.MENU_CONSTANT = [
             {
                 flag: '',
-                link: '/home',
+                link: '/guide',
                 main_name: '',
                 icon: 'fa fa-home',
                 sub: false,

@@ -5,7 +5,7 @@
                 <ng-container *ngFor="let item of MENU_CONSTANT">
                     <li routerLinkActive="active"  *ngIf="!item.sub">
                         <a routerLink="{{item.link}}" [routerLinkActive]="['router-link-active']">
-                        <i class="{{item.icon}}"></i>
+                        <i *ngIf="item.icon" class="{{item.icon}}"></i>
                         <span class="topbar-mini-hide" >{{item.main_name}}</span>
                     </a>
                     </li>
