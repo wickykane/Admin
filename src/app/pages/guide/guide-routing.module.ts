@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { UnitMeasureComponent } from './unit-measure.component';
+import { GuideComponent } from './guide.component';
 
 const routes: Routes = [
     {
         path: '',
-        component: UnitMeasureComponent,        
+        component: GuideComponent
     }
 ];
 
@@ -13,5 +13,4 @@ const routes: Routes = [
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule]
 })
-export class UnitMeasureRoutingModule {
-}
+export class GuideRoutingModule {}

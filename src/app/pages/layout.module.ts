@@ -12,6 +12,7 @@ import { MenuComponent } from './layout/menu/menu.component';
 import { FooterComponent } from './layout/footer/footer.component';
 
 
+
 @NgModule({
     imports: [
         CommonModule,

@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AdminPanelComponent } from './admin-panel.component';
 import { UnitMeasureComponent } from './unit-measure/unit-measure.component';
+import { UserComponent } from './user/user.component';
+import { UserCreateComponent } from './user/user-create.component';
 
 const routes: Routes = [
     {
@@ -9,7 +11,16 @@ const routes: Routes = [
     },
     {
         path: 'unit-measure', component: UnitMeasureComponent
+    },
+    {
+        path: 'user', component: UserComponent
+    },
+    {
+        path: 'user/create', component: UserCreateComponent
     }
+
+
+
 ];
 
 @NgModule({

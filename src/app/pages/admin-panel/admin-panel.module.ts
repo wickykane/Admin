@@ -7,17 +7,21 @@ import { AdminPanelComponent } from './admin-panel.component';
 
 import { StatModule } from '../../shared/index';
 import { UnitMeasureModule } from './unit-measure/unit-measure.module';
+import { UserModule } from './user/user.module';
+
 
 @NgModule({
     imports: [
-        CommonModule,    
-        NgbAlertModule.forRoot(),        
+        CommonModule,
+        NgbAlertModule.forRoot(),
         AdminPanelRoutingModule,
         StatModule,
-        UnitMeasureModule
+        UnitMeasureModule,
+        UserModule
     ],
     declarations: [
-        AdminPanelComponent  
+        AdminPanelComponent
+
     ]
 })
 export class AdminPanelModule {}
