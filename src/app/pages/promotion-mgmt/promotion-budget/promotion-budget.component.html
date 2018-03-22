@@ -46,7 +46,7 @@
                     <tr>
                         <th translate>ID</th>
                         <th translate>Code</th>
-                        <th translate>Name</th>
+                        <th sortColumn="name" [(sortParam)]="tableService.sortParams" (sortFn)="tableService.sortAction($event)" translate>Name</th>
                         <th class="text-center" translate>Status</th>
                         <th class="text-center" translate>Created by</th>
                         <th class="text-center" translate>Last Updated By</th>
@@ -55,7 +55,7 @@
                     </tr>
                 </thead>
 
-                <tr *ngFor="let item of  list.items">
+                <tr *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                     <td>
                         #{{item.id}}
                     </td>

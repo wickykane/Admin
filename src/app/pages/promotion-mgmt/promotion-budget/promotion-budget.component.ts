@@ -43,7 +43,12 @@ export class PromotionBudgetComponent implements OnInit {
     //Init Fn
     this.getList();
   }
-
+  /**
+   * Table Event
+   */
+  selectData(index) {
+    console.log(index);
+  }
   /**
    * Internal Function
    */

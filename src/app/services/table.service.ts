@@ -2,13 +2,16 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class TableService {
-    getListFnName:any;
+    getListFnName: any;
     context: any;
-    constructor() {}
+    constructor() { }
 
     itemPerPageOptions = [10, 15, 30, 50];
     maxSize = 5;
-    sortParams = {};
+    sortParams = {
+        order: null,
+        sort: null
+    };
     pagination = {
         page: 1,
         length: this.itemPerPageOptions[0],
@@ -39,7 +42,7 @@ export class TableService {
         return params;
     }
 
-    sortAction() {
+    sortAction(data) {
         return this.context[this.getListFnName]();
     }
 
@@ -59,7 +62,7 @@ export class TableService {
     }
 
     resetAction(form?) {
-        if(form) {
+        if (form) {
             form.reset();
         }
         this.pagination['page'] = 1;
