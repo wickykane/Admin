@@ -12,7 +12,7 @@ import {
 
 
 //TEST
-import { StatModule , cdArrowTable, SortColumnDirective} from '../../shared/index';
+import { StatModule, CommonShareModule } from '../../shared/index';
 import { TableService } from "../../services/index";
 import { FormsModule }   from '@angular/forms';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
@@ -24,6 +24,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
         NgbAlertModule.forRoot(),
         DashboardRoutingModule,
         StatModule,
+        CommonShareModule,
         NgbModule.forRoot(),
         FormsModule
     ],
@@ -31,9 +32,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
         DashboardComponent,
         TimelineComponent,
         NotificationComponent,
-        ChatComponent,
-        cdArrowTable,
-        SortColumnDirective
+        ChatComponent
     ],
     providers: [TableService]
 })
