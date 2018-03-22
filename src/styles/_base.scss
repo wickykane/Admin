@@ -59,12 +59,36 @@
             }
         }
     }
-    
+
     tbody {
         tr {
             td {
                 padding: 6px;
                 vertical-align: middle;
+            }
+        }
+    }
+    .table-child {
+        thead {
+            tr {
+                background-color: #828282;
+                color: #fff;
+                th {
+                    padding: 6px;
+                    font-weight: 600;
+                    vertical-align: middle;
+                    cursor: pointer;
+                    border-bottom: 1px solid #c2cfd6;
+                }
+            }
+        }
+
+        tbody {
+            tr {
+                td {
+                    padding: 6px;
+                    vertical-align: middle;
+                }
             }
         }
     }
@@ -83,7 +107,7 @@
     }
 
     &-title {
-     
+
         font-size: 12px;
         font-weight: 600;
         text-transform: uppercase;
@@ -110,7 +134,7 @@
             bottom: 0;
             margin-top: 1px;
         }
-    }    
+    }
 
     &-content {
         margin: 0 auto;
@@ -127,7 +151,7 @@
         }
 
         &.tab-content {
-            overflow: hidden; 
+            overflow: hidden;
        }
     }
 
@@ -192,7 +216,7 @@
 
 .form-search {
     margin-bottom: 10px;
-    
+
     .block-btn-search {
         display: inline-block;
         padding-left: 15px;
