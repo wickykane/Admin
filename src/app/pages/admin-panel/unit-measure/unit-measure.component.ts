@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AdminPanelService } from '../admin-panel.service';
+import { TableService } from "../../../services/index";
 import { routerTransition } from '../../../router.animations';
 
 @Component({
@@ -30,7 +31,9 @@ export class UnitMeasureComponent implements OnInit {
     selectData(data) {
         console.log("id :", data);
     }
-    constructor(private activeRouter: ActivatedRoute,
+    constructor(
+        private TableService:TableService,
+        private activeRouter: ActivatedRoute,
         private router: Router,       
         private AdminPanelService: AdminPanelService) {}   
 
@@ -41,9 +44,7 @@ export class UnitMeasureComponent implements OnInit {
         let params={
             page:page
         }
-        this.AdminPanelService.getListUOM(params).subscribe(result=>{
-            console.log('a');
-            console.log(result.results.rows);
+        this.AdminPanelService.getListUOM(params).subscribe(result=>{           
             if(result._type =='success'){
                 this.list.items = result.results.rows;
             }

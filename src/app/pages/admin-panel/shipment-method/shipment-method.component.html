@@ -1,0 +1,31 @@
+<div [@routerTransition]>
+  <app-page-header [heading]="'LIST OF SHIPMENT METHOD'" [icon]="'fa-th-list'"></app-page-header>
+  <div class="block">
+      <div class="block-content">
+          <div class="test table">
+              <table class="table table-borderd" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
+                  <thead>
+                      <tr>
+                          <th sortColumn="id" [(sortParam)]="sortParams" (sortFn)="sortAction($event)">ID</th>
+                          <th sortColumn="shipment_method_type_name" [(sortParam)]="sortParams" (sortFn)="sortAction($event)">Type</th>
+                          <th sortColumn="desc" [(sortParam)]="sortParams" (sortFn)="sortAction($event)">Description</th>
+                          <th sortColumn="carrier_name" [(sortParam)]="sortParams" (sortFn)="sortAction($event)">Carrier</th>
+                          <th sortColumn="fee" [(sortParam)]="sortParams" (sortFn)="sortAction($event)">Fee</th>
+                          <th sortColumn="is_sync_to_web" [(sortParam)]="sortParams" (sortFn)="sortAction($event)">Sync To Website</th>                          
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr *ngFor="let item of list.items; let i = index" [ngClass]="{'row-selected': i == selectedIndex}">
+                          <td>{{item.id}}</td>
+                          <td>{{item.shipment_method_type_name}}</td>
+                          <td>{{item.desc}}</td>
+                          <td>{{item.carrier_name}}</td>
+                          <td>{{item.fee}}</td>
+                          <td>{{item.is_sync_to_web}}</td>
+                      </tr>
+                  </tbody>
+              </table>
+          </div>
+      </div>
+  </div>
+</div>
