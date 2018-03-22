@@ -5,7 +5,7 @@ import { NgbCarouselModule, NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 import { UnitMeasureComponent } from './unit-measure.component';
 
 import { PageHeaderModule } from '../../../shared';
-import { StatModule , cdArrowTable, SortColumnDirective} from '../../../shared/index';
+import { StatModule , CommonShareModule} from '../../../shared/index';
 import { TableService } from "../../../services/index";
 
 @NgModule({
@@ -13,11 +13,10 @@ import { TableService } from "../../../services/index";
         CommonModule,
         NgbAlertModule.forRoot(),
         StatModule,
-        PageHeaderModule       
+        PageHeaderModule ,
+        CommonShareModule      
     ],
     declarations: [
-        cdArrowTable,
-        SortColumnDirective,
         UnitMeasureComponent
     ],
     providers: [TableService]
