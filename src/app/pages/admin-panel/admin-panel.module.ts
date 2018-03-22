@@ -8,6 +8,7 @@ import { AdminPanelComponent } from './admin-panel.component';
 import { StatModule } from '../../shared/index';
 import { UnitMeasureModule } from './unit-measure/unit-measure.module';
 import { UserModule } from './user/user.module';
+import { PageHeaderModule } from '../../shared';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { UserModule } from './user/user.module';
         AdminPanelRoutingModule,
         StatModule,
         UnitMeasureModule,
-        UserModule
+        UserModule,
+        PageHeaderModule
     ],
     declarations: [
         AdminPanelComponent
