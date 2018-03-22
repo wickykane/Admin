@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -10,7 +10,7 @@ import { TranslateService } from '@ngx-translate/core';
 export class MenuComponent implements OnInit {
 
     MENU_CONSTANT = [];
-
+     @ViewChild('.expand') expand;
     showMenu: string = '';
 
 
@@ -145,7 +145,7 @@ export class MenuComponent implements OnInit {
                 sub: true,
                 child: [
                     {
-                        link: '/s2wa',
+                        link: '/product-management/item-list',
                         name: 'Item List '
                     },
                     {
@@ -217,6 +217,10 @@ export class MenuComponent implements OnInit {
         } else {
             this.showMenu = element;
         }
+    }
+
+    removeClassExpand() {
+        this.expand.nativeElement.classList.remove();
     }
 
 
