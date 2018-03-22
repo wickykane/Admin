@@ -14,7 +14,7 @@ export class ApiService {
         // this.token = currentUser && currentUser.token;
     }
 
-    private headerFormData(params) {
+    private headerFormData(params?) {
         let _token = window.localStorage.getItem('token');
         let _headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + this.jwtService.getToken() });
         let _options = new RequestOptions({ headers: _headers, params: params });
@@ -44,14 +44,14 @@ export class ApiService {
     };
 
     post(path, params:Object = {} ):Observable<any> {
-        return this.http.post(`${environment.api_url}${path}`, this.headerJson(params))
+        return this.http.post(`${environment.api_url}${path}`, JSON.stringify(params), this.headerJson())
             .map(res => res.json())  // could raise an error if invalid JSON
             .do(data => console.log('server data:', data))  // debug
             .catch(this._serverError);
     };
 
     put(path, params:Object = {} ):Observable<any> {
-        return this.http.put(`${environment.api_url}${path}`, this.headerJson(params))
+        return this.http.put(`${environment.api_url}${path}`, JSON.stringify(params), this.headerJson())
             .map(res => res.json())  // could raise an error if invalid JSON
             .do(data => console.log('server data:', data))  // debug
             .catch(this._serverError);
@@ -65,16 +65,24 @@ export class ApiService {
     };
 
     postForm(path, params:Object = {} ):Observable<any> {
-        return this.http.post(`${environment.api_url}${path}`, this.headerFormData(params))
+        return this.http.post(`${environment.api_url}${path}`, this.madeFormData(params), this.headerFormData())
             .map(res => res.json())  // could raise an error if invalid JSON
             .do(data => console.log('server data:', data))  // debug
             .catch(this._serverError);
     };
 
     putForm(path, params:Object = {} ):Observable<any> {
-        return this.http.put(`${environment.api_url}${path}`, this.headerFormData(params))
+        return this.http.put(`${environment.api_url}${path}`, this.madeFormData(params),this.headerFormData(params))
             .map(res => res.json())  // could raise an error if invalid JSON
             .do(data => console.log('server data:', data))  // debug
             .catch(this._serverError);
     };
+
+    madeFormData(data) {
+        let formData: FormData = new FormData();
+        for (let i in data) {
+            formData.append(i, data[i]);
+        }
+        return formData;
+    }
 }
