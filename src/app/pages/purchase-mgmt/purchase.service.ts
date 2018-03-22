@@ -16,4 +16,16 @@ export class PurchaseService {
 
     }
 
+    getListSupplier(params) {
+        var url = 'company/list-option-company?is_supplier=true';
+        return this.API.get(url, params);
+    }
+
+    getListStatus() {
+        var url = 'purchase_quote_status';
+        return this.API.get(url);
+
+    }
+
+
 }

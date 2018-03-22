@@ -13,13 +13,17 @@
                     <div class="block-search">
                         <label for="part" class="control-label">Supplier</label>
                         <div class="">
-                            <select class="form-control" formControlName="supp_id" ng-options="item.id as (item.company_name) for item in listMaster['supplier']">
+                            <select class="form-control" formControlName="supp_id">
+                                <option value="null" selected="true"  translate>--Select--</option>
+                                <option *ngFor="let item of listMaster['supplier']" [ngValue] = "item.id">{{item.company_name}}</option>
                               </select>
                         </div>
                     </div>
                     <div class="block-search">
                         <label for="sts" class="control-label">Status</label>
-                        <select class="form-control" formControlName="sts" ng-options="item.id as (item.name) for item in listMaster['status']">
+                        <select class="form-control" formControlName="sts">
+                            <option value="null" selected="true"  translate>--Select--</option>
+                            <option *ngFor="let item of listMaster['status']" [ngValue] = "item.id">{{item.name}}</option>
                           </select>
                     </div>
                     <div class="block-search">
@@ -49,8 +53,9 @@
 
         <div class="block-content list-order-table">
             <button [routerLink]="['/purchase-management/purchase-quotation/create']" style="margin: 10px 0;" class="btn btn-primary" translate>Add New</button>
+
             <div class="table-responsive">
-                <table class="table table-striped table-vcenter table-hover custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
+                <table class="table table-striped table-vcenter custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                     <thead class="bg-white">
                         <tr>
                             <th>ID</th>
@@ -63,35 +68,35 @@
                     </thead>
                     <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                         <tr>
-                            <td>{{$index+1}}</td>
-                            <td>{{::item.cd}}</td>
-                            <td>{{::item.supplier_name}}</td>
-                            <td>{{::item.purchase_quote_status_name}}</td>
+                            <td>{{i+1}}</td>
+                            <td>{{item.cd}}</td>
+                            <td>{{item.supplier_name}}</td>
+                            <td>{{item.purchase_quote_status_name}}</td>
                             <td class="text-center">
-                                {{::item.rqst_dt | utcToLocal:'YYYY-MM-DD':'YYYY-MM-DD' }}
+                                {{item.rqst_dt}}
                             </td>
                             <td class="text-nowrap">
-                                <a class="btn btn-default" title="{{ (!showProduct)? 'Show details': 'Hide details' }}" ng-class="{'disable-expand': item.details.length == 0 }" ng-click="showProduct = !showProduct">
-                                <i class="fa" ng-class="showProduct ? 'fa-minus' : 'fa-plus'"></i>
+                                <a class="btn btn-default" title="{{ (!showProduct)? 'Show details': 'Hide details' }}" [ngClass]="{'disable-expand': item.purchase_quote_details.length == 0 }" (click)="showProduct = !showProduct">
+                                <i class="fa" [ngClass]="{'fa-minus': showProduct,' fa-plus': !showProduct}"></i>
                             </a>
-                                <a class="btn btn-default " title="Edit" ng-click="editPO(item.id)">
+                                <a class="btn btn-default " title="Edit" (click)="editPO(item.id)">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                             </a>
-                                <a ng-click="sentToSuppPQ(item.id)" ng-if="(item.purchase_quote_status_cd=='NW')" class="btn btn-default " title="Send Mail">
+                                <a (click)="sentToSuppPQ(item.id)" *ngIf="(item.purchase_quote_status_cd=='NW')" class="btn btn-default " title="Send Mail">
                                 <i class="fa fa-envelope" aria-hidden="true"></i>
                             </a>
-                                <a ng-click="approve(item.id)" ng-if="user.is_manager && (item.purchase_quote_status_cd=='SF')" class="btn btn-default " title="Approve">
+                                <!-- <a (click)="approve(item.id)" *ngIf="user.is_manager && (item.purchase_quote_status_cd=='SF')" class="btn btn-default " title="Approve">
                                 <i class="fa fa-check-square" aria-hidden="true"></i>
                             </a>
-                                <a ng-click="reject(item.id)" ng-if="user.is_manager && (item.purchase_quote_status_cd=='SF')" class="btn btn-default " title="Reject">
+                                <a (click)="reject(item.id)" *ngIf="user.is_manager && (item.purchase_quote_status_cd=='SF')" class="btn btn-default " title="Reject">
                                 <i class="fa fa-ban" aria-hidden="true"></i>
-                            </a>
+                            </a> -->
                             </td>
                         </tr>
-                        <tr ng-show="showProduct">
+                        <tr *ngIf="showProduct">
                             <td></td>
                             <td colspan="100%">
-                                <table class="table table-hover">
+                                <table class="table table-striped table-vcenter table-child">
                                     <thead>
                                         <tr>
                                             <th>Product Code</th>
@@ -101,13 +106,13 @@
                                             <th>Total Amount</th>
                                         </tr>
                                     </thead>
-                                    <tbody ng-repeat="it in item.purchase_quote_details">
+                                    <tbody *ngFor="let it of item.purchase_quote_details">
                                         <tr>
-                                            <td>{{::it.wine_sku}}</td>
-                                            <td>{{::it.wine_name}}</td>
-                                            <td>{{::it.uom_name}}</td>
-                                            <td>{{::it.qty}}</td>
-                                            <td>{{::it.amount}}</td>
+                                            <td>{{it.wine_sku}}</td>
+                                            <td>{{it.wine_name}}</td>
+                                            <td>{{it.uom_name}}</td>
+                                            <td>{{it.qty}}</td>
+                                            <td>{{it.amount}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -115,8 +120,9 @@
                         </tr>
                     </tbody>
                 </table>
-
             </div>
+
+
             <div class="row normal-pagination" *ngIf="list.items.length > 0">
                 <div class="col-md-6">
                     <div class="text-left">
