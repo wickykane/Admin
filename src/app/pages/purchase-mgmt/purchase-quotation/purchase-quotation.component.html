@@ -1,165 +1,145 @@
 <div [@routerTransition]>
     <app-page-header [heading]="'LIST OF PURCHASE QUOTATION'" [icon]="'fa-th-list'"></app-page-header>
 
+    <div class="block anchor-scroll">
 
-
-    <div class="block-content bg-gray-light">
-            <form>
-              <div class="form-row">
-                <div class="form-group col-md-1">
-                  <label for="inputCity">City</label>
-                  <input type="text" class="form-control" id="inputCity">
-                </div>
-                <div class="form-group col-md-1">
-                  <label for="inputState">State</label>
-                  <select id="inputState" class="form-control">
-                    <option selected>Choose...</option>
-                    <option>...</option>
-                  </select>
-                </div>
-                <div class="form-group col-md-1">
-                  <label for="inputZip">Zip</label>
-                  <input type="text" class="form-control" id="inputZip">
-                </div>
-              </div>
-              <div class="form-group col-md-1">
-                <label for="inputZip">Zip</label>
-                <input type="text" class="form-control" id="inputZip">
-              </div>
-            </div>
-    
-              <button type="submit" class="btn btn-primary">Sign in</button>
-            </form>
-            <!-- <form class="form-horizontal form-search"  role="form" [formGroup]="searchForm">
-                <div class="block-search">
-                    <label for="cd" class="control-label">Requisition No</label>
-                    <input type="text" name="cd"  formControlName="cd" class="form-control" id="cd" placeholder="" focus-element="focusAuto" capitalize>
-                </div>
-                <div class="block-search">
-                    <label for="part" class="control-label">Supplier</label>
-                    <div class="">
-                        <select class="form-control" formControlName="supp_id" ng-options="item.id as (item.company_name) for item in listMaster['supplier']">
-                              </select>
+        <div class="block-content pd-bottom tab-content bg-gray-light">
+            <div class="row">
+                <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
+                    <div class="block-search">
+                        <label for="cd" class="control-label">Requisition No</label>
+                        <input type="text" name="cd" formControlName="cd" class="form-control" id="cd" placeholder="" focus-element="focusAuto" capitalize>
                     </div>
-                </div>
-                <div class="block-search">
-                    <label for="sts" class="control-label">Status</label>
-                    <select class="form-control" formControlName="sts" ng-options="item.id as (item.name) for item in listMaster['status']">
-                          </select>
-                </div>
-                <div class="block-search">
-                    <label for="" class="control-label"> Requested On</label>
-                    <div class="input-group">
-                        <input class="form-control" type="input" placeholder="yyyy-mm-dd" name="dp" formControlName="rqst_dt" ngbDatepicker #d="ngbDatepicker">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
-                              <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
-                            </button>
+                    <div class="block-search">
+                        <label for="part" class="control-label">Supplier</label>
+                        <div class="">
+                            <select class="form-control" formControlName="supp_id" ng-options="item.id as (item.company_name) for item in listMaster['supplier']">
+                              </select>
                         </div>
                     </div>
-
-                </div>
-
-                <div class="block-btn-search">
-                    <label class="control-label">&nbsp;</label>
-                    <div class="">
-                        <button class="btn btn-primary" ng-click="searchAction(list.search)">Search</button>
-                        <button class="btn btn-gray" ng-click="list.search = {}; searchAction(list.search);">Reset</button>
+                    <div class="block-search">
+                        <label for="sts" class="control-label">Status</label>
+                        <select class="form-control" formControlName="sts" ng-options="item.id as (item.name) for item in listMaster['status']">
+                          </select>
                     </div>
-                </div>
-            </form> -->
+                    <div class="block-search">
+                        <label for="" class="control-label"> Requested On</label>
+                        <div class="input-group">
+                            <input class="form-control" type="input" placeholder="yyyy-mm-dd" name="dp" formControlName="rqst_dt" ngbDatepicker #d="ngbDatepicker">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                              <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
+                            </button>
+                            </div>
+                        </div>
 
-    </div>
+                    </div>
+
+                    <div class="block-btn-search">
+                        <label class="control-label">&nbsp;</label>
+                        <div>
+                            <button type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Search</button>
+                            <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchForm)" translate>Reset</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
 
 
-    <div class="block-content list-order-table">
-        <button style="margin: 10px 0;" class="btn btn-primary" ng-click="createPQ()">Add New</button>
-        <div class="table-responsive">
-            <table class="table table-striped table-vcenter table-hover custom-table" cd-arrow-table collection="list.items" selected-index="selectedIndex" on-enter="selectItem(row)">
-                <thead class="bg-white">
-                    <tr>
-                        <th>ID</th>
-                        <th>Requisition No</th>
-                        <th>Supplier</th>
-                        <th>Status</th>
-                        <th class="text-center">Requested On</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <!-- <tbody ng-repeat="item in list.items">
-                    <tr>
-                        <td>{{$index+1}}</td>
-                        <td>{{::item.cd}}</td>
-                        <td>{{::item.supplier_name}}</td>
-                        <td>{{::item.purchase_quote_status_name}}</td>
-                        <td class="text-center">
-                            {{::item.rqst_dt | utcToLocal:'YYYY-MM-DD':'YYYY-MM-DD' }}
-                        </td>
-                        <td class="text-nowrap">
-                            <a class="btn btn-default" title="{{ (!showProduct)? 'Show details': 'Hide details' }}" ng-class="{'disable-expand': item.details.length == 0 }" ng-click="showProduct = !showProduct">
+        <div class="block-content list-order-table">
+            <button [routerLink]="['/purchase-management/purchase-quotation/create']" style="margin: 10px 0;" class="btn btn-primary" translate>Add New</button>
+            <div class="table-responsive">
+                <table class="table table-striped table-vcenter table-hover custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
+                    <thead class="bg-white">
+                        <tr>
+                            <th>ID</th>
+                            <th sortColumn="cd" [(sortParam)]="tableService.sortParams" (sortFn)="tableService.sortAction($event)">Requisition No</th>
+                            <th>Supplier</th>
+                            <th>Status</th>
+                            <th class="text-center">Requested On</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
+                        <tr>
+                            <td>{{$index+1}}</td>
+                            <td>{{::item.cd}}</td>
+                            <td>{{::item.supplier_name}}</td>
+                            <td>{{::item.purchase_quote_status_name}}</td>
+                            <td class="text-center">
+                                {{::item.rqst_dt | utcToLocal:'YYYY-MM-DD':'YYYY-MM-DD' }}
+                            </td>
+                            <td class="text-nowrap">
+                                <a class="btn btn-default" title="{{ (!showProduct)? 'Show details': 'Hide details' }}" ng-class="{'disable-expand': item.details.length == 0 }" ng-click="showProduct = !showProduct">
                                 <i class="fa" ng-class="showProduct ? 'fa-minus' : 'fa-plus'"></i>
                             </a>
-                            <a class="btn btn-default " title="Edit" ng-click="editPO(item.id)">
+                                <a class="btn btn-default " title="Edit" ng-click="editPO(item.id)">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                             </a>
-                            <a ng-click="sentToSuppPQ(item.id)" ng-if="(item.purchase_quote_status_cd=='NW')" class="btn btn-default " title="Send Mail">
+                                <a ng-click="sentToSuppPQ(item.id)" ng-if="(item.purchase_quote_status_cd=='NW')" class="btn btn-default " title="Send Mail">
                                 <i class="fa fa-envelope" aria-hidden="true"></i>
                             </a>
-                            <a ng-click="approve(item.id)" ng-if="user.is_manager && (item.purchase_quote_status_cd=='SF')" class="btn btn-default " title="Approve">
+                                <a ng-click="approve(item.id)" ng-if="user.is_manager && (item.purchase_quote_status_cd=='SF')" class="btn btn-default " title="Approve">
                                 <i class="fa fa-check-square" aria-hidden="true"></i>
                             </a>
-                            <a ng-click="reject(item.id)" ng-if="user.is_manager && (item.purchase_quote_status_cd=='SF')" class="btn btn-default " title="Reject">
+                                <a ng-click="reject(item.id)" ng-if="user.is_manager && (item.purchase_quote_status_cd=='SF')" class="btn btn-default " title="Reject">
                                 <i class="fa fa-ban" aria-hidden="true"></i>
                             </a>
-                        </td>
-                    </tr>
-                    <tr ng-show="showProduct">
-                        <td></td>
-                        <td colspan="100%">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th >Product Code</th>
-                                        <th >Product Name</th>
-                                        <th >UOM</th>
-                                        <th >Order QTY</th>
-                                        <th >Total Amount</th>
-                                    </tr>
-                                </thead>
-                                <tbody ng-repeat="it in item.purchase_quote_details">
-                                    <tr>
-                                        <td>{{::it.wine_sku}}</td>
-                                        <td>{{::it.wine_name}}</td>
-                                        <td>{{::it.uom_name}}</td>
-                                        <td>{{::it.qty}}</td>
-                                        <td>{{::it.amount}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </td>
-                    </tr>
-                </tbody> -->
-            </table>
+                            </td>
+                        </tr>
+                        <tr ng-show="showProduct">
+                            <td></td>
+                            <td colspan="100%">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Product Code</th>
+                                            <th>Product Name</th>
+                                            <th>UOM</th>
+                                            <th>Order QTY</th>
+                                            <th>Total Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody ng-repeat="it in item.purchase_quote_details">
+                                        <tr>
+                                            <td>{{::it.wine_sku}}</td>
+                                            <td>{{::it.wine_name}}</td>
+                                            <td>{{::it.uom_name}}</td>
+                                            <td>{{::it.qty}}</td>
+                                            <td>{{::it.amount}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
 
-        </div>
-        <!-- <div class="row normal-pagination" ng-if="list.items.length > 0">
-            <div class="col-md-6">
-                <div class="text-left">
-                    <div class="col-md-6" style="padding-left: 0px;">
-                        <span style="float: left; padding-right: 10px;">{{list.items.length}}/{{pagination.total_record}} items </span>
-                        <select style="width: 50px; float: left;" class="form-control" ng-model="pagination.length" ng-options="option as option for option in itemPerPageOptions" ng-change="changeLength()"></select>
+            </div>
+            <div class="row normal-pagination" *ngIf="list.items.length > 0">
+                <div class="col-md-6">
+                    <div class="text-left">
+                        <div class="col-md-6" style="padding-left: 0px;">
+                            <span style="float: left; padding-right: 10px;">{{list.items.length}}/{{tableService.pagination.total_record}} items </span>
+                            <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length" (change)="tableService.changeLength()">
+                      <option *ngFor="let option of tableService.itemPerPageOptions" [ngValue]="option">{{option}}</option>
+                  </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="text-right">
+                        <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length" [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page" [maxSize]="tableService.maxSize"
+                            [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="text-right">
-                    <ul previous-text="Prev" class="pagination-sm" rotate="false" boundary-links="true" uib-pagination ng-change="changePage()" items-per-page="pagination.length" total-items="pagination.total_record" ng-model="pagination.page" max-size="maxSize"></ul>
-                </div>
-            </div>
-        </div> -->
-    </div>
+        </div>
 
-    <div class="block-content">
-        <button style="margin: 10px 0;" class="btn btn-primary" ng-click="createPQ()">Add New</button>
+        <div class="block-content">
+            <button [routerLink]="['/purchase-management/purchase-quotation/create']" style="margin: 10px 0;" class="btn btn-primary" translate>Add New</button>
+
+        </div>
     </div>
 </div>

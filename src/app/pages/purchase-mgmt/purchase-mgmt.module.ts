@@ -6,7 +6,6 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import {PurchaseManagementRoutingModule} from './purchase-mgmt-routing.module';
-import {PurchaseManagementComponent} from './purchase-mgmt.component';
 
 import {QuotationComponent} from './purchase-quotation/purchase-quotation.component';
 import {QuotationCreateComponent} from './purchase-quotation/purchase-quotation-create.component';
@@ -26,7 +25,6 @@ import {WarehouseReceiptComponent} from './warehouse-receipt/warehouse-receipt.c
     ReactiveFormsModule
   ],
   declarations: [
-    PurchaseManagementComponent,
     QuotationComponent,
     QuotationCreateComponent,
     SupplierComponent,
