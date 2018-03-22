@@ -2,17 +2,16 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class TableService {
-    getList = function() {
+    getListFnName: any;
+    context: any;
+    constructor() { }
 
-    };
-
-    constructor() {
-      
-    }
-
-    itemPerPageOptions = [15, 30, 50, 100, 200];
+    itemPerPageOptions = [10, 15, 30, 50];
     maxSize = 5;
-    sortParams = {};
+    sortParams = {
+        order: null,
+        sort: null
+    };
     pagination = {
         page: 1,
         length: this.itemPerPageOptions[0],
@@ -21,7 +20,7 @@ export class TableService {
 
     changeLength() {
         this.pagination['page'] = 1;
-        return this.getList();
+        return this.context[this.getListFnName]();
     };
 
     getParams() {
@@ -43,8 +42,8 @@ export class TableService {
         return params;
     }
 
-    sortAction() {
-        return this.getList();
+    sortAction(data) {
+        return this.context[this.getListFnName]();
     }
 
     matchPagingOption(options) {
@@ -57,15 +56,23 @@ export class TableService {
         }
     }
 
-    searchAction(params) {
+    searchAction() {
         this.pagination['page'] = 1;
-        return this.getList();
+        return this.context[this.getListFnName]();
     }
 
+    resetAction(form?) {
+        if (form) {
+            form.reset();
+        }
+        this.pagination['page'] = 1;
+        return this.context[this.getListFnName]();
+    }
+
+
     changePage(index) {
-        console.log("page index", index)
-        // this.pagination['page'] = this.pagination['page'] || 1;
-        return this.getList();
+        this.pagination['page'] = index;
+        return this.context[this.getListFnName]();
     }
 
     getTableConfig() {
