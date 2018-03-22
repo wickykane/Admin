@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PromotionService } from "../promotion.service";
+import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+
 
 @Component({
   selector: 'app-promotion-budget',
@@ -15,40 +17,49 @@ export class PromotionBudgetCreateComponent implements OnInit {
    */
   public generalForm: FormGroup;
   public listMaster = {};
-  public selectedIndex = 0;
-  public list = {
-    items: [{}, {}, {}]
-  }
-
   public data = {};
 
   /**
    * Init Data
    */
-  constructor(private fb: FormBuilder, private promotionService: PromotionService) {
+  constructor(private fb: FormBuilder, private promotionService: PromotionService, public toastr: ToastsManager, private router: Router) {
     this.generalForm = fb.group({
-      'code': [null],
-      'name': [null],
-      'crtd_on': [new Date()],
+      'code': [{ value: null, disabled: true }],
+      'name': [null, Validators.required],
+      'allowable_qty': [null],
+      'allowable_amt': [null],
+      'crtd_on': [new Date(), Validators.required],
     });
-
-
-
   }
 
   ngOnInit() {
     //Init data
-    this.listMaster['status'] = [{ id: 'NW', name: "New " }, { id: 'AP', name: "Approved" }, { id: 'CL', name: "Close" }];
     //Init Fn
   }
-  /**
-   * Table Event
-   */
-  selectData(index) {
-    console.log(index);
-  }
+
   /**
    * Internal Function
    */
+  createBudget = function () {
+    let params = this.generalForm.value;
+    this.promotionService.postBudget(params).subscribe(res => {
+      try {
+        if (res._type == 'success') {
+          this.toastr.success(res.message);
+          setTimeout(() => {
+            this.router.navigate(['/promotion/budget']);
+          }, 500)
+
+        } else {
+          this.toastr.error(res.message);
+        }
+
+      } catch (e) {
+        console.log(e)
+      }
+    })
+
+
+  }
 
 }
