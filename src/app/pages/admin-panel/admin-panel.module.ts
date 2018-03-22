@@ -7,6 +7,7 @@ import { AdminPanelComponent } from './admin-panel.component';
 
 import { StatModule } from '../../shared/index';
 import { UnitMeasureModule } from './unit-measure/unit-measure.module';
+import { ShipmentMethodModule } from './shipment-method/shipment-method.module';
 import { UserModule } from './user/user.module';
 import { PageHeaderModule } from '../../shared';
 
@@ -18,12 +19,12 @@ import { PageHeaderModule } from '../../shared';
         AdminPanelRoutingModule,
         StatModule,
         UnitMeasureModule,
+        ShipmentMethodModule,
         UserModule,
         PageHeaderModule
     ],
     declarations: [
-        AdminPanelComponent
-
+        AdminPanelComponent        
     ]
 })
 export class AdminPanelModule {}
