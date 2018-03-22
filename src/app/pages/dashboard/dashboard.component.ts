@@ -31,7 +31,7 @@ export class DashboardComponent implements OnInit {
     selectData(data) {
         console.log("id :", data);
     }
-    constructor(private tableService: TableService) {
+    constructor(public tableService: TableService) {
         this.sliders.push(
             {
                 imagePath: 'assets/images/slider1.jpg',
