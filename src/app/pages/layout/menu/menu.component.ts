@@ -111,7 +111,7 @@ export class MenuComponent implements OnInit {
                 sub: true,
                 child: [
                     {
-                        link: '/swaa',
+                        link: '/promotion/budget',
                         name: 'Promotion Budget'
                     },
                     {
