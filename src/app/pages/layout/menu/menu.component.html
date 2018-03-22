@@ -4,20 +4,20 @@
             <ul class="nav-main main-menu">
                 <ng-container *ngFor="let item of MENU_CONSTANT">
                     <li routerLinkActive="active"  *ngIf="!item.sub">
-                        <a routerLink="{{item.link}}" [routerLinkActive]="['router-link-active']">
-                        <i *ngIf="item.icon" class="{{item.icon}}"></i>
-                        <span class="topbar-mini-hide" >{{item.main_name}}</span>
-                    </a>
+                        <a routerLink="{{item.link}}" [routerLinkActive]="['router-link-active']" (click)="removeClassExpand()">
+                            <i *ngIf="item.icon" class="{{item.icon}}"></i>
+                            <span class="topbar-mini-hide" >{{item.main_name}}</span>
+                        </a>
                     </li>
                     <li routerLinkActive="active"  *ngIf="item.sub">
                         <a class="nav-submenu" [class.active]="showMenu === item.flag" (click)="addExpandClass(item.flag)">
-                        <span class="topbar-mini-hide" >{{item.main_name}}</span>
-                    </a>
+                            <span class="topbar-mini-hide" >{{item.main_name}}</span>
+                        </a>
                         <ul *ngIf="item.sub" class="dropdown-content" routerLinkActive="active-ul" [class.expand]="showMenu === item.flag">
                             <li routerLinkActive="active-li" *ngFor="let it of item.child">
                                 <a routerLink="{{it.link}}" [routerLinkActive]="['router-link-active']">
-                                <span class="topbar-mini-hide">{{it.name}}</span>
-                            </a>
+                                    <span class="topbar-mini-hide">{{it.name}}</span>
+                                </a>
                             </li>
                         </ul>
                     </li>
