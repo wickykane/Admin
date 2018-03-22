@@ -53,7 +53,7 @@ export class MenuComponent implements OnInit {
                 sub: true,
                 child: [
                     {
-                        link: '/dashboards',
+                        link: '/purchase-management/purchase-quotation',
                         name: 'Purchase Quotation'
                     },
                     {
