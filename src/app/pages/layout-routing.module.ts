@@ -12,7 +12,7 @@ const routes: Routes = [
             { path: 'blank-page', loadChildren: '../pages/blank-page/blank-page.module#BlankPageModule' },
             { path: 'admin-panel', loadChildren: '../pages/admin-panel/admin-panel.module#AdminPanelModule' },
             { path: 'guide', loadChildren: '../pages/guide/guide.module#GuideModule'},
-            { path: 'purchase-management', loadChildren: '../pages/purchase-management/purchase-management.module#PurchaseManagementModule'}
+            { path: 'purchase-management', loadChildren: '../pages/purchase-mgmt/purchase-mgmt.module#PurchaseManagementModule'}
         ]
     }
 ];

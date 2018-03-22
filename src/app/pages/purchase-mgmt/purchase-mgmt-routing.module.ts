@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { PurchaseManagementComponent } from './purchase-management.component';
-import { QuotationComponent } from './quotation/quotation.component';
-import { QuotationCreateComponent } from './quotation/quotation-create.component';
+import { PurchaseManagementComponent } from './purchase-mgmt.component';
+import { QuotationComponent } from './purchase-quotation/purchase-quotation.component';
+import { QuotationCreateComponent } from './purchase-quotation/purchase-quotation-create.component';
 
 const routes: Routes = [
     {
