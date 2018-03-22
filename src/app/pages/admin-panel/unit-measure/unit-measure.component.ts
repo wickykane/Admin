@@ -11,12 +11,45 @@ import { routerTransition } from '../../../router.animations';
 })
 
 export class UnitMeasureComponent implements OnInit {
+    public list = {
+        items :[]
+    };
+
+    
+    public sortParams = {
+        order: "",
+        sort: ""
+    }
+
+    public sortAction(param) {
+        console.log("sort data: ", param);
+    }
+    
+    public selectedIndex = 0;
+
+    selectData(data) {
+        console.log("id :", data);
+    }
     constructor(private activeRouter: ActivatedRoute,
         private router: Router,       
         private AdminPanelService: AdminPanelService) {}   
 
     ngOnInit(): void {
-     
+        this.loadPage(1);
+    }
+    loadPage(page?:any){
+        let params={
+            page:page
+        }
+        this.AdminPanelService.getListUOM(params).subscribe(result=>{
+            console.log('a');
+            console.log(result.results.rows);
+            if(result._type =='success'){
+                this.list.items = result.results.rows;
+            }
+        },error=>{
+            console.log(error);
+        })
     }
 
   

@@ -4,16 +4,22 @@ import { NgbCarouselModule, NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { UnitMeasureComponent } from './unit-measure.component';
 
-import { StatModule } from '../../../shared/index';
+import { PageHeaderModule } from '../../../shared';
+import { StatModule , cdArrowTable, SortColumnDirective} from '../../../shared/index';
+import { TableService } from "../../../services/index";
 
 @NgModule({
     imports: [
         CommonModule,
         NgbAlertModule.forRoot(),
-        StatModule
+        StatModule,
+        PageHeaderModule       
     ],
     declarations: [
+        cdArrowTable,
+        SortColumnDirective,
         UnitMeasureComponent
-    ]
+    ],
+    providers: [TableService]
 })
 export class UnitMeasureModule {}
