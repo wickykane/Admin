@@ -16,7 +16,7 @@ export class PromotionBudgetComponent implements OnInit {
   public listMaster = {};
   public selectedIndex = 0;
   public list = {
-    items: [{}, {}, {}]
+    items: []
   }
 
   public data = {};

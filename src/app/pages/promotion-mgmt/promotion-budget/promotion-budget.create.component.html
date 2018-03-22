@@ -1,0 +1,106 @@
+<section>
+    <div class="block-header bg-red-dark text-white">
+        <h3 class="block-title-lg" translate>CREATE NEW BUDGET</h3>
+        <div class="wrap-keyboard">
+            <span class="fa fa-keyboard-o my-own-cheatsheet"></span>
+        </div>
+    </div>
+</section>
+
+<section class="rma-page block">
+    <div class="row" style="padding-top:15px">
+        <div class="col-sm-12">
+            <div class="block-header bg-gray-lighter">
+                <h3 class="block-title" translate>GENERAL INFORMATION</h3>
+            </div>
+        </div>
+    </div>
+    <div>
+        <form [formGroup]="generalForm" class="form-search full-width form-horizontal">
+            <div class="row col-md-12">
+                    <div class="col-md-2">
+                        <label for="code" class="control-label" translate>Code</label>
+                        <input type="text" class="form-control" name="code" formControlName="code" disabled>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="budget_name" class="control-label" translate>Name</label>
+                        <span class="text-danger">( * )</span>
+                        <input type="text" class="form-control" name="budget_name" formControlName="name">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="created_on" class="control-label" translate>Created On </label>
+                        <span class="text-danger">( * )</span>
+                        <div class="input-group">
+                                <input class="form-control" placeholder="yyyy-mm-dd"
+                                       name="dp" formControlName="crtd_on" ngbDatepicker #d="ngbDatepicker">
+                                <div class="input-group-append">
+                                  <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                  </button>
+                                </div>
+                              </div>
+                        <!-- <div>
+                                            <span class="input-group">
+                                      <input name="created_on" type="text" class="form-control" datepicker-options="{showWeeks: false}" ng-model-options="{timezone: 'UTC'}"
+                                        uib-datepicker-popup ng-model="mainData.generalInfo.crtd_on" is-open="datePicker.crt_date" show-button-bar="false"
+                                        placeholder="YYYY-MM-DD" required />
+                                      <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="datePicker.crt_date = !datePicker.crt_date">
+                                          <i class="glyphicon glyphicon-calendar"></i>
+                                        </button>
+                                      </span>
+                                            </span>
+                                        </div> -->
+                    </div>
+        
+            </div>
+
+        </form>
+    </div>
+    <!-- <div class="row" style="padding-top:15px">
+        <div class="col-sm-12">
+            <div class="block-header bg-gray-lighter">
+                <h3 class="block-title" translate>DETAILS INFORMATION</h3>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="block-content">
+            <table class="table table-vcenter custom-table table-noborder">
+                <tr>
+                    <td style="width:16%" translate>Total Allowable Product QTY</td>
+                    <td style="width:4%">
+                        <div style="width:100px">
+                            <input numbers-int name="product_qty" type="text" class="form-control" ng-model="mainData.generalInfo.allowable_qty">
+                        </div>
+                    </td>
+                    <td style="width:17%" translate>Total Allowable Money Amount</td>
+                    <td>
+                        <div style="width:100px">
+                            <input numbers-only name="product_qty" type="text" class="form-control" ng-model="mainData.generalInfo.allowable_amt">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td translate>Total Used Product QTY</td>
+                    <td>0</td>
+                    <td translate>Total Used Amount</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td translate>Total Rest Product QTY</td>
+                    <td>0</td>
+                    <td translate>Total Rest Amount</td>
+                    <td>0</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    </form>
+    </div>
+
+    <div class="block-content block-content-full text-right">
+        <button type="button" class="btn btn-default" ng-click="cancelBudget()" translate>Cancel</button>
+        <button type="button" class="btn btn-primary" ng-click="createBudget()" ng-disabled="formData.$invalid" translate>Save</button>
+    </div> -->
+</section>
