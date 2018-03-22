@@ -25,6 +25,7 @@
            "styles/app.scss"
       ],
       "scripts": [
+        "../node_modules/systemjs/dist/system.src.js",
           "../node_modules/chart.js/dist/Chart.js",
           "../node_modules/ng2-toastr/bundles/ng2-toastr.min.js"],
       "environmentSource": "environments/environment.ts",
