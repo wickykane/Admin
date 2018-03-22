@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-purchase-management',
-  templateUrl: './purchase-management.component.html',
-  styleUrls: ['./purchase-management.component.scss']
+  selector: 'app-purchase-mgmt',
+  templateUrl: './purchase-mgmt.component.html',
+  styleUrls: ['./purchase-mgmt.component.scss']
 })
 export class PurchaseManagementComponent implements OnInit {
 
