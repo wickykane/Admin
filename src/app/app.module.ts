@@ -39,7 +39,7 @@ export function createTranslateLoader(http: HttpClient) {
             }
         }),
         AppRoutingModule,
-        NgbModule,
+        NgbModule.forRoot(),
         HttpModule,
         FormsModule,
         ReactiveFormsModule,

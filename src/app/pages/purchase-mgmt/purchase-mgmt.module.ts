@@ -2,6 +2,8 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 
 import { PageHeaderModule } from '../../shared';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import {PurchaseManagementRoutingModule} from './purchase-mgmt-routing.module';
 import {PurchaseManagementComponent} from './purchase-mgmt.component';
@@ -18,7 +20,10 @@ import {WarehouseReceiptComponent} from './warehouse-receipt/warehouse-receipt.c
   imports: [
     CommonModule,
     PageHeaderModule,
-    PurchaseManagementRoutingModule
+    PurchaseManagementRoutingModule,
+    NgbModule.forRoot(),
+    FormsModule,
+    ReactiveFormsModule
   ],
   declarations: [
     PurchaseManagementComponent,
