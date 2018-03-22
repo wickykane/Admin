@@ -145,7 +145,7 @@ export class MenuComponent implements OnInit {
                 sub: true,
                 child: [
                     {
-                        link: '/s2wa',
+                        link: '/product-management/item-list',
                         name: 'Item List '
                     },
                     {
