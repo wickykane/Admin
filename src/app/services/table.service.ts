@@ -15,7 +15,8 @@ export class TableService {
     sortParams = {};
     pagination = {
         page: 1,
-        length: this.itemPerPageOptions[0]
+        length: this.itemPerPageOptions[0],
+        total_record: 0
     };
 
     changeLength() {
