@@ -27,7 +27,7 @@ import { PurchaseService } from "./purchase.service";
     NgbModule.forRoot(),
     FormsModule,
     ReactiveFormsModule,
-    CommonShareModule
+    CommonShareModule,
   ],
   declarations: [
     QuotationComponent,

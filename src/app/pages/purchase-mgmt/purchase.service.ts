@@ -24,7 +24,21 @@ export class PurchaseService {
     getListStatus() {
         var url = 'purchase_quote_status';
         return this.API.get(url);
+    }
 
+    sentToSuppPQ(id) {
+        var url = 'purchase_quote/sent_to_supp/' + id;
+        return this.API.get(url);
+    }
+
+    aprvByMgrPQ(id) {
+        var url = 'purchase_quote/aprv_by_mgr/' + id;
+        return this.API.get(url);
+    }
+
+    rjtByMgrPQ(id) {
+        var url = 'purchase_quote/rjt_by_mgr/' + id;
+        return this.API.get(url);
     }
 
 

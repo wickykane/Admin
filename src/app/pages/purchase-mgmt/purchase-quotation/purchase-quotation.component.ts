@@ -23,8 +23,9 @@ export class QuotationComponent implements OnInit {
     public selectedIndex = 0;
     public list = {
         items: []
-    }
+    };
 
+    public user: any;
     public data = {};
 
     searchForm: FormGroup;
@@ -51,6 +52,8 @@ export class QuotationComponent implements OnInit {
         this.getList();
         this.getListSupplier();
         this.getListStatus();
+
+        this.user = localStorage.getItem('currentUser');
     }
     /**
      * Table Event
@@ -61,6 +64,41 @@ export class QuotationComponent implements OnInit {
     /**
      * Internal Function
      */
+    sentToSuppPQ(id){
+        this.purchaseService.sentToSuppPQ(id).subscribe(res => {
+            try {
+                this.toastr.success(res.data.message);
+                this.getList();
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
+
+    approve(id) {
+        this.purchaseService.aprvByMgrPQ(id).subscribe(res => {
+            try {
+                this.toastr.success(res.data.message);
+                this.getList();
+            } catch (e) {
+                console.log(e);
+            }
+        });
+
+    }
+
+    reject(id) {
+        this.purchaseService.rjtByMgrPQ(id).subscribe(res => {
+            try {
+                this.toastr.success(res.data.message);
+                this.getList();
+            } catch (e) {
+                console.log(e);
+            }
+        });
+
+    }
+
     getListSupplier() {
         var params = { page: 1, length: 100 }
         this.purchaseService.getListSupplier(params).subscribe(res => {
@@ -83,6 +121,9 @@ export class QuotationComponent implements OnInit {
     }
 
     getList() {
+        if (this.searchForm.value.rqst_dt) {
+            this.searchForm.value.rqst_dt = (this.searchForm.value.rqst_dt.toISOString().slice(0, 10));
+        }
         var params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
         Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);
 

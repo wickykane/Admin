@@ -28,14 +28,12 @@
                     </div>
                     <div class="block-search">
                         <label for="" class="control-label"> Requested On</label>
-                        <div class="input-group">
-                            <input class="form-control" type="input" placeholder="yyyy-mm-dd" name="dp" formControlName="rqst_dt" ngbDatepicker #d="ngbDatepicker">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
-                              <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
-                            </button>
-                            </div>
-                        </div>
+                        <input
+                            class="form-control"
+                            formControlName="rqst_dt"
+                            #dpYMD="bsDatepicker"
+                            bsDatepicker
+                            [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD' }">
 
                     </div>
 
@@ -79,18 +77,18 @@
                                 <a class="btn btn-default" title="{{ (!showProduct)? 'Show details': 'Hide details' }}" [ngClass]="{'disable-expand': item.purchase_quote_details.length == 0 }" (click)="showProduct = !showProduct">
                                 <i class="fa" [ngClass]="{'fa-minus': showProduct,' fa-plus': !showProduct}"></i>
                             </a>
-                                <a class="btn btn-default " title="Edit" (click)="editPO(item.id)">
+                                <a class="btn btn-default " title="Edit" [routerLink]="['/purchase-management/purchase-quotation/' + item.id]">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                             </a>
                                 <a (click)="sentToSuppPQ(item.id)" *ngIf="(item.purchase_quote_status_cd=='NW')" class="btn btn-default " title="Send Mail">
                                 <i class="fa fa-envelope" aria-hidden="true"></i>
                             </a>
-                                <!-- <a (click)="approve(item.id)" *ngIf="user.is_manager && (item.purchase_quote_status_cd=='SF')" class="btn btn-default " title="Approve">
+                                <a (click)="approve(item.id)" *ngIf="user.is_manager && (item.purchase_quote_status_cd=='SF')" class="btn btn-default " title="Approve">
                                 <i class="fa fa-check-square" aria-hidden="true"></i>
                             </a>
                                 <a (click)="reject(item.id)" *ngIf="user.is_manager && (item.purchase_quote_status_cd=='SF')" class="btn btn-default " title="Reject">
                                 <i class="fa fa-ban" aria-hidden="true"></i>
-                            </a> -->
+                            </a>
                             </td>
                         </tr>
                         <tr *ngIf="showProduct">

@@ -1,3 +1,89 @@
-<p>
-  quotation crate works!
-</p>
+<div [@routerTransition]>
+    <app-page-header [heading]="'CREATE NEW PURCHASE QUOTATION'" [icon]="'fa-th-list'"></app-page-header>
+
+    <section class="rma-page block">
+        <div class="row" style="padding-top:15px">
+            <div class="col-sm-12">
+                <div class="block-header bg-gray-lighter">
+                    <h3 class="block-title" >GENERAL INFORMATION</h3>
+                </div>
+            </div>
+        </div>
+        <div>
+            <form [formGroup]="generalForm" class="form-search full-width form-horizontal">
+                <div class="row col-md-12">
+                    <div class="col-md-2">
+                        <label for="cd" class="control-label" >Purchase Quotation No</label>
+                        <span class="text-danger">( * )</span>
+                        <input type="text" class="form-control" name="cd" formControlName="cd">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="rqst_dt" class="control-label" >Requested On</label>
+                        <span class="text-danger">( * )</span>
+                        <input class="form-control" formControlName="rqst_dt" #dpYMD="bsDatepicker" bsDatepicker [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD' }">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="bundle_name" class="control-label" >Supplier Name<span class="text-danger">( * )</span></label>
+                        <select class="form-control" formControlName="supplier_id">
+                                  <option value="null" selected="true"  >--Select--</option>
+                                  <option *ngFor="let item of listMaster['supplier']" [ngValue] = "item.id">{{item.company_name}}</option>
+                                </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="sts" class="control-label" >Status</label>
+                        <span class="text-danger">( * )</span>
+                        <input type="text" class="form-control" name="sts" value="1- New" disabled>
+                    </div>
+
+                </div>
+
+            </form>
+        </div>
+        <div class="row" style="padding-top:15px">
+            <div class="col-sm-12">
+                <div class="block-header bg-gray-lighter">
+                    <h3 class="block-title" >PRODUCTS</h3>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 20px;margin-top: 10px;">
+            <div class="col-sm-12">
+                <div class="block-content">
+                    <table class="table table-striped table-vcenter table-hover custom-table">
+                        <thead>
+                            <tr>
+                                <th role="button" > No </th>
+                                <th style="width:12%" role="button" > Product Code </th>
+                                <th role="button" > Product Name </th>
+                                <th style="width:12%" role="button" > UOM </th>
+                                <th style="width:10%" role="button" > Order QTY </th>
+                                <th style="width:12%" role="button" > Total Amount </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="add in items track by $index">
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{add.sku}}</td>
+                                <td> {{add.name}}</td>
+                                <td>{{ add.uom_name}}</td>
+                                <td>
+                                    <input type="text" class="form-control" name="bundle_name" ng-model="add.qty" ng-init="add.qty = 1" numbers-int>
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="block-content">
+                    <button style="margin: 10px 0;" class="btn btn-primary" (click)="addNewProduct(supplier_id)">Add New Product</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="block-content block-content-full text-right">
+            <button type="button" class="btn btn-default" [routerLink]="['/purchase-management/purchase-quotation']" >Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="createBudget()" >Save</button>
+        </div>
+    </section>
+</div>
