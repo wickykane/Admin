@@ -1,8 +1,12 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
+
 import { PromotionService } from "../promotion.service";
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { PromotionModalContent } from '../modals/promotion.modal';
 
 
 @Component({
@@ -22,7 +26,7 @@ export class PromotionBudgetCreateComponent implements OnInit {
   /**
    * Init Data
    */
-  constructor(private vRef: ViewContainerRef, private fb: FormBuilder, private promotionService: PromotionService, public toastr: ToastsManager, private router: Router) {
+  constructor(private vRef: ViewContainerRef, private fb: FormBuilder, private promotionService: PromotionService, public toastr: ToastsManager, private router: Router, private modalService: NgbModal) {
     this.toastr.setRootViewContainerRef(vRef);
     this.generalForm = fb.group({
       'code': [{ value: null, disabled: true }],
@@ -40,6 +44,13 @@ export class PromotionBudgetCreateComponent implements OnInit {
   /**
    * Internal Function
    */
+  open() {
+    const modalRef = this.modalService.open(PromotionModalContent);
+    modalRef.result.then(data => {
+      console.log(data);
+    });
+    modalRef.componentInstance.name = 'World';
+  }
   createBudget = function () {
     let params = this.generalForm.value;
     this.promotionService.postBudget(params).subscribe(res => {
