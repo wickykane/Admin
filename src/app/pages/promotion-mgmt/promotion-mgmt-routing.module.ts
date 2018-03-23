@@ -18,6 +18,16 @@ const routes: Routes = [
             
         ]
     },
+    {
+        path: 'campaign', 
+        children : [
+            { path: '', component: PromotionCampaignComponent },
+            { path: 'create', component: PromotionBudgetCreateComponent },
+            { path: 'edit/:id', component: PromotionBudgetEditComponent },
+            
+            
+        ]
+    },
   
 ];
 
