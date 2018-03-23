@@ -27,7 +27,7 @@ export class UnitMeasureComponent implements OnInit {
   public data = {};
     constructor(
         private fb :FormBuilder,
-        private tableService:TableService,
+        public tableService:TableService,
         private activeRouter: ActivatedRoute,
         private router: Router,       
         private AdminPanelService: AdminPanelService) {

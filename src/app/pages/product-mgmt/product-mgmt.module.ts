@@ -9,11 +9,17 @@ import {ConditionProductGroupComponent} from './condition-product-group/conditio
 import {ECatalogComponent} from './e-catalog/e-catalog.component';
 import {ProductDefinitionComponent} from './product-definition/product-definition.component';
 
+import {ProductService} from './product-mgmt.service';
+import { CommonShareModule, PageHeaderModule } from '../../shared/index';
+import { TableService } from "../../services/index";
 
 @NgModule({
   imports: [
     CommonModule,
-    ProductMgmtRoutingModule
+    ProductMgmtRoutingModule,
+    CommonShareModule,
+    PageHeaderModule
+
   ],
   declarations: [
     ProductMgmtComponent,
@@ -21,6 +27,7 @@ import {ProductDefinitionComponent} from './product-definition/product-definitio
     BundleMgmtComponent,
     ConditionProductGroupComponent,
     ECatalogComponent,
-    ProductDefinitionComponent]
+    ProductDefinitionComponent],
+    providers:[ProductService,TableService]
 })
 export class ProductMgmtModule { }
