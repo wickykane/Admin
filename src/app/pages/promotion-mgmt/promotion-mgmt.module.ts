@@ -10,6 +10,8 @@ import { CommonShareModule } from '../../shared/index';
 import { TableService } from "../../services/index";
 import { PromotionService } from "./promotion.service";
 
+//Modal
+import { PromotionModalContent } from "./modals/promotion.modal";
 
 @NgModule({
   imports: [
@@ -17,7 +19,8 @@ import { PromotionService } from "./promotion.service";
     PurchaseManagementRoutingModule,
     CommonShareModule
   ],
-  declarations: [PromotionBudgetComponent, PromotionCampaignComponent, PromotionBudgetCreateComponent, PromotionBudgetEditComponent],
-  providers:[TableService,PromotionService]
+  declarations: [PromotionBudgetComponent, PromotionCampaignComponent, PromotionBudgetCreateComponent, PromotionBudgetEditComponent, PromotionModalContent ],
+  providers:[TableService,PromotionService],
+  entryComponents:[PromotionModalContent]
 })
 export class PromotionMgmtModule { }
