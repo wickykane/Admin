@@ -75,14 +75,14 @@ export class MenuComponent implements OnInit {
                 ]
             },
             {
-                flag: 'sale',
+                flag: 'order',
                 link: '/',
                 main_name: 'Sales Management',
                 icon: '',
                 sub: true,
                 child: [
                     {
-                        link: '/swa',
+                        link: '/order-management/buyer-rfq',
                         name: 'Buyer RFQ'
                     },
                     {
