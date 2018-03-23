@@ -73,7 +73,7 @@
                     </td>
 
                     <td>
-                        <a class="btn btn-default " (click)="editBudget(item.id)">
+                        <a class="btn btn-default " [routerLink]="['edit', item.id]">
                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                         </a>
                     </td>
