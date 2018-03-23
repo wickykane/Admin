@@ -3,7 +3,7 @@
 
     <div class="block anchor-scroll">
 
-        <div class="block-content pd-bottom tab-content bg-gray-light">
+        <div class="block-content pd-bottom bg-gray-light">
             <div class="row">
                 <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
                     <div class="block-search">
@@ -28,12 +28,14 @@
                     </div>
                     <div class="block-search">
                         <label for="" class="control-label"> Requested On</label>
-                        <input
-                            class="form-control"
-                            formControlName="rqst_dt"
-                            #dpYMD="bsDatepicker"
-                            bsDatepicker
-                            [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD' }">
+                        <div class="input-group">
+                            <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="rqst_dt" ngbDatepicker #d="ngbDatepicker">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                                      </button>
+                            </div>
+                        </div>
 
                     </div>
 

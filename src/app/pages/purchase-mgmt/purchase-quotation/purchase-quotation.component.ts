@@ -121,9 +121,7 @@ export class QuotationComponent implements OnInit {
     }
 
     getList() {
-        if (this.searchForm.value.rqst_dt) {
-            this.searchForm.value.rqst_dt = (this.searchForm.value.rqst_dt.toISOString().slice(0, 10));
-        }
+        
         var params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
         Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);
 

@@ -29,7 +29,29 @@ export class QuotationCreateComponent implements OnInit {
         }
 
     ngOnInit() {
-        this.listMaster['supplier'] = [];
+        this.getListSupplier();
+        this.generateCodePurchaseQuotation();
+    }
+
+    getListSupplier() {
+        var params = { page: 1, length: 100 }
+        this.purchaseService.getListSupplier(params).subscribe(res => {
+            try {
+                this.listMaster["supplier"] = res.results.rows;
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
+
+    generateCodePurchaseQuotation() {
+        this.purchaseService.generateCodePurchaseQuotation().subscribe(res => {
+            try {
+                this.generalForm.patchValue({cd: res.results.code});
+            } catch(e) {
+
+            }
+        });
     }
 
 }

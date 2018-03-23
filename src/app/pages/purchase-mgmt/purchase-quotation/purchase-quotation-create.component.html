@@ -20,7 +20,14 @@
                     <div class="col-md-2">
                         <label for="rqst_dt" class="control-label" >Requested On</label>
                         <span class="text-danger">( * )</span>
-                        <input class="form-control" formControlName="rqst_dt" #dpYMD="bsDatepicker" bsDatepicker [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD' }">
+                        <div class="input-group">
+                            <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="rqst_dt" ngbDatepicker #d="ngbDatepicker">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                                      </button>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-2">
                         <label for="bundle_name" class="control-label" >Supplier Name<span class="text-danger">( * )</span></label>
@@ -61,13 +68,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="add in items track by $index">
+                            <tr *ngFor="let item of items">
                                 <td>{{ $index + 1 }}</td>
-                                <td>{{add.sku}}</td>
-                                <td> {{add.name}}</td>
-                                <td>{{ add.uom_name}}</td>
+                                <td>{{item.sku}}</td>
+                                <td> {{item.name}}</td>
+                                <td>{{ item.uom_name}}</td>
                                 <td>
-                                    <input type="text" class="form-control" name="bundle_name" ng-model="add.qty" ng-init="add.qty = 1" numbers-int>
+                                    <input type="text" class="form-control" name="bundle_name" [(ngModel)]="item.qty" ng-init="item.qty = 1">
                                 </td>
                                 <td>
                                 </td>

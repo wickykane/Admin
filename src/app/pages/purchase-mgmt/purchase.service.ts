@@ -41,5 +41,10 @@ export class PurchaseService {
         return this.API.get(url);
     }
 
+    generateCodePurchaseQuotation() {
+        var url = 'purchase_quote/generate_code';
+        return this.API.get(url);
+    }
+
 
 }
