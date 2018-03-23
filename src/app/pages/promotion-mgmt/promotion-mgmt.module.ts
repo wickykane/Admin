@@ -6,6 +6,8 @@ import { PromotionBudgetCreateComponent } from './promotion-budget/promotion-bud
 import { PromotionBudgetEditComponent } from './promotion-budget/promotion-budget.edit.component';
 
 import { PromotionCampaignComponent } from './promotion-campaign/promotion-campaign.component';
+import { PromotionCampaignCreateComponent } from './promotion-campaign/promotion-campaign.create.component';
+
 import { CommonShareModule } from '../../shared/index';
 import { TableService } from "../../services/index";
 import { PromotionService } from "./promotion.service";
@@ -19,7 +21,7 @@ import { PromotionModalContent } from "./modals/promotion.modal";
     PurchaseManagementRoutingModule,
     CommonShareModule
   ],
-  declarations: [PromotionBudgetComponent, PromotionCampaignComponent, PromotionBudgetCreateComponent, PromotionBudgetEditComponent, PromotionModalContent ],
+  declarations: [PromotionBudgetComponent, PromotionCampaignComponent, PromotionBudgetCreateComponent, PromotionBudgetEditComponent, PromotionModalContent, PromotionCampaignCreateComponent ],
   providers:[TableService,PromotionService],
   entryComponents:[PromotionModalContent]
 })

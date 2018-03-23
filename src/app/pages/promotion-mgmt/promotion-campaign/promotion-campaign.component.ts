@@ -63,6 +63,11 @@ export class PromotionCampaignComponent implements OnInit {
       year: dateObject.getFullYear()
     }
   }
+
+  changeStatus(id, ac) {
+    return;
+  }
+
   getList() {
     var params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
     Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);

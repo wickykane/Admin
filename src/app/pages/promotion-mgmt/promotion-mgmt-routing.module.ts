@@ -5,6 +5,7 @@ import { PromotionBudgetCreateComponent } from './promotion-budget/promotion-bud
 import { PromotionBudgetEditComponent } from './promotion-budget/promotion-budget.edit.component';
 
 import { PromotionCampaignComponent } from "./promotion-campaign/promotion-campaign.component";
+import { PromotionCampaignCreateComponent } from "./promotion-campaign/promotion-campaign.create.component";
 
 
 const routes: Routes = [
@@ -22,7 +23,7 @@ const routes: Routes = [
         path: 'campaign', 
         children : [
             { path: '', component: PromotionCampaignComponent },
-            { path: 'create', component: PromotionBudgetCreateComponent },
+            { path: 'create', component: PromotionCampaignCreateComponent },
             { path: 'edit/:id', component: PromotionBudgetEditComponent },
             
             
