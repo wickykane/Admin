@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PromotionService } from "../promotion.service";
@@ -22,7 +22,8 @@ export class PromotionBudgetCreateComponent implements OnInit {
   /**
    * Init Data
    */
-  constructor(private fb: FormBuilder, private promotionService: PromotionService, public toastr: ToastsManager, private router: Router) {
+  constructor(private vRef: ViewContainerRef, private fb: FormBuilder, private promotionService: PromotionService, public toastr: ToastsManager, private router: Router) {
+    this.toastr.setRootViewContainerRef(vRef);
     this.generalForm = fb.group({
       'code': [{ value: null, disabled: true }],
       'name': [null, Validators.required],
@@ -33,8 +34,7 @@ export class PromotionBudgetCreateComponent implements OnInit {
   }
 
   ngOnInit() {
-    //Init data
-    //Init Fn
+
   }
 
   /**

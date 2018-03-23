@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { PurchaseManagementRoutingModule } from "./promotion-mgmt-routing.module";
 import { PromotionBudgetComponent } from './promotion-budget/promotion-budget.component';
 import { PromotionBudgetCreateComponent } from './promotion-budget/promotion-budget.create.component';
+import { PromotionBudgetEditComponent } from './promotion-budget/promotion-budget.edit.component';
 
 import { PromotionCampaignComponent } from './promotion-campaign/promotion-campaign.component';
 import { CommonShareModule } from '../../shared/index';
@@ -16,7 +17,7 @@ import { PromotionService } from "./promotion.service";
     PurchaseManagementRoutingModule,
     CommonShareModule
   ],
-  declarations: [PromotionBudgetComponent, PromotionCampaignComponent, PromotionBudgetCreateComponent],
+  declarations: [PromotionBudgetComponent, PromotionCampaignComponent, PromotionBudgetCreateComponent, PromotionBudgetEditComponent],
   providers:[TableService,PromotionService]
 })
 export class PromotionMgmtModule { }
