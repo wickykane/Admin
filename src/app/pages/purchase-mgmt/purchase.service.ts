@@ -16,6 +16,21 @@ export class PurchaseService {
 
     }
 
+    createPurchaseQuotation(params) {
+        var url = 'purchase_quote';
+        return this.API.post(url, params);
+    }
+
+    getDetailPurchaseQuotation(id) {
+        var url = 'purchase_quote/' + id;
+        return this.API.get(url);
+    }
+
+    upddatePurchaseQuotation(params, id) {
+        var url = 'purchase_quote/' + id;
+        return this.API.put(url, params);
+    }
+
     getListSupplier(params) {
         var url = 'company/list-option-company?is_supplier=true';
         return this.API.get(url, params);
@@ -44,11 +59,6 @@ export class PurchaseService {
     generateCodePurchaseQuotation() {
         var url = 'purchase_quote/generate_code';
         return this.API.get(url);
-    }
-
-    createPurchaseQuotation(params) {
-        var url = 'purchase_quote';
-        return this.API.post(url, params);
     }
 
 

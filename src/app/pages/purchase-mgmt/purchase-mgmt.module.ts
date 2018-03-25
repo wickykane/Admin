@@ -7,8 +7,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import {PurchaseManagementRoutingModule} from './purchase-mgmt-routing.module';
 
+//Quotation
 import {QuotationComponent} from './purchase-quotation/purchase-quotation.component';
 import {QuotationCreateComponent} from './purchase-quotation/purchase-quotation-create.component';
+import {QuotationDetailComponent} from './purchase-quotation/purchase-quotation-detail.component';
 
 import {SupplierComponent} from './supplier/supplier.component';
 import {PurchaseOrderComponent} from './purchase-order/purchase-order.component';
@@ -38,6 +40,7 @@ import { ItemModalModule } from "../../shared/modals/item.module";
   declarations: [
     QuotationComponent,
     QuotationCreateComponent,
+    QuotationDetailComponent,
     SupplierComponent,
     PurchaseOrderComponent,
     InboundDeliveryComponent,

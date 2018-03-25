@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { QuotationComponent } from './purchase-quotation/purchase-quotation.component';
 import { QuotationCreateComponent } from './purchase-quotation/purchase-quotation-create.component';
+import { QuotationDetailComponent} from './purchase-quotation/purchase-quotation-detail.component';
 
 const routes: Routes = [
     {
@@ -11,7 +12,7 @@ const routes: Routes = [
         children : [
             { path: '', component: QuotationComponent },
             { path: 'create', component: QuotationCreateComponent },
-
+            { path: 'detail/:id', component: QuotationDetailComponent }
         ]
     },
 

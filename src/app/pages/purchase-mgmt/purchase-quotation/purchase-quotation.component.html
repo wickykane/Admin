@@ -79,7 +79,7 @@
                                 <a class="btn btn-default" title="{{ (!showProduct)? 'Show details': 'Hide details' }}" [ngClass]="{'disable-expand': item.purchase_quote_details.length == 0 }" (click)="toggleSubRow(item.id)">
                                 <i class="fa" [ngClass]="{'fa-minus': showProduct,' fa-plus': !showProduct}"></i>
                             </a>
-                                <a class="btn btn-default " title="Edit" [routerLink]="['/purchase-management/purchase-quotation/' + item.id]">
+                                <a class="btn btn-default " title="Edit" [routerLink]="['/purchase-management/purchase-quotation/detail/' + item.id]">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                             </a>
                                 <a (click)="sentToSuppPQ(item.id)" *ngIf="(item.purchase_quote_status_cd=='NW')" class="btn btn-default " title="Send Mail">
