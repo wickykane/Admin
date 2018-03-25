@@ -1,5 +1,5 @@
 import { TableService } from './../../../services/table.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PurchaseService } from "../purchase.service";
@@ -19,11 +19,12 @@ export class QuotationComponent implements OnInit {
      * Variable Declaration
      */
     public listMaster = {};
-    public showProduct: string = '';
     public selectedIndex = 0;
     public list = {
         items: []
     };
+    public showProduct: boolean = false;
+    public flagId: string = '';
 
     public user: any;
     public data = {};
@@ -33,7 +34,9 @@ export class QuotationComponent implements OnInit {
     constructor(public router: Router,
         public fb: FormBuilder,
         public toastr: ToastsManager,
+        private vRef: ViewContainerRef,
         public tableService: TableService, private purchaseService: PurchaseService) {
+        this.toastr.setRootViewContainerRef(vRef);
 
         this.searchForm = fb.group({
             'cd': [null],
@@ -53,7 +56,7 @@ export class QuotationComponent implements OnInit {
         this.getListSupplier();
         this.getListStatus();
 
-        this.user = localStorage.getItem('currentUser');
+        this.user = JSON.parse(localStorage.getItem('currentUser'));
     }
     /**
      * Table Event
@@ -64,10 +67,19 @@ export class QuotationComponent implements OnInit {
     /**
      * Internal Function
      */
+     toggleSubRow(id) {
+         if (id === this.flagId) {
+             this.flagId = '0';
+         } else {
+             this.flagId = id;
+         }
+         this.showProduct = !this.showProduct;
+     }
+
     sentToSuppPQ(id){
         this.purchaseService.sentToSuppPQ(id).subscribe(res => {
             try {
-                this.toastr.success(res.data.message);
+                this.toastr.success(res.message);
                 this.getList();
             } catch (e) {
                 console.log(e);
@@ -78,7 +90,7 @@ export class QuotationComponent implements OnInit {
     approve(id) {
         this.purchaseService.aprvByMgrPQ(id).subscribe(res => {
             try {
-                this.toastr.success(res.data.message);
+                this.toastr.success(res.message);
                 this.getList();
             } catch (e) {
                 console.log(e);
@@ -90,7 +102,7 @@ export class QuotationComponent implements OnInit {
     reject(id) {
         this.purchaseService.rjtByMgrPQ(id).subscribe(res => {
             try {
-                this.toastr.success(res.data.message);
+                this.toastr.success(res.message);
                 this.getList();
             } catch (e) {
                 console.log(e);
@@ -121,7 +133,7 @@ export class QuotationComponent implements OnInit {
     }
 
     getList() {
-        
+
         var params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
         Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);
 

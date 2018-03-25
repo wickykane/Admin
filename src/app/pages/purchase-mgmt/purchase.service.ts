@@ -28,22 +28,27 @@ export class PurchaseService {
 
     sentToSuppPQ(id) {
         var url = 'purchase_quote/sent_to_supp/' + id;
-        return this.API.get(url);
+        return this.API.put(url);
     }
 
     aprvByMgrPQ(id) {
         var url = 'purchase_quote/aprv_by_mgr/' + id;
-        return this.API.get(url);
+        return this.API.put(url);
     }
 
     rjtByMgrPQ(id) {
         var url = 'purchase_quote/rjt_by_mgr/' + id;
-        return this.API.get(url);
+        return this.API.put(url);
     }
 
     generateCodePurchaseQuotation() {
         var url = 'purchase_quote/generate_code';
         return this.API.get(url);
+    }
+
+    createPurchaseQuotation(params) {
+        var url = 'purchase_quote';
+        return this.API.post(url, params);
     }
 
 

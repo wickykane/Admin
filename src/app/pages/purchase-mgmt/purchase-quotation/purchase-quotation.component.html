@@ -76,7 +76,7 @@
                                 {{item.rqst_dt}}
                             </td>
                             <td class="text-nowrap">
-                                <a class="btn btn-default" title="{{ (!showProduct)? 'Show details': 'Hide details' }}" [ngClass]="{'disable-expand': item.purchase_quote_details.length == 0 }" (click)="showProduct = !showProduct">
+                                <a class="btn btn-default" title="{{ (!showProduct)? 'Show details': 'Hide details' }}" [ngClass]="{'disable-expand': item.purchase_quote_details.length == 0 }" (click)="toggleSubRow(item.id)">
                                 <i class="fa" [ngClass]="{'fa-minus': showProduct,' fa-plus': !showProduct}"></i>
                             </a>
                                 <a class="btn btn-default " title="Edit" [routerLink]="['/purchase-management/purchase-quotation/' + item.id]">
@@ -93,7 +93,7 @@
                             </a>
                             </td>
                         </tr>
-                        <tr *ngIf="showProduct">
+                        <tr *ngIf="item.id === flagId">
                             <td></td>
                             <td colspan="100%">
                                 <table class="table table-striped table-vcenter table-child">

@@ -68,13 +68,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let item of items">
-                                <td>{{ $index + 1 }}</td>
+                            <tr *ngFor="let item of items; let i = index">
+                                <td>{{index + 1}}</td>
                                 <td>{{item.sku}}</td>
                                 <td> {{item.name}}</td>
                                 <td>{{ item.uom_name}}</td>
                                 <td>
-                                    <input type="text" class="form-control" name="bundle_name" [(ngModel)]="item.qty" ng-init="item.qty = 1">
+                                    <input type="text" class="form-control" name="bundle_name" [(ngModel)]="item.qty">
                                 </td>
                                 <td>
                                 </td>
@@ -83,14 +83,14 @@
                     </table>
                 </div>
                 <div class="block-content">
-                    <button style="margin: 10px 0;" class="btn btn-primary" (click)="addNewProduct(supplier_id)">Add New Product</button>
+                    <button style="margin: 10px 0;" [disabled]="!this.generalForm.value.supplier_id" class="btn btn-primary" (click)="addNewProduct(this.generalForm.value.supplier_id)">Add New Product</button>
                 </div>
             </div>
         </div>
 
         <div class="block-content block-content-full text-right">
             <button type="button" class="btn btn-default" [routerLink]="['/purchase-management/purchase-quotation']" >Cancel</button>
-            <button type="button" class="btn btn-primary" (click)="createBudget()" >Save</button>
+            <button type="button" [disabled]="generalForm.invalid" class="btn btn-primary" (click)="createQuotation()" >Save</button>
         </div>
     </section>
 </div>

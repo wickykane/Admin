@@ -15,9 +15,14 @@ import {PurchaseOrderComponent} from './purchase-order/purchase-order.component'
 import {InboundDeliveryComponent} from './inbound-delivery/inbound-delivery.component';
 import {WarehouseReceiptComponent} from './warehouse-receipt/warehouse-receipt.component';
 
+import { PurchaseService } from "./purchase.service";
+//Table Service
 import { CommonShareModule } from '../../shared/index';
 import { TableService } from "../../services/index";
-import { PurchaseService } from "./purchase.service";
+
+//Modal
+import { ItemModalContent } from "../../shared/modals/item.modal";
+import { ItemModalModule } from "../../shared/modals/item.module";
 
 @NgModule({
   imports: [
@@ -28,6 +33,7 @@ import { PurchaseService } from "./purchase.service";
     FormsModule,
     ReactiveFormsModule,
     CommonShareModule,
+    ItemModalModule
   ],
   declarations: [
     QuotationComponent,
@@ -35,8 +41,10 @@ import { PurchaseService } from "./purchase.service";
     SupplierComponent,
     PurchaseOrderComponent,
     InboundDeliveryComponent,
-    WarehouseReceiptComponent
+    WarehouseReceiptComponent,
+    ItemModalContent
 ],
-providers:[TableService,PurchaseService]
+providers:[TableService,PurchaseService],
+entryComponents:[ItemModalContent]
 })
 export class PurchaseManagementModule {}
