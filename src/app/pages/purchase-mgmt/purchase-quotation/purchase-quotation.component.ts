@@ -27,7 +27,6 @@ export class QuotationComponent implements OnInit {
     public flagId: string = '';
 
     public user: any;
-    public data = {};
 
     searchForm: FormGroup;
 
@@ -40,8 +39,8 @@ export class QuotationComponent implements OnInit {
 
         this.searchForm = fb.group({
             'cd': [null],
-            'supp_id': [null],
-            'sts': [null],
+            'supplier_id': [null],
+            'purchase_quote_status_id': [null],
             'rqst_dt': [null]
         });
 
