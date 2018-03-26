@@ -102,5 +102,34 @@ export class PurchaseService {
         var url = 'purchase_order_delivery';
         return this.API.get(url, params);
     }
+    /**
+     * WAREHOUSE RECEIPT
+     */
+    //Warehouse
+    getListWarehouseReceipt(params) {
+        var url = 'warehouse_receipt';
+        return this.API.get(url, params);
+    }
+    createWarehouseReceipt(params) {
+        var url = 'warehouse_receipt';
+        return this.API.post(url, params);
+    }
+    updateStatusWarehouseReceiptCode(params, id) {
+        var url = 'warehouse_receipt/status/' + id;
+        return this.API.put(url, params);
+    }
+    getPurchaseOrderDelivery() {
+        var url = 'purchase_order_delivery?is_all=1&sts=2';
+        return this.API.get(url);
+    }
+    generationWarehouseReceiptCode() {
+        var url = 'warehouse_receipt/generate_code';
+        return this.API.get(url);
+    }
+    getDetailDeliveryOrder(id) {
+        var url = 'purchase_order_delivery/' + id;
+        return this.API.get(url);
+    }
+
 
 }

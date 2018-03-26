@@ -1,0 +1,109 @@
+<div [@routerTransition]>
+    <app-page-header [heading]="'CREATE NEW WAREHOUSE RECEIPTS'" [icon]="'fa-th-list'"></app-page-header>
+
+    <section class="rma-page block">
+        <div class="row" style="padding-top:15px">
+            <div class="col-sm-12">
+                <div class="block-header bg-gray-lighter">
+                    <h3 class="block-title" >GENERAL INFORMATION</h3>
+                </div>
+            </div>
+        </div>
+        <div>
+            <form [formGroup]="generalForm" class="form-search full-width form-horizontal">
+                <div class="row col-md-12">
+                    <div class="col-md-2">
+                        <label for="receipt_no" class="control-label" >Receipt No #</label>
+                        <span class="text-danger">( * )</span>
+                        <input type="text" class="form-control" name="receipt_no" formControlName="receipt_no">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="po_delivery_id" class="control-label" >Inbound Delievery #<span class="text-danger">( * )</span></label>
+                        <select class="form-control" formControlName="po_delivery_id" (change)="changeInboudDelivery(this.generalForm.value.po_delivery_id)">
+                                  <option value="null" selected="true"  >--Select--</option>
+                                  <option *ngFor="let item of listMaster['inbound']" [ngValue] = "item.id">{{item.cd}}</option>
+                                </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="purchase_order_oli_cd" class="control-label">Purchase Order #</label>
+                        <input type="text" class="form-control" name="purchase_order_oli_cd" formControlName="purchase_order_oli_cd">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="supplier_name" class="control-label">Supplier Name </label>
+                        <span class="text-danger">( * )</span>
+                        <input type="text" class="form-control" name="supplier_name" formControlName="supplier_name">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="date_of_receipt" class="control-label">Date of Receipt</label>
+                        <span class="text-danger">( * )</span>
+                        <div class="input-group">
+                            <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="date_of_receipt" ngbDatepicker #d="ngbDatepicker">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                                      </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="delivery_location" class="control-label">Receipt Location</label>
+                        <input type="text" class="form-control" name="delivery_location" formControlName="delivery_location">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="sts" class="control-label" >Status</label>
+                        <span class="text-danger">( * )</span>
+                        <input type="text" class="form-control" name="sts" value="1- New" disabled>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="des" class="control-label" >Note</label>
+                        <textarea name="des" class="form-control" formControlName="des" rows="4"></textarea>
+                    </div>
+
+                </div>
+
+            </form>
+        </div>
+        <div class="row" style="padding-top:15px">
+            <div class="col-sm-12">
+                <div class="block-header bg-gray-lighter">
+                    <h3 class="block-title" >PRODUCTS</h3>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 20px;margin-top: 10px;">
+            <div class="col-sm-12">
+                <div class="block-content">
+                    <table class="table table-striped table-vcenter table-hover custom-table">
+                        <thead>
+                            <tr>
+                                <th role="button" > No </th>
+                                <th role="button" > Product Code </th>
+                                <th role="button" > Product Name </th>
+                                <th role="button" > UOM </th>
+                                <th role="button" > Inbound QTY </th>
+                                <th style="width:15%" role="button" > Receipt Quantity <span>( * )</span></th>
+                                <th style="width:15%" role="button" > Remark </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of items; let i = index">
+                                <td>{{ i + 1 }}</td>
+                                <td>{{item.sku}}</td>
+                                <td>{{item.product_name}}</td>
+                                <td>{{item.uom_name}}</td>
+                                <td>{{item.inbound_qty}}</td>
+                                <td><input type="text" class="form-control" name="receipt_qty" [(ngModel)]="item.receipt_qty" maxlength="80" numbers-int></td>
+                                <td><input type="text" class="form-control" name="remark" [(ngModel)]="item.remark" maxlength="80"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="block-content block-content-full text-right">
+            <button type="button" class="btn btn-default" [routerLink]="['/purchase-management/warehouse_receipt']" >Cancel</button>
+            <button type="button" [disabled]="generalForm.invalid" class="btn btn-primary" (click)="createWarehouseReceipt()" >Save</button>
+        </div>
+    </section>
+</div>
