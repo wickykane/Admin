@@ -94,5 +94,13 @@ export class PurchaseService {
         var url = 'sale-price';
         return this.API.post(url, params);
     }
+    /**
+     * INBOUND DELIVERY
+     */
+    //Inbound
+    getListInboundDelievery(params) {
+        var url = 'purchase_order_delivery';
+        return this.API.get(url, params);
+    }
 
 }

@@ -136,8 +136,8 @@
                                     <div class="block-btn-search">
                                         <label class="control-label">&nbsp;</label>
                                         <div>
-                                            <button type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Search</button>
-                                            <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchBundleForm)" translate>Reset</button>
+                                            <button type="button" class="btn btn-primary" (click)="tableBundleService.searchAction()" translate>Search</button>
+                                            <button type="button" class="btn btn-default" (click)="tableBundleService.resetAction(this.searchBundleForm)" translate>Reset</button>
                                         </div>
                                     </div>
                                 </form>
@@ -186,16 +186,16 @@
                                 <div class="col-md-6">
                                     <div class="text-left">
                                         <div class="col-md-6" style="padding-left: 0px;">
-                                            <span style="float: left; padding-right: 10px;">{{list.bundles.length}}/{{tableService.pagination.total_record}} items </span>
-                                            <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length" (change)="tableService.changeLength()">
-                                <option *ngFor="let option of tableService.itemPerPageOptions" [ngValue]="option">{{option}}</option>
+                                            <span style="float: left; padding-right: 10px;">{{list.bundles.length}}/{{tableBundleService.pagination.total_record}} items </span>
+                                            <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableBundleService.pagination.length" (change)="tableBundleService.changeLength()">
+                                <option *ngFor="let option of tableBundleService.itemPerPageOptions" [ngValue]="option">{{option}}</option>
                             </select>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="text-right">
-                                        <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length" [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page" [maxSize]="tableService.maxSize"
+                                        <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableBundleService.changePage($event)" [pageSize]="tableBundleService.pagination.length" [collectionSize]="tableBundleService.pagination.total_record || 120" [(page)]="tableBundleService.pagination.page" [maxSize]="tableBundleService.maxSize"
                                             [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
                                     </div>
                                 </div>
