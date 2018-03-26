@@ -163,6 +163,10 @@ export class PromotionCampaignCreateComponent implements OnInit {
     this.openPromotionModal(item);
   }
 
+  remove = function (index) {
+    this.data['programs'].splice(index, 1);
+  };
+
   createCampain = function () {
     var params = this.generalForm.value;
     params.programs = this.data['programs'];
@@ -178,7 +182,7 @@ export class PromotionCampaignCreateComponent implements OnInit {
       }
     },
       err => {
-        this.toastr.error(err);
+        this.toastr.error(err.message, null, { enableHTML: true });
       })
 
   }
