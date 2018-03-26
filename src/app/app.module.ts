@@ -15,7 +15,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthGuard, JwtService} from './shared';
 import { AuthenticationService, ApiService } from './services/index';
-
+import { NgHttpLoaderModule } from 'ng-http-loader/ng-http-loader.module';
 
 
 // AoT requires an exported function for factories
@@ -31,6 +31,7 @@ export function createTranslateLoader(http: HttpClient) {
         BrowserModule,
         BrowserAnimationsModule,
         HttpClientModule,
+        NgHttpLoaderModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
