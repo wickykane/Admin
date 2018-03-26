@@ -108,4 +108,26 @@ export class PromotionService {
         var url = 'customer_segment/' + id;
         return this.API.put(url, params);
     }
+    /**
+     * Item Option
+     */
+    getListItemOption() {
+        var url = 'item/reference';
+        return this.API.get(url);
+    }
+    /**
+     * CONDITION
+     */
+    getListCondition(params) {
+        var url = 'promotion_condition';
+        return this.API.get(url, params);
+    }
+    getListConditionRef(params?) {
+        var url = 'promotion_condition/reference';
+        return this.API.get(url, params);
+    }
+    postCondition(params) {
+        var url = 'promotion_condition';
+        return this.API.post(url, params);
+    }
 }
