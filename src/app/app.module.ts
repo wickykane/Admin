@@ -18,6 +18,7 @@ import { AuthenticationService, ApiService } from './services/index';
 import { NgHttpLoaderModule } from 'ng-http-loader/ng-http-loader.module';
 
 
+
 // AoT requires an exported function for factories
 export function createTranslateLoader(http: HttpClient) {
     // for development
@@ -56,7 +57,7 @@ export function createTranslateLoader(http: HttpClient) {
         AuthGuard,
         JwtService,
         AuthenticationService,
-        ApiService,
+        ApiService
     ],
     bootstrap: [AppComponent]
 })
