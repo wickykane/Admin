@@ -20,7 +20,7 @@
             <div class="row col-md-12">
                 <div class="col-md-2">
                     <label for="campaign" class="control-label" translate>Campaign</label>
-                    <input type="text" class="form-control" name="rma" formControlName="code" [attr.disabled]='true'>
+                    <input type="text" class="form-control" name="rma" formControlName="cd" [attr.disabled]='true'>
                 </div>
                 <div class="col-md-2">
                     <label for="campaign_name" class="control-label" translate>Name</label>
@@ -208,6 +208,6 @@
 
     <div class="block-content block-content-full text-right">
         <button type="button" class="btn btn-default" [routerLink]="['/promotion/campaign']" translate>Cancel</button>
-        <button [disabled]="!generalForm.valid" type="button" class="btn btn-primary" (click)="createCampain()" translate>Save</button>
+        <button [disabled]="!generalForm.valid" type="button" class="btn btn-primary" (click)="updateCampain()" translate>Save</button>
     </div>
 </section>

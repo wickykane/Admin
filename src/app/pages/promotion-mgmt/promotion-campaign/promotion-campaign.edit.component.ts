@@ -12,11 +12,11 @@ import { PromotionInvoiceModalContent } from '../modals/promotion-invoice.modal'
 
 @Component({
   selector: 'app-promotion-campaign',
-  templateUrl: './promotion-campaign.create.component.html',
+  templateUrl: './promotion-campaign.edit.component.html',
   styleUrls: ['./promotion-campaign.component.scss']
 })
 
-export class PromotionCampaignCreateComponent implements OnInit {
+export class PromotionCampaignEditComponent implements OnInit {
   /**
    * Variable Declaration
    */
@@ -27,10 +27,10 @@ export class PromotionCampaignCreateComponent implements OnInit {
   /**
    * Init Data
    */
-  constructor(private vRef: ViewContainerRef, private fb: FormBuilder, private promotionService: PromotionService, public toastr: ToastsManager, private router: Router, private modalService: NgbModal) {
+  constructor(private vRef: ViewContainerRef, private fb: FormBuilder, private promotionService: PromotionService, public toastr: ToastsManager, private router: Router, private modalService: NgbModal, private route: ActivatedRoute) {
     this.toastr.setRootViewContainerRef(vRef);
     this.generalForm = fb.group({
-      'code': [{ value: null, disabled: true }],
+      'cd': [{ value: null, disabled: true }],
       'name': [null, Validators.required],
       'end_dt': [null],
       'start_dt': [null],
@@ -44,14 +44,9 @@ export class PromotionCampaignCreateComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getListStatus();
-    this.getListBaseOn();
-    this.getListBudget();
-    this.getListCustomerSegment();
-    this.getListPromotionLevel();
-    this.getTypeProgram();
 
-    this.data['programs'] = [];
+    this.data["id"] = this.route.snapshot.paramMap.get('id');
+    this.getDetailCampaign(this.data["id"]);
   }
   /**
    * Mater Data
@@ -107,32 +102,66 @@ export class PromotionCampaignCreateComponent implements OnInit {
   }
 
   getTypeProgram() {
-    this.promotionService.getTypeProgram().subscribe(res => {
-      try {
-        this.listMaster['typeProgram'] = res.results;
-      } catch (e) {
-        console.log(e);
-      }
+    return new Promise(resolve => {
+      this.promotionService.getTypeProgram().subscribe(res => {
+        try {
+          this.listMaster['typeProgram'] = res.results;
+          resolve(true);
+        } catch (e) {
+          console.log(e);
+        }
+      })
     })
   }
   /**
    * Internal Function
    */
 
-  checkLevel(item) {
+  async getDetailCampaign(id) {
+    this.getListStatus();
+    this.getListBaseOn();
+    this.getListBudget();
+    this.getListCustomerSegment();
+    this.getListPromotionLevel();
+    await this.getTypeProgram();
+
+    this.promotionService.getPromoProgram(id).subscribe(res => {
+      try {
+        if (res._type == 'success') {
+          this.generalForm.patchValue(res.results);
+          this.data['programs'] = res.results.programs || [];
+          if (this.listMaster['typeProgram']) {
+            this.data['programs'].forEach(item => {
+              this.checkLevel(item, 1);
+            });
+          }
+        } else {
+          this.toastr.error(res.message);
+        }
+
+      } catch (e) {
+        console.log(e)
+      }
+    })
+  }
+
+
+  checkLevel(item, flag?) {
     let tempArr = Array.from(this.listMaster['typeProgram']);
     if (item.level == 3) {
       item.typeProgram = tempArr.splice(1, 1);
-      item.detail = [];
+      item.detail =   item.detail ||  [];
     } else {
       item.typeProgram = tempArr.splice(0, 1);
-      item.detail = [];
+      item.detail =   item.detail || [];
     }
 
     //reset
-    item.is_promo_goods = false;
-    item.is_dsct = false;
-    item.is_acc_bal = false;
+    if(!flag) {
+      item.is_promo_goods = false;
+      item.is_dsct = false;
+      item.is_acc_bal = false;
+    }
   }
 
   clickAdd() {
@@ -163,11 +192,11 @@ export class PromotionCampaignCreateComponent implements OnInit {
     this.openPromotionModal(item);
   }
 
-  createCampain = function () {
+  updateCampain = function () {
     var params = this.generalForm.value;
     params.programs = this.data['programs'];
-    console.log(params);
-    this.promotionService.postCampaign(params).subscribe(res => {
+
+    this.promotionService.updatePromoProgram(this.data['id'], params).subscribe(res => {
       try {
         this.toastr.success(res.message);
         setTimeout(() => {
