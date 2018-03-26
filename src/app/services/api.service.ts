@@ -39,28 +39,28 @@ export class ApiService {
     get(path, params:URLSearchParams = new URLSearchParams() ):Observable<any>  {
         return this.http.get(`${environment.api_url}${path}`, this.headerJson(params))
             .map(res => res.json())  // could raise an error if invalid JSON
-            .do(data => console.log('server data:', data))  // debug
+            .do(data => data)  // debug
             .catch(this._serverError);
     };
 
     post(path, params:Object = {} ):Observable<any> {
         return this.http.post(`${environment.api_url}${path}`, JSON.stringify(params), this.headerJson())
             .map(res => res.json())  // could raise an error if invalid JSON
-            .do(data => console.log('server data:', data))  // debug
+            .do(data => data)  // debug
             .catch(this._serverError);
     };
 
     put(path, params:Object = {} ):Observable<any> {
         return this.http.put(`${environment.api_url}${path}`, JSON.stringify(params), this.headerJson())
             .map(res => res.json())  // could raise an error if invalid JSON
-            .do(data => console.log('server data:', data))  // debug
+            .do(data => data)  // debug
             .catch(this._serverError);
     };
 
     delete(path):Observable<any> {
         return this.http.delete(`${environment.api_url}${path}`, this.headerJson(''))
             .map(res => res.json())  // could raise an error if invalid JSON
-            .do(data => console.log('server data:', data))  // debug
+            .do(data => data)  // debug
             .catch(this._serverError);
     };
 

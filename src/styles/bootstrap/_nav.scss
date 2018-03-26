@@ -39,6 +39,8 @@
   .nav-link {
     border: $nav-tabs-border-width solid transparent;
     @include border-top-radius($nav-tabs-border-radius);
+    font-weight: 600;
+    color: #000;
 
     @include hover-focus {
       border-color: $nav-tabs-link-hover-border-color;
@@ -53,9 +55,11 @@
 
   .nav-link.active,
   .nav-item.show .nav-link {
-    color: $nav-tabs-link-active-color;
+    color: #36c6d3;
     background-color: $nav-tabs-link-active-bg;
     border-color: $nav-tabs-link-active-border-color;
+    font-weight: 600;
+    border-top: 2px solid;
   }
 
   .dropdown-menu {
