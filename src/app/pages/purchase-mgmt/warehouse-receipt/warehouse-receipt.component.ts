@@ -20,6 +20,7 @@ export class WarehouseReceiptComponent implements OnInit {
      */
     public listMaster = {};
     public selectedIndex = 0;
+    public onoffFilter: any;
     public list = {
         items: []
     };
