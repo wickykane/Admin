@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Spinkit } from 'ng-http-loader/spinkits';
 
 @Component({
     selector: 'app-layout',
@@ -7,6 +8,6 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LayoutComponent implements OnInit {
     constructor() {}
-
+    public spinkit = Spinkit;
     ngOnInit() {}
 }
