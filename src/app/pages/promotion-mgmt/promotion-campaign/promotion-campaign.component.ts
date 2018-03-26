@@ -25,7 +25,7 @@ export class PromotionCampaignComponent implements OnInit {
   /**
    * Init Data
    */
-  constructor(private fb: FormBuilder, public tableService: TableService, private promotionService: PromotionService) {
+  constructor(private fb: FormBuilder, public tableService: TableService, public tableFactory: TableService, private promotionService: PromotionService) {
     this.searchForm = fb.group({
       'cd': [null],
       'name': [null],
@@ -36,6 +36,10 @@ export class PromotionCampaignComponent implements OnInit {
     });
 
     //Assign get list function name, override variable here
+    this.tableFactory.getListFnName = 'getList';
+    this.tableFactory.context = this;
+
+
     this.tableService.getListFnName = 'getList';
     this.tableService.context = this;
 
