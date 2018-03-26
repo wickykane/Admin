@@ -4,37 +4,25 @@ import { PromotionService } from "../promotion.service";
 
 @Component({
   selector: 'promotion-modal-content',
-  templateUrl: './promotion.modal.html'
+  templateUrl: './promotion-invoice.modal.html'
 })
-export class PromotionModalContent implements OnInit {
+export class PromotionInvoiceModalContent implements OnInit {
   //Resolve Data
   @Input() name;
   @Input() item;
 
   public modalTitle = 'PROMOTION DETAIL LINE';
   public listMaster = {};
-
+  private _item;
   constructor(public activeModal: NgbActiveModal, private promotionService: PromotionService) { }
 
   ngOnInit() {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     this.getListPromotionLevel();
+    this.getListItem();
     this.getListPromoType();
-    if ((this.item.level == 2 || this.item.level == 4) && this.item.type == 1) {
-      if (this.item.level == 4) {
-        //List Condition
-        this.getListLine();
-        this.getListConditionRef();
-      } else {
-        //List Bundle
-        this.getListBundleRefer();
-      }
-    }
-    else {
-      //List Item Line
-      this.getListItem();
-    }
+    this._item = Object.assign(this.item);
   }
 
   getListPromotionLevel() {
@@ -42,16 +30,6 @@ export class PromotionModalContent implements OnInit {
 
       try {
         this.listMaster['promotionLevel'] = res.results;
-      } catch (e) {
-        console.log(e);
-      }
-    })
-  }
-
-  getListConditionRef() {
-    this.promotionService.getListConditionRef().subscribe(res => {
-      try {
-        this.listMaster['productList'] = res.results;
       } catch (e) {
         console.log(e);
       }
@@ -80,28 +58,6 @@ export class PromotionModalContent implements OnInit {
     })
   }
 
-  getListLine() {
-    this.promotionService.getListItemOption().subscribe(res => {
-
-      try {
-        this.listMaster['productLine'] = res.results;
-      } catch (e) {
-        console.log(e);
-      }
-    })
-  }
-
-  //Bundle
-  getListBundleRefer() {
-    this.promotionService.getListRefernceBundle().subscribe(res => {
-
-      try {
-        this.listMaster['productListBundle'] = res.results;
-      } catch (e) {
-        console.log(e);
-      }
-    })
-  }
   /**
    * Internal Fn
    */
@@ -116,6 +72,7 @@ export class PromotionModalContent implements OnInit {
   };
 
   cancel() {
+    this.item = this._item;
     this.activeModal.close(this.item);
   }
 
@@ -137,35 +94,6 @@ export class PromotionModalContent implements OnInit {
     item.prom_name = itemID[0].name;
     item.prom_uom = itemID[0].uom_name;
     item.price = itemID[0].price;
-  }
-
-  changeBundleLineBuying = function (item, index) {
-    var itemID = this.listMaster.productListBundle.filter(function (product) {
-      if (product.item_id == item.buying_bundle_id)
-        return product;
-    });
-    console.log(itemID);
-    item.name = itemID[0].name;
-    item.uom = itemID[0].uom_name;
-    item.price = itemID[0].price;
-  }
-
-  changeBundleLinePromo = function (item, index) {
-    var itemID = this.listMaster.productListBundle.filter(function (product) {
-      if (product.item_id == item.prom_bundle_id)
-        return product;
-    });
-    item.prom_name = itemID[0].name;
-    item.prom_uom = itemID[0].uom_name;
-    item.prom_price = itemID[0].price;
-  }
-
-  changeConditionLineBuying = function (item, index) {
-    var itemID = this.listMaster.productList.filter(function (product) {
-      if (product.id == item.promotion_condition_group_id)
-        return product;
-    });
-    item.name = itemID[0].name;
   }
 
 }

@@ -7,6 +7,7 @@ import { PromotionBudgetEditComponent } from './promotion-budget/promotion-budge
 
 import { PromotionCampaignComponent } from './promotion-campaign/promotion-campaign.component';
 import { PromotionCampaignCreateComponent } from './promotion-campaign/promotion-campaign.create.component';
+import { PromotionCampaignEditComponent } from './promotion-campaign/promotion-campaign.edit.component';
 
 import { CommonShareModule } from '../../shared/index';
 import { TableService } from "../../services/index";
@@ -14,6 +15,8 @@ import { PromotionService } from "./promotion.service";
 
 //Modal
 import { PromotionModalContent } from "./modals/promotion.modal";
+import { PromotionInvoiceModalContent } from "./modals/promotion-invoice.modal";
+
 
 @NgModule({
   imports: [
@@ -21,8 +24,8 @@ import { PromotionModalContent } from "./modals/promotion.modal";
     PurchaseManagementRoutingModule,
     CommonShareModule
   ],
-  declarations: [PromotionBudgetComponent, PromotionCampaignComponent, PromotionBudgetCreateComponent, PromotionBudgetEditComponent, PromotionModalContent, PromotionCampaignCreateComponent ],
+  declarations: [PromotionBudgetComponent, PromotionCampaignComponent, PromotionBudgetCreateComponent, PromotionBudgetEditComponent, PromotionModalContent, PromotionCampaignCreateComponent, PromotionInvoiceModalContent, PromotionCampaignEditComponent ],
   providers:[TableService,PromotionService],
-  entryComponents:[PromotionModalContent]
+  entryComponents:[PromotionModalContent, PromotionInvoiceModalContent]
 })
 export class PromotionMgmtModule { }

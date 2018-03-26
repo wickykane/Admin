@@ -115,7 +115,7 @@ export class MenuComponent implements OnInit {
                         name: 'Promotion Budget'
                     },
                     {
-                        link: '/sdsw',
+                        link: '/promotion/campaign',
                         name: 'Promotion Campaign'
                     }
                 ]

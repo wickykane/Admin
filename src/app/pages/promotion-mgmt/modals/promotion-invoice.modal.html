@@ -1,0 +1,54 @@
+<div class="modal-style">
+    <div class="modal-header">
+        <p class="second-title">{{modalTitle}}</p>
+        <button type="button" class="close" aria-label="Close" (click)="cancel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body" style="padding-bottom:10px;">
+        <h4>{{name}}</h4>
+        <div class="block-content">
+            <table class="table-striped table-vcenter table-hover custom-table">
+                <thead>
+                    <tr>
+                        <th style="width:20px" role="button" class="text-nowrap"> No </th>
+                        <th class="text-nowrap" translate>Invoice Amount</th>
+                        <th class="text-nowrap" *ngIf="item.is_dsct" translate>% Total Discount</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let add of item.detail; let $index = index;">
+                        <td>{{ $index + 1 }}</td>
+                        <td>
+                            <input type="text" class="form-control" [(ngModel)]="add.inv_amt">
+                        </td>
+                        <td *ngIf="item.is_dsct">
+                            <input type="text" class="form-control" [(ngModel)]="add.dsct_pct">
+                        </td>
+                        <td>
+                            <button type="button" (click)="remove($index)" class="btn btn-secondary" uib-tooltip="Remove">
+                          <i class="fa fa-times" aria-hidden="true"></i>
+                        </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td [attr.colspan]="4">
+                            <a href="javascript:void(0)" (click)="clickAdd()">
+                                <i class="fa fa-plus" aria-hidden="true"></i> <span translate>Add New Detail Line</span></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer" style="padding-top: 0">
+        <div class="form-group" style="margin-top: 20px;">
+            <div class="text-center">
+                <button style="width: 70px" class="btn btn-primary" type="button" (click)="activeModal.close(item)" translate>OK</button>
+                <button class="btn btn-default" type="button" (click)="cancel()" translate>Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
