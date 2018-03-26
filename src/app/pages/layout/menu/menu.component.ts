@@ -57,7 +57,7 @@ export class MenuComponent implements OnInit {
                         name: 'Purchase Quotation'
                     },
                     {
-                        link: '/sd',
+                        link: '/purchase-management/purchase-order',
                         name: 'Purchase Orders'
                     },
                     {

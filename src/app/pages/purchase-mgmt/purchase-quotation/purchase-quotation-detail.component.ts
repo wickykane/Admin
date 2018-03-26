@@ -7,26 +7,27 @@ import { PurchaseService } from "../purchase.service";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ItemModalContent } from "../../../shared/modals/item.modal";
 
-
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { routerTransition } from '../../../router.animations';
 
 @Component({
-    selector: 'app-quotation-create',
-    templateUrl: './purchase-quotation-create.component.html',
+    selector: 'app-quotation-detail',
+    templateUrl: './purchase-quotation-detail.component.html',
     styleUrls: ['./purchase-quotation.component.scss'],
     animations: [routerTransition()]
 })
-export class QuotationCreateComponent implements OnInit {
+export class QuotationDetailComponent implements OnInit {
 
     generalForm: FormGroup;
     public items: any = [];
+    public idQuotation: string = '';
 
     public listMaster = {};
 
     constructor(public fb: FormBuilder,
-        public router: Router,
         public  toastr: ToastsManager,
+        public router: Router,
+        public route: ActivatedRoute,
         public vRef: ViewContainerRef,
         private purchaseService: PurchaseService,
         private modalService: NgbModal) {
@@ -35,12 +36,16 @@ export class QuotationCreateComponent implements OnInit {
                 'cd': [{ value: null, disabled: true }],
                 'rqst_dt': [null, Validators.required],
                 'supplier_id': [null, Validators.required],
+                'purchase_quote_status_name': [{ value: null, disabled: true }],
+                'purchase_quote_status_id': [null]
             });
         }
 
     ngOnInit() {
+        this.route.params.subscribe( params => this.getDetailQuotaton(params.id) );
         this.getListSupplier();
-        this.generateCodePurchaseQuotation();
+        this.items = [];
+
     }
 
     getListSupplier() {
@@ -54,10 +59,12 @@ export class QuotationCreateComponent implements OnInit {
         });
     }
 
-    generateCodePurchaseQuotation() {
-        this.purchaseService.generateCodePurchaseQuotation().subscribe(res => {
+    getDetailQuotaton(id) {
+        this.idQuotation = id;
+        this.purchaseService.getDetailPurchaseQuotation(this.idQuotation).subscribe(res => {
             try {
-                this.generalForm.patchValue({cd: res.results.code});
+                this.generalForm.patchValue(res.results);
+                this.items = res.results.purchase_quote_details;
             } catch(e) {
 
             }
@@ -83,14 +90,14 @@ export class QuotationCreateComponent implements OnInit {
         modalRef.componentInstance.flagBundle = false;
     }
 
-    createQuotation() {
+    updateQuotation() {
         var params =  {};
         params = this.generalForm.value;
         this.items.forEach(function(value, key) {
             value.qty = Number(value.qty);
         });
         params['purchase_quote_details'] = this.items;
-        this.purchaseService.createPurchaseQuotation(params).subscribe(res => {
+        this.purchaseService.upddatePurchaseQuotation(params, this.idQuotation).subscribe(res => {
             try {
                 this.router.navigate(['/purchase-management/purchase-quotation']);
                 this.toastr.success(res.message);
