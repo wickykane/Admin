@@ -24,6 +24,7 @@ export class PurchaseOrderComponent implements OnInit {
         items: []
     };
     public showProduct: boolean = false;
+    public onoffFilter: any;
     public flagId: string = '';
 
     public user: any;
