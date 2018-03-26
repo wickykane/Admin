@@ -58,7 +58,7 @@
                     </div>
                     <div class="col-md-2">
                         <label for="bill_to" class="control-label">Bill To</label>
-                        <select class="form-control" formControlName="bill_to" (change)="changeAddress()">
+                        <select class="form-control" formControlName="bill_to" (change)="changeAddress('')">
                                   <option value="null" selected="true"  >--Select--</option>
                                   <option *ngFor="let item of listMaster['billing']" [ngValue] = "item.id">{{item.name}}</option>
                                 </select>

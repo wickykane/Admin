@@ -11,6 +11,13 @@ import { PurchaseOrderDetailComponent } from './purchase-order/purchase-order-de
 
 import { InboundDeliveryComponent } from './inbound-delivery/inbound-delivery.component';
 
+import { WarehouseReceiptComponent } from './warehouse-receipt/warehouse-receipt.component';
+import {WarehouseReceiptCreateComponent} from './warehouse-receipt/warehouse-receipt-create.component';
+
+import {SupplierComponent} from './supplier/supplier.component';
+import {SupplierCreateComponent} from './supplier/supplier-create.component';
+import {SupplierDetailComponent} from './supplier/supplier-detail.component';
+
 const routes: Routes = [
     {
         path: 'purchase-quotation',
@@ -32,6 +39,21 @@ const routes: Routes = [
         path: 'inbound-delivery',
         children : [
             { path: '', component: InboundDeliveryComponent }
+        ]
+    },
+    {
+        path: 'warehouse-receipt',
+        children : [
+            { path: '', component: WarehouseReceiptComponent },
+            { path: 'create', component: WarehouseReceiptCreateComponent }
+        ]
+    },
+    {
+        path: 'supplier',
+        children : [
+            { path: '', component: SupplierComponent },
+            { path: 'create', component: SupplierCreateComponent },
+            { path: 'detail/:id', component: SupplierDetailComponent }
         ]
     }
 
