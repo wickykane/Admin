@@ -7,6 +7,7 @@ import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './promotion.modal.html' 
 })
 export class PromotionModalContent {
+//Resolve Data
   @Input() name;
 
   constructor(public activeModal: NgbActiveModal) {}
