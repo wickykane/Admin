@@ -192,6 +192,10 @@ export class PromotionCampaignEditComponent implements OnInit {
     this.openPromotionModal(item);
   }
 
+  remove = function (index) {
+    this.data['programs'].splice(index, 1);
+  };
+  
   updateCampain = function () {
     var params = this.generalForm.value;
     params.programs = this.data['programs'];
@@ -207,7 +211,7 @@ export class PromotionCampaignEditComponent implements OnInit {
       }
     },
       err => {
-        this.toastr.error(err);
+        this.toastr.error(err.message, null, {enableHTML: true});
       })
 
   }

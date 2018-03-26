@@ -55,22 +55,17 @@ export class PromotionBudgetCreateComponent implements OnInit {
     let params = this.generalForm.value;
     this.promotionService.postBudget(params).subscribe(res => {
       try {
-        if (res._type == 'success') {
-          this.toastr.success(res.message);
-          setTimeout(() => {
-            this.router.navigate(['/promotion/budget']);
-          }, 500)
-
-        } else {
-          this.toastr.error(res.message);
-        }
-
+        this.toastr.success(res.message);
+        setTimeout(() => {
+          this.router.navigate(['/promotion/budget']);
+        }, 500)
       } catch (e) {
         console.log(e)
       }
-    })
-
-
+    },
+      err => {
+        this.toastr.error(err.message, null, {enableHTML: true});        
+      })
   }
 
 }
