@@ -39,53 +39,38 @@
                 (onEnter)="selectData($event)">
                 <thead class="bg-white">
                     <tr>
-                        <th>
-                            <label class="css-input css-checkbox css-checkbox-default">
-                                <input class="cb-all" type="checkbox" ng-model="selectItem.isCheckAll" ng-change="checkAll()">
-                                <span></span>
-                            </label>
-                        </th>
-                        <th translate>Image</th>
-                        <th translate >SKU</th>
-                        <th translate>Product Name</th>
-                        <th translate style="min-width: 100px;">Category</th>
-                        <th translate>Country Of Origin</th>
-                        <th translate>Manufacturer</th>
-                        <th translate>Supplier</th>
-                        <th translate>UOM</th>
-                        <th translate>Avail QTY</th>
-                        <th translate>On Water QTY</th>
-                        <th translate>Cost Price</th>
-                        <th translate>Sales Price</th>
+                        <th translate>ID</th>
+                        <th translate>Code</th>
+                        <th translate>Name</th>
+                        <th translate>Status</th>
+                        <th class="text-center" translate>Created On</th>
+                        <th class="text-center" translate>Created By</th>
+                        <th translate>Action</th>
                     </tr>
                 </thead>
-
                 <tr *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
+
+                    <td>{{index+1}}</td>
+                    <td>{{item.cd}}</td>
+                    <td>{{item.name}}</td>
                     <td>
-                        <label class="css-input css-checkbox css-checkbox-default">
-                            <input class="cb-element" type="checkbox" [ngModel]="item.is_checked" (change)="checkItem(item)">
-                            <span></span>
+                        <label class="switch" placement="top" ngbTooltip="Click to Active or Inactive">
+                            <input trueFalseValue trueValue="AT" falseValue="IA" type="checkbox" [(ngModel)]="item.sts" (change)="changeStatus(item.id,item.ac)">
+                            <div class="slider round"></div>
                         </label>
                     </td>
-                    <td style="cursor: pointer;">
-                        <!-- <img ng-click="showImage($index+1, item.wine_images[0])" src="{{item.wine_images[0]['thumb_img']}}" alt="" width="30" height="30">
-                          <div id="imageModal{{$index+1}}" class="imageModal">
-                            <span class="close" ng-click="closeImage($index+1)">&times;</span>
-                            <img class="modal-content" id="img{{$index+1}}">
-                            <div id="caption"></div>
-                          </div> -->
+                    <td class="text-center">
+                        {{item.crtd_dt }}
                     </td>
-                    <td>{{item.sku}}</td>
-                    <td>{{item.name}}</td>
-                    <td>{{item.product_category.name}}</td>
-                    <td>{{item.country_name}}</td>
-                    <td>{{item.brand_name}}</td>
-                    <td>{{item.supplier_name}}</td>
-                    <td>{{item.uom_name}}</td>
-                    <td>{{item.qty_available}}</td>
-                    <td>{{item.qty_on_water}}</td>
-                    <td>{{item.price|currency:'$'}}</td>
-                    <td>{{item.resale_price|currency:'$'}}</td>
+                    <td class="text-center">
+                        {{item.crtd_by_name}}
+                    </td>
+                    <td class="text-nowrap">
+                        <a href="" title="" ng-class="{'disable-expand': item.details.length == 0 }" ng-click="showProduct = !showProduct">
+                            <i class="fa" ng-class="showProduct ? 'fa-minus-circle' : 'fa-plus-circle'"></i>
+                            <span ng-bind="showProduct ? 'Hide details' : 'Show details'"></span>
+                        </a>
+                    </td>
                 </tr>
                 <tr *ngIf="list.items.length === 0">
                     <td colspan="100%" class="text-center">No data.</td>

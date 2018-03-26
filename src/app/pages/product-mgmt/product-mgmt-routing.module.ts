@@ -5,6 +5,8 @@ import {ProductMgmtComponent} from './product-mgmt.component';
 import {ItemListComponent} from './item-list/item-list.component';
 import {ProductDefinitionComponent} from './product-definition/product-definition.component';
 import {BundleMgmtComponent} from './bundle-mgmt/bundle-mgmt.component';
+import {BundleMgmtCreateComponent} from './bundle-mgmt/bundle-mgmt-create.component';
+import {BundleMgmtEditComponent} from './bundle-mgmt/bundle-mgmt-edit.component';
 import {ConditionProductGroupComponent} from './condition-product-group/condition-product-group.component';
 import {ECatalogComponent} from './e-catalog/e-catalog.component';
 
@@ -22,7 +24,11 @@ const routes : Routes = [
   },
   {
     path: 'bundle',
-    component: BundleMgmtComponent
+    children:[
+      {path:'',component:BundleMgmtComponent},
+      {path:'create',component:BundleMgmtCreateComponent},
+      {path:'edit/:id',component:BundleMgmtEditComponent},
+    ]    
   },
   {
     path: 'condition-product',
@@ -30,7 +36,7 @@ const routes : Routes = [
   },
   {
     path: 'e-catalog',
-    component: BundleMgmtComponent
+    component: ECatalogComponent
   }
 ];
 

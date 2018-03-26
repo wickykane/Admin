@@ -34,8 +34,7 @@ export class ECatalogComponent implements OnInit {
   ) { 
     this.searchForm = fb.group({
       'cd': [null],
-      'name': [null],
-      'sts': [null],
+      'name': [null]     
     });
 
     //Assign get list function name, override variable here
@@ -61,7 +60,7 @@ export class ECatalogComponent implements OnInit {
     var params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
     Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);
 
-    this.productService.getListItem(params).subscribe(res => {
+    this.productService.getListEcatalog(params).subscribe(res => {
       try {
         this.list.items = res.results.rows;
         this.tableService.matchPagingOption(res.results);

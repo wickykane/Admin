@@ -19,6 +19,8 @@ export class BundleMgmtComponent implements OnInit {
   public list = {
     items: []
   }
+  public showProduct: boolean = false;
+  public flagId: string = '';
 
   public data = {};
 
@@ -33,8 +35,7 @@ export class BundleMgmtComponent implements OnInit {
   ) { 
     this.searchForm = fb.group({
       'cd': [null],
-      'name': [null],
-      'sts': [null],
+      'name': [null]      
     });
 
     //Assign get list function name, override variable here
@@ -55,12 +56,21 @@ export class BundleMgmtComponent implements OnInit {
   /**
    * Internal Function
    */
+  toggleSubRow(id) {
+    if (id === this.flagId) {
+        this.flagId = '0';
+    } else {
+        this.flagId = id;
+    }
+    this.showProduct = !this.showProduct;
+}
+
 
   getList() {
     var params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
     Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);
 
-    this.productService.getListItem(params).subscribe(res => {
+    this.productService.getListBundle(params).subscribe(res => {
       try {
         this.list.items = res.results.rows;
         this.tableService.matchPagingOption(res.results);

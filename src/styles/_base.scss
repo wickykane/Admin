@@ -364,15 +364,9 @@ table.custom-table {
         display: inline-block;
         position: relative;
         min-height: 1px;
-<<<<<<< HEAD
-        padding-right: 15px;
-        padding-left: 15px;      
-=======
         padding-right: 0;
-        padding-left: 15px;
-        float: left;
+        padding-left: 15px;       
         width: 19%;
->>>>>>> 039b049bc96df3c4407640561be470558c6e2a9a
     }
 
     &.form-horizontal .control-label {

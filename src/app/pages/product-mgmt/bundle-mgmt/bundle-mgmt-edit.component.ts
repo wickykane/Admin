@@ -5,12 +5,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from "../product-mgmt.service";
 
 @Component({
-  selector: 'app-condition-product-group',
-  templateUrl: './condition-product-group.component.html'  
-})
-export class ConditionProductGroupComponent implements OnInit {
-
+  selector: 'app-bundle-mgmt-edit',
+  templateUrl: './bundle-mgmt-edit.component.html'
   
+})
+export class BundleMgmtEditComponent implements OnInit { 
   /**
    * Variable Declaration
    */
@@ -20,6 +19,8 @@ export class ConditionProductGroupComponent implements OnInit {
   public list = {
     items: []
   }
+  public showProduct: boolean = false;
+  public flagId: string = '';
 
   public data = {};
 
@@ -34,8 +35,7 @@ export class ConditionProductGroupComponent implements OnInit {
   ) { 
     this.searchForm = fb.group({
       'cd': [null],
-      'name': [null],
-      'sts': [null],
+      'name': [null]      
     });
 
     //Assign get list function name, override variable here
@@ -56,12 +56,21 @@ export class ConditionProductGroupComponent implements OnInit {
   /**
    * Internal Function
    */
+  toggleSubRow(id) {
+    if (id === this.flagId) {
+        this.flagId = '0';
+    } else {
+        this.flagId = id;
+    }
+    this.showProduct = !this.showProduct;
+}
+
 
   getList() {
     var params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
     Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);
 
-    this.productService.getListCondition(params).subscribe(res => {
+    this.productService.getListBundle(params).subscribe(res => {
       try {
         this.list.items = res.results.rows;
         this.tableService.matchPagingOption(res.results);

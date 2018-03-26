@@ -5,6 +5,8 @@ import { ProductMgmtRoutingModule } from './product-mgmt-routing.module';
 import { ProductMgmtComponent } from './product-mgmt.component';
 import {ItemListComponent} from './item-list/item-list.component';
 import {BundleMgmtComponent} from './bundle-mgmt/bundle-mgmt.component';
+import { BundleMgmtCreateComponent } from './bundle-mgmt/bundle-mgmt-create.component';
+import { BundleMgmtEditComponent } from './bundle-mgmt/bundle-mgmt-edit.component';
 import {ConditionProductGroupComponent} from './condition-product-group/condition-product-group.component';
 import {ECatalogComponent} from './e-catalog/e-catalog.component';
 import {ProductDefinitionComponent} from './product-definition/product-definition.component';
@@ -12,6 +14,7 @@ import {ProductDefinitionComponent} from './product-definition/product-definitio
 import {ProductService} from './product-mgmt.service';
 import { CommonShareModule, PageHeaderModule } from '../../shared/index';
 import { TableService } from "../../services/index";
+
 
 @NgModule({
   imports: [
@@ -27,7 +30,9 @@ import { TableService } from "../../services/index";
     BundleMgmtComponent,
     ConditionProductGroupComponent,
     ECatalogComponent,
-    ProductDefinitionComponent],
+    ProductDefinitionComponent,
+    BundleMgmtCreateComponent,
+    BundleMgmtEditComponent],
     providers:[ProductService,TableService]
 })
 export class ProductMgmtModule { }
