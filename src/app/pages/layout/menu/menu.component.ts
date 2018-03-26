@@ -69,7 +69,7 @@ export class MenuComponent implements OnInit {
                         name: 'Warehouse Receipt'
                     },
                     {
-                        link: '/233',
+                        link: '/purchase-management/supplier',
                         name: 'Suppliers'
                     }
                 ]
