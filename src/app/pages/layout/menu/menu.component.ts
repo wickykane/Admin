@@ -65,11 +65,11 @@ export class MenuComponent implements OnInit {
                         name: 'Inbound Delivery Orders'
                     },
                     {
-                        link: '/asdf',
+                        link: '/purchase-management/warehouse-receipt',
                         name: 'Warehouse Receipt'
                     },
                     {
-                        link: '/233',
+                        link: '/purchase-management/supplier',
                         name: 'Suppliers'
                     }
                 ]

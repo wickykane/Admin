@@ -17,9 +17,16 @@ import {PurchaseOrderComponent} from './purchase-order/purchase-order.component'
 import {PurchaseOrderCreateComponent} from './purchase-order/purchase-order-create.component';
 import {PurchaseOrderDetailComponent} from './purchase-order/purchase-order-detail.component';
 
-import {SupplierComponent} from './supplier/supplier.component';
 import {InboundDeliveryComponent} from './inbound-delivery/inbound-delivery.component';
+
+//Supplier
+import {SupplierComponent} from './supplier/supplier.component';
+import {SupplierCreateComponent} from './supplier/supplier-create.component';
+import {SupplierDetailComponent} from './supplier/supplier-detail.component';
+
+//warehouse-receipt
 import {WarehouseReceiptComponent} from './warehouse-receipt/warehouse-receipt.component';
+import {WarehouseReceiptCreateComponent} from './warehouse-receipt/warehouse-receipt-create.component';
 
 import { PurchaseService } from "./purchase.service";
 //Table Service
@@ -49,8 +56,11 @@ import { ItemModalModule } from "../../shared/modals/item.module";
     PurchaseOrderCreateComponent,
     PurchaseOrderDetailComponent,
     SupplierComponent,
+    SupplierCreateComponent,
+    SupplierDetailComponent,
     InboundDeliveryComponent,
     WarehouseReceiptComponent,
+    WarehouseReceiptCreateComponent,
     ItemModalContent
 ],
 providers:[TableService,PurchaseService],
