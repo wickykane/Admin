@@ -5,9 +5,11 @@ import { QuotationComponent } from './purchase-quotation/purchase-quotation.comp
 import { QuotationCreateComponent } from './purchase-quotation/purchase-quotation-create.component';
 import { QuotationDetailComponent} from './purchase-quotation/purchase-quotation-detail.component';
 
-import {PurchaseOrderComponent} from './purchase-order/purchase-order.component';
-import {PurchaseOrderCreateComponent} from './purchase-order/purchase-order-create.component';
-import {PurchaseOrderDetailComponent} from './purchase-order/purchase-order-detail.component';
+import { PurchaseOrderComponent } from './purchase-order/purchase-order.component';
+import { PurchaseOrderCreateComponent } from './purchase-order/purchase-order-create.component';
+import { PurchaseOrderDetailComponent } from './purchase-order/purchase-order-detail.component';
+
+import { InboundDeliveryComponent } from './inbound-delivery/inbound-delivery.component';
 
 const routes: Routes = [
     {
@@ -24,6 +26,12 @@ const routes: Routes = [
             { path: '', component: PurchaseOrderComponent },
             { path: 'create', component: PurchaseOrderCreateComponent },
             { path: 'detail/:id', component: PurchaseOrderDetailComponent }
+        ]
+    },
+    {
+        path: 'inbound-delivery',
+        children : [
+            { path: '', component: InboundDeliveryComponent }
         ]
     }
 

@@ -61,7 +61,7 @@ export class MenuComponent implements OnInit {
                         name: 'Purchase Orders'
                     },
                     {
-                        link: '/d-page',
+                        link: '/purchase-management/inbound-delivery',
                         name: 'Inbound Delivery Orders'
                     },
                     {
