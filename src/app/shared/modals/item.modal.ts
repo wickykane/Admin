@@ -29,6 +29,8 @@ export class ItemModalContent implements OnInit {
         selectedBundles: []
     };
 
+    public tableBundleService: any;
+
     searchForm: FormGroup;
     searchBundleForm: FormGroup;
 
@@ -53,13 +55,17 @@ export class ItemModalContent implements OnInit {
 
         //Assign get list function name, override variable here
         this.tableService.getListFnName = 'getList';
-        this.tableService.getListFnName = 'getListBundle';
         this.tableService.context = this;
+
+        this.tableBundleService = new TableService();
+        this.tableBundleService.getListFnName = 'getListBundle';
+        this.tableBundleService.context = this;
+
     }
 
     ngOnInit() {
         //Init Fn
-        if(this.flagBundle) {
+        if (this.flagBundle) {
             this.getListBundle();
         }
         this.getList();
@@ -75,8 +81,6 @@ export class ItemModalContent implements OnInit {
 
             this.itemService.getListItemBaseSupplier(params, this.id).subscribe(res => {
                 try {
-                    this.tableService.getListFnName = 'getList';
-                    this.tableService.context = this;
                     this.list.items = res.results.rows;
                     this.tableService.matchPagingOption(res.results);
                 } catch (e) {
@@ -88,15 +92,13 @@ export class ItemModalContent implements OnInit {
     }
 
     getListBundle() {
-        var params = Object.assign({}, this.tableService.getParams(), this.searchBundleForm.value);
+        var params = Object.assign({}, this.tableBundleService.getParams(), this.searchBundleForm.value);
         Object.keys(params).forEach((key) => (JSON.parse(params[key]) == null || JSON.parse(params[key]) == '') && delete params[key]);
 
         this.itemService.getListBundleBase(params).subscribe(res => {
             try {
-                this.tableService.getListFnName = 'getListBundle';
-                this.tableService.context = this;
                 this.list.bundles = res.results.rows;
-                this.tableService.matchPagingOption(res.results);
+                this.tableBundleService.matchPagingOption(res.results);
             } catch (e) {
                 console.log(e);
             }
@@ -120,7 +122,7 @@ export class ItemModalContent implements OnInit {
                 this.activeModal.close(this.list.selectedItems);
             }
         });
-        if(this.flagBundle) {
+        if (this.flagBundle) {
             this.list.bundles.forEach(x => {
                 if (x.state) {
                     this.list.selectedBundles.push(x);
