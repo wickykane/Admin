@@ -130,6 +130,15 @@ export class PurchaseService {
         var url = 'purchase_order_delivery/' + id;
         return this.API.get(url);
     }
+    /**
+     * SUPPLIER
+     */
+    //supplier
+    getListCountry() {
+        var url = 'country/get-all';
+        return this.API.get(url);
+    }
+
 
 
 }

@@ -14,7 +14,7 @@
 }
 .group-btn-search {
     position: relative;
-
+    margin-left: 15px;
     .show-more {
         width: 128px;
         border: 1px solid #ccc;
@@ -367,7 +367,6 @@ table.custom-table {
         padding-right: 0;
         padding-left: 15px;
         float: left;
-        width: 19%;
     }
 
     &.form-horizontal .control-label {
