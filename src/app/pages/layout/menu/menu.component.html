@@ -4,7 +4,7 @@
             <ul class="nav-main main-menu">
                 <ng-container *ngFor="let item of MENU_CONSTANT">
                     <li routerLinkActive="active"  *ngIf="!item.sub">
-                        <a routerLink="{{item.link}}" [routerLinkActive]="['router-link-active']" (click)="removeClassExpand()">
+                        <a href [routerLink]="[item.link]" [routerLinkActive]="['router-link-active']" (click)="addExpandClass(item.flag)">
                             <i *ngIf="item.icon" class="{{item.icon}}"></i>
                             <span class="topbar-mini-hide" >{{item.main_name}}</span>
                         </a>

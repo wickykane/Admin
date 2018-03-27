@@ -1,3 +1,132 @@
-<p>
-  bundle-mgmt works!
-</p>
+<div class="block anchor-scroll">
+    <app-page-header [heading]="'LIST OF BUNDLE'" [icon]="'fa-th-list'"></app-page-header>
+    <div class="block-content pd-bottom tab-content bg-gray-light">
+        <div class="row">
+            <form class="form-horizontal form-search" [formGroup]="searchForm">
+                <div class="block-search">
+                    <label for="so" class="control-label" translate>Code</label>
+                    <input type="text" name="so" formControlName="cd" class="form-control">
+                </div>
+                <div class="block-search">
+                    <label for="cus_po" class="control-label" translate>Description</label>
+                    <input type="text" name="cus_po" formControlName="name" class="form-control">
+                </div>
+                <div class="block-btn-search">
+                    <label class="control-label">&nbsp;</label>
+                    <div>
+                        <button type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Search</button>
+                        <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchForm)" translate>Reset</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="block-content pd-top">
+        <button [routerLink]="['/product-management/bundle/create']" style="margin: 10px 0;" class="btn btn-primary" translate>Add New Bundle</button>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-vcenter table-hover custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex"
+                (onEnter)="selectData($event)">
+                <thead class="bg-white">
+                    <tr>
+                        <th translate>ID</th>
+                        <th translate>Code</th>
+                        <th translate>Description</th>
+                        <th class="text-center" translate>Cost Price</th>
+                        <th class="text-center" translate>Sale Price</th>
+                        <th class="text-center" translate>Status</th>
+                        <th class="text-center" translate>Created on</th>
+                        <th class="text-center" translate>Created by</th>
+                        <th translate>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
+                    <tr>
+                        <td>
+                            #{{item.id}}
+                        </td>
+                        <td>{{item.cd}}</td>
+                        <td>{{item.name}}</td>
+                        <td class="text-center">
+                            {{item.cost_price | currency}}
+                        </td>
+                        <td class="text-center">
+                            {{item.sale_price | currency}}
+                        </td>
+                        <td>
+                            <label class="switch" placement="top" ngbTooltip="Click to Active or Inactive">
+                                <input trueFalseValue trueValue="AT" falseValue="IA" type="checkbox" [(ngModel)]="item.sts" (change)="changeStatus(item.id,item.ac)">
+                                <div class="slider round"></div>
+                            </label>
+                        </td>
+                        <td class="text-center">
+                            <span ng-if="item.crtd_dt">{{item.crtd_dt }}</span>
+                        </td>
+                        <td class="text-center">
+                            <span ng-if="item.crtd_by_name">{{item.crtd_by_name}}</span>
+                        </td>
+                        <td>
+                            <a class="btn btn-default" ngbTooltip="{{ (!showProduct)? 'Show details': 'Hide details' }}" [ngClass]="{'disable-expand': item.detail.length == 0 }"
+                                (click)="toggleSubRow(item.id)">
+                                <i class="fa" [ngClass]="{'fa-minus': showProduct && (item.id === flagId),' fa-plus': !(showProduct && (item.id === flagId))}"></i>
+                            </a>
+                            <a class="btn btn-default" ngbTooltip="Edit Bundle" ng-click="editBundle(item.id)">
+                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr *ngIf="item.id === flagId">
+                        <td></td>
+                        <td colspan="100%">
+                            <table class="table table-striped table-vcenter table-child">
+                                <thead>
+                                    <tr>
+                                        <th translate>Product Code</th>
+                                        <th translate>Product Name</th>
+                                        <th translate>UOM</th>
+                                        <th translate>Quantity</th>
+                                        <th translate>Cost price</th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngFor="let dt of item.detail">
+                                    <tr>
+                                        <td>{{dt.sku}}</td>
+                                        <td>{{dt.product_name}}</td>
+                                        <td>{{dt.uom_name}}</td>
+                                        <td>{{dt.qty}}</td>
+                                        <td>{{dt.price |currency}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr *ngIf="list.items.length === 0">
+                        <td colspan="100%" class="text-center">No data.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row normal-pagination" *ngIf="list.items.length > 0">
+            <div class="col-md-6">
+                <div class="text-left">
+                    <div class="col-md-6" style="padding-left: 0px;">
+                        <span style="float: left; padding-right: 10px;">{{list.items.length}}/{{tableService.pagination.total_record}} items </span>
+                        <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length" (change)="tableService.changeLength()">
+                            <option *ngFor="let option of tableService.itemPerPageOptions" [ngValue]="option">{{option}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="text-right">
+                    <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length"
+                        [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page"
+                        [maxSize]="tableService.maxSize" [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -3,7 +3,7 @@ import { Http,RequestOptions, Response } from '@angular/http';
 import {ApiService} from '../../services/api.service';
 
 @Injectable()
-export class AdminPanelService {
+export class ProductService {
     public token:string;
     constructor(
         private $http:Http,
@@ -12,7 +12,11 @@ export class AdminPanelService {
     //Item-Product Definition
     getListItem(params){
         let url ='item';
-        return this.ApiService.get(params);
+        return this.ApiService.get(url,params);
+    }
+    getListItemOption(){
+        let url ='item/reference';
+        return this.ApiService.get(url);
     }
     postProductDefinition(data,files){
         let url ='item';
