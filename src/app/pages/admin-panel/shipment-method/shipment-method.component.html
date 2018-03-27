@@ -1,31 +1,87 @@
-<div [@routerTransition]>
-  <app-page-header [heading]="'LIST OF SHIPMENT METHOD'" [icon]="'fa-th-list'"></app-page-header>
-  <div class="block">
-      <div class="block-content">
-          <div class="test table">
-              <table class="table table-borderd" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
-                  <thead>
-                      <tr>
-                          <th sortColumn="id" [(sortParam)]="sortParams" (sortFn)="sortAction($event)">ID</th>
-                          <th sortColumn="shipment_method_type_name" [(sortParam)]="sortParams" (sortFn)="sortAction($event)">Type</th>
-                          <th sortColumn="desc" [(sortParam)]="sortParams" (sortFn)="sortAction($event)">Description</th>
-                          <th sortColumn="carrier_name" [(sortParam)]="sortParams" (sortFn)="sortAction($event)">Carrier</th>
-                          <th sortColumn="fee" [(sortParam)]="sortParams" (sortFn)="sortAction($event)">Fee</th>
-                          <th sortColumn="is_sync_to_web" [(sortParam)]="sortParams" (sortFn)="sortAction($event)">Sync To Website</th>                          
-                      </tr>
-                  </thead>
-                  <tbody>
-                      <tr *ngFor="let item of list.items; let i = index" [ngClass]="{'row-selected': i == selectedIndex}">
-                          <td>{{item.id}}</td>
-                          <td>{{item.shipment_method_type_name}}</td>
-                          <td>{{item.desc}}</td>
-                          <td>{{item.carrier_name}}</td>
-                          <td>{{item.fee}}</td>
-                          <td>{{item.is_sync_to_web}}</td>
-                      </tr>
-                  </tbody>
-              </table>
-          </div>
-      </div>
-  </div>
+<div class="block anchor-scroll">
+    <app-page-header [heading]="'LIST OF SHIPMENT METHOD'" [icon]="'fa-th-list'"></app-page-header>
+    <div class="block-content pd-bottom tab-content bg-gray-light">
+        <div class="row">
+            <form class="form-horizontal form-search" [formGroup]="searchForm">
+                <div class="block-search">
+                    <label for="type" class="control-label" translate>Status</label>
+                    <select formControlName="type" class="form-control">
+                        <option value="null" selected="true" translate>--Select--</option>
+                        <option *ngFor="let de of listMaster['type']" [ngValue]="de.id">{{de.name}}</option>
+
+                    </select>
+
+                </div>
+                <div class="block-btn-search">
+                    <label class="control-label">&nbsp;</label>
+                    <div>
+                        <button type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Search</button>
+                        <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchForm)" translate>Reset</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="block-content pd-top">
+        <button [routerLink]="['/promotion/budget/create']" style="margin: 10px 0;" class="btn btn-primary" translate>Add New Method</button>
+        <div class="table-responsive">
+            <table class="table table-striped table-vcenter table-hover custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex"
+                (onEnter)="selectData($event)">
+                <thead class="bg-white">
+                    <tr>
+                        <th translate>ID</th>
+                        <th sortColumn="shipment_method_type_name" [(sortParam)]="tableService.sortParams" (sortFn)="tableService.sortAction($event)"
+                            translate>Type</th>
+                        <th sortColumn="desc" [(sortParam)]="tableService.sortParams" (sortFn)="tableService.sortAction($event)" translate>Description</th>
+                        <th sortColumn="carrier_name" [(sortParam)]="tableService.sortParams" (sortFn)="tableService.sortAction($event)" class="text-center"
+                            translate>Carrier</th>
+                        <th sortColumn="fee" [(sortParam)]="tableService.sortParams" (sortFn)="tableService.sortAction($event)" class="text-center"
+                            translate>Fee</th>
+                        <th translate>Sync To Web</th>
+
+                    </tr>
+                </thead>
+                <tr *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
+                    <td>
+                        #{{item.id}}
+                    </td>
+                    <td>{{item.shipment_method_type_name}}</td>
+                    <td>{{item.desc}}</td>
+                    <td> {{item.carrier_name}} </td>
+                    <td class="text-center"> {{item.fee |currency}} </td>
+                    <td>
+                            <div style="display: inline-block;">
+                                    <label class="switch" title="Click to Active or Inactive" data-toggle="tooltip" data-content="" data-trigger="hover" style="margin-bottom: 0px;">
+                                                         <input  (change)="changeStatus(item)" type="checkbox"  [(ngModel)]="item.is_sync_to_web" [value]='true'  >
+                                                         <div class="slider round"></div>
+                                                       </label>
+                                </div>                       
+                    </td>
+                </tr>
+                <tr *ngIf="list.items.length === 0">
+                    <td colspan="100%" class="text-center">No data.</td>
+                </tr>
+            </table>
+        </div>
+        <div class="row normal-pagination" *ngIf="list.items.length > 0">
+            <div class="col-md-6">
+                <div class="text-left">
+                    <div class="col-md-6" style="padding-left: 0px;">
+                        <span style="float: left; padding-right: 10px;">{{list.items.length}}/{{tableService.pagination.total_record}} items </span>
+                        <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length" (change)="tableService.changeLength()">
+                            <option *ngFor="let option of tableService.itemPerPageOptions" [ngValue]="option">{{option}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="text-right">
+                    <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length"
+                        [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page"
+                        [maxSize]="tableService.maxSize" [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>

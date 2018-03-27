@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AdminPanelService } from '../admin-panel.service';
 import { TableService } from "../../../services/index";
 import { routerTransition } from '../../../router.animations';
+
 
 @Component({
     selector: 'unit-measure',
@@ -12,46 +14,59 @@ import { routerTransition } from '../../../router.animations';
 })
 
 export class UnitMeasureComponent implements OnInit {
-    public list = {
-        items :[]
-    };
+    /**
+   * Variable Declaration
+   */
+  public searchForm: FormGroup;
+  public listMaster = {};
+  public selectedIndex = 0;
+  public list = {
+    items: []
+  }
 
-    
-    public sortParams = {
-        order: "",
-        sort: ""
-    }
-
-    public sortAction(param) {
-        console.log("sort data: ", param);
-    }
-    
-    public selectedIndex = 0;
-
-    selectData(data) {
-        console.log("id :", data);
-    }
+  public data = {};
     constructor(
-        private TableService:TableService,
+        private fb :FormBuilder,
+        public tableService:TableService,
         private activeRouter: ActivatedRoute,
         private router: Router,       
-        private AdminPanelService: AdminPanelService) {}   
+        private AdminPanelService: AdminPanelService) {
+            this.searchForm = fb.group({
+                'cd': [null],
+                'name': [null]      
+              });
+          
+              //Assign get list function name, override variable here
+              this.tableService.getListFnName = 'getList';
+              this.tableService.context = this;
+        }   
 
-    ngOnInit(): void {
-        this.loadPage(1);
-    }
-    loadPage(page?:any){
-        let params={
-            page:page
-        }
-        this.AdminPanelService.getListUOM(params).subscribe(result=>{           
-            if(result._type =='success'){
-                this.list.items = result.results.rows;
-            }
-        },error=>{
-            console.log(error);
-        })
-    }
-
-  
+        ngOnInit() {    
+   
+            //Init Fn
+            this.getList();
+          }
+          /**
+           * Table Event
+           */
+          selectData(index) {
+            console.log(index);
+          }
+          /**
+           * Internal Function
+           */
+        
+          getList() {
+            var params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
+            Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);
+        
+            this.AdminPanelService.getListUOM(params).subscribe(res => {
+              try {
+                this.list.items = res.results.rows;
+                this.tableService.matchPagingOption(res.results);
+              } catch (e) {
+                console.log(e);
+              }
+            });
+          }
 }

@@ -75,14 +75,14 @@ export class MenuComponent implements OnInit {
                 ]
             },
             {
-                flag: 'sale',
+                flag: 'order',
                 link: '/',
                 main_name: 'Sales Management',
                 icon: '',
                 sub: true,
                 child: [
                     {
-                        link: '/swa',
+                        link: '/order-management/buyer-rfq',
                         name: 'Buyer RFQ'
                     },
                     {
@@ -149,19 +149,19 @@ export class MenuComponent implements OnInit {
                         name: 'Item List '
                     },
                     {
-                        link: '/s3dw',
+                        link: '/product-management/product-definition',
                         name: 'Product Definition'
                     },
                     {
-                        link: '/d3d',
+                        link: '/product-management/bundle',
                         name: 'Bundle Management'
                     },
                     {
-                        link: '/asd3f',
+                        link: '/product-management/condition-product',
                         name: 'Conditional Product Groups'
                     },
                     {
-                        link: '/233s3',
+                        link: '/product-management/e-catalog',
                         name: 'E-Catalog'
                     }
                 ]

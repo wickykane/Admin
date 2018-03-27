@@ -7,6 +7,7 @@ import { routerTransition } from '../../router.animations';
     selector: 'admin-panel',
     providers: [AdminPanelService],
     templateUrl: 'admin-panel.component.html',
+    styleUrls: ['admin-panel.component.scss'],
     animations: [routerTransition()]
 })
 
