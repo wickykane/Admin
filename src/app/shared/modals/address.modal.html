@@ -1,0 +1,79 @@
+<div class="modal-header">
+    <span class="modal-title">{{title}}</span>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss([])">
+          <span aria-hidden="true">&times;</span>
+        </button>
+</div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <form [formGroup]="generalForm" class="form-search full-width form-horizontal">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="type" class="control-label">Type
+                            <span class="text-danger">( * )</span>
+                        </label>
+                            <select class="form-control" formControlName="type" [attr.disabled]="state == true ? null : true">
+                            <option value="2">SHIPPING</option>
+                            <option value="1">BILLING</option>
+                    </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="name" class="control-label">Name</label>
+                            <input type="text" class="form-control" name="name" formControlName="name">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="email" class="control-label">Email</label>
+                            <input type="text" class="form-control" name="email" formControlName="email">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="tax_number" class="control-label">Fax Number</label>
+                            <input type="text" class="form-control" name="tax_number" formControlName="tax_number">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="phone" class="control-label">Phone</label>
+                            <input type="text" class="form-control" name="phone" formControlName="phone">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="country_code" class="control-label">Country
+                            <span class="text-danger">( * )</span>
+                        </label>
+                            <select class="form-control" formControlName="country_code" (change)="changeCountry(this.primaryForm.value.country_code)">
+                          <option value="null" selected="true">--Select--</option>
+                          <option *ngFor="let item of listMaster['countries']" [ngValue] = "item.country_code">{{item.name}}</option>
+                        </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="city_name" class="control-label">City
+                            <span class="text-danger">( * )</span>
+                        </label>
+                            <input type="text" class="form-control" name="city_name" formControlName="city_name">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="state_id" class="control-label">State/Province</label>
+                            <select class="form-control" formControlName="state_id">
+                          <option value="null" selected="true"  >--Select--</option>
+                          <option *ngFor="let item of listMaster['state']" [ngValue] = "item.id">{{item.name}}</option>
+                        </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="zip_code" class="control-label">Zip/Postal Code
+                            <span class="text-danger">( * )</span>
+                        </label>
+                            <input type="text" class="form-control" name="zip_code" formControlName="zip_code">
+                        </div>
+                        <div class="col-md-12">
+                            <label for="address_line" class="control-label">Address Line
+                            <span class="text-danger">( * )</span>
+                        </label>
+                            <textarea name="name" rows="4" class="form-control" formControlName="address_line"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" (click)="updateData()">OK</button>
+        <button type="button" class="btn btn-outline-dark" (click)="activeModal.close([])">Close</button>
+    </div>

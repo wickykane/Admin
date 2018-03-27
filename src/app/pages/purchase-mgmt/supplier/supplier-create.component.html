@@ -43,11 +43,12 @@
                     <div class="block-file">
                         <div>
                             <div class="">
-                                <img src="./assets/images/icon-upload.jpg" alt="">
+                                <img *ngIf="!imageSelected" src="./assets/images/icon-upload.jpg" alt="">
+                                <img *ngIf="imageSelected" src="{{imageSelected}}" alt="">
                             </div>
                         </div>
                         <label class="btn-bs-file  btn btn-outline-secondary">UPLOAD IMAGE
-                            <input class="btn btn-default" id="file-to-upload" type="file" accept="image/*">
+                            <input class="btn btn-default" id="file-to-upload" type="file" (change)="onFileChange($event)" accept="image/*">
                         </label>
                     </div>
                 </div>
@@ -86,9 +87,9 @@
                                 </div>
                                 <div class="col-md-12">
                                     <label for="address_line" class="control-label">Address Line
-                                        <span class="text-danger">( * )</span>
-                                    </label>
-                                    <input type="text" class="form-control" name="address_line" formControlName="address_line">
+                                            <span class="text-danger">( * )</span>
+                                        </label>
+                                    <textarea name="name" rows="4" class="form-control" formControlName="address_line"></textarea>
                                 </div>
                                 <div class="col-md-12">
                                     <label for="country_code" class="control-label">Country
@@ -140,6 +141,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <label for="name" class="control-label">Name</label>
+                                    <span class="text-danger">( * )</span>
                                     <input type="text" class="form-control" name="name" formControlName="name">
                                 </div>
                                 <div class="col-md-12">
@@ -156,9 +158,9 @@
                                 </div>
                                 <div class="col-md-12">
                                     <label for="address_line" class="control-label">Address Line
-                                        <span class="text-danger">( * )</span>
-                                    </label>
-                                    <input type="text" class="form-control" name="address_line" formControlName="address_line">
+                                            <span class="text-danger">( * )</span>
+                                        </label>
+                                    <textarea name="name" rows="4" class="form-control" formControlName="address_line"></textarea>
                                 </div>
                                 <div class="col-md-12">
                                     <label for="country_code" class="control-label">Country
@@ -210,6 +212,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <label for="name" class="control-label">Name</label>
+                                    <span class="text-danger">( * )</span>
                                     <input type="text" class="form-control" name="name" formControlName="name">
                                 </div>
                                 <div class="col-md-12">
@@ -226,9 +229,9 @@
                                 </div>
                                 <div class="col-md-12">
                                     <label for="address_line" class="control-label">Address Line
-                                        <span class="text-danger">( * )</span>
-                                    </label>
-                                    <input type="text" class="form-control" name="address_line" formControlName="address_line">
+                                            <span class="text-danger">( * )</span>
+                                        </label>
+                                    <textarea name="name" rows="4" class="form-control" formControlName="address_line"></textarea>
                                 </div>
                                 <div class="col-md-12">
                                     <label for="country_code" class="control-label">Country
@@ -303,7 +306,7 @@
                                 <td><input type="text" class="form-control" name="full_name" [(ngModel)]="item.full_name"></td>
                                 <td><input type="text" class="form-control" name="phone" [(ngModel)]="item.phone"></td>
                                 <td><input type="text" class="form-control" name="phone2" [(ngModel)]="item.phone2"></td>
-                                <td><button type="button" class="btn btn-default" (click)="removeLine()"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                                <td><button type="button" class="btn btn-default" (click)="removeLine(i)"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                             </tr>
                             <tr>
                                 <td colspan="11">

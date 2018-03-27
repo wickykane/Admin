@@ -22,5 +22,14 @@ export class ItemService {
         return this.API.get(url);
     }
 
+    getListCountry() {
+        var url = 'country/get-all';
+        return this.API.get(url);
+    }
+
+    getStateByCountry( params) {
+        var url = 'state/get-by-country'
+        return this.API.get(url, params);
+    }
 
 }
