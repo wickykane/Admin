@@ -1,0 +1,64 @@
+<div class="workflow-container">
+    <div class="container">
+        <div>
+            <h4 class="red-header text-uppercase">Work flow</h4>
+            <div class="float-right left-control">
+                <a ><i class="fa fa-plus-circle"></i><span class="text-uppercase">Create New</span></a>
+                <label class="css-input css-checkbox css-checkbox-default">
+                    <input class="cb-element" type="checkbox">
+                    <span></span>
+                    SELECT
+                </label>
+                <label class="css-input css-checkbox css-checkbox-default">
+                    <input class="cb-element" type="checkbox">
+                    <span></span>
+                    SELECT ALL
+                </label>
+                <button class="btn btn-danger"><i class="fa fa-trash"></i><span> Remove</span></button>
+
+            </div>
+        </div>
+        <div class="row" style="margin-top: 50px;">
+            <div class="col-md-3">
+                <div class="task-object">
+                    <div class="icon">
+                        <a (click)="goDetail()" ><i class="fa fa-cog"></i></a>
+                    </div>
+                    <div class="text">
+                        Sales Process
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="task-object">
+                    <div class="icon">
+                        <a (click)="goDetail()" ><i class="fa fa-cog"></i></a>
+                    </div>
+                    <div class="text">
+                        Purchase Process
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="task-object">
+                    <div class="icon">
+                        <a (click)="goDetail()"  ><i class="fa fa-cog"></i></a>
+                    </div>
+                    <div class="text">
+                        Delivery Process
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="task-object">
+                    <div class="icon" (click)="goDetail()">
+                        <a (click)="goDetail()"  ><i class="fa fa-cog"></i></a>
+                    </div>
+                    <div class="text">
+                        Receiving Process
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -9,6 +9,8 @@ import { StatModule } from '../../shared/index';
 import { UnitMeasureModule } from './unit-measure/unit-measure.module';
 import { ShipmentMethodModule } from './shipment-method/shipment-method.module';
 import { UserModule } from './user/user.module';
+import { WorkFlowModule } from './work-flow/work-flow.module';
+
 import { PageHeaderModule } from '../../shared';
 
 
@@ -21,7 +23,8 @@ import { PageHeaderModule } from '../../shared';
         UnitMeasureModule,
         ShipmentMethodModule,
         UserModule,
-        PageHeaderModule
+        PageHeaderModule,
+        WorkFlowModule
     ],
     declarations: [
         AdminPanelComponent        
