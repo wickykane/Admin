@@ -34,6 +34,7 @@ export class BundleMgmtCreateComponent implements OnInit {
 
   ngOnInit() {
     this.getListStatus();  
+    this.getListItemOption();
     this.data['products'] = [];
   }
   /**
@@ -52,6 +53,11 @@ export class BundleMgmtCreateComponent implements OnInit {
   /**
    * Internal Function
    */
+  getListItemOption(){
+    this.productService.getListItemOption().subscribe(res=>{
+      this.listMaster['listProduct'] = res.results;     
+    })
+  }
 
   checkLevel(item) {
     let tempArr = Array.from(this.listMaster['typeProgram']);
@@ -69,10 +75,12 @@ export class BundleMgmtCreateComponent implements OnInit {
     item.is_acc_bal = false;
   }
 
-  clickAdd() {
-    console.log('1');
+  clickAdd() {    
     this.data['products'].push({});
   };
+  removeRow(index) {
+    this.data['products'].splice(index,1);
+  }
 
   toDateObject(date) {
     if (!date) return null;
@@ -83,21 +91,40 @@ export class BundleMgmtCreateComponent implements OnInit {
       year: dateObject.getFullYear()
     }
   }
-  //Promo Program
-  goPromoDetail = function (item) {
-    if (!item.level || !item.type) return;
-    this.openPromotionModal(item);
+  //Product Line
+  changeQTY(){
+    console.log('abc')
+    this.generalForm.controls['cost_price'].patchValue(0);
+    let list =this.data['products'];
+    if(list.length==0){
+      return;
+    }else{
+      let priceLine =0;
+      list.forEach(item => {
+        if(item.qty!= 0) {priceLine+=(item.qty*item.price)};
+      });
+      this.generalForm.controls['cost_price'].patchValue(priceLine);
+    }
+
+  }
+  changeProductLine(item,index){
+    let itemID = this.listMaster['listProduct'].filter(product=>{
+      if(product.item_id==item.product_id)
+        return product;
+    })
+    item.name= itemID[0].name;
+    item.uom_name=itemID[0].uom_name;
+    item.price=itemID[0].price;
   }
 
-  createCampain = function () {
-    var params = this.generalForm.value;
-    params.programs = this.data['programs'];
-    console.log(params);
-    this.promotionService.postCampaign(params).subscribe(res => {
+  createBundle = function () {
+    let params = this.generalForm.value;
+    params.detail  = this.data['products'];   
+    this.productService.postBundle(params).subscribe(res => {
       try {
         this.toastr.success(res.message);
         setTimeout(() => {
-          this.router.navigate(['/promotion/campaign']);
+          this.router.navigate(['/product-management/bundle']);
         }, 500)
       } catch (e) {
         console.log(e);

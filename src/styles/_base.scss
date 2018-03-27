@@ -9,11 +9,44 @@
     -webkit-transition: all 0.15s ease-out;
     transition: all 0.15s ease-out;
 }
+
 .btn-outline-secondary {
-        height: 21px;
+    height: 21px;
 }
+
+.btn-copy {
+    background: #138891;
+    color: $white;
+}
+
+.block-file {
+    text-align: center;
+    margin-top: 5px;
+    img {
+        border: 1px solid #e0e0e0;
+        width: 70%;
+        padding: 5px;
+    }
+
+    .btn-bs-file {
+        width: 70%;
+        margin-bottom: 0;
+        cursor: pointer;
+
+        input {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+            outline: 0;
+            cursor: pointer;
+        }
+    }
+}
+
 .group-btn-search {
     position: relative;
+    margin-left: 15px;
 
     .show-more {
         width: 128px;
@@ -302,7 +335,7 @@ table.custom-table {
 .bg {
     &-gray-lighter {
         background-color: #ccc;
-        margin-right: 5px;
+        margin-right: 0px;
     }
 
     &-red-dark {
@@ -365,8 +398,8 @@ table.custom-table {
         position: relative;
         min-height: 1px;
         padding-right: 0;
-        padding-left: 15px;       
-        width: 19%;
+        padding-left: 15px;
+        float: left;
     }
 
     &.form-horizontal .control-label {

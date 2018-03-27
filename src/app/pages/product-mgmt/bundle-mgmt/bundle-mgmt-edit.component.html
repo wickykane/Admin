@@ -1,132 +1,122 @@
-<div class="block anchor-scroll">
-    <app-page-header [heading]="'LIST OF BUNDLE'" [icon]="'fa-th-list'"></app-page-header>
-    <div class="block-content pd-bottom tab-content bg-gray-light">
-        <div class="row">
-            <form class="form-horizontal form-search" [formGroup]="searchForm">
-                <div class="block-search">
-                    <label for="so" class="control-label" translate>Code</label>
-                    <input type="text" name="so" formControlName="cd" class="form-control">
+<section>
+        <div class="block-header bg-red-dark text-white">
+            <h3 class="block-title-lg" translate>CREATE NEW BUNDLE</h3>
+            <div class="wrap-keyboard">
+                <span class="fa fa-keyboard-o my-own-cheatsheet"></span>
+            </div>
+        </div>
+    </section>
+    
+    <section class="rma-page block">
+        <div class="row" style="padding-top:15px">
+            <div class="col-sm-12">
+                <div class="block-header bg-gray-lighter">
+                    <h3 class="block-title" translate>GENERAL INFORMATION</h3>
                 </div>
-                <div class="block-search">
-                    <label for="cus_po" class="control-label" translate>Description</label>
-                    <input type="text" name="cus_po" formControlName="name" class="form-control">
-                </div>
-                <div class="block-btn-search">
-                    <label class="control-label">&nbsp;</label>
-                    <div>
-                        <button type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Search</button>
-                        <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchForm)" translate>Reset</button>
+            </div>
+        </div>
+        <div>
+            <form [formGroup]="generalForm" class="form-search full-width form-horizontal">
+                <div class="row col-md-12">
+                    <div class="col-md-2">
+                        <label for="campaign" class="control-label" translate>Code</label>
+                        <input type="text" class="form-control" name="rma" formControlName="code" [attr.disabled]='true'>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="campaign_name" class="control-label" translate>Name</label>
+                        <span class="text-danger">( * )</span>
+                        <input type="text" class="form-control" name="campaign_name" formControlName="name">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="sts" class="control-label" translate>Status </label>
+                        <span class="text-danger">( * )</span>
+                        <select name="sts" formControlName="sts" class="form-control">
+                            <option *ngFor="let item of listMaster['status']" [value]="item.id">{{ item.name }}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="sale_price" class="control-label" translate>Bundle Sales Price </label>
+                        <span class="text-danger">( * )</span>
+                        <input type="text" class="form-control" name="sale_price" formControlName="sale_price">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="cost_price" class="control-label" translate>Bundle Cost Price </label>
+                        <span class="text-danger">( * )</span>
+                        <input type="text" class="form-control" name="cost_price" formControlName="cost_price">
                     </div>
                 </div>
             </form>
         </div>
-    </div>
-
-    <div class="block-content pd-top">
-        <button [routerLink]="['/promotion/budget/create']" style="margin: 10px 0;" class="btn btn-primary" translate>Add New Bundle</button>
-
-        <div class="table-responsive">
-            <table class="table table-striped table-vcenter table-hover custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex"
-                (onEnter)="selectData($event)">
-                <thead class="bg-white">
-                    <tr>
-                        <th translate>ID</th>
-                        <th translate>Code</th>
-                        <th translate>Description</th>
-                        <th class="text-center" translate>Cost Price</th>
-                        <th class="text-center" translate>Sale Price</th>
-                        <th class="text-center" translate>Status</th>
-                        <th class="text-center" translate>Created on</th>
-                        <th class="text-center" translate>Created by</th>
-                        <th translate>Action</th>
-                    </tr>
-                </thead>
-
-                <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
-                    <tr>
-                        <td>
-                            #{{item.id}}
-                        </td>
-                        <td>{{item.cd}}</td>
-                        <td>{{item.name}}</td>
-                        <td class="text-center">
-                            {{item.cost_price | currency}}
-                        </td>
-                        <td class="text-center">
-                            {{item.sale_price | currency}}
-                        </td>
-                        <td>
-                            <label class="switch" placement="top" ngbTooltip="Click to Active or Inactive">
-                                <input trueFalseValue trueValue="AT" falseValue="IA" type="checkbox" [(ngModel)]="item.sts" (change)="changeStatus(item.id,item.ac)">
-                                <div class="slider round"></div>
-                            </label>
-                        </td>
-                        <td class="text-center">
-                            <span ng-if="item.crtd_dt">{{item.crtd_dt }}</span>
-                        </td>
-                        <td class="text-center">
-                            <span ng-if="item.crtd_by_name">{{item.crtd_by_name}}</span>
-                        </td>
-                        <td>
-                            <a class="btn btn-default" ngbTooltip="{{ (!showProduct)? 'Show details': 'Hide details' }}" [ngClass]="{'disable-expand': item.detail.length == 0 }"
-                                (click)="toggleSubRow(item.id)">
-                                <i class="fa" [ngClass]="{'fa-minus': showProduct && (item.id === flagId),' fa-plus': !(showProduct && (item.id === flagId))}"></i>
-                            </a>
-                            <a class="btn btn-default" ngbTooltip="Edit Bundle" ng-click="editBundle(item.id)">
-                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                            </a>
-                        </td>
-                    </tr>
-                    <tr *ngIf="item.id === flagId">
-                        <td></td>
-                        <td colspan="100%">
-                            <table class="table table-striped table-vcenter table-child">
-                                <thead>
-                                    <tr>
-                                        <th translate>Product Code</th>
-                                        <th translate>Product Name</th>
-                                        <th translate>UOM</th>
-                                        <th translate>Quantity</th>
-                                        <th translate>Cost price</th>
-                                    </tr>
-                                </thead>
-                                <tbody *ngFor="let dt of item.detail">
-                                    <tr>
-                                        <td>{{dt.sku}}</td>
-                                        <td>{{dt.product_name}}</td>
-                                        <td>{{dt.uom_name}}</td>
-                                        <td>{{dt.qty}}</td>
-                                        <td>{{dt.price |currency}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </td>
-                    </tr>
-                    <tr *ngIf="list.items.length === 0">
-                        <td colspan="100%" class="text-center">No data.</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="row normal-pagination" *ngIf="list.items.length > 0">
-            <div class="col-md-6">
-                <div class="text-left">
-                    <div class="col-md-6" style="padding-left: 0px;">
-                        <span style="float: left; padding-right: 10px;">{{list.items.length}}/{{tableService.pagination.total_record}} items </span>
-                        <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length" (change)="tableService.changeLength()">
-                            <option *ngFor="let option of tableService.itemPerPageOptions" [ngValue]="option">{{option}}</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="text-right">
-                    <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length"
-                        [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page"
-                        [maxSize]="tableService.maxSize" [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+    
+        <div class="row" style="padding-top:15px">
+            <div class="col-sm-12">
+                <div class="block-header bg-gray-lighter">
+                    <h3 class="block-title" translate>PRODUCT LINE</h3>
                 </div>
             </div>
         </div>
-
-    </div>
-</div>
+        <div class="row" style="margin-bottom: 20px;margin-top: 10px;">
+            <div class="col-sm-12">
+                <div class="block-content">
+                    <table class="table-striped table-vcenter table-hover custom-table">
+                        <thead>
+                            <tr>
+                                <th style="width:3%" role="button" translate> No </th>
+                                <th style="width:10%" role="button" translate> Product Code </th>
+                                <th style="width:15%" role="button" translate> Name </th>
+                                <th style="width:10%" role="button" translate> UOM </th>
+                                <th style="width:10%" role="button" translate> Quantity </th>
+                                <th style="width:8%" role="button" translate> Cost Price </th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of data['products']; let $index = index;">
+                                <td>{{ $index + 1 }}</td>
+                                <td>
+                                    <select class="form-control" [(ngModel)]="item.product_id" required (change)="changeProductLine(item,$index)">
+                                        <option *ngFor="let item of listMaster['listProduct']" [value]="item.item_id">{{ item.sku }}</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" [(ngModel)]="item.name" readonly>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" [(ngModel)]="item.uom_name" readonly>
+                                </td>
+                                <td class="text-center">
+                                    <input type="text" class="form-control" [(ngModel)]="item.qty" (change)="changeQTY()" required>
+    
+                                </td>
+                                <td class="text-center">
+                                    {{item.price|currency}}
+                                </td>
+                                <td>
+                                    <button type="button" (click)="goPromoDetail(item)" class="btn btn-secondary" placement="top" ngbTooltip="Go Promo Detail">
+                                        <i class="fa fa-align-justify"></i>
+                                    </button>
+                                    <button type="button" (click)="removeRow($index)" class="btn btn-secondary" placement="top" ngbTooltip="Remove">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="11">
+                                    <a href="javascript:void(0)" (click)="clickAdd()">
+                                        <i class="fa fa-plus" aria-hidden="true"></i>
+                                        <span translate>Add New Line</span>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    
+        <div class="block-content block-content-full text-right">
+            <button type="button" class="btn btn-default" [routerLink]="['/product-management/bundle']" translate>Cancel</button>
+            <button [disabled]="!generalForm.valid" type="button" class="btn btn-primary" (click)="createBundle()" translate>Save</button>
+        </div>
+    </section>
+    

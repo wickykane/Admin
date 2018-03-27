@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, Response, RequestOptions, URLSearchParams } from '@angular/http';
-import { HttpClient } from '@angular/common/http';
-import { HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
 import { environment } from '../../environments/environment';
 import { JwtService } from '../shared';
 import { catchError, retry } from 'rxjs/operators';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable'
 
 @Injectable()
 export class ApiService {
     public token: string;
 
-    constructor(public http: Http, public httpClient: HttpClient,  private jwtService:JwtService) {
+    constructor(public http: Http, public httpClient: HttpClient, private jwtService: JwtService) {
         // set token if saved in local storage
         // var currentUser = JSON.parse(localStorage.getItem('currentUser'));
         // this.token = currentUser && currentUser.token;
@@ -31,15 +31,16 @@ export class ApiService {
         return _options;
     }
 
-    private headerOptionDefault () {
+    private headerOptionDefault(params?) {
         let _token = window.localStorage.getItem('token');
-        const httpOptions = {
-            headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.jwtService.getToken() })
+        let httpOptions = {
+            headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.jwtService.getToken() }),
         }
+        if (params) httpOptions['params'] = params;
         return httpOptions;
     }
 
-    private headerOptionFormData () {
+    private headerOptionFormData() {
         let _token = window.localStorage.getItem('token');
         const httpOptions = {
             headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + this.jwtService.getToken() })
@@ -47,62 +48,62 @@ export class ApiService {
         return httpOptions;
     }
 
-    private _serverError(err: any) {
-        if (err instanceof Response) {
-            return Observable.throw(err.json().message || 'backend server error');
+    private _serverError(err: HttpErrorResponse) {
+        if (err.error instanceof ErrorEvent) {
+            return new ErrorObservable(err.error.message || 'backend server error');
         }
-        return Observable.throw(err || 'backend server error');
+        return new ErrorObservable(err.error || 'backend server error');
     }
 
 
-    get(path, params:URLSearchParams = new URLSearchParams() ):Observable<any>  {
-        console.log(path);
-        return this.httpClient.get(`${environment.api_url}${path}`, this.headerOptionDefault())
-        .pipe(
+    get(path, params?): Observable<any> {
+        return this.httpClient.get(`${environment.api_url}${path}`, this.headerOptionDefault(params))
+            .pipe(
             catchError(this._serverError)
-          );
-            // .map(res => res.json())  // could raise an error if invalid JSON
-            // .do(data => data)  // debug
-            // .catch(this._serverError);
+            );
+        // .map(res => res.json())  // could raise an error if invalid JSON
+        // .do(data => data)  // debug
+        // .catch(this._serverError);
     };
 
-    post(path, params:Object = {} ):Observable<any> {
+    post(path, params: Object = {}): Observable<any> {
         return this.httpClient.post(`${environment.api_url}${path}`, JSON.stringify(params), this.headerOptionDefault())
             // .map(res => res.json())  // could raise an error if invalid JSON
             // .do(data => data)  // debug
             .pipe(
-                catchError(this._serverError)
-              );
+            catchError(this._serverError)
+            );
     };
 
-    put(path, params:Object = {} ):Observable<any> {
+    put(path, params: Object = {}): Observable<any> {
         return this.httpClient.put(`${environment.api_url}${path}`, JSON.stringify(params), this.headerOptionDefault())
             // .map(res => res.json())  // could raise an error if invalid JSON
             // .do(data => data)  // debug
             .pipe(
-                catchError(this._serverError)
-              );
+            catchError(this._serverError)
+            );
+
     };
 
-    delete(path):Observable<any> {
+    delete(path): Observable<any> {
         return this.httpClient.delete(`${environment.api_url}${path}`, this.headerOptionDefault())
             // .map(res => res.json())  // could raise an error if invalid JSON
             // .do(data => data)  // debug
             // .catch(this._serverError);
             .pipe(
-                catchError(this._serverError)
-              );
+            catchError(this._serverError)
+            );
     };
 
-    postForm(path, params:Object = {} ):Observable<any> {
+    postForm(path, params: Object = {}): Observable<any> {
         return this.http.post(`${environment.api_url}${path}`, this.madeFormData(params), this.headerFormData())
             .map(res => res.json())  // could raise an error if invalid JSON
             .do(data => console.log('server data:', data))  // debug
             .catch(this._serverError);
     };
 
-    putForm(path, params:Object = {} ):Observable<any> {
-        return this.http.put(`${environment.api_url}${path}`, this.madeFormData(params),this.headerFormData(params))
+    putForm(path, params: Object = {}): Observable<any> {
+        return this.http.put(`${environment.api_url}${path}`, this.madeFormData(params), this.headerFormData(params))
             .map(res => res.json())  // could raise an error if invalid JSON
             .do(data => console.log('server data:', data))  // debug
             .catch(this._serverError);

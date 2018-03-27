@@ -14,6 +14,10 @@ export class ProductService {
         let url ='item';
         return this.ApiService.get(url,params);
     }
+    getListItemOption(){
+        let url ='item/reference';
+        return this.ApiService.get(url);
+    }
     postProductDefinition(data,files){
         let url ='item';
         return this.ApiService.postForm(url,data);
