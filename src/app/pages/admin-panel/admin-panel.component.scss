@@ -1,0 +1,28 @@
+@import '~styles/bootstrap/bootstrap';
+.admin-panel {
+    margin-left:150px;
+    h3,h5{
+        color :$red-menu;
+        font-weight: 600;
+    }
+    h3{
+        margin:20px 0;
+    }
+    .mg-25{
+        margin-bottom:25px;
+    }
+    ul {
+        list-style: none;
+        margin-bottom:15px;
+        -webkit-margin-start: 0px;
+        -webkit-padding-start: 0px;
+        margin-left:15px;
+        li {
+            list-style: none;
+            margin-bottom:15px;
+            a{
+                color:$gray-800;
+            }
+        }
+    }
+}

@@ -4,14 +4,14 @@ import { NgbCarouselModule, NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AdminPanelRoutingModule } from './admin-panel-routing.module';
 import { AdminPanelComponent } from './admin-panel.component';
-
-import { StatModule } from '../../shared/index';
-import { UnitMeasureModule } from './unit-measure/unit-measure.module';
-import { ShipmentMethodModule } from './shipment-method/shipment-method.module';
+import { UnitMeasureComponent } from './unit-measure/unit-measure.component';
+import { ShipmentMethodComponent } from './shipment-method/shipment-method.component';
 import { UserModule } from './user/user.module';
 import { WorkFlowModule } from './work-flow/work-flow.module';
 
-import { PageHeaderModule } from '../../shared';
+import { CommonShareModule, PageHeaderModule,StatModule} from '../../shared/index';
+import { TableService } from "../../services/index";
+import {AdminPanelService} from "./admin-panel.service";
 
 
 @NgModule({
@@ -19,15 +19,18 @@ import { PageHeaderModule } from '../../shared';
         CommonModule,
         NgbAlertModule.forRoot(),
         AdminPanelRoutingModule,
-        StatModule,
-        UnitMeasureModule,
-        ShipmentMethodModule,
+        StatModule,       
         UserModule,
         PageHeaderModule,
-        WorkFlowModule
+        WorkFlowModule,
+        CommonShareModule
     ],
     declarations: [
-        AdminPanelComponent        
-    ]
+        AdminPanelComponent,
+        UnitMeasureComponent,
+        ShipmentMethodComponent   
+    ],
+    providers:[TableService,
+        AdminPanelService]
 })
 export class AdminPanelModule {}

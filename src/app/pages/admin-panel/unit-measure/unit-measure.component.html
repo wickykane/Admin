@@ -1,27 +1,51 @@
-<div [@routerTransition]>
-    <app-page-header [heading]="'LIST OF UOM'" [icon]="'fa-th-list'"></app-page-header>
-    <div class="block">
-        <div class="block-content">
-            <div class="test table">
-                <table class="table table-borderd" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
-                    <thead>
-                        <tr>
-                            <th sortColumn="id" [(sortParam)]="sortParams" (sortFn)="sortAction($event)">ID</th>
-                            <th sortColumn="name" [(sortParam)]="sortParams" (sortFn)="sortAction($event)">Name</th>
-                            <th sortColumn="qty" [(sortParam)]="sortParams" (sortFn)="sortAction($event)">Quantity</th>
-                            <th sortColumn="base_uom_name" [(sortParam)]="sortParams" (sortFn)="sortAction($event)">Base UOM</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of list.items; let i = index" [ngClass]="{'row-selected': i == selectedIndex}">
-                            <td>{{item.id}}</td>
-                            <td>{{item.name}}</td>
-                            <td>{{item.qty}}</td>
-                            <td>{{item.base_uom_name}}</td>
-                        </tr>
-                    </tbody>
-                </table>
+<div class="block anchor-scroll">
+    <app-page-header [heading]="'LIST OF UOM'" [icon]="'fa-th-list'"></app-page-header>    
+    <div class="block-content pd-top">
+        <button [routerLink]="['/promotion/budget/create']" style="margin: 10px 0;" class="btn btn-primary" translate>Add New UOM</button>        
+        <div class="table-responsive">
+            <table class="table table-striped table-vcenter table-hover custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex"
+                (onEnter)="selectData($event)">
+                <thead class="bg-white">
+                    <tr>
+                        <th translate>ID</th>
+                        <th sortColumn="name" [(sortParam)]="tableService.sortParams" (sortFn)="tableService.sortAction($event)" translate translate>UOM Name</th>
+                        <th sortColumn="base_uom_name" [(sortParam)]="tableService.sortParams" (sortFn)="tableService.sortAction($event)" translate>Base UOM</th>
+                        <th sortColumn="qty" [(sortParam)]="tableService.sortParams" (sortFn)="tableService.sortAction($event)" translate class="text-center" >Base UOM QTY</th>
+                       
+                    </tr>
+                </thead>
+                <tr *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
+                    <td>
+                        #{{item.id}}
+                    </td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.base_uom_name}}</td>
+                    <td> {{item.qty}} </td>                   
+                </tr>
+                <tr *ngIf="list.items.length === 0">
+                    <td colspan="100%" class="text-center">No data.</td>
+                </tr>
+            </table>
+        </div>
+        <div class="row normal-pagination" *ngIf="list.items.length > 0">
+            <div class="col-md-6">
+                <div class="text-left">
+                    <div class="col-md-6" style="padding-left: 0px;">
+                        <span style="float: left; padding-right: 10px;">{{list.items.length}}/{{tableService.pagination.total_record}} items </span>
+                        <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length" (change)="tableService.changeLength()">
+                            <option *ngFor="let option of tableService.itemPerPageOptions" [ngValue]="option">{{option}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="text-right">
+                    <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length"
+                        [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page"
+                        [maxSize]="tableService.maxSize" [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+                </div>
             </div>
         </div>
+
     </div>
 </div>
