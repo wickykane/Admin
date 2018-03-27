@@ -2,19 +2,19 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {HotkeyModule} from 'angular2-hotkeys';
-import {ToastModule} from 'ng2-toastr/ng2-toastr';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { HotkeyModule } from 'angular2-hotkeys';
+import { ToastModule } from 'ng2-toastr/ng2-toastr';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AuthGuard, JwtService} from './shared';
-import { AuthenticationService, ApiService } from './services/index';
+import { AuthGuard, JwtService } from './shared';
+import { AuthenticationService, ApiService, ApiInterceptorService } from './services/index';
 import { NgHttpLoaderModule } from 'ng-http-loader/ng-http-loader.module';
 
 
@@ -57,8 +57,13 @@ export function createTranslateLoader(http: HttpClient) {
         AuthGuard,
         JwtService,
         AuthenticationService,
-        ApiService
+        ApiService,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: ApiInterceptorService,
+            multi: true
+        }
     ],
     bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }
