@@ -35,6 +35,10 @@ export class WorkFlowEditComponent implements OnInit {
 
     }
 
+    isCollapsedAction;
+    isCollapsedCondition;
+    isCollapsedInterActive;
+
     draggableActions = [{ name: 'Start', type: 3, }, { name: 'End', type: 4, }, { name: 'New Document', img: "../../../assets/img/icon-workflow/new-document.png" }, { name: 'Notify Document', img: "../../../assets/img/icon-workflow/Notify.png" }, { name: 'Read Document', img: "../../../assets/img/icon-workflow/Read.png" }, { name: 'Delete Document', img: "../../../assets/img/icon-workflow/delete.png" }, { name: 'Approve Document', img: "../../../assets/img/icon-workflow/new-document.png" }];
     draggableConditions = [{ name: 'Condition', type: 2, img: "../../../assets/img/icon-workflow/Condition.png" }, { name: 'Parallel', type: 2, img: "../../../assets/img/icon-workflow/Parallel.png" }];
     draggableInteractives = [{ name: 'Message', img: "../../../assets/img/icon-workflow/Message.png" }, { name: 'Set State Name', img: "../../../assets/img/icon-workflow/Set-State-name.png" }, { name: 'User Notification', img: "../../../assets/img/icon-workflow/User-notification.png" }, { name: 'Task', img: "../../../assets/img/icon-workflow/task.png" }];
@@ -73,7 +77,7 @@ export class WorkFlowEditComponent implements OnInit {
         }
     }
 
-    onDropComplete = function (data, event, id, item, flag, type, reload) {
+    onDropComplete = function (data, event, id, item, flag, type?, reload?) {
         var data_id = id;
         if (flag) {
             data.parent = (type) ? id : "";
