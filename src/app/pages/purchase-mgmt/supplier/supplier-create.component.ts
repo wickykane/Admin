@@ -7,7 +7,6 @@ import { PurchaseService } from "../purchase.service";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ItemModalContent } from "../../../shared/modals/item.modal";
 
-
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { routerTransition } from '../../../router.animations';
 
@@ -25,6 +24,8 @@ export class SupplierCreateComponent implements OnInit {
     shippingForm: FormGroup;
 
     public users: any = [];
+    public listFile: any = [];
+    public imageSelected: string = '';
 
     public listMaster = {};
 
@@ -40,9 +41,32 @@ export class SupplierCreateComponent implements OnInit {
             'email': [null, Validators.required],
             'phone': [null],
             'fax': [null],
-            'website': [null]
+            'website': [null],
+            'is_supplier': true
         });
-        this.primaryForm = this.billingForm = this.shippingForm = fb.group({
+        this.primaryForm = fb.group({
+            'name': [null, Validators.required],
+            'email': [null],
+            'tax_number': [null],
+            'phone': [null],
+            'address_line': [null, Validators.required],
+            'country_code': [null, Validators.required],
+            'state_id': [null],
+            'city_name': [null, Validators.required],
+            'zip_code': [null, Validators.required]
+        });
+        this.billingForm = fb.group({
+            'name': [null, Validators.required],
+            'email': [null],
+            'tax_number': [null],
+            'phone': [null],
+            'address_line': [null, Validators.required],
+            'country_code': [null, Validators.required],
+            'state_id': [null],
+            'city_name': [null, Validators.required],
+            'zip_code': [null, Validators.required]
+        });
+        this.shippingForm = fb.group({
             'name': [null, Validators.required],
             'email': [null],
             'tax_number': [null],
@@ -57,7 +81,6 @@ export class SupplierCreateComponent implements OnInit {
 
     ngOnInit() {
         this.getListCountry();
-        this.users = [{}];
     }
 
     //data master country
@@ -65,7 +88,6 @@ export class SupplierCreateComponent implements OnInit {
         this.purchaseService.getListCountry().subscribe(res => {
             try {
                 this.listMaster['countries'] = res.results;
-                this.listMaster['states'] = [];
             } catch (e) {
                 console.log(e);
             }
@@ -73,7 +95,7 @@ export class SupplierCreateComponent implements OnInit {
     }
     //action change country
     changeCountry(id, flag) {
-        var params = {
+        let params = {
             country: id
         }
         this.getStateByCountry(params, flag);
@@ -92,14 +114,68 @@ export class SupplierCreateComponent implements OnInit {
     //action copy address
     copyToAddress(flag) {
         if (flag == 'billing') {
-
+            this.billingForm.patchValue(this.primaryForm.value);
+            this.listMaster['states_billing'] = this.listMaster['states_primary'];
         }
         if (flag == 'shipping') {
+            this.shippingForm.patchValue(this.billingForm.value);
+            this.listMaster['states_shipping'] = this.listMaster['states_billing'];
+        }
+    }
+
+    addNewLine() {
+        this.users.push({});
+    }
+
+    removeLine(index) {
+        this.users.splice(index, 1);
+    }
+
+    onFileChange(event) {
+        this.listFile = [];
+        this.imageSelected = '';
+        let reader = new FileReader();
+        if (event.target.files && event.target.files.length > 0) {
+            let files = event.target.files;
+            this.listFile = Object.assign([], files);
+            for (let i = 0; i < files.length; i++) {
+                let file = files[i];
+                reader.readAsDataURL(file);
+                reader.onload = (e) => {
+                    this.imageSelected = e.target['result'];
+                }
+            }
 
         }
     }
 
+    createSupplier() {
 
+        let params = Object.assign({}, this.generalForm.value);
+        params['user'] = Object.assign([], this.users);
+        params['shipping'] = [];
+        params['shipping'].push(this.shippingForm.value);
+        params['primary'] = [];
+        params['primary'].push(this.primaryForm.value);
+        params['billing'] = [];
+        params['billing'].push(this.billingForm.value);
+
+        let data = {
+            data: JSON.stringify(params),
+            image: this.listFile[0] || null
+        }
+
+        this.purchaseService.createBuyer(data).subscribe(res => {
+            try {
+                setTimeout(() => {
+                    this.router.navigate(['/purchase-management/supplier']);
+                }, 2000);
+                this.toastr.success(res.message);
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
 
 
 }

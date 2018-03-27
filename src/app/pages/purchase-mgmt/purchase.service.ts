@@ -138,6 +138,18 @@ export class PurchaseService {
         var url = 'country/get-all';
         return this.API.get(url);
     }
+    getListState() {
+        var url = 'state/get-all';
+        return this.API.get(url);
+    }
+    createBuyer(data) {
+        var url = 'buyer/create';
+        return this.API.postForm(url, data);
+    }
+    getDetailBuyer(id) {
+        var url = 'buyer/detail/' + id;
+        return this.API.get(url);
+    }
     getStateByCountry( params) {
         var url = 'state/get-by-country'
         return this.API.get(url, params);
