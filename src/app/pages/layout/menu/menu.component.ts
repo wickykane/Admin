@@ -200,7 +200,7 @@ export class MenuComponent implements OnInit {
                 ]
             },
             {
-                flag: '',
+                flag: 'admin-panel',
                 link: '/admin-panel',
                 main_name: 'Admin Panel',
                 icon: '',
@@ -220,7 +220,7 @@ export class MenuComponent implements OnInit {
     }
 
     removeClassExpand() {
-        this.expand.nativeElement.classList.remove();
+        // this.expand.nativeElement.classList.remove();
     }
 
 

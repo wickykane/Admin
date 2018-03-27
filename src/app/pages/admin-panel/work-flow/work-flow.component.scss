@@ -1,0 +1,236 @@
+ul, li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.window {
+    position: absolute;
+    top:0;
+    left:350px;
+  }
+  
+  .workflow-container {
+    padding: 30px 0;
+  
+    .object-center {
+      top: 10px;
+      left: -85px;
+    }
+  
+    .start-icon {
+      height: 2px;
+      width: 10px;
+      background-color: #38ca17;
+      float: left;
+      margin-right: 5px;    
+      margin-top: 7px;
+    }
+  
+    .window-header-start {
+      background-color: #38ca17 !important;    
+    }
+  
+    .window-header-end {
+      background-color: #ff1c1c !important;    
+    }
+    
+    .end-icon {
+      height: 2px;
+      width: 10px;
+      background-color: #ff1c1c;
+      float: left;
+      margin-top: 7px;
+      margin-right: 5px;
+    }
+    .center-condition, .left-condition, .right-condition {
+      height: 20px;
+      width: 20px;
+      border-radius: 50%;
+      background-color: #fff;
+      position: absolute;
+      left: 90px;
+      bottom: -20px;
+      display: inline-block;
+    }
+  
+    .right-condition {
+      // left: 90px;
+      left: 200px;
+      bottom: 50px;
+  
+    }
+  
+    .left-condition {
+        left: -30px;
+      bottom: 50px;
+    }
+  
+    .condition-group {
+      display: block;
+      padding: 0 50px;
+      .diamond {
+        width: 0;
+        height: 0;
+        border: 50px solid transparent;
+        border-bottom-color: #b6b6b6;
+        position: relative;
+        top: -50px;
+      }
+      .diamond:after {
+        content: '';
+        position: absolute;
+        left: -50px;
+        top: 50px;
+        width: 0;
+        height: 0;
+        border: 50px solid transparent;
+        border-top-color: #b6b6b6;
+      }
+    }
+    a {
+      color: #444;
+      .fa  {
+        margin-right: 2px;
+      }
+    }
+    .dropdown-group {
+      margin-bottom: 10px;
+      > div button {
+        background-color: #43b3ff;
+        color: #fff;
+        font-weight: bold;
+      }
+    }
+    .child-content {
+      ul {
+        border: 1px solid #ccc;
+        border-top: none;
+      }
+      ul li {
+        padding: 15px;
+      
+      }
+      ul li:first-child {
+       
+      }
+      
+    }
+  
+    .dropable-container {
+      padding: 30px;
+      overflow: auto;
+      height: 600px;
+      position: relative;
+      .drag-over-border,[ng-drop].drag-enter{
+        background-color: #43b3ff;
+      }
+    
+  
+      .window {
+        width: 200px;
+        // margin: 30px auto;
+        display: block;
+        .window-header-grey {
+          background-color: #ccc !important;
+        }
+        .window-header {
+          padding: 2px 5px;
+          color: #fff;
+          width: 200px;
+          text-align: right;
+          a {
+            color: #fff;
+            margin-left: 5px;
+          }
+          background-color: #43b3ff;
+        }
+        .window-content {
+          img {
+            margin-left: 10px;
+          }
+          clear:both;
+          height: 100px;
+          background-color: #fff;
+          border: 1px solid #ccc;
+          border-radius: 0 0px 5px 5px;
+          a {
+            padding: 10px;
+            padding-left: 0;
+          }
+        }
+      }
+  
+      .dropable-container-1 {
+        background-color: #ccc;
+        border: 1px dashed #444;
+        min-height: 500px;
+      }
+      .clear-bg {
+        background-color: inherit !important;
+        border:none !important;
+      }
+    }
+    .right-toggle {
+      height: 40px !important;
+    }
+  
+    .edit-workflow-page > div:first-child{
+      border: 1px solid #ccc;
+      margin: 0;
+      padding: 0;
+    }
+    .left-edit-control {
+      padding: 0 10px;
+      border-bottom: 1px solid #ccc;
+      a + a {
+        margin-left: 10px;
+        line-height: 40px;
+      }
+  
+      a {
+        font-size: 13px;
+        &:hover, &:active, &:focus {
+          color: #006bb6;
+        }
+      }
+    }
+  
+    .task-object {
+      border: 1px solid #ccc;
+      display: flex;
+      .icon {
+        background-color: #43b3ff;        
+      }
+
+      .icon a{
+        padding: 0 15px;
+        font-size: 25px;
+        color: #fff;
+        background-color: #43b3ff;
+        line-height: 50px;
+      }
+      .text {
+        margin-left: 10px;
+        font-size: 13px; 
+      }
+      > div {
+        display: flex;
+        align-items: center; 
+      }
+    }
+    .left-control {
+        
+      > label, > button {
+        margin-left: 15px;
+      }
+      > a span {
+        margin-left: 5px;
+      }
+    }
+    .red-header {
+      color: #006bb6;
+      font-size: 20px;
+    }
+  }
+  

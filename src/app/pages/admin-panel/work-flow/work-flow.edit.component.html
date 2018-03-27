@@ -1,0 +1,148 @@
+<div class="workflow-container">
+    <div class="container">
+        <div class="row">
+            <h4 class="red-header text-uppercase">Edit Business Process Template</h4>
+        </div>
+        <div style="margin-top: 30px;">
+            <div class="row edit-workflow-page">
+                <div class="col-md-9 page-left">
+                    <div class="left-edit-control">
+                        <a (click)="loadChart()"><i class="fa fa-object-group"></i><span> Templates</span></a>
+                        <a (click)="createTemplate()"><i class="fa fa-plus-circle"></i><span> Create Templates</span></a>
+                        <a (click)="saveChart()"><i class="fa fa-sign-out"></i><span> Export</span></a>
+                    </div>
+                    <div class="dropable-container" droppable [dropEnabled]='parentDragable' (onDrop)="onDropComplete($event.dragData, $event, null, null, 1)">
+                        <div [ngClass]="{ 'clear-bg': dropOject.length > 0 }" class="dropable-container-1">
+                            <!-- <div ng-repeat="item in dropOject">
+                                <a ><i class="fa fa-file"> </i> New Document</a>
+                            </div> -->
+                            <div *ngFor="let item of dropOject; let $index = index;" id="object{{$index}}" class="window object{{$index}}">
+                                <div *ngIf="!item.type">
+                                    <div class="window-header pull-right">
+                                        <a><i class="fa fa-window-minimize"></i></a>
+                                        <a (click)="openSetting()"><i class="fa fa-cog"></i></a>
+                                        <a (click)="closeButton($index)" id="close-object-{{$index}}"><i class="fa fa-window-close"></i></a>
+                                    </div>
+                                    <div class="window-content">
+                                        <div *ngIf="!item.hide">
+                                            <img src="{{ item.img }}">
+                                            <a (click)="item.hide = !item.hide"> {{ item.name }}</a>
+                                        </div>
+                                        <div *ngIf="item.hide">
+                                            <img src="{{ item.img }}">
+
+                                            <input style="outline: none; padding: 10px; border:none;" type="text" [(ngModel)]="item.name" (keyup)="$event.keyCode == 13 && enterText(item)" />
+
+                                        </div>
+                                    </div>
+                                    <div droppable (onDrop)="onDropComplete($event.dragData,$event, $index, null, 1)" class="center-condition">
+
+                                    </div>
+                                </div>
+
+                                <div *ngIf="item.type == 3">
+                                    <div class="window-header window-header-start pull-right" style="text-align: center;">
+                                        <a class="text-center">Start</a>
+                                    </div>
+
+                                    <div droppable (onDrop)="onDropComplete($event.dragData,$event, $index, null, 1)" class="center-condition">
+
+                                    </div>
+                                </div>
+
+                                <div *ngIf="item.type == 4">
+                                    <div class="window-header window-header-end pull-right" style="text-align: center;">
+                                        <a class="text-center">End</a>
+                                    </div>
+
+                                    <div droppable (onDrop)="onDropComplete($event.dragData,$event, $index, null, 1)" class="center-condition">
+
+                                    </div>
+                                </div>
+
+                                <div *ngIf="item.type == 2">
+                                    <div>
+                                        <!-- <div class="condition-group"> -->
+                                        <!-- <div class="diamond"></div> -->
+
+                                        <div class="window-header window-header-grey pull-right">
+                                            <a><i class="fa fa-window-minimize"></i></a>
+                                            <a (click)="openSetting()"><i class="fa fa-cog"></i></a>
+                                            <a (click)="closeButton($index)" id="close-object-{{$index}}"><i class="fa fa-window-close"></i></a>
+                                        </div>
+                                        <div class="window-content">
+                                            <div *ngIf="!item.hide">
+                                                <img src="{{ item.img }}">
+                                                <a (click)="item.hide = !item.hide"> {{ item.name }}</a>
+                                            </div>
+                                            <div *ngIf="item.hide">
+                                                <img src="{{ item.img }}">
+
+                                                <input style="outline: none; padding: 10px; border:none;" type="text" [(ngModel)]="item.name" (keyup)="$event.keyCode == 13 && enterText(item)" />
+
+                                            </div>
+                                        </div>
+                                        <div droppable (onDrop)="onDropComplete($event.dragData,$event, $index, null, 1, 'left')" class="left-condition">
+                                        </div>
+                                        <div droppable (onDrop)="onDropComplete($event.dragData,$event, $index, null, 1, 'right')" class="right-condition">
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="dropdown-group">
+                        <div>
+                            <button type="button" class="right-toggle form-control text-left text-uppercase" (click)="isCollapsedAction = !isCollapsedAction">Action<span class="pull-right"><i class="fa fa-caret-down"></i></span></button>
+                        </div>
+                        <div [ngbCollapse]="!isCollapsedAction" class="child-content">
+                            <ul>
+                                <li *ngFor="let obj of draggableActions" class="drag-object" draggable [dragData]="obj">
+                                    <img *ngIf="obj.img" src="{{ obj.img }}">
+                                    <div class="start-icon" *ngIf="obj.type == 3"></div>
+                                    <div class="end-icon" *ngIf="obj.type == 4"></div>
+                                    <a> {{obj.name}}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="dropdown-group">
+                        <div>
+                            <button type="button" class="right-toggle form-control text-left text-uppercase" (click)="isCollapsedCondition = !isCollapsedCondition">Condition event<span class="pull-right"><i class="fa fa-caret-down"></i></span></button>
+                        </div>
+                        <div [ngbCollapse]="!isCollapsedCondition" class="child-content">
+                            <ul>
+                                <li *ngFor="let obj of draggableConditions" class="drag-object" draggable [dragData]="obj">
+                                    <img *ngIf="obj.img" src="{{ obj.img }}">
+                                    <div class="start-icon" *ngIf="obj.type == 3"></div>
+                                    <div class="end-icon" *ngIf="obj.type == 4"></div>
+
+                                    <a>{{obj.name}}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+
+                    <div class="dropdown-group">
+                        <div>
+                            <button type="button" class="right-toggle form-control text-left text-uppercase" (click)="isCollapsedInterActive = !isCollapsedInterActive">Interactive Settings<span class="pull-right"><i class="fa fa-caret-down"></i></span></button>
+                        </div>
+                        <div [ngbCollapse]="!isCollapsedInterActive" class="child-content">
+                            <ul>
+                                <li *ngFor="let obj of draggableInteractives" class="drag-object" draggable [dragData]="obj">
+                                    <img src="{{ obj.img }}">
+                                    <a>{{obj.name}}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
