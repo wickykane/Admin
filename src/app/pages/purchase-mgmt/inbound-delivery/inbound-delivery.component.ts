@@ -23,7 +23,7 @@ export class InboundDeliveryComponent implements OnInit {
     public list = {
         items: []
     };
-    public showProduct: boolean = false;
+    // public showProduct: boolean = false;
     public flagId: string = '';
 
     public user: any;
@@ -68,7 +68,7 @@ export class InboundDeliveryComponent implements OnInit {
          } else {
              this.flagId = id;
          }
-         this.showProduct = !this.showProduct;
+        //  this.showProduct = !this.showProduct;
      }
 
     getList() {

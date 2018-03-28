@@ -23,7 +23,7 @@ export class PurchaseOrderComponent implements OnInit {
     public list = {
         items: []
     };
-    public showProduct: boolean = false;
+    // public showProduct: boolean = false;
     public onoffFilter: any;
     public flagId: string = '';
 
@@ -77,7 +77,7 @@ export class PurchaseOrderComponent implements OnInit {
          } else {
              this.flagId = id;
          }
-         this.showProduct = !this.showProduct;
+        //  this.showProduct = !this.showProduct;
      }
 
      showMorefilter() {
