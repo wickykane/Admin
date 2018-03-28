@@ -132,7 +132,7 @@ export class MenuComponent implements OnInit {
                         name: 'Buyers'
                     },
                     {
-                        link: '/sd',
+                        link: '/customer/customer-segment',
                         name: 'Customer Segments'
                     }
                 ]

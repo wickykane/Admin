@@ -15,7 +15,9 @@ const routes: Routes = [
             { path: 'purchase-management', loadChildren: '../pages/purchase-mgmt/purchase-mgmt.module#PurchaseManagementModule'},
             { path: 'promotion', loadChildren: '../pages/promotion-mgmt/promotion-mgmt.module#PromotionMgmtModule'}, 
             { path: 'product-management', loadChildren: '../pages/product-mgmt/product-mgmt.module#ProductMgmtModule'},
-            { path: 'order-management', loadChildren: '../pages/order-mgmt/order-mgmt.module#OrderMgmtModule'}
+            { path: 'order-management', loadChildren: '../pages/order-mgmt/order-mgmt.module#OrderMgmtModule'},
+            { path: 'customer', loadChildren: '../pages/customer-mgmt/customer-mgmt.module#CustomerMgmtModule'}
+            
         ]
     }
 ];

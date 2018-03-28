@@ -1,0 +1,138 @@
+<section>
+    <div class="block-header bg-red-dark text-white">
+        <h3 class="block-title-lg" translate>EDIT CUSTOMER SEGMENT</h3>
+        <div class="wrap-keyboard">
+            <span class="fa fa-keyboard-o my-own-cheatsheet"></span>
+        </div>
+    </div>
+</section>
+
+<section class="rma-page block">
+    <div class="row" style="padding-top:15px">
+        <div class="col-sm-12">
+            <div class="block-header bg-gray-lighter">
+                <h3 class="block-title" translate>GENERAL INFORMATION</h3>
+            </div>
+        </div>
+    </div>
+    <div>
+        <form [formGroup]="generalForm" class="form-search full-width form-horizontal">
+            <div class="row ">
+                <div class="col-md-2">
+                    <label for="code" class="control-label" translate>Code</label>
+                    <input type="text" class="form-control" name="code" formControlName="cd">
+                </div>
+                <div class="col-md-2">
+                    <label for="budget_name" class="control-label" translate>Name</label>
+                    <span class="text-danger">( * )</span>
+                    <input type="text" class="form-control" name="budget_name" formControlName="name">
+                </div>
+                <div class="col-md-2">
+                    <label for="sts" class="control-label" translate>Apply For</label>
+                    <span class="text-danger">( * )</span>
+                    <select name="sts" formControlName="apply_for" class="form-control">
+                        <option *ngFor="let item of listMaster['applyFor']" [value]="item.id">{{ item.name }}</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="sts" class="control-label" translate>Status</label>
+                    <span class="text-danger">( * )</span>
+                    <select name="sts" formControlName="sts" class="form-control">
+                        <option *ngFor="let item of listMaster['status']" [value]="item.id">{{ item.name }}</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="created_on" class="control-label" translate>Created On </label>
+                    <span class="text-danger">( * )</span>
+                    <div class="input-group">
+                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="crtd_on" ngbDatepicker #d="ngbDatepicker">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+    <div class="row" style="padding-top:15px">
+        <div class="col-sm-12">
+            <div class="block-header bg-gray-lighter">
+                <h3 class="block-title" translate>DETAILS INFORMATION</h3>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-bottom: 20px;margin-top: 10px;">
+        <div class="col-sm-12">
+            <table class="table table-vcenter custom-table table-noborder">
+                <thead>
+                    <tr>
+                        <th style="width:3%" role="button" translate> No </th>
+                        <th style="width:13%" role="button" translate> Customer Type </th>
+                        <th style="width:13%" role="button" translate> Country </th>
+                        <th style="width:15%;" role="button" translate> Specific Customer </th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let segment of data['segmentList']; let $index = index;">
+                        <td>{{ $index + 1 }}</td>
+                        <td>
+                            <select class="form-control" [(ngModel)]="segment.company_type_id" name="customer_type" (change)="changeToGetCustomer(segment,$index)">
+                                    <option value="" selected="true" hidden="true">--Select--</option>
+                                    <option *ngFor="let item of listMaster['customerType']" [value]="item.id">{{ item.name }}</option>
+                        
+                              </select>
+                        </td>
+                        <td>
+                            <select class="form-control" [(ngModel)]="segment.country_code" name="primary_country" id="primary.country" (change)="changeToGetCustomer(segment,$index)">
+                                <option value="" selected="true" hidden="true" translate>--Country--</option>
+                                <option *ngFor="let item of listMaster['countries']" [value]="item.country_code">{{ item.name }}</option>
+                              </select>
+                        </td>
+                        <td>
+                            <!-- <select class='multiple-select2 ' multiple ui-select2="{mutilple: true,  allowClear: true}" id="type" [(ngModel)]="segment.customers" (change)='checkCustomerList(segment)'>
+                                    <option *ngFor="let item of segment.customerList" [value]="item.country_code">{{ item.name }}</option>                                    
+                                </select> -->
+                            <ng-select (change)='checkCustomerList(segment)'  [multiple]="true" [items]="segment.customerList" bindLabel="name" bindValue="id" [(ngModel)]="segment.customers">
+                            </ng-select>
+                            <!-- <ng-select  (selected)='checkCustomerList(segment)'  [(ngModel)]="segment.customers"  [multiple]="true" [items]="segment.customerList | select2:'id': 'name'"></ng-select> -->
+                            <!-- <select class="form-control" [(ngModel)]="item.customer" name="customer"
+                                ng-options="item.id as (item.name|uppercase) for item in customerList" required>
+                                <option value="" selected="true" hidden="true">--Select--</option>
+                              </select> -->
+                        </td>
+                        <td>
+                            <button type="button" (click)="remove($index)" class="btn btn-secondary">
+                              <i class="fa fa-times" aria-hidden="true"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="data.segmentList.length == 0 && generalForm.value.apply_for ==1 ">
+                        <td>{{ 1 }}</td>
+                        <td>
+                            <select class="form-control" [(ngModel)]="all_customer_type" name="customer_type">
+                                <option value="" selected="true" hidden="true" translate>--Select--</option>
+                                <option *ngFor="let item of listMaster['allType']" [value]="item.id">{{ item.name }}</option>                                    
+                              </select>
+                        </td>
+                        <td colspan="100%"></td>
+                    </tr>
+                    <tr *ngIf="generalForm.value.apply_for == 2">
+                        <td colspan="5">
+                            <a href="javascript:void(0)" (click)="clickAdd()">
+                                <i class="fa fa-plus" aria-hidden="true"></i><span translate>Add New Line</span></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="block-content block-content-full text-right">
+        <button type="button" class="btn btn-default" [routerLink]="['/customer/customer-segment']" translate>Cancel</button>
+        <button [disabled]="!generalForm.valid" type="button" class="btn btn-primary" (click)="createSegment()" translate>Save</button>
+    </div>
+</section>
