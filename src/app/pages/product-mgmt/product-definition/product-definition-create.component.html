@@ -14,14 +14,14 @@
                     <div class="col-md-3">
                         <label for="campaign_name" class="control-label" translate>Product Type</label>
                         <span class="text-danger">( * )</span>
-                        <input type="text" class="form-control" name="campaign_name" formControlName="name">
+                        <select name="product_type" formControlName="sts" class="form-control">
+                                <option *ngFor="let item of listMaster['productType']" [value]="item.id">{{ item.name }}</option>
+                        </select>
                     </div>
                     <div class="col-md-3">
                         <label for="sts" class="control-label" translate>Product Name </label>
                         <span class="text-danger">( * )</span>
-                        <select name="sts" formControlName="sts" class="form-control">
-                            <option *ngFor="let item of listMaster['status']" [value]="item.id">{{ item.name }}</option>
-                        </select>
+                        <input type="text" class="form-control" name="campaign_name" formControlName="name">
                     </div>
                     <div class="col-md-3">
                         <label for="sale_price" class="control-label" translate>Product Category </label>

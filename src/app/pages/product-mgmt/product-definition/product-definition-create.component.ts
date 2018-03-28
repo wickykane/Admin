@@ -19,9 +19,7 @@ export class ProductDefinitionCreateComponent implements OnInit {
    * Init Data
    */
     constructor(private vRef : ViewContainerRef, private fb : FormBuilder, private productService : ProductService, public toastr : ToastsManager, private router : Router) {
-        this
-            .toastr
-            .setRootViewContainerRef(vRef);
+        this.toastr.setRootViewContainerRef(vRef);
         this.generalForm = fb.group({
             'product_type': [],
             'name': [],
