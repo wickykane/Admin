@@ -18,7 +18,7 @@ export class ProductService {
         let url ='item/reference';
         return this.ApiService.get(url);
     }
-    postProductDefinition(data,files){
+    postProductDefinition(data){
         let url ='item';
         return this.ApiService.postForm(url,data);
     }
@@ -103,4 +103,17 @@ export class ProductService {
         let url = 'brand/reference';
         return this.ApiService.get(url);
      }
+     getListSupplier(){
+         let url ='company/list-option-company?is_supplier=1';
+         return this.ApiService.get(url);
+     }
+     getCountry(){
+         let url='country/get-all';
+         return this.ApiService.get(url);
+     }
+     getStateByCountry(params){
+         let url ='state/get-by-country';
+         return this.ApiService.get(url,params);
+     }
+
 }

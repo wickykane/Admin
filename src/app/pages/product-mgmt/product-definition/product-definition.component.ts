@@ -18,8 +18,12 @@ export class ProductDefinitionComponent implements OnInit {
   public listMaster = {};
   public selectedIndex = 0;
   public list = {
-    items: []
+    items: [],
+    checklist:[]
   }
+  public selectItem = {
+    isCheckAll: false
+}
 
   public data = {};
 
@@ -53,6 +57,39 @@ export class ProductDefinitionComponent implements OnInit {
   selectData(index) {
     console.log(index);
   }
+  checkExisted(list, id) {
+    return list.filter(function(item) {
+        return item.item_id == id;
+    }).length;
+  }
+  checkItem(item) {
+    if (item.is_checked && ! this.checkExisted(this.list.checklist, item.id)) {
+        this.list.checklist.push(item);
+    } else {
+        this.list.checklist = this.list.checklist.filter(function(it) {
+            return it.id != item.id;
+        });
+    }
+  
+    if (this.list.checklist.length == this.list.items.length) {
+        this.selectItem.isCheckAll = true;
+    } else this.selectItem.isCheckAll = false;
+  }
+  selectedItem (item) {
+    item.is_checked = !item.is_checked;
+    this.checkItem(item);
+  }
+  checkAll() {
+    var flag = this.selectItem.isCheckAll;
+    this.list.checklist = [];
+    this.list.items.forEach(function(item) {
+        item.is_checked = flag;
+        if (flag && !this.checkExisted(this.list.checklist, item.id)) {
+            this.list.checklist.push(item);
+        }
+    })
+  };
+  
   /**
    * Internal Function
    */
