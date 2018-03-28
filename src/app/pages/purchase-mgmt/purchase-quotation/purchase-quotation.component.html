@@ -76,8 +76,8 @@
                                 {{item.rqst_dt}}
                             </td>
                             <td class="text-nowrap">
-                                <a class="btn btn-default" title="{{ (!showProduct)? 'Show details': 'Hide details' }}" [ngClass]="{'disable-expand': item.purchase_quote_details.length == 0 }" (click)="toggleSubRow(item.id)">
-                                <i class="fa" [ngClass]="{'fa-minus': showProduct && (item.id === flagId),' fa-plus': !(showProduct && (item.id === flagId))}"></i></a>
+                                <a class="btn btn-default" title="{{ (!(item.id === flagId))? 'Show details': 'Hide details' }}" [ngClass]="{'disable-expand': item.purchase_quote_details.length == 0 }" (click)="toggleSubRow(item.id)">
+                                <i class="fa" [ngClass]="{'fa-minus': (item.id === flagId),' fa-plus': !(item.id === flagId)}"></i></a>
                                 <a class="btn btn-default " title="Edit" [routerLink]="['/purchase-management/purchase-quotation/detail/' + item.id]">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                             </a>

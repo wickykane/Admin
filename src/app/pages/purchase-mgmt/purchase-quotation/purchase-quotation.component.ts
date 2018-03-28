@@ -23,7 +23,7 @@ export class QuotationComponent implements OnInit {
     public list = {
         items: []
     };
-    public showProduct: boolean = false;
+    // public showProduct: boolean = false;
     public flagId: string = '';
 
     public user: any;
@@ -54,7 +54,7 @@ export class QuotationComponent implements OnInit {
         this.getList();
         this.getListSupplier();
         this.getListStatus();
-
+        this.flagId = '0';
         this.user = JSON.parse(localStorage.getItem('currentUser'));
     }
     /**
@@ -72,7 +72,7 @@ export class QuotationComponent implements OnInit {
          } else {
              this.flagId = id;
          }
-         this.showProduct = !this.showProduct;
+        //  this.showProduct = !this.showProduct;
      }
 
     sentToSuppPQ(id){
