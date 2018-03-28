@@ -1,5 +1,5 @@
 <section class="rma-page block">
-    <app-page-header [heading]="'CREATE NEW BUNDLE'" [icon]="'fa-th-list'"></app-page-header>
+<app-page-header [heading]="'CREATE NEW GROUP'" [icon]="'fa-th-list'"></app-page-header>
     <div class="row" style="padding-top:15px">
         <div class="col-sm-12">
             <div class="block-header bg-gray-lighter">
@@ -9,11 +9,7 @@
     </div>
     <div>
         <form [formGroup]="generalForm" class="form-search full-width form-horizontal">
-            <div class="row col-md-12">
-                <div class="col-md-2">
-                    <label for="campaign" class="control-label" translate>Code</label>
-                    <input type="text" class="form-control" name="rma" formControlName="code" [attr.disabled]='true'>
-                </div>
+            <div class="row col-md-12">                
                 <div class="col-md-2">
                     <label for="campaign_name" class="control-label" translate>Name</label>
                     <span class="text-danger">( * )</span>
@@ -25,17 +21,7 @@
                     <select name="sts" formControlName="sts" class="form-control">
                         <option *ngFor="let item of listMaster['status']" [value]="item.id">{{ item.name }}</option>
                     </select>
-                </div>
-                <div class="col-md-2">
-                    <label for="sale_price" class="control-label" translate>Bundle Sales Price </label>
-                    <span class="text-danger">( * )</span>
-                    <input type="text" class="form-control" name="sale_price" formControlName="sale_price">
-                </div>
-                <div class="col-md-2">
-                    <label for="cost_price" class="control-label" translate>Bundle Cost Price </label>
-                    <span class="text-danger">( * )</span>
-                    <input type="text" class="form-control" name="cost_price" formControlName="cost_price">
-                </div>
+                </div>               
             </div>
         </form>
     </div>
@@ -53,20 +39,21 @@
                 <table class="table-striped table-vcenter table-hover custom-table">
                     <thead>
                         <tr>
-                            <th style="width:3%" role="button" translate> No </th>
-                            <th style="width:10%" role="button" translate> Product Code </th>
-                            <th style="width:15%" role="button" translate> Name </th>
-                            <th style="width:10%" role="button" translate> UOM </th>
-                            <th style="width:10%" role="button" translate> Quantity </th>
-                            <th style="width:8%" role="button" translate> Cost Price </th>
+                            <th role="button" translate> No </th>
+                            <th style="width:12%" role="button" translate> Product Code </th>
+                            <th role="button" translate> Name </th>
+                            <th style="width:12%" role="button" translate> UOM </th>
+                            <th role="button" translate> Condition </th>
+                            <th style="width:12%" role="button" translate> Min Value </th>
+                            <th style="width:12%" role="button" translate> Max Value </th>
                             <th>Action</th>
-                        </tr>
+                          </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of data['products']; let $index = index;">
                             <td>{{ $index + 1 }}</td>
                             <td>
-                                <select class="form-control" [(ngModel)]="item.product_id" required (change)="changeProductLine(item,$index)">
+                                <select class="form-control" [(ngModel)]="item.wine_id" required (change)="changeProductLine(item,$index)">
                                     <option *ngFor="let item of listMaster['listProduct']" [value]="item.item_id">{{ item.sku }}</option>
                                 </select>
                             </td>
@@ -76,17 +63,16 @@
                             <td>
                                 <input type="text" class="form-control" [(ngModel)]="item.uom_name" readonly>
                             </td>
-                            <td class="text-center">
-                                <input type="text" class="form-control" [(ngModel)]="item.qty" (change)="changeQTY()" required>
-
-                            </td>
-                            <td class="text-center">
-                                {{item.price|currency}}
+                            <td>
+                                <input type="text" class="form-control" [(ngModel)]="item.limit_type" readonly>
                             </td>
                             <td>
-                                <button type="button" (click)="goPromoDetail(item)" class="btn btn-secondary" placement="top" ngbTooltip="Go Promo Detail">
-                                    <i class="fa fa-align-justify"></i>
-                                </button>
+                                <input type="text" class="form-control" [(ngModel)]="item.min_value" >
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" [(ngModel)]="item.max_value" >
+                            </td>                           
+                            <td>                             
                                 <button type="button" (click)="removeRow($index)" class="btn btn-secondary" placement="top" ngbTooltip="Remove">
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                 </button>
@@ -108,6 +94,6 @@
 
     <div class="block-content block-content-full text-right">
         <button type="button" class="btn btn-default" [routerLink]="['/product-management/bundle']" translate>Cancel</button>
-        <button [disabled]="!generalForm.valid" type="button" class="btn btn-primary" (click)="createBundle()" translate>Save</button>
+        <button [disabled]="!generalForm.valid" type="button" class="btn btn-primary" (click)="createProductGroup()" translate>Save</button>
     </div>
 </section>

@@ -49,7 +49,7 @@ export class QuotationDetailComponent implements OnInit {
     }
 
     getListSupplier() {
-        var params = { page: 1, length: 100 }
+        let params = { page: 1, length: 100 }
         this.purchaseService.getListSupplier(params).subscribe(res => {
             try {
                 this.listMaster["supplier"] = res.results.rows;
@@ -91,7 +91,7 @@ export class QuotationDetailComponent implements OnInit {
     }
 
     updateQuotation() {
-        var params =  {};
+        let params =  {};
         params = this.generalForm.value;
         this.items.forEach(function(value, key) {
             value.qty = Number(value.qty);

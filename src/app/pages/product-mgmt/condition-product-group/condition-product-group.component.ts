@@ -20,6 +20,8 @@ export class ConditionProductGroupComponent implements OnInit {
   public list = {
     items: []
   }
+  public showProduct: boolean = false;
+  public flagId: string = '';
 
   public data = {};
 
@@ -53,9 +55,18 @@ export class ConditionProductGroupComponent implements OnInit {
   selectData(index) {
     console.log(index);
   }
+
   /**
    * Internal Function
    */
+       toggleSubRow(id) {
+    if (id === this.flagId) {
+        this.flagId = '0';
+    } else {
+        this.flagId = id;
+    }
+    this.showProduct = !this.showProduct;
+}
 
   getList() {
     var params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);

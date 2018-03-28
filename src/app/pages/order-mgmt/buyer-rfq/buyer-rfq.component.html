@@ -36,22 +36,51 @@
                         <th translate>Action</th>
                     </tr>
                 </thead>
-                <tr *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
-                    <td>
-                        #{{item.rfq_id}}
-                    </td>
-                    <td>{{item.rfq_code}}</td>
-                    <td>{{item.buyer_name}}</td>
-                    <td> {{item.status}} </td>
-                    <td class="text-center">
-                        {{item.request_date | date:'YYYY-MM-DD'}}
-                    </td>
-                    <td>
-                        <a class="btn btn-default " (click)="editBudget(item.id)">
-                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        </a>
-                    </td>
-                </tr>
+                <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
+                    <tr>
+                        <td>
+                            #{{item.rfq_id}}
+                        </td>
+                        <td>{{item.rfq_code}}</td>
+                        <td>{{item.buyer_name}}</td>
+                        <td> {{item.status=='CO'?'Complete':'New'}} </td>
+                        <td class="text-center">
+                            {{item.request_date}}
+                        </td>
+                        <td>
+                            <a class="btn btn-default" ngbTooltip="{{ (!showProduct)? 'Show details': 'Hide details' }}" [ngClass]="{'disable-expand': item.items.length == 0 }"
+                                (click)="toggleSubRow(item.rfq_id)">
+                                <i class="fa" [ngClass]="{'fa-minus': showProduct && (item.rfq_id === flagId),' fa-plus': !(showProduct && (item.rfq_id === flagId))}"></i>
+                            </a>
+                            <a class="btn btn-default " *ngIf="item.status=='NW'" (click)="goToSaleQuote(item.rfq_id)">
+                                    <i class="fa fa-external-link"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr *ngIf="item.rfq_id === flagId">
+                        <td></td>
+                        <td colspan="100%">
+                            <table class="table table-striped table-vcenter table-child">
+                                <thead>
+                                    <tr>
+                                        <th translate>Product Code</th>
+                                        <th translate>Product Name</th>
+                                        <th translate>UOM</th>
+                                        <th translate>Quantity</th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngFor="let dt of item.items">
+                                    <tr>
+                                        <td>{{dt.sku}}</td>
+                                        <td>{{dt.name}}</td>
+                                        <td>{{dt.uom_name}}</td>
+                                        <td>{{dt.quantity}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
                 <tr *ngIf="list.items.length === 0">
                     <td colspan="100%" class="text-center">No data.</td>
                 </tr>
