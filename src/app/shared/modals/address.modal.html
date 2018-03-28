@@ -1,6 +1,6 @@
 <div class="modal-header">
     <span class="modal-title">{{title}}</span>
-    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss([])">
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss({})">
           <span aria-hidden="true">&times;</span>
         </button>
 </div>
@@ -19,26 +19,18 @@
                     </select>
                         </div>
                         <div class="col-md-4">
-                            <label for="name" class="control-label">Name</label>
-                            <input type="text" class="form-control" name="name" formControlName="name">
+                            <label for="address_name" class="control-label">Name</label>
+                            <input type="text" class="form-control" name="address_name" formControlName="address_name">
                         </div>
                         <div class="col-md-4">
                             <label for="email" class="control-label">Email</label>
                             <input type="text" class="form-control" name="email" formControlName="email">
                         </div>
                         <div class="col-md-4">
-                            <label for="tax_number" class="control-label">Fax Number</label>
-                            <input type="text" class="form-control" name="tax_number" formControlName="tax_number">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="phone" class="control-label">Phone</label>
-                            <input type="text" class="form-control" name="phone" formControlName="phone">
-                        </div>
-                        <div class="col-md-4">
                             <label for="country_code" class="control-label">Country
                             <span class="text-danger">( * )</span>
                         </label>
-                            <select class="form-control" formControlName="country_code" (change)="changeCountry(this.primaryForm.value.country_code)">
+                            <select class="form-control" formControlName="country_code" (change)="changeCountry(this.generalForm.value.country_code)">
                           <option value="null" selected="true">--Select--</option>
                           <option *ngFor="let item of listMaster['countries']" [ngValue] = "item.country_code">{{item.name}}</option>
                         </select>
@@ -62,6 +54,14 @@
                         </label>
                             <input type="text" class="form-control" name="zip_code" formControlName="zip_code">
                         </div>
+                        <div class="col-md-4">
+                            <label for="tax_number" class="control-label">Fax Number</label>
+                            <input type="text" class="form-control" name="tax_number" formControlName="tax_number">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="phone" class="control-label">Phone</label>
+                            <input type="text" class="form-control" name="phone" formControlName="phone">
+                        </div>
                         <div class="col-md-12">
                             <label for="address_line" class="control-label">Address Line
                             <span class="text-danger">( * )</span>
@@ -75,5 +75,5 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-outline-primary" (click)="updateData()">OK</button>
-        <button type="button" class="btn btn-outline-dark" (click)="activeModal.close([])">Close</button>
+        <button type="button" class="btn btn-outline-dark" (click)="activeModal.close({})">Close</button>
     </div>

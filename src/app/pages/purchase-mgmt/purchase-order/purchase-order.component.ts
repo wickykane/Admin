@@ -16,7 +16,7 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 export class PurchaseOrderComponent implements OnInit {
 
     /**
-     * Variable Declaration
+     * letiable Declaration
      */
     public listMaster = {};
     public selectedIndex = 0;
@@ -48,7 +48,7 @@ export class PurchaseOrderComponent implements OnInit {
             'rqst_dt': [null]
         });
 
-        //Assign get list function name, override variable here
+        //Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
     }
@@ -85,7 +85,7 @@ export class PurchaseOrderComponent implements OnInit {
      }
 
      sendMail(id) {
-         var params = {
+         let params = {
              "sts": "SP"
          }
          this.purchaseService.sendMailPO(params, id).subscribe(res => {
@@ -134,7 +134,7 @@ export class PurchaseOrderComponent implements OnInit {
     }
 
     getListSupplier() {
-        var params = { page: 1, length: 100 }
+        let params = { page: 1, length: 100 }
         this.purchaseService.getListSupplier(params).subscribe(res => {
             try {
                 this.listMaster["supplier"] = res.results.rows;
@@ -155,7 +155,7 @@ export class PurchaseOrderComponent implements OnInit {
     }
 
     getList() {
-        var params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
+        let params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
         Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);
 
         this.purchaseService.getListPurchaseOrder(params).subscribe(res => {

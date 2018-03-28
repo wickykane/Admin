@@ -16,7 +16,7 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 export class InboundDeliveryComponent implements OnInit {
 
     /**
-     * Variable Declaration
+     * letiable Declaration
      */
     public listMaster = {};
     public selectedIndex = 0;
@@ -42,7 +42,7 @@ export class InboundDeliveryComponent implements OnInit {
             'name': [null]
         });
 
-        //Assign get list function name, override variable here
+        //Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
     }
@@ -73,7 +73,7 @@ export class InboundDeliveryComponent implements OnInit {
 
     getList() {
 
-        var params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
+        let params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
         Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);
 
         this.purchaseService.getListInboundDelievery(params).subscribe(res => {

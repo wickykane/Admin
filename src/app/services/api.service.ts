@@ -95,6 +95,16 @@ export class ApiService {
             );
     };
 
+    deleteWithParam( path:string,body:Object = {} ):Observable<any> {        
+        return this.httpClient.delete(`${environment.api_url}${path}`, this.headerOptionDefault(body))
+            // .map(res => res.json())  // could raise an error if invalid JSON
+            // .do(data => data)  // debug
+            // .catch(this._serverError);
+            .pipe(
+            catchError(this._serverError)
+            );
+    }
+
     postForm(path, formData) {
         return  this.http.post( `${environment.api_url}${path}`,this.madeFormData(formData), this.headerFormData())
             .map(res => res.json())
