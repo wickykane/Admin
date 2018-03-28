@@ -19,6 +19,8 @@ export class BuyerRfqComponent implements OnInit {
   public list = {
     items: []
   }
+  public showProduct: boolean = false;
+  public flagId: string = '';
 
   public data = {};
 
@@ -51,6 +53,14 @@ export class BuyerRfqComponent implements OnInit {
   /**
    * Internal Function
    */
+  toggleSubRow(id) {
+    if (id === this.flagId) {
+        this.flagId = '0';
+    } else {
+        this.flagId = id;
+    }
+    this.showProduct = !this.showProduct;
+}
 
   getList() {
     var params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
@@ -65,4 +75,7 @@ export class BuyerRfqComponent implements OnInit {
       }
     });
   }
+  goToSaleQuote(id) {
+    // $state.go("app.orders.sales-quotation.buyerrfq",{id: id});            
+}
 }
