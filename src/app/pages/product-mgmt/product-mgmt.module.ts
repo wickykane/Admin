@@ -19,7 +19,7 @@ import {ECatalogEditComponent} from './e-catalog/e-catalog-edit.component';
 import {ProductService} from './product-mgmt.service';
 import { CommonShareModule, PageHeaderModule } from '../../shared/index';
 import { TableService } from "../../services/index";
-import { ItemModalContent } from "../../shared/modals/item.modal";
+
 import { ItemModalModule } from "../../shared/modals/item.module";
 
 
@@ -45,10 +45,10 @@ import { ItemModalModule } from "../../shared/modals/item.module";
     ConditionProductGroupCreateComponent,
     ConditionProductGroupEditComponent,
     ECatalogCreateComponent,
-    ECatalogEditComponent,
-    ItemModalContent
+    ECatalogEditComponent
+
     ],
     providers:[ProductService,TableService],
-    entryComponents:[ItemModalContent]
+    entryComponents:[]
 })
 export class ProductMgmtModule { }
