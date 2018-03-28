@@ -51,7 +51,7 @@ export class PurchaseOrderDetailComponent implements OnInit {
         }
 
     ngOnInit() {
-        this.route.params.subscribe( params => this.getDetailPurchaseOrder(params.id) );    
+        this.route.params.subscribe( params => this.getDetailPurchaseOrder(params.id) );
     }
 
     initList() {
@@ -73,7 +73,7 @@ export class PurchaseOrderDetailComponent implements OnInit {
     }
 
     getListQuote() {
-        var params = {sts: 5}
+        let params = {sts: 5}
         this.purchaseService.getListQuoteApproved(params).subscribe(res => {
             try {
                 this.listMaster['listquote'] = res.results.rows;
@@ -134,8 +134,8 @@ export class PurchaseOrderDetailComponent implements OnInit {
 
 
     changePQ() {
-        var id = this.generalForm.value.purchase_quote_id;
-        var data = this.listMaster['listquote'].find(function(item) {
+        let id = this.generalForm.value.purchase_quote_id;
+        let data = this.listMaster['listquote'].find(function(item) {
             return item.id == id;
         })
         if (data) {
@@ -147,8 +147,8 @@ export class PurchaseOrderDetailComponent implements OnInit {
 
     changeAddress(flag) {
         if (flag) {
-            var id = this.generalForm.value.ship_to;
-            var ship = this.listMaster['shipping'].find(function(item) {
+            let id = this.generalForm.value.ship_to;
+            let ship = this.listMaster['shipping'].find(function(item) {
                 return item.id == id;
             })
             if (ship) {
@@ -156,8 +156,8 @@ export class PurchaseOrderDetailComponent implements OnInit {
             }
 
         } else {
-            var id = this.generalForm.value.bill_to;
-            var bill = this.listMaster['billing'].find(function(item) {
+            let id = this.generalForm.value.bill_to;
+            let bill = this.listMaster['billing'].find(function(item) {
                 return item.id == id;
             })
             if (bill) {
@@ -168,7 +168,7 @@ export class PurchaseOrderDetailComponent implements OnInit {
     }
 
     update() {
-        // var params = Object.assign({}, this.generalForm.value);
+        // let params = Object.assign({}, this.generalForm.value);
         // params['detail'] = this.detail;
         // this.purchaseService.createPurchaseOrder(params).subscribe(res => {
         //     try {
