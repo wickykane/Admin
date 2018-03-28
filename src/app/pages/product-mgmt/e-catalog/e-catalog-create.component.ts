@@ -1,139 +1,141 @@
-import { TableService } from './../../../services/table.service';
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ProductService } from "../product-mgmt.service";
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import {TableService} from './../../../services/table.service';
+import {Component, OnInit, ViewContainerRef} from '@angular/core';
+import {Form, FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ProductService} from "../product-mgmt.service";
+import {ToastsManager} from 'ng2-toastr/ng2-toastr';
+//modal
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ItemModalContent } from "../../../shared/modals/item.modal";
 
-@Component({
-  selector: 'app-ecatalog-create',
-  templateUrl: './e-catalog-create.component.html'
-  
-})
-export class ECatalogCreateComponent implements OnInit { 
-   /**
-   * Variable Declaration
-   */
-  public generalForm: FormGroup;
-  public listMaster = {};
-  public data = {};
+@Component({selector: 'app-ecatalog-create', templateUrl: './e-catalog-create.component.html'})
+export class ECatalogCreateComponent implements OnInit {
+    /**
+     * Variable Declaration
+     */
+    public generalForm : FormGroup;
+    public listMaster = {};
+    public data = {};
+    public items: any = [];
+    public listFile : any = [];
+    public imageSelected : string = '';
 
-  /**
-   * Init Data
-   */
-  constructor(private vRef: ViewContainerRef, private fb: FormBuilder, private productService: ProductService, public toastr: ToastsManager, private router: Router) {
-    this.toastr.setRootViewContainerRef(vRef);
-    this.generalForm = fb.group({
-      'code': [{ value: null, disabled: true }],
-      'name': [null, Validators.required],      
-      'sts': [null, Validators.required],
-      'sale_price': [null, Validators.required],
-      'cost_price': [null, Validators.required]   
-    });
-  }
-
-  ngOnInit() {
-    this.getListStatus();  
-    this.getListItemOption();
-    this.data['products'] = [];
-  }
-  /**
-   * Mater Data
-   */
-  getListStatus() {
-    this.listMaster['status'] = [{
-      id: '0',
-      name: "In-Active"
-    }, {
-      id: '1',
-      name: "Active "
-    }];
-  } 
-  
-  /**
-   * Internal Function
-   */
-  getListItemOption(){
-    this.productService.getListItemOption().subscribe(res=>{
-      this.listMaster['listProduct'] = res.results;     
-    })
-  }
-
-  checkLevel(item) {
-    let tempArr = Array.from(this.listMaster['typeProgram']);
-    if (item.level == 3) {
-      item.typeProgram = tempArr.splice(1, 1);
-      item.detail = [];
-    } else {
-      item.typeProgram = tempArr.splice(0, 1);
-      item.detail = [];
+    /**
+     * Init Data
+     */
+    constructor(private vRef : ViewContainerRef, private fb : FormBuilder, private productService : ProductService, public toastr : ToastsManager, private router : Router,
+        private modalService: NgbModal) {
+        this
+            .toastr
+            .setRootViewContainerRef(vRef);
+        this.generalForm = fb.group({           
+            'name': [null, Validators.required],
+            'is_sync': [null, Validators.required],
+            
+        });
     }
 
-    //reset
-    item.is_promo_goods = false;
-    item.is_dsct = false;
-    item.is_acc_bal = false;
-  }
-
-  clickAdd() {    
-    this.data['products'].push({});
-  };
-  removeRow(index) {
-    this.data['products'].splice(index,1);
-  }
-
-  toDateObject(date) {
-    if (!date) return null;
-    const dateObject = new Date(date);
-    return {
-      day: dateObject.getDate(),
-      month: dateObject.getMonth() + 1,
-      year: dateObject.getFullYear()
+    ngOnInit() {          
     }
-  }
-  //Product Line
-  changeQTY(){
-    console.log('abc')
-    this.generalForm.controls['cost_price'].patchValue(0);
-    let list =this.data['products'];
-    if(list.length==0){
-      return;
-    }else{
-      let priceLine =0;
-      list.forEach(item => {
-        if(item.qty!= 0) {priceLine+=(item.qty*item.price)};
-      });
-      this.generalForm.controls['cost_price'].patchValue(priceLine);
+    /**
+     * Mater Data
+     */
+
+    /**
+     * Internal Function
+     */
+    onFileChange(event) {
+        this.listFile = [];
+        this.imageSelected = '';
+        let reader = new FileReader();
+        if (event.target.files && event.target.files.length > 0) {
+            let files = event.target.files;
+            this.listFile = Object.assign([], files);
+            for (let i = 0; i < files.length; i++) {
+                let file = files[i];
+                reader.readAsDataURL(file);
+                reader.onload = (e) => {
+                    this.imageSelected = e.target['result'];
+                }
+            }
+
+        }
+    }  
+
+    // clickAdd() {
+    //     this
+    //         .data['products']
+    //         .push({});
+    // };
+    // removeRow(index) {
+    //     this
+    //         .data['products']
+    //         .splice(index, 1);
+    // }
+
+    toDateObject(date) {
+        if (!date) 
+            return null;
+        const dateObject = new Date(date);
+        return {
+            day: dateObject.getDate(),
+            month: dateObject.getMonth() + 1,
+            year: dateObject.getFullYear()
+        }
+    }
+    addNewProduct(id) {
+        this.items = [];
+        const modalRef = this.modalService.open(ItemModalContent, {size: 'lg'});
+        modalRef.result.then(res => {
+            if (res.length > 0) {
+                this.items = Object.assign([], res);
+                this.items.forEach(function(item) {
+                    if (item.resale_price) item.resale_price = Number(item.resale_price);
+                    item['products'] = [];
+                    item.qty = 1;
+                    item.totalItem = item.resale_price;
+                })
+
+            }
+        });
+        modalRef.componentInstance.id = id;
+        modalRef.componentInstance.flagBundle = false;
     }
 
-  }
-  changeProductLine(item,index){
-    let itemID = this.listMaster['listProduct'].filter(product=>{
-      if(product.item_id==item.product_id)
-        return product;
-    })
-    item.name= itemID[0].name;
-    item.uom_name=itemID[0].uom_name;
-    item.price=itemID[0].price;
-  }
+    createECatalog= function () {
+        let params = this.generalForm.value;
+        let listID= [];
+        this.items.forEach(item => {
+            listID.push(item.id);
+        });
+        params.items = listID;
+        let data = {
+            data: JSON.stringify(params),
+            image: this.listFile[0] || null
+        }
+        console.log(data);
+        this
+            .productService
+            .postECatalog(data)
+            .subscribe(res => {
+                try {
+                    this
+                        .toastr
+                        .success(res.message);
+                    setTimeout(() => {
+                        this
+                            .router
+                            .navigate(['/product-management/bundle']);
+                    }, 500)
+                } catch (e) {
+                    console.log(e);
+                }
+            }, err => {
+                this
+                    .toastr
+                    .error(err);
+            })
 
-  createBundle = function () {
-    let params = this.generalForm.value;
-    params.detail  = this.data['products'];   
-    this.productService.postBundle(params).subscribe(res => {
-      try {
-        this.toastr.success(res.message);
-        setTimeout(() => {
-          this.router.navigate(['/product-management/bundle']);
-        }, 500)
-      } catch (e) {
-        console.log(e);
-      }
-    },
-      err => {
-        this.toastr.error(err);
-      })
-
-  }
+    }
 
 }

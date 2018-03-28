@@ -19,6 +19,8 @@ import {ECatalogEditComponent} from './e-catalog/e-catalog-edit.component';
 import {ProductService} from './product-mgmt.service';
 import { CommonShareModule, PageHeaderModule } from '../../shared/index';
 import { TableService } from "../../services/index";
+import { ItemModalContent } from "../../shared/modals/item.modal";
+import { ItemModalModule } from "../../shared/modals/item.module";
 
 
 @NgModule({
@@ -26,7 +28,8 @@ import { TableService } from "../../services/index";
     CommonModule,
     ProductMgmtRoutingModule,
     CommonShareModule,
-    PageHeaderModule
+    PageHeaderModule,
+    ItemModalModule
 
   ],
   declarations: [
@@ -42,8 +45,10 @@ import { TableService } from "../../services/index";
     ConditionProductGroupCreateComponent,
     ConditionProductGroupEditComponent,
     ECatalogCreateComponent,
-    ECatalogEditComponent
+    ECatalogEditComponent,
+    ItemModalContent
     ],
-    providers:[ProductService,TableService]
+    providers:[ProductService,TableService],
+    entryComponents:[ItemModalContent]
 })
 export class ProductMgmtModule { }

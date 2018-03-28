@@ -21,6 +21,11 @@ export class ItemService {
         var url = ['reference', 'item-data'].join('/');
         return this.API.get(url);
     }
+    
+    getListAllItem(params){
+        let url =['item'].join('/');
+        return this.API.get(url,params);
+    }
 
     getListCountry() {
         var url = 'country/get-all';

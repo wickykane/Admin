@@ -87,6 +87,18 @@ export class ItemModalContent implements OnInit {
                     console.log(e);
                 }
             });
+        }else{
+            var params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
+            Object.keys(params).forEach((key) => (JSON.parse(params[key]) == null || JSON.parse(params[key]) == '') && delete params[key]);
+
+            this.itemService.getListAllItem(params).subscribe(res => {
+                try {
+                    this.list.items = res.results.rows;
+                    this.tableService.matchPagingOption(res.results);
+                } catch (e) {
+                    console.log(e);
+                }
+            });
         }
 
     }
