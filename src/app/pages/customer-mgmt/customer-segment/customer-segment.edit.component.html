@@ -110,7 +110,7 @@
                             </button>
                         </td>
                     </tr>
-                    <tr *ngIf="data.segmentList.length == 0 && generalForm.value.apply_for ==1 ">
+                    <tr *ngIf="data['segmentList'].length == 0 && generalForm.value.apply_for ==1 ">
                         <td>{{ 1 }}</td>
                         <td>
                             <select class="form-control" [(ngModel)]="all_customer_type" name="customer_type">
