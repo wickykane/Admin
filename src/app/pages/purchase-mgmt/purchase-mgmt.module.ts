@@ -34,10 +34,8 @@ import { CommonShareModule } from '../../shared/index';
 import { TableService } from "../../services/index";
 
 //Modal
-import { ItemModalContent } from "../../shared/modals/item.modal";
-import { AddressModalContent } from "../../shared/modals/address.modal";
 import { ItemModalModule } from "../../shared/modals/item.module";
-import { ConfirmModalContent } from "../../shared/modals/confirm.modal";
+
 
 @NgModule({
   imports: [
@@ -62,12 +60,9 @@ import { ConfirmModalContent } from "../../shared/modals/confirm.modal";
     SupplierDetailComponent,
     InboundDeliveryComponent,
     WarehouseReceiptComponent,
-    WarehouseReceiptCreateComponent,
-    ItemModalContent,
-    AddressModalContent,
-    ConfirmModalContent
+    WarehouseReceiptCreateComponent
 ],
 providers:[TableService,PurchaseService],
-entryComponents:[ItemModalContent, AddressModalContent, ConfirmModalContent]
+entryComponents:[]
 })
 export class PurchaseManagementModule {}
