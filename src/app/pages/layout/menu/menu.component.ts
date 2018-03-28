@@ -174,27 +174,27 @@ export class MenuComponent implements OnInit {
                 sub: true,
                 child: [
                     {
-                        link: '/sa2wa',
+                        link: '/fulfillment/schedule',
                         name: 'Dashboard'
                     },
                     {
-                        link: '/s3sdw',
+                        link: '/fulfillment/delivery-order',
                         name: 'Delivery Order'
                     },
                     {
-                        link: '/d3ds',
+                        link: '/fulfillment/route',
                         name: 'Routes'
                     },
                     {
-                        link: '/assd3f',
+                        link: '/fulfillment/truck',
                         name: 'Trucks   '
                     },
                     {
-                        link: '/23s3s3',
+                        link: '/fulfillment/truck-type',
                         name: 'Truck Types'
                     },
                     {
-                        link: '/s',
+                        link: '/fulfillment/driver',
                         name: 'Drivers'
                     }
                 ]
