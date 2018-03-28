@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -10,11 +10,11 @@ import { TranslateService } from '@ngx-translate/core';
 export class MenuComponent implements OnInit {
 
     MENU_CONSTANT = [];
-     @ViewChild('.expand') expand;
+     @ViewChild('.open') open;
     showMenu: string = '';
 
 
-    constructor(private translate: TranslateService, public router: Router) {
+    constructor(private translate: TranslateService, public router: Router, private elRef:ElementRef) {
 
     }
 
@@ -211,7 +211,14 @@ export class MenuComponent implements OnInit {
     }
 
 
-    addExpandClass(element: any) {
+    addExpandClass(element: any, e) {
+        let el = this.elRef.nativeElement.querySelectorAll('.open');
+
+        for (var i = 0; i < el.length; i++) {
+               el[i].classList.remove('open');
+          }
+
+
         if (element === this.showMenu) {
             this.showMenu = '0';
         } else {
