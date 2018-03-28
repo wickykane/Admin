@@ -3,19 +3,19 @@
         <div class="top-content">
             <ul class="nav-main main-menu">
                 <ng-container *ngFor="let item of MENU_CONSTANT">
-                    <li routerLinkActive="active"  *ngIf="!item.sub">
-                        <a href [routerLink]="[item.link]" [routerLinkActive]="['router-link-active']" (click)="addExpandClass(item.flag)">
+                    <li *ngIf="!item.sub">
+                        <a [routerLink]="[item.link]" [routerLinkActive]="['active']">
                             <i *ngIf="item.icon" class="{{item.icon}}"></i>
                             <span class="topbar-mini-hide" >{{item.main_name}}</span>
                         </a>
                     </li>
-                    <li routerLinkActive="active"  *ngIf="item.sub">
-                        <a class="nav-submenu" [class.active]="showMenu === item.flag" (click)="addExpandClass(item.flag)">
+                    <li [routerLinkActive]="['open']" *ngIf="item.sub" [ngClass]="{'open': showMenu === item.flag}" (click)="addExpandClass(item.flag, $event)">
+                        <a class="nav-submenu">
                             <span class="topbar-mini-hide" >{{item.main_name}}</span>
                         </a>
-                        <ul *ngIf="item.sub" class="dropdown-content" routerLinkActive="active-ul" [class.expand]="showMenu === item.flag">
-                            <li routerLinkActive="active-li" *ngFor="let it of item.child">
-                                <a routerLink="{{it.link}}" [routerLinkActive]="['router-link-active']">
+                        <ul class="dropdown-content">
+                            <li *ngFor="let it of item.child">
+                                <a routerLink="{{it.link}}" [routerLinkActive]="['active']">
                                     <span class="topbar-mini-hide">{{it.name}}</span>
                                 </a>
                             </li>
