@@ -152,8 +152,9 @@
                                 <th>Email</th>
                                 <th>
                                   <div class="pull-right">
-                                    <a href="" class="btn  btn-default" (click)="deleteAddr()">Delete</a>
-                                    <a href="" class="btn btn-danger btn-default" (click)="deleteAllAddr()">Delete All</a>
+                                    <!-- <a class="btn  btn-danger" (click)="deleteAddr()" >Delete</a> -->
+                                    <button [disabled]="(removedList.length <= 0)" type="button" class="btn btn-danger" (click)="deleteAddr()">Delete</button>
+                                    <!-- <a href="" class="btn btn-danger btn-default" (click)="deleteAllAddr()">Delete All</a> -->
                                   </div>
                                 </th>
                             </tr>
@@ -167,23 +168,27 @@
                                 <td>
                                   {{item.city_name}}
                                 </td>
-                                <td>a
-                                  <!-- <span ng-repeat="state in states" ng-if="state.id == item.state_id">{{state.name}}</span> -->
+                                <td>
+                                    <ng-container *ngFor="let state of listMaster['states']">
+                                        <span *ngIf="state.id == item.state_id">{{state.name}}</span>
+                                    </ng-container>
                                 </td>
                                 <td>{{item.zip_code}}</td>
-                                <td>d
-                                  <!-- <span ng-repeat="country in countries" ng-if="country.country_code == item.country_code">{{country.name}}</span> -->
+                                <td>
+                                    <ng-container *ngFor="let country of listMaster['countries']">
+                                        <span *ngIf="country.country_code == item.country_code">{{country.name}}</span>
+                                    </ng-container>
                                 </td>
                                 <td>{{item.phone}}</td>
                                 <td>{{item.tax_number}}</td>
                                 <td>{{item.email}}</td>
                                 <td align="center">
-                                  <a class="btn btn-default" (click)="updateAddress(item)">
+                                  <a class="btn btn-default" (click)="updateAddress(item, i)">
                                     <i class="fa fa-pencil"></i>
                                   </a>
 
                                   <label class="css-input css-checkbox css-checkbox-default">
-                                    <input class="cb-element cd-{{item.id}}" type="checkbox" [(ngModel)]="item.isChecked" (change)="checkItem()">
+                                    <input class="cb-element cd-{{item.id}}" type="checkbox" [(ngModel)]="item.isChecked" (change)="checkItemChecked(item)">
                                     <span></span>
                                   </label>
                                 </td>
@@ -252,7 +257,7 @@
 
         <div class="block-content block-content-full text-right">
             <button type="button" class="btn btn-default" [routerLink]="['/purchase-management/supplier']">Cancel</button>
-            <button type="button" [disabled]="generalForm.invalid" class="btn btn-primary" (click)="createSupplier()">Save</button>
+            <button type="button" [disabled]="generalForm.invalid" class="btn btn-primary" (click)="actionUpdate(addressList)">Save</button>
         </div>
     </section>
 </div>

@@ -34,7 +34,7 @@ export class AddressModalContent implements OnInit {
 
         this.generalForm = fb.group({
             'type': 1,
-            'name': [null, Validators.required],
+            'address_name': [null, Validators.required],
             'email': [null],
             'tax_number': [null],
             'phone': [null],
@@ -51,10 +51,10 @@ export class AddressModalContent implements OnInit {
 
     ngOnInit() {
         //Init Fn
-        if(!this.state) {
+        if (!this.state) {
             this.generalForm.patchValue(this.input);
         }
-        this.title = this.state? this.title = 'New Address': this.title = 'Edit Address';
+        this.title = this.state ? this.title = 'New Address' : this.title = 'Edit Address';
         this.getListCountry();
     }
 
@@ -64,7 +64,7 @@ export class AddressModalContent implements OnInit {
             try {
                 console.log(res);
                 this.listMaster['countries'] = res.results;
-                if(!this.state) {
+                if (!this.state) {
                     this.changeCountry(this.input['country_code']);
                 }
             } catch (e) {
@@ -91,6 +91,9 @@ export class AddressModalContent implements OnInit {
         });
     }
 
+    updateData() {
+        this.activeModal.close(this.generalForm.value);
+    }
 
 
 }

@@ -7,6 +7,7 @@ import { PurchaseService } from "../purchase.service";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ItemModalContent } from "../../../shared/modals/item.modal";
 import { AddressModalContent } from "../../../shared/modals/address.modal";
+import { ConfirmModalContent } from "../../../shared/modals/confirm.modal";
 
 
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
@@ -31,11 +32,13 @@ export class SupplierDetailComponent implements OnInit {
     public addressList: any = [];
     public imageSelected: string = '';
     public listMaster = {};
+    public idSupplier: string = '';
+    public removedList: any = [];
 
     public ADDRESS_TYPE = {
-        3 : 'MAIN',
-        2 : 'SHIPPING',
-        1 : 'BILLING'
+        3: 'MAIN',
+        2: 'SHIPPING',
+        1: 'BILLING'
     };
 
     constructor(public fb: FormBuilder,
@@ -68,8 +71,10 @@ export class SupplierDetailComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.route.params.subscribe( params => this.getDetailSupplier(params.id) );
+        this.route.params.subscribe(params => this.getDetailSupplier(params.id));
         this.getListCountry();
+        this.getListState();
+        this.removedList.length = 0;
     }
 
     //data master country
@@ -94,7 +99,16 @@ export class SupplierDetailComponent implements OnInit {
         this.purchaseService.getStateByCountry(params).subscribe(res => {
             try {
                 this.listMaster[name] = res.results;
-                console.log(this.listMaster);
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
+
+    getListState() {
+        this.purchaseService.getListState().subscribe(res => {
+            try {
+                this.listMaster['states'] = res.results;
             } catch (e) {
                 console.log(e);
             }
@@ -129,13 +143,13 @@ export class SupplierDetailComponent implements OnInit {
     }
 
     mergeAddressList(data) {
-        var addressList = [];
+        let addressList = [];
 
-        if(data['shipping'].length > 0) addressList = addressList.concat(data['shipping']);
-        if(data['billing'].length > 0) addressList = addressList.concat(data['billing']);
+        if (data['shipping'].length > 0) addressList = addressList.concat(data['shipping']);
+        if (data['billing'].length > 0) addressList = addressList.concat(data['billing']);
 
         // add property isCheck to array
-        addressList.map( function(addr) {
+        addressList.map(function(addr) {
             addr.isChecked = false;
             return addr;
         });
@@ -143,25 +157,26 @@ export class SupplierDetailComponent implements OnInit {
     }
 
     addNewAddress() {
-        const modalRef = this.modalService.open(AddressModalContent, {size: 'lg'});
+        const modalRef = this.modalService.open(AddressModalContent, { size: 'lg' });
         modalRef.result.then(res => {
-            console.log(res)
+            this.addressList.push(res);
         });
         modalRef.componentInstance.input = {};
         modalRef.componentInstance.state = true;
     }
 
-    updateAddress(data) {
-        const modalRef = this.modalService.open(AddressModalContent, {size: 'lg'});
+    updateAddress(data, index) {
+        const modalRef = this.modalService.open(AddressModalContent, { size: 'lg' });
         modalRef.result.then(res => {
-            console.log(res)
+            this.addressList[index] = res;
         });
         modalRef.componentInstance.input = data;
         modalRef.componentInstance.state = false;
     }
 
     getDetailSupplier(id) {
-        this.purchaseService.getDetailBuyer(id).subscribe(res => {
+        this.idSupplier = id;
+        this.purchaseService.getDetailBuyer(this.idSupplier).subscribe(res => {
             try {
                 this.generalForm.patchValue(res.results);
                 this.primaryForm.patchValue(res.results['primary'][0]);
@@ -170,28 +185,74 @@ export class SupplierDetailComponent implements OnInit {
 
                 this.changeCountry(res.results['primary'][0]['country_code'], 'states_primary');
                 this.addressList = this.mergeAddressList(res.results);
-            } catch(e) {
+            } catch (e) {
 
             }
         })
     }
 
-    updateSupplier() {
+    checkItemChecked(item) {
+        if (item.isChecked) {
+            this.removedList.push(item);
+        } else {
+            this.removedList = this.removedList.filter(function(obj) {
+                return obj.isChecked == true;
+            });
+        }
+    }
+
+    deleteAddr() {
+        const modalRef = this.modalService.open(ConfirmModalContent);
+        modalRef.result.then(yes => {
+            if (yes) {
+                let params = {
+                    buyer_id: this.idSupplier,
+                    address_ids: this.removedList.map(x => x.address_id)
+                }
+                this.purchaseService.deleteAddress(params).subscribe(res => {
+                    try {
+                        this.toastr.success(res.message);
+                        this.addressList = this.addressList.filter(function(obj) {
+                            return obj.isChecked == false;
+                        });
+                        this.removedList.length = 0;
+                    } catch(e) {
+                        console.log(e);
+                    }
+                })
+            }
+        });
+        modalRef.componentInstance.message = "Are you sure you want to delete ?";
+    }
+
+    actionUpdate(objAddress) {
+        let data = {};
+        data['shipping'] = data['billing'] = [];
+
+        objAddress.forEach(item => {
+            if (parseInt(item.type) === 2) data['shipping'].push(item);;
+            if (parseInt(item.type) === 1) data['billing'].push(item);;
+        })
+
+        this.updateSupplier(data);
+    }
+
+    updateSupplier(array) {
         let params = Object.assign({}, this.generalForm.value);
         params['user'] = Object.assign([], this.users);
-        params['shipping'] = [];
-        params['shipping'].push(this.shippingForm.value);
         params['primary'] = [];
         params['primary'].push(this.primaryForm.value);
         params['billing'] = [];
-        params['billing'].push(this.billingForm.value);
+        params['billing'] = array['billing'];
+        params['shipping'] = [];
+        params['shipping'] = array['shipping'];
 
         let data = {
             data: JSON.stringify(params),
             image: this.listFile[0] || null
         }
 
-        this.purchaseService.createBuyer(data).subscribe(res => {
+        this.purchaseService.updateBuyer(data, this.idSupplier).subscribe(res => {
             try {
                 setTimeout(() => {
                     this.router.navigate(['/purchase-management/supplier']);
@@ -202,5 +263,7 @@ export class SupplierDetailComponent implements OnInit {
             }
         });
     }
+
+
 
 }
