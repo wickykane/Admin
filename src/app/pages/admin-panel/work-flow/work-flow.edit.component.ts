@@ -79,6 +79,7 @@ export class WorkFlowEditComponent implements OnInit {
 
     onDropComplete = function (data, event, id, item, flag, type?, reload?) {
         var data_id = id;
+        data = Object.assign({}, data);
         if (flag) {
             data.parent = (type) ? id : "";
             data.id = data_id;

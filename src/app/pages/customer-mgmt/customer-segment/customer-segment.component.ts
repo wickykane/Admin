@@ -2,14 +2,18 @@ import { TableService } from './../../../services/table.service';
 import { Component, OnInit } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PromotionService } from "../promotion.service";
+import { CustomerService } from "../customer.service";
+import { PromotionService } from "../../promotion-mgmt/promotion.service";
+
 
 @Component({
-  selector: 'app-promotion-campaign',
-  templateUrl: './promotion-campaign.component.html',
-  styleUrls: ['./promotion-campaign.component.scss']
+  selector: 'app-promotion-budget',
+  templateUrl: './customer-segment.component.html',
+  styleUrls: ['./customer-segment.component.scss'],
+  providers: [PromotionService]
 })
-export class PromotionCampaignComponent implements OnInit {
+
+export class CustomerSegmentComponent implements OnInit {
   /**
    * Variable Declaration
    */
@@ -25,14 +29,11 @@ export class PromotionCampaignComponent implements OnInit {
   /**
    * Init Data
    */
-  constructor(private fb: FormBuilder, public tableService: TableService, private promotionService: PromotionService) {
+  constructor(private fb: FormBuilder, public tableService: TableService, private promotionService: PromotionService, private customerService: CustomerService) {
     this.searchForm = fb.group({
       'cd': [null],
       'name': [null],
-      'sts': [null],
-      'budget_name': [null],
-      'from': [null],
-      'to': [null]
+      'apply_for': [null],
     });
 
     //Assign get list function name, override variable here
@@ -42,6 +43,14 @@ export class PromotionCampaignComponent implements OnInit {
   }
 
   ngOnInit() {
+    //Init data
+    this.listMaster['applyFor'] = [{
+      id: '1',
+      name: "All customers"
+    }, {
+      id: '2',
+      name: "Specific Customers "
+    }];
     //Init Fn
     this.getList();
   }
@@ -54,15 +63,12 @@ export class PromotionCampaignComponent implements OnInit {
   /**
    * Internal Function
    */
-  changeStatus(id, ac) {
-    return;
-  }
 
   getList() {
     var params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
     Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);
 
-    this.promotionService.getListCampaign(params).subscribe(res => {
+    this.promotionService.getListSegment(params).subscribe(res => {
       try {
         this.list.items = res.results.rows;
         this.tableService.matchPagingOption(res.results);
