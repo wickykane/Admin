@@ -1,0 +1,121 @@
+<section>
+    <div class="block-header bg-red-dark text-white">
+        <h3 class="block-title-lg" translate>CREATE NEW E-CATALOG</h3>
+        <div class="wrap-keyboard">
+            <span class="fa fa-keyboard-o my-own-cheatsheet"></span>
+        </div>
+    </div>
+</section>
+
+<section class="rma-page block">
+    <div class="row" style="padding-top:15px">
+        <div class="col-sm-12">
+            <div class="block-header bg-gray-lighter">
+                <h3 class="block-title" translate>GENERAL INFORMATION</h3>
+            </div>
+        </div>
+    </div>
+    <div>
+        <form [formGroup]="generalForm" class="form-search full-width form-horizontal">
+            <div class="row col-md-12">
+                <div class="col-md-2">
+                    <label for="campaign" class="control-label" translate>Code</label>
+                    <input type="text" class="form-control" name="rma" formControlName="code" [attr.disabled]='true'>
+                </div>
+                <div class="col-md-2">
+                    <label for="campaign_name" class="control-label" translate>Name</label>
+                    <span class="text-danger">( * )</span>
+                    <input type="text" class="form-control" name="campaign_name" formControlName="name">
+                </div>
+                <div class="col-md-2">
+                    <label for="sts" class="control-label" translate>Status </label>
+                    <span class="text-danger">( * )</span>
+                    <select name="sts" formControlName="sts" class="form-control">
+                        <option *ngFor="let item of listMaster['status']" [value]="item.id">{{ item.name }}</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="sale_price" class="control-label" translate>Bundle Sales Price </label>
+                    <span class="text-danger">( * )</span>
+                    <input type="text" class="form-control" name="sale_price" formControlName="sale_price">
+                </div>
+                <div class="col-md-2">
+                    <label for="cost_price" class="control-label" translate>Bundle Cost Price </label>
+                    <span class="text-danger">( * )</span>
+                    <input type="text" class="form-control" name="cost_price" formControlName="cost_price">
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="row" style="padding-top:15px">
+        <div class="col-sm-12">
+            <div class="block-header bg-gray-lighter">
+                <h3 class="block-title" translate>PRODUCT LINE</h3>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-bottom: 20px;margin-top: 10px;">
+        <div class="col-sm-12">
+            <div class="block-content">
+                <table class="table-striped table-vcenter table-hover custom-table">
+                    <thead>
+                        <tr>
+                            <th style="width:3%" role="button" translate> No </th>
+                            <th style="width:10%" role="button" translate> Product Code </th>
+                            <th style="width:15%" role="button" translate> Name </th>
+                            <th style="width:10%" role="button" translate> UOM </th>
+                            <th style="width:10%" role="button" translate> Quantity </th>
+                            <th style="width:8%" role="button" translate> Cost Price </th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of data['products']; let $index = index;">
+                            <td>{{ $index + 1 }}</td>
+                            <td>
+                                <select class="form-control" [(ngModel)]="item.product_id" required (change)="changeProductLine(item,$index)">
+                                    <option *ngFor="let item of listMaster['listProduct']" [value]="item.item_id">{{ item.sku }}</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" [(ngModel)]="item.name" readonly>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" [(ngModel)]="item.uom_name" readonly>
+                            </td>
+                            <td class="text-center">
+                                <input type="text" class="form-control" [(ngModel)]="item.qty" (change)="changeQTY()" required>
+
+                            </td>
+                            <td class="text-center">
+                                {{item.price|currency}}
+                            </td>
+                            <td>
+                                <button type="button" (click)="goPromoDetail(item)" class="btn btn-secondary" placement="top" ngbTooltip="Go Promo Detail">
+                                    <i class="fa fa-align-justify"></i>
+                                </button>
+                                <button type="button" (click)="removeRow($index)" class="btn btn-secondary" placement="top" ngbTooltip="Remove">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="11">
+                                <a href="javascript:void(0)" (click)="clickAdd()">
+                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                    <span translate>Add New Line</span>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="block-content block-content-full text-right">
+        <button type="button" class="btn btn-default" [routerLink]="['/product-management/bundle']" translate>Cancel</button>
+        <button [disabled]="!generalForm.valid" type="button" class="btn btn-primary" (click)="createBundle()" translate>Save</button>
+    </div>
+</section>
