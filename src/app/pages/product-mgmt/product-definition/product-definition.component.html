@@ -39,12 +39,12 @@
                 (onEnter)="selectData($event)">
                 <thead class="bg-white">
                     <tr>
-                        <th>
+                        <!-- <th>
                             <label class="css-input css-checkbox css-checkbox-default">
                                 <input class="cb-all" type="checkbox" [ngModel]="selectItem.isCheckAll" (change)="checkAll()">
                                 <span></span>
                             </label>
-                        </th>
+                        </th> -->
                         <th translate>Image</th>
                         <th translate >SKU</th>
                         <th translate>Product Name</th>
@@ -61,19 +61,14 @@
                 </thead>
 
                 <tr *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
-                    <td>
+                    <!-- <td>
                         <label class="css-input css-checkbox css-checkbox-default">
                             <input class="cb-element" type="checkbox" [ngModel]="item.is_checked" (change)="checkItem(item)">
                             <span></span>
                         </label>
-                    </td>
+                    </td> -->
                     <td style="cursor: pointer;">
-                        <!-- <img ng-click="showImage($index+1, item.wine_images[0])" src="{{item.wine_images[0]['thumb_img']}}" alt="" width="30" height="30">
-                          <div id="imageModal{{$index+1}}" class="imageModal">
-                            <span class="close" ng-click="closeImage($index+1)">&times;</span>
-                            <img class="modal-content" id="img{{$index+1}}">
-                            <div id="caption"></div>
-                          </div> -->
+                            <img src="{{item.thumb_img}}" alt="" width="30" height="30">
                     </td>
                     <td>{{item.sku}}</td>
                     <td>{{item.name}}</td>
@@ -91,10 +86,7 @@
                     <td colspan="100%" class="text-center">No data.</td>
                 </tr>
             </table>
-
         </div>
-
-
         <div class="row normal-pagination" *ngIf="list.items.length > 0">
             <div class="col-md-6">
                 <div class="text-left">
