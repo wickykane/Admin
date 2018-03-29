@@ -32,6 +32,13 @@ const routes: Routes = [
     ]
   },
   {
+    path: 'sale-quotation',
+    children: [
+      { path: '', component: SaleQuotationComponent }
+
+    ]
+  },
+  {
     path: 'sales-price',
     children: [
       { path: '', component: SalePriceComponent },

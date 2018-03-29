@@ -86,7 +86,7 @@ export class MenuComponent implements OnInit {
                         name: 'Buyer RFQ'
                     },
                     {
-                        link: '/sdw',
+                        link: '/order-management/sale-quotation',
                         name: 'Sales Quotation'
                     },
                     {
