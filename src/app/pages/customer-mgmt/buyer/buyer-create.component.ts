@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PurchaseService } from "../purchase.service";
+import { CustomerService } from "../customer.service";
 
 //modal
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -11,12 +11,12 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { routerTransition } from '../../../router.animations';
 
 @Component({
-    selector: 'app-supplier-create',
-    templateUrl: './supplier-create.component.html',
-    styleUrls: ['./supplier.component.scss'],
+    selector: 'app-buyer-create',
+    templateUrl: './buyer-create.component.html',
+    styleUrls: ['./buyer.component.scss'],
     animations: [routerTransition()]
 })
-export class SupplierCreateComponent implements OnInit {
+export class BuyerCreateComponent implements OnInit {
 
     generalForm: FormGroup;
     primaryForm: FormGroup;
@@ -33,16 +33,21 @@ export class SupplierCreateComponent implements OnInit {
         public router: Router,
         public toastr: ToastsManager,
         public vRef: ViewContainerRef,
-        private purchaseService: PurchaseService,
+        private customerService: CustomerService,
         private modalService: NgbModal) {
         this.toastr.setRootViewContainerRef(vRef);
         this.generalForm = fb.group({
+            'buyer_type':[null,Validators.required],
             'full_name': [null, Validators.required],
             'email': [null, Validators.required],
+            'sale_price_id':[null],
             'phone': [null],
             'fax': [null],
             'website': [null],
-            'is_supplier': true
+            'credit_sts': [null, Validators.required],
+            'line_of_credit': [null, Validators.required],
+            'credit_reason': [null],
+
         });
         this.primaryForm = fb.group({
             'name': [null, Validators.required],
@@ -77,15 +82,19 @@ export class SupplierCreateComponent implements OnInit {
             'city_name': [null, Validators.required],
             'zip_code': [null, Validators.required]
         });
+        this.listMaster['creditStatus']  = [{id: 1,name: 'Close'}, {id: 2, name: 'Open'}, {id: 3,name: 'Hold'}];
+        
     }
 
     ngOnInit() {
         this.getListCountry();
+        this.getSalePriceList();
+        this.getListBuyerType();
     }
 
     //data master country
     getListCountry() {
-        this.purchaseService.getListCountry().subscribe(res => {
+        this.customerService.getListCountry().subscribe(res => {
             try {
                 this.listMaster['countries'] = res.results;
             } catch (e) {
@@ -93,6 +102,16 @@ export class SupplierCreateComponent implements OnInit {
             }
         });
     }
+    getListBuyerType() {
+        this.customerService.getListBuyerType().subscribe(res => {
+            try {
+                this.listMaster['customerType'] = res.results;
+            } catch (e) {
+                console.log(e);
+            }
+        })
+    }
+
     //action change country
     changeCountry(id, flag) {
         let params = {
@@ -102,9 +121,19 @@ export class SupplierCreateComponent implements OnInit {
     }
 
     getStateByCountry(params, name) {
-        this.purchaseService.getStateByCountry(params).subscribe(res => {
+        this.customerService.getStateByCountry(params).subscribe(res => {
             try {
                 this.listMaster[name] = res.results;
+                console.log(this.listMaster);
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
+    getSalePriceList(){
+        this.customerService.getSalePriceList().subscribe(res => {
+            try {
+                this.listMaster['salePriceList'] = res.results;
                 console.log(this.listMaster);
             } catch (e) {
                 console.log(e);
@@ -149,7 +178,7 @@ export class SupplierCreateComponent implements OnInit {
         }
     }
 
-    createSupplier() {
+    createBuyer() {
 
         let params = Object.assign({}, this.generalForm.value);
         params['user'] = Object.assign([], this.users);
@@ -165,7 +194,7 @@ export class SupplierCreateComponent implements OnInit {
             image: this.listFile[0] || null
         }
 
-        this.purchaseService.createBuyer(data).subscribe(res => {
+        this.customerService.createBuyer(data).subscribe(res => {
             try {
                 setTimeout(() => {
                     this.router.navigate(['/purchase-management/supplier']);

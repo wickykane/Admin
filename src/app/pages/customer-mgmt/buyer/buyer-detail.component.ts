@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PurchaseService } from "../purchase.service";
+import { CustomerService } from "../customer.service";
 
 //modal
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -14,13 +14,13 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { routerTransition } from '../../../router.animations';
 
 @Component({
-    selector: 'app-supplier-detail',
-    templateUrl: './supplier-detail.component.html',
-    styleUrls: ['./supplier.component.scss'],
+    selector: 'app-buyer-detail',
+    templateUrl: './buyer-detail.component.html',
+    styleUrls: ['./buyer.component.scss'],
     animations: [routerTransition()]
 })
 
-export class SupplierDetailComponent implements OnInit {
+export class BuyerDetailComponent implements OnInit {
 
     generalForm: FormGroup;
     primaryForm: FormGroup;
@@ -46,16 +46,20 @@ export class SupplierDetailComponent implements OnInit {
         public route: ActivatedRoute,
         public toastr: ToastsManager,
         public vRef: ViewContainerRef,
-        private purchaseService: PurchaseService,
+        private customerService: CustomerService,
         private modalService: NgbModal) {
         this.toastr.setRootViewContainerRef(vRef);
         this.generalForm = fb.group({
+            'buyer_type':[null,Validators.required],
             'full_name': [null, Validators.required],
             'email': [null, Validators.required],
+            'sale_price_id':[null],
             'phone': [null],
             'fax': [null],
             'website': [null],
-            'is_supplier': true
+            'credit_sts': [null, Validators.required],
+            'line_of_credit': [null, Validators.required],
+            'credit_reason': [null],
         });
         this.primaryForm = fb.group({
             'name': [null, Validators.required],
@@ -68,18 +72,40 @@ export class SupplierDetailComponent implements OnInit {
             'city_name': [null, Validators.required],
             'zip_code': [null, Validators.required]
         });
+        this.listMaster['creditStatus']  = [{id: 1,name: 'Close'}, {id: 2, name: 'Open'}, {id: 3,name: 'Hold'}];
     }
 
     ngOnInit() {
         this.route.params.subscribe(params => this.getDetailSupplier(params.id));
         this.getListCountry();
         this.getListState();
+        this.getListBuyerType();
+        this.getSalePriceList();
         this.removedList.length = 0;
+    }
+    getListBuyerType() {
+        this.customerService.getListBuyerType().subscribe(res => {
+            try {
+                this.listMaster['customerType'] = res.results;
+            } catch (e) {
+                console.log(e);
+            }
+        })
+    }
+    getSalePriceList(){
+        this.customerService.getSalePriceList().subscribe(res => {
+            try {
+                this.listMaster['salePriceList'] = res.results;
+                console.log(this.listMaster);
+            } catch (e) {
+                console.log(e);
+            }
+        });
     }
 
     //data master country
     getListCountry() {
-        this.purchaseService.getListCountry().subscribe(res => {
+        this.customerService.getListCountry().subscribe(res => {
             try {
                 this.listMaster['countries'] = res.results;
             } catch (e) {
@@ -96,7 +122,7 @@ export class SupplierDetailComponent implements OnInit {
     }
 
     getStateByCountry(params, name) {
-        this.purchaseService.getStateByCountry(params).subscribe(res => {
+        this.customerService.getStateByCountry(params).subscribe(res => {
             try {
                 this.listMaster[name] = res.results;
             } catch (e) {
@@ -106,7 +132,7 @@ export class SupplierDetailComponent implements OnInit {
     }
 
     getListState() {
-        this.purchaseService.getListState().subscribe(res => {
+        this.customerService.getListState().subscribe(res => {
             try {
                 this.listMaster['states'] = res.results;
             } catch (e) {
@@ -176,7 +202,7 @@ export class SupplierDetailComponent implements OnInit {
 
     getDetailSupplier(id) {
         this.idSupplier = id;
-        this.purchaseService.getDetailBuyer(this.idSupplier).subscribe(res => {
+        this.customerService.getDetailBuyer(this.idSupplier).subscribe(res => {
             try {
                 this.generalForm.patchValue(res.results);
                 this.primaryForm.patchValue(res.results['primary'][0]);
@@ -209,7 +235,7 @@ export class SupplierDetailComponent implements OnInit {
                     buyer_id: this.idSupplier,
                     address_ids: this.removedList.map(x => x.address_id)
                 }
-                this.purchaseService.deleteAddress(params).subscribe(res => {
+                this.customerService.deleteAddress(params).subscribe(res => {
                     try {
                         this.toastr.success(res.message);
                         this.addressList = this.addressList.filter(function(obj) {
@@ -252,7 +278,7 @@ export class SupplierDetailComponent implements OnInit {
             image: this.listFile[0] || null
         }
 
-        this.purchaseService.updateBuyer(data, this.idSupplier).subscribe(res => {
+        this.customerService.updateBuyer(data, this.idSupplier).subscribe(res => {
             try {
                 setTimeout(() => {
                     this.router.navigate(['/purchase-management/supplier']);

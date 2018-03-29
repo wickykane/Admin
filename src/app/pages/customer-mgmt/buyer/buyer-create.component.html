@@ -14,6 +14,14 @@
                 <form [formGroup]="generalForm" class="form-search full-width form-horizontal">
                     <div class="row">
                         <div class="col-md-6">
+                            <label for="buyer_type" class="control-label">Buyer Type</label>
+                            <span class="text-danger">( * )</span>
+                            <select class="form-control" formControlName="buyer_type">
+                                <option value="null" selected="true">--Select--</option>
+                                <option *ngFor="let item of listMaster['customerType']" [ngValue]="item.id">{{item.name}}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
                             <label for="full_name" class="control-label">Buyer Name</label>
                             <span class="text-danger">( * )</span>
                             <input type="text" class="form-control" name="full_name" formControlName="full_name">
@@ -31,9 +39,16 @@
                             <label for="fax" class="control-label">Fax</label>
                             <input type="text" class="form-control" name="fax" formControlName="fax">
                         </div>
-                        <div class="col-md-6 offset-md-6">
+                        <div class="col-md-6 ">
                             <label for="website" class="control-label">Website</label>
                             <input type="text" class="form-control" name="website" formControlName="website">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="sale_price_list" class="control-label">Sale Price List</label>
+                            <select class="form-control" formControlName="sale_price_id">
+                                <option value="null" selected="true">--Select--</option>
+                                <option *ngFor="let item of listMaster['salePriceList']" [ngValue]="item.id">{{item.des}}</option>
+                            </select>
                         </div>
                     </div>
                 </form>
@@ -87,8 +102,8 @@
                                 </div>
                                 <div class="col-md-12">
                                     <label for="address_line" class="control-label">Address Line
-                                            <span class="text-danger">( * )</span>
-                                        </label>
+                                        <span class="text-danger">( * )</span>
+                                    </label>
                                     <textarea name="name" rows="4" class="form-control" formControlName="address_line"></textarea>
                                 </div>
                                 <div class="col-md-12">
@@ -96,8 +111,8 @@
                                         <span class="text-danger">( * )</span>
                                     </label>
                                     <select class="form-control" formControlName="country_code" (change)="changeCountry(this.primaryForm.value.country_code ,'states_primary')">
-                                      <option value="null" selected="true">--Select--</option>
-                                      <option *ngFor="let item of listMaster['countries']" [ngValue] = "item.country_code">{{item.name}}</option>
+                                        <option value="null" selected="true">--Select--</option>
+                                        <option *ngFor="let item of listMaster['countries']" [ngValue]="item.country_code">{{item.name}}</option>
                                     </select>
                                 </div>
                                 <div class="col-md-12">
@@ -109,8 +124,8 @@
                                 <div class="col-md-12">
                                     <label for="state_id" class="control-label">State/Province</label>
                                     <select class="form-control" formControlName="state_id">
-                                      <option value="null" selected="true"  >--Select--</option>
-                                      <option *ngFor="let item of listMaster['states_primary']" [ngValue] = "item.id">{{item.name}}</option>
+                                        <option value="null" selected="true">--Select--</option>
+                                        <option *ngFor="let item of listMaster['states_primary']" [ngValue]="item.id">{{item.name}}</option>
                                     </select>
                                 </div>
                                 <div class="col-md-12">
@@ -123,7 +138,9 @@
                         </form>
                     </div>
                     <div class="col-md-12 text-right">
-                        <button type="button" class="btn btn-copy" (click)="copyToAddress('billing')">Copy to Billing Address <i class="fa fa-arrow-right"></i></button>
+                        <button type="button" class="btn btn-copy" (click)="copyToAddress('billing')">Copy to Billing Address
+                            <i class="fa fa-arrow-right"></i>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -158,8 +175,8 @@
                                 </div>
                                 <div class="col-md-12">
                                     <label for="address_line" class="control-label">Address Line
-                                            <span class="text-danger">( * )</span>
-                                        </label>
+                                        <span class="text-danger">( * )</span>
+                                    </label>
                                     <textarea name="name" rows="4" class="form-control" formControlName="address_line"></textarea>
                                 </div>
                                 <div class="col-md-12">
@@ -167,8 +184,8 @@
                                         <span class="text-danger">( * )</span>
                                     </label>
                                     <select class="form-control" formControlName="country_code" (change)="changeCountry(this.billingForm.value.country_code ,'states_billing')">
-                                      <option value="null" selected="true"  >--Select--</option>
-                                      <option *ngFor="let item of listMaster['countries']" [ngValue] = "item.country_code">{{item.name}}</option>
+                                        <option value="null" selected="true">--Select--</option>
+                                        <option *ngFor="let item of listMaster['countries']" [ngValue]="item.country_code">{{item.name}}</option>
                                     </select>
                                 </div>
                                 <div class="col-md-12">
@@ -180,8 +197,8 @@
                                 <div class="col-md-12">
                                     <label for="state_id" class="control-label">State/Province</label>
                                     <select class="form-control" formControlName="state_id">
-                                      <option value="null" selected="true"  >--Select--</option>
-                                      <option *ngFor="let item of listMaster['states_billing']" [ngValue] = "item.id">{{item.name}}</option>
+                                        <option value="null" selected="true">--Select--</option>
+                                        <option *ngFor="let item of listMaster['states_billing']" [ngValue]="item.id">{{item.name}}</option>
                                     </select>
                                 </div>
                                 <div class="col-md-12">
@@ -194,7 +211,9 @@
                         </form>
                     </div>
                     <div class="col-md-12 text-right">
-                        <button type="button" class="btn btn-copy" (click)="copyToAddress('shipping')">Copy to Shipping Address <i class="fa fa-arrow-right"></i></button>
+                        <button type="button" class="btn btn-copy" (click)="copyToAddress('shipping')">Copy to Shipping Address
+                            <i class="fa fa-arrow-right"></i>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -229,8 +248,8 @@
                                 </div>
                                 <div class="col-md-12">
                                     <label for="address_line" class="control-label">Address Line
-                                            <span class="text-danger">( * )</span>
-                                        </label>
+                                        <span class="text-danger">( * )</span>
+                                    </label>
                                     <textarea name="name" rows="4" class="form-control" formControlName="address_line"></textarea>
                                 </div>
                                 <div class="col-md-12">
@@ -238,8 +257,8 @@
                                         <span class="text-danger">( * )</span>
                                     </label>
                                     <select class="form-control" formControlName="country_code" (change)="changeCountry(this.shippingForm.value.country_code ,'states_shipping')">
-                                      <option value="null" selected="true"  >--Select--</option>
-                                      <option *ngFor="let item of listMaster['countries']" [ngValue] = "item.country_code">{{item.name}}</option>
+                                        <option value="null" selected="true">--Select--</option>
+                                        <option *ngFor="let item of listMaster['countries']" [ngValue]="item.country_code">{{item.name}}</option>
                                     </select>
                                 </div>
                                 <div class="col-md-12">
@@ -251,8 +270,8 @@
                                 <div class="col-md-12">
                                     <label for="state_id" class="control-label">State/Province</label>
                                     <select class="form-control" formControlName="state_id">
-                                      <option value="null" selected="true"  >--Select--</option>
-                                      <option *ngFor="let item of listMaster['states_shipping']" [ngValue] = "item.id">{{item.name}}</option>
+                                        <option value="null" selected="true">--Select--</option>
+                                        <option *ngFor="let item of listMaster['states_shipping']" [ngValue]="item.id">{{item.name}}</option>
                                     </select>
                                 </div>
                                 <div class="col-md-12">
@@ -266,6 +285,41 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-3">
+                    <div class="row" style="padding-top:15px">
+                        <div class="col-sm-12">
+                            <div class="block-header bg-gray-lighter">
+                                <h3 class="block-title">CREDIT ACCOUNT</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form [formGroup]="generalForm" class="form-search full-width form-horizontal">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label for="name" class="control-label">Status</label>
+                                        <span class="text-danger">( * )</span>
+                                        <select class="form-control" formControlName="credit_sts">
+                                                <option value="null" selected="true">--Select--</option>
+                                                <option *ngFor="let item of listMaster['creditStatus']" [ngValue]="item.id">{{item.name}}</option>
+                                            </select>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label for="line_of_credit" class="control-label">Line Of Credit</label>
+                                        <span class="text-danger">( * )</span>
+                                        <input type="text" class="form-control" name="line_of_credit" formControlName="line_of_credit">
+                                    </div>
+                                    <div class="col-md-12" *ngIf="this.generalForm.value.credit_sts==1 || this.generalForm.value.credit_sts==3">
+                                        <label for="credit_reason" class="control-label">Reason</label>
+                                        <span class="text-danger">( * )</span>
+                                        <textarea rows="4" class="form-control" name="credit_reason" formControlName="credit_reason" style="resize: none;"></textarea>
+                                    </div>                                   
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
         </div>
 
         <div class="row" style="padding-top:15px">
@@ -297,20 +351,43 @@
                         <tbody>
                             <tr *ngFor="let item of users; let i = index">
                                 <td>{{i+1}}</td>
-                                <td><input type="text" class="form-control" name="email" [(ngModel)]="item.email"></td>
-                                <td><input type="text" class="form-control" name="username" [(ngModel)]="item.username"></td>
-                                <td><input type="password" class="form-control" name="password" [(ngModel)]="item.password"></td>
-                                <td><input type="password" class="form-control" name="password_confirm" [(ngModel)]="item.password_confirm"></td>
-                                <td><input type="text" class="form-control" name="first_name" [(ngModel)]="item.first_name"></td>
-                                <td><input type="text" class="form-control" name="last_name" [(ngModel)]="item.last_name"></td>
-                                <td><input type="text" class="form-control" name="full_name" [(ngModel)]="item.full_name"></td>
-                                <td><input type="text" class="form-control" name="phone" [(ngModel)]="item.phone"></td>
-                                <td><input type="text" class="form-control" name="phone2" [(ngModel)]="item.phone2"></td>
-                                <td><button type="button" class="btn btn-default" (click)="removeLine(i)"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                                <td>
+                                    <input type="text" class="form-control" name="email" [(ngModel)]="item.email">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="username" [(ngModel)]="item.username">
+                                </td>
+                                <td>
+                                    <input type="password" class="form-control" name="password" [(ngModel)]="item.password">
+                                </td>
+                                <td>
+                                    <input type="password" class="form-control" name="password_confirm" [(ngModel)]="item.password_confirm">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="first_name" [(ngModel)]="item.first_name">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="last_name" [(ngModel)]="item.last_name">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="full_name" [(ngModel)]="item.full_name">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="phone" [(ngModel)]="item.phone">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="phone2" [(ngModel)]="item.phone2">
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-default" (click)="removeLine(i)">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    </button>
+                                </td>
                             </tr>
                             <tr>
                                 <td colspan="11">
-                                    <button type="button" class="btn btn-primary" (click)="addNewLine()"><i class="fa fa-plus" aria-hidden="true"></i> Add new line</button>
+                                    <button type="button" class="btn btn-primary" (click)="addNewLine()">
+                                        <i class="fa fa-plus" aria-hidden="true"></i> Add new line</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -320,8 +397,8 @@
         </div>
 
         <div class="block-content block-content-full text-right">
-            <button type="button" class="btn btn-default" [routerLink]="['/purchase-management/supplier']">Cancel</button>
-            <button type="button" [disabled]="generalForm.invalid" class="btn btn-primary" (click)="createSupplier()">Save</button>
+            <button type="button" class="btn btn-default" [routerLink]="['/customer/buyer']">Cancel</button>
+            <button type="button" [disabled]="generalForm.invalid" class="btn btn-primary" (click)="createBuyer()">Save</button>
         </div>
     </section>
 </div>

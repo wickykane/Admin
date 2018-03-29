@@ -2,18 +2,18 @@ import { TableService } from './../../../services/table.service';
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PurchaseService } from "../purchase.service";
+import { CustomerService } from "../customer.service";
 
 import { routerTransition } from '../../../router.animations';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 @Component({
-  selector: 'app-supplier',
-  templateUrl: './supplier.component.html',
-  styleUrls: ['./supplier.component.scss'],
+  selector: 'app-buyer',
+  templateUrl: './buyer.component.html',
+  styleUrls: ['./buyer.component.scss'],
   animations: [routerTransition()]
 })
-export class SupplierComponent implements OnInit {
+export class BuyerComponent implements OnInit {
 
     /**
      * letiable Declaration
@@ -36,7 +36,8 @@ export class SupplierComponent implements OnInit {
         public fb: FormBuilder,
         public toastr: ToastsManager,
         private vRef: ViewContainerRef,
-        public tableService: TableService, private purchaseService: PurchaseService) {
+        public tableService: TableService,
+        private customerService: CustomerService) {
         this.toastr.setRootViewContainerRef(vRef);
 
         this.searchForm = fb.group({
@@ -68,7 +69,7 @@ export class SupplierComponent implements OnInit {
         let params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
         Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);
 
-        this.purchaseService.getListSupplier(params).subscribe(res => {
+        this.customerService.getListBuyer(params).subscribe(res => {
             try {
                 this.list.items = res.results.rows;
                 this.tableService.matchPagingOption(res.results);

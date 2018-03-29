@@ -1,5 +1,5 @@
 <div [@routerTransition]>
-    <app-page-header [heading]="'LIST OF SUPPLIERS'" [icon]="'fa-th-list'"></app-page-header>
+    <app-page-header [heading]="'LIST OF BUYER'" [icon]="'fa-th-list'"></app-page-header>
 
 
         <div class="block-content pd-bottom bg-gray-light">
@@ -26,14 +26,14 @@
 
 
         <div class="block-content list-order-table">
-            <button [routerLink]="['/purchase-management/supplier/create']" style="margin: 10px 0;" class="btn btn-primary">Add New</button>
+            <button [routerLink]="['/customer/buyer/create']" style="margin: 10px 0;" class="btn btn-primary">Add New</button>
 
             <div class="table-responsive">
                 <table class="table table-striped table-vcenter custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                     <thead class="bg-white">
                         <tr>
                             <th>ID</th>
-                            <th>Supplier Name</th>
+                            <th>Buyer Name</th>
                             <th>Email</th>
                             <th>Phone</th>
                             <th>Created Date</th>
@@ -48,7 +48,7 @@
                             <td>{{item.phone}}</td>
                             <td>{{item.created_at}}</td>
                             <td>
-                                <a class="btn btn-default " title="Edit" [routerLink]="['/purchase-management/supplier/detail/' + item.id]">
+                                <a class="btn btn-default " title="Edit" [routerLink]="['/customer/buyer/detail/' + item.id]">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                 </a>
                             </td>
