@@ -10,6 +10,7 @@ export class OrderService {
         let url ='rfq';
         return this.ApiService.get(url,params);
     }
+    //Sale Price List
      getList(params) {
         let url='sale-price/get-list';
          return this.ApiService.get(url,params);
@@ -26,5 +27,26 @@ export class OrderService {
          let url ='sale-price/'+id;
          return this.ApiService.put(url, params);
      }
+     //Sale Quotation
+     getListSalesQuotation(params){
+         let url ="order/list-sale-quote";
+         return this.ApiService.get(url,params);
+     }
+     getSalesQuotation(){
+        let url ='order/get-sale-quote-code';
+        return this.ApiService.get(url);
+    }
+    updateSaleQuoteStatus(sale_quote_id,params) {
+        let url = 'order/update-sale-quote-status/' + sale_quote_id;
+        return this.ApiService.put(url,params);
+    }
+    sentMailToBuyer(sale_quote_id){
+        let url='order/sale-quote/sent-to-buyer/'+sale_quote_id;
+        return this.ApiService.get(url);
+    }
+    getListSaleQuotationStatus(){
+        let url='order/sale-quote/list-status';
+        return this.ApiService.get(url);
+    }
 
 }
