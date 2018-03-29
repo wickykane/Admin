@@ -68,7 +68,7 @@
                             </td>
                             <td>{{item.last_updated_by_name}}</td>
                             <td>
-                                <a class="btn btn-default" title="{{ (!(item.id === flagId))? 'Show details': 'Hide details' }}" [ngClass]="{'disable-expand': item.purchase_quote_details.length == 0 }" (click)="toggleSubRow(item.id)">
+                                <a class="btn btn-default" title="{{ (!(item.id === flagId))? 'Show details': 'Hide details' }}" [ngClass]="{'disable-expand': item.detail.length == 0 }" (click)="toggleSubRow(item.id)">
                                 <i class="fa" [ngClass]="{'fa-minus': (item.id === flagId),' fa-plus': !(item.id === flagId)}"></i></a>
                               <a class="btn btn-default " *ngIf="item.status=='NW'" (click)="goToSaleQuote(item.rfq_id)">
                                 <i class="fa fa-external-link"></i>
