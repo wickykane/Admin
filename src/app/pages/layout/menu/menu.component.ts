@@ -98,7 +98,7 @@ export class MenuComponent implements OnInit {
                         name: 'Delivery Orders'
                     },
                     {
-                        link: '/23s3',
+                        link: '/order-management/sales-price',
                         name: 'Sales Price List'
                     }
                 ]
@@ -128,7 +128,7 @@ export class MenuComponent implements OnInit {
                 sub: true,
                 child: [
                     {
-                        link: '/saswaa',
+                        link: '/customer/buyer',
                         name: 'Buyers'
                     },
                     {

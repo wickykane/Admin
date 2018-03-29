@@ -10,6 +10,22 @@ export class OrderService {
         let url = 'rfq';
         return this.ApiService.get(url, params);
     }
+     getList(params) {
+        let url='sale-price/get-list';
+         return this.ApiService.get(url,params);
+     }       
+      createSalePrice(params) {
+         let url ='sale-price';
+         return this.ApiService.post(url, params);
+     }
+     getDetailSalePrice(id) {
+         let url ='sale-price/'+id;
+         return this.ApiService.get(url);
+     }
+     updateSalePrice(id,params){
+         let url ='sale-price/'+id;
+         return this.ApiService.put(url, params);
+     }
 
     //Order
     getListOrder(params) {

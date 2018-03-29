@@ -41,7 +41,7 @@
                     <tr>
                         <th>
                             <label class="css-input css-checkbox css-checkbox-default">
-                                <input class="cb-all" type="checkbox" ng-model="selectItem.isCheckAll" ng-change="checkAll()">
+                                <input class="cb-all" type="checkbox" [ngModel]="selectItem.isCheckAll" (change)="checkAll()">
                                 <span></span>
                             </label>
                         </th>
@@ -67,13 +67,8 @@
                             <span></span>
                         </label>
                     </td>
-                    <td style="cursor: pointer;">                        
-                        <!-- <img (click)="showImage($index+1, item.wine_images[0])" [src]="item.wine_images[0]['thumb_img']" alt="" width="30" height="30"> -->
-                          <div id="imageModal{{$index+1}}" class="imageModal">
-                            <span class="close" ng-click="closeImage($index+1)">&times;</span>
-                            <img class="modal-content" id="img{{$index+1}}">
-                            <div id="caption"></div>
-                          </div>
+                    <td style="cursor: pointer;">                   
+                        <img  src="{{item.thumb_img}}" alt="" width="30" height="30">                         
                     </td>
                     <td>{{item.sku}}</td>
                     <td>{{item.name}}</td>
