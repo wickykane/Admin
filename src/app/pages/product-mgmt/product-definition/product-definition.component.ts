@@ -101,6 +101,9 @@ export class ProductDefinitionComponent implements OnInit {
     this.productService.getListItem(params).subscribe(res => {
       try {
         this.list.items = res.results.rows;
+        this.list.items.forEach(item=>{
+          item.thumb_img = item.wine_images[0].thumb_img!= undefined ? item.wine_images[0].thumb_img :'./assets/images/no_image_available.png' ;
+        })        
         this.tableService.matchPagingOption(res.results);
       } catch (e) {
         console.log(e);
