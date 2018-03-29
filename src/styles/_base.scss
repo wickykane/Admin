@@ -4,11 +4,21 @@
     .ng-control  {
         min-height: 21px !important;
         border-radius: 0 !important;
+        max-width: 200px;
     }
     &.ng-multiple .ng-control .ng-value-container {
         padding-top: 0 !important;
         .ng-input {
             padding-bottom: 0px !important; 
+        }
+        .ng-value {
+            margin-bottom: 0;
+            .ng-value-icon {
+                padding: 0px 3px;
+            }
+            .ng-value-label {
+                padding: 0px 3px 0px 0px;
+            }
         }
     }
     

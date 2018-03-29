@@ -1,3 +1,260 @@
-<p>
-  sale-order works!
-</p>
+<div [@routerTransition]>
+    <app-page-header [heading]="'LIST OF PURCHASE ORDER'" [icon]="'fa-th-list'"></app-page-header>
+
+    <div class="block-content pd-bottom tab-content ">
+        <div class="row dashboard-content">
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-6 block-status">
+                <a class="dashboard-stat dashboard-stat-v2 bg-sky-blue" href="javascript: void(0)">
+                    <div class="visual">
+                        <i class="fa fa-bar-chart-o"></i>
+                    </div>
+                    <div class="details">
+                        <div class="number">
+                            <span data-counter="counterup" data-value="12,5">{{countStatus.new}}</span></div>
+                        <div class="desc" translate> New </div>
+                    </div>
+                </a>
+            </div>
+            <!-- <div class="col-lg-1 col-md-1 col-sm-1 col-xs-6 block-status">
+            <a class="dashboard-stat dashboard-stat-v2 bg-orange" href="javascript: void(0)">
+                <div class="visual">
+                    <i class="fa fa-shopping-cart"></i>
+                </div>
+                <div class="details">
+                    <div class="number">
+                        <span data-counter="counterup" data-value="12,5">{{countStatus.submitted}}</div>
+                    <div class="desc" translate> Submitted </div>
+                </div>
+            </a>
+        </div> -->
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-6 block-status">
+                <a class="dashboard-stat dashboard-stat-v2 bg-heavy-green" href="javascript: void(0)">
+                    <div class="visual">
+                        <i class="fa fa-comments"></i>
+                    </div>
+                    <div class="details">
+                        <div class="number">
+                            <span data-counter="counterup" data-value="12,5">{{countStatus.approved}}</span></div>
+                        <div class="desc" translate> Approved </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-6 block-status">
+                <a class="dashboard-stat dashboard-stat-v2 bg-brown" href="javascript: void(0)">
+                    <div class="visual">
+                        <i class="fa fa-bar-chart-o"></i>
+                    </div>
+                    <div class="details">
+                        <div class="number">
+                            <span data-counter="counterup" data-value="12,5">{{countStatus.preparing_for_shipment}}</span></div>
+                        <div class="desc" translate> Preparing </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-6 block-status">
+                <a class="dashboard-stat dashboard-stat-v2 bg-violet" href="javascript: void(0)">
+                    <div class="visual">
+                        <i class="fa fa-shopping-cart"></i>
+                    </div>
+                    <div class="details">
+                        <div class="number">
+                            <span data-counter="counterup" data-value="12,5">{{countStatus.delivering}}</span></div>
+                        <div class="desc" translate> Delivering </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-6 block-status">
+                <a class="dashboard-stat dashboard-stat-v2 bg-yellow" href="javascript: void(0)">
+                    <div class="visual">
+                        <i class="fa fa-comments"></i>
+                    </div>
+                    <div class="details">
+                        <div class="number">
+                            <span data-counter="counterup" data-value="12,5">{{countStatus.partial_delivered}}</span></div>
+                        <div class="desc" translate> Partial Delivered </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-6 block-status">
+                <a class="dashboard-stat dashboard-stat-v2 bg-soft-green" href="javascript: void(0)">
+                    <div class="visual">
+                        <i class="fa fa-bar-chart-o"></i>
+                    </div>
+                    <div class="details">
+                        <div class="number">
+                            <span data-counter="counterup" data-value="12,5">{{countStatus.full_delivered}}</span></div>
+                        <div class="desc" translate> Fully Delivered </div>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="block anchor-scroll">
+
+        <div class="block-content pd-bottom bg-gray-light">
+            <div class="row">
+                <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
+
+                    <div class="block-search">
+                        <label for="cd" class="control-label" translate>SO #</label>
+                        <input type="text" name="cd" formControlName="code" class="form-control" id="cd" placeholder="" capitalize>
+                    </div>
+                    <div class="block-search">
+                        <label for="purchase_quote_cd" class="control-label">Cust PO #</label>
+                        <input type="text" name="purchase_quote_cd" formControlName="cus_po" class="form-control" id="purchase_quote_cd" placeholder="" capitalize>
+                    </div>
+                    <div class="block-search">
+                        <label for="contract_no" class="control-label">Sales Quote #</label>
+                        <input type="text" name="contract_no" formControlName="sale_quote_num" class="form-control" id="contract_no" placeholder="" capitalize>
+                    </div>
+                    <div class="block-search">
+                        <label for="part" class="control-label">Type</label>
+                        <ng-select [multiple]="true" [items]="listMaster['type']" bindLabel="name" bindValue="id" formControlName="type">
+                        </ng-select>
+                    </div>
+                    <div class="block-search">
+                        <label for="po_status_id" class="control-label">Status</label>
+                        <ng-select [multiple]="true" [items]="listMaster['status']" bindLabel="name" bindValue="id" formControlName="sts">
+                        </ng-select>
+                    </div>
+                    <div class="block-search">
+                        <label for="cd" class="control-label" translate>Buyer</label>
+                        <input type="text" name="cd" formControlName="buyer_name" class="form-control" id="cd" placeholder="" capitalize>
+                    </div>
+                    <div *ngIf="listMoreFilter[0].value">
+                        <div class="block-search">
+                            <label for="" class="control-label" translate> Date Type</label>
+                            <select class="form-control" name="search_type" formControlName="date_type">
+                              <option value="" selected="true" hidden="true">Please select</option>
+                              <option *ngFor="let item of listMaster['dateType']" [ngValue] = "item.id">{{item.name}}</option>                              
+                            </select>
+                        </div>
+                        <div class="block-search">
+                            <label for="order-date" class="control-label" translate>From Date</label>
+                            <div class="input-group">
+                                <input [maxDate]="searchForm.value.date_to | dateObj" class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="date_from" ngbDatepicker #d="ngbDatepicker">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="block-search">
+                            <label for="deli-date" class="control-label" translate>To Date</label>
+                            <div class="input-group">
+                                <input [minDate]="searchForm.value.date_from | dateObj" class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="date_from" ngbDatepicker #dt="ngbDatepicker">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" (click)="dt.toggle()" type="button">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="block-btn-search">
+                    <label class="control-label">&nbsp;</label>
+                    <div class="group-btn-search">
+                        <button type="button" class="btn btn-primary" (click)="onoffFilter = !onoffFilter">More Filter</button>
+                        <div class="show-more" *ngIf="onoffFilter">
+                            <ul>
+                                <li *ngFor="let item of listMoreFilter; let i = index;">
+                                    <label for="{{i}}">
+                                  <input type="checkbox" value="item.value" [(ngModel)]="item.value"> {{item.name}}
+                                </label>
+                                </li>
+                            </ul>
+                        </div>
+                        <button type="button" class="btn btn-primary" (click)="tableService.searchAction()">Search</button>
+                        <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchForm)">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="block-content list-order-table">
+            <button [routerLink]="['create']" style="margin: 10px 0;" class="btn btn-primary">Create Order</button>
+
+            <div class="table-responsive">
+                <table class="table table-striped table-vcenter custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
+                    <thead class="bg-white">
+                        <tr>
+                            <th translate>SO #</th>
+                            <th translate>Cust PO #</th>
+                            <th translate>Sales Quote #</th>
+                            <th translate>Buyer</th>
+                            <th class="text-center " translate>Type</th>
+                            <th class="text-center" translate>Order date</th>
+                            <th class="text-center" translate>Delivery date</th>
+                            <th class="text-center" translate>Total</th>
+                            <th translate>Status</th>
+                            <th translate>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
+                        <tr>
+                            <td>
+                                <a [routerLink]="['detail', item.id]">#{{item.code}}</a>
+                            </td>
+                            <td>{{item.cus_po}}</td>
+                            <td>{{item.sale_quote_num}}</td>
+                            <td>{{item.buyer_name}}</td>
+                            <td class="text-center">
+                                <span *ngIf="item.type == 'PKU'">Pickup</span>
+                                <span *ngIf="item.type == 'CE'">Call</span>
+                                <span *ngIf="item.type == 'ONL'">Ecommerce</span>
+                                <span *ngIf="item.type == 'NO'">Normal Order</span>
+                            </td>
+                            <td class="text-center">{{item.order_date | date:'yyyy-MM-dd'}}</td>
+                            <td class="text-center">{{item.ship_date | date:'yyyy-MM-dd'}}</td>
+
+                            <td class="text-center">{{item.total_price | currency}}</td>
+                            <td>
+                                <span class="label label-info" *ngIf="item.sts_code == 'NW'">{{item.sts}}</span>
+                                <span class="label label-warning" *ngIf="item.sts_code == 'PS'">{{item.sts}}</span>
+                                <span class="label label-warning" *ngIf="item.sts_code == 'DL'">{{item.sts}}</span>
+                                <span class="label label-danger" *ngIf="item.sts_code == 'PD'">{{item.sts}}</span>
+                                <span class="label  label-success" *ngIf="item.sts_code == 'AP'">{{item.sts}}</span>
+                                <span class="label  label-success" *ngIf="item.sts_code == 'FD'">{{item.sts}}</span>
+                            </td>
+                            <td class="text-nowrap">
+                                <button placement="top" ngbTooltip="Approve" *ngIf="item.sts_code == 'NW'" type="button" class="btn btn-default" (click)="putApproveOrder(item.id)"><i class="fa fa-check-square"></i></button>
+                                <button placement="top" ngbTooltip="Clone Order" type="button" class="btn btn-default" (click)="cloneOrder(item.id)"><i class="fa fa-clone"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody *ngIf="list.items.length == 0">
+                        <tr>
+                            <td colspan="100%" class="text-center" translate>No data.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+            <div class="row normal-pagination" *ngIf="list.items.length > 0">
+                <div class="col-md-6">
+                    <div class="text-left">
+                        <div class="col-md-6" style="padding-left: 0px;">
+                            <span style="float: left; padding-right: 10px;">{{list.items.length}}/{{tableService.pagination.total_record}} items </span>
+                            <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length" (change)="tableService.changeLength()">
+                    <option *ngFor="let option of tableService.itemPerPageOptions" [ngValue]="option">{{option}}</option>
+                </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="text-right">
+                        <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length" [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page" [maxSize]="tableService.maxSize"
+                            [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
