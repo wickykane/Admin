@@ -41,6 +41,7 @@ export class OrderService {
 
     countOrderStatus() {
         let url = 'reports/order-status-count';
+        return this.API.get(url);
     }
 
 
@@ -101,6 +102,10 @@ export class OrderService {
      getDetailDeliveryOrder(id) {
          let url ='delivery-order/detail/' + id;
           return this.API.get(url);
+     }
+     updateDeliveryStatus(id,params){
+         var url ='delivery-order/update-manual/'+id;
+         return this.API.post(url, params);
      }
 
      //Sale Quotation

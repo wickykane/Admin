@@ -33,23 +33,26 @@ export class DelieveryOrderDetailComponent implements OnInit {
         private modalService: NgbModal) {
             this.toastr.setRootViewContainerRef(vRef);
             this.generalForm = fb.group({
-                'code': [{ value: null, disabled: true }],
-                'delivery_type': [null, Validators.required],
-                'pickup_location':[null, Validators.required],
-                'full_address': [null],
-                'pickup_time': [null, Validators.required],
-                'pickup_date': [null],
+                'id': [null],
+                'delivery_code': [{ value: null, disabled: true }],
+                'delivery_type': [{ value: null, disabled: true }],
+                'pickup_location':[{ value: null, disabled: true }],
+                'full_address': [{ value: null, disabled: true }],
+                'pickup_time': [{ value: null, disabled: true }],
+                'pickup_date': [{ value: null, disabled: true }],
                 'contact_name': [{ value: null, disabled: true }],
                 'contact_phone': [{ value: null, disabled: true }],
-                'order_id': [null, Validators.required],
+                'order_id': [{ value: null, disabled: true }],
                 'buyer_name': [{ value: null, disabled: true }],
-                'address_id':[null, Validators.required],
-                'delivey_address': [null],
-                'delivery_time':[null, Validators.required],
-                'delivery_date': [null],
-                'consignee_name': [null],
-                'consignee_phone': [null],
-                'buyer_id': [null]
+                'address_id':[{ value: null, disabled: true }],
+                'delivery_address': [{ value: null, disabled: true }],
+                'delivery_time':[{ value: null, disabled: true }],
+                'delivery_date': [{ value: null, disabled: true }],
+                'consignee_name': [{ value: null, disabled: true }],
+                'consignee_phone': [{ value: null, disabled: true }],
+                'buyer_id': [{ value: null, disabled: true }],
+                'status_id': [null],
+                'status': [null]
             });
         }
 
@@ -60,9 +63,16 @@ export class DelieveryOrderDetailComponent implements OnInit {
             {id:3, name:'Courier Delivery'},
             {id:1, name:' Customer Pickup'}
         ];
+        this.listMaster['status'] = [
+         {
+            id: 3,
+            name: "IN TRANSIT"
+        }, {
+            id: 4,
+            name: "DELIVERED"
+        }];
 
         this.route.params.subscribe( params => this.getDetailDeliveryOrder(params.id) );
-        this.getDeliveryCode();
         this.getListSaleOrder();
         this.getPickupLocation();
 
@@ -75,21 +85,17 @@ export class DelieveryOrderDetailComponent implements OnInit {
          this.orderService.getDetailDeliveryOrder(id).subscribe(res => {
              try {
                  this.generalForm.patchValue(res.results);
+                 this.items = res.results.details;
+                 setTimeout(() => {
+                     this.changeSaleOrder(res.results.order_id);
+                     this.getListProduct(res.results.order_id, res.results.address_id);
+                 }, 500);
              } catch(e) {
                  console.log(e);
              }
          })
      }
 
-     getDeliveryCode() {
-         this.orderService.getDeliveryCode().subscribe(res => {
-             try {
-                 this.generalForm.patchValue({'code': res.results.code});
-             } catch(e) {
-                 console.log(e);
-             }
-         })
-     }
 
      getListSaleOrder() {
          this.orderService.getOrderDelievery().subscribe(res => {
@@ -126,7 +132,6 @@ export class DelieveryOrderDetailComponent implements OnInit {
      }
 
      changeSaleOrder(order_id) {
-
          let item = this.listMaster['saleOrder'].filter(function(order){
              if(order.id == order_id)
                  return order;
@@ -141,29 +146,18 @@ export class DelieveryOrderDetailComponent implements OnInit {
              if(address.address_id == address_id)
                  return address;
          });
-         this.generalForm.value.delivey_address = item[0].full_address;
-         let params ={
-             "order_id":order_id,
-             "address_id":address_id,
-         }
-         this.orderService.getProductByOrderAndAddr(params).subscribe(res => {
-             this.items = res.results;
-         })
+          this.generalForm.patchValue({'delivey_address': item[0].full_address});
      }
 
-
-    createDeliveryOrder() {
+    updateDeliveryOrder() {
+        this.generalForm.patchValue({'status': this.generalForm.value.status_id});
         let params =  {};
         params = this.generalForm.value;
-        this.items.forEach(function(value, key) {
-            value.delivery_qty = Number(value.delivery_qty);
-        });
-        params['delivery_order_detail'] = this.items;
 
-        this.orderService.createDeliveryOrder(params).subscribe(res => {
+        this.orderService.updateDeliveryStatus(this.generalForm.value.id, params).subscribe(res => {
             try {
                 setTimeout(() => {
-                    this.router.navigate(['/order-management/delievery-order']);
+                    this.router.navigate(['/order-management/delivery-order']);
                 }, 2000);
                 this.toastr.success(res.message);
             } catch (e) {
