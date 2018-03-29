@@ -1,17 +1,21 @@
-import {NgModule} from '@angular/core';
-import {Routes, RouterModule} from '@angular/router';
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
 
-import {OrderMgmtComponent} from './order-mgmt.component';
+import { OrderMgmtComponent } from './order-mgmt.component';
 import { BuyerRfqComponent } from './buyer-rfq/buyer-rfq.component';
 import { DeliveryOrderComponent } from './delivery-order/delivery-order.component';
 import { SaleOrderComponent } from './sale-order/sale-order.component';
+import { SaleOrderCreateComponent } from './sale-order/sale-order.create.component';
+
 import { SalePriceComponent } from './sale-price/sale-price.component';
 import { SalePriceCreateComponent } from './sale-price/sale-price-create.component';
 import { SalePriceEditComponent } from './sale-price/sale-price-edit.component';
 import { SaleQuotationComponent } from './sale-quotation/sale-quotation.component';
 
 
-const routes : Routes = [
+
+
+const routes: Routes = [
   {
     path: '',
     component: OrderMgmtComponent
@@ -20,24 +24,32 @@ const routes : Routes = [
     component: BuyerRfqComponent
   },
   {
-    path: 'sale-quotation', 
-    children : [
-        { path: '', component: SaleQuotationComponent }  
-        
+    path: 'sale-order',
+    children: [
+      { path: '', component: SaleOrderComponent },
+      { path: 'create', component: SaleOrderCreateComponent },
+      { path: 'edit/:id', component: SalePriceEditComponent }
     ]
-},
+  },
   {
-    path: 'sales-price', 
-    children : [
-        { path: '', component: SalePriceComponent },    
-        { path: 'create', component: SalePriceCreateComponent },    
-        { path: 'edit/:id', component: SalePriceEditComponent } 
+    path: 'sale-quotation',
+    children: [
+      { path: '', component: SaleQuotationComponent }
+
     ]
-}
+  },
+  {
+    path: 'sales-price',
+    children: [
+      { path: '', component: SalePriceComponent },
+      { path: 'create', component: SalePriceCreateComponent },
+      { path: 'edit/:id', component: SalePriceEditComponent }
+    ]
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class OrderMgmtRoutingModule {}
+export class OrderMgmtRoutingModule { }

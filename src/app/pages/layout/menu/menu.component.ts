@@ -90,7 +90,7 @@ export class MenuComponent implements OnInit {
                         name: 'Sales Quotation'
                     },
                     {
-                        link: '/dd',
+                        link: '/order-management/sale-order',
                         name: 'Sales Orders'
                     },
                     {
