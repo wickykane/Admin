@@ -87,7 +87,7 @@ export class WarehouseReceiptCreateComponent implements OnInit {
     }
 
     createWarehouseReceipt() {
-        var params =  {};
+        let params =  {};
         params = this.generalForm.value;
         this.items.forEach(function(value, key) {
             value.receipt_qty = Number(value.receipt_qty);

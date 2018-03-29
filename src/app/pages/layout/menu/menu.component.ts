@@ -94,7 +94,7 @@ export class MenuComponent implements OnInit {
                         name: 'Sales Orders'
                     },
                     {
-                        link: '/asdf',
+                        link: '/order-management/delivery-order',
                         name: 'Delivery Orders'
                     },
                     {
