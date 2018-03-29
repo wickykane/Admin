@@ -1,0 +1,49 @@
+<div class="modal-style">
+    <div class="modal-header">
+        <p class="second-title" translate>LIST OF PROMOTION</p>
+
+        <button type="button" (click)="cancel()" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+
+    </div>
+    <div class="modal-body ">
+        <div class="table-responsive">
+            <table class="table table-vcenter table-hover table-have-sub-task custom-table">
+                <thead>
+                    <tr>
+                        <th translate>ID</th>
+                        <th translate>Campaign #</th>
+                        <th translate>Campaign Name</th>
+                        <th translate>Promo Program #</th>
+                        <th translate>Program Name</th>
+                        <th translate>Select?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of listPromotion; let $index = index">
+                        <td>{{$index}}</td>
+                        <td>{{item.promotion_campaign_code}}</td>
+                        <td>{{item.promotion_campaign_name}}</td>
+                        <td>{{item.id}}</td>
+                        <td>{{item.name}}</td>
+                        <td>
+                            <label class="css-input css-checkbox css-checkbox-default">
+                        <input class="cb-element" type="checkbox" [(ngModel)]="item.is_checked">
+                        <span></span>
+                      </label>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer" style="padding-top: 0">
+        <div class="form-group" style="margin-top: 20px;">
+            <div class="text-center">
+                <button style="width: 70px" class="btn btn-primary" type="button" (click)="ok()" translate>OK</button>
+                <button class="btn btn-default" type="button" (click)="cancel()" translate>Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -86,11 +86,11 @@ export class MenuComponent implements OnInit {
                         name: 'Buyer RFQ'
                     },
                     {
-                        link: '/sdw',
+                        link: '/order-management/sale-quotation',
                         name: 'Sales Quotation'
                     },
                     {
-                        link: '/dd',
+                        link: '/order-management/sale-order',
                         name: 'Sales Orders'
                     },
                     {
@@ -198,6 +198,14 @@ export class MenuComponent implements OnInit {
                         name: 'Drivers'
                     }
                 ]
+            },
+            {
+                flag: 'rma',
+                link: '/rma',
+                main_name: 'Return Order List',
+                icon: '',
+                sub: false,
+                child: []
             },
             {
                 flag: 'admin-panel',

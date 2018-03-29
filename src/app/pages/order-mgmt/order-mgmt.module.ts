@@ -13,6 +13,8 @@ import { DelieveryOrderDetailComponent } from './delivery-order/delivery-order-d
 
 //Sale Order
 import { SaleOrderComponent } from './sale-order/sale-order.component';
+import { SaleOrderCreateComponent } from './sale-order/sale-order.create.component';
+
 
 //Sale Price
 import { SalePriceComponent } from './sale-price/sale-price.component';
@@ -26,13 +28,15 @@ import { CommonShareModule, PageHeaderModule } from '../../shared/index';
 import { TableService } from "../../services/index";
 import { OrderService } from './order-mgmt.service';
 
+import { ItemModalModule } from "../../shared/modals/item.module";
 
 @NgModule({
     imports: [
         CommonModule,
         CommonShareModule,
         OrderMgmtRoutingModule,
-        PageHeaderModule
+        PageHeaderModule,
+        ItemModalModule
     ],
     declarations: [
         BuyerRfqComponent,
@@ -43,7 +47,8 @@ import { OrderService } from './order-mgmt.service';
         SalePriceComponent,
         SalePriceCreateComponent,
         SalePriceEditComponent,
-        SaleQuotationComponent],
+        SaleQuotationComponent,
+        SaleOrderCreateComponent],
     providers: [OrderService, TableService]
 })
 export class OrderMgmtModule { }

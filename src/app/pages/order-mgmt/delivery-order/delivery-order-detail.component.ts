@@ -72,7 +72,13 @@ export class DelieveryOrderDetailComponent implements OnInit {
      */
 
      getDetailDeliveryOrder(id) {
-
+         this.orderService.getDetailDeliveryOrder(id).subscribe(res => {
+             try {
+                 this.generalForm.patchValue(res.results);
+             } catch(e) {
+                 console.log(e);
+             }
+         })
      }
 
      getDeliveryCode() {

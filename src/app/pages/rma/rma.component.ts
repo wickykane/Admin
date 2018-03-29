@@ -1,20 +1,20 @@
-import { TableService } from './../../../services/table.service';
+import { TableService } from '../../services/table.service';
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import {OrderService} from '../order-mgmt.service';
+import { PurchaseService } from "../purchase-mgmt/purchase.service";
 
-import { routerTransition } from '../../../router.animations';
+import { routerTransition } from '../../router.animations';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
-
 @Component({
-  selector: 'app-sale-quotation',
-  templateUrl: './sale-quotation.component.html',
-  styleUrls: ['./sale-quotation.component.scss'],
-    animations: [routerTransition()]
+  selector: 'app-rma',
+  templateUrl: './rma.component.html',
+  styleUrls: ['./rma.component.scss'],
+  animations: [routerTransition()]
 })
-export class SaleQuotationComponent implements OnInit {
+export class RmaComponent implements OnInit {
+
     /**
      * letiable Declaration
      */
@@ -24,9 +24,11 @@ export class SaleQuotationComponent implements OnInit {
         items: []
     };
     // public showProduct: boolean = false;
+    public onoffFilter: any;
     public flagId: string = '';
 
     public user: any;
+    public listMoreFilter: any = [];
 
     searchForm: FormGroup;
 
@@ -34,14 +36,15 @@ export class SaleQuotationComponent implements OnInit {
         public fb: FormBuilder,
         public toastr: ToastsManager,
         private vRef: ViewContainerRef,
-        public tableService: TableService,
-        private orderService: OrderService) {
+        public tableService: TableService, private purchaseService: PurchaseService) {
         this.toastr.setRootViewContainerRef(vRef);
 
         this.searchForm = fb.group({
             'cd': [null],
+            'purchase_quote_cd': [null],
             'supplier_id': [null],
-            'purchase_quote_status_id': [null],
+            'contract_no': [null],
+            'po_status_id': [null],
             'rqst_dt': [null]
         });
 
@@ -52,10 +55,11 @@ export class SaleQuotationComponent implements OnInit {
 
     ngOnInit() {
         //Init Fn
+        this.listMoreFilter = [{ value: false, name: 'Requested On', type: 'date', model: 'rqst_dt' }];
         this.getList();
-        // this.getListSupplier();
-        // this.getListStatus();
-        this.flagId = '0';
+        this.getListSupplier();
+        this.getListStatus();
+
         this.user = JSON.parse(localStorage.getItem('currentUser'));
     }
     /**
@@ -76,8 +80,26 @@ export class SaleQuotationComponent implements OnInit {
         //  this.showProduct = !this.showProduct;
      }
 
-     sentMailToBuyer(id){
-        this.orderService.sentMailToBuyer(id).subscribe(res => {
+     showMorefilter() {
+
+     }
+
+     sendMail(id) {
+         let params = {
+             "sts": "SP"
+         }
+         this.purchaseService.sendMailPO(params, id).subscribe(res => {
+             try {
+                 this.toastr.success(res.message);
+                 this.getList();
+             } catch (e) {
+                 console.log(e);
+             }
+         });
+     }
+
+    sentToSuppPQ(id){
+        this.purchaseService.sentToSuppPQ(id).subscribe(res => {
             try {
                 this.toastr.success(res.message);
                 this.getList();
@@ -87,9 +109,8 @@ export class SaleQuotationComponent implements OnInit {
         });
     }
 
-    approveByManager(id) {
-      let params={status:'AM'};
-        this.orderService.updateSaleQuoteStatus(id,params).subscribe(res => {
+    approve(id) {
+        this.purchaseService.aprvByMgrPQ(id).subscribe(res => {
             try {
                 this.toastr.success(res.message);
                 this.getList();
@@ -98,14 +119,46 @@ export class SaleQuotationComponent implements OnInit {
             }
         });
 
+    }
+
+    reject(id) {
+        this.purchaseService.rjtByMgrPQ(id).subscribe(res => {
+            try {
+                this.toastr.success(res.message);
+                this.getList();
+            } catch (e) {
+                console.log(e);
+            }
+        });
+
+    }
+
+    getListSupplier() {
+        let params = { page: 1, length: 100 }
+        this.purchaseService.getListSupplier(params).subscribe(res => {
+            try {
+                this.listMaster["supplier"] = res.results.rows;
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
+
+    getListStatus() {
+        this.purchaseService.getListStatusOrder().subscribe(res => {
+            try {
+                this.listMaster["status"] = res.results;
+            } catch (e) {
+                console.log(e);
+            }
+        });
     }
 
     getList() {
-
         let params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
         Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);
 
-        this.orderService.getListSalesQuotation(params).subscribe(res => {
+        this.purchaseService.getListPurchaseOrder(params).subscribe(res => {
             try {
                 this.list.items = res.results.rows;
                 this.tableService.matchPagingOption(res.results);
@@ -116,4 +169,3 @@ export class SaleQuotationComponent implements OnInit {
     }
 
 }
-

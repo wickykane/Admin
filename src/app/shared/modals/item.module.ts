@@ -9,6 +9,10 @@ import { ItemService } from "./item.service";
 import { ItemModalContent } from "./item.modal";
 import { AddressModalContent } from "./address.modal";
 import { ConfirmModalContent } from "./confirm.modal";
+
+import { PromotionModalContent } from "./promotion.modal";
+
+
 //Modal
 
 
@@ -17,10 +21,10 @@ import { ConfirmModalContent } from "./confirm.modal";
     CommonModule,
     CommonShareModule
   ],
-  declarations: [ItemModalContent, AddressModalContent, ConfirmModalContent],
+  declarations: [ItemModalContent, AddressModalContent, ConfirmModalContent, PromotionModalContent],
   providers:[TableService,ItemService],
-  exports:[ItemModalContent, AddressModalContent, ConfirmModalContent],
-  entryComponents:[ItemModalContent, AddressModalContent, ConfirmModalContent]
+  exports:[ItemModalContent, AddressModalContent, ConfirmModalContent, PromotionModalContent],
+  entryComponents:[ItemModalContent, AddressModalContent, ConfirmModalContent, PromotionModalContent]
 
 })
 export class ItemModalModule { }
