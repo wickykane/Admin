@@ -10,24 +10,45 @@ export class OrderService {
         let url = 'rfq';
         return this.ApiService.get(url, params);
     }
-     getList(params) {
-        let url='sale-price/get-list';
-         return this.ApiService.get(url,params);
-     }       
-      createSalePrice(params) {
-         let url ='sale-price';
-         return this.ApiService.post(url, params);
-     }
-     getDetailSalePrice(id) {
-         let url ='sale-price/'+id;
-         return this.ApiService.get(url);
-     }
-     updateSalePrice(id,params){
-         let url ='sale-price/'+id;
-         return this.ApiService.put(url, params);
-     }
+    getList(params) {
+        let url = 'sale-price/get-list';
+        return this.ApiService.get(url, params);
+    }
+    createSalePrice(params) {
+        let url = 'sale-price';
+        return this.ApiService.post(url, params);
+    }
+    getDetailSalePrice(id) {
+        let url = 'sale-price/' + id;
+        return this.ApiService.get(url);
+    }
+    updateSalePrice(id, params) {
+        let url = 'sale-price/' + id;
+        return this.ApiService.put(url, params);
+    }
 
     //Order
+  
+    getBuyerType() {
+        let url = 'company_type/all';
+        return this.ApiService.get(url);
+    }
+    
+    getActiveProgram(id) {
+        let url = 'buyer/active-programs/' + id;
+        return this.ApiService.get(url);
+    }
+
+    getListCompany(type) {
+        let url = 'company/list-option-company?buyer_type=' + type;
+        return this.ApiService.get(url);
+    }
+
+    getDetailCompany(id) {
+        let url = 'company/information-of-company/' + id;
+        return this.ApiService.get(url);
+    }
+
     getListOrder(params) {
         let url = 'order/list-order';
         return this.ApiService.get(url, params);

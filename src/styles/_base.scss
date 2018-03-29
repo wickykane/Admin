@@ -1,11 +1,31 @@
 @import './bootstrap/_variables.scss';
 
 .ng-select {
-    .ng-control  {
-        min-height: 21px !important;
-        border-radius: 0 !important;
-        max-width: 200px;
+    &.ng-single .ng-control {
+        height: inherit !important;
+        // min-height: 21px !important;
+        max-width: inherit !important;
     }
+
+    &.ng-multiple {
+        .ng-control  {
+            min-height: 21px !important;
+            border-radius: 0 !important;
+            max-width: 200px;
+        }
+        .ng-arrow-zone .ng-arrow {
+            border-color: #444 transparent transparent !important;
+            border-style: solid;
+            border-width: 6px 3px 2.5px !important;
+        }
+    
+        &.opened>.ng-control .ng-arrow {
+            top: -2px;
+            border-color: transparent transparent #444;
+            border-width: 0 3px 6px;
+        }
+    }
+
     &.ng-multiple .ng-control .ng-value-container {
         padding-top: 0 !important;
         .ng-input {
@@ -20,17 +40,6 @@
                 padding: 0px 3px 0px 0px;
             }
         }
-    }
-    
-    .ng-arrow-zone .ng-arrow {
-        border-color: #444 transparent transparent !important;
-        border-style: solid;
-        border-width: 6px 3px 2.5px !important;
-    }
-    &.opened>.ng-control .ng-arrow {
-        top: -2px;
-        border-color: transparent transparent #444;
-        border-width: 0 3px 6px;
     }
 } 
 
