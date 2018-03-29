@@ -20,6 +20,13 @@ const routes : Routes = [
     component: BuyerRfqComponent
   },
   {
+    path: 'sale-quotation', 
+    children : [
+        { path: '', component: SaleQuotationComponent }  
+        
+    ]
+},
+  {
     path: 'sales-price', 
     children : [
         { path: '', component: SalePriceComponent },    
