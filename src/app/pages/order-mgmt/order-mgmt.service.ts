@@ -41,6 +41,7 @@ export class OrderService {
 
     countOrderStatus() {
         let url = 'reports/order-status-count';
+        return this.API.get(url);
     }
 
 
