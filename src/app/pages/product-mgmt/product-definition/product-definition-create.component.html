@@ -14,8 +14,8 @@
                     <div class="col-md-3">
                         <label for="campaign_name" class="control-label" translate>Product Type</label>
                         <span class="text-danger">( * )</span>
-                        <select name="product_type" formControlName="sts" class="form-control">
-                                <option *ngFor="let item of listMaster['productType']" [value]="item.id">{{ item.name }}</option>
+                        <select name="product_type" formControlName="product_type" class="form-control" (change)="changeProductType(this.generalForm.value.product_type)">
+                            <option *ngFor="let item of listMaster['productType']" [value]="item.id">{{ item.name }}</option>
                         </select>
                     </div>
                     <div class="col-md-3">
@@ -24,81 +24,91 @@
                         <input type="text" class="form-control" name="campaign_name" formControlName="name">
                     </div>
                     <div class="col-md-3">
-                        <label for="sale_price" class="control-label" translate>Product Category </label>
+                        <label for="category_id" class="control-label" translate>Product Category </label>
                         <span class="text-danger">( * )</span>
-                        <input type="text" class="form-control" name="sale_price" formControlName="sale_price">
+                        <select name="category_id" formControlName="category_id" class="form-control">
+                            <option *ngFor="let item of listMaster['productCategory']" [value]="item.id">{{ item.name }}</option>
+                        </select>
                     </div>
                     <div class="col-md-3">
-                        <label for="cost_price" class="control-label" translate>Quotable </label>
+                        <label for="is_quotable" class="control-label" translate>Quotable </label>
                         <span class="text-danger">( * )</span>
-                        <input type="text" class="form-control" name="cost_price" formControlName="cost_price">
+                        <select name="is_quotable" formControlName="is_quotable" class="form-control">
+                            <option *ngFor="let item of listMaster['quotable']" [value]="item.id">{{ item.name }}</option>
+                        </select>
                     </div>
                 </div>
                 <div class="row col-md-9">
                     <div class="col-md-3">
-                        <label for="campaign_name" class="control-label" translate>Supplier</label>
+                        <label for="supplier_id" class="control-label" translate>Supplier</label>
                         <span class="text-danger">( * )</span>
-                        <input type="text" class="form-control" name="campaign_name" formControlName="name">
-                    </div>
-                    <div class="col-md-3">
-                        <label for="sts" class="control-label" translate>Supplier Product Code</label>
-                        <span class="text-danger">( * )</span>
-                        <select name="sts" formControlName="sts" class="form-control">
-                            <option *ngFor="let item of listMaster['status']" [value]="item.id">{{ item.name }}</option>
+                        <select name="supplier_id" formControlName="supplier_id" class="form-control">
+                            <option *ngFor="let item of listMaster['supplier']" [value]="item.id">{{ item.company_name }}</option>
                         </select>
                     </div>
                     <div class="col-md-3">
-                        <label for="sale_price" class="control-label" translate>Volume (mL)</label>
+                        <label for="supp_prod_cd" class="control-label" translate>Supplier Product Code</label>
                         <span class="text-danger">( * )</span>
-                        <input type="text" class="form-control" name="sale_price" formControlName="sale_price">
+                        <input type="text" class="form-control" name="supp_prod_cd" formControlName="supp_prod_cd">
+
                     </div>
                     <div class="col-md-3">
-                        <label for="cost_price" class="control-label" translate>Country</label>
+                        <label for="volumne" class="control-label" translate>Volume (mL)</label>
                         <span class="text-danger">( * )</span>
-                        <input type="text" class="form-control" name="cost_price" formControlName="cost_price">
+                        <input type="text" class="form-control" name="volumne" formControlName="volumne">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="country_code" class="control-label" translate>Country</label>
+                        <span class="text-danger">( * )</span>
+                        <select name="country_code" formControlName="country_code" class="form-control" (change)="changeCountry()">
+                            <option *ngFor="let item of listMaster['countries']" [value]="item.country_code">{{ item.name }}</option>
+                        </select>
                     </div>
                 </div>
                 <div class="row col-md-9">
                     <div class="col-md-3">
-                        <label for="campaign_name" class="control-label" translate>Cost Price</label>
+                        <label for="price" class="control-label" translate>Cost Price</label>
                         <span class="text-danger">( * )</span>
-                        <input type="text" class="form-control" name="campaign_name" formControlName="name">
+                        <input type="text" class="form-control" name="price" formControlName="price">
                     </div>
                     <div class="col-md-3">
-                        <label for="sts" class="control-label" translate>Sales Price</label>
+                        <label for="resale_price" class="control-label" translate>Sales Price</label>
                         <span class="text-danger">( * )</span>
-                        <select name="sts" formControlName="sts" class="form-control">
-                            <option *ngFor="let item of listMaster['status']" [value]="item.id">{{ item.name }}</option>
+                        <input type="text" class="form-control" name="resale_price" formControlName="resale_price">
+
+                    </div>
+                    <div class="col-md-3">
+                        <label for="alcohol" class="control-label" translate>Alcohol (%)</label>
+                        <span class="text-danger">( * )</span>
+                        <input type="text" class="form-control" name="alcohol" formControlName="alcohol">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="brand_id" class="control-label" translate>Brand </label>
+                        <span class="text-danger">( * )</span>
+                        <select name="brand_id" formControlName="brand_id" class="form-control">
+                            <option *ngFor="let item of listMaster['listBrand']" [value]="item.id">{{ item.name }}</option>
                         </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label for="sale_price" class="control-label" translate>Alcohol (%)</label>
-                        <span class="text-danger">( * )</span>
-                        <input type="text" class="form-control" name="sale_price" formControlName="sale_price">
-                    </div>
-                    <div class="col-md-3">
-                        <label for="cost_price" class="control-label" translate>Brand </label>
-                        <span class="text-danger">( * )</span>
-                        <input type="text" class="form-control" name="cost_price" formControlName="cost_price">
                     </div>
                 </div>
                 <div class="row col-md-9">
                     <div class="col-md-3">
-                        <label for="campaign_name" class="control-label" translate>Grape Varieties</label>
+                        <label for="grape_varieties" class="control-label" translate>Grape Varieties</label>
                         <span class="text-danger">( * )</span>
-                        <input type="text" class="form-control" name="campaign_name" formControlName="name">
+                        <ng-select [multiple]="true" [items]="listMaster['grapeVarieties']" bindLabel="name" bindValue="id" formControlName="grape_varieties">
+                        </ng-select>                       
                     </div>
                     <div class="col-md-3">
-                        <label for="sts" class="control-label" translate>Year</label>
+                        <label for="year" class="control-label" translate>Year</label>
                         <span class="text-danger">( * )</span>
-                        <select name="sts" formControlName="sts" class="form-control">
-                            <option *ngFor="let item of listMaster['status']" [value]="item.id">{{ item.name }}</option>
+                        <input type="text" class="form-control" name="year" formControlName="year">
+
+                    </div>
+                    <div class="col-md-3">
+                        <label for="state_id" class="control-label" translate>Region</label>
+                        <span class="text-danger">( * )</span>
+                        <select name="state_id" formControlName="state_id" class="form-control">
+                            <option *ngFor="let item of listMaster['states']" [value]="item.id">{{ item.name }}</option>
                         </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label for="sale_price" class="control-label" translate>Region</label>
-                        <span class="text-danger">( * )</span>
-                        <input type="text" class="form-control" name="sale_price" formControlName="sale_price">
                     </div>
                 </div>
                 <div class="row col-md-3 ">
@@ -106,7 +116,7 @@
                         <div style="margin-top: 15px;" class="dropzone dz-clickable">
                             <label class="btn btn-block btn-primary btn-upload">
                                 Select files here to upload&hellip;
-                                <input type='file' accept="image/*" class="hidden" id="import-product" onchange="angular.element(this).scope().setFiles(event)"
+                                <input type='file' accept="image/*" class="hidden" id="import-product" (change)="setFiles($event)"
                                     multiple />
                             </label>
                         </div>
@@ -127,6 +137,6 @@
     </div>
     <div class="block-content block-content-full text-right">
         <button type="button" class="btn btn-default" [routerLink]="['/product-management/bundle']" translate>Cancel</button>
-        <button [disabled]="!generalForm.valid" type="button" class="btn btn-primary" (click)="createBundle()" translate>Save</button>
+        <button [disabled]="!generalForm.valid" type="button" class="btn btn-primary" (click)="createProduct()" translate>Save</button>
     </div>
 </section>
