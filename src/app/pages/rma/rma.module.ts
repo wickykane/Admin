@@ -12,6 +12,9 @@ import {PurchaseService} from '../purchase-mgmt/purchase.service';
 //Table Service
 import { CommonShareModule } from '../../shared/index';
 import { TableService } from "../../services/index";
+import {CustomerService} from '../customer-mgmt/customer.service';
+import { RmaCreateComponent } from './rma.create.component';
+import { RmaEditComponent } from './rma.edit.component';
 
 @NgModule({
   imports: [
@@ -23,7 +26,7 @@ import { TableService } from "../../services/index";
     CommonShareModule,
     RmaRoutingModule
   ],
-  declarations: [RmaComponent],
-  providers:[RmaService,TableService,PurchaseService]
+  declarations: [RmaComponent, RmaCreateComponent, RmaEditComponent],
+  providers:[RmaService,TableService,PurchaseService,CustomerService]
 })
 export class RmaModule { }
