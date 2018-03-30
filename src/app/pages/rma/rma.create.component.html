@@ -51,7 +51,7 @@
                           </select>
                       </div>
                       <div class="col-md-2">
-                        <label for="sale_price_list" class="control-label">Buyer Credit Balancee</label>
+                        <label for="sale_price_list" class="control-label">Buyer Credit Balance</label>
                         <select class="form-control" formControlName="sale_price_id">
                             <option value="null" selected="true">--Select--</option>
                             <option *ngFor="let item of listMaster['salePriceList']" [ngValue]="item.id">{{item.des}}</option>
@@ -128,12 +128,7 @@
                               </div>
                           </div>
                       </form>
-                  </div>
-                  <div class="col-md-12 text-right">
-                      <button type="button" class="btn btn-copy" (click)="copyToAddress('billing')">Copy to Billing Address
-                          <i class="fa fa-arrow-right"></i>
-                      </button>
-                  </div>
+                  </div>                  
               </div>
           </div>
           <div class="col-md-3">
@@ -201,12 +196,7 @@
                               </div>
                           </div>
                       </form>
-                  </div>
-                  <div class="col-md-12 text-right">
-                      <button type="button" class="btn btn-copy" (click)="copyToAddress('shipping')">Copy to Shipping Address
-                          <i class="fa fa-arrow-right"></i>
-                      </button>
-                  </div>
+                  </div>                  
               </div>
           </div>
           <div class="col-md-3">

@@ -48,64 +48,6 @@
 	background:#e8e816;
 }
 
-.label {
-    display: inline;
-    padding: .2em .6em .3em;
-    font-size: 75%;
-    font-weight: 700;
-    line-height: 1;
-    color: #fff;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: baseline;
-    border-radius: .25em;
-}
-
-.label-primary {
-    background-color: #5c90d2;
-}
-
-.label-primary[href]:hover,
-.label-primary[href]:focus {
-    background-color: #3675c5;
-}
-
-.label-success {
-    background-color: #46c37b;
-}
-
-.label-success[href]:hover,
-.label-success[href]:focus {
-    background-color: #34a263;
-}
-
-.label-info {
-    background-color: #70b9eb;
-}
-
-.label-info[href]:hover,
-.label-info[href]:focus {
-    background-color: #43a3e5;
-}
-
-.label-warning {
-    background-color: #f3b760;
-}
-
-.label-warning[href]:hover,
-.label-warning[href]:focus {
-    background-color: #efa231;
-}
-
-.label-danger {
-    background-color: #d26a5c;
-}
-
-.label-danger[href]:hover,
-.label-danger[href]:focus {
-    background-color: #c54736;
-}
-
 .dashboard-content {
     margin-top: 10px;
     margin-bottom: 10px;    
