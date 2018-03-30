@@ -36,11 +36,11 @@ export class MenuComponent implements OnInit {
                 sub: true,
                 child: [
                     {
-                        link: '/dashboard',
+                        link: '/dashboard/promotion',
                         name: 'Promotion Dashboard'
                     },
                     {
-                        link: '/blank-pag',
+                        link: '/dashboard/overall',
                         name: 'Overall Dashboard'
                     }
                 ]
