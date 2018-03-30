@@ -1,0 +1,154 @@
+<div [@routerTransition]>
+    <app-page-header [heading]="'Charts'" [icon]="'fa-bar-chart-o'"></app-page-header>
+
+    <div class="block-content pd-bottom bg-gray-light">
+        <div class="row">
+            <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
+                <div class="block-search">
+                    <label for="from" class="control-label">From Date</label>
+                    <div class="input-group">
+                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="from" ngbDatepicker #dp="ngbDatepicker">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" (click)="dp.toggle()" type="button">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="block-search">
+                    <label for="to" class="control-label">To Date</label>
+                    <div class="input-group">
+                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="to" ngbDatepicker #d="ngbDatepicker">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                  </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="block-btn-search">
+                <label class="control-label">&nbsp;</label>
+                <div class="group-btn-search">
+                    <button type="button" class="btn btn-primary" [disabled]="searchForm.invalid" (click)="searchAction()">Search</button>
+                    <button type="button" class="btn btn-default" (click)="resetAction()">Reset</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row dashboard-content">
+        <div class="col-lg-2 col-md-2 col-sm-3 col-xs-6">
+            <a class="dashboard-stat dashboard-stat-v2 blue" href="javascript: void(0)">
+                <div class="visual">
+                    <i class="fa fa-comments"></i>
+                </div>
+                <div class="details">
+                    <div class="number">
+                        <span data-counter="counterup" data-value="1349" *ngIf="info">{{info.campaign}}</span>
+                    </div>
+                    <div class="desc"> Campaigns </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-3 col-xs-6">
+            <a class="dashboard-stat dashboard-stat-v2 red" href="javascript: void(0)">
+                <div class="visual">
+                    <i class="fa fa-bar-chart-o"></i>
+                </div>
+                <div class="details">
+                    <div class="number">
+                        <span data-counter="counterup" data-value="1349" *ngIf="info">{{info.programs}}</span>
+                    </div>
+                    <div class="desc"> Programs </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-3 col-xs-6">
+            <a class="dashboard-stat dashboard-stat-v2 green" href="javascript: void(0)">
+                <div class="visual">
+                    <i class="fa fa-shopping-cart"></i>
+                </div>
+                <div class="details">
+                    <div class="number">
+                        <span data-counter="counterup" data-value="1349" *ngIf="info">{{info.budgets}}</span>
+                    </div>
+                    <div class="desc"> Budgets </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+
+    <div class="row chart-content">
+        <div class="col-md-4">
+            <div class="row">
+                <div class="col-md-8">
+                    <strong>PRODUCTS SOLD BY CATEGORY</strong>
+                </div>
+                <div class="col-md-4 text-right">
+                    <a href="javascript:void(0)" class="table-chart-btn" title="Data chart" data-toggle="tooltip" data-content="" data-trigger="hover" (click)="showTableSO()"><i class="fa fa-list" aria-hidden="true"></i></a>
+                </div>
+            </div>
+            <canvas baseChart [data]="data1" [labels]="label1" [chartType]="'pie'" [colors]="color1" [options]="option1"></canvas>
+        </div>
+        <div class="col-md-4">
+            <div class="row">
+                <div class="col-md-8">
+                    <strong>TOP EFFECTIVE CAMPAIGN BY SALES AMOUNT</strong>
+                </div>
+                <div class="col-md-4 text-right">
+                    <a href="javascript:void(0)" class="table-chart-btn" title="Data chart" data-toggle="tooltip" data-content="" data-trigger="hover" (click)="showTableSO()"><i class="fa fa-list" aria-hidden="true"></i></a>
+                </div>
+            </div>
+            <canvas baseChart [data]="data2" [labels]="label2" [chartType]="'horizontalBar'" [colors]="color1" [options]="option2"></canvas>
+        </div>
+        <div class="col-md-4">
+            <div class="row">
+                <div class="col-md-8">
+                    <strong>TOP PRODUCTS IN REVENUE</strong>
+                </div>
+                <div class="col-md-4 text-right">
+                    <a href="javascript:void(0)" class="table-chart-btn" title="Data chart" data-toggle="tooltip" data-content="" data-trigger="hover" (click)="showTableSO()"><i class="fa fa-list" aria-hidden="true"></i></a>
+                </div>
+            </div>
+            <canvas baseChart [data]="data3" [labels]="label3" [chartType]="'pie'" [colors]="color1" [options]="option1"></canvas>
+        </div>
+    </div>
+    <div class="row chart-content">
+        <div class="col-md-4">
+            <div class="row">
+                <div class="col-md-8">
+                    <strong>NEW CUSTOMERS DURING CAMPAIGN PERIOD</strong>
+                </div>
+                <div class="col-md-4 text-right">
+                    <a href="javascript:void(0)" class="table-chart-btn" title="Data chart" data-toggle="tooltip" data-content="" data-trigger="hover" (click)="showTableSO()"><i class="fa fa-list" aria-hidden="true"></i></a>
+                </div>
+            </div>
+            <canvas baseChart [data]="data4" [labels]="label4" [chartType]="'pie'" [colors]="color1" [options]="option1"></canvas>
+        </div>
+        <div class="col-md-4">
+            <div class="row">
+                <div class="col-md-8">
+                    <strong>EXPENSE ON BUDGET</strong>
+                </div>
+                <div class="col-md-4 text-right">
+                    <a href="javascript:void(0)" class="table-chart-btn" title="Data chart" data-toggle="tooltip" data-content="" data-trigger="hover" (click)="showTableSO()"><i class="fa fa-list" aria-hidden="true"></i></a>
+                </div>
+            </div>
+            <canvas baseChart [data]="data5" [labels]="label5" [chartType]="'doughnut'" [colors]="color5" [options]="option5"></canvas>
+        </div>
+        <div class="col-md-4">
+            <div class="row">
+                <div class="col-md-8">
+                    <strong>TOP BUYERS BY SALES AMOUNT</strong>
+                </div>
+                <div class="col-md-4 text-right">
+                    <a href="javascript:void(0)" class="table-chart-btn" title="Data chart" data-toggle="tooltip" data-content="" data-trigger="hover" (click)="showTableSO()"><i class="fa fa-list" aria-hidden="true"></i></a>
+                </div>
+            </div>
+            <canvas baseChart [data]="data6" [labels]="label6" [chartType]="'horizontalBar'" [colors]="color1" [options]="option2"></canvas>
+        </div>
+    </div>
+
+</div>
