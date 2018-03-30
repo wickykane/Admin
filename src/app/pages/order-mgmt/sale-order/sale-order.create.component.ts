@@ -32,6 +32,7 @@ export class SaleOrderCreateComponent implements OnInit {
     address: { primary: [{}], billing: [{}] }
   }
   public bill = {};
+  public billing;
   public ship = {};
 
   public order_info = {
