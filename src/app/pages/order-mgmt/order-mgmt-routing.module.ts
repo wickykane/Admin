@@ -11,6 +11,8 @@ import { DelieveryOrderDetailComponent } from './delivery-order/delivery-order-d
 //Sale Order
 import { SaleOrderComponent } from './sale-order/sale-order.component';
 import { SaleOrderCreateComponent } from './sale-order/sale-order.create.component';
+import { SaleOrderDetailComponent } from './sale-order/sale-order.detail.component';
+
 
 import { SalePriceComponent } from './sale-price/sale-price.component';
 import { SalePriceCreateComponent } from './sale-price/sale-price-create.component';
@@ -32,7 +34,7 @@ const routes: Routes = [
     children: [
       { path: '', component: SaleOrderComponent },
       { path: 'create', component: SaleOrderCreateComponent },
-      { path: 'edit/:id', component: SalePriceEditComponent }
+      { path: 'detail/:id', component: SaleOrderDetailComponent }
     ]
   },
   {
