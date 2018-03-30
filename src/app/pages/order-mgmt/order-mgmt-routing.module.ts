@@ -51,7 +51,7 @@ const routes: Routes = [
     ]
 },
 {
-  path: 'delievery-order',
+  path: 'delivery-order',
   children: [
     { path: '', component: DeliveryOrderComponent },
     { path: 'create', component: DelieveryOrderCreateComponent },

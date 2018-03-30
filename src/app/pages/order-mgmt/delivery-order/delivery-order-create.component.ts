@@ -43,7 +43,7 @@ export class DelieveryOrderCreateComponent implements OnInit {
                 'order_id': [null, Validators.required],
                 'buyer_name': [{ value: null, disabled: true }],
                 'address_id':[null, Validators.required],
-                'delivey_address': [null],
+                'delivery_address': [null],
                 'delivery_time':[null, Validators.required],
                 'delivery_date': [null],
                 'consignee_name': [null],
@@ -129,7 +129,7 @@ export class DelieveryOrderCreateComponent implements OnInit {
              if(address.address_id == address_id)
                  return address;
          });
-         this.generalForm.value.delivey_address = item[0].full_address;
+        this.generalForm.patchValue({'delivey_address': item[0].full_address});
          let params ={
              "order_id":order_id,
              "address_id":address_id,

@@ -13,9 +13,9 @@
             <form [formGroup]="generalForm" class="form-search full-width form-horizontal">
                 <div class="row ">
                     <div class="col-md-2">
-                        <label for="code" class="control-label">Doc No #</label>
+                        <label for="delivery_code" class="control-label">Doc No #</label>
                         <span class="text-danger">( * )</span>
-                        <input type="text" class="form-control" name="code" formControlName="code">
+                        <input type="text" class="form-control" name="delivery_code" formControlName="delivery_code">
                     </div>
                     <div class="col-md-2">
                         <label for="delivery_type" class="control-label">Delivery Type<span class="text-danger">( * )</span></label>
@@ -80,8 +80,8 @@
                                 </select>
                     </div>
                     <div class="col-md-2">
-                        <label for="delivey_address" class="control-label">&nbsp;</label>
-                        <input type="text" class="form-control" name="delivey_address" formControlName="delivey_address">
+                        <label for="delivery_address" class="control-label">&nbsp;</label>
+                        <input type="text" class="form-control" name="delivery_address" formControlName="delivery_address">
                     </div>
                     <div class="col-md-2">
                         <label for="delivery_time" class="control-label">Delivery Time<span class="text-danger">( * )</span></label>
@@ -110,8 +110,11 @@
                         <input type="text" class="form-control" name="consignee_phone" formControlName="consignee_phone">
                     </div>
                     <div class="col-md-2">
-                        <label for="sts" class="control-label">Status</label>
-                        <p class="">New</p>
+                        <label for="status_id" class="control-label">Status<span class="text-danger">( * )</span></label>
+                        <select class="form-control" formControlName="status_id">
+                                  <option value="null" selected="true"  >--Select--</option>
+                                  <option *ngFor="let item of listMaster['status']" [ngValue] = "item.id">{{item.name}}</option>
+                                </select>
                     </div>
 
 
@@ -148,7 +151,7 @@
                                 <td>{{item.uom_name}}</td>
                                 <td>{{item.need_qty}}</td>
                                 <td>
-                                  <input [(ngModel)]="item.delivery_qty" class="form-control" type="text">
+                                  <input [(ngModel)]="item.delivery_qty" class="form-control" type="text" disabled>
                                 </td>
                             </tr>
                         </tbody>
@@ -159,7 +162,7 @@
 
         <div class="block-content block-content-full text-right">
             <button type="button" class="btn btn-default" [routerLink]="['/order-management/delievery-order']">Cancel</button>
-            <button type="button" [disabled]="generalForm.invalid" class="btn btn-primary" (click)="createDeliveryOrder()">Save</button>
+            <button type="button" [disabled]="generalForm.invalid" class="btn btn-primary" (click)="updateDeliveryOrder()">Save</button>
         </div>
     </section>
 </div>
