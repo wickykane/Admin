@@ -32,11 +32,14 @@ export class HeaderComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.infoUser = (localStorage.getItem('currentUser')) || {};
-        if (this.infoUser) {
+        let user = (localStorage.getItem('currentUser'));
+        if (user) {            
             this.infoUser = JSON.parse(this.infoUser);
         }
-        if (!this.infoUser && this.JwtService.getToken()) this.getUserDetail();
+        else{
+            if (this.JwtService.getToken()) this.getUserDetail();
+        }
+        
     }
 
     getUserDetail() {
