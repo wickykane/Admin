@@ -1,0 +1,170 @@
+<div id="printOrder" class="d-none">
+    <div class="row">
+        <div class="col-sm-6 padding-none float-l padding-t" style="padding-left: 20px;">
+            <img src="../../../../assets/images/logo.png" alt="National Autobody Parts Warehouse" width="50%" />
+
+        </div>
+        <div class="col-sm-6 padding-none float-r">
+            <div class="col-sm-12 padding-none" style="height: 30px; padding-right: 30px;">
+                <h3 style="color: #999999; line-height: 20px; margin:0; font-size: 16px; font-weight: bold;"># {{detail.general.code}}</h3>
+            </div>
+            <div class="col-sm-12 padding-none">
+                <div class="col-sm-4 padding-none float-l">
+                    <div>Date: </div>
+                    <div>Customer PO#: </div>
+                    <div *ngIf="detail.general.approval_num!=null">Approval Number: </div>
+                    <div>Order Type: </div>
+                    <div>Payment Type:</div>
+                </div>
+                <div class="col-sm-8 padding-none float-r txt-title">
+                    <div>{{detail.general.order_date}}</div>
+                    <div>{{detail.general.cus_po}}</div>
+                    <div>{{detail.general.approval_num}}</div>
+                    <div>{{detail.general.type_name}}</div>
+                    <div><span *ngIf="detail.general.payment_method=='AB'">Account Balance </span>
+                        <span *ngIf="detail.general.payment_method=='BT'">Bank Transfer </span>
+                        <span *ngIf="detail.general.payment_method=='CS'">Cash </span>
+                        <span *ngIf="detail.general.payment_method=='CC'">Credit Card</span></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr style="margin: 15px 0 0 0; border-top: 1px solid #dddddd; width: 100%;">
+
+    <div class="row mrg-top">
+        <div class="col-sm-6 padding-none float-l">
+            <div style="font-weight: bold;">TO</div>
+            <div>
+                <h4 style="font-weight: bold; font-size: 9px;">{{detail.buyer_info.buyer_name}}</h4>
+            </div>
+            <div>{{detail.buyer_info.buyer_email}}</div>
+            <div>{{detail.buyer_info.buyer_address_line}}</div>
+            <div>{{detail.buyer_info.buyer_address_city}}, {{detail.buyer_info.buyer_address_state}}, {{detail.buyer_info.buyer_address_zip}}</div>
+            <div>{{detail.buyer_info.buyer_phone}}</div>
+        </div>
+        <div class="col-sm-6 padding-none float-r">
+            <div style="font-weight: bold;">BILLING INFORMATION</div>
+            <div>
+                <h4 style="font-weight: bold; font-size: 9px;">{{detail.billing.name}}</h4>
+            </div>
+            <div>{{detail.billing.address_line}}</div>
+            <div>
+                {{detail.billing.city_name}}, {{detail.billing.state_name}}, {{detail.billing.zip_code}}
+            </div>
+            <div>
+                {{detail.billing.phone}}
+            </div>
+        </div>
+    </div>
+
+    <hr style="margin: 15px 0 0 0; border-top: 1px solid #dddddd; width: 100%;">
+    <div class="row mrg-top">
+        <div class="col-sm-12 padding-none">
+            <div class="form-group" style="margin-bottom: 0px;">
+                Make all checks payable to National Autobody Parts Warehouse
+            </div>
+            <div class="form-group" style="margin-bottom: 0px;">
+                <label class="txt-title">Mailing address:</label> 2000 E. Main St Grand Prairie, TX 75050
+            </div>
+
+        </div>
+
+        <p></p>
+    </div>
+
+
+    <hr style="margin: 0 15px 15px 0px; border-top: 1px solid #dddddd; width: 100%;">
+
+    <div>
+        <div class="row mrg-none">
+            <h4 style="font-weight: bold; color:#5fa4fc; font-size: 9px;">PRODUCTS</h4>
+        </div>
+        <div class="row mrg-none">
+            <table bordercolor="grey" border="1" cellpadding="3" cellspacing="0" width="100%">
+                <thead>
+                    <tr class="vendorListHeading">
+                        <th>Part #</th>
+                        <th>Product Name</th>
+                        <th class="text-nowrap text-center ">Order QTY</th>
+                        <th class="text-nowrap text-center ">Shipped QTY</th>
+                        <th class="text-nowrap text-center">Ship To</th>
+                        <th class="text-center">Cost</th>
+                        <th class="text-center">Discount</th>
+                        <th class="text-center">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of detail.subs">
+                        <td>{{item.sku}}</td>
+                        <td>{{item.des}}</td>
+                        <td class="text-center">{{item.qty}} </td>
+                        <td class="text-center">{{item.qty_shipped}} </td>
+                        <td>{{item.address_full}}</td>
+                        <td class="text-center">{{item.price |currency:'$'}}</td>
+                        <td class="text-center">{{item.discount|currency:'$'}}</td>
+                        <td class="text-center">{{item.total_price|currency:'$'}}</td>
+                    </tr>
+                </tbody>
+
+
+            </table>
+        </div>
+    </div>
+    <div class="row clearfix float-r100">
+        <div class="col-sm-2 padding-none float-rcol-2" style="text-align: right;">
+            <div class="form-group"><label style="font-weight: normal;">{{detail.general.sub_total_price |currency}}</label></div>
+            <div class="form-group"><label style="font-weight: normal;">{{(detail.general.sub_total_price * detail.general.discount_percent / 100)|currency}}</label></div>
+            <div class="form-group"><label style="font-weight: normal;">$ {{detail.general.shipping}}</label></div>
+            <div class="form-group"><label style="font-weight: normal;">{{detail.general.vat |currency}}</label></div>
+        </div>
+        <div class="col-sm-2 padding-none float-rcol-2">
+            <div class="form-group"><label>Subtotal</label></div>
+            <div class="form-group"><label>Discount ({{detail.general.discount_percent==null ? 0 :detail.general.discount_percent}}%)</label></div>
+            <div class="form-group"><label>Shipping Cost</label></div>
+            <div class="form-group"><label>Tax/VAT ({{detail.general.vat_percent}}%)</label></div>
+        </div>
+    </div>
+
+    <hr style="margin: 0 15px 15px 0px; border-top: 1px solid #dddddd; width: 100%;">
+
+    <div class="row clearfix float-r100">
+        <div class="col-sm-2 padding-none float-rcol-2" style="text-align: right;">
+            <div class="form-group">
+                <h4 style="margin: 0; color:#5fa4fc; font-size: 9px">{{detail.general.total_price |currency}}</h4>
+            </div>
+        </div>
+        <div class="col-sm-2 padding-none float-rcol-2">
+            <div class="form-group"><label>TOTAL</label></div>
+        </div>
+    </div>
+
+    <hr style="margin: 0px 15px 15px 0px; border-top: 1px solid #dddddd; width: 100%;">
+
+    <div class="row" id="info-signature" style="margin-top: 20px;">
+        <div class="col-sm-6 padding-none float-l" style="padding-right: 20px;">
+            <div class="form-group" style="margin: 0;">
+                <label>Comment or special instruction</label>
+            </div>
+            <div class="form-group">
+                <div style="min-height: 150px; padding: 10px; width:90%">
+                    {{detail.general.description}}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 padding-none float-r">
+            <div class="form-group" style="margin: 0;">
+                <label>Buyer signature</label>
+            </div>
+            <!-- <div class="form-group">
+                            <img width="50%" ng-src="{{detail.general.sig}}" alt="Signature image" class="img-responsive">
+                        </div> -->
+        </div>
+    </div>
+
+    <div id="footer ">
+        <p class="text-center" style="font-weight:600">Thank you for your business!</p>
+    </div>
+</div>

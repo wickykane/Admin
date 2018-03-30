@@ -78,7 +78,7 @@
                                           <span class="text-danger">(*)</span>
                                         </label>
                             <div>
-                                <select required class="form-control" id="buyer_type" name="buyer_type" [(ngModel)]="order_info.buyer_type" (change)="getListCompanySearch(order_info.buyer_type)">
+                                <select required class="form-control" id="buyer_type" name="buyer_type" [(ngModel)]="order_info['buyer_type']" (change)="getListCompanySearch(order_info['buyer_type'])">
                                         <option value="" selected="true" hidden="true" translate>Please select</option>
                                         <option *ngFor="let item of listMaster['buyerType']" [ngValue] = "item.id">{{item.name}}</option>                              
                                     </select>
@@ -145,37 +145,37 @@
                         <div class="form-group">
                             <label class=" control-label" translate>Name</label>
                             <div>
-                                <input class="form-control" [(ngModel)]="bill.address_name" disabled>
+                                <input class="form-control" [(ngModel)]="bill['address_name']" disabled>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class=" control-label" translate>Address Line</label>
                             <div>
-                                <textarea cols="3" class="form-control" style=" resize: none;" disabled>{{bill.street}}</textarea>
+                                <textarea cols="3" class="form-control" style=" resize: none;" disabled>{{bill['street']}}</textarea>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label" translate>Country</label>
                             <div>
-                                <input class="form-control" [(ngModel)]="bill.country_name" disabled>
+                                <input class="form-control" [(ngModel)]="bill['country_name']" disabled>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class=" control-label" translate>City</label>
                             <div>
-                                <input class="form-control" [(ngModel)]="bill.city_name" disabled>
+                                <input class="form-control" [(ngModel)]="bill['city_name']" disabled>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class=" control-label" translate>State/Province</label>
                             <div>
-                                <input class="form-control" [(ngModel)]="bill.state_name" disabled>
+                                <input class="form-control" [(ngModel)]="bill['state_name']" disabled>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class=" control-label" translate>Zip Code</label>
                             <div>
-                                <input [(ngModel)]="bill.zip_code" class="form-control" disabled>
+                                <input [(ngModel)]="bill['zip_code']" class="form-control" disabled>
                             </div>
                         </div>
                     </div>
@@ -190,14 +190,14 @@
                                               <span class="text-danger">(*)</span>
                                             </label>
                             <div>
-                                <select class="form-control" (change)="resetPaymentMethod()" [(ngModel)]="order_info.payment_method">
+                                <select class="form-control" (change)="resetPaymentMethod()" [(ngModel)]="order_info['payment_method']">
                                                 <option value="" selected="true" hidden="true" translate>Please select</option>
                                                     <option *ngFor="let item of payment.paymentMethod" [ngValue] = "item.id">{{item.name}}</option>                              
                                             </select>
                             </div>
                         </div>
 
-                        <div *ngIf="order_info.payment_method =='AB'" class="form-group">
+                        <div *ngIf="order_info['payment_method'] =='AB'" class="form-group">
                             <label class=" control-label" for="pay_type" translate>Line Of Credit</label>
                             <div>
                                 <div class="input-group">
@@ -209,7 +209,7 @@
 
                             </div>
                         </div>
-                        <div *ngIf="order_info.payment_method == 'AB'" class="form-group">
+                        <div *ngIf="order_info['payment_method'] == 'AB'" class="form-group">
                             <label class=" control-label" for="pay_type" translate>Balance Of Credit</label>
                             <div>
                                 <div class="input-group">
@@ -222,7 +222,7 @@
                             </div>
                         </div>
 
-                        <div *ngIf="order_info.payment_method && order_info.payment_method != 'CS' && order_info.payment_method != 'AB'">
+                        <div *ngIf="order_info['payment_method'] && order_info['payment_method'] != 'CS' && order_info['payment_method'] != 'AB'">
                             <div class="form-group">
                                 <label class=" control-label" for="pay_type" translate>Payment Terms</label>
                                 <div>
@@ -234,7 +234,7 @@
                             </div>
                         </div>
                         <div class="clearfix"></div>
-                        <div *ngIf="order_info.payment_method && order_info.payment_method != 'CS' && order_info.payment_method != 'AB'">
+                        <div *ngIf="order_info['payment_method'] && order_info['payment_method'] != 'CS' && order_info['payment_method'] != 'AB'">
                             <div class="form-group">
                                 <label class=" control-label" for="order-date" translate>Due Date</label>
                                 <div class="input-group">
@@ -396,7 +396,7 @@
                         <label class="control-label" style="font-weight: 400" translate>- Promo DC ($):</label>
                     </div>
                     <div class="col-md-6 col-sm-6 col-xs-6">
-                        <input class="form-control"  [(ngModel)]="promotionList.total_invoice_discount" class="form-control" type="text" readonly  (change)="updateTotal()">
+                        <input class="form-control"  [(ngModel)]="promotionList['total_invoice_discount']" class="form-control" type="text" readonly  (change)="updateTotal()">
                     </div>
                 </div>
                 <div class="row">
@@ -418,7 +418,7 @@
                         <input class="form-control"  [(ngModel)]="order_info.vat_percent" class="form-control" type="text"  (change)="updateTotal()">
                     </div>
                     <div class="col-md-6 col-sm-6 col-xs-6">
-                        <input class="form-control" readonly="true"  [(ngModel)]="order_info.vat_percent_amount" class="form-control" value="0" type="number">
+                        <input class="form-control" readonly="true"  [(ngModel)]="order_info['vat_percent_amount']" class="form-control" value="0" type="number">
                     </div>
                 </div>
                 <div class="row" style="margin-top: 10px;">
@@ -436,6 +436,6 @@
 
     <div class="block-content block-content-full text-right">
         <button type="button" class="btn btn-default" [routerLink]="['/order-management/sale-order']" translate>Cancel</button>
-        <button [disabled]="!generalForm.valid || !bill || !order_info.payment_method" type="button" class="btn btn-primary" (click)="createOrder()" translate>Save</button>
+        <button [disabled]="!generalForm.valid || !bill || !order_info['payment_method']" type="button" class="btn btn-primary" (click)="createOrder()" translate>Save</button>
     </div>
 </section>

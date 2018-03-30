@@ -1,5 +1,9 @@
 @import './bootstrap/_variables.scss';
 
+#print-container {
+    // display: none;
+}
+
 .ng-select {
     &.ng-single .ng-control {
         height: inherit !important;
