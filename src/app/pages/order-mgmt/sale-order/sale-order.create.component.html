@@ -435,7 +435,7 @@
 
 
     <div class="block-content block-content-full text-right">
-        <button type="button" class="btn btn-default" [routerLink]="['/promotion/budget']" translate>Cancel</button>
-        <button [disabled]="!generalForm.valid" type="button" class="btn btn-primary" (click)="createBudget()" translate>Save</button>
+        <button type="button" class="btn btn-default" [routerLink]="['/order-management/sale-order']" translate>Cancel</button>
+        <button [disabled]="!generalForm.valid || !bill || !order_info.payment_method" type="button" class="btn btn-primary" (click)="createOrder()" translate>Save</button>
     </div>
 </section>

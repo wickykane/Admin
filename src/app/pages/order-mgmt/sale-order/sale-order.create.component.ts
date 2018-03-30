@@ -6,6 +6,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { OrderService } from "../order-mgmt.service";
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { ToastrService } from 'ngx-toastr';
 
 import { ItemModalContent } from "../../../shared/modals/item.modal";
 import { PromotionModalContent } from "../../../shared/modals/promotion.modal";
@@ -40,7 +41,10 @@ export class SaleOrderCreateComponent implements OnInit {
     customer_po: '',
     total_discount: 0,
     company_id: null,
-    selected_programs: []
+    selected_programs: [],
+    discount_percent: 0,
+    vat_percent: 0,
+    shipping_cost: 0
   };
 
   public list = {
@@ -53,19 +57,18 @@ export class SaleOrderCreateComponent implements OnInit {
   /**
    * Init Data
    */
-  constructor(private vRef: ViewContainerRef, private fb: FormBuilder, public toastr: ToastsManager, private router: Router, private modalService: NgbModal, private orderService: OrderService) {
-    this.toastr.setRootViewContainerRef(vRef);
+  constructor(private vRef: ViewContainerRef, private fb: FormBuilder, public toastr: ToastrService, private router: Router, private modalService: NgbModal, private orderService: OrderService) {
     this.generalForm = fb.group({
       'customer_po': [null, Validators.required],
       'order_number': [null],
       'type': [null, Validators.required],
       'order_date': [null, Validators.required],
       'delivery_date': [null],
-      'buyer_type': [null, Validators.required],
-      'company_id': [null, Validators.required],
-      'payment_method': [null],
-      'payment_term': [null],
-      'payment_due_date': [null],
+      // 'buyer_type': [null, Validators.required],
+      // 'company_id': [null, Validators.required],
+      // 'payment_method': [null],
+      // 'payment_term': [null],
+      // 'payment_due_date': [null],
     });
   }
 
@@ -83,16 +86,7 @@ export class SaleOrderCreateComponent implements OnInit {
         { id: 30, name: "30 days" }
       ]
     }
-
     this.getBuyerType();
-    // this.getListStatus();
-    // this.getListBaseOn();
-    // this.getListBudget();
-    // this.getListCustomerSegment();
-    // this.getListPromotionLevel();
-    // this.getTypeProgram();
-
-    this.data['programs'] = [];
   }
   /**
    * Mater Data
@@ -132,12 +126,18 @@ export class SaleOrderCreateComponent implements OnInit {
    */
   selectData(data) { }
 
+  resetPromo() {
+    this.promotionList = [];
+    this.list.items.forEach(function (item) {
+      item.promotion_discount_amount = 0;
+    });
+  }
 
   updateTotal() {
     this.order_info.total = 0;
     this.order_info.sub_total = 0;
     if (this.list.items != undefined) {
-      this.list.items.forEach(function (item) {
+      this.list.items.forEach((item) => {
         var sub_quantity = 0;
         item.discount_percent = item.discount_percent != undefined ? item.discount_percent : 0;
         item.products.forEach((subItem, index) => {
@@ -151,7 +151,7 @@ export class SaleOrderCreateComponent implements OnInit {
         item.totalItem = value;
 
         if (value) {
-          this.order_info.sub_total =    this.order_info.sub_total + value;
+          this.order_info.sub_total = this.order_info.sub_total + value;
         }
       });
 
@@ -271,6 +271,8 @@ export class SaleOrderCreateComponent implements OnInit {
         this.list.items = this.list.items.concat(res.filter(function (item) {
           return listAdded.indexOf(item.item_id) < 0;
         }));
+
+        this.updateTotal();
       }
     });
     modalRef.componentInstance.flagBundle = true;
@@ -286,23 +288,48 @@ export class SaleOrderCreateComponent implements OnInit {
     this.data['programs'].splice(index, 1);
   };
 
-  createCampain = function () {
-    var params = this.generalForm.value;
-    params.programs = this.data['programs'];
-    console.log(params);
-    this.promotionService.postCampaign(params).subscribe(res => {
+
+  createOrder() {
+
+    var products = [];
+    this.list.items.forEach(function (item) {
+      products.push({
+        item_id: item.item_id,
+        quantity: item.order_quantity,
+        price: item.sell_price,
+        discount_percent: item.discount,
+        shipping_address_id: item.shipping_address_id,
+        warehouse_id: item.warehouse_id || 1
+      });
+    });
+
+    let params = {
+      "brand_id": 1,
+      "billing_id": this.bill['id'],
+      "selected_programs": this.order_info.selected_programs,
+      "items": this.list.items
+    };
+
+    params = Object.assign({}, this.order_info, params, this.generalForm.value);
+
+    this.orderService.createOrder(params).subscribe(res => {
       try {
-        this.toastr.success(res.message);
-        setTimeout(() => {
-          this.router.navigate(['/promotion/campaign']);
-        }, 500)
+        if (res.results.status) {
+          this.toastr.success(res.results.message);
+          setTimeout(() => {
+            this.router.navigate(['/order-management/sale-order']);
+          }, 500)
+        }
+        else {
+          this.toastr.error(res.results.message, null, { enableHtml: true });
+        }
       } catch (e) {
         console.log(e);
       }
     },
       err => {
-        this.toastr.error(err.message, null, { enableHTML: true });
+        this.toastr.error(err.message, null, { enableHtml: true });
       })
-
   }
+
 }
