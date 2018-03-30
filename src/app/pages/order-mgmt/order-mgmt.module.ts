@@ -14,6 +14,7 @@ import { DelieveryOrderDetailComponent } from './delivery-order/delivery-order-d
 //Sale Order
 import { SaleOrderComponent } from './sale-order/sale-order.component';
 import { SaleOrderCreateComponent } from './sale-order/sale-order.create.component';
+import { SaleOrderDetailComponent } from './sale-order/sale-order.detail.component';
 
 
 //Sale Price
@@ -48,7 +49,8 @@ import { ItemModalModule } from "../../shared/modals/item.module";
         SalePriceCreateComponent,
         SalePriceEditComponent,
         SaleQuotationComponent,
-        SaleOrderCreateComponent],
+        SaleOrderCreateComponent,
+        SaleOrderDetailComponent],
     providers: [OrderService, TableService]
 })
 export class OrderMgmtModule { }

@@ -9,6 +9,11 @@ export class OrderService {
 
     //Order
 
+    getOrderDetail(id) {
+        let url = ['order','order-detail',id].join('/');
+        return this.API.get(url);
+    }
+    
     getBuyerType() {
         let url = 'company_type/all';
         return this.API.get(url);
