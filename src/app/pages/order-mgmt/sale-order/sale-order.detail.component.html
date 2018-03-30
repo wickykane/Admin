@@ -1,8 +1,8 @@
 <div class="block">
     <div class="block-header bg-red-dark text-white">
-        <h3 class="block-title-lg"><span translate>LIST OF ORDERS ></span> #{{detail.general.code}}</h3>
+        <h3 class="block-title-lg"><span translate>LIST OF ORDERS ></span> #{{detail.general['code']}}</h3>
         <div class="wrap-keyboard">
-            <span class="fa fa-keyboard-o my-own-cheatsheet" (click)="KeyShorcut()"></span>
+            <span class="fa fa-keyboard-o my-own-cheatsheet"></span>
         </div>
     </div>
 
@@ -65,7 +65,7 @@
                                         <div class="form-group row">
                                             <label class="col-sm-6 control-label" translate>Order Number</label>
                                             <div class="col-sm-6">
-                                                <p class="form-control-static">#{{detail.general.code}}</p>
+                                                <p class="form-control-static">#{{detail.general['code']}}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -73,7 +73,7 @@
                                         <div class="form-group row">
                                             <label class="col-sm-6 control-label" translate>Shipping Cost</label>
                                             <div class="col-sm-6">
-                                                <p class="form-control-static">{{detail.general.shipping | currency}}</p>
+                                                <p class="form-control-static">{{detail.general['shipping'] | currency}}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -83,7 +83,7 @@
                                         <div class="form-group row">
                                             <label class="col-sm-6 control-label" translate>Sales Quote #</label>
                                             <div class="col-sm-6">
-                                                <p *ngIf="detail.general.sale_quote_num !=undefined" class="form-control-static">#{{detail.general.sale_quote_num}}</p>
+                                                <p *ngIf="detail.general['sale_quote_num'] !=undefined" class="form-control-static">#{{detail.general['sale_quote_num']}}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -91,7 +91,7 @@
                                         <div class="form-group row">
                                             <label class="col-sm-6 control-label" translate>Discount</label>
                                             <div class="col-sm-6">
-                                                <p class="form-control-static">{{(detail.general.discount + detail.general.prom_dsct_amt) | currency}}</p>
+                                                <p class="form-control-static">{{(detail.general['discount'] + detail.general['prom_dsct_amt']) | currency}}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -102,7 +102,7 @@
                                             <label class="col-sm-6 control-label" translate>Order Status</label>
                                             <div class="col-sm-6">
                                                 <p class="form-control-static">
-                                                    <span class="label label-info">{{detail.general.order_sts_name}}</span>
+                                                    <span class="label label-info">{{detail.general['order_sts_name']}}</span>
                                                     <!-- <span class="label label-info" *ngIf="detail.general.order_sts_short_name == 'NW'">{{detail.general.order_sts_name}}</span>
                                                     <span class="label label-warning" *ngIf="detail.general.order_sts_short_name == 'IP'">{{detail.general.order_sts_name}}</span>
                                                     <span class="label label-danger" *ngIf="detail.general.order_sts_short_name == 'PD'">{{detail.general.order_sts_name}}</span>
@@ -117,7 +117,7 @@
                                         <div class="form-group row">
                                             <label class="col-sm-6 control-label" translate>VAT</label>
                                             <div class="col-sm-6">
-                                                <p class="form-control-static">{{detail.general.vat | currency}}</p>
+                                                <p class="form-control-static">{{detail.general['vat'] | currency}}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -128,7 +128,7 @@
                                         <div class="form-group row">
                                             <label class="col-sm-6 control-label" translate>Customer PO</label>
                                             <div class="col-sm-6">
-                                                <p class="form-control-static">{{detail.general.cus_po}}</p>
+                                                <p class="form-control-static">{{detail.general['cus_po']}}</p>
                                             </div>
                                         </div>
 
@@ -137,7 +137,7 @@
                                         <div class="form-group row">
                                             <label class="col-sm-6 control-label" translate>Grand Total</label>
                                             <div class="col-sm-6">
-                                                <p class="form-control-static">{{detail.general.total_price | currency}}</p>
+                                                <p class="form-control-static">{{detail.general['total_price'] | currency}}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -148,7 +148,7 @@
                                         <div class="form-group row">
                                             <label class="col-sm-6 control-label" translate>Order Type</label>
                                             <div class="col-sm-6">
-                                                <p class="form-control-static">{{detail.general.type_name}}</p>
+                                                <p class="form-control-static">{{detail.general['type_name']}}</p>
                                             </div>
                                         </div>
 
@@ -157,7 +157,7 @@
                                         <div class="form-group row">
                                             <label class="col-sm-6 control-label" translate>Last Updated On</label>
                                             <div class="col-sm-6">
-                                                <p class="form-control-static">{{detail.general.updated_at}}</p>
+                                                <p class="form-control-static">{{detail.general['updated_at']}}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -169,10 +169,10 @@
                                             <label class="col-sm-6 control-label" translate>Payment Type</label>
                                             <div class="col-sm-6">
                                                 <p class="form-control-static">
-                                                    <span *ngIf="detail.general.payment_method=='AB'">Account Balance </span>
-                                                    <span *ngIf="detail.general.payment_method=='BT'">Bank Transfer </span>
-                                                    <span *ngIf="detail.general.payment_method=='CS'">Cash </span>
-                                                    <span *ngIf="detail.general.payment_method=='CC'">Credit Card</span>
+                                                    <span *ngIf="detail.general['payment_method']=='AB'">Account Balance </span>
+                                                    <span *ngIf="detail.general['payment_method']=='BT'">Bank Transfer </span>
+                                                    <span *ngIf="detail.general['payment_method']=='CS'">Cash </span>
+                                                    <span *ngIf="detail.general['payment_method']=='CC'">Credit Card</span>
                                                 </p>
                                             </div>
                                         </div>
@@ -182,7 +182,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <div class="form-group row" *ngIf="detail.general.approval_num !=('' || null)">
+                                        <div class="form-group row" *ngIf="detail.general['approval_num'] !=('' || null)">
                                             <label class="col-sm-6 control-label" translate>Approval number</label>
                                             <div class="col-sm-6">
                                                 <p class="form-control-static">{{detail.general.approval_num}}</p>
@@ -207,19 +207,19 @@
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label" translate>Name</label>
                                         <div class="col-sm-8">
-                                            <p>{{detail.buyer_info.buyer_name}}</p>
+                                            <p>{{detail.buyer_info['buyer_name']}}</p>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label" translate>Phone</label>
                                         <div class="col-sm-8">
-                                            <p>{{detail.buyer_info.buyer_phone}}</p>
+                                            <p>{{detail.buyer_info['buyer_phone']}}</p>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label" translate>Email</label>
                                         <div class="col-sm-8">
-                                            <p>{{detail.buyer_info.buyer_email}}</p>
+                                            <p>{{detail.buyer_info['buyer_email']}}</p>
                                         </div>
                                     </div>
                                 </form>
@@ -238,35 +238,35 @@
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label" translate>Country</label>
                                         <div class="col-sm-8">
-                                            <p>{{detail.billing.country_name}}</p>
+                                            <p>{{detail.billing['country_name']}}</p>
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label" translate>Street</label>
                                         <div class="col-sm-8">
-                                            <p>{{detail.billing.street}}</p>
+                                            <p>{{detail.billing['street']}}</p>
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label">City</label>
                                         <div class="col-sm-8">
-                                            <p>{{detail.billing.city_name}}</p>
+                                            <p>{{detail.billing['city_name']}}</p>
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label" translate>State</label>
                                         <div class="col-sm-8">
-                                            <p>{{detail.billing.state_name}}</p>
+                                            <p>{{detail.billing['state_name']}}</p>
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-sm-4 control-label" translate>Zip Code</label>
                                         <div class="col-sm-8">
-                                            <p>{{detail.billing.zip_code}}</p>
+                                            <p>{{detail.billing['zip_code']}}</p>
                                         </div>
                                     </div>
                                 </form>
