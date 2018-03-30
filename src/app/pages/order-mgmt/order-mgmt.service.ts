@@ -103,6 +103,10 @@ export class OrderService {
          let url ='delivery-order/detail/' + id;
           return this.API.get(url);
      }
+     updateDeliveryStatus(id,params){
+         var url ='delivery-order/update-manual/'+id;
+         return this.API.post(url, params);
+     }
 
      //Sale Quotation
      getListSalesQuotation(params){
