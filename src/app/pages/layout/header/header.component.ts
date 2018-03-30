@@ -32,7 +32,7 @@ export class HeaderComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.infoUser = (localStorage.getItem('currentUser'))
+        this.infoUser = (localStorage.getItem('currentUser')) || {};
         if (this.infoUser) {
             this.infoUser = JSON.parse(this.infoUser);
         }
