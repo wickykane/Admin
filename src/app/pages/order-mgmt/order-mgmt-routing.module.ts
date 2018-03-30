@@ -20,6 +20,7 @@ import { SalePriceEditComponent } from './sale-price/sale-price-edit.component';
 
 //Sale Quotation
 import { SaleQuotationComponent } from './sale-quotation/sale-quotation.component';
+import {SaleQuotationCreateComponent} from './sale-quotation/sale-quotation.create.component';
 
 
 
@@ -40,7 +41,8 @@ const routes: Routes = [
   {
     path: 'sale-quotation',
     children: [
-      { path: '', component: SaleQuotationComponent }
+      { path: '', component: SaleQuotationComponent },
+      {path:'create',component:SaleQuotationCreateComponent}
 
     ]
   },

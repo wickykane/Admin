@@ -24,6 +24,7 @@ import { SalePriceEditComponent } from './sale-price/sale-price-edit.component';
 
 //Sale Quotation
 import { SaleQuotationComponent } from './sale-quotation/sale-quotation.component';
+import {SaleQuotationCreateComponent} from './sale-quotation/sale-quotation.create.component';
 
 import { CommonShareModule, PageHeaderModule } from '../../shared/index';
 import { TableService } from "../../services/index";
@@ -49,6 +50,7 @@ import { ItemModalModule } from "../../shared/modals/item.module";
         SalePriceCreateComponent,
         SalePriceEditComponent,
         SaleQuotationComponent,
+        SaleQuotationCreateComponent,
         SaleOrderCreateComponent,
         SaleOrderDetailComponent],
     providers: [OrderService, TableService]
