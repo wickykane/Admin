@@ -15,11 +15,11 @@ import { PromotionModalContent } from "../../../shared/modals/promotion.modal";
 
 @Component({
   selector: 'app-create-quotation',
-  templateUrl: './sale-quotation.create.component.html',
+  templateUrl: './sale-quotation.rfq.create.component.html',
   styleUrls: ['./sale-quotation.component.scss']
 })
 
-export class SaleQuotationCreateComponent implements OnInit {
+export class SaleQuotationRfqCreateComponent implements OnInit {
   /**
    * Variable Declaration
    */

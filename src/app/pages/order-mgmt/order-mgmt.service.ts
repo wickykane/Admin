@@ -130,6 +130,10 @@ export class OrderService {
         let url='order/sale-quote/sent-to-buyer/'+sale_quote_id;
         return this.API.get(url);
     }
+    getHistoryBySaleQuote(sale_id){
+        let url ="order/sale-quote/history/"+sale_id;
+        return this.API.get(url);
+    }
     getListSaleQuotationStatus(){
         let url='order/sale-quote/list-status';
         return this.API.get(url);

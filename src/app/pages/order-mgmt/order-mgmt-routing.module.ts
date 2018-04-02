@@ -21,9 +21,8 @@ import { SalePriceEditComponent } from './sale-price/sale-price-edit.component';
 //Sale Quotation
 import { SaleQuotationComponent } from './sale-quotation/sale-quotation.component';
 import {SaleQuotationCreateComponent} from './sale-quotation/sale-quotation.create.component';
-
-
-
+import {SaleQuotationDetailComponent} from './sale-quotation/sale-quotation.detail.component';
+import {SaleQuotationRfqCreateComponent} from './sale-quotation/sale-quotation.rfq.create.component';
 
 const routes: Routes = [
   {
@@ -42,8 +41,9 @@ const routes: Routes = [
     path: 'sale-quotation',
     children: [
       { path: '', component: SaleQuotationComponent },
-      {path:'create',component:SaleQuotationCreateComponent}
-
+      {path:'create',component:SaleQuotationCreateComponent},
+      {path:'detail/:id',component:SaleQuotationDetailComponent},
+      {path:'create/rfq/:id',component:SaleQuotationRfqCreateComponent}
     ]
   },
   {
