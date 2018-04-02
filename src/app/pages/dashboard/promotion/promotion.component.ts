@@ -161,5 +161,8 @@ export class PromotionComponent implements OnInit {
     resetAction() {
         this.searchForm.reset();
     }
+    showTableSO(){
+        
+    }
 
 }
