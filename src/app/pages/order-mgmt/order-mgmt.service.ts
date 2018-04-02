@@ -25,17 +25,17 @@ export class OrderService {
     }
 
     getListCompany(type) {
-        let url = 'company/list-option-company?buyer_type=' + type;
+        let url = 'buyer/index?buyer_type=' + type;
         return this.API.get(url);
     }
 
     getDetailCompany(id) {
-        let url = 'company/information-of-company/' + id;
+        let url = 'buyer/detail/' + id;
         return this.API.get(url);
     }
 
     getListOrder(params) {
-        let url = 'order/list-order';
+        let url = 'order';
         return this.API.get(url, params);
     }
 

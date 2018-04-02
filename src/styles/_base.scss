@@ -4,6 +4,22 @@
     // display: none;
 }
 
+.search-block {
+    .tab-header {
+        width: 100%;
+    }
+    .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+        color: inherit;
+        background-color: inherit;
+        border-bottom: 1px solid #007bff;
+    }
+
+    .justify-content-start {
+        background-color: #fff;
+        padding-bottom: 10px;
+    }
+}
+
 .ng-select {
     &.ng-single .ng-control {
         height: inherit !important;

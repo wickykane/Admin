@@ -47,6 +47,9 @@ export class SaleOrderComponent implements OnInit {
       'date_type': [null],
       'date_to': [null],
       'date_from': [null],
+      'ship_date_from': [null],
+      'ship_date_to': [null],
+
     });
 
     //Assign get list function name, override letiable here
@@ -56,10 +59,9 @@ export class SaleOrderComponent implements OnInit {
 
   ngOnInit() {
     //Init Fn
-    this.listMoreFilter = [{ value: false, name: 'Date Type' }];
-    this.listMaster['type'] = [{ id: 'PKU', name: "Pickup " }, { id: 'CE', name: "Call" }, { id: 'ONL', name: "Ecommerce" }, { id: 'NO', name: "Normal Order" }];
-
-    this.countOrderStatus();
+    this.listMoreFilter = [{ value: false, name: 'Date Filter' }];
+    this.listMaster['type'] = [{ id: 'PKU', name: "Pickup " }, { id: 'CE', name: "Call" }, { id: 'ONL', name: "Online" }];
+    // this.countOrderStatus();
     this.getList();
     this.getListStatus();
   }
@@ -101,8 +103,8 @@ export class SaleOrderComponent implements OnInit {
 
     this.orderService.getListOrder(params).subscribe(res => {
       try {
-        this.list.items = res.results.rows;
-        this.tableService.matchPagingOption(res.results);
+        this.list.items = res.data.rows;
+        this.tableService.matchPagingOption(res.data);
       } catch (e) {
         console.log(e);
       }

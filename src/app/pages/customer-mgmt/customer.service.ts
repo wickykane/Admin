@@ -28,7 +28,7 @@ export class CustomerService {
         return this.API.get(url);
     }
     getListBuyer(params) {
-        let url = 'company/list-option-company';
+        let url = 'buyer/index';
         return this.API.get(url, params);
     }
     createBuyer(data) {
@@ -38,6 +38,10 @@ export class CustomerService {
     updateBuyer(data, id) {
         let url = 'buyer/update/' + id;
         return this.API.postForm(url, data);
+    }
+    deleteBuyer(id) {
+        let url = 'buyer/delete/' + id;
+        return this.API.delete(url);
     }
     getDetailBuyer(id) {
         let url = 'buyer/detail/' + id;

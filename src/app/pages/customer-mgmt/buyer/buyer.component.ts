@@ -42,7 +42,8 @@ export class BuyerComponent implements OnInit {
 
         this.searchForm = fb.group({
             'buyer_name': [null],
-            'email': [null]
+            'email': [null],
+            'buyer_type': [null]
         });
 
         //Assign get list function name, override letiable here
@@ -53,6 +54,14 @@ export class BuyerComponent implements OnInit {
     ngOnInit() {
         //Init Fn
         this.getList();
+        this.listMaster['buyerType'] = [{
+            id: 'RS',
+            name: 'Repair Shop'
+          }, {
+            id: 'NU',
+            name: 'Normal Customer'
+          }];
+
         this.user = JSON.parse(localStorage.getItem('currentUser'));
     }
     /**
@@ -64,6 +73,16 @@ export class BuyerComponent implements OnInit {
     /**
      * Internal Function
      */
+    delete(id) {
+        this.customerService.deleteBuyer(id).subscribe( res => {
+            try {
+                this.toastr.success(res.message);
+                this.getList();
+            } catch (e) {
+                console.log(e);
+            }
+        })
+    }
 
     getList() {
         let params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
@@ -71,8 +90,8 @@ export class BuyerComponent implements OnInit {
 
         this.customerService.getListBuyer(params).subscribe(res => {
             try {
-                this.list.items = res.results.rows;
-                this.tableService.matchPagingOption(res.results);
+                this.list.items = res.data.rows;
+                this.tableService.matchPagingOption(res.data);
             } catch (e) {
                 console.log(e);
             }

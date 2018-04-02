@@ -1,61 +1,185 @@
 <div class="block anchor-scroll">
     <app-page-header [heading]="'ITEM LIST'" [icon]="'fa-th-list'"></app-page-header>
-    <div class="block-content pd-bottom tab-content bg-gray-light">
+    <div class="search-block block-content pd-bottom tab-content bg-gray-light">
         <div class="row">
-            <form class="form-horizontal form-search" [formGroup]="searchForm">
+            <ngb-tabset class="tab-header" activeId="vin" type="pills" (tabChange)="resetTab()">
+                <ngb-tab id="search" title="Search By:" [disabled]="true">
+                    <ng-template ngbTabContent>
+
+                    </ng-template>
+                </ngb-tab>
+                <ngb-tab id="vin" title="VIN">
+                    <ng-template ngbTabContent>
+                        <form class="form-horizontal form-search" [formGroup]="searchForm">
+                            <div class="block-search">
+                                <label for="so" class="control-label" translate>Number</label>
+                                <input type="text" name="so" formControlName="vin" class="form-control">
+                            </div>
+                            <div class="block-btn-search">
+                                <label class="control-label">&nbsp;</label>
+                                <div>
+                                    <button type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Search</button>
+                                    <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchForm)" translate>Reset</button>
+                                </div>
+                            </div>
+                        </form>
+                    </ng-template>
+                </ngb-tab>
+                <ngb-tab id="vehicle" title="VEHICLE">
+                    <ng-template ngbTabContent>
+                        <form class="form-horizontal form-search" [formGroup]="searchForm">
+                            <div class="block-search">
+                                <label for="type" class="control-label" translate>Year</label>
+                                <select formControlName="year" class="form-control">
+                                    <option value="null" selected="true" translate>--Select--</option>
+                                    <option *ngFor="let de of listMaster['years']" [ngValue]="de.id">{{de.name}}</option>
+                                </select>
+                            </div>
+                            <div class="block-search">
+                                <label for="type" class="control-label" translate>Make</label>
+                                <select formControlName="manufacturer_id" class="form-control">
+                                    <option value="null" selected="true" translate>--Select--</option>
+                                    <option *ngFor="let de of listMaster['manufacturers']" [ngValue]="de.manufacturer_id">{{de.name}}</option>
+                                </select>
+                            </div>
+                            <div class="block-search">
+                                <label for="type" class="control-label" translate>Model</label>
+                                <select (change)="changeToGetSubModel()" formControlName="model_id" class="form-control">
+                                    <option value="null" selected="true" translate>--Select--</option>
+                                    <option *ngFor="let de of listMaster['models']" [ngValue]="de.model_id">{{de.name}}</option>
+                                </select>
+                            </div>
+                            <div class="block-search">
+                                <label for="type" class="control-label" translate>Sub-Model</label>
+                                <select formControlName="sub_model_id" class="form-control">
+                                    <option value="null" selected="true" translate>--Select--</option>
+                                    <option *ngFor="let de of listMaster['sub_models']" [ngValue]="de.model_id">{{de.name}}</option>
+                                </select>
+                            </div>
+                            <div class="block-btn-search">
+                                <label class="control-label">&nbsp;</label>
+                                <div>
+                                    <button type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Search</button>
+                                    <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchForm)" translate>Reset</button>
+                                </div>
+                            </div>
+                        </form>
+                    </ng-template>
+                </ngb-tab>
+                <ngb-tab id="part_number" title="PART NUMBER">
+                    <ng-template ngbTabContent>
+                        <form class="form-horizontal form-search" [formGroup]="searchForm">
+                            <div class="block-search">
+                                <label for="so" class="control-label" translate>OEM #</label>
+                                <input type="text" name="so" formControlName="oem" class="form-control">
+                            </div>
+                            <div class="block-search">
+                                <label for="so" class="control-label" translate>Partlinks #</label>
+                                <input type="text" name="so" formControlName="partlinks_no" class="form-control">
+                            </div>
+                            <div class="block-search">
+                                <label for="so" class="control-label" translate>Part #</label>
+                                <input type="text" name="so" formControlName="part_no" class="form-control">
+                            </div>
+                            <div class="block-search">
+                                <label for="type" class="control-label" translate>Cert</label>
+                                <select formControlName="certification" class="form-control">
+                                            <option value="null" selected="true" translate>--Select--</option>
+                                            <option *ngFor="let de of listMaster['certification_partNumber']" [ngValue]="de.code">{{de.value}}</option>
+                                        </select>
+                            </div>
+                            <div class="block-btn-search">
+                                <label class="control-label">&nbsp;</label>
+                                <div>
+                                    <button type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Search</button>
+                                    <button type="button" class="btn btn-default" (click)="tableService.resetAction(searchForm); tableService.resetAction(filterForm)" translate>Reset</button>
+                                </div>
+                            </div>
+                        </form>
+                    </ng-template>
+                </ngb-tab>
+            </ngb-tabset>
+
+        </div>
+    </div>
+    <div class="block-content mt-1" *ngIf="list.items.length > 0">
+        <h5 class="title-form">Filter</h5>
+
+        <div class="row">
+            <form class="form-horizontal form-search" [formGroup]="filterForm">
                 <div class="block-search">
-                    <label for="so" class="control-label" translate>Code</label>
-                    <input type="text" name="so" formControlName="cd" class="form-control">
+                    <label for="type" class="control-label" translate>Brand</label>
+                    <ng-select [multiple]="true" [items]="listMaster['brands']" bindLabel="name" bindValue="brand_id" formControlName="brand_id_filter">
+                    </ng-select>
                 </div>
                 <div class="block-search">
-                    <label for="cus_po" class="control-label" translate>Name</label>
-                    <input type="text" name="cus_po" formControlName="name" class="form-control">
+                    <label for="type" class="control-label" translate>Category</label>
+                    <ng-select (change)="changeToGetSubCategory()" [multiple]="true" [items]="listMaster['categories']" bindLabel="name" bindValue="category_id" formControlName="category_id_filter">
+                    </ng-select>
                 </div>
                 <div class="block-search">
-                    <label for="type" class="control-label" translate>Status</label>
-                    <select formControlName="sts" class="form-control">
+                    <label for="type" class="control-label" translate>Sub-Category</label>
+                    <ng-select [multiple]="true" [items]="listMaster['sub_cat']" bindLabel="name" bindValue="category_id" formControlName="sub_category_id">
+                    </ng-select>
+                </div>
+                <div class="block-search">
+                    <label for="type" class="control-label" translate>Cert</label>
+                    <select formControlName="certification_filter" class="form-control">
                         <option value="null" selected="true" translate>--Select--</option>
-                        <option *ngFor="let de of listMaster['status']" [ngValue]="de.id">{{de.name}}</option>
-
+                        <option *ngFor="let de of listMaster['certification']" [ngValue]="de.code">{{de.value}}</option>
                     </select>
-
+                </div>
+                <div class="block-search">
+                    <label for="so" class="control-label" translate>OEM #</label>
+                    <input type="text" name="so" formControlName="oem_filter" class="form-control">
+                </div>
+                <div class="block-search">
+                    <label for="so" class="control-label" translate>Partlinks #</label>
+                    <input type="text" name="so" formControlName="partlinks_no_filter" class="form-control">
+                </div>
+                <div class="block-search">
+                    <label for="so" class="control-label" translate>Part #</label>
+                    <input type="text" name="so" formControlName="part_no_filter" class="form-control">
+                </div>
+                <div class="block-search">
+                    <label for="type" class="control-label" translate>Country of origin</label>
+                    <ng-select [multiple]="true" [items]="listMaster['countries']" bindLabel="name" bindValue="country_id" formControlName="country_id_filter">
+                    </ng-select>
                 </div>
                 <div class="block-btn-search">
                     <label class="control-label">&nbsp;</label>
                     <div>
                         <button type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Search</button>
-                        <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchForm)" translate>Reset</button>
+                        <button type="button" class="btn btn-default" (click)="tableService.resetAction(filterForm)" translate>Reset</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-
     <div class="block-content pd-top">
-        <button [routerLink]="['/promotion/budget/create']" style="margin: 10px 0;" class="btn btn-primary" translate>Create Order</button>
+        <button [disabled]="list.checklist.length == 0" (click)="createOrder()" style="margin: 10px 0;" class="btn btn-primary" translate>Create Order</button>
 
         <div class="table-responsive">
-            <table class="table table-striped table-vcenter table-hover custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex"
-                (onEnter)="selectData($event)">
+            <table class="table table-striped table-vcenter table-hover custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                 <thead class="bg-white">
                     <tr>
                         <th>
                             <label class="css-input css-checkbox css-checkbox-default">
-                                <input class="cb-all" type="checkbox" [ngModel]="selectItem.isCheckAll" (change)="checkAll()">
+                                <input class="cb-all" type="checkbox" [(ngModel)]="checkAllItem" (change)="checkAll($event)">
                                 <span></span>
                             </label>
                         </th>
-                        <th translate>Image</th>
-                        <th translate >SKU</th>
-                        <th translate>Product Name</th>
-                        <th translate style="min-width: 100px;">Category</th>
-                        <th translate>Country Of Origin</th>
-                        <th translate>Manufacturer</th>
-                        <th translate>Supplier</th>
-                        <th translate>UOM</th>
-                        <th translate>Avail QTY</th>
-                        <th translate>On Water QTY</th>
-                        <th translate>Cost Price</th>
+                        <th translate>Part #</th>
+                        <th translate>Oem #</th>
+                        <th translate>Partlinks #</th>
+                        <th translate >Description</th>
+                        <th translate>Make</th>
+                        <th translate>Model</th>
+                        <th translate>From</th>
+                        <th translate>To</th>
+                        <th translate>Brand</th>
+                        <th translate>Cert</th>
+                        <th translate>Country</th>
                         <th translate>Sales Price</th>
                     </tr>
                 </thead>
@@ -63,24 +187,22 @@
                 <tr *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                     <td>
                         <label class="css-input css-checkbox css-checkbox-default">
-                            <input class="cb-element" type="checkbox" [ngModel]="item.is_checked" (change)="checkItem(item)">
+                            <input class="cb-element" type="checkbox" [(ngModel)]="item.is_checked" (change)="isAllChecked()">
                             <span></span>
                         </label>
                     </td>
-                    <td style="cursor: pointer;">                   
-                        <img  src="{{item.thumb_img}}" alt="" width="30" height="30">                         
-                    </td>
                     <td>{{item.sku}}</td>
-                    <td>{{item.name}}</td>
-                    <td>{{item.product_category.name}}</td>
-                    <td>{{item.country_name}}</td>
+                    <td>{{item.oem}}</td>
+                    <td>{{item.partlinks_no}}</td>
+                    <td>{{item.des}}</td>
+                    <td>{{item.mfr_name}}</td>
+                    <td>{{item.model_name}}</td>
+                    <td>{{item.yr_from}}</td>
+                    <td>{{item.yr_to}}</td>
                     <td>{{item.brand_name}}</td>
-                    <td>{{item.supplier_name}}</td>
-                    <td>{{item.uom_name}}</td>
-                    <td>{{item.qty_available}}</td>
-                    <td>{{item.qty_on_water}}</td>
-                    <td>{{item.price|currency:'$'}}</td>
-                    <td>{{item.resale_price|currency:'$'}}</td>
+                    <td>{{item.cert=='Y'?'Yes':'No'}}</td>
+                    <th>{{item.ctr_name}}</th>
+                    <th>{{item.sell_price|currency:'$'}}</th>
                 </tr>
                 <tr *ngIf="list.items.length === 0">
                     <td colspan="100%" class="text-center">No data.</td>
@@ -103,9 +225,8 @@
             </div>
             <div class="col-md-6">
                 <div class="text-right">
-                    <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length"
-                        [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page"
-                        [maxSize]="tableService.maxSize" [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+                    <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length" [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page" [maxSize]="tableService.maxSize"
+                        [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
                 </div>
             </div>
         </div>

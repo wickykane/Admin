@@ -16,7 +16,7 @@ import { AppComponent } from './app.component';
 import { AuthGuard, JwtService} from './shared';
 import { AuthenticationService, ApiService } from './services/index';
 import { NgHttpLoaderModule } from 'ng-http-loader/ng-http-loader.module';
-
+import "angular2-navigate-with-data";
 
 
 // AoT requires an exported function for factories

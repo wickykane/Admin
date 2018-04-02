@@ -18,7 +18,7 @@ export class ItemService {
     }
 
     getReferenceList() {
-        let url = ['reference', 'item-data'].join('/');
+        let url = ['item', 'reference'].join('/');
         return this.API.get(url);
     }
     

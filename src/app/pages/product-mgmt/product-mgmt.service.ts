@@ -84,7 +84,7 @@ export class ProductService {
     }
     //Master Data
      getReferList() {
-        let url = ['reference', 'item-data'].join('/');
+        let url = ['item', 'reference'].join('/');
         return this.ApiService.get(url);
     }
      getProductType() {

@@ -6,7 +6,8 @@ import { ProductService } from "../product-mgmt.service";
 
 @Component({
   selector: 'app-item-list',
-  templateUrl: './item-list.component.html'  
+  templateUrl: './item-list.component.html',
+  styleUrls: ['./item-list.component.scss']
 })
 export class ItemListComponent implements OnInit {
 
@@ -14,16 +15,15 @@ export class ItemListComponent implements OnInit {
    * Variable Declaration
    */
   public searchForm: FormGroup;
+  public filterForm: FormGroup;
+
   public listMaster = {};
   public selectedIndex = 0;
   public list = {
     items: [],
     checklist: []
   }
-  public selectItem = {
-    isCheckAll: false
-}
-
+  public checkAllItem;
   public data = {};
 
   /**
@@ -32,13 +32,34 @@ export class ItemListComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
+    private router: Router,
     public tableService: TableService,
-    private productService:ProductService
-  ) { 
+    private productService: ProductService
+  ) {
     this.searchForm = fb.group({
       'cd': [null],
       'name': [null],
       'sts': [null],
+      'vin': [null],
+      'year': [null],
+      'manufacturer_id': [null],
+      'model_id': [null],
+      'sub_model_id': [null],
+      'oem': [null],
+      'partlinks_no': [null],
+      'part_no': [null],
+      'certification': [null],
+    });
+
+    this.filterForm = fb.group({
+      'brand_id_filter': [null],
+      'category_id_filter': [null],
+      'sub_category_id': [null],
+      'certification_filter': [null],
+      'oem_filter': [null],
+      'partlinks_no_filter': [null],
+      'part_no_filter': [null],
+      'country_id_filter': [null]
     });
 
     //Assign get list function name, override variable here
@@ -48,8 +69,26 @@ export class ItemListComponent implements OnInit {
 
   ngOnInit() {
     //Init Fn
-    this.getList();
+    this.listMaster['certification_partNumber'] = [{ code: "Y", value: "Yes" }, { code: "N", value: "No" }];
+    this.getListReference();
   }
+  /**
+   * Master Data
+   */
+
+  getListReference() {
+    this.productService.getReferList().subscribe(res => {
+      try {
+        this.listMaster['models'] = res.data.models;
+        this.listMaster['years'] = res.data.years.map(function (e) { return { id: e, name: e } });
+        this.listMaster['manufacturers'] = res.data.manufacturers;
+      } catch (e) {
+        console.log(e.message)
+      }
+    });
+
+  }
+
   /**
    * Table Event
    */
@@ -57,58 +96,73 @@ export class ItemListComponent implements OnInit {
     console.log(index);
   }
 
-checkExisted(list, id) {
-  return list.filter(function(item) {
-      return item.item_id == id;
-  }).length;
-}
-checkItem(item) {
-  if (item.is_checked && ! this.checkExisted(this.list.checklist, item.id)) {
-      this.list.checklist.push(item);
-  } else {
-      this.list.checklist = this.list.checklist.filter(function(it) {
-          return it.id != item.id;
-      });
+  checkAll(ev) {
+    this.list.items.forEach(x => x.is_checked = ev.target.checked);
+    this.list.checklist = this.list.items.filter(_ => _.is_checked);
   }
 
-  if (this.list.checklist.length == this.list.items.length) {
-      this.selectItem.isCheckAll = true;
-  } else this.selectItem.isCheckAll = false;
-}
-selectedItem (item) {
-  item.is_checked = !item.is_checked;
-  this.checkItem(item);
-}
-checkAll() {
-  var flag = this.selectItem.isCheckAll;
-  this.list.checklist = [];
-  this.list.items.forEach(function(item) {
-      item.is_checked = flag;
-      if (flag && !this.checkExisted(this.list.checklist, item.id)) {
-          this.list.checklist.push(item);
-      }
-  })
-};
+  isAllChecked() {
+    this.checkAllItem = this.list.items.every(_ => _.is_checked);
+    this.list.checklist = this.list.items.filter(_ => _.is_checked);
+  }
 
   /**
    * Internal Function
    */
+  resetTab() {
+    this.searchForm.reset();
+    this.filterForm.reset();
+    this.list.items = [];
+  }
+
+  changeToGetSubModel() {
+    let id = this.searchForm.value.model_id;
+    let arr = this.listMaster['models'];
+    for (var i = 0; i < arr.length; i++) {
+      if (arr[i]['model_id'] == id) {
+        return this.listMaster['sub_models'] = arr[i]['sub_models'];
+      }
+    }
+  }
+
+  changeToGetSubCategory() {
+    let id = this.filterForm.value.category_id_filter;
+    let arr = this.listMaster['categories'];
+    this.listMaster['sub_cat'] = [];
+    for (var k = 0; k < id.length; k++) {
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i]['category_id'] == id[k]) {
+          this.listMaster['sub_cat'] = this.listMaster['sub_cat'].concat(arr[i]['sub_categories']);
+        }
+      }
+    }
+  }
 
   getList() {
-    var params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
+    var params = Object.assign({}, this.tableService.getParams(), this.searchForm.value, this.filterForm.value);
     Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);
 
     this.productService.getListItem(params).subscribe(res => {
       try {
-        this.list.items = res.results.rows;
-        this.list.items.forEach(item=>{
-          item.thumb_img = item.wine_images[0].thumb_img!= undefined ? item.wine_images[0].thumb_img :'' ;
-        })
-        this.tableService.matchPagingOption(res.results);
+        if (!res.data.rows) {
+          this.list.items = [];
+          return;
+        }
+        this.list.items = res.data.rows;
+        this.listMaster['brands'] = res.data.meta_filters.brands;
+        this.listMaster['categories'] = res.data.meta_filters.categories;
+        this.listMaster['certification'] = res.data.meta_filters.certification;
+        this.listMaster['countries'] = res.data.meta_filters.countries;
+        this.tableService.matchPagingOption(res.data);
       } catch (e) {
         console.log(e);
       }
     });
   }
 
+  createOrder() {
+    let ids: any = (this.list.checklist.map(_ => {_.order_quantity = 1; return _;} ) || []);
+    this.router.navigateByData({url: ['order-management/sale-order/create'], data: ids});
+    // this.router.navigate(['order-management/sale-order/create', { data : ids }])
+  }
 }

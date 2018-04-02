@@ -6,7 +6,7 @@
                     <li *ngIf="!item.sub">
                         <a [routerLink]="[item.link]" [routerLinkActive]="['active']">
                             <i *ngIf="item.icon" class="{{item.icon}}"></i>
-                            <span class="topbar-mini-hide" >{{item.main_name}}</span>
+                            <span class="topbar-mini-hide" [innerHTML]="item.main_name"></span>
                         </a>
                     </li>
                     <li [routerLinkActive]="['open']" *ngIf="item.sub" [ngClass]="{'open': showMenu === item.flag}" (click)="addExpandClass(item.flag, $event)">
