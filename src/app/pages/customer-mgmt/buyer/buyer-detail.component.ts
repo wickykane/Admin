@@ -72,6 +72,19 @@ export class BuyerDetailComponent implements OnInit {
             'city_name': [null, Validators.required],
             'zip_code': [null, Validators.required]
         });
+
+        this.billingForm = fb.group({
+            'name': [null, Validators.required],
+            'email': [null],
+            'tax_number': [null],
+            'phone': [null],
+            'address_line': [null, Validators.required],
+            'country_code': [null, Validators.required],
+            'state_id': [null],
+            'city_name': [null, Validators.required],
+            'zip_code': [null, Validators.required]
+        });
+
         this.listMaster['creditStatus'] = [{ id: 1, name: 'Close' }, { id: 2, name: 'Open' }, { id: 3, name: 'Hold' }];
     }
 
@@ -262,10 +275,11 @@ export class BuyerDetailComponent implements OnInit {
         data['shipping'] = data['billing'] = [];
 
         objAddress.forEach(item => {
-            if (parseInt(item.type) === 2) data['shipping'].push(item);;
-            if (parseInt(item.type) === 1) data['billing'].push(item);;
+            this.billingForm.patchValue(Object.assign({}, item, { name: item.address_name}));
+            if (parseInt(item.type) === 2) data['shipping'].push(this.billingForm.value);
+            if (parseInt(item.type) === 1) data['billing'].push(this.billingForm.value);
         })
-
+        console.log(data);
         this.updateSupplier(data);
     }
 

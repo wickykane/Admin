@@ -37,7 +37,7 @@ export class CustomerService {
     }
     updateBuyer(data, id) {
         let url = 'buyer/update/' + id;
-        return this.API.post(url, data);
+        return this.API.postForm(url, data);
     }
     deleteBuyer(id) {
         let url = 'buyer/delete/' + id;
