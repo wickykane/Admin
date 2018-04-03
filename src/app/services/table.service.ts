@@ -6,7 +6,7 @@ export class TableService {
     context: any;
     constructor() { }
 
-    itemPerPageOptions = [10, 15, 30, 50];
+    itemPerPageOptions = [15, 30, 50,100];
     maxSize = 5;
     sortParams = {
         order: null,

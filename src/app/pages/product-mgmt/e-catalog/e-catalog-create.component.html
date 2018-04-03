@@ -1,0 +1,86 @@
+<section class="rma-page block">
+    <app-page-header [heading]="'CREATE NEW E-CATALOG'" [icon]="'fa-th-list'"></app-page-header>
+    <div class="row" style="padding-top:15px">
+        <div class="col-sm-12">
+            <div class="block-header bg-gray-lighter">
+                <h3 class="block-title" translate>GENERAL INFORMATION</h3>
+            </div>
+        </div>
+    </div>
+    <div>
+        <form [formGroup]="generalForm" class="form-search full-width form-horizontal">
+            <div class="row col-md-12">
+                <div class="col-md-2">
+                    <label for="campaign_name" class="control-label" translate>E-Catalog Name</label>
+                    <span class="text-danger">( * )</span>
+                    <input type="text" class="form-control" name="campaign_name" formControlName="name">
+                </div>
+                <div class="col-md-2">
+                    <label for="cost_price" class="control-label" translate>Sync to Web </label>
+                    <span class="text-danger">( * )</span>
+                    <div>
+                        <label class="switch" placement="top" ngbTooltip="Click to Active or Inactive">
+                            <input trueFalseValue trueValue="1" falseValue="0" type="checkbox" formControlName="is_sync">
+                            <div class="slider round"></div>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div class="">
+                        <div class="block-file">
+                            <div>
+                                <div class="">
+                                    <img *ngIf="!imageSelected" src="./assets/images/icon-upload.jpg" alt="">
+                                    <img *ngIf="imageSelected" src="{{imageSelected}}" alt="">
+                                </div>
+                            </div>
+                            <label class="btn-bs-file  btn btn-outline-secondary">UPLOAD IMAGE
+                                <input class="btn btn-default" id="file-to-upload" type="file" (change)="onFileChange($event)" accept="image/*">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="row" style="padding-top:15px">
+        <div class="col-sm-12">
+            <div class="block-header bg-gray-lighter">
+                <h3 class="block-title" translate>PRODUCT DETAIL</h3>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-bottom: 20px;margin-top: 10px;">
+        <div class="col-sm-12">
+            <div class="block-content">
+                <table class="table table-striped table-vcenter table-hover custom-table">
+                    <thead>
+                        <tr>
+                            <th role="button"> No </th>
+                            <th style="width:12%" role="button"> SKU </th>
+                            <th role="button"> Product Name </th>
+                            <th style="width:12%" role="button"> Product Category </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of items; let i = index">
+                            <td>{{$index + 1}}</td>
+                            <td>{{item.sku}}</td>
+                            <td> {{item.name}}</td>
+                            <td>{{item.product_category.name}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="block-content">
+                <button style="margin: 10px 0;" class="btn btn-primary" (click)="addNewProduct(this.generalForm.value.supplier_id)">Add New Item</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="block-content block-content-full text-right">
+        <button type="button" class="btn btn-default" [routerLink]="['/product-management/bundle']" translate>Cancel</button>
+        <button [disabled]="!generalForm.valid" type="button" class="btn btn-primary" (click)="createECatalog()" translate>Save</button>
+    </div>
+</section>

@@ -7,16 +7,16 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { HotkeyModule } from 'angular2-hotkeys';
-import { ToastModule } from 'ng2-toastr/ng2-toastr';
-
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {HotkeyModule} from 'angular2-hotkeys';
+import {ToastModule} from 'ng2-toastr/ng2-toastr';
+import { ToastrModule } from 'ngx-toastr';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthGuard, JwtService } from './shared';
 import { AuthenticationService, ApiService, ApiInterceptorService } from './services/index';
 import { NgHttpLoaderModule } from 'ng-http-loader/ng-http-loader.module';
-
+import "angular2-navigate-with-data";
 
 
 // AoT requires an exported function for factories
@@ -46,6 +46,7 @@ export function createTranslateLoader(http: HttpClient) {
         FormsModule,
         ReactiveFormsModule,
         ToastModule.forRoot(),
+        ToastrModule.forRoot(),
         HotkeyModule.forRoot()
     ],
     declarations: [

@@ -54,16 +54,6 @@ export class PromotionCampaignComponent implements OnInit {
   /**
    * Internal Function
    */
-  toDateObject(date) {
-    if (!date) return null;
-    const dateObject = new Date(date);
-    return {
-      day: dateObject.getDate(),
-      month: dateObject.getMonth() + 1,
-      year: dateObject.getFullYear()
-    }
-  }
-
   changeStatus(id, ac) {
     return;
   }

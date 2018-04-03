@@ -168,16 +168,6 @@ export class PromotionCampaignEditComponent implements OnInit {
     this.data['programs'].push({ 'is_dsct': 0, 'is_acc_bal': 0, 'is_promo_goods': 0 });
   };
 
-  toDateObject(date) {
-    if (!date) return null;
-    const dateObject = new Date(date);
-    return {
-      day: dateObject.getDate(),
-      month: dateObject.getMonth() + 1,
-      year: dateObject.getFullYear()
-    }
-  }
-
   openPromotionModal(item) {
     const modalRef = (item.level == 3 && item.type == 2) ? this.modalService.open(PromotionInvoiceModalContent, { size: 'sm' }) : this.modalService.open(PromotionModalContent, { size: 'lg' });
     modalRef.result.then(data => {

@@ -18,7 +18,7 @@ export class ProductService {
         let url ='item/reference';
         return this.ApiService.get(url);
     }
-    postProductDefinition(data,files){
+    postProductDefinition(data){
         let url ='item';
         return this.ApiService.postForm(url,data);
     }
@@ -69,7 +69,7 @@ export class ProductService {
         let url='catalog';
         return this.ApiService.get(url,params)
     }
-    postECatalog(data,files){
+    postECatalog(data){
         let url = 'catalog';
         return this.ApiService.postForm(url,data);
         
@@ -82,4 +82,38 @@ export class ProductService {
         let url='catalog/'+id;
         return this.ApiService.get(url)
     }
+    //Master Data
+     getReferList() {
+        let url = ['item', 'reference'].join('/');
+        return this.ApiService.get(url);
+    }
+     getProductType() {
+        let url = 'category';
+        return this.ApiService.get(url);
+    }
+     getProductCategory(id) {
+        let url = 'category?parent_id=' + id;
+        return this.ApiService.get(url);
+    }
+     getGrapeVariety() {
+        let url = 'grape_variety';
+        return this.ApiService.get(url);
+    }
+     getListBand() {
+        let url = 'brand/reference';
+        return this.ApiService.get(url);
+     }
+     getListSupplier(){
+         let url ='company/list-option-company?is_supplier=1';
+         return this.ApiService.get(url);
+     }
+     getCountry(){
+         let url='country/get-all';
+         return this.ApiService.get(url);
+     }
+     getStateByCountry(params){
+         let url ='state/get-by-country';
+         return this.ApiService.get(url,params);
+     }
+
 }

@@ -1,0 +1,442 @@
+<section>
+    <div class="block-header bg-red-dark text-white">
+        <h3 class="block-title-lg" translate>CREATE NEW ORDER</h3>
+        <div class="wrap-keyboard">
+            <span class="fa fa-keyboard-o my-own-cheatsheet"></span>
+        </div>
+    </div>
+</section>
+
+<section class="rma-page block">
+    <div class="row" style="padding-top:15px">
+        <div class="col-sm-12">
+            <div class="block-header bg-gray-lighter">
+                <h3 class="block-title" translate>GENERAL INFORMATION</h3>
+            </div>
+        </div>
+    </div>
+    <div>
+        <form [formGroup]="generalForm" class="form-search full-width form-horizontal">
+            <div class="row ">
+                <div class="col-md-2">
+                    <label for="sale_quote_num" class="control-label" translate>Sales Quote #</label>
+                    <span class="text-danger">(*)</span>
+                    <input type="text" class="form-control" name="sale_quote_num" formControlName="sale_quote_num">
+                </div>
+                <div class="col-md-2">
+                    <label for="rfq_id" class="control-label" translate>Buyer RFQ</label>
+                    <input type="text" class="form-control" name="rfq_id" formControlName="rfq_id">
+                </div>
+                <div class="col-md-2">
+                    <label class="control-label" for="ref_num" translate>Reference Number                           
+                      </label>
+                      <input type="text" class="form-control" name="ref_num" formControlName="ref_num">
+                </div>
+                <div class="col-md-2">
+                    <label for="order-date" class="control-label" translate>Quote Date</label>
+                    <span class="text-danger">(*)</span>
+                    <div class="input-group">
+                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="quote_date" ngbDatepicker #d="ngbDatepicker">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label for="order-date" class="control-label" translate>Expiry Date</label>
+                    <span class="text-danger">(*)</span>
+                    <div class="input-group">
+                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="expiry_date" ngbDatepicker #dt="ngbDatepicker">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" (click)="dt.toggle()" type="button">
+                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                        <label for="sale_executive_name" class="control-label" translate>Sales Excutive</label>
+                        <input type="text" class="form-control" name="sale_executive_name" formControlName="sale_executive_name">
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="block">
+        <div class="block-content" style="padding-top: 0px;">
+
+            <div class="row push-15-t">
+                <div class="col-md-3 border-right-2">
+                    <div class="block-header bg-gray-lighter-small " style="clear: both;">
+                        <h3 class="block-title" translate>BUYER INFORMATION</h3>
+                    </div>
+                    <div class="form-horizontal form-buyer">
+                        <div class="form-group">
+                            <label class=" control-label" for="billing_to" translate>Buyer Type
+                                          <span class="text-danger">(*)</span>
+                                        </label>
+                            <div>
+                                <select required class="form-control" id="buyer_type" name="buyer_type" [(ngModel)]="order_info['buyer_type']" (change)="getListCompanySearch(order_info['buyer_type'])">
+                                        <option value="" selected="true" hidden="true" translate>Please select</option>
+                                        <option *ngFor="let item of listMaster['buyerType']" [ngValue] = "item.id">{{item.name}}</option>                              
+                                    </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class=" control-label" for="search_type" translate> Buyer Name
+                                          <span class="text-danger">(*)</span>
+                                        </label>
+                            <div>
+                                <ng-select (change)="selectCompany(order_info.company_id)" [items]="listMaster['listCompanySearch']" bindLabel="company_name" bindValue="id" [(ngModel)]="order_info.company_id">
+                                </ng-select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class=" control-label" translate>Address Line</label>
+                            <div>
+                                <textarea cols="3" class="form-control" style=" resize: none;" disabled>{{order['address']['primary'][0]['street']}}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class=" control-label" translate>Country</label>
+                            <div>
+                                <input class="form-control" [(ngModel)]="order['address']['primary'][0]['country_name']" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" translate>City</label>
+                            <div>
+                                <input class="form-control" [(ngModel)]="order['address']['primary'][0]['city_name']" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class=" control-label" translate>State/Province</label>
+                            <div>
+                                <input class="form-control" [(ngModel)]="order['address']['primary'][0]['state_name']" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class=" control-label" translate>Zip Code</label>
+                            <div>
+                                <input class="form-control" [(ngModel)]="order['address']['primary'][0]['zip_code']" disabled>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-3 border-right-2">
+                    <div class="block-header bg-gray-lighter-small" style="clear: both;">
+                        <h3 class="block-title" translate>BILLING INFORMATION</h3>
+                    </div>
+                    <div class="form-horizontal form-buyer">
+                        <div class="form-group">
+                            <label class=" control-label" for="billing_to" translate> Billing To
+                                    <span class="text-danger">(*)</span>
+                                  </label>
+                            <div>
+                                <select required class="form-control" id="billing_to" name="search_type" [(ngModel)]="billing" (change)="selectAddress(billing,'billing')">
+                                      <option value="" selected="true" hidden="true" translate>Please select</option>
+                                      <option *ngFor="let item of order.address.billing" [ngValue] = "item.id">{{item.label}}</option>                              
+                                    </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class=" control-label" translate>Name</label>
+                            <div>
+                                <input class="form-control" [(ngModel)]="bill['address_name']" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class=" control-label" translate>Address Line</label>
+                            <div>
+                                <textarea cols="3" class="form-control" style=" resize: none;" disabled>{{bill['street']}}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" translate>Country</label>
+                            <div>
+                                <input class="form-control" [(ngModel)]="bill['country_name']" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class=" control-label" translate>City</label>
+                            <div>
+                                <input class="form-control" [(ngModel)]="bill['city_name']" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class=" control-label" translate>State/Province</label>
+                            <div>
+                                <input class="form-control" [(ngModel)]="bill['state_name']" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class=" control-label" translate>Zip Code</label>
+                            <div>
+                                <input [(ngModel)]="bill['zip_code']" class="form-control" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="block-header bg-gray-lighter-small" style="clear: both;">
+                        <h3 class="block-title" translate>PAYMENT</h3>
+                    </div>
+                    <div class="form-horizontal form-buyer">
+                        <div class="form-group">
+                            <label class=" control-label" translate>Payment Method
+                                              <span class="text-danger">(*)</span>
+                                            </label>
+                            <div>
+                                <select class="form-control" (change)="resetPaymentMethod()" [(ngModel)]="order_info['payment_method']">
+                                                <option value="" selected="true" hidden="true" translate>Please select</option>
+                                                    <option *ngFor="let item of payment.paymentMethod" [ngValue] = "item.id">{{item.name}}</option>                              
+                                            </select>
+                            </div>
+                        </div>
+
+                        <div *ngIf="order_info['payment_method'] =='AB'" class="form-group">
+                            <label class=" control-label" for="pay_type" translate>Line Of Credit</label>
+                            <div>
+                                <div class="input-group">
+                                    <input number-mask="2" class="form-control" disabled [(ngModel)]="order.information.line_of_credit" disabled>
+                                    <span class="input-group-btn">
+                                                  <button class="btn btn-default">$</button>
+                                                </span>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div *ngIf="order_info['payment_method'] == 'AB'" class="form-group">
+                            <label class=" control-label" for="pay_type" translate>Balance Of Credit</label>
+                            <div>
+                                <div class="input-group">
+                                    <input number-mask="2" class="form-control" [(ngModel)]="order.information.balance_of_credit" disabled>
+                                    <span class="input-group-btn">
+                                                  <button class="btn btn-default">$</button>
+                                                </span>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div *ngIf="order_info['payment_method'] && order_info['payment_method'] != 'CS' && order_info['payment_method'] != 'AB'">
+                            <div class="form-group">
+                                <label class=" control-label" for="pay_type" translate>Payment Terms</label>
+                                <div>
+                                    <select class="form-control" [(ngModel)]="order_info.payment_term">
+                                                  <option value="" selected="true" hidden="true" translate>Please select</option>
+                                                  <option *ngFor="let item of payment.paymentTerm" [ngValue] = "item.id">{{item.name}}</option>                              
+                                                </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div *ngIf="order_info['payment_method'] && order_info['payment_method'] != 'CS' && order_info['payment_method'] != 'AB'">
+                            <div class="form-group">
+                                <label class=" control-label" for="order-date" translate>Due Date</label>
+                                <div class="input-group">
+                                    <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="order_info.payment_due_date" ngbDatepicker #d1="ngbDatepicker">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
+                                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                                </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="block" style="margin-top:10px;">
+        <div class="block-header bg-gray-lighter" style="clear: both;">
+            <h3 class="block-title" translate>PRODUCTS DETAILS</h3>
+        </div>
+        <div class="block-content" style="padding-top: 10px; padding-bottom: 0;">
+            <div class="table-responsive">
+                <table class="table table-style table-order custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
+                    <thead>
+                        <tr>
+                            <th style="width:50px" translate>Action</th>
+                            <th style="width:150px" translate>Product #</th>
+                            <th translate>Product Name</th>
+                            <th translate>UOM</th>
+                            <th class="text-nowrap" style="width:100px" translate>Order QTY</th>
+                            <th class="text-nowrap text-center" translate>Ship To</th>
+                            <th class="text-center" style="width:100px" translate>Cost</th>
+                            <th style="width:100px" translate>Discount</th>
+                            <th style="width:200px" translate>Promo Discount</th>
+                            <th translate>Amount</th>
+                        </tr>
+                    </thead>
+                    <tr *ngIf="list['items'].length === 0">
+                        <td colspan="100%" class="text-center" translate>No data.</td>
+                    </tr>
+                    <tbody *ngFor="let item of list.items">
+                        <tr>
+                            <td>
+                                <button class="btn btn-danger btn-xs" type="button" (click)="deleteAction(item.item_id)">
+                          <i class="fa fa-trash"></i>
+                        </button>
+                            </td>
+                            <td>{{item.sku}}</td>
+                            <td>{{item.name}}</td>
+                            <td>{{item.uom_name}}</td>
+                            <td>
+                                <input style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" min="0" max="1000" (change)="updateTotal()">
+                            </td>
+
+                            <td>
+                                <select class="form-control" name="search_type" [(ngModel)]="item.shipping_address_id">
+                                    <option value="" selected="true" hidden="true" translate>Please select</option>
+                                    <option *ngFor="let item of order.address.shipping" [ngValue] = "item.id">{{((item.street+', '+item.city_name+', '+item.state_name+', '+item.zip_code+', '+item.country_name) | uppercase)}}</option>                              
+                                </select>
+                            </td>
+                            <td>
+
+                                <div>
+                                    <span>$</span>
+                                    <div style="display:inline-block;width:80%">
+                                        <input class="form-control input-sm" type="number" [(ngModel)]="item.resale_price" (change)="updateTotal()">
+                                    </div>
+                                </div>
+
+                            </td>
+                            <td>
+                                <input class="form-control input-sm" type="number" [(ngModel)]="item.discount_percent" (change)="updateTotal()">
+                            </td>
+                            <td>
+                                <div>
+                                    <span>$ </span>
+                                    <div style="display:inline-block;width:80%">
+                                        <input class="form-control input-sm" type="number" [(ngModel)]="item.promotion_discount_amount" (change)="updateTotal()" readonly>
+
+                                    </div>
+                                </div>
+
+                            </td>
+                            <td class="text-center">
+                                <span>{{item.totalItem | currency}}</span>
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="margin-top:10px">
+                <button type="button" class="btn btn-primary" (click)="addNewItem(list.items,1, order_info.company_id )" translate>Add New Item</button>
+                <button type="button" class="btn btn-primary" [disabled]="!(order_info.company_id && list.items.length > 0)" (click)="calcPromotion(order_info.company_id)" translate>Calculate Promotion</button>
+                <button type="button" class="btn btn-default" (click)="resetPromo()" translate>Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="block">
+        <div class="block-header bg-gray-lighter" style="clear: both;">
+            <h3 class="block-title" translate>PROMO PRODUCTS DETAILS</h3>
+        </div>
+        <div class="block-content" style="padding-top: 10px; padding-bottom: 0;">
+            <div class="table-responsive">
+                <table class="table table-style table-order custom-table table-stripped">
+                    <thead>
+                        <tr>
+                            <th translate>No</th>
+                            <th translate>Product</th>
+                            <th translate>Name</th>
+                            <th translate>UOM</th>
+                            <th translate>QTY</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of promotionList['items']; let $index = index;">
+                            <td>{{$index+1}}</td>
+                            <td>{{item.sku}}</td>
+                            <td>{{item.name}}</td>
+                            <td>{{item.uom_name}}</td>
+                            <td>{{item.qty}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+    <div class="block-content" style="padding-top: 0;">
+        <div class="row">
+            <div class="col-md-6">
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4 col-sm-4 col-xs-4">
+                        <label class="control-label" translate>Sub Total:</label>
+                    </div>
+                    <div class="col-md-8 col-sm-8 col-xs-8">
+                        <label class="pull-right">{{order_info.sub_total | currency}}</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <label class="control-label" style="font-weight: 400" translate>+ Shipping cost ($):</label>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <input class="form-control"  [(ngModel)]="order_info.shipping_cost" class="form-control" type="text"   (change)="updateTotal()">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <label class="control-label" style="font-weight: 400" translate>- Promo DC ($):</label>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <input class="form-control"  [(ngModel)]="promotionList['total_invoice_discount']" class="form-control" type="text" readonly  (change)="updateTotal()">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 col-sm-3 col-xs-3">
+                        <label class="control-label" style="font-weight: 400" translate>- Discount (%):</label>
+                    </div>
+                    <div class="col-md-3 col-sm-3 col-xs-3">
+                        <input class="form-control"  [(ngModel)]="order_info.discount_percent" class="form-control" type="text"    (change)="updateTotal()" >
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <input class="form-control" readonly="true"  [(ngModel)]="order_info.total_discount" class="form-control" value="0" type="number">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 col-sm-3 col-xs-3">
+                        <label class="control-label" style="font-weight: 400" translate>+ TAX/VAT (%):</label>
+                    </div>
+                    <div class="col-md-3 col-sm-3 col-xs-3">
+                        <input class="form-control"  [(ngModel)]="order_info.vat_percent" class="form-control" type="text"  (change)="updateTotal()">
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <input class="form-control" readonly="true"  [(ngModel)]="order_info['vat_percent_amount']" class="form-control" value="0" type="number">
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-md-4 col-sm-4 col-xs-4">
+                        <label class="control-label" style="font-weight: 800;" translate>Total:</label>
+                    </div>
+                    <div class="col-md-8 col-sm-8 col-xs-8">
+                        <label class="pull-right" style="font-weight: 800; text-align: right">{{order_info.total | currency}}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="block-content block-content-full text-right">
+        <button type="button" class="btn btn-default" [routerLink]="['/order-management/sale-order']" translate>Cancel</button>
+        <button [disabled]="!generalForm.valid || !bill || !order_info['payment_method']" type="button" class="btn btn-primary" (click)="createOrder()" translate>Save</button>
+    </div>
+</section>

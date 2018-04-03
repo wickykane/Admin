@@ -34,8 +34,8 @@ import { CommonShareModule } from '../../shared/index';
 import { TableService } from "../../services/index";
 
 //Modal
-import { ItemModalContent } from "../../shared/modals/item.modal";
 import { ItemModalModule } from "../../shared/modals/item.module";
+
 
 @NgModule({
   imports: [
@@ -60,10 +60,9 @@ import { ItemModalModule } from "../../shared/modals/item.module";
     SupplierDetailComponent,
     InboundDeliveryComponent,
     WarehouseReceiptComponent,
-    WarehouseReceiptCreateComponent,
-    ItemModalContent
+    WarehouseReceiptCreateComponent
 ],
 providers:[TableService,PurchaseService],
-entryComponents:[ItemModalContent]
+entryComponents:[]
 })
 export class PurchaseManagementModule {}

@@ -20,19 +20,18 @@ export class ItemModalContent implements OnInit {
      * Variable Declaration
      */
     public listMaster = {};
-    public selectedIndexItem = 0;
-    public selectedIndexBundle = 0;
+    public selectedIndex = 0;
+
     public list = {
         items: [],
-        selectedItems: [],
-        bundles: [],
-        selectedBundles: []
-    };
+        checklist: []
+    }
+    public checkAllItem;
+    public data = {};
 
-    public tableBundleService: any;
 
-    searchForm: FormGroup;
-    searchBundleForm: FormGroup;
+    public searchForm: FormGroup;
+    public filterForm: FormGroup;
 
     constructor(public activeModal: NgbActiveModal,
         public itemService: ItemService,
@@ -43,110 +42,125 @@ export class ItemModalContent implements OnInit {
         this.toastr.setRootViewContainerRef(vRef);
 
         this.searchForm = fb.group({
-            'sku': [null],
+            'cd': [null],
             'name': [null],
-            'category_id': [null]
+            'sts': [null],
+            'vin': [null],
+            'year': [null],
+            'manufacturer_id': [null],
+            'model_id': [null],
+            'sub_model_id': [null],
+            'oem': [null],
+            'partlinks_no': [null],
+            'part_no': [null],
+            'certification': [null],
         });
 
-        this.searchBundleForm = fb.group({
-            'cd': [null],
-            'name': [null]
+        this.filterForm = fb.group({
+            'brand_id_filter': [null],
+            'category_id_filter': [null],
+            'sub_category_id': [null],
+            'certification_filter': [null],
+            'oem_filter': [null],
+            'partlinks_no_filter': [null],
+            'part_no_filter': [null],
+            'country_id_filter': [null]
         });
 
         //Assign get list function name, override variable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
 
-        this.tableBundleService = new TableService();
-        this.tableBundleService.getListFnName = 'getListBundle';
-        this.tableBundleService.context = this;
-
     }
 
     ngOnInit() {
         //Init Fn
-        if (this.flagBundle) {
-            this.getListBundle();
-        }
-        this.getList();
-        this.getReferenceList();
-        this.list.selectedItems = [];
-        this.list.selectedBundles = [];
+        this.listMaster['certification_partNumber'] = [{ code: "Y", value: "Yes" }, { code: "N", value: "No" }];
+        this.getListReference();
     }
 
-    getList() {
-        if (this.id) {
-            var params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
-            Object.keys(params).forEach((key) => (JSON.parse(params[key]) == null || JSON.parse(params[key]) == '') && delete params[key]);
-
-            this.itemService.getListItemBaseSupplier(params, this.id).subscribe(res => {
-                try {
-                    this.list.items = res.results.rows;
-                    this.tableService.matchPagingOption(res.results);
-                } catch (e) {
-                    console.log(e);
-                }
-            });
-        }
-
-    }
-
-    getListBundle() {
-        var params = Object.assign({}, this.tableBundleService.getParams(), this.searchBundleForm.value);
-        Object.keys(params).forEach((key) => (JSON.parse(params[key]) == null || JSON.parse(params[key]) == '') && delete params[key]);
-
-        this.itemService.getListBundleBase(params).subscribe(res => {
-            try {
-                this.list.bundles = res.results.rows;
-                this.tableBundleService.matchPagingOption(res.results);
-            } catch (e) {
-                console.log(e);
-            }
-        });
-    }
-
-    getReferenceList() {
+    getListReference() {
         this.itemService.getReferenceList().subscribe(res => {
             try {
-                this.listMaster['categories'] = res.results.categories;
+                this.listMaster['models'] = res.data.models;
+                this.listMaster['years'] = res.data.years.map(function (e) { return { id: e, name: e } });
+                this.listMaster['manufacturers'] = res.data.manufacturers;
             } catch (e) {
-                console.log(e);
-            }
-        })
-    }
-
-    updateData() {
-        this.list.items.forEach(x => {
-            if (x.state) {
-                this.list.selectedItems.push(x);
-                this.activeModal.close(this.list.selectedItems);
+                console.log(e.message)
             }
         });
-        if (this.flagBundle) {
-            this.list.bundles.forEach(x => {
-                if (x.state) {
-                    this.list.selectedBundles.push(x);
-                    this.activeModal.close(this.list.selectedBundles);
-                }
-            })
-        }
+
     }
 
 
+    /**
+    * Table Event
+    */
+    selectData(index) {
+        console.log(index);
+    }
+
     checkAll(ev) {
-        this.list.items.forEach(x => x.state = ev.target.checked);
+        this.list.items.forEach(x => x.is_checked = ev.target.checked);
+        this.list.checklist = this.list.items.filter(_ => _.is_checked);
     }
 
     isAllChecked() {
-        return this.list.items.every(_ => _.state);
+        this.checkAllItem = this.list.items.every(_ => _.is_checked);
+        this.list.checklist = this.list.items.filter(_ => _.is_checked);
     }
 
-    checkAllBundle(ev) {
-        this.list.bundles.forEach(x => x.state = ev.target.checked);
+    /**
+     * Internal Function
+     */
+    resetTab() {
+        this.searchForm.reset();
+        this.filterForm.reset();
+        this.list.items = [];
     }
 
-    isAllCheckedBundle() {
-        return this.list.bundles.every(_ => _.state);
+    changeToGetSubModel() {
+        let id = this.searchForm.value.model_id;
+        let arr = this.listMaster['models'];
+        for (var i = 0; i < arr.length; i++) {
+            if (arr[i]['model_id'] == id) {
+                return this.listMaster['sub_models'] = arr[i]['sub_models'];
+            }
+        }
     }
 
+    changeToGetSubCategory() {
+        let id = this.filterForm.value.category_id_filter;
+        let arr = this.listMaster['categories'];
+        this.listMaster['sub_cat'] = [];
+        for (var k = 0; k < id.length; k++) {
+            for (var i = 0; i < arr.length; i++) {
+                if (arr[i]['category_id'] == id[k]) {
+                    this.listMaster['sub_cat'] = this.listMaster['sub_cat'].concat(arr[i]['sub_categories']);
+                }
+            }
+        }
+    }
+
+    getList() {
+        var params = Object.assign({}, this.tableService.getParams(), this.searchForm.value, this.filterForm.value);
+        Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);
+
+        this.itemService.getListAllItem(params).subscribe(res => {
+            try {
+                if (!res.data.rows) {
+                    this.list.items = [];
+                    return;
+                }
+                this.list.items = res.data.rows;
+                this.listMaster['brands'] = res.data.meta_filters.brands;
+                this.listMaster['categories'] = res.data.meta_filters.categories;
+                this.listMaster['certification'] = res.data.meta_filters.certification;
+                this.listMaster['countries'] = res.data.meta_filters.countries;
+                this.tableService.matchPagingOption(res.data);
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
 }

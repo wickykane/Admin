@@ -1,5 +1,68 @@
 @import './bootstrap/_variables.scss';
 
+#print-container {
+    // display: none;
+}
+
+.search-block {
+    .tab-header {
+        width: 100%;
+    }
+    .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+        color: inherit;
+        background-color: inherit;
+        border-bottom: 1px solid #007bff;
+    }
+
+    .justify-content-start {
+        background-color: #fff;
+        padding-bottom: 10px;
+    }
+}
+
+.ng-select {
+    &.ng-single .ng-control {
+        height: inherit !important;
+        // min-height: 21px !important;
+        max-width: inherit !important;
+    }
+
+    &.ng-multiple {
+        .ng-control  {
+            min-height: 21px !important;
+            border-radius: 0 !important;
+            max-width: 200px;
+        }
+        .ng-arrow-zone .ng-arrow {
+            border-color: #444 transparent transparent !important;
+            border-style: solid;
+            border-width: 6px 3px 2.5px !important;
+        }
+    
+        &.opened>.ng-control .ng-arrow {
+            top: -2px;
+            border-color: transparent transparent #444;
+            border-width: 0 3px 6px;
+        }
+    }
+
+    &.ng-multiple .ng-control .ng-value-container {
+        padding-top: 0 !important;
+        .ng-input {
+            padding-bottom: 0px !important; 
+        }
+        .ng-value {
+            margin-bottom: 0;
+            .ng-value-icon {
+                padding: 0px 3px;
+            }
+            .ng-value-label {
+                padding: 0px 3px 0px 0px;
+            }
+        }
+    }
+} 
+
 .btn {
     height: 20px;
     font-weight: 600;
@@ -24,12 +87,13 @@
     margin-top: 5px;
     img {
         border: 1px solid #e0e0e0;
-        width: 70%;
+        width: 100%;
         padding: 5px;
+        height: 160px;
     }
 
     .btn-bs-file {
-        width: 70%;
+        width: 100%;
         margin-bottom: 0;
         cursor: pointer;
 
@@ -39,7 +103,7 @@
             width: 0;
             height: 0;
             outline: 0;
-            cursor: pointer;
+            // cursor: pointer;
         }
     }
 }
@@ -52,7 +116,7 @@
         width: 128px;
         border: 1px solid #ccc;
         position: absolute;
-        background: #fff;
+        background: $white;
         z-index: 5001;
         padding-left: 8px;
         top: 0;
@@ -98,7 +162,7 @@ input:checked+.slider {
                 bottom: 0;
                 left: 0;
                 font-size: 10px;
-                color: #fff;
+                color: $white;
                 line-height: 18px;
                 content: "\f00c";
                 text-align: center;
@@ -113,7 +177,7 @@ input:checked+.slider {
             vertical-align: middle;
             width: 15px;
             height: 15px;
-            background-color: #fff;
+            background-color: $white;
             border: 1px solid #ccc;
             -webkit-transition: background-color 0.2s;
             transition: background-color 0.2s;
@@ -125,7 +189,7 @@ input:checked+.slider {
                 left: 0;
                 font-family: "FontAwesome";
                 font-size: 10px;
-                color: #fff;
+                color: $white;
                 line-height: 18px;
                 content: "\f00c";
                 text-align: center;
@@ -173,7 +237,7 @@ input:checked+.slider {
                 top: 2px;
                 position: absolute;
                 content: "";
-                background-color: #fff;
+                background-color: $white;
                 transition: 0.4s;
             }
         }
@@ -221,7 +285,7 @@ table.custom-table {
     thead {
         tr {
             background-color: #828282;
-            color: #fff;
+            color: $white;
 
             th {
                 padding: 6px;
@@ -246,7 +310,7 @@ table.custom-table {
         thead {
             tr {
                 background-color: #828282;
-                color: #fff;
+                color: $white;
 
                 th {
                     padding: 6px;
@@ -271,7 +335,7 @@ table.custom-table {
 
 .block {
     margin-bottom: 30px;
-    background-color: #fff;
+    background-color: $white;
     -webkit-box-shadow: 0 2px rgba(0, 0, 0, 0.01);
     box-shadow: 0 2px rgba(0, 0, 0, 0.01);
 
@@ -295,7 +359,7 @@ table.custom-table {
             text-transform: uppercase;
             line-height: 1.2;
             display: inline;
-            color: #fff;
+            color: $white;
             display: inline-block;
             padding-top: 3px;
         }
@@ -346,9 +410,67 @@ table.custom-table {
         background-color: #f3f3f3;
     }
 }
+.label {
+    display: inline;
+    padding: .2em .6em .3em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
+}
+
+.label-primary {
+    background-color: #5c90d2;
+}
+
+.label-primary[href]:hover,
+.label-primary[href]:focus {
+    background-color: #3675c5;
+}
+
+.label-success {
+    background-color: #46c37b;
+}
+
+.label-success[href]:hover,
+.label-success[href]:focus {
+    background-color: #34a263;
+}
+
+.label-info {
+    background-color: #70b9eb;
+}
+
+.label-info[href]:hover,
+.label-info[href]:focus {
+    background-color: #43a3e5;
+}
+
+.label-warning {
+    background-color: #f3b760;
+}
+
+.label-warning[href]:hover,
+.label-warning[href]:focus {
+    background-color: #efa231;
+}
+
+.label-danger {
+    background-color: #d26a5c;
+}
+
+.label-danger[href]:hover,
+.label-danger[href]:focus {
+    background-color: #c54736;
+}
+
 
 .text-white {
-    color: #fff;
+    color: $white;
 }
 
 .pd-bottom {
@@ -375,7 +497,7 @@ table.custom-table {
     font-size: 12px;
     line-height: 1.42857143;
     color: #555;
-    background-color: #fff;
+    background-color: $white;
     background-image: none;
     border: 1px solid #ccc;
     border-radius: 0;
