@@ -1,8 +1,9 @@
+import { environment } from './../../../../environments/environment.prod';
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { JwtService } from '../../../shared';
-
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
@@ -12,7 +13,7 @@ export class HeaderComponent implements OnInit {
     pushRightClass: string = 'push-right';
     infoUser: any = {};
 
-    constructor(private translate: TranslateService, public router: Router, private JwtService:JwtService) {
+    constructor(private http: HttpClient, private translate: TranslateService, public router: Router, private JwtService: JwtService) {
 
         this.translate.addLangs(['en', 'fr', 'ur', 'es', 'it', 'fa', 'de', 'zh-CHS']);
         this.translate.setDefaultLang('en');
@@ -31,8 +32,27 @@ export class HeaderComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.infoUser = JSON.parse(localStorage.getItem('currentUser'))
+        let user = (localStorage.getItem('currentUser'));
+        if (user) {            
+            this.infoUser = JSON.parse(this.infoUser);
+        }
+        else{
+            if (this.JwtService.getToken()) this.getUserDetail();
+        }
+        
     }
+
+    getUserDetail() {
+        let url = environment.auth_url + 'core/authentication/users/user-cache';
+        let httpOptions = {
+            headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.JwtService.getToken() }),
+        }
+        this.http.get(url, httpOptions).subscribe(res => {
+            this.infoUser = res['data'];
+            localStorage.setItem('currentUser', JSON.stringify(res['data']));
+        })
+    }
+
 
     isToggled(): boolean {
         const dom: Element = document.querySelector('body');

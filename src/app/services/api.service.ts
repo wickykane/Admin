@@ -32,7 +32,6 @@ export class ApiService {
     }
 
     private headerOptionDefault(params?) {
-        let _token = window.localStorage.getItem('token');
         let httpOptions = {
             headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.jwtService.getToken() }),
         }
@@ -41,7 +40,6 @@ export class ApiService {
     }
 
     private headerOptionFormData() {
-        let _token = window.localStorage.getItem('token');
         const httpOptions = {
             headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + this.jwtService.getToken() })
         }
