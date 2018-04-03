@@ -137,7 +137,7 @@
                                   </label>
                             <div>
                                 <select required class="form-control" id="billing_to" name="search_type" [(ngModel)]="billing" (change)="selectAddress(billing,'billing')">
-                                      <option value="" selected="true" translate>Please select</option>
+                                      <option value="" selected="true" hidden="true"  translate>Please select</option>
                                       <option *ngFor="let item of order.billing" [ngValue] = "item.address_id">{{item.label}}</option>                              
                                     </select>
                             </div>

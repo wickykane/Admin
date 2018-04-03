@@ -37,10 +37,10 @@ export class BuyerCreateComponent implements OnInit {
         private modalService: NgbModal) {
         this.toastr.setRootViewContainerRef(vRef);
         this.generalForm = fb.group({
-            'buyer_type':[null,Validators.required],
+            'buyer_type': [null, Validators.required],
             'full_name': [null, Validators.required],
             'email': [null, Validators.required],
-            'sale_price_id':[null],
+            // 'sale_price_id':[null],
             'phone': [null],
             'fax': [null],
             'website': [null],
@@ -50,7 +50,7 @@ export class BuyerCreateComponent implements OnInit {
 
         });
         this.primaryForm = fb.group({
-            'name': [null, Validators.required],
+            'label': [null],
             'email': [null],
             'tax_number': [null],
             'phone': [null],
@@ -82,21 +82,29 @@ export class BuyerCreateComponent implements OnInit {
             'city_name': [null, Validators.required],
             'zip_code': [null, Validators.required]
         });
-        this.listMaster['creditStatus']  = [{id: 1,name: 'Close'}, {id: 2, name: 'Open'}, {id: 3,name: 'Hold'}];
-        
+        this.listMaster['creditStatus'] = [{ id: 1, name: 'Close' }, { id: 2, name: 'Open' }, { id: 3, name: 'Hold' }];
+
     }
 
     ngOnInit() {
         this.getListCountry();
-        this.getSalePriceList();
-        this.getListBuyerType();
+        this.listMaster['customerType'] = [{
+            id: 'RS',
+            name: 'Repair Shop'
+        }, {
+            id: 'NU',
+            name: 'Normal Customer'
+        }];
+
+        // this.getSalePriceList();
+        // this.getListBuyerType();
     }
 
     //data master country
     getListCountry() {
         this.customerService.getListCountry().subscribe(res => {
             try {
-                this.listMaster['countries'] = res.results;
+                this.listMaster['countries'] = res.data;
             } catch (e) {
                 console.log(e);
             }
@@ -105,7 +113,7 @@ export class BuyerCreateComponent implements OnInit {
     getListBuyerType() {
         this.customerService.getListBuyerType().subscribe(res => {
             try {
-                this.listMaster['customerType'] = res.results;
+                this.listMaster['customerType'] = res.data;
             } catch (e) {
                 console.log(e);
             }
@@ -123,27 +131,30 @@ export class BuyerCreateComponent implements OnInit {
     getStateByCountry(params, name) {
         this.customerService.getStateByCountry(params).subscribe(res => {
             try {
-                this.listMaster[name] = res.results;
+                this.listMaster[name] = res.data;
                 console.log(this.listMaster);
             } catch (e) {
                 console.log(e);
             }
         });
     }
-    getSalePriceList(){
+
+    getSalePriceList() {
         this.customerService.getSalePriceList().subscribe(res => {
             try {
-                this.listMaster['salePriceList'] = res.results;
+                this.listMaster['salePriceList'] = res.data;
                 console.log(this.listMaster);
             } catch (e) {
                 console.log(e);
             }
         });
     }
+
     //action copy address
     copyToAddress(flag) {
         if (flag == 'billing') {
-            this.billingForm.patchValue(this.primaryForm.value);
+            let data = Object.assign(this.primaryForm.value, { name: this.primaryForm.value.label });
+            this.billingForm.patchValue(data);
             this.listMaster['states_billing'] = this.listMaster['states_primary'];
         }
         if (flag == 'shipping') {
@@ -194,16 +205,20 @@ export class BuyerCreateComponent implements OnInit {
             image: this.listFile[0] || null
         }
 
-        this.customerService.createBuyer(data).subscribe(res => {
-            try {
-                setTimeout(() => {
-                    this.router.navigate(['/purchase-management/supplier']);
-                }, 2000);
-                this.toastr.success(res.message);
-            } catch (e) {
-                console.log(e);
-            }
-        });
+        this.customerService.createBuyer(data).subscribe(
+            res => {
+                try {
+                    setTimeout(() => {
+                        this.router.navigate(['/customer/buyer']);
+                    }, 2000);
+                    this.toastr.success(res.message);
+                } catch (e) {
+                    console.log(e);
+                }
+            },
+            err => {
+                this.toastr.error(err.message, null, { enableHTML: true });
+            });
     }
 
 

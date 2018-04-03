@@ -91,6 +91,7 @@ export class SaleOrderCreateComponent implements OnInit {
 
     //Item
     this.list.items = this.router.getNavigatedData() || [];
+    if (Object.keys(this.list.items).length == 0) this.list.items = [];
     this.updateTotal();
   }
   /**
@@ -264,6 +265,7 @@ export class SaleOrderCreateComponent implements OnInit {
     if (id) {
       this.orderService.getDetailCompany(id).subscribe(res => {
         try {
+          if(res.data.length == 0) return;
           this.order = res.data;
           if (this.list.items.length > 0) {
             for (var i = 0; i < this.list.items.length; i++) {
