@@ -278,6 +278,7 @@ export class BuyerDetailComponent implements OnInit {
             this.billingForm.patchValue(Object.assign({}, item, { name: item.address_name}));
             if (parseInt(item.type) === 2) data['shipping'].push(this.billingForm.value);
             if (parseInt(item.type) === 1) data['billing'].push(this.billingForm.value);
+            console.log(parseInt(item.type) ===2, parseInt(item.type) === 1, data);
         })
         console.log(data);
         this.updateSupplier(data);
