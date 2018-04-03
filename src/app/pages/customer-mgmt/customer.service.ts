@@ -33,11 +33,11 @@ export class CustomerService {
     }
     createBuyer(data) {
         let url = 'buyer/create';
-        return this.API.postForm(url, data);
+        return this.API.post(url, data);
     }
     updateBuyer(data, id) {
         let url = 'buyer/update/' + id;
-        return this.API.postForm(url, data);
+        return this.API.post(url, data);
     }
     deleteBuyer(id) {
         let url = 'buyer/delete/' + id;

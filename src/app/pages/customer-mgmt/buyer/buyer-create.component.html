@@ -43,13 +43,13 @@
                             <label for="website" class="control-label">Website</label>
                             <input type="text" class="form-control" name="website" formControlName="website">
                         </div>
-                        <div class="col-md-6">
+                        <!-- <div class="col-md-6">
                             <label for="sale_price_list" class="control-label">Sale Price List</label>
                             <select class="form-control" formControlName="sale_price_id">
                                 <option value="null" selected="true">--Select--</option>
                                 <option *ngFor="let item of listMaster['salePriceList']" [ngValue]="item.id">{{item.des}}</option>
                             </select>
-                        </div>
+                        </div> -->
                     </div>
                 </form>
             </div>
@@ -58,8 +58,8 @@
                     <div class="block-file">
                         <div>
                             <div class="">
-                                <img *ngIf="!imageSelected" src="./assets/images/icon-upload.jpg" alt="">
-                                <img *ngIf="imageSelected" src="{{imageSelected}}" alt="">
+                                <img style="height: inherit;" *ngIf="!imageSelected" src="./assets/images/icon-upload.jpg" alt="">
+                                <img style="height: inherit;" *ngIf="imageSelected" src="{{imageSelected}}" alt="">
                             </div>
                         </div>
                         <label class="btn-bs-file  btn btn-outline-secondary">UPLOAD IMAGE
@@ -86,7 +86,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <label for="name" class="control-label">Name</label>
-                                    <input type="text" class="form-control" name="name" formControlName="name">
+                                    <input type="text" class="form-control" name="name" formControlName="label">
                                 </div>
                                 <div class="col-md-12">
                                     <label for="email" class="control-label">Email</label>
@@ -112,7 +112,7 @@
                                     </label>
                                     <select class="form-control" formControlName="country_code" (change)="changeCountry(this.primaryForm.value.country_code ,'states_primary')">
                                         <option value="null" selected="true">--Select--</option>
-                                        <option *ngFor="let item of listMaster['countries']" [ngValue]="item.country_code">{{item.name}}</option>
+                                        <option *ngFor="let item of listMaster['countries']" [ngValue]="item.cd">{{item.name}}</option>
                                     </select>
                                 </div>
                                 <div class="col-md-12">
@@ -185,7 +185,7 @@
                                     </label>
                                     <select class="form-control" formControlName="country_code" (change)="changeCountry(this.billingForm.value.country_code ,'states_billing')">
                                         <option value="null" selected="true">--Select--</option>
-                                        <option *ngFor="let item of listMaster['countries']" [ngValue]="item.country_code">{{item.name}}</option>
+                                        <option *ngFor="let item of listMaster['countries']" [ngValue]="item.cd">{{item.name}}</option>
                                     </select>
                                 </div>
                                 <div class="col-md-12">
@@ -258,7 +258,7 @@
                                     </label>
                                     <select class="form-control" formControlName="country_code" (change)="changeCountry(this.shippingForm.value.country_code ,'states_shipping')">
                                         <option value="null" selected="true">--Select--</option>
-                                        <option *ngFor="let item of listMaster['countries']" [ngValue]="item.country_code">{{item.name}}</option>
+                                        <option *ngFor="let item of listMaster['countries']" [ngValue]="item.cd">{{item.name}}</option>
                                     </select>
                                 </div>
                                 <div class="col-md-12">
@@ -322,7 +322,7 @@
                 </div>
         </div>
 
-        <div class="row" style="padding-top:15px">
+        <!-- <div class="row" style="padding-top:15px">
             <div class="col-sm-12">
                 <div class="block-header bg-gray-lighter">
                     <h3 class="block-title">USER LIST</h3>
@@ -394,11 +394,11 @@
                     </table>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <div class="block-content block-content-full text-right">
             <button type="button" class="btn btn-default" [routerLink]="['/customer/buyer']">Cancel</button>
-            <button type="button" [disabled]="generalForm.invalid" class="btn btn-primary" (click)="createBuyer()">Save</button>
+            <button type="button" [disabled]="generalForm.invalid ||  primaryForm.invalid ||  billingForm.invalid || shippingForm.invalid" class="btn btn-primary" (click)="createBuyer()">Save</button>
         </div>
     </section>
 </div>

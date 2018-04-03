@@ -16,6 +16,7 @@ import { TableService } from "../../services/index";
 import { CustomerService } from "./customer.service";
 
 //Modal
+import { ItemModalModule } from "../../shared/modals/item.module";
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { CustomerService } from "./customer.service";
     CommonModule,
     PageHeaderModule,
     CustomerManagementRoutingModule,
-    CommonShareModule
+    CommonShareModule,
+    ItemModalModule
   ],
   declarations: [CustomerSegmentComponent, CustomerSegmentCreateComponent, CustomerSegmentEditComponent,BuyerComponent,BuyerCreateComponent,BuyerDetailComponent],
   providers: [TableService, CustomerService],

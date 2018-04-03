@@ -63,7 +63,7 @@ export class AddressModalContent implements OnInit {
         this.itemService.getListCountry().subscribe(res => {
             try {
                 console.log(res);
-                this.listMaster['countries'] = res.results;
+                this.listMaster['countries'] = res.data;
                 if (!this.state) {
                     this.changeCountry(this.input['country_code']);
                 }
@@ -84,7 +84,7 @@ export class AddressModalContent implements OnInit {
     getStateByCountry(params) {
         this.itemService.getStateByCountry(params).subscribe(res => {
             try {
-                this.listMaster['state'] = res.results;
+                this.listMaster['state'] = res.data;
             } catch (e) {
                 console.log(e);
             }
