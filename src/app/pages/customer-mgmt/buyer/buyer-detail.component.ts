@@ -50,10 +50,10 @@ export class BuyerDetailComponent implements OnInit {
         private modalService: NgbModal) {
         this.toastr.setRootViewContainerRef(vRef);
         this.generalForm = fb.group({
-            'buyer_type':[null,Validators.required],
+            'buyer_type': [null, Validators.required],
             'full_name': [null, Validators.required],
             'email': [null, Validators.required],
-            'sale_price_id':[null],
+            // 'sale_price_id': [null],
             'phone': [null],
             'fax': [null],
             'website': [null],
@@ -62,6 +62,18 @@ export class BuyerDetailComponent implements OnInit {
             'credit_reason': [null],
         });
         this.primaryForm = fb.group({
+            'label': [null],
+            'email': [null],
+            'tax_number': [null],
+            'phone': [null],
+            'address_line': [null, Validators.required],
+            'country_code': [null, Validators.required],
+            'state_id': [null],
+            'city_name': [null, Validators.required],
+            'zip_code': [null, Validators.required]
+        });
+
+        this.billingForm = fb.group({
             'name': [null, Validators.required],
             'email': [null],
             'tax_number': [null],
@@ -72,30 +84,36 @@ export class BuyerDetailComponent implements OnInit {
             'city_name': [null, Validators.required],
             'zip_code': [null, Validators.required]
         });
-        this.listMaster['creditStatus']  = [{id: 1,name: 'Close'}, {id: 2, name: 'Open'}, {id: 3,name: 'Hold'}];
+
+        this.listMaster['creditStatus'] = [{ id: 1, name: 'Close' }, { id: 2, name: 'Open' }, { id: 3, name: 'Hold' }];
     }
 
     ngOnInit() {
         this.route.params.subscribe(params => this.getDetailSupplier(params.id));
+        this.listMaster['customerType'] = [{
+            id: 'RS',
+            name: 'Repair Shop'
+        }, {
+            id: 'NU',
+            name: 'Normal Customer'
+        }];
         this.getListCountry();
         this.getListState();
-        this.getListBuyerType();
-        this.getSalePriceList();
         this.removedList.length = 0;
     }
     getListBuyerType() {
         this.customerService.getListBuyerType().subscribe(res => {
             try {
-                this.listMaster['customerType'] = res.results;
+                this.listMaster['customerType'] = res.data;
             } catch (e) {
                 console.log(e);
             }
         })
     }
-    getSalePriceList(){
+    getSalePriceList() {
         this.customerService.getSalePriceList().subscribe(res => {
             try {
-                this.listMaster['salePriceList'] = res.results;
+                this.listMaster['salePriceList'] = res.data;
                 console.log(this.listMaster);
             } catch (e) {
                 console.log(e);
@@ -107,7 +125,7 @@ export class BuyerDetailComponent implements OnInit {
     getListCountry() {
         this.customerService.getListCountry().subscribe(res => {
             try {
-                this.listMaster['countries'] = res.results;
+                this.listMaster['countries'] = res.data;
             } catch (e) {
                 console.log(e);
             }
@@ -124,7 +142,7 @@ export class BuyerDetailComponent implements OnInit {
     getStateByCountry(params, name) {
         this.customerService.getStateByCountry(params).subscribe(res => {
             try {
-                this.listMaster[name] = res.results;
+                this.listMaster[name] = res.data;
             } catch (e) {
                 console.log(e);
             }
@@ -134,7 +152,7 @@ export class BuyerDetailComponent implements OnInit {
     getListState() {
         this.customerService.getListState().subscribe(res => {
             try {
-                this.listMaster['states'] = res.results;
+                this.listMaster['states'] = res.data;
             } catch (e) {
                 console.log(e);
             }
@@ -175,7 +193,7 @@ export class BuyerDetailComponent implements OnInit {
         if (data['billing'].length > 0) addressList = addressList.concat(data['billing']);
 
         // add property isCheck to array
-        addressList.map(function(addr) {
+        addressList.map(function (addr) {
             addr.isChecked = false;
             return addr;
         });
@@ -195,7 +213,8 @@ export class BuyerDetailComponent implements OnInit {
         const modalRef = this.modalService.open(AddressModalContent, { size: 'lg' });
         modalRef.result.then(res => {
             this.addressList[index] = res;
-        });
+        },
+            reason => { });
         modalRef.componentInstance.input = data;
         modalRef.componentInstance.state = false;
     }
@@ -204,13 +223,13 @@ export class BuyerDetailComponent implements OnInit {
         this.idSupplier = id;
         this.customerService.getDetailBuyer(this.idSupplier).subscribe(res => {
             try {
-                this.generalForm.patchValue(res.results);
-                this.primaryForm.patchValue(res.results['primary'][0]);
-                this.imageSelected = res.results.img;
-                this.users = res.results['user'];
+                this.generalForm.patchValue(res.data);
+                this.primaryForm.patchValue(res.data['primary'][0]);
+                this.imageSelected = res.data.img;
+                this.users = res.data['user'];
 
-                this.changeCountry(res.results['primary'][0]['country_code'], 'states_primary');
-                this.addressList = this.mergeAddressList(res.results);
+                this.changeCountry(res.data['primary'][0]['country_code'], 'states_primary');
+                this.addressList = this.mergeAddressList(res.data);
             } catch (e) {
 
             }
@@ -221,7 +240,7 @@ export class BuyerDetailComponent implements OnInit {
         if (item.isChecked) {
             this.removedList.push(item);
         } else {
-            this.removedList = this.removedList.filter(function(obj) {
+            this.removedList = this.removedList.filter(function (obj) {
                 return obj.isChecked == true;
             });
         }
@@ -238,11 +257,11 @@ export class BuyerDetailComponent implements OnInit {
                 this.customerService.deleteAddress(params).subscribe(res => {
                     try {
                         this.toastr.success(res.message);
-                        this.addressList = this.addressList.filter(function(obj) {
+                        this.addressList = this.addressList.filter(function (obj) {
                             return obj.isChecked == false;
                         });
                         this.removedList.length = 0;
-                    } catch(e) {
+                    } catch (e) {
                         console.log(e);
                     }
                 })
@@ -256,10 +275,11 @@ export class BuyerDetailComponent implements OnInit {
         data['shipping'] = data['billing'] = [];
 
         objAddress.forEach(item => {
-            if (parseInt(item.type) === 2) data['shipping'].push(item);;
-            if (parseInt(item.type) === 1) data['billing'].push(item);;
+            this.billingForm.patchValue(Object.assign({}, item, { name: item.address_name}));
+            if (parseInt(item.type) === 2) data['shipping'].push(this.billingForm.value);
+            if (parseInt(item.type) === 1) data['billing'].push(this.billingForm.value);
         })
-
+        console.log(data);
         this.updateSupplier(data);
     }
 
@@ -281,7 +301,7 @@ export class BuyerDetailComponent implements OnInit {
         this.customerService.updateBuyer(data, this.idSupplier).subscribe(res => {
             try {
                 setTimeout(() => {
-                    this.router.navigate(['/purchase-management/supplier']);
+                    this.router.navigate(['/customer/buyer']);
                 }, 2000);
                 this.toastr.success(res.message);
             } catch (e) {

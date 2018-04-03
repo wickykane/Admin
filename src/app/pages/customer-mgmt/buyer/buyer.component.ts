@@ -6,12 +6,14 @@ import { CustomerService } from "../customer.service";
 
 import { routerTransition } from '../../../router.animations';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { ConfirmModalContent } from "../../../shared/modals/confirm.modal";
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'app-buyer',
-  templateUrl: './buyer.component.html',
-  styleUrls: ['./buyer.component.scss'],
-  animations: [routerTransition()]
+    selector: 'app-buyer',
+    templateUrl: './buyer.component.html',
+    styleUrls: ['./buyer.component.scss'],
+    animations: [routerTransition()]
 })
 export class BuyerComponent implements OnInit {
 
@@ -37,6 +39,7 @@ export class BuyerComponent implements OnInit {
         public toastr: ToastsManager,
         private vRef: ViewContainerRef,
         public tableService: TableService,
+        private modalService: NgbModal,
         private customerService: CustomerService) {
         this.toastr.setRootViewContainerRef(vRef);
 
@@ -57,10 +60,10 @@ export class BuyerComponent implements OnInit {
         this.listMaster['buyerType'] = [{
             id: 'RS',
             name: 'Repair Shop'
-          }, {
+        }, {
             id: 'NU',
             name: 'Normal Customer'
-          }];
+        }];
 
         this.user = JSON.parse(localStorage.getItem('currentUser'));
     }
@@ -74,14 +77,20 @@ export class BuyerComponent implements OnInit {
      * Internal Function
      */
     delete(id) {
-        this.customerService.deleteBuyer(id).subscribe( res => {
-            try {
-                this.toastr.success(res.message);
-                this.getList();
-            } catch (e) {
-                console.log(e);
+        const modalRef = this.modalService.open(ConfirmModalContent);
+        modalRef.result.then(yes => {
+            if (yes) {
+                this.customerService.deleteBuyer(id).subscribe(res => {
+                    try {
+                        this.toastr.success(res.message);
+                        this.getList();
+                    } catch (e) {
+                        console.log(e);
+                    }
+                })
             }
-        })
+        });
+        modalRef.componentInstance.message = "Are you sure you want to delete ?";
     }
 
     getList() {
