@@ -34,7 +34,7 @@ export class HeaderComponent implements OnInit {
     ngOnInit() {
         let user = (localStorage.getItem('currentUser'));
         if (user) {            
-            this.infoUser = JSON.parse(this.infoUser);
+            this.infoUser = JSON.parse(user);
         }
         else{
             if (this.JwtService.getToken()) this.getUserDetail();
@@ -43,13 +43,13 @@ export class HeaderComponent implements OnInit {
     }
 
     getUserDetail() {
-        let url = environment.auth_url + 'core/authentication/users/user-cache';
+        let url = environment.api_url + 'auth/wms-user';
         let httpOptions = {
             headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.JwtService.getToken() }),
         }
         this.http.get(url, httpOptions).subscribe(res => {
-            this.infoUser = res['data'];
-            localStorage.setItem('currentUser', JSON.stringify(res['data']));
+            this.infoUser = res['data']['user'];
+            localStorage.setItem('currentUser', JSON.stringify(res['data']['user']));
         })
     }
 
