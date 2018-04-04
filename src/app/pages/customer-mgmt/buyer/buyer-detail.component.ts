@@ -10,7 +10,7 @@ import { AddressModalContent } from "../../../shared/modals/address.modal";
 import { ConfirmModalContent } from "../../../shared/modals/confirm.modal";
 
 
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 
 @Component({
@@ -34,7 +34,7 @@ export class BuyerDetailComponent implements OnInit {
     public listMaster = {};
     public idSupplier: string = '';
     public removedList: any = [];
-
+    private primaryAddress = [];
     public ADDRESS_TYPE = {
         3: 'MAIN',
         2: 'SHIPPING',
@@ -44,11 +44,10 @@ export class BuyerDetailComponent implements OnInit {
     constructor(public fb: FormBuilder,
         public router: Router,
         public route: ActivatedRoute,
-        public toastr: ToastsManager,
+        public toastr: ToastrService,
         public vRef: ViewContainerRef,
         private customerService: CustomerService,
         private modalService: NgbModal) {
-        this.toastr.setRootViewContainerRef(vRef);
         this.generalForm = fb.group({
             'buyer_type': [null, Validators.required],
             'full_name': [null, Validators.required],
@@ -60,21 +59,11 @@ export class BuyerDetailComponent implements OnInit {
             'credit_sts': [null, Validators.required],
             'line_of_credit': [null, Validators.required],
             'credit_reason': [null],
-        });
-        this.primaryForm = fb.group({
-            'label': [null],
-            'email': [null],
-            'tax_number': [null],
-            'phone': [null],
-            'address_line': [null, Validators.required],
-            'country_code': [null, Validators.required],
-            'state_id': [null],
-            'city_name': [null, Validators.required],
-            'zip_code': [null, Validators.required]
+            'credit_used': [null]
         });
 
-        this.billingForm = fb.group({
-            'name': [null, Validators.required],
+        this.primaryForm = fb.group({
+            'label': [null],
             'email': [null],
             'tax_number': [null],
             'phone': [null],
@@ -226,8 +215,8 @@ export class BuyerDetailComponent implements OnInit {
                 this.generalForm.patchValue(res.data);
                 this.primaryForm.patchValue(res.data['primary'][0]);
                 this.imageSelected = res.data.img;
-                this.users = res.data['user'];
-
+                // this.users = res.data['user'];
+                this.primaryAddress = res.data['primary'][0];
                 this.changeCountry(res.data['primary'][0]['country_code'], 'states_primary');
                 this.addressList = this.mergeAddressList(res.data);
             } catch (e) {
@@ -272,15 +261,14 @@ export class BuyerDetailComponent implements OnInit {
 
     actionUpdate(objAddress) {
         let data = {};
-        data['shipping'] = data['billing'] = [];
+        data['shipping'] = [];
+        data['billing'] = [];
 
         objAddress.forEach(item => {
-            this.billingForm.patchValue(Object.assign({}, item, { name: item.address_name}));
-            if (parseInt(item.type) === 2) data['shipping'].push(this.billingForm.value);
-            if (parseInt(item.type) === 1) data['billing'].push(this.billingForm.value);
-            console.log(parseInt(item.type) ===2, parseInt(item.type) === 1, data);
+            if (parseInt(item.type) === 2) data['shipping'].push(item);
+            if (parseInt(item.type) === 1) data['billing'].push(item);
         })
-        console.log(data);
+
         this.updateSupplier(data);
     }
 
@@ -299,18 +287,19 @@ export class BuyerDetailComponent implements OnInit {
             image: this.listFile[0] || null
         }
 
-        this.customerService.updateBuyer(data, this.idSupplier).subscribe(res => {
-            try {
-                setTimeout(() => {
-                    this.router.navigate(['/customer/buyer']);
-                }, 2000);
-                this.toastr.success(res.message);
-            } catch (e) {
-                console.log(e);
-            }
-        });
+        this.customerService.updateBuyer(data, this.idSupplier).subscribe(
+            res => {
+                try {
+                    setTimeout(() => {
+                        this.router.navigate(['/customer/buyer']);
+                    }, 2000);
+                    this.toastr.success(res.message);
+                } catch (e) {
+                    console.log(e);
+                }
+            },
+            err => {
+                this.toastr.error(err.message, null, { enableHtml: true });
+            });
     }
-
-
-
 }

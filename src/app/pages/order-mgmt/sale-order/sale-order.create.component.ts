@@ -133,10 +133,9 @@ export class SaleOrderCreateComponent implements OnInit {
   selectData(data) { }
 
   cloneRecord(record, list) {
-    var newRecord = record;
+    var newRecord = Object.assign({}, record);
     var index = list.indexOf(record);
     var objIndex = list[index];
-
     objIndex.products.push(newRecord);
     this.list.items = list;
     this.updateTotal();
@@ -213,7 +212,7 @@ export class SaleOrderCreateComponent implements OnInit {
     }
     this.order_info['shipping_cost'] = (this.order_info['shipping_cost'] != undefined ? this.order_info['shipping_cost'] : 0);
     this.order_info['alt_vat_percent'] = (this.order_info['vat_percent'] != undefined ? this.order_info['vat_percent'] : 0);
-    this.order_info['alt_discount'] = (this.order_info['discount'] != undefined ? this.order_info['discount'] : 0);
+    this.order_info['alt_discount'] = (this.order_info['discount_percent'] != undefined ? this.order_info['discount_percent'] : 0);
     this.promotionList['total_invoice_discount'] = (this.promotionList['total_invoice_discount'] ? this.promotionList['total_invoice_discount'] : 0);
 
     this.order_info.total_discount = parseFloat((this.order_info.sub_total * Number(this.order_info['alt_discount']) / 100).toFixed(2))
@@ -265,7 +264,7 @@ export class SaleOrderCreateComponent implements OnInit {
     if (id) {
       this.orderService.getDetailCompany(id).subscribe(res => {
         try {
-          if(res.data.length == 0) return;
+          if (res.data.length == 0) return;
           this.order = res.data;
           if (this.list.items.length > 0) {
             for (var i = 0; i < this.list.items.length; i++) {
