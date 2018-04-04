@@ -283,10 +283,11 @@
                         <tr>
                             <td>
                                 <button class="btn btn-danger btn-xs" type="button" (click)="deleteAction(item.item_id)">
-                          <i class="fa fa-trash"></i></button>
-                                <button class="btn btn-primary btn-xs" type="button" (click)="cloneRecord(item, list.items)" [disabled]="!checkCloneRecord(item, list.items[$index])" ngbTooltip="Add new shipping address">
-                                <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                        </button>
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                                <button class="btn btn-primary btn-xs" type="button" (click)="cloneRecord(item, list.items)" [disabled]="!checkCloneRecord(item, list.items[$index])" title="Add new shipping address">
+                                    <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                </button>
                             </td>
                             <td>{{item.part_no}}</td>
                             <td>{{item.des}}</td>
@@ -296,8 +297,8 @@
 
                             <td>
                                 <select class="form-control" name="search_type" [(ngModel)]="item.shipping_address_id">
-                                    <option value="" selected="true" hidden="true" translate>Please select</option>
-                                    <option *ngFor="let item of order.shipping" [ngValue] = "item.address_id">{{((item.street+', '+item.city_name+', '+item.state_name+', '+item.zip_code+', '+item.country_name) | uppercase)}}</option>                              
+                                    <option value="undefined" selected="true" hidden="true" translate>Please select</option>
+                                    <option *ngFor="let item of order.shipping" [ngValue] = "item.address_id">{{((item.address_line+', '+item.city_name+', '+item.state_name+', '+item.zip_code+', '+item.country_name) | uppercase)}}</option>                              
                                 </select>
                             </td>
                             <td>
@@ -327,6 +328,28 @@
                                 <span>{{item.totalItem | currency}}</span>
 
                             </td>
+                        </tr>
+                        <tr *ngFor="let product of item.products">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <input style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="product.order_quantity" min="0" max="1000" (change)="updateTotal()">
+                            </td>
+
+                            <td>
+                                <select class="form-control" name="search_type" [(ngModel)]="product.shipping_address_id">
+                                    <option value="undefined" selected="true"  hidden="true" translate>Please select</option>
+                                    <option *ngFor="let item of order.shipping" [ngValue] = "item.address_id">{{((item.address_line+', '+item.city_name+', '+tate_name+', '+item.zip_code+', '+item.country_name) | uppercase)}}</option>                              
+                                </select>
+                            </td>
+                            <td>
+                                <button class="btn btn-danger btn-xs" type="button" (click)="removeSubProduct(product, item.products, list.items)" style="line-height: 18px;">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                </button>
+                            </td>
+                            <td></td>
+                            <td></td>
                         </tr>
                     </tbody>
                 </table>

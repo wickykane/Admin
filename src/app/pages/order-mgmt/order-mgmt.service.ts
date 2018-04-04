@@ -10,7 +10,7 @@ export class OrderService {
     //Order
 
     getOrderDetail(id) {
-        let url = ['order','order-detail',id].join('/');
+        let url = ['order',id].join('/');
         return this.API.get(url);
     }
     

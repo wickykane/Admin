@@ -1,281 +1,354 @@
-<div class="block">
+<div class="block position-relative">
     <div class="block-header bg-red-dark text-white">
         <h3 class="block-title-lg"><span translate>LIST OF ORDERS ></span> #{{detail.general['code']}}</h3>
         <div class="wrap-keyboard">
             <span class="fa fa-keyboard-o my-own-cheatsheet"></span>
         </div>
+        <button type="button" class="btn btn-primary btn-print-order" (click)="printOrder()">
+            <i class="fa fa-print" aria-hidden="true"></i> Print Sales Order
+        </button>
     </div>
 
-    <ul class="nav nav-tabs" data-toggle="tabs">
-        <li class="active">
-            <a role="button" data-target="#information" data-toggle="tab" id="informationTab" translate>INFORMATION</a>
-        </li>
-        <li style="padding-top: 7px; float: right;padding-right: 20px;">
-            <button type="button" class="btn btn-primary" (click)="printOrder()">
-        <i class="fa fa-print" aria-hidden="true"></i> Print Sales Order</button>
-        </li>
-    </ul>
-    <div class="block-content tab-content bg-gray-light" style="margin-top:10px;">
-        <div class="tab-pane active " id="information">
-            <div>
-                <div *ngIf="detail['subs'].length >0">
+    <ngb-tabset>
+        <ngb-tab title="INFORMATION">
+            <ng-template ngbTabContent>
+                <div class="block-content tab-content bg-gray-light" style="margin-top:10px;">
+                    <div class="tab-pane active " id="information">
+                        <div>
+                            <div *ngIf="detail['subs'].length >0">
+                                <table class="table table-striped table-vcenter table-hover custom-table">
+                                    <thead class="bg-white">
+                                        <tr>
+
+                                            <th translate>SKU #</th>
+                                            <th translate>Product Name</th>
+                                            <th class="text-nowrap text-center " translate>Order QTY</th>
+                                            <th class="text-nowrap text-center" translate>Shipped QTY</th>
+                                            <th class="text-nowrap text-center" translate>Ship To</th>
+                                            <th class="text-center" translate>Cost</th>
+                                            <th class="text-center" translate>Discount</th>
+                                            <th class="text-center" translate>Amount</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of detail.subs">
+                                            <td>{{item.sku}}</td>
+                                            <td>{{item.item_name}}</td>
+                                            <td class="text-center">{{item.qty}} </td>
+                                            <td class="text-center">{{item.qty_shipped}}</td>
+                                            <td><span>{{item.address_full}}</span></td>
+                                            <td class="text-center">{{item.price |currency:'$'}}</td>
+                                            <td class="text-center">{{item.discount|currency:'$'}}</td>
+                                            <td class="text-center">{{item.total_price|currency:'$'}}</td>
+                                        </tr>
+                                        <tr *ngIf="detail.subs.length === 0">
+                                            <td colspan="100%" class="text-center">No data.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="order-infomation">
+                            <div class="row wrapper-flex">
+                                <div class="col-sm-6 block-small">
+                                    <div class="block-content block-themed ">
+                                        <div class="block-header bg-gray-lighter-small" style="clear: both;margin-top: 10px;margin-bottom:10px;">
+                                            <h3 class="block-title" translate>ORDER INFO</h3>
+                                        </div>
+                                        <div class="block-content detail-order">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-6 control-label" translate>Order Number</label>
+                                                        <div class="col-sm-6">
+                                                            <p class="form-control-static">#{{detail.general['code']}}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-6 control-label" translate>Shipping Cost</label>
+                                                        <div class="col-sm-6">
+                                                            <p class="form-control-static">{{detail.general['shipping'] | currency}}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-6 control-label" translate>Payment Type</label>
+                                                        <div class="col-sm-6">
+                                                            <p class="form-control-static">
+                                                                <span *ngIf="detail.general['payment_method']=='AB'">Account Balance </span>
+                                                                <span *ngIf="detail.general['payment_method']=='BT'">Bank Transfer </span>
+                                                                <span *ngIf="detail.general['payment_method']=='CS'">Cash </span>
+                                                                <span *ngIf="detail.general['payment_method']=='CC'">Credit Card</span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <!-- <div class="col-md-6">
+                                                            <div class="form-group row">
+                                                                <label class="col-sm-6 control-label" translate>Approval number</label>
+                                                                <div class="col-sm-6">
+                                                                    <p class="form-control-static">{{detail.general.approval_num}}</p>
+                                                                </div>
+                                                            </div>
+                    
+                                                        </div> -->
+                                                <!-- <div class="col-md-6">
+                                                            <div class="form-group row">
+                                                                <label class="col-sm-6 control-label" translate>Sales Quote #</label>
+                                                                <div class="col-sm-6">
+                                                                    <p *ngIf="detail.general['sale_quote_num'] !=undefined" class="form-control-static">#{{detail.general['sale_quote_num']}}</p>
+                                                                </div>
+                                                            </div>
+                                                        </div> -->
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-6 control-label" translate>Discount</label>
+                                                        <div class="col-sm-6">
+                                                            <p class="form-control-static">{{(detail.general['discount'] + detail.general['prom_dsct_amt']) | currency}}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-6 control-label" translate>Order Status</label>
+                                                        <div class="col-sm-6">
+                                                            <p class="form-control-static">
+                                                                <span class="label label-info">{{detail.general['order_sts_name']}}</span>
+                                                                <!-- <span class="label label-info" *ngIf="detail.general.order_sts_short_name == 'NW'">{{detail.general.order_sts_name}}</span>
+                                                                        <span class="label label-warning" *ngIf="detail.general.order_sts_short_name == 'IP'">{{detail.general.order_sts_name}}</span>
+                                                                        <span class="label label-danger" *ngIf="detail.general.order_sts_short_name == 'PD'">{{detail.general.order_sts_name}}</span>
+                                                                        <span class="label  label-success" *ngIf="detail.general.order_sts_short_name == 'CP'">{{detail.general.order_sts_name}}</span> -->
+                                                                <!-- <span class="label label-info">{{detail.general.order_sts_name}}</span>                          -->
+                                                            </p>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-6 control-label" translate>VAT</label>
+                                                        <div class="col-sm-6">
+                                                            <p class="form-control-static">{{detail.general['vat'] | currency}}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-6 control-label" translate>Customer PO</label>
+                                                        <div class="col-sm-6">
+                                                            <p class="form-control-static">{{detail.general['cus_po']}}</p>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-6 control-label" translate>Grand Total</label>
+                                                        <div class="col-sm-6">
+                                                            <p class="form-control-static">{{detail.general['total_price'] | currency}}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-6 control-label" translate>Order Type</label>
+                                                        <div class="col-sm-6">
+                                                            <p class="form-control-static">{{detail.general['type_name']}}</p>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-6 control-label" translate>Last Updated On</label>
+                                                        <div class="col-sm-6">
+                                                            <p class="form-control-static">{{detail.general['updated_at']}}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 block-small">
+                                    <div class=" block-content   block-themed ">
+                                        <div class="block-header bg-gray-lighter-small" style="clear: both;margin-top: 10px;margin-bottom:10px;">
+                                            <h3 class="block-title" translate>BUYER INFO</h3>
+                                        </div>
+                                        <div class="block-content detail-order">
+                                            <form class="form-horizontal form-design">
+
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 control-label" translate>Name</label>
+                                                    <div class="col-sm-8">
+                                                        <p>{{detail.buyer_info['buyer_name']}}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 control-label" translate>Phone</label>
+                                                    <div class="col-sm-8">
+                                                        <p>{{detail.buyer_info['buyer_phone']}}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 control-label" translate>Email</label>
+                                                    <div class="col-sm-8">
+                                                        <p>{{detail.buyer_info['buyer_email']}}</p>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-sm-3 block-small">
+                                    <div class=" block-content  block-themed ">
+                                        <div class="block-header bg-gray-lighter-small" style="clear: both;margin-top: 10px;margin-bottom:10px;">
+                                            <h3 class="block-title" translate>BILLING ADDRESS</h3>
+                                        </div>
+                                        <div class="block-content detail-order">
+                                            <form class="form-horizontal form-design">
+
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 control-label" translate>Country</label>
+                                                    <div class="col-sm-8">
+                                                        <p>{{detail.billing['country_name']}}</p>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 control-label" translate>Street</label>
+                                                    <div class="col-sm-8">
+                                                        <p>{{detail.billing['street']}}</p>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 control-label">City</label>
+                                                    <div class="col-sm-8">
+                                                        <p>{{detail.billing['city_name']}}</p>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 control-label" translate>State</label>
+                                                    <div class="col-sm-8">
+                                                        <p>{{detail.billing['state_name']}}</p>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 control-label" translate>Zip Code</label>
+                                                    <div class="col-sm-8">
+                                                        <p>{{detail.billing['zip_code']}}</p>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </ngb-tab>
+        <ngb-tab title='DOCUMENT'>
+            <ng-template ngbTabContent>
+                <div>
+                    <iframe [src]="sanitizer.bypassSecurityTrustResourceUrl(linkIframe)" width="100%" height="500px"></iframe>
+                </div>
+            </ng-template>
+        </ngb-tab>
+        <ngb-tab title='INVOICE'>
+            <ng-template ngbTabContent>
+                <div class="table-responsive">
                     <table class="table table-striped table-vcenter table-hover custom-table">
                         <thead class="bg-white">
                             <tr>
-
-                                <th translate>SKU #</th>
-                                <th translate>Product Name</th>
-                                <th class="text-nowrap text-center " translate>Order QTY</th>
-                                <th class="text-nowrap text-center" translate>Shipped QTY</th>
-                                <th class="text-nowrap text-center" translate>Ship To</th>
-                                <th class="text-center" translate>Cost</th>
-                                <th class="text-center" translate>Discount</th>
-                                <th class="text-center" translate>Amount</th>
-
+                                <th style="width:30px;" class="text-center">#</th>
+                                <th style="width:30px;" class="text-center"></th>
+                                <th>Invoice No</th>
+                                <th>Invoice Date</th>
+                                <th>Total</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let item of detail.subs">
-                                <td>{{item.sku}}</td>
-                                <td>{{item.item_name}}</td>
-                                <td class="text-center">{{item.qty}} </td>
-                                <td class="text-center">{{item.qty_shipped}}</td>
-                                <td><span>{{item.address_full}}</span></td>
-                                <td class="text-center">{{item.price |currency:'$'}}</td>
-                                <td class="text-center">{{item.discount|currency:'$'}}</td>
-                                <td class="text-center">{{item.total_price|currency:'$'}}</td>
+                            <tr *ngFor="let item of data['invList']; let $index=index">
+                                <td class="text-center">{{$index+1}}</td>
+                                <td class="text-center">
+                                    <a href="https://sandbox.qbo.intuit.com/app/sales" target="_blank"><img placement="top" ngbTooltip="Sent Invoice To QuickBooks {{item.updated_at}}" src="../../assets/img/qbicons.png" width="20px" height="20px"></a>
+                                </td>
+                                <td>{{item.invoice_cd}}</td>
+                                <td>{{item.invoice_date}}</td>
+                                <td>{{item.total|currency }}</td>
+                                <td>
+                                    <button class="btn btn-default btn-xs" type="button" (click)="showDetail(detail)">
+                                        <i class="fa fa-eye" aria-hidden="true"></i>
+                                    </button>
+                                    <button class="btn btn-primary btn-xs" type="button" (click)="printInvoice()">
+                                        <i class="fa fa-print" aria-hidden="true"></i>
+                                    </button>
+                                </td>
                             </tr>
-                            <tr *ngIf="detail.subs.length === 0">
+
+                            <tr *ngIf=" data['invList'].length === 0">
                                 <td colspan="100%" class="text-center">No data.</td>
                             </tr>
                         </tbody>
+
                     </table>
                 </div>
-            </div>
-            <div class="order-infomation">
-                <div class="row wrapper-flex">
-                    <div class="col-sm-6 block-small">
-                        <div class="block-content block-themed ">
-                            <div class="block-header bg-gray-lighter-small" style="clear: both;margin-top: 10px;margin-bottom:10px;">
-                                <h3 class="block-title" translate>ORDER INFO</h3>
-                            </div>
-                            <div class="block-content detail-order">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group row">
-                                            <label class="col-sm-6 control-label" translate>Order Number</label>
-                                            <div class="col-sm-6">
-                                                <p class="form-control-static">#{{detail.general['code']}}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group row">
-                                            <label class="col-sm-6 control-label" translate>Shipping Cost</label>
-                                            <div class="col-sm-6">
-                                                <p class="form-control-static">{{detail.general['shipping'] | currency}}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group row">
-                                            <label class="col-sm-6 control-label" translate>Sales Quote #</label>
-                                            <div class="col-sm-6">
-                                                <p *ngIf="detail.general['sale_quote_num'] !=undefined" class="form-control-static">#{{detail.general['sale_quote_num']}}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group row">
-                                            <label class="col-sm-6 control-label" translate>Discount</label>
-                                            <div class="col-sm-6">
-                                                <p class="form-control-static">{{(detail.general['discount'] + detail.general['prom_dsct_amt']) | currency}}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group row">
-                                            <label class="col-sm-6 control-label" translate>Order Status</label>
-                                            <div class="col-sm-6">
-                                                <p class="form-control-static">
-                                                    <span class="label label-info">{{detail.general['order_sts_name']}}</span>
-                                                    <!-- <span class="label label-info" *ngIf="detail.general.order_sts_short_name == 'NW'">{{detail.general.order_sts_name}}</span>
-                                                    <span class="label label-warning" *ngIf="detail.general.order_sts_short_name == 'IP'">{{detail.general.order_sts_name}}</span>
-                                                    <span class="label label-danger" *ngIf="detail.general.order_sts_short_name == 'PD'">{{detail.general.order_sts_name}}</span>
-                                                    <span class="label  label-success" *ngIf="detail.general.order_sts_short_name == 'CP'">{{detail.general.order_sts_name}}</span> -->
-                                                    <!-- <span class="label label-info">{{detail.general.order_sts_name}}</span>                          -->
-                                                </p>
-                                            </div>
-                                        </div>
+            </ng-template>
+        </ngb-tab>
+        <ngb-tab title='HISTORY'>
+            <ng-template ngbTabContent>
+                <div class="table-responsive">
+                    <table class="table table-striped table-vcenter table-hover custom-table">
+                        <thead class="bg-white">
+                            <tr>
+                                <th>Full Name</th>
+                                <th>Action</th>
+                                <th style="width: 200px;">Created</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of data['history']">
+                                <td>{{item.log_user_name}}</td>
+                                <td>{{item.log_content}}</td>
+                                <td>{{item.log_date }}</td>
+                            </tr>
 
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group row">
-                                            <label class="col-sm-6 control-label" translate>VAT</label>
-                                            <div class="col-sm-6">
-                                                <p class="form-control-static">{{detail.general['vat'] | currency}}</p>
-                                            </div>
-                                        </div>
-                                    </div>
+                            <tr *ngIf="data['history'].length === 0">
+                                <td colspan="100%" class="text-center">No data.</td>
+                            </tr>
+                        </tbody>
 
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group row">
-                                            <label class="col-sm-6 control-label" translate>Customer PO</label>
-                                            <div class="col-sm-6">
-                                                <p class="form-control-static">{{detail.general['cus_po']}}</p>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group row">
-                                            <label class="col-sm-6 control-label" translate>Grand Total</label>
-                                            <div class="col-sm-6">
-                                                <p class="form-control-static">{{detail.general['total_price'] | currency}}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group row">
-                                            <label class="col-sm-6 control-label" translate>Order Type</label>
-                                            <div class="col-sm-6">
-                                                <p class="form-control-static">{{detail.general['type_name']}}</p>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group row">
-                                            <label class="col-sm-6 control-label" translate>Last Updated On</label>
-                                            <div class="col-sm-6">
-                                                <p class="form-control-static">{{detail.general['updated_at']}}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group row">
-                                            <label class="col-sm-6 control-label" translate>Payment Type</label>
-                                            <div class="col-sm-6">
-                                                <p class="form-control-static">
-                                                    <span *ngIf="detail.general['payment_method']=='AB'">Account Balance </span>
-                                                    <span *ngIf="detail.general['payment_method']=='BT'">Bank Transfer </span>
-                                                    <span *ngIf="detail.general['payment_method']=='CS'">Cash </span>
-                                                    <span *ngIf="detail.general['payment_method']=='CC'">Credit Card</span>
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group row" *ngIf="detail.general['approval_num'] !=('' || null)">
-                                            <label class="col-sm-6 control-label" translate>Approval number</label>
-                                            <div class="col-sm-6">
-                                                <p class="form-control-static">{{detail.general.approval_num}}</p>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="col-md-6">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-3 block-small">
-                        <div class=" block-content   block-themed ">
-                            <div class="block-header bg-gray-lighter-small" style="clear: both;margin-top: 10px;margin-bottom:10px;">
-                                <h3 class="block-title" translate>BUYER INFO</h3>
-                            </div>
-                            <div class="block-content detail-order">
-                                <form class="form-horizontal form-design">
-
-                                    <div class="form-group row">
-                                        <label class="col-sm-4 control-label" translate>Name</label>
-                                        <div class="col-sm-8">
-                                            <p>{{detail.buyer_info['buyer_name']}}</p>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-4 control-label" translate>Phone</label>
-                                        <div class="col-sm-8">
-                                            <p>{{detail.buyer_info['buyer_phone']}}</p>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-4 control-label" translate>Email</label>
-                                        <div class="col-sm-8">
-                                            <p>{{detail.buyer_info['buyer_email']}}</p>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="col-sm-3 block-small">
-                        <div class=" block-content  block-themed ">
-                            <div class="block-header bg-gray-lighter-small" style="clear: both;margin-top: 10px;margin-bottom:10px;">
-                                <h3 class="block-title" translate>BILLING ADDRESS</h3>
-                            </div>
-                            <div class="block-content detail-order">
-                                <form class="form-horizontal form-design">
-
-                                    <div class="form-group row">
-                                        <label class="col-sm-4 control-label" translate>Country</label>
-                                        <div class="col-sm-8">
-                                            <p>{{detail.billing['country_name']}}</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <label class="col-sm-4 control-label" translate>Street</label>
-                                        <div class="col-sm-8">
-                                            <p>{{detail.billing['street']}}</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <label class="col-sm-4 control-label">City</label>
-                                        <div class="col-sm-8">
-                                            <p>{{detail.billing['city_name']}}</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <label class="col-sm-4 control-label" translate>State</label>
-                                        <div class="col-sm-8">
-                                            <p>{{detail.billing['state_name']}}</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <label class="col-sm-4 control-label" translate>Zip Code</label>
-                                        <div class="col-sm-8">
-                                            <p>{{detail.billing['zip_code']}}</p>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+                    </table>
                 </div>
-            </div>
-        </div>
-    </div>
+
+            </ng-template>
+        </ngb-tab>
+    </ngb-tabset>
 </div>
 <print-order #orderTemplate [detail]="detail"></print-order>
+<print-invoice #invoiceTemplate [detail]="detail"></print-invoice>
