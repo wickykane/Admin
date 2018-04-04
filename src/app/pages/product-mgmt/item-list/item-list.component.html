@@ -2,7 +2,7 @@
     <app-page-header [heading]="'ITEM LIST'" [icon]="'fa-th-list'"></app-page-header>
     <div class="search-block block-content pd-bottom tab-content bg-gray-light">
         <div class="row">
-            <ngb-tabset class="tab-header" activeId="vin" type="pills" (tabChange)="resetTab()">
+            <ngb-tabset  #tabSet class="tab-header" activeId="vin" type="pills" (tabChange)="resetTab()">
                 <ngb-tab id="search" title="Search By:" [disabled]="true">
                     <ng-template ngbTabContent>
 

@@ -353,7 +353,7 @@ export class SaleOrderCreateComponent implements OnInit {
 
 
   createOrder() {
-
+    if(!this.generalForm.valid || !this.bill || !this.order_info['payment_method']) return;
     let products = [];
     this.list.items.forEach(function (item) {
       products.push({
