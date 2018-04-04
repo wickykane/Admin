@@ -1,13 +1,16 @@
 import { TableService } from './../../../services/table.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from "../product-mgmt.service";
+import { ItemKeyService } from "./keys.control";
+import { NgbTab } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-item-list',
   templateUrl: './item-list.component.html',
-  styleUrls: ['./item-list.component.scss']
+  styleUrls: ['./item-list.component.scss'],
+  providers: [ItemKeyService]
 })
 export class ItemListComponent implements OnInit {
 
@@ -25,6 +28,7 @@ export class ItemListComponent implements OnInit {
   }
   public checkAllItem;
   public data = {};
+  @ViewChild('tabSet') tabSet;
 
   /**
    * Init Data
@@ -34,6 +38,7 @@ export class ItemListComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     public tableService: TableService,
+    public itemKeyService: ItemKeyService,
     private productService: ProductService
   ) {
     this.searchForm = fb.group({
@@ -65,9 +70,12 @@ export class ItemListComponent implements OnInit {
     //Assign get list function name, override variable here
     this.tableService.getListFnName = 'getList';
     this.tableService.context = this;
+    //Init Key
+    this.itemKeyService.watchContext.next(this);
   }
 
   ngOnInit() {
+
     //Init Fn
     this.listMaster['certification_partNumber'] = [{ code: "Y", value: "Yes" }, { code: "N", value: "No" }];
     this.getListReference();
@@ -109,6 +117,11 @@ export class ItemListComponent implements OnInit {
   /**
    * Internal Function
    */
+
+  selectTab(id) {
+    this.tabSet.select(id);
+  }
+
   resetTab() {
     this.searchForm.reset();
     this.filterForm.reset();
@@ -161,8 +174,9 @@ export class ItemListComponent implements OnInit {
   }
 
   createOrder() {
-    let ids: any = (this.list.checklist.map(_ => {_.order_quantity = 1; return _;} ) || []);
-    this.router.navigateByData({url: ['order-management/sale-order/create'], data: ids});
+    if (this.list.checklist.length == 0) return;
+    let ids: any = (this.list.checklist.map(_ => { _.order_quantity = 1; return _; }) || []);
+    this.router.navigateByData({ url: ['order-management/sale-order/create'], data: ids });
     // this.router.navigate(['order-management/sale-order/create', { data : ids }])
   }
 }
