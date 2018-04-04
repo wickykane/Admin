@@ -115,6 +115,10 @@ export class ReportComponent implements OnInit {
     public topRank: any[] = [5, 10, 15];
     public listCategory: any = [];
     public listSubCategory: any = [];
+    public listPart: any = [];
+    public listRepair: any = [];
+    public listSaleOrder: any = [];
+    public listCat: any = [];
 
     constructor(public fb: FormBuilder,
         public router: Router,
@@ -270,15 +274,24 @@ export class ReportComponent implements OnInit {
 
     //draw chart
     getListPart() {
-        if(this.partForm.value.order) {
-            this.partForm.patchValue({'from_date': [this.partForm.value.from_date.year, this.partForm.value.from_date.month, this.partForm.value.from_date.day].join('-')}),
-            this.partForm.patchValue({'to_date': [this.partForm.value.to_date.year, this.partForm.value.to_date.month, this.partForm.value.to_date.day].join('-')})
+        if (this.partForm.value.order == 4) {
+            this.partForm.patchValue({ 'from_date': [this.partForm.value.from_date.year, this.partForm.value.from_date.month, this.partForm.value.from_date.day].join('-') }),
+                this.partForm.patchValue({ 'to_date': [this.partForm.value.to_date.year, this.partForm.value.to_date.month, this.partForm.value.to_date.day].join('-') })
         }
 
         delete this.partForm.value.order;
         let params = this.partForm.value;
         this.dashboardService.getListPart(params).subscribe(res => {
             try {
+                this.listPart = res.data;
+
+                let arr = [];
+                for (var i = 0; i < res.data.length; i++) {
+                    this.label1.push(res.data[i].sku);
+                    arr.push(res.data[i].total_qty);
+                }
+
+                this.data1 = arr;
 
             } catch (e) {
 
@@ -287,16 +300,25 @@ export class ReportComponent implements OnInit {
     }
 
     getListRepair() {
-        if(this.repairForm.value.order) {
-            this.repairForm.patchValue({'from_date': [this.repairForm.value.from_date.year, this.repairForm.value.from_date.month, this.repairForm.value.from_date.day].join('-')}),
-            this.repairForm.patchValue({'to_date': [this.repairForm.value.to_date.year, this.repairForm.value.to_date.month, this.repairForm.value.to_date.day].join('-')})
+        if (this.repairForm.value.order == 4) {
+            this.repairForm.patchValue({ 'from_date': [this.repairForm.value.from_date.year, this.repairForm.value.from_date.month, this.repairForm.value.from_date.day].join('-') }),
+                this.repairForm.patchValue({ 'to_date': [this.repairForm.value.to_date.year, this.repairForm.value.to_date.month, this.repairForm.value.to_date.day].join('-') })
         }
 
-        delete this.repairForm.value.order;
+        // delete this.repairForm.value.order;
         let params = this.repairForm.value;
         this.dashboardService.getListRepair(params).subscribe(res => {
             try {
+                this.listRepair = res.data;
 
+                let first = [], second = [];
+                for (var i = 0; i < res.data.length; i++) {
+                    this.label2.push(res.data[i].buyer_name);
+                    first.push(res.data[i].total_ordered);
+                    second.push(res.data[i].total_revenue);
+                }
+
+                this.data2 = [{ data: first, label: 'Total sale orders', yAxisID: "yAxis1" }, { data: second, label: 'Total Revenues', yAxisID: "yAxis2" }];
             } catch (e) {
 
             }
@@ -304,16 +326,25 @@ export class ReportComponent implements OnInit {
     }
 
     getListSaleOrder() {
-        if(this.saleOrderForm.value.order) {
-            this.saleOrderForm.patchValue({'from_date': [this.saleOrderForm.value.from_date.year, this.saleOrderForm.value.from_date.month, this.saleOrderForm.value.from_date.day].join('-')}),
-            this.saleOrderForm.patchValue({'to_date': [this.saleOrderForm.value.to_date.year, this.saleOrderForm.value.to_date.month, this.saleOrderForm.value.to_date.day].join('-')})
+        if (this.saleOrderForm.value.order == 4) {
+            this.saleOrderForm.patchValue({ 'from_date': [this.saleOrderForm.value.from_date.year, this.saleOrderForm.value.from_date.month, this.saleOrderForm.value.from_date.day].join('-') }),
+                this.saleOrderForm.patchValue({ 'to_date': [this.saleOrderForm.value.to_date.year, this.saleOrderForm.value.to_date.month, this.saleOrderForm.value.to_date.day].join('-') })
         }
 
-        delete this.saleOrderForm.value.order;
+        // delete this.saleOrderForm.value.order;
         let params = this.saleOrderForm.value;
+
         this.dashboardService.getListSaleOrder(params).subscribe(res => {
             try {
+                this.listSaleOrder = res.data;
 
+                let arr = [];
+                for (var i = 0; i < res.data.length; i++) {
+                    this.label3.push(res.data[i].status_label);
+                    arr.push(res.data[i].total_order);
+                }
+
+                this.data3 = arr;
             } catch (e) {
 
             }
@@ -321,18 +352,25 @@ export class ReportComponent implements OnInit {
     }
 
     getCategorySold() {
-        if(this.categoryForm.value.order) {
-            this.categoryForm.patchValue({'from_date': [this.categoryForm.value.from_date.year, this.categoryForm.value.from_date.month, this.categoryForm.value.from_date.day].join('-')}),
-            this.categoryForm.patchValue({'to_date': [this.categoryForm.value.to_date.year, this.categoryForm.value.to_date.month, this.categoryForm.value.to_date.day].join('-')})
+        if (this.categoryForm.value.order) {
+            this.categoryForm.patchValue({ 'from_date': [this.categoryForm.value.from_date.year, this.categoryForm.value.from_date.month, this.categoryForm.value.from_date.day].join('-') }),
+                this.categoryForm.patchValue({ 'to_date': [this.categoryForm.value.to_date.year, this.categoryForm.value.to_date.month, this.categoryForm.value.to_date.day].join('-') })
         }
 
-        delete this.categoryForm.value.order;
-        delete this.categoryForm.value.category;
+        // delete this.categoryForm.value.order;
+        // delete this.categoryForm.value.category;
 
         let params = this.categoryForm.value;
         this.dashboardService.getCategorySold(params).subscribe(res => {
             try {
+                this.listCat = res.data;
+                let arr = [];
+                for (var i = 0; i < res.data.length; i++) {
+                    this.label4.push(res.data[i].brand_name);
+                    arr.push(res.data[i].total_qty);
+                }
 
+                this.data4 = arr;
             } catch (e) {
 
             }
@@ -348,7 +386,6 @@ export class ReportComponent implements OnInit {
                 this.getListRepair();
                 break;
             case 'saleOrderForm':
-
                 this.getListSaleOrder();
                 break;
             case 'categoryForm':
@@ -358,7 +395,20 @@ export class ReportComponent implements OnInit {
     }
 
     resetAction(flag) {
-
+        switch (flag) {
+            case 'partForm':
+                this.partForm.reset();
+                break;
+            case 'repairForm':
+                this.repairForm.reset();
+                break;
+            case 'saleOrderForm':
+                this.saleOrderForm.reset();
+                break;
+            case 'categoryForm':
+                this.categoryForm.reset();
+                break;
+        }
     }
 
 
