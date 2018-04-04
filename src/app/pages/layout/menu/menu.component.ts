@@ -39,7 +39,7 @@ export class MenuComponent implements OnInit {
             {
                 flag: 'order',
                 link: '/order-management/sale-order',
-                main_name: '<u>O</u>der List',
+                main_name: '<u>O</u>rder List',
                 icon: '',
                 sub: false,
                 child: []
@@ -48,6 +48,14 @@ export class MenuComponent implements OnInit {
                 flag: 'buyer',
                 link: '/customer/buyer',
                 main_name: '<u>B</u>uyer List',
+                icon: '',
+                sub: false,
+                child: []
+            },
+            {
+                flag: 'report',
+                link: '/dashboard/reports',
+                main_name: 'R<u>e</u>port',
                 icon: '',
                 sub: false,
                 child: []

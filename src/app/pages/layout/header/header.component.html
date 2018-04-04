@@ -1,8 +1,8 @@
-<div class="top-head">
+<!-- <div class="top-head">
     <ul class="clearfix">
-        <li class="pull-left">
+        <li class="pull-left"> -->
             <!-- END Header Navigation Left -->
-            <ul class="nav-header">
+            <!-- <ul class="nav-header">
                 <li class="nav-item dropdown" ngbDropdown>
                     <a href="javascript:void(0)" class="nav-link" ngbDropdownToggle>
                         <i class="fa fa-language"></i> {{ 'Language' | translate }}
@@ -41,7 +41,7 @@
             <p class="phone">Support(+08)0979240977</p>
         </li>
     </ul>
-</div>
+</div> -->
 
 
 <nav class="navbar navbar-expand-lg">
@@ -53,11 +53,11 @@
     </button>
     <div class="collapse navbar-collapse">
         <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a href="javascript:void(0)" class="nav-link mt-1" style="border-color: #999;" (click)="rltAndLtr()">
                     RTL/LTR
                 </a>
-            </li>
+            </li> -->
             <li class="nav-item">
                 <div class="avatar">
                     <img src="assets/images/no_avatar.jpg" alt="">
@@ -69,28 +69,28 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a style="border-color: #999;" placement="top" ngbTooltip="Notifications" class="nav-link mt-1" [routerLink]="['/login']"
+                <a style="border-color: #999;" placement="top" ngbTooltip="Notifications" class="nav-link mt-1" [routerLink]="['/']"
                     (click)="onLoggedout()">
                     <i class="fa fa-bell"></i>
                 </a>
             </li>
             <li class="nav-item">
-                <a style="border-color: #999;" placement="top" ngbTooltip="Keyboard" class="nav-link mt-1" [routerLink]="['/login']" (click)="onLoggedout()">
+                <a style="border-color: #999;" placement="top" ngbTooltip="Keyboard" class="nav-link mt-1" [routerLink]="['/']" >
                     <i class="fa fa-key"></i>
                 </a>
             </li>
             <li class="nav-item">
-                <a style="border-color: #999;" placement="top" ngbTooltip="Log out" class="nav-link mt-1" [routerLink]="['/login']" (click)="onLoggedout()">
+                <a style="border-color: #999;" placement="top" ngbTooltip="Log out" class="nav-link mt-1" [routerLink]="['/']" >
                     <i class="fa fa-sign-out"></i>
                 </a>
             </li>
             <li class="nav-item">
-                <a style="border-color: #999;" placement="top" ngbTooltip="Mail" class="nav-link mt-1" [routerLink]="['/login']" (click)="onLoggedout()">
+                <a style="border-color: #999;" placement="top" ngbTooltip="Mail" class="nav-link mt-1" [routerLink]="['/']" >
                     <i class="fa fa-envelope"></i>
                 </a>
             </li>
             <li class="nav-item">
-                <a style="border-color: #999;" placement="top" ngbTooltip="Log out" class="nav-link mt-1" [routerLink]="['/login']" (click)="onLoggedout()">
+                <a style="border-color: #999;" placement="top" ngbTooltip="Log out" class="nav-link mt-1"  (click)="onlogOut()">
                     <i class="fa fa-sign-out"></i>
                 </a>
             </li>
