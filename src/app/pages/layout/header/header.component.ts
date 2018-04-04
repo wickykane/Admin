@@ -77,7 +77,7 @@ export class HeaderComponent implements OnInit {
         this.translate.use(language);
     }
     onlogOut(){
-        localStorage.reset();
+        localStorage.clear();
         this.JwtService.cleanLocalStorage();
         this.router.navigate('http://nab.dev.seldatdirect.com');
     }
