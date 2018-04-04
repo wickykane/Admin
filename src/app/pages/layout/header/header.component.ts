@@ -78,6 +78,6 @@ export class HeaderComponent implements OnInit {
     }
     onlogOut(){       
         this.JwtService.cleanLocalStorage();
-        this.router.navigate(['http://nab.dev.seldatdirect.com']);
+        window.location.href='http://nab.dev.seldatdirect.com';
     }
 }
