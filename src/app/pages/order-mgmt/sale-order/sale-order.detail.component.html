@@ -1,9 +1,12 @@
-<div class="block">
+<div class="block position-relative">
     <div class="block-header bg-red-dark text-white">
         <h3 class="block-title-lg"><span translate>LIST OF ORDERS ></span> #{{detail.general['code']}}</h3>
         <div class="wrap-keyboard">
             <span class="fa fa-keyboard-o my-own-cheatsheet"></span>
         </div>
+        <button type="button" class="btn btn-primary btn-print-order" (click)="printOrder()">
+            <i class="fa fa-print" aria-hidden="true"></i> Print Sales Order
+        </button>
     </div>
 
     <ngb-tabset>
@@ -346,9 +349,6 @@
             </ng-template>
         </ngb-tab>
     </ngb-tabset>
-
-
-
 </div>
 <print-order #orderTemplate [detail]="detail"></print-order>
 <print-invoice #invoiceTemplate [detail]="detail"></print-invoice>
