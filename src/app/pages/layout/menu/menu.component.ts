@@ -52,6 +52,14 @@ export class MenuComponent implements OnInit {
                 sub: false,
                 child: []
             },
+            {
+                flag: 'report',
+                link: '/dashboard/reports',
+                main_name: 'R<u>e</u>port',
+                icon: '',
+                sub: false,
+                child: []
+            },
             // {
             //     flag: 'dashboard',
             //     link: '/',

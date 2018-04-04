@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { PromotionComponent } from './promotion/promotion.component';
 import { OverallComponent } from './overall/overall.component';
+import { ReportComponent } from './report/report.component';
 
 const routes: Routes = [
     {
@@ -16,6 +17,12 @@ const routes: Routes = [
         path: 'overall',
         children : [
             { path: '', component: OverallComponent }
+        ]
+    },
+    {
+        path: 'reports',
+        children : [
+            { path: '', component: ReportComponent }
         ]
     }
 

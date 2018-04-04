@@ -1,0 +1,349 @@
+<div [@routerTransition]>
+    <app-page-header [heading]="'Reports'" [icon]="'fa-bar-chart-o'"></app-page-header>
+
+
+    <div class="search-block block-content pd-bottom tab-content bg-gray-light">
+        <div class="row">
+            <ngb-tabset type="pills" class="tab-header">
+                <ngb-tab title="PART">
+                    <ng-template ngbTabContent>
+                        <form class="form-horizontal form-search" role="form" [formGroup]="partForm">
+                            <div class="block-search form-select">
+                                <label for="length" class="control-label">Top</label>
+                                <div class="">
+                                    <select class="form-control" formControlName="length">
+                                    <option value="null" selected="true">--Select--</option>
+                                    <option *ngFor="let item of topRank" [ngValue]="item">{{item}}</option>
+                                </select>
+                                </div>
+                            </div>
+                            <div class="block-search form-select">
+                                <label for="order" class="control-label">Order Date</label>
+                                <div class="">
+                                    <select class="form-control" formControlName="order" (change)="changeDate(partForm.value.order, 'partForm')">
+                                    <option value="null" selected="true">--Select--</option>
+                                    <option *ngFor="let item of filterDate" [ngValue]="item.id">{{item.name}}</option>
+                                </select>
+                                </div>
+                            </div>
+                            <div class="block-search form-select" *ngIf="partForm.value.order == '4'">
+                                <label for="from_date" class="control-label">Date From</label>
+                                <div class="input-group">
+                                    <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="from_date" ngbDatepicker #d="ngbDatepicker">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                          </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="block-search form-select" *ngIf="partForm.value.order == '4'">
+                                <label for="to_date" class="control-label">Date To</label>
+                                <div class="input-group">
+                                    <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="to_date" ngbDatepicker #a="ngbDatepicker">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" (click)="a.toggle()" type="button">
+                                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                          </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="block-btn-search">
+                                <label class="control-label">&nbsp;</label>
+                                <div>
+                                    <button type="button" class="btn btn-primary" (click)="searchAction('partForm')">Search</button>
+                                    <button type="button" class="btn btn-default" (click)="resetAction('partForm')">Reset</button>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="row" *ngIf="listPart.length > 0">
+                            <div class="col-md-8">
+                                <canvas baseChart [data]="data1" [labels]="label1" [chartType]="'bar'" [colors]="color1" [options]="option1"></canvas>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-vcenter custom-table">
+                                        <thead class="bg-white">
+                                            <tr>
+                                                <th>Part Num</th>
+                                                <th>Total Sold Quantity</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody *ngFor="let item of  listPart; let i = index;">
+                                            <tr>
+                                                <td>{{item.sku}}</td>
+                                                <td>{{item.total_qty}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngb-tab>
+                <ngb-tab title="REPAIR SHOP">
+                    <ng-template ngbTabContent>
+                        <form class="form-horizontal form-search" role="form" [formGroup]="repairForm">
+                            <div class="block-search form-select">
+                                <label for="length" class="control-label">Top</label>
+                                <div class="">
+                                    <select class="form-control" formControlName="length">
+                                    <option value="null" selected="true">--Select--</option>
+                                    <option *ngFor="let item of topRank" [ngValue]="item">{{item}}</option>
+                                </select>
+                                </div>
+                            </div>
+                            <div class="block-search form-select">
+                                <label for="order" class="control-label">Order Date</label>
+                                <div class="">
+                                    <select class="form-control" formControlName="order" (change)="changeDate(repairForm.value.order, 'repairForm')">
+                                    <option value="null" selected="true">--Select--</option>
+                                    <option *ngFor="let item of filterDate" [ngValue]="item.id">{{item.name}}</option>
+                                </select>
+                                </div>
+                            </div>
+                            <div class="block-search form-select" *ngIf="repairForm.value.order == '4'">
+                                <label for="from_date" class="control-label">Date From</label>
+                                <div class="input-group">
+                                    <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="from_date" ngbDatepicker #d="ngbDatepicker">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                          </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="block-search form-select" *ngIf="repairForm.value.order == '4'">
+                                <label for="to_date" class="control-label">Date To</label>
+                                <div class="input-group">
+                                    <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="to_date" ngbDatepicker #a="ngbDatepicker">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" (click)="a.toggle()" type="button">
+                                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                          </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="block-btn-search">
+                                <label class="control-label">&nbsp;</label>
+                                <div>
+                                    <button type="button" class="btn btn-primary" (click)="searchAction('repairForm')">Search</button>
+                                    <button type="button" class="btn btn-default" (click)="resetAction('repairForm')">Reset</button>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="row" *ngIf="listRepair.length >0">
+                            <div class="col-md-8">
+                                <canvas baseChart [datasets]="data2" [labels]="label2" [colors]="color2" [options]="option2" [legend]="true" [chartType]="'bar'"></canvas>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-vcenter custom-table">
+                                        <thead class="bg-white">
+                                            <tr>
+                                                <th>Repair Shop</th>
+                                                <th>Total Sales Order</th>
+                                                <th>Total Revenues</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody *ngFor="let item of  listRepair; let i = index;">
+                                            <tr>
+                                                <td>{{item}.buyer_name}</td>
+                                                <td>{{item.total_ordered}}</td>
+                                                <td>{{item.total_revenue}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngb-tab>
+
+                <ngb-tab title="SALE ORDER">
+                    <ng-template ngbTabContent>
+                        <form class="form-horizontal form-search" role="form" [formGroup]="saleOrderForm">
+                            <div class="block-search form-select">
+                                <label for="order" class="control-label">Sale Order Date</label>
+                                <div class="">
+                                    <select class="form-control" formControlName="order" (change)="changeDate(saleOrderForm.value.order, 'saleOrderForm')">
+                                    <option value="null" selected="true">--Select--</option>
+                                    <option *ngFor="let item of filterDate" [ngValue]="item.id">{{item.name}}</option>
+                                </select>
+                                </div>
+                            </div>
+                            <div class="block-search form-select" *ngIf="saleOrderForm.value.order == '4'">
+                                <label for="from_date" class="control-label">Date From</label>
+                                <div class="input-group">
+                                    <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="from_date" ngbDatepicker #d="ngbDatepicker">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                          </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="block-search form-select" *ngIf="saleOrderForm.value.order == '4'">
+                                <label for="to_date" class="control-label">Date To</label>
+                                <div class="input-group">
+                                    <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="to_date" ngbDatepicker #a="ngbDatepicker">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" (click)="a.toggle()" type="button">
+                                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                          </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="block-btn-search">
+                                <label class="control-label">&nbsp;</label>
+                                <div>
+                                    <button type="button" class="btn btn-primary" (click)="searchAction('saleOrderForm')">Search</button>
+                                    <button type="button" class="btn btn-default" (click)="resetAction('saleOrderForm')">Reset</button>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="row" *ngIf="listSaleOrder.length >0">
+                            <div class="col-md-8">
+                                <canvas baseChart [data]="data3" [labels]="label3" [chartType]="'pie'" [colors]="color1" [options]="option3"></canvas>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-vcenter custom-table">
+                                        <thead class="bg-white">
+                                            <tr>
+                                                <th>Status</th>
+                                                <th>Total Sale Order Quantity</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody *ngFor="let item of  listSaleOrder; let i = index;">
+                                            <tr>
+                                                <td>{{item.status_label}}</td>
+                                                <td>{{item.total_order}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngb-tab>
+                <ngb-tab title="CATEGORY">
+                    <ng-template ngbTabContent>
+                        <form class="form-horizontal form-search" role="form" [formGroup]="categoryForm">
+                            <div class="block-search form-select">
+                                <label for="length" class="control-label">Top</label>
+                                <div class="">
+                                    <select class="form-control" formControlName="length">
+                                    <option value="null" selected="true">--Select--</option>
+                                    <option *ngFor="let item of topRank" [ngValue]="item">{{item}}</option>
+                                </select>
+                                </div>
+                            </div>
+                            <div class="block-search form-select">
+                                <label for="category" class="control-label">Category</label>
+                                <div class="">
+                                    <select class="form-control" formControlName="category" (change)="changeCategory()">
+                                    <option value="null" selected="true">--Select--</option>
+                                    <option *ngFor="let item of listCategory" [ngValue]="item">{{item.name}}</option>
+                                </select>
+                                </div>
+                            </div>
+                            <div class="block-search form-select">
+                                <label for="category_id" class="control-label">Sub Category</label>
+                                <div class="">
+                                    <select class="form-control" formControlName="category_id">
+                                    <option value="null" selected="true">--Select--</option>
+                                    <option *ngFor="let item of listSubCategory" [ngValue]="item.category_id">{{item.name}}</option>
+                                </select>
+                                </div>
+                            </div>
+                            <div class="block-search form-select">
+                                <label for="order" class="control-label">Order Date</label>
+                                <div class="">
+                                    <select class="form-control" formControlName="order" (change)="changeDate(categoryForm.valueorder, 'categoryForm')">
+                                    <option value="null" selected="true">--Select--</option>
+                                    <option *ngFor="let item of filterDate" [ngValue]="item.id">{{item.name}}</option>
+                                </select>
+                                </div>
+                            </div>
+                            <div class="block-search form-select" *ngIf="categoryForm.value.order == '4'">
+                                <label for="from_date" class="control-label">Date From</label>
+                                <div class="input-group">
+                                    <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="from_date" ngbDatepicker #d="ngbDatepicker">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                          </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="block-search form-select" *ngIf="categoryForm.value.order == '4'">
+                                <label for="to_date" class="control-label">Date To</label>
+                                <div class="input-group">
+                                    <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="to_date" ngbDatepicker #a="ngbDatepicker">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" (click)="a.toggle()" type="button">
+                                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                          </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="block-btn-search">
+                                <label class="control-label">&nbsp;</label>
+                                <div>
+                                    <button type="button" class="btn btn-primary" (click)="searchAction('categoryForm')">Search</button>
+                                    <button type="button" class="btn btn-default" (click)="resetAction('categoryForm')">Reset</button>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="row" *ngIf="listCat.length >0">
+                            <div class="col-md-8">
+                                <canvas baseChart [data]="data4" [labels]="label4" [chartType]="'bar'" [colors]="color1" [options]="option1"></canvas>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-vcenter custom-table">
+                                        <thead class="bg-white">
+                                            <tr>
+                                                <th>Brand Name</th>
+                                                <th>Total Category Sold</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody *ngFor="let item of listCat; let i = index;">
+                                            <tr>
+                                                <td>{{item.brand_name}}</td>
+                                                <td>{{item.total_qty}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngb-tab>
+                <!-- <ngb-tab title="RMA">
+                <ng-template ngbTabContent>
+                    <form class="form-horizontal form-search" role="form" [formGroup]="rmaForm">
+                        <div class="block-search form-select">
+                            <label for="order" class="control-label">RMA Date</label>
+                            <div class="">
+                                <select class="form-control" formControlName="order" (change)="changeDate(order)">
+                                    <option value="null" selected="true">--Select--</option>
+                                    <option *ngFor="let item of filterDate" [ngValue]="item.id">{{item.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="block-btn-search">
+                            <label class="control-label">&nbsp;</label>
+                            <div>
+                                <button type="button" class="btn btn-primary" (click)="searchAction('rmaForm')">Search</button>
+                                <button type="button" class="btn btn-default" (click)="resetAction('rmaForm')">Reset</button>
+                            </div>
+                        </div>
+                    </form>
+                </ng-template>
+            </ngb-tab> -->
+            </ngb-tabset>
+        </div>
+    </div>
+</div>
