@@ -16,6 +16,9 @@ import { SaleOrderComponent } from './sale-order/sale-order.component';
 import { SaleOrderCreateComponent } from './sale-order/sale-order.create.component';
 import { SaleOrderDetailComponent } from './sale-order/sale-order.detail.component';
 import { PrintOrderComponent } from './sale-order/print/print.oder.component';
+import { PrintInvoiceComponent } from './sale-order/print/print.invoice.component';
+import { InvoiceModalContent } from './sale-order/modals/invoice.modal';
+
 
 
 //Sale Price
@@ -25,9 +28,9 @@ import { SalePriceEditComponent } from './sale-price/sale-price-edit.component';
 
 //Sale Quotation
 import { SaleQuotationComponent } from './sale-quotation/sale-quotation.component';
-import {SaleQuotationCreateComponent} from './sale-quotation/sale-quotation.create.component';
-import {SaleQuotationDetailComponent} from './sale-quotation/sale-quotation.detail.component';
-import {SaleQuotationRfqCreateComponent} from './sale-quotation/sale-quotation.rfq.create.component';
+import { SaleQuotationCreateComponent } from './sale-quotation/sale-quotation.create.component';
+import { SaleQuotationDetailComponent } from './sale-quotation/sale-quotation.detail.component';
+import { SaleQuotationRfqCreateComponent } from './sale-quotation/sale-quotation.rfq.create.component';
 
 import { CommonShareModule, PageHeaderModule } from '../../shared/index';
 import { TableService } from "../../services/index";
@@ -58,7 +61,10 @@ import { ItemModalModule } from "../../shared/modals/item.module";
         SaleQuotationRfqCreateComponent,
         SaleOrderCreateComponent,
         SaleOrderDetailComponent,
-        PrintOrderComponent],
-    providers: [OrderService, TableService]
+        PrintOrderComponent,
+        PrintInvoiceComponent,
+        InvoiceModalContent],
+    providers: [OrderService, TableService],
+    entryComponents: [InvoiceModalContent]
 })
 export class OrderMgmtModule { }
