@@ -4,12 +4,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 
-import { OrderService } from "../order-mgmt.service";
+import { OrderService } from '../order-mgmt.service';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { ToastrService } from 'ngx-toastr';
 
-import { ItemModalContent } from "../../../shared/modals/item.modal";
-import { PromotionModalContent } from "../../../shared/modals/promotion.modal";
+import { ItemModalContent } from '../../../shared/modals/item.modal';
+import { PromotionModalContent } from '../../../shared/modals/promotion.modal';
 
 
 
@@ -31,7 +31,7 @@ export class SaleOrderCreateComponent implements OnInit {
     information: {},
     primary: [{}],
     billing: []
-  }
+  };
   public bill = {};
   public billing = null;
   public ship = {};
@@ -59,7 +59,14 @@ export class SaleOrderCreateComponent implements OnInit {
   /**
    * Init Data
    */
-  constructor(private vRef: ViewContainerRef, private fb: FormBuilder, public toastr: ToastrService, private router: Router, private route: ActivatedRoute, private modalService: NgbModal, private orderService: OrderService) {
+  constructor(
+    private vRef: ViewContainerRef,
+    private fb: FormBuilder,
+    public toastr: ToastrService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private modalService: NgbModal,
+    private orderService: OrderService) {
     this.generalForm = fb.group({
       'customer_po': [null, Validators.required],
       'order_number': [null],
@@ -78,20 +85,20 @@ export class SaleOrderCreateComponent implements OnInit {
     this.listMaster['payType'] = [{ id: 'PKU', label: 'Pickup' }, { id: 'CE', label: 'Call' }, { id: 'ONL', label: 'Ecommerce' }];
     this.payment = {
       paymentMethod: [
-        { id: 'AB', name: "Account Balance" },
-        { id: 'BT', name: "Bank Transfer" },
-        { id: 'CS', name: "Cash" },
-        { id: 'CC', name: "Credit Card" }
+        { id: 'AB', name: 'Account Balance' },
+        { id: 'BT', name: 'Bank Transfer' },
+        { id: 'CS', name: 'Cash' },
+        { id: 'CC', name: 'Credit Card' }
       ],
       paymentTerm: [
-        { id: 15, name: "15 days" },
-        { id: 30, name: "30 days" }
+        { id: 15, name: '15 days' },
+        { id: 30, name: '30 days' }
       ]
-    }
+    };
 
-    //Item
+    // Item
     this.list.items = this.router.getNavigatedData() || [];
-    if (Object.keys(this.list.items).length == 0) this.list.items = [];
+    if (Object.keys(this.list.items).length === 0) {this.list.items = []; }
     this.updateTotal();
   }
   /**
@@ -100,10 +107,10 @@ export class SaleOrderCreateComponent implements OnInit {
   getListStatus() {
     this.listMaster['status'] = [{
       id: '0',
-      name: "In-Active"
+      name: 'In-Active'
     }, {
       id: '1',
-      name: "Active "
+      name: 'Active '
     }];
   }
 
@@ -114,7 +121,7 @@ export class SaleOrderCreateComponent implements OnInit {
       } catch (e) {
         console.log(e);
       }
-    })
+    });
   }
 
   getListCompanySearch(type_buyer) {
@@ -124,7 +131,7 @@ export class SaleOrderCreateComponent implements OnInit {
       } catch (e) {
         console.log(e);
       }
-    })
+    });
   }
 
   /**
@@ -133,9 +140,9 @@ export class SaleOrderCreateComponent implements OnInit {
   selectData(data) { }
 
   cloneRecord(record, list) {
-    var newRecord = Object.assign({}, record);
-    var index = list.indexOf(record);
-    var objIndex = list[index];
+    const newRecord = Object.assign({}, record);
+    const index = list.indexOf(record);
+    const objIndex = list[index];
     objIndex.products.push(newRecord);
     this.list.items = list;
     this.updateTotal();
@@ -153,7 +160,6 @@ export class SaleOrderCreateComponent implements OnInit {
 
     return total;
   };
-
 
   checkCloneRecord(item, list) {
 
@@ -227,13 +233,13 @@ export class SaleOrderCreateComponent implements OnInit {
       } catch (e) {
         console.log(e);
       }
-    })
+    });
   }
 
   deleteAction(id) {
     this.list.items = this.list.items.filter(function (item) {
-      return item.item_id != id
-    })
+      return item.item_id !== id;
+    });
     this.updateTotal();
   }
 
@@ -243,7 +249,7 @@ export class SaleOrderCreateComponent implements OnInit {
     modalRef.result.then(res => {
       if ((res) instanceof Array && res.length > 0) {
         this.order_info.selected_programs = res;
-        var params = {};
+        let params = {};
         params['company_id'] = this.order_info.company_id;
         params['selected_programs'] = this.order_info.selected_programs;
         params['items'] = this.list.items;
@@ -264,10 +270,10 @@ export class SaleOrderCreateComponent implements OnInit {
     if (id) {
       this.orderService.getDetailCompany(id).subscribe(res => {
         try {
-          if (res.data.length == 0) return;
+          if (res.data.length === 0) return;
           this.order = res.data;
           if (this.list.items.length > 0) {
-            for (var i = 0; i < this.list.items.length; i++) {
+            for (let i = 0; i < this.list.items.length; i++) {
               this.list.items[i]['shipping_address_id'] =
                 this.order['shipping'][0].id;
             }
@@ -275,7 +281,7 @@ export class SaleOrderCreateComponent implements OnInit {
         } catch (e) {
           console.log(e);
         }
-      })
+      });
     }
   }
 
@@ -295,10 +301,10 @@ export class SaleOrderCreateComponent implements OnInit {
   }
 
   findDataById(id, arr) {
-    var result;
+    let result;
     if ((arr) instanceof Array) {
-      for (var i = 0; i < arr.length; i++) {
-        if (arr[i].address_id == id) {
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i].address_id === id) {
           result = arr[i];
           break;
         }
@@ -314,14 +320,14 @@ export class SaleOrderCreateComponent implements OnInit {
 
   clickAdd() {
     this.data['programs'].push({ 'is_dsct': 0, 'is_acc_bal': 0, 'is_promo_goods': 0 });
-  };
+  }
 
   addNewItem(list, type_get, buyer_id) {
     const modalRef = this.modalService.open(ItemModalContent, { size: 'lg' });
     modalRef.result.then(res => {
       if (res instanceof Array && res.length > 0) {
 
-        var listAdded = [];
+        const listAdded = [];
         (this.list.items).forEach(function (item) {
           listAdded.push(item.item_id);
         });
@@ -353,8 +359,8 @@ export class SaleOrderCreateComponent implements OnInit {
 
 
   createOrder() {
-    if(!this.generalForm.valid || !this.bill || !this.order_info['payment_method']) return;
-    let products = [];
+    if (!this.generalForm.valid || !this.bill || !this.order_info['payment_method']) return;
+    const products = [];
     this.list.items.forEach(function (item) {
       products.push({
         item_id: item.item_id,
@@ -381,9 +387,9 @@ export class SaleOrderCreateComponent implements OnInit {
     });
 
     let params = {
-      "brand_id": 1,
-      "billing_id": this.billing,
-      "products": products
+      'brand_id': 1,
+      'billing_id': this.billing,
+      'products': products
     };
 
     params = Object.assign({}, this.order_info, this.generalForm.value, params);
@@ -393,9 +399,8 @@ export class SaleOrderCreateComponent implements OnInit {
           this.toastr.success(res.results.message);
           setTimeout(() => {
             this.router.navigate(['/order-management/sale-order']);
-          }, 500)
-        }
-        else {
+          }, 500);
+        } else {
           this.toastr.error(res.results.message, null, { enableHtml: true });
         }
       } catch (e) {
@@ -404,7 +409,7 @@ export class SaleOrderCreateComponent implements OnInit {
     },
       err => {
         this.toastr.error(err.message, null, { enableHtml: true });
-      })
+      });
   }
 
 }
