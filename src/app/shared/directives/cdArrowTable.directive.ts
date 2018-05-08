@@ -1,4 +1,4 @@
-import { Directive, Input, Output, EventEmitter } from '@angular/core';
+import { Directive, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 
 @Directive({ selector: '[cdArrowTable]' })
@@ -27,12 +27,24 @@ export class cdArrowTable {
     @Output() selectedIndexChange: EventEmitter<any> = new EventEmitter<any>();
     @Output() onEnter: EventEmitter<any> = new EventEmitter<any>();
 
+    ngOnDestroy() {
+        this.resetKeys();
+    }
+
+    resetKeys() {
+        let keys = this._hotkeysService.hotkeys;
+        for (const key of keys) {
+            console.log(key);
+            this._hotkeysService.remove(key);
+        }
+    }
+
     hotKeyConfig() {
+        this.resetKeys();
         this._hotkeysService.add(new Hotkey('up', (event: KeyboardEvent): boolean => {
             if (this._selectedIndex == 0) {
                 return;
             }
-
             this._selectedIndex--;
             this.selectedIndexChange.emit(this._selectedIndex);
         }, undefined, 'Up'));

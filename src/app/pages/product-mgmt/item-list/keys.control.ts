@@ -17,6 +17,10 @@ export class ItemKeyService implements OnDestroy {
         this._hotkeysService.reset()
     }
 
+    getKeys() {
+        return this._hotkeysService.hotkeys;
+    }
+
     initKey() {
         this._hotkeysService.add(new Hotkey('alt+n', (event: KeyboardEvent): boolean => {
             this.context.createOrder();

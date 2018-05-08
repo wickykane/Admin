@@ -1,0 +1,11 @@
+<div class='shortcut-container'>
+    <ul class="list-inline">
+        <ng-container *ngFor="let item of listShortcut">
+            <li *ngIf="item.combo[0] != '?'" class="list-inline-item">
+                <span class='key'>{{ item.combo[0]}}</span>
+                <span class='key-des'>{{ item.description }}</span>
+            </li>
+        </ng-container>
+
+    </ul>
+</div>
