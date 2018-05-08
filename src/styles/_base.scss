@@ -551,17 +551,26 @@ table.custom-table {
 
 .gradient-white {
     background: #feffff;
+    border: 1px solid #dee2e6;
+    border-radius: 3px !important;  
     background: -webkit-gradient(linear, left top, left bottom, from(#feffff), color-stop(50%, #ebebeb), to(#ffffff));
     background: linear-gradient(to bottom, #feffff 0%, #ebebeb 50%, #ffffff 100%);
 }
 
 .information-tab {
     .nav {
-        border: 1px solid #dee2e6;
+        border-top: 1px solid #dee2e6;
+        .nav-item + .nav-item {
+            .nav-link {
+                border-left: none !important;
+            }
+        }
+    
     }
+
     .nav-link {
         padding: 5px 10px !important;
-        border-color: #e9ecef #e9ecef #dee2e6 !important;
+        border-color: #dee2e6 #dee2e6 #dee2e6 !important;
         border-top: none;
         font-weight: normal !important;
         background: #feffff;
