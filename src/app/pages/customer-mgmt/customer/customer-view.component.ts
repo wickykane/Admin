@@ -12,12 +12,14 @@ import { ConfirmModalContent } from "../../../shared/modals/confirm.modal";
 
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
+import { CustomerKeyService } from "./keys.control";
 
 @Component({
     selector: 'app-customer-view',
     templateUrl: './customer-view.component.html',
     styleUrls: ['./customer.component.scss'],
-    animations: [routerTransition()]
+    animations: [routerTransition()],
+    providers: [CustomerKeyService]
 })
 
 export class CustomerViewComponent implements OnInit {
@@ -46,6 +48,7 @@ export class CustomerViewComponent implements OnInit {
         public route: ActivatedRoute,
         public toastr: ToastrService,
         public vRef: ViewContainerRef,
+        public customerKeyService: CustomerKeyService,
         private customerService: CustomerService,
         private modalService: NgbModal) {
         this.generalForm = fb.group({
@@ -75,6 +78,9 @@ export class CustomerViewComponent implements OnInit {
         });
 
         this.listMaster['creditStatus'] = [{ id: 1, name: 'Close' }, { id: 2, name: 'Open' }, { id: 3, name: 'Hold' }];
+
+        //Init Key
+        this.customerKeyService.watchContext.next(this);
     }
 
     ngOnInit() {

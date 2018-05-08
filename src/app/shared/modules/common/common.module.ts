@@ -7,12 +7,14 @@ import { NgbUTCStringAdapter } from './datepickerConfig';
 import { TextMaskModule } from 'angular2-text-mask';
 
 import { DateObjectPipe, Select2Pipe } from "../../pipes/index";
+import { ShortcutComponent } from "../short-cut/shortcut.component";
+
 import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
     imports: [CommonModule, FormsModule, ReactiveFormsModule, NgbModule.forRoot(), TextMaskModule, NgSelectModule],
-    declarations: [cdArrowTable, SortColumnDirective, UppercaseDirective, TrueFalseValueDirective, DateObjectPipe, Select2Pipe],
-    exports: [cdArrowTable, SortColumnDirective, UppercaseDirective, DateObjectPipe, TrueFalseValueDirective, FormsModule, ReactiveFormsModule, NgbModule, TextMaskModule, NgSelectModule],
+    declarations: [cdArrowTable, SortColumnDirective, UppercaseDirective, TrueFalseValueDirective, DateObjectPipe, Select2Pipe, ShortcutComponent],
+    exports: [cdArrowTable, SortColumnDirective, UppercaseDirective, DateObjectPipe, TrueFalseValueDirective, FormsModule, ReactiveFormsModule, NgbModule, TextMaskModule, NgSelectModule, ShortcutComponent],
     providers: [{ provide: NgbDateAdapter, useClass: NgbUTCStringAdapter }]
 })
 
