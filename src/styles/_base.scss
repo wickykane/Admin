@@ -52,7 +52,7 @@
             border-style: solid;
             border-width: 6px 3px 2.5px !important;
         }
-    
+
         &.opened>.ng-control .ng-arrow {
             top: -2px;
             border-color: transparent transparent #444;
@@ -63,7 +63,7 @@
     &.ng-multiple .ng-control .ng-value-container {
         padding-top: 0 !important;
         .ng-input {
-            padding-bottom: 0px !important; 
+            padding-bottom: 0px !important;
         }
         .ng-value {
             margin-bottom: 0;
@@ -75,7 +75,7 @@
             }
         }
     }
-} 
+}
 
 .btn {
     height: 20px;
@@ -296,6 +296,7 @@ input:checked+.slider {
 
 .custom-table-single,
 table.custom-table {
+  margin-bottom: 10px;
     thead {
         tr {
             background-color: #828282;
@@ -548,4 +549,3 @@ table.custom-table {
     display: block;
     position: relative;
 }
-

@@ -1,23 +1,23 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { TableService } from './../../services/table.service';
+import { Component, Input, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CustomerService } from '../customer.service';
 
-// modal
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { SiteModalComponent } from '../../../shared/modals/site.modal';
+import { ItemService } from './item.service';
 
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
-import { routerTransition } from '../../../router.animations';
+import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-    selector: 'app-customer-create',
-    templateUrl: './customer-create.component.html',
-    styleUrls: ['./customer.component.scss'],
-    animations: [routerTransition()]
+    selector: 'app-site-modal',
+    templateUrl: './site.modal.html'
 })
-export class CustomerCreateComponent implements OnInit {
+export class SiteModalComponent implements OnInit {
+    @Input() info;
 
+    /**
+     * Variable Declaration
+     */
     generalForm: FormGroup;
 
     public address: any = [];
@@ -33,23 +33,19 @@ export class CustomerCreateComponent implements OnInit {
         public router: Router,
         public toastr: ToastsManager,
         public vRef: ViewContainerRef,
-        private customerService: CustomerService,
-        private modalService: NgbModal) {
+        private itemService: ItemService,
+        private modalService: NgbModal,
+        public activeModal: NgbActiveModal) {
         this.toastr.setRootViewContainerRef(vRef);
         this.generalForm = fb.group({
-            'customer_type': [null, Validators.required],
-            'code': [null, Validators.required],
-            'company_name': [null, Validators.required],
+            'parent_company_name': [null],
+            'site_code': [null],
+            'site_name': [null, Validators.required],
             'registration_no': [null],
             'phone': [null],
             'fax': [null],
-            'email': [null],
             'credit_limit': [null],
-            'sale_person': [null],
-            'first_name': [null, Validators.required],
-            'last_name': [null, Validators.required],
-            'user_name': [null],
-            'password': [null]
+            'sale_person': [null]
         });
 
     }
@@ -58,6 +54,7 @@ export class CustomerCreateComponent implements OnInit {
         /**
          * Init Data
          */
+        this.listTypeAddress = [{ id: 4, name: 'Primary' }, { id: 2, name: 'Billing' }, { id: 3, name: 'Shipping' }];
         this.listMaster['customerType'] = [{
             id: 'C',
             name: 'Company'
@@ -65,31 +62,13 @@ export class CustomerCreateComponent implements OnInit {
             id: 'P',
             name: 'Personal'
         }];
-
-
-    }
-
-    // change customer Type
-    changeCustomerType() {
-        if (this.generalForm.value.customer_type === 'C') {
-            this.listTypeAddress = [{ id: 1, name: 'Head Office' }, { id: 2, name: 'Billing' }, { id: 3, name: 'Shipping' }];
-            this.address = [{
-                type: 1, listType: this.listTypeAddress
-            }, {
-                type: 2, listType: this.listTypeAddress
-            }, {
-                type: 3, listType: this.listTypeAddress
-            }];
-        } else {
-            this.listTypeAddress = [{ id: 4, name: 'Primary' }, { id: 2, name: 'Billing' }, { id: 3, name: 'Shipping' }];
-            this.address = [{
-                type: 4, listType: this.listTypeAddress
-            }, {
-                type: 2, listType: this.listTypeAddress
-            }, {
-                type: 3, listType: this.listTypeAddress
-            }];
-        }
+        this.address = [{
+            type: 4, listType: this.listTypeAddress
+        }, {
+            type: 2, listType: this.listTypeAddress
+        }, {
+            type: 3, listType: this.listTypeAddress
+        }];
 
     }
 
@@ -148,9 +127,6 @@ export class CustomerCreateComponent implements OnInit {
     removeSite(index) {
         this.site.splice(index, 1);
     }
-
-
-
 
 
 }
