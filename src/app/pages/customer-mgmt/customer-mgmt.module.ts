@@ -10,6 +10,12 @@ import { BuyerComponent } from "./buyer/buyer.component";
 import { BuyerCreateComponent } from "./buyer/buyer-create.component";
 import { BuyerDetailComponent } from "./buyer/buyer-detail.component";
 
+
+import { CustomerComponent } from "./customer/customer.component";
+import { CustomerCreateComponent } from "./customer/customer-create.component";
+import { CustomerDetailComponent } from "./customer/customer-detail.component";
+import { CustomerViewComponent } from "./customer/customer-view.component";
+
 import { CommonShareModule } from '../../shared/index';
 import { PageHeaderModule } from '../../shared';
 import { TableService } from "../../services/index";
@@ -27,7 +33,7 @@ import { ItemModalModule } from "../../shared/modals/item.module";
     CommonShareModule,
     ItemModalModule
   ],
-  declarations: [CustomerSegmentComponent, CustomerSegmentCreateComponent, CustomerSegmentEditComponent,BuyerComponent,BuyerCreateComponent,BuyerDetailComponent],
+  declarations: [CustomerSegmentComponent, CustomerSegmentCreateComponent, CustomerSegmentEditComponent,BuyerComponent,BuyerCreateComponent,BuyerDetailComponent, CustomerComponent, CustomerCreateComponent, CustomerDetailComponent, CustomerViewComponent],
   providers: [TableService, CustomerService],
   entryComponents: []
 })
