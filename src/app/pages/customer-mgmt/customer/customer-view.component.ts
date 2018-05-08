@@ -30,6 +30,7 @@ export class CustomerViewComponent implements OnInit {
     shippingForm: FormGroup;
 
     public users: any = [];
+    public customer = {};
     public listFile: any = [];
     public addressList: any = [];
     public imageSelected: string = '';
