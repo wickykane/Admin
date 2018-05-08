@@ -45,6 +45,14 @@ export class MenuComponent implements OnInit {
                 child: []
             },
             {
+                flag: 'customer',
+                link: '/customer',
+                main_name: '<u>C</u>ustomer',
+                icon: '',
+                sub: false,
+                child: []
+            },
+            {
                 flag: 'buyer',
                 link: '/customer/buyer',
                 main_name: '<u>B</u>uyer List',

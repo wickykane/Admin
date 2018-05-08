@@ -9,7 +9,10 @@ import { BuyerComponent } from "./buyer/buyer.component";
 import { BuyerCreateComponent } from "./buyer/buyer-create.component";
 import { BuyerDetailComponent } from "./buyer/buyer-detail.component";
 
-
+import { CustomerComponent } from "./customer/customer.component";
+import { CustomerCreateComponent } from "./customer/customer-create.component";
+import { CustomerDetailComponent } from "./customer/customer-detail.component";
+import { CustomerViewComponent } from "./customer/customer-view.component";
 
 const routes: Routes = [
     {
@@ -25,10 +28,19 @@ const routes: Routes = [
         children : [
             { path: '', component: BuyerComponent },
             { path: 'create', component: BuyerCreateComponent },
-            { path: 'detail/:id', component: BuyerDetailComponent }
+            { path: 'detail/:id', component: BuyerDetailComponent },
+        ]
+    },
+    {
+        path: '',
+        children : [
+            { path: '', component: CustomerComponent },
+            { path: 'create', component: CustomerCreateComponent },
+            { path: 'detail/:id', component: CustomerDetailComponent },
+            { path: 'view/:id', component: CustomerViewComponent }
+            
         ]
     }
-  
 ];
 
 @NgModule({
