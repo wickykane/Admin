@@ -14,7 +14,14 @@ export class CustomerKeyService implements OnDestroy {
     }
 
     ngOnDestroy() {
-        this._hotkeysService.reset()
+        this.resetKeys();
+    }
+
+    resetKeys() {
+        let keys = this.getKeys();
+        for (const key of keys) {
+            this._hotkeysService.remove(key);
+        }
     }
 
     getKeys() {
@@ -22,6 +29,7 @@ export class CustomerKeyService implements OnDestroy {
     }
 
     initKey() {
+        this.resetKeys();
         this._hotkeysService.add(new Hotkey('F1', (event: KeyboardEvent): boolean => {
             return;
         }, undefined, 'Edit'));

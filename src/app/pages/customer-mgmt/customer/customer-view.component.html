@@ -1,8 +1,129 @@
 <div [@routerTransition]>
     <app-page-header [heading]="customer?.name || 'Customer'"></app-page-header>
     <app-shortcut [listShortcut]='customerKeyService.getKeys()'></app-shortcut>
-    
-    <section class="rma-page block">
+    <section class='main-container'>
+        <div class="informaion">
+            <h5 class="text-uppercase font-weight-bold">Information</h5>
+            <div class="d-flex">
+                <div class="col-md-3 customer-infomation">
+                    <div class="row">
+                        <label class='col-6'>Type</label>
+                        <div class='col-6'>{{ customer.type }}</div>
+                    </div>
+                    <div class="row">
+                        <label class='col-6'>Code</label>
+                        <div class='col-6'>{{ customer.code }}</div>
+                    </div>
+                    <div class="row">
+                        <label class='col-6'>Phone</label>
+                        <div class='col-6'>{{ customer.phone }}</div>
+                    </div>
+                    <div class="row">
+                        <label class='col-6'>Fax</label>
+                        <div class='col-6'>{{ customer.fax }}</div>
+                    </div>
+                    <div class="row">
+                        <label class='col-6'>Discount Level</label>
+                        <div class='col-6 text-success'>{{ customer.discount_level }}</div>
+                    </div>
+                    <div class="row">
+                        <label class='col-6'>Salesperson</label>
+                        <div class='col-6'>{{ customer.salesperson }}</div>
+                    </div>
+                </div>
+                <div class="col-md-3 customer-infomation bolder">
+                    <div class="row">
+                        <label class='col-6'>Total Sales Orders</label>
+                        <div class='col-6 text-primary'>{{ customer.total_order }}</div>
+                    </div>
+                    <div class="row">
+                        <label class='col-6'>Total Sales Quotes</label>
+                        <div class='col-6 text-primary'>{{ customer.total_quote }}</div>
+                    </div>
+                    <div class="row">
+                        <label class='col-6'>Gross Sales YTD</label>
+                        <div class='col-6 text-success'>{{ customer.gross_ytd }}</div>
+                    </div>
+                    <div class="row">
+                        <label class='col-6'>Net Sales YTD</label>
+                        <div class='col-6 text-success'>{{ customer.net_ytd }}</div>
+                    </div>
+                    <div class="row">
+                        <label class='col-6'>COGS YTD</label>
+                        <div class='col-6 text-success'>{{ customer.cogs }}</div>
+                    </div>
+                    <div class="row">
+                        <label class='col-6'>Gross Profit % YTD</label>
+                        <div class='col-6 text-success'>{{ customer.gross_profit }}</div>
+                    </div>
+
+                </div>
+                <div class="col-md-3 customer-infomation ">
+                    <div class="row">
+                        <label class='col-6'>Total Sales Invoices</label>
+                        <div class='col-6 text-primary'>{{ customer.total_order }}</div>
+                    </div>
+                    <div class="row">
+                        <label class='col-6'>Total Amount</label>
+                        <div class='col-6 text-primary'>{{ customer.total_quote | currency:'$' }}</div>
+                    </div>
+                    <div class="row">
+                        <label class='col-6'>Total Overdue Invoices</label>
+                        <div class='col-6 text-danger'>{{ customer.gross_ytd }}</div>
+                    </div>
+                    <div class="row">
+                        <label class='col-6'>Total Outstanding Amount</label>
+                        <div class='col-6 text-danger'>{{ customer.net_ytd | currency:'$'}}</div>
+                    </div>
+                    <div class="row">
+                        <label class='col-6'>Total Refunded Amount</label>
+                        <div class='col-6 text-danger'>{{ customer.cogs | currency:'$'}}</div>
+                    </div>
+                </div>
+                <div class="col-md-3 customer-infomation bolder">
+                    <div class="row">
+                        <label class='col-6'>Total RMA Orders</label>
+                        <div class='col-6 text-primary'>{{ customer.total_order }}</div>
+                    </div>
+                    <div class="row">
+                        <label class='col-6'>Total Returned Items</label>
+                        <div class='col-6 text-primary'>{{ customer.total_quote }}</div>
+                    </div>
+                    <div class="row">
+                        <label class='col-6'>Total Received Item</label>
+                        <div class='col-6 text-danger'>{{ customer.gross_ytd }}</div>
+                    </div>
+                    <div class="row">
+                        <label class='col-6'>Credit Limit</label>
+                        <div class='col-6'>{{ customer.net_ytd | currency:'$'}}</div>
+                    </div>
+                    <div class="row">
+                        <label class='col-6'>Credit Balance</label>
+                        <div class='col-6 text-danger'>{{ customer.cogs | currency:'$'}}</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="information-tab">
+            <ngb-tabset>
+                <ngb-tab title="ADDRESSES">
+                    <ng-template ngbTabContent>
+                        <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher
+                            synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
+                    </ng-template>
+                </ngb-tab>
+                <ngb-tab title="CONTACTS">
+                    <ng-template ngbTabContent>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid.
+                        <p>Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl
+                            cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean
+                            shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.</p>
+                    </ng-template>
+                </ngb-tab>
+            </ngb-tabset>
+        </div>
+    </section>
+    <section>
         <div class="block-content block-content-full text-center">
             <button type="button" class="btn btn-default text-uppercase" [routerLink]="['/customer']">Back To List</button>
         </div>
