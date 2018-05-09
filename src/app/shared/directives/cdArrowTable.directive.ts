@@ -34,7 +34,6 @@ export class cdArrowTable {
     resetKeys() {
         let keys = this._hotkeysService.hotkeys;
         for (const key of keys) {
-            console.log(key);
             this._hotkeysService.remove(key);
         }
     }

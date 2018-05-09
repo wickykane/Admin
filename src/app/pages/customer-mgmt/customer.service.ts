@@ -55,4 +55,59 @@ export class CustomerService {
         let url = 'buyer/delete-address';
         return this.API.deleteWithParam(url, params);
     }
+
+    getListAddress(params) {
+        const url = 'buyer/index';
+        return this.API.get(url, params);
+    }
+
+    getListContact(params) {
+        const url = 'buyer/index';
+        return this.API.get(url, params);
+    }
+
+    getListSite(params) {
+        const url = 'buyer/index';
+        return this.API.get(url, params);
+    }
+
+    getListQuote(params) {
+        const url = 'buyer/index';
+        return this.API.get(url, params);
+    }
+
+    getListSO(params) {
+        const url = 'buyer/index';
+        return this.API.get(url, params);
+    }
+
+    getListInvoice(params) {
+        const url = 'buyer/index';
+        return this.API.get(url, params);
+    }
+
+    getListShipment(params) {
+        const url = 'buyer/index';
+        return this.API.get(url, params);
+    }
+
+    getListPayment(params) {
+        const url = 'buyer/index';
+        return this.API.get(url, params);
+    }
+
+    getListRMA(params) {
+        const url = 'buyer/index';
+        return this.API.get(url, params);
+    }
+
+    getListAccount(params) {
+        const url = 'buyer/index';
+        return this.API.get(url, params);
+    }
+
+    getListCard(params) {
+        const url = 'buyer/index';
+        return this.API.get(url, params);
+    }
 }
