@@ -22,7 +22,7 @@
                     <td>{{ item.fax }}</td>
                     <td>{{ item.email }}</td>
                     <td>{{ item.username }}</td>
-                    <td>{{ item.password }}</td>
+                    <td>{{ hideCharacter(item.password) }}</td>
                 </tr>
                 <tr *ngIf="list.items.length == 0">
                     <td class="text-center" colspan="100%">No data.</td>

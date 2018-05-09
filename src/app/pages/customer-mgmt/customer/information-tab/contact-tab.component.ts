@@ -21,7 +21,7 @@ export class CustomerContactTabComponent implements OnInit {
 
     searchForm: FormGroup;
 
-    constructor( private customerService: CustomerService ) {}
+    constructor(private customerService: CustomerService) { }
 
     ngOnInit() {
         // Init Fn
@@ -32,6 +32,13 @@ export class CustomerContactTabComponent implements OnInit {
     /**
      * Internal Function
      */
+
+    hideCharacter(text) {
+        if (!text) {
+            return text;
+        }
+        return text.replace(/./g, 'x');
+    }
 
     getList() {
         const params = Object.assign({});

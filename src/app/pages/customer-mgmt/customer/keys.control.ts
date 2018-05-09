@@ -10,7 +10,7 @@ export class CustomerKeyService implements OnDestroy {
         this.watchContext.subscribe(res => {
             this.context = res;
             this.initKey();
-        })
+        });
     }
 
     ngOnDestroy() {
@@ -18,7 +18,7 @@ export class CustomerKeyService implements OnDestroy {
     }
 
     resetKeys() {
-        let keys = this.getKeys();
+        const keys = this.getKeys();
         for (const key of keys) {
             this._hotkeysService.remove(key);
         }
@@ -30,11 +30,13 @@ export class CustomerKeyService implements OnDestroy {
 
     initKey() {
         this.resetKeys();
-        this._hotkeysService.add(new Hotkey('F1', (event: KeyboardEvent): boolean => {
-            return;
+        this._hotkeysService.add(new Hotkey('f1', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            return false;
         }, undefined, 'Edit'));
-        this._hotkeysService.add(new Hotkey('F2', (event: KeyboardEvent): boolean => {
-            return;
+        this._hotkeysService.add(new Hotkey('f2', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            return false;
         }, undefined, 'Back to list'));
 
     }
