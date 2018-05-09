@@ -1,7 +1,7 @@
 <div [@routerTransition]>
     <app-page-header [heading]="'CREATE NEW SALES ORDER'"></app-page-header>
     <!-- <app-shortcut [listShortcut]='customerKeyService.getKeys()'></app-shortcut> -->
-    <section class="rma-page block main-container">
+    <section class="rma-page block main-container block-order">
         <div class="row">
             <div class="col-md-12 mg-top-15">
                 <div class="block-border">
@@ -27,7 +27,7 @@
                                 </div>
                             </form>
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-md-12 fix-padding">
                             <div class="row">
                                 <div class="col-md-3 customer-infomation">
                                     <div class="form-group row">
@@ -56,7 +56,10 @@
                                     <div class="form-group row">
                                         <label class='col-4 control-label'>Contact</label>
                                         <div class='col-8 text-primary'>
-                                            <input type="text" class="form-control">
+                                            <select required class="form-control" id="billing_to" name="search_type" [(ngModel)]="billing" (change)="selectAddress(billing,'billing')">
+                                                <option value="" selected="true" hidden="true" translate>Please select</option>
+                                                <option *ngFor="let item of order.billing" [ngValue]="item.address_id">{{item.label}}</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -78,19 +81,22 @@
                                 </div>
                                 <div class="col-md-3 customer-infomation ">
                                     <div class="form-group row">
-                                        <label class='col-4'>Customer PO</label>
+                                        <label class='col-4'>Customer PO <span class="text-danger">(*)</span></label>
                                         <div class='col-8 text-primary'>
                                             <input type="text" class="form-control">
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label class='col-4'>Order Type</label>
+                                        <label class='col-4'>Order Type <span class="text-danger">(*)</span></label>
                                         <div class='col-8 text-primary'>
-                                            <input type="text" class="form-control">
+                                            <select required class="form-control" id="billing_to" name="search_type" [(ngModel)]="billing" (change)="selectAddress(billing,'billing')">
+                                                <option value="" selected="true" hidden="true" translate>Please select</option>
+                                                <option *ngFor="let item of order.billing" [ngValue]="item.address_id">{{item.label}}</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label class='col-4'>Order Date</label>
+                                        <label class='col-4'>Order Date <span class="text-danger">(*)</span></label>
                                         <div class='col-8 text-danger'>
                                             <input type="text" class="form-control">
                                         </div>
@@ -98,7 +104,10 @@
                                     <div class="form-group row">
                                         <label class='col-4'>Priotity</label>
                                         <div class='col-8 text-danger'>
-                                            <input type="text" class="form-control">
+                                            <select required class="form-control" id="billing_to" name="search_type" [(ngModel)]="billing" (change)="selectAddress(billing,'billing')">
+                                                <option value="" selected="true" hidden="true" translate>Please select</option>
+                                                <option *ngFor="let item of order.billing" [ngValue]="item.address_id">{{item.label}}</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -110,31 +119,43 @@
                                     <div class="form-group row">
                                         <label class='col-4'>Payment Method</label>
                                         <div class='col-8 text-primary'>
-                                            <input type="text" class="form-control">
+                                            <select required class="form-control" id="billing_to" name="search_type" [(ngModel)]="billing" (change)="selectAddress(billing,'billing')">
+                                                <option value="" selected="true" hidden="true" translate>Please select</option>
+                                                <option *ngFor="let item of order.billing" [ngValue]="item.address_id">{{item.label}}</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class='col-4'>Salesperson</label>
                                         <div class='col-8 text-primary'>
-                                            <input type="text" class="form-control">
+                                            <select required class="form-control" id="billing_to" name="search_type" [(ngModel)]="billing" (change)="selectAddress(billing,'billing')">
+                                                <option value="" selected="true" hidden="true" translate>Please select</option>
+                                                <option *ngFor="let item of order.billing" [ngValue]="item.address_id">{{item.label}}</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class='col-4'>Multi Ship Address</label>
                                         <div class='col-8 text-danger'>
-                                            <input type="text" class="form-control">
+                                            <select required class="form-control" id="billing_to" name="search_type" [(ngModel)]="billing" (change)="selectAddress(billing,'billing')">
+                                                <option value="" selected="true" hidden="true" translate>Please select</option>
+                                                <option *ngFor="let item of order.billing" [ngValue]="item.address_id">{{item.label}}</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class='col-4'>Warehouse</label>
                                         <div class='col-8'>
-                                            <input type="text" class="form-control">
+                                            <select required class="form-control" id="billing_to" name="search_type" [(ngModel)]="billing" (change)="selectAddress(billing,'billing')">
+                                                <option value="" selected="true" hidden="true" translate>Please select</option>
+                                                <option *ngFor="let item of order.billing" [ngValue]="item.address_id">{{item.label}}</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                       
+
                     </div>
                 </div>
             </div>
@@ -228,20 +249,22 @@
             <div class="col-md-12 mg-top-15">
                 <div class="block-border">
                     <h5 class="title-border" translate>PRODUCTS DETAILS</h5>
-                    <div class="col-md-12 mg-top-15">
+                    <div class="col-md-12">
                         <div class="table-responsive">
                             <table class="table table-style table-order custom-table table-bg" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex"
                                 (onEnter)="selectData($event)">
                                 <thead>
                                     <tr>
                                         <th style="width:100px" translate>Action</th>
-                                        <th style="width:150px" translate>Part #</th>
-                                        <th translate>Product Name</th>
+                                        <th style="width:150px" translate>Product Code</th>
+                                        <th translate>Description</th>
+                                        <!-- <th translate >Avail QTY</th> -->
                                         <th class="text-nowrap" style="width:100px" translate>Order QTY</th>
                                         <th class="text-nowrap text-center" translate>Ship To</th>
-                                        <th class="text-center" style="width:100px" translate>Cost</th>
-                                        <th style="width:100px" translate>Discount</th>
+                                        <th class="text-center" style="width:100px" translate>Unit Price</th>
+                                        <th style="width:100px" translate>Disc %</th>
                                         <th translate>Amount</th>
+                                        <th translate>Source</th>
                                     </tr>
                                 </thead>
                                 <tr *ngIf="list['items'].length === 0">
@@ -260,6 +283,7 @@
                                         </td>
                                         <td>{{item.part_no}}</td>
                                         <td>{{item.des}}</td>
+                                        <!-- <td>{{item.des}}</td> -->
                                         <td>
                                             <input style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.order_quantity" min="0" max="1000"
                                                 (change)="updateTotal()">
@@ -287,7 +311,9 @@
                                         </td>
                                         <td class="text-center">
                                             <span>{{item.totalItem | currency}}</span>
-
+                                        </td>
+                                        <td class="text-center">
+                                            <span>{{item.totalItem | currency}}</span>
                                         </td>
                                     </tr>
                                     <tr *ngFor="let product of item.products">
