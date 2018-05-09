@@ -109,305 +109,73 @@
             <ngb-tabset>
                 <ngb-tab title="ADDRESSES">
                     <ng-template ngbTabContent>
-                        <div class='address-tab'>
-                            <div class='scroll-container'>
-                                <table class='table table-custom'>
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Type</th>
-                                            <th>Name</th>
-                                            <th>Country</th>
-                                            <th>Address 1</th>
-                                            <th>Address 2</th>
-                                            <th>City</th>
-                                            <th>State</th>
-                                            <th>Zip Code</th>
-                                            <th>Route No</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let item of listMaster['addresses']">
-                                            <td>121313131</td>
-                                            <td>1</td>
-                                            <td>1213131</td>
-                                            <td>121313123</td>
-                                            <td>1</td>
-                                            <td>12131313</td>
-                                            <td>1 3131231313</td>
-                                            <td>1</td>
-                                            <td>1</td>
-                                            <td>1</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-                        </div>
+                        <app-customer-address-tab [customerId]="customerId"></app-customer-address-tab>
                     </ng-template>
                 </ngb-tab>
+
                 <ngb-tab title="CONTACTS">
                     <ng-template ngbTabContent>
-                        <div class='address-tab'>
-                            <div class='scroll-container'>
-                                <table class='table table-custom'>
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Name</th>
-                                            <th>Title</th>
-                                            <th>Phone</th>
-                                            <th>Fax</th>
-                                            <th>Email</th>
-                                            <th>Username</th>
-                                            <th>Password</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let item of listMaster['addresses']">
-                                            <td>121313131</td>
-                                            <td>1</td>
-                                            <td>1213131</td>
-                                            <td>121313123</td>
-                                            <td>1</td>
-                                            <td>12131313</td>
-                                            <td>1 3131231313</td>
-                                            <td>1</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-                        </div>
+                        <app-customer-contact-tab [customerId]="customerId"></app-customer-contact-tab>
                     </ng-template>
                 </ngb-tab>
 
                 <ngb-tab title="SITES">
                     <ng-template ngbTabContent>
-                        <div class='address-tab'>
-                            <div class='scroll-container'>
-                                <table class='table table-custom'>
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Site Code</th>
-                                            <th>Site Name</th>
-                                            <th>Address 1</th>
-                                            <th>Address 2</th>
-                                            <th>City</th>
-                                            <th>State</th>
-                                            <th>Zip Code</th>
-                                            <th>Country</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let item of listMaster['addresses']">
-                                            <td>121313131</td>
-                                            <td>1</td>
-                                            <td>1213131</td>
-                                            <td>121313123</td>
-                                            <td>1</td>
-                                            <td>12131313</td>
-                                            <td>1 3131231313</td>
-                                            <td>1</td>
-                                            <td>1</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-                        </div>
+                        <app-customer-site-tab [customerId]="customerId"></app-customer-site-tab>
                     </ng-template>
                 </ngb-tab>
 
                 <ngb-tab title="QUOTES">
                     <ng-template ngbTabContent>
-                        <div class='address-tab'>
-                            <div class="block-content pd-bottom bg-gray-light mb-2">
-                                <div class="row">
-                                    <form class="form-horizontal form-search" role="form" [formGroup]="searchFormQuote">
-                                        <div class="block-search">
-                                            <label for="buyer_name" class="control-label">Quote No</label>
-                                            <input type="text" name="buyer_name" formControlName="buyer_name" class="form-control" capitalize>
-                                        </div>
-                                        <div class="block-search">
-                                            <label for="buyer_name" class="control-label">Customer</label>
-                                            <input type="text" name="buyer_name" formControlName="buyer_name" class="form-control" capitalize>
-                                        </div>
-                                        <div class="block-search">
-                                            <label for="buyer_type" class="control-label">Date Type</label>
-                                            <select class="form-control" formControlName="buyer_type">
-                                                <option value="null" selected="true">--Select--</option>
-                                                <option *ngFor="let item of listMaster['dateType']" [ngValue]="item.id">{{item.name}}</option>
-                                            </select>
-                                        </div>
-                                        <div class="block-search">
-                                            <label for="buyer_type" class="control-label">From</label>
-                                            <div class="input-group">
-                                                <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="from" ngbDatepicker #d="ngbDatepicker">
-                                                <div class="input-group-append">
-                                                    <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
-                                                        <i class="fa fa-calendar" aria-hidden="true"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="block-search">
-                                            <label for="buyer_type" class="control-label">To</label>
-                                            <div class="input-group">
-                                                <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="to" ngbDatepicker #t="ngbDatepicker">
-                                                <div class="input-group-append">
-                                                    <button class="btn btn-outline-secondary" (click)="t.toggle()" type="button">
-                                                        <i class="fa fa-calendar" aria-hidden="true"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                    <div class="block-btn-search">
-                                        <label class="control-label">&nbsp;</label>
-                                        <div class="group-btn-search">
-                                            <button type="button" class="btn btn-primary" (click)="tableService.searchAction()">Search</button>
-                                            <button type="button" class="btn btn-default" (click)="tableService.resetAction(searchFormQuote)">Reset</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class='scroll-container'>
-                                <table class='table table-custom'>
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Quote No</th>
-                                            <th>Quote Date</th>
-                                            <th>Customer</th>
-                                            <th>Total Items</th>
-                                            <th>Total Amount</th>
-                                            <th>Status</th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let item of listMaster['addresses']">
-                                            <td>121313131</td>
-                                            <td>1</td>
-                                            <td>1213131</td>
-                                            <td>121313123</td>
-                                            <td>1</td>
-                                            <td>12131313</td>
-                                            <td>1 3131231313</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-                        </div>
+                        <app-customer-quote-tab [customerId]="customerId"></app-customer-quote-tab>
                     </ng-template>
                 </ngb-tab>
 
-
-                <ngb-tab title="SALE ORDERS">
+                <ngb-tab title="SALES ORDERS">
                     <ng-template ngbTabContent>
-                        <div class='address-tab'>
-                            <div class="block-content pd-bottom bg-gray-light mb-2">
-                                <div class="row">
-                                    <form class="form-horizontal form-search" role="form" [formGroup]="searchFormSO">
-                                        <div class="block-search">
-                                            <label for="buyer_name" class="control-label">SO Number</label>
-                                            <input type="text" name="buyer_name" formControlName="buyer_name" class="form-control">
-                                        </div>
-                                        <div class="block-search">
-                                            <label for="buyer_name" class="control-label">Cus PO No</label>
-                                            <input type="text" name="buyer_name" formControlName="buyer_name" class="form-control">
-                                        </div>
-                                        <div class="block-search">
-                                            <label for="buyer_name" class="control-label">Customer</label>
-                                            <input type="text" name="buyer_name" formControlName="buyer_name" class="form-control">
-                                        </div>
-                                        <div class="block-search">
-                                            <label for="buyer_type" class="control-label">Status</label>
-                                            <select class="form-control" formControlName="buyer_type">
-                                                        <option value="null" selected="true">--Select--</option>
-                                                        <option *ngFor="let item of listMaster['statusSO']" [ngValue]="item.id">{{item.name}}</option>
-                                                    </select>
-                                        </div>
-                                        <div class="block-search">
-                                            <label for="buyer_type" class="control-label">Date Type</label>
-                                            <select class="form-control" formControlName="buyer_type">
-                                                    <option value="null" selected="true">--Select--</option>
-                                                    <option *ngFor="let item of listMaster['dateType']" [ngValue]="item.id">{{item.name}}</option>
-                                                </select>
-                                        </div>
-                                        <div class="block-search">
-                                            <label for="buyer_type" class="control-label">From</label>
-                                            <div class="input-group">
-                                                <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="from" ngbDatepicker #d1="ngbDatepicker">
-                                                <div class="input-group-append">
-                                                    <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
-                                                            <i class="fa fa-calendar" aria-hidden="true"></i>
-                                                        </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="block-search">
-                                            <label for="buyer_type" class="control-label">To</label>
-                                            <div class="input-group">
-                                                <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="to" ngbDatepicker #t1="ngbDatepicker">
-                                                <div class="input-group-append">
-                                                    <button class="btn btn-outline-secondary" (click)="t1.toggle()" type="button">
-                                                            <i class="fa fa-calendar" aria-hidden="true"></i>
-                                                        </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                    <div class="block-btn-search">
-                                        <label class="control-label">&nbsp;</label>
-                                        <div class="group-btn-search">
-                                            <button type="button" class="btn btn-primary" (click)="tableService.searchAction()">Search</button>
-                                            <button type="button" class="btn btn-default" (click)="tableService.resetAction(searchFormSO)">Reset</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class='scroll-container'>
-                                <table class='table table-custom'>
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>SO Number</th>
-                                            <th>Cust PO No</th>
-                                            <th>Customer</th>
-                                            <th>Type</th>
-                                            <th>Order Date</th>
-                                            <th>Total Amount</th>
-                                            <th>Status</th>
-                                            
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let item of listMaster['addresses']">
-                                            <td>121313131</td>
-                                            <td>1</td>
-                                            <td>1213131</td>
-                                            <td>121313123</td>
-                                            <td>1</td>
-                                            <td>12131313</td>
-                                            <td>1 3131231313</td>
-                                            <td>1 3131231313</td>                                            
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-                        </div>
+                        <app-customer-sale-order-tab [customerId]="customerId"></app-customer-sale-order-tab>
                     </ng-template>
                 </ngb-tab>
 
+                <ngb-tab title="INVOICES">
+                    <ng-template ngbTabContent>
+                        <app-customer-invoice-tab [customerId]="customerId"></app-customer-invoice-tab>
+                    </ng-template>
+                </ngb-tab>
+
+                <ngb-tab title="SHIPMENTS">
+                    <ng-template ngbTabContent>
+                        <app-customer-shipment-tab [customerId]="customerId"></app-customer-shipment-tab>
+                    </ng-template>
+                </ngb-tab>
+
+                <ngb-tab title="PAYMENTS">
+                    <ng-template ngbTabContent>
+                        <app-customer-payment-tab [customerId]="customerId"></app-customer-payment-tab>
+                    </ng-template>
+                </ngb-tab>
+
+                <ngb-tab title="RMA">
+                    <ng-template ngbTabContent>
+                        <app-customer-rma-tab [customerId]="customerId"></app-customer-rma-tab>                        
+                    </ng-template>
+                </ngb-tab>
+
+                <ngb-tab title="ACCOUNTS & CARDS">
+                    <ng-template ngbTabContent>
+                        <app-customer-account-tab [customerId]="customerId"></app-customer-account-tab>                                                
+                    </ng-template>
+                </ngb-tab>
+
+                <ngb-tab title="DOCUMENTS">
+                    <ng-template ngbTabContent>
+
+                    </ng-template>
+                </ngb-tab>
             </ngb-tabset>
         </div>
     </section>
-    <section>
+    <section class="mb-2">
         <div class="block-content block-content-full text-center">
             <button type="button" class="btn btn-default text-uppercase gradient-white" [routerLink]="['/customer']">Back To List</button>
         </div>
