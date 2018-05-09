@@ -20,6 +20,11 @@ import { CustomerContactTabComponent } from './customer/information-tab/contact-
 import { CustomerSiteTabComponent } from './customer/information-tab/site-tab.component';
 import { CustomerQuoteTabComponent } from './customer/information-tab/quote-tab.component';
 import { CustomerSaleOrderTabComponent } from './customer/information-tab/sale-order-tab.component';
+import { CustomerInvoiceTabComponent } from './customer/information-tab/invoice-tab.component';
+import { CustomerShipmentTabComponent } from './customer/information-tab/shipment-tab.component';
+import { CustomerPaymentTabComponent } from './customer/information-tab/payment-tab.component';
+import { CustomerRMATabComponent } from './customer/information-tab/rma-tab.component';
+import { CustomerAccountTabComponent } from './customer/information-tab/account-tab.component';
 
 
 import { CommonShareModule } from '../../shared/index';
@@ -43,7 +48,8 @@ import { ItemModalModule } from '../../shared/modals/item.module';
     CustomerSegmentEditComponent, BuyerComponent, BuyerCreateComponent, BuyerDetailComponent,
     CustomerComponent, CustomerCreateComponent, CustomerDetailComponent, CustomerViewComponent,
     CustomerAddressTabComponent, CustomerContactTabComponent, CustomerSiteTabComponent, CustomerQuoteTabComponent,
-    CustomerSaleOrderTabComponent],
+    CustomerSaleOrderTabComponent, CustomerInvoiceTabComponent, CustomerShipmentTabComponent, CustomerPaymentTabComponent,
+    CustomerRMATabComponent, CustomerAccountTabComponent],
   providers: [TableService, CustomerService],
   entryComponents: []
 })
