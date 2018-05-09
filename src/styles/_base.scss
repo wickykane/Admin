@@ -52,7 +52,7 @@
             border-style: solid;
             border-width: 6px 3px 2.5px !important;
         }
-    
+
         &.opened>.ng-control .ng-arrow {
             top: -2px;
             border-color: transparent transparent #444;
@@ -63,7 +63,7 @@
     &.ng-multiple .ng-control .ng-value-container {
         padding-top: 0 !important;
         .ng-input {
-            padding-bottom: 0px !important; 
+            padding-bottom: 0px !important;
         }
         .ng-value {
             margin-bottom: 0;
@@ -75,7 +75,7 @@
             }
         }
     }
-} 
+}
 
 .btn {
     height: 20px;
@@ -551,17 +551,26 @@ table.custom-table {
 
 .gradient-white {
     background: #feffff;
+    border: 1px solid #dee2e6;
+    border-radius: 3px !important;  
     background: -webkit-gradient(linear, left top, left bottom, from(#feffff), color-stop(50%, #ebebeb), to(#ffffff));
     background: linear-gradient(to bottom, #feffff 0%, #ebebeb 50%, #ffffff 100%);
 }
 
 .information-tab {
     .nav {
-        border: 1px solid #dee2e6;
+        border-top: 1px solid #dee2e6;
+        .nav-item + .nav-item {
+            .nav-link {
+                border-left: none !important;
+            }
+        }
+    
     }
+
     .nav-link {
         padding: 5px 10px !important;
-        border-color: #e9ecef #e9ecef #dee2e6 !important;
+        border-color: #dee2e6 #dee2e6 #dee2e6 !important;
         border-top: none;
         font-weight: normal !important;
         background: #feffff;
@@ -577,4 +586,5 @@ table.custom-table {
             background: linear-gradient(to bottom, #f3b48b 13%,#f25707 55%,#fa834b 91%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
         }
     }
+
 }
