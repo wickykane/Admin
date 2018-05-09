@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CustomerService } from "../customer.service";
+import { CustomerService } from '../customer.service';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
-import { CustomerKeyService } from "./keys.control";
+import { CustomerKeyService } from './keys.control';
 import { TableService } from './../../../services/table.service';
 
 @Component({
@@ -19,6 +19,7 @@ import { TableService } from './../../../services/table.service';
 export class CustomerViewComponent implements OnInit {
 
     public customer = {};
+    public customerId;
     public listMaster = {};
     public searchFormQuote: FormGroup;
     public searchFormSO: FormGroup;
@@ -48,11 +49,11 @@ export class CustomerViewComponent implements OnInit {
             'to': [null],
 
         });
-        //Assign get list function name, override letiable here
+        // Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
 
-        //Init Key
+        // Init Key
         this.customerKeyService.watchContext.next(this);
     }
 
@@ -68,11 +69,11 @@ export class CustomerViewComponent implements OnInit {
             } catch (e) {
                 console.log(e);
             }
-        })
+        });
     }
 
     getDetailSupplier(id) {
-        // this.idSupplier = id;
+        this.customerId = id;
         // this.customerService.getDetailBuyer(this.idSupplier).subscribe(res => {
         //     try {
         //         this.generalForm.patchValue(res.data);

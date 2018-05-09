@@ -1,0 +1,36 @@
+<div class='address-tab'>
+    <div class='scroll-container'>
+        <table class='table table-custom'>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Site Code</th>
+                    <th>Site Name</th>
+                    <th>Address 1</th>
+                    <th>Address 2</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Zip Code</th>
+                    <th>Country</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of list.items">
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.id }}</td>
+                </tr>
+                <tr *ngIf="list.items.length == 0">
+                    <td class="text-center" colspan="100%">No data.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
