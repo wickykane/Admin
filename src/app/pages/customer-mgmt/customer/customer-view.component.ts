@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CustomerService } from '../customer.service';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -23,7 +23,7 @@ export class CustomerViewComponent implements OnInit {
     public listMaster = {};
     public searchFormQuote: FormGroup;
     public searchFormSO: FormGroup;
-
+    @ViewChild('tabSet') tabSet;
 
     constructor(
         public router: Router,
@@ -60,6 +60,10 @@ export class CustomerViewComponent implements OnInit {
     ngOnInit() {
         this.route.params.subscribe(params => this.getDetailSupplier(params.id));
         this.listMaster['addresses'] = [{}, {}, {}, {}, {}, {}];
+    }
+
+    selectTab(id) {
+        this.tabSet.select(id);
     }
 
     getListBuyerType() {

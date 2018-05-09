@@ -34,11 +34,11 @@
                 <div class="col-md-3 customer-infomation bolder">
                     <div class="row">
                         <label class='col-6'>Total Sales Orders</label>
-                        <div class='col-6 text-primary'>{{ customer.total_order }}</div>
+                        <div class='col-6 text-primary'><a  (click)="selectTab('so')">{{ customer.total_order || 0 }}</a></div>
                     </div>
                     <div class="row">
                         <label class='col-6'>Total Sales Quotes</label>
-                        <div class='col-6 text-primary'>{{ customer.total_quote }}</div>
+                        <div class='col-6 text-primary'><a  (click)="selectTab('quote')">{{ customer.total_quote || 0 }}</a></div>
                     </div>
                     <div class="row">
                         <label class='col-6'>Gross Sales YTD</label>
@@ -106,7 +106,7 @@
             </div>
         </div>
         <div class="information-tab">
-            <ngb-tabset>
+            <ngb-tabset #tabSet>
                 <ngb-tab title="ADDRESSES">
                     <ng-template ngbTabContent>
                         <app-customer-address-tab [customerId]="customerId"></app-customer-address-tab>
@@ -125,13 +125,13 @@
                     </ng-template>
                 </ngb-tab>
 
-                <ngb-tab title="QUOTES">
+                <ngb-tab id="quote" title="QUOTES">
                     <ng-template ngbTabContent>
                         <app-customer-quote-tab [customerId]="customerId"></app-customer-quote-tab>
                     </ng-template>
                 </ngb-tab>
 
-                <ngb-tab title="SALES ORDERS">
+                <ngb-tab id="so" title="SALES ORDERS">
                     <ng-template ngbTabContent>
                         <app-customer-sale-order-tab [customerId]="customerId"></app-customer-sale-order-tab>
                     </ng-template>
@@ -157,13 +157,13 @@
 
                 <ngb-tab title="RMA">
                     <ng-template ngbTabContent>
-                        <app-customer-rma-tab [customerId]="customerId"></app-customer-rma-tab>                        
+                        <app-customer-rma-tab [customerId]="customerId"></app-customer-rma-tab>
                     </ng-template>
                 </ngb-tab>
 
                 <ngb-tab title="ACCOUNTS & CARDS">
                     <ng-template ngbTabContent>
-                        <app-customer-account-tab [customerId]="customerId"></app-customer-account-tab>                                                
+                        <app-customer-account-tab [customerId]="customerId"></app-customer-account-tab>
                     </ng-template>
                 </ngb-tab>
 
