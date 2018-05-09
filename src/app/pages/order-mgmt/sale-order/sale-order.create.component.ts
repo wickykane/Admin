@@ -7,6 +7,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { OrderService } from '../order-mgmt.service';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { ToastrService } from 'ngx-toastr';
+import { routerTransition } from '../../../router.animations';
 
 import { ItemModalContent } from '../../../shared/modals/item.modal';
 import { PromotionModalContent } from '../../../shared/modals/promotion.modal';
@@ -16,7 +17,8 @@ import { PromotionModalContent } from '../../../shared/modals/promotion.modal';
 @Component({
   selector: 'app-create-order',
   templateUrl: './sale-order.create.component.html',
-  styleUrls: ['./sale-order.component.scss']
+  styleUrls: ['./sale-order.component.scss'],
+  animations: [routerTransition()]
 })
 
 export class SaleOrderCreateComponent implements OnInit {

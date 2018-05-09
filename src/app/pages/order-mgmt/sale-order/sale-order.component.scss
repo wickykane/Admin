@@ -161,6 +161,7 @@
     border-radius: 0;
     display: block;
     position: relative;
+    padding-top: 15px;
     h5.title-border{
         display: block;
         position: absolute;
@@ -169,5 +170,29 @@
         top: -10px;
         left: 15px;
         padding: 0 4px;
+    }
+}
+table.table-bg{
+    background: #ededed;
+}
+.full-block{
+    width: 100%;
+    height: 100%;
+}
+.main-container {
+    padding: 10px 8px;
+    .information-tab {
+        margin-top: 10px;
+    }
+    .customer-infomation {
+        padding: 15px;
+        padding-bottom: 5px;
+        background-color: #ededed;
+        label {
+            font-weight: bold;
+        }
+        &.bolder {
+            background-color: #dbdbdb;
+        }
     }
 }
