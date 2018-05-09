@@ -25,7 +25,7 @@ fieldset.custom-border {
         margin-bottom: 0;
 
         .col-form-label {
-            font-size: 11px;
+            font-size: 12px;
         }
     }
 }
@@ -40,6 +40,12 @@ div.custom-header {
         line-height: 1.2;
         display: inline;
         color: #4f5050;
+
+        span {
+            text-transform: capitalize;
+            color: #7b7a7a;
+            font-weight: 400;
+        }
     }
 
     .wrap-keyboard {
@@ -51,22 +57,48 @@ div.custom-header {
     }
 }
 
-
 .main-container {
     padding: 10px 8px;
+
     .information-tab {
         margin-top: 10px;
         border: 1px solid #dee2e6;
         border-top: none;
     }
-    
+
+    .scroll-container {
+        height: 238px;
+        overflow: auto;
+    }
+
+    .table-custom {
+        thead th {
+            padding: 5px 10px;
+            border: none;
+            background-color: #d2d2d2;
+        }
+
+        tbody td {
+            padding: 10px;
+        }
+    }
+
+    .address-tab {
+        padding: 15px 15px 0;
+
+        .block-search {
+            max-width: 125px;
+        }
+    }
+
     .customer-infomation {
-        padding: 15px;
-        padding-bottom: 5px;
+        padding: 15px 15px 5px;
         background-color: #ededed;
+
         label {
             font-weight: bold;
         }
+
         &.bolder {
             background-color: #dbdbdb;
         }
