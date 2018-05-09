@@ -8,32 +8,32 @@ export class ItemService {
 
 
     getListItemBaseSupplier(params, id) {
-        let url = 'item?supplier_id=' + id;
+        const url = 'item?supplier_id=' + id;
         return this.API.get(url, params);
     }
 
     getListBundleBase(params) {
-        let url = ['bundle', 'reference'].join('/');
+        const url = ['bundle', 'reference'].join('/');
         return this.API.get(url);
     }
 
     getReferenceList() {
-        let url = ['item', 'reference'].join('/');
+        const url = ['item', 'reference'].join('/');
         return this.API.get(url);
     }
-    
-    getListAllItem(params){
-        let url =['item'].join('/');
-        return this.API.get(url,params);
+
+    getListAllItem(params) {
+        const url = ['item'].join('/');
+        return this.API.get(url, params);
     }
 
     getListCountry() {
-        let url = 'country/get-all';
+        const url = 'country/get-all';
         return this.API.get(url);
     }
 
-    getStateByCountry( params) {
-        let url = 'state/get-by-country'
+    getStateByCountry(params) {
+        const url = 'state/get-by-country'
         return this.API.get(url, params);
     }
 
