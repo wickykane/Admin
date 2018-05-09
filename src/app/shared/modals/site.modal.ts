@@ -29,6 +29,8 @@ export class SiteModalComponent implements OnInit {
 
     public listMaster = {};
     public listTypeAddress: any = [];
+    public listCountry: any = [];
+    public listBank: any = [];
 
     constructor(public fb: FormBuilder,
         public router: Router,
@@ -55,30 +57,55 @@ export class SiteModalComponent implements OnInit {
         /**
          * Init Data
          */
-        this.listTypeAddress = [{ id: 4, name: 'Primary' }, { id: 2, name: 'Billing' }, { id: 3, name: 'Shipping' }];
-        this.listMaster['customerType'] = [{
-            id: 'C',
-            name: 'Company'
-        }, {
-            id: 'P',
-            name: 'Personal'
-        }];
-        this.address = [{
-            type: 4, listType: this.listTypeAddress
-        }, {
-            type: 2, listType: this.listTypeAddress
-        }, {
-            type: 3, listType: this.listTypeAddress
-        }];
+         this.listTypeAddress = [{ id: 4, name: 'Primary' }, { id: 2, name: 'Billing' }, { id: 3, name: 'Shipping' }];
+         this.address = [{
+             type: 4, listType: this.listTypeAddress, listCountry: this.listCountry, listState: []
+         }, {
+             type: 2, listType: this.listTypeAddress, listCountry: this.listCountry, listState: []
+         }, {
+             type: 3, listType: this.listTypeAddress, listCountry: this.listCountry, listState: []
+         }];
+
+         
+        this.getListSalePerson();
+        this.getListCountry();
+        this.getListBank();
 
     }
+    /**
+     * get list master data
+     */
+    getListSalePerson() {
+        this.listMaster['salePersons'] = [];
+    }
+
+    getListCountry() {
+        this.listCountry = [];
+    }
+
+    getListBank() {
+        this.listBank = [];
+    }
+
+
+
+    changeCountry(item) {
+        item.listState = [];
+    }
+
+    changeBank(item) {
+        item.listBranch = [];
+    }
+
+
+
 
     // add new row address
     addNewAddress() {
         this.address.push({
             listType: this.listTypeAddress,
-            listCountry: this.listTypeAddress,
-            listState: this.listTypeAddress
+            listCountry: this.listCountry,
+            listState: []
         });
     }
 
@@ -89,7 +116,7 @@ export class SiteModalComponent implements OnInit {
     // add new row bank account
     addNewBankAccount() {
         this.bank_account.push({
-            listName: [],
+            listBank: this.listBank,
             listBranch: []
         });
     }
@@ -116,18 +143,8 @@ export class SiteModalComponent implements OnInit {
         this.contact.splice(index, 1);
     }
 
-    // add new Site
-    addNewSite() {
-        const modalRef = this.modalService.open(SiteModalComponent, { size: 'lg' });
-        modalRef.result.then(res => {
 
-        });
-        modalRef.componentInstance.info = {};
-    }
 
-    removeSite(index) {
-        this.site.splice(index, 1);
-    }
 
 
 }
