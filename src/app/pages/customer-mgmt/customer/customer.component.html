@@ -63,7 +63,10 @@
 
                         </td>
                         <td>
-                            <a class="btn btn-default " title="Edit" [routerLink]="['/customer/view/' + item.id]">
+                            <a class="btn btn-default " title="View" [routerLink]="['/customer/view/' + item.id]">
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                            </a>
+                            <a class="btn btn-default " title="Edit" [routerLink]="['/customer/detail/' + item.id]">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                             </a>
                             <a class="btn btn-default " title="Delete" (click)='delete(item.id)'>

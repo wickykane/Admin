@@ -12,7 +12,10 @@ export class CustomerAddressTabComponent implements OnInit {
     /**
      * letiable Declaration
      */
-    @Input() customerId;
+    @Input() set listData(data) {
+        this.list.items = data || [];
+    }
+
     public list = {
         items: []
     };
@@ -21,27 +24,5 @@ export class CustomerAddressTabComponent implements OnInit {
 
     }
 
-    ngOnInit() {
-        // Init Fn
-        this.getList();
-    }
-
-
-    /**
-     * Internal Function
-     */
-
-    getList() {
-        const params = Object.assign({});
-        Object.keys(params).forEach((key) => (params[key] == null || params[key] === '') && delete params[key]);
-
-        this.customerService.getListAddress(params).subscribe(res => {
-            try {
-                this.list.items = res.data.rows;
-            } catch (e) {
-                console.log(e);
-            }
-        });
-    }
-
+    ngOnInit() {}
 }

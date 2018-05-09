@@ -11,10 +11,10 @@ export class MenuComponent implements OnInit {
 
     MENU_CONSTANT = [];
      @ViewChild('.open') open;
-    showMenu: string = '';
+    showMenu = '';
 
 
-    constructor(private translate: TranslateService, public router: Router, private elRef:ElementRef) {
+    constructor(private translate: TranslateService, public router: Router, private elRef: ElementRef) {
 
     }
 
@@ -255,14 +255,14 @@ export class MenuComponent implements OnInit {
             //     sub: false,
             //     child: []
             // }
-        ]
+        ];
     }
 
 
     addExpandClass(element: any, e) {
-        let el = this.elRef.nativeElement.querySelectorAll('.open');
+        const el = this.elRef.nativeElement.querySelectorAll('.open');
 
-        for (var i = 0; i < el.length; i++) {
+        for (let i = 0; i < el.length; i++) {
                el[i].classList.remove('open');
           }
 

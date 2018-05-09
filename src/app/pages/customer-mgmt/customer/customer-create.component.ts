@@ -10,6 +10,7 @@ import { SiteModalComponent } from '../../../shared/modals/site.modal';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { routerTransition } from '../../../router.animations';
 
+
 @Component({
     selector: 'app-customer-create',
     templateUrl: './customer-create.component.html',
@@ -28,6 +29,8 @@ export class CustomerCreateComponent implements OnInit {
 
     public listMaster = {};
     public listTypeAddress: any = [];
+    public listCountry: any = [];
+    public listBank: any = [];
 
     constructor(public fb: FormBuilder,
         public router: Router,
@@ -65,40 +68,68 @@ export class CustomerCreateComponent implements OnInit {
             id: 'P',
             name: 'Personal'
         }];
-
+        this.getListSalePerson();
+        this.getListCountry();
+        this.getListBank();
 
     }
+    /**
+     * get list master data
+     */
+    getListSalePerson() {
+        this.listMaster['salePersons'] = [];
+    }
+
+    getListCountry() {
+        this.listCountry = [];
+    }
+
+    getListBank() {
+        this.listBank = [];
+    }
+
 
     // change customer Type
     changeCustomerType() {
         if (this.generalForm.value.customer_type === 'C') {
             this.listTypeAddress = [{ id: 1, name: 'Head Office' }, { id: 2, name: 'Billing' }, { id: 3, name: 'Shipping' }];
             this.address = [{
-                type: 1, listType: this.listTypeAddress
+                type: 1, listType: this.listTypeAddress, listCountry: this.listCountry, listState: []
             }, {
-                type: 2, listType: this.listTypeAddress
+                type: 2, listType: this.listTypeAddress, listCountry: this.listCountry, listState: []
             }, {
-                type: 3, listType: this.listTypeAddress
+                type: 3, listType: this.listTypeAddress, listCountry: this.listCountry, listState: []
             }];
         } else {
             this.listTypeAddress = [{ id: 4, name: 'Primary' }, { id: 2, name: 'Billing' }, { id: 3, name: 'Shipping' }];
             this.address = [{
-                type: 4, listType: this.listTypeAddress
+                type: 4, listType: this.listTypeAddress, listCountry: this.listCountry, listState: []
             }, {
-                type: 2, listType: this.listTypeAddress
+                type: 2, listType: this.listTypeAddress, listCountry: this.listCountry, listState: []
             }, {
-                type: 3, listType: this.listTypeAddress
+                type: 3, listType: this.listTypeAddress, listCountry: this.listCountry, listState: []
             }];
         }
 
     }
 
+    changeCountry(item) {
+        item.listState = [];
+    }
+
+    changeBank(item) {
+        item.listBranch = [];
+    }
+
+
+
+
     // add new row address
     addNewAddress() {
         this.address.push({
             listType: this.listTypeAddress,
-            listCountry: this.listTypeAddress,
-            listState: this.listTypeAddress
+            listCountry: this.listCountry,
+            listState: []
         });
     }
 
@@ -109,7 +140,7 @@ export class CustomerCreateComponent implements OnInit {
     // add new row bank account
     addNewBankAccount() {
         this.bank_account.push({
-            listName: [],
+            listBank: this.listBank,
             listBranch: []
         });
     }
@@ -150,7 +181,9 @@ export class CustomerCreateComponent implements OnInit {
     }
 
 
+    createCustomer() {
 
+    }
 
 
 }
