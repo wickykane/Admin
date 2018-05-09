@@ -34,7 +34,7 @@
                     <div class="form-group row">
                         <label for="site_code" class="col-sm-4 col-form-label">Site Code<span class="text-danger">(*)</span></label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" name="site_code" formControlName="site_code">
+                            <input type="text" readonly class="form-control-plaintext" name="site_code" formControlName="site_code" value="AFCSE">
                         </div>
                     </div>
                 </div>
@@ -93,7 +93,7 @@
     <div class="row" style="margin-top:15px;">
         <div class="col-sm-12">
             <div class="custom-header">
-                <h3 class="custom-header">ADDRESS: {{address.length}}</h3>
+                <h3 class="custom-header">ADDRESS: <strong class="text-danger">{{address.length}}</strong> <span *ngIf="address.length > 1">Records</span><span *ngIf="address.length <= 1">Record</span></h3>
                 <div class="wrap-keyboard right-toggle-button" (click)="flagAddress = !flagAddress">
                     <span class="fa" [ngClass]="{'fa-minus': flagAddress,'fa-plus': !flagAddress}"></span>
                 </div>
@@ -176,7 +176,7 @@
     <div class="row" style="margin-top:15px;">
         <div class="col-sm-12">
             <div class="custom-header">
-                <h3 class="custom-header">BANK ACCOUNTS: {{bank_account.length}}</h3>
+                <h3 class="custom-header">BANK ACCOUNTS: <strong class="text-danger">{{bank_account.length}}</strong> <span *ngIf="bank_account.length > 1">Records</span><span *ngIf="bank_account.length <= 1">Record</span></h3>
                 <div class="wrap-keyboard right-toggle-button" (click)="flagAccount = !flagAccount">
                     <span class="fa" [ngClass]="{'fa-minus': flagAccount,'fa-plus': !flagAccount}"></span>
                 </div>
@@ -245,10 +245,10 @@
 
 
 
-    <div class="row" style="margin-top:15px;">
+    <div class="row" style="margin-top:15px;" *ngIf="false">
         <div class="col-sm-12">
             <div class="custom-header">
-                <h3 class="custom-header">BANK CARDS: {{bank_card.length}}</h3>
+                <h3 class="custom-header">BANK CARDS: <strong class="text-danger">{{bank_card.length}}</strong> <span *ngIf="bank_card.length > 1">Records</span><span *ngIf="bank_card.length <= 1">Record</span></h3>
                 <div class="wrap-keyboard right-toggle-button" (click)="flagCard = !flagCard">
                     <span class="fa" [ngClass]="{'fa-minus': flagCard,'fa-plus': !flagCard}"></span>
                 </div>
@@ -311,7 +311,7 @@
     <div class="row" style="margin-top:15px;">
         <div class="col-sm-12">
             <div class="custom-header">
-                <h3 class="custom-header">CONTACTS: {{contact.length}}</h3>
+                <h3 class="custom-header">CONTACTS: <strong class="text-danger">{{contact.length}}</strong> <span *ngIf="contact.length > 1">Records</span><span *ngIf="contact.length <= 1">Record</span></h3>
                 <div class="wrap-keyboard right-toggle-button" (click)="flagContact = !flagContact">
                     <span class="fa" [ngClass]="{'fa-minus': flagContact,'fa-plus': !flagContact}"></span>
                 </div>
