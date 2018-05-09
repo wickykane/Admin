@@ -50,3 +50,22 @@ div.custom-header {
         }
     }
 }
+
+
+.main-container {
+    padding: 10px 8px;
+    .information-tab {
+        margin-top: 10px;
+    }
+    .customer-infomation {
+        padding: 15px;
+        padding-bottom: 5px;
+        background-color: #ededed;
+        label {
+            font-weight: bold;
+        }
+        &.bolder {
+            background-color: #dbdbdb;
+        }
+    }
+}
