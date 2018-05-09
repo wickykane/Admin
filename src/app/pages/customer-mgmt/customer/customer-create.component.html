@@ -90,7 +90,7 @@
                     </div>
                     <div class="col-md-3">
                         <div class="form-group row" *ngIf="generalForm.value.customer_type == 'C'">
-                            <label for="credit_limit" class="col-sm-4 col-form-label">Credit Limit<span class="text-danger">(*)</span></label>
+                            <label for="credit_limit" class="col-sm-4 col-form-label">Credit Limit</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" name="credit_limit" formControlName="credit_limit">
                             </div>
@@ -492,9 +492,9 @@
 
 
 
-        <div class="block-content block-content-full text-right">
-            <button type="button" class="btn btn-default" [routerLink]="['/customer/buyer']">Cancel</button>
-            <button type="button" [disabled]="generalForm.invalid ||  primaryForm.invalid ||  billingForm.invalid || shippingForm.invalid" class="btn btn-outline-dark" (click)="createBuyer()">Save</button>
+        <div class="block-content block-content-full text-right" style="margin-top:15px;">
+            <button type="button" class="btn btn-default" [routerLink]="['/customer']">Cancel</button>
+            <button type="button" [disabled]="generalForm.invalid" class="btn btn-outline-primary" (click)="createCustomer()">Save</button>
         </div>
     </section>
 </div>

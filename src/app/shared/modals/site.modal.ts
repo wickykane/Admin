@@ -10,7 +10,8 @@ import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'app-site-modal',
-    templateUrl: './site.modal.html'
+    templateUrl: './site.modal.html',
+    styleUrls: ['./site.modal.scss']
 })
 export class SiteModalComponent implements OnInit {
     @Input() info;
