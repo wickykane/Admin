@@ -1,0 +1,61 @@
+<div class='address-tab'>
+    <h5 class="text-uppercase font-weight-bold">Bank Accounts</h5>
+    <div class='scroll-container'>
+        <table class='table table-custom'>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Bank Name</th>
+                    <th>SWIFT</th>
+                    <th>Branch</th>
+                    <th>Address</th>
+                    <th>Account Name</th>
+                    <th>Account No</th>
+                    <th>IBAN</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of list.accounts">
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.id }}</td>
+                </tr>
+                <tr *ngIf="list.accounts.length == 0">
+                    <td colspan="100%" class="text-center">No data.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h5 class="text-uppercase font-weight-bold">Cards</h5>
+    <div class='scroll-container'>
+        <table class='table table-custom'>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Card Type</th>
+                    <th>Card No</th>
+                    <th>Holder Name</th>
+                    <th>Expiry Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of list.cards">
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.id }}</td>
+                </tr>
+                <tr *ngIf="list.cards.length == 0">
+                    <td colspan="100%" class="text-center">No data.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -567,8 +567,12 @@ table.custom-table {
         }
     
     }
-
+    
     .nav-link {
+        &:first-child {
+            border-left: none;
+        }
+        
         padding: 5px 10px !important;
         border-color: #dee2e6 #dee2e6 #dee2e6 !important;
         border-top: none;
