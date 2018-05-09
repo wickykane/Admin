@@ -13,7 +13,9 @@ export class CustomerContactTabComponent implements OnInit {
     /**
      * letiable Declaration
      */
-    @Input() customerId;
+    @Input() set listData(data) {
+        this.list.items = data || [];
+    }
 
     public list = {
         items: []
@@ -23,10 +25,7 @@ export class CustomerContactTabComponent implements OnInit {
 
     constructor(private customerService: CustomerService) { }
 
-    ngOnInit() {
-        // Init Fn
-        this.getList();
-    }
+    ngOnInit() {}
 
 
     /**
@@ -39,18 +38,4 @@ export class CustomerContactTabComponent implements OnInit {
         }
         return text.replace(/./g, 'x');
     }
-
-    getList() {
-        const params = Object.assign({});
-        Object.keys(params).forEach((key) => (params[key] == null || params[key] === '') && delete params[key]);
-
-        this.customerService.getListContact(params).subscribe(res => {
-            try {
-                this.list.items = res.data.rows;
-            } catch (e) {
-                console.log(e);
-            }
-        });
-    }
-
 }

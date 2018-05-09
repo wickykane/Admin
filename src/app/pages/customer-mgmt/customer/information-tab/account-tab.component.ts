@@ -12,7 +12,13 @@ export class CustomerAccountTabComponent implements OnInit {
     /**
      * letiable Declaration
      */
-    @Input() customerId;
+    @Input() set listData(data) {
+        if (data) {
+            this.list.accounts = data['banks'] || [];
+            this.list.cards = data['credit_cards'] || [];
+        }
+    }
+
     public list = {
         accounts: [],
         cards: [],
@@ -22,41 +28,5 @@ export class CustomerAccountTabComponent implements OnInit {
 
     }
 
-    ngOnInit() {
-        // Init Fn
-        this.getListAccount();
-        this.getListCard();
-    }
-
-
-    /**
-     * Internal Function
-     */
-
-    getListAccount() {
-        const params = Object.assign({});
-        Object.keys(params).forEach((key) => (params[key] == null || params[key] === '') && delete params[key]);
-
-        this.customerService.getListAccount(params).subscribe(res => {
-            try {
-                this.list.accounts = res.data.rows;
-            } catch (e) {
-                console.log(e);
-            }
-        });
-    }
-
-    getListCard() {
-        const params = Object.assign({});
-        Object.keys(params).forEach((key) => (params[key] == null || params[key] === '') && delete params[key]);
-
-        this.customerService.getListCard(params).subscribe(res => {
-            try {
-                this.list.cards = res.data.rows;
-            } catch (e) {
-                console.log(e);
-            }
-        });
-    }
-
+    ngOnInit() {}
 }

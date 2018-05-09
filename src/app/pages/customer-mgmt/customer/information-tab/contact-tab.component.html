@@ -16,13 +16,13 @@
             <tbody>
                 <tr *ngFor="let item of list.items">
                     <td>{{ item.id }}</td>
-                    <td>{{ item.name }}</td>
+                    <td>{{ item.full_name }}</td>
                     <td>{{ item.title }}</td>
                     <td>{{ item.phone }}</td>
                     <td>{{ item.fax }}</td>
                     <td>{{ item.email }}</td>
                     <td>{{ item.username }}</td>
-                    <td>{{ hideCharacter(item.password) }}</td>
+                    <td>{{ 'xxxxxx' }}</td>
                 </tr>
                 <tr *ngIf="list.items.length == 0">
                     <td class="text-center" colspan="100%">No data.</td>

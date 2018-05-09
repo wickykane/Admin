@@ -109,19 +109,19 @@
             <ngb-tabset #tabSet>
                 <ngb-tab title="ADDRESSES">
                     <ng-template ngbTabContent>
-                        <app-customer-address-tab [customerId]="customerId"></app-customer-address-tab>
+                        <app-customer-address-tab [listData]="customer['address']"></app-customer-address-tab>
                     </ng-template>
                 </ngb-tab>
 
                 <ngb-tab *ngIf="customer['type']=='CP'" title="CONTACTS">
                     <ng-template ngbTabContent>
-                        <app-customer-contact-tab [customerId]="customerId"></app-customer-contact-tab>
+                        <app-customer-contact-tab [listData]="customer['user']"></app-customer-contact-tab>
                     </ng-template>
                 </ngb-tab>
 
-                <ngb-tab *ngIf="customer['type']=='CP' && customer['sites']" title="SITES">
+                <ngb-tab *ngIf="customer['type']=='CP' && customer['sites']?.length > 0" title="SITES">
                     <ng-template ngbTabContent>
-                        <app-customer-site-tab [customerId]="customerId"></app-customer-site-tab>
+                        <app-customer-site-tab [listData]="customer['sites']"></app-customer-site-tab>
                     </ng-template>
                 </ngb-tab>
 
@@ -163,7 +163,7 @@
 
                 <ngb-tab title="ACCOUNTS & CARDS">
                     <ng-template ngbTabContent>
-                        <app-customer-account-tab [customerId]="customerId"></app-customer-account-tab>
+                        <app-customer-account-tab [listData]="customer"></app-customer-account-tab>
                     </ng-template>
                 </ngb-tab>
 
