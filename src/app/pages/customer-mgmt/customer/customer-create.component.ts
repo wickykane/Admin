@@ -346,10 +346,10 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
             this.customerService.createCustomer(params).subscribe(
                 res => {
                     try {
-                        // setTimeout(() => {
-                        //     this.router.navigate(['/customer']);
-                        // }, 2000);
-                        // this.toastr.success(res.message);
+                        setTimeout(() => {
+                            this.router.navigate(['/customer']);
+                        }, 2000);
+                        this.toastr.success(res.message);
                     } catch (e) {
                         console.log(e);
                     }
