@@ -76,8 +76,8 @@ export class CustomerService {
         return this.API.get(url, params);
     }
 
-    getListSO(params) {
-        const url = 'buyer/index';
+    getListSO(id, params) {
+        const url = 'buyer/sales-orders/' + id;
         return this.API.get(url, params);
     }
 
@@ -109,5 +109,10 @@ export class CustomerService {
     getListCard(params) {
         const url = 'buyer/index';
         return this.API.get(url, params);
+    }
+
+    getDetailCustomer(id) {
+        const url = 'buyer/' + id;
+        return this.API.get(url);
     }
 }
