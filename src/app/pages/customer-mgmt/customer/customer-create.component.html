@@ -9,11 +9,11 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group row">
-                            <label for="customer_type" class="col-sm-4 col-form-label">Customer Type<span class="text-danger">(*)</span></label>
+                            <label for="buyer_type" class="col-sm-4 col-form-label">Customer Type<span class="text-danger">(*)</span></label>
                             <div class="col-sm-8">
-                                <select class="form-control" name="customer_type" formControlName="customer_type" (change)="changeCustomerType()">
+                                <select class="form-control" name="buyer_type" formControlName="buyer_type" (change)="changeCustomerType()">
                               <option value="null" selected="true">--Select--</option>
-                              <option *ngFor="let item of listMaster['customerType']" [ngValue]="item.id">{{item.name}}</option>
+                              <option *ngFor="let item of listMaster['customerType']" [ngValue]="item.code">{{item.name}}</option>
                           </select>
                             </div>
                         </div>
@@ -26,11 +26,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4" *ngIf="generalForm.value.customer_type == 'P'">
+                    <div class="col-md-4" *ngIf="generalForm.value.buyer_type == 'PS'">
                         <div class="form-group row">
-                            <label for="credit_limit" class="col-sm-4 col-form-label">Credit Limit</label>
+                            <label for="line_of_credit" class="col-sm-4 col-form-label">Credit Limit</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" name="credit_limit" formControlName="credit_limit">
+                                <input type="text" class="form-control" name="line_of_credit" formControlName="line_of_credit">
                             </div>
                         </div>
                     </div>
@@ -39,34 +39,29 @@
                         <div class="form-group row">
                             <label for="code" class="col-sm-4 col-form-label">Code<span class="text-danger">(*)</span></label>
                             <div class="col-sm-8">
-                                <div *ngIf="generalForm.value.customer_type == 'C'">
-                                    <input type="text" class="form-control" name="code" formControlName="code">
-                                </div>
-                                <div *ngIf="generalForm.value.customer_type == 'P'">
-                                    <input type="text" readonly class="form-control-plaintext" value="ABC123">
-                                </div>
+                                    <input type="text" readonly class="form-control-plaintext" name="code" formControlName="code">
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="form-group row" *ngIf="generalForm.value.customer_type == 'C'">
-                            <label for="sale_person" class="col-sm-4 col-form-label">Fax</label>
+                        <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'CP'">
+                            <label for="fax" class="col-sm-4 col-form-label">Fax</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" name="fax" formControlName="fax">
                             </div>
                         </div>
-                        <div class="form-group row" *ngIf="generalForm.value.customer_type == 'P'">
+                        <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'PS'">
                             <label for="email" class="col-sm-4 col-form-label">Email</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" name="email" formControlName="email">
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4" *ngIf="generalForm.value.customer_type == 'P'">
+                    <div class="col-md-4" *ngIf="generalForm.value.buyer_type == 'PS'">
                         <div class="form-group row">
-                            <label for="credit_limit" class="col-sm-4 col-form-label">Saleperson</label>
+                            <label for="sale_man_id" class="col-sm-4 col-form-label">Saleperson</label>
                             <div class="col-sm-8">
-                                <select class="form-control" name="sale_person" formControlName="sale_person">
+                                <select class="form-control" name="sale_man_id" formControlName="sale_man_id">
                           <option value="null" selected="true">--Select--</option>
                           <option *ngFor="let item of listMaster['salePersons']" [ngValue]="item.id">{{item.name}}</option>
                       </select>
@@ -75,13 +70,13 @@
                     </div>
                     <div class="w-100"></div>
                     <div class="col-md-4">
-                        <div class="form-group row" *ngIf="generalForm.value.customer_type == 'C'">
-                            <label for="company_name" class="col-sm-4 col-form-label">Company Name<span class="text-danger">(*)</span></label>
+                        <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'CP'">
+                            <label for="full_name" class="col-sm-4 col-form-label">Company Name<span class="text-danger">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" name="company_name" formControlName="company_name">
+                                <input type="text" class="form-control" name="full_name" formControlName="full_name">
                             </div>
                         </div>
-                        <div class="form-group row" *ngIf="generalForm.value.customer_type == 'P'">
+                        <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'PS'">
                             <label for="first_name" class="col-sm-4 col-form-label">First Name<span class="text-danger">(*)</span></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" name="first_name" formControlName="first_name">
@@ -89,28 +84,28 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="form-group row" *ngIf="generalForm.value.customer_type == 'C'">
-                            <label for="credit_limit" class="col-sm-4 col-form-label">Credit Limit</label>
+                        <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'CP'">
+                            <label for="line_of_credit" class="col-sm-4 col-form-label">Credit Limit</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" name="credit_limit" formControlName="credit_limit">
+                                <input type="text" class="form-control" name="line_of_credit" formControlName="line_of_credit">
                             </div>
                         </div>
-                        <div class="form-group row" *ngIf="generalForm.value.customer_type == 'P'">
-                            <label for="user_name" class="col-sm-4 col-form-label">Username</label>
+                        <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'PS'">
+                            <label for="username" class="col-sm-4 col-form-label">Username</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" name="user_name" formControlName="user_name">
+                                <input type="text" class="form-control" name="username" formControlName="username">
                             </div>
                         </div>
                     </div>
                     <div class="w-100"></div>
                     <div class="col-md-4">
-                        <div class="form-group row" *ngIf="generalForm.value.customer_type == 'C'">
-                            <label for="registration_no" class="col-sm-4 col-form-label">Registration No</label>
+                        <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'CP'">
+                            <label for="registration" class="col-sm-4 col-form-label">Registration No</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" name="registration_no" formControlName="registration_no">
+                                <input type="text" class="form-control" name="registration" formControlName="registration">
                             </div>
                         </div>
-                        <div class="form-group row" *ngIf="generalForm.value.customer_type == 'P'">
+                        <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'PS'">
                             <label for="last_name" class="col-sm-4 col-form-label">Last Name<span class="text-danger">(*)</span></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" name="last_name" formControlName="last_name">
@@ -118,19 +113,19 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="form-group row" *ngIf="generalForm.value.customer_type == 'C'">
-                            <label for="credit_limit" class="col-sm-4 col-form-label">Saleperson</label>
+                        <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'CP'">
+                            <label for="sale_man_id" class="col-sm-4 col-form-label">Saleperson</label>
                             <div class="col-sm-8">
-                                <select class="form-control" name="sale_person" formControlName="sale_person">
+                                <select class="form-control" name="sale_man_id" formControlName="sale_man_id">
                             <option value="null" selected="true">--Select--</option>
                             <option *ngFor="let item of listMaster['salePersons']" [ngValue]="item.id">{{item.name}}</option>
                         </select>
                             </div>
                         </div>
-                        <div class="form-group row" *ngIf="generalForm.value.customer_type == 'P'">
+                        <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'PS'">
                             <label for="password" class="col-sm-4 col-form-label">Password</label>
                             <div class="col-sm-8">
-                                <input type="password" class="form-control" name="password" formControlName="password">
+                                <input type="password" class="form-control" name="pwd" formControlName="pwd">
                             </div>
                         </div>
                     </div>
@@ -180,19 +175,19 @@
                                         <input type="text" class="form-control" name="name" [(ngModel)]="item.name">
                                     </td>
                                     <td>
-                                        <select class="form-control" name="country_id" [(ngModel)]="item.country_id" (change)="changeCountry(item)">
+                                        <select class="form-control" name="country_code" [(ngModel)]="item.country_code" (change)="changeCountry(item)">
                                       <option value="null" selected="true">--Select--</option>
-                                      <option *ngFor="let i of item.listCountry" [ngValue]="i.id">{{i.name}}</option>
+                                      <option *ngFor="let i of item.listCountry" [ngValue]="i.cd">{{i.name}}</option>
                                   </select>
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control" name="address_1" [(ngModel)]="item.address_1">
+                                        <input type="text" class="form-control" name="address_line" [(ngModel)]="item.address_line">
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control" name="address_2" [(ngModel)]="item.address_2">
+                                        <input type="text" class="form-control" name="address_line2" [(ngModel)]="item.address_line2">
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control" name="city" [(ngModel)]="item.city">
+                                        <input type="text" class="form-control" name="city_name" [(ngModel)]="item.city_name">
                                     </td>
                                     <td>
                                         <select class="form-control" name="state_id" [(ngModel)]="item.state_id">
@@ -204,7 +199,7 @@
                                         <input type="text" class="form-control" name="zip_code" [(ngModel)]="item.zip_code">
                                     </td>
                                     <td>
-                                        <input *ngIf="item.type == 3" type="text" class="form-control" name="route" [(ngModel)]="item.route">
+                                        <input *ngIf="item.type == 3" type="text" class="form-control" name="route_id" [(ngModel)]="item.route_id">
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-default" (click)="removeAddress(i)">
@@ -222,7 +217,7 @@
         </div>
 
 
-        <div class="row" style="margin-top:15px;" *ngIf="generalForm.value.customer_type == 'C'">
+        <div class="row" style="margin-top:15px;" *ngIf="generalForm.value.buyer_type == 'CP'">
             <div class="col-sm-12">
                 <div class="custom-header">
                     <h3 class="custom-header">SITES: <strong class="text-danger">{{site.length}}</strong> <span *ngIf="site.length > 1">Records</span><span *ngIf="site.length <= 1">Record</span></h3>
@@ -251,28 +246,28 @@
                                 <tr *ngFor="let item of site; let i = index">
                                     <td>{{i+1}}</td>
                                     <td>
-                                        {{item}}
+                                        {{item.code}}
                                     </td>
                                     <td>
-                                        {{item}}
+                                        {{item.full_name}}
                                     </td>
                                     <td>
-                                        {{item}}
+                                        {{item.country}}
                                     </td>
                                     <td>
-                                        {{item}}
+                                        {{item.address_line}}
                                     </td>
                                     <td>
-                                        {{item}}
+                                        {{item.address_line2}}
                                     </td>
                                     <td>
-                                        {{item}}
+                                        {{item.city_name}}
                                     </td>
                                     <td>
-                                        {{item}}
+                                        {{item.state}}
                                     </td>
                                     <td>
-                                        {{item}}
+                                        {{item.zip_code}}
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-default" (click)="removeSite(i)">
@@ -319,22 +314,22 @@
                                 <tr *ngFor="let item of bank_account; let i = index">
                                     <td>{{i+1}}</td>
                                     <td>
-                                        <select class="form-control" name="name" [(ngModel)]="item.name" (change)="changeBank(item)">
+                                        <select class="form-control" name="bank_id" [(ngModel)]="item.bank_id" (change)="changeBank(item)">
                               <option value="null" selected="true">--Select--</option>
                               <option *ngFor="let i of item.listBank" [ngValue]="i.id">{{i.name}}</option>
                             </select>
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control" name="swift" [(ngModel)]="item.swift">
+                                        <input type="text" readonly class="form-control-plaintext" name="bank_swift" [(ngModel)]="item.bank_swift">
                                     </td>
                                     <td>
-                                        <select class="form-control" name="branch_id" [(ngModel)]="item.branch_id">
+                                        <select class="form-control" name="branch_id" [(ngModel)]="item.branch_id" (change)="changeBranch(item)">
                               <option value="null" selected="true">--Select--</option>
-                              <option *ngFor="let i of item.listBranch" [ngValue]="i.id">{{i.name}}</option>
+                              <option *ngFor="let i of item.listBranch" [ngValue]="i.id">{{i.branch_name}}</option>
                             </select>
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control" name="address" [(ngModel)]="item.address">
+                                        <input type="text" readonly class="form-control-plaintext" name="full_address" [(ngModel)]="item.full_address">
                                     </td>
                                     <td>
                                         <input type="text" class="form-control" name="account_name" [(ngModel)]="item.account_name">
@@ -426,7 +421,7 @@
 
 
 
-        <div class="row" style="margin-top:15px;" *ngIf="generalForm.value.customer_type == 'C'">
+        <div class="row" style="margin-top:15px;" *ngIf="generalForm.value.buyer_type == 'CP'">
             <div class="col-sm-12">
                 <div class="custom-header">
                     <h3 class="custom-header">CONTACTS: <strong class="text-danger">{{contact.length}}</strong> <span *ngIf="contact.length > 1">Records</span><span *ngIf="contact.length <= 1">Record</span></h3>
@@ -444,7 +439,7 @@
                                     <th> Title </th>
                                     <th> Phone </th>
                                     <th> Fax </th>
-                                    <th> email </th>
+                                    <th> Email </th>
                                     <th> Username </th>
                                     <th> Password </th>
                                     <th> Action </th>
@@ -454,7 +449,7 @@
                                 <tr *ngFor="let item of contact; let i = index">
                                     <td>{{i+1}}</td>
                                     <td>
-                                        <input type="text" class="form-control" name="name" [(ngModel)]="item.name">
+                                        <input type="text" class="form-control" name="full_name" [(ngModel)]="item.full_name">
                                     </td>
                                     <td>
                                         <input type="text" class="form-control" name="title" [(ngModel)]="item.title">
@@ -469,10 +464,10 @@
                                         <input type="text" class="form-control" name="email" [(ngModel)]="item.email">
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control" name="user_name" [(ngModel)]="item.user_name">
+                                        <input type="text" class="form-control" name="username" [(ngModel)]="item.username">
                                     </td>
                                     <td>
-                                        <input type="password" class="form-control" name="password" [(ngModel)]="item.password">
+                                        <input type="password" class="form-control" name="pwd" [(ngModel)]="item.pwd">
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-default" (click)="removeContact(i)">
