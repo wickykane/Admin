@@ -129,7 +129,7 @@
                                     <input type="text" class="form-control" name="name" [(ngModel)]="item.name">
                                 </td>
                                 <td>
-                                    <select class="form-control" name="country_id" [(ngModel)]="item.country_id">
+                                    <select class="form-control" name="country_id" [(ngModel)]="item.country_id" (change)="changeCountry(item)">
                                     <option value="null" selected="true">--Select--</option>
                                     <option *ngFor="let i of item.listCountry" [ngValue]="i.id">{{i.name}}</option>
                                 </select>
@@ -201,7 +201,7 @@
                             <tr *ngFor="let item of bank_account; let i = index">
                                 <td>{{i+1}}</td>
                                 <td>
-                                    <select class="form-control" name="name" [(ngModel)]="item.name">
+                                    <select class="form-control" name="name" [(ngModel)]="item.name" (change)="changeBank(item)">
                             <option value="null" selected="true">--Select--</option>
                             <option *ngFor="let i of item.listName" [ngValue]="i.id">{{i.name}}</option>
                           </select>
