@@ -1,6 +1,6 @@
 <div [@routerTransition]>
-    <app-page-header [heading]="customer?.name || 'Customer'"></app-page-header>
-    <app-shortcut [listShortcut]='customerKeyService.getKeys()'></app-shortcut>
+    <app-page-header [heading]="customer['company_name'] || 'Customer'"></app-page-header>
+    <!-- <app-shortcut [listShortcut]='customerKeyService.getKeys()'></app-shortcut> -->
     <section class='main-container'>
         <div class="informaion">
             <h5 class="text-uppercase font-weight-bold">Information</h5>
@@ -8,130 +8,130 @@
                 <div class="col-md-3 customer-infomation">
                     <div class="row">
                         <label class='col-6'>Type</label>
-                        <div class='col-6'>{{ customer.type }}</div>
+                        <div class='col-6'>{{ customer['company_type_name'] }}</div>
                     </div>
                     <div class="row">
                         <label class='col-6'>Code</label>
-                        <div class='col-6'>{{ customer.code }}</div>
+                        <div class='col-6'>{{ customer['code'] }}</div>
                     </div>
                     <div class="row">
                         <label class='col-6'>Phone</label>
-                        <div class='col-6'>{{ customer.phone }}</div>
+                        <div class='col-6'>{{ customer['phone'] }}</div>
                     </div>
                     <div class="row">
                         <label class='col-6'>Fax</label>
-                        <div class='col-6'>{{ customer.fax }}</div>
+                        <div class='col-6'>{{ customer['fax'] }}</div>
                     </div>
                     <div class="row">
                         <label class='col-6'>Discount Level</label>
-                        <div class='col-6 text-success'>{{ customer.discount_level }}</div>
+                        <div class='col-6 text-success'>{{ customer['discount_level'] }}</div>
                     </div>
                     <div class="row">
                         <label class='col-6'>Salesperson</label>
-                        <div class='col-6'>{{ customer.salesperson }}</div>
+                        <div class='col-6'>{{ customer['sales_person'] }}</div>
                     </div>
                 </div>
                 <div class="col-md-3 customer-infomation bolder">
                     <div class="row">
                         <label class='col-6'>Total Sales Orders</label>
-                        <div class='col-6 text-primary'>{{ customer.total_order }}</div>
+                        <div class='col-6 text-primary'><a (click)="selectTab('so')">{{ customer['total_sales_orders'] || 0 }}</a></div>
                     </div>
                     <div class="row">
                         <label class='col-6'>Total Sales Quotes</label>
-                        <div class='col-6 text-primary'>{{ customer.total_quote }}</div>
+                        <div class='col-6 text-primary'><a (click)="selectTab('quote')">{{ customer['total_sales_quote'] || 0 }}</a></div>
                     </div>
                     <div class="row">
                         <label class='col-6'>Gross Sales YTD</label>
-                        <div class='col-6 text-success'>{{ customer.gross_ytd }}</div>
+                        <div class='col-6 text-success'>{{ customer['gross_sales_ytd'] }}</div>
                     </div>
                     <div class="row">
                         <label class='col-6'>Net Sales YTD</label>
-                        <div class='col-6 text-success'>{{ customer.net_ytd }}</div>
+                        <div class='col-6 text-success'>{{ customer['net_sales_ytd'] }}</div>
                     </div>
                     <div class="row">
                         <label class='col-6'>COGS YTD</label>
-                        <div class='col-6 text-success'>{{ customer.cogs }}</div>
+                        <div class='col-6 text-success'>{{ customer['cogs_ytd'] }}</div>
                     </div>
                     <div class="row">
                         <label class='col-6'>Gross Profit % YTD</label>
-                        <div class='col-6 text-success'>{{ customer.gross_profit }}</div>
+                        <div class='col-6 text-success'>{{ customer['gross_profit_ytd'] }}</div>
                     </div>
 
                 </div>
                 <div class="col-md-3 customer-infomation ">
                     <div class="row">
                         <label class='col-6'>Total Sales Invoices</label>
-                        <div class='col-6 text-primary'>{{ customer.total_order }}</div>
+                        <div class='col-6 text-primary'>{{ customer['total_sales_invoices'] }}</div>
                     </div>
                     <div class="row">
                         <label class='col-6'>Total Amount</label>
-                        <div class='col-6 text-primary'>{{ customer.total_quote | currency:'$' }}</div>
+                        <div class='col-6 text-primary'>{{ customer['total_amount'] | currency:'$' }}</div>
                     </div>
                     <div class="row">
                         <label class='col-6'>Total Overdue Invoices</label>
-                        <div class='col-6 text-danger'>{{ customer.gross_ytd }}</div>
+                        <div class='col-6 text-danger'>{{ customer['total_overdue_invoice'] }}</div>
                     </div>
                     <div class="row">
                         <label class='col-6'>Total Outstanding Amount</label>
-                        <div class='col-6 text-danger'>{{ customer.net_ytd | currency:'$'}}</div>
+                        <div class='col-6 text-danger'>{{ customer['total_outstanding_amount'] | currency:'$'}}</div>
                     </div>
                     <div class="row">
                         <label class='col-6'>Total Refunded Amount</label>
-                        <div class='col-6 text-danger'>{{ customer.cogs | currency:'$'}}</div>
+                        <div class='col-6 text-danger'>{{ customer['total_refunded_amount'] | currency:'$'}}</div>
                     </div>
                 </div>
                 <div class="col-md-3 customer-infomation bolder">
                     <div class="row">
                         <label class='col-6'>Total RMA Orders</label>
-                        <div class='col-6 text-primary'>{{ customer.total_order }}</div>
+                        <div class='col-6 text-primary'>{{ customer['total_rma_orders'] }}</div>
                     </div>
                     <div class="row">
                         <label class='col-6'>Total Returned Items</label>
-                        <div class='col-6 text-primary'>{{ customer.total_quote }}</div>
+                        <div class='col-6 text-primary'>{{ customer['total_returned_items'] }}</div>
                     </div>
                     <div class="row">
                         <label class='col-6'>Total Received Item</label>
-                        <div class='col-6 text-danger'>{{ customer.gross_ytd }}</div>
+                        <div class='col-6 text-danger'>{{ customer['total_received_items'] }}</div>
                     </div>
                     <div class="row">
                         <label class='col-6'>Credit Limit</label>
-                        <div class='col-6'>{{ customer.net_ytd | currency:'$'}}</div>
+                        <div class='col-6'>{{ customer['credit_limit'] | currency:'$'}}</div>
                     </div>
                     <div class="row">
                         <label class='col-6'>Credit Balance</label>
-                        <div class='col-6 text-danger'>{{ customer.cogs | currency:'$'}}</div>
+                        <div class='col-6 text-danger'>{{ customer['creadit_balance'] | currency:'$'}}</div>
                     </div>
                 </div>
 
             </div>
         </div>
         <div class="information-tab">
-            <ngb-tabset>
+            <ngb-tabset #tabSet>
                 <ngb-tab title="ADDRESSES">
                     <ng-template ngbTabContent>
-                        <app-customer-address-tab [customerId]="customerId"></app-customer-address-tab>
+                        <app-customer-address-tab [listData]="customer['address']"></app-customer-address-tab>
                     </ng-template>
                 </ngb-tab>
 
-                <ngb-tab title="CONTACTS">
+                <ngb-tab *ngIf="customer['type']=='CP'" title="CONTACTS">
                     <ng-template ngbTabContent>
-                        <app-customer-contact-tab [customerId]="customerId"></app-customer-contact-tab>
+                        <app-customer-contact-tab [listData]="customer['user']"></app-customer-contact-tab>
                     </ng-template>
                 </ngb-tab>
 
-                <ngb-tab title="SITES">
+                <ngb-tab *ngIf="customer['type']=='CP' && customer['sites']?.length > 0" title="SITES">
                     <ng-template ngbTabContent>
-                        <app-customer-site-tab [customerId]="customerId"></app-customer-site-tab>
+                        <app-customer-site-tab [listData]="customer['sites']"></app-customer-site-tab>
                     </ng-template>
                 </ngb-tab>
 
-                <ngb-tab title="QUOTES">
+                <ngb-tab id="quote" title="QUOTES">
                     <ng-template ngbTabContent>
                         <app-customer-quote-tab [customerId]="customerId"></app-customer-quote-tab>
                     </ng-template>
                 </ngb-tab>
 
-                <ngb-tab title="SALES ORDERS">
+                <ngb-tab id="so" title="SALES ORDERS">
                     <ng-template ngbTabContent>
                         <app-customer-sale-order-tab [customerId]="customerId"></app-customer-sale-order-tab>
                     </ng-template>
@@ -157,13 +157,13 @@
 
                 <ngb-tab title="RMA">
                     <ng-template ngbTabContent>
-                        <app-customer-rma-tab [customerId]="customerId"></app-customer-rma-tab>                        
+                        <app-customer-rma-tab [customerId]="customerId"></app-customer-rma-tab>
                     </ng-template>
                 </ngb-tab>
 
                 <ngb-tab title="ACCOUNTS & CARDS">
                     <ng-template ngbTabContent>
-                        <app-customer-account-tab [customerId]="customerId"></app-customer-account-tab>                                                
+                        <app-customer-account-tab [listData]="customer"></app-customer-account-tab>
                     </ng-template>
                 </ngb-tab>
 

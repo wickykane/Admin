@@ -17,13 +17,13 @@
             <tbody>
                 <tr *ngFor="let item of list.accounts">
                     <td>{{ item.id }}</td>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.id }}</td>
+                    <td>{{ item.bank_name }}</td>
+                    <td>{{ item.bank_swift }}</td>
+                    <td>{{ item.branch_name }}</td>
+                    <td>{{ item.full_address }}</td>
+                    <td>{{ item.account_name }}</td>
+                    <td>{{ item.account_no }}</td>
+                    <td>{{ item.iban }}</td>
                 </tr>
                 <tr *ngIf="list.accounts.length == 0">
                     <td colspan="100%" class="text-center">No data.</td>
@@ -47,10 +47,10 @@
             <tbody>
                 <tr *ngFor="let item of list.cards">
                     <td>{{ item.id }}</td>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.id }}</td>
+                    <td>{{ item.card_type_name }}</td>
+                    <td>{{ item.account_no }}</td>
+                    <td>{{ item.account_name }}</td>
+                    <td>{{ item.expiration_month + '/' + item.expiration_year}}</td>
                 </tr>
                 <tr *ngIf="list.cards.length == 0">
                     <td colspan="100%" class="text-center">No data.</td>

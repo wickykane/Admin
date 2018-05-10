@@ -5,8 +5,26 @@
 }
 
 .scroll-container {
-    height: 223px;
-    overflow: auto;
+    table {
+        thead tr {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        tbody {
+            display: block;
+            height: 145px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            tr {
+                display: table;
+                table-layout: fixed;
+                width: calc( 100% + 16px);
+            }
+        }
+      
+    }
 }
 
 .table-custom {
