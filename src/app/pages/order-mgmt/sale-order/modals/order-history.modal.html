@@ -1,0 +1,33 @@
+<div class="modal-header">
+    <h4 class="modal-title">{{name}}
+        <img src="../../assets/img/qbicons.png" width="20px" height="20px">
+    </h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div>
+        <table class="table table-striped table-vcenter table-hover custom-table">
+            <thead class="bg-white">
+                <tr>
+                    <th>Part #</th>
+                    <th>Product Name</th>
+                    <th class="text-nowrap text-center ">Order QTY</th>
+                    <th class="text-nowrap text-center">Shipped QTY</th>
+                    <th class="text-nowrap text-center">Ship To</th>
+                    <th class="text-center">Cost</th>
+                    <th class="text-center">Discount</th>
+                    <th class="text-center">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-outline-danger" (click)="activeModal.close(true)">Print</button>
+    <button type="button" class="btn btn-outline-dark" (click)="activeModal.dismiss()">Cancel</button>
+</div>
