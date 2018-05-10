@@ -13,10 +13,12 @@ import {ToastModule} from 'ng2-toastr/ng2-toastr';
 import { ToastrModule } from 'ngx-toastr';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { CustomSpinnerComponent } from './shared/modules/custom-spinner/spinner.component';
+
 import { AuthGuard, JwtService } from './shared';
 import { AuthenticationService, ApiService, ApiInterceptorService } from './services/index';
 import { NgHttpLoaderModule } from 'ng-http-loader/ng-http-loader.module';
-import "angular2-navigate-with-data";
+import 'angular2-navigate-with-data';
 
 
 // AoT requires an exported function for factories
@@ -49,9 +51,10 @@ export function createTranslateLoader(http: HttpClient) {
         ToastrModule.forRoot(),
         HotkeyModule.forRoot()
     ],
+    entryComponents: [CustomSpinnerComponent],
     declarations: [
         AppComponent,
-
+        CustomSpinnerComponent,
 
     ],
     providers: [
