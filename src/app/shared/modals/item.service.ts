@@ -33,8 +33,27 @@ export class ItemService {
     }
 
     getStateByCountry(params) {
-        const url = 'state/get-by-country'
+        const url = 'state/get-by-country';
         return this.API.get(url, params);
+    }
+
+    /**
+     * Customer
+     */
+    // customer
+    getListCountryAdmin() {
+        const url = 'country/admin/get-all';
+        return this.API.get(url);
+    }
+
+    getListBank() {
+        const url = 'bank/list';
+        return this.API.get(url);
+    }
+
+    getListBranchByBank(bank_id) {
+        const url = 'bank/' + bank_id + '/branch/list';
+        return this.API.get(url);
     }
 
 }
