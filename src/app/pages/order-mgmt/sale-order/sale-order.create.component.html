@@ -27,7 +27,7 @@
                                     Last Sales Date: {{customer.last_sales_order}}
                                 </div>
                                 <div class="col-md-2">
-                                    <a  (click)="showViewOrderHistory()">View Order History</a>
+                                    <a (click)="showViewOrderHistory()">View Order History</a>
                                 </div>
                                 <div class="col-md-2">
                                     Current Debt: {{customer.current_dept |currency}}
@@ -72,7 +72,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-3 customer-infomation bolder">
-                                    <div class="form-group row" *ngIf ="customer.buyer_type =='CP'">
+                                    <div class="form-group row" *ngIf="customer.buyer_type =='CP'">
                                         <label class='col-4 control-label'>Contact</label>
                                         <div class='col-8 text-primary'>
                                             <form [formGroup]="generalForm">
@@ -82,13 +82,13 @@
                                             </form>
                                         </div>
                                     </div>
-                                    <div class="form-group row" *ngIf ="customer.buyer_type =='CP'">
+                                    <div class="form-group row" *ngIf="customer.buyer_type =='CP'">
                                         <label class='col-4'>Contact Phone</label>
                                         <div class='col-8 text-primary'>
                                             {{addr_select.contact.phone}}
                                         </div>
                                     </div>
-                                    <div class="form-group row" *ngIf ="customer.buyer_type =='CP'">
+                                    <div class="form-group row" *ngIf="customer.buyer_type =='CP'">
                                         <label class='col-4'>Contact Email</label>
                                         <div class='col-8 text-success'>
                                             {{addr_select.contact.email}}
@@ -273,7 +273,7 @@
                         <div class="col-md-12" *ngIf="generalForm.value.is_multi_shp_addr == 1">
                             <div class="col-12">
                                 <p>This order ships to {{customer.shipping.length}} shipping addresses.</p>
-                                <a > View detail below</a>
+                                <a> View detail below</a>
                             </div>
                         </div>
                         <div class="col-md-12" *ngIf="generalForm.value.is_multi_shp_addr == 0">
@@ -351,7 +351,7 @@
                                         <th style="width:100px" translate>Action</th>
                                         <th style="width:150px" translate>Product Code</th>
                                         <th translate>Description</th>
-                                        <th translate style="width:150px" >Avail QTY</th>
+                                        <th translate style="width:150px">Avail QTY</th>
                                         <th class="text-nowrap" style="width:100px" translate>Order QTY</th>
                                         <th class="text-nowrap text-center" translate *ngIf="generalForm.value.is_multi_shp_addr == 1">Ship To</th>
                                         <th class="text-center" style="width:100px" translate>Unit Price</th>
@@ -437,16 +437,18 @@
                         </div>
                     </div>
                     <div class="col-md-12">
-                        <a  (click)="addNewItem(list.items,1, order_info.company_id )" translate>
+                        <a (click)="addNewItem(list.items,1, order_info.company_id )" translate>
                             <i class="fa fa-plus"></i>Add New Item</a>
                     </div>
                     <div class="col-md-12 mg-top-15">
                         <div class="row">
                             <div class="col-md-4">
                                 <label for="">Note</label>
-                                <div>
-                                    <textarea class="form-control" name="" id="" rows="5"></textarea>
-                                </div>
+                                <form [formGroup]="generalForm">
+                                    <div>
+                                        <textarea class="form-control" formControlName="note" name="" id="" rows="5"></textarea>
+                                    </div>
+                                </form>
                             </div>
                             <div class="col-md-4">
                             </div>
@@ -459,25 +461,39 @@
                                     </tr>
                                     <tr>
                                         <td>Discount (%):</td>
-                                        <td><input class="form-control" [(ngModel)]="order_info.discount_percent" class="form-control" type="text" (change)="updateTotal()"></td>
-                                        <td><input class="form-control" readonly="true" [(ngModel)]="order_info.total_discount" class="form-control" value="0" type="number"></td>
+                                        <td>
+                                            <input class="form-control" [(ngModel)]="order_info.discount_percent" class="form-control"
+                                                type="text" (change)="updateTotal()">
+                                        </td>
+                                        <td>
+                                            <input class="form-control" readonly="true" [(ngModel)]="order_info.total_discount"
+                                                class="form-control" value="0" type="number">
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td>TAX/VAT (%):</td>
-                                        <td><input class="form-control" [(ngModel)]="order_info.vat_percent" class="form-control" type="text" (change)="updateTotal()"></td>
-                                        <td><input class="form-control" readonly="true" [(ngModel)]="order_info['vat_percent_amount']" class="form-control" value="0"
-                                            type="number"></td>
+                                        <td>
+                                            <input class="form-control" [(ngModel)]="order_info.vat_percent" class="form-control"
+                                                type="text" (change)="updateTotal()">
+                                        </td>
+                                        <td>
+                                            <input class="form-control" readonly="true" [(ngModel)]="order_info['vat_percent_amount']"
+                                                class="form-control" value="0" type="number">
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td>Shipping cost ($):</td>
                                         <td></td>
-                                        <td><input class="form-control" [(ngModel)]="order_info.shipping_cost" class="form-control" type="text" (change)="updateTotal()"></td>
+                                        <td>
+                                            <input class="form-control" [(ngModel)]="order_info.shipping_cost" class="form-control"
+                                                type="text" (change)="updateTotal()">
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td>Grand Total:</td>                                        
+                                        <td>Grand Total:</td>
                                         <td colspan="2">{{order_info.total | currency}}</td>
                                     </tr>
-                                </table>                                
+                                </table>
                             </div>
                         </div>
                     </div>
