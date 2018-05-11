@@ -1,3 +1,27 @@
+.block-header {
+    padding: 4px 15px;
+    transition: opacity 0.2s ease-out;
+    background-color: #dc3545;
+    color: #ffffff;
+    
+    .parent-company {
+        margin-left: 15px;
+        font-size: 10px;
+        font-weight: normal;
+        text-transform: initial;
+    }
+
+    .block-title-lg {
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        line-height: 1.2;
+        display: inline;
+        display: inline-block;
+        padding-top: 3px;
+        margin-bottom: 0;
+    }
+}
 .right-toggle-button {
     // margin-top: -20px;
 }
