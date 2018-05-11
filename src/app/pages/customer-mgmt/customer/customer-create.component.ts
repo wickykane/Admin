@@ -195,7 +195,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
             if (item.bank_id === x.id) {
                 return x.swift;
             }
-        });
+        })[0];
 
         this.customerService.getListBranchByBank(item.bank_id).subscribe(res => {
             try {
@@ -211,7 +211,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
             if (item.branch_id === x.id) {
                 return x.address;
             }
-        });
+        })[0];
     }
 
 
@@ -307,6 +307,9 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
 
 
     createCustomer() {
+      this.contact.forEach(obj => {
+          obj['pwd_cfrm'] = obj.pwd;
+      });
         if (this.generalForm.valid) {
             const params = Object.assign({}, this.generalForm.value);
             params['user'] = Object.assign([], this.contact);
@@ -343,7 +346,11 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
 
             }
 
-            this.customerService.createCustomer(params).subscribe(
+            const data = {
+                data: JSON.stringify(params)
+            };
+
+            this.customerService.createCustomer(data).subscribe(
                 res => {
                     try {
                         setTimeout(() => {
