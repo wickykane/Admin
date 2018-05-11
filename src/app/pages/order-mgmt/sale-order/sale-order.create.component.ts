@@ -114,7 +114,7 @@ export class SaleOrderCreateComponent implements OnInit {
             'delivery_date': [null],
             'contact_user_id': [null],
             'prio_level': [null],
-            'is_multi_shp_addr': [{value: 0, disabled: true}],
+            'is_multi_shp_addr': [null],
             'sales_person': [null],
             'warehouse_id': [null],
             'payment_method': [null],
@@ -134,6 +134,7 @@ export class SaleOrderCreateComponent implements OnInit {
         this.updateTotal();
         this.copy_addr = Object.assign({}, this.addr_select);
         this.copy_customer = Object.assign(this.copy_customer, this.addr_select);
+        this.generalForm.controls['is_multi_shp_addr'].patchValue(0);
     }
     /**
      * Mater Data

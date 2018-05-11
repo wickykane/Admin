@@ -179,7 +179,7 @@
                                         <div class="form-group row">
                                             <label class='col-4'>Multi Ship Addr</label>
                                             <div class='col-8 text-danger'>
-                                                <select  class="form-control" id="is_multi_shp_addr" name="is_multi_shp_addr" formControlName="is_multi_shp_addr">
+                                                <select [attr.disabled]="true"  class="form-control" id="is_multi_shp_addr" name="is_multi_shp_addr" formControlName="is_multi_shp_addr">
                                                     <option *ngFor="let item of listMaster['multi_ship']" [ngValue]="item.id">{{item.label}}</option>
                                                 </select>
                                             </div>
