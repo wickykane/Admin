@@ -227,6 +227,14 @@ export class SaleOrderCreateComponent implements OnInit {
         const item = arr.filter(x => x.address_id === id);
         return item[0];
     }
+    _keyPress(event: any) {
+        const pattern = /[0-9]/;
+        const inputChar = String.fromCharCode(event.charCode);
+        if (!pattern.test(inputChar)) {
+          // invalid character, prevent input
+          event.preventDefault();
+        }
+    }
 
     selectContact() {
         const id = this.generalForm.value.contact_user_id;
@@ -322,7 +330,7 @@ export class SaleOrderCreateComponent implements OnInit {
         this.order_info.total_discount = parseFloat((this.order_info.sub_total * Number(this.order_info['alt_discount']) / 100).toFixed(2));
         const sub_after_discount = this.order_info.sub_total - this.order_info.total_discount;
         this.order_info['vat_percent_amount'] = parseFloat((sub_after_discount * Number(this.order_info['alt_vat_percent']) / 100).toFixed(2));
-        this.order_info.total = this.order_info.sub_total + Number(this.order_info['shipping_cost']) + this.order_info['vat_percent_amount'] - this.promotionList['total_invoice_discount'];
+        this.order_info.total = this.order_info.sub_total - this.order_info.total_discount + Number(this.order_info['shipping_cost']) + this.order_info['vat_percent_amount'] - this.promotionList['total_invoice_discount'];
     }
 
     calcPromotion(company_id) {

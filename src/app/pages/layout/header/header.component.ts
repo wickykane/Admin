@@ -75,9 +75,12 @@ export class HeaderComponent implements OnInit {
 
     changeLang(language: string) {
         this.translate.use(language);
-    }
-    onlogOut(){       
+    }    
+    onlogOut(){
         this.JwtService.cleanLocalStorage();
-        window.location.href='http://nab.dev.seldatdirect.com';
+        window.location.href = environment.nab_url;
+    }
+    goToHome() {
+        window.location.href = environment.nab_home;
     }
 }
