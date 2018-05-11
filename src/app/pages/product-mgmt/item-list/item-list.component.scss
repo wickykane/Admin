@@ -32,8 +32,21 @@
         }
 
         .control-label {
-            min-width: 80px;
+            min-width: 75px;
             text-align: left;
+        }
+
+        .filters-ctn {
+            padding-left: 30px;
+
+            .filter-item {
+                padding-left: 0;
+                padding-right: 0;
+            }
+
+            .block-btn-search {
+                padding-left: 0;
+            }
         }
     }
 
@@ -47,6 +60,13 @@
             &:not(:first-child) {
                 padding-left: 15px;
             }
+        }
+    }
+}
+@media (max-width: 1300px) {
+    .filters-ctn {
+        .control-label {
+            display: block;
         }
     }
 }
