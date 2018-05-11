@@ -151,7 +151,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             if (item.bank_id === x.id) {
                 return x.swift;
             }
-        });
+        })[0];
 
         this.itemService.getListBranchByBank(item.bank_id).subscribe(res => {
             try {
@@ -167,7 +167,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             if (item.branch_id === x.id) {
                 return x.address;
             }
-        });
+        })[0];
     }
 
 
@@ -219,6 +219,9 @@ export class SiteModalComponent implements OnInit, OnDestroy {
 
 
     applyData() {
+        this.contact.forEach(obj => {
+            obj['pwd_cfrm'] = obj.pwd;
+        });
         if (this.generalForm.valid) {
             const params = Object.assign({}, this.generalForm.value);
             params['user'] = Object.assign([], this.contact);
