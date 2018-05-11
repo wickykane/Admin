@@ -13,6 +13,10 @@ import { ConfirmModalContent } from './confirm.modal';
 import { PromotionModalContent } from './promotion.modal';
 import { SiteModalComponent } from './site.modal';
 
+import { OrderSaleQuoteModalContent } from './order-salequote.modal';
+import { InvoiceModalContent } from './invoice.modal';
+import { OrderHistoryModalContent } from './order-history.modal';
+
 // Modal
 
 
@@ -21,10 +25,10 @@ import { SiteModalComponent } from './site.modal';
         CommonModule,
         CommonShareModule
     ],
-    declarations: [ItemModalContent, AddressModalContent, ConfirmModalContent, PromotionModalContent, SiteModalComponent],
+    declarations: [ItemModalContent, AddressModalContent, ConfirmModalContent, PromotionModalContent, SiteModalComponent, OrderSaleQuoteModalContent, InvoiceModalContent, OrderHistoryModalContent],
     providers: [TableService, ItemService],
-    exports: [ItemModalContent, AddressModalContent, ConfirmModalContent, PromotionModalContent, SiteModalComponent],
-    entryComponents: [ItemModalContent, AddressModalContent, ConfirmModalContent, PromotionModalContent, SiteModalComponent]
+    exports: [ItemModalContent, AddressModalContent, ConfirmModalContent, PromotionModalContent, SiteModalComponent, OrderSaleQuoteModalContent, InvoiceModalContent, OrderHistoryModalContent],
+    entryComponents: [ItemModalContent, AddressModalContent, ConfirmModalContent, PromotionModalContent, SiteModalComponent, OrderSaleQuoteModalContent, InvoiceModalContent, OrderHistoryModalContent]
 
 })
 export class ItemModalModule { }

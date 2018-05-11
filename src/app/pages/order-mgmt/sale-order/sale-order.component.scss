@@ -152,3 +152,98 @@
     letter-spacing: 0;
     font-weight: 300;
 }
+//new style
+.mg-top-15{
+    margin-top:15px;
+}
+.fix-padding{
+    padding: 0 30px;
+}
+.block-order{
+    .block-border{
+        border:1px solid #ccc;
+        border-radius: 0;
+        display: block;
+        position: relative;
+        padding-top: 15px;
+        h5.title-border{
+            display: block;
+            position: absolute;
+            background: #fff;
+            font-weight: 600;
+            top: -10px;
+            left: 15px;
+            padding: 0 4px;
+        }
+    }
+    .table-responsive{
+        height: auto;
+        max-height: 150px;
+        overflow-y: auto;
+    }
+    table.table-bg{
+        background: #ededed;
+    }
+    .full-block{
+        width: 100%;
+        height: 100%;
+    }
+    .form-group{
+        margin-bottom: 5px;
+    }
+}
+
+.main-container {
+    padding: 10px 8px;
+    .information-tab {
+        margin-top: 10px;
+    }
+    .customer-infomation {
+        padding: 15px;
+        padding-bottom: 5px;
+        background-color: #ededed;
+        label {
+            font-weight: bold;
+        }
+        &.bolder {
+            background-color: #dbdbdb;
+        }
+    }
+}
+.table-sub-product{
+    font-size: 14px;
+    font-weight: 600;
+    float: right;
+    margin-top:15px;
+    border: none;
+    background: none;
+    width: 400px;
+    tbody{
+        tr{
+            padding:10px 0px;
+            border: none;
+            text-align: right;
+            td{
+                border:none;
+                padding:3px 5px;
+                text-align: right;
+                input{
+                    text-align: right;
+                }
+            }
+            td:first-child{
+                width:120px;
+                text-align: right; 
+                color:#000;
+                font-weight: 600;                  
+            }
+        }
+        tr:last-child{           
+            color:#fff;
+            td:last-child{
+                background: #FF0000;
+                text-align: right;
+            }
+        }
+    }
+}
