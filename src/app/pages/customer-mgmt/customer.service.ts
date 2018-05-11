@@ -71,8 +71,8 @@ export class CustomerService {
         return this.API.get(url, params);
     }
 
-    getListQuote(params) {
-        const url = 'buyer/index';
+    getListQuote(id, params) {
+        const url = 'buyer/purchase-orders/' + id;
         return this.API.get(url, params);
     }
 
