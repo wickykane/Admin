@@ -123,7 +123,7 @@ export class CustomerService {
 
     createCustomer(data) {
         const url = 'buyer/create';
-        return this.API.post(url, data);
+        return this.API.postForm(url, data);
     }
     getListCountryAdmin() {
         const url = 'country/admin/get-all';
