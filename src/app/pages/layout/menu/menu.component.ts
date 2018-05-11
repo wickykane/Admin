@@ -11,10 +11,10 @@ export class MenuComponent implements OnInit {
 
     MENU_CONSTANT = [];
      @ViewChild('.open') open;
-    showMenu: string = '';
+    showMenu = '';
 
 
-    constructor(private translate: TranslateService, public router: Router, private elRef:ElementRef) {
+    constructor(private translate: TranslateService, public router: Router, private elRef: ElementRef) {
 
     }
 
@@ -45,13 +45,50 @@ export class MenuComponent implements OnInit {
                 child: []
             },
             {
-                flag: 'buyer',
-                link: '/customer/buyer',
-                main_name: '<u>B</u>uyer List',
+                flag: 'customer',
+                link: '/customer',
+                main_name: '<u>C</u>ustomer',
                 icon: '',
                 sub: false,
                 child: []
             },
+            {
+                flag: 'product',
+                link: '/',
+                main_name: 'Products',
+                icon: '',
+                sub: true,
+                child: [
+                    {
+                        link: '/product-management/item-list',
+                        name: 'Item List '
+                    },
+                    // {
+                    //     link: '/product-management/product-definition',
+                    //     name: 'Product Definition'
+                    // },
+                    // {
+                    //     link: '/product-management/bundle',
+                    //     name: 'Bundle Management'
+                    // },
+                    // {
+                    //     link: '/product-management/condition-product',
+                    //     name: 'Conditional Product Groups'
+                    // },
+                    // {
+                    //     link: '/product-management/e-catalog',
+                    //     name: 'E-Catalog'
+                    // }
+                ]
+            },
+            // {
+            //     flag: 'buyer',
+            //     link: '/customer/buyer',
+            //     main_name: '<u>B</u>uyer List',
+            //     icon: '',
+            //     sub: false,
+            //     child: []
+            // },
             {
                 flag: 'report',
                 link: '/dashboard/reports',
@@ -247,14 +284,14 @@ export class MenuComponent implements OnInit {
             //     sub: false,
             //     child: []
             // }
-        ]
+        ];
     }
 
 
     addExpandClass(element: any, e) {
-        let el = this.elRef.nativeElement.querySelectorAll('.open');
+        const el = this.elRef.nativeElement.querySelectorAll('.open');
 
-        for (var i = 0; i < el.length; i++) {
+        for (let i = 0; i < el.length; i++) {
                el[i].classList.remove('open');
           }
 

@@ -1,0 +1,58 @@
+.right-toggle-button {
+    // margin-top: -20px;
+}
+
+.customer-content-toggle {
+    max-height: 140px;
+    overflow-x: auto;
+}
+
+fieldset.custom-border {
+    border: 1px solid #e0e0e0;
+    padding: 10px;
+    margin-top: 15px;
+
+    legend.custom-border {
+        font-size: 1.2em;
+        font-weight: bold;
+        text-align: left;
+        width: auto;
+        padding: 0 10px;
+        border-bottom: none;
+    }
+
+    .form-group {
+        margin-bottom: 0;
+
+        .col-form-label {
+            font-size: 11px;
+        }
+    }
+}
+
+div.custom-header {
+    border-bottom: 1px solid #ddd;
+
+    h3.custom-header {
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        line-height: 1.2;
+        display: inline;
+        color: #4f5050;
+
+        span {
+            text-transform: capitalize;
+            color: #7b7a7a;
+            font-weight: 400;
+        }
+    }
+
+    .wrap-keyboard {
+        span {
+            font-size: 13px;
+            cursor: pointer;
+            color: #dc3545;
+        }
+    }
+}
