@@ -28,14 +28,14 @@ export class MenuComponent implements OnInit {
                 sub: false,
                 child: []
             },
-            {
-                flag: 'partlist',
-                link: '/product-management/item-list',
-                main_name: '<u>P</u>art List',
-                icon: '',
-                sub: false,
-                child: []
-            },
+            // {
+            //     flag: 'partlist',
+            //     link: '/product-management/item-list',
+            //     main_name: '<u>P</u>art List',
+            //     icon: '',
+            //     sub: false,
+            //     child: []
+            // },
             {
                 flag: 'order',
                 link: '/order-management/sale-order',
