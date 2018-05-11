@@ -51,7 +51,7 @@ export class ProductService {
         let url ='bundle/'+id;
         return this.ApiService.put(url,params);
     }
-    //Condition Product Group    
+    //Condition Product Group
      getListCondition(params){
         let url ='promotion_condition';
         return this.ApiService.get(url,params);
@@ -72,11 +72,11 @@ export class ProductService {
     postECatalog(data){
         let url = 'catalog';
         return this.ApiService.postForm(url,data);
-        
+
     }
     putECatalog(id,data,files){
         let url = 'catalog/'+id;
-        return this.ApiService.putForm(url,data);        
+        return this.ApiService.putForm(url,data);
     }
     getDetailCatalog(id){
         let url='catalog/'+id;
@@ -114,6 +114,10 @@ export class ProductService {
      getStateByCountry(params){
          let url ='state/get-by-country';
          return this.ApiService.get(url,params);
+     }
+     getListWarehouse(){
+         let url ='warehouse/reference';
+         return this.ApiService.get(url);
      }
 
 }
