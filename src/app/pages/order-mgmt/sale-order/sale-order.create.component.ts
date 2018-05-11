@@ -36,6 +36,7 @@ export class SaleOrderCreateComponent implements OnInit {
         'current_dept': '',
         'discount_level': '',
         'items_in_quote': '',
+        'buyer_type': '',
         primary: [{
             'address_line': '',
             'city_name': '',
@@ -90,6 +91,8 @@ export class SaleOrderCreateComponent implements OnInit {
     };
     public payment;
     public promotionList = {};
+    public copy_customer = {};
+    public copy_addr = {};
 
     /**
      * Init Data
@@ -126,7 +129,11 @@ export class SaleOrderCreateComponent implements OnInit {
         this.list.items = this.router.getNavigatedData() || [];
         if (Object.keys(this.list.items).length === 0) { this.list.items = []; }
         this.getListCustomerOption();
+        this.getOrderReference();
         this.updateTotal();
+        this.copy_addr = Object.assign(this.copy_addr, this.customer);
+        this.copy_customer = Object.assign(this.copy_customer, this.addr_select);
+
 
     }
     /**
@@ -172,8 +179,11 @@ export class SaleOrderCreateComponent implements OnInit {
 
     changeCustomer() {
         const company_id = this.generalForm.value.company_id;
-        this.getDetailCustomerById(company_id);
-
+        if (company_id) {
+        //    this.customer:any = Object.assign()
+        //    this.addr_select = Object.assign({}, this.copy_addr);
+            this.getDetailCustomerById(company_id);
+        }
     }
     selectAddress(type) {
         try {
