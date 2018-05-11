@@ -60,7 +60,7 @@ export class SaleOrderComponent implements OnInit {
   ngOnInit() {
     // Init Fn
     this.listMoreFilter = [{ value: false, name: 'Date Filter' }];
-    this.listMaster['type'] = [{ id: 'PKU', name: 'Pickup ' }, { id: 'CE', name: 'Call' }, { id: 'ONL', name: 'Online' }];
+    this.listMaster['type'] = [{ id: 'PKU', name: 'Pickup ' }, { id: 'NO', name: 'Regular Order' }, { id: 'ONL', name: 'Ecommerce' }];
     // this.countOrderStatus();
     this.getList();
     this.getListStatus();
