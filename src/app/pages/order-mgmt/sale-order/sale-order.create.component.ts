@@ -107,7 +107,7 @@ export class SaleOrderCreateComponent implements OnInit {
             'customer_po': [null, Validators.required],
             'order_number': [null],
             'type': [null, Validators.required],
-            'order_date': [null, Validators.required],
+            'order_date': [new Date(), Validators.required],
             'delivery_date': [null],
             'contact_user_id': [null],
             'prio_level': [null],
@@ -285,8 +285,9 @@ export class SaleOrderCreateComponent implements OnInit {
         this.promotionList['total_invoice_discount'] = (this.promotionList['total_invoice_discount'] ? this.promotionList['total_invoice_discount'] : 0);
 
         this.order_info.total_discount = parseFloat((this.order_info.sub_total * Number(this.order_info['alt_discount']) / 100).toFixed(2));
-        this.order_info['vat_percent_amount'] = parseFloat((this.order_info.sub_total * Number(this.order_info['alt_vat_percent']) / 100).toFixed(2));
-        this.order_info.total = this.order_info.sub_total + Number(this.order_info['shipping_cost']) + this.order_info['vat_percent_amount'] - this.order_info.total_discount - this.promotionList['total_invoice_discount'];
+        const sub_after_discount = this.order_info.sub_total - this.order_info.total_discount;
+        this.order_info['vat_percent_amount'] = parseFloat((sub_after_discount * Number(this.order_info['alt_vat_percent']) / 100).toFixed(2));
+        this.order_info.total = this.order_info.sub_total + Number(this.order_info['shipping_cost']) + this.order_info['vat_percent_amount'] - this.promotionList['total_invoice_discount'];
     }
 
     calcPromotion(company_id) {
@@ -355,32 +356,43 @@ export class SaleOrderCreateComponent implements OnInit {
     }
     // Show order history
     showViewOrderHistory() {
-        const modalRef = this.modalService.open(OrderHistoryModalContent, { size: 'lg' });
+        if (this.generalForm.value.company_id !== null) {
+            const modalRef = this.modalService.open(OrderHistoryModalContent, { size: 'lg' });
+            modalRef.componentInstance.company_id = this.generalForm.value.company_id;
+            modalRef.result.then(res => {
+                if (res instanceof Array && res.length > 0) {
+                   console.log(res);
+                }
+            });
+        }
     }
     showSaleQuoteList() {
-        const modalRef = this.modalService.open(OrderSaleQuoteModalContent, { size: 'lg' });
-        modalRef.result.then(res => {
-            if (res instanceof Array && res.length > 0) {
+        if (this.generalForm.value.company_id !== null) {
+            const modalRef = this.modalService.open(OrderSaleQuoteModalContent, { size: 'lg' });
+            modalRef.result.then(res => {
+                if (res instanceof Array && res.length > 0) {
 
-                const listAdded = [];
-                (this.list.items).forEach(function (item) {
-                    listAdded.push(item.item_id);
-                });
-                res.forEach(function (item) {
-                    if (item.sell_price) { item.sell_price = Number(item.sell_price); }
-                    item['products'] = [];
-                    item.order_quantity = 1;
-                    item.totalItem = item.sell_price;
-                });
+                    const listAdded = [];
+                    (this.list.items).forEach(function (item) {
+                        listAdded.push(item.item_id);
+                    });
+                    res.forEach(function (item) {
+                        if (item.sell_price) { item.sell_price = Number(item.sell_price); }
+                        item['products'] = [];
+                        item.order_quantity = 1;
+                        item.totalItem = item.sell_price;
+                    });
 
-                this.list.items = this.list.items.concat(res.filter(function (item) {
-                    return listAdded.indexOf(item.item_id) < 0;
-                }));
+                    this.list.items = this.list.items.concat(res.filter(function (item) {
+                        return listAdded.indexOf(item.item_id) < 0;
+                    }));
 
-                this.updateTotal();
-            }
-        });
-        modalRef.componentInstance.company_id = this.generalForm.value.company_id;
+                    this.updateTotal();
+                }
+            });
+            modalRef.componentInstance.company_id = this.generalForm.value.company_id;
+        }
+
 
     }
 

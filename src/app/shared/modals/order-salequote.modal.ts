@@ -63,14 +63,11 @@ export class OrderSaleQuoteModalContent implements OnInit {
 
     ngOnInit() {
         // Init Fn
-       console.log(this.company_id);
        this.getList();
        this.getListItemReference(this.company_id);
        this.getListSalesQuoteReference(this.company_id);
 
     }
-
-
 
     /**
     * Table Event
@@ -99,7 +96,6 @@ export class OrderSaleQuoteModalContent implements OnInit {
     }
 
     getList() {
-        console.log(this.company_id);
         this.itemService.getListSalesQuoteItem(this.company_id).subscribe(res => {
             try {
                 if (!res.data.rows) {

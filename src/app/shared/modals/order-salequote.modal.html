@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <span class="modal-title">SELECT ITEM</span>
+    <span class="modal-title">ITEM IN QUOTE</span>
     <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss([])">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -9,7 +9,7 @@
         <div class="row">
             <form class="form-horizontal form-search" [formGroup]="searchForm">
                 <div class="block-search">
-                    <label for="so" class="control-label" translate>Number</label>
+                    <label for="so" class="control-label" translate>Quote No</label>
                     <input type="text" name="so" formControlName="vin" class="form-control">
                 </div>
                 <div class="block-btn-search">
@@ -33,18 +33,14 @@
                                         <span></span>
                                     </label>
                         </th>
-                        <th translate>Part #</th>
-                        <th translate>Oem #</th>
-                        <th translate>Partlinks #</th>
+                        <th translate>Quote No</th>
+                        <th translate>Product Code</th>
                         <th translate>Description</th>
-                        <th translate>Make</th>
-                        <th translate>Model</th>
-                        <th translate>From</th>
-                        <th translate>To</th>
-                        <th translate>Brand</th>
-                        <th translate>Cert</th>
-                        <th translate>Country</th>
-                        <th translate>Sales Price</th>
+                        <th translate>Order QTY</th>
+                        <th translate>Origin Unit Price</th>
+                        <th translate>Quote Unit Price</th>
+                        <th translate>Disc %</th>
+                        <th translate>Total</th>                       
                     </tr>
                 </thead>
 
@@ -55,18 +51,14 @@
                                     <span></span>
                                 </label>
                     </td>
+                    <td>{{item.sale_quote_num}}</td>
                     <td>{{item.sku}}</td>
-                    <td>{{item.oem}}</td>
-                    <td>{{item.partlinks_no}}</td>
                     <td>{{item.des}}</td>
-                    <td>{{item.mfr_name}}</td>
-                    <td>{{item.model_name}}</td>
-                    <td>{{item.yr_from}}</td>
-                    <td>{{item.yr_to}}</td>
-                    <td>{{item.brand_name}}</td>
-                    <td>{{item.cert=='Y'?'Yes':'No'}}</td>
-                    <th>{{item.ctr_name}}</th>
-                    <th>{{item.sell_price|currency:'$'}}</th>
+                    <td>{{item.order_qty}}</td>
+                    <td>{{item.origin_unit_price |currency}}</td>
+                    <td>{{item.quote_unit_price |currency}}</td>
+                    <td>{{item.discount}}</td>
+                    <td>{{item.total_price}}</td>                    
                 </tr>
                 <tr *ngIf="list.items.length === 0">
                     <td colspan="100%" class="text-center">No data.</td>

@@ -210,3 +210,40 @@
         }
     }
 }
+.table-sub-product{
+    font-size: 14px;
+    font-weight: 600;
+    float: right;
+    margin-top:15px;
+    border: none;
+    background: none;
+    width: 400px;
+    tbody{
+        tr{
+            padding:10px 0px;
+            border: none;
+            text-align: right;
+            td{
+                border:none;
+                padding:3px 5px;
+                text-align: right;
+                input{
+                    text-align: right;
+                }
+            }
+            td:first-child{
+                width:120px;
+                text-align: right; 
+                color:#000;
+                font-weight: 600;                  
+            }
+        }
+        tr:last-child{           
+            color:#fff;
+            td:last-child{
+                background: #FF0000;
+                text-align: right;
+            }
+        }
+    }
+}
