@@ -14,7 +14,7 @@
                                         <label for="code" class="control-label" translate>Customer Name</label>
                                         <span class="text-danger">(*)</span>
                                         <div>
-                                            <ng-select style="width: 210px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id"
+                                            <ng-select style="width: 150px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id"
                                                 formControlName="company_id">
                                             </ng-select>
                                         </div>
@@ -27,7 +27,7 @@
                                     Last Sales Date: {{customer.last_sales_order}}
                                 </div>
                                 <div class="col-md-2">
-                                    <a href="javascript:void(0)" (click)="showViewOrderHistory()">View Order History</a>
+                                    <a  (click)="showViewOrderHistory()">View Order History</a>
                                 </div>
                                 <div class="col-md-2">
                                     Current Debt: {{customer.current_dept |currency}}
@@ -97,7 +97,7 @@
                                     <div class="form-group row">
                                         <label class='col-4'>Item In Quote</label>
                                         <div class='col-8 text-success'>
-                                            <a href="javascript:voide(0)" (click)="showSaleQuoteList()">{{customer.items_in_quote}}</a>
+                                            <a (click)="showSaleQuoteList()">{{customer.items_in_quote}}</a>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -273,7 +273,7 @@
                         <div class="col-md-12" *ngIf="generalForm.value.is_multi_shp_addr == 1">
                             <div class="col-12">
                                 <p>This order ships to {{customer.shipping.length}} shipping addresses.</p>
-                                <a href="javascript:void(0)"> View detail below</a>
+                                <a > View detail below</a>
                             </div>
                         </div>
                         <div class="col-md-12" *ngIf="generalForm.value.is_multi_shp_addr == 0">
@@ -351,13 +351,13 @@
                                         <th style="width:100px" translate>Action</th>
                                         <th style="width:150px" translate>Product Code</th>
                                         <th translate>Description</th>
-                                        <th translate >Avail QTY</th>
+                                        <th translate style="width:150px" >Avail QTY</th>
                                         <th class="text-nowrap" style="width:100px" translate>Order QTY</th>
                                         <th class="text-nowrap text-center" translate *ngIf="generalForm.value.is_multi_shp_addr == 1">Ship To</th>
                                         <th class="text-center" style="width:100px" translate>Unit Price</th>
                                         <th style="width:100px" translate>Disc %</th>
-                                        <th translate>Amount</th>
-                                        <th translate>Source</th>
+                                        <th translate style="width:100px">Amount</th>
+                                        <th translate style="width:100px">Source</th>
                                     </tr>
                                 </thead>
                                 <tr *ngIf="list['items'].length === 0">
@@ -379,7 +379,7 @@
                                         <td></td>
                                         <td>
                                             <input style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.order_quantity" min="0" max="1000"
-                                                (change)="updateTotal()">
+                                                (change)="updateTotal();changeFromSource(item)">
                                         </td>
 
                                         <td *ngIf="generalForm.value.is_multi_shp_addr == 1">
@@ -393,18 +393,20 @@
                                             <div>
                                                 <span>$</span>
                                                 <div style="display:inline-block;width:80%">
-                                                    <input class="form-control input-sm" type="number" [(ngModel)]="item.sell_price" (change)="updateTotal()">
+                                                    <input class="form-control input-sm" type="number" [(ngModel)]="item.sale_price" (change)="updateTotal();changeFromSource(item)">
                                                 </div>
                                             </div>
                                         </td>
                                         <td>
-                                            <input class="form-control input-sm" type="number" [(ngModel)]="item.discount" (change)="updateTotal()">
+                                            <input class="form-control input-sm" type="number" [(ngModel)]="item.discount" (change)="updateTotal();changeFromSource(item)">
                                         </td>
                                         <td class="text-center">
                                             <span>{{item.totalItem | currency}}</span>
                                         </td>
                                         <td class="text-center">
-                                            <span>{{item.totalItem | currency}}</span>
+                                            <span>
+                                                {{item.source}}
+                                            </span>
                                         </td>
                                     </tr>
                                     <tr *ngFor="let product of item.products">
@@ -435,7 +437,7 @@
                         </div>
                     </div>
                     <div class="col-md-12">
-                        <a href="javascript:void(0)" (click)="addNewItem(list.items,1, order_info.company_id )" translate>
+                        <a  (click)="addNewItem(list.items,1, order_info.company_id )" translate>
                             <i class="fa fa-plus"></i>Add New Item</a>
                     </div>
                     <div class="col-md-12 mg-top-15">
