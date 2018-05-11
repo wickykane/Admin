@@ -38,11 +38,10 @@ export class CustomerQuoteTabComponent implements OnInit {
         private customerService: CustomerService) {
 
         this.searchForm = fb.group({
-            'buyer_name': [null],
-            'email': [null],
-            'buyer_type': [null],
-            'from': [null],
-            'to': [null]
+            'code': [null],
+            'company_name': [null],
+            'qt_dt_from': [null],
+            'qt_dt_to': [null],
         });
 
         // Assign get list function name, override letiable here
@@ -50,20 +49,20 @@ export class CustomerQuoteTabComponent implements OnInit {
         this.tableService.context = this;
     }
 
-    ngOnInit() {}
+    ngOnInit() { }
 
     /**
      * Internal Function
      */
 
     getList() {
-        const params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
+        const params = Object.assign({}, this.searchForm.value);
         Object.keys(params).forEach((key) => (params[key] == null || params[key] === '') && delete params[key]);
 
-        this.customerService.getListQuote(params).subscribe(res => {
+        this.customerService.getListQuote(this._customerId, params).subscribe(res => {
             try {
-                this.list.items = res.data.rows;
-                this.tableService.matchPagingOption(res.data);
+                this.list.items = res.data;
+                // this.tableService.matchPagingOption(res.data);
             } catch (e) {
                 console.log(e);
             }

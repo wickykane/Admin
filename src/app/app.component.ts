@@ -4,7 +4,6 @@ import { CustomSpinnerComponent } from './shared/modules/custom-spinner/spinner.
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
-    entryComponents: [CustomSpinnerComponent]
 })
 export class AppComponent implements OnInit {
     constructor() {

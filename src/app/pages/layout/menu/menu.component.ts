@@ -53,13 +53,42 @@ export class MenuComponent implements OnInit {
                 child: []
             },
             {
-                flag: 'buyer',
-                link: '/customer/buyer',
-                main_name: '<u>B</u>uyer List',
+                flag: 'product',
+                link: '/',
+                main_name: 'Products',
                 icon: '',
-                sub: false,
-                child: []
+                sub: true,
+                child: [
+                    {
+                        link: '/product-management/item-list',
+                        name: 'Item List '
+                    },
+                    // {
+                    //     link: '/product-management/product-definition',
+                    //     name: 'Product Definition'
+                    // },
+                    // {
+                    //     link: '/product-management/bundle',
+                    //     name: 'Bundle Management'
+                    // },
+                    // {
+                    //     link: '/product-management/condition-product',
+                    //     name: 'Conditional Product Groups'
+                    // },
+                    // {
+                    //     link: '/product-management/e-catalog',
+                    //     name: 'E-Catalog'
+                    // }
+                ]
             },
+            // {
+            //     flag: 'buyer',
+            //     link: '/customer/buyer',
+            //     main_name: '<u>B</u>uyer List',
+            //     icon: '',
+            //     sub: false,
+            //     child: []
+            // },
             {
                 flag: 'report',
                 link: '/dashboard/reports',

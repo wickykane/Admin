@@ -33,8 +33,46 @@ export class ItemService {
     }
 
     getStateByCountry(params) {
-        const url = 'state/get-by-country'
+        const url = 'state/get-by-country';
         return this.API.get(url, params);
+    }
+
+    /**
+     * Customer
+     */
+    // customer
+    getListCountryAdmin() {
+        const url = 'country/admin/get-all';
+        return this.API.get(url);
+    }
+
+    getListBank() {
+        const url = 'bank/list';
+        return this.API.get(url);
+    }
+
+    getListBranchByBank(bank_id) {
+        const url = 'bank/' + bank_id + '/branch/list';
+        return this.API.get(url);
+    }
+
+    // Order
+    getListSalesQuoteReference(company_id) {
+        const url = 'sale-quote/reference/' + company_id;
+        return this.API.get(url);
+    }
+    getListSalesQuoteItem(company_id) {
+        const url = 'sale-quote/item/list/' + company_id;
+        return this.API.get(url);
+    }
+
+    getListItemReference(company_id) {
+        const url = 'sale-quote/item/reference/' + company_id;
+        return this.API.get(url);
+    }
+    getListSaleOrderByCompany(company_id) {
+        const url = 'buyer/sales-orders/' + company_id;
+        return this.API.get(url);
     }
 
 }

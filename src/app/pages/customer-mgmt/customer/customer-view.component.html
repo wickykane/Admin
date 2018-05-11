@@ -113,13 +113,13 @@
                     </ng-template>
                 </ngb-tab>
 
-                <ngb-tab *ngIf="customer['type']=='CP'" title="CONTACTS">
+                <ngb-tab *ngIf="customer['company_type']=='CP'" title="CONTACTS">
                     <ng-template ngbTabContent>
                         <app-customer-contact-tab [listData]="customer['user']"></app-customer-contact-tab>
                     </ng-template>
                 </ngb-tab>
 
-                <ngb-tab *ngIf="customer['type']=='CP' && customer['sites']?.length > 0" title="SITES">
+                <ngb-tab *ngIf="customer['company_type']=='CP' && customer['sites']?.length > 0" title="SITES">
                     <ng-template ngbTabContent>
                         <app-customer-site-tab [listData]="customer['sites']"></app-customer-site-tab>
                     </ng-template>

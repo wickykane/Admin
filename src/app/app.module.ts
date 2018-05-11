@@ -51,6 +51,7 @@ export function createTranslateLoader(http: HttpClient) {
         ToastrModule.forRoot(),
         HotkeyModule.forRoot()
     ],
+    entryComponents: [CustomSpinnerComponent],
     declarations: [
         AppComponent,
         CustomSpinnerComponent,

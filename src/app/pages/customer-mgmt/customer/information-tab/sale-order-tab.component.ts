@@ -41,7 +41,7 @@ export class CustomerSaleOrderTabComponent implements OnInit {
         private orderService: OrderService) {
 
         this.searchForm = fb.group({
-            'buyer_name': [null],
+            'company_name': [null],
             'code': [null],
             'purchase_order_cd': [null],
             'order_sts_id': [null],

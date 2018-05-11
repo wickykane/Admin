@@ -2,7 +2,7 @@
     <app-page-header [heading]="'LIST OF CUSTOMER'" [icon]="'fa-th-list'"></app-page-header>
 
 
-    <div class="block-content pd-bottom bg-gray-light">
+    <div class="block-content pd-bottom bg-gray-light short-width">
         <div class="row">
             <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
                 <div class="block-search">
@@ -52,7 +52,7 @@
                 <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                     <tr>
                         <td>{{item.id}}</td>
-                        <td>{{item.buyer_type=='NU' ? 'Normal Customer':'Repair Shop' }}</td>
+                        <td>{{ item.buyer_type_name }}</td>
                         <td>{{item.company_name}}</td>
                         <td>{{item.email}}</td>
                         <td>{{item.phone}}</td>

@@ -7,52 +7,52 @@ export class CustomerService {
     constructor(private API: ApiService) { }
 
     getListCountry() {
-        var url = 'country/get-all';
+        const url = 'country/get-all';
         return this.API.get(url);
     }
 
     getListBuyerType() {
-        var url = 'company_type/all';
+        const url = 'company_type/all';
         return this.API.get(url);
     }
     /**
      * Buyer
      */
-    //supplier    
+    // supplier
     getListState() {
-        let url = 'state/get-all';
+        const url = 'state/get-all';
         return this.API.get(url);
     }
-    getSalePriceList(){
-        let url ='sale-price/get-list-option';
+    getSalePriceList() {
+        const url = 'sale-price/get-list-option';
         return this.API.get(url);
     }
     getListBuyer(params) {
-        let url = 'buyer/index';
+        const url = 'buyer/index';
         return this.API.get(url, params);
     }
     createBuyer(data) {
-        let url = 'buyer/create';
+        const url = 'buyer/create';
         return this.API.postForm(url, data);
     }
     updateBuyer(data, id) {
-        let url = 'buyer/update/' + id;
+        const url = 'buyer/update/' + id;
         return this.API.postForm(url, data);
     }
     deleteBuyer(id) {
-        let url = 'buyer/delete/' + id;
+        const url = 'buyer/delete/' + id;
         return this.API.delete(url);
     }
     getDetailBuyer(id) {
-        let url = 'buyer/detail/' + id;
+        const url = 'buyer/detail/' + id;
         return this.API.get(url);
     }
-    getStateByCountry( params) {
-        let url = 'state/get-by-country'
+    getStateByCountry(params) {
+        const url = 'state/get-by-country';
         return this.API.get(url, params);
     }
     deleteAddress(params) {
-        let url = 'buyer/delete-address';
+        const url = 'buyer/delete-address';
         return this.API.deleteWithParam(url, params);
     }
 
@@ -71,8 +71,8 @@ export class CustomerService {
         return this.API.get(url, params);
     }
 
-    getListQuote(params) {
-        const url = 'buyer/index';
+    getListQuote(id, params) {
+        const url = 'buyer/purchase-orders/' + id;
         return this.API.get(url, params);
     }
 
@@ -113,6 +113,39 @@ export class CustomerService {
 
     getDetailCustomer(id) {
         const url = 'buyer/' + id;
+        return this.API.get(url);
+    }
+
+    /**
+     * CUSTOMER
+     */
+    //
+
+    createCustomer(data) {
+        const url = 'buyer/create';
+        return this.API.postForm(url, data);
+    }
+    getListCountryAdmin() {
+        const url = 'country/admin/get-all';
+        return this.API.get(url);
+    }
+    generateSiteCode() {
+        const url = 'buyer/generate-code';
+        return this.API.get(url);
+    }
+
+    getListCustomerType() {
+        const url = 'buyer/type';
+        return this.API.get(url);
+    }
+
+    getListBank() {
+        const url = 'bank/list';
+        return this.API.get(url);
+    }
+
+    getListBranchByBank(bank_id) {
+        const url = 'bank/' + bank_id + '/branch/list';
         return this.API.get(url);
     }
 }

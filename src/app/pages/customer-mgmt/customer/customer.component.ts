@@ -2,11 +2,11 @@ import { TableService } from './../../../services/table.service';
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CustomerService } from "../customer.service";
+import { CustomerService } from '../customer.service';
 
 import { routerTransition } from '../../../router.animations';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
-import { ConfirmModalContent } from "../../../shared/modals/confirm.modal";
+import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -26,8 +26,8 @@ export class CustomerComponent implements OnInit {
     public list = {
         items: []
     };
-    public showProduct: boolean = false;
-    public flagId: string = '';
+    public showProduct = false;
+    public flagId = '';
 
     public user: any;
     public listMoreFilter: any = [];
@@ -49,20 +49,20 @@ export class CustomerComponent implements OnInit {
             'buyer_type': [null]
         });
 
-        //Assign get list function name, override letiable here
+        // Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
     }
 
     ngOnInit() {
-        //Init Fn
+        // Init Fn
         this.getList();
         this.listMaster['buyerType'] = [{
-            id: 'RS',
-            name: 'Repair Shop'
+            id: 'CP',
+            name: 'Company'
         }, {
-            id: 'NU',
-            name: 'Normal Customer'
+            id: 'PS',
+            name: 'Personal'
         }];
 
         this.user = JSON.parse(localStorage.getItem('currentUser'));

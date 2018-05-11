@@ -4,23 +4,23 @@
             <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
                 <div class="block-search">
                     <label for="buyer_name" class="control-label">Quote No</label>
-                    <input type="text" name="buyer_name" formControlName="buyer_name" class="form-control">
+                    <input type="text" name="buyer_name" formControlName="code" class="form-control">
                 </div>
                 <div class="block-search">
                     <label for="buyer_name" class="control-label">Customer</label>
-                    <input type="text" name="buyer_name" formControlName="buyer_name" class="form-control">
+                    <input type="text" name="buyer_name" formControlName="company_name" class="form-control">
                 </div>
-                <div class="block-search">
+                <!-- <div class="block-search">
                     <label for="buyer_type" class="control-label">Date Type</label>
                     <select class="form-control" formControlName="buyer_type">
                         <option value="null" selected="true">--Select--</option>
                         <option *ngFor="let item of listMaster['dateType']" [ngValue]="item.id">{{item.name}}</option>
                     </select>
-                </div>
+                </div> -->
                 <div class="block-search">
                     <label for="buyer_type" class="control-label">From</label>
                     <div class="input-group">
-                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="from" ngbDatepicker #d="ngbDatepicker">
+                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="qt_dt_from" ngbDatepicker #d="ngbDatepicker">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
                                 <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -31,7 +31,7 @@
                 <div class="block-search">
                     <label for="buyer_type" class="control-label">To</label>
                     <div class="input-group">
-                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="to" ngbDatepicker #t="ngbDatepicker">
+                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="qt_dt_to" ngbDatepicker #t="ngbDatepicker">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" (click)="t.toggle()" type="button">
                                 <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -66,12 +66,12 @@
             <tbody>
                 <tr *ngFor="let item of list.items">
                     <td>{{ item.id }}</td>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.id | currency }}</td>
-                    <td>{{ item.id }}</td>
+                    <td>{{ item.cd }}</td>
+                    <td>{{ item.qt_dt }}</td>
+                    <td>{{ item.buyer_name }}</td>
+                    <td>{{ item.total_item }}</td>
+                    <td>{{ item.total_price | currency }}</td>
+                    <td>{{ item.sts }}</td>
                 </tr>
                 <tr *ngIf="list.items.length == 0">
                     <td class="text-center" colspan="100%">No data.</td>

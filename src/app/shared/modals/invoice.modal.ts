@@ -2,11 +2,11 @@ import { Component, Input, OnInit } from '@angular/core';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-    selector: 'invoice-modal-content',
+    selector: 'app-invoice-modal-content',
     templateUrl: './invoice.modal.html'
 })
 export class InvoiceModalContent implements OnInit {
-    //Resolve Data
+    // Resolve Data
     @Input() name;
     @Input() detail;
 
