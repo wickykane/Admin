@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
-    selector: 'print-order',
+    selector: 'app-print-order',
     templateUrl: 'print.order.component.html'
 })
 

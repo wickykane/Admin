@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
-    selector: 'print-invoice',
+    selector: 'app-print-invoice',
     templateUrl: 'print.invoice.component.html'
 })
 

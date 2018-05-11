@@ -42,6 +42,7 @@ export class ItemListComponent implements OnInit {
     private productService: ProductService
   ) {
     this.searchForm = fb.group({
+      'warehouse': [null],
       'cd': [null],
       'name': [null],
       'sts': [null],
@@ -64,7 +65,8 @@ export class ItemListComponent implements OnInit {
       'oem_filter': [null],
       'partlinks_no_filter': [null],
       'part_no_filter': [null],
-      'country_id_filter': [null]
+      'country_id_filter': [null],
+      'manufacturer_id_filter': [null]
     });
 
     //Assign get list function name, override variable here
@@ -78,11 +80,22 @@ export class ItemListComponent implements OnInit {
 
     //Init Fn
     this.listMaster['certification_partNumber'] = [{ code: "Y", value: "Yes" }, { code: "N", value: "No" }];
+    this.getListWarehouse();
     this.getListReference();
   }
   /**
    * Master Data
    */
+
+   getListWarehouse() {
+     this.productService.getListWarehouse().subscribe(res => {
+       try {
+         this.listMaster['warehouses'] = res.data;
+       } catch (e) {
+         console.log(e.message)
+       }
+     });
+   }
 
   getListReference() {
     this.productService.getReferList().subscribe(res => {
@@ -166,6 +179,9 @@ export class ItemListComponent implements OnInit {
         this.listMaster['categories'] = res.data.meta_filters.categories;
         this.listMaster['certification'] = res.data.meta_filters.certification;
         this.listMaster['countries'] = res.data.meta_filters.countries;
+        this.listMaster['partlinks_no'] = res.data.meta_filters.partlinks_no;
+        this.listMaster['part_no'] = res.data.meta_filters.part_no;
+        this.listMaster['manufacturers'] = res.data.meta_filters.manufacturers;
         this.tableService.matchPagingOption(res.data);
       } catch (e) {
         console.log(e);

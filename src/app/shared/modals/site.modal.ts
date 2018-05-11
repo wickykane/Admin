@@ -120,7 +120,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
     // change customer Type
     changeCustomerType() {
 
-        const tempType1 = [{ id: 1, name: 'Primary' }];
+        const tempType1 = [{ id: 1, name: 'Head Office' }];
 
         this.address = [{
             type: 1, listType: tempType1, listCountry: this.listCountry, listState: []
