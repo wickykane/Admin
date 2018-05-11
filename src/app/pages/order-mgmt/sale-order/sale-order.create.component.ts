@@ -405,7 +405,8 @@ export class SaleOrderCreateComponent implements OnInit {
 
                     this.updateTotal();
                 }
-            });
+            },
+            dismiss => {});
             modalRef.componentInstance.company_id = this.generalForm.value.company_id;
         }
 

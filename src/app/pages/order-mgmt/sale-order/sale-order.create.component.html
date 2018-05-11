@@ -27,7 +27,7 @@
                                     Last Sales Date: {{customer.last_sales_order}}
                                 </div>
                                 <div class="col-md-2">
-                                    <a href="javascript:void(0)" (click)="showViewOrderHistory()">View Order History</a>
+                                    <a  (click)="showViewOrderHistory()">View Order History</a>
                                 </div>
                                 <div class="col-md-2">
                                     Current Debt: {{customer.current_dept |currency}}
@@ -97,7 +97,7 @@
                                     <div class="form-group row">
                                         <label class='col-4'>Item In Quote</label>
                                         <div class='col-8 text-success'>
-                                            <a href="javascript:voide(0)" (click)="showSaleQuoteList()">{{customer.items_in_quote}}</a>
+                                            <a (click)="showSaleQuoteList()">{{customer.items_in_quote}}</a>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -273,7 +273,7 @@
                         <div class="col-md-12" *ngIf="generalForm.value.is_multi_shp_addr == 1">
                             <div class="col-12">
                                 <p>This order ships to {{customer.shipping.length}} shipping addresses.</p>
-                                <a href="javascript:void(0)"> View detail below</a>
+                                <a > View detail below</a>
                             </div>
                         </div>
                         <div class="col-md-12" *ngIf="generalForm.value.is_multi_shp_addr == 0">
@@ -437,7 +437,7 @@
                         </div>
                     </div>
                     <div class="col-md-12">
-                        <a href="javascript:void(0)" (click)="addNewItem(list.items,1, order_info.company_id )" translate>
+                        <a  (click)="addNewItem(list.items,1, order_info.company_id )" translate>
                             <i class="fa fa-plus"></i>Add New Item</a>
                     </div>
                     <div class="col-md-12 mg-top-15">
