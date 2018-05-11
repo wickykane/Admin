@@ -161,7 +161,7 @@
                                 <span class="label label-warning" *ngIf="item.sts_code == 'IP'">{{item.sts}}</span>
                                 <span class="label label-danger" *ngIf="item.sts_code == 'PD'">{{item.sts}}</span>
                                 <span class="label  label-success" *ngIf="item.sts_code == 'CP'">{{item.sts}}</span>
-                                <span class="label  label-default" *ngIf="item.sts_code == 'Draft'">{{item.sts}}</span>
+                                <span class="label  label-draft" *ngIf="item.sts_code == 'Draft'">{{item.sts}}</span>
                             </td>
                             <!-- <td class="text-nowrap">
                                 <button placement="top" ngbTooltip="Approve" *ngIf="item.sts_code == 'NW'" type="button" class="btn btn-default" (click)="putApproveOrder(item.id)"><i class="fa fa-check-square"></i></button>
