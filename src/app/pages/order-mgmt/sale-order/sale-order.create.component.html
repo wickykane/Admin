@@ -163,7 +163,7 @@
                                         <div class="form-group row">
                                             <label class='col-4'>Payment Method</label>
                                             <div class='col-8 text-primary'>
-                                                <select required class="form-control" id="payment_method" name="payment_method" formControlName="payment_method">
+                                                <select  class="form-control" id="payment_method" name="payment_method" formControlName="payment_method">
                                                     <option *ngFor="let item of listMaster['payment_method']" [ngValue]="item.code">{{item.value}}</option>
                                                 </select>
                                             </div>
@@ -171,7 +171,7 @@
                                         <div class="form-group row">
                                             <label class='col-4'>Salesperson</label>
                                             <div class='col-8 text-primary'>
-                                                <select required class="form-control" id="sales_person" name="sales_person" formControlName="sales_person">
+                                                <select  class="form-control" id="sales_person" name="sales_person" formControlName="sales_person">
                                                     <option *ngFor="let item of listMaster['sale_mans']" [ngValue]="item.id">{{item.full_name}}</option>
                                                 </select>
                                             </div>
@@ -179,7 +179,7 @@
                                         <div class="form-group row">
                                             <label class='col-4'>Multi Ship Addr</label>
                                             <div class='col-8 text-danger'>
-                                                <select required class="form-control" id="is_multi_shp_addr" name="is_multi_shp_addr" formControlName="is_multi_shp_addr">
+                                                <select  class="form-control" id="is_multi_shp_addr" name="is_multi_shp_addr" formControlName="is_multi_shp_addr">
                                                     <option *ngFor="let item of listMaster['multi_ship']" [ngValue]="item.id">{{item.label}}</option>
                                                 </select>
                                             </div>
@@ -187,7 +187,7 @@
                                         <div class="form-group row">
                                             <label class='col-4'>Warehouse</label>
                                             <div class='col-8'>
-                                                <select required class="form-control" id="warehouse_id" name="warehouse_id" formControlName="warehouse_id">
+                                                <select  class="form-control" id="warehouse_id" name="warehouse_id" formControlName="warehouse_id">
                                                     <option *ngFor="let item of listMaster['warehouses']" [ngValue]="item.id">{{item.name}}</option>
                                                 </select>
                                             </div>
@@ -380,7 +380,7 @@
                                         <td></td>
                                         <td>
                                             <input style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.order_quantity" 
-                                                (change)="updateTotal();changeFromSource(item)">
+                                                (change)="updateTotal();changeFromSource(item)" (keypress)="_keyPress($event)">
                                         </td>
 
                                         <td *ngIf="generalForm.value.is_multi_shp_addr == 1">
@@ -416,7 +416,7 @@
                                         <td></td>
                                         <td>
                                             <input style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="product.order_quantity" min="0" max="1000"
-                                                (change)="updateTotal()">
+                                                (change)="updateTotal()" (keypress)="_keyPress($event)">
                                         </td>
                                         <td>
                                             <select class="form-control" name="search_type" [(ngModel)]="product.shipping_address_id">
@@ -461,7 +461,7 @@
                                         <td>{{order_info.sub_total | currency}}</td>
                                     </tr>
                                     <tr>
-                                        <td>Discount (%):</td>
+                                        <td>- Discount (%):</td>
                                         <td>
                                             <input class="form-control" [(ngModel)]="order_info.discount_percent" class="form-control"
                                                 type="text" (change)="updateTotal()">
@@ -472,7 +472,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>TAX/VAT (%):</td>
+                                        <td>+ TAX/VAT (%):</td>
                                         <td>
                                             <input class="form-control" [(ngModel)]="order_info.vat_percent" class="form-control"
                                                 type="text" (change)="updateTotal()">
@@ -483,7 +483,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>Shipping cost ($):</td>
+                                        <td>+ Shipping cost ($):</td>
                                         <td></td>
                                         <td>
                                             <input class="form-control" [(ngModel)]="order_info.shipping_cost" class="form-control"
