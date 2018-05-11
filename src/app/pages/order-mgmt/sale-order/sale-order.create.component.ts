@@ -133,6 +133,7 @@ export class SaleOrderCreateComponent implements OnInit {
         this.updateTotal();
         this.copy_addr = Object.assign(this.copy_addr, this.customer);
         this.copy_customer = Object.assign(this.copy_customer, this.addr_select);
+        this.generalForm.controls['is_multi_shp_addr'].patchValue(0);
 
 
     }
@@ -262,6 +263,9 @@ export class SaleOrderCreateComponent implements OnInit {
             item.promotion_discount_amount = 0;
         });
     }
+    changeFromSource(item) {
+        item.source = 'Manual';
+    }
 
     updateTotal() {
         this.order_info.total = 0;
@@ -277,8 +281,8 @@ export class SaleOrderCreateComponent implements OnInit {
                     }
                 });
 
-                const value = (Number(item.sell_price) * (Number(item.order_quantity) + sub_quantity)
-                    - (Number(item.sell_price) * (Number(item.order_quantity) + sub_quantity)) * Number(item.discount) / 100)
+                const value = (Number(item.sale_price) * (Number(item.order_quantity) + sub_quantity)
+                    - (Number(item.sale_price) * (Number(item.order_quantity) + sub_quantity)) * Number(item.discount) / 100)
                     - (item.promotion_discount_amount ? item.promotion_discount_amount : 0);
 
                 item.totalItem = value;
@@ -350,10 +354,11 @@ export class SaleOrderCreateComponent implements OnInit {
                     listAdded.push(item.item_id);
                 });
                 res.forEach(function (item) {
-                    if (item.sell_price) { item.sell_price = Number(item.sell_price); }
+                    if (item.sale_price) { item.sale_price = Number(item.sale_price); }
                     item['products'] = [];
                     item.order_quantity = 1;
-                    item.totalItem = item.sell_price;
+                    item.totalItem = item.sale_price;
+                    item.source = 'Manual';
                 });
 
                 this.list.items = this.list.items.concat(res.filter(function (item) {
@@ -387,10 +392,11 @@ export class SaleOrderCreateComponent implements OnInit {
                         listAdded.push(item.item_id);
                     });
                     res.forEach(function (item) {
-                        if (item.sell_price) { item.sell_price = Number(item.sell_price); }
+                        if (item.sale_price) { item.sale_price = Number(item.sale_price); }
                         item['products'] = [];
                         item.order_quantity = 1;
-                        item.totalItem = item.sell_price;
+                        item.totalItem = item.sale_price;
+                        item.source = 'From Quote';
                     });
 
                     this.list.items = this.list.items.concat(res.filter(function (item) {

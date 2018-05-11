@@ -147,10 +147,9 @@
                             <!-- <td>{{item.sale_quote_num}}</td> -->
                             <td>{{item.buyer_name}}</td>
                             <td class="text-center">
-                                <span *ngIf="item.type == 'PKU'">Pickup</span>
-                                <span *ngIf="item.type == 'CE'">Call</span>
+                                <span *ngIf="item.type == 'PKU'">Pickup</span>                               
                                 <span *ngIf="item.type == 'ONL'">Ecommerce</span>
-                                <span *ngIf="item.type == 'NO'">Normal Order</span>
+                                <span *ngIf="item.type == 'NO'">Regular Order</span>
                             </td>
                             <td class="text-center">{{item.order_date | date:'yyyy-MM-dd'}}</td>
                             <td class="text-center">{{item.ship_date | date:'yyyy-MM-dd'}}</td>
@@ -161,6 +160,7 @@
                                 <span class="label label-warning" *ngIf="item.sts_code == 'IP'">{{item.sts}}</span>
                                 <span class="label label-danger" *ngIf="item.sts_code == 'PD'">{{item.sts}}</span>
                                 <span class="label  label-success" *ngIf="item.sts_code == 'CP'">{{item.sts}}</span>
+                                <span class="label  label-success" *ngIf="item.sts_code == 'AP'">{{item.sts}}</span>
                                 <span class="label  label-draft" *ngIf="item.sts_code == 'Draft'">{{item.sts}}</span>
                             </td>
                             <!-- <td class="text-nowrap">
