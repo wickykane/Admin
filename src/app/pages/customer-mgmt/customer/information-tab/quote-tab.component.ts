@@ -62,7 +62,7 @@ export class CustomerQuoteTabComponent implements OnInit {
 
         this.customerService.getListQuote(params).subscribe(res => {
             try {
-                this.list.items = res.data.rows;
+                this.list.items = [] || res.data.rows;
                 this.tableService.matchPagingOption(res.data);
             } catch (e) {
                 console.log(e);
