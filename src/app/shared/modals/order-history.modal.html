@@ -27,10 +27,15 @@
                         <td>{{ item.code }}</td>
                         <td>{{ item.purchase_order_cd }}</td>
                         <td width="200">{{ item.buyer_name }}</td>
-                        <td>{{ item.type }}</td>
+                        <td>{{ item.order_type_name }}</td>
                         <td>{{ item.order_date }}</td>                    
                         <td>{{ item.total_price | currency }}</td>
-                        <td>{{ item.sts }}</td>
+                        <td> <span class="label label-info" *ngIf="item.sts_code == 'NW'">{{item.sts}}</span>
+                            <span class="label label-warning" *ngIf="item.sts_code == 'IP'">{{item.sts}}</span>
+                            <span class="label label-danger" *ngIf="item.sts_code == 'PD'">{{item.sts}}</span>
+                            <span class="label  label-success" *ngIf="item.sts_code == 'CP'">{{item.sts}}</span>
+                            <span class="label  label-success" *ngIf="item.sts_code == 'AP'">{{item.sts}}</span>
+                            <span class="label  label-draft" *ngIf="item.sts_code == 'Draft'">{{item.sts}}</span></td>
                     </tr>
                     <tr *ngIf="list.items.length == 0">
                         <td class="text-center" colspan="100%">No data.</td>

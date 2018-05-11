@@ -135,8 +135,6 @@ export class SaleOrderCreateComponent implements OnInit {
         this.copy_addr = Object.assign(this.copy_addr, this.customer);
         this.copy_customer = Object.assign(this.copy_customer, this.addr_select);
         this.generalForm.controls['is_multi_shp_addr'].patchValue(0);
-
-
     }
     /**
      * Mater Data
@@ -206,7 +204,6 @@ export class SaleOrderCreateComponent implements OnInit {
 
     findDataById(id, arr) {
         const item = arr.filter(x => x.address_id === id);
-        console.log(item);
         return item[0];
     }
 
@@ -387,7 +384,6 @@ export class SaleOrderCreateComponent implements OnInit {
             const modalRef = this.modalService.open(OrderSaleQuoteModalContent, { size: 'lg' });
             modalRef.result.then(res => {
                 if (res instanceof Array && res.length > 0) {
-
                     const listAdded = [];
                     (this.list.items).forEach(function (item) {
                         listAdded.push(item.item_id);
@@ -405,6 +401,7 @@ export class SaleOrderCreateComponent implements OnInit {
                     }));
 
                     this.updateTotal();
+                    this.generateNote();
                 }
             },
             dismiss => {});
@@ -412,6 +409,18 @@ export class SaleOrderCreateComponent implements OnInit {
         }
 
 
+    }
+    generateNote() {
+        let arrSale = [ ];
+       const temp =  this.list.items;
+       for (let i = 0; i < temp.length; i++) {
+        if (temp[i].sale_quote_num !== 'undefined') {
+            arrSale.push(temp[i].sale_quote_num);
+        }
+       }
+       arrSale = arrSale.reduce((x, y) => x.includes( y ) ? x : [...x, y], []);
+       const stringNote = 'This sales order has items added from Quote:' + arrSale.toString();
+       this.generalForm.controls['note'].patchValue(stringNote);
     }
 
     // Promo Program
