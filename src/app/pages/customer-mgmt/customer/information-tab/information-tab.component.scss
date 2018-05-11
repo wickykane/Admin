@@ -32,9 +32,11 @@
         padding: 5px 10px;
         border: none;
         background-color: #d2d2d2;
+        word-break: break-word;
     }
     tbody td {
         padding: 10px;
+        word-break: break-word;        
     }
 }
 
