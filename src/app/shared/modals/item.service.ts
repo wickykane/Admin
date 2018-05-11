@@ -56,4 +56,23 @@ export class ItemService {
         return this.API.get(url);
     }
 
+    // Order
+    getListSalesQuoteReference(company_id) {
+        const url = 'sale-quote/reference/' + company_id;
+        return this.API.get(url);
+    }
+    getListSalesQuoteItem(company_id) {
+        const url = 'sale-quote/item/list/' + company_id;
+        return this.API.get(url);
+    }
+
+    getListItemReference(company_id) {
+        const url = 'sale-quote/item/reference/' + company_id;
+        return this.API.get(url);
+    }
+    getListSaleOrderByCompany(company_id) {
+        const url = 'buyer/sales-orders/' + company_id;
+        return this.API.get(url);
+    }
+
 }

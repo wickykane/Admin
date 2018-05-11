@@ -2,7 +2,7 @@ import { TableService } from './../../../services/table.service';
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { OrderService } from "../order-mgmt.service";
+import { OrderService } from '../order-mgmt.service';
 
 import { routerTransition } from '../../../router.animations';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
@@ -52,15 +52,15 @@ export class SaleOrderComponent implements OnInit {
 
     });
 
-    //Assign get list function name, override letiable here
+    // Assign get list function name, override letiable here
     this.tableService.getListFnName = 'getList';
     this.tableService.context = this;
   }
 
   ngOnInit() {
-    //Init Fn
+    // Init Fn
     this.listMoreFilter = [{ value: false, name: 'Date Filter' }];
-    this.listMaster['type'] = [{ id: 'PKU', name: "Pickup " }, { id: 'CE', name: "Call" }, { id: 'ONL', name: "Online" }];
+    this.listMaster['type'] = [{ id: 'PKU', name: 'Pickup ' }, { id: 'CE', name: 'Call' }, { id: 'ONL', name: 'Online' }];
     // this.countOrderStatus();
     this.getList();
     this.getListStatus();
@@ -78,25 +78,25 @@ export class SaleOrderComponent implements OnInit {
   countOrderStatus() {
     this.orderService.countOrderStatus().subscribe(res => {
       this.countStatus = res.results[0];
-    })
+    });
   }
 
   getListStatus() {
     this.orderService.getListStatus().subscribe(res => {
       this.listMaster['status'] = res.results;
-    })
+    });
 
   }
 
   getList() {
-    let params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
+    const params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
 
     Object.keys(params).forEach((key) => {
       if (params[key] instanceof Array) {
         params[key] = params[key].join(',');
       }
       (params[key] == null || params[key] == '') && delete params[key];
-    })
+    });
 
     params.order = 'id';
     params.sort = 'desc';
@@ -121,8 +121,8 @@ export class SaleOrderComponent implements OnInit {
       err => {
         this.toastr.error(err.message, null, { enableHTML: true });
       }
-    )
-  }
+    );
+  };
 
   putApproveOrder(order_id) {
     this.orderService.approveOrd(order_id).subscribe(res => {
@@ -134,7 +134,7 @@ export class SaleOrderComponent implements OnInit {
       err => {
         this.toastr.error(err.message, null, { enableHTML: true });
       }
-    )
+    );
   }
 
 }
