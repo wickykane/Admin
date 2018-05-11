@@ -270,13 +270,14 @@
                 <div class="block-border full-block">
                     <h5 class="title-border" translate>SHIPPING INFORMATION</h5>
                     <div class="row">
-                        <div class="col-md-12" *ngIf="generalForm.value.is_multi_shp_addr == 1">
+                        <!-- <div class="col-md-12" >
                             <div class="col-12">
                                 <p>This order ships to {{customer.shipping.length}} shipping addresses.</p>
                                 <a> View detail below</a>
                             </div>
-                        </div>
-                        <div class="col-md-12" *ngIf="generalForm.value.is_multi_shp_addr == 0">
+                        </div> -->
+                        <!-- *ngIf="generalForm.value.is_multi_shp_addr == 0" -->
+                        <div class="col-md-12" >
                             <div class="">
                                 <div class="col-12">
                                     <div class="form-group row">
@@ -378,7 +379,7 @@
                                         <td>{{item.des}}</td>
                                         <td></td>
                                         <td>
-                                            <input style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.order_quantity" min="0" max="1000"
+                                            <input style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.order_quantity" 
                                                 (change)="updateTotal();changeFromSource(item)">
                                         </td>
 
