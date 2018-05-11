@@ -72,7 +72,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-3 customer-infomation bolder">
-                                    <div class="form-group row" *ngIf ="customer.buyer_type =='PS'">
+                                    <div class="form-group row" *ngIf ="customer.buyer_type =='CP'">
                                         <label class='col-4 control-label'>Contact</label>
                                         <div class='col-8 text-primary'>
                                             <form [formGroup]="generalForm">
@@ -82,13 +82,13 @@
                                             </form>
                                         </div>
                                     </div>
-                                    <div class="form-group row" *ngIf ="customer.buyer_type =='PS'">
+                                    <div class="form-group row" *ngIf ="customer.buyer_type =='CP'">
                                         <label class='col-4'>Contact Phone</label>
                                         <div class='col-8 text-primary'>
                                             {{addr_select.contact.phone}}
                                         </div>
                                     </div>
-                                    <div class="form-group row" *ngIf ="customer.buyer_type =='PS'">
+                                    <div class="form-group row" *ngIf ="customer.buyer_type =='CP'">
                                         <label class='col-4'>Contact Email</label>
                                         <div class='col-8 text-success'>
                                             {{addr_select.contact.email}}
