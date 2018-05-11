@@ -7,7 +7,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { OrderService } from '../order-mgmt.service';
 import { ToastrService } from 'ngx-toastr';
-import { InvoiceModalContent } from './modals/invoice.modal';
+import { InvoiceModalContent } from '../../../shared/modals/invoice.modal';
 
 @Component({
   selector: 'app-detail-order',

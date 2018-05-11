@@ -17,10 +17,6 @@ import { SaleOrderCreateComponent } from './sale-order/sale-order.create.compone
 import { SaleOrderDetailComponent } from './sale-order/sale-order.detail.component';
 import { PrintOrderComponent } from './sale-order/print/print.oder.component';
 import { PrintInvoiceComponent } from './sale-order/print/print.invoice.component';
-import { InvoiceModalContent } from './sale-order/modals/invoice.modal';
-import { OrderHistoryModalContent } from './sale-order/modals/order-history.modal';
-
-
 
 // Sale Price
 import { SalePriceComponent } from './sale-price/sale-price.component';
@@ -38,6 +34,7 @@ import { TableService } from '../../services/index';
 import { OrderService } from './order-mgmt.service';
 
 import { ItemModalModule } from '../../shared/modals/item.module';
+
 
 @NgModule({
     imports: [
@@ -64,9 +61,8 @@ import { ItemModalModule } from '../../shared/modals/item.module';
         SaleOrderDetailComponent,
         PrintOrderComponent,
         PrintInvoiceComponent,
-        InvoiceModalContent,
-        OrderHistoryModalContent],
+        ],
     providers: [OrderService, TableService],
-    entryComponents: [InvoiceModalContent, OrderHistoryModalContent]
+    entryComponents: []
 })
 export class OrderMgmtModule { }

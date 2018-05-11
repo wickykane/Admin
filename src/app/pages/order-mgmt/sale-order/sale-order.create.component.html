@@ -21,11 +21,14 @@
                                 <div class="col-md-3">
                                     Last Sales Date: {{customer.last_sales_order}}
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <a href="javascript:void(0)" (click)="showViewOrderHistory()">View Order History</a>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     Current Debt: {{customer.current_dept |currency}}
+                                </div>
+                                <div class="col-md-2">
+                                    Current Credit: {{customer.current_dept |currency}}
                                 </div>
                             </form>
                         </div>
@@ -58,7 +61,7 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class='col-4 control-label'>Country</label>
-                                        <div class='col-8 text-success'>
+                                        <div class='col-8'>
                                             {{customer.primary[0].country_name}}
                                         </div>
                                     </div>
@@ -68,7 +71,7 @@
                                         <label class='col-4 control-label'>Contact</label>
                                         <div class='col-8 text-primary'>
                                             <form [formGroup]="generalForm">
-                                                <select class="form-control" id="contact" formControlName="contact" name="contact">
+                                                <select class="form-control" id="contact" formControlName="contact_user_id" name="contact" (change)="selectContact()">
                                                     <option *ngFor="let item of customer.contact" [ngValue]="item.id">{{item.full_name}}</option>
                                                 </select>
                                             </form>
@@ -76,16 +79,20 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class='col-4'>Contact Phone</label>
-                                        <div class='col-8 text-primary'></div>
+                                        <div class='col-8 text-primary'>
+                                            {{addr_select.contact.phone}}
+                                        </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class='col-4'>Contact Email</label>
-                                        <div class='col-8 text-success'></div>
+                                        <div class='col-8 text-success'>
+                                            {{addr_select.contact.email}}
+                                        </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class='col-4'>Item In Quote</label>
                                         <div class='col-8 text-success'>
-                                            <a href="javascript:voide(0)">{{customer.items_in_quote}}</a>
+                                            <a href="javascript:voide(0)" (click)="showSaleQuoteList()">{{customer.items_in_quote}}</a>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -111,7 +118,7 @@
                                             </label>
                                             <div class='col-8 text-primary'>
                                                 <select required class="form-control" id="order_type" name="order-type" formControlName="type">
-                                                    <option *ngFor="let item of listMaster['pay_type']" [ngValue]="item.id">{{item.label}}</option>
+                                                    <option *ngFor="let item of listMaster['pay_type']" [ngValue]="item.code">{{item.value}}</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -133,14 +140,16 @@
                                         <div class="form-group row">
                                             <label class='col-4'>Priority</label>
                                             <div class='col-8 text-danger'>
-                                                <select required class="form-control" id="priority" name="priority" formControlName="priority">
-                                                    <option *ngFor="let item of listMaster['priority']" [ngValue]="item.id">{{item.label}}</option>
+                                                <select required class="form-control" id="priority" name="priority" formControlName="prio_level">
+                                                    <option *ngFor="let item of listMaster['priority']" [ngValue]="item.code">{{item.value}}</option>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class='col-4'>Order Status</label>
-                                            <div class='col-8 text-danger'></div>
+                                            <div class='col-8 text-success'>
+                                                <strong>1-NEW</strong>
+                                            </div>
                                         </div>
                                     </form>
                                 </div>
@@ -150,7 +159,7 @@
                                             <label class='col-4'>Payment Method</label>
                                             <div class='col-8 text-primary'>
                                                 <select required class="form-control" id="payment_method" name="payment_method" formControlName="payment_method">
-                                                    <option *ngFor="let item of listMaster['payment_method']" [ngValue]="item.id">{{item.name}}</option>
+                                                    <option *ngFor="let item of listMaster['payment_method']" [ngValue]="item.code">{{item.value}}</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -158,7 +167,7 @@
                                             <label class='col-4'>Salesperson</label>
                                             <div class='col-8 text-primary'>
                                                 <select required class="form-control" id="sales_person" name="sales_person" formControlName="sales_person">
-                                                    <option *ngFor="let item of customer.billing" [ngValue]="item.address_id">{{item.label}}</option>
+                                                    <option *ngFor="let item of listMaster['sale_mans']" [ngValue]="item.id">{{item.full_name}}</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -174,7 +183,7 @@
                                             <label class='col-4'>Warehouse</label>
                                             <div class='col-8'>
                                                 <select required class="form-control" id="warehouse_id" name="warehouse_id" formControlName="warehouse_id">
-                                                    <option *ngFor="let item of listMaster['warehouse']" [ngValue]="item.warehouse_id">{{item.name}}</option>
+                                                    <option *ngFor="let item of listMaster['warehouses']" [ngValue]="item.id">{{item.name}}</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -192,64 +201,65 @@
                     <h5 class="title-border" translate>BILLING INFORMATION</h5>
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="form-inline form-search">
+                            <div class="">
                                 <div class="col-12">
-                                    <div class="form-group">
-                                        <label class=" control-label" for="billing_to" translate> Bill To
+                                    <div class="form-group row">
+                                        <label class="control-label col-3" for="billing_to" translate> Bill To
                                             <span class="text-danger">(*)</span>
                                         </label>
-                                        <div>
-                                            <select required class="form-control" id="billing_to" name="search_type" [(ngModel)]="billing" (change)="change(billing,'billing')">
-                                                <option value="" selected="true" hidden="true" translate>Please select</option>
-                                                <option *ngFor="let item of customer.billing" [ngValue]="item.address_id">{{item.label}}</option>
-                                            </select>
+                                        <div class="col-5">
+                                            <form [formGroup]="generalForm">
+                                                <select required class="form-control" id="billing_to" name="search_type" formControlName="billing_id" (change)="selectAddress('billing')">
+                                                    <option *ngFor="let item of customer.billing" [ngValue]="item.address_id">{{item.label}}</option>
+                                                </select>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-12">
-                                    <div class="form-group">
-                                        <label class=" control-label" translate>Name</label>
-                                        <div>
+                                    <div class="form-group row">
+                                        <label class=" control-label col-3" translate>Name</label>
+                                        <div class="col-8">
                                             {{addr_select.billing.address_name}}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-12">
-                                    <div class="form-group">
-                                        <label class=" control-label" translate>Address Line</label>
-                                        <div>
+                                    <div class="form-group row">
+                                        <label class="control-label col-3" translate>Address Line</label>
+                                        <div class="col-8">
                                             {{addr_select.billing.address_line}}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-12">
-                                    <div class="form-group">
-                                        <label class="control-label" translate>Country</label>
-                                        <div>
+                                    <div class="form-group row">
+                                        <label class="control-label col-3" translate>Country</label>
+                                        <div class="col-8">
                                             {{addr_select.billing.country_name}}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-12">
-                                    <div class="form-group">
-                                        <label class=" control-label" translate>City</label>
-                                        <div>
+                                    <div class="form-group row">
+                                        <label class=" control-label col-3" translate>City</label>
+                                        <div class="col-8">
                                             {{addr_select.billing.city_name}}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-12">
-                                    <div class="form-group">
-                                        <label class=" control-label" translate>State/Province</label>
-                                        <div>
+                                    <div class="form-group row">
+                                        <label class=" control-label col-3" translate>State/Province</label>
+                                        <div class="col-8">
                                             {{addr_select.billing.state_name}}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-12">
-                                    <div class="form-group">
-                                        <label class=" control-label" translate>Zip Code</label>
-                                        <div>
+                                    <div class="form-group row">
+                                        <label class="control-label col-3" translate>Zip Code</label>
+                                        <div class="col-8">
                                             {{addr_select.billing.zip_code}}
                                         </div>
                                     </div>
@@ -263,9 +273,77 @@
                 <div class="block-border full-block">
                     <h5 class="title-border" translate>SHIPPING INFORMATION</h5>
                     <div class="row">
-                        <div class="col-md-12">
-                            <p>This order ships to 2 shipping addresses.</p>
-                            <a href="javascript:void(0)"> View detail below</a>
+                        <div class="col-md-12" *ngIf="generalForm.value.is_multi_shp_addr == 1">
+                            <div class="col-12">
+                                <p>This order ships to {{customer.shipping.length}} shipping addresses.</p>
+                                <a href="javascript:void(0)"> View detail below</a>
+                            </div>
+                        </div>
+                        <div class="col-md-12" *ngIf="generalForm.value.is_multi_shp_addr == 0">
+                            <div class="">
+                                <div class="col-12">
+                                    <div class="form-group row">
+                                        <label class=" control-label col-3" for="shiping_to" translate> Ship To
+                                            <span class="text-danger">(*)</span>
+                                        </label>
+                                        <div class="col-5">
+                                            <form [formGroup]="generalForm">
+                                                <select required class="form-control" id="shiping_to" name="search_type" formControlName="shipping_id" (change)="selectAddress('shipping')">
+                                                    <option *ngFor="let item of customer.shipping" [ngValue]="item.address_id">{{item.label}}</option>
+                                                </select>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group row">
+                                        <label class=" control-label col-3" translate>Name</label>
+                                        <div class="col-8">
+                                            {{addr_select.shipping.address_name}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group row">
+                                        <label class=" control-label col-3" translate>Address Line</label>
+                                        <div class="col-8">
+                                            {{addr_select.shipping.address_line}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group row">
+                                        <label class="control-label col-3" translate>Country</label>
+                                        <div class="col-8">
+                                            {{addr_select.shipping.country_name}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group row">
+                                        <label class=" control-label col-3" translate>City</label>
+                                        <div class="col-8">
+                                            {{addr_select.shipping.city_name}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group row">
+                                        <label class=" control-label col-3" translate>State/Province</label>
+                                        <div class="col-8">
+                                            {{addr_select.shipping.state_name}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group row">
+                                        <label class=" control-label col-3" translate>Zip Code</label>
+                                        <div class="col-8">
+                                            {{addr_select.shipping.zip_code}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -286,7 +364,7 @@
                                         <th translate>Description</th>
                                         <!-- <th translate >Avail QTY</th> -->
                                         <th class="text-nowrap" style="width:100px" translate>Order QTY</th>
-                                        <th class="text-nowrap text-center" translate>Ship To</th>
+                                        <th class="text-nowrap text-center" translate *ngIf="generalForm.value.is_multi_shp_addr == 1">Ship To</th>
                                         <th class="text-center" style="width:100px" translate>Unit Price</th>
                                         <th style="width:100px" translate>Disc %</th>
                                         <th translate>Amount</th>
@@ -302,8 +380,8 @@
                                             <button class="btn btn-danger btn-xs" type="button" (click)="deleteAction(item.item_id)">
                                                 <i class="fa fa-trash"></i>
                                             </button>
-                                            <button class="btn btn-primary btn-xs" type="button" (click)="cloneRecord(item, list.items)" [disabled]="!checkCloneRecord(item, list.items[$index])"
-                                                title="Add new shipping address">
+                                            <button *ngIf="generalForm.value.is_multi_shp_addr == 1" class="btn btn-primary btn-xs" type="button" (click)="cloneRecord(item, list.items)"
+                                                [disabled]="!checkCloneRecord(item, list.items[$index])" title="Add new shipping address">
                                                 <i class="fa fa-plus-circle" aria-hidden="true"></i>
                                             </button>
                                         </td>
@@ -315,22 +393,20 @@
                                                 (change)="updateTotal()">
                                         </td>
 
-                                        <td>
+                                        <td *ngIf="generalForm.value.is_multi_shp_addr == 1">
                                             <select class="form-control" name="search_type" [(ngModel)]="item.shipping_address_id">
                                                 <option value="undefined" selected="true" hidden="true" translate>Please select</option>
-                                                <option *ngFor="let item of order.shipping" [ngValue]="item.address_id">{{((item.address_line+', '+item.city_name+', '+item.state_name+', '+item.zip_code+',
+                                                <option *ngFor="let item of customer.shipping" [ngValue]="item.address_id">{{((item.address_line+', '+item.city_name+', '+item.state_name+', '+item.zip_code+',
                                                     '+item.country_name) | uppercase)}}</option>
                                             </select>
                                         </td>
                                         <td>
-
                                             <div>
                                                 <span>$</span>
                                                 <div style="display:inline-block;width:80%">
                                                     <input class="form-control input-sm" type="number" [(ngModel)]="item.sell_price" (change)="updateTotal()">
                                                 </div>
                                             </div>
-
                                         </td>
                                         <td>
                                             <input class="form-control input-sm" type="number" [(ngModel)]="item.discount" (change)="updateTotal()">
@@ -353,7 +429,7 @@
                                         <td>
                                             <select class="form-control" name="search_type" [(ngModel)]="product.shipping_address_id">
                                                 <option value="undefined" selected="true" hidden="true" translate>Please select</option>
-                                                <option *ngFor="let item of order.shipping" [ngValue]="item.address_id">{{((item.address_line+', '+item.city_name+', '+tate_name+', '+item.zip_code+',
+                                                <option *ngFor="let item of customer.shipping" [ngValue]="item.address_id">{{((item.address_line+', '+item.city_name+', '+tate_name+', '+item.zip_code+',
                                                     '+item.country_name) | uppercase)}}</option>
                                             </select>
                                         </td>
@@ -440,11 +516,9 @@
         </div>
         <div class="row">
             <div class="col-md-12 mg-top-15 text-center">
-                <button [disabled]="!generalForm.valid || !bill || !order_info['payment_method']" type="button" class="btn btn-primary" (click)="createOrder()"
-                    translate>Save As Draff</button>
-                <button type="button" class="btn btn-primary" (click)="createOrder()" translate>Save</button>
-                <button [disabled]="!generalForm.valid || !bill || !order_info['payment_method']" type="button" class="btn btn-primary" (click)="createOrder()"
-                    translate>Save & Submit</button>
+                <button type="button" class="btn btn-primary" (click)="saveQuote()" translate>Save As Quote</button>
+                <button type="button" class="btn btn-primary" (click)="saveDraftOrder()" translate>Save As Draff</button>
+                <button type="button" class="btn btn-primary" (click)="createOrder()" translate>Save & Submit</button>
                 <button type="button" class="btn btn-default" [routerLink]="['/order-management/sale-order']" translate>Cancel</button>
             </div>
         </div>
