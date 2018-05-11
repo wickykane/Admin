@@ -54,15 +54,15 @@ export class MenuComponent implements OnInit {
             },
             {
                 flag: 'product',
-                link: '/',
-                main_name: 'Products',
+                link: '/product-management/item-list',
+                main_name: 'Items List',
                 icon: '',
-                sub: true,
+                sub: false,
                 child: [
-                    {
-                        link: '/product-management/item-list',
-                        name: 'Item List '
-                    },
+                    // {
+                    //     link: '/product-management/item-list',
+                    //     name: 'Item List '
+                    // },
                     // {
                     //     link: '/product-management/product-definition',
                     //     name: 'Product Definition'
