@@ -8,33 +8,71 @@ export class ItemService {
 
 
     getListItemBaseSupplier(params, id) {
-        let url = 'item?supplier_id=' + id;
+        const url = 'item?supplier_id=' + id;
         return this.API.get(url, params);
     }
 
     getListBundleBase(params) {
-        let url = ['bundle', 'reference'].join('/');
+        const url = ['bundle', 'reference'].join('/');
         return this.API.get(url);
     }
 
     getReferenceList() {
-        let url = ['item', 'reference'].join('/');
+        const url = ['item', 'reference'].join('/');
         return this.API.get(url);
     }
-    
-    getListAllItem(params){
-        let url =['item'].join('/');
-        return this.API.get(url,params);
+
+    getListAllItem(params) {
+        const url = ['item'].join('/');
+        return this.API.get(url, params);
     }
 
     getListCountry() {
-        let url = 'country/get-all';
+        const url = 'country/get-all';
         return this.API.get(url);
     }
 
-    getStateByCountry( params) {
-        let url = 'state/get-by-country'
+    getStateByCountry(params) {
+        const url = 'state/get-by-country';
         return this.API.get(url, params);
+    }
+
+    /**
+     * Customer
+     */
+    // customer
+    getListCountryAdmin() {
+        const url = 'country/admin/get-all';
+        return this.API.get(url);
+    }
+
+    getListBank() {
+        const url = 'bank/list';
+        return this.API.get(url);
+    }
+
+    getListBranchByBank(bank_id) {
+        const url = 'bank/' + bank_id + '/branch/list';
+        return this.API.get(url);
+    }
+
+    // Order
+    getListSalesQuoteReference(company_id) {
+        const url = 'sale-quote/reference/' + company_id;
+        return this.API.get(url);
+    }
+    getListSalesQuoteItem(company_id) {
+        const url = 'sale-quote/item/list/' + company_id;
+        return this.API.get(url);
+    }
+
+    getListItemReference(company_id) {
+        const url = 'sale-quote/item/reference/' + company_id;
+        return this.API.get(url);
+    }
+    getListSaleOrderByCompany(company_id) {
+        const url = 'buyer/sales-orders/' + company_id;
+        return this.API.get(url);
     }
 
 }

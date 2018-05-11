@@ -1,0 +1,34 @@
+<div class='address-tab'>
+    <div class='scroll-container'>
+        <table class='table table-custom'>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Name</th>
+                    <th>Title</th>
+                    <th>Phone</th>
+                    <th>Fax</th>
+                    <th>Email</th>
+                    <th>Username</th>
+                    <th>Password</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of list.items">
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.full_name }}</td>
+                    <td>{{ item.title }}</td>
+                    <td>{{ item.phone }}</td>
+                    <td>{{ item.fax }}</td>
+                    <td>{{ item.email }}</td>
+                    <td>{{ item.username }}</td>
+                    <td>{{ 'xxxxxx' }}</td>
+                </tr>
+                <tr *ngIf="list.items.length == 0">
+                    <td class="text-center" colspan="100%">No data.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>

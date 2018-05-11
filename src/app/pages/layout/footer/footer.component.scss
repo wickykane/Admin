@@ -1,23 +1,27 @@
 footer {
     position: absolute;
     bottom: 0;
-    width: 100%;    
+    width: 100%;
     line-height: 32px;
-    height:60px;
+    height: 60px;
     background-color: #e3e3e3;
-    .footer-mg{
-        margin-top:10px;
+
+    .footer-mg {
+        margin-top: 10px;
     }
-    .block-footer{
-        ul{
-            list-style:none;
-            li{
+
+    .block-footer {
+        ul {
+            list-style: none;
+
+            li {
                 display: inline-block;
             }
         }
-        img{
-            width:77px;
-            height:auto;
+
+        img {
+            width: 40px;
+            height: 35px;
         }
     }
 }

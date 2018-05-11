@@ -46,11 +46,11 @@ export class ApiService {
         return httpOptions;
     }
 
-    private _serverError(err: HttpErrorResponse) {
+    private _serverError(err) {
         if (err.error instanceof ErrorEvent) {
-            return new ErrorObservable(err.error.message || 'backend server error');
+      return new ErrorObservable(JSON.parse(err._body));
         }
-        return new ErrorObservable(err.error || 'backend server error');
+        return new ErrorObservable(JSON.parse(err._body));
     }
 
 
@@ -93,7 +93,7 @@ export class ApiService {
             );
     };
 
-    deleteWithParam( path:string,body:Object = {} ):Observable<any> {        
+    deleteWithParam( path:string,body:Object = {} ):Observable<any> {
         return this.httpClient.delete(`${environment.api_url}${path}`, this.headerOptionDefault(body))
             // .map(res => res.json())  // could raise an error if invalid JSON
             // .do(data => data)  // debug
