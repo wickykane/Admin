@@ -114,7 +114,7 @@ export class SaleOrderCreateComponent implements OnInit {
             'delivery_date': [null],
             'contact_user_id': [null],
             'prio_level': [null],
-            'is_multi_shp_addr': [null],
+            'is_multi_shp_addr': [{value: 0, disabled: true}],
             'sales_person': [null],
             'warehouse_id': [null],
             'payment_method': [null],
@@ -132,9 +132,8 @@ export class SaleOrderCreateComponent implements OnInit {
         this.getListCustomerOption();
         this.getOrderReference();
         this.updateTotal();
-        this.copy_addr = Object.assign(this.copy_addr, this.customer);
+        this.copy_addr = Object.assign({}, this.addr_select);
         this.copy_customer = Object.assign(this.copy_customer, this.addr_select);
-        this.generalForm.controls['is_multi_shp_addr'].patchValue(0);
     }
     /**
      * Mater Data
@@ -179,10 +178,28 @@ export class SaleOrderCreateComponent implements OnInit {
 
     changeCustomer() {
         const company_id = this.generalForm.value.company_id;
+        this.customer.billing = [];
+        this.customer.shipping = [];
+        this.customer.contact = [] ;
+        this.addr_select.shipping.address_line = '';
+        this.addr_select.shipping.address_name = '';
+        this.addr_select.shipping.country_name = '';
+        this.addr_select.shipping.city_name = '';
+        this.addr_select.shipping.state_name = '';
+        this.addr_select.shipping.zip_code = '';
+        this.addr_select.billing.address_line = '';
+        this.addr_select.billing.address_name = '';
+        this.addr_select.billing.country_name = '';
+        this.addr_select.billing.city_name = '';
+        this.addr_select.billing.state_name = '';
+        this.addr_select.billing.zip_code = '';
         if (company_id) {
         //    this.customer:any = Object.assign()
         //    this.addr_select = Object.assign({}, this.copy_addr);
             this.getDetailCustomerById(company_id);
+            // this.selectAddress('billing');
+            // this.selectAddress('shipping');
+            // this.selectContact();
         }
     }
     selectAddress(type) {
@@ -190,11 +207,15 @@ export class SaleOrderCreateComponent implements OnInit {
             switch (type) {
                 case 'shipping':
                     const ship_id = this.generalForm.value.shipping_id;
-                    this.addr_select.shipping = this.findDataById(ship_id, this.customer.shipping);
+                    if (ship_id ) {
+                        this.addr_select.shipping = this.findDataById(ship_id, this.customer.shipping);
+                    }
                     break;
                 case 'billing':
                     const billing_id = this.generalForm.value.billing_id;
-                    this.addr_select.billing = this.findDataById(billing_id, this.customer.billing);
+                    if (billing_id) {
+                        this.addr_select.billing = this.findDataById(billing_id, this.customer.billing);
+                    }
                     break;
             }
         } catch (e) {
@@ -209,8 +230,10 @@ export class SaleOrderCreateComponent implements OnInit {
 
     selectContact() {
         const id = this.generalForm.value.contact_user_id;
-        const temp = this.customer.contact.filter(x => x.id === id);
+        if ( id) {
+            const temp = this.customer.contact.filter(x => x.id === id);
         this.addr_select.contact = temp[0];
+        }
     }
 
     cloneRecord(record, list) {

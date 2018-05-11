@@ -352,6 +352,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
 
             this.customerService.createCustomer(data).subscribe(
                 res => {
+                  console.log(res);
                     try {
                         setTimeout(() => {
                             this.router.navigate(['/customer']);
@@ -362,6 +363,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
                     }
                 },
                 err => {
+                    console.log(err);
                     this.toastr.error(err.message, null, { enableHTML: true });
                 });
         }
