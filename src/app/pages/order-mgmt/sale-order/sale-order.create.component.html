@@ -72,7 +72,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-3 customer-infomation bolder">
-                                    <div class="form-group row">
+                                    <div class="form-group row" *ngIf ="customer.buyer_type =='CP'">
                                         <label class='col-4 control-label'>Contact</label>
                                         <div class='col-8 text-primary'>
                                             <form [formGroup]="generalForm">
@@ -82,13 +82,13 @@
                                             </form>
                                         </div>
                                     </div>
-                                    <div class="form-group row">
+                                    <div class="form-group row" *ngIf ="customer.buyer_type =='CP'">
                                         <label class='col-4'>Contact Phone</label>
                                         <div class='col-8 text-primary'>
                                             {{addr_select.contact.phone}}
                                         </div>
                                     </div>
-                                    <div class="form-group row">
+                                    <div class="form-group row" *ngIf ="customer.buyer_type =='CP'">
                                         <label class='col-4'>Contact Email</label>
                                         <div class='col-8 text-success'>
                                             {{addr_select.contact.email}}
@@ -351,7 +351,7 @@
                                         <th style="width:100px" translate>Action</th>
                                         <th style="width:150px" translate>Product Code</th>
                                         <th translate>Description</th>
-                                        <!-- <th translate >Avail QTY</th> -->
+                                        <th translate >Avail QTY</th>
                                         <th class="text-nowrap" style="width:100px" translate>Order QTY</th>
                                         <th class="text-nowrap text-center" translate *ngIf="generalForm.value.is_multi_shp_addr == 1">Ship To</th>
                                         <th class="text-center" style="width:100px" translate>Unit Price</th>
@@ -376,7 +376,7 @@
                                         </td>
                                         <td>{{item.sku}}</td>
                                         <td>{{item.des}}</td>
-                                        <!-- <td>{{item.des}}</td> -->
+                                        <td></td>
                                         <td>
                                             <input style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.order_quantity" min="0" max="1000"
                                                 (change)="updateTotal()">
@@ -475,55 +475,7 @@
                                         <td>Grand Total:</td>                                        
                                         <td colspan="2">{{order_info.total | currency}}</td>
                                     </tr>
-                                </table>
-                                <!-- <div class="row">
-                                    <div class="col-md-4 col-sm-4 col-xs-4">
-                                        <label class="control-label" translate>Sub Total:</label>
-                                    </div>
-                                    <div class="col-md-8 col-sm-8 col-xs-8">
-                                        <label class="pull-right">{{order_info.sub_total | currency}}</label>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-3 col-sm-3 col-xs-3">
-                                        <label class="control-label" style="font-weight: 400" translate>- Discount (%):</label>
-                                    </div>
-                                    <div class="col-md-3 col-sm-3 col-xs-3">
-                                        <input class="form-control" [(ngModel)]="order_info.discount_percent" class="form-control" type="text" (change)="updateTotal()">
-                                    </div>
-                                    <div class="col-md-6 col-sm-6 col-xs-6">
-                                        <input class="form-control" readonly="true" [(ngModel)]="order_info.total_discount" class="form-control" value="0" type="number">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-3 col-sm-3 col-xs-3">
-                                        <label class="control-label" style="font-weight: 400" translate>+ TAX/VAT (%):</label>
-                                    </div>
-                                    <div class="col-md-3 col-sm-3 col-xs-3">
-                                        <input class="form-control" [(ngModel)]="order_info.vat_percent" class="form-control" type="text" (change)="updateTotal()">
-                                    </div>
-                                    <div class="col-md-6 col-sm-6 col-xs-6">
-                                        <input class="form-control" readonly="true" [(ngModel)]="order_info['vat_percent_amount']" class="form-control" value="0"
-                                            type="number">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6 col-sm-6 col-xs-6">
-                                        <label class="control-label" style="font-weight: 400" translate>+ Shipping cost ($):</label>
-                                    </div>
-                                    <div class="col-md-6 col-sm-6 col-xs-6">
-                                        <input class="form-control" [(ngModel)]="order_info.shipping_cost" class="form-control" type="text" (change)="updateTotal()">
-                                    </div>
-                                </div>
-                                <div class="row" style="margin-top: 10px;">
-                                    <div class="col-md-4 col-sm-4 col-xs-4">
-                                        <label class="control-label" style="font-weight: 800;" translate>Grand Total:</label>
-                                    </div>
-                                    <div class="col-md-8 col-sm-8 col-xs-8">
-                                        <label class="pull-right" style="font-weight: 800; text-align: right">{{order_info.total | currency}}</label>
-                                    </div>
-                                </div> -->
+                                </table>                                
                             </div>
                         </div>
                     </div>
@@ -532,9 +484,9 @@
         </div>
         <div class="row">
             <div class="col-md-12 mg-top-15 text-center">
-                <button type="button" class="btn btn-primary" (click)="saveQuote()" translate>Save As Quote</button>
-                <button type="button" class="btn btn-primary" (click)="saveDraftOrder()" translate>Save As Draff</button>
-                <button type="button" class="btn btn-primary" (click)="createOrder()" translate>Save & Submit</button>
+                <button type="button" class="btn btn-outline-info" (click)="saveQuote()" translate>Save As Quote</button>
+                <button type="button" class="btn btn-outline-warning" (click)="saveDraftOrder()" translate>Save As Draft</button>
+                <button type="button" class="btn btn-outline-primary" (click)="createOrder()" translate>Save & Submit</button>
                 <button type="button" class="btn btn-default" [routerLink]="['/order-management/sale-order']" translate>Cancel</button>
             </div>
         </div>
