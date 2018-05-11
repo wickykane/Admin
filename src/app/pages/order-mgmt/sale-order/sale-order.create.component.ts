@@ -119,7 +119,8 @@ export class SaleOrderCreateComponent implements OnInit {
             'warehouse_id': [null],
             'payment_method': [null],
             'billing_id': [null],
-            'shipping_id': [null]
+            'shipping_id': [null],
+            'note': [null]
         });
     }
 
@@ -367,7 +368,7 @@ export class SaleOrderCreateComponent implements OnInit {
 
                 this.updateTotal();
             }
-        });
+        }, dismiss => {});
     }
     // Show order history
     showViewOrderHistory() {
@@ -378,7 +379,7 @@ export class SaleOrderCreateComponent implements OnInit {
                 if (res instanceof Array && res.length > 0) {
                    console.log(res);
                 }
-            });
+            }, dismiss => {});
         }
     }
     showSaleQuoteList() {
