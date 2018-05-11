@@ -36,6 +36,7 @@ export class SaleOrderCreateComponent implements OnInit {
         'current_dept': '',
         'discount_level': '',
         'items_in_quote': '',
+        'buyer_type': '',
         primary: [{
             'address_line': '',
             'city_name': '',
