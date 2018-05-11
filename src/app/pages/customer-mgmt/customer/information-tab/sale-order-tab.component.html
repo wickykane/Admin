@@ -30,7 +30,7 @@
                 </div> -->
                 <div class="block-search">
                     <label for="buyer_type" class="control-label">From</label>
-                    <div class="input-group">
+                    <div clickOutside (clickOutside)="d1.close()"  class="input-group">
                         <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="order_date_from" ngbDatepicker #d1="ngbDatepicker">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
@@ -41,7 +41,7 @@
                 </div>
                 <div class="block-search">
                     <label for="buyer_type" class="control-label">To</label>
-                    <div class="input-group">
+                    <div clickOutside (clickOutside)="t1.close()" class="input-group">
                         <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="order_date_to" ngbDatepicker #t1="ngbDatepicker">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" (click)="t1.toggle()" type="button">

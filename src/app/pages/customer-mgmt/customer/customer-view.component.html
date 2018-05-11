@@ -1,5 +1,9 @@
 <div [@routerTransition]>
-    <app-page-header [heading]="customer['company_name'] || 'Customer'"></app-page-header>
+
+    <div class="block-header">
+        <h3 class="block-title-lg">{{customer['company_name'] }} <span *ngIf="customer['parent_compay_name']" class="parent-company">Parent Company: {{customer['parent_compay_name']}}</span> </h3>
+    </div>
+
     <!-- <app-shortcut [listShortcut]='customerKeyService.getKeys()'></app-shortcut> -->
     <section class='main-container'>
         <div class="informaion">
@@ -91,7 +95,7 @@
                     </div>
                     <div class="row">
                         <label class='col-6'>Total Received Item</label>
-                        <div class='col-6 text-danger'>{{ customer['total_received_items'] }}</div>
+                        <div class='col-6 text-primary'>{{ customer['total_received_items'] }}</div>
                     </div>
                     <div class="row">
                         <label class='col-6'>Credit Limit</label>
@@ -99,7 +103,7 @@
                     </div>
                     <div class="row">
                         <label class='col-6'>Credit Balance</label>
-                        <div class='col-6 text-danger'>{{ customer['creadit_balance'] | currency:'$'}}</div>
+                        <div class='col-6'>{{ customer['creadit_balance'] | currency:'$'}}</div>
                     </div>
                 </div>
 
