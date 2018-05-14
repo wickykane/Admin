@@ -142,7 +142,7 @@ export class SaleOrderCreateComponent implements OnInit {
     /**
      * Mater Data
      */
-    numberMaskObject(max) {
+    numberMaskObject(max?) {
         return createNumberMask({
             allowDecimal: true,
             prefix: '',
