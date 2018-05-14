@@ -41,18 +41,9 @@ export class OrderSaleQuoteModalContent implements OnInit {
         this.toastr.setRootViewContainerRef(vRef);
 
         this.searchForm = fb.group({
-            'cd': [null],
-            'name': [null],
-            'sts': [null],
-            'vin': [null],
-            'year': [null],
-            'manufacturer_id': [null],
-            'model_id': [null],
-            'sub_model_id': [null],
-            'oem': [null],
-            'partlinks_no': [null],
-            'part_no': [null],
-            'certification': [null],
+            'sale_quote_id': [null],
+            'item_id': [null],
+            'quote_date': [null]
         });
 
         // Assign get list function name, override variable here
@@ -91,12 +82,12 @@ export class OrderSaleQuoteModalContent implements OnInit {
      */
     resetTab() {
         this.searchForm.reset();
-        this.filterForm.reset();
-        this.list.items = [];
     }
 
     getList() {
-        this.itemService.getListSalesQuoteItem(this.company_id).subscribe(res => {
+        const params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
+        Object.keys(params).forEach((key) => (params[key] == null || params[key] === '') && delete params[key]);
+        this.itemService.getListSalesQuoteItem(this.company_id, params).subscribe(res => {
             try {
                 if (!res.data.rows) {
                     this.list.items = [];
@@ -112,7 +103,8 @@ export class OrderSaleQuoteModalContent implements OnInit {
     getListItemReference(company_id) {
         this.itemService.getListItemReference(company_id).subscribe(res => {
             try {
-                console.log(res);
+                this.listMaster['product-code'] = res.data;
+               console.log(res);
             } catch (e) {
                 console.log(e);
             }
@@ -121,7 +113,7 @@ export class OrderSaleQuoteModalContent implements OnInit {
     getListSalesQuoteReference(company_id) {
         this.itemService.getListSalesQuoteReference(company_id).subscribe(res => {
             try {
-                console.log(res);
+                this.listMaster['sale-quote'] = res.data;
             } catch (e) {
                 console.log(e);
             }

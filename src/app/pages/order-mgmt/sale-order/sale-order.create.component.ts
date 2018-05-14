@@ -2,7 +2,7 @@ import { Component, OnInit, ViewContainerRef, ViewEncapsulation } from '@angular
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
+import { DatePipe } from '@angular/common';
 
 import { OrderService } from '../order-mgmt.service';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
@@ -104,13 +104,14 @@ export class SaleOrderCreateComponent implements OnInit {
         private router: Router,
         private route: ActivatedRoute,
         private modalService: NgbModal,
-        private orderService: OrderService) {
+        private orderService: OrderService,
+        private dt: DatePipe ) {
         this.generalForm = fb.group({
             'company_id': [null, Validators.required],
             'customer_po': [null, Validators.required],
             'order_number': [null],
             'type': [null, Validators.required],
-            'order_date': [new Date(), Validators.required],
+            'order_date': [null, Validators.required],
             'delivery_date': [null],
             'contact_user_id': [null],
             'prio_level': [null],
@@ -128,13 +129,15 @@ export class SaleOrderCreateComponent implements OnInit {
         this.listMaster['multi_ship'] = [{ id: 0, label: 'No' }, { id: 1, label: 'Yes' }];
         // Item
         this.list.items = this.router.getNavigatedData() || [];
+        const currentDt = this.dt.transform(new Date(), 'yyyy-MM-dd');
         if (Object.keys(this.list.items).length === 0) { this.list.items = []; }
         this.getListCustomerOption();
         this.getOrderReference();
         this.updateTotal();
-        this.copy_addr = Object.assign({}, this.addr_select);
-        this.copy_customer = Object.assign(this.copy_customer, this.addr_select);
+        this.copy_addr = Object.assign(this.copy_addr, this.addr_select);
+        this.copy_customer = Object.assign(this.copy_customer, this.customer);
         this.generalForm.controls['is_multi_shp_addr'].patchValue(0);
+        this.generalForm.controls['order_date'].patchValue(currentDt);
     }
     /**
      * Mater Data
@@ -186,28 +189,10 @@ export class SaleOrderCreateComponent implements OnInit {
 
     changeCustomer() {
         const company_id = this.generalForm.value.company_id;
-        this.customer.billing = [];
-        this.customer.shipping = [];
-        this.customer.contact = [];
-        this.addr_select.shipping.address_line = '';
-        this.addr_select.shipping.address_name = '';
-        this.addr_select.shipping.country_name = '';
-        this.addr_select.shipping.city_name = '';
-        this.addr_select.shipping.state_name = '';
-        this.addr_select.shipping.zip_code = '';
-        this.addr_select.billing.address_line = '';
-        this.addr_select.billing.address_name = '';
-        this.addr_select.billing.country_name = '';
-        this.addr_select.billing.city_name = '';
-        this.addr_select.billing.state_name = '';
-        this.addr_select.billing.zip_code = '';
+        this.customer = Object.create(this.copy_customer);
+        this.addr_select = Object.create(this.copy_addr);
         if (company_id) {
-            //    this.customer:any = Object.assign()
-            //    this.addr_select = Object.assign({}, this.copy_addr);
             this.getDetailCustomerById(company_id);
-            // this.selectAddress('billing');
-            // this.selectAddress('shipping');
-            // this.selectContact();
         }
     }
     selectAddress(type) {
@@ -293,13 +278,6 @@ export class SaleOrderCreateComponent implements OnInit {
             return false;
         }
     }
-
-    resetPromo() {
-        this.promotionList = [];
-        this.list.items.forEach(function (item) {
-            item.promotion_discount_amount = 0;
-        });
-    }
     changeFromSource(item) {
         item.source = 'Manual';
     }
@@ -339,16 +317,6 @@ export class SaleOrderCreateComponent implements OnInit {
         const sub_after_discount = this.order_info.sub_total - this.order_info.total_discount;
         this.order_info['vat_percent_amount'] = parseFloat((sub_after_discount * Number(this.order_info['alt_vat_percent']) / 100).toFixed(2));
         this.order_info.total = this.order_info.sub_total - this.order_info.total_discount + Number(this.order_info['shipping_cost']) + this.order_info['vat_percent_amount'] - this.promotionList['total_invoice_discount'];
-    }
-
-    calcPromotion(company_id) {
-        this.orderService.getActiveProgram(company_id).subscribe(res => {
-            try {
-                this.checkListPromotion(res.results);
-            } catch (e) {
-                console.log(e);
-            }
-        });
     }
 
     deleteAction(id) {
@@ -462,18 +430,12 @@ export class SaleOrderCreateComponent implements OnInit {
         this.generalForm.controls['note'].patchValue(stringNote);
     }
 
-    // Promo Program
-    goPromoDetail = function (item) {
-        if (!item.level || !item.type) { return; }
-        this.openPromotionModal(item);
-    };
-
     remove = function (index) {
         this.data['programs'].splice(index, 1);
     };
 
 
-    createOrder() {
+    createOrder(type) {
         const products = [];
         this.list.items.forEach(function (item) {
             products.push({
@@ -499,121 +461,28 @@ export class SaleOrderCreateComponent implements OnInit {
                     });
                 });
             }
-
         });
-
-        let params = {
-            'items': products,
-            'is_draft_order': 0
-        };
-
-        params = Object.assign({}, this.order_info, this.generalForm.value, params);
-        this.orderService.createOrder(params).subscribe(res => {
-            try {
-                if (res.results.status) {
-                    this.toastr.success(res.results.message);
-                    setTimeout(() => {
-                        this.router.navigate(['/order-management/sale-order']);
-                    }, 500);
-                } else {
-                    this.toastr.error(res.results.message, null, { enableHtml: true });
-                }
-            } catch (e) {
-                console.log(e);
-            }
-        },
-            err => {
-                this.toastr.error(err.message, null, { enableHtml: true });
-            });
-    }
-    saveDraftOrder() {
-        const products = [];
-        this.list.items.forEach(function (item) {
-            products.push({
-                item_id: item.item_id,
-                item_type: item.item_type,
-                quantity: item.order_quantity,
-                sale_price: item.sale_price,
-                discount_percent: item.discount || 0,
-                shipping_address_id: item.shipping_address_id,
-                warehouse_id: item.warehouse_id || 1
-            });
-
-            if (item.products.length > 0) {
-                item.products.forEach(function (subItem, index) {
-                    products.push({
-                        item_id: subItem.item_id,
-                        item_type: item.item_type,
-                        quantity: subItem.order_quantity,
-                        sale_price: subItem.sale_price,
-                        discount_percent: subItem.discount || 0,
-                        shipping_address_id: subItem.shipping_address_id,
-                        warehouse_id: subItem.warehouse_id || 1
-                    });
-                });
-            }
-
-        });
-
-        let params = {
-            'items': products,
-            'is_draft_order': 1
-        };
-
-        params = Object.assign({}, this.order_info, this.generalForm.value, params);
-        this.orderService.createOrder(params).subscribe(res => {
-            try {
-                if (res.results.status) {
-                    this.toastr.success(res.results.message);
-                    setTimeout(() => {
-                        this.router.navigate(['/order-management/sale-order']);
-                    }, 500);
-                } else {
-                    this.toastr.error(res.results.message, null, { enableHtml: true });
-                }
-            } catch (e) {
-                console.log(e);
-            }
-        },
-            err => {
-                this.toastr.error(err.message, null, { enableHtml: true });
-            });
-    }
-    saveQuote() {
-        const products = [];
-        this.list.items.forEach(function (item) {
-            products.push({
-                item_id: item.item_id,
-                item_type: item.item_type,
-                quantity: item.order_quantity,
-                sale_price: item.sale_price,
-                discount_percent: item.discount || 0,
-                shipping_address_id: item.shipping_address_id,
-                warehouse_id: item.warehouse_id || 1
-            });
-
-            if (item.products.length > 0) {
-                item.products.forEach(function (subItem, index) {
-                    products.push({
-                        item_id: subItem.item_id,
-                        item_type: item.item_type,
-                        quantity: subItem.order_quantity,
-                        sale_price: subItem.sale_price,
-                        discount_percent: subItem.discount || 0,
-                        shipping_address_id: subItem.shipping_address_id,
-                        warehouse_id: subItem.warehouse_id || 1
-                    });
-                });
-            }
-
-        });
-
-        let params = {
-            'items': products,
-            'is_draft_order': 0
-        };
-        this.generalForm.controls['type'].patchValue('SAQ');
-
+        let params = {};
+        switch (type) {
+            case 'create':
+                params = {
+                    'items': products,
+                    'is_draft_order': 0
+                };
+                break;
+            case 'quote':
+                params = {
+                    'items': products,
+                    'is_draft_order': 0
+                };
+                break;
+            case 'draft':
+                params = {
+                    'items': products,
+                    'is_draft_order': 1
+                };
+                break;
+        }
         params = Object.assign({}, this.order_info, this.generalForm.value, params);
         this.orderService.createOrder(params).subscribe(res => {
             try {

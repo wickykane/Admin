@@ -27,7 +27,7 @@
                                     Last Sales Date: {{customer.last_sales_order}}
                                 </div>
                                 <div class="col-md-2">
-                                    <a (click)="showViewOrderHistory()">View Order History</a>
+                                    <a (click)="showViewOrderHistory()" href="javascript:void()">View Order History</a>
                                 </div>
                                 <div class="col-md-2">
                                     Current Debt: {{customer.current_dept |currency}}
@@ -84,20 +84,20 @@
                                     </div>
                                     <div class="form-group row" *ngIf="customer.buyer_type =='CP'">
                                         <label class='col-4'>Contact Phone</label>
-                                        <div class='col-8 text-primary'>
+                                        <div class='col-8 '>
                                             {{addr_select.contact.phone}}
                                         </div>
                                     </div>
                                     <div class="form-group row" *ngIf="customer.buyer_type =='CP'">
                                         <label class='col-4'>Contact Email</label>
-                                        <div class='col-8 text-success'>
+                                        <div class='col-8 '>
                                             {{addr_select.contact.email}}
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class='col-4'>Item In Quote</label>
                                         <div class='col-8 text-success'>
-                                            <a (click)="showSaleQuoteList()">{{customer.items_in_quote}}</a>
+                                            <a (click)="showSaleQuoteList()"><strong>{{customer.items_in_quote}}</strong></a>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -132,7 +132,7 @@
                                                 <span class="text-danger">(*)</span>
                                             </label>
                                             <div class='col-8 text-danger'>
-                                                <div class="input-group">
+                                                <div clickOutside (clickOutside)="d.close()" class="input-group">
                                                     <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="order_date" ngbDatepicker #d="ngbDatepicker">
                                                     <div class="input-group-append">
                                                         <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
@@ -438,8 +438,8 @@
                         </div>
                     </div>
                     <div class="col-md-12">
-                        <a (click)="addNewItem(list.items,1, order_info.company_id )" translate>
-                            <i class="fa fa-plus"></i>Add New Item</a>
+                        <button (click)="addNewItem(list.items,1, order_info.company_id )" class="btn btn-outline-dark" translate>
+                            <i class="fa fa-plus"></i>Add New Item</button>
                     </div>
                     <div class="col-md-12 mg-top-15">
                         <div class="row">
@@ -447,7 +447,7 @@
                                 <label for="">Note</label>
                                 <form [formGroup]="generalForm">
                                     <div>
-                                        <textarea class="form-control" formControlName="note" name="" id="" rows="5"></textarea>
+                                        <textarea class="form-control" formControlName="note" name="" id="" rows="5" style="resize:none"></textarea>
                                     </div>
                                 </form>
                             </div>
@@ -503,9 +503,9 @@
         </div>
         <div class="row">
             <div class="col-md-12 mg-top-15 text-center">
-                <button type="button" class="btn btn-outline-info" (click)="saveQuote()" translate>Save As Quote</button>
-                <button type="button" class="btn btn-outline-warning" (click)="saveDraftOrder()" translate>Save As Draft</button>
-                <button type="button" class="btn btn-outline-primary" (click)="createOrder()" translate>Save & Submit</button>
+                <button type="button" class="btn btn-outline-info" (click)="createOrder('quote')" translate>Save As Quote</button>
+                <button type="button" class="btn btn-outline-warning" (click)="createOrder('draft')" translate>Save As Draft</button>
+                <button type="button" class="btn btn-outline-primary" (click)="createOrder('create')" translate>Save & Submit</button>
                 <button type="button" class="btn btn-default" [routerLink]="['/order-management/sale-order']" translate>Cancel</button>
             </div>
         </div>

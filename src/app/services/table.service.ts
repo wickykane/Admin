@@ -6,7 +6,7 @@ export class TableService {
     context: any;
     constructor() { }
 
-    itemPerPageOptions = [15, 30, 50,100];
+    itemPerPageOptions = [15, 30, 50, 100];
     maxSize = 5;
     sortParams = {
         order: null,
@@ -21,10 +21,10 @@ export class TableService {
     changeLength() {
         this.pagination['page'] = 1;
         return this.context[this.getListFnName]();
-    };
+    }
 
     getParams() {
-        var params = {};
+        const params = {};
         params['page'] = this.pagination['page'] || 1;
         params['length'] = this.pagination['length'] || 15;
 
@@ -79,6 +79,6 @@ export class TableService {
         return {
             pagination: this.pagination,
             itemPerPageOptions: this.itemPerPageOptions
-        }
+        };
     }
 }
