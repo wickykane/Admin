@@ -10,18 +10,26 @@ export class ItemKeyService implements OnDestroy {
         this.watchContext.subscribe(res => {
             this.context = res;
             this.initKey();
-        })
+        });
     }
 
     ngOnDestroy() {
-        this._hotkeysService.reset()
+        this.resetKeys();
+    }
+
+    resetKeys() {
+        const keys = this.getKeys();
+        keys.map( key => {
+            this._hotkeysService.remove(key);
+        });
     }
 
     getKeys() {
-        return this._hotkeysService.hotkeys;
+        return Array.from(this._hotkeysService.hotkeys);
     }
 
     initKey() {
+        this.resetKeys();
         this._hotkeysService.add(new Hotkey('alt+n', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             this.context.createOrder();
@@ -90,19 +98,19 @@ export class ItemKeyService implements OnDestroy {
 
         this._hotkeysService.add(new Hotkey('ctrl+1', (event: KeyboardEvent): boolean => {
             event.preventDefault();
-            this.context.selectTab("vin");
+            this.context.selectTab('vin');
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Search by VIN'));
 
         this._hotkeysService.add(new Hotkey('ctrl+2', (event: KeyboardEvent): boolean => {
             event.preventDefault();
-            this.context.selectTab("vehicle");
+            this.context.selectTab('vehicle');
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Search by Vehicle'));
 
         this._hotkeysService.add(new Hotkey('ctrl+3', (event: KeyboardEvent): boolean => {
             event.preventDefault();
-            this.context.selectTab("part_number");
+            this.context.selectTab('part_number');
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Search by Part Number'));
         this._hotkeysService.add(new Hotkey('alt+f', (event: KeyboardEvent): boolean => {
