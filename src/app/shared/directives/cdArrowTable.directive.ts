@@ -32,14 +32,13 @@ export class cdArrowTable implements OnDestroy {
     }
 
     resetKeys() {
-        const keys = this._hotkeysService.hotkeys;
-        for (const key of keys) {
+        const keys = Array.from(this._hotkeysService.hotkeys);
+        keys.map(key => {
             this._hotkeysService.remove(key);
-        }
+        });
     }
 
     hotKeyConfig() {
-        //this.resetKeys();
         this._hotkeysService.add(new Hotkey('up', (event: KeyboardEvent): boolean => {
             if (this._selectedIndex === 0) {
                 return;

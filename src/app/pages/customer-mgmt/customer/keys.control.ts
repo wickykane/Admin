@@ -25,7 +25,7 @@ export class CustomerKeyService implements OnDestroy {
     }
 
     getKeys() {
-        return this._hotkeysService.hotkeys;
+        return Array.from(this._hotkeysService.hotkeys);
     }
 
     initKey() {
