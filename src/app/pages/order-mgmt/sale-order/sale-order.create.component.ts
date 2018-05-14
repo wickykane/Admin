@@ -13,7 +13,7 @@ import { ItemModalContent } from '../../../shared/modals/item.modal';
 import { PromotionModalContent } from '../../../shared/modals/promotion.modal';
 import { OrderHistoryModalContent } from '../../../shared/modals/order-history.modal';
 import { OrderSaleQuoteModalContent } from '../../../shared/modals/order-salequote.modal';
-
+import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 
 
 @Component({
@@ -51,7 +51,7 @@ export class SaleOrderCreateComponent implements OnInit {
 
     public addr_select = {
         shipping: {
-            'address_name' : '',
+            'address_name': '',
             'address_line': '',
             'country_name': '',
             'city_name': '',
@@ -59,7 +59,7 @@ export class SaleOrderCreateComponent implements OnInit {
             'zip_code': ''
         },
         billing: {
-            'address_name' : '',
+            'address_name': '',
             'address_line': '',
             'country_name': '',
             'city_name': '',
@@ -139,6 +139,13 @@ export class SaleOrderCreateComponent implements OnInit {
     /**
      * Mater Data
      */
+    numberMaskObject(max) {
+        return createNumberMask({
+            allowDecimal: true,
+            prefix: '',
+            integerLimit: max || null
+        });
+    }
 
     getListCustomerOption() {
         this.orderService.getAllCustomer().subscribe(res => {
@@ -181,7 +188,7 @@ export class SaleOrderCreateComponent implements OnInit {
         const company_id = this.generalForm.value.company_id;
         this.customer.billing = [];
         this.customer.shipping = [];
-        this.customer.contact = [] ;
+        this.customer.contact = [];
         this.addr_select.shipping.address_line = '';
         this.addr_select.shipping.address_name = '';
         this.addr_select.shipping.country_name = '';
@@ -195,8 +202,8 @@ export class SaleOrderCreateComponent implements OnInit {
         this.addr_select.billing.state_name = '';
         this.addr_select.billing.zip_code = '';
         if (company_id) {
-        //    this.customer:any = Object.assign()
-        //    this.addr_select = Object.assign({}, this.copy_addr);
+            //    this.customer:any = Object.assign()
+            //    this.addr_select = Object.assign({}, this.copy_addr);
             this.getDetailCustomerById(company_id);
             // this.selectAddress('billing');
             // this.selectAddress('shipping');
@@ -208,7 +215,7 @@ export class SaleOrderCreateComponent implements OnInit {
             switch (type) {
                 case 'shipping':
                     const ship_id = this.generalForm.value.shipping_id;
-                    if (ship_id ) {
+                    if (ship_id) {
                         this.addr_select.shipping = this.findDataById(ship_id, this.customer.shipping);
                     }
                     break;
@@ -232,16 +239,16 @@ export class SaleOrderCreateComponent implements OnInit {
         const pattern = /[0-9]/;
         const inputChar = String.fromCharCode(event.charCode);
         if (!pattern.test(inputChar)) {
-          // invalid character, prevent input
-          event.preventDefault();
+            // invalid character, prevent input
+            event.preventDefault();
         }
     }
 
     selectContact() {
         const id = this.generalForm.value.contact_user_id;
-        if ( id) {
+        if (id) {
             const temp = this.customer.contact.filter(x => x.id === id);
-        this.addr_select.contact = temp[0];
+            this.addr_select.contact = temp[0];
         }
     }
 
@@ -397,7 +404,7 @@ export class SaleOrderCreateComponent implements OnInit {
 
                 this.updateTotal();
             }
-        }, dismiss => {});
+        }, dismiss => { });
     }
     // Show order history
     showViewOrderHistory() {
@@ -406,9 +413,9 @@ export class SaleOrderCreateComponent implements OnInit {
             modalRef.componentInstance.company_id = this.generalForm.value.company_id;
             modalRef.result.then(res => {
                 if (res instanceof Array && res.length > 0) {
-                   console.log(res);
+                    console.log(res);
                 }
-            }, dismiss => {});
+            }, dismiss => { });
         }
     }
     showSaleQuoteList() {
@@ -436,23 +443,23 @@ export class SaleOrderCreateComponent implements OnInit {
                     this.generateNote();
                 }
             },
-            dismiss => {});
+                dismiss => { });
             modalRef.componentInstance.company_id = this.generalForm.value.company_id;
         }
 
 
     }
     generateNote() {
-        let arrSale = [ ];
-       const temp =  this.list.items;
-       for (let i = 0; i < temp.length; i++) {
-        if (temp[i].sale_quote_num !== 'undefined') {
-            arrSale.push(temp[i].sale_quote_num);
+        let arrSale = [];
+        const temp = this.list.items;
+        for (let i = 0; i < temp.length; i++) {
+            if (temp[i].sale_quote_num !== 'undefined') {
+                arrSale.push(temp[i].sale_quote_num);
+            }
         }
-       }
-       arrSale = arrSale.reduce((x, y) => x.includes( y ) ? x : [...x, y], []);
-       const stringNote = 'This sales order has items added from Quote:' + arrSale.toString();
-       this.generalForm.controls['note'].patchValue(stringNote);
+        arrSale = arrSale.reduce((x, y) => x.includes(y) ? x : [...x, y], []);
+        const stringNote = 'This sales order has items added from Quote:' + arrSale.toString();
+        this.generalForm.controls['note'].patchValue(stringNote);
     }
 
     // Promo Program
