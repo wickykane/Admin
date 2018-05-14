@@ -307,14 +307,21 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
 
 
     createCustomer() {
-      this.contact.forEach(obj => {
-          obj['pwd_cfrm'] = obj.pwd;
-      });
+        this.contact.forEach(obj => {
+            obj['pwd_cfrm'] = obj.pwd;
+        });
         if (this.generalForm.valid) {
             const params = Object.assign({}, this.generalForm.value);
-            params['user'] = Object.assign([], this.contact);
+            params['user'] = [];
+            if (this.contact.length > 0) {
+                params['user'] = this.contact;
+
+            }
             params['banks'] = [];
-            params['banks'] = this.bank_account;
+            if (this.bank_account.length > 0) {
+                params['banks'] = this.bank_account;
+
+            }
             params['company_child'] = [];
             params['company_child'] = this.company_child;
 
@@ -352,7 +359,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
 
             this.customerService.createCustomer(data).subscribe(
                 res => {
-                  console.log(res);
+                    console.log(res);
                     try {
                         setTimeout(() => {
                             this.router.navigate(['/customer']);

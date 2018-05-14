@@ -9,16 +9,11 @@ export class SortColumnDirective implements OnInit {
 
     }
 
-    ngOnInit() {
-        this.header = this.el.nativeElement.innerText;
-        this.render();
-    }
-
     @Input('sortColumn') sortKey;
     @Input('sortParam') set sortParam(value) {
         this._sortParam = value;
         if (this.header) {
-            if (this._sortParam.order != this.sortKey) {
+            if (this._sortParam.order !== this.sortKey) {
                 this.sort = true;
             }
             this.render();
@@ -29,15 +24,20 @@ export class SortColumnDirective implements OnInit {
     @Output() sortParamChange: EventEmitter<any> = new EventEmitter<any>();
 
     private sort = true;
+
+    ngOnInit() {
+        this.header = this.el.nativeElement.innerText;
+        this.render();
+    }
     @HostListener('click') onClick() {
-        if (this._sortParam.order == this.sortKey) {
+        if (this._sortParam.order === this.sortKey) {
             this.sort = !this.sort;
         }
 
         this._sortParam = {
             order: this.sortKey,
             sort: (this.sort) ? 1 : -1
-        }
+        };
 
         this.render();
 
@@ -51,14 +51,12 @@ export class SortColumnDirective implements OnInit {
             if (this.sort) {
                 this.el.nativeElement.innerHTML = (this.header + '&nbsp;<i class="fa fa-sort-asc" aria-hidden="true"></i>');
                 // ele.html(text + '&nbsp;<i class="fa fa-sort-asc" aria-hidden="true"></i>');
-            }
-            else {
+            }  else {
                 this.el.nativeElement.innerHTML = (this.header + '&nbsp;<i class="fa fa-sort-desc" aria-hidden="true"></i>');
 
                 // element.html(text + '&nbsp;<i class="fa fa-sort-desc" aria-hidden="true"></i>');
             }
-        }
-        else {
+        } else {
             this.el.nativeElement.innerHTML = (this.header + '&nbsp;<i class="fa fa-sort" aria-hidden="true" style="opacity : 0.2"></i>');
             // element.html(text + '&nbsp;<i class="fa fa-sort" aria-hidden="true" style="opacity : 0.2"></i>');
         }
