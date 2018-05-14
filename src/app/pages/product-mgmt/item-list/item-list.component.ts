@@ -152,12 +152,12 @@ export class ItemListComponent implements OnInit {
   }
 
   changeToGetSubCategory() {
-    let id = this.filterForm.value.category_id_filter;
-    let arr = this.listMaster['categories'];
+    const id = this.filterForm.value.category_id_filter;
+    const arr = this.listMaster['categories'];
     this.listMaster['sub_cat'] = [];
-    for (var k = 0; k < id.length; k++) {
-      for (var i = 0; i < arr.length; i++) {
-        if (arr[i]['category_id'] == id[k]) {
+    for (let k = 0; k < id.length; k++) {
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i]['category_id'] === id[k]) {
           this.listMaster['sub_cat'] = this.listMaster['sub_cat'].concat(arr[i]['sub_categories']);
         }
       }
@@ -165,8 +165,8 @@ export class ItemListComponent implements OnInit {
   }
 
   getList() {
-    var params = Object.assign({}, this.tableService.getParams(), this.searchForm.value, this.filterForm.value);
-    Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);
+    const params = Object.assign({}, this.tableService.getParams(), this.searchForm.value, this.filterForm.value);
+    Object.keys(params).forEach((key) => (params[key] == null || params[key] === '') && delete params[key]);
 
     this.productService.getListItem(params).subscribe(res => {
       try {
@@ -190,8 +190,9 @@ export class ItemListComponent implements OnInit {
   }
 
   createOrder() {
-    if (this.list.checklist.length == 0) return;
-    let ids: any = (this.list.checklist.map(_ => { _.order_quantity = 1; return _; }) || []);
+    if (this.list.checklist.length === 0) { return; }
+    const ids: any = (this.list.checklist.map(_ => { _.order_quantity = 1; _.source = 'Manual'; return _; }) || []);
+    console.log(ids);
     this.router.navigateByData({ url: ['order-management/sale-order/create'], data: ids });
     // this.router.navigate(['order-management/sale-order/create', { data : ids }])
   }
