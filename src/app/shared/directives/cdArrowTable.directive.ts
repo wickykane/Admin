@@ -39,7 +39,7 @@ export class cdArrowTable {
     }
 
     hotKeyConfig() {
-        this.resetKeys();
+        //this.resetKeys();
         this._hotkeysService.add(new Hotkey('up', (event: KeyboardEvent): boolean => {
             if (this._selectedIndex == 0) {
                 return;
