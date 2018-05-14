@@ -48,73 +48,69 @@ export class ApiService {
         return httpOptions;
     }
 
-    private _serverError(err) {
-        if (err.error instanceof ErrorEvent) {
-            return new ErrorObservable(JSON.parse(err._body));
+    private handleError(error: Response | any) {
+        // In a real world app, you might use a remote logging infrastructure
+        let errMsg: string;
+        if (error instanceof Response) {
+            const body = error.json() || '';
+            const err = body.error || JSON.stringify(body);
+            errMsg = `${err}`;
+        } else {
+            errMsg = error.message ? error.message : error.toString();
         }
-        return new ErrorObservable(JSON.parse(err._body));
+        return Observable.throw(JSON.parse(errMsg));
     }
+
 
 
     get(path, params?): Observable<any> {
         return this.httpClient.get(`${environment.api_url}${path}`, this.headerOptionDefault(params))
-            .pipe(
-                catchError(this._serverError)
-            );
-        // .map(res => res.json())  // could raise an error if invalid JSON
-        // .do(data => data)  // debug
-        // .catch(this._serverError);
+            // .catch(this.handleError);
+            .map((res: Response) => res);
+
     }
 
     post(path, params: Object = {}): Observable<any> {
         return this.httpClient.post(`${environment.api_url}${path}`, JSON.stringify(params), this.headerOptionDefault())
-            // .map(res => res.json())  // could raise an error if invalid JSON
-            // .do(data => data)  // debug
-            .pipe(
-                catchError(this._serverError)
-            );
+            // .catch(this.handleError);
+            .map((res: Response) => res);
+
     }
 
     put(path, params: Object = {}): Observable<any> {
         return this.httpClient.put(`${environment.api_url}${path}`, JSON.stringify(params), this.headerOptionDefault())
-            // .map(res => res.json())  // could raise an error if invalid JSON
-            // .do(data => data)  // debug
-            .pipe(
-                catchError(this._serverError)
-            );
+            // .catch(this.handleError);
+            .map((res: Response) => res);
+
 
     }
 
     delete(path): Observable<any> {
         return this.httpClient.delete(`${environment.api_url}${path}`, this.headerOptionDefault())
-            // .map(res => res.json())  // could raise an error if invalid JSON
-            // .do(data => data)  // debug
-            // .catch(this._serverError);
-            .pipe(
-                catchError(this._serverError)
-            );
+            // .catch(this.handleError);
+            .map((res: Response) => res);
+
     }
 
     deleteWithParam(path: string, body: Object = {}): Observable<any> {
         return this.httpClient.delete(`${environment.api_url}${path}`, this.headerOptionDefault(body))
-            // .map(res => res.json())  // could raise an error if invalid JSON
-            // .do(data => data)  // debug
-            // .catch(this._serverError);
-            .pipe(
-                catchError(this._serverError)
-            );
+            // .catch(this.handleError);
+            .map((res: Response) => res);
+
     }
 
     postForm(path, formData) {
         return this.http.post(`${environment.api_url}${path}`, this.madeFormData(formData), this.headerFormData())
-            .map(res => res.json())
-            .catch(this._serverError);
+            // .catch(this.handleError);
+            .map((res: Response) => res);
+
     }
 
     putForm(path, formData) {
         return this.http.put(`${environment.api_url}${path}`, this.madeFormData(formData), this.headerFormData())
-            .map(res => res.json())
-            .catch(this._serverError);
+            // .catch(this.handleError);
+            .map((res: Response) => res);
+
     }
 
     madeFormData(data) {
