@@ -486,6 +486,7 @@ export class SaleOrderCreateComponent implements OnInit {
         params = Object.assign({}, this.order_info, this.generalForm.value, params);
         this.orderService.createOrder(params).subscribe(res => {
             try {
+              console.log(res);
                 if (res.results.status) {
                     this.toastr.success(res.results.message);
                     setTimeout(() => {
@@ -499,9 +500,9 @@ export class SaleOrderCreateComponent implements OnInit {
             }
         },
             err => {
+              console.log(err);
                 this.toastr.error(err.message, null, { enableHtml: true });
             });
     }
 
 }
-
