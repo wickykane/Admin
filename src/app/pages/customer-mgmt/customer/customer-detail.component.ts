@@ -1,13 +1,13 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CustomerService } from "../customer.service";
+import { CustomerService } from '../customer.service';
 
-//modal
+// modal
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ItemModalContent } from "../../../shared/modals/item.modal";
-import { AddressModalContent } from "../../../shared/modals/address.modal";
-import { ConfirmModalContent } from "../../../shared/modals/confirm.modal";
+import { ItemModalContent } from '../../../shared/modals/item.modal';
+import { AddressModalContent } from '../../../shared/modals/address.modal';
+import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
 
 
 import { ToastrService } from 'ngx-toastr';
@@ -30,9 +30,9 @@ export class CustomerDetailComponent implements OnInit {
     public users: any = [];
     public listFile: any = [];
     public addressList: any = [];
-    public imageSelected: string = '';
+    public imageSelected: string;
     public listMaster = {};
-    public idSupplier: string = '';
+    public idSupplier: string;
     public removedList: any = [];
     private primaryAddress = [];
     public ADDRESS_TYPE = {
@@ -97,7 +97,7 @@ export class CustomerDetailComponent implements OnInit {
             } catch (e) {
                 console.log(e);
             }
-        })
+        });
     }
     getSalePriceList() {
         this.customerService.getSalePriceList().subscribe(res => {
@@ -110,7 +110,7 @@ export class CustomerDetailComponent implements OnInit {
         });
     }
 
-    //data master country
+    // data master country
     getListCountry() {
         this.customerService.getListCountry().subscribe(res => {
             try {
@@ -120,11 +120,11 @@ export class CustomerDetailComponent implements OnInit {
             }
         });
     }
-    //action change country
+    // action change country
     changeCountry(id, flag) {
-        let params = {
+        const params = {
             country: id
-        }
+        };
         this.getStateByCountry(params, flag);
     }
 
@@ -147,7 +147,7 @@ export class CustomerDetailComponent implements OnInit {
             }
         });
     }
-    //action copy address
+    // action copy address
 
     addNewLine() {
         this.users.push({});
@@ -160,16 +160,16 @@ export class CustomerDetailComponent implements OnInit {
     onFileChange(event) {
         this.listFile = [];
         this.imageSelected = '';
-        let reader = new FileReader();
+        const reader = new FileReader();
         if (event.target.files && event.target.files.length > 0) {
-            let files = event.target.files;
+            const files = event.target.files;
             this.listFile = Object.assign([], files);
             for (let i = 0; i < files.length; i++) {
-                let file = files[i];
+                const file = files[i];
                 reader.readAsDataURL(file);
                 reader.onload = (e) => {
                     this.imageSelected = e.target['result'];
-                }
+                };
             }
 
         }
@@ -178,11 +178,17 @@ export class CustomerDetailComponent implements OnInit {
     mergeAddressList(data) {
         let addressList = [];
 
-        if (data['shipping'].length > 0) addressList = addressList.concat(data['shipping']);
-        if (data['billing'].length > 0) addressList = addressList.concat(data['billing']);
+        if (data['shipping'].length > 0) {
+            addressList = addressList.concat(data['shipping']);
+
+        }
+        if (data['billing'].length > 0) {
+            addressList = addressList.concat(data['billing']);
+
+        }
 
         // add property isCheck to array
-        addressList.map(function (addr) {
+        addressList.map(function(addr) {
             addr.isChecked = false;
             return addr;
         });
@@ -222,15 +228,15 @@ export class CustomerDetailComponent implements OnInit {
             } catch (e) {
 
             }
-        })
+        });
     }
 
     checkItemChecked(item) {
         if (item.isChecked) {
             this.removedList.push(item);
         } else {
-            this.removedList = this.removedList.filter(function (obj) {
-                return obj.isChecked == true;
+            this.removedList = this.removedList.filter(function(obj) {
+                return obj.isChecked === true;
             });
         }
     }
@@ -239,41 +245,47 @@ export class CustomerDetailComponent implements OnInit {
         const modalRef = this.modalService.open(ConfirmModalContent);
         modalRef.result.then(yes => {
             if (yes) {
-                let params = {
+                const params = {
                     buyer_id: this.idSupplier,
                     address_ids: this.removedList.map(x => x.address_id)
-                }
+                };
                 this.customerService.deleteAddress(params).subscribe(res => {
                     try {
                         this.toastr.success(res.message);
-                        this.addressList = this.addressList.filter(function (obj) {
-                            return obj.isChecked == false;
+                        this.addressList = this.addressList.filter(function(obj) {
+                            return obj.isChecked === false;
                         });
                         this.removedList.length = 0;
                     } catch (e) {
                         console.log(e);
                     }
-                })
+                });
             }
         });
-        modalRef.componentInstance.message = "Are you sure you want to delete ?";
+        modalRef.componentInstance.message = 'Are you sure you want to delete ?';
     }
 
     actionUpdate(objAddress) {
-        let data = {};
+        const data = {};
         data['shipping'] = [];
         data['billing'] = [];
 
         objAddress.forEach(item => {
-            if (parseInt(item.type) === 2) data['shipping'].push(item);
-            if (parseInt(item.type) === 1) data['billing'].push(item);
-        })
+            if (parseInt(item.type, 1) === 2) {
+                data['shipping'].push(item);
+
+            }
+            if (parseInt(item.type, 1) === 1) {
+                data['billing'].push(item);
+
+            }
+        });
 
         this.updateSupplier(data);
     }
 
     updateSupplier(array) {
-        let params = Object.assign({}, this.generalForm.value);
+        const params = Object.assign({}, this.generalForm.value);
         params['user'] = Object.assign([], this.users);
         params['primary'] = [];
         params['primary'].push(this.primaryForm.value);
@@ -282,10 +294,10 @@ export class CustomerDetailComponent implements OnInit {
         params['shipping'] = [];
         params['shipping'] = array['shipping'];
 
-        let data = {
+        const data = {
             data: JSON.stringify(params),
             image: this.listFile[0] || null
-        }
+        };
 
         this.customerService.updateBuyer(data, this.idSupplier).subscribe(
             res => {

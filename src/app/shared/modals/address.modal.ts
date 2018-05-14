@@ -21,7 +21,7 @@ export class AddressModalContent implements OnInit {
      */
     generalForm: FormGroup;
 
-    public title: string = '';
+    public title: string;
     public listMaster = {};
 
     constructor(public activeModal: NgbActiveModal,
@@ -45,12 +45,12 @@ export class AddressModalContent implements OnInit {
             'zip_code': [null, Validators.required]
         });
 
-        //Assign get list function name, override variable here
+        // Assign get list function name, override variable here
 
     }
 
     ngOnInit() {
-        //Init Fn
+        // Init Fn
         if (!this.state) {
             this.generalForm.patchValue(this.input);
         }
@@ -73,11 +73,11 @@ export class AddressModalContent implements OnInit {
         });
     }
 
-    //action change country
+    // action change country
     changeCountry(id) {
-        let params = {
+        const params = {
             country: id
-        }
+        };
         this.getStateByCountry(params);
     }
 

@@ -2,7 +2,7 @@ import { Directive, Input, Output, EventEmitter, OnDestroy } from '@angular/core
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 
 @Directive({ selector: '[cdArrowTable]' })
-export class cdArrowTable {
+export class cdArrowTable implements OnDestroy {
     constructor(private _hotkeysService: HotkeysService) {
         this.hotKeyConfig();
     }
@@ -11,17 +11,17 @@ export class cdArrowTable {
 
     @Input() set collection(value: any) {
         this._collection = value;
-        var newValue = value.length;
+        const newValue = value.length;
         if (this.selectedIndex > newValue - 1) {
             this.selectedIndex = newValue - 1;
         } else {
             this.selectedIndex = 0;
         }
-    };
+    }
 
     @Input() set selectedIndex(value: any) {
         this._selectedIndex = value;
-    };
+    }
 
 
     @Output() selectedIndexChange: EventEmitter<any> = new EventEmitter<any>();
@@ -32,7 +32,7 @@ export class cdArrowTable {
     }
 
     resetKeys() {
-        let keys = this._hotkeysService.hotkeys;
+        const keys = this._hotkeysService.hotkeys;
         for (const key of keys) {
             this._hotkeysService.remove(key);
         }
@@ -41,7 +41,7 @@ export class cdArrowTable {
     hotKeyConfig() {
         this.resetKeys();
         this._hotkeysService.add(new Hotkey('up', (event: KeyboardEvent): boolean => {
-            if (this._selectedIndex == 0) {
+            if (this._selectedIndex === 0) {
                 return;
             }
             this._selectedIndex--;
@@ -49,7 +49,7 @@ export class cdArrowTable {
         }, undefined, 'Up'));
 
         this._hotkeysService.add(new Hotkey('down', (event: KeyboardEvent): boolean => {
-            if (this._collection.length == 0 || this._selectedIndex == this._collection.length - 1) {
+            if (this._collection.length === 0 || this._selectedIndex === this._collection.length - 1) {
                 return;
             }
             this._selectedIndex++;

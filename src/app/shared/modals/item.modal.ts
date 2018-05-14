@@ -25,7 +25,7 @@ export class ItemModalContent implements OnInit {
     public list = {
         items: [],
         checklist: []
-    }
+    };
     public checkAllItem;
     public data = {};
 
@@ -67,15 +67,15 @@ export class ItemModalContent implements OnInit {
             'country_id_filter': [null]
         });
 
-        //Assign get list function name, override variable here
+        // Assign get list function name, override variable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
 
     }
 
     ngOnInit() {
-        //Init Fn
-        this.listMaster['certification_partNumber'] = [{ code: "Y", value: "Yes" }, { code: "N", value: "No" }];
+        // Init Fn
+        this.listMaster['certification_partNumber'] = [{ code: 'Y', value: 'Yes' }, { code: 'N', value: 'No' }];
         this.getListReference();
     }
 
@@ -83,10 +83,10 @@ export class ItemModalContent implements OnInit {
         this.itemService.getReferenceList().subscribe(res => {
             try {
                 this.listMaster['models'] = res.data.models;
-                this.listMaster['years'] = res.data.years.map(function (e) { return { id: e, name: e } });
+                this.listMaster['years'] = res.data.years.map(function(e) { return { id: e, name: e }; });
                 this.listMaster['make'] = res.data.manufacturers;
             } catch (e) {
-                console.log(e.message)
+                console.log(e.message);
             }
         });
 
@@ -120,22 +120,22 @@ export class ItemModalContent implements OnInit {
     }
 
     changeToGetSubModel() {
-        let id = this.searchForm.value.model_id;
-        let arr = this.listMaster['models'];
-        for (var i = 0; i < arr.length; i++) {
-            if (arr[i]['model_id'] == id) {
+        const id = this.searchForm.value.model_id;
+        const arr = this.listMaster['models'];
+        for (let i = 0; i < arr.length; i++) {
+            if (arr[i]['model_id'] === id) {
                 return this.listMaster['sub_models'] = arr[i]['sub_models'];
             }
         }
     }
 
     changeToGetSubCategory() {
-        let id = this.filterForm.value.category_id_filter;
-        let arr = this.listMaster['categories'];
+        const id = this.filterForm.value.category_id_filter;
+        const arr = this.listMaster['categories'];
         this.listMaster['sub_cat'] = [];
-        for (var k = 0; k < id.length; k++) {
-            for (var i = 0; i < arr.length; i++) {
-                if (arr[i]['category_id'] == id[k]) {
+        for (let k = 0; k < id.length; k++) {
+            for (let i = 0; i < arr.length; i++) {
+                if (arr[i]['category_id'] === id[k]) {
                     this.listMaster['sub_cat'] = this.listMaster['sub_cat'].concat(arr[i]['sub_categories']);
                 }
             }
@@ -143,8 +143,8 @@ export class ItemModalContent implements OnInit {
     }
 
     getList() {
-        var params = Object.assign({}, this.tableService.getParams(), this.searchForm.value, this.filterForm.value);
-        Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);
+        const params = Object.assign({}, this.tableService.getParams(), this.searchForm.value, this.filterForm.value);
+        Object.keys(params).forEach((key) => (params[key] == null || params[key] === '') && delete params[key]);
 
         this.itemService.getListAllItem(params).subscribe(res => {
             try {
