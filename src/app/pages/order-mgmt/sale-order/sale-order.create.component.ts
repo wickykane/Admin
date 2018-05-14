@@ -425,7 +425,7 @@ export class SaleOrderCreateComponent implements OnInit {
     };
 
 
-    createOrder() {
+    createOrder(type) {
         const products = [];
         this.list.items.forEach(function (item) {
             products.push({
@@ -451,14 +451,28 @@ export class SaleOrderCreateComponent implements OnInit {
                     });
                 });
             }
-
         });
-
-        let params = {
-            'items': products,
-            'is_draft_order': 0
-        };
-
+        let params = {};
+        switch (type) {
+            case 'create':
+                params = {
+                    'items': products,
+                    'is_draft_order': 0
+                };
+                break;
+            case 'quote':
+                params = {
+                    'items': products,
+                    'is_draft_order': 0
+                };
+                break;
+            case 'draft':
+                params = {
+                    'items': products,
+                    'is_draft_order': 1
+                };
+                break;
+        }
         params = Object.assign({}, this.order_info, this.generalForm.value, params);
         this.orderService.createOrder(params).subscribe(res => {
             try {
@@ -478,113 +492,110 @@ export class SaleOrderCreateComponent implements OnInit {
                 this.toastr.error(err.message, null, { enableHtml: true });
             });
     }
-    saveDraftOrder() {
-        const products = [];
-        this.list.items.forEach(function (item) {
-            products.push({
-                item_id: item.item_id,
-                item_type: item.item_type,
-                quantity: item.order_quantity,
-                sale_price: item.sale_price,
-                discount_percent: item.discount || 0,
-                shipping_address_id: item.shipping_address_id,
-                warehouse_id: item.warehouse_id || 1
-            });
+    // saveDraftOrder() {
+    //     const products = [];
+    //     this.list.items.forEach(function (item) {
+    //         products.push({
+    //             item_id: item.item_id,
+    //             item_type: item.item_type,
+    //             quantity: item.order_quantity,
+    //             sale_price: item.sale_price,
+    //             discount_percent: item.discount || 0,
+    //             shipping_address_id: item.shipping_address_id,
+    //             warehouse_id: item.warehouse_id || 1
+    //         });
 
-            if (item.products.length > 0) {
-                item.products.forEach(function (subItem, index) {
-                    products.push({
-                        item_id: subItem.item_id,
-                        item_type: item.item_type,
-                        quantity: subItem.order_quantity,
-                        sale_price: subItem.sale_price,
-                        discount_percent: subItem.discount || 0,
-                        shipping_address_id: subItem.shipping_address_id,
-                        warehouse_id: subItem.warehouse_id || 1
-                    });
-                });
-            }
+    //         if (item.products.length > 0) {
+    //             item.products.forEach(function (subItem, index) {
+    //                 products.push({
+    //                     item_id: subItem.item_id,
+    //                     item_type: item.item_type,
+    //                     quantity: subItem.order_quantity,
+    //                     sale_price: subItem.sale_price,
+    //                     discount_percent: subItem.discount || 0,
+    //                     shipping_address_id: subItem.shipping_address_id,
+    //                     warehouse_id: subItem.warehouse_id || 1
+    //                 });
+    //             });
+    //         }
 
-        });
+    //     });
 
-        let params = {
-            'items': products,
-            'is_draft_order': 1
-        };
+    //     let 
 
-        params = Object.assign({}, this.order_info, this.generalForm.value, params);
-        this.orderService.createOrder(params).subscribe(res => {
-            try {
-                if (res.results.status) {
-                    this.toastr.success(res.results.message);
-                    setTimeout(() => {
-                        this.router.navigate(['/order-management/sale-order']);
-                    }, 500);
-                } else {
-                    this.toastr.error(res.results.message, null, { enableHtml: true });
-                }
-            } catch (e) {
-                console.log(e);
-            }
-        },
-            err => {
-                this.toastr.error(err.message, null, { enableHtml: true });
-            });
-    }
-    saveQuote() {
-        const products = [];
-        this.list.items.forEach(function (item) {
-            products.push({
-                item_id: item.item_id,
-                item_type: item.item_type,
-                quantity: item.order_quantity,
-                sale_price: item.sale_price,
-                discount_percent: item.discount || 0,
-                shipping_address_id: item.shipping_address_id,
-                warehouse_id: item.warehouse_id || 1
-            });
+    //     params = Object.assign({}, this.order_info, this.generalForm.value, params);
+    //     this.orderService.createOrder(params).subscribe(res => {
+    //         try {
+    //             if (res.results.status) {
+    //                 this.toastr.success(res.results.message);
+    //                 setTimeout(() => {
+    //                     this.router.navigate(['/order-management/sale-order']);
+    //                 }, 500);
+    //             } else {
+    //                 this.toastr.error(res.results.message, null, { enableHtml: true });
+    //             }
+    //         } catch (e) {
+    //             console.log(e);
+    //         }
+    //     },
+    //         err => {
+    //             this.toastr.error(err.message, null, { enableHtml: true });
+    //         });
+    // }
+    // saveQuote() {
+    //     const products = [];
+    //     this.list.items.forEach(function (item) {
+    //         products.push({
+    //             item_id: item.item_id,
+    //             item_type: item.item_type,
+    //             quantity: item.order_quantity,
+    //             sale_price: item.sale_price,
+    //             discount_percent: item.discount || 0,
+    //             shipping_address_id: item.shipping_address_id,
+    //             warehouse_id: item.warehouse_id || 1
+    //         });
 
-            if (item.products.length > 0) {
-                item.products.forEach(function (subItem, index) {
-                    products.push({
-                        item_id: subItem.item_id,
-                        item_type: item.item_type,
-                        quantity: subItem.order_quantity,
-                        sale_price: subItem.sale_price,
-                        discount_percent: subItem.discount || 0,
-                        shipping_address_id: subItem.shipping_address_id,
-                        warehouse_id: subItem.warehouse_id || 1
-                    });
-                });
-            }
+    //         if (item.products.length > 0) {
+    //             item.products.forEach(function (subItem, index) {
+    //                 products.push({
+    //                     item_id: subItem.item_id,
+    //                     item_type: item.item_type,
+    //                     quantity: subItem.order_quantity,
+    //                     sale_price: subItem.sale_price,
+    //                     discount_percent: subItem.discount || 0,
+    //                     shipping_address_id: subItem.shipping_address_id,
+    //                     warehouse_id: subItem.warehouse_id || 1
+    //                 });
+    //             });
+    //         }
 
-        });
+    //     });
 
-        let params = {
-            'items': products,
-            'is_draft_order': 0
-        };
-        this.generalForm.controls['type'].patchValue('SAQ');
+    //     let params = {
+    //         'items': products,
+    //         'is_draft_order': 0
+    //     };
+    //     this.generalForm.controls['type'].patchValue('SAQ');
 
-        params = Object.assign({}, this.order_info, this.generalForm.value, params);
-        this.orderService.createOrder(params).subscribe(res => {
-            try {
-                if (res.results.status) {
-                    this.toastr.success(res.results.message);
-                    setTimeout(() => {
-                        this.router.navigate(['/order-management/sale-order']);
-                    }, 500);
-                } else {
-                    this.toastr.error(res.results.message, null, { enableHtml: true });
-                }
-            } catch (e) {
-                console.log(e);
-            }
-        },
-            err => {
-                this.toastr.error(err.message, null, { enableHtml: true });
-            });
-    }
+    //     params = Object.assign({}, this.order_info, this.generalForm.value, params);
+    //     this.orderService.createOrder(params).subscribe(res => {
+    //         try {
+    //             if (res.results.status) {
+    //                 this.toastr.success(res.results.message);
+    //                 setTimeout(() => {
+    //                     this.router.navigate(['/order-management/sale-order']);
+    //                 }, 500);
+    //             } else {
+    //                 this.toastr.error(res.results.message, null, { enableHtml: true });
+    //             }
+    //         } catch (e) {
+    //             console.log(e);
+    //         }
+    //     },
+    //         err => {
+    //             this.toastr.error(err.message, null, { enableHtml: true });
+    //         });
+    // }
 
 }
 
