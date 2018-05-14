@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
+
 
 import { OrderMgmtRoutingModule } from './order-mgmt-routing.module';
 
@@ -62,7 +63,7 @@ import { ItemModalModule } from '../../shared/modals/item.module';
         PrintOrderComponent,
         PrintInvoiceComponent,
         ],
-    providers: [OrderService, TableService],
+    providers: [OrderService, TableService, DatePipe],
     entryComponents: []
 })
 export class OrderMgmtModule { }

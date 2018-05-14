@@ -61,9 +61,9 @@ export class ItemService {
         const url = 'sale-quote/reference/' + company_id;
         return this.API.get(url);
     }
-    getListSalesQuoteItem(company_id) {
+    getListSalesQuoteItem(company_id, params) {
         const url = 'sale-quote/item/list/' + company_id;
-        return this.API.get(url);
+        return this.API.get(url, params);
     }
 
     getListItemReference(company_id) {
