@@ -17,7 +17,7 @@
                 </div>
                 <div class="block-search">
                     <label for="so" class="control-label" translate>Product Code</label>
-                    <select class="form-control" formControlName="sku">
+                    <select class="form-control" formControlName="item_id">
                         <option value="null" selected="true">--Select--</option>
                         <option *ngFor="let item of listMaster['product-code']" [ngValue] = "item.item_id">{{item.sku}}</option>
                       </select>
