@@ -81,14 +81,6 @@ export class MenuComponent implements OnInit {
                     // }
                 ]
             },
-            // {
-            //     flag: 'buyer',
-            //     link: '/customer/buyer',
-            //     main_name: '<u>B</u>uyer List',
-            //     icon: '',
-            //     sub: false,
-            //     child: []
-            // },
             {
                 flag: 'report',
                 link: '/dashboard/reports',

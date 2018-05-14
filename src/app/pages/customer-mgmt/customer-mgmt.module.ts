@@ -6,11 +6,6 @@ import { CustomerSegmentComponent } from './customer-segment/customer-segment.co
 import { CustomerSegmentCreateComponent } from './customer-segment/customer-segment.create.component';
 import { CustomerSegmentEditComponent } from './customer-segment/customer-segment.edit.component';
 
-import { BuyerComponent } from './buyer/buyer.component';
-import { BuyerCreateComponent } from './buyer/buyer-create.component';
-import { BuyerDetailComponent } from './buyer/buyer-detail.component';
-
-
 import { CustomerComponent } from './customer/customer.component';
 import { CustomerCreateComponent } from './customer/customer-create.component';
 import { CustomerDetailComponent } from './customer/customer-detail.component';
@@ -45,7 +40,7 @@ import { ItemModalModule } from '../../shared/modals/item.module';
     ItemModalModule
   ],
   declarations: [CustomerSegmentComponent, CustomerSegmentCreateComponent,
-    CustomerSegmentEditComponent, BuyerComponent, BuyerCreateComponent, BuyerDetailComponent,
+    CustomerSegmentEditComponent,
     CustomerComponent, CustomerCreateComponent, CustomerDetailComponent, CustomerViewComponent,
     CustomerAddressTabComponent, CustomerContactTabComponent, CustomerSiteTabComponent, CustomerQuoteTabComponent,
     CustomerSaleOrderTabComponent, CustomerInvoiceTabComponent, CustomerShipmentTabComponent, CustomerPaymentTabComponent,
