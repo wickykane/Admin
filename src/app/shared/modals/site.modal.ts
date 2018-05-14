@@ -224,9 +224,16 @@ export class SiteModalComponent implements OnInit, OnDestroy {
         });
         if (this.generalForm.valid) {
             const params = Object.assign({}, this.generalForm.value);
-            params['user'] = Object.assign([], this.contact);
+            params['user'] = [];
+            if (this.contact.length > 0) {
+                params['user'] = this.contact;
+
+            }
             params['banks'] = [];
-            params['banks'] = this.bank_account;
+            if (this.bank_account.length > 0) {
+                params['banks'] = this.bank_account;
+
+            }
 
             this.address.forEach(obj => {
                 if (obj.type === 1) {

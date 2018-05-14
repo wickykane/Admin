@@ -87,15 +87,15 @@ export class CustomerComponent implements OnInit {
                     } catch (e) {
                         console.log(e);
                     }
-                })
+                });
             }
         });
-        modalRef.componentInstance.message = "Are you sure you want to delete ?";
+        modalRef.componentInstance.message = 'Are you sure you want to delete ?';
     }
 
     getList() {
-        let params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
-        Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);
+        const params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
+        Object.keys(params).forEach((key) => (params[key] == null || params[key] === '') && delete params[key]);
 
         this.customerService.getListBuyer(params).subscribe(res => {
             try {
