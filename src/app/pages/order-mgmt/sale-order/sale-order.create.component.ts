@@ -132,8 +132,8 @@ export class SaleOrderCreateComponent implements OnInit {
         this.getListCustomerOption();
         this.getOrderReference();
         this.updateTotal();
-        this.copy_addr = Object.assign({}, this.addr_select);
-        this.copy_customer = Object.assign(this.copy_customer, this.addr_select);
+        this.copy_addr = Object.assign(this.copy_addr, this.addr_select);
+        this.copy_customer = Object.assign(this.copy_customer, this.customer);
         this.generalForm.controls['is_multi_shp_addr'].patchValue(0);
     }
     /**
@@ -179,28 +179,10 @@ export class SaleOrderCreateComponent implements OnInit {
 
     changeCustomer() {
         const company_id = this.generalForm.value.company_id;
-        this.customer.billing = [];
-        this.customer.shipping = [];
-        this.customer.contact = [] ;
-        this.addr_select.shipping.address_line = '';
-        this.addr_select.shipping.address_name = '';
-        this.addr_select.shipping.country_name = '';
-        this.addr_select.shipping.city_name = '';
-        this.addr_select.shipping.state_name = '';
-        this.addr_select.shipping.zip_code = '';
-        this.addr_select.billing.address_line = '';
-        this.addr_select.billing.address_name = '';
-        this.addr_select.billing.country_name = '';
-        this.addr_select.billing.city_name = '';
-        this.addr_select.billing.state_name = '';
-        this.addr_select.billing.zip_code = '';
+        this.customer = Object.create(this.copy_customer);
+        this.addr_select = Object.create(this.copy_addr);
         if (company_id) {
-        //    this.customer:any = Object.assign()
-        //    this.addr_select = Object.assign({}, this.copy_addr);
             this.getDetailCustomerById(company_id);
-            // this.selectAddress('billing');
-            // this.selectAddress('shipping');
-            // this.selectContact();
         }
     }
     selectAddress(type) {
@@ -286,13 +268,6 @@ export class SaleOrderCreateComponent implements OnInit {
             return false;
         }
     }
-
-    resetPromo() {
-        this.promotionList = [];
-        this.list.items.forEach(function (item) {
-            item.promotion_discount_amount = 0;
-        });
-    }
     changeFromSource(item) {
         item.source = 'Manual';
     }
@@ -332,16 +307,6 @@ export class SaleOrderCreateComponent implements OnInit {
         const sub_after_discount = this.order_info.sub_total - this.order_info.total_discount;
         this.order_info['vat_percent_amount'] = parseFloat((sub_after_discount * Number(this.order_info['alt_vat_percent']) / 100).toFixed(2));
         this.order_info.total = this.order_info.sub_total - this.order_info.total_discount + Number(this.order_info['shipping_cost']) + this.order_info['vat_percent_amount'] - this.promotionList['total_invoice_discount'];
-    }
-
-    calcPromotion(company_id) {
-        this.orderService.getActiveProgram(company_id).subscribe(res => {
-            try {
-                this.checkListPromotion(res.results);
-            } catch (e) {
-                console.log(e);
-            }
-        });
     }
 
     deleteAction(id) {
@@ -454,12 +419,6 @@ export class SaleOrderCreateComponent implements OnInit {
        const stringNote = 'This sales order has items added from Quote:' + arrSale.toString();
        this.generalForm.controls['note'].patchValue(stringNote);
     }
-
-    // Promo Program
-    goPromoDetail = function (item) {
-        if (!item.level || !item.type) { return; }
-        this.openPromotionModal(item);
-    };
 
     remove = function (index) {
         this.data['programs'].splice(index, 1);
