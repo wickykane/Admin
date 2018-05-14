@@ -6,6 +6,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { OrderService } from '../order-mgmt.service';
+import { routerTransition } from '../../../router.animations';
 import { ToastrService } from 'ngx-toastr';
 import { InvoiceModalContent } from '../../../shared/modals/invoice.modal';
 
@@ -13,7 +14,8 @@ import { InvoiceModalContent } from '../../../shared/modals/invoice.modal';
   selector: 'app-detail-order',
   templateUrl: './sale-order.detail.component.html',
   styleUrls: ['./sale-order.component.scss'],
-  providers: [PrintHtmlService]
+  providers: [PrintHtmlService],
+  animations: [routerTransition()]
 })
 
 export class SaleOrderDetailComponent implements OnInit {
@@ -31,6 +33,7 @@ export class SaleOrderDetailComponent implements OnInit {
   public linkIframe;
   public invList;
   data = {};
+  public orderId;
   /**
    * Init Data
    */
@@ -40,6 +43,7 @@ export class SaleOrderDetailComponent implements OnInit {
 
   ngOnInit() {
     this.data['id'] = this.route.snapshot.paramMap.get('id');
+    this.orderId = this.data['id'];
     this.getDetail(this.data['id']);
     this.getInvoice(this.data['id']);
   }
