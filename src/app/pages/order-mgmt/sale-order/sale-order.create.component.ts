@@ -2,7 +2,7 @@ import { Component, OnInit, ViewContainerRef, ViewEncapsulation } from '@angular
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
+import { DatePipe } from '@angular/common';
 
 import { OrderService } from '../order-mgmt.service';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
@@ -104,13 +104,14 @@ export class SaleOrderCreateComponent implements OnInit {
         private router: Router,
         private route: ActivatedRoute,
         private modalService: NgbModal,
-        private orderService: OrderService) {
+        private orderService: OrderService,
+        private dt: DatePipe ) {
         this.generalForm = fb.group({
             'company_id': [null, Validators.required],
             'customer_po': [null, Validators.required],
             'order_number': [null],
             'type': [null, Validators.required],
-            'order_date': [new Date(), Validators.required],
+            'order_date': [null, Validators.required],
             'delivery_date': [null],
             'contact_user_id': [null],
             'prio_level': [null],
@@ -128,6 +129,7 @@ export class SaleOrderCreateComponent implements OnInit {
         this.listMaster['multi_ship'] = [{ id: 0, label: 'No' }, { id: 1, label: 'Yes' }];
         // Item
         this.list.items = this.router.getNavigatedData() || [];
+        const currentDt = this.dt.transform(new Date(), 'yyyy-MM-dd');
         if (Object.keys(this.list.items).length === 0) { this.list.items = []; }
         this.getListCustomerOption();
         this.getOrderReference();
@@ -135,6 +137,7 @@ export class SaleOrderCreateComponent implements OnInit {
         this.copy_addr = Object.assign(this.copy_addr, this.addr_select);
         this.copy_customer = Object.assign(this.copy_customer, this.customer);
         this.generalForm.controls['is_multi_shp_addr'].patchValue(0);
+        this.generalForm.controls['order_date'].patchValue(currentDt);
     }
     /**
      * Mater Data
@@ -492,110 +495,6 @@ export class SaleOrderCreateComponent implements OnInit {
                 this.toastr.error(err.message, null, { enableHtml: true });
             });
     }
-    // saveDraftOrder() {
-    //     const products = [];
-    //     this.list.items.forEach(function (item) {
-    //         products.push({
-    //             item_id: item.item_id,
-    //             item_type: item.item_type,
-    //             quantity: item.order_quantity,
-    //             sale_price: item.sale_price,
-    //             discount_percent: item.discount || 0,
-    //             shipping_address_id: item.shipping_address_id,
-    //             warehouse_id: item.warehouse_id || 1
-    //         });
-
-    //         if (item.products.length > 0) {
-    //             item.products.forEach(function (subItem, index) {
-    //                 products.push({
-    //                     item_id: subItem.item_id,
-    //                     item_type: item.item_type,
-    //                     quantity: subItem.order_quantity,
-    //                     sale_price: subItem.sale_price,
-    //                     discount_percent: subItem.discount || 0,
-    //                     shipping_address_id: subItem.shipping_address_id,
-    //                     warehouse_id: subItem.warehouse_id || 1
-    //                 });
-    //             });
-    //         }
-
-    //     });
-
-    //     let 
-
-    //     params = Object.assign({}, this.order_info, this.generalForm.value, params);
-    //     this.orderService.createOrder(params).subscribe(res => {
-    //         try {
-    //             if (res.results.status) {
-    //                 this.toastr.success(res.results.message);
-    //                 setTimeout(() => {
-    //                     this.router.navigate(['/order-management/sale-order']);
-    //                 }, 500);
-    //             } else {
-    //                 this.toastr.error(res.results.message, null, { enableHtml: true });
-    //             }
-    //         } catch (e) {
-    //             console.log(e);
-    //         }
-    //     },
-    //         err => {
-    //             this.toastr.error(err.message, null, { enableHtml: true });
-    //         });
-    // }
-    // saveQuote() {
-    //     const products = [];
-    //     this.list.items.forEach(function (item) {
-    //         products.push({
-    //             item_id: item.item_id,
-    //             item_type: item.item_type,
-    //             quantity: item.order_quantity,
-    //             sale_price: item.sale_price,
-    //             discount_percent: item.discount || 0,
-    //             shipping_address_id: item.shipping_address_id,
-    //             warehouse_id: item.warehouse_id || 1
-    //         });
-
-    //         if (item.products.length > 0) {
-    //             item.products.forEach(function (subItem, index) {
-    //                 products.push({
-    //                     item_id: subItem.item_id,
-    //                     item_type: item.item_type,
-    //                     quantity: subItem.order_quantity,
-    //                     sale_price: subItem.sale_price,
-    //                     discount_percent: subItem.discount || 0,
-    //                     shipping_address_id: subItem.shipping_address_id,
-    //                     warehouse_id: subItem.warehouse_id || 1
-    //                 });
-    //             });
-    //         }
-
-    //     });
-
-    //     let params = {
-    //         'items': products,
-    //         'is_draft_order': 0
-    //     };
-    //     this.generalForm.controls['type'].patchValue('SAQ');
-
-    //     params = Object.assign({}, this.order_info, this.generalForm.value, params);
-    //     this.orderService.createOrder(params).subscribe(res => {
-    //         try {
-    //             if (res.results.status) {
-    //                 this.toastr.success(res.results.message);
-    //                 setTimeout(() => {
-    //                     this.router.navigate(['/order-management/sale-order']);
-    //                 }, 500);
-    //             } else {
-    //                 this.toastr.error(res.results.message, null, { enableHtml: true });
-    //             }
-    //         } catch (e) {
-    //             console.log(e);
-    //         }
-    //     },
-    //         err => {
-    //             this.toastr.error(err.message, null, { enableHtml: true });
-    //         });
-    // }
 
 }
 

@@ -24,7 +24,7 @@
                 </div>
                 <div class="block-search">
                     <label for='date' class="control-label" translate>Date</label>
-                    <div class="input-group">
+                    <div clickOutside (clickOutside)="d.close()" class="input-group">
                         <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="quote_date" ngbDatepicker #d="ngbDatepicker">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
