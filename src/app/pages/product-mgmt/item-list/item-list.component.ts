@@ -102,7 +102,7 @@ export class ItemListComponent implements OnInit {
       try {
         this.listMaster['models'] = res.data.models;
         this.listMaster['years'] = res.data.years.map(function (e) { return { id: e, name: e } });
-        this.listMaster['manufacturers'] = res.data.manufacturers;
+        this.listMaster['make'] = res.data.manufacturers;
       } catch (e) {
         console.log(e.message)
       }
