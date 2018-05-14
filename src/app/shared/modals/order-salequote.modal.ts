@@ -42,7 +42,7 @@ export class OrderSaleQuoteModalContent implements OnInit {
 
         this.searchForm = fb.group({
             'sale_quote_id': [null],
-            'sku': [null],
+            'item_id': [null],
             'quote_date': [null]
         });
 
