@@ -95,7 +95,7 @@ export class SaleOrderComponent implements OnInit {
       if (params[key] instanceof Array) {
         params[key] = params[key].join(',');
       }
-      (params[key] == null || params[key] == '') && delete params[key];
+      (params[key] == null || params[key] === '') && delete params[key];
     });
 
     params.order = 'id';

@@ -44,7 +44,7 @@
                                 <label for="type" class="control-label" translate>Make</label>
                                 <select formControlName="manufacturer_id" class="form-control">
                                             <option value="null" selected="true" translate>--Select--</option>
-                                            <option *ngFor="let de of listMaster['manufacturers']" [ngValue]="de.manufacturer_id">{{de.name}}</option>
+                                            <option *ngFor="let de of listMaster['make']" [ngValue]="de.manufacturer_id">{{de.name}}</option>
                                         </select>
                             </div>
                             <div class="block-search">
@@ -161,7 +161,7 @@
             </form>
         </div>
     </div>
-    <div class="block-content pd-top">
+    <div class="block-content pd-top mt-2">
 
         <div class="table-responsive">
             <table class="table table-striped table-vcenter table-hover custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
@@ -173,7 +173,7 @@
                                         <span></span>
                                     </label>
                         </th>
-                        <th translate>Part #</th>
+                        <th translate>Part No</th>
                         <th translate>Oem #</th>
                         <th translate>Partlinks #</th>
                         <th translate>Description</th>

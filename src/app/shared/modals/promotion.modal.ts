@@ -20,21 +20,21 @@ export class PromotionModalContent implements OnInit {
     }
 
     ngOnInit() {
-        //Init Fn
+        // Init Fn
         this.listPromotion = this.data;
     }
 
-    cancel = function () {
+    cancel = function() {
         this.activeModal.close();
     };
 
-    ok = function () {
-        let checkList = [];
+    ok = function() {
+        const checkList = [];
         this.listPromotion.forEach((item) => {
             if (item.is_checked) {
                 checkList.push(item.id);
             }
-        })
+        });
         this.activeModal.close(checkList);
     };
 

@@ -9,8 +9,8 @@ import { JwtService } from '../shared';
 export class AuthenticationService {
     public token: string;
 
-    constructor(public http: Http, private JwtService:JwtService) {
-        var currentUser = JSON.parse( localStorage.getItem( 'currentUser' ) );
+    constructor(public http: Http, private jwtService: JwtService) {
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
         this.token = currentUser && currentUser.token;
     }
 
@@ -21,19 +21,19 @@ export class AuthenticationService {
         return Observable.throw(err || 'backend server error');
     }
 
-    login( params ) {
-        let url = environment.api_url + 'auth/login';
-        return this.http.post( url, params ).map(
-            ( response:Response )=> {
-                let results = response.json().results;
-                let token = results.token;
-                if( token ) {
+    login(params) {
+        const url = environment.api_url + 'auth/login';
+        return this.http.post(url, params).map(
+            (response: Response) => {
+                const results = response.json().results;
+                const token = results.token;
+                if (token) {
                     this.token = token;
                     // console.log( this.jwtHelper.decodeToken( this.token ) );
                     // console.log( this.jwtHelper.getTokenExpirationDate( this.token ) );
                     // console.log( this.jwtHelper.isTokenExpired( this.token ) );
-                    this.JwtService.saveToken( this.token );
-                    localStorage.setItem( 'currentUser', JSON.stringify( results.info) );
+                    this.jwtService.saveToken(this.token);
+                    localStorage.setItem('currentUser', JSON.stringify(results.info));
 
                     return true;
                 } else {
@@ -43,14 +43,14 @@ export class AuthenticationService {
 
             }
         ).do(data => console.log('server data:', data))  // debug
-        .catch(this._serverError);
+            .catch(this._serverError);
     }
 
-    logout():void {
+    logout(): void {
         // clear token remove user from local storage to log user out
         this.token = null;
-        this.JwtService.destroyToken();
-        this.JwtService.destroyUser();
+        this.jwtService.destroyToken();
+        this.jwtService.destroyUser();
     }
 
 

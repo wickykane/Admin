@@ -6,7 +6,7 @@
         <div class="block-content pd-bottom bg-gray-light">
             <div class="row">
                 <div class="col-9">
-                    <form class="row form-horizontal form-search" role="form" [formGroup]="searchForm">
+                    <form class="row form-horizontal form-search filter-order-group" role="form" [formGroup]="searchForm">
                         <div class="col-md-2">
                             <label for="cd" class="control-label" translate>SO #</label>
                             <input type="text" name="cd" formControlName="code" class="form-control" id="cd" placeholder="" capitalize>
@@ -16,11 +16,11 @@
                             <input type="text" name="purchase_quote_cd" formControlName="cus_po" class="form-control" id="purchase_quote_cd" placeholder=""
                                 >
                         </div>
-                        <div class="col-md-2">
+                        <!-- <div class="col-md-2">
                             <label for="contract_no" class="control-label">Sales Quote #</label>
                             <input type="text" name="contract_no" formControlName="sale_quote_num" class="form-control" id="contract_no" placeholder=""
                                 >
-                        </div>
+                        </div> -->
                         <div class="col-md-2">
                             <label for="part" class="control-label">Type</label>
                             <ng-select [multiple]="true" [items]="listMaster['type']" bindLabel="name" bindValue="id" formControlName="type">
@@ -39,7 +39,7 @@
                         <ng-container *ngIf="listMoreFilter[0].value">
                             <div class="col-md-2">
                                 <label for="" class="control-label" translate> Order Date</label>
-                                <div class="input-group">
+                                <div clickOutside (clickOutside)="d.close()" class="input-group">
                                     <input [maxDate]="searchForm.value.date_to | dateObj" class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="date_from"
                                         ngbDatepicker #d="ngbDatepicker">
                                     <div class="input-group-append">
@@ -51,7 +51,7 @@
                             </div>
                             <div class="col-md-2">
                                 <label for="" class="control-label" translate> &nbsp;</label>
-                                <div class="input-group">
+                                <div clickOutside (clickOutside)="dt.close()" class="input-group">
                                     <input [minDate]="searchForm.value.date_from | dateObj" class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="date_to"
                                         ngbDatepicker #dt="ngbDatepicker">
                                     <div class="input-group-append">
@@ -63,7 +63,7 @@
                             </div>
                             <div class="col-md-2">
                                 <label for="" class="control-label" translate> Delivery Date</label>
-                                <div class="input-group">
+                                <div clickOutside (clickOutside)="d1.close()" class="input-group">
                                     <input [maxDate]="searchForm.value.ship_date_to | dateObj" class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="ship_date_from"
                                         ngbDatepicker #d1="ngbDatepicker">
                                     <div class="input-group-append">
@@ -75,7 +75,7 @@
                             </div>
                             <div class="col-md-2">
                                 <label for="" class="control-label" translate> &nbsp;</label>
-                                <div class="input-group">
+                                <div clickOutside (clickOutside)="dt1.close()" class="input-group">
                                     <input [minDate]="searchForm.value.ship_date_from | dateObj" class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="date_to"
                                         ngbDatepicker #dt1="ngbDatepicker">
                                     <div class="input-group-append">
@@ -148,7 +148,7 @@
                             <!-- <td>{{item.sale_quote_num}}</td> -->
                             <td>{{item.buyer_name}}</td>
                             <td class="text-center">
-                                <span *ngIf="item.type == 'PKU'">Pickup</span>                               
+                                <span *ngIf="item.type == 'PKU'">Pickup</span>
                                 <span *ngIf="item.type == 'ONL'">Ecommerce</span>
                                 <span *ngIf="item.type == 'NO'">Regular Order</span>
                             </td>
