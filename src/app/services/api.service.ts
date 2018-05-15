@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Rx';
 import { environment } from '../../environments/environment';
 import { JwtService } from '../shared';
 import { catchError, retry } from 'rxjs/operators';
-import { ErrorObservable } from 'rxjs/observable/ErrorObservable'
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
 @Injectable()
 export class ApiService {
@@ -18,31 +18,31 @@ export class ApiService {
     }
 
     private headerFormData() {
-        let _token = window.localStorage.getItem('token');
-        let _headers = new Headers({ 'Authorization': 'Bearer ' + this.jwtService.getToken() });
-        let _options = new RequestOptions({ headers: _headers });
+        const _token = window.localStorage.getItem('token');
+        const _headers = new Headers({ 'Authorization': 'Bearer ' + this.jwtService.getToken() });
+        const _options = new RequestOptions({ headers: _headers });
         return _options;
     }
 
     private headerJson(params?) {
-        let _token = window.localStorage.getItem('token');
-        let _headers = new Headers({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.jwtService.getToken() });
-        let _options = new RequestOptions({ headers: _headers, params: params });
+        const _token = window.localStorage.getItem('token');
+        const _headers = new Headers({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.jwtService.getToken() });
+        const _options = new RequestOptions({ headers: _headers, params: params });
         return _options;
     }
 
     private headerOptionDefault(params?) {
-        let httpOptions = {
+        const httpOptions = {
             headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.jwtService.getToken() }),
-        }
-        if (params) httpOptions['params'] = params;
+        };
+        if (params) { httpOptions['params'] = params; }
         return httpOptions;
     }
 
     private headerOptionFormData() {
         const httpOptions = {
             headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + this.jwtService.getToken() })
-        }
+        };
         return httpOptions;
     }
 
@@ -50,7 +50,7 @@ export class ApiService {
         if (err.error instanceof ErrorEvent) {
       return new ErrorObservable(JSON.parse(err._body));
         }
-        return new ErrorObservable(JSON.parse(err._body));
+        return new ErrorObservable(err.error);
     }
 
 
@@ -62,7 +62,7 @@ export class ApiService {
         // .map(res => res.json())  // could raise an error if invalid JSON
         // .do(data => data)  // debug
         // .catch(this._serverError);
-    };
+    }
 
     post(path, params: Object = {}): Observable<any> {
         return this.httpClient.post(`${environment.api_url}${path}`, JSON.stringify(params), this.headerOptionDefault())
@@ -71,7 +71,7 @@ export class ApiService {
             .pipe(
             catchError(this._serverError)
             );
-    };
+    }
 
     put(path, params: Object = {}): Observable<any> {
         return this.httpClient.put(`${environment.api_url}${path}`, JSON.stringify(params), this.headerOptionDefault())
@@ -81,7 +81,7 @@ export class ApiService {
             catchError(this._serverError)
             );
 
-    };
+    }
 
     delete(path): Observable<any> {
         return this.httpClient.delete(`${environment.api_url}${path}`, this.headerOptionDefault())
@@ -91,9 +91,9 @@ export class ApiService {
             .pipe(
             catchError(this._serverError)
             );
-    };
+    }
 
-    deleteWithParam( path:string,body:Object = {} ):Observable<any> {
+    deleteWithParam( path: string, body: Object = {} ): Observable<any> {
         return this.httpClient.delete(`${environment.api_url}${path}`, this.headerOptionDefault(body))
             // .map(res => res.json())  // could raise an error if invalid JSON
             // .do(data => data)  // debug
@@ -104,20 +104,27 @@ export class ApiService {
     }
 
     postForm(path, formData) {
-        return  this.http.post( `${environment.api_url}${path}`,this.madeFormData(formData), this.headerFormData())
-            .map(res => res.json())
-            .catch( this._serverError);
-    };
+        return this.httpClient.post(`${environment.api_url}${path}`, this.madeFormData(formData), this.headerOptionDefault())
+            // .map(res => res.json())
+            // .catch(this._serverError);
+            .pipe(
+                catchError(this._serverError)
+            );
+    }
 
     putForm(path, formData) {
-        return  this.http.put( `${environment.api_url}${path}`,this.madeFormData(formData), this.headerFormData())
-            .map(res => res.json())
-            .catch( this._serverError);
-    };
+        return  this.httpClient.put( `${environment.api_url}${path}`, this.madeFormData(formData), this.headerOptionDefault())
+            // .map(res => res.json())
+            // .catch( this._serverError);
+            .pipe(
+                catchError(this._serverError)
+            );
+    }
 
     madeFormData(data) {
-        let formData: FormData = new FormData();
-        for (let i in data) {
+        const formData: FormData = new FormData();
+        // tslint:disable-next-line:forin
+        for (const i in data) {
             formData.append(i, data[i]);
         }
         return formData;

@@ -486,13 +486,13 @@ export class SaleOrderCreateComponent implements OnInit {
         params = Object.assign({}, this.order_info, this.generalForm.value, params);
         this.orderService.createOrder(params).subscribe(res => {
             try {
-                if (res.results.status) {
-                    this.toastr.success(res.results.message);
+                if (res.data.status) {
+                    this.toastr.success(res.data.message);
                     setTimeout(() => {
                         this.router.navigate(['/order-management/sale-order']);
                     }, 500);
                 } else {
-                    this.toastr.error(res.results.message, null, { enableHtml: true });
+                    this.toastr.error(res.data.message, null, { enableHtml: true });
                 }
             } catch (e) {
                 console.log(e);
