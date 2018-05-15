@@ -35,9 +35,7 @@ export class ApiService {
         const httpOptions = {
             headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.jwtService.getToken() }),
         };
-        if (params) {
-            httpOptions['params'] = params;
-        }
+        if (params) { httpOptions['params'] = params; }
         return httpOptions;
     }
 
@@ -50,7 +48,7 @@ export class ApiService {
 
     private _serverError(err) {
         if (err.error instanceof ErrorEvent) {
-            return new ErrorObservable(JSON.parse(err._body));
+      return new ErrorObservable(JSON.parse(err._body));
         }
         return new ErrorObservable(err.error);
     }
@@ -59,7 +57,7 @@ export class ApiService {
     get(path, params?): Observable<any> {
         return this.httpClient.get(`${environment.api_url}${path}`, this.headerOptionDefault(params))
             .pipe(
-                catchError(this._serverError)
+            catchError(this._serverError)
             );
         // .map(res => res.json())  // could raise an error if invalid JSON
         // .do(data => data)  // debug
@@ -71,7 +69,7 @@ export class ApiService {
             // .map(res => res.json())  // could raise an error if invalid JSON
             // .do(data => data)  // debug
             .pipe(
-                catchError(this._serverError)
+            catchError(this._serverError)
             );
     }
 
@@ -80,7 +78,7 @@ export class ApiService {
             // .map(res => res.json())  // could raise an error if invalid JSON
             // .do(data => data)  // debug
             .pipe(
-                catchError(this._serverError)
+            catchError(this._serverError)
             );
 
     }
@@ -91,17 +89,17 @@ export class ApiService {
             // .do(data => data)  // debug
             // .catch(this._serverError);
             .pipe(
-                catchError(this._serverError)
+            catchError(this._serverError)
             );
     }
 
-    deleteWithParam(path: string, body: Object = {}): Observable<any> {
+    deleteWithParam( path: string, body: Object = {} ): Observable<any> {
         return this.httpClient.delete(`${environment.api_url}${path}`, this.headerOptionDefault(body))
             // .map(res => res.json())  // could raise an error if invalid JSON
             // .do(data => data)  // debug
             // .catch(this._serverError);
             .pipe(
-                catchError(this._serverError)
+            catchError(this._serverError)
             );
     }
 
@@ -115,13 +113,17 @@ export class ApiService {
     }
 
     putForm(path, formData) {
-        return this.http.put(`${environment.api_url}${path}`, this.madeFormData(formData), this.headerFormData())
-            .map(res => res.json())
-            .catch(this._serverError);
+        return  this.httpClient.put( `${environment.api_url}${path}`, this.madeFormData(formData), this.headerOptionDefault())
+            // .map(res => res.json())
+            // .catch( this._serverError);
+            .pipe(
+                catchError(this._serverError)
+            );
     }
 
     madeFormData(data) {
         const formData: FormData = new FormData();
+        // tslint:disable-next-line:forin
         for (const i in data) {
             formData.append(i, data[i]);
         }
