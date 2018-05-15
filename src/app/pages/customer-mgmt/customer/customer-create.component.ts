@@ -289,7 +289,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
                 };
 
                 this.site.push(objSite);
-
+                console.log(res);
                 this.company_child.push(res);
                 this.countCode++;
             }
@@ -325,17 +325,18 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
             params['company_child'] = [];
             params['company_child'] = this.company_child;
 
+            params['primary'] = [];
+            params['billing'] = [];
+            params['shipping'] = [];
+
             this.address.forEach(obj => {
                 if (obj.type === 1) {
-                    params['primary'] = [];
                     params['primary'].push(obj);
                 }
                 if (obj.type === 2) {
-                    params['billing'] = [];
                     params['billing'].push(obj);
                 }
                 if (obj.type === 3) {
-                    params['shipping'] = [];
                     params['shipping'].push(obj);
                 }
             });
