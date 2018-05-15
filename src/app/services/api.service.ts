@@ -52,7 +52,7 @@ export class ApiService {
         if (err.error instanceof ErrorEvent) {
             return new ErrorObservable(JSON.parse(err._body));
         }
-        return new ErrorObservable(JSON.parse(err._body));
+        return new ErrorObservable(err.error);
     }
 
 
@@ -106,9 +106,12 @@ export class ApiService {
     }
 
     postForm(path, formData) {
-        return this.http.post(`${environment.api_url}${path}`, this.madeFormData(formData), this.headerFormData())
-            .map(res => res.json())
-            .catch(this._serverError);
+        return this.httpClient.post(`${environment.api_url}${path}`, this.madeFormData(formData), this.headerOptionDefault())
+            // .map(res => res.json())
+            // .catch(this._serverError);
+            .pipe(
+                catchError(this._serverError)
+            );
     }
 
     putForm(path, formData) {
