@@ -234,18 +234,18 @@ export class SiteModalComponent implements OnInit, OnDestroy {
                 params['banks'] = this.bank_account;
 
             }
+            params['primary'] = [];
+            params['billing'] = [];
+            params['shipping'] = [];
 
             this.address.forEach(obj => {
                 if (obj.type === 1) {
-                    params['primary'] = [];
                     params['primary'].push(obj);
                 }
                 if (obj.type === 2) {
-                    params['billing'] = [];
                     params['billing'].push(obj);
                 }
                 if (obj.type === 3) {
-                    params['shipping'] = [];
                     params['shipping'].push(obj);
                 }
             });
