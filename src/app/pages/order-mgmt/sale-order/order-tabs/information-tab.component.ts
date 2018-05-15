@@ -20,21 +20,19 @@ export class SaleOrderInformationTabComponent implements OnInit {
     @Input() set orderId(id) {
         if (id) {
             this._orderId = id;
-            this.getList();
         }
     }
 
     public detail = {
-        information: [],
-        history: [],
+        'total_paid': null,
         subs: [],
-        general: [],
         buyer_info: [],
         billing: []
-      };
-      public linkIframe;
-      public invList;
-      data = {};
+    };
+    data = {};
+    public  totalQTY = 0;
+    public totalShipQTY = 0;
+
     constructor(
         public fb: FormBuilder,
         private vRef: ViewContainerRef,
@@ -44,6 +42,7 @@ export class SaleOrderInformationTabComponent implements OnInit {
 
     ngOnInit() {
         this.getList();
+
     }
 
     /**
@@ -51,17 +50,25 @@ export class SaleOrderInformationTabComponent implements OnInit {
      */
 
     getList() {
+
         this.orderService.getOrderDetail(this._orderId).subscribe(res => {
             try {
-                this.detail.information = res.data.order_detail;
-                this.detail['billing'] = res.data.billing_info[0];
-                this.detail['general'] = res.data;
-                this.detail['subs'] = res.data.subs;
-                this.detail['buyer_info'] = res.data.buyer_info;              
-                this.linkIframe = this.getSrcIframe(this.detail['general']['code']);
-              } catch (e) {
+                this.detail = res.data;
+                this.detail.billing = res.data.billing_info[0];
+                if (this.detail.total_paid === null) {
+                    this.detail.total_paid = 0;
+                }
+                this.detail.subs = res.data.subs;
+                console.log(this.detail);
+                this.detail.subs.forEach( (item) => {
+                    this.totalQTY += item.qty;
+                    this.totalShipQTY += item.qty_shipped;
+                });
+                this.detail.buyer_info = res.data.buyer_info;
+
+            } catch (e) {
                 console.log(e);
-              }
+            }
         });
     }
 
