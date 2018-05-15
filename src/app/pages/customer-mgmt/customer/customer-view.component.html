@@ -1,7 +1,7 @@
 <div [@routerTransition]>
 
     <div class="block-header">
-        <h3 class="block-title-lg">{{customer['company_name'] }} <span *ngIf="customer['parent_compay_name']" class="parent-company">Parent Company: {{customer['parent_compay_name']}}</span> </h3>
+        <h3 class="block-title-lg">{{customer['company_name'] }} <span *ngIf="customer['company_type'] == 'CP' && customer['company_parent_id']" class="parent-company">Parent Company: {{ customer['company_parent_code'] + ' ' + customer['company_parent_name']}}</span> </h3>
     </div>
 
     <!-- <app-shortcut [listShortcut]='customerKeyService.getKeys()'></app-shortcut> -->
@@ -9,7 +9,7 @@
         <div class="informaion">
             <h5 class="text-uppercase font-weight-bold">
               <span>INFORMATION</span>
-              <span *ngIf="customer['company_type'] == 'CP'" style="float:right">PARENT COMPANY: {{ customer['code'] + ' ' + customer['full_name']}}</span>
+              <!-- <span *ngIf="customer['company_type'] == 'CP' && customer['company_parent_id']" style="float:right">PARENT COMPANY: {{ customer['company_parent_code'] + ' ' + customer['company_parent_name']}}</span> -->
             </h5>
             <div class="d-flex">
                 <div class="col-md-3 customer-infomation">
