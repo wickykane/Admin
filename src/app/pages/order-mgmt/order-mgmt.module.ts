@@ -30,6 +30,13 @@ import { SaleQuotationCreateComponent } from './sale-quotation/sale-quotation.cr
 import { SaleQuotationDetailComponent } from './sale-quotation/sale-quotation.detail.component';
 import { SaleQuotationRfqCreateComponent } from './sale-quotation/sale-quotation.rfq.create.component';
 
+// Saleorder Tab
+import { SaleOrderInformationTabComponent } from './sale-order/order-tabs/information-tab.component';
+import { SaleOrderInvoiceTabComponent } from './sale-order/order-tabs/invoice-tab.component';
+import { SaleOrderPaymentTabComponent} from './sale-order/order-tabs/payment-tab.component';
+import { SaleOrderShipmentTabComponent } from './sale-order/order-tabs/shipment-tab.component';
+import { SaleOrderTimelineTabComponent} from './sale-order/order-tabs/timeline-tab.component';
+
 import { CommonShareModule, PageHeaderModule } from '../../shared/index';
 import { TableService } from '../../services/index';
 import { OrderService } from './order-mgmt.service';
@@ -62,6 +69,11 @@ import { ItemModalModule } from '../../shared/modals/item.module';
         SaleOrderDetailComponent,
         PrintOrderComponent,
         PrintInvoiceComponent,
+        SaleOrderInformationTabComponent,
+        SaleOrderInvoiceTabComponent,
+        SaleOrderPaymentTabComponent,
+        SaleOrderShipmentTabComponent,
+        SaleOrderTimelineTabComponent
         ],
     providers: [OrderService, TableService, DatePipe],
     entryComponents: []

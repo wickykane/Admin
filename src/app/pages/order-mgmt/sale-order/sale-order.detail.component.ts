@@ -1,11 +1,12 @@
 import { PrintHtmlService } from './../../../services/print.service';
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Input } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { OrderService } from '../order-mgmt.service';
+import { routerTransition } from '../../../router.animations';
 import { ToastrService } from 'ngx-toastr';
 import { InvoiceModalContent } from '../../../shared/modals/invoice.modal';
 
@@ -13,7 +14,8 @@ import { InvoiceModalContent } from '../../../shared/modals/invoice.modal';
   selector: 'app-detail-order',
   templateUrl: './sale-order.detail.component.html',
   styleUrls: ['./sale-order.component.scss'],
-  providers: [PrintHtmlService]
+  providers: [PrintHtmlService],
+  animations: [routerTransition()]
 })
 
 export class SaleOrderDetailComponent implements OnInit {
@@ -31,6 +33,8 @@ export class SaleOrderDetailComponent implements OnInit {
   public linkIframe;
   public invList;
   data = {};
+  public orderId;
+
   /**
    * Init Data
    */
@@ -40,8 +44,9 @@ export class SaleOrderDetailComponent implements OnInit {
 
   ngOnInit() {
     this.data['id'] = this.route.snapshot.paramMap.get('id');
-    this.getDetail(this.data['id']);
-    this.getInvoice(this.data['id']);
+    this.orderId = this.data['id'];
+    // this.getDetail(this.data['id']);
+
   }
   /**
    * Mater Data
@@ -51,12 +56,6 @@ export class SaleOrderDetailComponent implements OnInit {
       this.orderService.getOrderDetail(id).subscribe(res => {
         try {
           this.detail.information = res.data.order_detail;
-          this.detail['billing'] = res.data.billing_info[0];
-          this.detail['general'] = res.data;
-          this.detail['subs'] = res.data.subs;
-          this.detail['buyer_info'] = res.data.buyer_info;
-          this.getHistoryByOrder(this.detail['general']['code']);
-          this.linkIframe = this.getSrcIframe(this.detail['general']['code']);
         } catch (e) {
           console.log(e);
         }
@@ -67,36 +66,30 @@ export class SaleOrderDetailComponent implements OnInit {
   /**
    * Internal Function
    */
-  showDetail(objInv) {
-    const modalRef = this.modalService.open(InvoiceModalContent, { size: 'lg' });
-    modalRef.result.then(
-      res => {
-        if (res) {
-          this.printInvoice();
-        }
-      },
-      reason => { }
-    );
-    modalRef.componentInstance.detail = objInv;
-    modalRef.componentInstance.name = 'INVOICE NO :' + objInv.general.invoice_num;
-  }
+  // showDetail(objInv) {
+  //   const modalRef = this.modalService.open(InvoiceModalContent, { size: 'lg' });
+  //   modalRef.result.then(
+  //     res => {
+  //       if (res) {
+  //         this.printInvoice();
+  //       }
+  //     },
+  //     reason => { }
+  //   );
+  //   modalRef.componentInstance.detail = objInv;
+  //   modalRef.componentInstance.name = 'INVOICE NO :' + objInv.general.invoice_num;
+  // }
 
-  getInvoice(order_id) {
-    this.orderService.getInvoice(order_id).subscribe((res) => {
-      this.data['invList'] = res.results.rows;
-    });
-  }
+  // getInvoice(order_id) {
+  //   this.orderService.getInvoice(order_id).subscribe((res) => {
+  //     this.data['invList'] = res.results.rows;
+  //   });
+  // }
 
-  getHistoryByOrder(code) {
-    this.orderService.getHistoryByCode(code).subscribe((res) => {
-      this.data['history'] = res.results.rows;
-    });
-  }
-
-  getSrcIframe(order_num) {
-    const url = 'http://wms360.nabp-demo.seldatdirect.com/fe-upload/?transaction=' + order_num;
-    return url;
-  }
+  // getSrcIframe(order_num) {
+  //   const url = 'http://wms360.nabp-demo.seldatdirect.com/fe-upload/?transaction=' + order_num;
+  //   return url;
+  // }
 
   printInvoice() {
     const innerContents = document.getElementById('printInvoice').innerHTML;

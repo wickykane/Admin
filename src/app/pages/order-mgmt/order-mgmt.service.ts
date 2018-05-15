@@ -174,8 +174,8 @@ export class OrderService {
         const url = 'order/get-order-code';
         return this.API.get(url);
     }
-    getHistoryByCode(code) {
-        const url = 'order/history?order_cd=' + code;
+    getHistoryByCode(id) {
+        const url = 'order/history/' + id;
         return this.API.get(url);
     }
     getInvoice(id) {
