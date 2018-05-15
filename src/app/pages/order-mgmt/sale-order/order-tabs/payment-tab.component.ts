@@ -23,7 +23,6 @@ export class SaleOrderPaymentTabComponent implements OnInit {
             this.getList();
         }
     }
-
     public listMaster = {};
 
     public list = {
@@ -36,21 +35,27 @@ export class SaleOrderPaymentTabComponent implements OnInit {
         public fb: FormBuilder,
         private vRef: ViewContainerRef,
         public tableService: TableService,
-        private orderService: OrderService) {
+        private orderService: OrderService
+      ) {
+        // Assign get list function name, override letiable here
+        this.tableService.getListFnName = 'getList';
+        this.tableService.context = this;
     }
 
-    ngOnInit() {
-        this.getList();
-    }
+    ngOnInit() {}
 
     /**
      * Internal Function
      */
 
     getList() {
-        this.orderService.getOrderDetail(this._orderId).subscribe(res => {
+        const params = Object.assign({}, this.tableService.getParams());
+        Object.keys(params).forEach((key) => (params[key] == null || params[key] === '') && delete params[key]);
+
+        this.orderService.getInvoice( this._orderId).subscribe(res => {
             try {
-              console.log(res);
+                this.list.items = [] || res.data.rows;
+                this.tableService.matchPagingOption(res.data);
             } catch (e) {
                 console.log(e);
             }

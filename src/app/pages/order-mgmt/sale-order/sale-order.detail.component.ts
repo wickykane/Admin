@@ -1,5 +1,5 @@
 import { PrintHtmlService } from './../../../services/print.service';
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Input } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -34,6 +34,7 @@ export class SaleOrderDetailComponent implements OnInit {
   public invList;
   data = {};
   public orderId;
+
   /**
    * Init Data
    */
@@ -45,7 +46,7 @@ export class SaleOrderDetailComponent implements OnInit {
     this.data['id'] = this.route.snapshot.paramMap.get('id');
     this.orderId = this.data['id'];
     // this.getDetail(this.data['id']);
-    // this.getInvoice(this.data['id']);
+
   }
   /**
    * Mater Data
@@ -55,12 +56,6 @@ export class SaleOrderDetailComponent implements OnInit {
       this.orderService.getOrderDetail(id).subscribe(res => {
         try {
           this.detail.information = res.data.order_detail;
-          this.detail['billing'] = res.data.billing_info[0];
-          this.detail['general'] = res.data;
-          this.detail['subs'] = res.data.subs;
-          this.detail['buyer_info'] = res.data.buyer_info;
-          // this.getHistoryByOrder(this.detail['general']['code']);
-          // this.linkIframe = this.getSrcIframe(this.detail['general']['code']);
         } catch (e) {
           console.log(e);
         }

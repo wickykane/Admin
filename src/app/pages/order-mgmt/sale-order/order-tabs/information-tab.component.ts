@@ -1,5 +1,5 @@
 import { TableService } from './../../../../services/table.service';
-import { Component, OnInit, ViewContainerRef, Input } from '@angular/core';
+import { Component, OnInit, ViewContainerRef, Input, Output } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { OrderService } from '../../../order-mgmt/order-mgmt.service';
 
@@ -24,10 +24,10 @@ export class SaleOrderInformationTabComponent implements OnInit {
     }
 
     public detail = {
-        'total_paid': null,
-        subs: [],
-        buyer_info: [],
-        billing: []
+        'billing': {},
+        'shipping_address': {},
+        'subs': [],
+        'buyer_info': {}
     };
     data = {};
     public  totalQTY = 0;
@@ -54,17 +54,18 @@ export class SaleOrderInformationTabComponent implements OnInit {
         this.orderService.getOrderDetail(this._orderId).subscribe(res => {
             try {
                 this.detail = res.data;
-                this.detail.billing = res.data.billing_info[0];
-                if (this.detail.total_paid === null) {
-                    this.detail.total_paid = 0;
+                this.detail['billing'] = res.data.billing_info[0];
+                this.detail['shipping_address'] = res.data.shipping_address[0];
+                if (this.detail['total_paid'] === null) {
+                    this.detail['total_paid'] = 0;
                 }
-                this.detail.subs = res.data.subs;
+                this.detail['subs'] = res.data.subs;
                 console.log(this.detail);
-                this.detail.subs.forEach( (item) => {
+                this.detail['subs'].forEach( (item) => {
                     this.totalQTY += item.qty;
                     this.totalShipQTY += item.qty_shipped;
                 });
-                this.detail.buyer_info = res.data.buyer_info;
+                this.detail['buyer_info'] = res.data.buyer_info;
 
             } catch (e) {
                 console.log(e);

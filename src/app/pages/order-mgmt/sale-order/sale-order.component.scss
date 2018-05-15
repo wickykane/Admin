@@ -305,3 +305,20 @@
         max-width: 19.666667%;
     }
 }
+.block-button{
+    right:15px;
+    display: block;
+    position: absolute;
+    .list-btn-custom{
+        list-style: none;
+        li{
+            display: inline-block;
+            margin-left: 10px;
+            button{
+                i{
+                    margin-right:10px;
+                }
+            }
+        }
+    }
+}

@@ -16,11 +16,10 @@ export class SaleOrderTimelineTabComponent implements OnInit {
      * letiable Declaration
      */
 
-    public order_code;
+    public order_id;
     @Input() set orderId(id) {
         if (id) {
-            this.order_code = id;
-            this.getList();
+            this.order_id = id;
         }
     }
     public detail = {
@@ -43,9 +42,9 @@ export class SaleOrderTimelineTabComponent implements OnInit {
      */
 
     getList() {
-        this.orderService.getHistoryByCode(this.order_code).subscribe(res => {
+        this.orderService.getHistoryByCode(this.order_id).subscribe(res => {
             try {
-
+                this.detail.history = res.data;
             } catch (e) {
                 console.log(e);
             }
