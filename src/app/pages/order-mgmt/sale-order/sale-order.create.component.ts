@@ -196,6 +196,7 @@ export class SaleOrderCreateComponent implements OnInit {
         }
         this.list.items = [];
         this.generalForm.controls['note'].patchValue('');
+        this.updateTotal();
     }
     selectAddress(type) {
         try {
