@@ -222,6 +222,14 @@ export class SiteModalComponent implements OnInit, OnDestroy {
         this.contact.forEach(obj => {
             obj['pwd_cfrm'] = obj.pwd;
         });
+        this.bank_account.forEach(obj => {
+            delete obj['listBank'];
+            delete obj['listBranch'];
+        });
+        this.address.forEach(obj => {
+          delete obj['listCountry'];
+          delete obj['listState'];
+        });
         if (this.generalForm.valid) {
             const params = Object.assign({}, this.generalForm.value);
             params['user'] = [];

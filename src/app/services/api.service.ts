@@ -18,10 +18,16 @@ export class ApiService {
     }
 
     private headerFormData() {
-        const _token = window.localStorage.getItem('token');
-        const _headers = new Headers({ 'Authorization': 'Bearer ' + this.jwtService.getToken() });
-        const _options = new RequestOptions({ headers: _headers });
-        return _options;
+        // const _token = window.localStorage.getItem('token');
+        // const _headers = new Headers({ 'Authorization': 'Bearer ' + this.jwtService.getToken() });
+        // const _options = new RequestOptions({ headers: _headers });
+        // return _options;
+
+        const httpOptions = {
+            headers: new HttpHeaders({ 'Authorization': 'Bearer ' + this.jwtService.getToken() }),
+        };
+        // if (params) { httpOptions['params'] = params; }
+        return httpOptions;
     }
 
     private headerJson(params?) {
@@ -48,7 +54,7 @@ export class ApiService {
 
     private _serverError(err) {
         if (err.error instanceof ErrorEvent) {
-      return new ErrorObservable(JSON.parse(err._body));
+            return new ErrorObservable(JSON.parse(err._body));
         }
         return new ErrorObservable(err.error);
     }
@@ -57,7 +63,7 @@ export class ApiService {
     get(path, params?): Observable<any> {
         return this.httpClient.get(`${environment.api_url}${path}`, this.headerOptionDefault(params))
             .pipe(
-            catchError(this._serverError)
+                catchError(this._serverError)
             );
         // .map(res => res.json())  // could raise an error if invalid JSON
         // .do(data => data)  // debug
@@ -69,7 +75,7 @@ export class ApiService {
             // .map(res => res.json())  // could raise an error if invalid JSON
             // .do(data => data)  // debug
             .pipe(
-            catchError(this._serverError)
+                catchError(this._serverError)
             );
     }
 
@@ -78,7 +84,7 @@ export class ApiService {
             // .map(res => res.json())  // could raise an error if invalid JSON
             // .do(data => data)  // debug
             .pipe(
-            catchError(this._serverError)
+                catchError(this._serverError)
             );
 
     }
@@ -89,22 +95,22 @@ export class ApiService {
             // .do(data => data)  // debug
             // .catch(this._serverError);
             .pipe(
-            catchError(this._serverError)
+                catchError(this._serverError)
             );
     }
 
-    deleteWithParam( path: string, body: Object = {} ): Observable<any> {
+    deleteWithParam(path: string, body: Object = {}): Observable<any> {
         return this.httpClient.delete(`${environment.api_url}${path}`, this.headerOptionDefault(body))
             // .map(res => res.json())  // could raise an error if invalid JSON
             // .do(data => data)  // debug
             // .catch(this._serverError);
             .pipe(
-            catchError(this._serverError)
+                catchError(this._serverError)
             );
     }
 
     postForm(path, formData) {
-        return this.httpClient.post(`${environment.api_url}${path}`, this.madeFormData(formData), this.headerOptionDefault())
+        return this.httpClient.post(`${environment.api_url}${path}`, this.madeFormData(formData), this.headerFormData())
             // .map(res => res.json())
             // .catch(this._serverError);
             .pipe(
@@ -113,7 +119,7 @@ export class ApiService {
     }
 
     putForm(path, formData) {
-        return  this.httpClient.put( `${environment.api_url}${path}`, this.madeFormData(formData), this.headerOptionDefault())
+        return this.httpClient.put(`${environment.api_url}${path}`, this.madeFormData(formData), this.headerFormData())
             // .map(res => res.json())
             // .catch( this._serverError);
             .pipe(
