@@ -16,7 +16,7 @@
                         <div class="w-100"></div>
                         <label class="col-sm-2 col-form-label text-label">Sale Quote #</label>
                         <div class="col-sm-3">
-                            <label class="col-form-label control-label">{{detail['sale_quote_num']}} ABCW123</label>
+                            <label class="col-form-label control-label">{{detail['sale_quote_num']}}</label>
                         </div>
                         <label class="col-sm-3 col-form-label text-label">Payment Method</label>
                         <div class="col-sm-4">
@@ -91,23 +91,23 @@
                 <h3 class="block-title" translate>BILLING ADDRESS</h3>
                 <form class="information-tab-content">
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label text-label">Country</label>
+                        <label class="col-sm-4 col-form-label text-label">Country</label>
                         <div class="col-sm-8">
                             <label class="col-form-label control-label">{{detail.billing['country_name']}}</label>
                         </div>
-                        <label class="col-sm-3 col-form-label text-label">Address</label>
+                        <label class="col-sm-4 col-form-label text-label">Address</label>
                         <div class="col-sm-8">
                             <label class="col-form-label control-label">{{detail.billing['address_line']}}</label>
                         </div>
-                        <label class="col-sm-3 col-form-label text-label">City</label>
+                        <label class="col-sm-4 col-form-label text-label">City</label>
                         <div class="col-sm-8">
                             <label class="col-form-label control-label">{{detail.billing['city_name']}}</label>
                         </div>
-                        <label class="col-sm-3 col-form-label text-label">State</label>
+                        <label class="col-sm-4 col-form-label text-label">State</label>
                         <div class="col-sm-8">
                             <label class="col-form-label control-label">{{detail.billing['state_name']}}</label>
                         </div>
-                        <label class="col-sm-3 col-form-label text-label">Zip Code</label>
+                        <label class="col-sm-4 col-form-label text-label">Zip Code</label>
                         <div class="col-sm-8">
                             <label class="col-form-label control-label">{{detail.billing['zip_code']}}</label>
                         </div>
@@ -153,7 +153,7 @@
         </div>
         <div class="col-md-12">
             <div class="" ng-show="detail.subs.length >0">
-                <table class="table table-striped table-vcenter table-hover custom-table">
+                <table class="table table-striped table-vcenter custom-table">
                     <thead class="bg-white">
                         <tr>
                             <th translate>SKU #</th>
@@ -193,7 +193,7 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td></td>
+                            <!-- <td></td> -->
                         </tr>
                         <tr *ngIf="detail.subs.length === 0">
                             <td colspan="100%" class="text-center" translate>No data.</td>
@@ -245,7 +245,7 @@
                   <div class="col-sm-4 text-right">
                       <label class="col-form-label control-label">{{detail['total_price'] |currency}}</label>
                   </div>
-                  <div class="w-100"></div>
+                  <!-- <div class="w-100"></div>
                   <label class="col-sm-4 offset-md-4 col-form-label text-label">Total Paid:</label>
                   <div class="col-sm-4 text-right">
                       <label class="col-form-label control-label"><span class="text-success">{{detail['total_paid'] |currency}}  </span></label>
@@ -254,7 +254,7 @@
                   <label class="col-sm-4 offset-md-4 col-form-label text-label">Balance</label>
                   <div class="col-sm-4 text-right">
                       <label class="col-form-label control-label"><span class="text-danger">{{detail['balance'] |currency}} </span></label>
-                  </div>
+                  </div> -->
               </div>
           </form>
         </div>
