@@ -310,6 +310,14 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         this.contact.forEach(obj => {
             obj['pwd_cfrm'] = obj.pwd;
         });
+        this.bank_account.forEach(obj => {
+            delete obj['listBank'];
+            delete obj['listBranch'];
+        });
+        this.address.forEach(obj => {
+          delete obj['listCountry'];
+          delete obj['listState'];
+        });
         if (this.generalForm.valid) {
             const params = Object.assign({}, this.generalForm.value);
             params['user'] = [];
@@ -357,6 +365,9 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
             const data = {
                 data: JSON.stringify(params)
             };
+
+            console.log(params);
+            console.log(data);
 
             this.customerService.createCustomer(data).subscribe(
                 res => {
