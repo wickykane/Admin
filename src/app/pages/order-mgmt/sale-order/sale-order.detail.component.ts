@@ -1,5 +1,5 @@
 import { PrintHtmlService } from './../../../services/print.service';
-import { Component, OnInit, ElementRef, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ElementRef, ViewChild, Input } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -22,18 +22,13 @@ export class SaleOrderDetailComponent implements OnInit {
   /**
    * Variable Declaration
    */
-  public detail = {
-    information: [],
-    history: [],
-    subs: [],
-    general: [],
-    buyer_info: [],
-    billing: []
-  };
-  public linkIframe;
-  public invList;
+
   data = {};
   public orderId;
+  public orderDetail = {
+    order_sts_short_name: ''
+  };
+
 
   /**
    * Init Data
@@ -45,23 +40,19 @@ export class SaleOrderDetailComponent implements OnInit {
   ngOnInit() {
     this.data['id'] = this.route.snapshot.paramMap.get('id');
     this.orderId = this.data['id'];
-    // this.getDetail(this.data['id']);
-
   }
   /**
    * Mater Data
    */
-  getDetail(id) {
-    if (id) {
-      this.orderService.getOrderDetail(id).subscribe(res => {
-        try {
-          this.detail.information = res.data.order_detail;
-        } catch (e) {
-          console.log(e);
-        }
-      });
-    }
+
+  checkRender(detail) {
+    this.orderDetail = detail;
   }
+  cancel() {
+    console.log('ab');
+    this.router.navigate(['/order-management/sale-order']);
+  }
+
 
   /**
    * Internal Function
@@ -133,7 +124,7 @@ export class SaleOrderDetailComponent implements OnInit {
       'table.table-footer>tbody>tr>td{padding:5px;border:none}' +
       '#footer p{margin-bottom:5px;}' +
       '</style>' +
-      '<title>' + this.detail.general['invoice_num'] + '</title>' +
+      '<title>' + this.orderDetail['invoice_num'] + '</title>' +
       '</head>' +
       '<body onload="window.print()">' + innerContents + '</html>');
     popupWinindow.document.close();
@@ -181,7 +172,7 @@ export class SaleOrderDetailComponent implements OnInit {
       'table.table-footer>tbody>tr>td{padding:5px;border:none}' +
       '#footer p{margin-bottom:5px;}' +
       '</style>' +
-      '<title>' + this.detail.general['code'] + '</title>' +
+      '<title>' + this.orderDetail['code'] + '</title>' +
       '</head>' +
       '<body onload="window.print()">' + innerContents + '</html>');
     popupWinindow.document.close();

@@ -194,6 +194,9 @@ export class SaleOrderCreateComponent implements OnInit {
         if (company_id) {
             this.getDetailCustomerById(company_id);
         }
+        this.list.items = [];
+        this.generalForm.controls['note'].patchValue('');
+        this.updateTotal();
     }
     selectAddress(type) {
         try {
