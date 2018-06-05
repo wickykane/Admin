@@ -1,3 +1,4 @@
+import { CustomerEditComponent } from './customer/customer-edit.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CustomerManagementRoutingModule } from './customer-mgmt-routing.module';
@@ -42,7 +43,7 @@ import { ItemModalModule } from '../../shared/modals/item.module';
   declarations: [CustomerSegmentComponent, CustomerSegmentCreateComponent,
     CustomerSegmentEditComponent,
     CustomerComponent, CustomerCreateComponent, CustomerDetailComponent, CustomerViewComponent,
-    CustomerAddressTabComponent, CustomerContactTabComponent, CustomerSiteTabComponent, CustomerQuoteTabComponent,
+    CustomerAddressTabComponent, CustomerContactTabComponent,CustomerEditComponent, CustomerSiteTabComponent, CustomerQuoteTabComponent,
     CustomerSaleOrderTabComponent, CustomerInvoiceTabComponent, CustomerShipmentTabComponent, CustomerPaymentTabComponent,
     CustomerRMATabComponent, CustomerAccountTabComponent],
   providers: [TableService, CustomerService],
