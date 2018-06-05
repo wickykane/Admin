@@ -9,6 +9,7 @@ import { CustomerComponent } from './customer/customer.component';
 import { CustomerCreateComponent } from './customer/customer-create.component';
 import { CustomerDetailComponent } from './customer/customer-detail.component';
 import { CustomerViewComponent } from './customer/customer-view.component';
+import { CustomerEditComponent } from './customer/customer-edit.component';
 
 const routes: Routes = [
     {
@@ -25,7 +26,8 @@ const routes: Routes = [
             { path: '', component: CustomerComponent },
             { path: 'create', component: CustomerCreateComponent },
             { path: 'detail/:id', component: CustomerDetailComponent },
-            { path: 'view/:id', component: CustomerViewComponent }
+            { path: 'view/:id', component: CustomerViewComponent },
+            { path: 'edit/:id', component: CustomerEditComponent }
         ]
     }
 ];
