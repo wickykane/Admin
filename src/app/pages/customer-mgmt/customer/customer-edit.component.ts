@@ -33,7 +33,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     public listCountry: any = [];
     public listBank: any = [];
 
-    public flagAddress: boolean;
+    public flagAddress: true;
     public flagSite: boolean;
     public flagAccount: boolean;
     public flagContact: boolean;
@@ -82,7 +82,11 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             'username': [null],
             'pwd': [null],
             'pwd_cfrm': [null],
-            'primary': [null]
+            'primary': [null],
+            'credit_used':[null],
+            'credit_limit':[null],
+            'credit_balance':[null]
+
         });
 
         this.hotkeyCtrlRight = hotkeysService.add(new Hotkey('alt+r', (event: KeyboardEvent): boolean => {
@@ -292,6 +296,10 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     }
 
     removeBankAccount(index) {
+        if(this.bank_account[index].hasOwnProperty('id')){
+            this.bank_account[index].is_deleted = true;
+            return;
+        }
         this.bank_account.splice(index, 1);
     }
     // add new row bank card
@@ -310,6 +318,10 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     }
 
     removeContact(index) {
+        if(this.contact[index].hasOwnProperty('id')){
+            this.contact[index].is_deleted = true;
+            return;
+        }
         this.contact.splice(index, 1);
     }
 
