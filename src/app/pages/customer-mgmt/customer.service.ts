@@ -152,4 +152,8 @@ export class CustomerService {
         const url = 'bank/' + bank_id + '/branch/list';
         return this.API.get(url);
     }
+    getRoute() {
+        const url = 'buyer/list-route-gate-time';
+        return this.API.get(url);
+    }
 }

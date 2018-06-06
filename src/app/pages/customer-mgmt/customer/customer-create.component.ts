@@ -32,6 +32,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     public listTypeAddress: any = [];
     public listCountry: any = [];
     public listBank: any = [];
+    public routeList = [];
 
     public flagAddress: boolean;
     public flagSite: boolean;
@@ -88,6 +89,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         this.getListSalePerson();
         this.getListCountryAdmin();
         this.getListBank();
+        this.customerService.getRoute().subscribe(res=>{this.routeList = res.data});
 
     }
 

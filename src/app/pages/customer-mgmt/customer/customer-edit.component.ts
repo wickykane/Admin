@@ -37,6 +37,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     public flagSite: boolean;
     public flagAccount: boolean;
     public flagContact: boolean;
+    public routeList = [];
 
     public users: any = [];
     public listFile: any = [];
@@ -106,7 +107,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         this.getListCustomerType();
         this.getListSalePerson();
         this.getListCountryAdmin();
-
+        this.customerService.getRoute().subscribe(res=>{this.routeList = res.data});
     }
     getDetailSupplier(id) {
         this.idSupplier = id;
@@ -160,7 +161,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             // this.generalForm.patchValue({primary: this})
         }
         else {
-            this.generalForm.patchValue(this.detail['primary'][0]);
+            // this.generalForm.patchValue(this.detail['primary'][0]);
         }
     }
 
@@ -424,7 +425,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                 delete params.email;
             } else {
                 params.pwd_cfrm = params.pwd;
-                delete params.full_name;
+                // delete params.full_name;
 
             }
 
