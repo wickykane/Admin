@@ -33,7 +33,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     public listCountry: any = [];
     public listBank: any = [];
 
-    public flagAddress: true;
+    public flagAddress= true;
     public flagSite: boolean;
     public flagAccount: boolean;
     public flagContact: boolean;
