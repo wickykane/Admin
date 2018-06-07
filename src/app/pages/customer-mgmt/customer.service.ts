@@ -127,7 +127,7 @@ export class CustomerService {
     }
     updateCustomer(id, data) {
         const url = 'buyer/update/'+id;
-        return this.API.putForm(url, data);
+        return this.API.postForm(url, data);
     }
     getListCountryAdmin() {
         const url = 'country/admin/get-all';
@@ -150,6 +150,10 @@ export class CustomerService {
 
     getListBranchByBank(bank_id) {
         const url = 'bank/' + bank_id + '/branch/list';
+        return this.API.get(url);
+    }
+    getRoute() {
+        const url = 'buyer/list-route-gate-time';
         return this.API.get(url);
     }
 }
