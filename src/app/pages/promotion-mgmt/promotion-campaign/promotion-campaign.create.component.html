@@ -32,7 +32,7 @@
                     <label for="created_on" class="control-label" translate>Start date</label>
                     <span class="text-danger">( * )</span>
                     <div class="input-group">
-                        <input [maxDate]='(generalForm.value.end_dt) | dateObj' class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="start_dt" ngbDatepicker #df="ngbDatepicker">
+                        <input [maxDate]='(generalForm.value.end_dt) | dateObj' class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="start_dt" [autoClose]="true" ngbDatepicker #df="ngbDatepicker">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" (click)="df.toggle()" type="button">
                                             <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -43,7 +43,7 @@
                 <div class="col-md-2">
                     <label for="created_on" class="control-label" translate>End date</label>
                     <div class="input-group">
-                        <input [minDate]='(generalForm.value.start_dt) | dateObj' class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="end_dt" ngbDatepicker #dt="ngbDatepicker">
+                        <input [minDate]='(generalForm.value.start_dt) | dateObj' class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="end_dt" [autoClose]="true" ngbDatepicker #dt="ngbDatepicker">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" (click)="dt.toggle()" type="button">
                                             <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -160,7 +160,7 @@
                             </td>
                             <td>
                                 <div class="input-group">
-                                    <input [maxDate]='(item.end_dt) | dateObj' class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="item.start_dt" ngbDatepicker #dt="ngbDatepicker">
+                                    <input [maxDate]='(item.end_dt) | dateObj' class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="item.start_dt" [autoClose]="true" ngbDatepicker #dt="ngbDatepicker">
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-secondary" (click)="dt.toggle()" type="button">
                                             <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -170,7 +170,7 @@
                             </td>
                             <td>
                                 <div class="input-group">
-                                    <input [minDate]='(item.start_dt) | dateObj' class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="item.end_dt" ngbDatepicker #df="ngbDatepicker">
+                                    <input [minDate]='(item.start_dt) | dateObj' class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="item.end_dt" [autoClose]="true" ngbDatepicker #df="ngbDatepicker">
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-secondary" (click)="df.toggle()" type="button">
                                             <i class="fa fa-calendar" aria-hidden="true"></i>

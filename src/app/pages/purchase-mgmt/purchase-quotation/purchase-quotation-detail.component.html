@@ -21,7 +21,7 @@
                         <label for="rqst_dt" class="control-label" >Requested On</label>
                         <span class="text-danger">( * )</span>
                         <div class="input-group">
-                            <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="rqst_dt" ngbDatepicker #d="ngbDatepicker">
+                            <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="rqst_dt" [autoClose]="true" ngbDatepicker #d="ngbDatepicker">
                             <div class="input-group-append">
                                 <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
                                             <i class="fa fa-calendar" aria-hidden="true"></i>

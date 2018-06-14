@@ -38,7 +38,7 @@
                         <div class="block-search" *ngIf="item.value">
                             <label for="{{item.model}}" class="control-label"> {{item.name}}</label>
                             <div class="input-group">
-                                <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="{{item.model}}" ngbDatepicker #d="ngbDatepicker">
+                                <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="{{item.model}}" [autoClose]="true" ngbDatepicker #d="ngbDatepicker">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
                                                 <i class="fa fa-calendar" aria-hidden="true"></i>
