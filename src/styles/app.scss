@@ -7,3 +7,6 @@
 @import "responsive";
 @import "_base.scss";
 @import "~@ng-select/ng-select/themes/default.theme.css";
+.hidden{
+    display: none !important
+}

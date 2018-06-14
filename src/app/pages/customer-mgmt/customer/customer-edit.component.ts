@@ -12,12 +12,12 @@ import { routerTransition } from '../../../router.animations';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 
 @Component({
-    selector: 'app-customer-create',
-    templateUrl: './customer-create.component.html',
+    selector: 'app-customer-edit',
+    templateUrl: './customer-edit.component.html',
     styleUrls: ['./customer.component.scss'],
     animations: [routerTransition()]
 })
-export class CustomerCreateComponent implements OnInit, OnDestroy {
+export class CustomerEditComponent implements OnInit, OnDestroy {
 
     generalForm: FormGroup;
 
@@ -32,15 +32,28 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     public listTypeAddress: any = [];
     public listCountry: any = [];
     public listBank: any = [];
-    public routeList = [];
 
-    public flagAddress: boolean;
+    public flagAddress= true;
     public flagSite: boolean;
     public flagAccount: boolean;
     public flagContact: boolean;
+    public routeList = [];
 
+    public users: any = [];
+    public listFile: any = [];
+    public addressList: any = [];
+    public imageSelected: string;
+    public idSupplier: string;
+    public removedList: any = [];
+    private primaryAddress = [];
+    public ADDRESS_TYPE = {
+        3: 'MAIN',
+        2: 'SHIPPING',
+        1: 'BILLING'
+    };
     public countCode: number;
     public textCode: string;
+    public detail = {};
 
     hotkeyCtrlLeft: Hotkey | Hotkey[];
     hotkeyCtrlRight: Hotkey | Hotkey[];
@@ -50,6 +63,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         public toastr: ToastsManager,
         public vRef: ViewContainerRef,
         private customerService: CustomerService,
+        public route: ActivatedRoute,
         private modalService: NgbModal,
         private hotkeysService: HotkeysService) {
         this.toastr.setRootViewContainerRef(vRef);
@@ -68,7 +82,12 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
             'last_name': [null],
             'username': [null],
             'pwd': [null],
-            'pwd_cfrm': [null]
+            'pwd_cfrm': [null],
+            'primary': [null],
+            'credit_used':[null],
+            'credit_limit':[null],
+            'credit_balance':[null]
+
         });
 
         this.hotkeyCtrlRight = hotkeysService.add(new Hotkey('alt+r', (event: KeyboardEvent): boolean => {
@@ -83,16 +102,39 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         /**
          * Init Data
          */
-        this.listTypeAddress = [{ id: 2, name: 'Billing' }, { id: 3, name: 'Shipping' }];
-
+        this.listTypeAddress = [{ id: 1, name: 'Billing' }, { id: 2, name: 'Shipping' }];
+        this.route.params.subscribe(params => this.getDetailSupplier(params.id));
         this.getListCustomerType();
         this.getListSalePerson();
         this.getListCountryAdmin();
-        this.getListBank();
         this.customerService.getRoute().subscribe(res=>{this.routeList = res.data});
-
     }
+    getDetailSupplier(id) {
+        this.idSupplier = id;
+        this.customerService.getDetailCustomer(this.idSupplier).subscribe(res => {
+            try {
+                this.detail = res.data;
+                this.generalForm.patchValue(this.detail);
+                this.generalForm.patchValue({
+                    'buyer_type': this.detail['company_type'],
+                });
+                this.imageSelected = res.data.img;
+                this.site = res.data['sites'];
+                for (let i = 0; i < this.site.length; i++) {
+                    this.site[i].is_remove = false;
+                    this.company_child.push(this.site[i]);
+                }
+                this.contact = this.detail['user'];
+                this.detail['company_type'] == 'CP' && (res.data['primary'] = res.data['head_office']);
+                this.changeCustomerType();
+                this.getListBank();
+                // this.changeCountry(res.data['primary'][0]['country_code'], 'states_primary');
+                // this.addressList = this.mergeAddressList(res.data);
+            } catch (e) {
 
+            }
+        });
+    }
     ngOnDestroy() {
         this.hotkeysService.remove(this.hotkeyCtrlLeft);
         this.hotkeysService.remove(this.hotkeyCtrlRight);
@@ -111,19 +153,16 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     }
 
     getListTypeAddress() {
-        this.customerService.generateSiteCode().subscribe(res => {
-            try {
-                if (this.generalForm.value.buyer_type === 'CP') {
-                    this.generalForm.patchValue({ code: res.data.CP.code });
-                    this.countCode = Number(res.data.CP.no);
-                    this.textCode = res.data.CP.text;
-                } else {
-                    this.generalForm.patchValue({ code: res.data.PS.code });
-                }
-            } catch (e) {
-
-            }
-        });
+        if (this.generalForm.value.buyer_type === 'CP') {
+            var tmp = this.generalForm.value.code.split('-');
+            this.countCode = Number(tmp[1]);
+            this.textCode = tmp[0] + '-';
+            this.generalForm.patchValue(this.detail['head_office'][0]);
+            // this.generalForm.patchValue({primary: this})
+        }
+        else {
+            // this.generalForm.patchValue(this.detail['primary'][0]);
+        }
     }
 
     getListSalePerson() {
@@ -144,6 +183,11 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         this.customerService.getListBank().subscribe(res => {
             try {
                 this.listBank = res.data;
+                this.bank_account = this.detail['banks'];
+                for (let i = 0; i < this.bank_account.length; i++) {
+                    this.bank_account[i].listBank = this.listBank;
+                    this.changeBank(this.bank_account[i]);
+                }
             } catch (e) {
                 console.log(e);
             }
@@ -154,29 +198,44 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     // change customer Type
     changeCustomerType() {
         this.getListTypeAddress();
-
         if (this.generalForm.value.buyer_type === 'CP') {
-            const tempType = [{ id: 1, name: 'Head Office' }];
-
-            this.address = [{
-                type: 1, listType: tempType, listCountry: this.listCountry, listState: []
-            }, {
-                type: 2, listType: this.listTypeAddress, listCountry: this.listCountry, listState: []
-            }, {
-                type: 3, listType: this.listTypeAddress, listCountry: this.listCountry, listState: []
-            }];
+            for (let i = 0; i < this.detail['head_office'].length; i++) {
+                const element = this.detail['head_office'][i];
+                this.address.push({
+                    ...{
+                        type: 4, listType: [{ id: 4, name: 'Head Office' }], listCountry: this.listCountry, listState: [], allow_remove: false
+                    }, ...element
+                });
+            }
         } else {
-            const tempType1 = [{ id: 1, name: 'Primary' }];
-
-            this.address = [{
-                type: 1, listType: tempType1, listCountry: this.listCountry, listState: []
-            }, {
-                type: 2, listType: this.listTypeAddress, listCountry: this.listCountry, listState: []
-            }, {
-                type: 3, listType: this.listTypeAddress, listCountry: this.listCountry, listState: []
-            }];
+            for (let i = 0; i < this.detail['primary'].length; i++) {
+                const element = this.detail['primary'][i];
+                this.address.push({
+                    ...{
+                        type: 3, listType: [{ id: 3, name: 'Primary' }], listCountry: this.listCountry, listState: [], allow_remove: false
+                    }, ...element
+                });
+            }
         }
-
+        for (let i = 0; i < this.detail['billing'].length; i++) {
+            const element = this.detail['billing'][i];
+            this.address.push({
+                ...{
+                    type: 1, listType: this.listTypeAddress, listCountry: this.listCountry, listState: [], allow_remove: false
+                }, ...element
+            });
+        }
+        for (let i = 0; i < this.detail['shipping'].length; i++) {
+            const element = this.detail['shipping'][i];
+            this.address.push({
+                ...{
+                    type: 2, listType: this.listTypeAddress, listCountry: this.listCountry, listState: [], allow_remove: false
+                }, ...element
+            });
+        }
+        for (let i = 0; i < this.address.length; i++) {
+            this.changeCountry(this.address[i]);
+        }
     }
 
     changeCountry(item) {
@@ -216,14 +275,12 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         })[0];
     }
 
-
-
     // add new row address
     addNewAddress() {
         this.address.push({
             listType: this.listTypeAddress,
             listCountry: this.listCountry,
-            listState: []
+            listState: [], allow_remove: true
         });
     }
 
@@ -240,6 +297,10 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     }
 
     removeBankAccount(index) {
+        if(this.bank_account[index].hasOwnProperty('id')){
+            this.bank_account[index].is_deleted = true;
+            return;
+        }
         this.bank_account.splice(index, 1);
     }
     // add new row bank card
@@ -258,6 +319,10 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     }
 
     removeContact(index) {
+        if(this.contact[index].hasOwnProperty('id')){
+            this.contact[index].is_deleted = true;
+            return;
+        }
         this.contact.splice(index, 1);
     }
 
@@ -267,17 +332,17 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     }
 
     addNewSite() {
-
         const modalRef = this.modalService.open(SiteModalComponent, { size: 'lg' });
         modalRef.result.then(res => {
+            console.log(res);
             if (!this.isEmptyObject(res)) {
-                const state = res.primary[0].listState.filter(x =>
+                const state = this.address[0].listState.filter(x =>
                     res.primary[0].state_id === x.id
                 );
                 const objSite = {
                     code: res.code,
                     full_name: res.full_name,
-                    country: res.primary[0].listCountry.map(x => {
+                    country: this.address[0].listCountry.map(x => {
                         if (res.primary[0].country_code === x.cd) {
                             return x.name;
                         }
@@ -308,7 +373,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     }
 
 
-    createCustomer() {
+    updateCustomer() {
         this.contact.forEach(obj => {
             obj['pwd_cfrm'] = obj.pwd;
         });
@@ -317,8 +382,8 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
             delete obj['listBranch'];
         });
         this.address.forEach(obj => {
-          delete obj['listCountry'];
-          delete obj['listState'];
+            delete obj['listCountry'];
+            delete obj['listState'];
         });
         if (this.generalForm.valid) {
             const params = Object.assign({}, this.generalForm.value);
@@ -340,13 +405,13 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
             params['shipping'] = [];
 
             this.address.forEach(obj => {
-                if (obj.type === 1) {
+                if (obj.type == 4 || obj.type == 3) {
                     params['primary'].push(obj);
                 }
-                if (obj.type === 2) {
+                if (obj.type === 1) {
                     params['billing'].push(obj);
                 }
-                if (obj.type === 3) {
+                if (obj.type === 2) {
                     params['shipping'].push(obj);
                 }
             });
@@ -360,7 +425,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
                 delete params.email;
             } else {
                 params.pwd_cfrm = params.pwd;
-                delete params.full_name;
+                // delete params.full_name;
 
             }
 
@@ -371,7 +436,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
             console.log(params);
             console.log(data);
 
-            this.customerService.createCustomer(data).subscribe(
+            this.customerService.updateCustomer(this.idSupplier, data).subscribe(
                 res => {
                     console.log(res);
                     try {
