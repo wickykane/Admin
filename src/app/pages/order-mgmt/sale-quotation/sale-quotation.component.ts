@@ -2,16 +2,16 @@ import { TableService } from './../../../services/table.service';
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import {OrderService} from '../order-mgmt.service';
+import { OrderService } from '../order-mgmt.service';
 
 import { routerTransition } from '../../../router.animations';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 
 @Component({
-  selector: 'app-sale-quotation',
-  templateUrl: './sale-quotation.component.html',
-  styleUrls: ['./sale-quotation.component.scss'],
+    selector: 'app-sale-quotation',
+    templateUrl: './sale-quotation.component.html',
+    styleUrls: ['./sale-quotation.component.scss'],
     animations: [routerTransition()]
 })
 export class SaleQuotationComponent implements OnInit {
@@ -23,9 +23,6 @@ export class SaleQuotationComponent implements OnInit {
     public list = {
         items: []
     };
-    // public showProduct: boolean = false;
-    public flagId: string = '';
-
     public user: any;
 
     searchForm: FormGroup;
@@ -45,17 +42,16 @@ export class SaleQuotationComponent implements OnInit {
             'rqst_dt': [null]
         });
 
-        //Assign get list function name, override letiable here
+        // Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
     }
 
     ngOnInit() {
-        //Init Fn
+        // Init Fn
         this.getList();
         // this.getListSupplier();
         // this.getListStatus();
-        this.flagId = '0';
         this.user = JSON.parse(localStorage.getItem('currentUser'));
     }
     /**
@@ -67,16 +63,7 @@ export class SaleQuotationComponent implements OnInit {
     /**
      * Internal Function
      */
-     toggleSubRow(id) {
-         if (id === this.flagId) {
-             this.flagId = '0';
-         } else {
-             this.flagId = id;
-         }
-        //  this.showProduct = !this.showProduct;
-     }
-
-     sentMailToBuyer(id){
+    sentMailToBuyer(id) {
         this.orderService.sentMailToBuyer(id).subscribe(res => {
             try {
                 this.toastr.success(res.message);
@@ -88,8 +75,8 @@ export class SaleQuotationComponent implements OnInit {
     }
 
     approveByManager(id) {
-      let params={status:'AM'};
-        this.orderService.updateSaleQuoteStatus(id,params).subscribe(res => {
+        const params = { status: 'AM' };
+        this.orderService.updateSaleQuoteStatus(id, params).subscribe(res => {
             try {
                 this.toastr.success(res.message);
                 this.getList();
@@ -102,8 +89,8 @@ export class SaleQuotationComponent implements OnInit {
 
     getList() {
 
-        let params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
-        Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);
+        const params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
+        Object.keys(params).forEach((key) => (params[key] == null || params[key] === '') && delete params[key]);
 
         this.orderService.getListSalesQuotation(params).subscribe(res => {
             try {
@@ -116,4 +103,3 @@ export class SaleQuotationComponent implements OnInit {
     }
 
 }
-

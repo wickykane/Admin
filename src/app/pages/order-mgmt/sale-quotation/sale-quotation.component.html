@@ -29,7 +29,7 @@
                     <div class="block-search">
                         <label for="" class="control-label"> Requested On</label>
                         <div class="input-group">
-                            <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="rqst_dt" ngbDatepicker #d="ngbDatepicker">
+                            <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="rqst_dt"  [autoClose]="true" ngbDatepicker #d="ngbDatepicker">
                             <div class="input-group-append">
                                 <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
                                     <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -62,7 +62,7 @@
                         <tr>
                             <th translate style="width:8%">Sales Quote #</th>
                             <th translate style="width:8%">Reference #</th>
-                            <th translate>Buyer</th>
+                            <th translate>Customer</th>
                             <th class="text-center" translate style="width:8%">Quote date</th>
                             <th class="text-center" translate style="width:8%">Expiry date</th>
                             <th class="text-center" translate style="width:8%">Total</th>
@@ -113,7 +113,7 @@
                                 </button>
                                 <a ngbTooltip="Click to Update" class="btn btn-default " [routerLink]="['edit', item.id]" *ngIf="item.sts_code == 'SM'">
                                         <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                    </a>  
+                                    </a>
                                 <!-- <button ngbTooltip="Click to Update" data-toggle="tooltip" *ngIf="item.sts_code == 'SM'" type="button" class="btn btn-default"
                                     ng-click="updateDetail(item.id)">
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
