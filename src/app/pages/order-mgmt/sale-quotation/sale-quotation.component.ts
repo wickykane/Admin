@@ -24,6 +24,7 @@ export class SaleQuotationComponent implements OnInit {
         items: []
     };
     public user: any;
+    public onoffFilter: any;
 
     searchForm: FormGroup;
 
@@ -36,10 +37,12 @@ export class SaleQuotationComponent implements OnInit {
         this.toastr.setRootViewContainerRef(vRef);
 
         this.searchForm = fb.group({
-            'cd': [null],
-            'supplier_id': [null],
-            'purchase_quote_status_id': [null],
-            'rqst_dt': [null]
+            'sale_quote_num': [null],
+            'buyer_name': [null],
+            'sts_code': [null],
+            'date_type': [null],
+            'date_from': [null],
+            'date_to': [null]
         });
 
         // Assign get list function name, override letiable here
@@ -49,9 +52,10 @@ export class SaleQuotationComponent implements OnInit {
 
     ngOnInit() {
         // Init Fn
+        this.listMaster['listFilter'] = [{ value: false, name: 'Date Filter' }];
+        this.listMaster['dateType'] = [{ id: 1, name: 'Quote Date' }, { id: 2, name: 'Expiry Date' }, { id: 3, name: 'Exp Delivery Date' }];
         this.getList();
-        // this.getListSupplier();
-        // this.getListStatus();
+        this.getListStatus();
         this.user = JSON.parse(localStorage.getItem('currentUser'));
     }
     /**
@@ -63,6 +67,16 @@ export class SaleQuotationComponent implements OnInit {
     /**
      * Internal Function
      */
+    getListStatus() {
+        this.orderService.getListSaleQuotationStatus().subscribe(res => {
+            try {
+              this.listMaster['listStatus'] = res.data;
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
+
     sentMailToBuyer(id) {
         this.orderService.sentMailToBuyer(id).subscribe(res => {
             try {
