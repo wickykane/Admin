@@ -1,8 +1,9 @@
 import { TableService } from './../../../services/table.service';
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, ViewContainerRef, ElementRef, Renderer, ViewChild } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService } from '../order-mgmt.service';
+import { SaleQuoteKeyService } from './keys.list.control';
 
 import { routerTransition } from '../../../router.animations';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
@@ -12,12 +13,15 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
     selector: 'app-sale-quotation',
     templateUrl: './sale-quotation.component.html',
     styleUrls: ['./sale-quotation.component.scss'],
+    providers: [SaleQuoteKeyService],
     animations: [routerTransition()]
 })
 export class SaleQuotationComponent implements OnInit {
     /**
      * letiable Declaration
      */
+    @ViewChild('inp') inp: ElementRef;
+
     public listMaster = {};
     public selectedIndex = 0;
     public list = {
@@ -33,14 +37,16 @@ export class SaleQuotationComponent implements OnInit {
         public toastr: ToastsManager,
         private vRef: ViewContainerRef,
         public tableService: TableService,
-        private orderService: OrderService) {
+        private orderService: OrderService,
+        public saleQuoteKeyService: SaleQuoteKeyService,
+        private renderer: Renderer) {
         this.toastr.setRootViewContainerRef(vRef);
 
         this.searchForm = fb.group({
             'sale_quote_num': [null],
             'buyer_name': [null],
-            'sts_code': [null],
-            'date_type': [null],
+            'sts': [null],
+            'type': [null],
             'date_from': [null],
             'date_to': [null]
         });
@@ -48,12 +54,14 @@ export class SaleQuotationComponent implements OnInit {
         // Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
+        // Init Key
+        this.saleQuoteKeyService.watchContext.next(this);
     }
 
     ngOnInit() {
         // Init Fn
         this.listMaster['listFilter'] = [{ value: false, name: 'Date Filter' }];
-        this.listMaster['dateType'] = [{ id: 1, name: 'Quote Date' }, { id: 2, name: 'Expiry Date' }, { id: 3, name: 'Exp Delivery Date' }];
+        this.listMaster['dateType'] = [{ id: 'quote_date', name: 'Quote Date' }, { id: 2, name: 'Expiry Date' }, { id: 3, name: 'Exp Delivery Date' }];
         this.getList();
         this.getListStatus();
         this.user = JSON.parse(localStorage.getItem('currentUser'));
@@ -70,11 +78,22 @@ export class SaleQuotationComponent implements OnInit {
     getListStatus() {
         this.orderService.getListSaleQuotationStatus().subscribe(res => {
             try {
-              this.listMaster['listStatus'] = res.data;
+                this.listMaster['listStatus'] = res.data;
             } catch (e) {
                 console.log(e);
             }
         });
+    }
+
+    createOrder() {
+        this.router.navigate(['/order-management/sale-quotation/create']);
+    }
+
+    moreFilter() {
+        this.onoffFilter = !this.onoffFilter;
+        setTimeout(() => {
+            this.renderer.invokeElementMethod(this.inp.nativeElement, 'focus');
+        }, 300);
     }
 
     sentMailToBuyer(id) {
@@ -108,8 +127,8 @@ export class SaleQuotationComponent implements OnInit {
 
         this.orderService.getListSalesQuotation(params).subscribe(res => {
             try {
-                this.list.items = res.results.rows;
-                this.tableService.matchPagingOption(res.results);
+                this.list.items = res.data.rows;
+                this.tableService.matchPagingOption(res.data);
             } catch (e) {
                 console.log(e);
             }

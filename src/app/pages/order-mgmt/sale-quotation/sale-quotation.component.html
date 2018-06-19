@@ -1,6 +1,6 @@
 <div [@routerTransition]>
     <app-page-header [heading]="'LIST OF SALES QUOTATION'" [icon]="'fa-th-list'"></app-page-header>
-
+    <app-shortcut [listShortcut]='saleQuoteKeyService.getKeys()'></app-shortcut>
     <div class="block anchor-scroll">
 
       <div class="block-content pd-bottom bg-gray-light">
@@ -9,11 +9,11 @@
                   <form class="row form-horizontal form-search filter-order-group" role="form" [formGroup]="searchForm">
                       <div class="col-md-4">
                           <label for="sale_quote_num" class="control-label">Sales Quote #</label>
-                          <input type="text" name="sale_quote_num" formControlName="sale_quote_num" class="form-control" placeholder="">
+                          <input autofocus="true" type="text" name="sale_quote_num" formControlName="sale_quote_num" class="form-control" placeholder="">
                       </div>
                       <div class="col-md-4">
-                          <label for="sts_code" class="control-label">Status</label>
-                          <ng-select [multiple]="true" [items]="listMaster['listStatus']" bindLabel="name" bindValue="id" formControlName="sts_code">
+                          <label for="sts" class="control-label">Status</label>
+                          <ng-select [multiple]="true" [items]="listMaster['listStatus']" bindLabel="name" bindValue="cd" formControlName="sts">
                           </ng-select>
                       </div>
                       <div class="col-md-4">
@@ -23,8 +23,8 @@
 
                       <ng-container *ngIf="listMaster['listFilter'][0].value">
                           <div class="col-md-4">
-                              <label for="date_type" class="control-label" translate>Date Type</label>
-                              <select class="form-control" formControlName="date_type">
+                              <label for="type" class="control-label" translate>Date Type</label>
+                              <select class="form-control" formControlName="type">
                                       <option value="null" selected="true">--Select--</option>
                                       <option *ngFor="let item of listMaster['dateType']" [ngValue]="item.id">{{item.name}}</option>
                                   </select>
@@ -60,12 +60,12 @@
                   <div class="block-btn-search">
                       <label class="control-label">&nbsp;</label>
                       <div class="group-btn-search">
-                          <button type="button" class="btn btn-primary" (click)="onoffFilter = !onoffFilter">More Filter</button>
+                          <button type="button" class="btn btn-primary" (click)="moreFilter()">More Filter</button>
                           <div class="show-more" *ngIf="onoffFilter">
-                              <ul>
+                              <ul >
                                   <li *ngFor="let item of listMaster['listFilter']; let i = index;">
                                       <label for="{{i}}">
-                                          <input type="checkbox" value="item.value" [(ngModel)]="item.value"> {{item.name}}
+                                          <input #inp type="checkbox" value="item.value" [(ngModel)]="item.value"> {{item.name}}
                                       </label>
                                   </li>
                               </ul>
@@ -80,7 +80,7 @@
 
 
         <div class="block-content list-order-table">
-            <button [routerLink]="['/order-management/sale-quotation/create']" style="margin: 10px 0;" class="btn btn-primary"
+            <button (click)="createOrder()" style="margin: 10px 0;" class="btn btn-primary"
                 translate>Create Sales Quote</button>
 
             <div class="table-responsive">
@@ -122,13 +122,13 @@
                                 </span>
                             </td>
                             <td>
-                                <span class="label label-info" *ngIf="item.sts_code == 'NW'">{{item.sts}}</span>
-                                <span class="label label-warning" *ngIf="item.sts_code == 'AM'">{{item.sts}}</span>
-                                <span class="label label-danger" *ngIf="item.sts_code == 'CC'">{{item.sts}}</span>
-                                <span class="label  label-success" *ngIf="item.sts_code == 'AB'">{{item.sts}}</span>
-                                <span class="label label-default" *ngIf="item.sts_code == 'RB'">{{item.sts}}</span>
-                                <span class="label label-default" *ngIf="item.sts_code == 'SM'">{{item.sts}}</span>
-                                <span class="label" style="background-color: #a48ad4" *ngIf="item.sts_code == 'RM'">{{item.sts}}</span>
+                                <span class="badge badge-info" *ngIf="item.sts_code == 'NW'">{{item.sts}}</span>
+                                <span class="badge badge-warning" *ngIf="item.sts_code == 'AM'">{{item.sts}}</span>
+                                <span class="badge badge-danger" *ngIf="item.sts_code == 'CC'">{{item.sts}}</span>
+                                <span class="badge badge-success" *ngIf="item.sts_code == 'AB'">{{item.sts}}</span>
+                                <span class="badge badge-primary" *ngIf="item.sts_code == 'RB'">{{item.sts}}</span>
+                                <span class="badge badge-primary" *ngIf="item.sts_code == 'SM'">{{item.sts}}</span>
+                                <span class="badge badge-secondary" *ngIf="item.sts_code == 'RM'">{{item.sts}}</span>
                             </td>
                             <td>
                                 <button ngbTooltip="Click to Approve" data-toggle="tooltip" *ngIf="item.sts_code=='SM'" type="button" class="btn btn-default"
@@ -174,7 +174,7 @@
         </div>
 
         <div class="block-content">
-            <button [routerLink]="['/order-management/sale-quotation/create']" style="margin: 10px 0;" class="btn btn-primary"
+            <button (click)="createOrder()" style="margin: 10px 0;" class="btn btn-primary"
                 translate>Create Sales Quote</button>
 
         </div>
