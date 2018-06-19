@@ -141,7 +141,7 @@
                             </ng-select>
                         </div>
                     </div>
-                    <div class="col-md-3 filter-item">
+                    <div class="col-md-3 filter-item" *ngIf="filterForm.value.category_id_filter">
                         <label for="type" class="control-label" translate>Sub-Category</label>
                         <div class="block-search">
                             <ng-select [multiple]="true" [items]="listMaster['sub_cat']" bindLabel="name" bindValue="category_id" formControlName="sub_category_id">

@@ -31,7 +31,7 @@
                         <label for="created_on" class="control-label" translate>Start Date </label>
                         <span class="text-danger">( * )</span>
                         <div class="input-group">
-                            <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="start_dt" ngbDatepicker #st="ngbDatepicker">
+                            <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="start_dt" [autoClose]="true" ngbDatepicker #st="ngbDatepicker">
                             <div class="input-group-append">
                                 <button class="btn btn-outline-secondary" (click)="st.toggle()" type="button">
                                     <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -43,7 +43,7 @@
                         <label for="created_on" class="control-label" translate>End Date</label>
                         <span class="text-danger">( * )</span>
                         <div class="input-group">
-                            <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="end_dt" ngbDatepicker #ed="ngbDatepicker">
+                            <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="end_dt" [autoClose]="true" ngbDatepicker #ed="ngbDatepicker">
                             <div class="input-group-append">
                                 <button class="btn btn-outline-secondary" (click)="ed.toggle()" type="button">
                                     <i class="fa fa-calendar" aria-hidden="true"></i>

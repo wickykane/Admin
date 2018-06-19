@@ -2,16 +2,16 @@ import { TableService } from './../../../services/table.service';
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import {OrderService} from '../order-mgmt.service';
+import { OrderService } from '../order-mgmt.service';
 
 import { routerTransition } from '../../../router.animations';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 
 @Component({
-  selector: 'app-sale-quotation',
-  templateUrl: './sale-quotation.component.html',
-  styleUrls: ['./sale-quotation.component.scss'],
+    selector: 'app-sale-quotation',
+    templateUrl: './sale-quotation.component.html',
+    styleUrls: ['./sale-quotation.component.scss'],
     animations: [routerTransition()]
 })
 export class SaleQuotationComponent implements OnInit {
@@ -23,10 +23,8 @@ export class SaleQuotationComponent implements OnInit {
     public list = {
         items: []
     };
-    // public showProduct: boolean = false;
-    public flagId: string = '';
-
     public user: any;
+    public onoffFilter: any;
 
     searchForm: FormGroup;
 
@@ -39,23 +37,25 @@ export class SaleQuotationComponent implements OnInit {
         this.toastr.setRootViewContainerRef(vRef);
 
         this.searchForm = fb.group({
-            'cd': [null],
-            'supplier_id': [null],
-            'purchase_quote_status_id': [null],
-            'rqst_dt': [null]
+            'sale_quote_num': [null],
+            'buyer_name': [null],
+            'sts_code': [null],
+            'date_type': [null],
+            'date_from': [null],
+            'date_to': [null]
         });
 
-        //Assign get list function name, override letiable here
+        // Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
     }
 
     ngOnInit() {
-        //Init Fn
+        // Init Fn
+        this.listMaster['listFilter'] = [{ value: false, name: 'Date Filter' }];
+        this.listMaster['dateType'] = [{ id: 1, name: 'Quote Date' }, { id: 2, name: 'Expiry Date' }, { id: 3, name: 'Exp Delivery Date' }];
         this.getList();
-        // this.getListSupplier();
-        // this.getListStatus();
-        this.flagId = '0';
+        this.getListStatus();
         this.user = JSON.parse(localStorage.getItem('currentUser'));
     }
     /**
@@ -67,16 +67,17 @@ export class SaleQuotationComponent implements OnInit {
     /**
      * Internal Function
      */
-     toggleSubRow(id) {
-         if (id === this.flagId) {
-             this.flagId = '0';
-         } else {
-             this.flagId = id;
-         }
-        //  this.showProduct = !this.showProduct;
-     }
+    getListStatus() {
+        this.orderService.getListSaleQuotationStatus().subscribe(res => {
+            try {
+              this.listMaster['listStatus'] = res.data;
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
 
-     sentMailToBuyer(id){
+    sentMailToBuyer(id) {
         this.orderService.sentMailToBuyer(id).subscribe(res => {
             try {
                 this.toastr.success(res.message);
@@ -88,8 +89,8 @@ export class SaleQuotationComponent implements OnInit {
     }
 
     approveByManager(id) {
-      let params={status:'AM'};
-        this.orderService.updateSaleQuoteStatus(id,params).subscribe(res => {
+        const params = { status: 'AM' };
+        this.orderService.updateSaleQuoteStatus(id, params).subscribe(res => {
             try {
                 this.toastr.success(res.message);
                 this.getList();
@@ -102,8 +103,8 @@ export class SaleQuotationComponent implements OnInit {
 
     getList() {
 
-        let params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
-        Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);
+        const params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
+        Object.keys(params).forEach((key) => (params[key] == null || params[key] === '') && delete params[key]);
 
         this.orderService.getListSalesQuotation(params).subscribe(res => {
             try {
@@ -116,4 +117,3 @@ export class SaleQuotationComponent implements OnInit {
     }
 
 }
-

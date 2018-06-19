@@ -3,57 +3,85 @@
 
     <div class="block anchor-scroll">
 
-        <div class="block-content pd-bottom bg-gray-light">
-            <div class="row">
-                <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
-                    <div class="block-search">
-                        <label for="cd" class="control-label">Requisition No</label>
-                        <input type="text" name="cd" formControlName="cd" class="form-control" id="cd" placeholder="" focus-element="focusAuto" capitalize>
-                    </div>
-                    <div class="block-search">
-                        <label for="supplier_id" class="control-label">Supplier</label>
-                        <div class="">
-                            <select class="form-control" formControlName="supplier_id">
-                                <option value="null" selected="true" translate>--Select--</option>
-                                <option *ngFor="let item of listMaster['supplier']" [ngValue]="item.id">{{item.company_name}}</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="block-search">
-                        <label for="purchase_quote_status_id" class="control-label">Status</label>
-                        <select class="form-control" formControlName="purchase_quote_status_id">
-                            <option value="null" selected="true" translate>--Select--</option>
-                            <option *ngFor="let item of listMaster['status']" [ngValue]="item.id">{{item.name}}</option>
-                        </select>
-                    </div>
-                    <div class="block-search">
-                        <label for="" class="control-label"> Requested On</label>
-                        <div class="input-group">
-                            <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="rqst_dt" ngbDatepicker #d="ngbDatepicker">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
-                                    <i class="fa fa-calendar" aria-hidden="true"></i>
-                                </button>
-                            </div>
-                        </div>
+      <div class="block-content pd-bottom bg-gray-light">
+          <div class="row">
+              <div class="col-6">
+                  <form class="row form-horizontal form-search filter-order-group" role="form" [formGroup]="searchForm">
+                      <div class="col-md-4">
+                          <label for="sale_quote_num" class="control-label">Sales Quote #</label>
+                          <input type="text" name="sale_quote_num" formControlName="sale_quote_num" class="form-control" placeholder="">
+                      </div>
+                      <div class="col-md-4">
+                          <label for="sts_code" class="control-label">Status</label>
+                          <ng-select [multiple]="true" [items]="listMaster['listStatus']" bindLabel="name" bindValue="id" formControlName="sts_code">
+                          </ng-select>
+                      </div>
+                      <div class="col-md-4">
+                          <label for="buyer_name" class="control-label" translate>Customer</label>
+                          <input type="text" name="buyer_name" formControlName="buyer_name" class="form-control" placeholder="">
+                      </div>
 
-                    </div>
-
-                    <div class="block-btn-search">
-                        <label class="control-label">&nbsp;</label>
-                        <div>
-                            <button type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Search</button>
-                            <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchForm)" translate>Reset</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
+                      <ng-container *ngIf="listMaster['listFilter'][0].value">
+                          <div class="col-md-4">
+                              <label for="date_type" class="control-label" translate>Date Type</label>
+                              <select class="form-control" formControlName="date_type">
+                                      <option value="null" selected="true">--Select--</option>
+                                      <option *ngFor="let item of listMaster['dateType']" [ngValue]="item.id">{{item.name}}</option>
+                                  </select>
+                          </div>
+                          <div class="col-md-4">
+                              <label for="" class="control-label" translate>&nbsp;</label>
+                              <div clickOutside (clickOutside)="d1.close()" class="input-group">
+                                  <input [maxDate]="searchForm.value.date_to | dateObj" class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="date_from"
+                                      [autoClose]="true" ngbDatepicker #d1="ngbDatepicker">
+                                  <div class="input-group-append">
+                                      <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
+                                          <i class="fa fa-calendar" aria-hidden="true"></i>
+                                      </button>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-md-4">
+                              <label for="" class="control-label" translate> &nbsp;</label>
+                              <div clickOutside (clickOutside)="dt2.close()" class="input-group">
+                                  <input [minDate]="searchForm.value.date_from | dateObj" class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="date_to"
+                                      [autoClose]="true" ngbDatepicker #dt2="ngbDatepicker">
+                                  <div class="input-group-append">
+                                      <button class="btn btn-outline-secondary" (click)="dt2.toggle()" type="button">
+                                          <i class="fa fa-calendar" aria-hidden="true"></i>
+                                      </button>
+                                  </div>
+                              </div>
+                          </div>
+                      </ng-container>
+                  </form>
+              </div>
+              <div class="col-3">
+                  <div class="block-btn-search">
+                      <label class="control-label">&nbsp;</label>
+                      <div class="group-btn-search">
+                          <button type="button" class="btn btn-primary" (click)="onoffFilter = !onoffFilter">More Filter</button>
+                          <div class="show-more" *ngIf="onoffFilter">
+                              <ul>
+                                  <li *ngFor="let item of listMaster['listFilter']; let i = index;">
+                                      <label for="{{i}}">
+                                          <input type="checkbox" value="item.value" [(ngModel)]="item.value"> {{item.name}}
+                                      </label>
+                                  </li>
+                              </ul>
+                          </div>
+                          <button type="button" class="btn btn-primary" (click)="tableService.searchAction()">Search</button>
+                          <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchForm)">Reset</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
 
 
         <div class="block-content list-order-table">
             <button [routerLink]="['/order-management/sale-quotation/create']" style="margin: 10px 0;" class="btn btn-primary"
-                translate>Add New</button>
+                translate>Create Sales Quote</button>
 
             <div class="table-responsive">
                 <table class="table table-striped table-vcenter custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex"
@@ -62,7 +90,7 @@
                         <tr>
                             <th translate style="width:8%">Sales Quote #</th>
                             <th translate style="width:8%">Reference #</th>
-                            <th translate>Buyer</th>
+                            <th translate>Customer</th>
                             <th class="text-center" translate style="width:8%">Quote date</th>
                             <th class="text-center" translate style="width:8%">Expiry date</th>
                             <th class="text-center" translate style="width:8%">Total</th>
@@ -113,7 +141,7 @@
                                 </button>
                                 <a ngbTooltip="Click to Update" class="btn btn-default " [routerLink]="['edit', item.id]" *ngIf="item.sts_code == 'SM'">
                                         <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                    </a>  
+                                    </a>
                                 <!-- <button ngbTooltip="Click to Update" data-toggle="tooltip" *ngIf="item.sts_code == 'SM'" type="button" class="btn btn-default"
                                     ng-click="updateDetail(item.id)">
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
@@ -146,8 +174,8 @@
         </div>
 
         <div class="block-content">
-            <button [routerLink]="['/purchase-management/purchase-quotation/create']" style="margin: 10px 0;" class="btn btn-primary"
-                translate>Add New</button>
+            <button [routerLink]="['/order-management/sale-quotation/create']" style="margin: 10px 0;" class="btn btn-primary"
+                translate>Create Sales Quote</button>
 
         </div>
     </div>

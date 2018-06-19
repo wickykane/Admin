@@ -37,6 +37,10 @@ import { SaleOrderPaymentTabComponent} from './sale-order/order-tabs/payment-tab
 import { SaleOrderShipmentTabComponent } from './sale-order/order-tabs/shipment-tab.component';
 import { SaleOrderTimelineTabComponent} from './sale-order/order-tabs/timeline-tab.component';
 
+// salequote tabs
+import { SaleQuoteInformationTabComponent } from './sale-order/order-tabs/quote-info.component';
+import { SaleQuoteHistoryTabComponent } from './sale-order/order-tabs/quote-history.component';
+
 import { CommonShareModule, PageHeaderModule } from '../../shared/index';
 import { TableService } from '../../services/index';
 import { OrderService } from './order-mgmt.service';
@@ -73,7 +77,9 @@ import { ItemModalModule } from '../../shared/modals/item.module';
         SaleOrderInvoiceTabComponent,
         SaleOrderPaymentTabComponent,
         SaleOrderShipmentTabComponent,
-        SaleOrderTimelineTabComponent
+        SaleOrderTimelineTabComponent,
+        SaleQuoteInformationTabComponent,
+        SaleQuoteHistoryTabComponent
         ],
     providers: [OrderService, TableService, DatePipe],
     entryComponents: []
