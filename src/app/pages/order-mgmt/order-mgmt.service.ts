@@ -120,7 +120,10 @@ export class OrderService {
         const url = ['sale-quote', id].join('/');
         return this.API.get(url);
     }
-
+    getSaleQuoteHistory(id) {
+        const url = ['sale-quote/history', id].join('/');
+        return this.API.get(url);
+    }
     getSalesQuotation() {
         const url = 'order/get-sale-quote-code';
         return this.API.get(url);

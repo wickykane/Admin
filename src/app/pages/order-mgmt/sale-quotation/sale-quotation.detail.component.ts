@@ -51,11 +51,14 @@ export class SaleQuotationDetailComponent implements OnInit {
      */
 
     checkRender(detail) {
+        this.data['sale_quote_id'] = detail['sale_quote_id'];
         this.orderDetail = detail;
     }
     cancel() {
-        console.log('ab');
-        this.router.navigate(['/order-management/sale-order']);
+
+    }
+    back() {
+        this.router.navigate(['/order-management/sale-quotation']);
     }
 
 

@@ -102,7 +102,7 @@
                     <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                         <tr>
                             <td>
-                                <a [routerLink]="['detail', item.id]">#{{item.sale_quote_num}}</a>
+                                <a class="text-primary" [routerLink]="['detail', item.id]">#{{item.sale_quote_num}}</a>
                             </td>
                             <td>{{item.ref_num}}</td>
                             <td>{{item.buyer_name}}</td>
