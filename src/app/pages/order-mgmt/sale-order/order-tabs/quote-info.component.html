@@ -63,7 +63,7 @@
                         </div>
                         <label class="col-sm-3 col-form-label text-label">Contact</label>
                         <div class="col-sm-8">
-                            <label class="col-form-label control-label">{{detail.buyer_info['buyer_contact']}}</label>
+                            <label class="col-form-label control-label">{{detail.buyer_info['buyer_address_name']}}</label>
                         </div>
                         <label class="col-sm-3 col-form-label text-label">Phone</label>
                         <div class="col-sm-8">
@@ -84,19 +84,28 @@
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label text-label">Name</label>
                         <div class="col-sm-8">
-                            <label class="col-form-label control-label">{{detail.buyer_info['buyer_name']}}</label>
+                            <label class="col-form-label control-label" *ngIf="detail['buyer_type_name'] == 'Company'">{{detail.buyer_info.head_office['buyer_name']}}</label>
+                            <label class="col-form-label control-label" *ngIf="detail['buyer_type_name'] == 'Personal'">{{detail.buyer_info.primary['buyer_name']}}</label>
                         </div>
-                        <label class="col-sm-3 col-form-label text-label">Contact</label>
+                        <label class="col-sm-3 col-form-label text-label">Address</label>
                         <div class="col-sm-8">
-                            <label class="col-form-label control-label">{{detail.buyer_info['buyer_contact']}}</label>
+                          <label class="col-form-label control-label" *ngIf="detail['buyer_type_name'] == 'Company'">{{detail.buyer_info.head_office['buyer_address_name']}}</label>
+                          <label class="col-form-label control-label" *ngIf="detail['buyer_type_name'] == 'Personal'">{{detail.buyer_info.primary['buyer_address_name']}}</label>
                         </div>
-                        <label class="col-sm-3 col-form-label text-label">Phone</label>
+                        <label class="col-sm-3 col-form-label text-label">City</label>
                         <div class="col-sm-8">
-                            <label class="col-form-label control-label">{{detail.buyer_info['buyer_phone']}}</label>
+                          <label class="col-form-label control-label" *ngIf="detail['buyer_type_name'] == 'Company'">{{detail.buyer_info.head_office['buyer_address_city']}}</label>
+                          <label class="col-form-label control-label" *ngIf="detail['buyer_type_name'] == 'Personal'">{{detail.buyer_info.primary['buyer_address_city']}}</label>
                         </div>
-                        <label class="col-sm-3 col-form-label text-label">Email</label>
+                        <label class="col-sm-3 col-form-label text-label">State</label>
                         <div class="col-sm-8">
-                            <label class="col-form-label control-label">{{detail.buyer_info['buyer_email']}}</label>
+                          <label class="col-form-label control-label" *ngIf="detail['buyer_type_name'] == 'Company'">{{detail.buyer_info.head_office['buyer_address_state']}}</label>
+                          <label class="col-form-label control-label" *ngIf="detail['buyer_type_name'] == 'Personal'">{{detail.buyer_info.primary['buyer_address_state']}}</label>
+                        </div>
+                        <label class="col-sm-3 col-form-label text-label">Zip Code</label>
+                        <div class="col-sm-8">
+                          <label class="col-form-label control-label" *ngIf="detail['buyer_type_name'] == 'Company'">{{detail.buyer_info.head_office['buyer_address_zip']}}</label>
+                          <label class="col-form-label control-label" *ngIf="detail['buyer_type_name'] == 'Personal'">{{detail.buyer_info.primary['buyer_address_zip']}}</label>
                         </div>
                     </div>
                 </form>

@@ -89,14 +89,14 @@ export class MenuComponent implements OnInit {
                 sub: false,
                 child: []
             },
-            // {
-            //     flag: 'saleorder',
-            //     link: '/order-management/sale-quotation',
-            //     main_name: 'Sales Quotation',
-            //     icon: '',
-            //     sub: false,
-            //     child: []
-            // },
+            {
+                flag: 'saleorder',
+                link: '/order-management/sale-quotation',
+                main_name: 'Sales Quotation',
+                icon: '',
+                sub: false,
+                child: []
+            },
             // {
             //     flag: 'dashboard',
             //     link: '/',
