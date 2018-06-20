@@ -10,7 +10,7 @@ import { AddressModalContent } from "../../../shared/modals/address.modal";
 import { ConfirmModalContent } from "../../../shared/modals/confirm.modal";
 
 
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 
 @Component({
@@ -44,11 +44,11 @@ export class SupplierDetailComponent implements OnInit {
     constructor(public fb: FormBuilder,
         public router: Router,
         public route: ActivatedRoute,
-        public toastr: ToastsManager,
+        public toastr: ToastrService,
         public vRef: ViewContainerRef,
         private purchaseService: PurchaseService,
         private modalService: NgbModal) {
-        this.toastr.setRootViewContainerRef(vRef);
+         
         this.generalForm = fb.group({
             'full_name': [null, Validators.required],
             'email': [null, Validators.required],

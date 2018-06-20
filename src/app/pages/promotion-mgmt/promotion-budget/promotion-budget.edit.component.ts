@@ -2,7 +2,7 @@ import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PromotionService } from "../promotion.service";
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -22,8 +22,8 @@ export class PromotionBudgetEditComponent implements OnInit {
   /**
    * Init Data
    */
-  constructor(private vRef: ViewContainerRef, private fb: FormBuilder, private promotionService: PromotionService, public toastr: ToastsManager, private router: Router, private route: ActivatedRoute) {
-    this.toastr.setRootViewContainerRef(vRef);
+  constructor(private vRef: ViewContainerRef, private fb: FormBuilder, private promotionService: PromotionService, public toastr: ToastrService, private router: Router, private route: ActivatedRoute) {
+     
     this.generalForm = fb.group({
       'cd': [null],
       'name': [null, Validators.required],

@@ -7,7 +7,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CustomerService } from "../customer.service";
 import { PromotionService } from "../../promotion-mgmt/promotion.service";
 
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -29,8 +29,8 @@ export class CustomerSegmentCreateComponent implements OnInit {
     /**
      * Init Data
      */
-    constructor(private vRef: ViewContainerRef, private fb: FormBuilder, private promotionService: PromotionService, private customerService: CustomerService, public toastr: ToastsManager, private router: Router, private modalService: NgbModal) {
-        this.toastr.setRootViewContainerRef(vRef);
+    constructor(private vRef: ViewContainerRef, private fb: FormBuilder, private promotionService: PromotionService, private customerService: CustomerService, public toastr: ToastrService, private router: Router, private modalService: NgbModal) {
+         
         this.generalForm = fb.group({
             'cd': [{ value: null, disabled: true }],
             'name': [null],
@@ -149,7 +149,7 @@ export class CustomerSegmentCreateComponent implements OnInit {
             }
         },
             err => {
-                this.toastr.error(err.message, null, { enableHTML: true });
+                  this.toastr.error(err.message);
             })
     }
 }

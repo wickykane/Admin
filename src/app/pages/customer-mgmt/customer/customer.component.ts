@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CustomerService } from '../customer.service';
 
 import { routerTransition } from '../../../router.animations';
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { ToastrService } from 'ngx-toastr';
 import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -36,12 +36,12 @@ export class CustomerComponent implements OnInit {
 
     constructor(public router: Router,
         public fb: FormBuilder,
-        public toastr: ToastsManager,
+        public toastr: ToastrService,
         private vRef: ViewContainerRef,
         public tableService: TableService,
         private modalService: NgbModal,
         private customerService: CustomerService) {
-        this.toastr.setRootViewContainerRef(vRef);
+         
 
         this.searchForm = fb.group({
             'buyer_name': [null],

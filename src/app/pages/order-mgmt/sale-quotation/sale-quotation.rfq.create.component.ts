@@ -5,7 +5,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 
 import { OrderService } from "../order-mgmt.service";
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { ToastrService } from 'ngx-toastr';
 
 import { ItemModalContent } from "../../../shared/modals/item.modal";
@@ -333,7 +332,7 @@ export class SaleQuotationRfqCreateComponent implements OnInit {
       }
     },
       err => {
-        this.toastr.error(err.message, null, { enableHtml: true });
+          this.toastr.error(err.message);
       })
   }
 

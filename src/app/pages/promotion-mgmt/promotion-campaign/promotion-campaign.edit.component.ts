@@ -5,7 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 
 import { PromotionService } from "../promotion.service";
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { ToastrService } from 'ngx-toastr';
 import { PromotionModalContent } from '../modals/promotion.modal';
 import { PromotionInvoiceModalContent } from '../modals/promotion-invoice.modal';
 
@@ -27,8 +27,8 @@ export class PromotionCampaignEditComponent implements OnInit {
   /**
    * Init Data
    */
-  constructor(private vRef: ViewContainerRef, private fb: FormBuilder, private promotionService: PromotionService, public toastr: ToastsManager, private router: Router, private modalService: NgbModal, private route: ActivatedRoute) {
-    this.toastr.setRootViewContainerRef(vRef);
+  constructor(private vRef: ViewContainerRef, private fb: FormBuilder, private promotionService: PromotionService, public toastr: ToastrService, private router: Router, private modalService: NgbModal, private route: ActivatedRoute) {
+     
     this.generalForm = fb.group({
       'cd': [{ value: null, disabled: true }],
       'name': [null, Validators.required],
