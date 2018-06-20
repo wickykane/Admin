@@ -5,7 +5,7 @@
             <ul class="list-btn-custom">
                 <li *ngIf="orderDetail['order_sts_short_name'] == 'NW'"><button class="btn btn-outline-dark"><i class="fa fa-check-square"></i>Approve</button></li>
                 <li><button class="btn btn-outline-dark" (click)="cancel()"><i class="fa fa-ban" ></i>Cancel</button></li>
-                <li><button class="btn btn-outline-dark"><i class="fa fa-arrow-left"></i>Back</button></li>
+                <li><button class="btn btn-outline-dark" (click)="back()"><i class="fa fa-arrow-left"></i>Back</button></li>
             </ul>
         </div>
         <ngb-tabset>
@@ -16,7 +16,7 @@
             </ngb-tab>
             <ngb-tab title="SALES QUOTE HISTORY">
                 <ng-template ngbTabContent>
-                    <app-sale-quote-history-tab [orderId]="orderId"></app-sale-quote-history-tab>
+                    <app-sale-quote-history-tab [saleQuoteId]="data['sale_quote_id']"></app-sale-quote-history-tab>
                 </ng-template>
             </ngb-tab>
         </ngb-tabset>

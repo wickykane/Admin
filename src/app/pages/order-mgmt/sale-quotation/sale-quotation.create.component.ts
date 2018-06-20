@@ -84,7 +84,7 @@ export class SaleQuotationCreateComponent implements OnInit {
     /**
      * Init Data
      */
-    constructor(       
+    constructor(
         private fb: FormBuilder,
         public toastr: ToastrService,
         private router: Router,
@@ -112,9 +112,9 @@ export class SaleQuotationCreateComponent implements OnInit {
     }
 
     ngOnInit() {
-      setTimeout(() => {
-        this.inp.focusSearchInput();
-      }, 300);
+        setTimeout(() => {
+            this.inp.focusSearchInput();
+        }, 300);
 
         this.listMaster['multi_ship'] = [{ id: 0, label: 'No' }, { id: 1, label: 'Yes' }];
         // Item
@@ -441,7 +441,7 @@ export class SaleQuotationCreateComponent implements OnInit {
             }
         },
             err => {
-                  this.toastr.error(err.message);
+                this.toastr.error(err.message);
             });
     }
 
