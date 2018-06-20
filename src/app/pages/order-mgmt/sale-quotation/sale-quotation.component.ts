@@ -59,7 +59,7 @@ export class SaleQuotationComponent implements OnInit {
     ngOnInit() {
         // Init Fn
         this.listMaster['listFilter'] = [{ value: false, name: 'Date Filter' }];
-        this.listMaster['dateType'] = [{ id: 'quote_date', name: 'Quote Date' }, { id: 2, name: 'Expiry Date' }, { id: 3, name: 'Exp Delivery Date' }];
+        this.listMaster['dateType'] = [{ id: 'quote_date', name: 'Quote Date' }, { id: 'expiry_dt', name: 'Expiry Date' }, { id: 'ship_date', name: 'Delivery Date' }];
         this.getList();
         this.getListStatus();
         this.user = JSON.parse(localStorage.getItem('currentUser'));
