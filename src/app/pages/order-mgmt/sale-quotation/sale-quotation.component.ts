@@ -34,11 +34,11 @@ export class SaleQuotationComponent implements OnInit {
 
     constructor(public router: Router,
         public fb: FormBuilder,
-        public toastr: ToastrService,       
+        public toastr: ToastrService,
         public tableService: TableService,
         private orderService: OrderService,
         public saleQuoteKeyService: SaleQuoteKeyService,
-        private renderer: Renderer) {       
+        private renderer: Renderer) {
 
         this.searchForm = fb.group({
             'sale_quote_num': [null],
