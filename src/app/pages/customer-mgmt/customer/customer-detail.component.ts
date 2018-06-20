@@ -311,7 +311,7 @@ export class CustomerDetailComponent implements OnInit {
                 }
             },
             err => {
-                this.toastr.error(err.message, null, { enableHtml: true });
+                  this.toastr.error(err.message);
             });
     }
 }

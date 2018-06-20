@@ -8,7 +8,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ItemModalContent } from "../../../shared/modals/item.modal";
 
 
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 
 @Component({
@@ -26,11 +26,11 @@ export class WarehouseReceiptCreateComponent implements OnInit {
 
     constructor(public fb: FormBuilder,
         public router: Router,
-        public  toastr: ToastsManager,
+        public toastr: ToastrService, 
         public vRef: ViewContainerRef,
         private purchaseService: PurchaseService,
         private modalService: NgbModal) {
-            this.toastr.setRootViewContainerRef(vRef);
+             
             this.generalForm = fb.group({
                 'receipt_no': [{ value: null, disabled: true }],
                 'po_delivery_id': [null, Validators.required],
