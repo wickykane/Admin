@@ -11,7 +11,6 @@ import { SiteModalComponent } from '../../../shared/modals/site.modal';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
-import { async } from 'q';
 
 @Component({
     selector: 'app-customer-create',
