@@ -14,7 +14,7 @@
                                         <label for="code" class="control-label" translate>Customer Name</label>
                                         <span class="text-danger">(*)</span>
                                         <div>
-                                            <ng-select style="width: 150px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id"
+                                            <ng-select #inp style="width: 150px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id"
                                                 formControlName="company_id">
                                             </ng-select>
                                         </div>
@@ -111,7 +111,7 @@
                                                 <span class="text-danger">(*)</span>
                                             </label>
                                             <div class='col-7 text-primary'>
-                                                <input type="text" class="form-control" formControlName="sale_quote_no">
+                                                <input type="text" class="form-control" formControlName="sale_quote_no" readonly>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -149,7 +149,7 @@
                                             </label>
                                             <div class='col-7 text-danger'>
                                                 <div clickOutside (clickOutside)="d2.close()" class="input-group">
-                                                    <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="ex_delivery_date" [autoClose]="true" ngbDatepicker #d2="ngbDatepicker">
+                                                    <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="delivery_date" [autoClose]="true" ngbDatepicker #d2="ngbDatepicker">
                                                     <div class="input-group-append">
                                                         <button class="btn btn-outline-secondary" (click)="d2.toggle()" type="button">
                                                             <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -368,8 +368,8 @@
         </div>
         <div class="row">
             <div class="col-md-12 mg-top-15 text-center">
-                <button type="button" class="btn btn-outline-info" (click)="createOrder('quote')" translate>Save As Quote</button>
-                <button type="button" class="btn btn-outline-warning" (click)="createOrder('draft')" translate>Save As Draft</button>
+                <!-- <button type="button" class="btn btn-outline-info" (click)="createOrder('quote')" translate>Save As Quote</button>
+                <button type="button" class="btn btn-outline-warning" (click)="createOrder('draft')" translate>Save As Draft</button> -->
                 <button type="button" class="btn btn-outline-primary" (click)="createOrder('create')" translate>Save & Submit</button>
                 <button type="button" class="btn btn-default" [routerLink]="['/order-management/sale-order']" translate>Cancel</button>
             </div>

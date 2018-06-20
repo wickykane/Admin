@@ -113,9 +113,14 @@ export class OrderService {
 
     // Sale Quotation
     getListSalesQuotation(params) {
-        const url = 'order/list-sale-quote';
+        const url = 'sale-quote';
         return this.API.get(url, params);
     }
+    getSaleQuoteDetail(id) {
+        const url = ['sale-quote', id].join('/');
+        return this.API.get(url);
+    }
+
     getSalesQuotation() {
         const url = 'order/get-sale-quote-code';
         return this.API.get(url);
@@ -133,7 +138,7 @@ export class OrderService {
         return this.API.get(url);
     }
     getListSaleQuotationStatus() {
-        const url = 'order/sale-quote/list-status';
+        const url = 'sale-quote/status';
         return this.API.get(url);
     }
 

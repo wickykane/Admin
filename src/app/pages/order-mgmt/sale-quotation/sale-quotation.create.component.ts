@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewContainerRef, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewContainerRef, ViewEncapsulation, ViewChild } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
+import { NgSelectComponent } from '@ng-select/ng-select';
 
 import { OrderService } from '../order-mgmt.service';
 import { ToastrService } from 'ngx-toastr';
@@ -27,6 +28,8 @@ export class SaleQuotationCreateComponent implements OnInit {
     /**
      * Variable Declaration
      */
+    @ViewChild('inp') inp: NgSelectComponent;
+
     public generalForm: FormGroup;
     public listMaster = {};
     public selectedIndex = 0;
@@ -91,24 +94,28 @@ export class SaleQuotationCreateComponent implements OnInit {
         private dt: DatePipe) {
         this.generalForm = fb.group({
             'company_id': [null, Validators.required],
-            'sale_quote_no': [null, Validators.required],
-            'order_number': [null],
-            // 'type': [null, Validators.required],
+            'sale_quote_no': [null],
+            'order_date': [null],
+            'type': 'SAQ',
             'quote_date': [null, Validators.required],
             'expiry_date': [null, Validators.required],
-            'ex_delivery_date': [null],
             'delivery_date': [null],
             'contact_user_id': [null],
             'prio_level': [null],
-            // 'is_multi_shp_addr': [null],
+            'is_multi_shp_addr': 0,
             'sales_person': [null],
-            // 'warehouse_id': [null],
+            'billing_id': [null],
+            'shipping_id': [null],
             'payment_method': [null],
             'note': [null]
         });
     }
 
     ngOnInit() {
+      setTimeout(() => {
+        this.inp.focusSearchInput();
+      }, 300);
+
         this.listMaster['multi_ship'] = [{ id: 0, label: 'No' }, { id: 1, label: 'Yes' }];
         // Item
         this.list.items = this.router.getNavigatedData() || [];
@@ -123,11 +130,9 @@ export class SaleQuotationCreateComponent implements OnInit {
         this.generalForm.controls['quote_date'].patchValue(d.toISOString().slice(0, 10));
         d.setDate(d.getDate() + 30);
         this.generalForm.controls['expiry_date'].patchValue(d.toISOString().slice(0, 10));
-        this.generalForm.controls['ex_delivery_date'].patchValue(d.toISOString().slice(0, 10));
-
-
-
+        this.generalForm.controls['delivery_date'].patchValue(d.toISOString().slice(0, 10));
     }
+
     /**
      * Mater Data
      */
@@ -381,7 +386,7 @@ export class SaleQuotationCreateComponent implements OnInit {
                 sale_price: item.sale_price,
                 discount_percent: item.discount || 0,
                 shipping_address_id: item.shipping_address_id,
-                // warehouse_id: item.warehouse_id || 1
+                warehouse_id: item.warehouse_id || 1
             });
 
             if (item.products.length > 0) {
@@ -393,7 +398,7 @@ export class SaleQuotationCreateComponent implements OnInit {
                         sale_price: subItem.sale_price,
                         discount_percent: subItem.discount || 0,
                         shipping_address_id: subItem.shipping_address_id,
-                        // warehouse_id: subItem.warehouse_id || 1
+                        warehouse_id: subItem.warehouse_id || 1
                     });
                 });
             }
@@ -403,13 +408,13 @@ export class SaleQuotationCreateComponent implements OnInit {
             case 'create':
                 params = {
                     'items': products,
-                    'is_draft_order': 0
+                    'is_draft_order': 1
                 };
                 break;
             case 'quote':
                 params = {
                     'items': products,
-                    'is_draft_order': 0
+                    'is_draft_order': 1
                 };
                 break;
             case 'draft':
@@ -420,12 +425,13 @@ export class SaleQuotationCreateComponent implements OnInit {
                 break;
         }
         params = Object.assign({}, this.order_info, this.generalForm.value, params);
+        console.log(params);
         this.orderService.createOrder(params).subscribe(res => {
             try {
                 if (res.data.status) {
                     this.toastr.success(res.data.message);
                     setTimeout(() => {
-                        this.router.navigate(['/order-management/sale-order']);
+                        this.router.navigate(['/order-management/sale-quotation']);
                     }, 500);
                 } else {
                     this.toastr.error(res.data.message, null, { enableHtml: true });
