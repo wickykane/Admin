@@ -3,7 +3,7 @@ import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {Form, FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ProductService} from "../product-mgmt.service";
-import {ToastsManager} from 'ng2-toastr/ng2-toastr';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({selector: 'app-product-definition-create', templateUrl: './product-definition-create.component.html', styleUrls: ['../product-mgmt.component.scss']})
 export class ProductDefinitionCreateComponent implements OnInit {
@@ -20,8 +20,8 @@ export class ProductDefinitionCreateComponent implements OnInit {
     /**
    * Init Data
    */
-    constructor(private vRef : ViewContainerRef, private fb : FormBuilder, private productService : ProductService, public toastr : ToastsManager, private router : Router) {
-        this.toastr.setRootViewContainerRef(vRef);
+    constructor( private fb : FormBuilder, private productService : ProductService, public toastr: ToastrService,  private router : Router) {
+         
         this.generalForm = fb.group({
             'product_type': [],
             'name': [],

@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { ItemService } from './item.service';
 
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { ToastrService } from 'ngx-toastr';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 
@@ -41,13 +41,12 @@ export class SiteModalComponent implements OnInit, OnDestroy {
 
     constructor(public fb: FormBuilder,
         public router: Router,
-        public toastr: ToastsManager,
-        public vRef: ViewContainerRef,
+        public toastr: ToastrService,        
         private itemService: ItemService,
         private modalService: NgbModal,
         private hotkeysService: HotkeysService,
         public activeModal: NgbActiveModal) {
-        this.toastr.setRootViewContainerRef(vRef);
+         
         this.generalForm = fb.group({
             'parent_company_name': [null],
             'code': [null, Validators.required],
@@ -222,14 +221,14 @@ export class SiteModalComponent implements OnInit, OnDestroy {
         this.contact.forEach(obj => {
             obj['pwd_cfrm'] = obj.pwd;
         });
-        this.bank_account.forEach(obj => {
-            delete obj['listBank'];
-            delete obj['listBranch'];
-        });
-        this.address.forEach(obj => {
-          delete obj['listCountry'];
-          delete obj['listState'];
-        });
+        // this.bank_account.forEach(obj => {
+        //     delete obj['listBank'];
+        //     delete obj['listBranch'];
+        // });
+        // this.address.forEach(obj => {
+        //   delete obj['listCountry'];
+        //   delete obj['listState'];
+        // });
         if (this.generalForm.valid) {
             const params = Object.assign({}, this.generalForm.value);
             params['user'] = [];

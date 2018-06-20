@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService } from '../order-mgmt.service';
 
 import { routerTransition } from '../../../router.animations';
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'app-delivery-order',
@@ -32,10 +32,10 @@ export class DeliveryOrderComponent implements OnInit {
 
     constructor(public router: Router,
         public fb: FormBuilder,
-        public toastr: ToastsManager,
+        public toastr: ToastrService,
         private vRef: ViewContainerRef,
         public tableService: TableService, private orderService: OrderService) {
-        this.toastr.setRootViewContainerRef(vRef);
+         
 
         this.searchForm = fb.group({
             'code': [null],

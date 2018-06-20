@@ -6,7 +6,7 @@ import { OrderService } from '../order-mgmt.service';
 import { SaleQuoteKeyService } from './keys.list.control';
 
 import { routerTransition } from '../../../router.animations';
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -34,13 +34,11 @@ export class SaleQuotationComponent implements OnInit {
 
     constructor(public router: Router,
         public fb: FormBuilder,
-        public toastr: ToastsManager,
-        private vRef: ViewContainerRef,
+        public toastr: ToastrService,       
         public tableService: TableService,
         private orderService: OrderService,
         public saleQuoteKeyService: SaleQuoteKeyService,
-        private renderer: Renderer) {
-        this.toastr.setRootViewContainerRef(vRef);
+        private renderer: Renderer) {       
 
         this.searchForm = fb.group({
             'sale_quote_num': [null],

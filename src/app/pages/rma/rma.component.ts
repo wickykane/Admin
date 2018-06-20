@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PurchaseService } from "../purchase-mgmt/purchase.service";
 
 import { routerTransition } from '../../router.animations';
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-rma',
@@ -34,10 +34,10 @@ export class RmaComponent implements OnInit {
 
     constructor(public router: Router,
         public fb: FormBuilder,
-        public toastr: ToastsManager,
+        public toastr: ToastrService,
         private vRef: ViewContainerRef,
         public tableService: TableService, private purchaseService: PurchaseService) {
-        this.toastr.setRootViewContainerRef(vRef);
+         
 
         this.searchForm = fb.group({
             'cd': [null],

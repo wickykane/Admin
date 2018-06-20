@@ -7,7 +7,7 @@ import { PurchaseService } from "../purchase.service";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ItemModalContent } from "../../../shared/modals/item.modal";
 
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 
 @Component({
@@ -25,13 +25,13 @@ export class QuotationDetailComponent implements OnInit {
     public listMaster = {};
 
     constructor(public fb: FormBuilder,
-        public  toastr: ToastsManager,
+        public toastr: ToastrService, 
         public router: Router,
         public route: ActivatedRoute,
         public vRef: ViewContainerRef,
         private purchaseService: PurchaseService,
         private modalService: NgbModal) {
-            this.toastr.setRootViewContainerRef(vRef);
+             
             this.generalForm = fb.group({
                 'cd': [{ value: null, disabled: true }],
                 'rqst_dt': [null, Validators.required],

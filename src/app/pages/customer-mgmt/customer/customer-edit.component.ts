@@ -7,7 +7,8 @@ import { CustomerService } from '../customer.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SiteModalComponent } from '../../../shared/modals/site.modal';
 
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+
+import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 
@@ -60,13 +61,11 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
 
     constructor(public fb: FormBuilder,
         public router: Router,
-        public toastr: ToastsManager,
-        public vRef: ViewContainerRef,
+        public toastr: ToastrService,
         private customerService: CustomerService,
         public route: ActivatedRoute,
         private modalService: NgbModal,
         private hotkeysService: HotkeysService) {
-        this.toastr.setRootViewContainerRef(vRef);
         this.generalForm = fb.group({
             'buyer_type': [null, Validators.required],
             'code': [null],
@@ -377,14 +376,14 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         this.contact.forEach(obj => {
             obj['pwd_cfrm'] = obj.pwd;
         });
-        this.bank_account.forEach(obj => {
-            delete obj['listBank'];
-            delete obj['listBranch'];
-        });
-        this.address.forEach(obj => {
-            delete obj['listCountry'];
-            delete obj['listState'];
-        });
+        // this.bank_account.forEach(obj => {
+        //     delete obj['listBank'];
+        //     delete obj['listBranch'];
+        // });
+        // this.address.forEach(obj => {
+        //     delete obj['listCountry'];
+        //     delete obj['listState'];
+        // });
         if (this.generalForm.valid) {
             const params = Object.assign({}, this.generalForm.value);
             params['user'] = [];
@@ -450,7 +449,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                 },
                 err => {
                     console.log(err);
-                    this.toastr.error(err.message, null, { enableHTML: true });
+                    this.toastr.error(err.message);
                 });
         }
 

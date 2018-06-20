@@ -6,7 +6,6 @@ import { DatePipe } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
 
 import { OrderService } from '../order-mgmt.service';
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 
@@ -85,8 +84,7 @@ export class SaleQuotationCreateComponent implements OnInit {
     /**
      * Init Data
      */
-    constructor(
-        private vRef: ViewContainerRef,
+    constructor(       
         private fb: FormBuilder,
         public toastr: ToastrService,
         private router: Router,
@@ -443,7 +441,7 @@ export class SaleQuotationCreateComponent implements OnInit {
             }
         },
             err => {
-                this.toastr.error(err.message, null, { enableHtml: true });
+                  this.toastr.error(err.message);
             });
     }
 
