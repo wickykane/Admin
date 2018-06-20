@@ -20,7 +20,7 @@
                 <div class="block-search">
                     <label for="buyer_type" class="control-label">From</label>
                     <div clickOutside (clickOutside)="d.close()" class="input-group">
-                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="qt_dt_from" [autoClose]="true" ngbDatepicker #d="ngbDatepicker">
+                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="qt_dt_from" ngbDatepicker #d="ngbDatepicker">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
                                 <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -31,7 +31,7 @@
                 <div class="block-search">
                     <label for="buyer_type" class="control-label">To</label>
                     <div clickOutside (clickOutside)="t.close()" class="input-group">
-                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="qt_dt_to" [autoClose]="true" ngbDatepicker #t="ngbDatepicker">
+                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="qt_dt_to" ngbDatepicker #t="ngbDatepicker">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" (click)="t.toggle()" type="button">
                                 <i class="fa fa-calendar" aria-hidden="true"></i>
