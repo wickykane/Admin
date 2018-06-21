@@ -54,11 +54,48 @@ export class SaleQuotationDetailComponent implements OnInit {
         this.data['sale_quote_id'] = detail['sale_quote_id'];
         this.orderDetail = detail;
     }
-    cancel() {
 
-    }
     back() {
         this.router.navigate(['/order-management/sale-quotation']);
+    }
+
+    sentMailToBuyer(id) {
+        this.orderService.sentMailToBuyer(id).subscribe(res => {
+            try {
+                this.toastr.success(res.message);
+                this.router.navigate(['/order-management/sale-quotation/detail/', {id: this.orderId}]);
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
+
+    approveByManager(id) {
+        const params = { status: 'AM' };
+        this.orderService.updateSaleQuoteStatus(id, params).subscribe(res => {
+            try {
+                this.toastr.success(res.message);
+                this.router.navigate(['/order-management/sale-quotation/detail/', {id: this.orderId}]);
+
+            } catch (e) {
+                console.log(e);
+            }
+        });
+
+    }
+
+    rejectByManager(id) {
+        const params = { status: 'RM' };
+        this.orderService.updateSaleQuoteStatus(id, params).subscribe(res => {
+            try {
+                this.toastr.success(res.message);
+                this.router.navigate(['/order-management/sale-quotation/detail/', {id: this.orderId}]);
+
+            } catch (e) {
+                console.log(e);
+            }
+        });
+
     }
 
 
