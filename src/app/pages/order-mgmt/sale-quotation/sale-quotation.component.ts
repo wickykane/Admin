@@ -118,6 +118,19 @@ export class SaleQuotationComponent implements OnInit {
 
     }
 
+    rejectByManager(id) {
+        const params = { status: 'RM' };
+        this.orderService.updateSaleQuoteStatus(id, params).subscribe(res => {
+            try {
+                this.toastr.success(res.message);
+                this.getList();
+            } catch (e) {
+                console.log(e);
+            }
+        });
+
+    }
+
     getList() {
 
         const params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
