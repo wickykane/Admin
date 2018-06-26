@@ -4,8 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 
-import { OrderService } from "../order-mgmt.service";
-import { ProductService } from "../../product-mgmt/product-mgmt.service";
+import { OrderService } from '../order-mgmt.service';
+import { ProductService } from '../../product-mgmt/product-mgmt.service';
 
 import { ToastrService } from 'ngx-toastr';
 
@@ -42,24 +42,24 @@ export class SalePriceEditComponent implements OnInit {
     ngOnInit() {
        
         this.data['products'] = [];
-        //Master Data
+        // Master Data
         this.listMaster['status'] = [
             {
                 id: '0',
-                name: "In-Active"
+                name: 'In-Active'
             }, {
                 id: '1',
-                name: "Active "
+                name: 'Active '
             }
         ];
-        this.data["id"] = this.route.snapshot.paramMap.get('id');
-        this.getDetailSalesPrice(this.data["id"]);
+        this.data['id'] = this.route.snapshot.paramMap.get('id');
+        this.getDetailSalesPrice(this.data['id']);
     }
     getDetailSalesPrice(id) {
         this.getListItemOption();
         this.orderService.getDetailSalePrice(id).subscribe(res => {
             try {
-                if (res._type == 'success') {
+                if (res._type ===  'success') {
                     this.generalForm.patchValue(res.results);
                     this.data['products'] = res.results.products || [];
                     this.data['products'].forEach((data, index) => {

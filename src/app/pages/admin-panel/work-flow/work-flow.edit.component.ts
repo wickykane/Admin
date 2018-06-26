@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AdminPanelService } from '../admin-panel.service';
-import { TableService } from "../../../services/index";
+import { TableService } from '../../../services/index';
 import { routerTransition } from '../../../router.animations';
-import { DocumentModalContent } from "./modal/document.modal";
+import { DocumentModalContent } from './modal/document.modal';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 declare var jsPlumb: any;
@@ -39,9 +39,9 @@ export class WorkFlowEditComponent implements OnInit {
     isCollapsedCondition;
     isCollapsedInterActive;
 
-    draggableActions = [{ name: 'Start', type: 3, }, { name: 'End', type: 4, }, { name: 'New Document', img: "../../../assets/img/icon-workflow/new-document.png" }, { name: 'Notify Document', img: "../../../assets/img/icon-workflow/Notify.png" }, { name: 'Read Document', img: "../../../assets/img/icon-workflow/Read.png" }, { name: 'Delete Document', img: "../../../assets/img/icon-workflow/delete.png" }, { name: 'Approve Document', img: "../../../assets/img/icon-workflow/new-document.png" }];
-    draggableConditions = [{ name: 'Condition', type: 2, img: "../../../assets/img/icon-workflow/Condition.png" }, { name: 'Parallel', type: 2, img: "../../../assets/img/icon-workflow/Parallel.png" }];
-    draggableInteractives = [{ name: 'Message', img: "../../../assets/img/icon-workflow/Message.png" }, { name: 'Set State Name', img: "../../../assets/img/icon-workflow/Set-State-name.png" }, { name: 'User Notification', img: "../../../assets/img/icon-workflow/User-notification.png" }, { name: 'Task', img: "../../../assets/img/icon-workflow/task.png" }];
+    draggableActions = [{ name: 'Start', type: 3, }, { name: 'End', type: 4, }, { name: 'New Document', img: '../../../assets/img/icon-workflow/new-document.png' }, { name: 'Notify Document', img: '../../../assets/img/icon-workflow/Notify.png' }, { name: 'Read Document', img: '../../../assets/img/icon-workflow/Read.png' }, { name: 'Delete Document', img: '../../../assets/img/icon-workflow/delete.png' }, { name: 'Approve Document', img: '../../../assets/img/icon-workflow/new-document.png' }];
+    draggableConditions = [{ name: 'Condition', type: 2, img: '../../../assets/img/icon-workflow/Condition.png' }, { name: 'Parallel', type: 2, img: '../../../assets/img/icon-workflow/Parallel.png' }];
+    draggableInteractives = [{ name: 'Message', img: '../../../assets/img/icon-workflow/Message.png' }, { name: 'Set State Name', img: '../../../assets/img/icon-workflow/Set-State-name.png' }, { name: 'User Notification', img: '../../../assets/img/icon-workflow/User-notification.png' }, { name: 'Task', img: '../../../assets/img/icon-workflow/task.png' }];
 
     centerAnchor = true;
     dropOject = [];
@@ -59,21 +59,21 @@ export class WorkFlowEditComponent implements OnInit {
     currentjsPlumb = jsPlumb.getInstance();
 
     common = {
-        connector: ["Straight"],
-        anchor: ["Bottom", "Top"],
-        endpoint: "Blank"
+        connector: ['Straight'],
+        anchor: ['Bottom', 'Top'],
+        endpoint: 'Blank'
     };
 
     condition = {
         2: {
-            connector: ["Flowchart"],
-            anchor: ["Left", "Top"],
-            endpoint: "Blank"
+            connector: ['Flowchart'],
+            anchor: ['Left', 'Top'],
+            endpoint: 'Blank'
         },
         1: {
-            connector: ["Flowchart"],
-            anchor: ["Right", "Top"],
-            endpoint: "Blank"
+            connector: ['Flowchart'],
+            anchor: ['Right', 'Top'],
+            endpoint: 'Blank'
         }
     }
 
@@ -81,7 +81,7 @@ export class WorkFlowEditComponent implements OnInit {
         var data_id = id;
         data = Object.assign({}, data);
         if (flag) {
-            data.parent = (type) ? id : "";
+            data.parent = (type) ? id : '';
             data.id = data_id;
             data.item = item;
             data.flag = flag;
@@ -93,11 +93,11 @@ export class WorkFlowEditComponent implements OnInit {
             this.parentDragable = false;
             if (data_id != null) {
                 setTimeout(() => {
-                    this.initArrow(jQuery("#object" + data_id), type, data);
+                    this.initArrow(jQuery('#object' + data_id), type, data);
                 })
             } else {
                 setTimeout(() => {
-                    jQuery('#object0').css({ "top": '100px' });
+                    jQuery('#object0').css({ 'top': '100px' });
                 })
             }
 
@@ -113,35 +113,35 @@ export class WorkFlowEditComponent implements OnInit {
         this.currentPrevObject = src;
         var currentIndex = (this.dropOject.length - 1);
 
-        var cur = jQuery("#object" + currentIndex);
+        var cur = jQuery('#object' + currentIndex);
         var jsConfig = this.common;
 
-        if (type == "left") {
-            cur.css({ "left": src.offset().left - 305 });
+        if (type ===  'left') {
+            cur.css({ 'left': src.offset().left - 305 });
             jsConfig = this.condition[2];
         } else
-            if (type == "right") {
-                cur.css({ "left": src.offset().left + 90 });
+            if (type ===  'right') {
+                cur.css({ 'left': src.offset().left + 90 });
                 jsConfig = this.condition[1];
             } else {
                 if (this.currentPrevObject) {
-                    cur.css({ "left": this.currentPrevObject.offset().left - 105 });
+                    cur.css({ 'left': this.currentPrevObject.offset().left - 105 });
                 }
             }
 
-        //Set height position
-        cur.css({ "top": jQuery(".dropable-container").scrollTop() + src.offset().top - 100 });
-        jQuery(".dropable-container-1").css("height", jQuery(".dropable-container").scrollTop() + cur.offset().top + 100);
+        // Set height position
+        cur.css({ 'top': jQuery('.dropable-container').scrollTop() + src.offset().top - 100 });
+        jQuery('.dropable-container-1').css('height', jQuery('.dropable-container').scrollTop() + cur.offset().top + 100);
 
         this.currentjsPlumb.ready(() => {
             this.currentjsPlumb.connect({
                 source: src,
                 target: cur,
-                paintStyle: { stroke: "lightgray", strokeWidth: 2, "dashstyle": "2" },
-                endpointStyle: { fillStyle: "lightgray", outlineStroke: "gray" },
+                paintStyle: { stroke: 'lightgray', strokeWidth: 2, 'dashstyle': '2' },
+                endpointStyle: { fillStyle: 'lightgray', outlineStroke: 'gray' },
                 overlays: [
-                    ["Arrow", { width: 12, length: 12, location: 0.5 }],
-                    // [ "Label", { location:0.1, label:"Teooo",cssClass:"labell" } ],
+                    ['Arrow', { width: 12, length: 12, location: 0.5 }],
+                    //  [ 'Label', { location:0.1, label:'Teooo',cssClass:'labell' } ],
 
                 ]
             }, jsConfig);
@@ -161,9 +161,9 @@ export class WorkFlowEditComponent implements OnInit {
     }
 
     remove = function (index) {
-        this.currentjsPlumb.remove("object" + index);
+        this.currentjsPlumb.remove('object' + index);
         this.dropOject.splice(index, 1);
-        if (this.dropOject.length == 0) {
+        if (this.dropOject.length === 0) {
             this.parentDragable = true;
         }
         this.currentnode = (Number(index) || 1) - 1;
@@ -187,7 +187,7 @@ export class WorkFlowEditComponent implements OnInit {
     saveChart = function () {
         this.tempData = this.dropOject;
         for (var i in this.dropOject) {
-            this.currentjsPlumb.remove("object" + i);
+            this.currentjsPlumb.remove('object' + i);
         }
         localStorage.setItem('chartData', JSON.stringify(this.tempData));
         this.dropOject = [];

@@ -16,7 +16,7 @@ export class ApiInterceptorService {
       }, (err: any) => {
         if (err instanceof HttpErrorResponse) {
           if (err.status === 401) {
-            // redirect to the login route
+            //  redirect to the login route
             window.location.href = '/#/login';
           }
         }

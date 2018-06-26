@@ -1,24 +1,24 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-//Quotation
+// Quotation
 import {QuotationComponent} from './purchase-quotation/purchase-quotation.component';
 import {QuotationCreateComponent} from './purchase-quotation/purchase-quotation-create.component';
 import {QuotationDetailComponent} from './purchase-quotation/purchase-quotation-detail.component';
 
-//Order
+// Order
 import {PurchaseOrderComponent} from './purchase-order/purchase-order.component';
 import {PurchaseOrderCreateComponent} from './purchase-order/purchase-order-create.component';
 import {PurchaseOrderDetailComponent} from './purchase-order/purchase-order-detail.component';
 
 import {InboundDeliveryComponent} from './inbound-delivery/inbound-delivery.component';
 
-//Supplier
+// Supplier
 import {SupplierComponent} from './supplier/supplier.component';
 import {SupplierCreateComponent} from './supplier/supplier-create.component';
 import {SupplierDetailComponent} from './supplier/supplier-detail.component';
 
-//warehouse-receipt
+// warehouse-receipt
 import {WarehouseReceiptComponent} from './warehouse-receipt/warehouse-receipt.component';
 import {WarehouseReceiptCreateComponent} from './warehouse-receipt/warehouse-receipt-create.component';
 

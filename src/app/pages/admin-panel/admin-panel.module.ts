@@ -10,8 +10,8 @@ import { UserModule } from './user/user.module';
 import { WorkFlowModule } from './work-flow/work-flow.module';
 
 import { CommonShareModule, PageHeaderModule,StatModule} from '../../shared/index';
-import { TableService } from "../../services/index";
-import {AdminPanelService} from "./admin-panel.service";
+import { TableService } from '../../services/index';
+import {AdminPanelService} from './admin-panel.service';
 
 
 @NgModule({

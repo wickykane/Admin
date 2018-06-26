@@ -4,8 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 
-import { OrderService } from "../order-mgmt.service";
-import { ProductService } from "../../product-mgmt/product-mgmt.service";
+import { OrderService } from '../order-mgmt.service';
+import { ProductService } from '../../product-mgmt/product-mgmt.service';
 
 import { ToastrService } from 'ngx-toastr';
 
@@ -43,14 +43,14 @@ export class SalePriceCreateComponent implements OnInit {
     ngOnInit() {
         this.getListItemOption();
         this.data['products'] = [];
-        //Master Data
+        // Master Data
         this.listMaster['status'] = [
             {
                 id: '0',
-                name: "In-Active"
+                name: 'In-Active'
             }, {
                 id: '1',
-                name: "Active "
+                name: 'Active '
             }
         ];
     }

@@ -11,28 +11,28 @@ export class PromotionService {
      */
 
     getListBudget(params) {
-        var url = 'budget/get-list';
+        const url = 'budget/get-list';
         return this.API.get(url, params);
     }
 
     postBudget(params) {
-        var url = 'budget';
+        const url = 'budget';
         return this.API.post(url, params);
     }
     getListBudgetAll() {
-        var url = 'budget/get-list-option';
+        const url = 'budget/get-list-option';
         return this.API.get(url);
     }
     getBudgetDetail(id) {
-        var url = 'budget/' + id;
+        const url = 'budget/' + id;
         return this.API.get(url);
     }
     updateBudget(id, params) {
-        var url = 'budget/' + id;
+        const url = 'budget/' + id;
         return this.API.put(url, params);
     }
     approveBudget(id, params) {
-        var url = 'budget/' + id + '/approve';
+        const url = 'budget/' + id + '/approve';
         return this.API.put(url, params);
     }
 
@@ -41,43 +41,43 @@ export class PromotionService {
      */
 
     getListCampaign(params) {
-        var url = 'promotion-campaign/get-list';
+        const url = 'promotion-campaign/get-list';
         return this.API.get(url, params);
     }
     getListBaseOption() {
-        var url = 'promotion-campaign/get-list-based-option';
+        const url = 'promotion-campaign/get-list-based-option';
         return this.API.get(url);
     }
     postCampaign(params) {
-        var url = 'promotion-campaign';
+        const url = 'promotion-campaign';
         return this.API.post(url, params);
     }
     getListprogramLevel() {
-        var url = 'promotion-program-level/get-list';
+        const url = 'promotion-program-level/get-list';
         return this.API.get(url);
     }
     getTypeProgram() {
-        var url = 'promotion-program-type/get-list';
+        const url = 'promotion-program-type/get-list';
         return this.API.get(url);
     }
     getListPromoType() {
-        var url = 'promo-program-detail/get-list-type';
+        const url = 'promo-program-detail/get-list-type';
         return this.API.get(url);
     }
     getListRefernceBundle() {
-        var url = 'bundle/promo-reference';
+        const url = 'bundle/promo-reference';
         return this.API.get(url);
     }
     getPromoProgram(id) {
-        var url = "promotion-campaign/" + id;
+        const url = 'promotion-campaign/' + id;
         return this.API.get(url)
     }
     updatePromoProgram(id, params) {
-        var url = "promotion-campaign/" + id;
+        const url = 'promotion-campaign/' + id;
         return this.API.put(url, params)
     }
     generateCampaignCode() {
-        var url = 'promotion-campaign/get-campaign-code';
+        const url = 'promotion-campaign/get-campaign-code';
         return this.API.get(url);
     }
 
@@ -85,49 +85,49 @@ export class PromotionService {
      * SEGMENT
      */
     getListSegment(params) {
-        var url = 'customer_segment';
+        const url = 'customer_segment';
         return this.API.get(url, params);
     }
     postSegment(params) {
-        var url = 'customer_segment';
+        const url = 'customer_segment';
         return this.API.post(url, params);
     }
     getListAllSegment() {
-        var url = 'customer_segment/all';
+        const url = 'customer_segment/all';
         return this.API.get(url);
     }
     getCustomerSegment(params) {
-        var url = 'customer_segment/search_customer';
+        const url = 'customer_segment/search_customer';
         return this.API.get(url, params);
     }
     getDetailSegment(id) {
-        var url = 'customer_segment/' + id;
+        const url = 'customer_segment/' + id;
         return this.API.get(url);
     }
     updateSegment(id, params) {
-        var url = 'customer_segment/' + id;
+        const url = 'customer_segment/' + id;
         return this.API.put(url, params);
     }
     /**
      * Item Option
      */
     getListItemOption() {
-        var url = 'item/reference';
+        const url = 'item/reference';
         return this.API.get(url);
     }
     /**
      * CONDITION
      */
     getListCondition(params) {
-        var url = 'promotion_condition';
+        const url = 'promotion_condition';
         return this.API.get(url, params);
     }
     getListConditionRef(params?) {
-        var url = 'promotion_condition/reference';
+        const url = 'promotion_condition/reference';
         return this.API.get(url, params);
     }
     postCondition(params) {
-        var url = 'promotion_condition';
+        const url = 'promotion_condition';
         return this.API.post(url, params);
     }
 }

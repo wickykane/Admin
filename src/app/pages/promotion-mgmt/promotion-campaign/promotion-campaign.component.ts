@@ -1,8 +1,8 @@
-import { TableService } from './../../../services/table.service';
 import { Component, OnInit } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PromotionService } from "../promotion.service";
+import { PromotionService } from '../promotion.service';
+import { TableService } from './../../../services/table.service';
 
 @Component({
   selector: 'app-promotion-campaign',
@@ -18,7 +18,7 @@ export class PromotionCampaignComponent implements OnInit {
   public selectedIndex = 0;
   public list = {
     items: []
-  }
+  };
 
   public data = {};
 
@@ -35,14 +35,14 @@ export class PromotionCampaignComponent implements OnInit {
       'to': [null]
     });
 
-    //Assign get list function name, override variable here
+    //  Assign get list function name, override variable here
     this.tableService.getListFnName = 'getList';
     this.tableService.context = this;
 
   }
 
   ngOnInit() {
-    //Init Fn
+    //  Init Fn
     this.getList();
   }
   /**
@@ -59,8 +59,8 @@ export class PromotionCampaignComponent implements OnInit {
   }
 
   getList() {
-    var params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
-    Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);
+    const params = {...this.tableService.getParams(), ...this.searchForm.value};
+    Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
     this.promotionService.getListCampaign(params).subscribe(res => {
       try {

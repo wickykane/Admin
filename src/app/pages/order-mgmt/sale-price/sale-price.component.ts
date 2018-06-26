@@ -2,7 +2,7 @@ import { TableService } from './../../../services/table.service';
 import { Component, OnInit } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { OrderService } from "../order-mgmt.service";
+import { OrderService } from '../order-mgmt.service';
 
 
 @Component({
@@ -35,7 +35,7 @@ export class SalePriceComponent implements OnInit {
      
     });
 
-    //Assign get list function name, override variable here
+    // Assign get list function name, override variable here
     this.tableService.getListFnName = 'getList';
     this.tableService.context = this;
 
@@ -43,7 +43,7 @@ export class SalePriceComponent implements OnInit {
 
   ngOnInit() {
     
-    //Init Fn
+    // Init Fn
     this.getList();
   }
   /**
@@ -58,7 +58,7 @@ export class SalePriceComponent implements OnInit {
 
   getList() {
     var params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
-    Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);
+    Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
     this.orderService.getList(params).subscribe(res => {
       try {

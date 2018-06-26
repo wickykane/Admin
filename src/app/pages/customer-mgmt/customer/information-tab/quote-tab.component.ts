@@ -1,7 +1,7 @@
-import { TableService } from './../../../../services/table.service';
-import { Component, OnInit, ViewContainerRef, Input } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, Input, OnInit, ViewContainerRef } from '@angular/core';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CustomerService } from '../../customer.service';
+import { TableService } from './../../../../services/table.service';
 
 
 @Component({
@@ -44,7 +44,7 @@ export class CustomerQuoteTabComponent implements OnInit {
             'qt_dt_to': [null],
         });
 
-        // Assign get list function name, override letiable here
+        //  Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
     }
@@ -56,13 +56,13 @@ export class CustomerQuoteTabComponent implements OnInit {
      */
 
     getList() {
-        const params = Object.assign({}, this.searchForm.value);
-        Object.keys(params).forEach((key) => (params[key] == null || params[key] === '') && delete params[key]);
+        const params = {...this.searchForm.value};
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
         this.customerService.getListQuote(this._customerId, params).subscribe(res => {
             try {
                 this.list.items = res.data;
-                // this.tableService.matchPagingOption(res.data);
+                //  this.tableService.matchPagingOption(res.data);
             } catch (e) {
                 console.log(e);
             }

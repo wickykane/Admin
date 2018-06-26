@@ -2,11 +2,11 @@ import { TableService } from './../../../services/table.service';
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ProductService } from "../product-mgmt.service";
+import { ProductService } from '../product-mgmt.service';
 import { ToastrService } from 'ngx-toastr';
-//modal
+// modal
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ItemModalContent } from "../../../shared/modals/item.modal";
+import { ItemModalContent } from '../../../shared/modals/item.modal';
 
 @Component({ selector: 'app-ecatalog-create', templateUrl: './e-catalog-create.component.html' })
 export class ECatalogCreateComponent implements OnInit {
@@ -59,16 +59,16 @@ export class ECatalogCreateComponent implements OnInit {
         }
     }
 
-    // clickAdd() {
-    //     this
-    //         .data['products']
-    //         .push({});
-    // };
-    // removeRow(index) {
-    //     this
-    //         .data['products']
-    //         .splice(index, 1);
-    // }
+    //  clickAdd() {
+    //      this
+    //          .data['products']
+    //          .push({});
+    //  };
+    //  removeRow(index) {
+    //      this
+    //          .data['products']
+    //          .splice(index, 1);
+    //  }
 
     toDateObject(date) {
         if (!date)

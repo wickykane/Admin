@@ -17,7 +17,7 @@ import { OrderSaleQuoteModalContent } from './order-salequote.modal';
 import { InvoiceModalContent } from './invoice.modal';
 import { OrderHistoryModalContent } from './order-history.modal';
 
-// Modal
+//  Modal
 
 
 @NgModule({

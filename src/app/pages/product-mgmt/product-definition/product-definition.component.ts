@@ -2,7 +2,7 @@ import { TableService } from './../../../services/table.service';
 import { Component, OnInit } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ProductService } from "../product-mgmt.service";
+import { ProductService } from '../product-mgmt.service';
 
 @Component({
   selector: 'app-product-definition',
@@ -42,13 +42,13 @@ export class ProductDefinitionComponent implements OnInit {
       'sts': [null],
     });
 
-    //Assign get list function name, override variable here
+    // Assign get list function name, override variable here
     this.tableService.getListFnName = 'getList';
     this.tableService.context = this;
   }
 
   ngOnInit() {
-    //Init Fn
+    // Init Fn
     this.getList();
   }
   /**
@@ -59,7 +59,7 @@ export class ProductDefinitionComponent implements OnInit {
   }
   checkExisted(list, id) {
     return list.filter(function(item) {
-        return item.item_id == id;
+        return item.item_id === id;
     }).length;
   }
   checkItem(item) {
@@ -71,7 +71,7 @@ export class ProductDefinitionComponent implements OnInit {
         });
     }
   
-    if (this.list.checklist.length == this.list.items.length) {
+    if (this.list.checklist.length === this.list.items.length) {
         this.selectItem.isCheckAll = true;
     } else this.selectItem.isCheckAll = false;
   }
@@ -96,7 +96,7 @@ export class ProductDefinitionComponent implements OnInit {
 
   getList() {
     var params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
-    Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);
+    Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
     this.productService.getListItem(params).subscribe(res => {
       try {

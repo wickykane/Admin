@@ -9,7 +9,7 @@ export class DashboardService {
     /**
      * PROMOTION
      */
-    //
+    // 
     getOverAllCount(params) {
         var url = ['reports', 'count-overall'].join('/');
         return this.API.get(url, params);
@@ -21,7 +21,7 @@ export class DashboardService {
     /**
      * REPORTS
      */
-    //
+    // 
     getRefenceCategory() {
         var url = ['item','reference', 'category'].join('/');
         return this.API.get(url);

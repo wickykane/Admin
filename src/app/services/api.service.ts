@@ -12,21 +12,21 @@ export class ApiService {
     public token: string;
 
     constructor(public http: Http, public httpClient: HttpClient, private jwtService: JwtService) {
-        // set token if saved in local storage
-        // var currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        // this.token = currentUser && currentUser.token;
+        //  set token if saved in local storage
+        //  var currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        //  this.token = currentUser && currentUser.token;
     }
 
     private headerFormData() {
-        // const _token = window.localStorage.getItem('token');
-        // const _headers = new Headers({ 'Authorization': 'Bearer ' + this.jwtService.getToken() });
-        // const _options = new RequestOptions({ headers: _headers });
-        // return _options;
+        //  const _token = window.localStorage.getItem('token');
+        //  const _headers = new Headers({ 'Authorization': 'Bearer ' + this.jwtService.getToken() });
+        //  const _options = new RequestOptions({ headers: _headers });
+        //  return _options;
 
         const httpOptions = {
             headers: new HttpHeaders({ 'Authorization': 'Bearer ' + this.jwtService.getToken() }),
         };
-        // if (params) { httpOptions['params'] = params; }
+        //  if (params) { httpOptions['params'] = params; }
         return httpOptions;
     }
 
@@ -65,15 +65,15 @@ export class ApiService {
             .pipe(
                 catchError(this._serverError)
             );
-        // .map(res => res.json())  // could raise an error if invalid JSON
-        // .do(data => data)  // debug
-        // .catch(this._serverError);
+        //  .map(res => res.json())  //  could raise an error if invalid JSON
+        //  .do(data => data)  //  debug
+        //  .catch(this._serverError);
     }
 
     post(path, params: Object = {}): Observable<any> {
         return this.httpClient.post(`${environment.api_url}${path}`, JSON.stringify(params), this.headerOptionDefault())
-            // .map(res => res.json())  // could raise an error if invalid JSON
-            // .do(data => data)  // debug
+            //  .map(res => res.json())  //  could raise an error if invalid JSON
+            //  .do(data => data)  //  debug
             .pipe(
                 catchError(this._serverError)
             );
@@ -81,8 +81,8 @@ export class ApiService {
 
     put(path, params: Object = {}): Observable<any> {
         return this.httpClient.put(`${environment.api_url}${path}`, JSON.stringify(params), this.headerOptionDefault())
-            // .map(res => res.json())  // could raise an error if invalid JSON
-            // .do(data => data)  // debug
+            //  .map(res => res.json())  //  could raise an error if invalid JSON
+            //  .do(data => data)  //  debug
             .pipe(
                 catchError(this._serverError)
             );
@@ -91,9 +91,9 @@ export class ApiService {
 
     delete(path): Observable<any> {
         return this.httpClient.delete(`${environment.api_url}${path}`, this.headerOptionDefault())
-            // .map(res => res.json())  // could raise an error if invalid JSON
-            // .do(data => data)  // debug
-            // .catch(this._serverError);
+            //  .map(res => res.json())  //  could raise an error if invalid JSON
+            //  .do(data => data)  //  debug
+            //  .catch(this._serverError);
             .pipe(
                 catchError(this._serverError)
             );
@@ -101,9 +101,9 @@ export class ApiService {
 
     deleteWithParam(path: string, body: Object = {}): Observable<any> {
         return this.httpClient.delete(`${environment.api_url}${path}`, this.headerOptionDefault(body))
-            // .map(res => res.json())  // could raise an error if invalid JSON
-            // .do(data => data)  // debug
-            // .catch(this._serverError);
+            //  .map(res => res.json())  //  could raise an error if invalid JSON
+            //  .do(data => data)  //  debug
+            //  .catch(this._serverError);
             .pipe(
                 catchError(this._serverError)
             );
@@ -111,8 +111,8 @@ export class ApiService {
 
     postForm(path, formData) {
         return this.httpClient.post(`${environment.api_url}${path}`, this.madeFormData(formData), this.headerFormData())
-            // .map(res => res.json())
-            // .catch(this._serverError);
+            //  .map(res => res.json())
+            //  .catch(this._serverError);
             .pipe(
                 catchError(this._serverError)
             );
@@ -120,8 +120,8 @@ export class ApiService {
 
     putForm(path, formData) {
         return this.httpClient.put(`${environment.api_url}${path}`, this.madeFormData(formData), this.headerFormData())
-            // .map(res => res.json())
-            // .catch( this._serverError);
+            //  .map(res => res.json())
+            //  .catch( this._serverError);
             .pipe(
                 catchError(this._serverError)
             );
@@ -129,7 +129,7 @@ export class ApiService {
 
     madeFormData(data) {
         const formData: FormData = new FormData();
-        // tslint:disable-next-line:forin
+        //  tslint:disable-next-line:forin
         for (const i in data) {
             formData.append(i, data[i]);
         }

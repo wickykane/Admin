@@ -20,8 +20,8 @@ export class LoginComponent implements OnInit {
         public fb: FormBuilder,
         public toastr: ToastrService, ) {
         this.nameForm = fb.group({
-            username: ["", Validators.required],
-            password: ["", Validators.required],
+            username: ['', Validators.required],
+            password: ['', Validators.required],
         });       
     }
 

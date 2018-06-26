@@ -2,7 +2,7 @@ import { TableService } from './../../../services/table.service';
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PurchaseService } from "../purchase.service";
+import { PurchaseService } from '../purchase.service';
 
 import { routerTransition } from '../../../router.animations';
 import { ToastrService } from 'ngx-toastr';
@@ -44,13 +44,13 @@ export class SupplierComponent implements OnInit {
             'email': [null]
         });
 
-        //Assign get list function name, override letiable here
+        // Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
     }
 
     ngOnInit() {
-        //Init Fn
+        // Init Fn
         this.getList();
         this.user = JSON.parse(localStorage.getItem('currentUser'));
     }
@@ -66,7 +66,7 @@ export class SupplierComponent implements OnInit {
 
     getList() {
         let params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
-        Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
         this.purchaseService.getListSupplier(params).subscribe(res => {
             try {

@@ -59,9 +59,9 @@ export class cdArrowTable implements OnDestroy {
         this._hotkeysService.add(new Hotkey('space', (event: KeyboardEvent): boolean => {
             if (this._selectedIndex >= 0) {
                 this.onEnter.emit(this._selectedIndex);
-                return false; // Prevent bubbling
+                return false; //  Prevent bubbling
             }
-            // event.preventDefault();
+            //  event.preventDefault();
         }, undefined, 'Select'));
 
     }

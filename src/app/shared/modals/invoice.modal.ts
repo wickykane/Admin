@@ -6,7 +6,7 @@ import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
     templateUrl: './invoice.modal.html'
 })
 export class InvoiceModalContent implements OnInit {
-    // Resolve Data
+    //  Resolve Data
     @Input() name;
     @Input() detail;
 

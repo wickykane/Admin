@@ -2,7 +2,7 @@ import {TableService} from './../../../services/table.service';
 import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {Form, FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ProductService} from "../product-mgmt.service";
+import {ProductService} from '../product-mgmt.service';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({selector: 'app-product-definition-create', templateUrl: './product-definition-create.component.html', styleUrls: ['../product-mgmt.component.scss']})

@@ -38,7 +38,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         'last_sales_order': '',
         'current_dept': '',
         'discount_level': '',
-        // 'items_in_quote': '',
+        //  'items_in_quote': '',
         'buyer_type': '',
         primary: [{
             'address_line': '',
@@ -117,7 +117,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         }, 300);
 
         this.listMaster['multi_ship'] = [{ id: 0, label: 'No' }, { id: 1, label: 'Yes' }];
-        // Item
+        //  Item
         this.list.items = this.router.getNavigatedData() || [];
         if (Object.keys(this.list.items).length === 0) { this.list.items = []; }
         this.getListCustomerOption();
@@ -125,7 +125,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         this.updateTotal();
         this.copy_addr = Object.assign(this.copy_addr, this.addr_select);
         this.copy_customer = Object.assign(this.copy_customer, this.customer);
-        // this.generalForm.controls['is_multi_shp_addr'].patchValue(0);
+        //  this.generalForm.controls['is_multi_shp_addr'].patchValue(0);
         const d = new Date();
         this.generalForm.controls['quote_date'].patchValue(d.toISOString().slice(0, 10));
         d.setDate(d.getDate() + 30);
@@ -197,7 +197,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         const pattern = /[0-9]/;
         const inputChar = String.fromCharCode(event.charCode);
         if (!pattern.test(inputChar)) {
-            // invalid character, prevent input
+            //  invalid character, prevent input
             event.preventDefault();
         }
     }
@@ -226,10 +226,10 @@ export class SaleQuotationCreateComponent implements OnInit {
     updateTotal() {
         this.order_info.total = 0;
         this.order_info.sub_total = 0;
-        if (this.list.items !== undefined) {
+        if (this.list.items !=== undefined) {
             (this.list.items || []).forEach((item) => {
                 let sub_quantity = 0;
-                item.discount = item.discount !== undefined ? item.discount : 0;
+                item.discount = item.discount !=== undefined ? item.discount : 0;
                 if (!item.products) { item.products = []; }
                 item.products.forEach((subItem, index) => {
                     if (item.products.length > 0) {
@@ -249,9 +249,9 @@ export class SaleQuotationCreateComponent implements OnInit {
             });
 
         }
-        this.order_info['shipping_cost'] = (this.order_info['shipping_cost'] !== undefined ? this.order_info['shipping_cost'] : 0);
-        this.order_info['alt_vat_percent'] = (this.order_info['vat_percent'] !== undefined ? this.order_info['vat_percent'] : 0);
-        this.order_info['alt_discount'] = (this.order_info['discount_percent'] !== undefined ? this.order_info['discount_percent'] : 0);
+        this.order_info['shipping_cost'] = (this.order_info['shipping_cost'] !=== undefined ? this.order_info['shipping_cost'] : 0);
+        this.order_info['alt_vat_percent'] = (this.order_info['vat_percent'] !=== undefined ? this.order_info['vat_percent'] : 0);
+        this.order_info['alt_discount'] = (this.order_info['discount_percent'] !=== undefined ? this.order_info['discount_percent'] : 0);
         this.promotionList['total_invoice_discount'] = (this.promotionList['total_invoice_discount'] ? this.promotionList['total_invoice_discount'] : 0);
 
         this.order_info.total_discount = parseFloat((this.order_info.sub_total * Number(this.order_info['alt_discount']) / 100).toFixed(2));
@@ -262,7 +262,7 @@ export class SaleQuotationCreateComponent implements OnInit {
 
     deleteAction(id) {
         this.list.items = this.list.items.filter(function(item) {
-            return item.item_id !== id;
+            return item.item_id !=== id;
         });
         this.updateTotal();
     }
@@ -315,9 +315,9 @@ export class SaleQuotationCreateComponent implements OnInit {
             }
         }, dismiss => { });
     }
-    // Show order history
+    //  Show order history
     showViewOrderHistory() {
-        if (this.generalForm.value.company_id !== null) {
+        if (this.generalForm.value.company_id !=== null) {
             const modalRef = this.modalService.open(OrderHistoryModalContent, { size: 'lg' });
             modalRef.componentInstance.company_id = this.generalForm.value.company_id;
             modalRef.result.then(res => {
@@ -327,42 +327,42 @@ export class SaleQuotationCreateComponent implements OnInit {
             }, dismiss => { });
         }
     }
-    // showSaleQuoteList() {
-    //     if (this.generalForm.value.company_id !== null) {
-    //         const modalRef = this.modalService.open(OrderSaleQuoteModalContent, { size: 'lg' });
-    //         modalRef.result.then(res => {
-    //             if (res instanceof Array && res.length > 0) {
-    //                 const listAdded = [];
-    //                 (this.list.items).forEach(function(item) {
-    //                     listAdded.push(item.item_id);
-    //                 });
-    //                 res.forEach(function(item) {
-    //                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
-    //                     item['products'] = [];
-    //                     item.order_quantity = 1;
-    //                     item.totalItem = item.sale_price;
-    //                     item.source = 'From Quote';
-    //                 });
-    //
-    //                 this.list.items = this.list.items.concat(res.filter(function(item) {
-    //                     return listAdded.indexOf(item.item_id) < 0;
-    //                 }));
-    //
-    //                 this.updateTotal();
-    //                 this.generateNote();
-    //             }
-    //         },
-    //             dismiss => { });
-    //         modalRef.componentInstance.company_id = this.generalForm.value.company_id;
-    //     }
-    //
-    //
-    // }
+    //  showSaleQuoteList() {
+    //      if (this.generalForm.value.company_id !=== null) {
+    //          const modalRef = this.modalService.open(OrderSaleQuoteModalContent, { size: 'lg' });
+    //          modalRef.result.then(res => {
+    //              if (res instanceof Array && res.length > 0) {
+    //                  const listAdded = [];
+    //                  (this.list.items).forEach(function(item) {
+    //                      listAdded.push(item.item_id);
+    //                  });
+    //                  res.forEach(function(item) {
+    //                      if (item.sale_price) { item.sale_price = Number(item.sale_price); }
+    //                      item['products'] = [];
+    //                      item.order_quantity = 1;
+    //                      item.totalItem = item.sale_price;
+    //                      item.source = 'From Quote';
+    //                  });
+    // 
+    //                  this.list.items = this.list.items.concat(res.filter(function(item) {
+    //                      return listAdded.indexOf(item.item_id) < 0;
+    //                  }));
+    // 
+    //                  this.updateTotal();
+    //                  this.generateNote();
+    //              }
+    //          },
+    //              dismiss => { });
+    //          modalRef.componentInstance.company_id = this.generalForm.value.company_id;
+    //      }
+    // 
+    // 
+    //  }
     generateNote() {
         let arrSale = [];
         const temp = this.list.items;
         for (let i = 0; i < temp.length; i++) {
-            if (temp[i].sale_quote_num !== 'undefined') {
+            if (temp[i].sale_quote_num !===  'undefined') {
                 arrSale.push(temp[i].sale_quote_num);
             }
         }

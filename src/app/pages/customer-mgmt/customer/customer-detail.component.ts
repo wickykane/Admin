@@ -1,13 +1,13 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CustomerService } from '../customer.service';
 
-// modal
+//  modal
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ItemModalContent } from '../../../shared/modals/item.modal';
 import { AddressModalContent } from '../../../shared/modals/address.modal';
 import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
+import { ItemModalContent } from '../../../shared/modals/item.modal';
 
 
 import { ToastrService } from 'ngx-toastr';
@@ -52,7 +52,7 @@ export class CustomerDetailComponent implements OnInit {
             'buyer_type': [null, Validators.required],
             'full_name': [null, Validators.required],
             'email': [null, Validators.required],
-            // 'sale_price_id': [null],
+            //  'sale_price_id': [null],
             'phone': [null],
             'fax': [null],
             'website': [null],
@@ -110,7 +110,7 @@ export class CustomerDetailComponent implements OnInit {
         });
     }
 
-    // data master country
+    //  data master country
     getListCountry() {
         this.customerService.getListCountry().subscribe(res => {
             try {
@@ -120,7 +120,7 @@ export class CustomerDetailComponent implements OnInit {
             }
         });
     }
-    // action change country
+    //  action change country
     changeCountry(id, flag) {
         const params = {
             country: id
@@ -147,7 +147,7 @@ export class CustomerDetailComponent implements OnInit {
             }
         });
     }
-    // action copy address
+    //  action copy address
 
     addNewLine() {
         this.users.push({});
@@ -163,9 +163,8 @@ export class CustomerDetailComponent implements OnInit {
         const reader = new FileReader();
         if (event.target.files && event.target.files.length > 0) {
             const files = event.target.files;
-            this.listFile = Object.assign([], files);
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
+            this.listFile = [...files];
+            for (file of files) {
                 reader.readAsDataURL(file);
                 reader.onload = (e) => {
                     this.imageSelected = e.target['result'];
@@ -187,8 +186,8 @@ export class CustomerDetailComponent implements OnInit {
 
         }
 
-        // add property isCheck to array
-        addressList.map(function(addr) {
+        //  add property isCheck to array
+        addressList.map((addr) => {
             addr.isChecked = false;
             return addr;
         });
@@ -221,7 +220,7 @@ export class CustomerDetailComponent implements OnInit {
                 this.generalForm.patchValue(res.data);
                 this.primaryForm.patchValue(res.data['primary'][0]);
                 this.imageSelected = res.data.img;
-                // this.users = res.data['user'];
+                //  this.users = res.data['user'];
                 this.primaryAddress = res.data['primary'][0];
                 this.changeCountry(res.data['primary'][0]['country_code'], 'states_primary');
                 this.addressList = this.mergeAddressList(res.data);
@@ -235,7 +234,7 @@ export class CustomerDetailComponent implements OnInit {
         if (item.isChecked) {
             this.removedList.push(item);
         } else {
-            this.removedList = this.removedList.filter(function(obj) {
+            this.removedList = this.removedList.filter((obj) => {
                 return obj.isChecked === true;
             });
         }
@@ -252,7 +251,7 @@ export class CustomerDetailComponent implements OnInit {
                 this.customerService.deleteAddress(params).subscribe(res => {
                     try {
                         this.toastr.success(res.message);
-                        this.addressList = this.addressList.filter(function(obj) {
+                        this.addressList = this.addressList.filter((obj) => {
                             return obj.isChecked === false;
                         });
                         this.removedList.length = 0;
@@ -285,8 +284,8 @@ export class CustomerDetailComponent implements OnInit {
     }
 
     updateSupplier(array) {
-        const params = Object.assign({}, this.generalForm.value);
-        params['user'] = Object.assign([], this.users);
+        const params = {...this.generalForm.value};
+        params['user'] = {...[], ...this.users};
         params['primary'] = [];
         params['primary'].push(this.primaryForm.value);
         params['billing'] = [];

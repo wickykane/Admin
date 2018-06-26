@@ -33,7 +33,7 @@ export class BuyerRfqComponent implements OnInit {
       'name': [null]      
     });
 
-    //Assign get list function name, override variable here
+    // Assign get list function name, override variable here
     this.tableService.getListFnName = 'getList';
     this.tableService.context = this;
 
@@ -41,7 +41,7 @@ export class BuyerRfqComponent implements OnInit {
 
   ngOnInit() {    
    
-    //Init Fn
+    // Init Fn
     this.getList();
   }
   /**
@@ -64,7 +64,7 @@ export class BuyerRfqComponent implements OnInit {
 
   getList() {
     var params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
-    Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);
+    Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
     this.orderService.getListBuyerRFQ(params).subscribe(res => {
       try {
@@ -76,6 +76,6 @@ export class BuyerRfqComponent implements OnInit {
     });
   }
   goToSaleQuote(id) {
-    // $state.go("app.orders.sales-quotation.buyerrfq",{id: id});            
+    //  $state.go('app.orders.sales-quotation.buyerrfq',{id: id});            
 }
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AdminPanelService } from '../admin-panel.service';
-import { TableService } from "../../../services/index";
+import { TableService } from '../../../services/index';
 import { routerTransition } from '../../../router.animations';
 
 
@@ -36,14 +36,14 @@ export class UnitMeasureComponent implements OnInit {
                 'name': [null]      
               });
           
-              //Assign get list function name, override variable here
+              // Assign get list function name, override variable here
               this.tableService.getListFnName = 'getList';
               this.tableService.context = this;
         }   
 
         ngOnInit() {    
    
-            //Init Fn
+            // Init Fn
             this.getList();
           }
           /**
@@ -58,7 +58,7 @@ export class UnitMeasureComponent implements OnInit {
         
           getList() {
             var params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
-            Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);
+            Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
         
             this.AdminPanelService.getListUOM(params).subscribe(res => {
               try {

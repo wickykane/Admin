@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 
-import { PromotionService } from "../promotion.service";
+import { PromotionService } from '../promotion.service';
 import { ToastrService } from 'ngx-toastr';
 import { PromotionModalContent } from '../modals/promotion.modal';
 

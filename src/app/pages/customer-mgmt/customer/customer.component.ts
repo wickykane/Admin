@@ -49,13 +49,13 @@ export class CustomerComponent implements OnInit {
             'buyer_type': [null]
         });
 
-        // Assign get list function name, override letiable here
+        //  Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
     }
 
     ngOnInit() {
-        // Init Fn
+        //  Init Fn
         this.getList();
         this.listMaster['buyerType'] = [{
             id: 'CP',
@@ -95,7 +95,7 @@ export class CustomerComponent implements OnInit {
 
     getList() {
         const params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
-        Object.keys(params).forEach((key) => (params[key] == null || params[key] === '') && delete params[key]);
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
         this.customerService.getListBuyer(params).subscribe(res => {
             try {

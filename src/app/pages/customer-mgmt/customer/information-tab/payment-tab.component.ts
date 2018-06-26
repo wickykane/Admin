@@ -1,7 +1,7 @@
-import { TableService } from './../../../../services/table.service';
-import { Component, OnInit, ViewContainerRef, Input } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, Input, OnInit, ViewContainerRef } from '@angular/core';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CustomerService } from '../../customer.service';
+import { TableService } from './../../../../services/table.service';
 
 
 @Component({
@@ -45,7 +45,7 @@ export class CustomerPaymentTabComponent implements OnInit {
             'to': [null]
         });
 
-        // Assign get list function name, override letiable here
+        //  Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
     }
@@ -57,8 +57,8 @@ export class CustomerPaymentTabComponent implements OnInit {
      */
 
     getList() {
-        const params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
-        Object.keys(params).forEach((key) => (params[key] == null || params[key] === '') && delete params[key]);
+        const params = {...this.tableService.getParams(), ...this.searchForm.value};
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
         this.customerService.getListInvoice(params).subscribe(res => {
             try {

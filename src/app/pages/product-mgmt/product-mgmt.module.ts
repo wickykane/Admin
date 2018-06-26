@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductMgmtRoutingModule } from './product-mgmt-routing.module';
-//Component
+// Component
 import {ProductMgmtComponent} from './product-mgmt.component';
 import {ItemListComponent} from './item-list/item-list.component';
 import {ProductDefinitionComponent} from './product-definition/product-definition.component';
@@ -15,12 +15,12 @@ import {ConditionProductGroupEditComponent} from './condition-product-group/cond
 import {ECatalogComponent} from './e-catalog/e-catalog.component';
 import {ECatalogCreateComponent} from './e-catalog/e-catalog-create.component';
 import {ECatalogEditComponent} from './e-catalog/e-catalog-edit.component';
-//Services
+// Services
 import {ProductService} from './product-mgmt.service';
 import { CommonShareModule, PageHeaderModule } from '../../shared/index';
-import { TableService } from "../../services/index";
+import { TableService } from '../../services/index';
 
-import { ItemModalModule } from "../../shared/modals/item.module";
+import { ItemModalModule } from '../../shared/modals/item.module';
 
 
 @NgModule({
