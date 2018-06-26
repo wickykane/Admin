@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 
-import { CustomerService } from '../customer.service';
 import { PromotionService } from '../../promotion-mgmt/promotion.service';
+import { CustomerService } from '../customer.service';
 
 import { ToastrService } from 'ngx-toastr';
 
@@ -29,8 +29,11 @@ export class CustomerSegmentCreateComponent implements OnInit {
     /**
      * Init Data
      */
-    constructor(private vRef: ViewContainerRef, private fb: FormBuilder, private promotionService: PromotionService, private customerService: CustomerService, public toastr: ToastrService, private router: Router, private modalService: NgbModal) {
-         
+    constructor(private vRef: ViewContainerRef,
+         private fb: FormBuilder,
+          private promotionService: PromotionService,
+           private customerService: CustomerService, public toastr: ToastrService, private router: Router, private modalService: NgbModal) {
+
         this.generalForm = fb.group({
             'cd': [{ value: null, disabled: true }],
             'name': [null],
@@ -91,7 +94,7 @@ export class CustomerSegmentCreateComponent implements OnInit {
             } catch (e) {
                 console.log(e);
             }
-        })
+        });
     }
 
     getListBuyerType() {
@@ -101,13 +104,12 @@ export class CustomerSegmentCreateComponent implements OnInit {
             } catch (e) {
                 console.log(e);
             }
-        })
+        });
     }
 
-    changeToGetCustomer = function (segment, index) {
-
-        let params = { 'type': segment.type, 'country_code': segment.country_code }
-        Object.keys(params).forEach(function (item) {
+    changeToGetCustomer (segment, index) => {
+        const params = { 'type': segment.type, 'country_code': segment.country_code };
+        Object.keys(params).forEach( (item) => {
             if ((params[item]) instanceof Array) {
                 params[item] = params[item].join(',');
             }
@@ -120,22 +122,21 @@ export class CustomerSegmentCreateComponent implements OnInit {
             } catch (e) {
                 console.log(e);
             }
-        })
+        });
     }
-
-    checkCustomerList = function (segment) {
+    checkCustomerList = segment => {
         setTimeout(() => {
-            if (!segment.customers) return;
+            if (!segment.customers) { return; }
             if (segment.customers.length > 0) {
                 segment.has_specific_customer = true;
             } else {
                 segment.has_specific_customer = false;
             }
-        })
-    }
+        });
+    };
 
     createSegment = function () {
-        let params = this.generalForm.value;
+        const params = this.generalForm.value;
         params.detail = Array.from( this.data.segmentList);
 
         this.promotionService.postSegment(params).subscribe(res => {
@@ -143,13 +144,13 @@ export class CustomerSegmentCreateComponent implements OnInit {
                 this.toastr.success(res.message);
                 setTimeout(() => {
                     this.router.navigate(['/customer/customer-segment']);
-                }, 500)
+                }, 500);
             } catch (e) {
-                console.log(e)
+                console.log(e);
             }
         },
             err => {
                   this.toastr.error(err.message);
-            })
-    }
+            });
+    };
 }

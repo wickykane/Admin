@@ -1,13 +1,13 @@
-import { TableService } from './../../../services/table.service';
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CustomerService } from '../customer.service';
+import { TableService } from './../../../services/table.service';
 
-import { routerTransition } from '../../../router.animations';
-import { ToastrService } from 'ngx-toastr';
-import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
+import { routerTransition } from '../../../router.animations';
+import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
 
 @Component({
     selector: 'app-buyer',
@@ -41,7 +41,6 @@ export class CustomerComponent implements OnInit {
         public tableService: TableService,
         private modalService: NgbModal,
         private customerService: CustomerService) {
-         
 
         this.searchForm = fb.group({
             'buyer_name': [null],
@@ -94,7 +93,7 @@ export class CustomerComponent implements OnInit {
     }
 
     getList() {
-        const params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
+        const params = {...this.tableService.getParams(), ...this.searchForm.value};
         Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
         this.customerService.getListBuyer(params).subscribe(res => {

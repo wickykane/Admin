@@ -159,9 +159,6 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             this.generalForm.patchValue(this.detail['head_office'][0]);
             //  this.generalForm.patchValue({primary: this})
         }
-        else {
-            //  this.generalForm.patchValue(this.detail['primary'][0]);
-        }
     }
 
     getListSalePerson() {
@@ -183,9 +180,9 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             try {
                 this.listBank = res.data;
                 this.bank_account = this.detail['banks'];
-                for (let i = 0; i < this.bank_account.length; i++) {
-                    this.bank_account[i].listBank = this.listBank;
-                    this.changeBank(this.bank_account[i]);
+                for (bank of this.bank_account) {
+                    bank.listBank = this.listBank;
+                    this.changeBank(bank);
                 }
             } catch (e) {
                 console.log(e);
@@ -200,9 +197,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         if (this.generalForm.value.buyer_type ===  'CP') {
             for (let i = 0; i < this.detail['head_office'].length; i++) {
                 const element = this.detail['head_office'][i];
-                this.address.push({
-                    ...{
-                        type: 4, listType: [{ id: 4, name: 'Head Office' }], listCountry: this.listCountry, listState: [], allow_remove: false
+                this.address.push({...{type: 4, listType: [{ id: 4, name: 'Head Office' }], listCountry: this.listCountry, listState: [], allow_remove: false
                     }, ...element
                 });
             }
@@ -296,7 +291,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     }
 
     removeBankAccount(index) {
-        if(this.bank_account[index].hasOwnProperty('id')){
+        if (this.bank_account[index].hasOwnProperty('id')) {
             this.bank_account[index].is_deleted = true;
             return;
         }
@@ -318,7 +313,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     }
 
     removeContact(index) {
-        if(this.contact[index].hasOwnProperty('id')){
+        if (this.contact[index].hasOwnProperty('id')) {
             this.contact[index].is_deleted = true;
             return;
         }
@@ -385,7 +380,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         //      delete obj['listState'];
         //  });
         if (this.generalForm.valid) {
-            const params = Object.assign({}, this.generalForm.value);
+            const params = {...this.generalForm.value};
             params['user'] = [];
             if (this.contact.length > 0) {
                 params['user'] = this.contact;
