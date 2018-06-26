@@ -85,7 +85,7 @@ export class CustomerSegmentEditComponent implements OnInit {
         this.getListBuyerType();
         this.promotionService.getDetailSegment(id).subscribe(res => {
             try {
-                if (res._type === 'success') {
+                if (res._type ===  'success') {
                     this.generalForm.patchValue(res.results);
                     this.data['segmentList'] = res.results.detail || [];
                     this.data['segmentList'].forEach((data, index) => {

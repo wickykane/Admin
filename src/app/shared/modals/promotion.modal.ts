@@ -20,7 +20,7 @@ export class PromotionModalContent implements OnInit {
     }
 
     ngOnInit() {
-        // Init Fn
+        //  Init Fn
         this.listPromotion = this.data;
     }
 

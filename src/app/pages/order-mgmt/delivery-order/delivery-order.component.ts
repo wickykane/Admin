@@ -44,26 +44,26 @@ export class DeliveryOrderComponent implements OnInit {
             'status_id': [null]
         });
 
-        //Assign get list function name, override letiable here
+        // Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
     }
 
     ngOnInit() {
-        //Init Fn
+        // Init Fn
         this.listMaster['status'] = [{
             id: '1',
-            name: "NEW"
+            name: 'NEW'
         }, {
             id: '2',
-            name: "READY TO SHIP"
+            name: 'READY TO SHIP'
         },
         {
             id: '3',
-            name: "IN TRANSIT"
+            name: 'IN TRANSIT'
         }, {
             id: '4',
-            name: "DELIVERED"
+            name: 'DELIVERED'
         }];
         this.getList();
 
@@ -94,7 +94,7 @@ export class DeliveryOrderComponent implements OnInit {
 
     getList() {
         let params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
-        Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
         this.orderService.getListDeliveryOrder(params).subscribe(res => {
             try {

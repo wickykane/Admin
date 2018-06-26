@@ -2,7 +2,7 @@ import { TableService } from './../../../services/table.service';
 import { Component, OnInit } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PromotionService } from "../promotion.service";
+import { PromotionService } from '../promotion.service';
 @Component({
   selector: 'app-promotion-budget',
   templateUrl: './promotion-budget.component.html',
@@ -31,16 +31,16 @@ export class PromotionBudgetComponent implements OnInit {
       'sts': [null],
     });
 
-    //Assign get list function name, override variable here
+    // Assign get list function name, override variable here
     this.tableService.getListFnName = 'getList';
     this.tableService.context = this;
 
   }
 
   ngOnInit() {
-    //Init data
-    this.listMaster['status'] = [{ id: 'NW', name: "New " }, { id: 'AP', name: "Approved" }, { id: 'CL', name: "Close" }];
-    //Init Fn
+    // Init data
+    this.listMaster['status'] = [{ id: 'NW', name: 'New ' }, { id: 'AP', name: 'Approved' }, { id: 'CL', name: 'Close' }];
+    // Init Fn
     this.getList();
   }
   /**
@@ -55,7 +55,7 @@ export class PromotionBudgetComponent implements OnInit {
 
   getList() {
     var params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
-    Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);
+    Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
     this.promotionService.getListBudget(params).subscribe(res => {
       try {

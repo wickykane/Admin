@@ -1,5 +1,5 @@
-import { Injectable } from "@angular/core";
-import { NgbDateParserFormatter, NgbDateStruct, NgbDateAdapter } from "@ng-bootstrap/ng-bootstrap";
+import { Injectable } from '@angular/core';
+import { NgbDateParserFormatter, NgbDateStruct, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
 @Injectable()
 
 export class NgbUTCStringAdapter extends NgbDateAdapter<string> {

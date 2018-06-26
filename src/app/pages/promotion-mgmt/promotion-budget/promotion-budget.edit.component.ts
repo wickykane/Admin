@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PromotionService } from "../promotion.service";
+import { PromotionService } from '../promotion.service';
 import { ToastrService } from 'ngx-toastr';
 
 
@@ -40,8 +40,8 @@ export class PromotionBudgetEditComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.data["id"] = this.route.snapshot.paramMap.get('id');
-    this.getDetailBudget(this.data["id"]);
+    this.data['id'] = this.route.snapshot.paramMap.get('id');
+    this.getDetailBudget(this.data['id']);
   }
 
   /**
@@ -51,7 +51,7 @@ export class PromotionBudgetEditComponent implements OnInit {
   getDetailBudget(id) {
     this.promotionService.getBudgetDetail(id).subscribe(res => {
       try {
-        if (res._type == 'success') {
+        if (res._type ===  'success') {
           this.generalForm.patchValue(res.results);
         } else {
           this.toastr.error(res.message);
@@ -85,7 +85,7 @@ export class PromotionBudgetEditComponent implements OnInit {
     let params = this.generalForm.value;
     this.promotionService.approveBudget(this.data['id'], params).subscribe(res => {
       try {
-        if (res._type == 'success') {
+        if (res._type ===  'success') {
           this.toastr.success(res.message);
         } else {
           this.toastr.error(res.message);

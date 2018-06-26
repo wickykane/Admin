@@ -24,7 +24,7 @@ export class SaleOrderComponent implements OnInit {
   public list = {
     items: []
   };
-  // public showProduct: boolean = false;
+  //  public showProduct: boolean = false;
   public onoffFilter: any;
   public listMoreFilter: any = [];
 
@@ -52,16 +52,16 @@ export class SaleOrderComponent implements OnInit {
 
     });
 
-    // Assign get list function name, override letiable here
+    //  Assign get list function name, override letiable here
     this.tableService.getListFnName = 'getList';
     this.tableService.context = this;
   }
 
   ngOnInit() {
-    // Init Fn
+    //  Init Fn
     this.listMoreFilter = [{ value: false, name: 'Date Filter' }];
     this.listMaster['type'] = [{ id: 'PKU', name: 'Pickup ' }, { id: 'NO', name: 'Regular Order' }, { id: 'ONL', name: 'Ecommerce' }];
-    // this.countOrderStatus();
+    //  this.countOrderStatus();
     this.getList();
     this.getListStatus();
   }
@@ -95,7 +95,7 @@ export class SaleOrderComponent implements OnInit {
       if (params[key] instanceof Array) {
         params[key] = params[key].join(',');
       }
-      (params[key] == null || params[key] === '') && delete params[key];
+      (params[key] === null || params[key] ===  '') && delete params[key];
     });
 
     params.order = 'id';

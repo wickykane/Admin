@@ -1,11 +1,11 @@
-import { TableService } from './../../../services/table.service';
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PurchaseService } from "../purchase.service";
+import { PurchaseService } from '../purchase.service';
+import { TableService } from './../../../services/table.service';
 
-import { routerTransition } from '../../../router.animations';
 import { ToastrService } from 'ngx-toastr';
+import { routerTransition } from '../../../router.animations';
 
 @Component({
   selector: 'app-purchase-order',
@@ -16,16 +16,16 @@ import { ToastrService } from 'ngx-toastr';
 export class PurchaseOrderComponent implements OnInit {
 
     /**
-     * letiable Declaration
+     * constiable Declaration
      */
     public listMaster = {};
     public selectedIndex = 0;
     public list = {
         items: []
     };
-    // public showProduct: boolean = false;
+    //  public showProduct: boolean = false;
     public onoffFilter: any;
-    public flagId: string = '';
+    public flagId = '';
 
     public user: any;
     public listMoreFilter: any = [];
@@ -37,8 +37,6 @@ export class PurchaseOrderComponent implements OnInit {
         public toastr: ToastrService,
         private vRef: ViewContainerRef,
         public tableService: TableService, private purchaseService: PurchaseService) {
-         
-
         this.searchForm = fb.group({
             'cd': [null],
             'purchase_quote_cd': [null],
@@ -48,13 +46,13 @@ export class PurchaseOrderComponent implements OnInit {
             'rqst_dt': [null]
         });
 
-        //Assign get list function name, override letiable here
+        // Assign get list function name, override constiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
     }
 
     ngOnInit() {
-        //Init Fn
+        // Init Fn
         this.listMoreFilter = [{ value: false, name: 'Requested On', type: 'date', model: 'rqst_dt' }];
         this.getList();
         this.getListSupplier();
@@ -72,12 +70,7 @@ export class PurchaseOrderComponent implements OnInit {
      * Internal Function
      */
      toggleSubRow(id) {
-         if (id === this.flagId) {
-             this.flagId = '0';
-         } else {
-             this.flagId = id;
-         }
-        //  this.showProduct = !this.showProduct;
+         (id === this.flagId) ? this.flagId = '0' : this.flagId = id;
      }
 
      showMorefilter() {
@@ -85,9 +78,9 @@ export class PurchaseOrderComponent implements OnInit {
      }
 
      sendMail(id) {
-         let params = {
-             "sts": "SP"
-         }
+         const params = {
+             'sts': 'SP'
+         };
          this.purchaseService.sendMailPO(params, id).subscribe(res => {
              try {
                  this.toastr.success(res.message);
@@ -98,7 +91,7 @@ export class PurchaseOrderComponent implements OnInit {
          });
      }
 
-    sentToSuppPQ(id){
+    sentToSuppPQ(id) {
         this.purchaseService.sentToSuppPQ(id).subscribe(res => {
             try {
                 this.toastr.success(res.message);
@@ -134,10 +127,10 @@ export class PurchaseOrderComponent implements OnInit {
     }
 
     getListSupplier() {
-        let params = { page: 1, length: 100 }
+        const params = { page: 1, length: 100 };
         this.purchaseService.getListSupplier(params).subscribe(res => {
             try {
-                this.listMaster["supplier"] = res.results.rows;
+                this.listMaster['supplier'] = res.results.rows;
             } catch (e) {
                 console.log(e);
             }
@@ -147,7 +140,7 @@ export class PurchaseOrderComponent implements OnInit {
     getListStatus() {
         this.purchaseService.getListStatusOrder().subscribe(res => {
             try {
-                this.listMaster["status"] = res.results;
+                this.listMaster['status'] = res.results;
             } catch (e) {
                 console.log(e);
             }
@@ -155,8 +148,8 @@ export class PurchaseOrderComponent implements OnInit {
     }
 
     getList() {
-        let params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
-        Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);
+        const params = {...this.tableService.getParams(), ...this.searchForm.value};
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && deconste params[key]);
 
         this.purchaseService.getListPurchaseOrder(params).subscribe(res => {
             try {

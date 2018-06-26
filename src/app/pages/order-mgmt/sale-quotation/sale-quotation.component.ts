@@ -49,15 +49,15 @@ export class SaleQuotationComponent implements OnInit {
             'date_to': [null]
         });
 
-        // Assign get list function name, override letiable here
+        //  Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
-        // Init Key
+        //  Init Key
         this.saleQuoteKeyService.watchContext.next(this);
     }
 
     ngOnInit() {
-        // Init Fn
+        //  Init Fn
         this.listMaster['listFilter'] = [{ value: false, name: 'Date Filter' }];
         this.listMaster['dateType'] = [{ id: 'quote_date', name: 'Quote Date' }, { id: 'expiry_dt', name: 'Expiry Date' }, { id: 'ship_date', name: 'Delivery Date' }];
         this.getList();
@@ -134,7 +134,7 @@ export class SaleQuotationComponent implements OnInit {
     getList() {
 
         const params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
-        Object.keys(params).forEach((key) => (params[key] == null || params[key] === '') && delete params[key]);
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
         this.orderService.getListSalesQuotation(params).subscribe(res => {
             try {

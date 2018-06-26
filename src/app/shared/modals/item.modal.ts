@@ -66,14 +66,14 @@ export class ItemModalContent implements OnInit {
             'country_id_filter': [null]
         });
 
-        // Assign get list function name, override variable here
+        //  Assign get list function name, override variable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
 
     }
 
     ngOnInit() {
-        // Init Fn
+        //  Init Fn
         this.listMaster['certification_partNumber'] = [{ code: 'Y', value: 'Yes' }, { code: 'N', value: 'No' }];
         this.getListReference();
     }
@@ -143,7 +143,7 @@ export class ItemModalContent implements OnInit {
 
     getList() {
         const params = Object.assign({}, this.tableService.getParams(), this.searchForm.value, this.filterForm.value);
-        Object.keys(params).forEach((key) => (params[key] == null || params[key] === '') && delete params[key]);
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
         this.itemService.getListAllItem(params).subscribe(res => {
             try {

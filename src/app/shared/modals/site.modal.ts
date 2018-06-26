@@ -61,7 +61,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
 
         this.hotkeyCtrlRight = hotkeysService.add(new Hotkey('alt+r', (event: KeyboardEvent): boolean => {
             this.flagAddress = true;
-            return false; // Prevent bubbling
+            return false; //  Prevent bubbling
         }));
 
 
@@ -116,7 +116,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
     }
 
 
-    // change customer Type
+    //  change customer Type
     changeCustomerType() {
 
         const tempType1 = [{ id: 1, name: 'Head Office' }];
@@ -172,7 +172,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
 
 
 
-    // add new row address
+    //  add new row address
     addNewAddress() {
         this.address.push({
             listType: this.listTypeAddress,
@@ -185,7 +185,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
         this.address.splice(index, 1);
     }
 
-    // add new row bank account
+    //  add new row bank account
     addNewBankAccount() {
         this.bank_account.push({
             listBank: this.listBank,
@@ -196,7 +196,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
     removeBankAccount(index) {
         this.bank_account.splice(index, 1);
     }
-    // add new row bank card
+    //  add new row bank card
     addNewBankCard() {
         this.bank_card.push({
             listCardType: []
@@ -206,7 +206,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
     removeBankCard(index) {
         this.bank_card.splice(index, 1);
     }
-    // add new row contact
+    //  add new row contact
     addNewContact() {
         this.contact.push({});
     }
@@ -221,14 +221,14 @@ export class SiteModalComponent implements OnInit, OnDestroy {
         this.contact.forEach(obj => {
             obj['pwd_cfrm'] = obj.pwd;
         });
-        // this.bank_account.forEach(obj => {
-        //     delete obj['listBank'];
-        //     delete obj['listBranch'];
-        // });
-        // this.address.forEach(obj => {
-        //   delete obj['listCountry'];
-        //   delete obj['listState'];
-        // });
+        //  this.bank_account.forEach(obj => {
+        //      delete obj['listBank'];
+        //      delete obj['listBranch'];
+        //  });
+        //  this.address.forEach(obj => {
+        //    delete obj['listCountry'];
+        //    delete obj['listState'];
+        //  });
         if (this.generalForm.valid) {
             const params = Object.assign({}, this.generalForm.value);
             params['user'] = [];

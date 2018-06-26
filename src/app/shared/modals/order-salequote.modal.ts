@@ -45,14 +45,14 @@ export class OrderSaleQuoteModalContent implements OnInit {
             'quote_date': [null]
         });
 
-        // Assign get list function name, override variable here
+        //  Assign get list function name, override variable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
 
     }
 
     ngOnInit() {
-        // Init Fn
+        //  Init Fn
        this.getList();
        this.getListItemReference(this.company_id);
        this.getListSalesQuoteReference(this.company_id);
@@ -85,7 +85,7 @@ export class OrderSaleQuoteModalContent implements OnInit {
 
     getList() {
         const params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
-        Object.keys(params).forEach((key) => (params[key] == null || params[key] === '') && delete params[key]);
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
         this.itemService.getListSalesQuoteItem(this.company_id, params).subscribe(res => {
             try {
                 if (!res.data.rows) {

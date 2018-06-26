@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PurchaseService } from "../purchase.service";
+import { PurchaseService } from '../purchase.service';
 
-//modal
+// modal
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ItemModalContent } from "../../../shared/modals/item.modal";
+import { ItemModalContent } from '../../../shared/modals/item.modal';
 
 
 import { ToastrService } from 'ngx-toastr';
@@ -26,11 +26,11 @@ export class QuotationCreateComponent implements OnInit {
 
     constructor(public fb: FormBuilder,
         public router: Router,
-        public toastr: ToastrService, 
+        public toastr: ToastrService,
         public vRef: ViewContainerRef,
         private purchaseService: PurchaseService,
         private modalService: NgbModal) {
-             
+
             this.generalForm = fb.group({
                 'cd': [{ value: null, disabled: true }],
                 'rqst_dt': [null, Validators.required],
@@ -44,10 +44,10 @@ export class QuotationCreateComponent implements OnInit {
     }
 
     getListSupplier() {
-        let params = { page: 1, length: 100 }
+        const params = { page: 1, length: 100 }
         this.purchaseService.getListSupplier(params).subscribe(res => {
             try {
-                this.listMaster["supplier"] = res.results.rows;
+                this.listMaster['supplier'] = res.results.rows;
             } catch (e) {
                 console.log(e);
             }
@@ -58,7 +58,7 @@ export class QuotationCreateComponent implements OnInit {
         this.purchaseService.generateCodePurchaseQuotation().subscribe(res => {
             try {
                 this.generalForm.patchValue({cd: res.results.code});
-            } catch(e) {
+            } catch (e) {
 
             }
         });
@@ -69,8 +69,8 @@ export class QuotationCreateComponent implements OnInit {
         const modalRef = this.modalService.open(ItemModalContent, {size: 'lg'});
         modalRef.result.then(res => {
             if (res.length > 0) {
-                this.items = Object.assign([], res);
-                this.items.forEach(function(item) {
+                this.items = [...res];
+                this.items.forEach((item) => {
                     if (item.resale_price) item.resale_price = Number(item.resale_price);
                     item['products'] = [];
                     item.qty = 1;
@@ -84,7 +84,7 @@ export class QuotationCreateComponent implements OnInit {
     }
 
     createQuotation() {
-        let params =  {};
+        const params =  {};
         params = this.generalForm.value;
         this.items.forEach(function(value, key) {
             value.qty = Number(value.qty);

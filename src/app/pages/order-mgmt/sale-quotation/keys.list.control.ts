@@ -36,11 +36,11 @@ export class SaleQuoteKeyService implements OnDestroy {
             return;
         }, undefined, 'Create Order'));
 
-        // this._hotkeysService.add(new Hotkey('alt+a', (event: KeyboardEvent): boolean => {
-        //     this.context.checkAllItem = !this.context.checkAllItem;
-        //     this.context.checkAll({ target: { checked: this.context.checkAllItem } });
-        //     return;
-        // }, undefined, 'Select all items on page'));
+        //  this._hotkeysService.add(new Hotkey('alt+a', (event: KeyboardEvent): boolean => {
+        //      this.context.checkAllItem = !this.context.checkAllItem;
+        //      this.context.checkAll({ target: { checked: this.context.checkAllItem } });
+        //      return;
+        //  }, undefined, 'Select all items on page'));
 
         this._hotkeysService.add(new Hotkey('alt+pagedown', (event: KeyboardEvent): boolean => {
             this.context.tableService.pagination.page++;
@@ -90,29 +90,29 @@ export class SaleQuoteKeyService implements OnDestroy {
             this.context.tableService.resetAction(this.context.searchForm);
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset Search'));
-        // this._hotkeysService.add(new Hotkey('alt+shift+r', (event: KeyboardEvent): boolean => {
-        //     event.preventDefault();
-        //     this.context.tableService.resetAction(this.context.filterForm);
-        //     return;
-        // }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset Filter'));
+        //  this._hotkeysService.add(new Hotkey('alt+shift+r', (event: KeyboardEvent): boolean => {
+        //      event.preventDefault();
+        //      this.context.tableService.resetAction(this.context.filterForm);
+        //      return;
+        //  }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset Filter'));
 
-        // this._hotkeysService.add(new Hotkey('ctrl+1', (event: KeyboardEvent): boolean => {
-        //     event.preventDefault();
-        //     this.context.selectTab('vin');
-        //     return;
-        // }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Search by VIN'));
-        //
-        // this._hotkeysService.add(new Hotkey('ctrl+2', (event: KeyboardEvent): boolean => {
-        //     event.preventDefault();
-        //     this.context.selectTab('vehicle');
-        //     return;
-        // }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Search by Vehicle'));
-        //
-        // this._hotkeysService.add(new Hotkey('ctrl+3', (event: KeyboardEvent): boolean => {
-        //     event.preventDefault();
-        //     this.context.selectTab('part_number');
-        //     return;
-        // }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Search by Part Number'));
+        //  this._hotkeysService.add(new Hotkey('ctrl+1', (event: KeyboardEvent): boolean => {
+        //      event.preventDefault();
+        //      this.context.selectTab('vin');
+        //      return;
+        //  }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Search by VIN'));
+        // 
+        //  this._hotkeysService.add(new Hotkey('ctrl+2', (event: KeyboardEvent): boolean => {
+        //      event.preventDefault();
+        //      this.context.selectTab('vehicle');
+        //      return;
+        //  }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Search by Vehicle'));
+        // 
+        //  this._hotkeysService.add(new Hotkey('ctrl+3', (event: KeyboardEvent): boolean => {
+        //      event.preventDefault();
+        //      this.context.selectTab('part_number');
+        //      return;
+        //  }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Search by Part Number'));
         this._hotkeysService.add(new Hotkey('alt+f', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             this.context.moreFilter();

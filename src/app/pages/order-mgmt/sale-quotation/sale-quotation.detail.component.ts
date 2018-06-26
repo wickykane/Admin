@@ -102,30 +102,30 @@ export class SaleQuotationDetailComponent implements OnInit {
     /**
      * Internal Function
      */
-    // showDetail(objInv) {
-    //   const modalRef = this.modalService.open(InvoiceModalContent, { size: 'lg' });
-    //   modalRef.result.then(
-    //     res => {
-    //       if (res) {
-    //         this.printInvoice();
-    //       }
-    //     },
-    //     reason => { }
-    //   );
-    //   modalRef.componentInstance.detail = objInv;
-    //   modalRef.componentInstance.name = 'INVOICE NO :' + objInv.general.invoice_num;
-    // }
+    //  showDetail(objInv) {
+    //    const modalRef = this.modalService.open(InvoiceModalContent, { size: 'lg' });
+    //    modalRef.result.then(
+    //      res => {
+    //        if (res) {
+    //          this.printInvoice();
+    //        }
+    //      },
+    //      reason => { }
+    //    );
+    //    modalRef.componentInstance.detail = objInv;
+    //    modalRef.componentInstance.name = 'INVOICE NO :' + objInv.general.invoice_num;
+    //  }
 
-    // getInvoice(order_id) {
-    //   this.orderService.getInvoice(order_id).subscribe((res) => {
-    //     this.data['invList'] = res.results.rows;
-    //   });
-    // }
+    //  getInvoice(order_id) {
+    //    this.orderService.getInvoice(order_id).subscribe((res) => {
+    //      this.data['invList'] = res.results.rows;
+    //    });
+    //  }
 
-    // getSrcIframe(order_num) {
-    //   const url = 'http://wms360.nabp-demo.seldatdirect.com/fe-upload/?transaction=' + order_num;
-    //   return url;
-    // }
+    //  getSrcIframe(order_num) {
+    //    const url = 'http:// wms360.nabp-demo.seldatdirect.com/fe-upload/?transaction=' + order_num;
+    //    return url;
+    //  }
 
 
 }

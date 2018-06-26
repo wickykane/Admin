@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CustomerService } from "../customer-mgmt/customer.service";
+import { CustomerService } from '../customer-mgmt/customer.service';
 
-//modal
+// modal
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ItemModalContent } from "../../shared/modals/item.modal";
+import { ItemModalContent } from '../../shared/modals/item.modal';
 
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../router.animations';
@@ -92,7 +92,7 @@ export class RmaCreateComponent implements OnInit {
         this.getListBuyerType();
     }
 
-    //data master country
+    // data master country
     getListCountry() {
         this.customerService.getListCountry().subscribe(res => {
             try {
@@ -112,7 +112,7 @@ export class RmaCreateComponent implements OnInit {
         })
     }
 
-    //action change country
+    // action change country
     changeCountry(id, flag) {
         let params = {
             country: id
@@ -140,13 +140,13 @@ export class RmaCreateComponent implements OnInit {
             }
         });
     }
-    //action copy address
+    // action copy address
     copyToAddress(flag) {
-        if (flag == 'billing') {
+        if (flag ===  'billing') {
             this.billingForm.patchValue(this.primaryForm.value);
             this.listMaster['states_billing'] = this.listMaster['states_primary'];
         }
-        if (flag == 'shipping') {
+        if (flag ===  'shipping') {
             this.shippingForm.patchValue(this.billingForm.value);
             this.listMaster['states_shipping'] = this.listMaster['states_billing'];
         }

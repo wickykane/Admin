@@ -57,30 +57,30 @@ export class SaleOrderDetailComponent implements OnInit {
   /**
    * Internal Function
    */
-  // showDetail(objInv) {
-  //   const modalRef = this.modalService.open(InvoiceModalContent, { size: 'lg' });
-  //   modalRef.result.then(
-  //     res => {
-  //       if (res) {
-  //         this.printInvoice();
-  //       }
-  //     },
-  //     reason => { }
-  //   );
-  //   modalRef.componentInstance.detail = objInv;
-  //   modalRef.componentInstance.name = 'INVOICE NO :' + objInv.general.invoice_num;
-  // }
+  //  showDetail(objInv) {
+  //    const modalRef = this.modalService.open(InvoiceModalContent, { size: 'lg' });
+  //    modalRef.result.then(
+  //      res => {
+  //        if (res) {
+  //          this.printInvoice();
+  //        }
+  //      },
+  //      reason => { }
+  //    );
+  //    modalRef.componentInstance.detail = objInv;
+  //    modalRef.componentInstance.name = 'INVOICE NO :' + objInv.general.invoice_num;
+  //  }
 
-  // getInvoice(order_id) {
-  //   this.orderService.getInvoice(order_id).subscribe((res) => {
-  //     this.data['invList'] = res.results.rows;
-  //   });
-  // }
+  //  getInvoice(order_id) {
+  //    this.orderService.getInvoice(order_id).subscribe((res) => {
+  //      this.data['invList'] = res.results.rows;
+  //    });
+  //  }
 
-  // getSrcIframe(order_num) {
-  //   const url = 'http://wms360.nabp-demo.seldatdirect.com/fe-upload/?transaction=' + order_num;
-  //   return url;
-  // }
+  //  getSrcIframe(order_num) {
+  //    const url = 'http:// wms360.nabp-demo.seldatdirect.com/fe-upload/?transaction=' + order_num;
+  //    return url;
+  //  }
 
   printInvoice() {
     const innerContents = document.getElementById('printInvoice').innerHTML;
@@ -89,11 +89,11 @@ export class SaleOrderDetailComponent implements OnInit {
     popupWinindow.document.write('' +
       '<html>' +
       '<head>' +
-      '<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400italic,600,700%7COpen+Sans:300,400,400italic,600,700"/>' +
-      '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">' +
-      '<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>' +
-      '<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>' +
-      '<style type="text/css">' +
+      '<link rel='stylesheet' href='https:// fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400italic,600,700%7COpen+Sans:300,400,400italic,600,700'/>' +
+      '<link rel='stylesheet' href='https:// maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>' +
+      '<script src='https:// ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js'></script>' +
+      '<script src='https:// maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>' +
+      '<style type='text/css'>' +
       'body{-webkit-print-color-adjust: exact; overflow: scroll; font-size: 9px;}' +
       '@media print{body{font-size: 9px;} thead {display: table-header-group;}}' +
       '@media print {table >tr.vendorListHeading {background-color:#cccccc !important; -webkit-print-color-adjust: exact; font-weight:normal; border-top:1px solid grey}}' +
@@ -126,7 +126,7 @@ export class SaleOrderDetailComponent implements OnInit {
       '</style>' +
       '<title>' + this.orderDetail['invoice_num'] + '</title>' +
       '</head>' +
-      '<body onload="window.print()">' + innerContents + '</html>');
+      '<body onload='window.print()'>' + innerContents + '</html>');
     popupWinindow.document.close();
   }
 
@@ -137,11 +137,11 @@ export class SaleOrderDetailComponent implements OnInit {
     popupWinindow.document.write('' +
       '<html>' +
       '<head>' +
-      '<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400italic,600,700%7COpen+Sans:300,400,400italic,600,700"/>' +
-      '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">' +
-      '<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>' +
-      '<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>' +
-      '<style type="text/css">' +
+      '<link rel='stylesheet' href='https:// fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400italic,600,700%7COpen+Sans:300,400,400italic,600,700'/>' +
+      '<link rel='stylesheet' href='https:// maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>' +
+      '<script src='https:// ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js'></script>' +
+      '<script src='https:// maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>' +
+      '<style type='text/css'>' +
       'body{-webkit-print-color-adjust: exact; overflow: scroll; font-size: 9px;}' +
       '@media print{body{font-size: 9px;} thead {display: table-header-group;}}' +
       '@media print {table >tr.vendorListHeading {background-color:#cccccc !important; -webkit-print-color-adjust: exact; font-weight:normal; border-top:1px solid grey}}' +
@@ -174,7 +174,7 @@ export class SaleOrderDetailComponent implements OnInit {
       '</style>' +
       '<title>' + this.orderDetail['code'] + '</title>' +
       '</head>' +
-      '<body onload="window.print()">' + innerContents + '</html>');
+      '<body onload='window.print()'>' + innerContents + '</html>');
     popupWinindow.document.close();
   }
 

@@ -4,8 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 
-import { CustomerService } from "../customer.service";
-import { PromotionService } from "../../promotion-mgmt/promotion.service";
+import { CustomerService } from '../customer.service';
+import { PromotionService } from '../../promotion-mgmt/promotion.service';
 
 import { ToastrService } from 'ngx-toastr';
 
@@ -46,29 +46,29 @@ export class CustomerSegmentCreateComponent implements OnInit {
 
         this.listMaster['applyFor'] = [{
             id: '1',
-            name: "All customers"
+            name: 'All customers'
         }, {
             id: '2',
-            name: "Specific Customers "
+            name: 'Specific Customers '
         }];
 
         this.listMaster['status'] = [{
             id: 'IA',
-            name: "In-Active"
+            name: 'In-Active'
         }, {
             id: 'AT',
-            name: "Active "
+            name: 'Active '
         }];
 
         this.listMaster['allType'] = [
             {
                 id: '1',
-                name: "All customers "
+                name: 'All customers '
             },
 
         ];
 
-        //Master Data
+        // Master Data
         this.getListCountry();
         this.getListBuyerType();
     }

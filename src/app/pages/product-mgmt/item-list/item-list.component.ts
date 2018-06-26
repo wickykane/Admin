@@ -69,16 +69,16 @@ export class ItemListComponent implements OnInit {
             'manufacturer_id_filter': [null]
         });
 
-        // Assign get list function name, override variable here
+        //  Assign get list function name, override variable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
-        // Init Key
+        //  Init Key
         this.itemKeyService.watchContext.next(this);
     }
 
     ngOnInit() {
 
-        // Init Fn
+        //  Init Fn
         this.listMaster['certification_partNumber'] = [{ code: 'Y', value: 'Yes' }, { code: 'N', value: 'No' }];
         this.getListWarehouse();
         this.getListReference();
@@ -166,7 +166,7 @@ export class ItemListComponent implements OnInit {
 
     getList() {
         const params = Object.assign({}, this.tableService.getParams(), this.searchForm.value, this.filterForm.value);
-        Object.keys(params).forEach((key) => (params[key] == null || params[key] === '') && delete params[key]);
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
         this.productService.getListItem(params).subscribe(res => {
             try {
@@ -194,6 +194,6 @@ export class ItemListComponent implements OnInit {
         const ids: any = (this.list.checklist.map(_ => { _.order_quantity = 1; _.source = 'Manual'; return _; }) || []);
         console.log(ids);
         this.router.navigateByData({ url: ['order-management/sale-order/create'], data: ids });
-        // this.router.navigate(['order-management/sale-order/create', { data : ids }])
+        //  this.router.navigate(['order-management/sale-order/create', { data : ids }])
     }
 }

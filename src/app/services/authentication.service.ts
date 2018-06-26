@@ -29,25 +29,25 @@ export class AuthenticationService {
                 const token = results.token;
                 if (token) {
                     this.token = token;
-                    // console.log( this.jwtHelper.decodeToken( this.token ) );
-                    // console.log( this.jwtHelper.getTokenExpirationDate( this.token ) );
-                    // console.log( this.jwtHelper.isTokenExpired( this.token ) );
+                    //  console.log( this.jwtHelper.decodeToken( this.token ) );
+                    //  console.log( this.jwtHelper.getTokenExpirationDate( this.token ) );
+                    //  console.log( this.jwtHelper.isTokenExpired( this.token ) );
                     this.jwtService.saveToken(this.token);
                     localStorage.setItem('currentUser', JSON.stringify(results.info));
 
                     return true;
                 } else {
-                    // return false to indicate failed login
+                    //  return false to indicate failed login
                     return false;
                 }
 
             }
-        ).do(data => console.log('server data:', data))  // debug
+        ).do(data => console.log('server data:', data))  //  debug
             .catch(this._serverError);
     }
 
     logout(): void {
-        // clear token remove user from local storage to log user out
+        //  clear token remove user from local storage to log user out
         this.token = null;
         this.jwtService.destroyToken();
         this.jwtService.destroyUser();

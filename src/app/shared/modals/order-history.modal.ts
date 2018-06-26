@@ -54,14 +54,14 @@ export class OrderHistoryModalContent implements OnInit {
             'certification': [null],
         });
 
-        // Assign get list function name, override variable here
+        //  Assign get list function name, override variable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
 
     }
 
     ngOnInit() {
-        // Init Fn
+        //  Init Fn
        this.getList();
 
     }
@@ -100,7 +100,7 @@ export class OrderHistoryModalContent implements OnInit {
                     return;
                 }
                 this.list.items = res.data;
-                // this.tableService.matchPagingOption(res.data);
+                //  this.tableService.matchPagingOption(res.data);
             } catch (e) {
                 console.log(e);
             }

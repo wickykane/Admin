@@ -30,7 +30,7 @@ export class CustomerViewComponent implements OnInit {
         public toastr: ToastrService,
         public customerKeyService: CustomerKeyService,
         private customerService: CustomerService) {
-        // Init Key
+        //  Init Key
         this.customerKeyService.watchContext.next(this);
     }
 
@@ -47,7 +47,7 @@ export class CustomerViewComponent implements OnInit {
         this.customerService.getDetailCustomer(this.customerId).subscribe(res => {
             try {
                 this.customer = res.data;
-                this.customer['address'] = [...((this.customer['company_type'] === 'CP') ? res.data['head_office'] : res.data['primary']),
+                this.customer['address'] = [...((this.customer['company_type'] ===  'CP') ? res.data['head_office'] : res.data['primary']),
                 ...res.data['billing'], ...res.data['shipping']];
             } catch (e) {
                 console.log(e);

@@ -9,7 +9,7 @@ export class PurchaseService {
     /**
      * PURCHASE QUOTATION
      */
-    //Quotation
+    // Quotation
     getListPurchaseQuotation(params) {
         let url = 'purchase_quote';
         return this.API.get(url, params);
@@ -53,7 +53,7 @@ export class PurchaseService {
     /**
      * PURCHASE Order
      */
-    //Order
+    // Order
     getListPurchaseOrder(params) {
         let url = 'oli_purchase_order';
         return this.API.get(url, params);
@@ -97,7 +97,7 @@ export class PurchaseService {
     /**
      * INBOUND DELIVERY
      */
-    //Inbound
+    // Inbound
     getListInboundDelievery(params) {
         let url = 'purchase_order_delivery';
         return this.API.get(url, params);
@@ -105,7 +105,7 @@ export class PurchaseService {
     /**
      * WAREHOUSE RECEIPT
      */
-    //Warehouse
+    // Warehouse
     getListWarehouseReceipt(params) {
         let url = 'warehouse_receipt';
         return this.API.get(url, params);
@@ -133,7 +133,7 @@ export class PurchaseService {
     /**
      * SUPPLIER
      */
-    //supplier
+    // supplier
     getListCountry() {
         let url = 'country/get-all';
         return this.API.get(url);

@@ -1,13 +1,13 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PurchaseService } from "../purchase.service";
+import { PurchaseService } from '../purchase.service';
 
-//modal
+// modal
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ItemModalContent } from "../../../shared/modals/item.modal";
-import { AddressModalContent } from "../../../shared/modals/address.modal";
-import { ConfirmModalContent } from "../../../shared/modals/confirm.modal";
+import { ItemModalContent } from '../../../shared/modals/item.modal';
+import { AddressModalContent } from '../../../shared/modals/address.modal';
+import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
 
 
 import { ToastrService } from 'ngx-toastr';
@@ -77,7 +77,7 @@ export class SupplierDetailComponent implements OnInit {
         this.removedList.length = 0;
     }
 
-    //data master country
+    // data master country
     getListCountry() {
         this.purchaseService.getListCountry().subscribe(res => {
             try {
@@ -87,7 +87,7 @@ export class SupplierDetailComponent implements OnInit {
             }
         });
     }
-    //action change country
+    // action change country
     changeCountry(id, flag) {
         let params = {
             country: id
@@ -114,7 +114,7 @@ export class SupplierDetailComponent implements OnInit {
             }
         });
     }
-    //action copy address
+    // action copy address
 
     addNewLine() {
         this.users.push({});
@@ -148,7 +148,7 @@ export class SupplierDetailComponent implements OnInit {
         if (data['shipping'].length > 0) addressList = addressList.concat(data['shipping']);
         if (data['billing'].length > 0) addressList = addressList.concat(data['billing']);
 
-        // add property isCheck to array
+        //  add property isCheck to array
         addressList.map(function(addr) {
             addr.isChecked = false;
             return addr;
@@ -196,7 +196,7 @@ export class SupplierDetailComponent implements OnInit {
             this.removedList.push(item);
         } else {
             this.removedList = this.removedList.filter(function(obj) {
-                return obj.isChecked == true;
+                return obj.isChecked === true;
             });
         }
     }
@@ -213,7 +213,7 @@ export class SupplierDetailComponent implements OnInit {
                     try {
                         this.toastr.success(res.message);
                         this.addressList = this.addressList.filter(function(obj) {
-                            return obj.isChecked == false;
+                            return obj.isChecked === false;
                         });
                         this.removedList.length = 0;
                     } catch(e) {
@@ -222,7 +222,7 @@ export class SupplierDetailComponent implements OnInit {
                 })
             }
         });
-        modalRef.componentInstance.message = "Are you sure you want to delete ?";
+        modalRef.componentInstance.message = 'Are you sure you want to delete ?';
     }
 
     actionUpdate(objAddress) {

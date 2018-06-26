@@ -20,10 +20,10 @@ import { NgHttpLoaderModule } from 'ng-http-loader/ng-http-loader.module';
 import 'angular2-navigate-with-data';
 
 
-// AoT requires an exported function for factories
+//  AoT requires an exported function for factories
 export function createTranslateLoader(http: HttpClient) {
-    // for development
-    // return new TranslateHttpLoader(http, '/start-angular/SB-Admin-BS4-Angular-5/master/dist/assets/i18n/', '.json');
+    //  for development
+    //  return new TranslateHttpLoader(http, '/start-angular/SB-Admin-BS4-Angular-5/master/dist/assets/i18n/', '.json');
     return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 

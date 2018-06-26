@@ -28,7 +28,7 @@ import { PageHeaderModule } from '../../shared';
 import { TableService } from '../../services/index';
 import { CustomerService } from './customer.service';
 
-// Modal
+//  Modal
 import { ItemModalModule } from '../../shared/modals/item.module';
 
 

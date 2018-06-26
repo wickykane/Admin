@@ -40,7 +40,7 @@ export class ItemService {
     /**
      * Customer
      */
-    // customer
+    //  customer
     getListCountryAdmin() {
         const url = 'country/admin/get-all';
         return this.API.get(url);
@@ -56,7 +56,7 @@ export class ItemService {
         return this.API.get(url);
     }
 
-    // Order
+    //  Order
     getListSalesQuoteReference(company_id) {
         const url = 'sale-quote/reference/' + company_id;
         return this.API.get(url);

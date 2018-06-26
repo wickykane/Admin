@@ -3,9 +3,9 @@ import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { OrderService } from '../order-mgmt.service';
-//modal
+// modal
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ItemModalContent } from "../../../shared/modals/item.modal";
+import { ItemModalContent } from '../../../shared/modals/item.modal';
 
 
 import { ToastrService } from 'ngx-toastr';
@@ -53,7 +53,7 @@ export class DelieveryOrderCreateComponent implements OnInit {
         }
 
     ngOnInit() {
-        this.listMaster['deliveryTime'] = [{id: '8-17',name: "8-17"}];
+        this.listMaster['deliveryTime'] = [{id: '8-17',name: '8-17'}];
         this.listMaster['deliveryType'] = [
             {id:2, name:'Home Delivery'},
             {id:3, name:'Courier Delivery'},
@@ -104,7 +104,7 @@ export class DelieveryOrderCreateComponent implements OnInit {
       */
      changePickupLocation(pickup_location) {
          let item = this.listMaster['pickupLocation'].filter(function(warehouse){
-             if(warehouse.id == pickup_location)
+             if(warehouse.id === pickup_location)
                  return warehouse;
          });
          this.generalForm.patchValue({'full_address': item[0].full_address});
@@ -116,7 +116,7 @@ export class DelieveryOrderCreateComponent implements OnInit {
      changeSaleOrder(order_id) {
 
          let item = this.listMaster['saleOrder'].filter(function(order){
-             if(order.id == order_id)
+             if(order.id === order_id)
                  return order;
          });
          this.generalForm.patchValue({'buyer_name': item[0].buyer_name});
@@ -126,13 +126,13 @@ export class DelieveryOrderCreateComponent implements OnInit {
 
      getListProduct(order_id, address_id) {
          let item = this.listMaster['deliveryLocation'].filter(function(address){
-             if(address.address_id == address_id)
+             if(address.address_id === address_id)
                  return address;
          });
         this.generalForm.patchValue({'delivey_address': item[0].full_address});
          let params ={
-             "order_id":order_id,
-             "address_id":address_id,
+             'order_id':order_id,
+             'address_id':address_id,
          }
          this.orderService.getProductByOrderAndAddr(params).subscribe(res => {
              this.items = res.results;
