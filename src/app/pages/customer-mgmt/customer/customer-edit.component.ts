@@ -83,9 +83,9 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             'pwd': [null],
             'pwd_cfrm': [null],
             'primary': [null],
-            'credit_used':[null],
-            'credit_limit':[null],
-            'credit_balance':[null]
+            'credit_used': [null],
+            'credit_limit': [null],
+            'credit_balance': [null]
 
         });
 
@@ -106,7 +106,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         this.getListCustomerType();
         this.getListSalePerson();
         this.getListCountryAdmin();
-        this.customerService.getRoute().subscribe(res => {this.routeList = res.data; });
+        this.customerService.getRoute().subscribe(res => { this.routeList = res.data; });
     }
     getDetailSupplier(id) {
         this.idSupplier = id;
@@ -124,7 +124,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                     this.company_child.push(this.site[i]);
                 }
                 this.contact = this.detail['user'];
-                this.detail['company_type'] ===  'CP' && (res.data['primary'] = res.data['head_office']);
+                this.detail['company_type'] === 'CP' && (res.data['primary'] = res.data['head_office']);
                 this.changeCustomerType();
                 this.getListBank();
                 //  this.changeCountry(res.data['primary'][0]['country_code'], 'states_primary');
@@ -152,8 +152,8 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     }
 
     getListTypeAddress() {
-        if (this.generalForm.value.buyer_type ===  'CP') {
-            const  tmp = this.generalForm.value.code.split('-');
+        if (this.generalForm.value.buyer_type === 'CP') {
+            const tmp = this.generalForm.value.code.split('-');
             this.countCode = Number(tmp[1]);
             this.textCode = tmp[0] + '-';
             this.generalForm.patchValue(this.detail['head_office'][0]);
@@ -194,7 +194,28 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     //  change customer Type
     changeCustomerType() {
         this.getListTypeAddress();
-        if (this.generalForm.value.buyer_type ===  'CP') {
+        const addressConfig = {
+            head_office: { type: 4, listType: [{ id: 4, name: 'Head Office' }] },
+            primary: { type: 3, listType: [{ id: 3, name: 'Primary' }] },
+            billing: { type: 1, listType: this.listTypeAddress },
+            shipping: { type: 2, listType: this.listTypeAddress },
+            general: {listCountry: this.listCountry, listState: [], allow_remove: false}
+        }
+
+        const primary = this.detail[(this.generalForm.value.buyer_type === 'CP')? 'head_office' : 'primary'].map( item => {
+            return { ...item, ...addressConfig[(this.generalForm.value.buyer_type === 'CP')? 'head_office' : 'primary'],  ...addressConfig['general']};
+        })
+        const billing = this.detail['billing'].map( item => { return { ...item, ...addressConfig['billing'], ...addressConfig['general']}; })
+        const shipping = this.detail['shipping'].map( item => { return { ...item, ...addressConfig['shipping'],  ...addressConfig['general']}; })
+        
+        this.address = [ ...primary, ...billing, ...shipping ];
+        this.address.forEach(element => {
+            this.changeCountry(element); 
+        });
+        
+        console.log(this.address);
+        this.address = [];
+        if (this.generalForm.value.buyer_type === 'CP') {
             for (let i = 0; i < this.detail['head_office'].length; i++) {
                 const element = this.detail['head_office'][i];
                 this.address.push({...{type: 4, listType: [{ id: 4, name: 'Head Office' }], listCountry: this.listCountry, listState: [], allow_remove: false
@@ -211,6 +232,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                 });
             }
         }
+
         for (let i = 0; i < this.detail['billing'].length; i++) {
             const element = this.detail['billing'][i];
             this.address.push({
@@ -410,7 +432,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                 }
             });
 
-            if (this.generalForm.value.buyer_type ===  'CP') {
+            if (this.generalForm.value.buyer_type === 'CP') {
                 delete params.first_name;
                 delete params.last_name;
                 delete params.pwd;
