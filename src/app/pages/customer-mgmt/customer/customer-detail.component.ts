@@ -164,7 +164,7 @@ export class CustomerDetailComponent implements OnInit {
         if (event.target.files && event.target.files.length > 0) {
             const files = event.target.files;
             this.listFile = [...files];
-            for (file of files) {
+            for (const file of files) {
                 reader.readAsDataURL(file);
                 reader.onload = (e) => {
                     this.imageSelected = e.target['result'];

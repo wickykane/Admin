@@ -1,13 +1,13 @@
-import { TableService } from './../../services/table.service';
-import { Component, Input, OnInit, ViewContainerRef, OnDestroy } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, Input, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TableService } from './../../services/table.service';
 
 import { ItemService } from './item.service';
 
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
-import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 
 @Component({
     selector: 'app-site-modal',
@@ -41,12 +41,12 @@ export class SiteModalComponent implements OnInit, OnDestroy {
 
     constructor(public fb: FormBuilder,
         public router: Router,
-        public toastr: ToastrService,        
+        public toastr: ToastrService,
         private itemService: ItemService,
         private modalService: NgbModal,
         private hotkeysService: HotkeysService,
         public activeModal: NgbActiveModal) {
-         
+
         this.generalForm = fb.group({
             'parent_company_name': [null],
             'code': [null, Validators.required],
@@ -230,7 +230,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
         //    delete obj['listState'];
         //  });
         if (this.generalForm.valid) {
-            const params = Object.assign({}, this.generalForm.value);
+            const params = {...this.generalForm.value};
             params['user'] = [];
             if (this.contact.length > 0) {
                 params['user'] = this.contact;

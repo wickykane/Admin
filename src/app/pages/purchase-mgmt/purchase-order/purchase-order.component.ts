@@ -149,7 +149,7 @@ export class PurchaseOrderComponent implements OnInit {
 
     getList() {
         const params = {...this.tableService.getParams(), ...this.searchForm.value};
-        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && deconste params[key]);
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
         this.purchaseService.getListPurchaseOrder(params).subscribe(res => {
             try {

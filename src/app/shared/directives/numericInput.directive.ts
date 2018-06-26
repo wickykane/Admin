@@ -1,10 +1,10 @@
 import {
-    Directive, Input, Output, EventEmitter, ViewChild, ElementRef,
-    Renderer2, forwardRef, OnChanges, SimpleChanges, OnInit
+    Directive, ElementRef, EventEmitter, forwardRef, Input, OnChanges,
+    OnInit, Output, Renderer2, SimpleChanges, ViewChild
 } from '@angular/core';
 import {
-    NG_VALUE_ACCESSOR, NG_VALIDATORS, Validator, AbstractControl,
-    ValidatorFn, ControlValueAccessor, Validators
+    AbstractControl, ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR,
+    Validator, ValidatorFn, Validators
 } from '@angular/forms';
 
 import { DecimalPipe } from '@angular/common';
@@ -21,7 +21,7 @@ const keyCodes = {
 const Helper = {
     anyChanges(properties: string[], changes: SimpleChanges): boolean {
         for (const property of properties) {
-            if (changes[property] !=== undefined) {
+            if (changes[property] !== undefined) {
                 return true;
             }
         }
@@ -79,7 +79,7 @@ export class NumericDirective implements ControlValueAccessor, Validator, OnChan
     ) {
     }
     ngOnInit(): void {
-        console.log(1)
+        console.log(1);
 
     }
     focusInput() {
@@ -155,7 +155,7 @@ export class NumericDirective implements ControlValueAccessor, Validator, OnChan
                 limitInputValue = this.limitValue(limitInputValue);
             }
 
-            if (orginalInputValue !=== limitInputValue) {
+            if (orginalInputValue !== limitInputValue) {
                 this.setInputValue(limitInputValue);
                 this.setSelection(selectionStart, selectionEnd);
             } else {
@@ -272,7 +272,7 @@ export class NumericDirective implements ControlValueAccessor, Validator, OnChan
 
     private restrictModelValue(value: number): number {
         let newValue = this.restrictDecimals(value);
-        if (this.autoCorrect && this.limitValue(newValue) !=== newValue) {
+        if (this.autoCorrect && this.limitValue(newValue) !== newValue) {
             newValue = null;
         }
 
@@ -303,7 +303,7 @@ export class NumericDirective implements ControlValueAccessor, Validator, OnChan
     }
 
     private updateValue(value: number) {
-        if (this.value !=== value) {
+        if (this.value !== value) {
             this.previousValue = this.value;
             this.value = value;
             this.ngChange(value);

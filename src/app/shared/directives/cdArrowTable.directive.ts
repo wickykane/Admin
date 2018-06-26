@@ -1,7 +1,9 @@
-import { Directive, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { HotkeysService, Hotkey } from 'angular2-hotkeys';
+import { Directive, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 
+// tslint:disable-next-line:directive-selector
 @Directive({ selector: '[cdArrowTable]' })
+// tslint:disable-next-line:class-name
 export class cdArrowTable implements OnDestroy {
     constructor(private _hotkeysService: HotkeysService) {
         this.hotKeyConfig();
@@ -12,19 +14,15 @@ export class cdArrowTable implements OnDestroy {
     @Input() set collection(value: any) {
         this._collection = value;
         const newValue = value.length;
-        if (this.selectedIndex > newValue - 1) {
-            this.selectedIndex = newValue - 1;
-        } else {
-            this.selectedIndex = 0;
-        }
+        (this.selectedIndex > newValue - 1) ? (this.selectedIndex = newValue - 1) : (this.selectedIndex = 0);
     }
-
     @Input() set selectedIndex(value: any) {
         this._selectedIndex = value;
     }
 
 
     @Output() selectedIndexChange: EventEmitter<any> = new EventEmitter<any>();
+    // tslint:disable-next-line:no-output-on-prefix
     @Output() onEnter: EventEmitter<any> = new EventEmitter<any>();
 
     ngOnDestroy() {

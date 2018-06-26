@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 import { CustomerSegmentComponent } from './customer-segment/customer-segment.component';
 import { CustomerSegmentCreateComponent } from './customer-segment/customer-segment.create.component';
 import { CustomerSegmentEditComponent } from './customer-segment/customer-segment.edit.component';
 
-import { CustomerComponent } from './customer/customer.component';
 import { CustomerCreateComponent } from './customer/customer-create.component';
 import { CustomerDetailComponent } from './customer/customer-detail.component';
-import { CustomerViewComponent } from './customer/customer-view.component';
 import { CustomerEditComponent } from './customer/customer-edit.component';
+import { CustomerViewComponent } from './customer/customer-view.component';
+import { CustomerComponent } from './customer/customer.component';
 
 const routes: Routes = [
     {

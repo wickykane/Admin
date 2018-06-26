@@ -1,6 +1,8 @@
 import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
+// tslint:disable-next-line:ordered-imports
 import { HttpHandler, HttpRequest, HttpEvent, HttpResponse, HttpErrorResponse, HttpInterceptor } from '@angular/common/http';
+// tslint:disable-next-line:import-blacklist
 import { Observable } from 'rxjs/Rx';
 import { AuthenticationService } from './authentication.service';
 
