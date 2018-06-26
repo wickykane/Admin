@@ -75,8 +75,6 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
             this.flagAddress = true;
             return false; // Prevent bubbling
         }));
-
-
     }
 
     ngOnInit() {
@@ -88,7 +86,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         this.getListSalePerson();
         this.getListCountryAdmin();
         this.getListBank();
-        this.customerService.getRoute().subscribe(res => {this.routeList = res.data; });
+        this.customerService.getRoute().subscribe(res => { this.routeList = res.data; });
 
     }
 
@@ -266,13 +264,12 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     }
 
     addNewSite() {
-
         const modalRef = this.modalService.open(SiteModalComponent, { size: 'lg' });
         modalRef.result.then(res => {
             if (!this.isEmptyObject(res)) {
-                const state = res.primary[0].listState.filter(x =>
-                    res.primary[0].state_id === x.id
-                );
+                const state = res.primary[0].listState.filter(x => {
+                    return res.primary[0].state_id === x.id;
+                });
                 const objSite = {
                     code: res.code,
                     full_name: res.full_name,
@@ -290,7 +287,6 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
                 };
 
                 this.site.push(objSite);
-                console.log(res);
                 this.company_child.push(res);
                 this.countCode++;
             }
