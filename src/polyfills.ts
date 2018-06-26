@@ -56,6 +56,28 @@ import 'core-js/es7/reflect';
 import 'zone.js/dist/zone';  // Included with Angular CLI.
 
 
+if (typeof Object.assign !== 'function') {
+  Object.assign = function(target) {
+    'use strict';
+    if (target == null) {
+      throw new TypeError('Cannot convert undefined or null to object');
+    }
+
+    target = Object(target);
+    for (let index = 1; index < arguments.length; index++) {
+      const source = arguments[index];
+      if (source != null) {
+        for (const key in source) {
+          if (Object.prototype.hasOwnProperty.call(source, key)) {
+            target[key] = source[key];
+          }
+        }
+      }
+    }
+    return target;
+  };
+}
+
 
 /***************************************************************************************************
  * APPLICATION IMPORTS
