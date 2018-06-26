@@ -107,7 +107,7 @@ export class CustomerSegmentCreateComponent implements OnInit {
         });
     }
 
-    changeToGetCustomer (segment, index) => {
+    changeToGetCustomer  = (segment, index) => {
         const params = { 'type': segment.type, 'country_code': segment.country_code };
         Object.keys(params).forEach( (item) => {
             if ((params[item]) instanceof Array) {
@@ -129,7 +129,7 @@ export class CustomerSegmentCreateComponent implements OnInit {
             if (!segment.customers) { return; }
             (segment.customers.length > 0) ? segment.has_specific_customer = true : segment.has_specific_customer = false;
         });
-    };
+    }
 
     createSegment = function () {
         const params = this.generalForm.value;

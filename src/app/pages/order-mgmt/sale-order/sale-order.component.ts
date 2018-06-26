@@ -1,11 +1,11 @@
-import { TableService } from './../../../services/table.service';
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService } from '../order-mgmt.service';
+import { TableService } from './../../../services/table.service';
 
-import { routerTransition } from '../../../router.animations';
 import { ToastrService } from 'ngx-toastr';
+import { routerTransition } from '../../../router.animations';
 
 @Component({
   selector: 'app-sale-order',
@@ -35,7 +35,6 @@ export class SaleOrderComponent implements OnInit {
     public toastr: ToastrService,
     private vRef: ViewContainerRef,
     public tableService: TableService, private orderService: OrderService) {
-     
 
     this.searchForm = fb.group({
       'code': [null],
@@ -89,12 +88,13 @@ export class SaleOrderComponent implements OnInit {
   }
 
   getList() {
-    const params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
+    const params = {...this.tableService.getParams(), ...this.searchForm.value};
 
     Object.keys(params).forEach((key) => {
       if (params[key] instanceof Array) {
         params[key] = params[key].join(',');
       }
+      // tslint:disable-next-line:no-unused-expression
       (params[key] === null || params[key] ===  '') && delete params[key];
     });
 

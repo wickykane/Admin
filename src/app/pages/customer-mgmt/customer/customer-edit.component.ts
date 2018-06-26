@@ -119,11 +119,12 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                 });
                 this.imageSelected = res.data.img;
                 this.site = res.data['sites'];
-                for (let i = 0; i < this.site.length; i++) {
-                    this.site[i].is_remove = false;
-                    this.company_child.push(this.site[i]);
+                for (const s of this.site) {
+                    s.is_remove = false;
+                    this.company_child.push(s);
                 }
                 this.contact = this.detail['user'];
+                // tslint:disable-next-line:no-unused-expression
                 this.detail['company_type'] === 'CP' && (res.data['primary'] = res.data['head_office']);
                 this.changeCustomerType();
                 this.getListBank();
@@ -180,7 +181,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             try {
                 this.listBank = res.data;
                 this.bank_account = this.detail['banks'];
-                for (bank of this.bank_account) {
+                for (const bank of this.bank_account) {
                     bank.listBank = this.listBank;
                     this.changeBank(bank);
                 }
@@ -200,58 +201,27 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             billing: { type: 1, listType: this.listTypeAddress },
             shipping: { type: 2, listType: this.listTypeAddress },
             general: {listCountry: this.listCountry, listState: [], allow_remove: false}
-        }
+        };
 
-        const primary = this.detail[(this.generalForm.value.buyer_type === 'CP')? 'head_office' : 'primary'].map( item => {
-            return { ...item, ...addressConfig[(this.generalForm.value.buyer_type === 'CP')? 'head_office' : 'primary'],  ...addressConfig['general']};
-        })
-        const billing = this.detail['billing'].map( item => { return { ...item, ...addressConfig['billing'], ...addressConfig['general']}; })
-        const shipping = this.detail['shipping'].map( item => { return { ...item, ...addressConfig['shipping'],  ...addressConfig['general']}; })
-        
+        const primary = this.detail[(this.generalForm.value.buyer_type === 'CP')
+        ? 'head_office' : 'primary'].map( item => {
+            return { ...item, ...addressConfig[(this.generalForm.value.buyer_type === 'CP')
+            ?
+            'head_office' : 'primary'],  ...addressConfig['general']};
+        });
+        const billing = this.detail['billing'].map( item => {
+             return { ...item, ...addressConfig['billing'], ...addressConfig['general']};
+             });
+        const shipping = this.detail['shipping'].map( item => {
+             return { ...item, ...addressConfig['shipping'],  ...addressConfig['general']}; });
+
         this.address = [ ...primary, ...billing, ...shipping ];
         this.address.forEach(element => {
-            this.changeCountry(element); 
+            this.changeCountry(element);
         });
-        
-        console.log(this.address);
-        this.address = [];
-        if (this.generalForm.value.buyer_type === 'CP') {
-            for (let i = 0; i < this.detail['head_office'].length; i++) {
-                const element = this.detail['head_office'][i];
-                this.address.push({...{type: 4, listType: [{ id: 4, name: 'Head Office' }], listCountry: this.listCountry, listState: [], allow_remove: false
-                    }, ...element
-                });
-            }
-        } else {
-            for (let i = 0; i < this.detail['primary'].length; i++) {
-                const element = this.detail['primary'][i];
-                this.address.push({
-                    ...{
-                        type: 3, listType: [{ id: 3, name: 'Primary' }], listCountry: this.listCountry, listState: [], allow_remove: false
-                    }, ...element
-                });
-            }
-        }
 
-        for (let i = 0; i < this.detail['billing'].length; i++) {
-            const element = this.detail['billing'][i];
-            this.address.push({
-                ...{
-                    type: 1, listType: this.listTypeAddress, listCountry: this.listCountry, listState: [], allow_remove: false
-                }, ...element
-            });
-        }
-        for (let i = 0; i < this.detail['shipping'].length; i++) {
-            const element = this.detail['shipping'][i];
-            this.address.push({
-                ...{
-                    type: 2, listType: this.listTypeAddress, listCountry: this.listCountry, listState: [], allow_remove: false
-                }, ...element
-            });
-        }
-        for (let i = 0; i < this.address.length; i++) {
-            this.changeCountry(this.address[i]);
-        }
+        console.log(this.address);
+
     }
 
     changeCountry(item) {

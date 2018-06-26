@@ -1,18 +1,18 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewContainerRef, ViewEncapsulation } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { DatePipe } from '@angular/common';
 
-import { OrderService } from '../order-mgmt.service';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
+import { OrderService } from '../order-mgmt.service';
 
+import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { ItemModalContent } from '../../../shared/modals/item.modal';
-import { PromotionModalContent } from '../../../shared/modals/promotion.modal';
 import { OrderHistoryModalContent } from '../../../shared/modals/order-history.modal';
 import { OrderSaleQuoteModalContent } from '../../../shared/modals/order-salequote.modal';
-import createNumberMask from 'text-mask-addons/dist/createNumberMask';
+import { PromotionModalContent } from '../../../shared/modals/promotion.modal';
 
 
 @Component({
@@ -133,8 +133,8 @@ export class SaleOrderCreateComponent implements OnInit {
         this.getListCustomerOption();
         this.getOrderReference();
         this.updateTotal();
-        this.copy_addr = Object.assign(this.copy_addr, this.addr_select);
-        this.copy_customer = Object.assign(this.copy_customer, this.customer);
+        this.copy_addr = {...this.copy_addr, ...this.addr_select};
+        this.copy_customer = {...this.copy_customer, ...this.customer};
         this.generalForm.controls['is_multi_shp_addr'].patchValue(0);
         this.generalForm.controls['order_date'].patchValue(currentDt);
     }
@@ -240,7 +240,7 @@ export class SaleOrderCreateComponent implements OnInit {
     }
 
     cloneRecord(record, list) {
-        const newRecord = Object.assign({}, record);
+        const newRecord = {...record};
         const index = list.indexOf(record);
         const objIndex = list[index];
         objIndex.products.push(newRecord);
@@ -251,7 +251,7 @@ export class SaleOrderCreateComponent implements OnInit {
     checkLengthRecord(id, list) {
         let total = 0;
         const _list = list || this.list.items;
-        _list.forEach(function (record) {
+        _list.forEach( (record) => {
             if (id === record.item_id) {
                 total++;
             }
@@ -287,10 +287,10 @@ export class SaleOrderCreateComponent implements OnInit {
     updateTotal() {
         this.order_info.total = 0;
         this.order_info.sub_total = 0;
-        if (this.list.items !=== undefined) {
+        if (this.list.items !== undefined) {
             (this.list.items || []).forEach((item) => {
                 let sub_quantity = 0;
-                item.discount = item.discount !=== undefined ? item.discount : 0;
+                item.discount = item.discount !== undefined ? item.discount : 0;
                 if (!item.products) { item.products = []; }
                 item.products.forEach((subItem, index) => {
                     if (item.products.length > 0) {
@@ -310,10 +310,11 @@ export class SaleOrderCreateComponent implements OnInit {
             });
 
         }
-        this.order_info['shipping_cost'] = (this.order_info['shipping_cost'] !=== undefined ? this.order_info['shipping_cost'] : 0);
-        this.order_info['alt_vat_percent'] = (this.order_info['vat_percent'] !=== undefined ? this.order_info['vat_percent'] : 0);
-        this.order_info['alt_discount'] = (this.order_info['discount_percent'] !=== undefined ? this.order_info['discount_percent'] : 0);
-        this.promotionList['total_invoice_discount'] = (this.promotionList['total_invoice_discount'] ? this.promotionList['total_invoice_discount'] : 0);
+        this.order_info['shipping_cost'] = (this.order_info['shipping_cost'] !== undefined ? this.order_info['shipping_cost'] : 0);
+        this.order_info['alt_vat_percent'] = (this.order_info['vat_percent'] !== undefined ? this.order_info['vat_percent'] : 0);
+        this.order_info['alt_discount'] = (this.order_info['discount_percent'] !== undefined ? this.order_info['discount_percent'] : 0);
+        this.promotionList['total_invoice_discount'] = (this.promotionList['total_invoice_discount'] 
+        ? this.promotionList['total_invoice_discount'] : 0);
 
         this.order_info.total_discount = parseFloat((this.order_info.sub_total * Number(this.order_info['alt_discount']) / 100).toFixed(2));
         const sub_after_discount = this.order_info.sub_total - this.order_info.total_discount;
@@ -322,8 +323,8 @@ export class SaleOrderCreateComponent implements OnInit {
     }
 
     deleteAction(id) {
-        this.list.items = this.list.items.filter(function (item) {
-            return item.item_id !=== id;
+        this.list.items = this.list.items.filter((item) => {
+            return item.item_id !== id;
         });
         this.updateTotal();
     }
@@ -357,10 +358,10 @@ export class SaleOrderCreateComponent implements OnInit {
             if (res instanceof Array && res.length > 0) {
 
                 const listAdded = [];
-                (this.list.items).forEach(function (item) {
+                (this.list.items).forEach( (item) => {
                     listAdded.push(item.item_id);
                 });
-                res.forEach(function (item) {
+                res.forEach( (item) => {
                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
                     item['products'] = [];
                     item.order_quantity = 1;
@@ -368,7 +369,7 @@ export class SaleOrderCreateComponent implements OnInit {
                     item.source = 'Manual';
                 });
 
-                this.list.items = this.list.items.concat(res.filter(function (item) {
+                this.list.items = this.list.items.concat(res.filter( (item) => {
                     return listAdded.indexOf(item.item_id) < 0;
                 }));
 
@@ -378,7 +379,7 @@ export class SaleOrderCreateComponent implements OnInit {
     }
     //  Show order history
     showViewOrderHistory() {
-        if (this.generalForm.value.company_id !=== null) {
+        if (this.generalForm.value.company_id !== null) {
             const modalRef = this.modalService.open(OrderHistoryModalContent, { size: 'lg' });
             modalRef.componentInstance.company_id = this.generalForm.value.company_id;
             modalRef.result.then(res => {
@@ -389,15 +390,15 @@ export class SaleOrderCreateComponent implements OnInit {
         }
     }
     showSaleQuoteList() {
-        if (this.generalForm.value.company_id !=== null) {
+        if (this.generalForm.value.company_id !== null) {
             const modalRef = this.modalService.open(OrderSaleQuoteModalContent, { size: 'lg' });
             modalRef.result.then(res => {
                 if (res instanceof Array && res.length > 0) {
                     const listAdded = [];
-                    (this.list.items).forEach(function (item) {
+                    (this.list.items).forEach( (item) => {
                         listAdded.push(item.item_id);
                     });
-                    res.forEach(function (item) {
+                    res.forEach(  (item) => {
                         if (item.sale_price) { item.sale_price = Number(item.sale_price); }
                         item['products'] = [];
                         item.order_quantity = 1;
@@ -405,7 +406,7 @@ export class SaleOrderCreateComponent implements OnInit {
                         item.source = 'From Quote';
                     });
 
-                    this.list.items = this.list.items.concat(res.filter(function (item) {
+                    this.list.items = this.list.items.concat(res.filter( (item)  =>{
                         return listAdded.indexOf(item.item_id) < 0;
                     }));
 
@@ -422,9 +423,9 @@ export class SaleOrderCreateComponent implements OnInit {
     generateNote() {
         let arrSale = [];
         const temp = this.list.items;
-        for (let i = 0; i < temp.length; i++) {
-            if (temp[i].sale_quote_num !===  'undefined') {
-                arrSale.push(temp[i].sale_quote_num);
+        for (const unit in temp) {
+            if (unit.sale_quote_num !==  'undefined') {
+                arrSale.push(unit.sale_quote_num);
             }
         }
         arrSale = arrSale.reduce((x, y) => x.includes(y) ? x : [...x, y], []);
@@ -439,7 +440,7 @@ export class SaleOrderCreateComponent implements OnInit {
 
     createOrder(type) {
         const products = [];
-        this.list.items.forEach(function (item) {
+        this.list.items.forEach((item) => {
             products.push({
                 item_id: item.item_id,
                 item_type: item.item_type,
@@ -451,7 +452,7 @@ export class SaleOrderCreateComponent implements OnInit {
             });
 
             if (item.products.length > 0) {
-                item.products.forEach(function (subItem, index) {
+                item.products.forEach( (subItem, index) => {
                     products.push({
                         item_id: subItem.item_id,
                         item_type: item.item_type,
@@ -485,7 +486,7 @@ export class SaleOrderCreateComponent implements OnInit {
                 };
                 break;
         }
-        params = Object.assign({}, this.order_info, this.generalForm.value, params);
+        params = {...this.order_info, ...this.generalForm.value, ...params};
         this.orderService.createOrder(params).subscribe(res => {
             try {
                 if (res.data.status) {
