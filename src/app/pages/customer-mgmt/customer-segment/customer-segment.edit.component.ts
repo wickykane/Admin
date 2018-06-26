@@ -151,11 +151,7 @@ export class CustomerSegmentEditComponent implements OnInit {
     checkCustomerList = (segment) => {
         setTimeout(() => {
             if (!segment.customers) { return; }
-            if (segment.customers.length > 0) {
-                segment.has_specific_customer = true;
-            } else {
-                segment.has_specific_customer = false;
-            }
+            (segment.customers.length > 0) ? segment.has_specific_customer = true : segment.has_specific_customer = false;
         });
     }
 
