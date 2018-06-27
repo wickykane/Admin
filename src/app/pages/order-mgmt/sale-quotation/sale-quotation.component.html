@@ -61,7 +61,7 @@
                       <label class="control-label">&nbsp;</label>
                       <div class="group-btn-search">
                           <button type="button" class="btn btn-primary" (click)="moreFilter()">More Filter</button>
-                          <div class="show-more" *ngIf="onoffFilter">
+                          <div class="show-more" [hidden]="!onoffFilter">
                               <ul >
                                   <li *ngFor="let item of listMaster['listFilter']; let i = index;">
                                       <label for="{{i}}">

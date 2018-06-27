@@ -53,10 +53,7 @@ export class SaleQuotationComponent implements OnInit {
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
         //  Init Key
-        // this.saleQuoteKeyService.watchContext.next(this);
-        this.saleQuoteKeyService.watchContext.subscribe(res => {
-            res.next(this);
-        });
+        this.saleQuoteKeyService.watchContext.next(this);
     }
 
     ngOnInit() {
@@ -135,9 +132,9 @@ export class SaleQuotationComponent implements OnInit {
     }
 
     getList() {
-        const params = {...this.tableService.getParams(), ...this.searchForm.value};
+        const params = { ...this.tableService.getParams(), ...this.searchForm.value };
         // const params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
-        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
 
         this.orderService.getListSalesQuotation(params).subscribe(res => {
             try {

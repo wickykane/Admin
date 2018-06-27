@@ -11,6 +11,7 @@ import { SiteModalComponent } from '../../../shared/modals/site.modal';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
+import { Helper } from '../../../shared/index';
 
 @Component({
     selector: 'app-customer-edit',
@@ -65,7 +66,8 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         private customerService: CustomerService,
         public route: ActivatedRoute,
         private modalService: NgbModal,
-        private hotkeysService: HotkeysService) {
+        private hotkeysService: HotkeysService,
+        public helper: Helper) {
         this.generalForm = fb.group({
             'buyer_type': [null, Validators.required],
             'code': [null],
@@ -313,15 +315,11 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     }
 
     //  add new Site
-    isEmptyObject(obj) {
-        return (obj && (Object.keys(obj).length === 0));
-    }
-
     addNewSite() {
         const modalRef = this.modalService.open(SiteModalComponent, { size: 'lg' });
         modalRef.result.then(res => {
             console.log(res);
-            if (!this.isEmptyObject(res)) {
+            if (!this.helper.isEmptyObject(res)) {
                 const state = this.address[0].listState.filter(x =>
                     res.primary[0].state_id === x.id
                 );

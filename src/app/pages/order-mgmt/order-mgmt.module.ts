@@ -42,7 +42,7 @@ import { SaleQuoteHistoryTabComponent } from './sale-order/order-tabs/quote-hist
 import { SaleQuoteInformationTabComponent } from './sale-order/order-tabs/quote-info.component';
 
 import { TableService } from '../../services/index';
-import { CommonShareModule, PageHeaderModule } from '../../shared/index';
+import { CommonShareModule, Helper,  PageHeaderModule } from '../../shared/index';
 import { OrderService } from './order-mgmt.service';
 
 import { ItemModalModule } from '../../shared/modals/item.module';
@@ -81,7 +81,7 @@ import { ItemModalModule } from '../../shared/modals/item.module';
         SaleQuoteInformationTabComponent,
         SaleQuoteHistoryTabComponent
         ],
-    providers: [OrderService, TableService, DatePipe],
+    providers: [OrderService, TableService, DatePipe, Helper],
     entryComponents: []
 })
 export class OrderMgmtModule { }

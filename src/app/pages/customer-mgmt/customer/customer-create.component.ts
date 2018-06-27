@@ -7,10 +7,10 @@ import { CustomerService } from '../customer.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SiteModalComponent } from '../../../shared/modals/site.modal';
 
-
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
+import { Helper } from '../../../shared/index';
 
 @Component({
     selector: 'app-customer-create',
@@ -52,7 +52,8 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         public vRef: ViewContainerRef,
         private customerService: CustomerService,
         private modalService: NgbModal,
-        private hotkeysService: HotkeysService) {
+        private hotkeysService: HotkeysService,
+        public helper: Helper) {
         this.generalForm = fb.group({
             'buyer_type': [null, Validators.required],
             'code': [null],
@@ -259,14 +260,11 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     }
 
     //  add new Site
-    isEmptyObject(obj) {
-        return (obj && (Object.keys(obj).length === 0));
-    }
 
     addNewSite() {
         const modalRef = this.modalService.open(SiteModalComponent, { size: 'lg' });
         modalRef.result.then(res => {
-            if (!this.isEmptyObject(res)) {
+            if (!this.helper.isEmptyObject(res)) {
                 const state = res.primary[0].listState.filter(x => {
                     return res.primary[0].state_id === x.id;
                 });
