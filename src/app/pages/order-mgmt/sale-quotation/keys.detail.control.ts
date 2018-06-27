@@ -1,11 +1,12 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 
 @Injectable()
 export class SaleQuoteDetailKeyService implements OnDestroy {
     public context: any;
-    public watchContext = new Observable<any>();
+    public watchContext = new Subject<any>();
 
     constructor(private _hotkeysService: HotkeysService) {
         this.watchContext.subscribe(res => {

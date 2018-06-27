@@ -25,7 +25,7 @@ import { CustomerSiteTabComponent } from './customer/information-tab/site-tab.co
 
 import { TableService } from '../../services/index';
 import { PageHeaderModule } from '../../shared';
-import { CommonShareModule } from '../../shared/index';
+import { CommonShareModule, Helper } from '../../shared/index';
 import { CustomerService } from './customer.service';
 
 //  Modal
@@ -46,7 +46,7 @@ import { ItemModalModule } from '../../shared/modals/item.module';
     CustomerAddressTabComponent, CustomerContactTabComponent, CustomerEditComponent, CustomerSiteTabComponent, CustomerQuoteTabComponent,
     CustomerSaleOrderTabComponent, CustomerInvoiceTabComponent, CustomerShipmentTabComponent, CustomerPaymentTabComponent,
     CustomerRMATabComponent, CustomerAccountTabComponent],
-  providers: [TableService, CustomerService],
+  providers: [TableService, CustomerService, Helper],
   entryComponents: []
 })
 export class CustomerMgmtModule { }
