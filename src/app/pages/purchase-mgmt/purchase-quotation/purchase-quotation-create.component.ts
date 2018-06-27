@@ -44,7 +44,7 @@ export class QuotationCreateComponent implements OnInit {
     }
 
     getListSupplier() {
-        const params = { page: 1, length: 100 }
+        const params = { page: 1, length: 100 };
         this.purchaseService.getListSupplier(params).subscribe(res => {
             try {
                 this.listMaster['supplier'] = res.results.rows;
@@ -66,17 +66,18 @@ export class QuotationCreateComponent implements OnInit {
 
     addNewProduct(id) {
         this.items = [];
+        const correctItem = item => ({
+            ...item,
+            resale_price: Number(item.resale_price) || 0,
+            qty: 1,
+            totalItem: item.resale_price,
+            products: []
+        });
         const modalRef = this.modalService.open(ItemModalContent, {size: 'lg'});
         modalRef.result.then(res => {
             if (res.length > 0) {
                 this.items = [...res];
-                this.items.forEach((item) => {
-                    if (item.resale_price) item.resale_price = Number(item.resale_price);
-                    item['products'] = [];
-                    item.qty = 1;
-                    item.totalItem = item.resale_price;
-                })
-
+                this.items.map(correctItem);
             }
         });
         modalRef.componentInstance.id = id;
@@ -84,9 +85,8 @@ export class QuotationCreateComponent implements OnInit {
     }
 
     createQuotation() {
-        const params =  {};
-        params = this.generalForm.value;
-        this.items.forEach(function(value, key) {
+        const params = this.generalForm.value;
+        this.items.forEach((value, key) => {
             value.qty = Number(value.qty);
         });
         params['purchase_quote_details'] = this.items;
