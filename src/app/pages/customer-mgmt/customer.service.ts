@@ -119,7 +119,6 @@ export class CustomerService {
     /**
      * CUSTOMER
      */
-    // 
 
     createCustomer(data) {
         const url = 'buyer/create';

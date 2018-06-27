@@ -1,12 +1,12 @@
-import { TableService } from './../../services/table.service';
 import { Component, Input, OnInit, ViewContainerRef } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TableService } from './../../services/table.service';
 
 import { ItemService } from './item.service';
 
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'address-modal-content',
@@ -27,9 +27,9 @@ export class AddressModalContent implements OnInit {
     constructor(public activeModal: NgbActiveModal,
         public itemService: ItemService,
         public fb: FormBuilder,
-        public toastr: ToastrService,        
+        public toastr: ToastrService,
         public tableService: TableService) {
-         
+
 
         this.generalForm = fb.group({
             'type': 1,

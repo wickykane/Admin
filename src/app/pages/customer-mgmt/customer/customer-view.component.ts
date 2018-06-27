@@ -4,8 +4,8 @@ import { CustomerService } from '../customer.service';
 
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
-import { CustomerKeyService } from './keys.control';
 import { TableService } from './../../../services/table.service';
+import { CustomerKeyService } from './keys.control';
 
 @Component({
     selector: 'app-customer-view',
