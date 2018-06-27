@@ -361,15 +361,11 @@ export class SaleQuotationCreateComponent implements OnInit {
     generateNote() {
         let arrSale = [];
         const temp = this.list.items;
-<<<<<<< HEAD
+
         for (const [index, value] of temp) {
             if (value.sale_quote_num !== undefined) {
                 arrSale.push(value.sale_quote_num);
-=======
-        for (let i = 0; i < temp.length; i++) {
-            if (temp[i].sale_quote_num !==  'undefined') {
-                arrSale.push(temp[i].sale_quote_num);
->>>>>>> 5649755578ba6093dff3fbd5167b78b76ab77ed7
+
             }
         }
         // for (let i = 0; i < temp.length; i++) {
