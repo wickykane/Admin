@@ -118,7 +118,7 @@ export class CustomerSegmentCreateComponent implements OnInit {
 
         this.promotionService.getCustomerSegment(params).subscribe(res => {
             try {
-                this.data.segmentList[index].customerList = res.results;
+                // this.data.segmentList[index]['customerList'] = res.results;
             } catch (e) {
                 console.log(e);
             }
