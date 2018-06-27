@@ -73,7 +73,7 @@ export class OrderService {
     /**
      * dELIVERY order
      */
-    // 
+    //
     getDeliveryCode() {
         const url = 'delivery-order/get-delivery-order-code';
         return this.API.get(url);

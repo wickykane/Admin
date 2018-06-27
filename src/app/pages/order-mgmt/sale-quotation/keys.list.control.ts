@@ -1,10 +1,11 @@
-import { Subject } from 'rxjs/Rx';
 import { Injectable, OnDestroy } from '@angular/core';
-import { HotkeysService, Hotkey } from 'angular2-hotkeys';
+import { Hotkey, HotkeysService } from 'angular2-hotkeys';
+import { Observable } from 'rxjs/Observable';
+
 @Injectable()
 export class SaleQuoteKeyService implements OnDestroy {
     public context: any;
-    public watchContext = new Subject<any>();
+    public watchContext = new Observable<any>();
 
     constructor(private _hotkeysService: HotkeysService) {
         this.watchContext.subscribe(res => {
@@ -101,13 +102,13 @@ export class SaleQuoteKeyService implements OnDestroy {
         //      this.context.selectTab('vin');
         //      return;
         //  }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Search by VIN'));
-        // 
+        //
         //  this._hotkeysService.add(new Hotkey('ctrl+2', (event: KeyboardEvent): boolean => {
         //      event.preventDefault();
         //      this.context.selectTab('vehicle');
         //      return;
         //  }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Search by Vehicle'));
-        // 
+        //
         //  this._hotkeysService.add(new Hotkey('ctrl+3', (event: KeyboardEvent): boolean => {
         //      event.preventDefault();
         //      this.context.selectTab('part_number');

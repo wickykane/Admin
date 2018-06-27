@@ -1,12 +1,12 @@
-import { TableService } from './../../../services/table.service';
-import { Component, OnInit, ViewContainerRef, ElementRef, Renderer, ViewChild } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { OrderService } from '../order-mgmt.service';
+import { TableService } from './../../../services/table.service';
 import { SaleQuoteKeyService } from './keys.list.control';
 
-import { routerTransition } from '../../../router.animations';
 import { ToastrService } from 'ngx-toastr';
+import { routerTransition } from '../../../router.animations';
+import { OrderService } from '../order-mgmt.service';
 
 
 @Component({
@@ -53,7 +53,10 @@ export class SaleQuotationComponent implements OnInit {
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
         //  Init Key
-        this.saleQuoteKeyService.watchContext.next(this);
+        // this.saleQuoteKeyService.watchContext.next(this);
+        this.saleQuoteKeyService.watchContext.subscribe(res => {
+            res.next(this);
+        });
     }
 
     ngOnInit() {
@@ -132,8 +135,8 @@ export class SaleQuotationComponent implements OnInit {
     }
 
     getList() {
-
-        const params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
+        const params = {...this.tableService.getParams(), ...this.searchForm.value};
+        // const params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
         Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
         this.orderService.getListSalesQuotation(params).subscribe(res => {
