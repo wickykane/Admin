@@ -1,10 +1,11 @@
-import { Subject } from 'rxjs/Rx';
 import { Injectable, OnDestroy } from '@angular/core';
-import { HotkeysService, Hotkey } from 'angular2-hotkeys';
+import { Hotkey, HotkeysService } from 'angular2-hotkeys';
+import { Observable } from 'rxjs/Observable';
+
 @Injectable()
 export class SaleQuoteDetailKeyService implements OnDestroy {
     public context: any;
-    public watchContext = new Subject<any>();
+    public watchContext = new Observable<any>();
 
     constructor(private _hotkeysService: HotkeysService) {
         this.watchContext.subscribe(res => {
@@ -41,7 +42,7 @@ export class SaleQuoteDetailKeyService implements OnDestroy {
         //      this.context.checkAll({ target: { checked: this.context.checkAllItem } });
         //      return;
         //  }, undefined, 'Select all items on page'));
-        // 
+        //
         //  this._hotkeysService.add(new Hotkey('alt+pagedown', (event: KeyboardEvent): boolean => {
         //      this.context.tableService.pagination.page++;
         //      if (this.context.tableService.pagination.page > this.context.tableService.pagination.total_page) {
@@ -51,7 +52,7 @@ export class SaleQuoteDetailKeyService implements OnDestroy {
         //      this.context.tableService.changePage(this.context.tableService.pagination.page);
         //      return;
         //  }, undefined, 'Move to next page'));
-        // 
+        //
         //  this._hotkeysService.add(new Hotkey('alt+pageup', (event: KeyboardEvent): boolean => {
         //      this.context.tableService.pagination.page--;
         //      if (this.context.tableService.pagination.page < 1) {
@@ -61,14 +62,14 @@ export class SaleQuoteDetailKeyService implements OnDestroy {
         //      this.context.tableService.changePage(this.context.tableService.pagination.page);
         //      return;
         //  }, undefined, 'Move to next page'));
-        // 
+        //
         //  this._hotkeysService.add(new Hotkey('alt+end', (event: KeyboardEvent): boolean => {
         //      event.preventDefault();
         //      this.context.tableService.pagination.page = this.context.tableService.pagination.total_page;
         //      this.context.tableService.changePage(this.context.tableService.pagination.page);
         //      return;
         //  }, undefined, 'Move to last page'));
-        // 
+        //
         //  this._hotkeysService.add(new Hotkey('alt+home', (event: KeyboardEvent): boolean => {
         //      event.preventDefault();
         //      this.context.tableService.pagination.page = 1;
@@ -84,7 +85,7 @@ export class SaleQuoteDetailKeyService implements OnDestroy {
         //      this.context.tableService.searchAction();
         //      return;
         //  }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Search data based on key'));
-        // 
+        //
         //  this._hotkeysService.add(new Hotkey('alt+r', (event: KeyboardEvent): boolean => {
         //      event.preventDefault();
         //      this.context.tableService.resetAction( this.context.searchForm);

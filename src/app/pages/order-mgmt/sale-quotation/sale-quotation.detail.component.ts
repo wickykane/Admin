@@ -1,13 +1,13 @@
-import { PrintHtmlService } from './../../../services/print.service';
-import { Component, OnInit, AfterViewInit, ElementRef, ViewChild, Input } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { PrintHtmlService } from './../../../services/print.service';
 
-import { OrderService } from '../order-mgmt.service';
-import { routerTransition } from '../../../router.animations';
 import { ToastrService } from 'ngx-toastr';
+import { routerTransition } from '../../../router.animations';
+import { OrderService } from '../order-mgmt.service';
 
 @Component({
     selector: 'app-detail-quotation',

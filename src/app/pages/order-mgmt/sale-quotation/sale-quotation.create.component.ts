@@ -1,19 +1,19 @@
-import { Component, OnInit, ViewContainerRef, ViewEncapsulation, ViewChild } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { DatePipe } from '@angular/common';
+import { Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { DatePipe } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
 
-import { OrderService } from '../order-mgmt.service';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
+import { OrderService } from '../order-mgmt.service';
 
+import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { ItemModalContent } from '../../../shared/modals/item.modal';
-import { PromotionModalContent } from '../../../shared/modals/promotion.modal';
 import { OrderHistoryModalContent } from '../../../shared/modals/order-history.modal';
 import { OrderSaleQuoteModalContent } from '../../../shared/modals/order-salequote.modal';
-import createNumberMask from 'text-mask-addons/dist/createNumberMask';
+import { PromotionModalContent } from '../../../shared/modals/promotion.modal';
 
 
 
@@ -123,8 +123,8 @@ export class SaleQuotationCreateComponent implements OnInit {
         this.getListCustomerOption();
         this.getOrderReference();
         this.updateTotal();
-        this.copy_addr = Object.assign(this.copy_addr, this.addr_select);
-        this.copy_customer = Object.assign(this.copy_customer, this.customer);
+        this.copy_addr = { ...this.copy_addr, ...this.addr_select };
+        this.copy_customer = { ...this.copy_customer, ...this.customer };
         //  this.generalForm.controls['is_multi_shp_addr'].patchValue(0);
         const d = new Date();
         this.generalForm.controls['quote_date'].patchValue(d.toISOString().slice(0, 10));
@@ -211,7 +211,7 @@ export class SaleQuotationCreateComponent implements OnInit {
     }
 
     cloneRecord(record, list) {
-        const newRecord = Object.assign({}, record);
+        const newRecord = { ...record };
         const index = list.indexOf(record);
         const objIndex = list[index];
         objIndex.products.push(newRecord);
@@ -261,7 +261,7 @@ export class SaleQuotationCreateComponent implements OnInit {
     }
 
     deleteAction(id) {
-        this.list.items = this.list.items.filter(function(item) {
+        this.list.items = this.list.items.filter(item => {
             return item.item_id !== id;
         });
         this.updateTotal();
@@ -296,10 +296,10 @@ export class SaleQuotationCreateComponent implements OnInit {
             if (res instanceof Array && res.length > 0) {
 
                 const listAdded = [];
-                (this.list.items).forEach(function(item) {
+                (this.list.items).forEach(item => {
                     listAdded.push(item.item_id);
                 });
-                res.forEach(function(item) {
+                res.forEach(item => {
                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
                     item['products'] = [];
                     item.order_quantity = 1;
@@ -307,7 +307,7 @@ export class SaleQuotationCreateComponent implements OnInit {
                     item.source = 'Manual';
                 });
 
-                this.list.items = this.list.items.concat(res.filter(function(item) {
+                this.list.items = this.list.items.concat(res.filter(item => {
                     return listAdded.indexOf(item.item_id) < 0;
                 }));
 
@@ -343,11 +343,11 @@ export class SaleQuotationCreateComponent implements OnInit {
     //                      item.totalItem = item.sale_price;
     //                      item.source = 'From Quote';
     //                  });
-    // 
+    //
     //                  this.list.items = this.list.items.concat(res.filter(function(item) {
     //                      return listAdded.indexOf(item.item_id) < 0;
     //                  }));
-    // 
+    //
     //                  this.updateTotal();
     //                  this.generateNote();
     //              }
@@ -355,17 +355,24 @@ export class SaleQuotationCreateComponent implements OnInit {
     //              dismiss => { });
     //          modalRef.componentInstance.company_id = this.generalForm.value.company_id;
     //      }
-    // 
-    // 
+    //
+    //
     //  }
     generateNote() {
         let arrSale = [];
         const temp = this.list.items;
-        for (let i = 0; i < temp.length; i++) {
-            if (temp[i].sale_quote_num !==  'undefined') {
-                arrSale.push(temp[i].sale_quote_num);
+
+        for (const [index, value] of temp) {
+            if (value.sale_quote_num !== undefined) {
+                arrSale.push(value.sale_quote_num);
+
             }
         }
+        // for (let i = 0; i < temp.length; i++) {
+        //     if (temp[i].sale_quote_num !== 'undefined') {
+        //         arrSale.push(temp[i].sale_quote_num);
+        //     }
+        // }
         arrSale = arrSale.reduce((x, y) => x.includes(y) ? x : [...x, y], []);
         const stringNote = 'This sales order has items added from Quote:' + arrSale.toString();
         this.generalForm.controls['note'].patchValue(stringNote);
@@ -378,10 +385,10 @@ export class SaleQuotationCreateComponent implements OnInit {
 
     createOrder(type) {
         const products = [];
-        this.list.items.forEach(function(item) {
+        this.list.items.forEach(item => {
             products.push({
+              item_type: item.item_type,
                 item_id: item.item_id,
-                item_type: item.item_type,
                 quantity: item.order_quantity,
                 sale_price: item.sale_price,
                 discount_percent: item.discount || 0,
@@ -390,7 +397,7 @@ export class SaleQuotationCreateComponent implements OnInit {
             });
 
             if (item.products.length > 0) {
-                item.products.forEach(function(subItem, index) {
+                item.products.forEach((subItem, index) => {
                     products.push({
                         item_id: subItem.item_id,
                         item_type: item.item_type,
@@ -424,7 +431,7 @@ export class SaleQuotationCreateComponent implements OnInit {
                 };
                 break;
         }
-        params = Object.assign({}, this.order_info, this.generalForm.value, params);
+        params = { ...this.order_info, ...this.generalForm.value, ...params };
         console.log(params);
         this.orderService.createOrder(params).subscribe(res => {
             try {
