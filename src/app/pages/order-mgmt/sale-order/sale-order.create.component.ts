@@ -313,7 +313,7 @@ export class SaleOrderCreateComponent implements OnInit {
         this.order_info['shipping_cost'] = (this.order_info['shipping_cost'] !== undefined ? this.order_info['shipping_cost'] : 0);
         this.order_info['alt_vat_percent'] = (this.order_info['vat_percent'] !== undefined ? this.order_info['vat_percent'] : 0);
         this.order_info['alt_discount'] = (this.order_info['discount_percent'] !== undefined ? this.order_info['discount_percent'] : 0);
-        this.promotionList['total_invoice_discount'] = (this.promotionList['total_invoice_discount'] 
+        this.promotionList['total_invoice_discount'] = (this.promotionList['total_invoice_discount']
         ? this.promotionList['total_invoice_discount'] : 0);
 
         this.order_info.total_discount = parseFloat((this.order_info.sub_total * Number(this.order_info['alt_discount']) / 100).toFixed(2));
@@ -406,7 +406,7 @@ export class SaleOrderCreateComponent implements OnInit {
                         item.source = 'From Quote';
                     });
 
-                    this.list.items = this.list.items.concat(res.filter( (item)  =>{
+                    this.list.items = this.list.items.concat(res.filter( (item)  => {
                         return listAdded.indexOf(item.item_id) < 0;
                     }));
 
@@ -424,8 +424,8 @@ export class SaleOrderCreateComponent implements OnInit {
         let arrSale = [];
         const temp = this.list.items;
         for (const unit in temp) {
-            if (unit.sale_quote_num !==  'undefined') {
-                arrSale.push(unit.sale_quote_num);
+            if (typeof(unit['sale_quote_num']) !==  'undefined') {
+                arrSale.push(unit['sale_quote_num']);
             }
         }
         arrSale = arrSale.reduce((x, y) => x.includes(y) ? x : [...x, y], []);
