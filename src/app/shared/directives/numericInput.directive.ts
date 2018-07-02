@@ -1,10 +1,10 @@
 import {
-    Directive, Input, Output, EventEmitter, ViewChild, ElementRef,
-    Renderer2, forwardRef, OnChanges, SimpleChanges, OnInit
+    Directive, ElementRef, EventEmitter, forwardRef, Input, OnChanges,
+    OnInit, Output, Renderer2, SimpleChanges, ViewChild
 } from '@angular/core';
 import {
-    NG_VALUE_ACCESSOR, NG_VALIDATORS, Validator, AbstractControl,
-    ValidatorFn, ControlValueAccessor, Validators
+    AbstractControl, ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR,
+    Validator, ValidatorFn, Validators
 } from '@angular/forms';
 
 import { DecimalPipe } from '@angular/common';
@@ -79,7 +79,7 @@ export class NumericDirective implements ControlValueAccessor, Validator, OnChan
     ) {
     }
     ngOnInit(): void {
-        console.log(1)
+        console.log(1);
 
     }
     focusInput() {
@@ -119,21 +119,21 @@ export class NumericDirective implements ControlValueAccessor, Validator, OnChan
             delete this.numericRegex;
         }
 
-        // if (Helper.anyChanges(['min', 'max', 'rangeValidation'], changes)) {
-        //     if (!isNaN(this.min) && this.rangeValidation) {
-        //         this.minValidateFn = createMinValidator(this.min);
-        //     } else {
-        //         this.minValidateFn = Validators.nullValidator;
-        //     }
+        //  if (Helper.anyChanges(['min', 'max', 'rangeValidation'], changes)) {
+        //      if (!isNaN(this.min) && this.rangeValidation) {
+        //          this.minValidateFn = createMinValidator(this.min);
+        //      } else {
+        //          this.minValidateFn = Validators.nullValidator;
+        //      }
 
-        //     if (!isNaN(this.max) && this.rangeValidation) {
-        //         this.maxValidateFn = createMaxValidator(this.max);
-        //     } else {
-        //         this.maxValidateFn = Validators.nullValidator;
-        //     }
+        //      if (!isNaN(this.max) && this.rangeValidation) {
+        //          this.maxValidateFn = createMaxValidator(this.max);
+        //      } else {
+        //          this.maxValidateFn = Validators.nullValidator;
+        //      }
 
         this.ngChange(this.value);
-        // }
+        //  }
 
         if (Helper.anyChanges(['format'], changes)) {
             this.setInputValue();
@@ -204,13 +204,13 @@ export class NumericDirective implements ControlValueAccessor, Validator, OnChan
     }
 
     private verifySettings() {
-        // if (!isNaN(this.min) && !isNaN(this.max) && this.min > this.max) {
-        //     throw new Error('The max value should be bigger than the min value');
-        // }
+        //  if (!isNaN(this.min) && !isNaN(this.max) && this.min > this.max) {
+        //      throw new Error('The max value should be bigger than the min value');
+        //  }
 
-        // if (!isNaN(this.decimals) && this.decimals < 0) {
-        //     throw new Error('The decimals value should be bigger than 0');
-        // }
+        //  if (!isNaN(this.decimals) && this.decimals < 0) {
+        //      throw new Error('The decimals value should be bigger than 0');
+        //  }
     }
 
     private isValidInput(input: string) {
@@ -329,8 +329,8 @@ export class NumericDirective implements ControlValueAccessor, Validator, OnChan
 
     private formatNumber(value: number): string {
         return this.numeral.transform(value, '1.0-2');
-        // return numerel. value.toString();
-        // return numeral(value).format(this.format);
+        //  return numerel. value.toString();
+        //  return numeral(value).format(this.format);
     }
 
     private setSelection(start: number, end: number) {

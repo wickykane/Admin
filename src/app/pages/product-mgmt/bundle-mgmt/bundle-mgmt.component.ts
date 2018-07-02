@@ -2,7 +2,7 @@ import { TableService } from './../../../services/table.service';
 import { Component, OnInit } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ProductService } from "../product-mgmt.service";
+import { ProductService } from '../product-mgmt.service';
 
 @Component({
   selector: 'app-bundle-mgmt',
@@ -38,13 +38,13 @@ export class BundleMgmtComponent implements OnInit {
       'name': [null]      
     });
 
-    //Assign get list function name, override variable here
+    // Assign get list function name, override variable here
     this.tableService.getListFnName = 'getList';
     this.tableService.context = this;
   }
 
   ngOnInit() {
-    //Init Fn
+    // Init Fn
     this.getList();
   }
   /**
@@ -68,7 +68,7 @@ export class BundleMgmtComponent implements OnInit {
 
   getList() {
     var params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
-    Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);
+    Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
     this.productService.getListBundle(params).subscribe(res => {
       try {

@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { ItemService } from './item.service';
 
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { ToastrService } from 'ngx-toastr';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -35,10 +35,9 @@ export class OrderSaleQuoteModalContent implements OnInit {
     constructor(public activeModal: NgbActiveModal,
         public itemService: ItemService,
         public fb: FormBuilder,
-        public toastr: ToastsManager,
-        private vRef: ViewContainerRef,
+        public toastr: ToastrService,
         public tableService: TableService) {
-        this.toastr.setRootViewContainerRef(vRef);
+
 
         this.searchForm = fb.group({
             'sale_quote_id': [null],
@@ -46,14 +45,14 @@ export class OrderSaleQuoteModalContent implements OnInit {
             'quote_date': [null]
         });
 
-        // Assign get list function name, override variable here
+        //  Assign get list function name, override variable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
 
     }
 
     ngOnInit() {
-        // Init Fn
+        //  Init Fn
        this.getList();
        this.getListItemReference(this.company_id);
        this.getListSalesQuoteReference(this.company_id);
@@ -86,7 +85,7 @@ export class OrderSaleQuoteModalContent implements OnInit {
 
     getList() {
         const params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
-        Object.keys(params).forEach((key) => (params[key] == null || params[key] === '') && delete params[key]);
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
         this.itemService.getListSalesQuoteItem(this.company_id, params).subscribe(res => {
             try {
                 if (!res.data.rows) {

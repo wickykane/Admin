@@ -1,8 +1,8 @@
 import { Component, Input, OnInit, ViewContainerRef } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'item-promotion-content',
@@ -20,7 +20,7 @@ export class PromotionModalContent implements OnInit {
     }
 
     ngOnInit() {
-        // Init Fn
+        //  Init Fn
         this.listPromotion = this.data;
     }
 

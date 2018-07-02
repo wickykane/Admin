@@ -1,30 +1,31 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
+import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { HttpModule } from '@angular/http';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import {HotkeyModule} from 'angular2-hotkeys';
-import {ToastModule} from 'ng2-toastr/ng2-toastr';
 import { ToastrModule } from 'ngx-toastr';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CustomSpinnerComponent } from './shared/modules/custom-spinner/spinner.component';
 
-import { AuthGuard, JwtService } from './shared';
-import { AuthenticationService, ApiService, ApiInterceptorService } from './services/index';
-import { NgHttpLoaderModule } from 'ng-http-loader/ng-http-loader.module';
 import 'angular2-navigate-with-data';
+// tslint:disable-next-line:ordered-imports
+import { NgHttpLoaderModule } from 'ng-http-loader/ng-http-loader.module';
+// tslint:disable-next-line:ordered-imports
+import { ApiInterceptorService, ApiService, AuthenticationService } from './services/index';
+import { AuthGuard, JwtService } from './shared';
 
 
-// AoT requires an exported function for factories
+//  AoT requires an exported function for factories
 export function createTranslateLoader(http: HttpClient) {
-    // for development
-    // return new TranslateHttpLoader(http, '/start-angular/SB-Admin-BS4-Angular-5/master/dist/assets/i18n/', '.json');
+    //  for development
+    //  return new TranslateHttpLoader(http, '/start-angular/SB-Admin-BS4-Angular-5/master/dist/assets/i18n/', '.json');
     return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
@@ -47,7 +48,6 @@ export function createTranslateLoader(http: HttpClient) {
         HttpModule,
         FormsModule,
         ReactiveFormsModule,
-        ToastModule.forRoot(),
         ToastrModule.forRoot(),
         HotkeyModule.forRoot()
     ],

@@ -10,6 +10,7 @@ node_modules/
 dist/
 dist-temp/
 package-lock.json
+package-lock.json.*
 
 # IDEs and editors
 /.idea

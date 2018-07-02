@@ -1,13 +1,13 @@
-import { TableService } from './../../../services/table.service';
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CustomerService } from '../customer.service';
+import { TableService } from './../../../services/table.service';
 
-import { routerTransition } from '../../../router.animations';
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
-import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
+import { routerTransition } from '../../../router.animations';
+import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
 
 @Component({
     selector: 'app-buyer',
@@ -36,12 +36,11 @@ export class CustomerComponent implements OnInit {
 
     constructor(public router: Router,
         public fb: FormBuilder,
-        public toastr: ToastsManager,
+        public toastr: ToastrService,
         private vRef: ViewContainerRef,
         public tableService: TableService,
         private modalService: NgbModal,
         private customerService: CustomerService) {
-        this.toastr.setRootViewContainerRef(vRef);
 
         this.searchForm = fb.group({
             'buyer_name': [null],
@@ -49,13 +48,13 @@ export class CustomerComponent implements OnInit {
             'buyer_type': [null]
         });
 
-        // Assign get list function name, override letiable here
+        //  Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
     }
 
     ngOnInit() {
-        // Init Fn
+        //  Init Fn
         this.getList();
         this.listMaster['buyerType'] = [{
             id: 'CP',
@@ -94,8 +93,8 @@ export class CustomerComponent implements OnInit {
     }
 
     getList() {
-        const params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
-        Object.keys(params).forEach((key) => (params[key] == null || params[key] === '') && delete params[key]);
+        const params = {...this.tableService.getParams(), ...this.searchForm.value};
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
         this.customerService.getListBuyer(params).subscribe(res => {
             try {

@@ -1,13 +1,12 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
+import { PromotionService } from '../../promotion-mgmt/promotion.service';
+import { CustomerService } from '../customer.service';
 
-import { CustomerService } from "../customer.service";
-import { PromotionService } from "../../promotion-mgmt/promotion.service";
-
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -29,8 +28,14 @@ export class CustomerSegmentEditComponent implements OnInit {
     /**
      * Init Data
      */
-    constructor(private vRef: ViewContainerRef, private fb: FormBuilder, private promotionService: PromotionService, private customerService: CustomerService, public toastr: ToastsManager, private router: Router, private modalService: NgbModal, private route: ActivatedRoute) {
-        this.toastr.setRootViewContainerRef(vRef);
+    constructor(private fb: FormBuilder,
+        private promotionService: PromotionService,
+        private customerService: CustomerService,
+        public toastr: ToastrService,
+        private router: Router,
+        private modalService: NgbModal,
+        private route: ActivatedRoute) {
+
         this.generalForm = fb.group({
             'cd': [{ value: null, disabled: true }],
             'name': [null],
@@ -46,30 +51,30 @@ export class CustomerSegmentEditComponent implements OnInit {
 
         this.listMaster['applyFor'] = [{
             id: '1',
-            name: "All customers"
+            name: 'All customers'
         }, {
             id: '2',
-            name: "Specific Customers "
+            name: 'Specific Customers '
         }];
 
         this.listMaster['status'] = [{
             id: 'IA',
-            name: "In-Active"
+            name: 'In-Active'
         }, {
             id: 'AT',
-            name: "Active "
+            name: 'Active '
         }];
 
         this.listMaster['allType'] = [
             {
                 id: '1',
-                name: "All customers "
+                name: 'All customers '
             },
 
         ];
 
-        this.data["id"] = this.route.snapshot.paramMap.get('id');
-        this.getDetailSegment(this.data["id"]);
+        this.data['id'] = this.route.snapshot.paramMap.get('id');
+        this.getDetailSegment(this.data['id']);
     }
 
     /**
@@ -80,7 +85,7 @@ export class CustomerSegmentEditComponent implements OnInit {
         this.getListBuyerType();
         this.promotionService.getDetailSegment(id).subscribe(res => {
             try {
-                if (res._type == 'success') {
+                if (res._type ===  'success') {
                     this.generalForm.patchValue(res.results);
                     this.data['segmentList'] = res.results.detail || [];
                     this.data['segmentList'].forEach((data, index) => {
@@ -91,9 +96,9 @@ export class CustomerSegmentEditComponent implements OnInit {
                 }
 
             } catch (e) {
-                console.log(e)
+                console.log(e);
             }
-        })
+        });
 
     }
 
@@ -112,7 +117,7 @@ export class CustomerSegmentEditComponent implements OnInit {
             } catch (e) {
                 console.log(e);
             }
-        })
+        });
     }
 
     getListBuyerType() {
@@ -122,13 +127,12 @@ export class CustomerSegmentEditComponent implements OnInit {
             } catch (e) {
                 console.log(e);
             }
-        })
+        });
     }
 
-    changeToGetCustomer = function (segment, index) {
-
-        let params = { 'type': segment.company_type_id, 'country_code': segment.country_code }
-        Object.keys(params).forEach(function (item) {
+    changeToGetCustomer = (segment, index) => {
+        const params = { 'type': segment.company_type_id, 'country_code': segment.country_code };
+        Object.keys(params).forEach((item)  => {
             if ((params[item]) instanceof Array) {
                 params[item] = params[item].join(',');
             }
@@ -137,26 +141,22 @@ export class CustomerSegmentEditComponent implements OnInit {
 
         this.promotionService.getCustomerSegment(params).subscribe(res => {
             try {
-                this.data.segmentList[index].customerList = res.results;
+                // this.data.segmentList[index].customerList = res.results;
             } catch (e) {
                 console.log(e);
             }
-        })
+        });
     }
 
-    checkCustomerList = function (segment) {
+    checkCustomerList = (segment) => {
         setTimeout(() => {
-            if (!segment.customers) return;
-            if (segment.customers.length > 0) {
-                segment.has_specific_customer = true;
-            } else {
-                segment.has_specific_customer = false;
-            }
-        })
+            if (!segment.customers) { return; }
+            (segment.customers.length > 0) ? segment.has_specific_customer = true : segment.has_specific_customer = false;
+        });
     }
 
     createSegment = function () {
-        let params = this.generalForm.value;
+        const params = this.generalForm.value;
         params.detail = Array.from(this.data.segmentList);
 
         params.detail.forEach(item => {
@@ -165,19 +165,19 @@ export class CustomerSegmentEditComponent implements OnInit {
             });
         });
 
-        console.log(params)
+
         this.promotionService.postSegment(params).subscribe(res => {
             try {
                 this.toastr.success(res.message);
                 setTimeout(() => {
                     this.router.navigate(['/customer/customer-segment']);
-                }, 500)
+                }, 500);
             } catch (e) {
-                console.log(e)
+                console.log(e);
             }
         },
             err => {
-                this.toastr.error(err.message, null, { enableHTML: true });
-            })
-    }
+                this.toastr.error(err.message);
+            });
+    };
 }

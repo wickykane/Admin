@@ -1,13 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { PromotionService } from "../promotion.service";
+import { PromotionService } from '../promotion.service';
 
 @Component({
   selector: 'promotion-modal-content',
   templateUrl: './promotion.modal.html'
 })
 export class PromotionModalContent implements OnInit {
-  //Resolve Data
+  // Resolve Data
   @Input() name;
   @Input() item;
 
@@ -17,22 +17,22 @@ export class PromotionModalContent implements OnInit {
   constructor(public activeModal: NgbActiveModal, private promotionService: PromotionService) { }
 
   ngOnInit() {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
+    // Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    // Add 'implements OnInit' to the class.
     this.getListPromotionLevel();
     this.getListPromoType();
-    if ((this.item.level == 2 || this.item.level == 4) && this.item.type == 1) {
-      if (this.item.level == 4) {
-        //List Condition
+    if ((this.item.level === 2 || this.item.level === 4) && this.item.type === 1) {
+      if (this.item.level === 4) {
+        // List Condition
         this.getListLine();
         this.getListConditionRef();
       } else {
-        //List Bundle
+        // List Bundle
         this.getListBundleRefer();
       }
     }
     else {
-      //List Item Line
+      // List Item Line
       this.getListItem();
     }
   }
@@ -91,7 +91,7 @@ export class PromotionModalContent implements OnInit {
     })
   }
 
-  //Bundle
+  // Bundle
   getListBundleRefer() {
     this.promotionService.getListRefernceBundle().subscribe(res => {
 
@@ -121,7 +121,7 @@ export class PromotionModalContent implements OnInit {
 
   changeProductLineBuying = function (item, index) {
     var itemID = this.listMaster.productList.filter(function (product) {
-      if (product.item_id == item.buying_product_id)
+      if (product.item_id === item.buying_product_id)
         return product;
     });
     item.name = itemID[0].name;
@@ -131,7 +131,7 @@ export class PromotionModalContent implements OnInit {
 
   changeProductLinePromo = function (item, index) {
     var itemID = this.listMaster.productList.filter(function (product) {
-      if (product.item_id == item.prom_product_id)
+      if (product.item_id === item.prom_product_id)
         return product;
     });
     item.prom_name = itemID[0].name;
@@ -141,7 +141,7 @@ export class PromotionModalContent implements OnInit {
 
   changeBundleLineBuying = function (item, index) {
     var itemID = this.listMaster.productListBundle.filter(function (product) {
-      if (product.item_id == item.buying_bundle_id)
+      if (product.item_id === item.buying_bundle_id)
         return product;
     });
     console.log(itemID);
@@ -152,7 +152,7 @@ export class PromotionModalContent implements OnInit {
 
   changeBundleLinePromo = function (item, index) {
     var itemID = this.listMaster.productListBundle.filter(function (product) {
-      if (product.item_id == item.prom_bundle_id)
+      if (product.item_id === item.prom_bundle_id)
         return product;
     });
     item.prom_name = itemID[0].name;
@@ -162,7 +162,7 @@ export class PromotionModalContent implements OnInit {
 
   changeConditionLineBuying = function (item, index) {
     var itemID = this.listMaster.productList.filter(function (product) {
-      if (product.id == item.promotion_condition_group_id)
+      if (product.id === item.promotion_condition_group_id)
         return product;
     });
     item.name = itemID[0].name;

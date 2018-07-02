@@ -1,7 +1,7 @@
-import { TableService } from './../../../../services/table.service';
-import { Component, OnInit, ViewContainerRef, Input } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, Input, OnInit, ViewContainerRef } from '@angular/core';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { OrderService } from '../../../order-mgmt/order-mgmt.service';
+import { TableService } from './../../../../services/table.service';
 
 
 @Component({
@@ -38,7 +38,7 @@ export class SaleOrderInvoiceTabComponent implements OnInit {
         public tableService: TableService,
         private orderService: OrderService
       ) {
-        // Assign get list function name, override letiable here
+        //  Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
     }
@@ -50,8 +50,8 @@ export class SaleOrderInvoiceTabComponent implements OnInit {
      */
 
     getList() {
-        const params = Object.assign({}, this.tableService.getParams());
-        Object.keys(params).forEach((key) => (params[key] == null || params[key] === '') && delete params[key]);
+        const params = {...this.tableService.getParams()};
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
         this.orderService.getInvoice( this._orderId).subscribe(res => {
             try {

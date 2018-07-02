@@ -1,13 +1,13 @@
-import { TableService } from './../../services/table.service';
-import { Component, Input, OnInit, ViewContainerRef, OnDestroy } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, Input, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TableService } from './../../services/table.service';
 
 import { ItemService } from './item.service';
 
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
-import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { HotkeysService, Hotkey } from 'angular2-hotkeys';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Hotkey, HotkeysService } from 'angular2-hotkeys';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'app-site-modal',
@@ -41,13 +41,12 @@ export class SiteModalComponent implements OnInit, OnDestroy {
 
     constructor(public fb: FormBuilder,
         public router: Router,
-        public toastr: ToastsManager,
-        public vRef: ViewContainerRef,
+        public toastr: ToastrService,
         private itemService: ItemService,
         private modalService: NgbModal,
         private hotkeysService: HotkeysService,
         public activeModal: NgbActiveModal) {
-        this.toastr.setRootViewContainerRef(vRef);
+
         this.generalForm = fb.group({
             'parent_company_name': [null],
             'code': [null, Validators.required],
@@ -62,7 +61,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
 
         this.hotkeyCtrlRight = hotkeysService.add(new Hotkey('alt+r', (event: KeyboardEvent): boolean => {
             this.flagAddress = true;
-            return false; // Prevent bubbling
+            return false; //  Prevent bubbling
         }));
 
 
@@ -117,7 +116,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
     }
 
 
-    // change customer Type
+    //  change customer Type
     changeCustomerType() {
 
         const tempType1 = [{ id: 1, name: 'Head Office' }];
@@ -173,7 +172,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
 
 
 
-    // add new row address
+    //  add new row address
     addNewAddress() {
         this.address.push({
             listType: this.listTypeAddress,
@@ -186,7 +185,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
         this.address.splice(index, 1);
     }
 
-    // add new row bank account
+    //  add new row bank account
     addNewBankAccount() {
         this.bank_account.push({
             listBank: this.listBank,
@@ -197,7 +196,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
     removeBankAccount(index) {
         this.bank_account.splice(index, 1);
     }
-    // add new row bank card
+    //  add new row bank card
     addNewBankCard() {
         this.bank_card.push({
             listCardType: []
@@ -207,7 +206,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
     removeBankCard(index) {
         this.bank_card.splice(index, 1);
     }
-    // add new row contact
+    //  add new row contact
     addNewContact() {
         this.contact.push({});
     }
@@ -222,16 +221,16 @@ export class SiteModalComponent implements OnInit, OnDestroy {
         this.contact.forEach(obj => {
             obj['pwd_cfrm'] = obj.pwd;
         });
-        this.bank_account.forEach(obj => {
-            delete obj['listBank'];
-            delete obj['listBranch'];
-        });
-        this.address.forEach(obj => {
-          delete obj['listCountry'];
-          delete obj['listState'];
-        });
+        //  this.bank_account.forEach(obj => {
+        //      delete obj['listBank'];
+        //      delete obj['listBranch'];
+        //  });
+        //  this.address.forEach(obj => {
+        //    delete obj['listCountry'];
+        //    delete obj['listState'];
+        //  });
         if (this.generalForm.valid) {
-            const params = Object.assign({}, this.generalForm.value);
+            const params = {...this.generalForm.value};
             params['user'] = [];
             if (this.contact.length > 0) {
                 params['user'] = this.contact;

@@ -1,41 +1,38 @@
-import {TableService} from './../../../services/table.service';
-import {Component, OnInit, ViewContainerRef} from '@angular/core';
-import {Form, FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import {ProductService} from "../product-mgmt.service";
-import {ToastsManager} from 'ng2-toastr/ng2-toastr';
-//modal
+import { TableService } from './../../../services/table.service';
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ProductService } from '../product-mgmt.service';
+import { ToastrService } from 'ngx-toastr';
+// modal
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ItemModalContent } from "../../../shared/modals/item.modal";
+import { ItemModalContent } from '../../../shared/modals/item.modal';
 
-@Component({selector: 'app-ecatalog-create', templateUrl: './e-catalog-create.component.html'})
+@Component({ selector: 'app-ecatalog-create', templateUrl: './e-catalog-create.component.html' })
 export class ECatalogCreateComponent implements OnInit {
     /**
      * Variable Declaration
      */
-    public generalForm : FormGroup;
+    public generalForm: FormGroup;
     public listMaster = {};
     public data = {};
     public items: any = [];
-    public listFile : any = [];
-    public imageSelected : string = '';
+    public listFile: any = [];
+    public imageSelected: string = '';
 
     /**
      * Init Data
      */
-    constructor(private vRef : ViewContainerRef, private fb : FormBuilder, private productService : ProductService, public toastr : ToastsManager, private router : Router,
+    constructor(private fb: FormBuilder, private productService: ProductService, public toastr: ToastrService, private router: Router,
         private modalService: NgbModal) {
-        this
-            .toastr
-            .setRootViewContainerRef(vRef);
-        this.generalForm = fb.group({           
+        this.generalForm = fb.group({
             'name': [null, Validators.required],
             'is_sync': [null, Validators.required],
-            
+
         });
     }
 
-    ngOnInit() {          
+    ngOnInit() {
     }
     /**
      * Mater Data
@@ -60,21 +57,21 @@ export class ECatalogCreateComponent implements OnInit {
             }
 
         }
-    }  
+    }
 
-    // clickAdd() {
-    //     this
-    //         .data['products']
-    //         .push({});
-    // };
-    // removeRow(index) {
-    //     this
-    //         .data['products']
-    //         .splice(index, 1);
-    // }
+    //  clickAdd() {
+    //      this
+    //          .data['products']
+    //          .push({});
+    //  };
+    //  removeRow(index) {
+    //      this
+    //          .data['products']
+    //          .splice(index, 1);
+    //  }
 
     toDateObject(date) {
-        if (!date) 
+        if (!date)
             return null;
         const dateObject = new Date(date);
         return {
@@ -85,11 +82,11 @@ export class ECatalogCreateComponent implements OnInit {
     }
     addNewProduct(id) {
         this.items = [];
-        const modalRef = this.modalService.open(ItemModalContent, {size: 'lg'});
+        const modalRef = this.modalService.open(ItemModalContent, { size: 'lg' });
         modalRef.result.then(res => {
             if (res.length > 0) {
                 this.items = Object.assign([], res);
-                this.items.forEach(function(item) {
+                this.items.forEach(function (item) {
                     if (item.resale_price) item.resale_price = Number(item.resale_price);
                     item['products'] = [];
                     item.qty = 1;
@@ -102,9 +99,9 @@ export class ECatalogCreateComponent implements OnInit {
         modalRef.componentInstance.flagBundle = false;
     }
 
-    createECatalog= function () {
+    createECatalog = function () {
         let params = this.generalForm.value;
-        let listID= [];
+        let listID = [];
         this.items.forEach(item => {
             listID.push(item.id);
         });

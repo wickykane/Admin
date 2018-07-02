@@ -2,8 +2,8 @@ import { TableService } from './../../../services/table.service';
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ProductService } from "../product-mgmt.service";
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { ProductService } from '../product-mgmt.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-bundle-mgmt-create',
@@ -21,8 +21,8 @@ export class BundleMgmtEditComponent implements OnInit {
   /**
    * Init Data
    */
-  constructor(private vRef: ViewContainerRef, private fb: FormBuilder, private productService: ProductService, public toastr: ToastsManager, private router: Router) {
-    this.toastr.setRootViewContainerRef(vRef);
+  constructor(private vRef: ViewContainerRef, private fb: FormBuilder, private productService: ProductService, public toastr: ToastrService, private router: Router) {
+     
     this.generalForm = fb.group({
       'code': [{ value: null, disabled: true }],
       'name': [null, Validators.required],      
@@ -43,10 +43,10 @@ export class BundleMgmtEditComponent implements OnInit {
   getListStatus() {
     this.listMaster['status'] = [{
       id: '0',
-      name: "In-Active"
+      name: 'In-Active'
     }, {
       id: '1',
-      name: "Active "
+      name: 'Active '
     }];
   } 
   
@@ -61,7 +61,7 @@ export class BundleMgmtEditComponent implements OnInit {
 
   checkLevel(item) {
     let tempArr = Array.from(this.listMaster['typeProgram']);
-    if (item.level == 3) {
+    if (item.level === 3) {
       item.typeProgram = tempArr.splice(1, 1);
       item.detail = [];
     } else {
@@ -69,7 +69,7 @@ export class BundleMgmtEditComponent implements OnInit {
       item.detail = [];
     }
 
-    //reset
+    // reset
     item.is_promo_goods = false;
     item.is_dsct = false;
     item.is_acc_bal = false;
@@ -91,7 +91,7 @@ export class BundleMgmtEditComponent implements OnInit {
       year: dateObject.getFullYear()
     }
   }
-  //Product Line
+  // Product Line
   changeQTY(){
     console.log('abc')
     this.generalForm.controls['cost_price'].patchValue(0);

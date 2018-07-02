@@ -1,12 +1,12 @@
-import { TableService } from './../../services/table.service';
 import { Component, Input, OnInit, ViewContainerRef } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TableService } from './../../services/table.service';
 
 import { ItemService } from './item.service';
 
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
-import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'app-order-history-modal-content',
@@ -35,10 +35,9 @@ export class OrderHistoryModalContent implements OnInit {
     constructor(public activeModal: NgbActiveModal,
         public itemService: ItemService,
         public fb: FormBuilder,
-        public toastr: ToastsManager,
-        private vRef: ViewContainerRef,
+        public toastr: ToastrService,
         public tableService: TableService) {
-        this.toastr.setRootViewContainerRef(vRef);
+
 
         this.searchForm = fb.group({
             'cd': [null],
@@ -55,21 +54,19 @@ export class OrderHistoryModalContent implements OnInit {
             'certification': [null],
         });
 
-        // Assign get list function name, override variable here
+        //  Assign get list function name, override variable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
 
     }
 
     ngOnInit() {
-        // Init Fn
+        //  Init Fn
        this.getList();
 
     }
 
-    /**
-    * Table Event
-    */
+  // table
     selectData(index) {
         console.log(index);
     }
@@ -101,7 +98,7 @@ export class OrderHistoryModalContent implements OnInit {
                     return;
                 }
                 this.list.items = res.data;
-                // this.tableService.matchPagingOption(res.data);
+                //  this.tableService.matchPagingOption(res.data);
             } catch (e) {
                 console.log(e);
             }

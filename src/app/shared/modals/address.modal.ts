@@ -1,12 +1,12 @@
-import { TableService } from './../../services/table.service';
 import { Component, Input, OnInit, ViewContainerRef } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TableService } from './../../services/table.service';
 
 import { ItemService } from './item.service';
 
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
-import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'address-modal-content',
@@ -27,10 +27,9 @@ export class AddressModalContent implements OnInit {
     constructor(public activeModal: NgbActiveModal,
         public itemService: ItemService,
         public fb: FormBuilder,
-        public toastr: ToastsManager,
-        private vRef: ViewContainerRef,
+        public toastr: ToastrService,
         public tableService: TableService) {
-        this.toastr.setRootViewContainerRef(vRef);
+
 
         this.generalForm = fb.group({
             'type': 1,
@@ -45,12 +44,12 @@ export class AddressModalContent implements OnInit {
             'zip_code': [null, Validators.required]
         });
 
-        // Assign get list function name, override variable here
+        //  Assign get list function name, override variable here
 
     }
 
     ngOnInit() {
-        // Init Fn
+        //  Init Fn
         if (!this.state) {
             this.generalForm.patchValue(this.input);
         }
@@ -73,7 +72,7 @@ export class AddressModalContent implements OnInit {
         });
     }
 
-    // action change country
+    //  action change country
     changeCountry(id) {
         const params = {
             country: id

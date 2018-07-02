@@ -18,7 +18,7 @@ export class CustomerService {
     /**
      * Buyer
      */
-    // supplier
+    //  supplier
     getListState() {
         const url = 'state/get-all';
         return this.API.get(url);
@@ -119,7 +119,6 @@ export class CustomerService {
     /**
      * CUSTOMER
      */
-    //
 
     createCustomer(data) {
         const url = 'buyer/create';

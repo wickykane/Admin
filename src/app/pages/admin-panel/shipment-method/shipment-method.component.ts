@@ -2,9 +2,9 @@ import { Component, OnInit,ViewContainerRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AdminPanelService } from '../admin-panel.service';
-import { TableService } from "../../../services/index";
+import { TableService } from '../../../services/index';
 import { routerTransition } from '../../../router.animations';
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -33,19 +33,19 @@ export class ShipmentMethodComponent implements OnInit {
         private activeRouter: ActivatedRoute,
         private router: Router,       
 		private AdminPanelService: AdminPanelService,
-		public toastr: ToastsManager, vcr: ViewContainerRef) {
+		public toastr: ToastrService, ) {
             this.searchForm = fb.group({
                 'type': [null]                 
               });
           
-              //Assign get list function name, override variable here
+              // Assign get list function name, override variable here
               this.tableService.getListFnName = 'getList';
               this.tableService.context = this;
         }   
 
         ngOnInit() {    
 			
-			//Init Fn
+			// Init Fn
 			this.getListTypeMethod();
             this.getList();
           }
@@ -61,7 +61,7 @@ export class ShipmentMethodComponent implements OnInit {
         
           getList() {
             var params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
-            Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);
+            Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
         
             this.AdminPanelService.getListShipmentMethod(params).subscribe(res => {
               try {

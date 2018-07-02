@@ -4,12 +4,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 
-import { OrderService } from "../order-mgmt.service";
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { OrderService } from '../order-mgmt.service';
 import { ToastrService } from 'ngx-toastr';
 
-import { ItemModalContent } from "../../../shared/modals/item.modal";
-import { PromotionModalContent } from "../../../shared/modals/promotion.modal";
+import { ItemModalContent } from '../../../shared/modals/item.modal';
+import { PromotionModalContent } from '../../../shared/modals/promotion.modal';
 
 
 
@@ -71,17 +70,17 @@ export class SaleQuotationRfqCreateComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.listMaster['payType'] = [{ id: 'PKU', name: "Pickup " }, { id: 'CE', name: "Call" }, { id: 'ONL', name: "Ecommerce" }, { id: 'NO', name: "Normal Order" }];
+    this.listMaster['payType'] = [{ id: 'PKU', name: 'Pickup ' }, { id: 'CE', name: 'Call' }, { id: 'ONL', name: 'Ecommerce' }, { id: 'NO', name: 'Normal Order' }];
     this.payment = {
       paymentMethod: [
-        { id: 'AB', name: "Account Balance" },
-        { id: 'BT', name: "Bank Transfer" },
-        { id: 'CS', name: "Cash" },
-        { id: 'CC', name: "Credit Card" }
+        { id: 'AB', name: 'Account Balance' },
+        { id: 'BT', name: 'Bank Transfer' },
+        { id: 'CS', name: 'Cash' },
+        { id: 'CC', name: 'Credit Card' }
       ],
       paymentTerm: [
-        { id: 15, name: "15 days" },
-        { id: 30, name: "30 days" }
+        { id: 15, name: '15 days' },
+        { id: 30, name: '30 days' }
       ]
     }
     this.generateSaleQuote();
@@ -94,10 +93,10 @@ export class SaleQuotationRfqCreateComponent implements OnInit {
   getListStatus() {
     this.listMaster['status'] = [{
       id: '0',
-      name: "In-Active"
+      name: 'In-Active'
     }, {
       id: '1',
-      name: "Active "
+      name: 'Active '
     }];
   }
   generateSaleQuote(){
@@ -240,7 +239,7 @@ export class SaleQuotationRfqCreateComponent implements OnInit {
     var result;
     if ((arr) instanceof Array) {
       for (var i = 0; i < arr.length; i++) {
-        if (arr[i].id == id) {
+        if (arr[i].id === id) {
           result = arr[i];
           break;
         }
@@ -283,7 +282,7 @@ export class SaleQuotationRfqCreateComponent implements OnInit {
     modalRef.componentInstance.flagBundle = true;
   }
 
-  //Promo Program
+  // Promo Program
   goPromoDetail = function (item) {
     if (!item.level || !item.type) return;
     this.openPromotionModal(item);
@@ -309,10 +308,10 @@ export class SaleQuotationRfqCreateComponent implements OnInit {
     });
 
     let params = {
-      "brand_id": 1,
-      "billing_id": this.bill['id'],
-      "selected_programs": this.order_info.selected_programs,
-      "items": this.list.items
+      'brand_id': 1,
+      'billing_id': this.bill['id'],
+      'selected_programs': this.order_info.selected_programs,
+      'items': this.list.items
     };
 
     params = Object.assign({}, this.order_info, params, this.generalForm.value);
@@ -333,7 +332,7 @@ export class SaleQuotationRfqCreateComponent implements OnInit {
       }
     },
       err => {
-        this.toastr.error(err.message, null, { enableHtml: true });
+          this.toastr.error(err.message);
       })
   }
 

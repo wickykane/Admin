@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { routerTransition } from '../../router.animations';
 import { AuthenticationService } from '../../services/index';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'app-login',
@@ -18,12 +18,11 @@ export class LoginComponent implements OnInit {
     constructor( public router: Router,
         public authenticationService: AuthenticationService,
         public fb: FormBuilder,
-        public toastr: ToastsManager, vcr: ViewContainerRef) {
+        public toastr: ToastrService, ) {
         this.nameForm = fb.group({
-            username: ["", Validators.required],
-            password: ["", Validators.required],
-        });
-         this.toastr.setRootViewContainerRef(vcr);
+            username: ['', Validators.required],
+            password: ['', Validators.required],
+        });       
     }
 
     ngOnInit() {

@@ -5,7 +5,7 @@ import { ApiService } from '../../services/index';
 export class OrderService {
     constructor(private API: ApiService) { }
 
-    // Order
+    //  Order
 
     getOrderDetail(id) {
         const url = ['order', id].join('/');
@@ -52,7 +52,7 @@ export class OrderService {
         const url = 'rfq';
         return this.API.get(url, params);
     }
-    // Sale Price List
+    //  Sale Price List
     getList(params) {
         const url = 'sale-price/get-list';
         return this.API.get(url, params);
@@ -111,10 +111,18 @@ export class OrderService {
         return this.API.post(url, params);
     }
 
-    // Sale Quotation
+    //  Sale Quotation
     getListSalesQuotation(params) {
-        const url = 'order/list-sale-quote';
+        const url = 'sale-quote';
         return this.API.get(url, params);
+    }
+    getSaleQuoteDetail(id) {
+        const url = ['sale-quote', id].join('/');
+        return this.API.get(url);
+    }
+    getSaleQuoteHistory(id) {
+        const url = ['sale-quote/history', id].join('/');
+        return this.API.get(url);
     }
     getSalesQuotation() {
         const url = 'order/get-sale-quote-code';
@@ -133,7 +141,7 @@ export class OrderService {
         return this.API.get(url);
     }
     getListSaleQuotationStatus() {
-        const url = 'order/sale-quote/list-status';
+        const url = 'sale-quote/status';
         return this.API.get(url);
     }
 

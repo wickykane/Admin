@@ -2,10 +2,10 @@ import { TableService } from '../../services/table.service';
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PurchaseService } from "../purchase-mgmt/purchase.service";
+import { PurchaseService } from '../purchase-mgmt/purchase.service';
 
 import { routerTransition } from '../../router.animations';
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-rma',
@@ -23,7 +23,7 @@ export class RmaComponent implements OnInit {
     public list = {
         items: []
     };
-    // public showProduct: boolean = false;
+    //  public showProduct: boolean = false;
     public onoffFilter: any;
     public flagId: string = '';
 
@@ -34,10 +34,10 @@ export class RmaComponent implements OnInit {
 
     constructor(public router: Router,
         public fb: FormBuilder,
-        public toastr: ToastsManager,
+        public toastr: ToastrService,
         private vRef: ViewContainerRef,
         public tableService: TableService, private purchaseService: PurchaseService) {
-        this.toastr.setRootViewContainerRef(vRef);
+         
 
         this.searchForm = fb.group({
             'cd': [null],
@@ -48,13 +48,13 @@ export class RmaComponent implements OnInit {
             'rqst_dt': [null]
         });
 
-        //Assign get list function name, override letiable here
+        // Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
     }
 
     ngOnInit() {
-        //Init Fn
+        // Init Fn
         this.listMoreFilter = [{ value: false, name: 'Requested On', type: 'date', model: 'rqst_dt' }];
         this.getList();
         this.getListSupplier();
@@ -77,7 +77,7 @@ export class RmaComponent implements OnInit {
          } else {
              this.flagId = id;
          }
-        //  this.showProduct = !this.showProduct;
+        //   this.showProduct = !this.showProduct;
      }
 
      showMorefilter() {
@@ -86,7 +86,7 @@ export class RmaComponent implements OnInit {
 
      sendMail(id) {
          let params = {
-             "sts": "SP"
+             'sts': 'SP'
          }
          this.purchaseService.sendMailPO(params, id).subscribe(res => {
              try {
@@ -137,7 +137,7 @@ export class RmaComponent implements OnInit {
         let params = { page: 1, length: 100 }
         this.purchaseService.getListSupplier(params).subscribe(res => {
             try {
-                this.listMaster["supplier"] = res.results.rows;
+                this.listMaster['supplier'] = res.results.rows;
             } catch (e) {
                 console.log(e);
             }
@@ -147,7 +147,7 @@ export class RmaComponent implements OnInit {
     getListStatus() {
         this.purchaseService.getListStatusOrder().subscribe(res => {
             try {
-                this.listMaster["status"] = res.results;
+                this.listMaster['status'] = res.results;
             } catch (e) {
                 console.log(e);
             }
@@ -156,7 +156,7 @@ export class RmaComponent implements OnInit {
 
     getList() {
         let params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
-        Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
         this.purchaseService.getListPurchaseOrder(params).subscribe(res => {
             try {

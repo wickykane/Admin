@@ -1,14 +1,14 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PurchaseService } from "../purchase.service";
+import { PurchaseService } from '../purchase.service';
 
-//modal
+// modal
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ItemModalContent } from "../../../shared/modals/item.modal";
+import { ItemModalContent } from '../../../shared/modals/item.modal';
 
 
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 
 @Component({
@@ -22,17 +22,17 @@ export class PurchaseOrderDetailComponent implements OnInit {
     generalForm: FormGroup;
 
     public items: any = [];
-    public detail: any =[];
+    public detail: any = [];
     public listMaster = {};
 
     constructor(public fb: FormBuilder,
         public router: Router,
         public route: ActivatedRoute,
-        public  toastr: ToastsManager,
+        public toastr: ToastrService,
         public vRef: ViewContainerRef,
         private purchaseService: PurchaseService,
         private modalService: NgbModal) {
-            this.toastr.setRootViewContainerRef(vRef);
+
             this.generalForm = fb.group({
                 'cd': [{ value: null, disabled: true }],
                 'purchase_quote_cd': [{ value: null, disabled: true }],
@@ -65,15 +65,15 @@ export class PurchaseOrderDetailComponent implements OnInit {
     getPOCode() {
         this.purchaseService.getPOCode().subscribe(res => {
             try {
-                this.generalForm.patchValue({'cd' : res.results.code})
+                this.generalForm.patchValue({'cd' : res.results.code});
             } catch (e) {
                 console.log(e);
             }
-        })
+        });
     }
 
     getListQuote() {
-        let params = {sts: 5}
+        const params = {sts: 5};
         this.purchaseService.getListQuoteApproved(params).subscribe(res => {
             try {
                 this.listMaster['listquote'] = res.results.rows;
@@ -134,10 +134,10 @@ export class PurchaseOrderDetailComponent implements OnInit {
 
 
     changePQ() {
-        let id = this.generalForm.value.purchase_quote_id;
-        let data = this.listMaster['listquote'].find(function(item) {
-            return item.id == id;
-        })
+        const id = this.generalForm.value.purchase_quote_id;
+        const data = this.listMaster['listquote'].find((item) => {
+            return item.id === id;
+        });
         if (data) {
             this.generalForm.patchValue({'supplier_id':  data.supplier_id});
             this.generalForm.patchValue({'supplier_name':  data.supplier_name});
@@ -147,19 +147,19 @@ export class PurchaseOrderDetailComponent implements OnInit {
 
     changeAddress(flag) {
         if (flag) {
-            let id = this.generalForm.value.ship_to;
-            let ship = this.listMaster['shipping'].find(function(item) {
-                return item.id == id;
-            })
+            const id = this.generalForm.value.ship_to;
+            const ship = this.listMaster['shipping'].find((item) => {
+                return item.id === id;
+            });
             if (ship) {
                 this.generalForm.patchValue({'ship_address':  ship.full_address});
             }
 
         } else {
-            let id = this.generalForm.value.bill_to;
-            let bill = this.listMaster['billing'].find(function(item) {
-                return item.id == id;
-            })
+            const id = this.generalForm.value.bill_to;
+            const bill = this.listMaster['billing'].find((item) => {
+                return item.id === id;
+            });
             if (bill) {
                 this.generalForm.patchValue({'bill_address':  bill.full_address});
             }
@@ -168,18 +168,18 @@ export class PurchaseOrderDetailComponent implements OnInit {
     }
 
     update() {
-        // let params = Object.assign({}, this.generalForm.value);
-        // params['detail'] = this.detail;
-        // this.purchaseService.createPurchaseOrder(params).subscribe(res => {
-        //     try {
-        //         setTimeout(() => {
+        //  const params = Object.assign({}, this.generalForm.value);
+        //  params['detail'] = this.detail;
+        //  this.purchaseService.createPurchaseOrder(params).subscribe(res => {
+        //      try {
+        //          setTimeout(() => {
                     this.router.navigate(['/purchase-management/purchase-order']);
-        //         }, 2000);
-        //         this.toastr.success(res.message);
-        //     } catch (e) {
-        //         this.toastr.error(e.message);
-        //     }
-        // });
+        //          }, 2000);
+        //          this.toastr.success(res.message);
+        //      } catch (e) {
+        //          this.toastr.error(e.message);
+        //      }
+        //  });
     }
 
 }

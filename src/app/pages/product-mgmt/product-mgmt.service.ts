@@ -9,7 +9,7 @@ export class ProductService {
         private $http:Http,
         private ApiService: ApiService
     ){}
-    //Item-Product Definition
+    // Item-Product Definition
     getListItem(params){
         let url ='item';
         return this.ApiService.get(url,params);
@@ -26,7 +26,7 @@ export class ProductService {
         let url ='item'+id;
         return this.ApiService.putForm(url,data);
     }
-    //Bundle
+    // Bundle
     getListBundle(params){
         let url ='bundle/get-list';
         return this.ApiService.get(url,params);
@@ -51,7 +51,7 @@ export class ProductService {
         let url ='bundle/'+id;
         return this.ApiService.put(url,params);
     }
-    //Condition Product Group
+    // Condition Product Group
      getListCondition(params){
         let url ='promotion_condition';
         return this.ApiService.get(url,params);
@@ -64,7 +64,7 @@ export class ProductService {
         let url ='promotion_condition';
         return this.ApiService.post(url,params);
     }
-    //Ecatalog
+    // Ecatalog
     getListEcatalog(params){
         let url='catalog';
         return this.ApiService.get(url,params)
@@ -82,7 +82,7 @@ export class ProductService {
         let url='catalog/'+id;
         return this.ApiService.get(url)
     }
-    //Master Data
+    // Master Data
      getReferList() {
         let url = ['item', 'reference'].join('/');
         return this.ApiService.get(url);

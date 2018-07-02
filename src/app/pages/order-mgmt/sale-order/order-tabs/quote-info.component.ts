@@ -1,7 +1,7 @@
-import { TableService } from './../../../../services/table.service';
-import { Component, OnInit, ViewContainerRef, Input, Output, EventEmitter } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { OrderService } from '../../../order-mgmt/order-mgmt.service';
+import { TableService } from './../../../../services/table.service';
 
 
 @Component({
@@ -52,15 +52,15 @@ export class SaleQuoteInformationTabComponent implements OnInit {
 
     getList() {
 
-        this.orderService.getOrderDetail(this._orderId).subscribe(res => {
+        this.orderService.getSaleQuoteDetail(this._orderId).subscribe(res => {
             try {
                 this.detail = res.data;
                 this.stockValueChange.emit(res.data) ;
-                this.detail['billing'] = res.data.billing_info[0];
-                this.detail['shipping_address'] = res.data.shipping_address[0];
-                if (this.detail['total_paid'] === null) {
-                    this.detail['total_paid'] = 0;
-                }
+                //  this.detail['billing'] = res.data.billing_info[0];
+                //  this.detail['shipping_address'] = res.data.shipping_address[0];
+                //  if (this.detail['total_paid'] === null) {
+                //      this.detail['total_paid'] = 0;
+                //  }
                 this.detail['subs'] = res.data.subs;
                 this.detail['subs'].forEach( (item) => {
                     this.totalQTY += item.qty;

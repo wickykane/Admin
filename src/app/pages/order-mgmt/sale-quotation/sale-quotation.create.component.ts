@@ -1,19 +1,19 @@
-import { Component, OnInit, ViewContainerRef, ViewEncapsulation } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { DatePipe } from '@angular/common';
+import { Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { DatePipe } from '@angular/common';
+import { NgSelectComponent } from '@ng-select/ng-select';
 
-import { OrderService } from '../order-mgmt.service';
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
+import { OrderService } from '../order-mgmt.service';
 
+import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { ItemModalContent } from '../../../shared/modals/item.modal';
-import { PromotionModalContent } from '../../../shared/modals/promotion.modal';
 import { OrderHistoryModalContent } from '../../../shared/modals/order-history.modal';
 import { OrderSaleQuoteModalContent } from '../../../shared/modals/order-salequote.modal';
-import createNumberMask from 'text-mask-addons/dist/createNumberMask';
+import { PromotionModalContent } from '../../../shared/modals/promotion.modal';
 
 
 
@@ -28,6 +28,8 @@ export class SaleQuotationCreateComponent implements OnInit {
     /**
      * Variable Declaration
      */
+    @ViewChild('inp') inp: NgSelectComponent;
+
     public generalForm: FormGroup;
     public listMaster = {};
     public selectedIndex = 0;
@@ -36,7 +38,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         'last_sales_order': '',
         'current_dept': '',
         'discount_level': '',
-        // 'items_in_quote': '',
+        //  'items_in_quote': '',
         'buyer_type': '',
         primary: [{
             'address_line': '',
@@ -83,7 +85,6 @@ export class SaleQuotationCreateComponent implements OnInit {
      * Init Data
      */
     constructor(
-        private vRef: ViewContainerRef,
         private fb: FormBuilder,
         public toastr: ToastrService,
         private router: Router,
@@ -93,43 +94,45 @@ export class SaleQuotationCreateComponent implements OnInit {
         private dt: DatePipe) {
         this.generalForm = fb.group({
             'company_id': [null, Validators.required],
-            'sale_quote_no': [null, Validators.required],
-            'order_number': [null],
-            // 'type': [null, Validators.required],
+            'sale_quote_no': [null],
+            'order_date': [null],
+            'type': 'SAQ',
             'quote_date': [null, Validators.required],
             'expiry_date': [null, Validators.required],
-            'ex_delivery_date': [null],
             'delivery_date': [null],
             'contact_user_id': [null],
             'prio_level': [null],
-            // 'is_multi_shp_addr': [null],
+            'is_multi_shp_addr': 0,
             'sales_person': [null],
-            // 'warehouse_id': [null],
+            'billing_id': [null],
+            'shipping_id': [null],
             'payment_method': [null],
             'note': [null]
         });
     }
 
     ngOnInit() {
+        setTimeout(() => {
+            this.inp.focusSearchInput();
+        }, 300);
+
         this.listMaster['multi_ship'] = [{ id: 0, label: 'No' }, { id: 1, label: 'Yes' }];
-        // Item
+        //  Item
         this.list.items = this.router.getNavigatedData() || [];
         if (Object.keys(this.list.items).length === 0) { this.list.items = []; }
         this.getListCustomerOption();
         this.getOrderReference();
         this.updateTotal();
-        this.copy_addr = Object.assign(this.copy_addr, this.addr_select);
-        this.copy_customer = Object.assign(this.copy_customer, this.customer);
-        // this.generalForm.controls['is_multi_shp_addr'].patchValue(0);
+        this.copy_addr = { ...this.copy_addr, ...this.addr_select };
+        this.copy_customer = { ...this.copy_customer, ...this.customer };
+        //  this.generalForm.controls['is_multi_shp_addr'].patchValue(0);
         const d = new Date();
         this.generalForm.controls['quote_date'].patchValue(d.toISOString().slice(0, 10));
         d.setDate(d.getDate() + 30);
         this.generalForm.controls['expiry_date'].patchValue(d.toISOString().slice(0, 10));
-        this.generalForm.controls['ex_delivery_date'].patchValue(d.toISOString().slice(0, 10));
-
-
-
+        this.generalForm.controls['delivery_date'].patchValue(d.toISOString().slice(0, 10));
     }
+
     /**
      * Mater Data
      */
@@ -194,7 +197,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         const pattern = /[0-9]/;
         const inputChar = String.fromCharCode(event.charCode);
         if (!pattern.test(inputChar)) {
-            // invalid character, prevent input
+            //  invalid character, prevent input
             event.preventDefault();
         }
     }
@@ -208,7 +211,7 @@ export class SaleQuotationCreateComponent implements OnInit {
     }
 
     cloneRecord(record, list) {
-        const newRecord = Object.assign({}, record);
+        const newRecord = { ...record };
         const index = list.indexOf(record);
         const objIndex = list[index];
         objIndex.products.push(newRecord);
@@ -258,7 +261,7 @@ export class SaleQuotationCreateComponent implements OnInit {
     }
 
     deleteAction(id) {
-        this.list.items = this.list.items.filter(function(item) {
+        this.list.items = this.list.items.filter(item => {
             return item.item_id !== id;
         });
         this.updateTotal();
@@ -293,10 +296,10 @@ export class SaleQuotationCreateComponent implements OnInit {
             if (res instanceof Array && res.length > 0) {
 
                 const listAdded = [];
-                (this.list.items).forEach(function(item) {
+                (this.list.items).forEach(item => {
                     listAdded.push(item.item_id);
                 });
-                res.forEach(function(item) {
+                res.forEach(item => {
                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
                     item['products'] = [];
                     item.order_quantity = 1;
@@ -304,7 +307,7 @@ export class SaleQuotationCreateComponent implements OnInit {
                     item.source = 'Manual';
                 });
 
-                this.list.items = this.list.items.concat(res.filter(function(item) {
+                this.list.items = this.list.items.concat(res.filter(item => {
                     return listAdded.indexOf(item.item_id) < 0;
                 }));
 
@@ -312,7 +315,7 @@ export class SaleQuotationCreateComponent implements OnInit {
             }
         }, dismiss => { });
     }
-    // Show order history
+    //  Show order history
     showViewOrderHistory() {
         if (this.generalForm.value.company_id !== null) {
             const modalRef = this.modalService.open(OrderHistoryModalContent, { size: 'lg' });
@@ -324,45 +327,52 @@ export class SaleQuotationCreateComponent implements OnInit {
             }, dismiss => { });
         }
     }
-    // showSaleQuoteList() {
-    //     if (this.generalForm.value.company_id !== null) {
-    //         const modalRef = this.modalService.open(OrderSaleQuoteModalContent, { size: 'lg' });
-    //         modalRef.result.then(res => {
-    //             if (res instanceof Array && res.length > 0) {
-    //                 const listAdded = [];
-    //                 (this.list.items).forEach(function(item) {
-    //                     listAdded.push(item.item_id);
-    //                 });
-    //                 res.forEach(function(item) {
-    //                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
-    //                     item['products'] = [];
-    //                     item.order_quantity = 1;
-    //                     item.totalItem = item.sale_price;
-    //                     item.source = 'From Quote';
-    //                 });
+    //  showSaleQuoteList() {
+    //      if (this.generalForm.value.company_id !== null) {
+    //          const modalRef = this.modalService.open(OrderSaleQuoteModalContent, { size: 'lg' });
+    //          modalRef.result.then(res => {
+    //              if (res instanceof Array && res.length > 0) {
+    //                  const listAdded = [];
+    //                  (this.list.items).forEach(function(item) {
+    //                      listAdded.push(item.item_id);
+    //                  });
+    //                  res.forEach(function(item) {
+    //                      if (item.sale_price) { item.sale_price = Number(item.sale_price); }
+    //                      item['products'] = [];
+    //                      item.order_quantity = 1;
+    //                      item.totalItem = item.sale_price;
+    //                      item.source = 'From Quote';
+    //                  });
     //
-    //                 this.list.items = this.list.items.concat(res.filter(function(item) {
-    //                     return listAdded.indexOf(item.item_id) < 0;
-    //                 }));
+    //                  this.list.items = this.list.items.concat(res.filter(function(item) {
+    //                      return listAdded.indexOf(item.item_id) < 0;
+    //                  }));
     //
-    //                 this.updateTotal();
-    //                 this.generateNote();
-    //             }
-    //         },
-    //             dismiss => { });
-    //         modalRef.componentInstance.company_id = this.generalForm.value.company_id;
-    //     }
+    //                  this.updateTotal();
+    //                  this.generateNote();
+    //              }
+    //          },
+    //              dismiss => { });
+    //          modalRef.componentInstance.company_id = this.generalForm.value.company_id;
+    //      }
     //
     //
-    // }
+    //  }
     generateNote() {
         let arrSale = [];
         const temp = this.list.items;
-        for (let i = 0; i < temp.length; i++) {
-            if (temp[i].sale_quote_num !== 'undefined') {
-                arrSale.push(temp[i].sale_quote_num);
+
+        for (const [index, value] of temp) {
+            if (value.sale_quote_num !== undefined) {
+                arrSale.push(value.sale_quote_num);
+
             }
         }
+        // for (let i = 0; i < temp.length; i++) {
+        //     if (temp[i].sale_quote_num !== 'undefined') {
+        //         arrSale.push(temp[i].sale_quote_num);
+        //     }
+        // }
         arrSale = arrSale.reduce((x, y) => x.includes(y) ? x : [...x, y], []);
         const stringNote = 'This sales order has items added from Quote:' + arrSale.toString();
         this.generalForm.controls['note'].patchValue(stringNote);
@@ -375,19 +385,19 @@ export class SaleQuotationCreateComponent implements OnInit {
 
     createOrder(type) {
         const products = [];
-        this.list.items.forEach(function(item) {
+        this.list.items.forEach(item => {
             products.push({
+              item_type: item.item_type,
                 item_id: item.item_id,
-                item_type: item.item_type,
                 quantity: item.order_quantity,
                 sale_price: item.sale_price,
                 discount_percent: item.discount || 0,
                 shipping_address_id: item.shipping_address_id,
-                // warehouse_id: item.warehouse_id || 1
+                warehouse_id: item.warehouse_id || 1
             });
 
             if (item.products.length > 0) {
-                item.products.forEach(function(subItem, index) {
+                item.products.forEach((subItem, index) => {
                     products.push({
                         item_id: subItem.item_id,
                         item_type: item.item_type,
@@ -395,7 +405,7 @@ export class SaleQuotationCreateComponent implements OnInit {
                         sale_price: subItem.sale_price,
                         discount_percent: subItem.discount || 0,
                         shipping_address_id: subItem.shipping_address_id,
-                        // warehouse_id: subItem.warehouse_id || 1
+                        warehouse_id: subItem.warehouse_id || 1
                     });
                 });
             }
@@ -405,13 +415,13 @@ export class SaleQuotationCreateComponent implements OnInit {
             case 'create':
                 params = {
                     'items': products,
-                    'is_draft_order': 0
+                    'is_draft_order': 1
                 };
                 break;
             case 'quote':
                 params = {
                     'items': products,
-                    'is_draft_order': 0
+                    'is_draft_order': 1
                 };
                 break;
             case 'draft':
@@ -421,13 +431,14 @@ export class SaleQuotationCreateComponent implements OnInit {
                 };
                 break;
         }
-        params = Object.assign({}, this.order_info, this.generalForm.value, params);
+        params = { ...this.order_info, ...this.generalForm.value, ...params };
+        console.log(params);
         this.orderService.createOrder(params).subscribe(res => {
             try {
                 if (res.data.status) {
                     this.toastr.success(res.data.message);
                     setTimeout(() => {
-                        this.router.navigate(['/order-management/sale-order']);
+                        this.router.navigate(['/order-management/sale-quotation']);
                     }, 500);
                 } else {
                     this.toastr.error(res.data.message, null, { enableHtml: true });
@@ -437,7 +448,7 @@ export class SaleQuotationCreateComponent implements OnInit {
             }
         },
             err => {
-                this.toastr.error(err.message, null, { enableHtml: true });
+                this.toastr.error(err.message);
             });
     }
 

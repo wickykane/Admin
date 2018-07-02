@@ -1,13 +1,11 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
-
-import { PromotionService } from "../promotion.service";
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
-import { PromotionModalContent } from '../modals/promotion.modal';
+import { ToastrService } from 'ngx-toastr';
 import { PromotionInvoiceModalContent } from '../modals/promotion-invoice.modal';
+import { PromotionModalContent } from '../modals/promotion.modal';
+import { PromotionService } from '../promotion.service';
 
 
 @Component({
@@ -27,8 +25,11 @@ export class PromotionCampaignCreateComponent implements OnInit {
   /**
    * Init Data
    */
-  constructor(private vRef: ViewContainerRef, private fb: FormBuilder, private promotionService: PromotionService, public toastr: ToastsManager, private router: Router, private modalService: NgbModal) {
-    this.toastr.setRootViewContainerRef(vRef);
+  constructor(private vRef: ViewContainerRef,
+    private fb: FormBuilder,
+    private promotionService:
+      PromotionService, public toastr: ToastrService, private router: Router, private modalService: NgbModal) {
+
     this.generalForm = fb.group({
       'code': [{ value: null, disabled: true }],
       'name': [null, Validators.required],
@@ -59,10 +60,10 @@ export class PromotionCampaignCreateComponent implements OnInit {
   getListStatus() {
     this.listMaster['status'] = [{
       id: '0',
-      name: "In-Active"
+      name: 'In-Active'
     }, {
       id: '1',
-      name: "Active "
+      name: 'Active '
     }];
   }
 
@@ -73,7 +74,7 @@ export class PromotionCampaignCreateComponent implements OnInit {
       } catch (e) {
         console.log(e);
       }
-    })
+    });
   }
 
   getListBudget() {
@@ -83,7 +84,7 @@ export class PromotionCampaignCreateComponent implements OnInit {
       } catch (e) {
         console.log(e);
       }
-    })
+    });
   }
 
   getListCustomerSegment() {
@@ -93,7 +94,7 @@ export class PromotionCampaignCreateComponent implements OnInit {
       } catch (e) {
         console.log(e);
       }
-    })
+    });
   }
 
   getListPromotionLevel() {
@@ -103,7 +104,7 @@ export class PromotionCampaignCreateComponent implements OnInit {
       } catch (e) {
         console.log(e);
       }
-    })
+    });
   }
 
   getTypeProgram() {
@@ -113,15 +114,15 @@ export class PromotionCampaignCreateComponent implements OnInit {
       } catch (e) {
         console.log(e);
       }
-    })
+    });
   }
   /**
    * Internal Function
    */
 
   checkLevel(item) {
-    let tempArr = Array.from(this.listMaster['typeProgram']);
-    if (item.level == 3) {
+    const tempArr = Array.from(this.listMaster['typeProgram']);
+    if (item.level === 3) {
       item.typeProgram = tempArr.splice(1, 1);
       item.detail = [];
     } else {
@@ -129,7 +130,7 @@ export class PromotionCampaignCreateComponent implements OnInit {
       item.detail = [];
     }
 
-    //reset
+    //  reset
     item.is_promo_goods = false;
     item.is_dsct = false;
     item.is_acc_bal = false;
@@ -137,28 +138,29 @@ export class PromotionCampaignCreateComponent implements OnInit {
 
   clickAdd() {
     this.data['programs'].push({ 'is_dsct': 0, 'is_acc_bal': 0, 'is_promo_goods': 0 });
-  };
+  }
 
   openPromotionModal(item) {
-    const modalRef = (item.level == 3 && item.type == 2) ? this.modalService.open(PromotionInvoiceModalContent, { size: 'sm' }) : this.modalService.open(PromotionModalContent, { size: 'lg' });
+    const modalRef = (item.level === 3 && item.type === 2) ? this.modalService.open(PromotionInvoiceModalContent, { size: 'sm' })
+    : this.modalService.open(PromotionModalContent, { size: 'lg' });
     modalRef.result.then(data => {
-      console.log("Add data: ", data);
+      console.log('Add data: ', data);
     });
     modalRef.componentInstance.item = item;
   }
 
-  //Promo Program
+  //  Promo Program
   goPromoDetail = function (item) {
-    if (!item.level || !item.type) return;
+    if (!item.level || !item.type) { return; }
     this.openPromotionModal(item);
-  }
+  };
 
   remove = function (index) {
     this.data['programs'].splice(index, 1);
   };
 
   createCampain = function () {
-    var params = this.generalForm.value;
+    const params = this.generalForm.value;
     params.programs = this.data['programs'];
     console.log(params);
     this.promotionService.postCampaign(params).subscribe(res => {
@@ -166,14 +168,14 @@ export class PromotionCampaignCreateComponent implements OnInit {
         this.toastr.success(res.message);
         setTimeout(() => {
           this.router.navigate(['/promotion/campaign']);
-        }, 500)
+        }, 500);
       } catch (e) {
         console.log(e);
       }
     },
       err => {
-        this.toastr.error(err.message, null, { enableHTML: true });
-      })
+        this.toastr.error(err.message);
+      });
 
-  }
+  };
 }

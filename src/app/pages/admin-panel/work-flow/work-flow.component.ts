@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AdminPanelService } from '../admin-panel.service';
-import { TableService } from "../../../services/index";
+import { TableService } from '../../../services/index';
 import { routerTransition } from '../../../router.animations';
 
 @Component({

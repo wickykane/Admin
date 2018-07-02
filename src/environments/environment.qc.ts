@@ -6,4 +6,3 @@ export const environment = {
     nab_home : 'http://nab.qc.seldatdirect.com/#/home',
     nab_url : 'http://nab.qc.seldatdirect.com'
   };
-  

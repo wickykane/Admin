@@ -1,13 +1,13 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PurchaseService } from "../purchase.service";
+import { PurchaseService } from '../purchase.service';
 
-//modal
+// modal
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ItemModalContent } from "../../../shared/modals/item.modal";
+import { ItemModalContent } from '../../../shared/modals/item.modal';
 
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 
 @Component({
@@ -31,11 +31,11 @@ export class SupplierCreateComponent implements OnInit {
 
     constructor(public fb: FormBuilder,
         public router: Router,
-        public toastr: ToastsManager,
+        public toastr: ToastrService,
         public vRef: ViewContainerRef,
         private purchaseService: PurchaseService,
         private modalService: NgbModal) {
-        this.toastr.setRootViewContainerRef(vRef);
+         
         this.generalForm = fb.group({
             'full_name': [null, Validators.required],
             'email': [null, Validators.required],
@@ -83,7 +83,7 @@ export class SupplierCreateComponent implements OnInit {
         this.getListCountry();
     }
 
-    //data master country
+    // data master country
     getListCountry() {
         this.purchaseService.getListCountry().subscribe(res => {
             try {
@@ -93,7 +93,7 @@ export class SupplierCreateComponent implements OnInit {
             }
         });
     }
-    //action change country
+    // action change country
     changeCountry(id, flag) {
         let params = {
             country: id
@@ -111,13 +111,13 @@ export class SupplierCreateComponent implements OnInit {
             }
         });
     }
-    //action copy address
+    // action copy address
     copyToAddress(flag) {
-        if (flag == 'billing') {
+        if (flag ===  'billing') {
             this.billingForm.patchValue(this.primaryForm.value);
             this.listMaster['states_billing'] = this.listMaster['states_primary'];
         }
-        if (flag == 'shipping') {
+        if (flag ===  'shipping') {
             this.shippingForm.patchValue(this.billingForm.value);
             this.listMaster['states_shipping'] = this.listMaster['states_billing'];
         }

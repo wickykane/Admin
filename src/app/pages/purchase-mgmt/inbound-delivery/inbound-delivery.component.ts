@@ -1,11 +1,11 @@
-import { TableService } from './../../../services/table.service';
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PurchaseService } from "../purchase.service";
+import { PurchaseService } from '../purchase.service';
+import { TableService } from './../../../services/table.service';
 
+import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 @Component({
   selector: 'app-inbound-delivery',
@@ -23,8 +23,8 @@ export class InboundDeliveryComponent implements OnInit {
     public list = {
         items: []
     };
-    // public showProduct: boolean = false;
-    public flagId: string = '';
+    //  public showProduct: boolean = false;
+    public flagId = '';
 
     public user: any;
 
@@ -32,23 +32,22 @@ export class InboundDeliveryComponent implements OnInit {
 
     constructor(public router: Router,
         public fb: FormBuilder,
-        public toastr: ToastsManager,
+        public toastr: ToastrService,
         private vRef: ViewContainerRef,
         public tableService: TableService, private purchaseService: PurchaseService) {
-        this.toastr.setRootViewContainerRef(vRef);
 
         this.searchForm = fb.group({
             'cd': [null],
             'name': [null]
         });
 
-        //Assign get list function name, override letiable here
+        // Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
     }
 
     ngOnInit() {
-        //Init Fn
+        // Init Fn
         this.getList();
 
         this.user = JSON.parse(localStorage.getItem('currentUser'));
@@ -63,18 +62,14 @@ export class InboundDeliveryComponent implements OnInit {
      * Internal Function
      */
      toggleSubRow(id) {
-         if (id === this.flagId) {
-             this.flagId = '0';
-         } else {
-             this.flagId = id;
-         }
-        //  this.showProduct = !this.showProduct;
+         (id === this.flagId) ? this.flagId = '0' : this.flagId = id;
+
      }
 
     getList() {
 
-        let params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
-        Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);
+        const params = {...this.tableService.getParams(), ...this.searchForm.value};
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
         this.purchaseService.getListInboundDelievery(params).subscribe(res => {
             try {

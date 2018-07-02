@@ -1,9 +1,9 @@
-import { TableService } from './../../../services/table.service';
 import { Component, OnInit } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CustomerService } from "../customer.service";
-import { PromotionService } from "../../promotion-mgmt/promotion.service";
+import { PromotionService } from '../../promotion-mgmt/promotion.service';
+import { CustomerService } from '../customer.service';
+import { TableService } from './../../../services/table.service';
 
 
 @Component({
@@ -22,36 +22,37 @@ export class CustomerSegmentComponent implements OnInit {
   public selectedIndex = 0;
   public list = {
     items: []
-  }
+  };
 
   public data = {};
 
   /**
    * Init Data
    */
-  constructor(private fb: FormBuilder, public tableService: TableService, private promotionService: PromotionService, private customerService: CustomerService) {
+  constructor(private fb: FormBuilder,
+    public tableService: TableService, private promotionService: PromotionService, private customerService: CustomerService) {
     this.searchForm = fb.group({
       'cd': [null],
       'name': [null],
       'apply_for': [null],
     });
 
-    //Assign get list function name, override variable here
+    // Assign get list function name, override variable here
     this.tableService.getListFnName = 'getList';
     this.tableService.context = this;
 
   }
 
   ngOnInit() {
-    //Init data
+    // Init data
     this.listMaster['applyFor'] = [{
       id: '1',
-      name: "All customers"
+      name: 'All customers'
     }, {
       id: '2',
-      name: "Specific Customers "
+      name: 'Specific Customers '
     }];
-    //Init Fn
+    // Init Fn
     this.getList();
   }
   /**
@@ -65,8 +66,8 @@ export class CustomerSegmentComponent implements OnInit {
    */
 
   getList() {
-    var params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
-    Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);
+    const params = {...this.tableService.getParams(), ...this.searchForm.value};
+    Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
 
     this.promotionService.getListSegment(params).subscribe(res => {
       try {

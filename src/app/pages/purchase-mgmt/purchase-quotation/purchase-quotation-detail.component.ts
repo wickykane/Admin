@@ -1,13 +1,13 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PurchaseService } from "../purchase.service";
+import { PurchaseService } from '../purchase.service';
 
-//modal
+// modal
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ItemModalContent } from "../../../shared/modals/item.modal";
+import { ItemModalContent } from '../../../shared/modals/item.modal';
 
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 
 @Component({
@@ -25,13 +25,13 @@ export class QuotationDetailComponent implements OnInit {
     public listMaster = {};
 
     constructor(public fb: FormBuilder,
-        public  toastr: ToastsManager,
+        public toastr: ToastrService, 
         public router: Router,
         public route: ActivatedRoute,
         public vRef: ViewContainerRef,
         private purchaseService: PurchaseService,
         private modalService: NgbModal) {
-            this.toastr.setRootViewContainerRef(vRef);
+             
             this.generalForm = fb.group({
                 'cd': [{ value: null, disabled: true }],
                 'rqst_dt': [null, Validators.required],
@@ -52,7 +52,7 @@ export class QuotationDetailComponent implements OnInit {
         let params = { page: 1, length: 100 }
         this.purchaseService.getListSupplier(params).subscribe(res => {
             try {
-                this.listMaster["supplier"] = res.results.rows;
+                this.listMaster['supplier'] = res.results.rows;
             } catch (e) {
                 console.log(e);
             }

@@ -7,7 +7,7 @@ import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './document.modal.html'
 })
 export class DocumentModalContent implements OnInit {
-  //Resolve Data
+  // Resolve Data
 
   public modalTitle = 'DOCUMENT';
 

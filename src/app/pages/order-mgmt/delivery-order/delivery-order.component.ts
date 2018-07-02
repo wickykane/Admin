@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService } from '../order-mgmt.service';
 
 import { routerTransition } from '../../../router.animations';
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'app-delivery-order',
@@ -32,10 +32,10 @@ export class DeliveryOrderComponent implements OnInit {
 
     constructor(public router: Router,
         public fb: FormBuilder,
-        public toastr: ToastsManager,
+        public toastr: ToastrService,
         private vRef: ViewContainerRef,
         public tableService: TableService, private orderService: OrderService) {
-        this.toastr.setRootViewContainerRef(vRef);
+         
 
         this.searchForm = fb.group({
             'code': [null],
@@ -44,26 +44,26 @@ export class DeliveryOrderComponent implements OnInit {
             'status_id': [null]
         });
 
-        //Assign get list function name, override letiable here
+        // Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
     }
 
     ngOnInit() {
-        //Init Fn
+        // Init Fn
         this.listMaster['status'] = [{
             id: '1',
-            name: "NEW"
+            name: 'NEW'
         }, {
             id: '2',
-            name: "READY TO SHIP"
+            name: 'READY TO SHIP'
         },
         {
             id: '3',
-            name: "IN TRANSIT"
+            name: 'IN TRANSIT'
         }, {
             id: '4',
-            name: "DELIVERED"
+            name: 'DELIVERED'
         }];
         this.getList();
 
@@ -94,7 +94,7 @@ export class DeliveryOrderComponent implements OnInit {
 
     getList() {
         let params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
-        Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
         this.orderService.getListDeliveryOrder(params).subscribe(res => {
             try {

@@ -1,12 +1,12 @@
-import { TableService } from './../../services/table.service';
 import { Component, Input, OnInit, ViewContainerRef } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TableService } from './../../services/table.service';
 
 import { ItemService } from './item.service';
 
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
-import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'item-modal-content',
@@ -36,10 +36,9 @@ export class ItemModalContent implements OnInit {
     constructor(public activeModal: NgbActiveModal,
         public itemService: ItemService,
         public fb: FormBuilder,
-        public toastr: ToastsManager,
-        private vRef: ViewContainerRef,
+        public toastr: ToastrService,
         public tableService: TableService) {
-        this.toastr.setRootViewContainerRef(vRef);
+
 
         this.searchForm = fb.group({
             'cd': [null],
@@ -67,14 +66,14 @@ export class ItemModalContent implements OnInit {
             'country_id_filter': [null]
         });
 
-        // Assign get list function name, override variable here
+        //  Assign get list function name, override variable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
 
     }
 
     ngOnInit() {
-        // Init Fn
+        //  Init Fn
         this.listMaster['certification_partNumber'] = [{ code: 'Y', value: 'Yes' }, { code: 'N', value: 'No' }];
         this.getListReference();
     }
@@ -93,9 +92,7 @@ export class ItemModalContent implements OnInit {
     }
 
 
-    /**
-    * Table Event
-    */
+    // Table event
     selectData(index) {
         console.log(index);
     }
@@ -143,8 +140,8 @@ export class ItemModalContent implements OnInit {
     }
 
     getList() {
-        const params = Object.assign({}, this.tableService.getParams(), this.searchForm.value, this.filterForm.value);
-        Object.keys(params).forEach((key) => (params[key] == null || params[key] === '') && delete params[key]);
+        const params = {...this.tableService.getParams(), ...this.searchForm.value, ...this.filterForm.value};
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
         this.itemService.getListAllItem(params).subscribe(res => {
             try {

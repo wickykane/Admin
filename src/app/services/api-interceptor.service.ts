@@ -1,6 +1,8 @@
 import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
+// tslint:disable-next-line:ordered-imports
 import { HttpHandler, HttpRequest, HttpEvent, HttpResponse, HttpErrorResponse, HttpInterceptor } from '@angular/common/http';
+// tslint:disable-next-line:import-blacklist
 import { Observable } from 'rxjs/Rx';
 import { AuthenticationService } from './authentication.service';
 
@@ -16,7 +18,7 @@ export class ApiInterceptorService {
       }, (err: any) => {
         if (err instanceof HttpErrorResponse) {
           if (err.status === 401) {
-            // redirect to the login route
+            //  redirect to the login route
             window.location.href = '/#/login';
           }
         }

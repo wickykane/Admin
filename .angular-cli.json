@@ -20,8 +20,7 @@
       "prefix": "app",
       "styles": [
           "../node_modules/font-awesome/css/font-awesome.css",
-           "../node_modules/bootstrap/dist/css/bootstrap.min.css",
-           "../node_modules/ng2-toastr/bundles/ng2-toastr.min.css",
+           "../node_modules/bootstrap/dist/css/bootstrap.min.css",           
            "../node_modules/ngx-toastr/toastr.css",
            "styles/app.scss"
       ],
@@ -29,8 +28,7 @@
         "../node_modules/jquery/dist/jquery.min.js",
         "./assets/jsPlugin/jsplumb/jsplumb.js",        
         "../node_modules/systemjs/dist/system.src.js",
-          "../node_modules/chart.js/dist/Chart.js",
-          "../node_modules/ng2-toastr/bundles/ng2-toastr.min.js"],
+          "../node_modules/chart.js/dist/Chart.js"],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",
@@ -52,10 +50,6 @@
     },
     {
       "project": "src/tsconfig.spec.json",
-      "exclude": "**/node_modules/**"
-    },
-    {
-      "project": "e2e/tsconfig.e2e.json",
       "exclude": "**/node_modules/**"
     }
   ],

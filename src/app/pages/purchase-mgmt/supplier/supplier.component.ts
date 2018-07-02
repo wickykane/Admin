@@ -2,10 +2,10 @@ import { TableService } from './../../../services/table.service';
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PurchaseService } from "../purchase.service";
+import { PurchaseService } from '../purchase.service';
 
 import { routerTransition } from '../../../router.animations';
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-supplier',
@@ -34,23 +34,23 @@ export class SupplierComponent implements OnInit {
 
     constructor(public router: Router,
         public fb: FormBuilder,
-        public toastr: ToastsManager,
+        public toastr: ToastrService,
         private vRef: ViewContainerRef,
         public tableService: TableService, private purchaseService: PurchaseService) {
-        this.toastr.setRootViewContainerRef(vRef);
+         
 
         this.searchForm = fb.group({
             'buyer_name': [null],
             'email': [null]
         });
 
-        //Assign get list function name, override letiable here
+        // Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
     }
 
     ngOnInit() {
-        //Init Fn
+        // Init Fn
         this.getList();
         this.user = JSON.parse(localStorage.getItem('currentUser'));
     }
@@ -66,7 +66,7 @@ export class SupplierComponent implements OnInit {
 
     getList() {
         let params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
-        Object.keys(params).forEach((key) => (params[key] == null || params[key] == '') && delete params[key]);
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
         this.purchaseService.getListSupplier(params).subscribe(res => {
             try {

@@ -1,23 +1,27 @@
-import { TableService } from './../../../services/table.service';
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { OrderService } from '../order-mgmt.service';
+import { TableService } from './../../../services/table.service';
+import { SaleQuoteKeyService } from './keys.list.control';
 
+import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { OrderService } from '../order-mgmt.service';
 
 
 @Component({
     selector: 'app-sale-quotation',
     templateUrl: './sale-quotation.component.html',
     styleUrls: ['./sale-quotation.component.scss'],
+    providers: [SaleQuoteKeyService],
     animations: [routerTransition()]
 })
 export class SaleQuotationComponent implements OnInit {
     /**
      * letiable Declaration
      */
+    @ViewChild('inp') inp: ElementRef;
+
     public listMaster = {};
     public selectedIndex = 0;
     public list = {
@@ -30,30 +34,32 @@ export class SaleQuotationComponent implements OnInit {
 
     constructor(public router: Router,
         public fb: FormBuilder,
-        public toastr: ToastsManager,
-        private vRef: ViewContainerRef,
+        public toastr: ToastrService,
         public tableService: TableService,
-        private orderService: OrderService) {
-        this.toastr.setRootViewContainerRef(vRef);
+        private orderService: OrderService,
+        public saleQuoteKeyService: SaleQuoteKeyService,
+        private renderer: Renderer) {
 
         this.searchForm = fb.group({
             'sale_quote_num': [null],
             'buyer_name': [null],
-            'sts_code': [null],
-            'date_type': [null],
+            'sts': [null],
+            'type': [null],
             'date_from': [null],
             'date_to': [null]
         });
 
-        // Assign get list function name, override letiable here
+        //  Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
+        //  Init Key
+        this.saleQuoteKeyService.watchContext.next(this);
     }
 
     ngOnInit() {
-        // Init Fn
+        //  Init Fn
         this.listMaster['listFilter'] = [{ value: false, name: 'Date Filter' }];
-        this.listMaster['dateType'] = [{ id: 1, name: 'Quote Date' }, { id: 2, name: 'Expiry Date' }, { id: 3, name: 'Exp Delivery Date' }];
+        this.listMaster['dateType'] = [{ id: 'quote_date', name: 'Quote Date' }, { id: 'expiry_dt', name: 'Expiry Date' }, { id: 'ship_date', name: 'Delivery Date' }];
         this.getList();
         this.getListStatus();
         this.user = JSON.parse(localStorage.getItem('currentUser'));
@@ -70,11 +76,22 @@ export class SaleQuotationComponent implements OnInit {
     getListStatus() {
         this.orderService.getListSaleQuotationStatus().subscribe(res => {
             try {
-              this.listMaster['listStatus'] = res.data;
+                this.listMaster['listStatus'] = res.data;
             } catch (e) {
                 console.log(e);
             }
         });
+    }
+
+    createOrder() {
+        this.router.navigate(['/order-management/sale-quotation/create']);
+    }
+
+    moreFilter() {
+        this.onoffFilter = !this.onoffFilter;
+        setTimeout(() => {
+            this.renderer.invokeElementMethod(this.inp.nativeElement, 'focus');
+        }, 300);
     }
 
     sentMailToBuyer(id) {
@@ -101,15 +118,28 @@ export class SaleQuotationComponent implements OnInit {
 
     }
 
-    getList() {
+    rejectByManager(id) {
+        const params = { status: 'RM' };
+        this.orderService.updateSaleQuoteStatus(id, params).subscribe(res => {
+            try {
+                this.toastr.success(res.message);
+                this.getList();
+            } catch (e) {
+                console.log(e);
+            }
+        });
 
-        const params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
-        Object.keys(params).forEach((key) => (params[key] == null || params[key] === '') && delete params[key]);
+    }
+
+    getList() {
+        const params = { ...this.tableService.getParams(), ...this.searchForm.value };
+        // const params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
 
         this.orderService.getListSalesQuotation(params).subscribe(res => {
             try {
-                this.list.items = res.results.rows;
-                this.tableService.matchPagingOption(res.results);
+                this.list.items = res.data.rows;
+                this.tableService.matchPagingOption(res.data);
             } catch (e) {
                 console.log(e);
             }

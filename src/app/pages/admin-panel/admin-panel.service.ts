@@ -9,7 +9,7 @@ export class AdminPanelService {
         private $http:Http,
         private ApiService: ApiService
     ){}
-    //UOM
+    // UOM
     getListUOM(params){
         let url ='uom';
         return this.ApiService.get(url,params);
@@ -23,7 +23,7 @@ export class AdminPanelService {
         return this.ApiService.put(url,params);
     }
 
-    //Shipment Method
+    // Shipment Method
     getListShipmentMethod(params){
         let url ='shipment_method';
         return this.ApiService.get(url,params);
@@ -36,7 +36,7 @@ export class AdminPanelService {
         let url ='shipment_method/'+id;
         return this.ApiService.put(url,params);
     }
-    //Shipment method Type
+    // Shipment method Type
     getListShipmentMethodType(){
         let url ='shipment_method_type/all';
         return this.ApiService.get(url);

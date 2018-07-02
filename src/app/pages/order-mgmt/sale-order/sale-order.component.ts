@@ -1,11 +1,11 @@
-import { TableService } from './../../../services/table.service';
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService } from '../order-mgmt.service';
+import { TableService } from './../../../services/table.service';
 
+import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 @Component({
   selector: 'app-sale-order',
@@ -24,7 +24,7 @@ export class SaleOrderComponent implements OnInit {
   public list = {
     items: []
   };
-  // public showProduct: boolean = false;
+  //  public showProduct: boolean = false;
   public onoffFilter: any;
   public listMoreFilter: any = [];
 
@@ -32,10 +32,9 @@ export class SaleOrderComponent implements OnInit {
 
   constructor(public router: Router,
     public fb: FormBuilder,
-    public toastr: ToastsManager,
+    public toastr: ToastrService,
     private vRef: ViewContainerRef,
     public tableService: TableService, private orderService: OrderService) {
-    this.toastr.setRootViewContainerRef(vRef);
 
     this.searchForm = fb.group({
       'code': [null],
@@ -52,16 +51,16 @@ export class SaleOrderComponent implements OnInit {
 
     });
 
-    // Assign get list function name, override letiable here
+    //  Assign get list function name, override letiable here
     this.tableService.getListFnName = 'getList';
     this.tableService.context = this;
   }
 
   ngOnInit() {
-    // Init Fn
+    //  Init Fn
     this.listMoreFilter = [{ value: false, name: 'Date Filter' }];
     this.listMaster['type'] = [{ id: 'PKU', name: 'Pickup ' }, { id: 'NO', name: 'Regular Order' }, { id: 'ONL', name: 'Ecommerce' }];
-    // this.countOrderStatus();
+    //  this.countOrderStatus();
     this.getList();
     this.getListStatus();
   }
@@ -89,13 +88,14 @@ export class SaleOrderComponent implements OnInit {
   }
 
   getList() {
-    const params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
+    const params = {...this.tableService.getParams(), ...this.searchForm.value};
 
     Object.keys(params).forEach((key) => {
       if (params[key] instanceof Array) {
         params[key] = params[key].join(',');
       }
-      (params[key] == null || params[key] === '') && delete params[key];
+      // tslint:disable-next-line:no-unused-expression
+      (params[key] === null || params[key] ===  '') && delete params[key];
     });
 
     params.order = 'id';
@@ -119,7 +119,7 @@ export class SaleOrderComponent implements OnInit {
       }, 500);
     },
       err => {
-        this.toastr.error(err.message, null, { enableHTML: true });
+          this.toastr.error(err.message);
       }
     );
   };
@@ -132,7 +132,7 @@ export class SaleOrderComponent implements OnInit {
       }, 500);
     },
       err => {
-        this.toastr.error(err.message, null, { enableHTML: true });
+          this.toastr.error(err.message);
       }
     );
   }
