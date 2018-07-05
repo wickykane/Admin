@@ -7,6 +7,8 @@ import { AdminPanelComponent } from './admin-panel.component';
 import { BankComponent } from './bank/bank.component';
 import { BankModalComponent } from './bank/modal/bank.modal';
 import { BranchModalComponent } from './bank/modal/branch.modal';
+import { DiscountCategoryComponent } from './discount-category/discount-category.component';
+import { DiscountCategoryCreateComponent } from './discount-category/discount-category.create.component';
 
 import { PaymentTermComponent } from './payterm/payterm.component';
 import { WarehourseComponent } from './warehourse/warehourse.component';
@@ -42,6 +44,8 @@ import { AdminPanelService } from './admin-panel.service';
         BranchModalComponent,
         PaymentTermComponent,
         WarehourseComponent,
+        DiscountCategoryComponent,
+        DiscountCategoryCreateComponent
     ],
     entryComponents: [
         BankModalComponent,

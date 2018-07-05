@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminPanelComponent } from './admin-panel.component';
 import { BankComponent } from './bank/bank.component';
+import { DiscountCategoryComponent } from './discount-category/discount-category.component';
+import { DiscountCategoryCreateComponent } from './discount-category/discount-category.create.component';
 import { PaymentTermComponent } from './payterm/payterm.component';
 import { ShipmentMethodComponent } from './shipment-method/shipment-method.component';
 import { UnitMeasureComponent } from './unit-measure/unit-measure.component';
@@ -43,7 +45,14 @@ const routes: Routes = [
     },
     {
         path: 'warehouse', component: WarehourseComponent
+    },
+    {
+        path: 'discount-category', component: DiscountCategoryComponent
+    },
+    {
+        path: 'discount-category/create', component: DiscountCategoryCreateComponent
     }
+
 
 
 ];
