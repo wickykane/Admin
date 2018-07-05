@@ -3,16 +3,16 @@ import { routerTransition } from '../../../router.animations';
 
 // Services
 import { TableService } from '../../../services/index';
-import { WarehourseService } from './warehourse.service';
+import { WarehouseService } from './warehouse.service';
 
 @Component({
-    selector: 'app-warehourse',
-    templateUrl: './warehourse.component.html',
-    providers: [WarehourseService],
-    styleUrls: ['./warehourse.component.scss'],
+    selector: 'app-warehouse',
+    templateUrl: './warehouse.component.html',
+    styleUrls: ['./warehouse.component.scss'],
+    providers: [WarehouseService],
     animations: [routerTransition()]
 })
-export class WarehourseComponent implements OnInit {
+export class WarehouseComponent implements OnInit {
     public list = {
         items: []
     };
@@ -20,7 +20,7 @@ export class WarehourseComponent implements OnInit {
 
     constructor(
         public tableService: TableService,
-        private warehourseService: WarehourseService
+        private warehouseService: WarehouseService
     ) {
         //  Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
@@ -42,7 +42,7 @@ export class WarehourseComponent implements OnInit {
                 delete params[key]
         );
 
-        this.warehourseService.getListWarehouse(params).subscribe(res => {
+        this.warehouseService.getListWarehouse(params).subscribe(res => {
             try {
                 this.list.items = res.data.rows;
                 this.tableService.matchPagingOption(res.data);

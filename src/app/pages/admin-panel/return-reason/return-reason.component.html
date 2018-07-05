@@ -1,6 +1,6 @@
 <div [@routerTransition]>
     <app-page-header [heading]="'LIST OF BANK'" [icon]="'fa-th-list'"></app-page-header>
-    <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
+
 
     <div class="block-content pd-bottom bg-gray-light short-width">
         <div class="row">
@@ -61,7 +61,7 @@
                             <a class="btn btn-default " (click)="addBranch(item)" title="Add Branch">
                                 <i class="fa fa-plus-circle" aria-hidden="true"></i>
                             </a>
-                            <a class="btn btn-default" [routerLink]="[item.id, 'branch']"  title="View Branch">
+                            <a class="btn btn-default " (click)="viewBranchById(item.id)" title="View Branch">
                                 <i class="fa fa-eye" aria-hidden="true"></i>
                             </a>
 

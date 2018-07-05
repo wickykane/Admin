@@ -5,7 +5,7 @@ import { ApiService } from './api.service';
 export class CommonService {
     constructor(private apiService: ApiService) { }
     getListCountry() {
-        const url = 'country/get-all';
+        const url = 'country/admin/get-all';
         return this.apiService.get(url);
     }
 

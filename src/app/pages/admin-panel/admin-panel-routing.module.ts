@@ -2,14 +2,17 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminPanelComponent } from './admin-panel.component';
 import { BankComponent } from './bank/bank.component';
+import { BranchComponent } from './bank/branch/branch.component';
 import { DiscountCategoryComponent } from './discount-category/discount-category.component';
 import { DiscountCategoryCreateComponent } from './discount-category/discount-category.create.component';
 import { PaymentTermComponent } from './payterm/payterm.component';
+import { ReturnReasonComponent } from './return-reason/return-reason.component';
 import { ShipmentMethodComponent } from './shipment-method/shipment-method.component';
 import { UnitMeasureComponent } from './unit-measure/unit-measure.component';
 import { UserCreateComponent } from './user/user-create.component';
 import { UserComponent } from './user/user.component';
-import { WarehourseComponent } from './warehourse/warehourse.component';
+import { WarehouseCreateComponent } from './warehouse/warehouse-create.component';
+import { WarehouseComponent } from './warehouse/warehouse.component';
 import { WorkFlowComponent } from './work-flow/work-flow.component';
 import { WorkFlowEditComponent } from './work-flow/work-flow.edit.component';
 
@@ -38,13 +41,30 @@ const routes: Routes = [
         path: 'work-flow/edit', component: WorkFlowEditComponent
     },
     {
+        path: 'bank',
+        children: [
+            { path: ':id/branch', component: BranchComponent },
+            { path: '', component: BankComponent }
+        ]
+    },
+    {
+        path: 'carrier',
+        loadChildren: './carrier/carrier.module#CarrierModule',
+    },
+    {
         path: 'bank', component: BankComponent
     },
     {
         path: 'payment-term', component: PaymentTermComponent
     },
     {
-        path: 'warehouse', component: WarehourseComponent
+        path: 'warehouse', component: WarehouseComponent
+    },
+    {
+        path: 'warehouse/create', component: WarehouseCreateComponent
+    },
+    {
+        path: 'return-reason', component: ReturnReasonComponent
     },
     {
         path: 'discount-category', component: DiscountCategoryComponent
