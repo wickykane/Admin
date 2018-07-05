@@ -3,7 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminPanelComponent } from './admin-panel.component';
 import { BankComponent } from './bank/bank.component';
 import { BranchComponent } from './bank/branch/branch.component';
-
+import { DiscountCategoryComponent } from './discount-category/discount-category.component';
+import { DiscountCategoryCreateComponent } from './discount-category/discount-category.create.component';
 import { PaymentTermComponent } from './payterm/payterm.component';
 import { ReturnReasonComponent } from './return-reason/return-reason.component';
 import { ShipmentMethodComponent } from './shipment-method/shipment-method.component';
@@ -64,7 +65,15 @@ const routes: Routes = [
     },
     {
         path: 'return-reason', component: ReturnReasonComponent
+    },
+    {
+        path: 'discount-category', component: DiscountCategoryComponent
+    },
+    {
+        path: 'discount-category/create', component: DiscountCategoryCreateComponent
     }
+
+
 
 ];
 
