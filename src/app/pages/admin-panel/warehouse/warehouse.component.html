@@ -22,7 +22,12 @@
                         <td>{{item.id}}</td>
                         <td>{{item.name }}</td>
                         <td>{{item.full_address}}</td>
-                        <td>{{item.status}}</td>
+                        <td>
+                            <label class="switch" placement="top" ngbTooltip="Click to Active or Inactive">
+                                <input trueFalseValue trueValue="AT" falseValue="IA" type="checkbox" [(ngModel)]="item.sts" (change)="changeStatus(item.id,item.ac)">
+                                <div class="slider round"></div>
+                            </label>
+                        </td>
                         <td>{{item.created_dt}}</td>
                         <td>{{item.updated_dt}}</td>
                         <td>{{item.updated_by}}</td>

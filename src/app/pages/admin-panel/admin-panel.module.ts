@@ -9,7 +9,7 @@ import { BankModalComponent } from './bank/modal/bank.modal';
 import { BranchModalComponent } from './bank/modal/branch.modal';
 
 import { PaymentTermComponent } from './payterm/payterm.component';
-import { WarehourseComponent } from './warehourse/warehourse.component';
+import { WarehouseComponent } from './warehouse/warehouse.component';
 
 import { ShipmentMethodComponent } from './shipment-method/shipment-method.component';
 import { UnitMeasureComponent } from './unit-measure/unit-measure.component';
@@ -41,7 +41,7 @@ import { AdminPanelService } from './admin-panel.service';
         BankModalComponent,
         BranchModalComponent,
         PaymentTermComponent,
-        WarehourseComponent,
+        WarehouseComponent,
     ],
     entryComponents: [
         BankModalComponent,
