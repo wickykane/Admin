@@ -12,10 +12,13 @@ export class BranchModalComponent implements OnInit {
   // Resolve Data
   public branchForm: FormGroup;
   public listMaster = {};
-  @Input() item;
+  @Input() bankData;
+  @Input() branchId;
+  @Input() bankId;
+
   constructor(public activeModal: NgbActiveModal, private fb: FormBuilder, private bankService: BankService) {
     this.branchForm = fb.group({
-      'bankname': [null],
+      'bankname': [{ value: null, disabled: true }],
       'name': [null],
       'country_code': [null],
       'address': [null],
@@ -26,7 +29,10 @@ export class BranchModalComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.branchForm.patchValue({ bankname: this.item['name'] });
+    this.branchForm.patchValue({ bankname: this.bankData['name'] });
+    if (this.branchId && this.bankId) {
+      this.getBranchDetail(this.bankId, this.branchId);
+    }
     this.getListCountry();
   }
 
@@ -36,6 +42,16 @@ export class BranchModalComponent implements OnInit {
       country: id
     };
     this.getStateByCountry(params);
+  }
+
+  getBranchDetail(bankId, branchId) {
+    this.bankService.getDetailBranch(bankId, branchId).subscribe(res => {
+      try {
+        this.branchForm.patchValue(res.data);
+      } catch (e) {
+        console.log(e);
+      }
+    });
   }
 
   getStateByCountry(params) {
@@ -63,6 +79,6 @@ export class BranchModalComponent implements OnInit {
   }
 
   cancel() {
-    this.activeModal.close();
+    this.activeModal.dismiss();
   }
 }

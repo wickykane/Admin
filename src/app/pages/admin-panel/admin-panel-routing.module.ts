@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminPanelComponent } from './admin-panel.component';
 import { BankComponent } from './bank/bank.component';
+import { BranchComponent } from './bank/branch/branch.component';
+
 import { ShipmentMethodComponent } from './shipment-method/shipment-method.component';
 import { UnitMeasureComponent } from './unit-measure/unit-measure.component';
 import { UserCreateComponent } from './user/user-create.component';
@@ -33,7 +35,11 @@ const routes: Routes = [
         path: 'work-flow/edit', component: WorkFlowEditComponent
     },
     {
-        path: 'bank', component: BankComponent
+        path: 'bank',
+        children: [
+            { path: ':id/branch', component: BranchComponent },
+            { path: '', component: BankComponent }
+        ]
     },
 
 
