@@ -10,9 +10,11 @@ import { BankService } from './bank.service';
 import { BankModalComponent } from './modal/bank.modal';
 import { BranchModalComponent } from './modal/branch.modal';
 
+import { BankKeyService } from './keys.control';
+
 @Component({
   selector: 'app-bank',
-  providers: [BankService],
+  providers: [BankService, BankKeyService],
   templateUrl: 'bank.component.html',
   animations: [routerTransition()]
 })
@@ -36,7 +38,8 @@ export class BankComponent implements OnInit {
     private router: Router,
     private bankService: BankService,
     private modalService: NgbModal,
-    private toastr: ToastrService) {
+    private toastr: ToastrService,
+    public keyService: BankKeyService, ) {
     this.searchForm = fb.group({
       'code': [null],
       'name': [null],
@@ -46,6 +49,8 @@ export class BankComponent implements OnInit {
     // Assign get list function name, override variable here
     this.tableService.getListFnName = 'getList';
     this.tableService.context = this;
+    //  Init Key
+    this.keyService.watchContext.next(this);
   }
 
   ngOnInit() {
