@@ -3,23 +3,20 @@ import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { routerTransition } from '../../../router.animations';
-import { TableService } from '../../../services/index';
-import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
-import { BankService } from './bank.service';
-import { BankModalComponent } from './modal/bank.modal';
-import { BranchModalComponent } from './modal/branch.modal';
-
-import { BankKeyService } from './keys.control';
+import { routerTransition } from '../../../../router.animations';
+import { TableService } from '../../../../services/index';
+import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
+import { BankService } from '../bank.service';
+import { BranchModalComponent } from '../modal/branch.modal';
 
 @Component({
-  selector: 'app-bank',
-  providers: [BankService, BankKeyService],
-  templateUrl: 'bank.component.html',
+  selector: 'app-branch',
+  providers: [BankService],
+  templateUrl: 'branch.component.html',
   animations: [routerTransition()]
 })
 
-export class BankComponent implements OnInit {
+export class BranchComponent implements OnInit {
   /**
    *  Variable
    */
@@ -38,22 +35,19 @@ export class BankComponent implements OnInit {
     private router: Router,
     private bankService: BankService,
     private modalService: NgbModal,
-    private toastr: ToastrService,
-    public keyService: BankKeyService, ) {
+    private toastr: ToastrService) {
     this.searchForm = fb.group({
-      'code': [null],
-      'name': [null],
-      'swift': [null],
+      'branch_name': [null],
     });
 
     // Assign get list function name, override variable here
     this.tableService.getListFnName = 'getList';
     this.tableService.context = this;
-    //  Init Key
-    this.keyService.watchContext.next(this);
   }
 
   ngOnInit() {
+    this.data['bank_id'] = this.activeRouter.snapshot.params['id'];
+    this.getBankDetail(this.data['bank_id']);
     this.getList();
   }
 
@@ -69,11 +63,17 @@ export class BankComponent implements OnInit {
    * Internal Function
    */
 
+  getBankDetail(id) {
+    this.bankService.getDetailBank(id).subscribe(res => {
+      this.data['bankData'] = res.data;
+    });
+  }
+
   getList() {
     const params = { ...this.tableService.getParams(), ...this.searchForm.value };
     Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
 
-    this.bankService.getListBank(params).subscribe(res => {
+    this.bankService.getListBranch(this.data['bank_id'], params).subscribe(res => {
       try {
         this.list.items = res.data.rows;
         this.tableService.matchPagingOption(res.data);
@@ -83,8 +83,8 @@ export class BankComponent implements OnInit {
     });
   }
 
-  createBank(params) {
-    this.bankService.createBank(params).subscribe(res => {
+  createBranch(params) {
+    this.bankService.createBranch(this.data['bank_id'], params).subscribe(res => {
       try {
         this.toastr.success(res.data.message);
         this.getList();
@@ -94,8 +94,8 @@ export class BankComponent implements OnInit {
     });
   }
 
-  updateBank(params) {
-    this.bankService.updateBank(params).subscribe(res => {
+  updateBranch(bankId, branchId, params) {
+    this.bankService.updateBranch(bankId, branchId, params).subscribe(res => {
       try {
         this.toastr.success(res.data.message);
         this.getList();
@@ -105,11 +105,11 @@ export class BankComponent implements OnInit {
     });
   }
 
-  deleteBank(id) {
+  deleteBranch(bankId, branchId) {
     const modalRef = this.modalService.open(ConfirmModalContent);
     modalRef.result.then(result => {
       if (result) {
-        this.bankService.deleteBank(id).subscribe(res => {
+        this.bankService.deleteBranch(bankId, branchId).subscribe(res => {
           try {
             this.toastr.success(res.data.message);
             this.getList();
@@ -122,39 +122,21 @@ export class BankComponent implements OnInit {
   }
 
   // Modal
-  editBank(flag?) {
-    const modalRef = this.modalService.open(BankModalComponent, { windowClass: 'md-modal' });
-    modalRef.componentInstance.modalTitle = (flag) ? 'EDIT BANK' : 'CREATE NEW BANK';
-    modalRef.componentInstance.isEdit = flag;
-    modalRef.componentInstance.item = flag || {};
+  editBranch(branchId, flag?) {
+    const modalRef = this.modalService.open(BranchModalComponent, { windowClass: 'md-modal' });
+    modalRef.componentInstance.modalTitle = (flag) ? 'EDIT BRANCH' : 'CREATE NEW BRANCH';
+    modalRef.componentInstance.branchId = branchId;
+    modalRef.componentInstance.bankId = this.data['bank_id'];
+    modalRef.componentInstance.bankData = this.data['bankData'] || {};
+
     modalRef.result.then(data => {
       const params = { data };
       if (!flag) {
-        this.createBank(params);
+        this.createBranch(params);
       } else {
-        this.updateBank(params);
+        this.updateBranch(this.data['bank_id'], branchId, params);
       }
     },
       dismiss => { });
-  }
-
-  addBranch(item) {
-    const modalRef = this.modalService.open(BranchModalComponent, { windowClass: 'md-modal' });
-    modalRef.componentInstance.modalTitle = 'CREATE NEW BRANCH';
-    modalRef.componentInstance.bankData = item || {};
-    modalRef.result.then(data => {
-      this.createBranch(item.id, data);
-    },
-      dismiss => { });
-  }
-
-  createBranch(bankId, params) {
-    this.bankService.createBranch(bankId, params).subscribe(res => {
-      try {
-        this.toastr.success(res.data.message);
-      } catch (e) {
-        console.log(e);
-      }
-    });
   }
 }
