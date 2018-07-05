@@ -44,51 +44,43 @@ export class MenuComponent implements OnInit {
             //     sub: false,
             //     child: []
             // },
-            {
-                flag: 'customer',
-                link: '/customer',
-                main_name: '<u>C</u>ustomer',
-                icon: '',
-                sub: false,
-                child: []
-            },
-            {
-                flag: 'product',
-                link: '/product-management/item-list',
-                main_name: 'Items List',
-                icon: '',
-                sub: false,
-                child: [
-                    {
-                        link: '/product-management/item-list',
-                        name: 'Item List '
-                    },
-                    {
-                        link: '/product-management/product-definition',
-                        name: 'Product Definition'
-                    },
-                    {
-                        link: '/product-management/bundle',
-                        name: 'Bundle Management'
-                    },
-                    {
-                        link: '/product-management/condition-product',
-                        name: 'Conditional Product Groups'
-                    },
-                    {
-                        link: '/product-management/e-catalog',
-                        name: 'E-Catalog'
-                    }
-                ]
-            },
-            {
-                flag: 'report',
-                link: '/dashboard/reports',
-                main_name: 'R<u>e</u>port',
-                icon: '',
-                sub: false,
-                child: []
-            },
+            // {
+            //     flag: 'customer',
+            //     link: '/customer',
+            //     main_name: '<u>C</u>ustomer',
+            //     icon: '',
+            //     sub: false,
+            //     child: []
+            // },
+            // {
+            //     flag: 'product',
+            //     link: '/product-management/item-list',
+            //     main_name: 'Items List',
+            //     icon: '',
+            //     sub: false,
+            //     child: [
+            //         {
+            //             link: '/product-management/item-list',
+            //             name: 'Item List '
+            //         },
+            //         {
+            //             link: '/product-management/product-definition',
+            //             name: 'Product Definition'
+            //         },
+            //         {
+            //             link: '/product-management/bundle',
+            //             name: 'Bundle Management'
+            //         },
+            //         {
+            //             link: '/product-management/condition-product',
+            //             name: 'Conditional Product Groups'
+            //         },
+            //         {
+            //             link: '/product-management/e-catalog',
+            //             name: 'E-Catalog'
+            //         }
+            //     ]
+            // },
             // {
             //     flag: 'saleorder',
             //     link: '/order-management/sale-quotation',
@@ -197,7 +189,7 @@ export class MenuComponent implements OnInit {
                 sub: true,
                 child: [
                     {
-                        link: '/customer/buyer',
+                        link: '/customer',
                         name: 'Buyers'
                     },
                     {
@@ -283,6 +275,14 @@ export class MenuComponent implements OnInit {
                 icon: '',
                 sub: false,
                 child: []
+            },
+            {
+                flag: 'report',
+                link: '/dashboard/reports',
+                main_name: 'R<u>e</u>port',
+                icon: '',
+                sub: false,
+                child: []
             }
         ];
     }
@@ -292,16 +292,18 @@ export class MenuComponent implements OnInit {
         const el = this.elRef.nativeElement.querySelectorAll('.open');
 
         for (let i = 0; i < el.length; i++) {
-          console.log(el[i]);
             el[i].classList.remove('open');
         }
 
+        console.log(el);
 
-        if (element === this.showMenu) {
-            this.showMenu = '0';
-        } else {
-            this.showMenu = element;
-        }
+        // for (const [key, value] of el) {
+        //     console.log(key);
+        //     console.log(value);
+        // }
+
+
+        this.showMenu = (element === this.showMenu) ? '0' : element;
     }
 
     removeClassExpand() {
