@@ -8,6 +8,7 @@ import { CommonShareModule, Helper } from '../../shared/index';
 import { WarehourseComponent } from './warehourse/warehourse.component';
 
 import { TableService } from '../../services/index';
+import { WarehourseService } from './warehourse.service';
 
 @NgModule({
     imports: [
@@ -16,6 +17,7 @@ import { TableService } from '../../services/index';
         PageHeaderModule,
         CommonShareModule
     ],
-    declarations: [WarehourseComponent]
+    declarations: [WarehourseComponent],
+    providers: [TableService, WarehourseService]
 })
 export class WarehouseMgmtModule {}
