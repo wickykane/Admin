@@ -58,6 +58,12 @@ export class WarehouseCreateComponent implements OnInit {
         const params = {
             country: this.generalForm.value.country_code
         };
+
+        Object.keys(params).forEach(
+            key =>
+                (params[key] === null || params[key] === '') &&
+                delete params[key]
+        );
         this.commonService.getStateByCountry(params).subscribe(res => {
             try {
                 this.listState = res.data;
@@ -80,7 +86,10 @@ export class WarehouseCreateComponent implements OnInit {
     }
     createWarehouse() {
         if (this.generalForm.valid) {
-            const params = { ...this.generalForm.value };
+            const params = {
+                ...this.generalForm.value,
+                ...this.contactForm.value
+            };
 
             const data = {
                 data: JSON.stringify(params)
