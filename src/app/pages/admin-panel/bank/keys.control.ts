@@ -36,13 +36,13 @@ export class BankKeyService implements OnDestroy {
             this.context.tableService.searchAction();
             event.returnValue = false;
             return event;
-        }, undefined, 'Search'));
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Search'));
         this._hotkeysService.add(new Hotkey('ctrl+r', (event: KeyboardEvent): any => {
             event.preventDefault();
             this.context.tableService.resetAction(this.context.searchForm);
             event.returnValue = false;
             return event;
-        }, undefined, 'Reset'));
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset'));
 
     }
 }
