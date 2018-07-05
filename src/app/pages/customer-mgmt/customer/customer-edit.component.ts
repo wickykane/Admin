@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CommonService } from '../../../services/common.service';
 import { CustomerService } from '../customer.service';
 
 //  modal
@@ -67,6 +68,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         public route: ActivatedRoute,
         private modalService: NgbModal,
         private hotkeysService: HotkeysService,
+        private commonService: CommonService,
         public helper: Helper) {
         this.generalForm = fb.group({
             'buyer_type': [null, Validators.required],
@@ -169,7 +171,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     }
 
     getListCountryAdmin() {
-        this.customerService.getListCountryAdmin().subscribe(res => {
+        this.commonService.getListCountry().subscribe(res => {
             try {
                 this.listCountry = res.data;
             } catch (e) {
@@ -230,7 +232,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         const params = {
             country: item.country_code
         };
-        this.customerService.getStateByCountry(params).subscribe(res => {
+        this.commonService.getStateByCountry(params).subscribe(res => {
             try {
                 item.listState = res.data;
             } catch (e) {

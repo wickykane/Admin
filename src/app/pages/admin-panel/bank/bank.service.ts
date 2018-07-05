@@ -54,14 +54,4 @@ export class BankService {
         const url = ['bank', bankId, 'branch', branchId].join('/');
         return this.apiService.delete(url);
     }
-
-    getListCountry() {
-        const url = 'country/admin/get-all';
-        return this.apiService.get(url);
-    }
-
-    getStateByCountry(params) {
-        const url = 'state/get-by-country';
-        return this.apiService.get(url, params);
-    }
 }

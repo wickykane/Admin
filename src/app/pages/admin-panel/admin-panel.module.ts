@@ -11,6 +11,8 @@ import { BranchComponent } from './bank/branch/branch.component';
 import { BankModalComponent } from './bank/modal/bank.modal';
 import { BranchModalComponent } from './bank/modal/branch.modal';
 
+import { PaymentTermComponent } from './payterm/payterm.component';
+import { WarehourseComponent } from './warehourse/warehourse.component';
 
 import { ShipmentMethodComponent } from './shipment-method/shipment-method.component';
 import { UnitMeasureComponent } from './unit-measure/unit-measure.component';
@@ -18,7 +20,7 @@ import { UnitMeasureComponent } from './unit-measure/unit-measure.component';
 import { UserModule } from './user/user.module';
 import { WorkFlowModule } from './work-flow/work-flow.module';
 
-import { TableService } from '../../services/index';
+import { CommonService, TableService } from '../../services/index';
 import { CommonShareModule, PageHeaderModule, StatModule } from '../../shared/index';
 
 import { AdminPanelService } from './admin-panel.service';
@@ -44,12 +46,14 @@ import { AdminPanelService } from './admin-panel.service';
         BankModalComponent,
         BranchModalComponent,
         BranchComponent,
+        PaymentTermComponent,
+        WarehourseComponent,
     ],
     entryComponents: [
         BankModalComponent,
         BranchModalComponent,
     ],
-    providers: [TableService,
+    providers: [TableService, CommonService,
         AdminPanelService]
 })
 export class AdminPanelModule { }
