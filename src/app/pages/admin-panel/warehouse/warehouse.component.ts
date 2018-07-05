@@ -8,8 +8,8 @@ import { WarehouseService } from './warehouse.service';
 @Component({
     selector: 'app-warehouse',
     templateUrl: './warehouse.component.html',
-    providers: [WarehouseService],
     styleUrls: ['./warehouse.component.scss'],
+    providers: [WarehouseService],
     animations: [routerTransition()]
 })
 export class WarehouseComponent implements OnInit {

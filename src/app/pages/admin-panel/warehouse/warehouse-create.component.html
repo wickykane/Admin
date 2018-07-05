@@ -1,3 +1,34 @@
-<p>
-  warehouse-create works!
-</p>
+<div [@routerTransition]>
+    <app-page-header [heading]="'CREATE NEW WAREHOUSE'" [icon]="'fa-th-list'"></app-page-header>
+    <div class="row pt-3">
+        <div class="col-md-12">
+            <div class="block-header">
+                <h3 class="block-title">GENERAL INFORMATION
+                </h3>
+            </div>
+        </div>
+    </div>
+    <form [formGroup]="generalForm" class="form-search full-width form-horizontal">
+        <div class="row pl-3 pr-3">
+            <div class="col-md-2">
+                <label for="name" class="control-label">Warehouse Name</label>
+                <span class="text-danger">( * )</span>
+                <input type="text" class="form-control" name="name" formControlName="name">
+            </div>
+            <div class="col-md-2">
+                <label for="address_line" class="control-label">Address Line</label>
+                <span class="text-danger">( * )</span>
+                <input type="text" class="form-control" name="address_line" formControlName="address_line">
+            </div>
+            <div class="col-md-2">
+                <label for="country_code" class="control-label">Country</label>
+                <span class="text-danger">( * )</span>
+                <select class="form-control" name="country_code" [(ngModel)]="country_code"  (change)="changeCountry(item)">
+                    <option value="null" selected="true">--Country--</option>
+                    <option *ngFor="let i of listCountry" [ngValue]="i.cd">{{i.name}}</option>
+                </select>
+            </div>
+           
+        </div>
+    </form>
+</div>
