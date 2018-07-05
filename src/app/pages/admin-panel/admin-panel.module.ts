@@ -12,7 +12,8 @@ import { BankModalComponent } from './bank/modal/bank.modal';
 import { BranchModalComponent } from './bank/modal/branch.modal';
 
 import { PaymentTermComponent } from './payterm/payterm.component';
-import { WarehourseComponent } from './warehourse/warehourse.component';
+import { WarehouseCreateComponent } from './warehouse/warehouse-create.component';
+import { WarehouseComponent } from './warehouse/warehouse.component';
 
 import { ReturnReasonComponent } from './return-reason/return-reason.component';
 import { ShipmentMethodComponent } from './shipment-method/shipment-method.component';
@@ -22,10 +23,13 @@ import { UserModule } from './user/user.module';
 import { WorkFlowModule } from './work-flow/work-flow.module';
 
 import { CommonService, TableService } from '../../services/index';
-import { CommonShareModule, PageHeaderModule, StatModule } from '../../shared/index';
+import {
+    CommonShareModule,
+    PageHeaderModule,
+    StatModule
+} from '../../shared/index';
 
 import { AdminPanelService } from './admin-panel.service';
-
 
 @NgModule({
     imports: [
@@ -48,14 +52,11 @@ import { AdminPanelService } from './admin-panel.service';
         BranchModalComponent,
         BranchComponent,
         PaymentTermComponent,
-        WarehourseComponent,
+        WarehouseComponent,
+        WarehouseCreateComponent,
         ReturnReasonComponent
     ],
-    entryComponents: [
-        BankModalComponent,
-        BranchModalComponent,
-    ],
-    providers: [TableService, CommonService,
-        AdminPanelService]
+    entryComponents: [BankModalComponent, BranchModalComponent],
+    providers: [TableService, CommonService, AdminPanelService]
 })
-export class AdminPanelModule { }
+export class AdminPanelModule {}
