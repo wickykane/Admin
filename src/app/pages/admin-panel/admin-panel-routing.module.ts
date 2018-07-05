@@ -36,6 +36,10 @@ const routes: Routes = [
         path: 'work-flow/edit', component: WorkFlowEditComponent
     },
     {
+        path: 'carrier',
+        loadChildren: './carrier/carrier.module#CarrierModule',
+    },
+    {
         path: 'bank', component: BankComponent
     },
     {
