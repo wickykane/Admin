@@ -1,10 +1,10 @@
-import { NgModule } from '@angular/core';
-import { NgbModule, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
-import { cdArrowTable, SortColumnDirective, UppercaseDirective, TrueFalseValueDirective, NgStickyDirective, ClickOutsideDirective, NumericDirective } from '../../directives/index';
+import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgbUTCStringAdapter } from './datepickerConfig';
+import { NgbDateAdapter, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TextMaskModule } from 'angular2-text-mask';
+import { cdArrowTable, ClickOutsideDirective, NgStickyDirective, NumericDirective, SortColumnDirective, TrueFalseValueDirective, UppercaseDirective } from '../../directives/index';
+import { NgbUTCStringAdapter } from './datepickerConfig';
 
 import { DateObjectPipe, Select2Pipe } from '../../pipes/index';
 import { ShortcutComponent } from '../short-cut/shortcut.component';

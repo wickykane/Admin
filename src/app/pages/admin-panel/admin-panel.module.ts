@@ -2,9 +2,12 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { NgbAlertModule, NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 
+import { ItemModalModule } from '../../shared/modals/item.module';
 import { AdminPanelRoutingModule } from './admin-panel-routing.module';
 import { AdminPanelComponent } from './admin-panel.component';
+
 import { BankComponent } from './bank/bank.component';
+import { BranchComponent } from './bank/branch/branch.component';
 import { BankModalComponent } from './bank/modal/bank.modal';
 import { BranchModalComponent } from './bank/modal/branch.modal';
 
@@ -19,6 +22,7 @@ import { WorkFlowModule } from './work-flow/work-flow.module';
 
 import { CommonService, TableService } from '../../services/index';
 import { CommonShareModule, PageHeaderModule, StatModule } from '../../shared/index';
+
 import { AdminPanelService } from './admin-panel.service';
 
 
@@ -31,7 +35,8 @@ import { AdminPanelService } from './admin-panel.service';
         UserModule,
         PageHeaderModule,
         WorkFlowModule,
-        CommonShareModule
+        CommonShareModule,
+        ItemModalModule
     ],
     declarations: [
         AdminPanelComponent,
@@ -40,6 +45,7 @@ import { AdminPanelService } from './admin-panel.service';
         BankComponent,
         BankModalComponent,
         BranchModalComponent,
+        BranchComponent,
         PaymentTermComponent,
         WarehourseComponent,
     ],
