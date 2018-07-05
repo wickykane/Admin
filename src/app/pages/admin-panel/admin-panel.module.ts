@@ -17,7 +17,7 @@ import { UnitMeasureComponent } from './unit-measure/unit-measure.component';
 import { UserModule } from './user/user.module';
 import { WorkFlowModule } from './work-flow/work-flow.module';
 
-import { TableService } from '../../services/index';
+import { CommonService, TableService } from '../../services/index';
 import { CommonShareModule, PageHeaderModule, StatModule } from '../../shared/index';
 import { AdminPanelService } from './admin-panel.service';
 
@@ -47,7 +47,7 @@ import { AdminPanelService } from './admin-panel.service';
         BankModalComponent,
         BranchModalComponent,
     ],
-    providers: [TableService,
+    providers: [TableService, CommonService,
         AdminPanelService]
 })
 export class AdminPanelModule { }
