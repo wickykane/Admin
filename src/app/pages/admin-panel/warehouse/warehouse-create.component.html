@@ -23,7 +23,7 @@
             <div class="col-md-2">
                 <label for="country_code" class="control-label">Country</label>
                 <span class="text-danger">( * )</span>
-                <select class="form-control" name="country_code" [ngModelOptions]="{standalone: true}" [(ngModel)]="country_code" (change)="changeCountry(country_code) ">
+                <select class="form-control" name="country_code" formControlName="country_code" (change)="changeCountry() ">
                     <option value="null " selected="true ">--Country--</option>
                     <option *ngFor="let i of listCountry " [ngValue]="i.cd ">{{i.name}}</option>
                 </select>
@@ -36,7 +36,7 @@
             <div class="col-md-2">
                 <label for="state_id" class="control-label">State</label>
                 <span class="text-danger">( * )</span>
-                <select class="form-control" name="state_id" [ngModelOptions]="{standalone: true}" [(ngModel)]="state_id">
+                <select class="form-control" name="state_id" formControlName="state_id" (change)="changeState()">
                     <option value="null " selected="true ">--State--</option>
                     <option *ngFor="let i of listState " [ngValue]="i.id ">{{i.name}}</option>
                 </select>
@@ -63,4 +63,39 @@
             </div>
         </div>
     </form>
+
+    <div class="row pt-3">
+        <div class="col-md-12">
+            <div class="block-header">
+                <h3 class="block-title">CONTACT INFORMATION
+                </h3>
+            </div>
+        </div>
+    </div>
+    <form [formGroup]="contactForm" class="form-search full-width form-horizontal">
+        <div class="row pl-3 pr-3">
+            <div class="col-md-2">
+                <label for="name" class="control-label">Contact Name</label>
+                <input type="text" class="form-control" name="name" formControlName="name">
+            </div>
+            <div class="col-md-2">
+                <label for="job" class="control-label">Job Title</label>
+                <input type="text" class="form-control" name="job" formControlName="job">
+            </div>
+            <div class="col-md-2">
+                <label for="emal" class="control-label">Contact Email</label>
+                <input type="text" class="form-control" name="emal" formControlName="emal">
+            </div>
+            <div class="col-md-2">
+                <label for="phone" class="control-label">Contact Phone</label>
+                <input type="text" class="form-control" name="phone" formControlName="phone">
+            </div>
+
+        </div>
+    </form>
+
+    <div class="block-content block-content-full text-center">
+        <button type="button" [disabled]="generalForm.invalid" class="btn btn-outline-primary" (click)="createWarehouse()">Save</button>
+        <button type="button" class="btn btn-default" [routerLink]="['/warehouse']">Cancel</button>
+    </div>
 </div>

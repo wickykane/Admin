@@ -10,4 +10,8 @@ export class WarehouseService {
         const url = 'buyer/index';
         return this.API.get(url, params);
     }
+    createWarehouse(data) {
+        const url = 'warehouse/create';
+        return this.API.postForm(url, data);
+    }
 }
