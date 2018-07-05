@@ -14,4 +14,12 @@ export class WarehouseService {
         const url = 'warehouse/create';
         return this.API.postForm(url, data);
     }
+    updateWarehouse(data) {
+        const url = 'warehouse/update';
+        return this.API.postForm(url, data);
+    }
+    getDetailWarehouse(id) {
+        const url = 'warehouse/detail/' + id;
+        return this.API.get(url);
+    }
 }

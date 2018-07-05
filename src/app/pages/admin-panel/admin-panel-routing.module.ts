@@ -12,6 +12,7 @@ import { UnitMeasureComponent } from './unit-measure/unit-measure.component';
 import { UserCreateComponent } from './user/user-create.component';
 import { UserComponent } from './user/user.component';
 import { WarehouseCreateComponent } from './warehouse/warehouse-create.component';
+import { WarehouseEditComponent } from './warehouse/warehouse-edit.component';
 import { WarehouseComponent } from './warehouse/warehouse.component';
 import { WorkFlowComponent } from './work-flow/work-flow.component';
 import { WorkFlowEditComponent } from './work-flow/work-flow.edit.component';
@@ -62,6 +63,9 @@ const routes: Routes = [
     },
     {
         path: 'warehouse/create', component: WarehouseCreateComponent
+    },
+    {
+        path: 'warehouse/edit/:id', component: WarehouseEditComponent
     },
     {
         path: 'return-reason', component: ReturnReasonComponent
