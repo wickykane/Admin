@@ -1,7 +1,7 @@
 <div [@routerTransition]>
     <app-page-header [heading]="'LIST OF WAREHOUSE'" [icon]="'fa-th-list'"></app-page-header>
     <div class="block-content list-order-table">
-        <button [routerLink]="['/warehouse/create']" style="margin: 10px 0;" class="btn btn-primary">Add New Warehouse</button>
+        <button [routerLink]="['create']" style="margin: 10px 0;" class="btn btn-primary">Add New Warehouse</button>
 
         <div class="table-responsive">
             <table class="table table-striped table-vcenter custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex"

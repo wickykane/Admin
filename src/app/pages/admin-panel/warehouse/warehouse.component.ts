@@ -6,10 +6,10 @@ import { TableService } from '../../../services/index';
 import { WarehouseService } from './warehouse.service';
 
 @Component({
-    selector: 'app-warehourse',
-    templateUrl: './warehourse.component.html',
+    selector: 'app-warehouse',
+    templateUrl: './warehouse.component.html',
     providers: [WarehouseService],
-    styleUrls: ['./warehourse.component.scss'],
+    styleUrls: ['./warehouse.component.scss'],
     animations: [routerTransition()]
 })
 export class WarehouseComponent implements OnInit {
