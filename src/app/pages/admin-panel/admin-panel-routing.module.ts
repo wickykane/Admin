@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminPanelComponent } from './admin-panel.component';
 import { BankComponent } from './bank/bank.component';
+import { PaymentTermComponent } from './payterm/payterm.component';
 import { ShipmentMethodComponent } from './shipment-method/shipment-method.component';
 import { UnitMeasureComponent } from './unit-measure/unit-measure.component';
 import { UserCreateComponent } from './user/user-create.component';
@@ -34,6 +35,9 @@ const routes: Routes = [
     },
     {
         path: 'bank', component: BankComponent
+    },
+    {
+        path: 'payment-term', component: PaymentTermComponent
     },
 
 

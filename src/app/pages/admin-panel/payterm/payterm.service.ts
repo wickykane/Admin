@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiService } from '../../../services/api.service';
 
 @Injectable()
-export class BankService {
+export class PaymentTermService {
     constructor(private apiService: ApiService) { }
 
     getListBank(params) {
