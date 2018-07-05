@@ -15,7 +15,9 @@ import { WarehouseService } from './warehouse.service';
 export class WarehouseCreateComponent implements OnInit {
     generalForm: FormGroup;
     public listCountry: any = [];
-
+    public listState: any = [];
+    public country_code: any = '';
+    public state_id: any = '';
     constructor(
         public fb: FormBuilder,
         private commonService: CommonService,
@@ -24,7 +26,12 @@ export class WarehouseCreateComponent implements OnInit {
         this.generalForm = fb.group({
             name: [null, Validators.required],
             address_line: [null, Validators.required],
-            country_code: [null, Validators.required]
+            city_name: [null, Validators.required],
+            state_id: [null],
+            zip_code: [null, Validators.required],
+            telephone: [null, Validators.required],
+            mobile_phone: [null, Validators.required],
+            fax: [null, Validators.required]
         });
     }
 
@@ -32,13 +39,15 @@ export class WarehouseCreateComponent implements OnInit {
         this.getListCountryAdmin();
     }
 
-    changeCountry(item) {
+    changeCountry() {
+        console.log('country:', this.country_code);
+
         const params = {
-            country: item.country_code
+            country: this.country_code
         };
         this.commonService.getStateByCountry(params).subscribe(res => {
             try {
-                item.listState = res.data;
+                this.listState = res.data;
             } catch (e) {}
         });
     }
