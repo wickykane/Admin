@@ -7,8 +7,10 @@ import { ShipmentMethodComponent } from './shipment-method/shipment-method.compo
 import { UnitMeasureComponent } from './unit-measure/unit-measure.component';
 import { UserCreateComponent } from './user/user-create.component';
 import { UserComponent } from './user/user.component';
+import { WarehourseComponent } from './warehourse/warehourse.component';
 import { WorkFlowComponent } from './work-flow/work-flow.component';
 import { WorkFlowEditComponent } from './work-flow/work-flow.edit.component';
+
 
 
 const routes: Routes = [
@@ -39,6 +41,9 @@ const routes: Routes = [
     {
         path: 'payment-term', component: PaymentTermComponent
     },
+    {
+        path: 'warehouse', component: WarehourseComponent
+    }
 
 
 ];
