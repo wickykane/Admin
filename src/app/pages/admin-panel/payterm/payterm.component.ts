@@ -1,20 +1,23 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 import { TableService } from '../../../services/index';
-import { AdminPanelService } from '../admin-panel.service';
-
+import { PaymentTermService } from './payterm.service';
 
 @Component({
-  selector: 'app-shipment-method',
-  providers: [AdminPanelService],
-  templateUrl: 'shipment-method.component.html',
+  selector: 'app-payterm',
+  providers: [PaymentTermService],
+  templateUrl: 'payterm.component.html',
   animations: [routerTransition()]
 })
 
-export class ShipmentMethodComponent implements OnInit {
+export class PaymentTermComponent implements OnInit {
+  /**
+   *  Variable
+   */
   public searchForm: FormGroup;
   public listMaster = {};
   public selectedIndex = 0;
@@ -22,17 +25,19 @@ export class ShipmentMethodComponent implements OnInit {
     items: []
   };
 
-
   public data = {};
   constructor(
     private fb: FormBuilder,
     public tableService: TableService,
     private activeRouter: ActivatedRoute,
     private router: Router,
-    private adminPanelService: AdminPanelService,
-    public toastr: ToastrService, ) {
+    private paymentTerm: PaymentTermService,
+    private modalService: NgbModal,
+    private toastr: ToastrService) {
     this.searchForm = fb.group({
-      'type': [null]
+      'code': [null],
+      'name': [null],
+      'swift': [null],
     });
 
     // Assign get list function name, override variable here
@@ -41,17 +46,17 @@ export class ShipmentMethodComponent implements OnInit {
   }
 
   ngOnInit() {
-
-    // Init Fn
-    this.getListTypeMethod();
     this.getList();
   }
+
   /**
    * Table Event
    */
+
   selectData(index) {
     console.log(index);
   }
+
   /**
    * Internal Function
    */
@@ -60,41 +65,56 @@ export class ShipmentMethodComponent implements OnInit {
     const params = { ...this.tableService.getParams(), ...this.searchForm.value };
     Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
 
-    this.adminPanelService.getListShipmentMethod(params).subscribe(res => {
+    this.paymentTerm.getListBank(params).subscribe(res => {
       try {
-        this.list.items = res.results.rows;
-        this.tableService.matchPagingOption(res.results);
+        this.list.items = res.data.rows;
+        this.tableService.matchPagingOption(res.data);
       } catch (e) {
         console.log(e);
       }
     });
   }
-  getListTypeMethod() {
-    this.adminPanelService.getListShipmentMethodType().subscribe(res => {
-      try {
-        this.listMaster['type'] = res.results;
-      } catch (e) {
-        console.log(e);
-      }
-    }, error => {
-      console.log(error);
-    });
-  }
-  changeStatus(item) {
-    const params = { 'ac': item.is_sync_to_web };
-    this.adminPanelService.updateShipmentMethod(item.id, params).subscribe(res => {
-      try {
-        if (res._type === 'success') {
-          this.toastr.success(res.message);
-        } else {
-          this.toastr.error(res.message);
-        }
 
+  createBank(params) {
+    this.paymentTerm.createBank(params).subscribe(res => {
+      try {
+        this.toastr.success(res.data.message);
+        this.getList();
       } catch (e) {
         console.log(e);
       }
-    }, error => {
-      console.log(error);
     });
   }
+
+  updateBank(params) {
+    this.paymentTerm.updateBank(params).subscribe(res => {
+      try {
+        this.toastr.success(res.data.message);
+        this.getList();
+      } catch (e) {
+        console.log(e);
+      }
+    });
+  }
+
+  deleteBank(id) {
+    this.paymentTerm.deleteBank(id).subscribe(res => {
+      try {
+        this.toastr.success(res.data.message);
+        this.getList();
+      } catch (e) {
+        console.log(e);
+      }
+    });
+  }
+  // Modal
+
+  editBank(flag?) {
+
+  }
+
+  addBranch(item) {
+
+  }
+
 }

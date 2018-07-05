@@ -1,10 +1,12 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { AdminPanelComponent } from './admin-panel.component';
-import { UnitMeasureComponent } from './unit-measure/unit-measure.component';
-import { UserComponent } from './user/user.component';
-import { UserCreateComponent } from './user/user-create.component';
+import { BankComponent } from './bank/bank.component';
+import { PaymentTermComponent } from './payterm/payterm.component';
 import { ShipmentMethodComponent } from './shipment-method/shipment-method.component';
+import { UnitMeasureComponent } from './unit-measure/unit-measure.component';
+import { UserCreateComponent } from './user/user-create.component';
+import { UserComponent } from './user/user.component';
 import { WorkFlowComponent } from './work-flow/work-flow.component';
 import { WorkFlowEditComponent } from './work-flow/work-flow.edit.component';
 
@@ -30,8 +32,13 @@ const routes: Routes = [
     },
     {
         path: 'work-flow/edit', component: WorkFlowEditComponent
-    }
-
+    },
+    {
+        path: 'bank', component: BankComponent
+    },
+    {
+        path: 'payment-term', component: PaymentTermComponent
+    },
 
 
 ];
