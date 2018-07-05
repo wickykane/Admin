@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { routerTransition } from '../../../router.animations';
 
 // Services
-import { WarehourseService } from '../warehourse.service';
-import { TableService } from './../../../services/table.service';
+import { TableService } from '../../../services/index';
+import { WarehourseService } from './warehourse.service';
 
 @Component({
     selector: 'app-warehourse',
