@@ -8,6 +8,7 @@ import { WarehourseService } from './warehourse.service';
 @Component({
     selector: 'app-warehourse',
     templateUrl: './warehourse.component.html',
+    providers: [WarehourseService],
     styleUrls: ['./warehourse.component.scss'],
     animations: [routerTransition()]
 })
