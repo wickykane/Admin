@@ -11,7 +11,10 @@ import { InsuranceService } from '../insurance.service';
 export class InsuranceModalComponent implements OnInit {
   // Resolve Data
   public insuranceForm: FormGroup;
+
   @Input() item;
+  @Input() modalTitle;
+  @Input() isEdit;
 
   constructor(public activeModal: NgbActiveModal, private fb: FormBuilder, private insuranceService: InsuranceService) {
     this.insuranceForm = fb.group({

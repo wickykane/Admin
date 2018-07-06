@@ -12,6 +12,8 @@ export class BankModalComponent implements OnInit {
   // Resolve Data
   public bankForm: FormGroup;
   @Input() item;
+  @Input() modalTitle;
+  @Input() isEdit;
 
   constructor(public activeModal: NgbActiveModal, private fb: FormBuilder, private bankService: BankService) {
     this.bankForm = fb.group({
