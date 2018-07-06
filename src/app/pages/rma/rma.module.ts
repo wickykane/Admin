@@ -1,20 +1,20 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PageHeaderModule } from '../../shared';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { PageHeaderModule } from '../../shared';
 
-import {RmaRoutingModule} from './rma-routing.module';
-import { RmaComponent } from './rma.component';
+import { RmaComponent } from './list/rma.component';
+import { RmaRoutingModule } from './rma-routing.module';
 
-import { RmaService } from './rma.service';
-import {PurchaseService} from '../purchase-mgmt/purchase.service';
+import { TableService } from '../../services/index';
 // Table Service
 import { CommonShareModule } from '../../shared/index';
-import { TableService } from '../../services/index';
-import {CustomerService} from '../customer-mgmt/customer.service';
-import { RmaCreateComponent } from './rma.create.component';
-import { RmaEditComponent } from './rma.edit.component';
+import { CustomerService } from '../customer-mgmt/customer.service';
+import { PurchaseService } from '../purchase-mgmt/purchase.service';
+import { RmaCreateComponent } from './create/rma.create.component';
+import { RmaEditComponent } from './edit/rma.edit.component';
+import { RmaService } from './rma.service';
 
 @NgModule({
   imports: [
@@ -27,6 +27,6 @@ import { RmaEditComponent } from './rma.edit.component';
     RmaRoutingModule
   ],
   declarations: [RmaComponent, RmaCreateComponent, RmaEditComponent],
-  providers:[RmaService,TableService,PurchaseService,CustomerService]
+  providers: [RmaService, TableService, PurchaseService, CustomerService]
 })
 export class RmaModule { }

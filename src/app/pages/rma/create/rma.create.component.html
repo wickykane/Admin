@@ -1,0 +1,455 @@
+<div [@routerTransition]>
+    <app-page-header [heading]="'CREATE NEW RMA ORDER'"></app-page-header>
+    <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
+
+    <section class="rma-page block main-container block-order">
+        <div class="row">
+            <div class="col-md-12 mg-top-15">
+                <div class="block-border">
+                    <h5 class="title-border" translate>GENERAL INFORMATION</h5>
+                    <div class="row informaion">
+                        <div class="col-md-12">
+                            <form [formGroup]="generalForm" class="form-search full-width form-inline">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="code" class="control-label" translate>Customer</label>
+                                        <span class="text-danger">(*) </span>
+                                        <div>
+                                            <ng-select style="width: 150px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="company_id">
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <!-- Last Sales Date: {{customer.last_sales_order}} -->
+                                </div>
+                                <div class="col-md-2">
+                                    <a class="text-primary" href="javascript:void()">View Return History</a>
+                                </div>
+                                <div class="col-md-2">
+                                    <i class="fa fa-exclamation-triangle text-danger"></i> Current Return Rate: {{customer['current_dept'] }} %
+                                </div>
+                                <div class="col-md-2">
+                                    <span class="text-success">Current Credit: {{customer['current_dept'] |currency}}</span>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-12 fix-padding">
+                            <div class="row">
+                                <div class="col-md-3 customer-infomation">
+                                    <div class="form-group row">
+                                        <label class='col-5 control-label'>Address</label>
+                                        <div class='col-7'>
+                                            {{data['primary']['address_line']}}
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class='col-5 control-label'>City</label>
+                                        <div class='col-7'>
+                                            {{data['primary']['city_name']}}
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class='col-5 control-label'>State</label>
+                                        <div class='col-7'>
+                                            {{data['primary']['state_name']}}
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class='col-5 control-label'>Zip</label>
+                                        <div class='col-7'>
+                                            {{data['primary']['zip_code']}}
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class='col-5 control-label'>Country</label>
+                                        <div class='col-7'>
+                                            {{data['primary']['country_name']}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 customer-infomation bolder">
+                                    <form [formGroup]="generalForm">
+                                        <div class="form-group row">
+                                            <label class='col-5'>Return Order No
+                                                <span class="text-danger">(*)</span>
+                                            </label>
+                                            <div class='col-7 text-primary'>
+                                                <input readonly type="text" class="form-control" formControlName="customer_po">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-5'>RMA Type
+                                                <span class="text-danger">(*)</span>
+                                            </label>
+                                            <div class='col-7 text-primary'>
+                                                <select required class="form-control" id="order_type" name="order-type" formControlName="type">
+                                                    <option value="undefined" hidden="true">Select</option>
+                                                    <option *ngFor="let item of listMaster['pay_type']" [ngValue]="item.code">{{item.value}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-5'>Request Date
+                                                <span class="text-danger">(*)</span>
+                                            </label>
+                                            <div class='col-7 text-danger'>
+                                                <div (clickOutside)="d.close()" class="input-group">
+                                                    <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="request_date" ngbDatepicker #d="ngbDatepicker">
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                                                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-5'>Order Status</label>
+                                            <div class='col-7 text-success'>
+                                                <strong>1-NEW</strong>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="code" class="col-5">Sales Order <span class="text-danger">(*)</span></label>
+                                            <div class="col-7">
+                                                <ng-select (change)="changeSaleOrder()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="company_id">
+                                                </ng-select>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-md-3 customer-infomation ">
+                                    <form [formGroup]="generalForm">
+                                        <div class="form-group row">
+                                            <label class='col-5'>Return Time</label>
+                                            <div class='col-7'>
+                                                {{ generalForm.value.return_time }}
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-5'>Receiving Date</label>
+                                            <div class='col-7'>
+                                                {{ generalForm.value.return_time }}
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-5'>Return Via
+                                                <span class="text-danger">(*)</span>
+                                            </label>
+                                            <div class='col-7'>
+                                                <select class="form-control" formControlName="type">
+                                                    <option value="undefined" hidden="true">Select</option>
+                                                    <option *ngFor="let item of listMaster['pay_type']" [ngValue]="item.code">{{item.value}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-5'>Carrier
+                                                <span class="text-danger">(*)</span>
+                                            </label>
+                                            <div class='col-7'>
+                                                <ng-select [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="company_id">
+                                                </ng-select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-5'>Cover Ship. Fee
+                                                <span class="text-danger">(*)</span>
+                                            </label>
+                                            <div class='col-7'>
+                                                <select class="form-control" formControlName="type">
+                                                    <option value="undefined" hidden="true">Select</option>
+                                                    <option *ngFor="let item of listMaster['pay_type']" [ngValue]="item.code">{{item.value}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-md-3 customer-infomation bolder">
+                                    <form [formGroup]="generalForm">
+                                        <div class="form-group row">
+                                            <label class='col-5'>Return Warehouse</label>
+                                            <div class='col-7'>
+                                                {{ generalForm.value.return_time }}
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-5'>Apply Restock. Fee </label>
+                                            <div class='col-7'>
+                                                <input type="checkbox" [value]='1' formControlName="customer_po">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-5'>Refund Method <span class="text-danger">(*)</span></label>
+                                            <div class='col-7 text-primary'>
+                                                <select class="form-control" formControlName="payment_method">
+                                                    <option value="undefined" hidden="true">Select</option>                                                        
+                                                    <option *ngFor="let item of listMaster['refund_method']" [ngValue]="item.code">{{item.value}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-5'>Payment Terms</label>
+                                            <div class='col-7 text-primary'>
+                                                <select class="form-control" formControlName="sales_person">
+                                                    <option value="undefined" hidden="true">Select</option>                                                                                                                
+                                                    <option *ngFor="let item of listMaster['payment_term']" [ngValue]="item.id">{{item.full_name}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-5'>Approver
+                                                    <span class="text-danger">(*)</span>
+                                                </label>
+                                            <div class='col-7'>
+                                                <ng-select [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="company_id" aria-placeholder="Select">
+                                                </ng-select>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mg-top-15">
+                <div class="block-border full-block">
+                    <h5 class="title-border" translate>CUSTOMER PICKUP ADDRESS</h5>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div>
+                                <div class="col-12">
+                                    <div class="form-group row">
+                                        <label class="control-label col-5" for="shipping_to" translate> Address Name
+                                            <span class="text-danger">(*)</span>
+                                        </label>
+                                        <div class="col-7">
+                                            <form [formGroup]="generalForm">
+                                                <ng-select [items]="customer['shipping']" bindLabel="label" bindValue="address_id" formControlName="shipping_id">
+                                                </ng-select>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group row">
+                                        <label class="control-label col-5" translate>Address Line</label>
+                                        <div class="col-7">
+                                            {{data['shipping']['address_line']}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group row">
+                                        <label class="control-label col-5" translate>Country</label>
+                                        <div class="col-7">
+                                            {{data['shipping']['country_name']}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group row">
+                                        <label class=" control-label col-5" translate>City</label>
+                                        <div class="col-7">
+                                            {{data['shipping']['city_name']}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group row">
+                                        <label class=" control-label col-5" translate>State/Province</label>
+                                        <div class="col-7">
+                                            {{data['shipping']['state_name']}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group row">
+                                        <label class="control-label col-5" translate>Zip Code</label>
+                                        <div class="col-7">
+                                            {{data['shipping']['zip_code']}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mg-top-15">
+                <div class="block-border full-block">
+                    <h5 class="title-border" translate>CONTACT INFORMATION</h5>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div [formGroup]="generalForm">
+                                <div class="col-12">
+                                    <div class="form-group row">
+                                        <label class="control-label col-5" translate>Contact Name</label>
+                                        <div class="col-7">
+                                            <input type="text" class="form-control" formControlName="customer_po">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group row">
+                                        <label class="control-label col-5" translate>Email</label>
+                                        <div class="col-7">
+                                            <input type="text" class="form-control" formControlName="customer_po">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group row">
+                                        <label class="control-label col-5" translate>Phone</label>
+                                        <div class="col-7">
+                                            <input type="text" class="form-control" formControlName="customer_po">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 mg-top-15">
+                <div class="block-border">
+                    <h5 class="title-border" translate>PRODUCTS DETAILS</h5>
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="table table-style table-order custom-table table-bg" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <label class="css-input css-checkbox css-checkbox-default">
+                                                <input class="cb-all" type="checkbox" [(ngModel)]="checkAllItem" (change)="checkAll($event)">
+                                                <span></span>
+                                            </label>
+                                        </th>
+                                        <th style="width:150px" translate>Part No</th>
+                                        <th translate>Description</th>
+                                        <th translate style="width:150px">Initial Condition</th>
+                                        <th translate>UOM</th>
+                                        <th class="text-nowrap" style="width:100px" translate>Order QTY</th>
+                                        <th class="text-nowrap" style="width:100px" translate>Return QTY</th>
+                                        <th class="text-center" style="width:100px" translate>Unit Price</th>
+                                        <th class="text-center" style="width:100px" translate>Total Refund</th>
+                                        <th translate>Return Reason</th>
+                                        <th translate style="width:100px">Status</th>
+                                    </tr>
+                                </thead>
+                                <tr *ngIf="list['items'].length === 0">
+                                    <td colspan="100%" class="text-center" translate>No data.</td>
+                                </tr>
+                                <tbody *ngFor="let item of list.items; let $index = index;">
+                                    <tr>
+                                        <td>
+                                            <label class="css-input css-checkbox css-checkbox-default">
+                                                <input class="cb-element" type="checkbox" [(ngModel)]="item.is_checked" (change)="isAllChecked()">
+                                                <span></span>
+                                            </label>
+                                        </td>
+                                        <td>{{item.part_no}}</td>
+                                        <td>{{item.des}}</td>
+                                        <td>{{item.initial_condition}}</td>
+                                        <td>{{item.uom}}</td>
+                                        <td>{{item.order_quantity}}</td>
+                                        <td>
+                                            <input [textMask]="{mask: numberMaskObject()}" class="form-control input-sm" type="text" [(ngModel)]="item.refund_quantity">
+                                        </td>
+                                        <td>{{item.sale_price}}</td>
+                                        <td>{{item.total_refund}}</td>
+                                        <td>
+                                            <select class="form-control" [(ngModel)]="item.reason">
+                                                <option value="undefined" selected="true" hidden="true" translate>Select</option>
+                                                <option *ngFor="let item of listMaster['reason']" [ngValue]="item.id">{{ item.name }}</option>
+                                            </select>
+                                        </td>
+                                        <td class="text-center">
+                                            <span>
+                                                {{item.status}}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mg-top-15">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="">Note</label>
+                                <form [formGroup]="generalForm">
+                                    <div>
+                                        <textarea class="form-control" formControlName="note" name="" id="" rows="5" style="resize:none"></textarea>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-md-4">
+                            </div>
+                            <div class="col-md-4 clearfix">
+                                <table class="table table-sub-product">
+                                    <tr>
+                                        <td>Sub Total:</td>
+                                        <td></td>
+                                        <td>{{order_info['sub_total'] | currency}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>- Discount (%):</td>
+                                        <td>
+                                            <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info['discount_percent']" class="form-control" type="text" (change)="updateTotal()">
+                                        </td>
+                                        <td>
+                                            <input class="form-control" readonly="true" [(ngModel)]="order_info['total_discount']" class="form-control" value="0" type="number">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>+ TAX/VAT (%):</td>
+                                        <td>
+                                            <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info['vat_percent']" class="form-control" type="text" (change)="updateTotal()">
+                                        </td>
+                                        <td>
+                                            <input class="form-control" readonly="true" [(ngModel)]="order_info['vat_percent_amount']" class="form-control" value="0" type="number">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>- Restocking Fee (%):</td>
+                                        <td>
+                                            <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info['vat_percent']" class="form-control" type="text" (change)="updateTotal()">
+                                        </td>
+                                        <td>
+                                            <input class="form-control" readonly="true" [(ngModel)]="order_info['vat_percent_amount']" class="form-control" value="0" type="number">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>+ Ship Fee ($):</td>
+                                        <td></td>
+                                        <td>
+                                            <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info['shipping_cost']" class="form-control" type="text" (change)="updateTotal()">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total Amount:</td>
+                                        <td style="background-color: inherit; color: inherit;" colspan="2">{{order_info['total'] | currency}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 mg-top-15 text-center">
+                <button type="button" class="btn btn-primary" (click)="createRMA()" translate>Save & Validate</button>
+                <button type="button" class="btn btn-default" [routerLink]="['/rma']" translate>Cancel</button>
+            </div>
+        </div>
+    </section>
+</div>
