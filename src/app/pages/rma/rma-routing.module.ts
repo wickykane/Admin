@@ -1,20 +1,20 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
-import {RmaComponent} from './rma.component';
-import { RmaCreateComponent } from './rma.create.component';
-import { RmaEditComponent } from './rma.edit.component';
+import { RmaCreateComponent } from './create/rma.create.component';
+import { RmaEditComponent } from './edit/rma.edit.component';
+import { RmaComponent } from './list/rma.component';
 
 
 const routes: Routes = [
     {
-        path:'', component:RmaComponent          
+        path: '', component: RmaComponent
     },
     {
-        path:'create',component:RmaCreateComponent,
+        path: 'create', component: RmaCreateComponent,
     },
     {
-        path:'edit/:id',component:RmaEditComponent,
+        path: 'edit/:id', component: RmaEditComponent,
     }
 ];
 

@@ -5,13 +5,16 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 import { TableService } from '../../../services/index';
+import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
 import { BankService } from './bank.service';
 import { BankModalComponent } from './modal/bank.modal';
 import { BranchModalComponent } from './modal/branch.modal';
 
+import { BankKeyService } from './keys.control';
+
 @Component({
   selector: 'app-bank',
-  providers: [BankService],
+  providers: [BankService, BankKeyService],
   templateUrl: 'bank.component.html',
   animations: [routerTransition()]
 })
@@ -35,7 +38,8 @@ export class BankComponent implements OnInit {
     private router: Router,
     private bankService: BankService,
     private modalService: NgbModal,
-    private toastr: ToastrService) {
+    private toastr: ToastrService,
+    public keyService: BankKeyService, ) {
     this.searchForm = fb.group({
       'code': [null],
       'name': [null],
@@ -45,6 +49,8 @@ export class BankComponent implements OnInit {
     // Assign get list function name, override variable here
     this.tableService.getListFnName = 'getList';
     this.tableService.context = this;
+    //  Init Key
+    this.keyService.watchContext.next(this);
   }
 
   ngOnInit() {
@@ -80,7 +86,7 @@ export class BankComponent implements OnInit {
   createBank(params) {
     this.bankService.createBank(params).subscribe(res => {
       try {
-        this.toastr.success(res.data.message);
+        this.toastr.success(res.message);
         this.getList();
       } catch (e) {
         console.log(e);
@@ -88,10 +94,10 @@ export class BankComponent implements OnInit {
     });
   }
 
-  updateBank(params) {
-    this.bankService.updateBank(params).subscribe(res => {
+  updateBank(id, params) {
+    this.bankService.updateBank(id, params).subscribe(res => {
       try {
-        this.toastr.success(res.data.message);
+        this.toastr.success(res.message);
         this.getList();
       } catch (e) {
         console.log(e);
@@ -100,28 +106,33 @@ export class BankComponent implements OnInit {
   }
 
   deleteBank(id) {
-    this.bankService.deleteBank(id).subscribe(res => {
-      try {
-        this.toastr.success(res.data.message);
-        this.getList();
-      } catch (e) {
-        console.log(e);
+    const modalRef = this.modalService.open(ConfirmModalContent);
+    modalRef.result.then(result => {
+      if (result) {
+        this.bankService.deleteBank(id).subscribe(res => {
+          try {
+            this.toastr.success(res.message);
+            this.getList();
+          } catch (e) {
+            console.log(e);
+          }
+        });
       }
     });
   }
-  // Modal
 
+  // Modal
   editBank(flag?) {
     const modalRef = this.modalService.open(BankModalComponent, { windowClass: 'md-modal' });
     modalRef.componentInstance.modalTitle = (flag) ? 'EDIT BANK' : 'CREATE NEW BANK';
     modalRef.componentInstance.isEdit = flag;
     modalRef.componentInstance.item = flag || {};
     modalRef.result.then(data => {
-      const params = { data };
+      const params = { ...data };
       if (!flag) {
         this.createBank(params);
       } else {
-        this.updateBank(params);
+        this.updateBank(flag.id, params);
       }
     },
       dismiss => { });
@@ -130,10 +141,20 @@ export class BankComponent implements OnInit {
   addBranch(item) {
     const modalRef = this.modalService.open(BranchModalComponent, { windowClass: 'md-modal' });
     modalRef.componentInstance.modalTitle = 'CREATE NEW BRANCH';
-    modalRef.componentInstance.item = item || {};
+    modalRef.componentInstance.bankData = item || {};
     modalRef.result.then(data => {
+      this.createBranch(item.id, data);
     },
       dismiss => { });
   }
 
+  createBranch(bankId, params) {
+    this.bankService.createBranch(bankId, params).subscribe(res => {
+      try {
+        this.toastr.success(res.message);
+      } catch (e) {
+        console.log(e);
+      }
+    });
+  }
 }

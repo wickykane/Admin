@@ -18,8 +18,22 @@ export class TableService {
         total_record: 0
     };
 
+    temptSearchParams = null;
+    temptParams = null;
+
     changeLength() {
         this.pagination['page'] = 1;
+        if (this.context.searchForm) {
+            this.temptSearchParams = this.context.searchForm.value;
+
+            this.context.searchForm.reset();
+            this.context.searchForm.patchValue(this.temptParams || {});
+            this.context[this.getListFnName]();
+
+            this.context.searchForm.reset();
+            this.context.searchForm.patchValue(this.temptSearchParams || {});
+            return;
+        }
         return this.context[this.getListFnName]();
     }
 
@@ -57,11 +71,14 @@ export class TableService {
     }
 
     searchAction() {
+        this.temptParams = { ...this.getParams(), ...this.context.searchForm.value };
         this.pagination['page'] = 1;
         return this.context[this.getListFnName]();
     }
 
     resetAction(form?) {
+        this.temptSearchParams = null;
+        this.temptParams = null;
         if (form) {
             form.reset();
         }
@@ -72,6 +89,17 @@ export class TableService {
 
     changePage(index) {
         this.pagination['page'] = index;
+        if (this.context.searchForm) {
+            this.temptSearchParams = this.context.searchForm.value;
+
+            this.context.searchForm.reset();
+            this.context.searchForm.patchValue(this.temptParams || {});
+            this.context[this.getListFnName]();
+
+            this.context.searchForm.reset();
+            this.context.searchForm.patchValue(this.temptSearchParams || {});
+            return;
+        }
         return this.context[this.getListFnName]();
     }
 

@@ -3,24 +3,28 @@ import { routerTransition } from '../../../router.animations';
 
 // Services
 import { TableService } from '../../../services/index';
-import { WarehourseService } from './warehourse.service';
+import { DiscountCategoryService } from './discount-category.service';
 
 @Component({
-    selector: 'app-warehourse',
-    templateUrl: './warehourse.component.html',
-    providers: [WarehourseService],
-    styleUrls: ['./warehourse.component.scss'],
+    selector: 'app-discount-category',
+    templateUrl: './discount-category.component.html',
+    providers: [DiscountCategoryService],
+    styleUrls: ['./discount-category.component.scss'],
     animations: [routerTransition()]
 })
-export class WarehourseComponent implements OnInit {
+export class DiscountCategoryComponent implements OnInit {
     public list = {
         items: []
     };
     public user: any;
+    public flagAddress: boolean;
+    public listMaster = {};
+    public selectedIndex = 0;
+
 
     constructor(
         public tableService: TableService,
-        private warehourseService: WarehourseService
+        private discountCategoryService: DiscountCategoryService
     ) {
         //  Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
@@ -30,6 +34,10 @@ export class WarehourseComponent implements OnInit {
     ngOnInit() {
         this.getList();
         this.user = JSON.parse(localStorage.getItem('currentUser'));
+    }
+
+    selectData(index) {
+      console.log(index);
     }
 
     getList() {
@@ -42,7 +50,7 @@ export class WarehourseComponent implements OnInit {
                 delete params[key]
         );
 
-        this.warehourseService.getListWarehouse(params).subscribe(res => {
+        this.discountCategoryService.getListWarehouse(params).subscribe(res => {
             try {
                 this.list.items = res.data.rows;
                 this.tableService.matchPagingOption(res.data);
