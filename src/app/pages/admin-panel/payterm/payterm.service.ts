@@ -5,28 +5,28 @@ import { ApiService } from '../../../services/api.service';
 export class PaymentTermService {
     constructor(private apiService: ApiService) { }
 
-    getListBank(params) {
-        const url = ['buyer/index'].join('/');
+    getListPaymentTerm(params) {
+        const url = ['payment-term'].join('/');
         return this.apiService.get(url, params);
     }
 
-    getDetailBank(id) {
-        const url = ['bank', id].join('/');
+    getDetailPayment(id) {
+        const url = ['payment-term', id].join('/');
         return this.apiService.get(url);
     }
 
-    createBank(params) {
-        const url = ['bank'].join('/');
+    createPayment(params) {
+        const url = ['payment-term'].join('/');
         return this.apiService.post(url, params);
     }
 
-    updateBank(params) {
-        const url = ['bank'].join('/');
+    updatePayment(id, params) {
+        const url = ['payment-term', id].join('/');
         return this.apiService.put(url, params);
     }
 
-    deleteBank(id) {
-        const url = ['bank', id].join('/');
+    deletePayment(id) {
+        const url = ['payment-term', id].join('/');
         return this.apiService.delete(url);
     }
 }

@@ -6,12 +6,12 @@ export class BankService {
     constructor(private apiService: ApiService) { }
 
     getListBank(params) {
-        const url = ['buyer/index'].join('/');
+        const url = ['bank', 'list'].join('/');
         return this.apiService.get(url, params);
     }
 
     getListBranch(id, params) {
-        const url = ['buyer/index'].join('/');
+        const url = ['bank', id, 'branch', 'list'].join('/');
         return this.apiService.get(url, params);
     }
 
@@ -30,8 +30,8 @@ export class BankService {
         return this.apiService.post(url, params);
     }
 
-    updateBank(params) {
-        const url = ['bank'].join('/');
+    updateBank(id, params) {
+        const url = ['bank', id].join('/');
         return this.apiService.put(url, params);
     }
 

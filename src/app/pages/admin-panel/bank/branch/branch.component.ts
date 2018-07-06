@@ -86,7 +86,7 @@ export class BranchComponent implements OnInit {
   createBranch(params) {
     this.bankService.createBranch(this.data['bank_id'], params).subscribe(res => {
       try {
-        this.toastr.success(res.data.message);
+        this.toastr.success(res.message);
         this.getList();
       } catch (e) {
         console.log(e);
@@ -97,7 +97,7 @@ export class BranchComponent implements OnInit {
   updateBranch(bankId, branchId, params) {
     this.bankService.updateBranch(bankId, branchId, params).subscribe(res => {
       try {
-        this.toastr.success(res.data.message);
+        this.toastr.success(res.message);
         this.getList();
       } catch (e) {
         console.log(e);
@@ -111,7 +111,7 @@ export class BranchComponent implements OnInit {
       if (result) {
         this.bankService.deleteBranch(bankId, branchId).subscribe(res => {
           try {
-            this.toastr.success(res.data.message);
+            this.toastr.success(res.message);
             this.getList();
           } catch (e) {
             console.log(e);
@@ -130,7 +130,7 @@ export class BranchComponent implements OnInit {
     modalRef.componentInstance.bankData = this.data['bankData'] || {};
 
     modalRef.result.then(data => {
-      const params = { data };
+      const params = { ...data };
       if (!flag) {
         this.createBranch(params);
       } else {

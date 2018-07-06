@@ -17,6 +17,9 @@ export class WarehouseComponent implements OnInit {
         items: []
     };
     public user: any;
+    public flagAddress: boolean;
+    public listMaster = {};
+    public selectedIndex = 0;
 
     constructor(
         public tableService: TableService,
@@ -25,6 +28,10 @@ export class WarehouseComponent implements OnInit {
         //  Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
+    }
+
+    selectData(index) {
+      console.log(index);
     }
 
     ngOnInit() {
