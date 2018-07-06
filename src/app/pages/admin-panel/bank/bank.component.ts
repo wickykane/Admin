@@ -86,7 +86,7 @@ export class BankComponent implements OnInit {
   createBank(params) {
     this.bankService.createBank(params).subscribe(res => {
       try {
-        this.toastr.success(res.data.message);
+        this.toastr.success(res.message);
         this.getList();
       } catch (e) {
         console.log(e);
@@ -94,10 +94,10 @@ export class BankComponent implements OnInit {
     });
   }
 
-  updateBank(params) {
-    this.bankService.updateBank(params).subscribe(res => {
+  updateBank(id, params) {
+    this.bankService.updateBank(id, params).subscribe(res => {
       try {
-        this.toastr.success(res.data.message);
+        this.toastr.success(res.message);
         this.getList();
       } catch (e) {
         console.log(e);
@@ -111,7 +111,7 @@ export class BankComponent implements OnInit {
       if (result) {
         this.bankService.deleteBank(id).subscribe(res => {
           try {
-            this.toastr.success(res.data.message);
+            this.toastr.success(res.message);
             this.getList();
           } catch (e) {
             console.log(e);
@@ -128,11 +128,11 @@ export class BankComponent implements OnInit {
     modalRef.componentInstance.isEdit = flag;
     modalRef.componentInstance.item = flag || {};
     modalRef.result.then(data => {
-      const params = { data };
+      const params = { ...data };
       if (!flag) {
         this.createBank(params);
       } else {
-        this.updateBank(params);
+        this.updateBank(flag.id, params);
       }
     },
       dismiss => { });
@@ -151,7 +151,7 @@ export class BankComponent implements OnInit {
   createBranch(bankId, params) {
     this.bankService.createBranch(bankId, params).subscribe(res => {
       try {
-        this.toastr.success(res.data.message);
+        this.toastr.success(res.message);
       } catch (e) {
         console.log(e);
       }
