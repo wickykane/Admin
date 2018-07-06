@@ -13,4 +13,14 @@ export class CommonService {
         const url = 'state/get-by-country';
         return this.apiService.get(url, params);
     }
+
+    getAllCustomer() {
+        const url = 'buyer/get-all';
+        return this.apiService.get(url);
+    }
+
+    getDetailCustomer(id) {
+        const url = 'buyer/detail/' + id;
+        return this.apiService.get(url);
+    }
 }

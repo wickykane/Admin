@@ -2,15 +2,15 @@ import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { routerTransition } from '../../router.animations';
-import { TableService } from '../../services/table.service';
-import { PurchaseService } from '../purchase-mgmt/purchase.service';
+import { routerTransition } from '../../../router.animations';
+import { TableService } from '../../../services/table.service';
+import { PurchaseService } from '../../purchase-mgmt/purchase.service';
 import { RMAKeyService } from './keys.control';
 
 @Component({
     selector: 'app-rma',
     templateUrl: './rma.component.html',
-    styleUrls: ['./rma.component.scss'],
+    styleUrls: ['../rma.component.scss'],
     animations: [routerTransition()],
     providers: [RMAKeyService]
 })
