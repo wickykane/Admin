@@ -9,6 +9,7 @@ import { PageHeaderModule } from '../../shared';
 import { InvoiceComponent } from './ar-invoice/invoice.component';
 import { FinancialRoutingModule } from './financial-routing.module';
 import { FinancialService } from './financial.service';
+import { PaymentComponent } from './payment/payment.component';
 
 
 
@@ -24,6 +25,7 @@ import { FinancialService } from './financial.service';
     ],
     declarations: [
         InvoiceComponent,
+        PaymentComponent
 
     ],
     providers: [FinancialService],
