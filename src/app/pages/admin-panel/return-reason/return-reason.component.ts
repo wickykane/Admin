@@ -88,7 +88,7 @@ export class ReturnReasonComponent implements OnInit {
     this.router.navigate(['/admin-panel/return-reason/create']);
   }
   editReturnReason(id) {
-    this.router.navigate(['/admin-panel/payment-term/edit', id]);
+    this.router.navigate(['/admin-panel/return-reason/edit', id]);
   }
 
 }

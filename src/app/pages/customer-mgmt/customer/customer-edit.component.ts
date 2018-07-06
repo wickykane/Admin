@@ -89,7 +89,8 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             'primary': [null],
             'credit_used': [null],
             'credit_limit': [null],
-            'credit_balance': [null]
+            'credit_balance': [null],
+            'is_parent': [null]
 
         });
 
@@ -120,6 +121,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                 this.generalForm.patchValue(this.detail);
                 this.generalForm.patchValue({
                     'buyer_type': this.detail['company_type'],
+                    'is_parent': this.detail['is_parent']
                 });
                 this.imageSelected = res.data.img;
                 this.site = res.data['sites'];
