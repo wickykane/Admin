@@ -101,6 +101,7 @@
                                     <th> ID </th>
                                     <th> Product Category <span class="text-danger">(*)</span></th>
                                     <th> Apply For SubCategory <span class="text-danger">(*)</span></th>
+                                    <th> Sub Category <span class="text-danger">(*)</span></th>
                                     <th> Discount Value % <span class="text-danger">(*)</span></th>
                                     <th> Action </th>
                                 </tr>
@@ -109,28 +110,29 @@
                                 <tr *ngFor="let item of data['products']; let i = index">
                                     <td>{{i+1}}</td>
                                     <td>
-                                        <select class="form-control" name="category_id" [(ngModel)]="item.category_id">
+                                        <select class="form-control" name="category_id" [(ngModel)]="item.category_id" (click)="changeCategory(item.category_id, item)">
                                             <option value="null" selected="true">--Select--</option>
-                                            <option *ngFor="let i of item.listCategory" [ngValue]="i.id">{{i.name}}</option>
+                                            <option *ngFor="let i of listMaster['category']" [disabled]="i.disabled" [ngValue]="i.id">{{i.name}}</option>
                                         </select>
                                     </td>
                                     <td>
-                                        <select class="form-control" name="type" [(ngModel)]="item.type">
+                                        <select class="form-control" name="type" [(ngModel)]="item.type" (click)="changeType(item.type, item)">
                                             <option value="null" selected="true">--Select--</option>
-                                            <option *ngFor="let i of item.listType" [ngValue]="i.id">{{i.name}}</option>
+                                            <option *ngFor="let i of listMaster['type']" [ngValue]="i.id">{{i.name}}</option>
                                         </select>
                                     </td>
                                     <td>
-                                        <select class="form-control" name="type" [(ngModel)]="item.type">
-                                            <option value="null" selected="true">--Select--</option>
-                                            <option *ngFor="let i of item.listSubCategory" [ngValue]="i.id">{{i.name}}</option>
-                                        </select>
+                                        <ng-container *ngIf="item.type == 'S'">
+                                            <ng-select (change)="changeToGetSubCategory(item.sub_cate_id, item)" (remove)="removeSelected($event, item.sub_cate_id, item)" [multiple]="true" [items]="item.listSubCategory" [disabled]="disabled" bindLabel="name" bindValue="id" [(ngModel)]="item.sub_cate_id">
+                                            </ng-select>
+                                        </ng-container>
+                                        <ng-container *ngIf="item.type == 'A'">All Sub Categories</ng-container>
                                     </td>
                                     <td>
                                         <input type="text" class="form-control" name="name" [(ngModel)]="item.name">
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-default" (click)="remove(i)">
+                                        <button type="button" class="btn btn-default" (click)="removeLine(i, item)">
                                             <i class="fa fa-times" aria-hidden="true"></i>
                                         </button>
                                     </td>
@@ -138,7 +140,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <button type="button" class="btn btn-outline-dark" (click)="addNew()">
+                    <button type="button" class="btn btn-outline-dark" (click)="addNewLine()">
                         <i class="fa fa-plus" aria-hidden="true"></i> Add new</button>
                 </div>
             </div>
@@ -154,8 +156,8 @@
 
 
         <div class="block-content block-content-full text-center" style="margin-top:15px;">
-            <button type="button" class="btn btn-default" [routerLink]="['/customer']">Cancel</button>
-            <button type="button" [disabled]="generalForm.invalid" class="btn btn-outline-primary" (click)="createCustomer()">Save</button>
+            <button type="button" class="btn btn-default" [routerLink]="['/discount-category']">Cancel</button>
+            <button type="button" [disabled]="generalForm.invalid" class="btn btn-outline-primary" (click)="createCategory()">Save</button>
         </div>
     </section>
 </div>
