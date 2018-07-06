@@ -24,13 +24,13 @@
                                     <!-- Last Sales Date: {{customer.last_sales_order}} -->
                                 </div>
                                 <div class="col-md-2">
-                                    <a class="text-primary" (click)="showViewOrderHistory()" href="javascript:void()">View Return History</a>
+                                    <a class="text-primary" href="javascript:void()">View Return History</a>
                                 </div>
                                 <div class="col-md-2">
-                                    <i class="fa fa-exclamation-triangle text-danger"></i> Current Return Rate: {{customer.current_dept }} %
+                                    <i class="fa fa-exclamation-triangle text-danger"></i> Current Return Rate: {{customer['current_dept'] }} %
                                 </div>
                                 <div class="col-md-2">
-                                    <span class="text-success">Current Credit: {{customer.current_dept |currency}}</span>
+                                    <span class="text-success">Current Credit: {{customer['current_dept'] |currency}}</span>
                                 </div>
                             </form>
                         </div>
@@ -40,31 +40,31 @@
                                     <div class="form-group row">
                                         <label class='col-5 control-label'>Address</label>
                                         <div class='col-7'>
-                                            {{data['primary'].address_line}}
+                                            {{data['primary']['address_line']}}
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class='col-5 control-label'>City</label>
                                         <div class='col-7'>
-                                            {{data['primary'].city_name}}
+                                            {{data['primary']['city_name']}}
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class='col-5 control-label'>State</label>
                                         <div class='col-7'>
-                                            {{data['primary'].state_name}}
+                                            {{data['primary']['state_name']}}
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class='col-5 control-label'>Zip</label>
                                         <div class='col-7'>
-                                            {{data['primary'].zip_code}}
+                                            {{data['primary']['zip_code']}}
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class='col-5 control-label'>Country</label>
                                         <div class='col-7'>
-                                            {{data['primary'].country_name}}
+                                            {{data['primary']['country_name']}}
                                         </div>
                                     </div>
                                 </div>
@@ -229,7 +229,7 @@
                                         </label>
                                         <div class="col-7">
                                             <form [formGroup]="generalForm">
-                                                <ng-select [items]="customer.shipping" bindLabel="label" bindValue="address_id" formControlName="shipping_id">
+                                                <ng-select [items]="customer['shipping']" bindLabel="label" bindValue="address_id" formControlName="shipping_id">
                                                 </ng-select>
                                             </form>
                                         </div>
@@ -239,7 +239,7 @@
                                     <div class="form-group row">
                                         <label class="control-label col-5" translate>Address Line</label>
                                         <div class="col-7">
-                                            {{data['shipping'].address_line}}
+                                            {{data['shipping']['address_line']}}
                                         </div>
                                     </div>
                                 </div>
@@ -247,7 +247,7 @@
                                     <div class="form-group row">
                                         <label class="control-label col-5" translate>Country</label>
                                         <div class="col-7">
-                                            {{data['shipping'].country_name}}
+                                            {{data['shipping']['country_name']}}
                                         </div>
                                     </div>
                                 </div>
@@ -255,7 +255,7 @@
                                     <div class="form-group row">
                                         <label class=" control-label col-5" translate>City</label>
                                         <div class="col-7">
-                                            {{data['shipping'].city_name}}
+                                            {{data['shipping']['city_name']}}
                                         </div>
                                     </div>
                                 </div>
@@ -263,7 +263,7 @@
                                     <div class="form-group row">
                                         <label class=" control-label col-5" translate>State/Province</label>
                                         <div class="col-7">
-                                            {{data['shipping'].state_name}}
+                                            {{data['shipping']['state_name']}}
                                         </div>
                                     </div>
                                 </div>
@@ -271,7 +271,7 @@
                                     <div class="form-group row">
                                         <label class="control-label col-5" translate>Zip Code</label>
                                         <div class="col-7">
-                                            {{data['shipping'].zip_code}}
+                                            {{data['shipping']['zip_code']}}
                                         </div>
                                     </div>
                                 </div>
@@ -398,21 +398,21 @@
                                     <tr>
                                         <td>Sub Total:</td>
                                         <td></td>
-                                        <td>{{order_info.sub_total | currency}}</td>
+                                        <td>{{order_info['sub_total'] | currency}}</td>
                                     </tr>
                                     <tr>
                                         <td>- Discount (%):</td>
                                         <td>
-                                            <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info.discount_percent" class="form-control" type="text" (change)="updateTotal()">
+                                            <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info['discount_percent']" class="form-control" type="text" (change)="updateTotal()">
                                         </td>
                                         <td>
-                                            <input class="form-control" readonly="true" [(ngModel)]="order_info.total_discount" class="form-control" value="0" type="number">
+                                            <input class="form-control" readonly="true" [(ngModel)]="order_info['total_discount']" class="form-control" value="0" type="number">
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>+ TAX/VAT (%):</td>
                                         <td>
-                                            <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info.vat_percent" class="form-control" type="text" (change)="updateTotal()">
+                                            <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info['vat_percent']" class="form-control" type="text" (change)="updateTotal()">
                                         </td>
                                         <td>
                                             <input class="form-control" readonly="true" [(ngModel)]="order_info['vat_percent_amount']" class="form-control" value="0" type="number">
@@ -421,7 +421,7 @@
                                     <tr>
                                         <td>- Restocking Fee (%):</td>
                                         <td>
-                                            <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info.vat_percent" class="form-control" type="text" (change)="updateTotal()">
+                                            <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info['vat_percent']" class="form-control" type="text" (change)="updateTotal()">
                                         </td>
                                         <td>
                                             <input class="form-control" readonly="true" [(ngModel)]="order_info['vat_percent_amount']" class="form-control" value="0" type="number">
@@ -431,12 +431,12 @@
                                         <td>+ Ship Fee ($):</td>
                                         <td></td>
                                         <td>
-                                            <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info.shipping_cost" class="form-control" type="text" (change)="updateTotal()">
+                                            <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info['shipping_cost']" class="form-control" type="text" (change)="updateTotal()">
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>Total Amount:</td>
-                                        <td style="background-color: inherit; color: inherit;" colspan="2">{{order_info.total | currency}}</td>
+                                        <td style="background-color: inherit; color: inherit;" colspan="2">{{order_info['total'] | currency}}</td>
                                     </tr>
                                 </table>
                             </div>

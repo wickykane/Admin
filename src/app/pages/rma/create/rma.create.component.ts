@@ -59,7 +59,7 @@ export class RmaCreateComponent implements OnInit {
             'customer_po': [null, Validators.required],
             'order_number': [null],
             'type': [null, Validators.required],
-            'request_date': [ moment().format('YYYY-MM-DD'), Validators.required],
+            'request_date': [moment().format('YYYY-MM-DD'), Validators.required],
             'delivery_date': [null],
             'contact_user_id': [null],
             'prio_level': [null],
@@ -143,5 +143,7 @@ export class RmaCreateComponent implements OnInit {
     updateTotal() {
 
     }
+    changeSaleOrder() { }
+    createRMA() { }
 }
 
