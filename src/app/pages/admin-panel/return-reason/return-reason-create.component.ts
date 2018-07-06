@@ -13,7 +13,7 @@ import { ReturnReasonService } from './return-reason.service';
     styleUrls: ['./reason.component.scss'],
     animations: [routerTransition()]
 })
-export class PayTermCreateComponent implements OnInit {
+export class ReturnReasonCreateComponent implements OnInit {
 
     generalForm: FormGroup;
     public listMaster = {};
@@ -33,25 +33,25 @@ export class PayTermCreateComponent implements OnInit {
 
     ngOnInit() {
         this.listMaster['status'] = [{ key: 'IA', value: 'In Active' }, { key: 'IA', value: 'In Active' }];
-        this.route.params.subscribe(params => this.getDetailPaymentTerm(params.id));
+        this.route.params.subscribe(params => this.getDetailReturnReason(params.id));
     }
     payloadData() {
         if (this.generalForm.get('id').value) {
-            this.updatePaymentTerm(this.generalForm.get('id').value);
+            this.updateReturnReason(this.generalForm.get('id').value);
         } else {
-            this.createPaymentTerm();
+            this.createReturnReason();
         }
     }
-    createPaymentTerm() {
+    createReturnReason() {
         const params = this.generalForm.value;
         this.returnReasonService.createReturnReason(params).subscribe(res => {
             this.toastr.success(res.message);
-            this.router.navigate(['/admin-panel/payment-term']);
+            this.router.navigate(['/admin-panel/return-reason']);
         }, err => {
             console.log(err);
         });
     }
-    getDetailPaymentTerm(id) {
+    getDetailReturnReason(id) {
         console.log(id);
         this.returnReasonService.getDetailReturnReason(id).subscribe(res => {
             this.generalForm.patchValue(res.data);
@@ -59,7 +59,7 @@ export class PayTermCreateComponent implements OnInit {
             console.log(err.message);
         });
     }
-    updatePaymentTerm(id) {
+    updateReturnReason(id) {
         console.log(id);
         const params = this.generalForm.value;
         this.returnReasonService.updateReturnReason(id, params).subscribe(res => {

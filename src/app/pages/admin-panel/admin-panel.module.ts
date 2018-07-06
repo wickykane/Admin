@@ -25,6 +25,7 @@ import { WarehouseCreateComponent } from './warehouse/warehouse-create.component
 import { WarehouseEditComponent } from './warehouse/warehouse-edit.component';
 import { WarehouseComponent } from './warehouse/warehouse.component';
 
+import { ReturnReasonCreateComponent } from './return-reason/return-reason-create.component';
 import { ReturnReasonComponent } from './return-reason/return-reason.component';
 import { ShipmentMethodComponent } from './shipment-method/shipment-method.component';
 import { UnitMeasureComponent } from './unit-measure/unit-measure.component';
@@ -73,6 +74,7 @@ import { AdminPanelService } from './admin-panel.service';
         InsuranceBranchComponent,
         InsuranceBranchModalComponent,
         InsuranceModalComponent,
+        ReturnReasonCreateComponent
     ],
     entryComponents: [BankModalComponent, BranchModalComponent, InsuranceBranchModalComponent, InsuranceModalComponent],
     providers: [TableService, CommonService, AdminPanelService]

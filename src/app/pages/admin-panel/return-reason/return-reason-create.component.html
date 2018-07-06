@@ -2,7 +2,7 @@
     <app-page-header [heading]="'CREATE NEW PAYMENT TERM'" [icon]="'fa-th-list'"></app-page-header>
     <section class="rma-page block">
         <div style="margin: 15px 0">
-            <a class="btn btn-outline-info" [routerLink]="['/admin-panel/payment-term']">
+            <a class="btn btn-outline-info" [routerLink]="['/admin-panel/return-reason']">
                 <i class="fa fa-arrow-left"></i> Back</a>
         </div>
         <fieldset class="custom-border">
@@ -25,7 +25,7 @@
                         <label> Exclude RR Calc
                             <span class="text-danger">(*)</span>
                         </label>
-                        <input type="text" name="" class="form-control" formControlName="day_limit">
+                        <input type="checkbox" name="" class="form-control" formControlName="exclude_rr_calc">
                     </div>
                     <div class="col-sm-2 form-group">
                         <label> Status

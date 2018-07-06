@@ -24,7 +24,7 @@ export class PayTermCreateComponent implements OnInit {
         private paytermService: PaymentTermService) {
         this.generalForm = fb.group({
             'id': [null],
-            'cd': [{value: null, disabled: true}, Validators.required],
+            'cd': [{ value: null, disabled: true }, Validators.required],
             'des': [null, Validators.required],
             'day_limit': [null, Validators.required],
             'sts': ['AT', Validators.required]
@@ -52,12 +52,13 @@ export class PayTermCreateComponent implements OnInit {
         });
     }
     getDetailPaymentTerm(id) {
-        console.log(id);
-        this.paytermService.getDetailPayment(id).subscribe(res => {
-            this.generalForm.patchValue(res.data);
-        }, err => {
-            console.log(err.message);
-        });
+        if (id) {
+            this.paytermService.getDetailPayment(id).subscribe(res => {
+                this.generalForm.patchValue(res.data);
+            }, err => {
+                console.log(err.message);
+            });
+        }
     }
     updatePaymentTerm(id) {
         console.log(id);

@@ -26,17 +26,14 @@
 
 
     <div class="block-content list-order-table">
-        <button (click)="createPaymentTerm()" style="margin: 10px 0;" class="btn btn-primary">New Paymet Term</button>
-
-        <button  class="btn btn-default"  type="button" [routerLink]="['/admin-panel/payment-term/edit/8']">Cancel</button>
-
+        <button (click)="createReturnReason()" style="margin: 10px 0;" class="btn btn-primary">New Return Reason</button>
         <div class="table-responsive">
             <table class="table table-striped table-vcenter custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                 <thead class="bg-white">
                     <tr>
                         <th>Code</th>
                         <th>Description</th>
-                        <th>Day Limit</th>
+                        <th>Exclude Reason</th>
                         <th>Status</th>
                         <th>Last Updated By</th>
                         <th>Last Updated On</th>
@@ -52,10 +49,10 @@
                         <td>{{item.crtd_by_name}}</td>
                         <td>{{item.updated_dt}}</td>
                         <td>
-                            <a class="btn btn-default" (click)="editPayment(item)" title="Edit Payment Term">
+                            <a class="btn btn-default" (click)="editReturnReason(item.id)" title="Edit Return Reason">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                             </a>                           
-                            <a class="btn btn-default" (click)="deletePayment(item.id)" title="Delete Payment Term">
+                            <a class="btn btn-default" (click)="deleteReason(item.id)" title="Delete Return Reason">
                                 <i class="fa fa-trash" aria-hidden="true"></i>
                             </a>
                         </td>
