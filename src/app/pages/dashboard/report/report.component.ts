@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { routerTransition } from '../../../router.animations';
@@ -77,7 +77,7 @@ export class ReportComponent implements OnInit {
                     display: true,
                     position: 'right',
                     ticks: {
-                        callback: function(value, index, values) {
+                        callback(value, index, values) {
                             return '$' + value;
                         },
                         beginAtZero: true,
@@ -167,7 +167,7 @@ export class ReportComponent implements OnInit {
             } catch (e) {
 
             }
-        })
+        });
     }
 
     changeCategory() {
@@ -176,7 +176,7 @@ export class ReportComponent implements OnInit {
 
     // change Date range
     changeDate(id, flag) {
-        if (id != 4 && id != null && id != '' && id != undefined) {
+        if (id !== 4 && id != null && id !== '' && id !== undefined) {
             switch (id) {
                 case 1:
                     this.calWeek(flag);
@@ -193,7 +193,7 @@ export class ReportComponent implements OnInit {
     }
 
     calWeek(flag) {
-        let d = new Date();
+        const d = new Date();
         switch (flag) {
             case 'partForm':
                 this.partForm.patchValue({ 'to_date': d.toISOString().slice(0, 10) });
@@ -219,7 +219,7 @@ export class ReportComponent implements OnInit {
     }
 
     calMonth(flag) {
-        let d = new Date();
+        const d = new Date();
         switch (flag) {
             case 'partForm':
                 this.partForm.patchValue({ 'to_date': d.toISOString().slice(0, 10) });
@@ -245,7 +245,7 @@ export class ReportComponent implements OnInit {
     }
 
     calYear(flag) {
-        let d = new Date();
+        const d = new Date();
         switch (flag) {
             case 'partForm':
                 this.partForm.patchValue({ 'to_date': d.toISOString().slice(0, 10) });
@@ -275,18 +275,18 @@ export class ReportComponent implements OnInit {
     // draw chart
     getListPart() {
         if (this.partForm.value.order === 4) {
-            this.partForm.patchValue({ 'from_date': [this.partForm.value.from_date.year, this.partForm.value.from_date.month, this.partForm.value.from_date.day].join('-') }),
-                this.partForm.patchValue({ 'to_date': [this.partForm.value.to_date.year, this.partForm.value.to_date.month, this.partForm.value.to_date.day].join('-') })
+            this.partForm.patchValue({ 'from_date': [this.partForm.value.from_date.year, this.partForm.value.from_date.month, this.partForm.value.from_date.day].join('-') });
+                this.partForm.patchValue({ 'to_date': [this.partForm.value.to_date.year, this.partForm.value.to_date.month, this.partForm.value.to_date.day].join('-') });
         }
 
         delete this.partForm.value.order;
-        let params = this.partForm.value;
+        const params = this.partForm.value;
         this.dashboardService.getListPart(params).subscribe(res => {
             try {
                 this.listPart = res.data;
 
-                let arr = [];
-                for (var i = 0; i < res.data.length; i++) {
+                const arr = [];
+                for (const i of res.data) {
                     this.label1.push(res.data[i].sku);
                     arr.push(res.data[i].total_qty);
                 }
@@ -296,23 +296,24 @@ export class ReportComponent implements OnInit {
             } catch (e) {
 
             }
-        })
+        });
     }
 
     getListRepair() {
         if (this.repairForm.value.order === 4) {
-            this.repairForm.patchValue({ 'from_date': [this.repairForm.value.from_date.year, this.repairForm.value.from_date.month, this.repairForm.value.from_date.day].join('-') }),
-                this.repairForm.patchValue({ 'to_date': [this.repairForm.value.to_date.year, this.repairForm.value.to_date.month, this.repairForm.value.to_date.day].join('-') })
+            this.repairForm.patchValue({ 'from_date': [this.repairForm.value.from_date.year, this.repairForm.value.from_date.month, this.repairForm.value.from_date.day].join('-') });
+                this.repairForm.patchValue({ 'to_date': [this.repairForm.value.to_date.year, this.repairForm.value.to_date.month, this.repairForm.value.to_date.day].join('-') });
         }
 
         //  delete this.repairForm.value.order;
-        let params = this.repairForm.value;
+        const params = this.repairForm.value;
         this.dashboardService.getListRepair(params).subscribe(res => {
             try {
                 this.listRepair = res.data;
 
-                let first = [], second = [];
-                for (var i = 0; i < res.data.length; i++) {
+                const first = [];
+                 const second = [];
+                for (const i of res.data) {
                     this.label2.push(res.data[i].buyer_name);
                     first.push(res.data[i].total_ordered);
                     second.push(res.data[i].total_revenue);
@@ -322,24 +323,24 @@ export class ReportComponent implements OnInit {
             } catch (e) {
 
             }
-        })
+        });
     }
 
     getListSaleOrder() {
         if (this.saleOrderForm.value.order === 4) {
-            this.saleOrderForm.patchValue({ 'from_date': [this.saleOrderForm.value.from_date.year, this.saleOrderForm.value.from_date.month, this.saleOrderForm.value.from_date.day].join('-') }),
-                this.saleOrderForm.patchValue({ 'to_date': [this.saleOrderForm.value.to_date.year, this.saleOrderForm.value.to_date.month, this.saleOrderForm.value.to_date.day].join('-') })
+            this.saleOrderForm.patchValue({ 'from_date': [this.saleOrderForm.value.from_date.year, this.saleOrderForm.value.from_date.month, this.saleOrderForm.value.from_date.day].join('-') });
+                this.saleOrderForm.patchValue({ 'to_date': [this.saleOrderForm.value.to_date.year, this.saleOrderForm.value.to_date.month, this.saleOrderForm.value.to_date.day].join('-') });
         }
 
         //  delete this.saleOrderForm.value.order;
-        let params = this.saleOrderForm.value;
+        const  params = this.saleOrderForm.value;
 
         this.dashboardService.getListSaleOrder(params).subscribe(res => {
             try {
                 this.listSaleOrder = res.data;
 
-                let arr = [];
-                for (var i = 0; i < res.data.length; i++) {
+                const arr = [];
+                for (const i of res.data) {
                     this.label3.push(res.data[i].status_label);
                     arr.push(res.data[i].total_order);
                 }
@@ -348,24 +349,24 @@ export class ReportComponent implements OnInit {
             } catch (e) {
 
             }
-        })
+        });
     }
 
     getCategorySold() {
         if (this.categoryForm.value.order) {
-            this.categoryForm.patchValue({ 'from_date': [this.categoryForm.value.from_date.year, this.categoryForm.value.from_date.month, this.categoryForm.value.from_date.day].join('-') }),
-                this.categoryForm.patchValue({ 'to_date': [this.categoryForm.value.to_date.year, this.categoryForm.value.to_date.month, this.categoryForm.value.to_date.day].join('-') })
+            this.categoryForm.patchValue({ 'from_date': [this.categoryForm.value.from_date.year, this.categoryForm.value.from_date.month, this.categoryForm.value.from_date.day].join('-') });
+                this.categoryForm.patchValue({ 'to_date': [this.categoryForm.value.to_date.year, this.categoryForm.value.to_date.month, this.categoryForm.value.to_date.day].join('-') });
         }
 
         //  delete this.categoryForm.value.order;
         //  delete this.categoryForm.value.category;
 
-        let params = this.categoryForm.value;
+        const  params = this.categoryForm.value;
         this.dashboardService.getCategorySold(params).subscribe(res => {
             try {
                 this.listCat = res.data;
-                let arr = [];
-                for (var i = 0; i < res.data.length; i++) {
+                const arr = [];
+                for (const i of res.data) {
                     this.label4.push(res.data[i].brand_name);
                     arr.push(res.data[i].total_qty);
                 }
@@ -374,7 +375,7 @@ export class ReportComponent implements OnInit {
             } catch (e) {
 
             }
-        })
+        });
     }
 
     searchAction(flag) {
