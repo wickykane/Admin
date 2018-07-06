@@ -15,6 +15,7 @@ import { DiscountCategoryCreateComponent } from './discount-category/discount-ca
 
 import { PaymentTermComponent } from './payterm/payterm.component';
 import { WarehouseCreateComponent } from './warehouse/warehouse-create.component';
+import { WarehouseEditComponent } from './warehouse/warehouse-edit.component';
 import { WarehouseComponent } from './warehouse/warehouse.component';
 
 import { ReturnReasonComponent } from './return-reason/return-reason.component';
@@ -56,6 +57,7 @@ import { AdminPanelService } from './admin-panel.service';
         PaymentTermComponent,
         WarehouseComponent,
         WarehouseCreateComponent,
+        WarehouseEditComponent,
         ReturnReasonComponent,
         DiscountCategoryComponent,
         DiscountCategoryCreateComponent

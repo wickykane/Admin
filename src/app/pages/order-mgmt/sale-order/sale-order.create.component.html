@@ -17,10 +17,7 @@
                                             <ng-select style="width: 150px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id"
                                                 formControlName="company_id">
                                             </ng-select>
-                                        </div>
-                                        <!-- <select class="form-control" id="company_id" formControlName="company_id" name="company_id" (change)="changeCustomer()">
-                                            <option *ngFor="let item of listMaster['customer']" [ngValue]="item.id">{{item.company_name}}</option>
-                                        </select> -->
+                                        </div>                                      
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -179,7 +176,7 @@
                                         <div class="form-group row">
                                             <label class='col-4'>Multi Ship Addr</label>
                                             <div class='col-8 text-danger'>
-                                                <select [attr.disabled]="true"  class="form-control" id="is_multi_shp_addr" name="is_multi_shp_addr" formControlName="is_multi_shp_addr">
+                                                <select class="form-control" id="is_multi_shp_addr" name="is_multi_shp_addr" formControlName="is_multi_shp_addr">
                                                     <option *ngFor="let item of listMaster['multi_ship']" [ngValue]="item.id">{{item.label}}</option>
                                                 </select>
                                             </div>
@@ -270,14 +267,13 @@
                 <div class="block-border full-block">
                     <h5 class="title-border" translate>SHIPPING INFORMATION</h5>
                     <div class="row">
-                        <!-- <div class="col-md-12" >
+                        <div class="col-md-12"  *ngIf="generalForm.value.is_multi_shp_addr == 1" >
                             <div class="col-12">
                                 <p>This order ships to {{customer.shipping.length}} shipping addresses.</p>
                                 <a> View detail below</a>
                             </div>
-                        </div> -->
-                        <!-- *ngIf="generalForm.value.is_multi_shp_addr == 0" -->
-                        <div class="col-md-12" >
+                        </div>                       
+                        <div class="col-md-12"  *ngIf="generalForm.value.is_multi_shp_addr == 0">
                             <div class="">
                                 <div class="col-12">
                                     <div class="form-group row">
@@ -411,6 +407,7 @@
                                         </td>
                                     </tr>
                                     <tr *ngFor="let product of item.products">
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
