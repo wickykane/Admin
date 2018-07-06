@@ -17,6 +17,10 @@ export class DiscountCategoryComponent implements OnInit {
         items: []
     };
     public user: any;
+    public flagAddress: boolean;
+    public listMaster = {};
+    public selectedIndex = 0;
+
 
     constructor(
         public tableService: TableService,
@@ -30,6 +34,10 @@ export class DiscountCategoryComponent implements OnInit {
     ngOnInit() {
         this.getList();
         this.user = JSON.parse(localStorage.getItem('currentUser'));
+    }
+
+    selectData(index) {
+      console.log(index);
     }
 
     getList() {

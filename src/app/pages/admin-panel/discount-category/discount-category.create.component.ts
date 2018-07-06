@@ -24,6 +24,7 @@ export class DiscountCategoryCreateComponent implements OnInit {
     public generalForm: FormGroup;
     public listMaster = {};
     public data = {};
+    public flagAddress: boolean;
 
     public listCheckSubCat = [];
 
