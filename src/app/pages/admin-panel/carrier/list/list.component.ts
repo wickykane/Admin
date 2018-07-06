@@ -31,7 +31,6 @@ export class ListComponent implements OnInit {
 
         this.searchForm = fb.group({
             'name': [null],
-            'transport_method': [null],
             'email': [null]
         });
 
@@ -46,16 +45,13 @@ export class ListComponent implements OnInit {
     }
 
     getList() {
-        // const params = {...this.tableService.getParams(), ...this.searchForm.value};
-        // Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
+        const params = {...this.tableService.getParams(), ...this.searchForm.value};
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
-
-        // this.ari.getARInvoicesList(params).subscribe(res => {
-        //     this.list.items = res.data.rows;
-        //     this.tableService.matchPagingOption(res.data);
-        // }, err => {
-        //     this.toastr.error(err.message);
-        // });
+        this.cs.getListCarrier(params).subscribe(res => {
+            this.list.items = res.data.rows;
+            this.tableService.matchPagingOption(res.data);
+        });
     }
 
 }
