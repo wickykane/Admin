@@ -13,9 +13,11 @@ export class BranchModalComponent implements OnInit {
   // Resolve Data
   public branchForm: FormGroup;
   public listMaster = {};
+
   @Input() bankData;
   @Input() branchId;
   @Input() bankId;
+  @Input() modalTitle;
 
   constructor(public activeModal: NgbActiveModal,
     private fb: FormBuilder,

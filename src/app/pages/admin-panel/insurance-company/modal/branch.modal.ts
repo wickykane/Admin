@@ -13,9 +13,11 @@ export class InsuranceBranchModalComponent implements OnInit {
   // Resolve Data
   public branchForm: FormGroup;
   public listMaster = {};
+
   @Input() insuranceData;
   @Input() branchId;
   @Input() insuranceId;
+  @Input() modalTitle;
 
   constructor(public activeModal: NgbActiveModal,
     private fb: FormBuilder,
