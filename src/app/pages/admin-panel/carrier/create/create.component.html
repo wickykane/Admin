@@ -7,131 +7,144 @@
         </div>
         <fieldset class="custom-border">
             <legend class="custom-border">GENERAL INFORMATION</legend>
-            <form class="form-search full-width form-horizontal"><div class="row">
+            <form class="form-search full-width form-horizontal" [formGroup]="generalForm"><div class="row">
                 <div class="col-sm-2 form-group">
                     <label> Carrier Name
                         <span class="text-danger">(*)</span>
                     </label>
-                    <input type="text" name="" class="form-control">
-                </div>
-                <div class="col-sm-2 form-group">
-                    <label> Transport Method
-                        <span class="text-danger">(*)</span>
-                    </label>
-                    <select class="form-control">
-                        <option [value]="null" disabled>Select</option>
-                    </select>
+                    <input type="text" class="form-control" formControlName="name">
                 </div>
                 <div class="col-sm-2 form-group">
                     <label> Contact Person</label>
-                    <input type="text" name="" class="form-control">
+                    <input type="text" class="form-control" formControlName="ctt_person">
                 </div>
                 <div class="col-sm-2 form-group">
                     <label> Contact Email</label>
-                    <input type="text" name="" class="form-control">
+                    <input type="text" class="form-control" formControlName="ctt_email">
                 </div>
                 <div class="col-sm-2 form-group">
                     <label> Contact Phone</label>
-                    <input type="text" name="" class="form-control">
+                    <input type="text" class="form-control" formControlName="ctt_phone">
                 </div>
                 <div class="col-sm-2 form-group">
                     <label>Website</label>
-                    <input type="text" name="" class="form-control">
+                    <input type="text" class="form-control" formControlName="website">
+                </div>
+                <div class="col-sm-2 form-group">
                 </div>
                 <div class="col-sm-2 form-group">
                     <label>Own Carrier</label>
-                    <input type="checkbox" name="" style="display: block;">
+                    <input type="checkbox" style="display: block;" formControlName="own_carrier">
                 </div>
                 <div class="col-sm-2 form-group">
                     <label>Created On</label>
-                    <input type="text" name="" class="form-control" readonly>
+                    <input type="text" class="form-control" readonly value="{{ generalForm.value.dt_of_crtn | date:'MM/dd/yyyy' }}">
                 </div>
                 <div class="col-sm-2 form-group">
                     <label>From Weight (lbs) <span class="text-danger">(*)</span></label>
-                    <input type="text" name="" class="form-control">
+                    <input type="text" class="form-control" formControlName="from_weight">
                 </div>
                 <div class="col-sm-2 form-group">
-                    <label>From Weight (lbs) <span class="text-danger">(*)</span></label>
-                    <input type="text" name="" class="form-control">
+                    <label>To Weight (lbs) <span class="text-danger">(*)</span></label>
+                    <input type="text" class="form-control" formControlName="to_weight">
                 </div>
             </div></form>
         </fieldset>
 
-        <div style="margin-top:15px;">
-            <div class="custom-header">
-                <h3 class="custom-header">ADDRESS</h3>
-                <div class="wrap-keyboard right-toggle-button">
-                    <span class="fa fa-plus fa-minus"></span>
-                </div>
-            </div>
-            <div>
-                <div class="customer-content-toggle"><table class="table table-striped table-vcenter table-hover custom-table">
-                    <thead>
-                        <tr>
-                            <th> No </th>
-                            <th> Type </th>
-                            <th> Name </th>
-                            <th> Country </th>
-                            <th> Address 1 </th>
-                            <th> Address 2 </th>
-                            <th> City </th>
-                            <th> State </th>
-                            <th> Zip Code </th>
-                            <th> Route </th>
-                            <th> Action </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td></td>
-                            <td>
-                                <select class="form-control">
-                                    <option [value]="null" disabled>--Select--</option>
-                                </select>
-                            </td>
-                            <td>
-                                <input type="text" class="form-control">
-                            </td>
-                            <td>
-                                <select class="form-control">
-                                    <option [value]="null" disabled>--Select--</option>
-                                </select>
-                            </td>
-                            <td>
-                                <input type="text" class="form-control">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control">
-                            </td>
-                            <td>
-                                <select class="form-control">
-                                    <option [value]="null" disabled>--Select--</option>
-                                </select>
-                            </td>
-                            <td>
-                                <input type="text" class="form-control">
-                            </td>
-                            <td>
-                                <select class="form-control">
-                                    <option [value]="null" disabled>--Select--</option>
-                                </select>
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-default">
-                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table></div>
-                <button type="button" class="btn btn-outline-dark">
-                    <i class="fa fa-plus" aria-hidden="true"></i> 
-                    Add new address
-                </button>
-            </div>
+        <div class="row">
+            <div class="col-sm-6"><fieldset class="custom-border">
+                <legend class="custom-border">PRIMARY ADDRESS</legend>
+                <form class="row" [formGroup]="primaryAddress">
+                    <div class="col-sm-6 form-group">
+                        <label>Email</label>
+                        <input type="text" class="form-control" formControlName="email">
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label> Country
+                            <span class="text-danger">(*)</span>
+                        </label>
+                        <select class="form-control" formControlName="country_code" (change)="getStateByCountry($event.target.value, 'primary')">
+                            <option [value]="null" disabled>Select</option>
+                            <option *ngFor="let item of listMaster['countries']" [value]="item.cd">{{ item.name }}</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label> Fax Number</label>
+                        <input type="text" class="form-control" formControlName="tax_number">
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label>City <span class="text-danger">(*)</span></label>
+                        <input type="text" class="form-control" formControlName="city_name">
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label>Phone</label>
+                        <input type="text" class="form-control" formControlName="phone">
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label>State/Province</label>
+                        <select class="form-control" formControlName="state_id">
+                            <option [value]="null" disabled>Select</option>
+                            <option *ngFor="let item of listMaster['primaryState']" [value]="item.id">{{ item.name }}</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label>Address Line <span class="text-danger">(*)</span></label>
+                        <textarea class="form-control" rows="4" formControlName="address_line"></textarea>
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label>Zip/Postal Code <span class="text-danger">(*)</span></label>
+                        <input type="text" class="form-control" formControlName="zip_code">
+                        <button type="button" class="btn btn-outline-primary float-right" style="margin-top: 15px;" (click)="copyAddress()">
+                            Copy to Billing Address
+                        </button>
+                    </div>
+                </form>
+            </fieldset></div>
+            <div class="col-sm-6"><fieldset class="custom-border">
+                <legend class="custom-border">BILLING ADDRESS</legend>
+                <form class="row" [formGroup]="billingAddress">
+                    <div class="col-sm-6 form-group">
+                        <label>Email</label>
+                        <input type="text" class="form-control" formControlName="email">
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label> Country
+                            <span class="text-danger">(*)</span>
+                        </label>
+                        <select class="form-control" formControlName="country_code" (change)="getStateByCountry($event.target.value, 'billing')">
+                            <option [value]="null" disabled>Select</option>
+                            <option *ngFor="let item of listMaster['countries']" [value]="item.cd">{{ item.name }}</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label> Fax Number</label>
+                        <input type="text" class="form-control" formControlName="tax_number">
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label>City <span class="text-danger">(*)</span></label>
+                        <input type="text" class="form-control" formControlName="city_name">
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label>Phone</label>
+                        <input type="text" class="form-control" formControlName="phone">
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label>State/Province</label>
+                        <select class="form-control" formControlName="state_id">
+                            <option [value]="null" disabled>Select</option>
+                            <option *ngFor="let item of listMaster['billingState']" [value]="item.id">{{ item.name }}</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label>Address Line <span class="text-danger">(*)</span></label>
+                        <textarea class="form-control" rows="4" formControlName="address_line"></textarea>
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label>Zip/Postal Code <span class="text-danger">(*)</span></label>
+                        <input type="text" class="form-control" formControlName="zip_code">
+                    </div>
+                </form>
+            </fieldset></div>
         </div>
 
         <div style="margin-top:15px;">
@@ -146,53 +159,71 @@
                     <thead>
                         <tr>
                             <th> No </th>
-                            <th> Type </th>
-                            <th> Name </th>
-                            <th> Country </th>
-                            <th> Address 1 </th>
-                            <th> Address 2 </th>
-                            <th> City </th>
-                            <th> State </th>
-                            <th> Zip Code </th>
+                            <th> Bank </th>
+                            <th> Swift # </th>
+                            <th> Branch </th>
+                            <th> Address </th>
+                            <th> Account Name </th>
+                            <th> Account Number </th>
+                            <th> IBAN # </th>
+                            <th> Action </th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td></td>
+                        <tr *ngFor="let item of listBankAccount; let i=index">
+                            <td class="">{{ i + 1 }}</td>
                             <td>
-                                <select class="form-control">
+                                <select class="form-control" [(ngModel)]="item.bank_id" (change)="bankChange($event.target.value, item)">
                                     <option [value]="null" disabled>--Select--</option>
+                                    <option *ngFor="let bank of listMaster['bank']" [value]="bank.id">
+                                        {{ bank.name }}
+                                    </option>
                                 </select>
                             </td>
-                            <td></td>
                             <td>
-                                <select class="form-control">
+                                {{ item.swift }}
+                            </td>
+                            <td>
+                                <select class="form-control" [(ngModel)]="item.bank_branch_id"  (change)="branchChange($event.target.value, item)">
                                     <option [value]="null" disabled>--Select--</option>
+                                    <option *ngFor="let branch of item['list_branch']" [value]="branch.id">
+                                        {{ branch.branch_name }}
+                                    </option>
                                 </select>
                             </td>
-                            <td></td>
                             <td>
-                                <input type="text" class="form-control">
+                                {{ item.address }}
                             </td>
                             <td>
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" [(ngModel)]="item.account_name">
                             </td>
                             <td>
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" [(ngModel)]="item.account_number">
                             </td>
                             <td>
-                                <button type="button" class="btn btn-default">
+                                <input type="text" class="form-control" [(ngModel)]="item.iban">
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-default" (click)="removeBankAccount(i, item)">
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                 </button>
                             </td>
                         </tr>
+                        <tr *ngIf="!listBankAccount.length" class="text-center">
+                            <td colspan="9">No data</td>
+                        </tr>
                     </tbody>
                 </table></div>
-                <button type="button" class="btn btn-outline-dark">
+                <button type="button" class="btn btn-outline-dark" (click)="addNewBank()">
                     <i class="fa fa-plus" aria-hidden="true"></i> 
-                    Add new account
+                    Add new line
                 </button>
             </div>
+        </div>
+
+        <div class="block-content block-content-full text-right" style="margin-top:15px;">
+            <button type="button" class="btn btn-default" [routerLink]="['/admin-panel/carrier']">Cancel</button>
+            <button type="button" class="btn btn-outline-primary" [disabled]="!valid()" (click)="confirm()">Save</button>
         </div>
     </section>
 </div>

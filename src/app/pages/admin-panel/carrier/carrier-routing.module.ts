@@ -24,6 +24,13 @@ const routes: Routes = [
                 data: {
                     title: ''
                 }
+            },
+            {
+                path: 'edit/:id',
+                component: CreateComponent,
+                data: {
+                    title: ''
+                }
             }
         ]
     }
