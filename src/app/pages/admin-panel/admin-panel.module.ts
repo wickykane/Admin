@@ -39,6 +39,7 @@ import {
 } from '../../shared/index';
 
 import { AdminPanelService } from './admin-panel.service';
+import { DiscountComponent } from './discount/discount.component';
 
 @NgModule({
     imports: [
@@ -71,6 +72,7 @@ import { AdminPanelService } from './admin-panel.service';
         InsuranceBranchComponent,
         InsuranceBranchModalComponent,
         InsuranceModalComponent,
+        DiscountComponent,
     ],
     entryComponents: [BankModalComponent, BranchModalComponent, InsuranceBranchModalComponent, InsuranceModalComponent],
     providers: [TableService, CommonService, AdminPanelService]

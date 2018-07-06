@@ -1,0 +1,170 @@
+<div [@routerTransition]>
+    <app-page-header [heading]="'DISCOUNT BY PRODUCT CATEGORIES'" [icon]="'fa-th-list'"></app-page-header>
+    <section class="rma-page block">
+        <div style="margin: 15px 0">
+            <a class="btn btn-outline-info" routerLink="['/admin-panel']">
+                <i class="fa fa-arrow-left"></i> Back</a>
+        </div>
+        <fieldset class="custom-border">
+            <legend class="custom-border">GENERAL INFORMATION</legend>
+            <form [formGroup]="generalForm" class="form-search full-width form-horizontal">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group row">
+                            <label for="code_id" class="col-sm-4 col-form-label p-0 pl-3">
+                                <span>Code</span>
+                            </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="code_id" formControlName="code_id">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group row ">
+                            <label for="description" class="col-sm-4 col-form-label p-0 pl-3">
+                                <span>Description</span>
+                            </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="description" formControlName="description">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group row">
+                            <label for="start_dt" class="col-sm-4 col-form-label p-0 pl-3">Start Date</label>
+                            <div class="col-sm-8 input-group">
+                                <input class="form-control" placeholder="yyyy-mm-dd" name="start_dt" formControlName="start_dt" ngbDatepicker #d="ngbDatepicker">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group row ">
+                            <label for="status" class="col-sm-4 col-form-label p-0 pl-3">
+                                <span>Status</span>
+                            </label>
+                            <div class="col-sm-8">
+                                <select formControlName="status" class="form-control">
+                                    <option *ngFor="let stt of list['status']" [ngValue]="stt.id">{{stt.name}}</option>
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group row ">
+                            <div class="col-sm-4 p-0 pl-3">
+                                <span>Create By</span>
+                            </div>
+                            <div class="col-sm-8 p-0 pl-3">
+                                <span>Khiet Pham</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group row ">
+                            <div class="col-sm-4 p-0 pl-3">
+                                <span>Create Date</span>
+                            </div>
+                            <div class="col-sm-8 p-0 pl-3">
+                                <span>MM-DD-YYYY</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </fieldset>
+
+
+
+        <div class="row" style="margin-top:15px;">
+            <div class="col-sm-12">
+                <div class="custom-header">
+                    <h3 class="custom-header">CATEGORIES
+                        <!-- <strong class="text-danger">{{address.length}}</strong>
+                        <span *ngIf="address.length > 1">Records</span>
+                        <span *ngIf="address.length <= 1">Record</span> -->
+                    </h3>
+                    <div class="wrap-keyboard right-toggle-button" (click)="flagCategory = !flagCategory">
+                        <span class="fa" [ngClass]="{'fa-minus': flagCategory,'fa-plus': !flagCategory}"></span>
+                    </div>
+                </div>
+                <div [ngClass]="{'show': flagCategory,'hidden': !flagCategory}">
+                    <div class="customer-content-toggle ">
+                        <table class="table table-striped table-vcenter table-hover custom-table">
+                            <thead>
+                                <tr>
+                                    <th> ID </th>
+                                    <th>
+                                        <span>Product Category</span>
+                                        <span class="text-danger">(*)</span>
+                                    </th>
+                                    <th>
+                                        <span>Apply For SubCategory</span>
+                                        <span class="text-danger">(*)</span>
+                                    </th>
+                                    <th>
+                                        <span>Sub Category</span>
+                                        <span class="text-danger">(*)</span>
+                                    </th>
+                                    <th>
+                                        <span>Discount Value %</span>
+                                        <span class="text-danger">(*)</span>
+                                    </th>
+                                    <th>Action</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of categories; let i = index">
+                                    <td>{{i+1}}</td>
+                                    <td>
+                                        <select class="form-control" name="type" [(ngModel)]="item.type">
+                                            <option value="null" selected="true">--Select--</option>
+                                            <option *ngFor="let i of item.listType" [ngValue]="i.id">{{i.name}}</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" name="applyType" [(ngModel)]="item.applyType">
+                                            <option value="null" selected="true">--Select--</option>
+                                            <option *ngFor="let i of item.listApplyType" [ngValue]="i.id">{{i.name}}</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <span *ngIf="item.applyType == 'all'">All Sub Categories</span>
+                                        <select *ngIf="item.applyType != 'all'" class="form-control" name="subCategory" [(ngModel)]="item.subCategory">
+                                            <option value="null" selected="true">--Select--</option>
+                                            <option *ngFor="let i of item.listSubCategory" [ngValue]="i.id">{{i.name}}</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="name" [(ngModel)]="item.name">
+                                        <span>%</span>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-default" (click)="removeCategory(i)">
+                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <button type="button" class="btn btn-outline-dark" (click)="addNewCategory()">
+                        <i class="fa fa-plus" aria-hidden="true"></i> Add New</button>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="block-content block-content-full text-center mt-3 mb-3" style="margin-top:15px;">
+            <button type="button" class="btn btn-default" [routerLink]="['/admin-panel']">Cancel</button>
+            <button type="button" [disabled]="generalForm.invalid" class="btn btn-outline-primary" (click)="saveDiscount()">Save</button>
+        </div>
+    </section>
+</div>
