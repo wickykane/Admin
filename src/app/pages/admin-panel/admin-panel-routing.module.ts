@@ -7,7 +7,9 @@ import { DiscountCategoryComponent } from './discount-category/discount-category
 import { DiscountCategoryCreateComponent } from './discount-category/discount-category.create.component';
 import { InsuranceBranchComponent } from './insurance-company/branch/branch.component';
 import { InsuranceComponent } from './insurance-company/insurance.component';
+import { PayTermCreateComponent } from './payterm/payterm-create.component';
 import { PaymentTermComponent } from './payterm/payterm.component';
+import { ReturnReasonCreateComponent } from './return-reason/return-reason-create.component';
 import { ReturnReasonComponent } from './return-reason/return-reason.component';
 import { ShipmentMethodComponent } from './shipment-method/shipment-method.component';
 import { UnitMeasureComponent } from './unit-measure/unit-measure.component';
@@ -58,6 +60,12 @@ const routes: Routes = [
         path: 'payment-term', component: PaymentTermComponent
     },
     {
+        path: 'payment-term/create', component: PayTermCreateComponent
+    },
+    {
+        path: 'payment-term/edit/:id', component: PayTermCreateComponent
+    },
+    {
         path: 'warehouse', component: WarehouseComponent
     },
     {
@@ -68,6 +76,12 @@ const routes: Routes = [
     },
     {
         path: 'return-reason', component: ReturnReasonComponent
+    },
+    {
+        path: 'return-reason/create', component: ReturnReasonCreateComponent
+    },
+    {
+        path: 'return-reason/edit/:id', component: ReturnReasonCreateComponent
     },
     {
         path: 'discount-category', component: DiscountCategoryComponent
