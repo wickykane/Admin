@@ -8,22 +8,23 @@ import { CommonService } from '../../../services/common.service';
 import { WarehouseService } from './warehouse.service';
 
 @Component({
-    selector: 'app-warehouse-create',
-    templateUrl: './warehouse-create.component.html',
+    selector: 'app-warehouse-edit',
+    templateUrl: './warehouse-edit.component.html',
     styleUrls: ['./warehouse.component.scss'],
     providers: [WarehouseService, ToastrService],
     animations: [routerTransition()]
 })
-export class WarehouseCreateComponent implements OnInit {
+export class WarehouseEditComponent implements OnInit {
     generalForm: FormGroup;
     contactForm: FormGroup;
+    public idWarehouse: string;
+
     public listCountry: any = [];
     public listState: any = [];
-    // public country_code: any = '';
-    // public state_id: any = '';
     constructor(
         public fb: FormBuilder,
         public router: Router,
+        public route: ActivatedRoute,
         public toastr: ToastrService,
         private commonService: CommonService,
         private warehouseService: WarehouseService
@@ -50,6 +51,20 @@ export class WarehouseCreateComponent implements OnInit {
 
     ngOnInit() {
         this.getListCountryAdmin();
+        this.route.params.subscribe(params =>
+            this.getDetailWarehouse(params.id)
+        );
+    }
+
+    getDetailWarehouse(id) {
+        this.idWarehouse = id;
+        this.warehouseService
+            .getDetailWarehouse(this.idWarehouse)
+            .subscribe(res => {
+                try {
+                    this.generalForm.patchValue(res.data);
+                } catch (e) {}
+            });
     }
 
     changeCountry() {
@@ -84,7 +99,8 @@ export class WarehouseCreateComponent implements OnInit {
             }
         });
     }
-    createWarehouse() {
+
+    updateWarehouse() {
         if (this.generalForm.valid) {
             const params = {
                 ...this.generalForm.value,
@@ -95,7 +111,7 @@ export class WarehouseCreateComponent implements OnInit {
                 data: JSON.stringify(params)
             };
 
-            this.warehouseService.createWarehouse(data).subscribe(
+            this.warehouseService.updateWarehouse(data).subscribe(
                 res => {
                     console.log(res);
                     try {

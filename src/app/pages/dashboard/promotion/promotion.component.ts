@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { routerTransition } from '../../../router.animations';
@@ -52,9 +52,9 @@ export class PromotionComponent implements OnInit {
     public label4: any = ['Red Wine', 'Wine', 'Sparkling'];
 
     // chart 4
-    public data5: any = [7,3];
+    public data5: any = [7, 3];
     public label5: any = ['New', 'Used'];
-    public color5: any = [{ backgroundColor: ['#46BFBD','#DCDCDC'] }];
+    public color5: any = [{ backgroundColor: ['#46BFBD', '#DCDCDC'] }];
     public option5 = {
         cutoutPercentage: 60,
          animation: false,
@@ -79,16 +79,16 @@ export class PromotionComponent implements OnInit {
          },
          tooltips: {
              callbacks: {
-                 label: function(tooltipItem, data) {
+                 label(tooltipItem, data) {
 
-                     var allData = data.datasets[tooltipItem.datasetIndex].data;
-                       var tooltipLabel = data.labels[tooltipItem.index];
-                       var tooltipData = allData[tooltipItem.index];
-                     var total = 0;
-                     for (var i in allData) {
+                     const allData = data.datasets[tooltipItem.datasetIndex].data;
+                       const tooltipLabel = data.labels[tooltipItem.index];
+                       const tooltipData = allData[tooltipItem.index];
+                     let total = 0;
+                     for ( const i of allData) {
                          total += allData[i];
                      }
-                     var tooltipPercentage = Math.round((tooltipData / total) * 100);
+                     const tooltipPercentage = Math.round((tooltipData / total) * 100);
                      return tooltipLabel + ': ' + tooltipData + ' (' + tooltipPercentage + '%)';
                  }
              }
@@ -101,7 +101,7 @@ export class PromotionComponent implements OnInit {
                  sidePadding: 15 //  Defualt is 20 (as a percentage)
              }
         }
-    }
+    };
 
     // chart 6
     public data6: any = [12, 5, 6];
@@ -130,7 +130,7 @@ export class PromotionComponent implements OnInit {
         this.dashboardService.topProductSoldByCategory().subscribe(res => {
             try {
 
-                let data = res.data.results;
+                const data = res.data.results;
                 data.forEach(function(element) {
                     this.label1.push(element.category_name);
                     this.data1.push(element.qty_used);
@@ -138,14 +138,14 @@ export class PromotionComponent implements OnInit {
             } catch (e) {
                 console.log(e);
             }
-        })
+        });
     }
 
     searchAction() {
-        let params = {
+        const params = {
             from: [this.searchForm.value.from.year, this.searchForm.value.from.month, this.searchForm.value.from.day].join('-'),
             to: [this.searchForm.value.from.year, this.searchForm.value.from.month, this.searchForm.value.from.day].join('-')
-        }
+        };
 
         this.dashboardService.getOverAllCount(params).subscribe(res => {
             try {
@@ -155,14 +155,14 @@ export class PromotionComponent implements OnInit {
             } catch (e) {
 
             }
-        })
+        });
     }
 
     resetAction() {
         this.searchForm.reset();
     }
-    showTableSO(){
-        
+    showTableSO() {
+
     }
 
 }

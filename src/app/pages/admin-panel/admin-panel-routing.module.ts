@@ -5,6 +5,8 @@ import { BankComponent } from './bank/bank.component';
 import { BranchComponent } from './bank/branch/branch.component';
 import { DiscountCategoryComponent } from './discount-category/discount-category.component';
 import { DiscountCategoryCreateComponent } from './discount-category/discount-category.create.component';
+import { InsuranceBranchComponent } from './insurance-company/branch/branch.component';
+import { InsuranceComponent } from './insurance-company/insurance.component';
 import { PaymentTermComponent } from './payterm/payterm.component';
 import { ReturnReasonComponent } from './return-reason/return-reason.component';
 import { ShipmentMethodComponent } from './shipment-method/shipment-method.component';
@@ -12,6 +14,7 @@ import { UnitMeasureComponent } from './unit-measure/unit-measure.component';
 import { UserCreateComponent } from './user/user-create.component';
 import { UserComponent } from './user/user.component';
 import { WarehouseCreateComponent } from './warehouse/warehouse-create.component';
+import { WarehouseEditComponent } from './warehouse/warehouse-edit.component';
 import { WarehouseComponent } from './warehouse/warehouse.component';
 import { WorkFlowComponent } from './work-flow/work-flow.component';
 import { WorkFlowEditComponent } from './work-flow/work-flow.edit.component';
@@ -52,9 +55,6 @@ const routes: Routes = [
         loadChildren: './carrier/carrier.module#CarrierModule',
     },
     {
-        path: 'bank', component: BankComponent
-    },
-    {
         path: 'payment-term', component: PaymentTermComponent
     },
     {
@@ -64,6 +64,9 @@ const routes: Routes = [
         path: 'warehouse/create', component: WarehouseCreateComponent
     },
     {
+        path: 'warehouse/edit/:id', component: WarehouseEditComponent
+    },
+    {
         path: 'return-reason', component: ReturnReasonComponent
     },
     {
@@ -71,8 +74,14 @@ const routes: Routes = [
     },
     {
         path: 'discount-category/create', component: DiscountCategoryCreateComponent
-    }
-
+    },
+    {
+        path: 'insurance',
+        children: [
+            { path: ':id/branch', component: InsuranceBranchComponent },
+            { path: '', component: InsuranceComponent }
+        ]
+    },
 
 
 ];
