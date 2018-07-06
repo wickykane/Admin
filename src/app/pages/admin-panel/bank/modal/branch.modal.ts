@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 import { CommonService } from '../../../../services/common.service';
 import { BankService } from '../bank.service';
 
@@ -22,7 +23,8 @@ export class BranchModalComponent implements OnInit {
   constructor(public activeModal: NgbActiveModal,
     private fb: FormBuilder,
     private bankService: BankService,
-    private commonService: CommonService) {
+    private commonService: CommonService,
+  ) {
     this.branchForm = fb.group({
       'bankname': [{ value: null, disabled: true }],
       'name': [null],
@@ -54,6 +56,7 @@ export class BranchModalComponent implements OnInit {
     this.bankService.getDetailBranch(bankId, branchId).subscribe(res => {
       try {
         this.branchForm.patchValue(res.data);
+        this.changeCountry();
       } catch (e) {
         console.log(e);
       }
@@ -81,7 +84,7 @@ export class BranchModalComponent implements OnInit {
   }
 
   ok() {
-
+    this.activeModal.close(this.branchForm.value);
   }
 
   cancel() {
