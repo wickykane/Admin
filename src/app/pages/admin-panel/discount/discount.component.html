@@ -98,10 +98,10 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let item of categories; let i = index">
+                                <tr *ngFor="let item of list.categories; let i = index">
                                     <td>{{i+1}}</td>
                                     <td>
-                                        <select class="form-control" name="type" [(ngModel)]="item.type">
+                                        <select class="form-control" name="type" [(ngModel)]="item.category_id">
                                             <option value="null" selected="true">--Select--</option>
                                             <option *ngFor="let i of item.listType" [ngValue]="i.id">{{i.name}}</option>
                                         </select>
@@ -120,8 +120,13 @@
                                         </select>
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control" name="name" [(ngModel)]="item.name">
-                                        <span>%</span>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" name="value" [(ngModel)]="item.value">
+                                            <div class="input-group-append pl-3">
+                                                <span>%</span>
+                                            </div>
+                                        </div>
+
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-default" (click)="removeCategory(i)">

@@ -5,21 +5,21 @@ import { ApiService } from '../../../services/api.service';
 export class DiscountService {
     constructor(private API: ApiService) {}
 
-    getListDiscount(params) {
-        // const url = 'Discount/index';
-        const url = 'buyer/index';
-        return this.API.get(url, params);
-    }
-    createDiscount(data) {
-        const url = 'Discount/create';
+    saveDiscount(data) {
+        const url = 'discount/create';
         return this.API.postForm(url, data);
     }
-    updateDiscount(data) {
-        const url = 'Discount/update';
-        return this.API.postForm(url, data);
-    }
-    getDetailDiscount(id) {
-        const url = 'Discount/detail/' + id;
+
+    getListType() {
+        const url = 'discount/list-type/';
         return this.API.get(url);
+    }
+    getListApplyType(data) {
+        const url = 'discount/list-apply-type';
+        return this.API.get(url, data);
+    }
+    getListSubCategory(data) {
+        const url = 'discount/list-sub-category';
+        return this.API.get(url, data);
     }
 }
