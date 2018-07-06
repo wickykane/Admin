@@ -26,13 +26,13 @@ export class ReturnReasonCreateComponent implements OnInit {
             'id': [null],
             'cd': [null, Validators.required],
             'des': [null, Validators.required],
-            'day_limit': [null, Validators.required],
+            'exclude_rr_calc': [null, Validators.required],
             'sts': ['AT', Validators.required]
         });
     }
 
     ngOnInit() {
-        this.listMaster['status'] = [{ key: 'IA', value: 'In Active' }, { key: 'IA', value: 'In Active' }];
+        this.listMaster['status'] = [{ key: 'IA', value: 'In Active' }, { key: 'AT', value: 'Active' }];
         this.route.params.subscribe(params => this.getDetailReturnReason(params.id));
     }
     payloadData() {

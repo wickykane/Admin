@@ -32,7 +32,7 @@ export class PayTermCreateComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.listMaster['status'] = [{ key: 'IA', value: 'In Active' }, { key: 'IA', value: 'In Active' }];
+        this.listMaster['status'] = [{ key: 'IA', value: 'In Active' }, { key: 'AT', value: 'Active' }];
         this.route.params.subscribe(params => this.getDetailPaymentTerm(params.id));
     }
     payloadData() {
