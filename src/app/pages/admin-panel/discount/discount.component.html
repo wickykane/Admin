@@ -8,71 +8,48 @@
         <fieldset class="custom-border">
             <legend class="custom-border">GENERAL INFORMATION</legend>
             <form [formGroup]="generalForm" class="form-search full-width form-horizontal">
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="form-group row">
-                            <label for="code_id" class="col-sm-4 col-form-label p-0 pl-3">
-                                <span>Code</span>
-                            </label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" name="code_id" formControlName="code_id">
+                <div class="row pl-3 pr-3">
+                    <div class="col-md-2">
+                        <label for="code_id" class="control-label mb-2">Code</label>
+                        <input type="text" class="form-control" name="code_id" formControlName="code_id">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="description" class="control-label mb-2">Description</label>
+                        <input type="text" class="form-control" name="description" formControlName="description">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="start_dt" class="control-label mb-2">Start Date</label>
+                        <div class="input-group">
+                            <input class="form-control" placeholder="yyyy-mm-dd" name="start_dt" formControlName="start_dt" ngbDatepicker #d="ngbDatepicker">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="form-group row ">
-                            <label for="description" class="col-sm-4 col-form-label p-0 pl-3">
-                                <span>Description</span>
-                            </label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" name="description" formControlName="description">
-                            </div>
+                    <div class="col-md-2">
+                        <label for="status" class="control-label mb-2">Status</label>
+                        <div class="">
+                            <select formControlName="status" class="form-control">
+                                <option *ngFor="let stt of listStatus" [ngValue]="stt.id">{{stt.name}}</option>
+                            </select>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="form-group row">
-                            <label for="start_dt" class="col-sm-4 col-form-label p-0 pl-3">Start Date</label>
-                            <div class="col-sm-8 input-group">
-                                <input class="form-control" placeholder="yyyy-mm-dd" name="start_dt" formControlName="start_dt" ngbDatepicker #d="ngbDatepicker">
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
-                                        <i class="fa fa-calendar" aria-hidden="true"></i>
-                                    </button>
-                                </div>
-                            </div>
+                    <div class="col-md-2">
+                        <div>
+                            <label for="crt_by" class="control-label mb-2">Create By</label>
+                        </div>
+                        <div>
+                            <span>Khiet Pham</span>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="form-group row ">
-                            <label for="status" class="col-sm-4 col-form-label p-0 pl-3">
-                                <span>Status</span>
-                            </label>
-                            <div class="col-sm-8">
-                                <select formControlName="status" class="form-control">
-                                    <option *ngFor="let stt of list['status']" [ngValue]="stt.id">{{stt.name}}</option>
-
-                                </select>
-                            </div>
+                    <div class="col-md-2">
+                        <div>
+                            <label for="crt_dt" class="control-label mb-2">Create Date</label>
                         </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group row ">
-                            <div class="col-sm-4 p-0 pl-3">
-                                <span>Create By</span>
-                            </div>
-                            <div class="col-sm-8 p-0 pl-3">
-                                <span>Khiet Pham</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group row ">
-                            <div class="col-sm-4 p-0 pl-3">
-                                <span>Create Date</span>
-                            </div>
-                            <div class="col-sm-8 p-0 pl-3">
-                                <span>MM-DD-YYYY</span>
-                            </div>
+                        <div>
+                            <span>MM-DD-YYYY</span>
                         </div>
                     </div>
                 </div>

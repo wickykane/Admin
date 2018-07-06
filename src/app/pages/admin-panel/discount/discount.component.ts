@@ -17,18 +17,9 @@ import { DiscountService } from './discount.service';
 export class DiscountComponent implements OnInit {
     generalForm: FormGroup;
     public flagCategory = true;
+    public listStatus = [];
     public list = {
-        items: [],
-        status: [
-            {
-                id: 1,
-                name: 'Active'
-            },
-            {
-                id: 0,
-                name: 'Inactive'
-            }
-        ]
+        items: []
     };
     public user: any;
 
@@ -46,6 +37,16 @@ export class DiscountComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.listStatus = [
+            {
+                id: 1,
+                name: 'Active'
+            },
+            {
+                id: 0,
+                name: 'Inactive'
+            }
+        ];
         this.getList();
         this.user = JSON.parse(localStorage.getItem('currentUser'));
     }
