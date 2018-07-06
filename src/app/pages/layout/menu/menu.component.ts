@@ -261,6 +261,23 @@ export class MenuComponent implements OnInit {
                 ]
             },
             {
+                flag: 'financial',
+                link: '/',
+                main_name: 'Financial',
+                icon: '',
+                sub: true,
+                child: [
+                    {
+                        link: '/financial/invoice',
+                        name: 'AR Invoice'
+                    },
+                    {
+                        link: '/financial/payment',
+                        name: 'Payment'
+                    }
+                ]
+            },
+            {
                 flag: 'rma',
                 link: '/rma',
                 main_name: 'Return Order List',
