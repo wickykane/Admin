@@ -5,6 +5,7 @@ import { BankComponent } from './bank/bank.component';
 import { BranchComponent } from './bank/branch/branch.component';
 import { DiscountCategoryComponent } from './discount-category/discount-category.component';
 import { DiscountCategoryCreateComponent } from './discount-category/discount-category.create.component';
+import { DiscountComponent } from './discount/discount.component';
 import { InsuranceBranchComponent } from './insurance-company/branch/branch.component';
 import { InsuranceComponent } from './insurance-company/insurance.component';
 import { PayTermCreateComponent } from './payterm/payterm-create.component';
@@ -21,29 +22,34 @@ import { WarehouseComponent } from './warehouse/warehouse.component';
 import { WorkFlowComponent } from './work-flow/work-flow.component';
 import { WorkFlowEditComponent } from './work-flow/work-flow.edit.component';
 
-
-
 const routes: Routes = [
     {
-        path: '', component: AdminPanelComponent
+        path: '',
+        component: AdminPanelComponent
     },
     {
-        path: 'unit-measure', component: UnitMeasureComponent
+        path: 'unit-measure',
+        component: UnitMeasureComponent
     },
     {
-        path: 'shipment-method', component: ShipmentMethodComponent
+        path: 'shipment-method',
+        component: ShipmentMethodComponent
     },
     {
-        path: 'user', component: UserComponent
+        path: 'user',
+        component: UserComponent
     },
     {
-        path: 'user/create', component: UserCreateComponent
+        path: 'user/create',
+        component: UserCreateComponent
     },
     {
-        path: 'work-flow', component: WorkFlowComponent
+        path: 'work-flow',
+        component: WorkFlowComponent
     },
     {
-        path: 'work-flow/edit', component: WorkFlowEditComponent
+        path: 'work-flow/edit',
+        component: WorkFlowEditComponent
     },
     {
         path: 'bank',
@@ -54,40 +60,51 @@ const routes: Routes = [
     },
     {
         path: 'carrier',
-        loadChildren: './carrier/carrier.module#CarrierModule',
+        loadChildren: './carrier/carrier.module#CarrierModule'
     },
     {
-        path: 'payment-term', component: PaymentTermComponent
+        path: 'payment-term',
+        component: PaymentTermComponent
     },
     {
-        path: 'payment-term/create', component: PayTermCreateComponent
+        path: 'payment-term/create',
+        component: PayTermCreateComponent
     },
     {
-        path: 'payment-term/edit/:id', component: PayTermCreateComponent
+        path: 'payment-term/edit/:id',
+        component: PayTermCreateComponent
     },
     {
-        path: 'warehouse', component: WarehouseComponent
+        path: 'warehouse',
+        component: WarehouseComponent
     },
     {
-        path: 'warehouse/create', component: WarehouseCreateComponent
+        path: 'warehouse/create',
+        component: WarehouseCreateComponent
     },
     {
-        path: 'warehouse/edit/:id', component: WarehouseEditComponent
+        path: 'warehouse/edit/:id',
+        component: WarehouseEditComponent
     },
     {
-        path: 'return-reason', component: ReturnReasonComponent
+        path: 'return-reason',
+        component: ReturnReasonComponent
     },
     {
-        path: 'return-reason/create', component: ReturnReasonCreateComponent
+        path: 'return-reason/create',
+        component: ReturnReasonCreateComponent
     },
     {
-        path: 'return-reason/edit/:id', component: ReturnReasonCreateComponent
+        path: 'return-reason/edit/:id',
+        component: ReturnReasonCreateComponent
     },
     {
-        path: 'discount-category', component: DiscountCategoryComponent
+        path: 'discount-category',
+        component: DiscountCategoryComponent
     },
     {
-        path: 'discount-category/create', component: DiscountCategoryCreateComponent
+        path: 'discount-category/create',
+        component: DiscountCategoryCreateComponent
     },
     {
         path: 'insurance',
@@ -96,13 +113,14 @@ const routes: Routes = [
             { path: '', component: InsuranceComponent }
         ]
     },
-
-
+    {
+        path: 'discount',
+        component: DiscountComponent
+    }
 ];
 
 @NgModule({
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule]
 })
-export class AdminPanelRoutingModule {
-}
+export class AdminPanelRoutingModule {}
