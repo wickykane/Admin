@@ -35,9 +35,8 @@ export class PaymentTermComponent implements OnInit {
     private modalService: NgbModal,
     private toastr: ToastrService) {
     this.searchForm = fb.group({
-      'code': [null],
-      'name': [null],
-      'swift': [null],
+      'cd': [null],
+      'des': [null]
     });
 
     // Assign get list function name, override variable here
@@ -65,7 +64,7 @@ export class PaymentTermComponent implements OnInit {
     const params = { ...this.tableService.getParams(), ...this.searchForm.value };
     Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
 
-    this.paymentTerm.getListBank(params).subscribe(res => {
+    this.paymentTerm.getListPaymentTerm(params).subscribe(res => {
       try {
         this.list.items = res.data.rows;
         this.tableService.matchPagingOption(res.data);
@@ -74,9 +73,8 @@ export class PaymentTermComponent implements OnInit {
       }
     });
   }
-
-  createBank(params) {
-    this.paymentTerm.createBank(params).subscribe(res => {
+  deletePayment(id) {
+    this.paymentTerm.deletePayment(id).subscribe(res => {
       try {
         this.toastr.success(res.data.message);
         this.getList();
@@ -85,36 +83,8 @@ export class PaymentTermComponent implements OnInit {
       }
     });
   }
-
-  updateBank(params) {
-    this.paymentTerm.updateBank(params).subscribe(res => {
-      try {
-        this.toastr.success(res.data.message);
-        this.getList();
-      } catch (e) {
-        console.log(e);
-      }
-    });
-  }
-
-  deleteBank(id) {
-    this.paymentTerm.deleteBank(id).subscribe(res => {
-      try {
-        this.toastr.success(res.data.message);
-        this.getList();
-      } catch (e) {
-        console.log(e);
-      }
-    });
-  }
-  // Modal
-
-  editBank(flag?) {
-
-  }
-
-  addBranch(item) {
-
+  createPaymentTerm() {
+    this.router.navigate(['/admin-panel/payment-term/create']);
   }
 
 }

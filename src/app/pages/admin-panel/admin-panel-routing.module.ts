@@ -5,6 +5,7 @@ import { BankComponent } from './bank/bank.component';
 import { BranchComponent } from './bank/branch/branch.component';
 import { DiscountCategoryComponent } from './discount-category/discount-category.component';
 import { DiscountCategoryCreateComponent } from './discount-category/discount-category.create.component';
+import { PayTermCreateComponent } from './payterm/payterm-create.component';
 import { PaymentTermComponent } from './payterm/payterm.component';
 import { ReturnReasonComponent } from './return-reason/return-reason.component';
 import { ShipmentMethodComponent } from './shipment-method/shipment-method.component';
@@ -57,6 +58,9 @@ const routes: Routes = [
     },
     {
         path: 'payment-term', component: PaymentTermComponent
+    },
+    {
+        path: 'payment-term/create', component: PayTermCreateComponent
     },
     {
         path: 'warehouse', component: WarehouseComponent
