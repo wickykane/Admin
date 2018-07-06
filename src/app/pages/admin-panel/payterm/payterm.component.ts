@@ -86,5 +86,8 @@ export class PaymentTermComponent implements OnInit {
   createPaymentTerm() {
     this.router.navigate(['/admin-panel/payment-term/create']);
   }
+  editPayment(id) {
+    this.router.navigate(['/admin-panel/payment-term/edit', id]);
+  }
 
 }

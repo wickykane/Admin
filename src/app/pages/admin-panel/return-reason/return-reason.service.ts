@@ -2,31 +2,31 @@ import { Injectable } from '@angular/core';
 import { ApiService } from '../../../services/api.service';
 
 @Injectable()
-export class ReturnReaSonService {
+export class ReturnReasonService {
     constructor(private apiService: ApiService) { }
 
-    getListBank(params) {
-        const url = ['buyer/index'].join('/');
+    getListReturnReason(params) {
+        const url = ['payment-term'].join('/');
         return this.apiService.get(url, params);
     }
 
-    getDetailBank(id) {
-        const url = ['bank', id].join('/');
+    getDetailReturnReason(id) {
+        const url = ['payment-term', id].join('/');
         return this.apiService.get(url);
     }
 
-    createBank(params) {
-        const url = ['bank'].join('/');
+    createReturnReason(params) {
+        const url = ['payment-term'].join('/');
         return this.apiService.post(url, params);
     }
 
-    updateBank(params) {
-        const url = ['bank'].join('/');
+    updateReturnReason(id, params) {
+        const url = ['payment-term', id].join('/');
         return this.apiService.put(url, params);
     }
 
-    deleteBank(id) {
-        const url = ['bank', id].join('/');
+    deleteReturnReason(id) {
+        const url = ['payment-term', id].join('/');
         return this.apiService.delete(url);
     }
 }

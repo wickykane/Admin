@@ -26,8 +26,7 @@
 
 
     <div class="block-content list-order-table">
-        <button (click)="createPaymentTerm()" style="margin: 10px 0;" class="btn btn-primary">New Paymet Term</button>
-
+        <button (click)="createPaymentTerm()" style="margin: 10px 0;" class="btn btn-primary">New Paymet Term</button>     
         <div class="table-responsive">
             <table class="table table-striped table-vcenter custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                 <thead class="bg-white">
@@ -50,7 +49,7 @@
                         <td>{{item.crtd_by_name}}</td>
                         <td>{{item.updated_dt}}</td>
                         <td>
-                            <a class="btn btn-default" (click)="editPayment(item)" title="Edit Payment Term">
+                            <a class="btn btn-default" (click)="editPayment(item.id)" title="Edit Payment Term">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                             </a>                           
                             <a class="btn btn-default" (click)="deletePayment(item.id)" title="Delete Payment Term">

@@ -5,11 +5,11 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 import { TableService } from '../../../services/index';
-import { ReturnReaSonService } from './return-reason.service';
+import { ReturnReasonService } from './return-reason.service';
 
 @Component({
   selector: 'app-return-reason',
-  providers: [ReturnReaSonService],
+  providers: [ReturnReasonService],
   templateUrl: 'return-reason.component.html',
   animations: [routerTransition()]
 })
@@ -31,19 +31,19 @@ export class ReturnReasonComponent implements OnInit {
     public tableService: TableService,
     private activeRouter: ActivatedRoute,
     private router: Router,
-    private returnReasonService: ReturnReaSonService,
+    private returnReasonService: ReturnReasonService,
     private modalService: NgbModal,
     private toastr: ToastrService) {
     this.searchForm = fb.group({
-      'code': [null],
-      'name': [null],
-      'swift': [null],
+      'cd': [null],
+      'des': [null]
     });
 
     // Assign get list function name, override variable here
     this.tableService.getListFnName = 'getList';
     this.tableService.context = this;
   }
+
 
   ngOnInit() {
     this.getList();
@@ -65,7 +65,7 @@ export class ReturnReasonComponent implements OnInit {
     const params = { ...this.tableService.getParams(), ...this.searchForm.value };
     Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
 
-    this.returnReasonService.getListBank(params).subscribe(res => {
+    this.returnReasonService.getListReturnReason(params).subscribe(res => {
       try {
         this.list.items = res.data.rows;
         this.tableService.matchPagingOption(res.data);
@@ -74,9 +74,8 @@ export class ReturnReasonComponent implements OnInit {
       }
     });
   }
-
-  createBank(params) {
-    this.returnReasonService.createBank(params).subscribe(res => {
+  deleteReason(id) {
+    this.returnReasonService.deleteReturnReason(id).subscribe(res => {
       try {
         this.toastr.success(res.data.message);
         this.getList();
@@ -85,36 +84,8 @@ export class ReturnReasonComponent implements OnInit {
       }
     });
   }
-
-  updateBank(params) {
-    this.returnReasonService.updateBank(params).subscribe(res => {
-      try {
-        this.toastr.success(res.data.message);
-        this.getList();
-      } catch (e) {
-        console.log(e);
-      }
-    });
-  }
-
-  deleteBank(id) {
-    this.returnReasonService.deleteBank(id).subscribe(res => {
-      try {
-        this.toastr.success(res.data.message);
-        this.getList();
-      } catch (e) {
-        console.log(e);
-      }
-    });
-  }
-  // Modal
-
-  editBank(flag?) {
-
-  }
-
-  addBranch(item) {
-
+  createReturnReason() {
+    this.router.navigate(['/admin-panel/return-reason/create']);
   }
 
 }

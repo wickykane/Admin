@@ -62,6 +62,9 @@ const routes: Routes = [
         path: 'payment-term/create', component: PayTermCreateComponent
     },
     {
+        path: 'payment-term/edit/:id', component: PayTermCreateComponent
+    },
+    {
         path: 'warehouse', component: WarehouseComponent
     },
     {

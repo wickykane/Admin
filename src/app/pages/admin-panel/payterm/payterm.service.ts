@@ -20,8 +20,8 @@ export class PaymentTermService {
         return this.apiService.post(url, params);
     }
 
-    updatePayment(params) {
-        const url = ['payment-term'].join('/');
+    updatePayment(id, params) {
+        const url = ['payment-term', id].join('/');
         return this.apiService.put(url, params);
     }
 

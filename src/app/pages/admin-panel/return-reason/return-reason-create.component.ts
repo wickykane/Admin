@@ -4,13 +4,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
-import { PaymentTermService } from './payterm.service';
+import { ReturnReasonService } from './return-reason.service';
 
 @Component({
-    selector: 'app-payterm-create',
-    templateUrl: './payterm-create.component.html',
-    providers: [PaymentTermService],
-    styleUrls: ['./payterm.component.scss'],
+    selector: 'app-reason-create',
+    templateUrl: './return-reason-create.component.html',
+    providers: [ReturnReasonService],
+    styleUrls: ['./reason.component.scss'],
     animations: [routerTransition()]
 })
 export class PayTermCreateComponent implements OnInit {
@@ -21,10 +21,10 @@ export class PayTermCreateComponent implements OnInit {
         public route: ActivatedRoute,
         public fb: FormBuilder,
         public toastr: ToastrService,
-        private paytermService: PaymentTermService) {
+        private returnReasonService: ReturnReasonService) {
         this.generalForm = fb.group({
             'id': [null],
-            'cd': [{value: null, disabled: true}, Validators.required],
+            'cd': [null, Validators.required],
             'des': [null, Validators.required],
             'day_limit': [null, Validators.required],
             'sts': ['AT', Validators.required]
@@ -44,7 +44,7 @@ export class PayTermCreateComponent implements OnInit {
     }
     createPaymentTerm() {
         const params = this.generalForm.value;
-        this.paytermService.createPayment(params).subscribe(res => {
+        this.returnReasonService.createReturnReason(params).subscribe(res => {
             this.toastr.success(res.message);
             this.router.navigate(['/admin-panel/payment-term']);
         }, err => {
@@ -53,7 +53,7 @@ export class PayTermCreateComponent implements OnInit {
     }
     getDetailPaymentTerm(id) {
         console.log(id);
-        this.paytermService.getDetailPayment(id).subscribe(res => {
+        this.returnReasonService.getDetailReturnReason(id).subscribe(res => {
             this.generalForm.patchValue(res.data);
         }, err => {
             console.log(err.message);
@@ -62,7 +62,7 @@ export class PayTermCreateComponent implements OnInit {
     updatePaymentTerm(id) {
         console.log(id);
         const params = this.generalForm.value;
-        this.paytermService.updatePayment(id, params).subscribe(res => {
+        this.returnReasonService.updateReturnReason(id, params).subscribe(res => {
             this.toastr.success(res.message);
         }, err => {
             this.toastr.error(err.message);
