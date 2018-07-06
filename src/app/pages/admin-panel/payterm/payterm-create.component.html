@@ -7,54 +7,36 @@
         </div>
         <fieldset class="custom-border">
             <legend class="custom-border">GENERAL INFORMATION</legend>
-            <form class="form-search full-width form-horizontal"><div class="row">
-                <div class="col-sm-2 form-group">
-                    <label> Carrier Name
-                        <span class="text-danger">(*)</span>
-                    </label>
-                    <input type="text" name="" class="form-control">
+            <form class="form-search full-width form-horizontal" [formGroup]="generalForm">
+                <div class="row">
+                    <div class="col-sm-2 form-group">
+                        <label> Code
+                            <span class="text-danger">(*)</span>
+                        </label>
+                        <input type="text" name="" class="form-control" formControlName="cd">
+                    </div>
+                    <div class="col-sm-2 form-group">
+                        <label> Description
+                            <span class="text-danger">(*)</span>
+                        </label>
+                        <input type="text" name="" class="form-control" formControlName="des">
+                    </div>
+                    <div class="col-sm-2 form-group">
+                        <label> Day Limit</label>
+                        <input type="text" name="" class="form-control" formControlName="day_limit">
+                    </div>
+                    <div class="col-sm-2 form-group">
+                        <label> Status</label>
+                        <select class="form-control" formControlName="sts" name="status">
+                            <option value="null" selected="false">--Select--</option>
+                            <option *ngFor="let item of listMaster['status']" [ngValue]="item.key">{{item.value}}</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="col-sm-2 form-group">
-                    <label> Transport Method
-                        <span class="text-danger">(*)</span>
-                    </label>
-                    <select class="form-control">
-                        <option [value]="null" disabled>Select</option>
-                    </select>
-                </div>
-                <div class="col-sm-2 form-group">
-                    <label> Contact Person</label>
-                    <input type="text" name="" class="form-control">
-                </div>
-                <div class="col-sm-2 form-group">
-                    <label> Contact Email</label>
-                    <input type="text" name="" class="form-control">
-                </div>
-                <div class="col-sm-2 form-group">
-                    <label> Contact Phone</label>
-                    <input type="text" name="" class="form-control">
-                </div>
-                <div class="col-sm-2 form-group">
-                    <label>Website</label>
-                    <input type="text" name="" class="form-control">
-                </div>
-                <div class="col-sm-2 form-group">
-                    <label>Own Carrier</label>
-                    <input type="checkbox" name="" style="display: block;">
-                </div>
-                <div class="col-sm-2 form-group">
-                    <label>Created On</label>
-                    <input type="text" name="" class="form-control" readonly>
-                </div>
-                <div class="col-sm-2 form-group">
-                    <label>From Weight (lbs) <span class="text-danger">(*)</span></label>
-                    <input type="text" name="" class="form-control">
-                </div>
-                <div class="col-sm-2 form-group">
-                    <label>From Weight (lbs) <span class="text-danger">(*)</span></label>
-                    <input type="text" name="" class="form-control">
-                </div>
-            </div></form>
-        </fieldset>       
+            </form>
+        </fieldset>
+        <div class="col-12">
+            <button class="btn btn-default" (click)="createPaymentTerm()">Save</button>            
+        </div>
     </section>
 </div>

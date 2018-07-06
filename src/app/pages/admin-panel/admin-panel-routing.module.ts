@@ -5,6 +5,8 @@ import { BankComponent } from './bank/bank.component';
 import { BranchComponent } from './bank/branch/branch.component';
 import { DiscountCategoryComponent } from './discount-category/discount-category.component';
 import { DiscountCategoryCreateComponent } from './discount-category/discount-category.create.component';
+import { InsuranceBranchComponent } from './insurance-company/branch/branch.component';
+import { InsuranceComponent } from './insurance-company/insurance.component';
 import { PayTermCreateComponent } from './payterm/payterm-create.component';
 import { PaymentTermComponent } from './payterm/payterm.component';
 import { ReturnReasonComponent } from './return-reason/return-reason.component';
@@ -54,9 +56,6 @@ const routes: Routes = [
         loadChildren: './carrier/carrier.module#CarrierModule',
     },
     {
-        path: 'bank', component: BankComponent
-    },
-    {
         path: 'payment-term', component: PaymentTermComponent
     },
     {
@@ -79,8 +78,14 @@ const routes: Routes = [
     },
     {
         path: 'discount-category/create', component: DiscountCategoryCreateComponent
-    }
-
+    },
+    {
+        path: 'insurance',
+        children: [
+            { path: ':id/branch', component: InsuranceBranchComponent },
+            { path: '', component: InsuranceComponent }
+        ]
+    },
 
 
 ];
