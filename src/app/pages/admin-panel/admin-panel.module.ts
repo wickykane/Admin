@@ -13,6 +13,7 @@ import { BranchModalComponent } from './bank/modal/branch.modal';
 import { DiscountCategoryComponent } from './discount-category/discount-category.component';
 import { DiscountCategoryCreateComponent } from './discount-category/discount-category.create.component';
 
+import { PayTermCreateComponent } from './payterm/payterm-create.component';
 
 import { InsuranceBranchComponent } from './insurance-company/branch/branch.component';
 import { InsuranceComponent } from './insurance-company/insurance.component';
@@ -24,6 +25,7 @@ import { WarehouseCreateComponent } from './warehouse/warehouse-create.component
 import { WarehouseEditComponent } from './warehouse/warehouse-edit.component';
 import { WarehouseComponent } from './warehouse/warehouse.component';
 
+import { ReturnReasonCreateComponent } from './return-reason/return-reason-create.component';
 import { ReturnReasonComponent } from './return-reason/return-reason.component';
 import { ShipmentMethodComponent } from './shipment-method/shipment-method.component';
 import { UnitMeasureComponent } from './unit-measure/unit-measure.component';
@@ -67,10 +69,12 @@ import { AdminPanelService } from './admin-panel.service';
         ReturnReasonComponent,
         DiscountCategoryComponent,
         DiscountCategoryCreateComponent,
+        PayTermCreateComponent,
         InsuranceComponent,
         InsuranceBranchComponent,
         InsuranceBranchModalComponent,
         InsuranceModalComponent,
+        ReturnReasonCreateComponent
     ],
     entryComponents: [BankModalComponent, BranchModalComponent, InsuranceBranchModalComponent, InsuranceModalComponent],
     providers: [TableService, CommonService, AdminPanelService]
