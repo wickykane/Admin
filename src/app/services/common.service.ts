@@ -23,4 +23,14 @@ export class CommonService {
         const url = 'buyer/detail/' + id;
         return this.apiService.get(url);
     }
+
+    getOrderByCustomer(id) {
+        const url = 'buyer/detail/' + id;
+        return this.apiService.get(url);
+    }
+
+    getListCarrier() {
+        const url = 'country/admin/get-all';
+        return this.apiService.get(url);
+    }
 }

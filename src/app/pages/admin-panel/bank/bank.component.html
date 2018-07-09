@@ -45,6 +45,11 @@
                         <th>Action</th>
                     </tr>
                 </thead>
+                <tbody *ngIf="list.items.length == 0">
+                    <tr>
+                        <td class="text-center" colspan="100%">No data.</td>
+                    </tr>
+                </tbody>
                 <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                     <tr>
                         <td>{{item.code}}</td>
