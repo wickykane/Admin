@@ -18,15 +18,11 @@ import { DiscountService } from './discount.service';
 export class DiscountComponent implements OnInit {
     generalForm: FormGroup;
     public flagCategory = true;
-    public listStatus = [];
-    public listType = [];
-    public listApplyType = [];
-    public listSubCategory = [];
+    public listSearchStatus = [];
+
     public list = {
-        categories: []
+        items: []
     };
-    public user: any;
-    public crt_dt: any;
 
     constructor(
         public fb: FormBuilder,
@@ -36,120 +32,91 @@ export class DiscountComponent implements OnInit {
         private toastr: ToastrService
     ) {
         this.generalForm = fb.group({
-            code_id: [{ value: null, disabled: true }],
-            description: [null],
-            start_dt: [null, Validators.required],
+            name: [null, Validators.required],
+            dt_from: [null, Validators.required],
+            dt_to: [null, Validators.required],
             status: [1, Validators.required]
         });
     }
 
     ngOnInit() {
-        this.user = JSON.parse(localStorage.getItem('currentUser'));
-        this.crt_dt = moment().format('YYYY-MM-DD');
-        this.listStatus = [
+        this.listSearchStatus = [
             {
                 id: 1,
                 name: 'Active'
             },
             {
-                id: 0,
+                id: 2,
                 name: 'Inactive'
-            }
-        ];
-        this.listType = [
-            {
-                id: 'fe',
-                name: 'Fender'
             },
             {
-                id: 'ho',
-                name: 'Hood'
-            }
-        ];
-        this.listApplyType = [
+                id: 3,
+                name: 'Closed'
+            },
             {
-                id: 'all',
+                id: 4,
                 name: 'All'
-            },
-            {
-                id: 'spe',
-                name: 'Specific'
             }
         ];
-        this.listSubCategory = [
-            {
-                id: 'lr',
-                name: 'Left, Right'
-            },
-            {
-                id: 'fb',
-                name: 'Front, Back'
+        this.getList();
+    }
+
+    getList() {
+        this.discountService.getListDiscounts().subscribe(res => {
+            try {
+                // this.list.items = res.data;
+                this.list.items = [
+                    {
+                        id: 1,
+                        name: 'Discount & Return Rate 3',
+                        start_dt: moment().format('YYYY-MM-DD'),
+                        status: 1,
+                        base_discount_levels: 6,
+                        return_rate_levels: 6,
+                        consol_discount_levels: 5
+                    },
+                    {
+                        id: 2,
+                        name: 'Discount & Return Rate 3',
+                        start_dt: moment().format('YYYY-MM-DD'),
+                        status: 1,
+                        base_discount_levels: 6,
+                        return_rate_levels: 6,
+                        consol_discount_levels: 5
+                    },
+                    {
+                        id: 3,
+                        name: 'Discount & Return Rate 3',
+                        start_dt: moment().format('YYYY-MM-DD'),
+                        status: 1,
+                        base_discount_levels: 6,
+                        return_rate_levels: 6,
+                        consol_discount_levels: 5
+                    },
+                    {
+                        id: 4,
+                        name: 'Discount & Return Rate 3',
+                        start_dt: moment().format('YYYY-MM-DD'),
+                        status: 1,
+                        base_discount_levels: 6,
+                        return_rate_levels: 6,
+                        consol_discount_levels: 5
+                    }
+                ];
+                this.tableService.matchPagingOption(res.data);
+            } catch (e) {
+                console.log(e);
             }
-        ];
-    }
-
-    getListType() {
-        this.discountService.getListType().subscribe(res => {
-            try {
-                this.list['listType'] = res.data;
-            } catch (e) {}
-        });
-    }
-    getListApplyType(item) {
-        const params = {
-            type_id: item.type_id
-        };
-        this.discountService.getListApplyType(params).subscribe(res => {
-            try {
-                this.list['listApplyType'] = res.data;
-            } catch (e) {}
-        });
-    }
-    getListSubCategory(item) {
-        const params = {
-            type_id: item.type_id,
-            sub_category_id: item.sub_category_id
-        };
-        this.discountService.getListSubCategory(params).subscribe(res => {
-            try {
-                this.list['listSubCategory'] = res.data;
-            } catch (e) {}
         });
     }
 
-    addNewCategory() {
-        this.list.categories.push({
-            // category_id: 'fe',
-            value: 0,
-            listType: this.listType,
-            listApplyType: this.listApplyType,
-            listSubCategory: this.listSubCategory
-        });
-        console.log(this.list.categories);
+    reset() {
+        this.generalForm.reset();
+    }
+    cloneItem(item) {
+        this.list.items.push(item);
     }
     removeCategory(index) {
-        this.list.categories.splice(index, 1);
-    }
-    saveDiscount() {
-        const data = {
-            data: JSON.stringify(this.list.categories)
-        };
-        this.discountService.saveDiscount(data).subscribe(
-            res => {
-                console.log(res);
-                try {
-                    setTimeout(() => {
-                        this.router.navigate(['/admin-panel']);
-                    }, 2000);
-                    this.toastr.success(res.message);
-                } catch (e) {
-                    console.log(e);
-                }
-            },
-            err => {
-                console.log(err);
-                this.toastr.error(err.message);
-            }
-        );
+        this.list.items.splice(index, 1);
     }
 }
