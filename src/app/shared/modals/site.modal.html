@@ -5,12 +5,8 @@
         </button>
 </div>
 <div class="modal-body">
-
-
-
     <fieldset class="custom-border">
         <legend class="custom-border">GENERAL INFORMATION</legend>
-
         <form [formGroup]="generalForm" class="form-search full-width form-horizontal">
             <div class="row">
                 <div class="col-md-4">
@@ -34,7 +30,7 @@
                     <div class="form-group row">
                         <label for="code" class="col-sm-5 col-form-label">Site Code<span class="text-danger">(*)</span></label>
                         <div class="col-sm-7">
-                            <input type="text" readonly class="form-control-plaintext" name="code" formControlName="code">
+                            <input type="text" class="form-control" name="code" formControlName="code" >
                         </div>
                     </div>
                 </div>
