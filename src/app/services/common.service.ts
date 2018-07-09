@@ -23,4 +23,12 @@ export class CommonService {
         const url = 'buyer/detail/' + id;
         return this.apiService.get(url);
     }
+    getAllListBank() {
+        const url = 'bank/list?is_all=1';
+        return this.apiService.get(url);
+    }
+    getListBranchByBank(bank_id) {
+        const url = 'bank/' + bank_id + '/branch/list?is_all=1';
+        return this.apiService.get(url);
+    }
 }

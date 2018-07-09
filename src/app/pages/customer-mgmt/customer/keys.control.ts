@@ -1,6 +1,7 @@
-import { Subject } from 'rxjs/Rx';
 import { Injectable, OnDestroy } from '@angular/core';
-import { HotkeysService, Hotkey } from 'angular2-hotkeys';
+import { Hotkey, HotkeysService } from 'angular2-hotkeys';
+// tslint:disable-next-line:import-blacklist
+import { Subject } from 'rxjs/Rx';
 @Injectable()
 export class CustomerKeyService implements OnDestroy {
     public context: any;
