@@ -79,7 +79,7 @@ export class DiscountComponent implements OnInit {
                         id: 2,
                         name: 'Discount & Return Rate 3',
                         start_dt: moment().format('YYYY-MM-DD'),
-                        status: 1,
+                        status: 2,
                         base_discount_levels: 6,
                         return_rate_levels: 6,
                         consol_discount_levels: 5
@@ -88,7 +88,7 @@ export class DiscountComponent implements OnInit {
                         id: 3,
                         name: 'Discount & Return Rate 3',
                         start_dt: moment().format('YYYY-MM-DD'),
-                        status: 1,
+                        status: 3,
                         base_discount_levels: 6,
                         return_rate_levels: 6,
                         consol_discount_levels: 5
@@ -97,7 +97,7 @@ export class DiscountComponent implements OnInit {
                         id: 4,
                         name: 'Discount & Return Rate 3',
                         start_dt: moment().format('YYYY-MM-DD'),
-                        status: 1,
+                        status: 2,
                         base_discount_levels: 6,
                         return_rate_levels: 6,
                         consol_discount_levels: 5
@@ -110,13 +110,17 @@ export class DiscountComponent implements OnInit {
         });
     }
 
+    convertStatus(id) {
+        const stt = this.listSearchStatus.find(item => item.id === id);
+        return stt.name;
+    }
     reset() {
         this.generalForm.reset();
     }
     cloneItem(item) {
         this.list.items.push(item);
     }
-    removeCategory(index) {
+    removeItem(index) {
         this.list.items.splice(index, 1);
     }
 }

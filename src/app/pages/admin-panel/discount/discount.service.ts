@@ -19,5 +19,9 @@ export class DiscountService {
         const url = 'buyer/index';
         return this.API.get(url);
     }
-
+    getDetailDiscount(id) {
+        // const url = 'discount/detail/' + id;
+        const url = 'buyer/index';
+        return this.API.get(url);
+    }
 }

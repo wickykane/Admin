@@ -94,7 +94,7 @@
                                     <td>{{item.id}}</td>
                                     <td>{{item.name}}</td>
                                     <td>{{item.start_dt}}</td>
-                                    <td>{{item.status}}</td>
+                                    <td>{{convertStatus(item.status)}}</td>
                                     <td>{{item.base_discount_levels}}</td>
                                     <td>{{item.return_rate_levels}}</td>
                                     <td>{{item.consol_discount_levels}}</td>
@@ -102,13 +102,13 @@
                                         <button type="button" class="btn btn-primary" [routerLink]="['/admin-panel/discount/detail/', item.id]">
                                             <i class="fa fa-eye" aria-hidden="true"></i>
                                         </button>
-                                        <button type="button" class="btn btn-primary" [routerLink]="['/admin-panel/discount/edit/', item.id]">
+                                        <button *ngIf="item.status === 2" type="button" class="btn btn-primary" [routerLink]="['/admin-panel/discount/edit/', item.id]">
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                         </button>
                                         <button type="button" class="btn btn-primary" (click)="cloneItem(item)">
                                             <i class="fa fa-copy" aria-hidden="true"></i>
                                         </button>
-                                        <button type="button" class="btn btn-primary" (click)="removeItem(i)">
+                                        <button *ngIf="item.status === 2" type="button" class="btn btn-primary" (click)="removeItem(i)">
                                             <i class="fa fa-trash" aria-hidden="true"></i>
                                         </button>
                                     </td>
