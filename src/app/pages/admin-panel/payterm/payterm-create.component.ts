@@ -10,7 +10,7 @@ import { PaymentTermService } from './payterm.service';
 @Component({
     selector: 'app-payterm-create',
     templateUrl: './payterm-create.component.html',
-    providers: [PaymentTermService],
+    providers: [PaymentTermService, PayTermKeyService],
     styleUrls: ['./payterm.component.scss'],
     animations: [routerTransition()]
 })
