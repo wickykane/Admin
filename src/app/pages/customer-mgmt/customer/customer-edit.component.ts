@@ -80,7 +80,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             'email': [null],
             'line_of_credit': [null],
             'credit_sts': 2,
-            'sale_man_id': 1,
+            'sale_man_id': [null],
             'first_name': [null],
             'last_name': [null],
             'username': [null],
@@ -169,7 +169,14 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     }
 
     getListSalePerson() {
-        this.listMaster['salePersons'] = [];
+        this.commonService.getOrderReference().subscribe(res => {
+            try {
+                this.listMaster['salePersons'] = res.data.sale_mans;
+
+            } catch (e) {
+                console.log(e);
+            }
+        });
     }
 
     getListCountryAdmin() {

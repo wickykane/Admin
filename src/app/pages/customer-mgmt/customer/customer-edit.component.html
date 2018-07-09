@@ -87,7 +87,7 @@
                             <div class="col-sm-8">
                                 <select class="form-control" name="sale_man_id" formControlName="sale_man_id">
                                     <option value="null" selected="true">--Select--</option>
-                                    <option *ngFor="let item of listMaster['salePersons']" [ngValue]="item.id">{{item.name}}</option>
+                                    <option *ngFor="let item of listMaster['salePersons']" [ngValue]="item.id">{{item.full_name}}</option>
                                 </select>
                             </div>
                         </div>
@@ -123,7 +123,7 @@
                                 <div class="col-sm-8">
                                     <select class="form-control" name="sale_man_id" formControlName="sale_man_id">
                                         <option value="null" selected="true">--Select--</option>
-                                        <option *ngFor="let item of listMaster['salePersons']" [ngValue]="item.id">{{item.name}}</option>
+                                        <option *ngFor="let item of listMaster['salePersons']" [ngValue]="item.id">{{item.full_name}}</option>
                                     </select>
                                 </div>
                             </div>

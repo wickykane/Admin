@@ -382,6 +382,31 @@ export class SaleOrderCreateComponent implements OnInit {
             }
         }, dismiss => { });
     }
+    addNewItemFromQuote(list, type_get, buyer_id) {
+        const modalRef = this.modalService.open(ItemModalContent, { size: 'lg' });
+        modalRef.result.then(res => {
+            if (res instanceof Array && res.length > 0) {
+
+                const listAdded = [];
+                (this.list.items).forEach( (item) => {
+                    listAdded.push(item.item_id);
+                });
+                res.forEach( (item) => {
+                    if (item.sale_price) { item.sale_price = Number(item.sale_price); }
+                    item['products'] = [];
+                    item.order_quantity = 1;
+                    item.totalItem = item.sale_price;
+                    item.source = 'Manual';
+                });
+
+                this.list.items = this.list.items.concat(res.filter( (item) => {
+                    return listAdded.indexOf(item.item_id) < 0;
+                }));
+
+                this.updateTotal();
+            }
+        }, dismiss => { });
+    }
     //  Show order history
     showViewOrderHistory() {
         if (this.generalForm.value.company_id !== null) {
