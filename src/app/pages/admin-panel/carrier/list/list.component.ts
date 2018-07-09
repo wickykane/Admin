@@ -6,12 +6,13 @@ import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
 import { TableService } from '../../../../services/table.service';
 import { CarrierService } from '../carrier.service';
-
+import {CarrierKeyService} from './keys.control';
 
 @Component({
     selector: 'app-carrier-list',
     templateUrl: './list.component.html',
     styleUrls: ['./list.component.scss'],
+    providers: [CarrierKeyService],
     animations: [routerTransition()]
 })
 export class ListComponent implements OnInit {
@@ -27,17 +28,18 @@ export class ListComponent implements OnInit {
         public toastr: ToastrService,
         private vRef: ViewContainerRef,
         public tableService: TableService,
+        public keyService: CarrierKeyService,
         private cs: CarrierService) {
 
         this.searchForm = fb.group({
             'name': [null],
-            'transport_method': [null],
             'email': [null]
         });
 
         //  Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
+        this.keyService.watchContext.next(this);
     }
 
     ngOnInit() {
@@ -46,16 +48,13 @@ export class ListComponent implements OnInit {
     }
 
     getList() {
-        // const params = {...this.tableService.getParams(), ...this.searchForm.value};
-        // Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
+        const params = {...this.tableService.getParams(), ...this.searchForm.value};
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
-
-        // this.ari.getARInvoicesList(params).subscribe(res => {
-        //     this.list.items = res.data.rows;
-        //     this.tableService.matchPagingOption(res.data);
-        // }, err => {
-        //     this.toastr.error(err.message);
-        // });
+        this.cs.getListCarrier(params).subscribe(res => {
+            this.list.items = res.data.rows;
+            this.tableService.matchPagingOption(res.data);
+        });
     }
 
 }

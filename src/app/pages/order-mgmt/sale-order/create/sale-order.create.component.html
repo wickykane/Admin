@@ -1,6 +1,6 @@
 <div [@routerTransition]>
-    <app-page-header [heading]="'CREATE NEW SALES QUOTATION'" [icon]="'fa-th-list'"></app-page-header>
-    <!-- <app-shortcut [listShortcut]='customerKeyService.getKeys()'></app-shortcut> -->
+    <app-page-header [heading]="'CREATE NEW SALES ORDER'"></app-page-header>
+    <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
     <section class="rma-page block main-container block-order">
         <div class="row">
             <div class="col-md-12 mg-top-15">
@@ -14,24 +14,24 @@
                                         <label for="code" class="control-label" translate>Customer Name</label>
                                         <span class="text-danger">(*)</span>
                                         <div>
-                                            <ng-select #inp style="width: 150px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id"
+                                            <ng-select style="width: 150px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id"
                                                 formControlName="company_id">
                                             </ng-select>
-                                        </div>
+                                        </div>                                      
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     Last Sales Date: {{customer.last_sales_order}}
                                 </div>
-                                <div class="col-md-2" *ngIf="customer.buyer_type">
-                                    <button type="button" (click)="showViewOrderHistory()" class="btn btn-link">View Order History</button>
+                                <div class="col-md-2">
+                                    <a (click)="showViewOrderHistory()" href="javascript:void()">View Order History</a>
                                 </div>
                                 <div class="col-md-2">
                                     Current Debt: {{customer.current_dept |currency}}
                                 </div>
-                                <!-- <div class="col-md-2">
+                                <div class="col-md-2">
                                     Current Credit: {{customer.current_dept |currency}}
-                                </div> -->
+                                </div>
                             </form>
                         </div>
                         <div class="col-md-12 fix-padding">
@@ -81,22 +81,22 @@
                                     </div>
                                     <div class="form-group row" *ngIf="customer.buyer_type =='CP'">
                                         <label class='col-4'>Contact Phone</label>
-                                        <div class='col-8'>
+                                        <div class='col-8 '>
                                             {{addr_select.contact.phone}}
                                         </div>
                                     </div>
                                     <div class="form-group row" *ngIf="customer.buyer_type =='CP'">
                                         <label class='col-4'>Contact Email</label>
-                                        <div class='col-8'>
+                                        <div class='col-8 '>
                                             {{addr_select.contact.email}}
                                         </div>
                                     </div>
-                                    <!-- <div class="form-group row">
+                                    <div class="form-group row">
                                         <label class='col-4'>Item In Quote</label>
                                         <div class='col-8 text-success'>
                                             <a (click)="showSaleQuoteList()"><strong>{{customer.items_in_quote}}</strong></a>
                                         </div>
-                                    </div> -->
+                                    </div>
                                     <div class="form-group row">
                                         <label class='col-4'>Discount Level</label>
                                         <div class='col-8 text-success'>
@@ -107,20 +107,30 @@
                                 <div class="col-md-3 customer-infomation ">
                                     <form [formGroup]="generalForm">
                                         <div class="form-group row">
-                                            <label class='col-5'>Sales Quote No
+                                            <label class='col-4'>Customer PO
                                                 <span class="text-danger">(*)</span>
                                             </label>
-                                            <div class='col-7 text-primary'>
-                                                <input type="text" class="form-control" formControlName="sale_quote_no" readonly>
+                                            <div class='col-8 text-primary'>
+                                                <input type="text" class="form-control" formControlName="customer_po">
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class='col-5'>Quote Date
+                                            <label class='col-4'>Order Type
                                                 <span class="text-danger">(*)</span>
                                             </label>
-                                            <div class='col-7 text-danger'>
+                                            <div class='col-8 text-primary'>
+                                                <select required class="form-control" id="order_type" name="order-type" formControlName="type">
+                                                    <option *ngFor="let item of listMaster['pay_type']" [ngValue]="item.code">{{item.value}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-4'>Order Date
+                                                <span class="text-danger">(*)</span>
+                                            </label>
+                                            <div class='col-8 text-danger'>
                                                 <div clickOutside (clickOutside)="d.close()" class="input-group">
-                                                    <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="quote_date" ngbDatepicker #d="ngbDatepicker">
+                                                    <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="order_date" ngbDatepicker #d="ngbDatepicker">
                                                     <div class="input-group-append">
                                                         <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
                                                             <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -130,42 +140,19 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class='col-5'>Expiry Date
-                                                <span class="text-danger">(*)</span>
-                                            </label>
-                                            <div class='col-7 text-danger'>
-                                                <div clickOutside (clickOutside)="d1.close()" class="input-group">
-                                                    <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="expiry_date" ngbDatepicker #d1="ngbDatepicker">
-                                                    <div class="input-group-append">
-                                                        <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
-                                                            <i class="fa fa-calendar" aria-hidden="true"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
+                                            <label class='col-4'>Priority</label>
+                                            <div class='col-8 text-danger'>
+                                                <select required class="form-control" id="priority" name="priority" formControlName="prio_level">
+                                                    <option *ngFor="let item of listMaster['priority']" [ngValue]="item.code">{{item.value}}</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class='col-5'>Expiry Delivery Date
-                                            </label>
-                                            <div class='col-7 text-danger'>
-                                                <div clickOutside (clickOutside)="d2.close()" class="input-group">
-                                                    <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="delivery_date" ngbDatepicker #d2="ngbDatepicker">
-                                                    <div class="input-group-append">
-                                                        <button class="btn btn-outline-secondary" (click)="d2.toggle()" type="button">
-                                                            <i class="fa fa-calendar" aria-hidden="true"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class='col-5'>Quote Status</label>
-                                            <div class='col-7 text-success'>
+                                            <label class='col-4'>Order Status</label>
+                                            <div class='col-8 text-success'>
                                                 <strong>1-NEW</strong>
                                             </div>
                                         </div>
-
-
                                     </form>
                                 </div>
                                 <div class="col-md-3 customer-infomation bolder">
@@ -186,22 +173,22 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <!-- <div class="form-group row">
+                                        <div class="form-group row">
                                             <label class='col-4'>Multi Ship Addr</label>
                                             <div class='col-8 text-danger'>
-                                                <select [attr.disabled]="true"  class="form-control" id="is_multi_shp_addr" name="is_multi_shp_addr" formControlName="is_multi_shp_addr">
+                                                <select class="form-control" id="is_multi_shp_addr" name="is_multi_shp_addr" formControlName="is_multi_shp_addr">
                                                     <option *ngFor="let item of listMaster['multi_ship']" [ngValue]="item.id">{{item.label}}</option>
                                                 </select>
                                             </div>
-                                        </div> -->
-                                        <!-- <div class="form-group row">
+                                        </div>
+                                        <div class="form-group row">
                                             <label class='col-4'>Warehouse</label>
                                             <div class='col-8'>
                                                 <select  class="form-control" id="warehouse_id" name="warehouse_id" formControlName="warehouse_id">
                                                     <option *ngFor="let item of listMaster['warehouses']" [ngValue]="item.id">{{item.name}}</option>
                                                 </select>
                                             </div>
-                                        </div> -->
+                                        </div>
                                     </form>
                                 </div>
                             </div>
@@ -210,7 +197,144 @@
                 </div>
             </div>
         </div>
-
+        <div class="row">
+            <div class="col-md-6 mg-top-15">
+                <div class="block-border full-block">
+                    <h5 class="title-border" translate>BILLING INFORMATION</h5>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="">
+                                <div class="col-12">
+                                    <div class="form-group row">
+                                        <label class="control-label col-3" for="billing_to" translate> Bill To
+                                            <span class="text-danger">(*)</span>
+                                        </label>
+                                        <div class="col-5">
+                                            <form [formGroup]="generalForm">
+                                                <select required class="form-control" id="billing_to" name="search_type" formControlName="billing_id" (change)="selectAddress('billing')">
+                                                    <option *ngFor="let item of customer.billing" [ngValue]="item.address_id">{{item.label}}</option>
+                                                </select>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group row">
+                                        <label class="control-label col-3" translate>Address Line</label>
+                                        <div class="col-8">
+                                            {{addr_select.billing.address_line}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group row">
+                                        <label class="control-label col-3" translate>Country</label>
+                                        <div class="col-8">
+                                            {{addr_select.billing.country_name}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group row">
+                                        <label class=" control-label col-3" translate>City</label>
+                                        <div class="col-8">
+                                            {{addr_select.billing.city_name}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group row">
+                                        <label class=" control-label col-3" translate>State/Province</label>
+                                        <div class="col-8">
+                                            {{addr_select.billing.state_name}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group row">
+                                        <label class="control-label col-3" translate>Zip Code</label>
+                                        <div class="col-8">
+                                            {{addr_select.billing.zip_code}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mg-top-15">
+                <div class="block-border full-block">
+                    <h5 class="title-border" translate>SHIPPING INFORMATION</h5>
+                    <div class="row">
+                        <div class="col-md-12"  *ngIf="generalForm.value.is_multi_shp_addr == 1" >
+                            <div class="col-12">
+                                <p>This order ships to {{customer.shipping.length}} shipping addresses.</p>
+                                <a> View detail below</a>
+                            </div>
+                        </div>                       
+                        <div class="col-md-12"  *ngIf="generalForm.value.is_multi_shp_addr == 0">
+                            <div class="">
+                                <div class="col-12">
+                                    <div class="form-group row">
+                                        <label class=" control-label col-3" for="shiping_to" translate> Ship To
+                                            <span class="text-danger">(*)</span>
+                                        </label>
+                                        <div class="col-5">
+                                            <form [formGroup]="generalForm">
+                                                <select required class="form-control" id="shiping_to" name="search_type" formControlName="shipping_id" (change)="selectAddress('shipping')">
+                                                    <option *ngFor="let item of customer.shipping" [ngValue]="item.address_id">{{item.label}}</option>
+                                                </select>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group row">
+                                        <label class=" control-label col-3" translate>Address Line</label>
+                                        <div class="col-8">
+                                            {{addr_select.shipping.address_line}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group row">
+                                        <label class="control-label col-3" translate>Country</label>
+                                        <div class="col-8">
+                                            {{addr_select.shipping.country_name}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group row">
+                                        <label class=" control-label col-3" translate>City</label>
+                                        <div class="col-8">
+                                            {{addr_select.shipping.city_name}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group row">
+                                        <label class=" control-label col-3" translate>State/Province</label>
+                                        <div class="col-8">
+                                            {{addr_select.shipping.state_name}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group row">
+                                        <label class=" control-label col-3" translate>Zip Code</label>
+                                        <div class="col-8">
+                                            {{addr_select.shipping.zip_code}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-12 mg-top-15">
                 <div class="block-border">
@@ -221,14 +345,16 @@
                                 (onEnter)="selectData($event)">
                                 <thead>
                                     <tr>
-                                        <th translate>Action</th>
-                                        <th translate>Product Code</th>
+                                        <th style="width:100px" translate>Action</th>
+                                        <th style="width:150px" translate>Product Code</th>
                                         <th translate>Description</th>
-                                        <th class="text-nowrap" translate>Order QTY</th>
-                                        <!-- <th class="text-nowrap text-center" translate *ngIf="generalForm.value.is_multi_shp_addr == 1">Ship To</th> -->
-                                        <th class="text-center" translate>Unit Price</th>
-                                        <th translate>Discount %</th>
-                                        <th translate>Amount</th>
+                                        <th translate style="width:150px">Avail QTY</th>
+                                        <th class="text-nowrap" style="width:100px" translate>Order QTY</th>
+                                        <th class="text-nowrap text-center" translate *ngIf="generalForm.value.is_multi_shp_addr == 1">Ship To</th>
+                                        <th class="text-center" style="width:100px" translate>Unit Price</th>
+                                        <th style="width:100px" translate>Disc %</th>
+                                        <th translate style="width:100px">Amount</th>
+                                        <th translate style="width:100px">Source</th>
                                     </tr>
                                 </thead>
                                 <tr *ngIf="list['items'].length === 0">
@@ -240,25 +366,26 @@
                                             <button class="btn btn-danger btn-xs" type="button" (click)="deleteAction(item.item_id)">
                                                 <i class="fa fa-trash"></i>
                                             </button>
-                                            <!-- <button *ngIf="generalForm.value.is_multi_shp_addr == 1" class="btn btn-primary btn-xs" type="button" (click)="cloneRecord(item, list.items)"
+                                            <button *ngIf="generalForm.value.is_multi_shp_addr == 1" class="btn btn-primary btn-xs" type="button" (click)="cloneRecord(item, list.items)"
                                                 [disabled]="!checkCloneRecord(item, list.items[$index])" title="Add new shipping address">
                                                 <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                                            </button> -->
+                                            </button>
                                         </td>
                                         <td>{{item.sku}}</td>
                                         <td>{{item.des}}</td>
+                                        <td></td>
                                         <td>
                                             <input style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.order_quantity"
                                                 (change)="updateTotal();changeFromSource(item)" (keypress)="_keyPress($event)">
                                         </td>
 
-                                        <!-- <td *ngIf="generalForm.value.is_multi_shp_addr == 1">
+                                        <td *ngIf="generalForm.value.is_multi_shp_addr == 1">
                                             <select class="form-control" name="search_type" [(ngModel)]="item.shipping_address_id">
                                                 <option value="undefined" selected="true" hidden="true" translate>Please select</option>
                                                 <option *ngFor="let item of customer.shipping" [ngValue]="item.address_id">{{((item.address_line+', '+item.city_name+', '+item.state_name+', '+item.zip_code+',
                                                     '+item.country_name) | uppercase)}}</option>
                                             </select>
-                                        </td> -->
+                                        </td>
                                         <td>
                                             <div>
                                                 <span>$</span>
@@ -273,9 +400,14 @@
                                         <td class="text-center">
                                             <span>{{item.totalItem | currency}}</span>
                                         </td>
-
+                                        <td class="text-center">
+                                            <span>
+                                                {{item.source}}
+                                            </span>
+                                        </td>
                                     </tr>
                                     <tr *ngFor="let product of item.products">
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -368,8 +500,8 @@
         </div>
         <div class="row">
             <div class="col-md-12 mg-top-15 text-center">
-                <!-- <button type="button" class="btn btn-outline-info" (click)="createOrder('quote')" translate>Save As Quote</button>
-                <button type="button" class="btn btn-outline-warning" (click)="createOrder('draft')" translate>Save As Draft</button> -->
+                <button type="button" class="btn btn-outline-info" (click)="createOrder('quote')" translate>Save As Quote</button>
+                <button type="button" class="btn btn-outline-warning" (click)="createOrder('draft')" translate>Save As Draft</button>
                 <button type="button" class="btn btn-outline-primary" (click)="createOrder('create')" translate>Save & Submit</button>
                 <button type="button" class="btn btn-default" [routerLink]="['/order-management/sale-order']" translate>Cancel</button>
             </div>

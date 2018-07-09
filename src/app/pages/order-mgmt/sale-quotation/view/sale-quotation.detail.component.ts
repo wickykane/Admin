@@ -3,18 +3,19 @@ import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { PrintHtmlService } from './../../../services/print.service';
+import { PrintHtmlService } from '../../../../services/print.service';
 
 import { ToastrService } from 'ngx-toastr';
-import { routerTransition } from '../../../router.animations';
-import { OrderService } from '../order-mgmt.service';
+import { routerTransition } from '../../../../router.animations';
+import { OrderService } from '../../order-mgmt.service';
+import {SaleQuoteDetailKeyService} from './keys.detail.control';
 
 @Component({
     selector: 'app-detail-quotation',
     templateUrl: './sale-quotation.detail.component.html',
-    styleUrls: ['./sale-quotation.component.scss'],
+    styleUrls: ['../sale-quotation.component.scss'],
     animations: [routerTransition()],
-    providers: [PrintHtmlService]
+    providers: [PrintHtmlService, SaleQuoteDetailKeyService]
 })
 
 export class SaleQuotationDetailComponent implements OnInit {
@@ -38,7 +39,9 @@ export class SaleQuotationDetailComponent implements OnInit {
         public toastr: ToastrService,
         private router: Router,
         private orderService: OrderService,
+        public keyService: SaleQuoteDetailKeyService,
         private route: ActivatedRoute) {
+        this.keyService.watchContext.next(this);
 
     }
 

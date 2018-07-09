@@ -8,7 +8,6 @@ import { CustomerSegmentCreateComponent } from './customer-segment/customer-segm
 import { CustomerSegmentEditComponent } from './customer-segment/customer-segment.edit.component';
 
 import { CustomerCreateComponent } from './customer/customer-create.component';
-import { CustomerDetailComponent } from './customer/customer-detail.component';
 import { CustomerViewComponent } from './customer/customer-view.component';
 import { CustomerComponent } from './customer/customer.component';
 import { CustomerAccountTabComponent } from './customer/information-tab/account-tab.component';
@@ -43,7 +42,7 @@ import { ItemModalModule } from '../../shared/modals/item.module';
   ],
   declarations: [CustomerSegmentComponent, CustomerSegmentCreateComponent,
     CustomerSegmentEditComponent,
-    CustomerComponent, CustomerCreateComponent, CustomerDetailComponent, CustomerViewComponent,
+    CustomerComponent, CustomerCreateComponent, CustomerViewComponent,
     CustomerAddressTabComponent, CustomerContactTabComponent, CustomerEditComponent, CustomerSiteTabComponent, CustomerQuoteTabComponent,
     CustomerSaleOrderTabComponent, CustomerInvoiceTabComponent, CustomerShipmentTabComponent, CustomerPaymentTabComponent,
     CustomerRMATabComponent, CustomerAccountTabComponent],

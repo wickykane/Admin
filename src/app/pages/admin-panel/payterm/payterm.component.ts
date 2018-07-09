@@ -5,11 +5,12 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 import { TableService } from '../../../services/index';
+import { PayTermKeyService } from './keys.control';
 import { PaymentTermService } from './payterm.service';
 
 @Component({
   selector: 'app-payterm',
-  providers: [PaymentTermService],
+  providers: [PaymentTermService, PayTermKeyService],
   templateUrl: 'payterm.component.html',
   animations: [routerTransition()]
 })
@@ -32,6 +33,7 @@ export class PaymentTermComponent implements OnInit {
     private activeRouter: ActivatedRoute,
     private router: Router,
     private paymentTerm: PaymentTermService,
+    public keyService: PayTermKeyService,
     private modalService: NgbModal,
     private toastr: ToastrService) {
     this.searchForm = fb.group({
@@ -42,6 +44,7 @@ export class PaymentTermComponent implements OnInit {
     // Assign get list function name, override variable here
     this.tableService.getListFnName = 'getList';
     this.tableService.context = this;
+    this.keyService.watchContext.next(this);
   }
 
   ngOnInit() {

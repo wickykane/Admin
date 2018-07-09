@@ -89,7 +89,8 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             'primary': [null],
             'credit_used': [null],
             'credit_limit': [null],
-            'credit_balance': [null]
+            'credit_balance': [null],
+            'is_parent': [null]
 
         });
 
@@ -120,6 +121,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                 this.generalForm.patchValue(this.detail);
                 this.generalForm.patchValue({
                     'buyer_type': this.detail['company_type'],
+                    'is_parent': this.detail['is_parent']
                 });
                 this.imageSelected = res.data.img;
                 this.site = res.data['sites'];
@@ -320,7 +322,6 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     addNewSite() {
         const modalRef = this.modalService.open(SiteModalComponent, { size: 'lg' });
         modalRef.result.then(res => {
-            console.log(res);
             if (!this.helper.isEmptyObject(res)) {
                 const state = this.address[0].listState.filter(x =>
                     res.primary[0].state_id === x.id
@@ -342,7 +343,6 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                 };
 
                 this.site.push(objSite);
-                console.log(res);
                 this.company_child.push(res);
                 this.countCode++;
             }
@@ -363,14 +363,6 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         this.contact.forEach(obj => {
             obj['pwd_cfrm'] = obj.pwd;
         });
-        //  this.bank_account.forEach(obj => {
-        //      delete obj['listBank'];
-        //      delete obj['listBranch'];
-        //  });
-        //  this.address.forEach(obj => {
-        //      delete obj['listCountry'];
-        //      delete obj['listState'];
-        //  });
         if (this.generalForm.valid) {
             const params = {...this.generalForm.value};
             params['user'] = [];
@@ -411,20 +403,13 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                 delete params.email;
             } else {
                 params.pwd_cfrm = params.pwd;
-                //  delete params.full_name;
-
             }
 
             const data = {
                 data: JSON.stringify(params)
             };
-
-            console.log(params);
-            console.log(data);
-
             this.customerService.updateCustomer(this.idSupplier, data).subscribe(
                 res => {
-                    console.log(res);
                     try {
                         setTimeout(() => {
                             this.router.navigate(['/customer']);

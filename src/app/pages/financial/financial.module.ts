@@ -13,6 +13,7 @@ import { TableService } from '../../services/index';
 import { CommonShareModule, Helper,  PageHeaderModule } from '../../shared/index';
 import { FinancialRoutingModule } from './financial-routing.module';
 import { FinancialService } from './financial.service';
+import { PaymentComponent } from './payment/payment.component';
 
 @NgModule({
     imports: [
@@ -29,6 +30,7 @@ import { FinancialService } from './financial.service';
         InvoiceComponent,
         InvoiceCreateComponent,
         InvoiceDetailComponent,
+        PaymentComponent
 
     ],
     providers: [FinancialService, TableService, DatePipe, Helper],

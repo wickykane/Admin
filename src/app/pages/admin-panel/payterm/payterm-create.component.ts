@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
+import { PayTermKeyService } from './keys.control';
 import { PaymentTermService } from './payterm.service';
 
 @Component({
@@ -21,6 +22,7 @@ export class PayTermCreateComponent implements OnInit {
         public route: ActivatedRoute,
         public fb: FormBuilder,
         public toastr: ToastrService,
+        public keyService: PayTermKeyService,
         private paytermService: PaymentTermService) {
         this.generalForm = fb.group({
             'id': [null],
@@ -29,10 +31,11 @@ export class PayTermCreateComponent implements OnInit {
             'day_limit': [null, Validators.required],
             'sts': ['AT', Validators.required]
         });
+        this.keyService.watchContext.next(this);
     }
 
     ngOnInit() {
-        this.listMaster['status'] = [{ key: 'IA', value: 'In Active' }, { key: 'IA', value: 'In Active' }];
+        this.listMaster['status'] = [{ key: 'IA', value: 'In Active' }, { key: 'AT', value: 'Active' }];
         this.route.params.subscribe(params => this.getDetailPaymentTerm(params.id));
     }
     payloadData() {

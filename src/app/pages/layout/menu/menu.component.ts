@@ -106,35 +106,35 @@ export class MenuComponent implements OnInit {
                     }
                 ]
             },
-            {
-                flag: 'purchase',
-                link: '/',
-                main_name: 'Purchasing Management',
-                icon: '',
-                sub: true,
-                child: [
-                    {
-                        link: '/purchase-management/purchase-quotation',
-                        name: 'Purchase Quotation'
-                    },
-                    {
-                        link: '/purchase-management/purchase-order',
-                        name: 'Purchase Orders'
-                    },
-                    {
-                        link: '/purchase-management/inbound-delivery',
-                        name: 'Inbound Delivery Orders'
-                    },
-                    {
-                        link: '/purchase-management/warehouse-receipt',
-                        name: 'Warehouse Receipt'
-                    },
-                    {
-                        link: '/purchase-management/supplier',
-                        name: 'Suppliers'
-                    }
-                ]
-            },
+            // {
+            //     flag: 'purchase',
+            //     link: '/',
+            //     main_name: 'Purchasing Management',
+            //     icon: '',
+            //     sub: true,
+            //     child: [
+            //         {
+            //             link: '/purchase-management/purchase-quotation',
+            //             name: 'Purchase Quotation'
+            //         },
+            //         {
+            //             link: '/purchase-management/purchase-order',
+            //             name: 'Purchase Orders'
+            //         },
+            //         {
+            //             link: '/purchase-management/inbound-delivery',
+            //             name: 'Inbound Delivery Orders'
+            //         },
+            //         {
+            //             link: '/purchase-management/warehouse-receipt',
+            //             name: 'Warehouse Receipt'
+            //         },
+            //         {
+            //             link: '/purchase-management/supplier',
+            //             name: 'Suppliers'
+            //         }
+            //     ]
+            // },
             {
                 flag: 'order',
                 link: '/',
@@ -142,10 +142,10 @@ export class MenuComponent implements OnInit {
                 icon: '',
                 sub: true,
                 child: [
-                    {
-                        link: '/order-management/buyer-rfq',
-                        name: 'Buyer RFQ'
-                    },
+                    // {
+                    //     link: '/order-management/buyer-rfq',
+                    //     name: 'Buyer RFQ'
+                    // },
                     {
                         link: '/order-management/sale-quotation',
                         name: 'Sales Quotation'
@@ -154,33 +154,33 @@ export class MenuComponent implements OnInit {
                         link: '/order-management/sale-order',
                         name: 'Sales Orders'
                     },
-                    {
-                        link: '/order-management/delivery-order',
-                        name: 'Delivery Orders'
-                    },
-                    {
-                        link: '/order-management/sales-price',
-                        name: 'Sales Price List'
-                    }
+                    // {
+                    //     link: '/order-management/delivery-order',
+                    //     name: 'Delivery Orders'
+                    // },
+                    // {
+                    //     link: '/order-management/sales-price',
+                    //     name: 'Sales Price List'
+                    // }
                 ]
             },
-            {
-                flag: 'promotion',
-                link: '/',
-                main_name: 'Promotion Management',
-                icon: '',
-                sub: true,
-                child: [
-                    {
-                        link: '/promotion/budget',
-                        name: 'Promotion Budget'
-                    },
-                    {
-                        link: '/promotion/campaign',
-                        name: 'Promotion Campaign'
-                    }
-                ]
-            },
+            // {
+            //     flag: 'promotion',
+            //     link: '/',
+            //     main_name: 'Promotion Management',
+            //     icon: '',
+            //     sub: true,
+            //     child: [
+            //         {
+            //             link: '/promotion/budget',
+            //             name: 'Promotion Budget'
+            //         },
+            //         {
+            //             link: '/promotion/campaign',
+            //             name: 'Promotion Campaign'
+            //         }
+            //     ]
+            // },
             {
                 flag: 'customer',
                 link: '/',
@@ -190,7 +190,7 @@ export class MenuComponent implements OnInit {
                 child: [
                     {
                         link: '/customer',
-                        name: 'Buyers'
+                        name: 'Customer'
                     },
                     {
                         link: '/customer/customer-segment',
@@ -213,53 +213,53 @@ export class MenuComponent implements OnInit {
                         link: '/product-management/product-definition',
                         name: 'Product Definition'
                     },
-                    {
-                        link: '/product-management/bundle',
-                        name: 'Bundle Management'
-                    },
-                    {
-                        link: '/product-management/condition-product',
-                        name: 'Conditional Product Groups'
-                    },
-                    {
-                        link: '/product-management/e-catalog',
-                        name: 'E-Catalog'
-                    }
+                    // {
+                    //     link: '/product-management/bundle',
+                    //     name: 'Bundle Management'
+                    // },
+                    // {
+                    //     link: '/product-management/condition-product',
+                    //     name: 'Conditional Product Groups'
+                    // },
+                    // {
+                    //     link: '/product-management/e-catalog',
+                    //     name: 'E-Catalog'
+                    // }
                 ]
             },
-            {
-                flag: 'delivery',
-                link: '/',
-                main_name: 'Delivery Management',
-                icon: '',
-                sub: true,
-                child: [
-                    {
-                        link: '/fulfillment/schedule',
-                        name: 'Dashboard'
-                    },
-                    {
-                        link: '/fulfillment/delivery-order',
-                        name: 'Delivery Order'
-                    },
-                    {
-                        link: '/fulfillment/route',
-                        name: 'Routes'
-                    },
-                    {
-                        link: '/fulfillment/truck',
-                        name: 'Trucks   '
-                    },
-                    {
-                        link: '/fulfillment/truck-type',
-                        name: 'Truck Types'
-                    },
-                    {
-                        link: '/fulfillment/driver',
-                        name: 'Drivers'
-                    }
-                ]
-            },
+            // {
+            //     flag: 'delivery',
+            //     link: '/',
+            //     main_name: 'Delivery Management',
+            //     icon: '',
+            //     sub: true,
+            //     child: [
+            //         {
+            //             link: '/fulfillment/schedule',
+            //             name: 'Dashboard'
+            //         },
+            //         {
+            //             link: '/fulfillment/delivery-order',
+            //             name: 'Delivery Order'
+            //         },
+            //         {
+            //             link: '/fulfillment/route',
+            //             name: 'Routes'
+            //         },
+            //         {
+            //             link: '/fulfillment/truck',
+            //             name: 'Trucks   '
+            //         },
+            //         {
+            //             link: '/fulfillment/truck-type',
+            //             name: 'Truck Types'
+            //         },
+            //         {
+            //             link: '/fulfillment/driver',
+            //             name: 'Drivers'
+            //         }
+            //     ]
+            // },
             {
                 flag: 'financial',
                 link: '/',
@@ -307,12 +307,16 @@ export class MenuComponent implements OnInit {
 
     addExpandClass(element: any, e) {
         const el = this.elRef.nativeElement.querySelectorAll('.open');
+        el.forEach(item => {
+            item.classList.remove('open');
+        });
 
-        for (let i = 0; i < el.length; i++) {
-            el[i].classList.remove('open');
-        }
+        // for (const i of el) {
+        //     console.log(el.classList);
+        //     el.classList.remove('open');
+        // }
 
-        console.log(el);
+        // console.log(el);
 
         // for (const [key, value] of el) {
         //     console.log(key);

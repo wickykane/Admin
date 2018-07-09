@@ -4,12 +4,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
+import { ReturnReasonKeyService} from './keys.control';
 import { ReturnReasonService } from './return-reason.service';
 
 @Component({
     selector: 'app-reason-create',
     templateUrl: './return-reason-create.component.html',
-    providers: [ReturnReasonService],
+    providers: [ReturnReasonService, ReturnReasonKeyService],
     styleUrls: ['./reason.component.scss'],
     animations: [routerTransition()]
 })
@@ -21,18 +22,20 @@ export class ReturnReasonCreateComponent implements OnInit {
         public route: ActivatedRoute,
         public fb: FormBuilder,
         public toastr: ToastrService,
+        public keyService: ReturnReasonKeyService,
         private returnReasonService: ReturnReasonService) {
         this.generalForm = fb.group({
             'id': [null],
             'cd': [null, Validators.required],
             'des': [null, Validators.required],
-            'day_limit': [null, Validators.required],
+            'exclude_rr_calc': [null, Validators.required],
             'sts': ['AT', Validators.required]
         });
+        this.keyService.watchContext.next(this);
     }
 
     ngOnInit() {
-        this.listMaster['status'] = [{ key: 'IA', value: 'In Active' }, { key: 'IA', value: 'In Active' }];
+        this.listMaster['status'] = [{ key: 'IA', value: 'In Active' }, { key: 'AT', value: 'Active' }];
         this.route.params.subscribe(params => this.getDetailReturnReason(params.id));
     }
     payloadData() {
