@@ -118,7 +118,7 @@ export class CustomerService {
     }
     updateCustomer(id, data) {
         const url = 'buyer/update/' + id;
-        return this.API.post(url, data);
+        return this.API.put(url, data);
     }
     getListCountryAdmin() {
         const url = 'country/admin/get-all';
