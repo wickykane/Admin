@@ -10,6 +10,10 @@ export class DiscountService {
         console.log(data);
         return this.API.postForm(url, data);
     }
+    saveEditDiscount(data) {
+        const url = 'discount/edit';
+        return this.API.postForm(url, data);
+    }
 
     getListType() {
         const url = 'discount/list-type/';

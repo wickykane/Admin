@@ -9,13 +9,13 @@ import { TableService } from '../../../services/index';
 import { DiscountService } from './discount.service';
 
 @Component({
-    selector: 'app-discount-edit',
-    templateUrl: './discount-edit.component.html',
+    selector: 'app-discount-clone',
+    templateUrl: './discount-clone.component.html',
     styleUrls: ['./discount.component.scss'],
     providers: [DiscountService],
     animations: [routerTransition()]
 })
-export class DiscountEditComponent implements OnInit {
+export class DiscountCloneComponent implements OnInit {
     generalForm: FormGroup;
 
     public discount: any = [];
@@ -36,7 +36,6 @@ export class DiscountEditComponent implements OnInit {
         private toastr: ToastrService
     ) {
         this.generalForm = fb.group({
-            id: [null, Validators.required],
             name: [null, Validators.required],
             from_dt: [null, Validators.required],
             from_time: [{ hour: 13, minute: 30, second: 0 }],
@@ -226,7 +225,7 @@ export class DiscountEditComponent implements OnInit {
         this.list['consolidated_discount_rate'].push(item);
     }
 
-    saveEdit() {
+    saveAll() {
         if (this.generalForm.valid) {
             const params = {
                 ...this.generalForm.value,
@@ -243,7 +242,7 @@ export class DiscountEditComponent implements OnInit {
                 data: JSON.stringify(params)
             };
 
-            this.discountService.saveEditDiscount(data).subscribe(
+            this.discountService.saveDiscount(data).subscribe(
                 res => {
                     console.log(res);
                     try {

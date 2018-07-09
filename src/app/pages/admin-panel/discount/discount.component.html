@@ -39,8 +39,8 @@
                     <div class="col-md-2">
                         <label for="status" class="control-label mb-2">Status</label>
                         <div class="">
-                            <select formControlName="status" class="form-control">
-                                <option *ngFor="let stt of listSearchStatus" [ngValue]="stt.id">{{stt.name}}</option>
+                            <select formControlName="status" class="form-control" *ngIf="list.status">
+                                <option *ngFor="let stt of list.status" [ngValue]="stt.id">{{stt.name}}</option>
                             </select>
                         </div>
                     </div>
@@ -105,7 +105,7 @@
                                         <button *ngIf="item.status === 2" type="button" class="btn btn-primary" [routerLink]="['/admin-panel/discount/edit/', item.id]">
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                         </button>
-                                        <button type="button" class="btn btn-primary" (click)="cloneItem(item)">
+                                        <button type="button" class="btn btn-primary" [routerLink]="['/admin-panel/discount/clone/', item.id]">
                                             <i class="fa fa-copy" aria-hidden="true"></i>
                                         </button>
                                         <button *ngIf="item.status === 2" type="button" class="btn btn-primary" (click)="removeItem(i)">

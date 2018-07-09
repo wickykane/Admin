@@ -5,6 +5,7 @@ import { BankComponent } from './bank/bank.component';
 import { BranchComponent } from './bank/branch/branch.component';
 import { DiscountCategoryComponent } from './discount-category/discount-category.component';
 import { DiscountCategoryCreateComponent } from './discount-category/discount-category.create.component';
+import { DiscountCloneComponent } from './discount/discount-clone.component';
 import { DiscountCreateComponent } from './discount/discount-create.component';
 import { DiscountDetailComponent } from './discount/discount-detail.component';
 import { DiscountEditComponent } from './discount/discount-edit.component';
@@ -131,6 +132,10 @@ const routes: Routes = [
     {
         path: 'discount/edit/:id',
         component: DiscountEditComponent
+    },
+    {
+        path: 'discount/clone/:id',
+        component: DiscountCloneComponent
     }
 ];
 

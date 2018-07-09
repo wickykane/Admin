@@ -6,11 +6,7 @@
             <form [formGroup]="generalForm" class="form-search full-width form-horizontal">
 
                 <div class="row pl-3 pr-3">
-                    <div class="col-md-2">
-                        <label for="id" class="control-label mb-2">ID</label>
-                        <span class="text-danger">( * )</span>
-                        <input type="text" class="form-control" name="id" formControlName="id">
-                    </div>
+                   
                     <div class="col-md-2">
                         <label for="name" class="control-label mb-2">Name</label>
                         <span class="text-danger">( * )</span>
@@ -245,7 +241,7 @@
             </div>
         </div>
         <div class="block-content block-content-full text-center mt-3 mb-3 ">
-            <button type="button" [disabled]="generalForm.invalid" class="btn btn-primary " (click)="saveEdit()">Save</button>
+            <button type="button" [disabled]="generalForm.invalid" class="btn btn-primary " (click)="saveAll()">Save</button>
             <button type="button" class="btn btn-default " [routerLink]="[ '/admin-panel/discount'] ">Back</button>
         </div>
     </section>
