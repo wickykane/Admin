@@ -40,7 +40,7 @@ export class SaleOrderDetailComponent implements OnInit {
     public toastr: ToastrService,
     private router: Router,
     private orderService: OrderService,
-    private keyService: SaleOrderViewKeyService,
+    public keyService: SaleOrderViewKeyService,
     private route: ActivatedRoute) {
     //  Init Key
     this.keyService.watchContext.next(this);

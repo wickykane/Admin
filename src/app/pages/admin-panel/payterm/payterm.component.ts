@@ -33,7 +33,7 @@ export class PaymentTermComponent implements OnInit {
     private activeRouter: ActivatedRoute,
     private router: Router,
     private paymentTerm: PaymentTermService,
-    private keyService: PayTermKeyService,
+    public keyService: PayTermKeyService,
     private modalService: NgbModal,
     private toastr: ToastrService) {
     this.searchForm = fb.group({

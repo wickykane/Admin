@@ -33,7 +33,7 @@ export class ReturnReasonComponent implements OnInit {
     private activeRouter: ActivatedRoute,
     private router: Router,
     private returnReasonService: ReturnReasonService,
-    private keyService: ReturnReasonKeyService,
+    public keyService: ReturnReasonKeyService,
     private modalService: NgbModal,
     private toastr: ToastrService) {
     this.searchForm = fb.group({

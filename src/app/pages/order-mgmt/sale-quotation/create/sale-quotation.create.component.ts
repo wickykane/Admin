@@ -93,7 +93,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         private route: ActivatedRoute,
         private modalService: NgbModal,
         private orderService: OrderService,
-        private keyService: SaleQuoteCreateKeyService,
+        public keyService: SaleQuoteCreateKeyService,
         private dt: DatePipe) {
         this.generalForm = fb.group({
             'company_id': [null, Validators.required],

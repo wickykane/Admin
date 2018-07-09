@@ -33,7 +33,7 @@ export class CreateComponent implements OnInit {
         private activeRouter: ActivatedRoute,
         private cos: CommonService,
         private cs: CarrierService,
-        private keyService: CarrierCreateKeyService
+        public keyService: CarrierCreateKeyService
     ) {
         this.generalForm = fb.group({
             'name': [null, Validators.required],

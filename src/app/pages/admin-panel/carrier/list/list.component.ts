@@ -28,7 +28,7 @@ export class ListComponent implements OnInit {
         public toastr: ToastrService,
         private vRef: ViewContainerRef,
         public tableService: TableService,
-        private keyService: CarrierKeyService,
+        public keyService: CarrierKeyService,
         private cs: CarrierService) {
 
         this.searchForm = fb.group({

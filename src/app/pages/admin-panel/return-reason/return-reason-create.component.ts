@@ -22,7 +22,7 @@ export class ReturnReasonCreateComponent implements OnInit {
         public route: ActivatedRoute,
         public fb: FormBuilder,
         public toastr: ToastrService,
-        private keyService: ReturnReasonKeyService,
+        public keyService: ReturnReasonKeyService,
         private returnReasonService: ReturnReasonService) {
         this.generalForm = fb.group({
             'id': [null],

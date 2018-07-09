@@ -106,7 +106,7 @@ export class SaleOrderCreateComponent implements OnInit {
         private route: ActivatedRoute,
         private modalService: NgbModal,
         private orderService: OrderService,
-        private keyService: SaleOrderCreateKeyService,
+        public keyService: SaleOrderCreateKeyService,
         private dt: DatePipe ) {
         this.generalForm = fb.group({
             'company_id': [null, Validators.required],

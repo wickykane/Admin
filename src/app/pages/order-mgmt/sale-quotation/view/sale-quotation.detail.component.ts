@@ -39,7 +39,7 @@ export class SaleQuotationDetailComponent implements OnInit {
         public toastr: ToastrService,
         private router: Router,
         private orderService: OrderService,
-        private keyService: SaleQuoteDetailKeyService,
+        public keyService: SaleQuoteDetailKeyService,
         private route: ActivatedRoute) {
         this.keyService.watchContext.next(this);
 

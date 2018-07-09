@@ -22,7 +22,7 @@ export class PayTermCreateComponent implements OnInit {
         public route: ActivatedRoute,
         public fb: FormBuilder,
         public toastr: ToastrService,
-        private keyService: PayTermKeyService,
+        public keyService: PayTermKeyService,
         private paytermService: PaymentTermService) {
         this.generalForm = fb.group({
             'id': [null],
