@@ -15,6 +15,7 @@ import { DiscountCategoryCreateComponent } from './discount-category/discount-ca
 
 import { DiscountCreateComponent } from './discount/discount-create.component';
 import { DiscountDetailComponent } from './discount/discount-detail.component';
+import { DiscountEditComponent } from './discount/discount-edit.component';
 import { DiscountComponent } from './discount/discount.component';
 import { PayTermCreateComponent } from './payterm/payterm-create.component';
 
@@ -80,7 +81,8 @@ import { AdminPanelService } from './admin-panel.service';
         ReturnReasonCreateComponent,
         DiscountComponent,
         DiscountDetailComponent,
-        DiscountCreateComponent
+        DiscountCreateComponent,
+        DiscountEditComponent
     ],
     entryComponents: [
         BankModalComponent,

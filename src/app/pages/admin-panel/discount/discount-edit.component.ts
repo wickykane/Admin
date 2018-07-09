@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 
 import { ToastrService } from 'ngx-toastr';
@@ -10,13 +9,13 @@ import { TableService } from '../../../services/index';
 import { DiscountService } from './discount.service';
 
 @Component({
-    selector: 'app-discount-create',
-    templateUrl: './discount-create.component.html',
+    selector: 'app-discount-edit',
+    templateUrl: './discount-edit.component.html',
     styleUrls: ['./discount.component.scss'],
     providers: [DiscountService],
     animations: [routerTransition()]
 })
-export class DiscountCreateComponent implements OnInit {
+export class DiscountEditComponent implements OnInit {
     generalForm: FormGroup;
 
     public discount: any = [];
@@ -37,12 +36,14 @@ export class DiscountCreateComponent implements OnInit {
         private toastr: ToastrService
     ) {
         this.generalForm = fb.group({
+            id: [null, Validators.required],
             name: [null, Validators.required],
             from_dt: [null, Validators.required],
             from_time: [{ hour: 13, minute: 30, second: 0 }],
-            duration: [1, Validators.required],
+            duration: [null, Validators.required],
             durationType: [1, Validators.required],
             approve: [1, Validators.required],
+            status: [null, Validators.required]
         });
     }
 
@@ -65,10 +66,6 @@ export class DiscountCreateComponent implements OnInit {
             {
                 id: 3,
                 name: 'Closed'
-            },
-            {
-                id: 4,
-                name: 'All'
             }
         ];
         this.list['durationType'] = [
@@ -119,17 +116,71 @@ export class DiscountCreateComponent implements OnInit {
     getDetailDiscount(id) {
         this.discountService.getDetailDiscount(id).subscribe(res => {
             try {
+                // this.generalForm.patchValue(res.data);
+
                 this.discount = {
                     id: 4,
                     name: 'Discount & Return Rate 3',
-                    start_dt: moment().format('YYYY-MM-DD'),
-                    start_time: moment().format('h:mm a'),
-                    status: 2
+                    from_dt: moment().format('YYYY-MM-DD'),
+                    from_time: moment().format('h:mm a'),
+                    status: 2,
+                    duration: 1,
+                    durationType: 1,
+                    approve: 1
                 };
 
-                this.list['base_discount'] = [];
-                this.list['return_rate'] = [];
-                this.list['consolidated_discount_rate'] = [];
+                this.generalForm.patchValue(this.discount);
+
+                this.list['base_discount'] = [
+                    {
+                        base_discount_levels: 1,
+                        discount: 20,
+                        min_gross_purchase: 0
+                    },
+                    {
+                        base_discount_levels: 2,
+                        discount: 25,
+                        min_gross_purchase: 20000
+                    },
+                    {
+                        base_discount_levels: 3,
+                        discount: 30,
+                        min_gross_purchase: 30000
+                    }
+                ];
+
+                this.list['return_rate'] = [
+                    {
+                        return_rate_level: 1,
+                        discount_adjustment: '+ 5.00',
+                        from_return_rate: 1,
+                        to_return_rate: 5
+                    },
+                    {
+                        return_rate_level: 2,
+                        discount_adjustment: '+ 2.50',
+                        from_return_rate: 5,
+                        to_return_rate: 10
+                    }
+                ];
+
+                this.list['consolidated_discount_rate'] = [
+                    {
+                        discount_level: 1,
+                        discount_adjustment: '+ 0.00',
+                        min_gross_purchase: 0
+                    },
+                    {
+                        discount_level: 2,
+                        discount_adjustment: '+ 2.50',
+                        min_gross_purchase: 50000
+                    },
+                    {
+                        discount_level: 3,
+                        discount_adjustment: '+ 5.00',
+                        min_gross_purchase: 100000
+                    }
+                ];
             } catch (e) {}
         });
     }
