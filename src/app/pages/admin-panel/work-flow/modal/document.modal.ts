@@ -1,11 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 
 @Component({
-  selector: 'promotion-modal-content',
+  selector: 'app-promotion-modal-content',
   templateUrl: './document.modal.html'
 })
+// tslint:disable-next-line:component-class-suffix
 export class DocumentModalContent implements OnInit {
   // Resolve Data
 

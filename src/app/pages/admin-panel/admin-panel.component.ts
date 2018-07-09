@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AdminPanelService } from './admin-panel.service';
 import { routerTransition } from '../../router.animations';
+import { AdminPanelService } from './admin-panel.service';
 
 @Component({
-    selector: 'admin-panel',
+    selector: 'app-dmin-panel',
     providers: [AdminPanelService],
     templateUrl: 'admin-panel.component.html',
     styleUrls: ['admin-panel.component.scss'],
@@ -13,12 +13,12 @@ import { routerTransition } from '../../router.animations';
 
 export class AdminPanelComponent implements OnInit {
     constructor(private activeRouter: ActivatedRoute,
-        private router: Router,       
-        private AdminPanelService: AdminPanelService) {}   
+        private router: Router,
+        ) {}
 
     ngOnInit(): void {
-     
+
     }
 
-  
+
 }

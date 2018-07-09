@@ -5,7 +5,12 @@
             <h5>GENERAL</h5>
             <ul>
                 <li><a href="">Company Details</a></li>
-                <li><a href="">Warehouses Details</a></li>
+                <li><a [routerLink]="['/admin-panel/warehouse']">Warehouses Details</a></li>
+                <li><a [routerLink]="['/admin-panel/carrier']">Carrier</a></li>
+                <li><a [routerLink]="['/admin-panel/bank']">Banks</a></li>
+                <li><a [routerLink]="['/admin-panel/payment-term']">Payment Term</a></li>
+                <li><a [routerLink]="['/admin-panel/return-reason']">Return Reason</a></li>
+                <li><a [routerLink]="['/admin-panel/discount']">Discount By Product Category </a></li>
             </ul>
         </div>
         <div class="col-md-2">
@@ -53,9 +58,11 @@
         <div class="col-md-2">
             <h5>DATA DEFINITION</h5>
             <ul>
-                <li><a routerLink ='unit-measure'>Unit of Measure</a></li>
+                <li><a routerLink='unit-measure'>Unit of Measure</a></li>
                 <li><a routerLink='shipment-method'>Shipment Methods</a></li>
                 <li><a href="">Currency</a></li>
+                <li><a routerLink="bank">Bank & Branch</a></li>
+                <li><a routerLink="insurance">Insurance Copmany</a></li>
             </ul>
         </div>
         <div class="col-md-2">

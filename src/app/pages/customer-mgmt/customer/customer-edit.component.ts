@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CommonService } from '../../../services/common.service';
 import { CustomerService } from '../customer.service';
 
 //  modal
@@ -67,6 +68,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         public route: ActivatedRoute,
         private modalService: NgbModal,
         private hotkeysService: HotkeysService,
+        private commonService: CommonService,
         public helper: Helper) {
         this.generalForm = fb.group({
             'buyer_type': [null, Validators.required],
@@ -87,7 +89,8 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             'primary': [null],
             'credit_used': [null],
             'credit_limit': [null],
-            'credit_balance': [null]
+            'credit_balance': [null],
+            'is_parent': [null]
 
         });
 
@@ -118,6 +121,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                 this.generalForm.patchValue(this.detail);
                 this.generalForm.patchValue({
                     'buyer_type': this.detail['company_type'],
+                    'is_parent': this.detail['is_parent']
                 });
                 this.imageSelected = res.data.img;
                 this.site = res.data['sites'];
@@ -169,7 +173,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     }
 
     getListCountryAdmin() {
-        this.customerService.getListCountryAdmin().subscribe(res => {
+        this.commonService.getListCountry().subscribe(res => {
             try {
                 this.listCountry = res.data;
             } catch (e) {
@@ -230,7 +234,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         const params = {
             country: item.country_code
         };
-        this.customerService.getStateByCountry(params).subscribe(res => {
+        this.commonService.getStateByCountry(params).subscribe(res => {
             try {
                 item.listState = res.data;
             } catch (e) {
@@ -318,7 +322,6 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     addNewSite() {
         const modalRef = this.modalService.open(SiteModalComponent, { size: 'lg' });
         modalRef.result.then(res => {
-            console.log(res);
             if (!this.helper.isEmptyObject(res)) {
                 const state = this.address[0].listState.filter(x =>
                     res.primary[0].state_id === x.id
@@ -340,7 +343,6 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                 };
 
                 this.site.push(objSite);
-                console.log(res);
                 this.company_child.push(res);
                 this.countCode++;
             }
@@ -361,14 +363,6 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         this.contact.forEach(obj => {
             obj['pwd_cfrm'] = obj.pwd;
         });
-        //  this.bank_account.forEach(obj => {
-        //      delete obj['listBank'];
-        //      delete obj['listBranch'];
-        //  });
-        //  this.address.forEach(obj => {
-        //      delete obj['listCountry'];
-        //      delete obj['listState'];
-        //  });
         if (this.generalForm.valid) {
             const params = {...this.generalForm.value};
             params['user'] = [];
@@ -409,20 +403,13 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                 delete params.email;
             } else {
                 params.pwd_cfrm = params.pwd;
-                //  delete params.full_name;
-
             }
 
             const data = {
                 data: JSON.stringify(params)
             };
-
-            console.log(params);
-            console.log(data);
-
             this.customerService.updateCustomer(this.idSupplier, data).subscribe(
                 res => {
-                    console.log(res);
                     try {
                         setTimeout(() => {
                             this.router.navigate(['/customer']);
