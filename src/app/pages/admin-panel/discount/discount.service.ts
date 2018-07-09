@@ -14,12 +14,14 @@ export class DiscountService {
         const url = 'discount/list-type/';
         return this.API.get(url);
     }
-    getListApplyType(data) {
-        const url = 'discount/list-apply-type';
-        return this.API.get(url, data);
+    getListDiscounts() {
+        // const url = 'discount/list-all';
+        const url = 'buyer/index';
+        return this.API.get(url);
     }
-    getListSubCategory(data) {
-        const url = 'discount/list-sub-category';
-        return this.API.get(url, data);
+    getDetailDiscount(id) {
+        // const url = 'discount/detail/' + id;
+        const url = 'buyer/index';
+        return this.API.get(url);
     }
 }
