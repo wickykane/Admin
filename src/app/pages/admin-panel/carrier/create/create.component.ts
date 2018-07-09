@@ -51,7 +51,7 @@ export class CreateComponent implements OnInit {
         const addrConfig = {
             'id': [null],
             'email': [null],
-            'tax_number': [null],
+            'fax': [null],
             'phone': [null],
             'address_line': [null, Validators.required],
             'country_code': [null, Validators.required],
@@ -66,21 +66,19 @@ export class CreateComponent implements OnInit {
     }
 
     ngOnInit() {
-        setTimeout(() => {
-            this.getListCountry();
-            this.getListBank();
+        (async () => {
+            await new Promise((calback) => { this.getListCountry(calback); });
+            await new Promise((calback) => { this.getListBank(calback); });
             this.activeRouter.params.subscribe(params => {
                 if (params.id) {
                     this.id = params.id;
                     this.getCarrierById(params.id);
                 }
             });
-        });
+        })();
     }
 
     setData(data) {
-        console.log(data);
-
         this.getStateByCountry(data.primary.country_code, 'primary');
         this.getStateByCountry(data.billing.country_code, 'billing');
 
@@ -88,32 +86,12 @@ export class CreateComponent implements OnInit {
         this.primaryAddress.patchValue(data.primary);
         this.billingAddress.patchValue(data.billing);
         data.banks.forEach(e => {
-            this.setBankData(e);
+            (async () => {
+                await new Promise((calback) => { this.bankChange(e.bank_id, e, calback); });
+                this.branchChange(e.bank_branch_id, e);
+            })();
         });
         this.listBankAccount = data.banks;
-    }
-
-    setBankData(e) {
-        if (!this.listMaster['bank']) {
-            setTimeout(() => {
-                this.setBankData(e);
-            }, 500);
-            return;
-        }
-
-        this.bankChange(e.bank_id, e, true);
-        this.setBranchData(e);
-    }
-
-    setBranchData(e) {
-        if (!e.list_branch) {
-            setTimeout(() => {
-                this.setBranchData(e);
-            }, 500);
-            return;
-        }
-
-        this.branchChange(e.bank_branch_id, e);
     }
 
     getCarrierById(id) {
@@ -128,25 +106,28 @@ export class CreateComponent implements OnInit {
         });
     }
 
-    getListCountry() {
+    getListCountry(calback) {
         this.cos.getListCountry().subscribe(res => {
             this.listMaster['countries'] = res.data;
+            calback();
         });
     }
 
-    getListBank() {
+    getListBank(calback) {
         this.cs.getListBank().subscribe(res => {
             this.listMaster['bank'] = res.data.rows;
+            calback();
         });
     }
 
-    bankChange(id, item, is) {
+    bankChange(id, item, calback) {
         item.swift = this.listMaster['bank'].filter(e => e.id === Number(id))[0].swift;
-        item.bank_branch_id = (is) ? item.bank_branch_id : null;
+        item.bank_branch_id = (calback) ? item.bank_branch_id : null;
         item.address = null;
 
         this.cs.getBranchByBank(id).subscribe(res => {
             item.list_branch = res.data.rows;
+            if (calback) { calback(); }
         });
     }
 
@@ -164,7 +145,7 @@ export class CreateComponent implements OnInit {
     }
 
     copyAddress() {
-        this.listMaster['billingState'] = [ ...this.listMaster['primaryState'] ];
+        this.listMaster['billingState'] = [ ...(this.listMaster['primaryState'] || []) ];
         this.billingAddress.patchValue(this.primaryAddress.value);
     }
 
@@ -191,14 +172,14 @@ export class CreateComponent implements OnInit {
                 this.toastr.success(res.message);
                 setTimeout(() => {
                     this.router.navigate(['/admin-panel/carrier']);
-                });
+                }, 500);
             });
         } else {
             this.cs.createCarrier(param).subscribe(res => {
                 this.toastr.success(res.message);
                 setTimeout(() => {
                     this.router.navigate(['/admin-panel/carrier']);
-                });
+                }, 500);
             });
         }
     }
