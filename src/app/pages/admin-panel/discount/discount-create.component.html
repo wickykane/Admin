@@ -1,0 +1,243 @@
+<div [@routerTransition]>
+    <app-page-header [heading]="'CREATE NEW DISCOUNT & RETURN RATE'" [icon]="'fa-th-list'"></app-page-header>
+    <section class="rma-page block">
+        <fieldset class="custom-border">
+            <legend class="custom-border">GENETAL INFORMATION</legend>
+            <form [formGroup]="generalForm" class="form-search full-width form-horizontal">
+
+                <div class="row pl-3 pr-3">
+                    <div class="col-md-2">
+                        <label for="name" class="control-label mb-2">Name</label>
+                        <span class="text-danger">( * )</span>
+
+                        <input type="text" class="form-control" name="name" formControlName="name">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="from_dt" class="control-label mb-2">Start Date</label>
+                        <span class="text-danger">( * )</span>
+
+                        <div class="input-group">
+                            <input class="form-control" placeholder="yyyy-mm-dd" name="from_dt" formControlName="from_dt" ngbDatepicker #d="ngbDatepicker">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="from_time" class="control-label mb-2">Start Time</label>
+                        <span class="text-danger">( * )</span>
+                        <input type="time" class="form-control" name="from_time" formControlName="from_time">
+                    </div>
+                    <div class="col-md-2 ">
+                        <label for="durationType" class="control-label mb-2 ">Duration</label>
+                        <span class="text-danger">( * )</span>
+                        <div class=" input-group">
+                            <input type="number" class="form-control" name="duration" formControlName="duration">
+                            <select formControlName="durationType" class="form-control" *ngIf="list.durationType">
+                                <option *ngFor="let dur of list.durationType " [ngValue]="dur.id ">{{dur.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2 ">
+                        <label for="approve" class="control-label mb-2 ">Auto Approve after</label>
+                        <span class="text-danger">( * )</span>
+
+                        <div class=" input-group">
+                            <select formControlName="approve" class="form-control" *ngIf="list.approveList">
+                                <option *ngFor="let dur of list.approveList " [ngValue]="dur.id ">{{dur.name}}</option>
+                            </select>
+                            <span>days</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2 ">
+                        <label for="" class="control-label mb-2 ">Action</label>
+                        <span class="text-danger">( * )</span>
+
+                        <div class=" input-group">
+                            <button class="btn btn-default" (click)="test()">Test</button>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </fieldset>
+        <div class="row mt-3 " *ngIf="list.base_discount ">
+            <div class="col-sm-12 pt-3 ">
+                <div class="custom-header ">
+                    <h3 class="custom-header ">BASE DISCOUNT RATE TABLE
+                    </h3>
+                    <div class="wrap-keyboard right-toggle-button " (click)="flagBaseDiscount=! flagBaseDiscount ">
+                        <span class="fa " [ngClass]="{ 'fa-minus': flagBaseDiscount, 'fa-plus': !flagBaseDiscount} "></span>
+                    </div>
+                </div>
+                <div [ngClass]="{ 'show': flagBaseDiscount, 'hidden': !flagBaseDiscount} ">
+                    <div class="customer-content-toggle ">
+                        <table class="table table-striped table-vcenter table-hover custom-table ">
+                            <thead>
+                                <tr>
+                                    <th> Base Discount Level </th>
+                                    <th> Discount % </th>
+                                    <th> Min. Gross Purchase </th>
+                                    <th> Action </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of list.base_discount; let i=index ">
+                                    <td>{{i+1}}</td>
+                                    <td>
+                                        <div class=" input-group">
+                                            <input type="number" class="form-control col-md-6" [(ngModel)]="item.discount">
+                                            <span class="pl-3">%</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class=" input-group">
+                                            <span class="pr-3">$</span>
+                                            <input type="number" class="form-control col-md-6" [(ngModel)]="item.min_gross_purchase">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary" (click)="removeBaseDiscount(i)">
+                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary" (click)="addBaseDiscount()">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                            <span>Add New</span>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3 " *ngIf="list.return_rate ">
+            <div class="col-sm-12 pt-3 ">
+                <div class="custom-header ">
+                    <h3 class="custom-header ">RETURN RATE TABLE
+                    </h3>
+                    <div class="wrap-keyboard right-toggle-button " (click)="flagReturnRate=! flagReturnRate ">
+                        <span class="fa " [ngClass]="{ 'fa-minus': flagReturnRate, 'fa-plus': !flagReturnRate} "></span>
+                    </div>
+                </div>
+                <div [ngClass]="{ 'show': flagReturnRate, 'hidden': !flagReturnRate} ">
+                    <div class="customer-content-toggle ">
+                        <table class="table table-striped table-vcenter table-hover custom-table ">
+                            <thead>
+                                <tr>
+                                    <th> Return Rate Level </th>
+                                    <th> Discount Adjustment </th>
+                                    <th> From Return Rate </th>
+                                    <th> To Return Rate </th>
+                                    <th> Action </th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of list.return_rate; let i = index ">
+                                    <td>{{i+1}}</td>
+                                    <td>
+                                        <div class=" input-group">
+                                            <select [(ngModel)]="item.discount_adjustment_type" class="form-control col-md-2" *ngIf="list.discountAdjustmentType">
+                                                <option *ngFor="let type of list.discountAdjustmentType " [ngValue]="type.id ">{{type.name}}</option>
+                                            </select>
+                                            <input type="text" class="form-control col-md-3" [(ngModel)]="item.discount_adjustment">
+                                            <span class="pl-3">%</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class=" input-group">
+                                            <input type="text" class="form-control col-md-6" [(ngModel)]="item.from_return_rate">
+                                            <span class="pl-3">%</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class=" input-group">
+                                            <input type="text" class="form-control col-md-6" [(ngModel)]="item.to_return_rate">
+                                            <span class="pl-3">%</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary" (click)="removeReturnRate(i)">
+                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary" (click)="addReturnRate()">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                            <span>Add New</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3 " *ngIf="list.consolidated_discount_rate ">
+            <div class="col-sm-12 pt-3 ">
+                <div class="custom-header ">
+                    <h3 class="custom-header ">CONSOLIDATED DISCOUNT RATE TABLE
+                    </h3>
+                    <div class="wrap-keyboard right-toggle-button " (click)="flagConsolidatedDiscount=! flagConsolidatedDiscount ">
+                        <span class="fa " [ngClass]="{ 'fa-minus': flagConsolidatedDiscount, 'fa-plus': !flagConsolidatedDiscount} "></span>
+                    </div>
+                </div>
+                <div [ngClass]="{ 'show': flagConsolidatedDiscount, 'hidden': !flagConsolidatedDiscount} ">
+                    <div class="customer-content-toggle ">
+                        <table class="table table-striped table-vcenter table-hover custom-table ">
+                            <thead>
+                                <tr>
+                                    <th> Discount Level </th>
+                                    <th> Discount Adjustment </th>
+                                    <th> Min. Gross Purchase </th>
+                                    <th> Action </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of list.consolidated_discount_rate; let i = index ">
+                                    <td>{{i+1}}</td>
+                                    <td>
+                                        <div class=" input-group">
+                                            <span class="pr-3">+</span>
+                                            <input type="text" class="form-control col-md-3" [(ngModel)]="item.discount_adjustment">
+                                            <span class="pl-3">%</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class=" input-group">
+                                            <span class="pr-3">$</span>
+                                            <input type="number" class="form-control col-md-6" [(ngModel)]="item.min_gross_purchase">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary" (click)="removeConsolDiscount(i)">
+                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary" (click)="addConsolDiscount()">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                            <span>Add New</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="block-content block-content-full text-center mt-3 mb-3 ">
+            <button type="button" [disabled]="generalForm.invalid" class="btn btn-primary " (click)="saveAll()">Save</button>
+            <button type="button" class="btn btn-default " [routerLink]="[ '/admin-panel/discount'] ">Back</button>
+        </div>
+    </section>
+</div>
