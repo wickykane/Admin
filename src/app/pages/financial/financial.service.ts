@@ -7,12 +7,47 @@ export class FinancialService {
     constructor(private API: ApiService) { }
 
     /**
-     * PROMOTION
+     * AR INVOICE
      */
     //
-    getOverAllCount(params) {
-        const url = ['reports', 'count-overall'].join('/');
+    countOrderStatus() {
+        const url = 'reports/order-status-count';
+        return this.API.get(url);
+    }
+
+    getListStatus() {
+        const url = 'order/list-status';
+        return this.API.get(url);
+    }
+
+    getListOrder(params) {
+        const url = 'order';
         return this.API.get(url, params);
+    }
+
+    getAllCustomer() {
+        const url = 'buyer/get-all';
+        return this.API.get(url);
+    }
+
+    getDetailCompany(id) {
+        const url = 'buyer/detail/' + id;
+        return this.API.get(url);
+    }
+
+    getOrderReference() {
+        const url = 'order/reference-data';
+        return this.API.get(url);
+    }
+
+    previewOrder(params) {
+        const url = 'order/preview-order';
+        return this.API.post(url, params);
+    }
+
+    createOrder(params) {
+        const url = 'order/create-order';
+        return this.API.post(url, params);
     }
 
 

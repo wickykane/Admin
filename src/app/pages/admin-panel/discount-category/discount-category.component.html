@@ -1,7 +1,7 @@
 <div [@routerTransition]>
     <app-page-header [heading]="'LIST OF DISCOUNT CATEGORY'" [icon]="'fa-th-list'"></app-page-header>
     <div class="block-content list-order-table">
-        <a class="btn btn-primary" routerLink="/discount-category/create"> Add New</a>
+        <a class="btn btn-primary" routerLink="/create"> Add New</a>
 
         <div class="table-responsive">
             <table class="table table-striped table-vcenter custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex"
