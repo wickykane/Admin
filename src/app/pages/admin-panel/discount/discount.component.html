@@ -3,7 +3,7 @@
     <section class="rma-page block">
         <div style="margin: 15px 0">
             <a class="btn btn-outline-info" routerLink="/admin-panel">
-              
+
                 <i class="fa fa-arrow-left"></i> Back</a>
         </div>
         <fieldset class="custom-border">
@@ -42,7 +42,7 @@
                             <label for="crt_by" class="control-label mb-2">Create By</label>
                         </div>
                         <div>
-                            <span>Khiet Pham</span>
+                            <span>{{user.full_name}}</span>
                         </div>
                     </div>
                     <div class="col-md-2">
@@ -50,7 +50,7 @@
                             <label for="crt_dt" class="control-label mb-2">Create Date</label>
                         </div>
                         <div>
-                            <span>MM-DD-YYYY</span>
+                            <span formControlName="crt_dt">{{crt_dt}}</span>
                         </div>
                     </div>
                 </div>
