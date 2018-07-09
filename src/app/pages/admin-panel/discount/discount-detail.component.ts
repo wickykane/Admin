@@ -63,7 +63,7 @@ export class DiscountDetailComponent implements OnInit {
                     id: 4,
                     name: 'Discount & Return Rate 3',
                     start_dt: moment().format('YYYY-MM-DD'),
-                    start_time: moment().format('h:mm a'),
+                    start_time: moment().format('hh:mm a'),
                     status: 2
                 };
 

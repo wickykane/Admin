@@ -21,7 +21,8 @@ export class DiscountComponent implements OnInit {
     public listSearchStatus = [];
 
     public list = {
-        items: []
+        items: [],
+        status: []
     };
 
     constructor(
@@ -40,7 +41,7 @@ export class DiscountComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.listSearchStatus = [
+        this.list.status = [
             {
                 id: 1,
                 name: 'Active'
@@ -111,7 +112,7 @@ export class DiscountComponent implements OnInit {
     }
 
     convertStatus(id) {
-        const stt = this.listSearchStatus.find(item => item.id === id);
+        const stt = this.list.status.find(item => item.id === id);
         return stt.name;
     }
     reset() {

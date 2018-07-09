@@ -7,6 +7,11 @@ export class DiscountService {
 
     saveDiscount(data) {
         const url = 'discount/create';
+        console.log(data);
+        return this.API.postForm(url, data);
+    }
+    saveEditDiscount(data) {
+        const url = 'discount/edit';
         return this.API.postForm(url, data);
     }
 
