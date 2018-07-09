@@ -272,7 +272,7 @@ export class RmaCreateComponent implements OnInit {
         this.order_info['shipping_cost'] = Number(this.order_info['shipping_cost'] || 0);
 
         this.order_info['total'] = this.order_info['sub_total'] - this.order_info['total_discount'] + this.order_info['shipping_cost'] + this.order_info['vat_percent_amount'];
-        console.log(  this.order_info['total'])
+        console.log(  this.order_info['total']);
     }
 
     createRMA() { }

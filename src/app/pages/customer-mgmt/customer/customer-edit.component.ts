@@ -80,7 +80,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             'email': [null],
             'line_of_credit': [null],
             'credit_sts': 2,
-            'sale_man_id': 1,
+            'sale_man_id': [null],
             'first_name': [null],
             'last_name': [null],
             'username': [null],
@@ -169,7 +169,14 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     }
 
     getListSalePerson() {
-        this.listMaster['salePersons'] = [];
+        this.commonService.getOrderReference().subscribe(res => {
+            try {
+                this.listMaster['salePersons'] = res.data.sale_mans;
+
+            } catch (e) {
+                console.log(e);
+            }
+        });
     }
 
     getListCountryAdmin() {
@@ -183,7 +190,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     }
 
     getListBank() {
-        this.customerService.getListBank().subscribe(res => {
+        this.commonService.getAllListBank().subscribe(res => {
             try {
                 this.listBank = res.data;
                 this.bank_account = this.detail['banks'];
@@ -250,7 +257,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             }
         })[0];
 
-        this.customerService.getListBranchByBank(item.bank_id).subscribe(res => {
+        this.commonService.getListBranchByBank(item.bank_id).subscribe(res => {
             try {
                 item.listBranch = res.data;
             } catch (e) {
@@ -405,9 +412,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                 params.pwd_cfrm = params.pwd;
             }
 
-            const data = {
-                data: JSON.stringify(params)
-            };
+            const data = {...params };
             this.customerService.updateCustomer(this.idSupplier, data).subscribe(
                 res => {
                     try {

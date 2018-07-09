@@ -9,9 +9,10 @@ import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
-    selector: 'item-modal-content',
+    selector: 'app-item-modal-content',
     templateUrl: './item.modal.html'
 })
+// tslint:disable-next-line:component-class-suffix
 export class ItemModalContent implements OnInit {
     @Input() id;
     @Input() flagBundle;
@@ -82,7 +83,7 @@ export class ItemModalContent implements OnInit {
         this.itemService.getReferenceList().subscribe(res => {
             try {
                 this.listMaster['models'] = res.data.models;
-                this.listMaster['years'] = res.data.years.map(function(e) { return { id: e, name: e }; });
+                this.listMaster['years'] = res.data.years.map((e) => { return { id: e, name: e }; });
                 this.listMaster['make'] = res.data.manufacturers;
             } catch (e) {
                 console.log(e.message);

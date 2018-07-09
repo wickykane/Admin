@@ -66,7 +66,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
             'email': [null],
             'line_of_credit': [null],
             'credit_sts': 2,
-            'sale_man_id': 1,
+            'sale_man_id': [null],
             'first_name': [null],
             'last_name': [null],
             'username': [null],
@@ -113,7 +113,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     getListTypeAddress() {
         this.customerService.generateSiteCode().subscribe(res => {
             try {
-                if (this.generalForm.value.buyer_type ===  'CP') {
+                if (this.generalForm.value.buyer_type === 'CP') {
                     this.generalForm.patchValue({ code: res.data.CP.code });
                     this.countCode = Number(res.data.CP.no);
                     this.textCode = res.data.CP.text;
@@ -124,10 +124,6 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
 
             }
         });
-    }
-
-    getListSalePerson() {
-        this.listMaster['salePersons'] = [];
     }
 
     getListCountryAdmin() {
@@ -141,9 +137,18 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     }
 
     getListBank() {
-        this.customerService.getListBank().subscribe(res => {
+        this.commonService.getAllListBank().subscribe(res => {
             try {
                 this.listBank = res.data;
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
+    getListSalePerson() {
+        this.commonService.getOrderReference().subscribe(res => {
+            try {
+                this.listMaster['salePersons'] = res.data.sale_mans;
             } catch (e) {
                 console.log(e);
             }
@@ -155,7 +160,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     changeCustomerType() {
         this.getListTypeAddress();
 
-        if (this.generalForm.value.buyer_type ===  'CP') {
+        if (this.generalForm.value.buyer_type === 'CP') {
             const tempType = [{ id: 1, name: 'Head Office' }];
 
             this.address = [{
@@ -193,13 +198,13 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     }
 
     changeBank(item) {
+        console.log(item);
         item.bank_swift = this.listBank.map(x => {
             if (item.bank_id === x.id) {
                 return x.swift;
             }
         })[0];
-
-        this.customerService.getListBranchByBank(item.bank_id).subscribe(res => {
+        this.commonService.getListBranchByBank(item.bank_id).subscribe(res => {
             try {
                 item.listBranch = res.data;
             } catch (e) {
@@ -299,23 +304,17 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     }
 
     removeSite(index) {
+        console.log(index);
         this.site.splice(index, 1);
+        console.log(this.site);
     }
 
     createCustomer() {
         this.contact.forEach(obj => {
             obj['pwd_cfrm'] = obj.pwd;
         });
-        //  this.bank_account.forEach(obj => {
-        //      delete obj['listBank'];
-        //      delete obj['listBranch'];
-        //  });
-        //  this.address.forEach(obj => {
-        //    delete obj['listCountry'];
-        //    delete obj['listState'];
-        //  });
         if (this.generalForm.valid) {
-            const params = {...this.generalForm.value};
+            const params = { ...this.generalForm.value };
             params['user'] = [];
             if (this.contact.length > 0) {
                 params['user'] = this.contact;
@@ -345,7 +344,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
                 }
             });
 
-            if (this.generalForm.value.buyer_type ===  'CP') {
+            if (this.generalForm.value.buyer_type === 'CP') {
                 delete params.first_name;
                 delete params.last_name;
                 delete params.pwd;
@@ -357,10 +356,13 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
                 delete params.full_name;
 
             }
-
-            const data = {
-                data: JSON.stringify(params)
-            };
+            const data = { ...params };
+            data.banks.forEach(item => {
+                delete item.listBank;
+                delete item.listBranch;
+            });
+            console.log(data);
+            // return;
 
             this.customerService.createCustomer(data).subscribe(
                 res => {

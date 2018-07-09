@@ -8,6 +8,7 @@ import { ItemService } from './item.service';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
+import {CommonService} from '../../services/common.service';
 
 @Component({
     selector: 'app-site-modal',
@@ -45,6 +46,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
         private itemService: ItemService,
         private modalService: NgbModal,
         private hotkeysService: HotkeysService,
+        private commonService: CommonService,
         public activeModal: NgbActiveModal) {
 
         this.generalForm = fb.group({
@@ -106,7 +108,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
     }
 
     getListBank() {
-        this.itemService.getListBank().subscribe(res => {
+        this.commonService.getAllListBank().subscribe(res => {
             try {
                 this.listBank = res.data;
             } catch (e) {
@@ -152,7 +154,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             }
         })[0];
 
-        this.itemService.getListBranchByBank(item.bank_id).subscribe(res => {
+        this.commonService.getListBranchByBank(item.bank_id).subscribe(res => {
             try {
                 item.listBranch = res.data;
             } catch (e) {

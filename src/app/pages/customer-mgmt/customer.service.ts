@@ -31,14 +31,6 @@ export class CustomerService {
         const url = 'buyer/index';
         return this.API.get(url, params);
     }
-    createBuyer(data) {
-        const url = 'buyer/create';
-        return this.API.postForm(url, data);
-    }
-    updateBuyer(data, id) {
-        const url = 'buyer/update/' + id;
-        return this.API.postForm(url, data);
-    }
     deleteBuyer(id) {
         const url = 'buyer/delete/' + id;
         return this.API.delete(url);
@@ -122,11 +114,11 @@ export class CustomerService {
 
     createCustomer(data) {
         const url = 'buyer/create';
-        return this.API.postForm(url, data);
+        return this.API.post(url, data);
     }
     updateCustomer(id, data) {
         const url = 'buyer/update/' + id;
-        return this.API.postForm(url, data);
+        return this.API.put(url, data);
     }
     getListCountryAdmin() {
         const url = 'country/admin/get-all';
@@ -151,6 +143,7 @@ export class CustomerService {
         const url = 'bank/' + bank_id + '/branch/list';
         return this.API.get(url);
     }
+
     getRoute() {
         const url = 'buyer/list-route-gate-time';
         return this.API.get(url);
