@@ -13,6 +13,7 @@ import { BranchModalComponent } from './bank/modal/branch.modal';
 import { DiscountCategoryComponent } from './discount-category/discount-category.component';
 import { DiscountCategoryCreateComponent } from './discount-category/discount-category.create.component';
 
+import { DiscountCreateComponent } from './discount/discount-create.component';
 import { DiscountDetailComponent } from './discount/discount-detail.component';
 import { DiscountComponent } from './discount/discount.component';
 import { PayTermCreateComponent } from './payterm/payterm-create.component';
@@ -78,7 +79,8 @@ import { AdminPanelService } from './admin-panel.service';
         InsuranceModalComponent,
         ReturnReasonCreateComponent,
         DiscountComponent,
-        DiscountDetailComponent
+        DiscountDetailComponent,
+        DiscountCreateComponent
     ],
     entryComponents: [
         BankModalComponent,
