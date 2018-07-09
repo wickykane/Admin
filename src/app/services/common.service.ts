@@ -31,4 +31,8 @@ export class CommonService {
         const url = 'bank/' + bank_id + '/branch/list?is_all=1';
         return this.apiService.get(url);
     }
+    getOrderReference() {
+        const url = 'order/reference-data';
+        return this.apiService.get(url);
+    }
 }

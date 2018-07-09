@@ -9,6 +9,7 @@ import { routerTransition } from '../../../../router.animations';
 import { OrderService } from '../../order-mgmt.service';
 
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
+import { ItemQuoteModalContent } from '../../../../shared/modals/item-quote.modal';
 import { ItemModalContent } from '../../../../shared/modals/item.modal';
 import { OrderHistoryModalContent } from '../../../../shared/modals/order-history.modal';
 import { OrderSaleQuoteModalContent } from '../../../../shared/modals/order-salequote.modal';
@@ -381,6 +382,34 @@ export class SaleOrderCreateComponent implements OnInit {
                 this.updateTotal();
             }
         }, dismiss => { });
+    }
+    addNewItemFromQuote(list, type_get) {
+        if (this.generalForm.value.company_id !== null) {
+        const modalRef = this.modalService.open(ItemQuoteModalContent, { size: 'lg' });
+        modalRef.componentInstance.company_id = this.generalForm.value.company_id;
+        modalRef.result.then(res => {
+            if (res instanceof Array && res.length > 0) {
+
+                const listAdded = [];
+                (this.list.items).forEach( (item) => {
+                    listAdded.push(item.item_id);
+                });
+                res.forEach( (item) => {
+                    if (item.sale_price) { item.sale_price = Number(item.sale_price); }
+                    item['products'] = [];
+                    item.order_quantity = 1;
+                    item.totalItem = item.sale_price;
+                    item.source = 'Manual';
+                });
+
+                this.list.items = this.list.items.concat(res.filter( (item) => {
+                    return listAdded.indexOf(item.item_id) < 0;
+                }));
+
+                this.updateTotal();
+            }
+        }, dismiss => { });
+    }
     }
     //  Show order history
     showViewOrderHistory() {

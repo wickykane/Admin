@@ -66,7 +66,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
             'email': [null],
             'line_of_credit': [null],
             'credit_sts': 2,
-            'sale_man_id': 1,
+            'sale_man_id': [null],
             'first_name': [null],
             'last_name': [null],
             'username': [null],
@@ -126,10 +126,6 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         });
     }
 
-    getListSalePerson() {
-        this.listMaster['salePersons'] = [];
-    }
-
     getListCountryAdmin() {
         this.commonService.getListCountry().subscribe(res => {
             try {
@@ -144,6 +140,15 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         this.commonService.getAllListBank().subscribe(res => {
             try {
                 this.listBank = res.data;
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
+    getListSalePerson() {
+        this.commonService.getOrderReference().subscribe(res => {
+            try {
+                this.listMaster['salePersons'] = res.data.sale_mans;
             } catch (e) {
                 console.log(e);
             }
@@ -299,7 +304,9 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     }
 
     removeSite(index) {
+        console.log(index);
         this.site.splice(index, 1);
+        console.log(this.site);
     }
 
     createCustomer() {
