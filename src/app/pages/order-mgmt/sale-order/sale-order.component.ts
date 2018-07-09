@@ -6,11 +6,13 @@ import { TableService } from './../../../services/table.service';
 
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
+import {SaleOrderKeyService} from './keys.control';
 
 @Component({
   selector: 'app-sale-order',
   templateUrl: './sale-order.component.html',
   styleUrls: ['./sale-order.component.scss'],
+  providers: [SaleOrderKeyService],
   animations: [routerTransition()]
 })
 export class SaleOrderComponent implements OnInit {
@@ -34,7 +36,9 @@ export class SaleOrderComponent implements OnInit {
     public fb: FormBuilder,
     public toastr: ToastrService,
     private vRef: ViewContainerRef,
-    public tableService: TableService, private orderService: OrderService) {
+    public keyService: SaleOrderKeyService,
+    public tableService: TableService,
+     private orderService: OrderService) {
 
     this.searchForm = fb.group({
       'code': [null],

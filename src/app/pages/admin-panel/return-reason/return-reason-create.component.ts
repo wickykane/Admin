@@ -4,12 +4,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
+import { ReturnReasonKeyService} from './keys.control';
 import { ReturnReasonService } from './return-reason.service';
 
 @Component({
     selector: 'app-reason-create',
     templateUrl: './return-reason-create.component.html',
-    providers: [ReturnReasonService],
+    providers: [ReturnReasonService, ReturnReasonKeyService],
     styleUrls: ['./reason.component.scss'],
     animations: [routerTransition()]
 })
@@ -21,6 +22,7 @@ export class ReturnReasonCreateComponent implements OnInit {
         public route: ActivatedRoute,
         public fb: FormBuilder,
         public toastr: ToastrService,
+        private keyService: ReturnReasonKeyService,
         private returnReasonService: ReturnReasonService) {
         this.generalForm = fb.group({
             'id': [null],
@@ -29,6 +31,7 @@ export class ReturnReasonCreateComponent implements OnInit {
             'exclude_rr_calc': [null, Validators.required],
             'sts': ['AT', Validators.required]
         });
+        this.keyService.watchContext.next(this);
     }
 
     ngOnInit() {

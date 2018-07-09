@@ -1,7 +1,6 @@
 <div [@routerTransition]>
     <app-page-header [heading]="'LIST OF PAYMENT TERM'" [icon]="'fa-th-list'"></app-page-header>
-
-
+    <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
     <div class="block-content pd-bottom bg-gray-light short-width">
         <div class="row">
             <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">

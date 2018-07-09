@@ -6,21 +6,23 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectComponent } from '@ng-select/ng-select';
 
 import { ToastrService } from 'ngx-toastr';
-import { routerTransition } from '../../../router.animations';
-import { OrderService } from '../order-mgmt.service';
+import { routerTransition } from '../../../../router.animations';
+import { OrderService } from '../../order-mgmt.service';
 
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
-import { ItemModalContent } from '../../../shared/modals/item.modal';
-import { OrderHistoryModalContent } from '../../../shared/modals/order-history.modal';
-import { OrderSaleQuoteModalContent } from '../../../shared/modals/order-salequote.modal';
-import { PromotionModalContent } from '../../../shared/modals/promotion.modal';
+import { ItemModalContent } from '../../../../shared/modals/item.modal';
+import { OrderHistoryModalContent } from '../../../../shared/modals/order-history.modal';
+import { OrderSaleQuoteModalContent } from '../../../../shared/modals/order-salequote.modal';
+import { PromotionModalContent } from '../../../../shared/modals/promotion.modal';
+import { SaleQuoteCreateKeyService} from './keys.create.control';
 
 
 
 @Component({
     selector: 'app-create-quotation',
     templateUrl: './sale-quotation.create.component.html',
-    styleUrls: ['./sale-quotation.component.scss'],
+    styleUrls: ['../sale-quotation.component.scss'],
+    providers: [SaleQuoteCreateKeyService],
     animations: [routerTransition()]
 })
 
@@ -91,6 +93,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         private route: ActivatedRoute,
         private modalService: NgbModal,
         private orderService: OrderService,
+        private keyService: SaleQuoteCreateKeyService,
         private dt: DatePipe) {
         this.generalForm = fb.group({
             'company_id': [null, Validators.required],
@@ -109,6 +112,8 @@ export class SaleQuotationCreateComponent implements OnInit {
             'payment_method': [null],
             'note': [null]
         });
+
+        this.keyService.watchContext.next(this);
     }
 
     ngOnInit() {

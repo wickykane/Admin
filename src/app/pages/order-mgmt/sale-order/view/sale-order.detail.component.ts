@@ -3,18 +3,19 @@ import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { PrintHtmlService } from './../../../services/print.service';
+import { PrintHtmlService } from '.././../../../services/print.service';
 
 import { ToastrService } from 'ngx-toastr';
-import { routerTransition } from '../../../router.animations';
-import { InvoiceModalContent } from '../../../shared/modals/invoice.modal';
-import { OrderService } from '../order-mgmt.service';
+import { routerTransition } from '../../../../router.animations';
+import { InvoiceModalContent } from '../../../../shared/modals/invoice.modal';
+import { OrderService } from '../../order-mgmt.service';
+import { SaleOrderViewKeyService } from './keys.control';
 
 @Component({
   selector: 'app-detail-order',
   templateUrl: './sale-order.detail.component.html',
-  styleUrls: ['./sale-order.component.scss'],
-  providers: [PrintHtmlService],
+  styleUrls: ['../sale-order.component.scss'],
+  providers: [PrintHtmlService, SaleOrderViewKeyService],
   animations: [routerTransition()]
 })
 
@@ -34,9 +35,15 @@ export class SaleOrderDetailComponent implements OnInit {
    * Init Data
    */
   constructor(public sanitizer: DomSanitizer,
-     private modalService: NgbModal,
-      private printService: PrintHtmlService,
-       public toastr: ToastrService, private router: Router, private orderService: OrderService, private route: ActivatedRoute) {
+    private modalService: NgbModal,
+    private printService: PrintHtmlService,
+    public toastr: ToastrService,
+    private router: Router,
+    private orderService: OrderService,
+    private keyService: SaleOrderViewKeyService,
+    private route: ActivatedRoute) {
+    //  Init Key
+    this.keyService.watchContext.next(this);
 
   }
 
