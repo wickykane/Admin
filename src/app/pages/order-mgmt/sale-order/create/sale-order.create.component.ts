@@ -9,6 +9,7 @@ import { routerTransition } from '../../../../router.animations';
 import { OrderService } from '../../order-mgmt.service';
 
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
+import { ItemQuoteModalContent } from '../../../../shared/modals/item-quote.modal';
 import { ItemModalContent } from '../../../../shared/modals/item.modal';
 import { OrderHistoryModalContent } from '../../../../shared/modals/order-history.modal';
 import { OrderSaleQuoteModalContent } from '../../../../shared/modals/order-salequote.modal';
@@ -382,8 +383,10 @@ export class SaleOrderCreateComponent implements OnInit {
             }
         }, dismiss => { });
     }
-    addNewItemFromQuote(list, type_get, buyer_id) {
-        const modalRef = this.modalService.open(ItemModalContent, { size: 'lg' });
+    addNewItemFromQuote(list, type_get) {
+        if (this.generalForm.value.company_id !== null) {
+        const modalRef = this.modalService.open(ItemQuoteModalContent, { size: 'lg' });
+        modalRef.componentInstance.company_id = this.generalForm.value.company_id;
         modalRef.result.then(res => {
             if (res instanceof Array && res.length > 0) {
 
@@ -406,6 +409,7 @@ export class SaleOrderCreateComponent implements OnInit {
                 this.updateTotal();
             }
         }, dismiss => { });
+    }
     }
     //  Show order history
     showViewOrderHistory() {

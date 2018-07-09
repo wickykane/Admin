@@ -26,6 +26,10 @@ export class ItemService {
         const url = ['item'].join('/');
         return this.API.get(url, params);
     }
+    getListAllItemFromQuote(id, params) {
+        const url = ['order', 'getQuoteItems', id].join('/');
+        return this.API.get(url, params);
+    }
 
     getListCountry() {
         const url = 'country/get-all';

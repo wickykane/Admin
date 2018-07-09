@@ -8,6 +8,7 @@ import { ItemService } from './item.service';
 
 import { AddressModalContent } from './address.modal';
 import { ConfirmModalContent } from './confirm.modal';
+import { ItemQuoteModalContent } from './item-quote.modal';
 import { ItemModalContent } from './item.modal';
 
 import { PromotionModalContent } from './promotion.modal';
@@ -27,12 +28,13 @@ import { OrderSaleQuoteModalContent } from './order-salequote.modal';
     ],
     declarations: [ItemModalContent, AddressModalContent, ConfirmModalContent,
          PromotionModalContent, SiteModalComponent, OrderSaleQuoteModalContent,
+         ItemQuoteModalContent,
           InvoiceModalContent, OrderHistoryModalContent],
     providers: [TableService, ItemService],
-    exports: [ItemModalContent, AddressModalContent, ConfirmModalContent,
+    exports: [ItemModalContent, AddressModalContent, ConfirmModalContent, ItemQuoteModalContent,
          PromotionModalContent, SiteModalComponent, OrderSaleQuoteModalContent,
           InvoiceModalContent, OrderHistoryModalContent],
-    entryComponents: [ItemModalContent, AddressModalContent,
+    entryComponents: [ItemModalContent, AddressModalContent, ItemQuoteModalContent,
          ConfirmModalContent, PromotionModalContent, SiteModalComponent,
           OrderSaleQuoteModalContent, InvoiceModalContent, OrderHistoryModalContent]
 

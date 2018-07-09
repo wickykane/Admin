@@ -314,7 +314,7 @@
                                         {{item.zip_code}}
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-default" (click)="removeSite(i)">
+                                        <button [disabled]="item.id != null" type="button" class="btn btn-default" (click)="removeSite(i)">
                                             <i class="fa fa-times" aria-hidden="true"></i>
                                         </button>
                                     </td>
