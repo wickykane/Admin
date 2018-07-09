@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as moment from 'moment';
 
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
@@ -25,6 +26,7 @@ export class DiscountComponent implements OnInit {
         categories: []
     };
     public user: any;
+    public crt_dt: any;
 
     constructor(
         public fb: FormBuilder,
@@ -42,6 +44,8 @@ export class DiscountComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.user = JSON.parse(localStorage.getItem('currentUser'));
+        this.crt_dt = moment().format('YYYY-MM-DD');
         this.listStatus = [
             {
                 id: 1,
