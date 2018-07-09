@@ -23,6 +23,17 @@ export class CommonService {
         const url = 'buyer/detail/' + id;
         return this.apiService.get(url);
     }
+
+    getOrderByCustomer(id) {
+        const url = 'buyer/detail/' + id;
+        return this.apiService.get(url);
+    }
+
+    getListCarrier() {
+        const url = 'country/admin/get-all';
+        return this.apiService.get(url);
+    }
+
     getAllListBank() {
         const url = 'bank/list?is_all=1';
         return this.apiService.get(url);
@@ -31,6 +42,7 @@ export class CommonService {
         const url = 'bank/' + bank_id + '/branch/list?is_all=1';
         return this.apiService.get(url);
     }
+
     getOrderReference() {
         const url = 'order/reference-data';
         return this.apiService.get(url);
