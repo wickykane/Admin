@@ -1,19 +1,22 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { ChartsModule } from 'ng2-charts';
-
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { PageHeaderModule } from '../../shared';
+import { ChartsModule } from 'ng2-charts';
+
 
 import { InvoiceComponent } from './ar-invoice/invoice.component';
+import { InvoiceCreateComponent } from './ar-invoice/invoice.create.component';
+import { InvoiceDetailComponent } from './ar-invoice/invoice.view.component';
+
+import { TableService } from '../../services/index';
+import { CommonShareModule, Helper,  PageHeaderModule } from '../../shared/index';
 import { FinancialRoutingModule } from './financial-routing.module';
 import { FinancialService } from './financial.service';
 
-
-
 @NgModule({
     imports: [
+        CommonShareModule,
         CommonModule,
         PageHeaderModule,
         FinancialRoutingModule,
@@ -24,9 +27,11 @@ import { FinancialService } from './financial.service';
     ],
     declarations: [
         InvoiceComponent,
+        InvoiceCreateComponent,
+        InvoiceDetailComponent,
 
     ],
-    providers: [FinancialService],
+    providers: [FinancialService, TableService, DatePipe, Helper],
     entryComponents: []
 })
 export class FinancialModule { }
