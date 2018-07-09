@@ -38,7 +38,7 @@ export class InvoiceDetailComponent implements OnInit {
         public toastr: ToastrService,
         private router: Router,
         private financialService: FinancialService,
-        private keyService: InvoiceDetailKeyService,
+        public keyService: InvoiceDetailKeyService,
         private route: ActivatedRoute) {
 
     }

@@ -108,7 +108,7 @@ export class InvoiceCreateComponent implements OnInit {
         private route: ActivatedRoute,
         private modalService: NgbModal,
         private financialService: FinancialService,
-        private keyService: InvoiceCreateKeyService,
+        public keyService: InvoiceCreateKeyService,
         private commonService: CommonService,
         private dt: DatePipe) {
         this.generalForm = fb.group({
