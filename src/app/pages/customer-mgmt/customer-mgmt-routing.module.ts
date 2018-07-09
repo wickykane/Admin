@@ -6,7 +6,6 @@ import { CustomerSegmentCreateComponent } from './customer-segment/customer-segm
 import { CustomerSegmentEditComponent } from './customer-segment/customer-segment.edit.component';
 
 import { CustomerCreateComponent } from './customer/customer-create.component';
-import { CustomerDetailComponent } from './customer/customer-detail.component';
 import { CustomerEditComponent } from './customer/customer-edit.component';
 import { CustomerViewComponent } from './customer/customer-view.component';
 import { CustomerComponent } from './customer/customer.component';
@@ -25,7 +24,6 @@ const routes: Routes = [
         children : [
             { path: '', component: CustomerComponent },
             { path: 'create', component: CustomerCreateComponent },
-            { path: 'detail/:id', component: CustomerDetailComponent },
             { path: 'view/:id', component: CustomerViewComponent },
             { path: 'edit/:id', component: CustomerEditComponent }
         ]

@@ -5,11 +5,12 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 import { TableService } from '../../../services/index';
+import { ReturnReasonKeyService } from './keys.control';
 import { ReturnReasonService } from './return-reason.service';
 
 @Component({
   selector: 'app-return-reason',
-  providers: [ReturnReasonService],
+  providers: [ReturnReasonService, ReturnReasonKeyService],
   templateUrl: 'return-reason.component.html',
   animations: [routerTransition()]
 })
@@ -32,6 +33,7 @@ export class ReturnReasonComponent implements OnInit {
     private activeRouter: ActivatedRoute,
     private router: Router,
     private returnReasonService: ReturnReasonService,
+    public keyService: ReturnReasonKeyService,
     private modalService: NgbModal,
     private toastr: ToastrService) {
     this.searchForm = fb.group({
@@ -42,6 +44,8 @@ export class ReturnReasonComponent implements OnInit {
     // Assign get list function name, override variable here
     this.tableService.getListFnName = 'getList';
     this.tableService.context = this;
+    //  Init Key
+    this.keyService.watchContext.next(this);
   }
 
 

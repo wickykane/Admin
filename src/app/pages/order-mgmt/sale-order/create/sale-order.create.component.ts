@@ -5,20 +5,22 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ToastrService } from 'ngx-toastr';
-import { routerTransition } from '../../../router.animations';
-import { OrderService } from '../order-mgmt.service';
+import { routerTransition } from '../../../../router.animations';
+import { OrderService } from '../../order-mgmt.service';
 
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
-import { ItemModalContent } from '../../../shared/modals/item.modal';
-import { OrderHistoryModalContent } from '../../../shared/modals/order-history.modal';
-import { OrderSaleQuoteModalContent } from '../../../shared/modals/order-salequote.modal';
-import { PromotionModalContent } from '../../../shared/modals/promotion.modal';
+import { ItemModalContent } from '../../../../shared/modals/item.modal';
+import { OrderHistoryModalContent } from '../../../../shared/modals/order-history.modal';
+import { OrderSaleQuoteModalContent } from '../../../../shared/modals/order-salequote.modal';
+import { PromotionModalContent } from '../../../../shared/modals/promotion.modal';
+import { SaleOrderCreateKeyService } from './keys.control';
 
 
 @Component({
     selector: 'app-create-order',
     templateUrl: './sale-order.create.component.html',
-    styleUrls: ['./sale-order.component.scss'],
+    styleUrls: ['../sale-order.component.scss'],
+    providers: [SaleOrderCreateKeyService],
     animations: [routerTransition()]
 })
 
@@ -104,6 +106,7 @@ export class SaleOrderCreateComponent implements OnInit {
         private route: ActivatedRoute,
         private modalService: NgbModal,
         private orderService: OrderService,
+        public keyService: SaleOrderCreateKeyService,
         private dt: DatePipe ) {
         this.generalForm = fb.group({
             'company_id': [null, Validators.required],
@@ -122,6 +125,8 @@ export class SaleOrderCreateComponent implements OnInit {
             'shipping_id': [null],
             'note': [null]
         });
+        //  Init Key
+        this.keyService.watchContext.next(this);
     }
 
     ngOnInit() {

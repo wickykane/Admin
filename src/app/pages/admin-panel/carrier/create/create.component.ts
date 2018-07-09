@@ -6,12 +6,14 @@ import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
 import { CommonService } from '../../../../services/common.service';
 import { CarrierService } from '../carrier.service';
+import { CarrierCreateKeyService } from './keys.control';
 
 
 @Component({
     selector: 'app-carrier-create',
     templateUrl: './create.component.html',
     styleUrls: ['./create.component.scss'],
+    providers: [CarrierCreateKeyService],
     animations: [routerTransition()]
 })
 export class CreateComponent implements OnInit {
@@ -30,7 +32,8 @@ export class CreateComponent implements OnInit {
         private vRef: ViewContainerRef,
         private activeRouter: ActivatedRoute,
         private cos: CommonService,
-        private cs: CarrierService
+        private cs: CarrierService,
+        public keyService: CarrierCreateKeyService
     ) {
         this.generalForm = fb.group({
             'name': [null, Validators.required],
@@ -43,6 +46,7 @@ export class CreateComponent implements OnInit {
             'own_carrier': false,
             'dt_of_crtn': new Date()
         });
+        this.keyService.watchContext.next(this);
 
         const addrConfig = {
             'id': [null],
