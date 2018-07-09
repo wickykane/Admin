@@ -33,9 +33,8 @@
                     <div class="col-md-2">
                         <label for="from_time" class="control-label mb-2">Start Time</label>
                         <span class="text-danger">( * )</span>
-                        <div class="input-group">
-                            <ngb-timepicker name="from_time" formControlName="from_time" [spinners]="OFF" [meridian]="true" [size]="small"></ngb-timepicker>
-                        </div>
+                        <input type="time" class="form-control" name="from_time" formControlName="from_time">
+
                     </div>
                     <div class="col-md-2 ">
                         <label for="durationType" class="control-label mb-2 ">Duration</label>

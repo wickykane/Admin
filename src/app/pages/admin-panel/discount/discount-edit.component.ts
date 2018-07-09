@@ -39,18 +39,12 @@ export class DiscountEditComponent implements OnInit {
             id: [null, Validators.required],
             name: [null, Validators.required],
             from_dt: [null, Validators.required],
-            from_time: [{ hour: 13, minute: 30, second: 0 }],
+            from_time: [null, Validators.required],
             duration: [null, Validators.required],
             durationType: [1, Validators.required],
             approve: [1, Validators.required],
             status: [null, Validators.required]
         });
-    }
-
-    test() {
-        console.log('before: ', this.generalForm.value);
-        this.generalForm.value.from_time = { hour: 20, minute: 45 };
-        console.log('after: ', this.generalForm.value);
     }
 
     ngOnInit() {
@@ -122,7 +116,7 @@ export class DiscountEditComponent implements OnInit {
                     id: 4,
                     name: 'Discount & Return Rate 3',
                     from_dt: moment().format('YYYY-MM-DD'),
-                    from_time: moment().format('h:mm a'),
+                    from_time: moment().format('hh:mm'),
                     status: 2,
                     duration: 1,
                     durationType: 1,

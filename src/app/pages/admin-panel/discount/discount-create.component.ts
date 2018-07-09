@@ -39,10 +39,10 @@ export class DiscountCreateComponent implements OnInit {
         this.generalForm = fb.group({
             name: [null, Validators.required],
             from_dt: [null, Validators.required],
-            from_time: [{ hour: 13, minute: 30, second: 0 }],
+            from_time: [null, Validators.required],
             duration: [1, Validators.required],
             durationType: [1, Validators.required],
-            approve: [1, Validators.required],
+            approve: [1, Validators.required]
         });
     }
 
