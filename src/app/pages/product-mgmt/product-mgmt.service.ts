@@ -5,10 +5,18 @@ import { ApiService } from '../../services/api.service';
 @Injectable()
 export class ProductService {
     public token: string;
-    constructor(
-        private $http: Http,
-        private apiService: ApiService
-    ) { }
+    constructor(private $http: Http, private apiService: ApiService) {}
+
+    // Part List
+    getListPart(params) {
+        const url = 'part';
+        return this.apiService.get(url, params);
+    }
+    getDetailPart(id) {
+        const url = 'part/detail/' + id;
+        return this.apiService.get(url);
+    }
+
     // Item-Product Definition
     getListItem(params) {
         const url = ' item';
@@ -72,7 +80,6 @@ export class ProductService {
     postECatalog(data) {
         const url = 'catalog';
         return this.apiService.postForm(url, data);
-
     }
     putECatalog(id, data, files) {
         const url = 'catalog/' + id;
@@ -127,11 +134,9 @@ export class ProductService {
     postFileMassPrice(data) {
         const url = 'item/mass';
         return this.apiService.postForm(url, data);
-
     }
     getDetailMassPrice(id) {
         const url = 'item/mass/' + id;
         return this.apiService.get(url);
     }
-
 }

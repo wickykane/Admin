@@ -37,7 +37,7 @@
             </div>
 
         </fieldset>
-        <div class="row mt-3" *ngIf="list.base_discount">
+        <div class="row mt-3">
             <div class="col-sm-12 pt-3">
                 <div class="custom-header">
                     <h3 class="custom-header">BASE DISCOUNT RATE TABLE
@@ -57,7 +57,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let item of list.base_discount; let i = index">
+                                <tr *ngFor="let item of list['base_discount']; let i = index">
                                     <td>{{item.base_discount_levels}}</td>
                                     <td>{{item.discount}} %</td>
                                     <td>{{item.min_gross_purchase | currency}}</td>
@@ -69,7 +69,7 @@
                 </div>
             </div>
         </div>
-        <div class="row mt-3" *ngIf="list.return_rate">
+        <div class="row mt-3" >
             <div class="col-sm-12 pt-3">
                 <div class="custom-header">
                     <h3 class="custom-header">RETURN RATE TABLE
@@ -90,7 +90,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let item of list.return_rate; let i = index">
+                                <tr *ngFor="let item of list['return_rate']; let i = index">
                                     <td>{{item.return_rate_level}}</td>
                                     <td>{{item.discount_adjustment}} %</td>
                                     <td>{{item.from_return_rate }} %</td>
@@ -103,7 +103,7 @@
                 </div>
             </div>
         </div>
-        <div class="row mt-3" *ngIf="list.consolidated_discount_rate">
+        <div class="row mt-3">
             <div class="col-sm-12 pt-3">
                 <div class="custom-header">
                     <h3 class="custom-header">CONSOLIDATED DISCOUNT RATE TABLE
@@ -123,7 +123,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let item of list.consolidated_discount_rate; let i = index">
+                                <tr *ngFor="let item of list['consolidated_discount_rate']; let i = index">
                                     <td>{{item.discount_level}}</td>
                                     <td>{{item.discount_adjustment}} %</td>
                                     <td>{{item.min_gross_purchase | currency}}</td>

@@ -1,0 +1,52 @@
+<div class="block anchor-scroll">
+    <app-page-header [heading]="'PART MANAGEMENT'" [icon]="'fa-th-list'"></app-page-header>
+    <div class="row">
+        <section class="col-md-8 information-block">
+            <fieldset class="custom-border">
+                <legend class="custom-border">GENETAL INFORMATION</legend>
+                <div class="row pl-3 pr-3">
+                    <div class="col-md-2">
+                        <label for="" class="control-label mb-2">Part No</label>
+                        <span class="text-danger">( * )</span>
+                        <div>
+                            <span>{{part.sku}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="" class="control-label mb-2">Partlink No</label>
+                        <span class="text-danger">( * )</span>
+
+                        <div>
+                            <span>{{part.partlinks_no}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="" class="control-label mb-2">Product Description</label>
+                        <span class="text-danger">( * )</span>
+                        <div>
+                            <span>{{part.des}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="" class="control-label mb-2">Category</label>
+                        <span class="text-danger">( * )</span>
+                        <div>
+                            <span>{{part.category_id}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2" *ngIf="part.sub_category_id">
+                        <label for="" class="control-label mb-2">Sub Category</label>
+                        <span class="text-danger">( * )</span>
+                        <div>
+                            <span>{{convertStatus(part.sub_category_id)}}</span>
+                        </div>
+                    </div>
+                </div>
+
+            </fieldset>
+        </section>
+        <section class="col-md-4 images-block">
+            iamge
+        </section>
+    </div>
+</div>
