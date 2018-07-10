@@ -1,5 +1,5 @@
 <div class="block anchor-scroll">
-    <app-page-header [heading]="'ITEM LIST'" [icon]="'fa-th-list'"></app-page-header>
+    <app-page-header [heading]="'INVENTORY ITEMS'" [icon]="'fa-th-list'"></app-page-header>
     <app-shortcut [listShortcut]='itemKeyService.getKeys()'></app-shortcut>
     <div class="search-block block-content pd-bottom tab-content">
         <div class="row" style="margin-top: 10px;">
@@ -16,23 +16,6 @@
                 <ngb-tab id="search" title="SEARCH BY:" [disabled]="true">
                     <ng-template ngbTabContent>
 
-                    </ng-template>
-                </ngb-tab>
-                <ngb-tab id="vin" title="VIN">
-                    <ng-template ngbTabContent>
-                        <form class="form-horizontal form-search" [formGroup]="searchForm">
-                            <label for="so" class="control-label" translate>Number</label>
-                            <div class="block-search">
-                                <input type="text" name="so" formControlName="vin" class="form-control">
-                            </div>
-                            <div class="block-btn-search">
-                                <label class="control-label">&nbsp;</label>
-                                <div>
-                                    <button type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Search</button>
-                                    <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchForm)" translate>Reset</button>
-                                </div>
-                            </div>
-                        </form>
                     </ng-template>
                 </ngb-tab>
                 <ngb-tab id="vehicle" title="VEHICLE">
@@ -59,13 +42,13 @@
                                     <option *ngFor="let de of listMaster['models']" [ngValue]="de.model_id">{{de.name}}</option>
                                 </select>
                             </div>
-                            <label for="type" class="control-label" translate>Sub-Model</label>
+                            <!-- <label for="type" class="control-label" translate>Sub-Model</label>
                             <div class="block-search">
                                 <select formControlName="sub_model_id" class="form-control">
                                     <option value="null" selected="true" translate>--Select--</option>
                                     <option *ngFor="let de of listMaster['sub_models']" [ngValue]="de.model_id">{{de.name}}</option>
                                 </select>
-                            </div>
+                            </div> -->
                             <div class="block-btn-search">
                                 <label class="control-label">&nbsp;</label>
                                 <div>
@@ -103,6 +86,23 @@
                                 <div>
                                     <button type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Search</button>
                                     <button type="button" class="btn btn-default" (click)="tableService.resetAction(searchForm); tableService.resetAction(filterForm)" translate>Reset</button>
+                                </div>
+                            </div>
+                        </form>
+                    </ng-template>
+                </ngb-tab>
+                <ngb-tab id="vin" title="VIN">
+                    <ng-template ngbTabContent>
+                        <form class="form-horizontal form-search" [formGroup]="searchForm">
+                            <label for="so" class="control-label" translate>Number</label>
+                            <div class="block-search">
+                                <input type="text" name="so" formControlName="vin" class="form-control">
+                            </div>
+                            <div class="block-btn-search">
+                                <label class="control-label">&nbsp;</label>
+                                <div>
+                                    <button type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Search</button>
+                                    <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchForm)" translate>Reset</button>
                                 </div>
                             </div>
                         </form>
@@ -160,7 +160,7 @@
                             </ng-select>
                         </div>
                     </div>
-                    <div class="col-md-3 filter-item">
+                    <!-- <div class="col-md-3 filter-item">
                         <label for="type" class="control-label" translate>Country</label>
                         <div class="block-search">
                             <ng-select [multiple]="true" [items]="listMaster['countries']" bindLabel="name" bindValue="country_id" formControlName="country_id_filter">
@@ -173,7 +173,7 @@
                             <ng-select [multiple]="true" [items]="listMaster['manufacturers']" bindLabel="name" bindValue="id" formControlName="manufacturer_id_filter">
                             </ng-select>
                         </div>
-                    </div>
+                    </div> -->
                     <div>
                         <div class="block-btn-search">
                             <label class="control-label">&nbsp;</label>
@@ -206,11 +206,17 @@
                         <th translate>Description</th>
                         <th translate>Make</th>
                         <th translate>Model</th>
-                        <th translate>From</th>
-                        <th translate>To</th>
+                        <th translate>Category</th>
+                        <th translate>Sub Category</th>
                         <th translate>Brand</th>
                         <th translate>Cert</th>
-                        <th translate>Country</th>
+                        <th translate>UOM</th>
+                        <th translate>Condition</th>
+                        <th translate>On Hand QTY</th>
+                        <th translate>Alloc QTY</th>
+                        <th translate>Avail QTY</th>
+                        <th translate>OEM Price</th>
+                        <th translate>Cost Price</th>
                         <th translate>Sales Price</th>
                     </tr>
                 </thead>
@@ -227,11 +233,17 @@
                     <td>{{item.des}}</td>
                     <td>{{item.mfr_name}}</td>
                     <td>{{item.model_name}}</td>
-                    <td>{{item.yr_from}}</td>
-                    <td>{{item.yr_to}}</td>
+                    <td>{{item.category_name}}</td>
+                    <td>{{item.sub_category_name}}</td>
                     <td>{{item.brand_name}}</td>
                     <td>{{item.cert=='Y'?'Yes':'No'}}</td>
-                    <th>{{item.ctr_name}}</th>
+                    <td>{{item.uom_code}}</td>
+                    <td>{{item.condition}}</td>
+                    <td>{{item.on_hand_qty}}</td>
+                    <th>{{item.alloc_qty}}</th>
+                    <td>{{item.avail_qty}}</td>
+                    <td>{{item.oem}}</td>
+                    <th>{{item.cost_of_goods_sold | currency}}</th>
                     <th>{{item.sell_price|currency:'$'}}</th>
                 </tr>
                 <tr *ngIf="list.items.length === 0">
