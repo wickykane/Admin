@@ -3,11 +3,11 @@
 
 
         <form [formGroup]="generalForm" class="form-search full-width form-horizontal">
+          <a href="../assets/mass-template.xlsx" class="btn btn-outline-success" target="_blank" download style="margin: 10px 0"><i class="fa fa-download"></i> Download Template</a>
             <div class="row">
                 <div class="col-md-3">
-                  <label for="">&nbsp;</label>
                   <div class="input-group">
-                    <input type="text" class="form-control" readonly>
+                    <input type="text" class="form-control" formControlName="path" readonly>
                   <div class="input-group-btn">
                     <span class="fileUpload btn btn-info">
                         <span class="upl">Upload file</span>
