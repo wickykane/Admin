@@ -10,6 +10,12 @@
             <legend class="custom-border">GENERAL INFORMATION</legend>
             <form class="form-search full-width form-horizontal" [formGroup]="generalForm"><div class="row">
                 <div class="col-sm-2 form-group">
+                    <label> Code
+                        <span class="text-danger">(*)</span>
+                    </label>
+                    <input type="text" class="form-control" readonly [value]="listMaster['generate-code']">
+                </div>
+                <div class="col-sm-2 form-group">
                     <label> Carrier Name
                         <span class="text-danger">(*)</span>
                     </label>
@@ -32,8 +38,6 @@
                     <input type="text" class="form-control" formControlName="website">
                 </div>
                 <div class="col-sm-2 form-group">
-                </div>
-                <div class="col-sm-2 form-group">
                     <label>Own Carrier</label>
                     <input type="checkbox" style="display: block;" formControlName="own_carrier">
                 </div>
@@ -43,11 +47,11 @@
                 </div>
                 <div class="col-sm-2 form-group">
                     <label>From Weight (lbs) <span class="text-danger">(*)</span></label>
-                    <input type="text" class="form-control" formControlName="from_weight">
+                    <input type="number" class="form-control" formControlName="from_weight">
                 </div>
                 <div class="col-sm-2 form-group">
                     <label>To Weight (lbs) <span class="text-danger">(*)</span></label>
-                    <input type="text" class="form-control" formControlName="to_weight">
+                    <input type="number" class="form-control" formControlName="to_weight">
                 </div>
             </div></form>
         </fieldset>

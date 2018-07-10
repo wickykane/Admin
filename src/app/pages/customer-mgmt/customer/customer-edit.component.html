@@ -87,7 +87,7 @@
                             <div class="col-sm-8">
                                 <select class="form-control" name="sale_man_id" formControlName="sale_man_id">
                                     <option value="null" selected="true">--Select--</option>
-                                    <option *ngFor="let item of listMaster['salePersons']" [ngValue]="item.id">{{item.name}}</option>
+                                    <option *ngFor="let item of listMaster['salePersons']" [ngValue]="item.id">{{item.full_name}}</option>
                                 </select>
                             </div>
                         </div>
@@ -123,7 +123,7 @@
                                 <div class="col-sm-8">
                                     <select class="form-control" name="sale_man_id" formControlName="sale_man_id">
                                         <option value="null" selected="true">--Select--</option>
-                                        <option *ngFor="let item of listMaster['salePersons']" [ngValue]="item.id">{{item.name}}</option>
+                                        <option *ngFor="let item of listMaster['salePersons']" [ngValue]="item.id">{{item.full_name}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -257,7 +257,7 @@
         </div>
 
 
-        <div class="row" style="margin-top:15px;" *ngIf="generalForm.value.is_parent == true" >
+        <div class="row" style="margin-top:15px;" *ngIf="generalForm.value.is_parent == true && generalForm.value.buyer_type!='CP'" >
             <div class="col-sm-12">
                 <div class="custom-header">
                     <h3 class="custom-header">SITES:
@@ -314,7 +314,7 @@
                                         {{item.zip_code}}
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-default" (click)="removeSite(i)">
+                                        <button [disabled]="item.id != null" type="button" class="btn btn-default" (click)="removeSite(i)">
                                             <i class="fa fa-times" aria-hidden="true"></i>
                                         </button>
                                     </td>

@@ -18,8 +18,8 @@ export class BankModalComponent implements OnInit {
   constructor(public activeModal: NgbActiveModal, private fb: FormBuilder, private bankService: BankService) {
     this.bankForm = fb.group({
       'code': [{ value: null, disabled: true }],
-      'name': [null],
-      'swift': [null],
+      'name': [null, Validators.required],
+      'swift': [null, Validators.required],
     });
   }
 

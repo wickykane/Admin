@@ -26,7 +26,7 @@
                         <label> Day Limit
                             <span class="text-danger">(*)</span>
                         </label>
-                        <input type="text" name="" class="form-control" formControlName="day_limit">
+                        <input  [textMask]="{mask: numberMaskObject()}" type="text" name="" class="form-control" formControlName="day_limit">
                     </div>
                     <div class="col-sm-2 form-group">
                         <label> Status
@@ -44,7 +44,7 @@
     </section>
     <div class="row">
         <div class="col-md-12 mg-top-15 text-center">
-            <button class="btn btn btn-outline-primary" (click)="payloadData()" ng-disabled="generalForm.$invalid">Save</button>            
+            <button class="btn btn btn-outline-primary" (click)="payloadData()" [disabled]="!generalForm.valid">Save</button>            
             <button class="btn btn-default" type="button" [routerLink]="['/admin-panel/payment-term']">Cancel</button>
         </div>
     </div>

@@ -7,6 +7,11 @@ export class DiscountService {
 
     saveDiscount(data) {
         const url = 'discount/create';
+        console.log(data);
+        return this.API.postForm(url, data);
+    }
+    saveEditDiscount(data) {
+        const url = 'discount/edit';
         return this.API.postForm(url, data);
     }
 
@@ -14,12 +19,14 @@ export class DiscountService {
         const url = 'discount/list-type/';
         return this.API.get(url);
     }
-    getListApplyType(data) {
-        const url = 'discount/list-apply-type';
-        return this.API.get(url, data);
+    getListDiscounts(params) {
+        const url = 'discount/list-all';
+        // const url = 'buyer/index';
+        return this.API.get(url, params);
     }
-    getListSubCategory(data) {
-        const url = 'discount/list-sub-category';
-        return this.API.get(url, data);
+    getDetailDiscount(id) {
+        // const url = 'discount/detail/' + id;
+        const url = 'buyer/index';
+        return this.API.get(url);
     }
 }
