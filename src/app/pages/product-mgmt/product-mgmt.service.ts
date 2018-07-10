@@ -7,13 +7,8 @@ export class ProductService {
     public token: string;
     constructor(private $http: Http, private apiService: ApiService) {}
 
-    // Part List
-    getListPart(params) {
-        const url = 'part';
-        return this.apiService.get(url, params);
-    }
     getDetailPart(id) {
-        const url = 'part/detail/' + id;
+        const url = 'item/' + id;
         return this.apiService.get(url);
     }
 

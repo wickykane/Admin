@@ -1,6 +1,7 @@
 // Module
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { NgxGalleryModule } from 'ngx-gallery';
 import { CommonShareModule, PageHeaderModule } from '../../shared/index';
 import { ItemModalModule } from '../../shared/modals/item.module';
 
@@ -35,7 +36,8 @@ import { ProductService } from './product-mgmt.service';
         ProductMgmtRoutingModule,
         CommonShareModule,
         PageHeaderModule,
-        ItemModalModule
+        ItemModalModule,
+        NgxGalleryModule
     ],
     declarations: [
         ProductMgmtComponent,

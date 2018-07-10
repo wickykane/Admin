@@ -20,7 +20,7 @@ export class PartListComponent implements OnInit {
     public filterForm: FormGroup;
 
     public listMaster = {};
-    public selectedIndex = 0;
+    public selectedIndex = -1;
     public list = {
         items: [],
         checklist: []
@@ -48,7 +48,6 @@ export class PartListComponent implements OnInit {
             year: [null],
             manufacturer_id: [null],
             model_id: [null],
-            sub_model_id: [null],
             oem: [null],
             partlinks_no: [null],
             part_no: [null],
@@ -132,22 +131,6 @@ export class PartListComponent implements OnInit {
         this.list.items = [];
     }
 
-    changeToGetSubModel() {
-        const id = this.searchForm.value.model_id;
-        const arr = this.listMaster['models'];
-        arr.forEach(el => {
-            if (el['model_id'] === id) {
-                return (this.listMaster['sub_models'] = el['sub_models']);
-            }
-        });
-
-        // for (let i = 0; i < arr.length; i++) {
-        //     if (arr[i]['model_id'] === id) {
-        //         return (this.listMaster['sub_models'] = arr[i]['sub_models']);
-        //     }
-        // }
-    }
-
     changeToGetSubCategory() {
         const id = this.filterForm.value.category_id_filter;
         const arr = this.listMaster['categories'];
@@ -178,7 +161,7 @@ export class PartListComponent implements OnInit {
         );
         this.list.items = [
             {
-                id: 1,
+                id: 49872,
                 sku: 'abc',
                 partlinks_no: 'abc',
                 des: 'abc',
