@@ -14,7 +14,7 @@ export class PartDetailComponent implements OnInit {
     /**
      * Variable Declaration
      */
-
+    public part: any = {};
     public listMaster = {};
     public list = {
         items: []
@@ -37,9 +37,7 @@ export class PartDetailComponent implements OnInit {
             { code: 'Y', value: 'Yes' },
             { code: 'N', value: 'No' }
         ];
-        this.route.params.subscribe(params =>
-            this.getDetailPart(params.id)
-        );
+        this.route.params.subscribe(params => this.getDetailPart(params.id));
     }
 
     getDetailPart(id) {

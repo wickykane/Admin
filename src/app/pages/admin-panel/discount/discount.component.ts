@@ -38,6 +38,12 @@ export class DiscountComponent implements OnInit {
             dt_to: [null, Validators.required],
             status: [1, Validators.required]
         });
+
+        //  Assign get list function name, override variable here
+        this.tableService.getListFnName = 'getList';
+        this.tableService.context = this;
+        //  Init Key
+        // this.itemKeyService.watchContext.next(this);
     }
 
     ngOnInit() {
@@ -63,7 +69,16 @@ export class DiscountComponent implements OnInit {
     }
 
     getList() {
-        this.discountService.getListDiscounts().subscribe(res => {
+        const params = {
+            ...this.tableService.getParams(),
+            ...this.generalForm.value,
+        };
+        Object.keys(params).forEach(
+            key =>
+                (params[key] === null || params[key] === '') &&
+                delete params[key]
+        );
+        this.discountService.getListDiscounts(params).subscribe(res => {
             try {
                 // this.list.items = res.data;
                 this.list.items = [
