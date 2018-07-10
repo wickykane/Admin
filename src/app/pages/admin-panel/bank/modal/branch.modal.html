@@ -10,14 +10,17 @@
             <div class="row">
                 <div class="form-group col-sm-12">
                     <label for="" class="control-label">Bank Name</label>
+                    <span class="text-danger">(*) </span>
                     <input type="text" class="form-control" formControlName="bankname">
                 </div>
                 <div class="form-group col-sm-12">
                     <label for="" class="control-label">Branch Name</label>
+                    <span class="text-danger">(*) </span>
                     <input type="text" formControlName="name" class="form-control">
                 </div>
                 <div class="form-group col-sm-12">
                     <label for="" class="control-label">Country</label>
+                    <span class="text-danger">(*) </span>
                     <select (change)="changeCountry()" class="form-control" formControlName="country_code">
                             <option value="null" selected="true">--Select--</option>
                             <option *ngFor="let item of listMaster['countries']" [ngValue]="item.cd">{{item.name}}</option>
@@ -25,10 +28,12 @@
                 </div>
                 <div class="form-group col-sm-12">
                     <label for="" class="control-label">Address Line</label>
+                    <span class="text-danger">(*) </span>
                     <input type="text" formControlName="address" class="form-control">
                 </div>
                 <div class="form-group col-sm-12">
                     <label for="" class="control-label">City</label>
+                    <span class="text-danger">(*) </span>
                     <input type="text" formControlName="city" class="form-control">
                 </div>
                 <div class="form-group col-sm-12">
@@ -40,6 +45,7 @@
                 </div>
                 <div class="form-group col-sm-12">
                     <label for="" class="control-label">Zip Code</label>
+                    <span class="text-danger">(*) </span>
                     <input type="text" formControlName="zip_code" class="form-control">
                 </div>
             </div>
@@ -48,7 +54,7 @@
     <div class="modal-footer" style="padding-top: 0">
         <div class="form-group" style="margin-top: 20px;">
             <div class="text-center">
-                <button style="width: 70px" class="btn btn-primary" type="button" (click)="ok()">OK</button>
+                <button [disabled]="!branchForm.valid" style="width: 70px" class="btn btn-primary" type="button" (click)="ok()">OK</button>
                 <button class="btn btn-default" type="button" (click)="cancel()">Cancel</button>
             </div>
         </div>
