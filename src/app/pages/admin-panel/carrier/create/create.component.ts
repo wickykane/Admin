@@ -66,6 +66,7 @@ export class CreateComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.getGenerateCode();
         (async () => {
             await new Promise((calback) => { this.getListCountry(calback); });
             await new Promise((calback) => { this.getListBank(calback); });
@@ -103,6 +104,12 @@ export class CreateComponent implements OnInit {
     getStateByCountry(country_code, type) {
         this.cos.getStateByCountry({country: country_code}).subscribe(res => {
             this.listMaster[type + 'State'] = res.data;
+        });
+    }
+
+    getGenerateCode() {
+        this.cs.getGenerateCode().subscribe(res => {
+            this.listMaster['generate-code'] = res.message;
         });
     }
 

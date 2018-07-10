@@ -40,7 +40,7 @@
 
 
     <div class="block-content list-order-table">
-        <a class="btn btn-primary" routerLink="/product-management/mass-price/create"> Upload New file</a>
+        <a class="btn btn-primary" routerLink="/product-management/mass-price/create" style="margin: 10px 0"> Upload New file</a>
 
         <div class="table-responsive">
             <table class="table table-striped table-vcenter custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
@@ -52,8 +52,8 @@
                         <th>To</th>
                         <th>User</th>
                         <th>Status</th>
-                        <th>Imported records</th>
-                        <th>Error record</th>
+                        <th class="text-center">Imported records</th>
+                        <th class="text-center">Error record</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -64,9 +64,11 @@
                         <td>{{item.start}}</td>
                         <td>{{item.end}}</td>
                         <td>{{item.username}}</td>
-                        <td>{{item.status_name}}</td>
-                        <td><span class="badge badge-primary">{{item.success}}</span></td>
-                        <td><span class="badge badge-danger">{{item.error}}</span></td>
+                        <td>
+                            <span [ngClass]="{'text-primary': (item.status  === 1),'text-warning': (item.status  === 2), 'text-success': (item.status == 3)}">{{item.status_name}}</span>
+                        </td>
+                        <td class="text-center"><span class="badge badge-primary">{{item.success}}</span></td>
+                        <td class="text-center"><span class="badge badge-danger">{{item.error}}</span></td>
                         <td>
                             <a class="btn btn-default " title="View" routerLink="/product-management/mass-price/detail/{{item.id}}">
                                 <i class="fa fa-eye" aria-hidden="true"></i>
@@ -97,7 +99,7 @@
             <div class="col-md-6">
                 <div class="text-right">
                     <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length" [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page" [maxSize]="tableService.maxSize"
-                        [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+                      [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
                 </div>
             </div>
         </div>

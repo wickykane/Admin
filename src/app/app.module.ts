@@ -5,10 +5,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import {HotkeyModule} from 'angular2-hotkeys';
+import { HotkeyModule } from 'angular2-hotkeys';
 import { ToastrModule } from 'ngx-toastr';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -48,7 +48,7 @@ export function createTranslateLoader(http: HttpClient) {
         HttpModule,
         FormsModule,
         ReactiveFormsModule,
-        ToastrModule.forRoot(),
+        ToastrModule.forRoot({ enableHtml: true }),
         HotkeyModule.forRoot()
     ],
     entryComponents: [CustomSpinnerComponent],

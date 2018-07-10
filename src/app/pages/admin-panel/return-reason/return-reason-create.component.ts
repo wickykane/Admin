@@ -35,8 +35,14 @@ export class ReturnReasonCreateComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.route.params.subscribe(params => {
+            if (params.id) {
+                this.getDetailReturnReason(params.id);
+            } else {
+                this.getGenerateCode();
+            }
+        });
         this.listMaster['status'] = [{ key: 'IA', value: 'In Active' }, { key: 'AT', value: 'Active' }];
-        this.route.params.subscribe(params => this.getDetailReturnReason(params.id));
     }
     payloadData() {
         if (this.generalForm.get('id').value) {
@@ -44,6 +50,11 @@ export class ReturnReasonCreateComponent implements OnInit {
         } else {
             this.createReturnReason();
         }
+    }
+    getGenerateCode() {
+        this.returnReasonService.getGenerateCode().subscribe(res => {
+            this.generalForm.get('cd').patchValue (res.message);
+        });
     }
     createReturnReason() {
         const params = this.generalForm.value;

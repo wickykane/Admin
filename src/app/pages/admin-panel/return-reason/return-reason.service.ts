@@ -29,4 +29,8 @@ export class ReturnReasonService {
         const url = ['return-reason', id].join('/');
         return this.apiService.delete(url);
     }
+    getGenerateCode() {
+        const url = 'return-reason/generate-code';
+        return this.apiService.get(url);
+    }
 }

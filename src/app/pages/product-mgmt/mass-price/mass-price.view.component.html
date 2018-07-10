@@ -1,1 +1,61 @@
-overlock
+<section class="rma-page block">
+    <app-page-header [heading]="'MASS UPDATE PRICE'" [icon]="'fa-th-list'"></app-page-header>
+
+
+    <form>
+      <div class="form-group row">
+        <label for="staticEmail" class="col-sm-1 col-form-label">File Name:</label>
+        <div class="col-sm-4">
+          <input type="text" readonly class="form-control-plaintext" value="{{data.file}}">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="inputPassword" class="col-sm-1 col-form-label">Import Date:</label>
+        <div class="col-sm-4">
+          <input type="text" readonly class="form-control-plaintext" value="{{data.created_at}}">
+        </div>
+      </div>
+    </form>
+
+
+    <div class="row" style="padding-top:15px">
+        <div class="col-sm-12">
+            <div class="block-header bg-gray-lighter">
+                <h3 class="block-title" translate>Import Log</h3>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-bottom: 20px;margin-top: 10px;">
+        <div class="col-sm-12">
+            <div class="block-content">
+                <table class="table table-striped table-vcenter table-hover custom-table">
+                    <thead>
+                        <tr>
+                            <th> ID </th>
+                            <th> SKU </th>
+                            <th> Sale Price </th>
+                            <th> Status </th>
+                            <th> Message </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of data.log; let i = index">
+                            <td>{{i + 1}}</td>
+                            <td>{{item.sku}}</td>
+                            <td> {{item.sales_price | currency}}</td>
+                            <td>
+                              <span *ngIf="item.status" class="text-success">Success</span>
+                              <span *ngIf="!item.status" class="text-danger">Fail</span>
+                            </td>
+                            <td>{{item.message}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="block-content block-content-full text-center">
+        <button type="button" class="btn btn-default" [routerLink]="['/product-management/mass-price']" translate>Back To List</button>
+    </div>
+</section>

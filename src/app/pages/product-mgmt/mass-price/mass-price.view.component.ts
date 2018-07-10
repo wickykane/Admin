@@ -16,11 +16,7 @@ export class MassPriceViewComponent implements OnInit {
     /**
      * Variable Declaration
      */
-    public generalForm: FormGroup;
-    public listMaster = {};
     public data = {};
-    public items: any = [];
-    public listFile: any = [];
 
     /**
      * Init Data
@@ -50,7 +46,7 @@ export class MassPriceViewComponent implements OnInit {
     getDetailMassPrice(id) {
       this.productService.getDetailMassPrice(id).subscribe(res => {
               try {
-                  console.log(res);
+                  this.data = res.data;
               } catch (e) {}
           });
     }

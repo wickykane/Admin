@@ -50,6 +50,7 @@ export class ReturnReasonComponent implements OnInit {
 
 
   ngOnInit() {
+    this.listMaster['status'] = [{ key: 'IA', value: 'In Active' }, { key: 'AT', value: 'Active' }];
     this.getList();
   }
 
@@ -93,6 +94,10 @@ export class ReturnReasonComponent implements OnInit {
   }
   editReturnReason(id) {
     this.router.navigate(['/admin-panel/return-reason/edit', id]);
+  }
+  convertStatus(id) {
+    const stt = this.listMaster['status'].find(item => item.key === id);
+    return stt.value;
   }
 
 }
