@@ -39,5 +39,5 @@ export class CarrierService {
     createCarrier(params) {
         const url = 'carrier';
         return this.API.post(url, params);
-    }   
+    }
 }
