@@ -19,7 +19,7 @@ export class ProductService {
 
     // Item-Product Definition
     getListItem(params) {
-        const url = ' item';
+        const url = 'item';
         return this.apiService.get(url, params);
     }
     getListItemOption() {
