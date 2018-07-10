@@ -1,7 +1,7 @@
 <div class="block anchor-scroll">
     <app-page-header [heading]="'PART MANAGEMENT'" [icon]="'fa-th-list'"></app-page-header>
     <app-shortcut [listShortcut]='itemKeyService.getKeys()'></app-shortcut>
-    <div class="search-block block-content pd-bottom tab-content mt-3">
+    <div class="search-block block-content pd-bottom tab-content pt-3">
         <div class="row">
             <ngb-tabset #tabSet class="tab-header" activeId="vehicle" type="pills" (tabChange)="resetTab()">
                 <ngb-tab id="search" title="SEARCH BY:" [disabled]="true">
@@ -105,7 +105,7 @@
 
         </div>
     </div>
-    <!-- <div class="block-content mt-3" *ngIf="list.items.length > 0"> -->
+    <!-- <div class="block-content pt-3" *ngIf="list.items.length > 0"> -->
     <div class="block-content mt-4">
         <h5 class="title-form">FILTER</h5>
         <div class="row">
@@ -169,18 +169,18 @@
                         </div>
                     </div> -->
                 </div>
-                <div class="d-block mt-3">
+                <div class="d-block pt-3">
                     <button type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Apply</button>
                     <button type="button" class="btn btn-default" (click)="tableService.resetAction(filterForm)" translate>Reset</button>
                 </div>
             </form>
         </div>
     </div>
-    <div class="block-content mt-3">
+    <div class="block-content pt-3">
         <!-- <button [disabled]="list.checklist.length == 0" (click)="createOrder()" class="btn btn-primary" translate>Create Order</button> -->
         <a class="btn btn-primary pull-right" routerLink="/product-management/mass-price"> Mass Update Price</a>
 
-        <div class="table-responsive mt-3">
+        <div class="table-responsive pt-3">
             <table class="table table-striped table-vcenter table-hover custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex"
                 (onEnter)="selectData($event)">
                 <thead class="bg-white">
@@ -221,12 +221,22 @@
                     <td>{{item.des}}</td>
                     <td>{{item.mfr_name}}</td>
                     <td>{{item.model_name}}</td>
-                    <td>{{item.yr_from}}</td>
-                    <td>{{item.yr_to}}</td>
+                    <td>{{item.category_id}}</td>
+                    <td>{{item.sub_category_id}}</td>
                     <td>{{item.brand_name}}</td>
                     <td>{{item.cert=='Y'?'Yes':'No'}}</td>
-                    <th>{{item.ctr_name}}</th>
-                    <th>{{item.sell_price|currency:'$'}}</th>
+                    <td>{{item.UOM}}</td>
+                    <td>{{item.oem_price|currency:'$'}}</td>
+                    <td>{{item.cost_price|currency:'$'}}</td>
+                    <td>{{item.sell_price|currency:'$'}}</td>
+                    <td>
+                        <a class="btn btn-default" [routerLink]="['/product-management/part-list/detail/', item.id]">
+                            <i class="fa fa-eye" aria-hidden="true"></i>
+                        </a>
+                        <a class="btn btn-default" [routerLink]="['/product-management/part-list/edit/', item.id]">
+                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                        </a>
+                    </td>
                 </tr>
                 <tr *ngIf="list.items.length === 0">
                     <td colspan="100%" class="text-center">No data.</td>

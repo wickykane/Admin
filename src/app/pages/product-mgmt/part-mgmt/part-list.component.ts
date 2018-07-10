@@ -135,11 +135,17 @@ export class PartListComponent implements OnInit {
     changeToGetSubModel() {
         const id = this.searchForm.value.model_id;
         const arr = this.listMaster['models'];
-        for (let i = 0; i < arr.length; i++) {
-            if (arr[i]['model_id'] === id) {
-                return (this.listMaster['sub_models'] = arr[i]['sub_models']);
+        arr.forEach(el => {
+            if (el['model_id'] === id) {
+                return (this.listMaster['sub_models'] = el['sub_models']);
             }
-        }
+        });
+
+        // for (let i = 0; i < arr.length; i++) {
+        //     if (arr[i]['model_id'] === id) {
+        //         return (this.listMaster['sub_models'] = arr[i]['sub_models']);
+        //     }
+        // }
     }
 
     changeToGetSubCategory() {
@@ -168,29 +174,48 @@ export class PartListComponent implements OnInit {
                 (params[key] === null || params[key] === '') &&
                 delete params[key]
         );
-
-        this.productService.getListItem(params).subscribe(res => {
-            try {
-                if (!res.data.rows) {
-                    this.list.items = [];
-                    return;
-                }
-                this.list.items = res.data.rows;
-                this.listMaster['brands'] = res.data.meta_filters.brands;
-                this.listMaster['categories'] =
-                    res.data.meta_filters.categories;
-                this.listMaster['certification'] =
-                    res.data.meta_filters.certification;
-                this.listMaster['countries'] = res.data.meta_filters.countries;
-                this.listMaster['partlinks_no'] =
-                    res.data.meta_filters.partlinks_no;
-                this.listMaster['part_no'] = res.data.meta_filters.part_no;
-                this.listMaster['manufacturers'] =
-                    res.data.meta_filters.manufacturers;
-                this.tableService.matchPagingOption(res.data);
-            } catch (e) {
-                console.log(e);
+        this.list.items = [
+            {
+                id: 1,
+                sku: 'abc',
+                partlinks_no: 'abc',
+                des: 'abc',
+                mfr_name: 'abc',
+                model_name: 'abc',
+                category_id: 'abc',
+                sub_category_id: 'abc',
+                brand_name: 'abc',
+                cert: 'Y',
+                UOM: 'abc',
+                oem_price: 50,
+                cost_price: 50,
+                sell_price: 50
             }
-        });
+        ];
+
+        // this.productService.getListPart(params).subscribe(res => {
+        //     try {
+        //         if (!res.data.rows) {
+        //             this.list.items = [];
+        //             return;
+        //         }
+        //         this.list.items = res.data.rows;
+
+        //         this.listMaster['brands'] = res.data.meta_filters.brands;
+        //         this.listMaster['categories'] =
+        //             res.data.meta_filters.categories;
+        //         this.listMaster['certification'] =
+        //             res.data.meta_filters.certification;
+        //         this.listMaster['countries'] = res.data.meta_filters.countries;
+        //         this.listMaster['partlinks_no'] =
+        //             res.data.meta_filters.partlinks_no;
+        //         this.listMaster['part_no'] = res.data.meta_filters.part_no;
+        //         this.listMaster['manufacturers'] =
+        //             res.data.meta_filters.manufacturers;
+        //         this.tableService.matchPagingOption(res.data);
+        //     } catch (e) {
+        //         console.log(e);
+        //     }
+        // });
     }
 }
