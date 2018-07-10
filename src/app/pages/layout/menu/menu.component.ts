@@ -307,9 +307,14 @@ export class MenuComponent implements OnInit {
 
     addExpandClass(element: any, e) {
         const el = this.elRef.nativeElement.querySelectorAll('.open');
-        el.forEach(item => {
-            item.classList.remove('open');
-        });
+        // el.forEach(item => {
+        //     item.classList.remove('open');
+        // });
+
+        for (let i = 0; i < el.length; i++) {
+            el[i].classList.remove('open');
+          }
+
 
         // for (const i of el) {
         //     console.log(el.classList);
