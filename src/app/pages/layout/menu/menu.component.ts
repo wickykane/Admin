@@ -8,15 +8,15 @@ import { TranslateService } from '@ngx-translate/core';
     styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit {
-
     MENU_CONSTANT = [];
     @ViewChild('.open') open;
     public showMenu = '';
 
-
-    constructor(private translate: TranslateService, public router: Router, private elRef: ElementRef) {
-
-    }
+    constructor(
+        private translate: TranslateService,
+        public router: Router,
+        private elRef: ElementRef
+    ) {}
 
     ngOnInit() {
         this.MENU_CONSTANT = [
@@ -153,7 +153,7 @@ export class MenuComponent implements OnInit {
                     {
                         link: '/order-management/sale-order',
                         name: 'Sales Orders'
-                    },
+                    }
                     // {
                     //     link: '/order-management/delivery-order',
                     //     name: 'Delivery Orders'
@@ -206,13 +206,17 @@ export class MenuComponent implements OnInit {
                 sub: true,
                 child: [
                     {
+                        link: '/product-management/part-list',
+                        name: 'Part Management '
+                    },
+                    {
                         link: '/product-management/item-list',
                         name: 'Item List '
                     },
                     {
                         link: '/product-management/product-definition',
                         name: 'Product Definition'
-                    },
+                    }
                     // {
                     //     link: '/product-management/bundle',
                     //     name: 'Bundle Management'
@@ -304,7 +308,6 @@ export class MenuComponent implements OnInit {
         ];
     }
 
-
     addExpandClass(element: any, e) {
         const el = this.elRef.nativeElement.querySelectorAll('.open');
         // el.forEach(item => {
@@ -328,13 +331,10 @@ export class MenuComponent implements OnInit {
         //     console.log(value);
         // }
 
-
-        this.showMenu = (element === this.showMenu) ? '0' : element;
+        this.showMenu = element === this.showMenu ? '0' : element;
     }
 
     removeClassExpand() {
         //  this.expand.nativeElement.classList.remove();
     }
-
-
 }

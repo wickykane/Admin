@@ -14,6 +14,8 @@ import { ECatalogEditComponent } from './e-catalog/e-catalog-edit.component';
 import { ECatalogComponent } from './e-catalog/e-catalog.component';
 
 import { ItemListComponent } from './item-list/item-list.component';
+import { PartDetailComponent } from './part-mgmt/part-detail.component';
+import { PartListComponent } from './part-mgmt/part-list.component';
 import { ProductDefinitionCreateComponent } from './product-definition/product-definition-create.component';
 import { ProductDefinitionComponent } from './product-definition/product-definition.component';
 import { ProductMgmtComponent } from './product-mgmt.component';
@@ -26,9 +28,18 @@ const routes: Routes = [
     {
         path: '',
         component: ProductMgmtComponent
-    }, {
+    },
+    {
         path: 'item-list',
         component: ItemListComponent
+    },
+    {
+        path: 'part-list',
+        component: PartListComponent
+    },
+    {
+        path: 'part-list/detail/:id',
+        component: PartDetailComponent
     },
     {
         path: 'product-definition',
@@ -42,7 +53,7 @@ const routes: Routes = [
         children: [
             { path: '', component: BundleMgmtComponent },
             { path: 'create', component: BundleMgmtCreateComponent },
-            { path: 'edit/:id', component: BundleMgmtEditComponent },
+            { path: 'edit/:id', component: BundleMgmtEditComponent }
         ]
     },
     {
@@ -52,7 +63,6 @@ const routes: Routes = [
             { path: 'create', component: ConditionProductGroupCreateComponent },
             { path: 'edit/:id', component: ConditionProductGroupEditComponent }
         ]
-
     },
     {
         path: 'e-catalog',
@@ -76,4 +86,4 @@ const routes: Routes = [
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule]
 })
-export class ProductMgmtRoutingModule { }
+export class ProductMgmtRoutingModule {}
