@@ -10,15 +10,18 @@
             <div class="row">
                 <div class="form-group col-sm-12" *ngIf="isEdit">
                     <label for="" class="control-label" translate>Code</label>
+                    <span class="text-danger">(*) </span>
                     <input type="text" formControlName="code" class="form-control">
                 </div>
                 <div class="form-group col-sm-12">
                     <label for="" class="control-label" translate>Bank Name</label>
+                    <span class="text-danger">(*) </span>
                     <input type="text" formControlName="name" class="form-control">
                 </div>
 
                 <div class="form-group col-sm-12">
                     <label for="" class="control-label" translate>SWIFT CODE</label>
+                    <span class="text-danger">(*) </span>
                     <input type="text" formControlName="swift" class="form-control">
                 </div>
             </div>
@@ -27,7 +30,7 @@
     <div class="modal-footer" style="padding-top: 0">
         <div class="form-group" style="margin-top: 20px;">
             <div class="text-center">
-                <button style="width: 70px" class="btn btn-primary" type="button" (click)="ok()" translate>OK</button>
+                <button [disabled]="!bankForm.valid" style="width: 70px" class="btn btn-primary" type="button" (click)="ok()" translate>OK</button>
                 <button class="btn btn-default" type="button" (click)="cancel()" translate>Cancel</button>
             </div>
         </div>
