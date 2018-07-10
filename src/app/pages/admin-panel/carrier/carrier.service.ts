@@ -26,6 +26,11 @@ export class CarrierService {
         return this.API.get(url);
     }
 
+    getGenerateCode() {
+        const url = 'carrier/generate-code';
+        return this.API.get(url);
+    }
+
     getBranchByBank(id) {
         const url = `bank/${id}/branch/list`;
         return this.API.get(url);
@@ -34,5 +39,5 @@ export class CarrierService {
     createCarrier(params) {
         const url = 'carrier';
         return this.API.post(url, params);
-    }
+    }   
 }
