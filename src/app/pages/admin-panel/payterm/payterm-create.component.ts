@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
@@ -35,8 +36,14 @@ export class PayTermCreateComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.route.params.subscribe(params => {
+            if (params.id) {
+                this.getDetailPaymentTerm(params.id);
+            } else {
+                this.getGenerateCode();
+            }
+        });
         this.listMaster['status'] = [{ key: 'IA', value: 'In Active' }, { key: 'AT', value: 'Active' }];
-        this.route.params.subscribe(params => this.getDetailPaymentTerm(params.id));
     }
     payloadData() {
         if (this.generalForm.get('id').value) {
@@ -44,6 +51,11 @@ export class PayTermCreateComponent implements OnInit {
         } else {
             this.createPaymentTerm();
         }
+    }
+    getGenerateCode() {
+        this.paytermService.getGenerateCode().subscribe(res => {
+            this.generalForm.get('cd').patchValue (res.message);
+        });
     }
     createPaymentTerm() {
         const params = this.generalForm.value;
@@ -70,6 +82,13 @@ export class PayTermCreateComponent implements OnInit {
             this.toastr.success(res.message);
         }, err => {
             this.toastr.error(err.message);
+        });
+    }
+    numberMaskObject(max?) {
+        return createNumberMask({
+            allowDecimal: false,
+            prefix: '',
+            integerLimit: max || null
         });
     }
 

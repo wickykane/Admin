@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
     selector: 'app-order-history-modal-content',
     templateUrl: './order-history.modal.html'
 })
+// tslint:disable-next-line:component-class-suffix
 export class OrderHistoryModalContent implements OnInit {
     @Input() company_id;
 
