@@ -16,7 +16,9 @@ export class MassPriceViewComponent implements OnInit {
     /**
      * Variable Declaration
      */
-    public data = {};
+    public file = '';
+    public created_at = '';
+    public log = [];
 
     /**
      * Init Data
@@ -32,9 +34,10 @@ export class MassPriceViewComponent implements OnInit {
     }
 
     ngOnInit() {
-      this.route.params.subscribe(params =>
-          this.getDetailMassPrice(params.id)
-      );
+
+        this.route.params.subscribe(params =>
+            this.getDetailMassPrice(params.id)
+        );
     }
     /**
      * Mater Data
@@ -44,11 +47,13 @@ export class MassPriceViewComponent implements OnInit {
      * Internal Function
      */
     getDetailMassPrice(id) {
-      this.productService.getDetailMassPrice(id).subscribe(res => {
-              try {
-                  this.data = res.data;
-              } catch (e) {}
-          });
+        this.productService.getDetailMassPrice(id).subscribe(res => {
+            try {
+                this.file = res.data['file'];
+                this.created_at = res.data['created_at'];
+                this.log = res.data['log'];
+            } catch (e) { }
+        });
     }
 
 
