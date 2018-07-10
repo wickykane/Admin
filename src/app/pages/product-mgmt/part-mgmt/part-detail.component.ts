@@ -1,6 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import {
+    NgxGalleryAnimation,
+    NgxGalleryImage,
+    NgxGalleryOptions
+} from 'ngx-gallery';
 import { ProductService } from '../product-mgmt.service';
 import { PartKeyService } from './keys.control';
 
@@ -14,11 +19,12 @@ export class PartDetailComponent implements OnInit {
     /**
      * Variable Declaration
      */
-    public part: any = {};
-    public listMaster = {};
+    public part: any;
     public list = {
-        items: []
+        images: []
     };
+    galleryOptions: NgxGalleryOptions[];
+    galleryImages: NgxGalleryImage[];
 
     constructor(
         private fb: FormBuilder,
@@ -32,55 +38,70 @@ export class PartDetailComponent implements OnInit {
     }
 
     ngOnInit() {
-        //  Init Fn
-        this.listMaster['certification_partNumber'] = [
-            { code: 'Y', value: 'Yes' },
-            { code: 'N', value: 'No' }
-        ];
+        this.part = {};
         this.route.params.subscribe(params => this.getDetailPart(params.id));
+        this.galleryOptions = [
+            {
+                width: '500px',
+                height: '400px',
+                thumbnailsOrder: 'row',
+                // thumbnailsColumns: 4,
+                // thumbnailsRows: 1
+            }
+        ];
     }
 
     getDetailPart(id) {
-        const params = {};
-
-        this.list.items = [
-            {
-                id: 1,
-                sku: 'abc',
-                partlinks_no: 'abc',
-                des: 'abc',
-                mfr_name: 'abc',
-                model_name: 'abc',
-                category_id: 'abc',
-                sub_category_id: 'abc',
-                brand_name: 'abc',
-                cert: 'Y',
-                UOM: 'abc',
-                oem_price: 50,
-                cost_price: 50,
-                sell_price: 50
-            }
-        ];
-
         this.productService.getDetailPart(id).subscribe(res => {
             try {
-                if (!res.data.rows) {
-                    this.list.items = [];
-                    return;
+                if (res.status) {
+                    this.part = res.data.item;
+                    this.list.images = res.data.images;
                 }
-                this.list.items = res.data.rows;
 
-                this.listMaster['brands'] = res.data.meta_filters.brands;
-                this.listMaster['categories'] =
-                    res.data.meta_filters.categories;
-                this.listMaster['certification'] =
-                    res.data.meta_filters.certification;
-                this.listMaster['countries'] = res.data.meta_filters.countries;
-                this.listMaster['partlinks_no'] =
-                    res.data.meta_filters.partlinks_no;
-                this.listMaster['part_no'] = res.data.meta_filters.part_no;
-                this.listMaster['manufacturers'] =
-                    res.data.meta_filters.manufacturers;
+                console.log(this.part);
+                this.galleryImages = [
+                    {
+                        small:
+                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/1-small.jpeg',
+                        medium:
+                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/1-medium.jpeg',
+                        big:
+                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/1-big.jpeg'
+                    },
+                    {
+                        small:
+                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/2-small.jpeg',
+                        medium:
+                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/2-medium.jpeg',
+                        big:
+                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/2-big.jpeg'
+                    },
+                    {
+                        small:
+                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/3-small.jpeg',
+                        medium:
+                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/3-medium.jpeg',
+                        big:
+                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/3-big.jpeg'
+                    },
+                    {
+                        small:
+                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/4-small.jpeg',
+                        medium:
+                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/4-medium.jpeg',
+                        big:
+                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/4-big.jpeg'
+                    },
+                    {
+                        small:
+                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/5-small.jpeg',
+                        medium:
+                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/5-medium.jpeg',
+                        big:
+                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/5-big.jpeg'
+                    }
+                ];
             } catch (e) {
                 console.log(e);
             }

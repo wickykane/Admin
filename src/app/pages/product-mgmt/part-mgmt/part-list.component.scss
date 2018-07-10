@@ -53,3 +53,9 @@
         }
     }
 }
+
+.images-block {
+    ngx-gallery {
+        max-width: 100%;
+    }
+}
