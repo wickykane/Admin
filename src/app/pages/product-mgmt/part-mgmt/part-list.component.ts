@@ -152,7 +152,9 @@ export class PartListComponent implements OnInit {
         const id = this.filterForm.value.category_id_filter;
         const arr = this.listMaster['categories'];
         this.listMaster['sub_cat'] = [];
+        // tslint:disable-next-line:prefer-for-of
         for (let k = 0; k < id.length; k++) {
+            // tslint:disable-next-line:prefer-for-of
             for (let i = 0; i < arr.length; i++) {
                 if (arr[i]['category_id'] === id[k]) {
                     this.listMaster['sub_cat'] = this.listMaster[

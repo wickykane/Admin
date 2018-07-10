@@ -12,6 +12,10 @@ export class ProductService {
         const url = 'part';
         return this.apiService.get(url, params);
     }
+    getDetailPart(id) {
+        const url = 'part/detail/' + id;
+        return this.apiService.get(url);
+    }
 
     // Item-Product Definition
     getListItem(params) {
