@@ -152,6 +152,7 @@ export class BankComponent implements OnInit {
     this.bankService.createBranch(bankId, params).subscribe(res => {
       try {
         this.toastr.success(res.message);
+        this.getList();
       } catch (e) {
         console.log(e);
       }

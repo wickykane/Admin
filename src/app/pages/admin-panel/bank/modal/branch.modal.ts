@@ -27,12 +27,12 @@ export class BranchModalComponent implements OnInit {
   ) {
     this.branchForm = fb.group({
       'bankname': [{ value: null, disabled: true }],
-      'name': [null],
-      'country_code': [null],
-      'address': [null],
-      'city': [null],
+      'name': [null, Validators.required],
+      'country_code': [null, Validators.required],
+      'address': [null, Validators.required],
+      'city': [null, Validators.required],
       'state_id': [null],
-      'zip_code': [null],
+      'zip_code': [null, Validators.required],
     });
   }
 

@@ -31,7 +31,8 @@ export class MassPriceCreateComponent implements OnInit {
         private vRef: ViewContainerRef,
         private productService: ProductService) {
         this.generalForm = fb.group({
-            'name': [null, Validators.required]
+            'name': [null, Validators.required],
+            'path': [null]
         });
     }
 
@@ -50,6 +51,7 @@ export class MassPriceCreateComponent implements OnInit {
         if (event.target.files && event.target.files.length > 0) {
             const files = event.target.files;
             this.listFile = Array.of(...files);
+            this.generalForm.patchValue({ path: this.generalForm.value.name });
         }
     }
 
@@ -62,6 +64,9 @@ export class MassPriceCreateComponent implements OnInit {
             res => {
                 try {
                     this.toastr.success('The file has been imported successfully');
+                    setTimeout(() => {
+                        this.router.navigate(['/product-management/mass-price/detail/' + res.data.id]);
+                    }, 1000);
                 } catch (e) {
                     console.log(e);
                 }
