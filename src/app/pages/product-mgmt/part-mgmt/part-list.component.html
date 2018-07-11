@@ -223,10 +223,10 @@
                     <td>{{item.cost_price|currency:'$'}}</td>
                     <td>{{item.sale_price|currency:'$'}}</td>
                     <td>
-                        <a class="btn btn-default" [routerLink]="['/product-management/part-list/detail/', item.id]">
+                        <a class="btn btn-default" [routerLink]="['/product-management/part-list/detail/', item.item_id]">
                             <i class="fa fa-eye" aria-hidden="true"></i>
                         </a>
-                        <a class="btn btn-default" [routerLink]="['/product-management/part-list/edit/', item.id]">
+                        <a class="btn btn-default" [routerLink]="['/product-management/part-list/edit/', item.item_id]">
                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                         </a>
                     </td>

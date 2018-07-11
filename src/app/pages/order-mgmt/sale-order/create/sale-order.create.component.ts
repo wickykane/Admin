@@ -389,7 +389,6 @@ export class SaleOrderCreateComponent implements OnInit {
         modalRef.componentInstance.company_id = this.generalForm.value.company_id;
         modalRef.result.then(res => {
             if (res instanceof Array && res.length > 0) {
-
                 const listAdded = [];
                 (this.list.items).forEach( (item) => {
                     listAdded.push(item.item_id);
@@ -399,7 +398,7 @@ export class SaleOrderCreateComponent implements OnInit {
                     item['products'] = [];
                     item.order_quantity = 1;
                     item.totalItem = item.sale_price;
-                    item.source = 'Manual';
+                    item.source = 'From Quote';
                 });
 
                 this.list.items = this.list.items.concat(res.filter( (item) => {
