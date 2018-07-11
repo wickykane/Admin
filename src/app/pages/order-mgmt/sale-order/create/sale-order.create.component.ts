@@ -365,6 +365,7 @@ export class SaleOrderCreateComponent implements OnInit {
 
                 const listAdded = [];
                 (this.list.items).forEach( (item) => {
+                    item['order_detail_id'] = null;
                     listAdded.push(item.item_id);
                 });
                 res.forEach( (item) => {
@@ -479,6 +480,7 @@ export class SaleOrderCreateComponent implements OnInit {
                 item_type: item.item_type,
                 quantity: item.order_quantity,
                 sale_price: item.sale_price,
+                order_detail_id: item.order_detail_id,
                 discount_percent: item.discount || 0,
                 shipping_address_id: item.shipping_address_id,
                 warehouse_id: item.warehouse_id || 1
