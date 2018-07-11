@@ -34,13 +34,6 @@
                                     <option *ngFor="let de of listMaster['models']" [ngValue]="de.model_id">{{de.name}}</option>
                                 </select>
                             </div>
-                            <label for="type" class="control-label" translate>Sub-Model</label>
-                            <div class="block-search">
-                                <select formControlName="sub_model_id" class="form-control">
-                                    <option value="null" selected="true" translate>--Select--</option>
-                                    <option *ngFor="let de of listMaster['sub_models']" [ngValue]="de.model_id">{{de.name}}</option>
-                                </select>
-                            </div>
                             <div class="block-btn-search">
                                 <label class="control-label">&nbsp;</label>
                                 <div>
@@ -105,8 +98,7 @@
 
         </div>
     </div>
-    <!-- <div class="block-content pt-3" *ngIf="list.items.length > 0"> -->
-    <div class="block-content mt-4">
+    <div class="block-content pt-4" *ngIf="list.items.length > 0">
         <h5 class="title-form">FILTER</h5>
         <div class="row">
             <form class="form-horizontal form-search col-md-12" [formGroup]="filterForm">
@@ -196,7 +188,6 @@
                         <th translate>Description</th>
                         <th translate>Make</th>
                         <th translate>Model</th>
-
                         <th translate>Category</th>
                         <th translate>Sub Category</th>
                         <th translate>Brand</th>
@@ -209,7 +200,7 @@
                     </tr>
                 </thead>
 
-                <tr *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
+                <tr *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': item.is_checked}">
                     <td>
                         <label class="css-input css-checkbox css-checkbox-default">
                             <input class="cb-element" type="checkbox" [(ngModel)]="item.is_checked" (change)="isAllChecked()">
