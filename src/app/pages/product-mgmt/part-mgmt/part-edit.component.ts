@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NguCarousel } from '@ngu/carousel';
 import {
     NgxGalleryAnimation,
     NgxGalleryImage,
@@ -19,8 +20,10 @@ export class PartEditComponent implements OnInit {
     /**
      * Variable Declaration
      */
+    public carouselImages: NguCarousel;
     public generalForm: FormGroup;
     public part: any;
+    public images: any = [];
     public list = {
         image_del: [],
         files: []
@@ -54,6 +57,19 @@ export class PartEditComponent implements OnInit {
                 thumbnailsOrder: 'row'
             }
         ];
+        this.carouselImages = {
+            grid: { xs: 1, sm: 1, md: 1, lg: 1, all: 0 },
+            slide: 1,
+            speed: 400,
+            interval: 4000,
+            point: {
+                visible: true
+            },
+            load: 2,
+            touch: true,
+            loop: true,
+            custom: 'banner'
+        };
     }
     uploadFile($event) {
         const fileUpload: File = $event.target.files[0];
@@ -61,13 +77,17 @@ export class PartEditComponent implements OnInit {
         reader.readAsDataURL(fileUpload);
         reader.onloadend = () => {
             const base64 = reader.result;
-            const newImage = {
+            const galleryImage = {
                 small: base64,
                 medium: base64,
                 big: base64
             };
+            this.galleryImages.push(galleryImage);
 
-            this.galleryImages.push(newImage);
+            const nguImage = {
+                origin_img: base64
+            };
+            this.images.push(nguImage);
             this.list.files.push(reader.result);
         };
     }
@@ -75,7 +95,8 @@ export class PartEditComponent implements OnInit {
     updateItem() {
         const data = {
             ...this.generalForm.value,
-            ...this.list.files
+            ...{ image_del: this.list.image_del },
+            ...{ files: this.list.files }
         };
         Object.keys(data).forEach(
             key => (data[key] === null || data[key] === '') && delete data[key]
@@ -92,16 +113,21 @@ export class PartEditComponent implements OnInit {
         );
     }
 
+    removeItem(index, item) {
+        this.images.splice(index, 1);
+        this.list.image_del.push(item.item_image_id);
+    }
+
     getDetailPart(id) {
         this.productService.getDetailPart(id).subscribe(res => {
             try {
                 if (res.status) {
                     this.part = res.data.item;
-                    // this.list.images = res.data.images;
+                    this.images = res.data.images;
                     this.generalForm.patchValue(res.data.item);
                 }
 
-                console.log(this.part);
+                console.log(res.data);
                 this.galleryImages = [
                     {
                         small:
@@ -124,5 +150,11 @@ export class PartEditComponent implements OnInit {
                 console.log(e);
             }
         });
+    }
+
+    myfunc(event: Event) {
+        // carouselLoad will trigger this funnction when your load value reaches
+        // it is helps to load the data by parts to increase the performance of the app
+        // must use feature to all carousel
     }
 }
