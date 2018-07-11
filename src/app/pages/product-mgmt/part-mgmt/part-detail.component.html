@@ -1,0 +1,213 @@
+<div class="block anchor-scroll">
+    <app-page-header [heading]="'PART MANAGEMENT'" [icon]="'fa-th-list'"></app-page-header>
+    <div class="row">
+        <section class="col-md-8 information-block" *ngIf="part">
+            <fieldset class="custom-border">
+                <legend class="custom-border">GENETAL INFORMATION</legend>
+                <div class="row pl-3 pr-3">
+                    <div class="col-md-2">
+                        <label for="" class="control-label mb-2">Part No</label>
+                        <span class="text-danger">( * )</span>
+                        <div>
+                            <span>{{part.part_no}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="" class="control-label mb-2">Partlink No</label>
+                        <span class="text-danger">( * )</span>
+
+                        <div>
+                            <span>{{part.partlinks_no}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="" class="control-label mb-2">Product Description</label>
+                        <span class="text-danger">( * )</span>
+                        <div>
+                            <span>{{part.des}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="" class="control-label mb-2">Category</label>
+                        <span class="text-danger">( * )</span>
+                        <div>
+                            <span>{{part.category_id}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="" class="control-label mb-2">Sub Category</label>
+                        <span class="text-danger">( * )</span>
+                        <div>
+                            <span>{{part.sub_ctgry_name}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="" class="control-label mb-2">UOM</label>
+                        <span class="text-danger">( * )</span>
+                        <div>
+                            <span>{{part.uom_name}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="" class="control-label mb-2">Make</label>
+                        <span class="text-danger">( * )</span>
+                        <div>
+                            <span>{{part.make_name}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="" class="control-label mb-2">Model</label>
+                        <div>
+                            <span>{{part.model_name}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="" class="control-label mb-2">Year From</label>
+                        <span class="text-danger">( * )</span>
+                        <div>
+                            <span>{{part.yr_from}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="" class="control-label mb-2">Year To</label>
+                        <span class="text-danger">( * )</span>
+                        <div>
+                            <span>{{part.yr_to}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="" class="control-label mb-2">Brand</label>
+                        <div>
+                            <span>{{part.brand_name}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="" class="control-label mb-2">Certification</label>
+                        <div>
+                            <span>{{part.cert_name}}</span>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="custom-border">
+                <legend class="custom-border">SHIPPING PACKAGE INFORMATION</legend>
+                <div class="row pl-3 pr-3">
+                    <div class="col-md-2">
+                        <label for="" class="control-label mb-2">Length (m)</label>
+                        <div>
+                            <span>{{part.len}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="" class="control-label mb-2">Width (m)</label>
+
+                        <div>
+                            <span>{{part.width}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="" class="control-label mb-2">Height (m)</label>
+                        <div>
+                            <span>{{part.height}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="" class="control-label mb-2">Volume (cbm)</label>
+                        <div>
+                            <span>{{part.vol}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="" class="control-label mb-2">Gross Weight</label>
+                        <div>
+                            <span>{{part.wt}}</span>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="custom-border">
+                <legend class="custom-border">SELLING INFORMATION</legend>
+                <div class="row pl-3 pr-3">
+                    <div class="col-md-2">
+                        <label for="" class="control-label mb-2">Quatable</label>
+                        <div>
+                            <span>{{part.is_quotable == 1 ? 'Yes' : 'No'}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="" class="control-label mb-2">Show Price on Store</label>
+                        <div>
+                            <span>{{part.is_show_price == 1 ? 'Yes' : 'No'}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="" class="control-label mb-2">Cost Price</label>
+                        <span class="text-danger">( * )</span>
+                        <div>
+                            <span>{{part.po_price}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="" class="control-label mb-2">OEM Price</label>
+                        <span class="text-danger">( * )</span>
+                        <div>
+                            <span>{{part.oem_price}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="" class="control-label mb-2">Sales Price</label>
+                        <span class="text-danger">( * )</span>
+                        <div>
+                            <span>{{part.sell_price}}</span>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="custom-border">
+                <legend class="custom-border">DISCOUNT INFORMATION</legend>
+                <div class="row pl-3 pr-3">
+                    <div class="col-md-4">
+                        <label for="" class="control-label mb-2">Category Discount (%)</label>
+                        <div>
+                            <span>{{part.percent}} %</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="" class="control-label mb-2">Discount on Product Condition (%)</label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <span>Good</span>
+                            </div>
+                            <div class="col-md-6">
+                                <span>{{part.percent}} %</span>
+                            </div>
+                            <div class="col-md-6">
+                                <span>Bad</span>
+                            </div>
+                            <div class="col-md-6">
+                                <span>{{part.percent}} %</span>
+                            </div>
+                            <div class="col-md-6">
+                                <span>Scratch</span>
+                            </div>
+                            <div class="col-md-6">
+                                <span>{{part.percent}} %</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </fieldset>
+        </section>
+        <section class="col-md-4 images-block">
+            <fieldset class="custom-border">
+                <legend class="custom-border">IMAGES</legend>
+                <div class="row">
+                    <div class="col-md-12">
+                        <ngx-gallery [options]="galleryOptions" [images]="galleryImages"></ngx-gallery>
+                    </div>
+                </div>
+            </fieldset>
+        </section>
+    </div>
+</div>
