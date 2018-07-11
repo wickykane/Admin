@@ -16,6 +16,8 @@ import { ECatalogComponent } from './e-catalog/e-catalog.component';
 import { ItemListComponent } from './item-list/item-list.component';
 import { PartDetailComponent } from './part-mgmt/part-detail.component';
 import { PartListComponent } from './part-mgmt/part-list.component';
+import { PartEditComponent } from './part-mgmt/part-edit.component';
+
 import { ProductDefinitionCreateComponent } from './product-definition/product-definition-create.component';
 import { ProductDefinitionComponent } from './product-definition/product-definition.component';
 import { ProductMgmtComponent } from './product-mgmt.component';
@@ -40,6 +42,10 @@ const routes: Routes = [
     {
         path: 'part-list/detail/:id',
         component: PartDetailComponent
+    },
+     {
+        path: 'part-list/edit/:id',
+        component: PartEditComponent
     },
     {
         path: 'product-definition',
