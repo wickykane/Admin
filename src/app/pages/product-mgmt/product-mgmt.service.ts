@@ -7,6 +7,11 @@ export class ProductService {
     public token: string;
     constructor(private $http: Http, private apiService: ApiService) {}
 
+    updateItem(id, data) {
+        const url = 'item/update/' + id;
+        return this.apiService.post(url, data);
+    }
+
     getDetailPart(id) {
         const url = 'item/' + id;
         return this.apiService.get(url);
