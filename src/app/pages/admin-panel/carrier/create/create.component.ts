@@ -3,6 +3,7 @@ import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ToastrService } from 'ngx-toastr';
+import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { routerTransition } from '../../../../router.animations';
 import { CommonService } from '../../../../services/common.service';
 import { CarrierService } from '../carrier.service';
@@ -93,6 +94,13 @@ export class CreateComponent implements OnInit {
             })();
         });
         this.listBankAccount = data.banks;
+    }
+    numberMaskObject(max?) {
+        return createNumberMask({
+            allowDecimal: true,
+            prefix: '',
+            integerLimit: max || null
+        });
     }
 
     getCarrierById(id) {
