@@ -13,9 +13,16 @@
                 <ngb-tab id="vehicle" title="VEHICLE">
                     <ng-template ngbTabContent>
                         <form class="form-horizontal form-search form-vehicle" [formGroup]="searchForm">
-                            <label for="type" class="control-label" translate>Year</label>
+                            <label for="type" class="control-label" translate>Year From</label>
                             <div class="block-search">
-                                <select formControlName="year" class="form-control">
+                                <select formControlName="year_from" class="form-control">
+                                    <option value="null" selected="true" translate>--Select--</option>
+                                    <option *ngFor="let de of listMaster['years']" [ngValue]="de.id">{{de.name}}</option>
+                                </select>
+                            </div>
+                            <label for="type" class="control-label" translate>Year To</label>
+                            <div class="block-search">
+                                <select formControlName="year_to" class="form-control">
                                     <option value="null" selected="true" translate>--Select--</option>
                                     <option *ngFor="let de of listMaster['years']" [ngValue]="de.id">{{de.name}}</option>
                                 </select>
@@ -193,9 +200,10 @@
                         <th translate>Brand</th>
                         <th translate>Cert</th>
                         <th translate>UOM</th>
+                        <th translate>Condition</th>
                         <th translate>OEM Price</th>
                         <th translate>Cost Price</th>
-                        <th translate>Sales Price</th>
+                        <th class="text-center">Sales Price</th>
                         <th translate>Action</th>
                     </tr>
                 </thead>
@@ -210,21 +218,22 @@
                     <td>{{item.sku}}</td>
                     <td>{{item.partlinks_no}}</td>
                     <td>{{item.des}}</td>
-                    <td>{{item.mfr_name}}</td>
+                    <td>{{item.make_name }}</td>
                     <td>{{item.model_name}}</td>
-                    <td>{{item.category_id}}</td>
-                    <td>{{item.sub_category_id}}</td>
+                    <td>{{item.ctgry_name}}</td>
+                    <td>{{item.sub_ctgry_name}}</td>
                     <td>{{item.brand_name}}</td>
                     <td>{{item.cert=='Y'?'Yes':'No'}}</td>
-                    <td>{{item.UOM}}</td>
+                    <td>{{item.uom_name}}</td>
+                    <td>{{item.condition_name}}</td>
                     <td>{{item.oem_price|currency:'$'}}</td>
                     <td>{{item.cost_price|currency:'$'}}</td>
-                    <td>{{item.sell_price|currency:'$'}}</td>
+                    <td>{{item.sale_price|currency:'$'}}</td>
                     <td>
-                        <a class="btn btn-default" [routerLink]="['/product-management/part-list/detail/', item.id]">
+                        <a class="btn btn-default" [routerLink]="['/product-management/part-list/detail/', item.item_id]">
                             <i class="fa fa-eye" aria-hidden="true"></i>
                         </a>
-                        <a class="btn btn-default" [routerLink]="['/product-management/part-list/edit/', item.id]">
+                        <a class="btn btn-default" [routerLink]="['/product-management/part-list/edit/', item.item_id]">
                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                         </a>
                     </td>

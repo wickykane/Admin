@@ -12,7 +12,7 @@
                     </select>
                 </div>
             </form>
-            <ngb-tabset #tabSet class="tab-header" activeId="vin" type="pills" (tabChange)="resetTab()">
+            <ngb-tabset #tabSet class="tab-header" activeId="vehicle" type="pills" (tabChange)="resetTab()">
                 <ngb-tab id="search" title="SEARCH BY:" [disabled]="true">
                     <ng-template ngbTabContent>
 
@@ -21,9 +21,16 @@
                 <ngb-tab id="vehicle" title="VEHICLE">
                     <ng-template ngbTabContent>
                         <form class="form-horizontal form-search form-vehicle" [formGroup]="searchForm">
-                            <label for="type" class="control-label" translate>Year</label>
+                            <label for="type" class="control-label" translate>Year From</label>
                             <div class="block-search">
-                                <select formControlName="year" class="form-control">
+                                <select formControlName="year_from" class="form-control">
+                                    <option value="null" selected="true" translate>--Select--</option>
+                                    <option *ngFor="let de of listMaster['years']" [ngValue]="de.id">{{de.name}}</option>
+                                </select>
+                            </div>
+                            <label for="type" class="control-label" translate>Year To</label>
+                            <div class="block-search">
+                                <select formControlName="year_to" class="form-control">
                                     <option value="null" selected="true" translate>--Select--</option>
                                     <option *ngFor="let de of listMaster['years']" [ngValue]="de.id">{{de.name}}</option>
                                 </select>
@@ -189,8 +196,7 @@
     </div>
     <div class="block-content pd-top">
         <button [disabled]="list.checklist.length == 0" (click)="createOrder()" class="btn btn-primary" translate>Create Order</button>
-        <a class="btn btn-primary pull-right" routerLink="/product-management/mass-price"> Mass Update Price</a>
-
+        <!-- <a class="btn btn-primary pull-right" routerLink="/product-management/mass-price"> Mass Update Price</a> -->
         <div class="table-responsive" style="margin-top:10px">
             <table class="table table-striped table-vcenter table-hover custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                 <thead class="bg-white">
@@ -215,8 +221,7 @@
                         <th translate>On Hand QTY</th>
                         <th translate>Alloc QTY</th>
                         <th translate>Avail QTY</th>
-                        <th translate>OEM Price</th>
-                        <th translate>Cost Price</th>
+                        <th translate>OEM Price</th>                        
                         <th translate>Sales Price</th>
                     </tr>
                 </thead>
@@ -231,20 +236,19 @@
                     <td>{{item.sku}}</td>
                     <td>{{item.partlinks_no}}</td>
                     <td>{{item.des}}</td>
-                    <td>{{item.mfr_name}}</td>
+                    <td>{{item.make_name}}</td>
                     <td>{{item.model_name}}</td>
-                    <td>{{item.category_name}}</td>
-                    <td>{{item.sub_category_name}}</td>
+                    <td>{{item.ctgry_name}}</td>
+                    <td>{{item.sub_ctgry_name}}</td>
                     <td>{{item.brand_name}}</td>
                     <td>{{item.cert=='Y'?'Yes':'No'}}</td>
-                    <td>{{item.uom_code}}</td>
-                    <td>{{item.condition}}</td>
-                    <td>{{item.on_hand_qty}}</td>
-                    <th>{{item.alloc_qty}}</th>
-                    <td>{{item.avail_qty}}</td>
-                    <td>{{item.oem}}</td>
-                    <th>{{item.cost_of_goods_sold | currency}}</th>
-                    <th>{{item.sell_price|currency:'$'}}</th>
+                    <td>{{item.uom_name}}</td>
+                    <td>{{item.condition_name}}</td>
+                    <td>{{item.qty_remained}}</td>
+                    <th>{{item.qty_reserved}}</th>
+                    <td>{{item.qty_available}}</td>
+                    <td>{{item.oem_price |currency:'$'}}</td>                    
+                    <th>{{item.sale_price|currency:'$'}}</th>
                 </tr>
                 <tr *ngIf="list.items.length === 0">
                     <td colspan="100%" class="text-center">No data.</td>
