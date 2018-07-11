@@ -4,7 +4,7 @@
         <section class="col-md-8 information-block" *ngIf="part">
             <fieldset class="custom-border">
                 <legend class="custom-border">GENETAL INFORMATION</legend>
-                <div class="row pl-3 pr-3">
+                <div class="row pl-3 pr-3 mb-3">
                     <div class="col-md-2">
                         <label for="" class="control-label mb-2">Part No</label>
                         <span class="text-danger">( * )</span>
@@ -48,6 +48,8 @@
                             <span>{{part.uom_name}}</span>
                         </div>
                     </div>
+                </div>
+                <div class="row pl-3 pr-3">
                     <div class="col-md-2">
                         <label for="" class="control-label mb-2">Make</label>
                         <span class="text-danger">( * )</span>
@@ -127,41 +129,56 @@
             </fieldset>
             <fieldset class="custom-border">
                 <legend class="custom-border">SELLING INFORMATION</legend>
-                <div class="row pl-3 pr-3">
-                    <div class="col-md-2">
-                        <label for="" class="control-label mb-2">Quatable</label>
-                        <div>
-                            <span>{{part.is_quotable == 1 ? 'Yes' : 'No'}}</span>
+                <form class="form-horizontal" [formGroup]="generalForm">
+
+                    <div class="row pl-3 pr-3">
+                        <div class="col-md-2">
+                            <label for="" class="control-label mb-2">Quatable</label>
+                            <div>
+                                <!-- <span>{{part.is_quotable == 1 ? 'Yes' : 'No'}}</span> -->
+                                <select formControlName="is_quotable" class="form-control">
+                                    <option value="0" selected="true" translate>No</option>
+                                    <option value="1" translate>Yes</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="" class="control-label mb-2">Show Price on Store</label>
+                            <div>
+                                <!-- <span>{{part.is_show_price == 1 ? 'Yes' : 'No'}}</span> -->
+                                <select formControlName="is_show_price" class="form-control">
+                                    <option value="0" selected="true" translate>No</option>
+                                    <option value="1" translate>Yes</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="" class="control-label mb-2">Cost Price</label>
+                            <span class="text-danger">( * )</span>
+                            <div>
+                                <span>{{part.po_price}}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="" class="control-label mb-2">OEM Price</label>
+                            <span class="text-danger">( * )</span>
+                            <div>
+                                <span>{{part.oem_price}}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="" class="control-label mb-2">Sales Price</label>
+                            <span class="text-danger">( * )</span>
+                            <div class="input-group">
+                                <!-- <span>{{part.sell_price}}</span> -->
+                                <input type="text" class="form-control" formControlName="sell_price">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">$</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <label for="" class="control-label mb-2">Show Price on Store</label>
-                        <div>
-                            <span>{{part.is_show_price == 1 ? 'Yes' : 'No'}}</span>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <label for="" class="control-label mb-2">Cost Price</label>
-                        <span class="text-danger">( * )</span>
-                        <div>
-                            <span>{{part.po_price}}</span>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <label for="" class="control-label mb-2">OEM Price</label>
-                        <span class="text-danger">( * )</span>
-                        <div>
-                            <span>{{part.oem_price}}</span>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <label for="" class="control-label mb-2">Sales Price</label>
-                        <span class="text-danger">( * )</span>
-                        <div>
-                            <span>{{part.sell_price}}</span>
-                        </div>
-                    </div>
-                </div>
+                </form>
             </fieldset>
             <fieldset class="custom-border">
                 <legend class="custom-border">DISCOUNT INFORMATION</legend>
@@ -202,7 +219,11 @@
         <section class="col-md-4 images-block">
             <fieldset class="custom-border">
                 <legend class="custom-border">IMAGES</legend>
-                <div class="row">
+                <div class="mb-3">
+                    <input type="file" class="hidden" accept="image/*" #file (change)="uploadFile($event)">
+                    <button class="btn btn-block btn-upload" (click)="file.click()">Select File Here To Upload</button>
+                </div>
+                <div class="row" *ngIf="galleryImages">
                     <div class="col-md-12">
                         <ngx-gallery [options]="galleryOptions" [images]="galleryImages"></ngx-gallery>
                     </div>
@@ -211,6 +232,7 @@
         </section>
     </div>
     <div class="d-block pt-3 pb-3 text-center">
+        <a class="btn btn-primary text-white" (click)="updateItem()" translate>Save</a>
         <button class="btn btn-default" routerLink="/product-management/part-list/">Cancel</button>
     </div>
 </div>
