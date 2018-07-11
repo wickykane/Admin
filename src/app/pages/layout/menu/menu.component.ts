@@ -211,12 +211,12 @@ export class MenuComponent implements OnInit {
                     },
                     {
                         link: '/product-management/item-list',
-                        name: 'Item List '
-                    },
-                    {
-                        link: '/product-management/product-definition',
-                        name: 'Product Definition'
+                        name: 'Inventory Items'
                     }
+                    // {
+                    //     link: '/product-management/product-definition',
+                    //     name: 'Product Definition'
+                    // }
                     // {
                     //     link: '/product-management/bundle',
                     //     name: 'Bundle Management'
