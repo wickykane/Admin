@@ -41,8 +41,8 @@
                         <span class="text-danger">( * )</span>
                         <div class=" input-group">
                             <input type="number" class="form-control" name="duration" formControlName="duration">
-                            <select formControlName="durationType" class="form-control" *ngIf="list.durationType">
-                                <option *ngFor="let dur of list.durationType " [ngValue]="dur.id ">{{dur.name}}</option>
+                            <select formControlName="durationType" class="form-control">
+                                <option *ngFor="let dur of list['durationType']" [ngValue]="dur.id ">{{dur.name}}</option>
                             </select>
                         </div>
                     </div>
@@ -51,8 +51,8 @@
                         <span class="text-danger">( * )</span>
 
                         <div class=" input-group">
-                            <select formControlName="approve" class="form-control" *ngIf="list.approveList">
-                                <option *ngFor="let dur of list.approveList " [ngValue]="dur.id ">{{dur.name}}</option>
+                            <select formControlName="approve" class="form-control">
+                                <option *ngFor="let dur of list['approveList']" [ngValue]="dur.id ">{{dur.name}}</option>
                             </select>
                             <span>days</span>
                         </div>
@@ -71,8 +71,8 @@
                 </div>
             </form>
         </fieldset>
-        <div class="row mt-3 " *ngIf="list.base_discount ">
-            <div class="col-sm-12 pt-3 ">
+        <div class="row mt-3">
+            <div class="col-sm-12 pt-3">
                 <div class="custom-header ">
                     <h3 class="custom-header ">BASE DISCOUNT RATE TABLE
                     </h3>
@@ -92,7 +92,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let item of list.base_discount; let i=index ">
+                                <tr *ngFor="let item of list['base_discount']; let i=index ">
                                     <td>{{i+1}}</td>
                                     <td>
                                         <div class=" input-group">
@@ -125,7 +125,7 @@
                 </div>
             </div>
         </div>
-        <div class="row mt-3 " *ngIf="list.return_rate ">
+        <div class="row mt-3">
             <div class="col-sm-12 pt-3 ">
                 <div class="custom-header ">
                     <h3 class="custom-header ">RETURN RATE TABLE
@@ -148,7 +148,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let item of list.return_rate; let i = index ">
+                                <tr *ngFor="let item of list['return_rate']; let i = index ">
                                     <td>{{i+1}}</td>
                                     <td>
                                         <div class=" input-group">
@@ -189,7 +189,7 @@
                 </div>
             </div>
         </div>
-        <div class="row mt-3 " *ngIf="list.consolidated_discount_rate ">
+        <div class="row mt-3">
             <div class="col-sm-12 pt-3 ">
                 <div class="custom-header ">
                     <h3 class="custom-header ">CONSOLIDATED DISCOUNT RATE TABLE
@@ -210,7 +210,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let item of list.consolidated_discount_rate; let i = index ">
+                                <tr *ngFor="let item of list['consolidated_discount_rate']; let i = index ">
                                     <td>{{i+1}}</td>
                                     <td>
                                         <div class=" input-group">

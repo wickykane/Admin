@@ -47,10 +47,10 @@
                     <div class="col-md-2">
                         <label for="status" class="control-label mb-2">Action</label>
                         <div class="">
-                            <button type="button" class="btn btn-primary" (click)="search()">
+                            <button type="button" class="btn btn-primary" (click)="tableService.searchAction()">
                                 Search
                             </button>
-                            <button type="button" class="btn btn-default" (click)="reset()">
+                            <button type="button" class="btn btn-default" (click)="tableService.resetAction(generalForm)">
                                 Reset
                             </button>
                         </div>

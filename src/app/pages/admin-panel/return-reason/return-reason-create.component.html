@@ -26,7 +26,9 @@
                         <label> Exclude RR Calc
                             <span class="text-danger">(*)</span>
                         </label>
-                        <input type="checkbox" name="" class="form-control" formControlName="exclude_rr_calc">
+                        <div class="">
+                            <input type="checkbox" name="" class="" formControlName="exclude_rr_calc">
+                        </div>
                     </div>
                     <div class="col-sm-2 form-group">
                         <label> Status
@@ -40,11 +42,11 @@
                 </div>
             </form>
         </fieldset>
-        
+
     </section>
     <div class="row">
         <div class="col-md-12 mg-top-15 text-center">
-            <button class="btn btn btn-outline-primary" (click)="payloadData()" ng-disabled="generalForm.$invalid">Save</button>            
+            <button class="btn btn btn-outline-primary" (click)="payloadData()" [disabled]="!generalForm.valid">Save</button>
             <button class="btn btn-default" type="button" [routerLink]="['/admin-panel/payment-term']">Cancel</button>
         </div>
     </div>

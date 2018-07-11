@@ -218,6 +218,7 @@ export class RmaCreateComponent implements OnInit {
     numberMaskObject(max?) {
         return createNumberMask({
             allowDecimal: true,
+            includeThousandsSeparator: false,
             prefix: '',
             integerLimit: max || null
         });
@@ -258,6 +259,7 @@ export class RmaCreateComponent implements OnInit {
             this.order_info['total_order_quantity'] += Number(item['order_quantity'] || 0);
             this.order_info['total_return_quantity'] += Number(item['return_quantity'] || 0);
             this.order_info['sub_total'] += (Number(item['sale_price'] || 0) * Number(item['return_quantity'] || 0));
+            console.log(this.order_info['sub_total']);
         });
 
         this.order_info['discount_percent'] = Number(this.order_info['discount_percent'] || 0);
@@ -271,8 +273,7 @@ export class RmaCreateComponent implements OnInit {
 
         this.order_info['shipping_cost'] = Number(this.order_info['shipping_cost'] || 0);
 
-        this.order_info['total'] = this.order_info['sub_total'] - this.order_info['total_discount'] + this.order_info['shipping_cost'] + this.order_info['vat_percent_amount'];
-        console.log(  this.order_info['total']);
+        this.order_info['total'] = this.order_info['sub_total'] - this.order_info['total_discount'] - this.order_info['restock_fee_amount'] + this.order_info['shipping_cost'] + this.order_info['vat_percent_amount'];
     }
 
     createRMA() { }

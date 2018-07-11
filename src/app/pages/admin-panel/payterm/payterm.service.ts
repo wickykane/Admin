@@ -29,4 +29,8 @@ export class PaymentTermService {
         const url = ['payment-term', id].join('/');
         return this.apiService.delete(url);
     }
+    getGenerateCode() {
+        const url = 'payment-term/generate-code';
+        return this.apiService.get(url);
+    }
 }

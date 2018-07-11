@@ -83,7 +83,7 @@ export class ItemModalContent implements OnInit {
         this.itemService.getReferenceList().subscribe(res => {
             try {
                 this.listMaster['models'] = res.data.models;
-                this.listMaster['years'] = res.data.years.map((e) => { return { id: e, name: e }; });
+                this.listMaster['years'] = res.data.years.map((e) => ({ id: e, name: e }));
                 this.listMaster['make'] = res.data.manufacturers;
             } catch (e) {
                 console.log(e.message);
@@ -120,24 +120,36 @@ export class ItemModalContent implements OnInit {
     changeToGetSubModel() {
         const id = this.searchForm.value.model_id;
         const arr = this.listMaster['models'];
-        for (let i = 0; i < arr.length; i++) {
-            if (arr[i]['model_id'] === id) {
-                return this.listMaster['sub_models'] = arr[i]['sub_models'];
-            }
+        for ( const item of arr) {
+           if (item['model_id'] === id) {
+               return this.listMaster['sub_models'] = arr['sub_models'];
+           }
         }
+        // for (let i = 0; i < arr.length; i++) {
+        //     if (arr[i]['model_id'] === id) {
+        //         return this.listMaster['sub_models'] = arr[i]['sub_models'];
+        //     }
+        // }
     }
 
     changeToGetSubCategory() {
         const id = this.filterForm.value.category_id_filter;
         const arr = this.listMaster['categories'];
         this.listMaster['sub_cat'] = [];
-        for (let k = 0; k < id.length; k++) {
-            for (let i = 0; i < arr.length; i++) {
-                if (arr[i]['category_id'] === id[k]) {
-                    this.listMaster['sub_cat'] = this.listMaster['sub_cat'].concat(arr[i]['sub_categories']);
-                }
+        for (const item of id ) {
+            for (const temp of arr) {
+               if (temp['category_id'] === item) {
+                this.listMaster['sub_cat'] = this.listMaster['sub_cat'].concat(temp['sub_categories']);
+               }
             }
         }
+        // for (let k = 0; k < id.length; k++) {
+        //     for (let i = 0; i < arr.length; i++) {
+        //         if (arr[i]['category_id'] === id[k]) {
+        //             this.listMaster['sub_cat'] = this.listMaster['sub_cat'].concat(arr[i]['sub_categories']);
+        //         }
+        //     }
+        // }
     }
 
     getList() {

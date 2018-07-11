@@ -19,10 +19,10 @@ export class DiscountService {
         const url = 'discount/list-type/';
         return this.API.get(url);
     }
-    getListDiscounts() {
-        // const url = 'discount/list-all';
-        const url = 'buyer/index';
-        return this.API.get(url);
+    getListDiscounts(params) {
+        const url = 'discount/list-all';
+        // const url = 'buyer/index';
+        return this.API.get(url, params);
     }
     getDetailDiscount(id) {
         // const url = 'discount/detail/' + id;
