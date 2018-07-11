@@ -45,7 +45,8 @@ export class PartListComponent implements OnInit {
             name: [null],
             sts: [null],
             vin: [null],
-            year: [null],
+            year_from: [null],
+            year_to: [null],
             manufacturer_id: [null],
             model_id: [null],
             oem: [null],
@@ -131,18 +132,24 @@ export class PartListComponent implements OnInit {
         this.list.items = [];
     }
 
+    changeToGetSubModel() {
+        const id = this.searchForm.value.model_id;
+        const arr = this.listMaster['models'];
+        for (const i of arr) {
+            if (arr['model_id'] === id) {
+                        return this.listMaster['sub_models'] = arr['sub_models'];
+                    }
+        }
+    }
+
     changeToGetSubCategory() {
         const id = this.filterForm.value.category_id_filter;
         const arr = this.listMaster['categories'];
         this.listMaster['sub_cat'] = [];
-        // tslint:disable-next-line:prefer-for-of
-        for (let k = 0; k < id.length; k++) {
-            // tslint:disable-next-line:prefer-for-of
-            for (let i = 0; i < arr.length; i++) {
-                if (arr[i]['category_id'] === id[k]) {
-                    this.listMaster['sub_cat'] = this.listMaster[
-                        'sub_cat'
-                    ].concat(arr[i]['sub_categories']);
+        for (const k of id) {
+            for (const i of arr) {
+                if (arr['category_id'] === k) {
+                    this.listMaster['sub_cat'] = this.listMaster['sub_cat'].concat(arr['sub_categories']);
                 }
             }
         }
@@ -159,48 +166,28 @@ export class PartListComponent implements OnInit {
                 (params[key] === null || params[key] === '') &&
                 delete params[key]
         );
-        this.list.items = [
-            {
-                id: 49872,
-                sku: 'abc',
-                partlinks_no: 'abc',
-                des: 'abc',
-                mfr_name: 'abc',
-                model_name: 'abc',
-                category_id: 'abc',
-                sub_category_id: 'abc',
-                brand_name: 'abc',
-                cert: 'Y',
-                UOM: 'abc',
-                oem_price: 50,
-                cost_price: 50,
-                sell_price: 50
+        this.productService.getListItem(params).subscribe(res => {
+            try {
+                if (!res.data.rows) {
+                    this.list.items = [];
+                    return;
+                }
+                this.list.items = res.data.rows;
+                this.listMaster['brands'] = res.data.meta_filters.brands;
+                this.listMaster['categories'] =
+                    res.data.meta_filters.categories;
+                this.listMaster['certification'] =
+                    res.data.meta_filters.certification;
+                this.listMaster['countries'] = res.data.meta_filters.countries;
+                this.listMaster['partlinks_no'] =
+                    res.data.meta_filters.partlinks_no;
+                this.listMaster['part_no'] = res.data.meta_filters.part_no;
+                this.listMaster['manufacturers'] =
+                    res.data.meta_filters.manufacturers;
+                this.tableService.matchPagingOption(res.data);
+            } catch (e) {
+                console.log(e);
             }
-        ];
-
-        // this.productService.getListPart(params).subscribe(res => {
-        //     try {
-        //         if (!res.data.rows) {
-        //             this.list.items = [];
-        //             return;
-        //         }
-        //         this.list.items = res.data.rows;
-
-        //         this.listMaster['brands'] = res.data.meta_filters.brands;
-        //         this.listMaster['categories'] =
-        //             res.data.meta_filters.categories;
-        //         this.listMaster['certification'] =
-        //             res.data.meta_filters.certification;
-        //         this.listMaster['countries'] = res.data.meta_filters.countries;
-        //         this.listMaster['partlinks_no'] =
-        //             res.data.meta_filters.partlinks_no;
-        //         this.listMaster['part_no'] = res.data.meta_filters.part_no;
-        //         this.listMaster['manufacturers'] =
-        //             res.data.meta_filters.manufacturers;
-        //         this.tableService.matchPagingOption(res.data);
-        //     } catch (e) {
-        //         console.log(e);
-        //     }
-        // });
+        });
     }
 }

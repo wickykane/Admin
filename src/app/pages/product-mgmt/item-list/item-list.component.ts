@@ -1,10 +1,10 @@
-import { TableService } from './../../../services/table.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../product-mgmt.service';
+import { TableService } from './../../../services/table.service';
 import { ItemKeyService } from './keys.control';
-import { NgbTab } from '@ng-bootstrap/ng-bootstrap';
+// import { NgbTab } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'app-item-list',
@@ -47,7 +47,8 @@ export class ItemListComponent implements OnInit {
             'name': [null],
             'sts': [null],
             'vin': [null],
-            'year': [null],
+            'year_from': [null],
+            'year_to': [null],
             'manufacturer_id': [null],
             'model_id': [null],
             'sub_model_id': [null],
@@ -144,10 +145,10 @@ export class ItemListComponent implements OnInit {
     changeToGetSubModel() {
         const id = this.searchForm.value.model_id;
         const arr = this.listMaster['models'];
-        for (let i = 0; i < arr.length; i++) {
-            if (arr[i]['model_id'] === id) {
-                return this.listMaster['sub_models'] = arr[i]['sub_models'];
-            }
+        for (const i of arr) {
+            if (arr['model_id'] === id) {
+                        return this.listMaster['sub_models'] = arr['sub_models'];
+                    }
         }
     }
 
@@ -155,17 +156,17 @@ export class ItemListComponent implements OnInit {
         const id = this.filterForm.value.category_id_filter;
         const arr = this.listMaster['categories'];
         this.listMaster['sub_cat'] = [];
-        for (let k = 0; k < id.length; k++) {
-            for (let i = 0; i < arr.length; i++) {
-                if (arr[i]['category_id'] === id[k]) {
-                    this.listMaster['sub_cat'] = this.listMaster['sub_cat'].concat(arr[i]['sub_categories']);
+        for (const k of id) {
+            for (const i of arr) {
+                if (arr['category_id'] === k) {
+                    this.listMaster['sub_cat'] = this.listMaster['sub_cat'].concat(arr['sub_categories']);
                 }
             }
         }
     }
 
     getList() {
-        const params = Object.assign({}, this.tableService.getParams(), this.searchForm.value, this.filterForm.value);
+        const params = {...this.tableService.getParams(), ...this.searchForm.value, ...this.filterForm.value};
         Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
         this.productService.getListItem(params).subscribe(res => {

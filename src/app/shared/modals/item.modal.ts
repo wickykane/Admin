@@ -49,7 +49,6 @@ export class ItemModalContent implements OnInit {
             'year': [null],
             'manufacturer_id': [null],
             'model_id': [null],
-            'sub_model_id': [null],
             'oem': [null],
             'partlinks_no': [null],
             'part_no': [null],
@@ -63,8 +62,7 @@ export class ItemModalContent implements OnInit {
             'certification_filter': [null],
             'oem_filter': [null],
             'partlinks_no_filter': [null],
-            'part_no_filter': [null],
-            'country_id_filter': [null]
+            'part_no_filter': [null]
         });
 
         //  Assign get list function name, override variable here
@@ -125,11 +123,6 @@ export class ItemModalContent implements OnInit {
                return this.listMaster['sub_models'] = arr['sub_models'];
            }
         }
-        // for (let i = 0; i < arr.length; i++) {
-        //     if (arr[i]['model_id'] === id) {
-        //         return this.listMaster['sub_models'] = arr[i]['sub_models'];
-        //     }
-        // }
     }
 
     changeToGetSubCategory() {
@@ -143,13 +136,6 @@ export class ItemModalContent implements OnInit {
                }
             }
         }
-        // for (let k = 0; k < id.length; k++) {
-        //     for (let i = 0; i < arr.length; i++) {
-        //         if (arr[i]['category_id'] === id[k]) {
-        //             this.listMaster['sub_cat'] = this.listMaster['sub_cat'].concat(arr[i]['sub_categories']);
-        //         }
-        //     }
-        // }
     }
 
     getList() {

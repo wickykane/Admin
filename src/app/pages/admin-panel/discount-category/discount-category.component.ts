@@ -50,7 +50,7 @@ export class DiscountCategoryComponent implements OnInit {
                 delete params[key]
         );
 
-        this.discountCategoryService.getListWarehouse(params).subscribe(res => {
+        this.discountCategoryService.getListDiscountCategory(params).subscribe(res => {
             try {
                 this.list.items = res.data.rows;
                 this.tableService.matchPagingOption(res.data);

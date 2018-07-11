@@ -176,7 +176,7 @@
                                         <div class="form-group row">
                                             <label class='col-4'>Multi Ship Addr</label>
                                             <div class='col-8 text-danger'>
-                                                <select class="form-control" id="is_multi_shp_addr" name="is_multi_shp_addr" formControlName="is_multi_shp_addr">
+                                                <select [attr.disabled] = true class="form-control" id="is_multi_shp_addr" name="is_multi_shp_addr" formControlName="is_multi_shp_addr">
                                                     <option *ngFor="let item of listMaster['multi_ship']" [ngValue]="item.id">{{item.label}}</option>
                                                 </select>
                                             </div>
@@ -348,6 +348,7 @@
                                         <th style="width:100px" translate>Action</th>
                                         <th style="width:150px" translate>Product Code</th>
                                         <th translate>Description</th>
+                                        <th translate>Condition</th>
                                         <th translate style="width:150px">Avail QTY</th>
                                         <th class="text-nowrap" style="width:100px" translate>Order QTY</th>
                                         <th class="text-nowrap text-center" translate *ngIf="generalForm.value.is_multi_shp_addr == 1">Ship To</th>
@@ -373,6 +374,7 @@
                                         </td>
                                         <td>{{item.sku}}</td>
                                         <td>{{item.des}}</td>
+                                        <td>{{item.condition_name}}</td>
                                         <td></td>
                                         <td>
                                             <input style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.order_quantity"
