@@ -223,10 +223,32 @@
                     <input type="file" class="hidden" accept="image/*" #file (change)="uploadFile($event)">
                     <button class="btn btn-block btn-upload" (click)="file.click()">Select File Here To Upload</button>
                 </div>
-                <div class="row" *ngIf="galleryImages">
+                <!-- <div class="row" *ngIf="galleryImages">
                     <div class="col-md-12">
                         <ngx-gallery [options]="galleryOptions" [images]="galleryImages"></ngx-gallery>
                     </div>
+                </div> -->
+                <div class="row">
+                    <ngu-carousel class="col-md-12" [inputs]="carouselImages" (carouselLoad)="myfunc($event)">
+                        <ngu-item NguCarouselItem *ngFor="let item of images; let i = index">
+                            <div class="image-container">
+                                <div class="image">
+                                    <img src="https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/5-medium.jpeg" class="img-fluid" alt="Responsive image">
+                                    <!-- {{item.origin_img}} -->
+                                    <button class='btn-control btn-remove' (click)="removeItem(i,item)">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </ngu-item>
+
+                        <button NguCarouselPrev class='btn-control btn-prev btn-hover-scale'>
+                            <i class="fa fa-angle-left"></i>
+                        </button>
+                        <button NguCarouselNext class='btn-control btn-next btn-hover-scale'>
+                            <i class="fa fa-angle-right"></i>
+                        </button>
+                    </ngu-carousel>
                 </div>
             </fieldset>
         </section>
