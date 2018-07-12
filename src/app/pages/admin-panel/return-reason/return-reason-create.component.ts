@@ -28,7 +28,7 @@ export class ReturnReasonCreateComponent implements OnInit {
             'id': [null],
             'cd': [null, Validators.required],
             'des': [null, Validators.required],
-            'exclude_rr_calc': [null, Validators.required],
+            'exclude_rr_calc': [0],
             'sts': ['AT', Validators.required]
         });
         this.keyService.watchContext.next(this);

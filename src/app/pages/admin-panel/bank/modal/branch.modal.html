@@ -22,7 +22,7 @@
                     <label for="" class="control-label">Country</label>
                     <span class="text-danger">(*) </span>
                     <select (change)="changeCountry()" class="form-control" formControlName="country_code">
-                            <option value="null" selected="true">--Select--</option>
+                            <option value="null" hidden="true">--Select--</option>
                             <option *ngFor="let item of listMaster['countries']" [ngValue]="item.cd">{{item.name}}</option>
                     </select>
                 </div>
@@ -39,7 +39,7 @@
                 <div class="form-group col-sm-12">
                     <label for="" class="control-label">State</label>
                     <select class="form-control" formControlName="state_id" name="primary_state" ng-options="item.id as (item.name) for item in listState">
-                            <option value="null" selected="true">--Select--</option>
+                            <option value="null" hidden="true" selected="true">--Select--</option>
                             <option *ngFor="let item of listMaster['state']" [ngValue]="item.id">{{item.name}}</option>
                     </select>
                 </div>
