@@ -40,6 +40,7 @@ export class RmaCreateComponent implements OnInit {
     public checkAllItem = true;
     customer = {};
     order_info = {};
+    public dataConfig = {};
     /**
      * Init Data
      */
@@ -57,22 +58,26 @@ export class RmaCreateComponent implements OnInit {
         this.generalForm = fb.group({
             'company_id': [null, Validators.required],
             'rma_number': [null, Validators.required],
-            'type': [null, Validators.required],
+            'rma_type': [1, Validators.required],
             'request_date': [moment().format('YYYY-MM-DD'), Validators.required],
-            'sales_order_id': [null, Validators.required],
+            'order_id': [null, Validators.required],
             'return_via': [null, Validators.required],
-            'carrier_id': [null, Validators.required],
-            'cover_ship_fee': [null, Validators.required],
-            'restock_fee': [null],
+            'carrier': [null, Validators.required],
+            'cover_ship': [1, Validators.required],
+            'apply_restock': [null],
             'refund_method': [null, Validators.required],
             'payment_term': [null],
             'approver': [null],
             'billing_id': [null],
-            'shipping_id': [null],
+            'address_id': [null],
             'note': [null],
             'contact_name': [null],
-            'contact_email': [null],
-            'contact_phone': [null],
+            'email': [null],
+            'phone': [null],
+            // Extra data
+            'return_time': [null],
+            'receiving_date': [null],
+            'warehouse': [null],
         });
 
         //  Init Key
@@ -96,6 +101,68 @@ export class RmaCreateComponent implements OnInit {
 
         this.updateTotal();
 
+        // Change form data event handle
+        this.generalForm.get('return_via').valueChanges.subscribe(data => {
+            this.generalForm.patchValue({ carrier: null });
+        });
+
+        this.initConfig();
+    }
+
+    // Disable Config
+    initConfig() {
+        const data = this.generalForm.value;
+        if (this.generalForm.value.rma_type === 1) {
+            // Case 1: RMA Type: Refund, Return Time: During WH Pickup, Receiving Date: Not yet received
+            if (data.return_time === 1 && data.receiving_date === 'During WH Pickup') {
+                this.dataConfig = {
+                    carrier: 1,
+                    cover_ship: 2,
+                };
+            }
+            // Case 2: RMA Type: Refund, Return Time: Before Delivery
+            if (data.return_time === 2) {
+                this.dataConfig = {
+                    carrier: 1,
+                    cover_ship: 1,
+                    return_via: 4
+                };
+            }
+
+            // Case 3: RMA Type: Refund, Return Time: At Delivery
+            if (data.return_time === 3) {
+                this.dataConfig = {
+                };
+            }
+
+            // Case 4: RMA Type: Refund, Return Time: <= 15
+            if (data.return_time === 4) {
+                this.dataConfig = {
+                };
+            }
+
+            // Case 5: RMA Type: Refund, Return Time: > 30
+            if (data.return_time === 5) {
+                this.dataConfig = {
+                    apply_restock: 1,
+                    validate: 1
+                };
+            }
+
+            // Case 5: RMA Type: Refund, Return Time: 16 - 30
+            if (data.return_time === 6) {
+                this.dataConfig = {
+                    apply_restock: 1,
+                    validate: 1
+                };
+            }
+
+            this.generalForm.patchValue({
+                apply_restock: this.dataConfig['apply_restock'],
+                cover_ship: this.dataConfig['cover_ship'],
+                return_via: this.dataConfig['return_via']
+            });
+        }
     }
     // Table event
     selectData(index) {
@@ -116,7 +183,7 @@ export class RmaCreateComponent implements OnInit {
     }
 
     actionCheckItem(item) {
-        item.return_quantity = (item.is_checked) ? item.order_quantity : 0;
+        item.return_qty = (item.is_checked) ? item.order_quantity : 0;
     }
 
     /**
@@ -172,7 +239,8 @@ export class RmaCreateComponent implements OnInit {
     }
 
     getListCarrier() {
-        this.commonService.getListCarrier().subscribe(res => {
+        const params = { is_all: 1 };
+        this.commonService.getListCarrier(params).subscribe(res => {
             this.listMaster['carrier'] = res.data;
         });
     }
@@ -230,10 +298,15 @@ export class RmaCreateComponent implements OnInit {
      */
     changeCustomer() {
         const company_id = this.generalForm.value.company_id;
+        this.resetData();
         if (company_id) {
             this.getDetailCustomerById(company_id);
             this.getListOrderByCustomer(company_id);
         }
+    }
+
+    resetData() {
+
     }
 
     changeSaleOrder() {
@@ -243,7 +316,7 @@ export class RmaCreateComponent implements OnInit {
 
     changeAddress(flag?) {
         if (flag === 'shipping') {
-            const id = this.generalForm.value.shipping_id;
+            const id = this.generalForm.value.address_id;
             this.data.shipping = this.customer['shipping'].find(item => item.address_id === id);
         }
     }
@@ -252,14 +325,13 @@ export class RmaCreateComponent implements OnInit {
         this.order_info['total'] = 0;
         this.order_info['sub_total'] = 0;
         this.order_info['total_order_quantity'] = 0;
-        this.order_info['total_return_quantity'] = 0;
+        this.order_info['total_return_qty'] = 0;
 
         this.list.items.forEach(item => {
-            item['total_refund'] = Number(item['return_quantity'] || 0) * Number(item['sale_price'] || 0);
+            item['total_refund'] = Number(item['return_qty'] || 0) * Number(item['sale_price'] || 0);
             this.order_info['total_order_quantity'] += Number(item['order_quantity'] || 0);
-            this.order_info['total_return_quantity'] += Number(item['return_quantity'] || 0);
-            this.order_info['sub_total'] += (Number(item['sale_price'] || 0) * Number(item['return_quantity'] || 0));
-            console.log(this.order_info['sub_total']);
+            this.order_info['total_return_qty'] += Number(item['return_qty'] || 0);
+            this.order_info['sub_total'] += (Number(item['sale_price'] || 0) * Number(item['return_qty'] || 0));
         });
 
         this.order_info['discount_percent'] = Number(this.order_info['discount_percent'] || 0);
@@ -267,13 +339,18 @@ export class RmaCreateComponent implements OnInit {
 
         this.order_info['vat_percent'] = Number(this.order_info['vat_percent'] || 0);
         this.order_info['vat_percent_amount'] = ((this.order_info['sub_total'] - this.order_info['total_discount']) * this.order_info['vat_percent'] / 100);
-
-        this.order_info['restock_fee_percent'] = Number(this.order_info['restock_fee_percent'] || 0);
-        this.order_info['restock_fee_amount'] = (this.order_info['sub_total'] * this.order_info['restock_fee_percent'] / 100);
+        if (this.generalForm.value.apply_restock) {
+            this.order_info['restock_fee_percent'] = Number(this.order_info['restock_fee_percent'] || 0);
+            this.order_info['restock_fee_amount'] = (this.order_info['sub_total'] * this.order_info['restock_fee_percent'] / 100);
+        } else {
+            this.order_info['restock_fee_percent'] = 0;
+            this.order_info['restock_fee_amount'] = 0;
+        }
 
         this.order_info['shipping_cost'] = Number(this.order_info['shipping_cost'] || 0);
 
-        this.order_info['total'] = this.order_info['sub_total'] - this.order_info['total_discount'] - this.order_info['restock_fee_amount'] + this.order_info['shipping_cost'] + this.order_info['vat_percent_amount'];
+        this.order_info['total'] = this.order_info['sub_total'] - this.order_info['total_discount'] - this.order_info['restock_fee_amount'] + ((this.generalForm.value.cover_ship) ? this.order_info['shipping_cost'] : 0)
+            + this.order_info['vat_percent_amount'];
     }
 
     createRMA() { }
