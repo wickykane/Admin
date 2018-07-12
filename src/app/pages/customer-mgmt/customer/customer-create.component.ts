@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as _ from 'lodash';
 import { CommonService } from '../../../services/common.service';
 import { CustomerService } from '../customer.service';
 
@@ -23,11 +24,10 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
 
     generalForm: FormGroup;
 
-    public address: any = [];
-    public bank_account: any = [];
-    public bank_card: any = [];
-    public contact: any = [];
-    public site: any = [];
+    public addresses: any = [];
+    public bank_accounts: any = [];
+    public contacts: any = [];
+    public sites: any = [];
     public company_child: any = [];
 
     public listMaster = {};
@@ -58,17 +58,17 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         public helper: Helper) {
         this.generalForm = fb.group({
             'buyer_type': [null, Validators.required],
-            'code': [null],
+            'code': [null, Validators.required],
             'full_name': [null],
             'registration': [null],
-            'phone': [null],
-            'fax': [null],
-            'email': [null],
+            'phone': [''],
+            'fax': [''],
+            'email': [null, Validators.required],
             'line_of_credit': [null],
             'credit_sts': 2,
-            'sale_man_id': [null],
-            'first_name': [null],
-            'last_name': [null],
+            'sale_person_id': [null],
+            'first_name': [null, Validators.required],
+            'last_name': [null, Validators.required],
             'username': [null],
             'pwd': [null],
             'pwd_cfrm': [null]
@@ -154,8 +154,6 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
             }
         });
     }
-
-
     //  change customer Type
     changeCustomerType() {
         this.getListTypeAddress();
@@ -163,7 +161,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         if (this.generalForm.value.buyer_type === 'CP') {
             const tempType = [{ id: 1, name: 'Head Office' }];
 
-            this.address = [{
+            this.addresses = [{
                 type: 1, listType: tempType, listCountry: this.listCountry, listState: []
             }, {
                 type: 2, listType: this.listTypeAddress, listCountry: this.listCountry, listState: []
@@ -173,7 +171,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         } else {
             const tempType1 = [{ id: 1, name: 'Primary' }];
 
-            this.address = [{
+            this.addresses = [{
                 type: 1, listType: tempType1, listCountry: this.listCountry, listState: []
             }, {
                 type: 2, listType: this.listTypeAddress, listCountry: this.listCountry, listState: []
@@ -225,7 +223,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
 
     //  add new row address
     addNewAddress() {
-        this.address.push({
+        this.addresses.push({
             listType: this.listTypeAddress,
             listCountry: this.listCountry,
             listState: []
@@ -233,65 +231,76 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     }
 
     removeAddress(index) {
-        this.address.splice(index, 1);
+        this.addresses.splice(index, 1);
     }
 
     //  add new row bank account
     addNewBankAccount() {
-        this.bank_account.push({
+        this.bank_accounts.push({
             listBank: this.listBank,
             listBranch: []
         });
     }
 
     removeBankAccount(index) {
-        this.bank_account.splice(index, 1);
-    }
-    //  add new row bank card
-    addNewBankCard() {
-        this.bank_card.push({
-            listCardType: []
-        });
-    }
-
-    removeBankCard(index) {
-        this.bank_card.splice(index, 1);
+        this.bank_accounts.splice(index, 1);
     }
     //  add new row contact
     addNewContact() {
-        this.contact.push({});
+        this.contacts.push({});
     }
 
     removeContact(index) {
-        this.contact.splice(index, 1);
+        this.contacts.splice(index, 1);
     }
 
     //  add new Site
 
-    addNewSite() {
+    addNewSite(item?) {
         const modalRef = this.modalService.open(SiteModalComponent, { size: 'lg' });
+        modalRef.componentInstance.item = item;
         modalRef.result.then(res => {
             if (!this.helper.isEmptyObject(res)) {
-                const state = res.primary[0].listState.filter(x => {
-                    return res.primary[0].state_id === x.id;
+                console.log(res);
+                const state = res.addresses[0].listState.filter(x => {
+                    return res.addresses[0].state_id === x.id;
                 });
-                const objSite = {
+                  const objSite = {
                     code: res.code,
                     full_name: res.full_name,
-                    country: res.primary[0].listCountry.map(x => {
-                        if (res.primary[0].country_code === x.cd) {
+                    country: res.addresses[0].listCountry.map(x => {
+                        if (res.addresses[0].country_code === x.cd) {
                             return x.name;
                         }
                     }),
-                    name: res.primary[0].name,
-                    address_line: res.primary[0].address_line,
-                    address_line2: res.primary[0].address_line2,
-                    city_name: res.primary[0].city_name,
+                    name: res.addresses[0].name,
+                    address_line: res.addresses[0].address_1,
+                    address_line2: res.addresses[0].address_2,
+                    city_name: res.addresses[0].city,
                     state: state[0].name,
-                    zip_code: res.primary[0].zip_code
+                    zip_code: res.addresses[0].zip_code
                 };
+                const full_site = {...objSite, ...res};
+                // const state = res.primary[0].listState.filter(x => {
+                //     return res.primary[0].state_id === x.id;
+                // });
+                // const objSite = {
+                //     code: res.code,
+                //     full_name: res.full_name,
+                //     country: res.primary[0].listCountry.map(x => {
+                //         if (res.primary[0].country_code === x.cd) {
+                //             return x.name;
+                //         }
+                //     }),
+                //     name: res.primary[0].name,
+                //     address_line: res.primary[0].address_line,
+                //     address_line2: res.primary[0].address_line2,
+                //     city_name: res.primary[0].city_name,
+                //     state: state[0].name,
+                //     zip_code: res.primary[0].zip_code
+                // };
 
-                this.site.push(objSite);
+                this.sites.push(full_site);
                 this.company_child.push(res);
                 this.countCode++;
             }
@@ -305,66 +314,40 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
 
     removeSite(index) {
         console.log(index);
-        this.site.splice(index, 1);
-        console.log(this.site);
+        this.sites.splice(index, 1);
+        console.log(this.sites);
     }
 
     createCustomer() {
-        this.contact.forEach(obj => {
-            obj['pwd_cfrm'] = obj.pwd;
-        });
+        console.log(this.contacts);
+        console.log(this.sites);
+        console.log(this.bank_accounts);
+        console.log(this.addresses);
         if (this.generalForm.valid) {
-            const params = { ...this.generalForm.value };
-            params['user'] = [];
-            if (this.contact.length > 0) {
-                params['user'] = this.contact;
-
-            }
-            params['banks'] = [];
-            if (this.bank_account.length > 0) {
-                params['banks'] = this.bank_account;
-
-            }
-            params['company_child'] = [];
-            params['company_child'] = this.company_child;
-
-            params['primary'] = [];
-            params['billing'] = [];
-            params['shipping'] = [];
-
-            this.address.forEach(obj => {
-                if (obj.type === 1) {
-                    params['primary'].push(obj);
-                }
-                if (obj.type === 2) {
-                    params['billing'].push(obj);
-                }
-                if (obj.type === 3) {
-                    params['shipping'].push(obj);
-                }
+            const params = this.generalForm.value;
+            params['addresses'] = _.cloneDeep(this.addresses);
+            params['bank_accounts'] = _.cloneDeep(this.bank_accounts);
+            params['addresses'].forEach(item => {
+                delete item.listType;
+                delete item.listCountry;
+                delete item.listState;
             });
-
-            if (this.generalForm.value.buyer_type === 'CP') {
-                delete params.first_name;
-                delete params.last_name;
-                delete params.pwd;
-                delete params.pwd_cfrm;
-                delete params.username;
-                delete params.email;
-            } else {
-                params.pwd_cfrm = params.pwd;
-                delete params.full_name;
-
-            }
-            const data = { ...params };
-            data.banks.forEach(item => {
+            params['bank_accounts'].forEach(item => {
                 delete item.listBank;
                 delete item.listBranch;
             });
-            console.log(data);
-            // return;
-
-            this.customerService.createCustomer(data).subscribe(
+            params['sites'] = _.cloneDeep(this.company_child);
+            params['site']['addresses'].forEach(item => {
+                delete item.listType;
+                delete item.listCountry;
+                delete item.listState;
+            });
+            params['site']['bank_accounts'].forEach(item => {
+                delete item.listBank;
+                delete item.listBranch;
+            });
+            console.log(params);
+            this.customerService.createCustomer(params).subscribe(
                 res => {
                     console.log(res);
                     try {
@@ -381,7 +364,80 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
                     console.log(err);
                     this.toastr.error(err.message);
                 });
+
         }
+        // this.contacts.forEach(obj => {
+        //     obj['pwd_cfrm'] = obj.pwd;
+        // });
+        // if (this.generalForm.valid) {
+        //     const params = { ...this.generalForm.value };
+        //     params['user'] = [];
+        //     if (this.contacts.length > 0) {
+        //         params['user'] = this.contacts;
+
+        //     }
+        //     params['banks'] = [];
+        //     if (this.bank_accounts.length > 0) {
+        //         params['banks'] = this.bank_accounts;
+
+        //     }
+        //     params['company_child'] = [];
+        //     params['company_child'] = this.company_child;
+
+        //     params['primary'] = [];
+        //     params['billing'] = [];
+        //     params['shipping'] = [];
+
+        //     this.addresses.forEach(obj => {
+        //         if (obj.type === 1) {
+        //             params['primary'].push(obj);
+        //         }
+        //         if (obj.type === 2) {
+        //             params['billing'].push(obj);
+        //         }
+        //         if (obj.type === 3) {
+        //             params['shipping'].push(obj);
+        //         }
+        //     });
+
+        //     if (this.generalForm.value.buyer_type === 'CP') {
+        //         delete params.first_name;
+        //         delete params.last_name;
+        //         delete params.pwd;
+        //         delete params.pwd_cfrm;
+        //         delete params.username;
+        //         delete params.email;
+        //     } else {
+        //         params.pwd_cfrm = params.pwd;
+        //         delete params.full_name;
+
+        //     }
+        //     const data = { ...params };
+        //     // data.banks.forEach(item => {
+        //     //     delete item.listBank;
+        //     //     delete item.listBranch;
+        //     // });
+        //     console.log(data);
+        //     // return;
+
+        //     this.customerService.createCustomer(data).subscribe(
+        //         res => {
+        //             console.log(res);
+        //             try {
+
+        //                 setTimeout(() => {
+        //                     this.router.navigate(['/customer']);
+        //                 }, 2000);
+        //                 this.toastr.success(res.message);
+        //             } catch (e) {
+        //                 console.log(e);
+        //             }
+        //         },
+        //         err => {
+        //             console.log(err);
+        //             this.toastr.error(err.message);
+        //         });
+        // }
 
     }
 

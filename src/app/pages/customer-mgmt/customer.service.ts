@@ -113,7 +113,7 @@ export class CustomerService {
      */
 
     createCustomer(data) {
-        const url = 'buyer/create';
+        const url = 'buyer';
         return this.API.post(url, data);
     }
     updateCustomer(id, data) {

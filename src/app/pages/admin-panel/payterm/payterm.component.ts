@@ -5,6 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 import { TableService } from '../../../services/index';
+import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
 import { PayTermKeyService } from './keys.control';
 import { PaymentTermService } from './payterm.service';
 
@@ -78,12 +79,17 @@ export class PaymentTermComponent implements OnInit {
     });
   }
   deletePayment(id) {
-    this.paymentTerm.deletePayment(id).subscribe(res => {
-      try {
-        this.toastr.success(res.data.message);
-        this.getList();
-      } catch (e) {
-        console.log(e);
+    const modalRef = this.modalService.open(ConfirmModalContent);
+    modalRef.result.then(result => {
+      if (result) {
+        this.paymentTerm.deletePayment(id).subscribe(res => {
+          try {
+            this.toastr.success(res.message);
+            this.getList();
+          } catch (e) {
+            console.log(e);
+          }
+        });
       }
     });
   }
