@@ -5,6 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 import { TableService } from '../../../services/index';
+import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
 import { ReturnReasonKeyService } from './keys.control';
 import { ReturnReasonService } from './return-reason.service';
 
@@ -80,12 +81,17 @@ export class ReturnReasonComponent implements OnInit {
     });
   }
   deleteReason(id) {
-    this.returnReasonService.deleteReturnReason(id).subscribe(res => {
-      try {
-        this.toastr.success(res.data.message);
-        this.getList();
-      } catch (e) {
-        console.log(e);
+    const modalRef = this.modalService.open(ConfirmModalContent);
+    modalRef.result.then(result => {
+      if (result) {
+        this.returnReasonService.deleteReturnReason(id).subscribe(res => {
+          try {
+            this.toastr.success(res.message);
+            this.getList();
+          } catch (e) {
+            console.log(e);
+          }
+        });
       }
     });
   }
