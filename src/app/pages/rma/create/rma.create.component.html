@@ -83,7 +83,7 @@
                                                 <span class="text-danger">(*)</span>
                                             </label>
                                             <div class='col-7 text-primary'>
-                                                <select required class="form-control" id="order_type" name="order-type" formControlName="type">
+                                                <select required class="form-control" id="order_type" name="order-type" formControlName="rma_type">
                                                     <option value="undefined" hidden="true">Select</option>
                                                     <option *ngFor="let item of listMaster['rma_type']" [ngValue]="item.id">{{item.name}}</option>
                                                 </select>
@@ -95,9 +95,9 @@
                                             </label>
                                             <div class='col-7 text-danger'>
                                                 <div (clickOutside)="d.close()" class="input-group">
-                                                    <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="request_date" ngbDatepicker #d="ngbDatepicker">
+                                                    <input readonly class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="request_date" ngbDatepicker #d="ngbDatepicker">
                                                     <div class="input-group-append">
-                                                        <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                                                        <button disabled class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
                                                             <i class="fa fa-calendar" aria-hidden="true"></i>
                                                         </button>
                                                     </div>
@@ -113,7 +113,7 @@
                                         <div class="form-group row">
                                             <label for="code" class="col-5">Sales Order <span class="text-danger">(*)</span></label>
                                             <div class="col-7">
-                                                <ng-select (change)="changeSaleOrder()" [items]="listMaster['sales_order']" bindLabel="company_name" bindValue="id" formControlName="sales_order_id">
+                                                <ng-select (change)="changeSaleOrder()" [items]="listMaster['sales_order']" bindLabel="company_name" bindValue="id" formControlName="order_id">
                                                 </ng-select>
                                             </div>
                                         </div>
@@ -130,7 +130,7 @@
                                         <div class="form-group row">
                                             <label class='col-5'>Receiving Date</label>
                                             <div class='col-7'>
-                                                {{ generalForm.value.return_time }}
+                                                {{ generalForm.value.receiving_date }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -149,7 +149,7 @@
                                                 <span class="text-danger">(*)</span>
                                             </label>
                                             <div class='col-7'>
-                                                <ng-select [items]="listMaster['carrier']" bindLabel="company_name" bindValue="id" formControlName="carrier_id">
+                                                <ng-select [ngClass]="{'select-disabled': !generalForm.value.return_via || dataConfig['carrier']}" [items]="listMaster['carrier']" bindLabel="name" bindValue="id" formControlName="carrier">
                                                 </ng-select>
                                             </div>
                                         </div>
@@ -158,7 +158,7 @@
                                                 <span class="text-danger">(*)</span>
                                             </label>
                                             <div class='col-7'>
-                                                <select class="form-control" formControlName="cover_ship_fee">
+                                                <select [disabled]="dataConfig['cover_ship'] === null || dataConfig['cover_ship'] === undefined " (change)="updateTotal()" class="form-control" formControlName="cover_ship">
                                                     <option value="undefined" hidden="true">Select</option>
                                                     <option *ngFor="let item of listMaster['cover_ship']" [ngValue]="item.id">{{item.name}}</option>
                                                 </select>
@@ -171,13 +171,13 @@
                                         <div class="form-group row">
                                             <label class='col-5'>Return Warehouse</label>
                                             <div class='col-7'>
-                                                {{ generalForm.value.return_time }}
+                                                {{ generalForm.value.warehouse }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class='col-5'>Apply Restock. Fee </label>
                                             <div class='col-7'>
-                                                <input type="checkbox" [value]='1' formControlName="restock_fee">
+                                                <input (change)="updateTotal()" type="checkbox" [value]='1' formControlName="apply_restock">
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -216,7 +216,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-4 mg-top-15">
+            <div *ngIf="generalForm.value.return_via == 1 ||  generalForm.value.return_via == 2" class="col-md-4 mg-top-15">
                 <div class="block-border full-block">
                     <h5 class="title-border" translate>CUSTOMER PICKUP ADDRESS</h5>
                     <div class="row">
@@ -229,7 +229,7 @@
                                         </label>
                                         <div class="col-7">
                                             <form [formGroup]="generalForm">
-                                                <ng-select (change)="changeAddress('shipping')" [items]="customer['shipping']" bindLabel="label" bindValue="address_id" formControlName="shipping_id">
+                                                <ng-select (change)="changeAddress('shipping')" [items]="customer['shipping']" bindLabel="label" bindValue="address_id" formControlName="address_id">
                                                 </ng-select>
                                             </form>
                                         </div>
@@ -298,7 +298,7 @@
                                     <div class="form-group row">
                                         <label class="control-label col-5" translate>Email</label>
                                         <div class="col-7">
-                                            <input type="text" class="form-control" formControlName="contact_email">
+                                            <input type="text" class="form-control" formControlName="email">
                                         </div>
                                     </div>
                                 </div>
@@ -306,7 +306,7 @@
                                     <div class="form-group row">
                                         <label class="control-label col-5" translate>Phone</label>
                                         <div class="col-7">
-                                            <input type="text" class="form-control" formControlName="contact_phone">
+                                            <input type="text" class="form-control" formControlName="phone">
                                         </div>
                                     </div>
                                 </div>
@@ -360,12 +360,12 @@
                                         <td>{{item.uom}}</td>
                                         <td>{{item.order_quantity}}</td>
                                         <td>
-                                            <input (change)="updateTotal()" [disabled]="!item.is_checked" [textMask]="{mask: numberMaskObject()}" class="form-control input-sm" type="text" [(ngModel)]="item.return_quantity">
+                                            <input (change)="updateTotal()" [disabled]="!item.is_checked" [textMask]="{mask: numberMaskObject()}" class="form-control input-sm" type="text" [(ngModel)]="item.return_qty">
                                         </td>
                                         <td>{{item.sale_price | currency}}</td>
                                         <td>{{item.total_refund | currency}}</td>
                                         <td>
-                                            <select [disabled]="!item.is_checked" class="form-control" [(ngModel)]="item.reason">
+                                            <select [disabled]="!item.is_checked" class="form-control" [(ngModel)]="item.return_reason">
                                                 <option value="undefined" selected="true" hidden="true" translate>Select</option>
                                                 <option *ngFor="let item of listMaster['reason']" [ngValue]="item.id">{{ item.name }}</option>
                                             </select>
@@ -379,7 +379,7 @@
                                     <tr>
                                         <td colspan="5"><strong>Total</strong></td>
                                         <td class="text-success">{{ order_info['total_order_quantity'] }}</td>
-                                        <td class="text-primary">{{ order_info['total_return_quantity'] }}</td>
+                                        <td class="text-primary">{{ order_info['total_return_qty'] }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -423,7 +423,7 @@
                                             <input class="form-control" readonly="true" [(ngModel)]="order_info['vat_percent_amount']" class="form-control" value="0" type="number">
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <tr *ngIf="generalForm.value.apply_restock">
                                         <td>- Restocking Fee (%):</td>
                                         <td>
                                             <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info['restock_fee_percent']" class="form-control" type="text" (change)="updateTotal()">

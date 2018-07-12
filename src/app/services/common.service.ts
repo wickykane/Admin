@@ -29,9 +29,9 @@ export class CommonService {
         return this.apiService.get(url);
     }
 
-    getListCarrier() {
-        const url = 'country/admin/get-all';
-        return this.apiService.get(url);
+    getListCarrier(params = {}) {
+        const url = 'carrier';
+        return this.apiService.get(url, params);
     }
 
     getAllListBank() {
