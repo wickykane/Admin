@@ -3,6 +3,7 @@ import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from './../../services/table.service';
 
+import { CustomerService } from '../../pages/customer-mgmt/customer.service';
 import { ItemService } from './item.service';
 
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -17,21 +18,24 @@ import {CommonService} from '../../services/common.service';
 })
 export class SiteModalComponent implements OnInit, OnDestroy {
     @Input() info;
+    @Input() item;
 
     /**
      * Variable Declaration
      */
     generalForm: FormGroup;
 
-    public address: any = [];
-    public bank_account: any = [];
+    public addresses: any = [];
+    public bank_accounts: any = [];
     public bank_card: any = [];
-    public contact: any = [];
+    public contacts: any = [];
 
     public listMaster = {};
     public listTypeAddress: any = [];
     public listCountry: any = [];
     public listBank: any = [];
+    public routeList = [];
+
 
     public flagAddress: boolean;
     public flagAccount: boolean;
@@ -44,6 +48,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
         public router: Router,
         public toastr: ToastrService,
         private itemService: ItemService,
+        private customerService: CustomerService,
         private modalService: NgbModal,
         private hotkeysService: HotkeysService,
         private commonService: CommonService,
@@ -54,11 +59,11 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             'code': [null, Validators.required],
             'full_name': [null, Validators.required],
             'registration': [null],
-            'phone': [null],
-            'fax': [null],
+            'phone': [''],
+            'fax': [''],
             'line_of_credit': [null],
             'credit_sts': 2,
-            'sale_man_id': 1,
+            'sale_person_id': [null],
         });
 
         this.hotkeyCtrlRight = hotkeysService.add(new Hotkey('alt+r', (event: KeyboardEvent): boolean => {
@@ -70,60 +75,42 @@ export class SiteModalComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        /**
-         * Init Data
-         */
-        let code = this.info.code;
-        code++;
-        this.listTypeAddress = [{ id: 2, name: 'Billing' }, { id: 3, name: 'Shipping' }];
-        this.generalForm.patchValue({ parent_company_name: this.info.parent_company_name });
-        this.generalForm.patchValue({ code: String(this.info.textCode + '0000' + code) });
-
-        this.getListSalePerson();
-        this.getListCountryAdmin();
-        this.getListBank();
-
+        (async () => {
+           await this.itemService.getListCountryAdmin().subscribe(res => {this.listCountry = res.data; this.changeCustomerType(); });
+            this.listTypeAddress = [{ id: 2, name: 'Billing' }, { id: 3, name: 'Shipping' }];
+            await this.commonService.getOrderReference().subscribe(res =>  this.listMaster['salePersons'] = res.data.sale_mans);
+            await this.commonService.getAllListBank().subscribe(res => this.listBank = res.data);
+            await this.customerService.getRoute().subscribe(res => { this.routeList = res.data; });
+            await this.setData();
+        })();
     }
 
     ngOnDestroy() {
         this.hotkeysService.remove(this.hotkeyCtrlLeft);
         this.hotkeysService.remove(this.hotkeyCtrlRight);
     }
-    /**
-     * get list master data
-     */
-    getListSalePerson() {
-        this.listMaster['salePersons'] = [];
+    setData() {
+        if (this.item) {
+            console.log('3');
+            this.generalForm.patchValue(this.item);
+            this.contacts = this.item.contacts;
+            this.addresses = this.item.addresses;
+            console.log(this.addresses);
+            this.bank_accounts = this.item.bank_accounts;
+        } else {
+            console.log('2');
+            let code = this.info.code;
+            code++;
+            this.generalForm.patchValue({ parent_company_name: this.info.parent_company_name });
+            this.generalForm.patchValue({ code: String(this.info.textCode + '0000' + code) });
+        }
     }
-
-    getListCountryAdmin() {
-        this.itemService.getListCountryAdmin().subscribe(res => {
-            try {
-                this.listCountry = res.data;
-                this.changeCustomerType();
-            } catch (e) {
-                console.log(e);
-            }
-        });
-    }
-
-    getListBank() {
-        this.commonService.getAllListBank().subscribe(res => {
-            try {
-                this.listBank = res.data;
-            } catch (e) {
-                console.log(e);
-            }
-        });
-    }
-
 
     //  change customer Type
     changeCustomerType() {
-
+        console.log('1');
         const tempType1 = [{ id: 1, name: 'Head Office' }];
-
-        this.address = [{
+        this.addresses = [{
             type: 1, listType: tempType1, listCountry: this.listCountry, listState: []
         }, {
             type: 2, listType: this.listTypeAddress, listCountry: this.listCountry, listState: []
@@ -174,9 +161,9 @@ export class SiteModalComponent implements OnInit, OnDestroy {
 
 
 
-    //  add new row address
+    //  add new row addresses
     addNewAddress() {
-        this.address.push({
+        this.addresses.push({
             listType: this.listTypeAddress,
             listCountry: this.listCountry,
             listState: []
@@ -184,19 +171,19 @@ export class SiteModalComponent implements OnInit, OnDestroy {
     }
 
     removeAddress(index) {
-        this.address.splice(index, 1);
+        this.addresses.splice(index, 1);
     }
 
     //  add new row bank account
     addNewBankAccount() {
-        this.bank_account.push({
+        this.bank_accounts.push({
             listBank: this.listBank,
             listBranch: []
         });
     }
 
     removeBankAccount(index) {
-        this.bank_account.splice(index, 1);
+        this.bank_accounts.splice(index, 1);
     }
     //  add new row bank card
     addNewBankCard() {
@@ -208,56 +195,51 @@ export class SiteModalComponent implements OnInit, OnDestroy {
     removeBankCard(index) {
         this.bank_card.splice(index, 1);
     }
-    //  add new row contact
+    //  add new row contacts
     addNewContact() {
-        this.contact.push({});
+        this.contacts.push({});
     }
 
     removeContact(index) {
-        this.contact.splice(index, 1);
+        this.contacts.splice(index, 1);
     }
 
 
 
     applyData() {
-        this.contact.forEach(obj => {
+        this.contacts.forEach(obj => {
             obj['pwd_cfrm'] = obj.pwd;
         });
-        //  this.bank_account.forEach(obj => {
-        //      delete obj['listBank'];
-        //      delete obj['listBranch'];
-        //  });
-        //  this.address.forEach(obj => {
-        //    delete obj['listCountry'];
-        //    delete obj['listState'];
-        //  });
         if (this.generalForm.valid) {
             const params = {...this.generalForm.value};
-            params['user'] = [];
-            if (this.contact.length > 0) {
-                params['user'] = this.contact;
+            params['contacts'] = this.contacts;
+            params['addresses'] = this.addresses;
+            params['bank_accounts'] = this.bank_accounts;
+            // params['user'] = [];
+            // if (this.contacts.length > 0) {
+            //     params['user'] = this.contacts;
 
-            }
-            params['banks'] = [];
-            if (this.bank_account.length > 0) {
-                params['banks'] = this.bank_account;
+            // }
+            // params['banks'] = [];
+            // if (this.bank_accounts.length > 0) {
+            //     params['banks'] = this.bank_accounts;
 
-            }
-            params['primary'] = [];
-            params['billing'] = [];
-            params['shipping'] = [];
+            // }
+            // params['primary'] = [];
+            // params['billing'] = [];
+            // params['shipping'] = [];
 
-            this.address.forEach(obj => {
-                if (obj.type === 1) {
-                    params['primary'].push(obj);
-                }
-                if (obj.type === 2) {
-                    params['billing'].push(obj);
-                }
-                if (obj.type === 3) {
-                    params['shipping'].push(obj);
-                }
-            });
+            // this.addresses.forEach(obj => {
+            //     if (obj.type === 1) {
+            //         params['primary'].push(obj);
+            //     }
+            //     if (obj.type === 2) {
+            //         params['billing'].push(obj);
+            //     }
+            //     if (obj.type === 3) {
+            //         params['shipping'].push(obj);
+            //     }
+            // });
 
             this.closeModal(params);
 

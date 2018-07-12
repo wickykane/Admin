@@ -128,7 +128,7 @@
                                         <ng-container *ngIf="item.apply_for == '1'">All Sub Categories</ng-container>
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control" name="discount" [(ngModel)]="item.discount">
+                                        <input type="number" class="form-control" name="discount" [(ngModel)]="item.discount">
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-default" (click)="removeLine(i, item)">
@@ -155,7 +155,7 @@
 
 
         <div class="block-content block-content-full text-center" style="margin-top:15px;">
-            <button type="button" class="btn btn-default" [routerLink]="['/discount-category']">Cancel</button>
+            <button type="button" class="btn btn-default" [routerLink]="['/admin-panel/discount-category']">Cancel</button>
             <button type="button" [disabled]="generalForm.invalid" class="btn btn-outline-primary" (click)="createDiscountCategory()">Save</button>
         </div>
     </section>
