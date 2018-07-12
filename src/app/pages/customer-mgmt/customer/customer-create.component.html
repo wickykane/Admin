@@ -57,7 +57,9 @@
                             </div>
                         </div>
                         <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'PS'">
-                            <label for="email" class="col-sm-4 col-form-label">Email</label>
+                            <label for="email" class="col-sm-4 col-form-label">Email
+                                <span class="text-danger">(*)</span>
+                            </label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" name="email" formControlName="email">
                             </div>
@@ -65,9 +67,9 @@
                     </div>
                     <div class="col-md-4" *ngIf="generalForm.value.buyer_type == 'PS'">
                         <div class="form-group row">
-                            <label for="sale_man_id" class="col-sm-4 col-form-label">Saleperson</label>
+                            <label for="sale_person_id" class="col-sm-4 col-form-label">Sale Person</label>
                             <div class="col-sm-8">
-                                <select class="form-control" name="sale_man_id" formControlName="sale_man_id">
+                                <select class="form-control" name="sale_person_id" formControlName="sale_person_id">
                                     <option value="null" selected="true">--Select--</option>
                                     <option *ngFor="let item of listMaster['salePersons']" [ngValue]="item.id">{{item.full_name}}</option>
                                 </select>
@@ -126,9 +128,9 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'CP'">
-                            <label for="sale_man_id" class="col-sm-4 col-form-label">Saleperson</label>
+                            <label for="sale_person_id" class="col-sm-4 col-form-label">Saleperson</label>
                             <div class="col-sm-8">
-                                <select class="form-control" name="sale_man_id" formControlName="sale_man_id">
+                                <select class="form-control" name="sale_person_id" formControlName="sale_person_id">
                                     <option value="null" selected="true">--Select--</option>
                                     <option *ngFor="let item of listMaster['salePersons']" [ngValue]="item.id">{{item.full_name}}</option>
                                 </select>
@@ -152,9 +154,9 @@
             <div class="col-sm-12">
                 <div class="custom-header">
                     <h3 class="custom-header">ADDRESS:
-                        <strong class="text-danger">{{address.length}}</strong>
-                        <span *ngIf="address.length > 1">Records</span>
-                        <span *ngIf="address.length <= 1">Record</span>
+                        <strong class="text-danger">{{addresses.length}}</strong>
+                        <span *ngIf="addresses.length > 1">Records</span>
+                        <span *ngIf="addresses.length <= 1">Record</span>
                     </h3>
                     <div class="wrap-keyboard right-toggle-button" (click)="flagAddress = !flagAddress">
                         <span class="fa" [ngClass]="{'fa-minus': flagAddress,'fa-plus': !flagAddress}"></span>
@@ -179,7 +181,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let item of address; let i = index">
+                                <tr *ngFor="let item of addresses; let i = index">
                                     <td>{{i+1}}</td>
                                     <td>
                                         <select class="form-control" name="type" [(ngModel)]="item.type">
@@ -192,22 +194,22 @@
                                     </td>
                                     <td>
                                         <select class="form-control" name="country_code" [(ngModel)]="item.country_code" (change)="changeCountry(item)">
-                                            <option value="null" selected="true">--Select--</option>
+                                            <option value="null" selected="true" disabled>--Select--</option>
                                             <option *ngFor="let i of item.listCountry" [ngValue]="i.cd">{{i.name}}</option>
                                         </select>
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control" name="address_line" [(ngModel)]="item.address_line">
+                                        <input type="text" class="form-control" name="address_1" [(ngModel)]="item.address_1">
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control" name="address_line2" [(ngModel)]="item.address_line2">
+                                        <input type="text" class="form-control" name="address_2" [(ngModel)]="item.address_2">
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control" name="city_name" [(ngModel)]="item.city_name">
+                                        <input type="text" class="form-control" name="city_name" [(ngModel)]="item.city">
                                     </td>
                                     <td>
                                         <select class="form-control" name="state_id" [(ngModel)]="item.state_id">
-                                            <option value="null" selected="true">--Select--</option>
+                                            <option value="null" selected="true" disabled>--Select--</option>
                                             <option *ngFor="let i of item.listState" [ngValue]="i.id">{{i.name}}</option>
                                         </select>
                                     </td>
@@ -216,12 +218,12 @@
                                     </td>
                                     <td>
                                         <select [(ngModel)]="item.route_id" class="form-control" name="route_id" *ngIf="item.type == 3">
-                                            <option value="null" selected="true">Select Route</option>
+                                            <option value="null" selected="true" disabled>Select Route</option>
                                             <option *ngFor="let item of routeList" value="{{item.id}}">{{item.route_gatetime}}</option>
                                         </select>
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-default" (click)="removeAddress(i)">
+                                        <button [disabled]="item.type==1 || item.type==4" type="button" class="btn btn-default" (click)="removeAddress(i)">
                                             <i class="fa fa-times" aria-hidden="true"></i>
                                         </button>
                                     </td>
@@ -240,9 +242,9 @@
             <div class="col-sm-12">
                 <div class="custom-header">
                     <h3 class="custom-header">SITES:
-                        <strong class="text-danger">{{site.length}}</strong>
-                        <span *ngIf="site.length > 1">Records</span>
-                        <span *ngIf="site.length <= 1">Record</span>
+                        <strong class="text-danger">{{sites.length}}</strong>
+                        <span *ngIf="sites.length > 1">Records</span>
+                        <span *ngIf="sites.length <= 1">Record</span>
                     </h3>
                     <div class="wrap-keyboard right-toggle-button" (click)="flagSite = !flagSite">
                         <span class="fa" [ngClass]="{'fa-minus': flagSite,'fa-plus': !flagSite}"></span>
@@ -266,7 +268,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let item of site; let i = index">
+                                <tr *ngFor="let item of sites; let i = index">
                                     <td>{{i+1}}</td>
                                     <td>
                                         {{item.code}}
@@ -293,6 +295,9 @@
                                         {{item.zip_code}}
                                     </td>
                                     <td>
+                                        <button type="button" class="btn btn-default" (click)="addNewSite(item)">
+                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        </button>
                                         <button type="button" class="btn btn-default" (click)="removeSite(i)">
                                             <i class="fa fa-times" aria-hidden="true"></i>
                                         </button>
@@ -313,9 +318,9 @@
             <div class="col-sm-12">
                 <div class="custom-header">
                     <h3 class="custom-header">BANK ACCOUNTS:
-                        <strong class="text-danger">{{bank_account.length}}</strong>
-                        <span *ngIf="bank_account.length > 1">Records</span>
-                        <span *ngIf="bank_account.length <= 1">Record</span>
+                        <strong class="text-danger">{{bank_accounts.length}}</strong>
+                        <span *ngIf="bank_accounts.length > 1">Records</span>
+                        <span *ngIf="bank_accounts.length <= 1">Record</span>
                     </h3>
                     <div class="wrap-keyboard right-toggle-button" (click)="flagAccount = !flagAccount">
                         <span class="fa" [ngClass]="{'fa-minus': flagAccount,'fa-plus': !flagAccount}"></span>
@@ -338,11 +343,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let item of bank_account; let i = index">
+                                <tr *ngFor="let item of bank_accounts; let i = index">
                                     <td>{{i+1}}</td>
                                     <td>
                                         <select class="form-control" name="bank_id" [(ngModel)]="item.bank_id" (change)="changeBank(item)">
-                                            <option value="null" selected="true">--Select--</option>
+                                            <option value="null" selected="true" disabled>--Select--</option>
                                             <option *ngFor="let i of item.listBank" [ngValue]="i.id">{{i.name}}</option>
                                         </select>
                                     </td>
@@ -351,7 +356,7 @@
                                     </td>
                                     <td>
                                         <select class="form-control" name="branch_id" [(ngModel)]="item.branch_id" (change)="changeBranch(item)">
-                                            <option value="null" selected="true">--Select--</option>
+                                            <option value="null" selected="true" disabled>--Select--</option>
                                             <option *ngFor="let i of item.listBranch" [ngValue]="i.id">{{i.branch_name}}</option>
                                         </select>
                                     </td>
@@ -385,7 +390,7 @@
 
 
 
-        <div class="row" style="margin-top:15px;" *ngIf="false">
+        <!-- <div class="row" style="margin-top:15px;" *ngIf="false">
             <div class="col-sm-12">
                 <div class="custom-header">
                     <h3 class="custom-header">BANK CARDS:
@@ -448,7 +453,7 @@
                         <i class="fa fa-plus" aria-hidden="true"></i> Add new bank card</button>
                 </div>
             </div>
-        </div>
+        </div> -->
 
 
 
@@ -456,9 +461,9 @@
             <div class="col-sm-12">
                 <div class="custom-header">
                     <h3 class="custom-header">CONTACTS:
-                        <strong class="text-danger">{{contact.length}}</strong>
-                        <span *ngIf="contact.length > 1">Records</span>
-                        <span *ngIf="contact.length <= 1">Record</span>
+                        <strong class="text-danger">{{contacts.length}}</strong>
+                        <span *ngIf="contacts.length > 1">Records</span>
+                        <span *ngIf="contacts.length <= 1">Record</span>
                     </h3>
                     <div class="wrap-keyboard right-toggle-button" (click)="flagContact = !flagContact">
                         <span class="fa" [ngClass]="{'fa-minus': flagContact,'fa-plus': !flagContact}"></span>
@@ -481,7 +486,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let item of contact; let i = index">
+                                <tr *ngFor="let item of contacts; let i = index">
                                     <td>{{i+1}}</td>
                                     <td>
                                         <input type="text" class="form-control" name="full_name" [(ngModel)]="item.full_name">
@@ -524,7 +529,7 @@
 
         <div class="block-content block-content-full text-right" style="margin-top:15px;">
             <button type="button" class="btn btn-default" [routerLink]="['/customer']">Cancel</button>
-            <button type="button" [disabled]="generalForm.invalid" class="btn btn-outline-primary" (click)="createCustomer()">Save</button>
+            <button type="button" [disabled]="!generalForm.valid" class="btn btn-outline-primary" (click)="createCustomer()">Save</button>
         </div>
     </section>
 </div>
