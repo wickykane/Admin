@@ -114,8 +114,8 @@ export class DiscountCategoryCreateComponent implements OnInit {
 
     mapArrayValue(item, flag) {
         this.listMaster['category'].map(obj => {
-            if (obj.id === item.category_id) {
-                obj.disabled = flag;
+            if (obj.category_id === item.category_id) {
+                obj['disabled'] = flag;
             }
         });
     }
@@ -131,8 +131,8 @@ export class DiscountCategoryCreateComponent implements OnInit {
     switchStatusSelected(item, flag) {
         item.listSubCategory.map(obj => {
             item.sub_category_id.map(res => {
-                if (res === obj['id']) {
-                    obj.disabled = flag;
+                if (res === obj['category_id']) {
+                    obj['disabled'] = flag;
                 }
             });
         });
@@ -165,6 +165,7 @@ export class DiscountCategoryCreateComponent implements OnInit {
     changeToGetSubCategory(sub_category_id, item) {
 
         this.switchStatusSelected(item, true);
+        console.log(item.listSubCategory.every(this.isSameAnswer));
         this.mapArrayValue(item, item.listSubCategory.every(this.isSameAnswer) ? true : false);
     }
 
