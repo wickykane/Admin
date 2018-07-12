@@ -149,7 +149,7 @@
                                                 <span class="text-danger">(*)</span>
                                             </label>
                                             <div class='col-7'>
-                                                <ng-select [ngClass]="{'select-disabled': !generalForm.value.return_via || dataConfig.carrier}" [items]="listMaster['carrier']" bindLabel="name" bindValue="id" formControlName="carrier">
+                                                <ng-select [ngClass]="{'select-disabled': !generalForm.value.return_via || dataConfig['carrier']}" [items]="listMaster['carrier']" bindLabel="name" bindValue="id" formControlName="carrier">
                                                 </ng-select>
                                             </div>
                                         </div>
@@ -158,7 +158,7 @@
                                                 <span class="text-danger">(*)</span>
                                             </label>
                                             <div class='col-7'>
-                                                <select [disabled]="dataConfig.cover_ship === null || dataConfig.cover_ship === undefined " (change)="updateTotal()" class="form-control" formControlName="cover_ship">
+                                                <select [disabled]="dataConfig['cover_ship'] === null || dataConfig['cover_ship'] === undefined " (change)="updateTotal()" class="form-control" formControlName="cover_ship">
                                                     <option value="undefined" hidden="true">Select</option>
                                                     <option *ngFor="let item of listMaster['cover_ship']" [ngValue]="item.id">{{item.name}}</option>
                                                 </select>
