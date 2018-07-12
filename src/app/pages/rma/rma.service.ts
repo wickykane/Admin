@@ -30,21 +30,6 @@ export class RmaService {
     return this.API.post(url, params);
   }
 
-  getRMACode() {
-    const url = ['bank/list?is_all=1'].join('/');
-    return this.API.get(url);
-  }
-
-  getRMAType() {
-    const url = ['bank/list?is_all=1'].join('/');
-    return this.API.get(url);
-  }
-
-  getRMAReturnVia() {
-    const url = ['bank/list?is_all=1'].join('/');
-    return this.API.get(url);
-  }
-
   getRefundMethod() {
     const url = ['bank/list?is_all=1'].join('/');
     return this.API.get(url);
@@ -60,9 +45,9 @@ export class RmaService {
     return this.API.get(url);
   }
 
-  getOrderReferenve(id) {
-    const url = ['bank/list?is_all=1', id].join('/');
-    return this.API.get(url);
+  getOrderReferenve(params) {
+    const url = ['rma/create'].join('/');
+    return this.API.post(url, params);
   }
 
   getReturnReason() {

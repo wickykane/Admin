@@ -113,7 +113,7 @@
                                         <div class="form-group row">
                                             <label for="code" class="col-5">Sales Order <span class="text-danger">(*)</span></label>
                                             <div class="col-7">
-                                                <ng-select (change)="changeSaleOrder()" [items]="listMaster['sales_order']" bindLabel="company_name" bindValue="id" formControlName="order_id">
+                                                <ng-select (change)="changeSaleOrder()" [items]="listMaster['sales_order']" bindLabel="code" bindValue="id" formControlName="order_id">
                                                 </ng-select>
                                             </div>
                                         </div>
@@ -354,15 +354,15 @@
                                                 <span></span>
                                             </label>
                                         </td>
-                                        <td>{{item.part_no}}</td>
+                                        <td>{{item.sku}}</td>
                                         <td>{{item.des}}</td>
-                                        <td>{{item.initial_condition}}</td>
-                                        <td>{{item.uom}}</td>
+                                        <td>{{item.condition}}</td>
+                                        <td>{{item.uom_name}}</td>
                                         <td>{{item.order_quantity}}</td>
                                         <td>
                                             <input (change)="updateTotal()" [disabled]="!item.is_checked" [textMask]="{mask: numberMaskObject()}" class="form-control input-sm" type="text" [(ngModel)]="item.return_qty">
                                         </td>
-                                        <td>{{item.sale_price | currency}}</td>
+                                        <td>{{item.price | currency}}</td>
                                         <td>{{item.total_refund | currency}}</td>
                                         <td>
                                             <select [disabled]="!item.is_checked" class="form-control" [(ngModel)]="item.return_reason">
@@ -376,6 +376,9 @@
                                             </span>
                                         </td>
                                     </tr>
+
+                                </tbody>
+                                <tbody *ngIf="list.items.length > 0">
                                     <tr>
                                         <td colspan="5"><strong>Total</strong></td>
                                         <td class="text-success">{{ order_info['total_order_quantity'] }}</td>
