@@ -3,20 +3,25 @@ import { ApiService } from '../../../services/api.service';
 
 @Injectable()
 export class DiscountCategoryService {
-    constructor(private API: ApiService) {}
+    constructor(private API: ApiService) { }
 
-    getListWarehouse(params) {
-        const url = 'buyer/index';
+    getListDiscountCategory(params) {
+        const url = 'category/discount/list';
         return this.API.get(url, params);
     }
 
     getListCategory() {
-        const url = 'category';
+        const url = 'category/reference';
         return this.API.get(url);
     }
 
-    getListSubCategoryByCategory(id) {
-        const url = 'category/sub' + id;
+    generateCode() {
+        const url = 'category/discount/generate-code';
         return this.API.get(url);
+    }
+
+    createDiscountCategory(params) {
+        const url = 'category/discount/create';
+        return this.API.post(url, params);
     }
 }

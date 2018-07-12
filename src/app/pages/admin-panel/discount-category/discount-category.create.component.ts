@@ -25,10 +25,9 @@ export class DiscountCategoryCreateComponent implements OnInit {
     public listMaster = {};
     public data = {};
     public flagAddress: boolean;
+    public flagSub = false;
 
     public listCheckSubCat = [];
-
-    public tempCat = [{ id: 1, name: 'A', disabled: false }, { id: 2, name: 'B', disabled: false }];
 
     /**
      * Init Data
@@ -37,9 +36,9 @@ export class DiscountCategoryCreateComponent implements OnInit {
 
         this.generalForm = fb.group({
             'code': [null],
-            'name': [null],
-            'sts': [null],
-            'start_dt': [null],
+            'description': [null],
+            'ac': [null],
+            'start_date': [null],
             'create_by': 'Khiet Pham',
             'create_dt': new Date().toLocaleDateString()
         });
@@ -48,25 +47,32 @@ export class DiscountCategoryCreateComponent implements OnInit {
     ngOnInit() {
         this.data['products'] = [];
         this.getListStatus();
-        this.getListCategory();
-        this.getListType();
+        this.getListReference();
+        this.generateCode();
     }
     /**
      * Mater Data
      */
-    getListType() {
-        this.listMaster['type'] = [{ id: 'A', name: 'All' }, { id: 'S', name: 'Specific' }];
+    generateCode() {
+        this.discountCategoryService.generateCode().subscribe(
+            res => {
+                this.generalForm.patchValue({ code: res.message });
+            },
+            err => {
+
+            });
     }
 
-    getListCategory() {
-        this.listMaster['category'] = this.tempCat;
-        // this.discountCategoryService.getListCategory().subscribe(
-        //     res => {
-        //
-        //     },
-        //     err => {
-        //
-        //     });
+    getListReference() {
+        this.discountCategoryService.getListCategory().subscribe(
+            res => {
+                this.listMaster['category'] = res.data.categories;
+                this.listMaster['type'] = res.data.apply_for;
+                this.initDisabledType(res.data.categories);
+            },
+            err => {
+
+            });
     }
 
     getListStatus() {
@@ -80,28 +86,32 @@ export class DiscountCategoryCreateComponent implements OnInit {
     }
 
     getListSubCate(id, item) {
-        switch (id) {
-            case 1:
-                item.listSubCategory = [{ id: 1, name: 'a', disabled: false }, { id: 2, name: 'b', disabled: false }, { id: 3, name: 'c', disabled: false }];
-                break;
-            case 2:
-                item.listSubCategory = [{ id: 1, name: 'd', disabled: false }, { id: 2, name: 'e', disabled: false }, { id: 3, name: 'f', disabled: false }];
-                break;
+        this.listMaster['category'].map(obj => {
+            if (id === obj.category_id) {
+                item.listSubCategory = obj['sub_categories'];
+                this.initDisabledType(item.listSubCategory);
 
-        }
-
-        // this.discountCategoryService.getListSubCategoryByCategory(id).subscribe(
-        //     res => {
-        //
-        //     },
-        //     err => {
-        //
-        //     });
+                if (item.listSubCategory.length <= 0) {
+                  item['apply_for'] = 1;
+                  this.flagSub = true;
+                } else {
+                  this.flagSub = false;
+                }
+            }
+        });
     }
+
 
     /**
      * Internal Function
      */
+
+    initDisabledType(array) {
+        array.map(obj => {
+            obj['disabled'] = false;
+        });
+    }
+
     mapArrayValue(item, flag) {
         this.listMaster['category'].map(obj => {
             if (obj.id === item.category_id) {
@@ -120,7 +130,7 @@ export class DiscountCategoryCreateComponent implements OnInit {
 
     switchStatusSelected(item, flag) {
         item.listSubCategory.map(obj => {
-            item.sub_cate_id.map(res => {
+            item.sub_category_id.map(res => {
                 if (res === obj['id']) {
                     obj.disabled = flag;
                 }
@@ -147,18 +157,18 @@ export class DiscountCategoryCreateComponent implements OnInit {
 
 
     changeType(id, item) {
-        if (id === 'A') {
+        if (id === 1) {
             this.mapArrayValue(item, true);
         }
     }
 
-    changeToGetSubCategory(sub_cate_id, item) {
+    changeToGetSubCategory(sub_category_id, item) {
 
         this.switchStatusSelected(item, true);
         this.mapArrayValue(item, item.listSubCategory.every(this.isSameAnswer) ? true : false);
     }
 
-    removeSelected(value: any, sub_cate_id, item) {
+    removeSelected(value: any, sub_category_id, item) {
         item.listSubCategory.map(obj => {
             if (value.value.id === obj['id']) {
                 obj.disabled = false;
@@ -182,14 +192,14 @@ export class DiscountCategoryCreateComponent implements OnInit {
     }
 
     // create new discount by category
-    createCategory() {
+    createDiscountCategory() {
         const params = this.generalForm.value;
-        params.detail = this.data['products'];
-        this.discountCategoryService.getListWarehouse(params).subscribe(res => {
+        params.category_info = this.data['products'];
+        this.discountCategoryService.createDiscountCategory(params).subscribe(res => {
             try {
-                this.toastr.success(res.message);
+                this.toastr.success('Create Discount Category Successfully');
                 setTimeout(() => {
-                    this.router.navigate(['/product-management/bundle']);
+                    this.router.navigate(['/admin-panel/discount-category']);
                 }, 500);
             } catch (e) {
                 console.log(e);
