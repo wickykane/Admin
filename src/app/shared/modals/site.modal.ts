@@ -56,12 +56,12 @@ export class SiteModalComponent implements OnInit, OnDestroy {
 
         this.generalForm = fb.group({
             'parent_company_name': [null],
-            'code': [null, Validators.required],
-            'full_name': [null, Validators.required],
-            'registration': [null],
+            'site_code': [null, Validators.required],
+            'site_name': [null, Validators.required],
+            'registration_no': [null],
             'phone': [''],
             'fax': [''],
-            'line_of_credit': [null],
+            'credit_limit': [null],
             'credit_sts': 2,
             'sale_person_id': [null],
         });

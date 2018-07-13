@@ -9,7 +9,7 @@ export class ProductService {
 
     updateItem(id, data) {
         const url = 'item/update/' + id;
-        return this.apiService.post(url, data);
+        return this.apiService.postForm(url, data);
     }
 
     getDetailPart(id) {

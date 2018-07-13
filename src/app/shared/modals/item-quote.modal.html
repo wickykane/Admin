@@ -49,6 +49,8 @@
                         <th>Description</th>
                         <th class="text-center">Condition</th>
                         <th class="text-center">Qty</th>
+                        <th translate>WH Dallas</th>  
+                        <th translate>WH Amazon</th>
                         <th class="text-center">Price</th>
                         <th class="text-center">Quote Price</th>
                         <th class="text-center">Discount</th>
@@ -68,6 +70,8 @@
                     <td>{{item.des}}</td>
                     <td class="text-center">{{item.condition_name}}</td>
                     <td class="text-center">{{item.order_quantity}}</td>
+                    <td>{{item.warehouse[0]['qty_available']}}</td>
+                    <td>{{item.warehouse[1]['qty_available']}}</td>
                     <td class="text-center">{{item.sale_price|currency}}</td>
                     <td class="text-center">{{item.quote_price|currency}}</td>
                     <td class="text-center">{{item.discount}}</td>
