@@ -89,6 +89,7 @@ export class ItemQuoteModalContent implements OnInit {
                     return;
                 }
                 this.list.items = res.data.rows;
+                this.listMaster['warehouses'] = res.data.warehouses;
                 this.tableService.matchPagingOption(res.data);
             } catch (e) {
                 console.log(e);

@@ -17,8 +17,15 @@
                     <ng-template ngbTabContent>
                         <form class="form-horizontal form-search" [formGroup]="searchForm">
                             <div class="block-search">
-                                <label for="type" class="control-label" translate>Year</label>
-                                <select formControlName="year" class="form-control">
+                                <label for="type" class="control-label" translate>Year From </label>
+                                <select formControlName="year_from" class="form-control">
+                                    <option value="null" selected="true" translate>--Select--</option>
+                                    <option *ngFor="let de of listMaster['years']" [ngValue]="de.id">{{de.name}}</option>
+                                </select>
+                            </div>
+                            <div class="block-search">
+                                <label for="type" class="control-label" translate>Year To</label>
+                                <select formControlName="year_to" class="form-control">
                                     <option value="null" selected="true" translate>--Select--</option>
                                     <option *ngFor="let de of listMaster['years']" [ngValue]="de.id">{{de.name}}</option>
                                 </select>
@@ -152,7 +159,6 @@
         </div>
     </div>
     <div class="block-content pd-top mt-2">
-
         <div class="table-responsive">
             <table class="table table-striped table-vcenter table-hover custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex"
                 (onEnter)="selectData($event)">
@@ -174,7 +180,11 @@
                         <th translate>From</th>
                         <th translate>To</th>
                         <th translate>Brand</th>
-                        <th translate>Cert</th>                        
+                        <th translate>Cert</th>  
+                        <th translate>WH Dallas</th>  
+                        <th translate>WH Amazon</th>  
+                        <!-- <th translate>{{getNameWarehouse(listMaster['warehouses'],1)}}</th>   -->
+                        <!-- <th translate>{{getNameWarehouse(listMaster['warehouses'],2)}}</th>                         -->
                         <th translate>Sales Price</th>
                     </tr>
                 </thead>
@@ -190,13 +200,15 @@
                     <td>{{item.oem}}</td>
                     <td>{{item.partlinks_no}}</td>
                     <td>{{item.des}}</td>
-                    <td>{{item.mfr_name}}</td>
+                    <td>{{item.make_name}}</td>
                     <td>{{item.model_name}}</td>
                     <td>{{item.condition_name}}</td>
                     <td>{{item.yr_from}}</td>
                     <td>{{item.yr_to}}</td>
                     <td>{{item.brand_name}}</td>
-                    <td>{{item.cert=='Y'?'Yes':'No'}}</td>                   
+                    <td>{{item.cert=='Y'?'Yes':'No'}}</td>  
+                    <td>{{item.warehouse[0]['qty_available']}}</td>
+                    <td>{{item.warehouse[1]['qty_available']}}</td>                 
                     <th>{{item.sale_price|currency:'$'}}</th>
                 </tr>
                 <tr *ngIf="list.items.length === 0">

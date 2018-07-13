@@ -46,7 +46,8 @@ export class ItemModalContent implements OnInit {
             'name': [null],
             'sts': [null],
             'vin': [null],
-            'year': [null],
+            'year_from': [null],
+            'year_to': [null],
             'manufacturer_id': [null],
             'model_id': [null],
             'oem': [null],
@@ -87,9 +88,7 @@ export class ItemModalContent implements OnInit {
                 console.log(e.message);
             }
         });
-
     }
-
 
     // Table event
     selectData(index) {
@@ -137,12 +136,15 @@ export class ItemModalContent implements OnInit {
             }
         }
     }
+    getNameWarehouse(arr, id) {
+        return arr.find(item => item.warehouse_id === id)['name'];
+    }
 
     getList() {
         const params = {...this.tableService.getParams(), ...this.searchForm.value, ...this.filterForm.value};
         Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
-        this.itemService.getListAllItem(params).subscribe(res => {
+        this.itemService.getMasterItems(params).subscribe(res => {
             try {
                 if (!res.data.rows) {
                     this.list.items = [];
@@ -153,6 +155,8 @@ export class ItemModalContent implements OnInit {
                 this.listMaster['categories'] = res.data.meta_filters.categories;
                 this.listMaster['certification'] = res.data.meta_filters.certification;
                 this.listMaster['countries'] = res.data.meta_filters.countries;
+                this.listMaster['warehouses'] = res.data.warehouses;
+                console.log(this.listMaster['warehouses'][0]);
                 this.tableService.matchPagingOption(res.data);
             } catch (e) {
                 console.log(e);

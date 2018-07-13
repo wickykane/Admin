@@ -26,6 +26,10 @@ export class ItemService {
         const url = ['item'].join('/');
         return this.API.get(url, params);
     }
+    getMasterItems(params) {
+        const url = 'order/getMasterItems';
+        return this.API.get(url, params);
+    }
     getListAllItemFromQuote(id, params) {
         const url = ['order', 'getQuoteItems', id].join('/');
         return this.API.get(url, params);

@@ -120,7 +120,7 @@ export class SaleOrderCreateComponent implements OnInit {
             'prio_level': [null],
             'is_multi_shp_addr': [null],
             'sales_person': [null],
-            'warehouse_id': [null],
+            'warehouse_id': [1, Validators.required],
             'payment_method': [null],
             'billing_id': [null],
             'shipping_id': [null],
@@ -357,21 +357,31 @@ export class SaleOrderCreateComponent implements OnInit {
         });
         modalRef.componentInstance.data = data;
     }
+    getQtyAvail() {
+        if (this.list.items && this.list.items.length > 0) {
+           this.list.items.map(item => {
+              item.warehouse.find(k => {
+                  if ( k['warehouse_id'] === this.generalForm.value.warehouse_id) {
+                      return item.qty_avail = k.qty_available;
+                  }
+               } );
+           });
+        }
+    }
 
     addNewItem(list, type_get, buyer_id) {
         const modalRef = this.modalService.open(ItemModalContent, { size: 'lg' });
         modalRef.result.then(res => {
             if (res instanceof Array && res.length > 0) {
-
                 const listAdded = [];
                 (this.list.items).forEach( (item) => {
-                    item['order_detail_id'] = null;
                     listAdded.push(item.item_id);
                 });
                 res.forEach( (item) => {
                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
                     item['products'] = [];
                     item.order_quantity = 1;
+                    item['order_detail_id'] = null;
                     item.totalItem = item.sale_price;
                     item.source = 'Manual';
                 });
@@ -381,6 +391,7 @@ export class SaleOrderCreateComponent implements OnInit {
                 }));
 
                 this.updateTotal();
+                this.getQtyAvail();
             }
         }, dismiss => { });
     }
@@ -407,6 +418,7 @@ export class SaleOrderCreateComponent implements OnInit {
                 }));
 
                 this.updateTotal();
+                this.getQtyAvail();
             }
         }, dismiss => { });
     }
@@ -474,6 +486,7 @@ export class SaleOrderCreateComponent implements OnInit {
 
     createOrder(type) {
         const products = [];
+        console.log(this.list.items);
         this.list.items.forEach((item) => {
             products.push({
                 item_id: item.item_id,
@@ -483,7 +496,6 @@ export class SaleOrderCreateComponent implements OnInit {
                 order_detail_id: item.order_detail_id,
                 discount_percent: item.discount || 0,
                 shipping_address_id: item.shipping_address_id,
-                warehouse_id: item.warehouse_id || 1
             });
 
             if (item.products.length > 0) {
@@ -495,7 +507,6 @@ export class SaleOrderCreateComponent implements OnInit {
                         sale_price: subItem.sale_price,
                         discount_percent: subItem.discount || 0,
                         shipping_address_id: subItem.shipping_address_id,
-                        warehouse_id: subItem.warehouse_id || 1
                     });
                 });
             }
