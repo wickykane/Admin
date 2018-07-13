@@ -13,8 +13,7 @@
                         </div>
                         <div class="col-md-2">
                             <label for="purchase_quote_cd" class="control-label">Cust PO #</label>
-                            <input type="text" name="purchase_quote_cd" formControlName="cus_po" class="form-control" id="purchase_quote_cd" placeholder=""
-                                >
+                            <input type="text" name="purchase_quote_cd" formControlName="cus_po" class="form-control" id="purchase_quote_cd" placeholder="">
                         </div>
                         <!-- <div class="col-md-2">
                             <label for="contract_no" class="control-label">Sales Quote #</label>
@@ -118,53 +117,37 @@
                     (onEnter)="selectData($event)">
                     <thead class="bg-white">
                         <tr>
-                            <th style="width:50px"></th>
-                            <th translate>SO #</th>
-                            <th translate>Cust PO #</th>
-                            <!-- <th translate>Sales Quote #</th> -->
-                            <th translate>Customer</th>
-                            <th class="text-center " translate>Type</th>
-                            <th class="text-center" translate>Order date</th>
-                            <th class="text-center" translate>Delivery date</th>
-                            <th class="text-center" translate>Total</th>
-                            <th translate>Status</th>
-                            <!-- <th translate>Action</th> -->
+                            <td>Invoice #</td>
+                            <td>Invoice Date #</td>
+                            <td>SO #</td>
+                            <td>Customer Name</td>
+                            <td>Due Date</td>
+                            <td>Total Amount</td>
+                            <td>Status</td>
+                            <td>Aged Overdue</td>
+                            <td>Sent</td>
+                            <td>Created On</td>
+                            <td>Last Updated By</td>
+                            <td>Action</td>
                         </tr>
                     </thead>
                     <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                         <tr>
-                            <td>
-                                <img *ngIf="item.sts_code!='CP'" src="assets/img/qbicon-gray.png" width="20px" height="20px">
-                                <a *ngIf="item.sts_code=='CP'" href="https://sandbox.qbo.intuit.com/app/sales" target="_blank">
-                                    <img placement="top" ngbTooltip="Sent Invoice To QuickBooks {{item.updated_at}}" src="../../assets/img/qbicons.png"
-                                        width="20px" height="20px">
-                                </a>
-                            </td>
-                            <td>
-                                <a [routerLink]="['detail', item.id]">#{{item.code}}</a>
-                                <!-- #{{item.code}} -->
-                            </td>
-                            <td>{{item.cus_po}}</td>
-                            <!-- <td>{{item.sale_quote_num}}</td> -->
-                            <td>{{item.buyer_name}}</td>
-                            <td class="text-center">
-                                <span *ngIf="item.type == 'PKU'">Pickup</span>
-                                <span *ngIf="item.type == 'ONL'">Ecommerce</span>
-                                <span *ngIf="item.type == 'NO'">Regular Order</span>
-                            </td>
-                            <td class="text-center">{{item.order_date | date:'yyyy-MM-dd'}}</td>
-                            <td class="text-center">{{item.ship_date | date:'yyyy-MM-dd'}}</td>
 
-                            <td class="text-center">{{item.total_price | currency}}</td>
                             <td>
-                                <span class="label label-info" *ngIf="item.sts_code == 'NW'">{{item.sts}}</span>
-                                <span class="label label-warning" *ngIf="item.sts_code == 'IP'">{{item.sts}}</span>
-                                <span class="label label-danger" *ngIf="item.sts_code == 'PD'">{{item.sts}}</span>
-                                <span class="label  label-success" *ngIf="item.sts_code == 'CP'">{{item.sts}}</span>
-                                <span class="label  label-success" *ngIf="item.sts_code == 'AP'">{{item.sts}}</span>
-                                <span class="label  label-draft" *ngIf="item.sts_code == 'Draft'">{{item.sts}}</span>
+                                <a [routerLink]="['detail', item.id]">#{{item.inv_num}}</a>
                             </td>
-
+                            <td>{{item.inv_dt}}</td>
+                            <td>{{item.order_number}}</td>
+                            <td>{{item.customer_name}}</td>
+                            <td>{{item.due_dt}}</td>
+                            <td>{{item.tot_amt|currency}}</td>
+                            <td>{{item.status}}</td>
+                            <td>{{item.ageing}}</td>
+                            <td>{{item.is_sent}}</td>
+                            <td>{{item.creation_on}}</td>
+                            <td>{{item.last_updated_by}}</td>
+                            <td></td>
                         </tr>
                     </tbody>
                     <tbody *ngIf="list.items.length == 0">

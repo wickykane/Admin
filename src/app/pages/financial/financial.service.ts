@@ -20,8 +20,8 @@ export class FinancialService {
         return this.API.get(url);
     }
 
-    getListOrder(params) {
-        const url = 'order';
+    getListInvoice(params) {
+        const url = 'ar-invoice';
         return this.API.get(url, params);
     }
 

@@ -26,6 +26,7 @@ export class PartDetailComponent implements OnInit {
         images: []
     };
     public url_image;
+    public item_condition;
     galleryOptions: NgxGalleryOptions[];
     galleryImages: NgxGalleryImage[];
 
@@ -60,6 +61,7 @@ export class PartDetailComponent implements OnInit {
             try {
                 if (res.status) {
                     this.part = res.data.item;
+                    this.item_condition = res.data.item_condition;
                     this.list.images = res.data.images;
                     this.list.images.map(item => {
                         item['small'] = this.url_image + item.large_img;
