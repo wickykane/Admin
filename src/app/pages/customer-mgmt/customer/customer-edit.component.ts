@@ -46,7 +46,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     public listFile: any = [];
     public addressList: any = [];
     public imageSelected: string;
-    public idSupplier: string;
+    public idCustomer: string;
     public removedList: any = [];
     private primaryAddress = [];
     public ADDRESS_TYPE = {
@@ -113,16 +113,16 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         this.customerService.getRoute().subscribe(res => { this.routeList = res.data; });
     }
     getDetailSupplier(id) {
-        this.idSupplier = id;
-        this.customerService.getDetailCustomer(this.idSupplier).subscribe(res => {
+        this.idCustomer = id;
+        this.customerService.getDetailCustomer(this.idCustomer).subscribe(res => {
             try {
                 this.detail = res.data;
                 this.generalForm.patchValue(this.detail);
                 this.generalForm.patchValue({
                     'buyer_type': this.detail['company_type'],
-                    'is_parent': this.detail['is_parent']
+                    'is_parent': this.detail['is_parent'],
+                    'email': this.detail['user'][0]['email']
                 });
-                this.imageSelected = res.data.img;
                 this.sites = res.data['sites'];
                 for (const s of this.sites) {
                     s.is_remove = false;
@@ -192,7 +192,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         this.commonService.getAllListBank().subscribe(res => {
             try {
                 this.listBank = res.data;
-                this.bank_accounts = this.detail['banks'];
+                this.bank_accounts = this.detail['bank_accounts'];
                 for (const bank of this.bank_accounts) {
                     bank.listBank = this.listBank;
                     this.changeBank(bank);
@@ -231,8 +231,6 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         this.addresses.forEach(element => {
             this.changeCountry(element);
         });
-
-        console.log(this.addresses);
 
     }
 
@@ -301,16 +299,6 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         }
         this.bank_accounts.splice(index, 1);
     }
-    //  add new row bank card
-    // addNewBankCard() {
-    //     this.bank_card.push({
-    //         listCardType: []
-    //     });
-    // }
-
-    // removeBankCard(index) {
-    //     this.bank_card.splice(index, 1);
-    // }
     //  add new row contact
     addNewContact() {
         this.contacts.push({});
@@ -412,7 +400,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             }
 
             const data = {...params };
-            this.customerService.updateCustomer(this.idSupplier, data).subscribe(
+            this.customerService.updateCustomer(this.idCustomer, data).subscribe(
                 res => {
                     try {
                         setTimeout(() => {

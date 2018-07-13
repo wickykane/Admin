@@ -106,7 +106,7 @@ export class InvoiceComponent implements OnInit {
     params.order = 'id';
     params.sort = 'desc';
 
-    this.financialService.getListOrder(params).subscribe(res => {
+    this.financialService.getListInvoice(params).subscribe(res => {
       try {
         this.list.items = res.data.rows;
         this.tableService.matchPagingOption(res.data);
