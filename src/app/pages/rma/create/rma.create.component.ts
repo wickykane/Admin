@@ -76,6 +76,7 @@ export class RmaCreateComponent implements OnInit {
             'phone': [null],
             // Extra data
             'return_time': [null],
+            'return_time_id': [null],
             'receiving_date': [null],
             'warehouse': [null],
             'status': [null],
@@ -104,8 +105,6 @@ export class RmaCreateComponent implements OnInit {
         this.generalForm.get('return_via').valueChanges.subscribe(data => {
             this.generalForm.patchValue({ carrier: null });
         });
-
-        this.initConfig();
     }
 
     // Disable Config
@@ -113,53 +112,55 @@ export class RmaCreateComponent implements OnInit {
         const data = this.generalForm.value;
         if (this.generalForm.value.rma_type === 1) {
             // Case 1: RMA Type: Refund, Return Time: During WH Pickup, Receiving Date: Not yet received
-            if (data.return_time === 1 && data.receiving_date === 'During WH Pickup') {
+            if (data.return_time_id === 1 && data.receiving_date === 'Not yet received') {
                 this.dataConfig = {
-                    carrier: 1,
-                    cover_ship: 2,
+                    carrier: { disable: true, value: null },
+                    cover_ship: { disable: true, value: 2 },
+                    return_via: { disable: false, value: 4 }
                 };
+
             }
             // Case 2: RMA Type: Refund, Return Time: Before Delivery
-            if (data.return_time === 2) {
+            if (data.return_time_id === 2) {
                 this.dataConfig = {
-                    carrier: 1,
-                    cover_ship: 1,
-                    return_via: 4
+                    carrier: { disable: true, value: null },
+                    cover_ship: { disable: true, value: 1 },
+                    return_via: { disable: false, value: 4 }
                 };
             }
 
             // Case 3: RMA Type: Refund, Return Time: At Delivery
-            if (data.return_time === 3) {
+            if (data.return_time_id === 3) {
                 this.dataConfig = {
                 };
             }
 
             // Case 4: RMA Type: Refund, Return Time: <= 15
-            if (data.return_time === 4) {
+            if (data.return_time_id === 4) {
                 this.dataConfig = {
                 };
             }
 
             // Case 5: RMA Type: Refund, Return Time: > 30
-            if (data.return_time === 5) {
+            if (data.return_time_id === 5) {
                 this.dataConfig = {
-                    apply_restock: 1,
+                    apply_restock: { disable: true, value: 1 },
                     validate: 1
                 };
             }
 
             // Case 5: RMA Type: Refund, Return Time: 16 - 30
-            if (data.return_time === 6) {
+            if (data.return_time_id === 6) {
                 this.dataConfig = {
-                    apply_restock: 1,
+                    apply_restock: { disable: true, value: 1 },
                     validate: 1
                 };
             }
 
             this.generalForm.patchValue({
-                apply_restock: this.dataConfig['apply_restock'],
-                cover_ship: this.dataConfig['cover_ship'],
-                return_via: this.dataConfig['return_via']
+                apply_restock: (this.dataConfig['apply_restock'] || {}).value,
+                cover_ship: (this.dataConfig['cover_ship'] || {}).value,
+                return_via: (this.dataConfig['return_via'] || {}).value
             });
         }
     }
@@ -268,10 +269,13 @@ export class RmaCreateComponent implements OnInit {
             const return_time = (this.listMaster['return_time'].find(item => item.id === data.return_time)) || {};
             this.generalForm.patchValue({
                 return_time: return_time.name,
+                return_time_id: return_time.id,
                 receiving_date: data.receiving_date,
                 status: data.status,
                 warehouse: data.warehouse
             });
+
+            this.initConfig();
             this.checkAll(null, true);
             this.updateTotal();
         });

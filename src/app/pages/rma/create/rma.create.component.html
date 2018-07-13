@@ -149,7 +149,7 @@
                                                 <span class="text-danger">(*)</span>
                                             </label>
                                             <div class='col-7'>
-                                                <ng-select [ngClass]="{'select-disabled': !generalForm.value.return_via || dataConfig['carrier']}" [items]="listMaster['carrier']" bindLabel="name" bindValue="id" formControlName="carrier">
+                                                <ng-select [ngClass]="{'select-disabled': !generalForm.value.return_via || !dataConfig['carrier'] || (dataConfig['carrier'] && dataConfig['carrier'].disable)  }" [items]="listMaster['carrier']" bindLabel="name" bindValue="id" formControlName="carrier">
                                                 </ng-select>
                                             </div>
                                         </div>
