@@ -59,19 +59,18 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         this.generalForm = fb.group({
             'buyer_type': [null, Validators.required],
             'code': [null, Validators.required],
-            'full_name': [null],
-            'registration': [null],
+            'company_name': [null],
+            'registration_no': [null],
             'phone': [''],
             'fax': [''],
-            'email': [null, Validators.required],
-            'line_of_credit': [null],
+            'email': [null],
+            'credit_limit': [null],
             'credit_sts': 2,
             'sale_person_id': [null],
-            'first_name': [null, Validators.required],
-            'last_name': [null, Validators.required],
+            'first_name': [null],
+            'last_name': [null],
             'username': [null],
-            'pwd': [null],
-            'pwd_cfrm': [null]
+            'password': [null]
         });
 
         this.hotkeyCtrlRight = hotkeysService.add(new Hotkey('alt+r', (event: KeyboardEvent): boolean => {
@@ -265,7 +264,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
                 const state = res.addresses[0].listState.filter(x => {
                     return res.addresses[0].state_id === x.id;
                 });
-                  const objSite = {
+                const objSite = {
                     code: res.code,
                     full_name: res.full_name,
                     country: res.addresses[0].listCountry.map(x => {
@@ -280,26 +279,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
                     state: state[0].name,
                     zip_code: res.addresses[0].zip_code
                 };
-                const full_site = {...objSite, ...res};
-                // const state = res.primary[0].listState.filter(x => {
-                //     return res.primary[0].state_id === x.id;
-                // });
-                // const objSite = {
-                //     code: res.code,
-                //     full_name: res.full_name,
-                //     country: res.primary[0].listCountry.map(x => {
-                //         if (res.primary[0].country_code === x.cd) {
-                //             return x.name;
-                //         }
-                //     }),
-                //     name: res.primary[0].name,
-                //     address_line: res.primary[0].address_line,
-                //     address_line2: res.primary[0].address_line2,
-                //     city_name: res.primary[0].city_name,
-                //     state: state[0].name,
-                //     zip_code: res.primary[0].zip_code
-                // };
-
+                const full_site = { ...objSite, ...res };
                 this.sites.push(full_site);
                 this.company_child.push(res);
                 this.countCode++;
@@ -319,14 +299,11 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     }
 
     createCustomer() {
-        console.log(this.contacts);
-        console.log(this.sites);
-        console.log(this.bank_accounts);
-        console.log(this.addresses);
         if (this.generalForm.valid) {
             const params = this.generalForm.value;
             params['addresses'] = _.cloneDeep(this.addresses);
             params['bank_accounts'] = _.cloneDeep(this.bank_accounts);
+            params['contacts'] = _.cloneDeep(this.contacts);
             params['addresses'].forEach(item => {
                 delete item.listType;
                 delete item.listCountry;
@@ -337,16 +314,28 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
                 delete item.listBranch;
             });
             params['sites'] = _.cloneDeep(this.company_child);
-            params['site']['addresses'].forEach(item => {
-                delete item.listType;
-                delete item.listCountry;
-                delete item.listState;
+            params['sites'].forEach(item => {
+                item.addresses.map(add => {
+                    delete add.listType;
+                    delete add.listCountry;
+                    delete add.listState;
+                });
+                item.bank_accounts.map(add => {
+                    delete add.listBank;
+                    delete add.listBranch;
+                });
             });
-            params['site']['bank_accounts'].forEach(item => {
-                delete item.listBank;
-                delete item.listBranch;
-            });
-            console.log(params);
+            if (params['buyer_type'] === 'CP') {
+                delete params['email'];
+                delete params['first_name'];
+                delete params['last_name'];
+                delete params['username'];
+                delete params['password'];
+                delete params['pwd_cfrm'];
+            } else {
+                delete params['company_name'];
+            }
+
             this.customerService.createCustomer(params).subscribe(
                 res => {
                     console.log(res);
@@ -362,7 +351,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
                 },
                 err => {
                     console.log(err);
-                    this.toastr.error(err.message);
+                    // this.toastr.error(err.message);
                 });
 
         }
