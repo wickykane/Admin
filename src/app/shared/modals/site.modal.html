@@ -32,7 +32,7 @@
                             <span class="text-danger">(*)</span>
                         </label>
                         <div class="col-sm-7">
-                            <input type="text" class="form-control" name="code" formControlName="code">
+                            <input type="text" class="form-control" name="code" formControlName="site_code">
                         </div>
                     </div>
                 </div>
@@ -51,7 +51,7 @@
                             <span class="text-danger">(*)</span>
                         </label>
                         <div class="col-sm-7">
-                            <input type="text" class="form-control" name="full_name" formControlName="full_name">
+                            <input type="text" class="form-control" name="full_name" formControlName="site_name">
                         </div>
                     </div>
                 </div>
@@ -68,7 +68,7 @@
                     <div class="form-group row">
                         <label for="registration" class="col-sm-5 col-form-label">Registration No</label>
                         <div class="col-sm-7">
-                            <input type="text" class="form-control" name="registration" formControlName="registration">
+                            <input type="text" class="form-control" name="registration" formControlName="credit_limit">
                         </div>
                     </div>
                 </div>
@@ -355,7 +355,7 @@
                             <tr *ngFor="let item of contacts; let i = index">
                                 <td>{{i+1}}</td>
                                 <td>
-                                    <input type="text" class="form-control" name="full_name" [(ngModel)]="item.full_name">
+                                    <input type="text" class="form-control" name="full_name" [(ngModel)]="item.name">
                                 </td>
                                 <td>
                                     <input type="text" class="form-control" name="title" [(ngModel)]="item.title">
@@ -373,7 +373,7 @@
                                     <input type="text" class="form-control" name="username" [(ngModel)]="item.username">
                                 </td>
                                 <td>
-                                    <input type="password" class="form-control" name="pwd" [(ngModel)]="item.pwd">
+                                    <input type="password" class="form-control" name="pwd" [(ngModel)]="item.password">
                                 </td>
                                 <td>
                                     <button type="button" class="btn btn-default" (click)="removeContact(i)">

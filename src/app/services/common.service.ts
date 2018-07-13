@@ -25,7 +25,7 @@ export class CommonService {
     }
 
     getOrderByCustomer(id) {
-        const url = 'buyer/detail/' + id;
+        const url = 'rma/get-order-by-customer/' + id;
         return this.apiService.get(url);
     }
 

@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { environment } from '../../../../environments/environment';
+
 import {
     NgxGalleryAnimation,
     NgxGalleryImage,
@@ -23,6 +25,8 @@ export class PartDetailComponent implements OnInit {
     public list = {
         images: []
     };
+    public url_image;
+    public item_condition;
     galleryOptions: NgxGalleryOptions[];
     galleryImages: NgxGalleryImage[];
 
@@ -39,6 +43,7 @@ export class PartDetailComponent implements OnInit {
 
     ngOnInit() {
         this.part = {};
+        this.url_image = `${environment.api_url}file/view?path=`;
         this.route.params.subscribe(params => this.getDetailPart(params.id));
         this.galleryOptions = [
             {
@@ -56,52 +61,15 @@ export class PartDetailComponent implements OnInit {
             try {
                 if (res.status) {
                     this.part = res.data.item;
+                    this.item_condition = res.data.item_condition;
                     this.list.images = res.data.images;
+                    this.list.images.map(item => {
+                        item['small'] = this.url_image + item.large_img;
+                        item['medium'] = this.url_image + item.origin_img;
+                        item['big'] = this.url_image + item.thumb_img;
+                    });
                 }
 
-                console.log(this.part);
-                this.galleryImages = [
-                    {
-                        small:
-                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/1-small.jpeg',
-                        medium:
-                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/1-medium.jpeg',
-                        big:
-                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/1-big.jpeg'
-                    },
-                    {
-                        small:
-                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/2-small.jpeg',
-                        medium:
-                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/2-medium.jpeg',
-                        big:
-                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/2-big.jpeg'
-                    },
-                    {
-                        small:
-                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/3-small.jpeg',
-                        medium:
-                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/3-medium.jpeg',
-                        big:
-                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/3-big.jpeg'
-                    },
-                    {
-                        small:
-                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/4-small.jpeg',
-                        medium:
-                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/4-medium.jpeg',
-                        big:
-                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/4-big.jpeg'
-                    },
-                    {
-                        small:
-                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/5-small.jpeg',
-                        medium:
-                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/5-medium.jpeg',
-                        big:
-                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/5-big.jpeg'
-                    }
-                ];
             } catch (e) {
                 console.log(e);
             }

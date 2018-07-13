@@ -34,7 +34,7 @@ export class RmaCreateComponent implements OnInit {
         primary: {},
     };
     public list = {
-        items: [{ order_quantity: 100, sale_price: 125 }],
+        items: [],
         checklist: []
     };
     public checkAllItem = true;
@@ -78,6 +78,7 @@ export class RmaCreateComponent implements OnInit {
             'return_time': [null],
             'receiving_date': [null],
             'warehouse': [null],
+            'status': [null],
         });
 
         //  Init Key
@@ -89,9 +90,7 @@ export class RmaCreateComponent implements OnInit {
         this.checkAll(null, true);
 
         // Master Data Init
-        this.getRMACode();
-        this.getListRMAType();
-        this.getListReturnVia();
+
         this.getListRefundMethod();
         this.getListPaymentTerm();
         this.getListCoverShipFee();
@@ -189,25 +188,16 @@ export class RmaCreateComponent implements OnInit {
     /**
      * Mater Data
      */
-    getRMACode() {
-        this.rmaService.getRMACode().subscribe(res => {
-            this.order_info['code'] = res.data;
-        });
-    }
 
-    getListRMAType() {
-        this.rmaService.getRMAType().subscribe(res => {
-            const list = [
-                { id: 1, name: 'Refund' },
-                { id: 2, name: 'Exchange' }
-            ];
-            this.listMaster['rma_type'] = list || res.data;
-        });
-    }
 
     getListOrderByCustomer(id) {
         this.commonService.getOrderByCustomer(id).subscribe(res => {
-            this.listMaster['sales_order'] = res.data;
+            const data = res.data;
+            this.listMaster['sales_order'] = data.order;
+            this.listMaster['return_time'] = data.return_time;
+            this.listMaster['rma_type'] = data.rma_type;
+            this.listMaster['return_via'] = data.return_via;
+            this.generalForm.patchValue({ rma_number: data.return_order_no });
         });
     }
 
@@ -232,11 +222,6 @@ export class RmaCreateComponent implements OnInit {
         });
     }
 
-    getListReturnVia() {
-        this.rmaService.getRMAReturnVia().subscribe(res => {
-            this.listMaster['return_via'] = res.data;
-        });
-    }
 
     getListCarrier() {
         const params = { is_all: 1 };
@@ -271,8 +256,23 @@ export class RmaCreateComponent implements OnInit {
     }
 
     getOrderReference(id) {
-        this.rmaService.getOrderReferenve(id).subscribe(res => {
-            this.listMaster['order_reference'] = res.data;
+        const params = {
+            type: 'data',
+            order_id: id,
+            request_date: this.generalForm.value.request_date
+        };
+
+        this.rmaService.getOrderReferenve(params).subscribe(res => {
+            const data = res.data;
+            this.list.items = data.items;
+            const return_time = (this.listMaster['return_time'].find(item => item.id === data.return_time)) || {};
+            this.generalForm.patchValue({
+                return_time: return_time.name,
+                receiving_date: data.receiving_date,
+                status: data.status,
+                warehouse: data.warehouse
+            });
+            this.checkAll(null, true);
             this.updateTotal();
         });
     }
@@ -310,7 +310,10 @@ export class RmaCreateComponent implements OnInit {
     }
 
     changeSaleOrder() {
-        const id = this.generalForm.value.order_number;
+        const id = this.generalForm.value.order_id;
+        const order = this.listMaster['sales_order'].find(item => item.id === id);
+        this.order_info['discount_percent'] = order['discount_percent'];
+        this.order_info['vat_percent'] = order['vat_percent'];
         this.getOrderReference(id);
     }
 
@@ -328,10 +331,10 @@ export class RmaCreateComponent implements OnInit {
         this.order_info['total_return_qty'] = 0;
 
         this.list.items.forEach(item => {
-            item['total_refund'] = Number(item['return_qty'] || 0) * Number(item['sale_price'] || 0);
+            item['total_refund'] = Number(item['return_qty'] || 0) * Number(item['price'] || 0);
             this.order_info['total_order_quantity'] += Number(item['order_quantity'] || 0);
             this.order_info['total_return_qty'] += Number(item['return_qty'] || 0);
-            this.order_info['sub_total'] += (Number(item['sale_price'] || 0) * Number(item['return_qty'] || 0));
+            this.order_info['sub_total'] += (Number(item['price'] || 0) * Number(item['return_qty'] || 0));
         });
 
         this.order_info['discount_percent'] = Number(this.order_info['discount_percent'] || 0);

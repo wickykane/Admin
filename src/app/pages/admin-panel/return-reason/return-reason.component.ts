@@ -39,7 +39,8 @@ export class ReturnReasonComponent implements OnInit {
     private toastr: ToastrService) {
     this.searchForm = fb.group({
       'cd': [null],
-      'des': [null]
+      'des': [null],
+      'exclude_rr_calc': [null]
     });
 
     // Assign get list function name, override variable here
@@ -52,6 +53,7 @@ export class ReturnReasonComponent implements OnInit {
 
   ngOnInit() {
     this.listMaster['status'] = [{ key: 'IA', value: 'In Active' }, { key: 'AT', value: 'Active' }];
+    this.listMaster['Reason'] = [{ key: '0', value: 'No' }, { key: '1', value: 'Yes' }];
     this.getList();
   }
 

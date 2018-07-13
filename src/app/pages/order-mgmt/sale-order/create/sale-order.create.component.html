@@ -182,9 +182,11 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class='col-4'>Warehouse</label>
+                                            <label class='col-4'>Warehouse
+                                                <span class="text-danger">(*)</span>
+                                            </label>
                                             <div class='col-8'>
-                                                <select  class="form-control" id="warehouse_id" name="warehouse_id" formControlName="warehouse_id">
+                                                <select (change) = "getQtyAvail()"  class="form-control" id="warehouse_id" name="warehouse_id" formControlName="warehouse_id">
                                                     <option *ngFor="let item of listMaster['warehouses']" [ngValue]="item.id">{{item.name}}</option>
                                                 </select>
                                             </div>
@@ -375,7 +377,7 @@
                                         <td>{{item.sku}}</td>
                                         <td>{{item.des}}</td>
                                         <td>{{item.condition_name}}</td>
-                                        <td></td>
+                                        <td>{{item.qty_avail}}</td>
                                         <td>
                                             <input style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.order_quantity"
                                                 (change)="updateTotal();changeFromSource(item)" (keypress)="_keyPress($event)">

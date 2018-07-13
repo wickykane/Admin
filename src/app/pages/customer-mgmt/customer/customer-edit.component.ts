@@ -24,11 +24,11 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
 
     generalForm: FormGroup;
 
-    public address: any = [];
-    public bank_account: any = [];
-    public bank_card: any = [];
-    public contact: any = [];
-    public site: any = [];
+    public addresses: any = [];
+    public bank_accounts: any = [];
+    // public bank_card: any = [];
+    public contacts: any = [];
+    public sites: any = [];
     public company_child: any = [];
 
     public listMaster = {};
@@ -46,7 +46,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     public listFile: any = [];
     public addressList: any = [];
     public imageSelected: string;
-    public idSupplier: string;
+    public idCustomer: string;
     public removedList: any = [];
     private primaryAddress = [];
     public ADDRESS_TYPE = {
@@ -74,13 +74,13 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             'buyer_type': [null, Validators.required],
             'code': [null],
             'full_name': [null],
-            'registration': [null],
+            'registration_no': [null],
             'phone': [null],
             'fax': [null],
             'email': [null],
-            'line_of_credit': [null],
+            'credit_limit': [null],
             'credit_sts': 2,
-            'sale_man_id': [null],
+            'sale_person_id': [null],
             'first_name': [null],
             'last_name': [null],
             'username': [null],
@@ -88,7 +88,6 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             'pwd_cfrm': [null],
             'primary': [null],
             'credit_used': [null],
-            'credit_limit': [null],
             'credit_balance': [null],
             'is_parent': [null]
 
@@ -114,22 +113,22 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         this.customerService.getRoute().subscribe(res => { this.routeList = res.data; });
     }
     getDetailSupplier(id) {
-        this.idSupplier = id;
-        this.customerService.getDetailCustomer(this.idSupplier).subscribe(res => {
+        this.idCustomer = id;
+        this.customerService.getDetailCustomer(this.idCustomer).subscribe(res => {
             try {
                 this.detail = res.data;
                 this.generalForm.patchValue(this.detail);
                 this.generalForm.patchValue({
                     'buyer_type': this.detail['company_type'],
-                    'is_parent': this.detail['is_parent']
+                    'is_parent': this.detail['is_parent'],
+                    'email': this.detail['user'][0]['email']
                 });
-                this.imageSelected = res.data.img;
-                this.site = res.data['sites'];
-                for (const s of this.site) {
+                this.sites = res.data['sites'];
+                for (const s of this.sites) {
                     s.is_remove = false;
                     this.company_child.push(s);
                 }
-                this.contact = this.detail['user'];
+                this.contacts = this.detail['user'];
                 // tslint:disable-next-line:no-unused-expression
                 this.detail['company_type'] === 'CP' && (res.data['primary'] = res.data['head_office']);
                 this.changeCustomerType();
@@ -193,8 +192,8 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         this.commonService.getAllListBank().subscribe(res => {
             try {
                 this.listBank = res.data;
-                this.bank_account = this.detail['banks'];
-                for (const bank of this.bank_account) {
+                this.bank_accounts = this.detail['bank_accounts'];
+                for (const bank of this.bank_accounts) {
                     bank.listBank = this.listBank;
                     this.changeBank(bank);
                 }
@@ -228,12 +227,10 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         const shipping = this.detail['shipping'].map( item => {
              return { ...item, ...addressConfig['shipping'],  ...addressConfig['general']}; });
 
-        this.address = [ ...primary, ...billing, ...shipping ];
-        this.address.forEach(element => {
+        this.addresses = [ ...primary, ...billing, ...shipping ];
+        this.addresses.forEach(element => {
             this.changeCountry(element);
         });
-
-        console.log(this.address);
 
     }
 
@@ -276,7 +273,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
 
     //  add new row address
     addNewAddress() {
-        this.address.push({
+        this.addresses.push({
             listType: this.listTypeAddress,
             listCountry: this.listCountry,
             listState: [], allow_remove: true
@@ -284,45 +281,35 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     }
 
     removeAddress(index) {
-        this.address.splice(index, 1);
+        this.addresses.splice(index, 1);
     }
 
     //  add new row bank account
     addNewBankAccount() {
-        this.bank_account.push({
+        this.bank_accounts.push({
             listBank: this.listBank,
             listBranch: []
         });
     }
 
     removeBankAccount(index) {
-        if (this.bank_account[index].hasOwnProperty('id')) {
-            this.bank_account[index].is_deleted = true;
+        if (this.bank_accounts[index].hasOwnProperty('id')) {
+            this.bank_accounts[index].is_deleted = true;
             return;
         }
-        this.bank_account.splice(index, 1);
-    }
-    //  add new row bank card
-    addNewBankCard() {
-        this.bank_card.push({
-            listCardType: []
-        });
-    }
-
-    removeBankCard(index) {
-        this.bank_card.splice(index, 1);
+        this.bank_accounts.splice(index, 1);
     }
     //  add new row contact
     addNewContact() {
-        this.contact.push({});
+        this.contacts.push({});
     }
 
     removeContact(index) {
-        if (this.contact[index].hasOwnProperty('id')) {
-            this.contact[index].is_deleted = true;
+        if (this.contacts[index].hasOwnProperty('id')) {
+            this.contacts[index].is_deleted = true;
             return;
         }
-        this.contact.splice(index, 1);
+        this.contacts.splice(index, 1);
     }
 
     //  add new Site
@@ -330,13 +317,13 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         const modalRef = this.modalService.open(SiteModalComponent, { size: 'lg' });
         modalRef.result.then(res => {
             if (!this.helper.isEmptyObject(res)) {
-                const state = this.address[0].listState.filter(x =>
+                const state = this.addresses[0].listState.filter(x =>
                     res.primary[0].state_id === x.id
                 );
                 const objSite = {
                     code: res.code,
                     full_name: res.full_name,
-                    country: this.address[0].listCountry.map(x => {
+                    country: this.addresses[0].listCountry.map(x => {
                         if (res.primary[0].country_code === x.cd) {
                             return x.name;
                         }
@@ -349,7 +336,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                     zip_code: res.primary[0].zip_code
                 };
 
-                this.site.push(objSite);
+                this.sites.push(objSite);
                 this.company_child.push(res);
                 this.countCode++;
             }
@@ -362,24 +349,24 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     }
 
     removeSite(index) {
-        this.site.splice(index, 1);
+        this.sites.splice(index, 1);
     }
 
 
     updateCustomer() {
-        this.contact.forEach(obj => {
+        this.contacts.forEach(obj => {
             obj['pwd_cfrm'] = obj.pwd;
         });
         if (this.generalForm.valid) {
             const params = {...this.generalForm.value};
             params['user'] = [];
-            if (this.contact.length > 0) {
-                params['user'] = this.contact;
+            if (this.contacts.length > 0) {
+                params['user'] = this.contacts;
 
             }
             params['banks'] = [];
-            if (this.bank_account.length > 0) {
-                params['banks'] = this.bank_account;
+            if (this.bank_accounts.length > 0) {
+                params['banks'] = this.bank_accounts;
 
             }
             params['company_child'] = [];
@@ -389,7 +376,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             params['billing'] = [];
             params['shipping'] = [];
 
-            this.address.forEach(obj => {
+            this.addresses.forEach(obj => {
                 if (obj.type === 4 || obj.type === 3) {
                     params['primary'].push(obj);
                 }
@@ -413,7 +400,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             }
 
             const data = {...params };
-            this.customerService.updateCustomer(this.idSupplier, data).subscribe(
+            this.customerService.updateCustomer(this.idCustomer, data).subscribe(
                 res => {
                     try {
                         setTimeout(() => {

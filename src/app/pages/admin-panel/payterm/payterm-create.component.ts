@@ -76,7 +76,6 @@ export class PayTermCreateComponent implements OnInit {
         }
     }
     updatePaymentTerm(id) {
-        console.log(id);
         const params = this.generalForm.value;
         this.paytermService.updatePayment(id, params).subscribe(res => {
             this.toastr.success(res.message);
@@ -87,6 +86,7 @@ export class PayTermCreateComponent implements OnInit {
     numberMaskObject(max?) {
         return createNumberMask({
             allowDecimal: false,
+            includeThousandsSeparator : false,
             prefix: '',
             integerLimit: max || null
         });

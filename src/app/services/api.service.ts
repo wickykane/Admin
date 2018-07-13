@@ -112,7 +112,7 @@ export class ApiService {
     }
 
     postForm(path, formData) {
-        return this.httpClient.post(`${environment.api_url}${path}`, this.madeFormData(formData), this.headerFormData())
+        return this.httpClient.post(`${environment.api_url}${path}`, formData, this.headerFormData())
             //  .map(res => res.json())
             //  .catch(this._serverError);
             .pipe(

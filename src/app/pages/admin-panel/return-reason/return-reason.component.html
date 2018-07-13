@@ -12,7 +12,13 @@
                 <div class="block-search">
                     <label for="name" class="control-label">Description</label>
                     <input type="text" name="des" formControlName="des" class="form-control" id="name" placeholder="">
-                </div>             
+                </div>           
+                <div class="block-search">
+                    <label for="name" class="control-label">Exclude Reason</label>
+                    <select class="form-control" formControlName="exclude_rr_calc" name="status">                        
+                        <option *ngFor="let item of listMaster['Reason']" [ngValue]="item.key">{{item.value}}</option>
+                    </select>
+                </div>   
             </form>
             <div class="block-btn-search">
                 <label class="control-label">&nbsp;</label>

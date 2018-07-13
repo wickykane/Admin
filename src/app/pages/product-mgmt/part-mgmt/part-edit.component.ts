@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NguCarousel } from '@ngu/carousel';
+import { environment } from '../../../../environments/environment';
+
 import {
     NgxGalleryAnimation,
     NgxGalleryImage,
@@ -24,10 +26,12 @@ export class PartEditComponent implements OnInit {
     public generalForm: FormGroup;
     public part: any;
     public images: any = [];
+    public dataFile: any = [];
+    public url_image;
     public list = {
-        image_del: [],
-        files: []
+        image_del: []
     };
+    public item_condition;
     galleryOptions: NgxGalleryOptions[];
     galleryImages: NgxGalleryImage[];
 
@@ -48,6 +52,7 @@ export class PartEditComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.url_image = `${environment.api_url}file/view?path=`;
         this.part = {};
         this.route.params.subscribe(params => this.getDetailPart(params.id));
         this.galleryOptions = [
@@ -72,38 +77,38 @@ export class PartEditComponent implements OnInit {
         };
     }
     uploadFile($event) {
-        const fileUpload: File = $event.target.files[0];
-        const reader = new FileReader();
-        reader.readAsDataURL(fileUpload);
-        reader.onloadend = () => {
-            const base64 = reader.result;
-            const galleryImage = {
-                small: base64,
-                medium: base64,
-                big: base64
-            };
-            this.galleryImages.push(galleryImage);
+        console.log($event);
+        const fileUpload: File = $event.target.files;
+        console.log(fileUpload);
+        this.dataFile = fileUpload;
+        // const reader = new FileReader();
+        // reader.readAsDataURL(fileUpload);
+        // reader.onloadend = () => {
+        //     const base64 = reader.result;
+        //     const galleryImage = {
+        //         small: base64,
+        //         medium: base64,
+        //         big: base64
+        //     };
+        //     this.galleryImages.push(galleryImage);
 
-            const nguImage = {
-                origin_img: base64
-            };
-            this.images.push(nguImage);
-            this.list.files.push(reader.result);
-        };
+        //     const nguImage = {
+        //         origin_img: base64
+        //     };
+        //     this.images.push(nguImage);
+        //     this.list.files.push(reader.result);
+        // };
     }
 
     updateItem() {
-        const data = {
-            ...this.generalForm.value,
-            ...{ image_del: this.list.image_del },
-            ...{ files: this.list.files }
-        };
-        Object.keys(data).forEach(
-            key => (data[key] === null || data[key] === '') && delete data[key]
-        );
-        console.log(data);
+        const formData: FormData = new FormData();
+        formData.append('data', JSON.stringify(this.generalForm.value));
+        for ( const file of this.dataFile) {
+            formData.append('files[]', file);
+        }
+        formData.append('image_del', JSON.stringify(this.list.image_del));
         this.route.params.subscribe(params =>
-            this.productService.updateItem(params.id, data).subscribe(res => {
+            this.productService.updateItem(params.id, formData ).subscribe(res => {
                 try {
                     console.log(res);
                 } catch (e) {
@@ -124,6 +129,8 @@ export class PartEditComponent implements OnInit {
                 if (res.status) {
                     this.part = res.data.item;
                     this.images = res.data.images;
+                    this.item_condition = res.data.item_condition;
+                    // this.images
                     this.generalForm.patchValue(res.data.item);
                 }
 
