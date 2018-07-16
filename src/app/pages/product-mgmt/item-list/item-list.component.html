@@ -7,7 +7,7 @@
                 <label for="type" class="control-label" style="font-weight: bold;" translate>SELECT WH</label>
                 <div class="block-search">
                     <select (change)="tableService.searchAction()" formControlName="warehouse" class="form-control">
-                        <option value="null" selected="true" translate>--Select--</option>
+                        <option value="null" selected="true" translate disabled>--Select--</option>
                         <option *ngFor="let de of listMaster['warehouses']" [ngValue]="de.id">{{de.name}}</option>
                     </select>
                 </div>
@@ -24,28 +24,28 @@
                             <label for="type" class="control-label" translate>Year From</label>
                             <div class="block-search">
                                 <select formControlName="year_from" class="form-control">
-                                    <option value="null" selected="true" translate>--Select--</option>
+                                    <option value="null" selected="true" translate disabled>--Select--</option>
                                     <option *ngFor="let de of listMaster['years']" [ngValue]="de.id">{{de.name}}</option>
                                 </select>
                             </div>
                             <label for="type" class="control-label" translate>Year To</label>
                             <div class="block-search">
                                 <select formControlName="year_to" class="form-control">
-                                    <option value="null" selected="true" translate>--Select--</option>
+                                    <option value="null" selected="true" translate disabled>--Select--</option>
                                     <option *ngFor="let de of listMaster['years']" [ngValue]="de.id">{{de.name}}</option>
                                 </select>
                             </div>
                             <label for="type" class="control-label" translate>Make</label>
                             <div class="block-search">
                                 <select formControlName="manufacturer_id" class="form-control">
-                                    <option value="null" selected="true" translate>--Select--</option>
+                                    <option value="null" selected="true" translate disabled>--Select--</option>
                                     <option *ngFor="let de of listMaster['make']" [ngValue]="de.manufacturer_id">{{de.name}}</option>
                                 </select>
                             </div>
                             <label for="type" class="control-label" translate>Model</label>
                             <div class="block-search">
                                 <select (change)="changeToGetSubModel()" formControlName="model_id" class="form-control">
-                                    <option value="null" selected="true" translate>--Select--</option>
+                                    <option value="null" selected="true" translate disabled>--Select--</option>
                                     <option *ngFor="let de of listMaster['models']" [ngValue]="de.model_id">{{de.name}}</option>
                                 </select>
                             </div>
@@ -84,7 +84,7 @@
                             <label for="type" class="control-label" translate>Cert</label>
                             <div class="block-search">
                                 <select formControlName="certification" class="form-control">
-                                    <option value="null" selected="true" translate>--Select--</option>
+                                    <option value="null" selected="true" translate disabled>--Select--</option>
                                     <option *ngFor="let de of listMaster['certification_partNumber']" [ngValue]="de.code">{{de.value}}</option>
                                 </select>
                             </div>
@@ -195,8 +195,7 @@
         </div>
     </div>
     <div class="block-content pd-top">
-        <button [disabled]="list.checklist.length == 0" (click)="createOrder()" class="btn btn-primary" translate>Create Order</button>
-        <!-- <a class="btn btn-primary pull-right" routerLink="/product-management/mass-price"> Mass Update Price</a> -->
+        <button [disabled]="list.checklist.length == 0" (click)="createOrder()" class="btn btn-primary" translate>Create Order</button>        
         <div class="table-responsive" style="margin-top:10px">
             <table class="table table-striped table-vcenter table-hover custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                 <thead class="bg-white">
