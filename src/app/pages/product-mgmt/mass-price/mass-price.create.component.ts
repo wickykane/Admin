@@ -51,7 +51,7 @@ export class MassPriceCreateComponent implements OnInit {
         if (event.target.files && event.target.files.length > 0) {
             const files = event.target.files;
             this.listFile = Array.of(...files);
-            this.generalForm.patchValue({ path: this.generalForm.value.name });
+            this.generalForm.patchValue({ path: this.listFile[0].name});
         }
     }
 
