@@ -300,12 +300,12 @@ export class SaleOrderCreateComponent implements OnInit {
                 if (!item.products) { item.products = []; }
                 item.products.forEach((subItem, index) => {
                     if (item.products.length > 0) {
-                        sub_quantity += Number(subItem.order_quantity);
+                        sub_quantity += Number(subItem.quantity);
                     }
                 });
 
-                const value = (Number(item.sale_price) * (Number(item.order_quantity) + sub_quantity)
-                    - (Number(item.sale_price) * (Number(item.order_quantity) + sub_quantity)) * Number(item.discount) / 100)
+                const value = (Number(item.sale_price) * (Number(item.quantity) + sub_quantity)
+                    - (Number(item.sale_price) * (Number(item.quantity) + sub_quantity)) * Number(item.discount) / 100)
                     - (item.promotion_discount_amount ? item.promotion_discount_amount : 0);
 
                 item.totalItem = value;
@@ -380,7 +380,7 @@ export class SaleOrderCreateComponent implements OnInit {
                 res.forEach( (item) => {
                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
                     item['products'] = [];
-                    item.order_quantity = 1;
+                    item.quantity = 1;
                     item['order_detail_id'] = null;
                     item.totalItem = item.sale_price;
                     item.source = 'Manual';
@@ -408,7 +408,7 @@ export class SaleOrderCreateComponent implements OnInit {
                 res.forEach( (item) => {
                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
                     item['products'] = [];
-                    item.order_quantity = 1;
+                    item.quantity = 1;
                     item.totalItem = item.sale_price;
                     item.source = 'From Quote';
                 });
@@ -447,7 +447,7 @@ export class SaleOrderCreateComponent implements OnInit {
                     res.forEach(  (item) => {
                         if (item.sale_price) { item.sale_price = Number(item.sale_price); }
                         item['products'] = [];
-                        item.order_quantity = 1;
+                        item.quantity = 1;
                         item.totalItem = item.sale_price;
                         item.source = 'From Quote';
                     });
@@ -491,9 +491,10 @@ export class SaleOrderCreateComponent implements OnInit {
             products.push({
                 item_id: item.item_id,
                 item_type: item.item_type,
-                quantity: item.order_quantity,
+                quantity: item.quantity,
                 sale_price: item.sale_price,
                 order_detail_id: item.order_detail_id,
+                condition_id: item.condition_id,
                 discount_percent: item.discount || 0,
                 shipping_address_id: item.shipping_address_id,
             });
@@ -503,9 +504,10 @@ export class SaleOrderCreateComponent implements OnInit {
                     products.push({
                         item_id: subItem.item_id,
                         item_type: item.item_type,
-                        quantity: subItem.order_quantity,
+                        quantity: subItem.quantity,
                         sale_price: subItem.sale_price,
                         discount_percent: subItem.discount || 0,
+                        condition_id: item.condition_id,
                         shipping_address_id: subItem.shipping_address_id,
                     });
                 });
