@@ -104,7 +104,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             let code = this.info.code;
             code++;
             this.generalForm.patchValue({ parent_company_name: this.info.parent_company_name });
-            this.generalForm.patchValue({ code: String(this.info.textCode + '0000' + code) });
+            this.generalForm.patchValue({ site_code: String(this.info.textCode + '0000' + code) });
         }
     }
 
@@ -113,11 +113,11 @@ export class SiteModalComponent implements OnInit, OnDestroy {
         console.log('1');
         const tempType1 = [{ id: 4, name: 'Head Office' }];
         this.addresses = [{
-            type: 1, listType: tempType1, listCountry: this.listCountry, listState: []
+            type: 4, listType: tempType1, listCountry: this.listCountry, listState: []
         }, {
-            type: 2, listType: this.listTypeAddress, listCountry: this.listCountry, listState: []
+            type: 1, listType: this.listTypeAddress, listCountry: this.listCountry, listState: [], is_default: false
         }, {
-            type: 3, listType: this.listTypeAddress, listCountry: this.listCountry, listState: []
+            type: 2, listType: this.listTypeAddress, listCountry: this.listCountry, listState: [], is_default: false
         }];
 
 
@@ -275,18 +275,18 @@ export class SiteModalComponent implements OnInit, OnDestroy {
         console.log(e.target.value, this.paddr);
         let val = e.target.value;
         let flag = !1;
-        if (val * 1 == 2) {
+        if (val * 1 == 1) {
             for (let i = 0; i < this.addresses.length; i++) {
-                if (this.addresses[i].type == 2) {
+                if (this.addresses[i].type == 1) {
                     for (let j = 0; j < this.paddr.length; j++) {
-                        if (this.paddr[j].type == 2 && this.paddr[j].is_default) {
+                        if (this.paddr[j].type == 1 && this.paddr[j].is_default) {
                             this.addresses[i] = JSON.parse(JSON.stringify(this.paddr[j]));
                             flag = !0;
                         }
                     }
                     if (!flag) {
                         for (let j = 0; j < this.paddr.length; j++) {
-                            if (this.paddr[j].type == 2) {
+                            if (this.paddr[j].type == 1) {
                                 this.addresses[i] = JSON.parse(JSON.stringify(this.paddr[j]));
                                 break;
                             }
