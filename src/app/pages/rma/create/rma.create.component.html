@@ -15,7 +15,7 @@
                                         <label for="code" class="control-label" translate>Customer</label>
                                         <span class="text-danger">(*) </span>
                                         <div>
-                                            <ng-select style="width: 150px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="company_id">
+                                            <ng-select style="width: 150px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="buyer">
                                             </ng-select>
                                         </div>
                                     </div>
@@ -124,7 +124,7 @@
                                         <div class="form-group row">
                                             <label class='col-5'>Return Time</label>
                                             <div class='col-7'>
-                                                {{ generalForm.value.return_time }}
+                                                {{ generalForm.value.return_time_name }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -144,21 +144,21 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="form-group row">
+                                        <div class="form-group row" *ngIf="generalForm.value.return_via==1 || generalForm.value.return_via == 2">
                                             <label class='col-5'>Carrier
                                                 <span class="text-danger">(*)</span>
                                             </label>
                                             <div class='col-7'>
-                                                <ng-select [ngClass]="{'select-disabled': !generalForm.value.return_via || dataConfig['carrier']}" [items]="listMaster['carrier']" bindLabel="name" bindValue="id" formControlName="carrier">
+                                                <ng-select [ngClass]="{'select-disabled': (generalForm.value.return_via==3 || generalForm.value.return_via == 4) }" [items]="listMaster['carrier']" bindLabel="name" bindValue="id" formControlName="carrier">
                                                 </ng-select>
                                             </div>
                                         </div>
-                                        <div class="form-group row">
+                                        <div class="form-group row" >
                                             <label class='col-5'>Cover Ship. Fee
                                                 <span class="text-danger">(*)</span>
                                             </label>
                                             <div class='col-7'>
-                                                <select [disabled]="dataConfig['cover_ship'] === null || dataConfig['cover_ship'] === undefined " (change)="updateTotal()" class="form-control" formControlName="cover_ship">
+                                                <select [disabled]="generalForm.value.return_time ==1&&generalForm.value.receiving_date === 'Not yet received'" (change)="updateTotal()" class="form-control" formControlName="cover_ship">
                                                     <option value="undefined" hidden="true">Select</option>
                                                     <option *ngFor="let item of listMaster['cover_ship']" [ngValue]="item.id">{{item.name}}</option>
                                                 </select>
@@ -171,13 +171,13 @@
                                         <div class="form-group row">
                                             <label class='col-5'>Return Warehouse</label>
                                             <div class='col-7'>
-                                                {{ generalForm.value.warehouse }}
+                                                {{ generalForm.value.warehouseName }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class='col-5'>Apply Restock. Fee </label>
                                             <div class='col-7'>
-                                                <input (change)="updateTotal()" type="checkbox" [value]='1' formControlName="apply_restock">
+                                                <input (change)="updateTotal();checkApplyRestock($event.target.checked)" type="checkbox" [value]='1' formControlName="apply_restock">
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -185,7 +185,7 @@
                                             <div class='col-7 text-primary'>
                                                 <select class="form-control" formControlName="refund_method">
                                                     <option value="undefined" hidden="true">Select</option>                                                        
-                                                    <option *ngFor="let item of listMaster['refund_method']" [ngValue]="item.code">{{item.value}}</option>
+                                                    <option *ngFor="let item of listMaster['refund_method']" [ngValue]="item.id">{{item.name}}</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -194,7 +194,7 @@
                                             <div class='col-7 text-primary'>
                                                 <select class="form-control" formControlName="payment_term">
                                                     <option value="undefined" hidden="true">Select</option>                                                                                                                
-                                                    <option *ngFor="let item of listMaster['payment_term']" [ngValue]="item.id">{{item.full_name}}</option>
+                                                    <option *ngFor="let item of listMaster['payment_term']" [ngValue]="item.id">{{item.cd}}</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -203,7 +203,7 @@
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                             <div class='col-7'>
-                                                <ng-select [items]="listMaster['approver']" bindLabel="company_name" bindValue="id" formControlName="approver" aria-placeholder="Select">
+                                                <ng-select [items]="listMaster['approver']" bindLabel="full_name" bindValue="id" formControlName="approver" aria-placeholder="Select">
                                                 </ng-select>
                                             </div>
                                         </div>
@@ -367,7 +367,7 @@
                                         <td>
                                             <select [disabled]="!item.is_checked" class="form-control" [(ngModel)]="item.return_reason">
                                                 <option value="undefined" selected="true" hidden="true" translate>Select</option>
-                                                <option *ngFor="let item of listMaster['reason']" [ngValue]="item.id">{{ item.name }}</option>
+                                                <option *ngFor="let item1 of listMaster['reason']" [ngValue]="item1.id">{{ item1.cd }}</option>
                                             </select>
                                         </td>
                                         <td class="text-center">
@@ -411,7 +411,7 @@
                                     <tr>
                                         <td>- Discount (%):</td>
                                         <td>
-                                            <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info['discount_percent']" class="form-control" type="text" (change)="updateTotal()">
+                                            <input [textMask]="{mask: numberMaskObject()}" disabled class="form-control" [(ngModel)]="order_info['discount_percent']" type="text" (change)="updateTotal()">
                                         </td>
                                         <td>
                                             <input class="form-control" readonly="true" [(ngModel)]="order_info['total_discount']" class="form-control" value="0" type="number">
@@ -429,10 +429,10 @@
                                     <tr *ngIf="generalForm.value.apply_restock">
                                         <td>- Restocking Fee (%):</td>
                                         <td>
-                                            <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info['restock_fee_percent']" class="form-control" type="text" (change)="updateTotal()">
+                                            <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info['restocking_fee_percent']" class="form-control" type="text" (change)="updateTotal()">
                                         </td>
                                         <td>
-                                            <input class="form-control" readonly="true" [(ngModel)]="order_info['restock_fee_amount']" class="form-control" value="0" type="number">
+                                            <input class="form-control" readonly="true" [(ngModel)]="order_info['restocking_fee_amount']" class="form-control" value="0" type="number">
                                         </td>
                                     </tr>
                                     <tr>
@@ -455,7 +455,7 @@
         </div>
         <div class="row">
             <div class="col-md-12 mg-top-15 text-center">
-                <button type="button" class="btn btn-primary" (click)="createRMA()" translate>Save & Validate</button>
+                <button type="button" class="btn btn-primary" [disabled]="generalForm.invalid" (click)="createRMA()" translate>Save & Validate</button>
                 <button type="button" class="btn btn-default" [routerLink]="['/rma']" translate>Cancel</button>
             </div>
         </div>

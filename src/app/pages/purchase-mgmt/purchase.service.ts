@@ -55,8 +55,8 @@ export class PurchaseService {
      */
     // Order
     getListPurchaseOrder(params) {
-        let url = 'oli_purchase_order';
-        return this.API.get(url, params);
+        let url = 'rma/get-list';
+        return this.API.post(url, params);
     }
     createPurchaseOrder(params) {
         let url = 'oli_purchase_order';
