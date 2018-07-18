@@ -12,6 +12,7 @@
                     <th>City</th>
                     <th>State</th>
                     <th>Zip Code</th>
+                    <th>Default</th>
                     <th>Route No</th>
                 </tr>
             </thead>
@@ -19,13 +20,14 @@
                 <tr *ngFor="let item of list.items">
                     <td>{{ item.address_id }}</td>
                     <td>{{ item.address_type }}</td>
-                    <td>{{ item.address_name }}</td>
+                    <td>{{ item.name }}</td>
                     <td>{{ item.country_name }}</td>
                     <td>{{ item.address_line }}</td>
                     <td>{{ item.address_line2 }}</td>
                     <td>{{ item.city_name }}</td>
                     <td>{{ item.state_name }}</td>
                     <td>{{ item.zip_code }}</td>
+                    <td>{{ item.is_default?'Yes':'No' }}</td>
                     <td>{{ item.route_id }}</td>
                 </tr>
                 <tr *ngIf="list.items.length == 0">
