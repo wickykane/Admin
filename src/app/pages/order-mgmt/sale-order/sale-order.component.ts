@@ -86,7 +86,7 @@ export class SaleOrderComponent implements OnInit {
 
   getListStatus() {
     this.orderService.getListStatus().subscribe(res => {
-      this.listMaster['status'] = res.results;
+      this.listMaster['status'] = res.data;
     });
 
   }

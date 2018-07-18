@@ -486,7 +486,6 @@ export class SaleOrderCreateComponent implements OnInit {
 
     createOrder(type) {
         const products = [];
-        console.log(this.list.items);
         this.list.items.forEach((item) => {
             products.push({
                 item_id: item.item_id,
