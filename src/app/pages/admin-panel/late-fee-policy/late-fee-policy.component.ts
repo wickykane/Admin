@@ -53,8 +53,8 @@ export class LateFeePolicyComponent implements OnInit {
             { id: 2, value: "Specific Customers" }
         ];
         this.listMaster['status'] = [
-            { id: 0, value: "Active" },
-            { id: 1, value: "Inactive" },
+            { id: 1, value: "Active" },
+            { id: 0, value: "Inactive" },
             { id: 2, value: "Closed" }
         ];
         this.getList();
