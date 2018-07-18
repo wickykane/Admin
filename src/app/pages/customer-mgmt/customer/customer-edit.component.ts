@@ -328,6 +328,8 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     //  add new Site
     addNewSite() {
         const modalRef = this.modalService.open(SiteModalComponent, { size: 'lg' });
+
+        modalRef.componentInstance.paddr = this.addresses;
         modalRef.result.then(res => {
             if (!this.helper.isEmptyObject(res)) {
                 const state = this.addresses[0].listState.filter(x =>
