@@ -9,6 +9,7 @@ import { routerTransition } from '../../../router.animations';
 import { LateFeePolicyKeyService } from './keys.control';
 import { LateFeePolicyService } from './late-fee-policy.service';
 import { CustomerModalContent } from './modal/customer.modal';
+import { TerminatePolicyModalContent } from './modal/terminate-policy.modal';
 
 @Component({
     selector: 'app-late-fee-policy-detail',
@@ -27,6 +28,7 @@ export class LateFeePolicyDetailComponent implements OnInit {
     };
     public checkAllItem;
     public headerTitle;
+    public currentStatus;
     public isCreate = false;
     public isView = false;
     public isEdit = false;
@@ -160,7 +162,11 @@ export class LateFeePolicyDetailComponent implements OnInit {
 
     payloadData() {
         if (this.generalForm.get('id').value && this.isEdit) {
-            this.updateLateFeePolicy(this.generalForm.get('id').value);
+            if (this.currentStatus != 2 && this.generalForm.value['ac'] == 2) {
+                this.openTerminateLFPModal();
+            } else {
+                this.updateLateFeePolicy(this.generalForm.get('id').value);
+            }
         } else {
             this.createLateFeePolicy();
         }
@@ -169,6 +175,15 @@ export class LateFeePolicyDetailComponent implements OnInit {
     getGenerateCode() {
         this.lateFeePolicyService.getGenerateCode().subscribe(res => {
             this.generalForm.get('code').patchValue(res.data.code);
+        });
+    }
+
+    openTerminateLFPModal() {
+        const modalRef = this.modalService.open(TerminatePolicyModalContent);
+        modalRef.result.then(result => {
+            if (result) {
+                this.updateLateFeePolicy(this.generalForm.get('id').value);
+            }
         });
     }
 
@@ -219,6 +234,7 @@ export class LateFeePolicyDetailComponent implements OnInit {
             this.lateFeePolicyService.getDetailLateFeePolicy(id).subscribe(res => {
                 if (res.data.invoice_lfp) {
                     this.generalForm.patchValue(res.data.invoice_lfp);
+                    this.currentStatus = res.data.invoice_lfp.ac;
                     if (res.data.invoice_lfp.recuring_fee_status == 1) {
                         this.generalForm.controls['recuring_fee_status'].setValue(true);
                     } else {

@@ -38,6 +38,7 @@ import { UnitMeasureComponent } from './unit-measure/unit-measure.component';
 import { LateFeePolicyDetailComponent } from './late-fee-policy/late-fee-policy-detail.component';
 import { LateFeePolicyComponent } from './late-fee-policy/late-fee-policy.component';
 import { CustomerModalContent } from './late-fee-policy/modal/customer.modal';
+import { TerminatePolicyModalContent } from './late-fee-policy/modal/terminate-policy.modal';
 
 import { UserModule } from './user/user.module';
 import { WorkFlowModule } from './work-flow/work-flow.module';
@@ -92,13 +93,15 @@ import { AdminPanelService } from './admin-panel.service';
         LateFeePolicyDetailComponent,
         LateFeePolicyComponent,
         CustomerModalContent,
+        TerminatePolicyModalContent
     ],
     entryComponents: [
         BankModalComponent,
         BranchModalComponent,
         InsuranceBranchModalComponent,
         InsuranceModalComponent,
-        CustomerModalContent
+        CustomerModalContent,
+        TerminatePolicyModalContent
     ],
     providers: [TableService, CommonService, AdminPanelService]
 })
