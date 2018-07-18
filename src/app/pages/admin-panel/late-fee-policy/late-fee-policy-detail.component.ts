@@ -42,7 +42,7 @@ export class LateFeePolicyDetailComponent implements OnInit {
         private lateFeePolicyService: LateFeePolicyService) {
         this.generalForm = fb.group({
             'id': [null],
-            'code': [{ value: null, disabled: true }, Validators.required],
+            'code': [null, Validators.required],
             'des': [null, Validators.required],
             'apply_for': [null, Validators.required],
             'ac': [null, Validators.required],
@@ -70,8 +70,8 @@ export class LateFeePolicyDetailComponent implements OnInit {
                     this.isEdit = false;
                 }
                 this.listMaster['status'] = [
-                    { id: 0, value: "Active" },
-                    { id: 1, value: "Inactive" },
+                    { id: 1, value: "Active" },
+                    { id: 0, value: "Inactive" },
                     { id: 2, value: "Closed" }
                 ];
                 this.getDetailLateFeePolicy(params.id);
@@ -83,8 +83,8 @@ export class LateFeePolicyDetailComponent implements OnInit {
                     this.headerTitle = "CREATE NEW POLICY";
                 }
                 this.listMaster['status'] = [
-                    { id: 0, value: "Active" },
-                    { id: 1, value: "Inactive" }
+                    { id: 1, value: "Active" },
+                    { id: 0, value: "Inactive" }
                 ];
                 this.getGenerateCode();
             }
@@ -174,7 +174,8 @@ export class LateFeePolicyDetailComponent implements OnInit {
 
     getGenerateCode() {
         this.lateFeePolicyService.getGenerateCode().subscribe(res => {
-            this.generalForm.get('code').patchValue(res.data.code);
+            this.generalForm.controls['code'].setValue(res.data.code);
+            this.listMaster['generate-code'] = res.data.code;
         });
     }
 

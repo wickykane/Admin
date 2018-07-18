@@ -15,7 +15,7 @@
                         <label> Code
                             <span class="text-danger">(*)</span>
                         </label>
-                        <input type="text" class="form-control" formControlName="code" *ngIf="isCreate">
+                        <input type="text" class="form-control" [value]="listMaster['generate-code']" *ngIf="isCreate" disabled>
                         <div *ngIf="!isCreate">{{generalForm.value['code']}}</div>
                     </div>
                     <div class="col-sm-2 form-group">
