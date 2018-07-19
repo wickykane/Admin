@@ -429,10 +429,10 @@
                                     <tr *ngIf="generalForm.value.apply_restock">
                                         <td>- Restocking Fee (%):</td>
                                         <td>
-                                            <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info['restocking_fee_percent']" class="form-control" type="text" (change)="updateTotal()">
+                                            <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info['restock_fee_percent']" class="form-control" type="text" (change)="updateTotal()">
                                         </td>
                                         <td>
-                                            <input class="form-control" readonly="true" [(ngModel)]="order_info['restocking_fee_amount']" class="form-control" value="0" type="number">
+                                            <input class="form-control" readonly="true" [(ngModel)]="order_info['restock_fee_amount']" class="form-control" value="0" type="number">
                                         </td>
                                     </tr>
                                     <tr>
