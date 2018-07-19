@@ -1,7 +1,7 @@
 <div [@routerTransition]>
     <app-page-header [heading]="'EDIT CUSTOMER'" [icon]="'fa-th-list'"></app-page-header>
     <!-- <app-shortcut [listShortcut]='editCustomerKeyService.getKeys()'></app-shortcut> -->
-    
+
     <div style="margin: 15px 0">
         <a class="btn btn-outline-info" routerLink="/customer">
             <i class="fa fa-arrow-left"></i> Back</a>
@@ -36,13 +36,13 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        
+
                         <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'CP'">
-                                <label for="credit_limit" class="col-sm-4 col-form-label">Credit Limit</label>
-                                <div class="col-sm-8">
-                                    <input type="number" class="form-control" name="credit_limit" formControlName="credit_limit">
-                                </div>
+                            <label for="credit_limit" class="col-sm-4 col-form-label">Credit Limit</label>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control" name="credit_limit" formControlName="credit_limit">
                             </div>
+                        </div>
                         <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'PS'">
                             <label for="credit_limit" class="col-sm-4 col-form-label">Credit Limit</label>
                             <div class="col-sm-8">
@@ -77,11 +77,11 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'CP'">
-                                <label for="sale_person_id" class="col-sm-4 col-form-label">Credit Used</label>
-                                <div class="col-sm-8">
-                                        <input type="text" disabled class="form-control" name="credit_used" formControlName="credit_used">
-                                </div>
+                            <label for="sale_person_id" class="col-sm-4 col-form-label">Credit Used</label>
+                            <div class="col-sm-8">
+                                <input type="text" disabled class="form-control" name="credit_used" formControlName="credit_used">
                             </div>
+                        </div>
                         <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'PS'">
                             <label for="sale_person_id" class="col-sm-4 col-form-label">Saleperson</label>
                             <div class="col-sm-8">
@@ -103,11 +103,11 @@
                             </div>
                         </div>
                         <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'PS'">
-                            <label for="full_name" class="col-sm-4 col-form-label">Full Name
+                            <label for="first_name" class="col-sm-4 col-form-label">First Name
                                 <span class="text-danger">(*)</span>
                             </label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" name="full_name" formControlName="full_name">
+                                <input type="text" class="form-control" name="first_name" formControlName="first_name">
                             </div>
                         </div>
                     </div>
@@ -119,22 +119,22 @@
                             </div>
                         </div>
                         <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'CP'">
-                                <label for="sale_person_id" class="col-sm-4 col-form-label">Saleperson</label>
-                                <div class="col-sm-8">
-                                    <select class="form-control" name="sale_person_id" formControlName="sale_person_id">
-                                        <option value="null" selected="true">--Select--</option>
-                                        <option *ngFor="let item of listMaster['salePersons']" [ngValue]="item.id">{{item.full_name}}</option>
-                                    </select>
-                                </div>
+                            <label for="sale_person_id" class="col-sm-4 col-form-label">Saleperson</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" name="sale_person_id" formControlName="sale_person_id">
+                                    <option value="null" selected="true">--Select--</option>
+                                    <option *ngFor="let item of listMaster['salePersons']" [ngValue]="item.id">{{item.full_name}}</option>
+                                </select>
                             </div>
+                        </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'CP'">
-                                <label for="sale_person_id" class="col-sm-4 col-form-label">Credit Balance</label>
-                                <div class="col-sm-8">
-                                    <input type="text" disabled class="form-control" name="credit_balance" formControlName="credit_balance">
-                                </div>
+                            <label for="sale_person_id" class="col-sm-4 col-form-label">Credit Balance</label>
+                            <div class="col-sm-8">
+                                <input type="text" disabled class="form-control" name="credit_balance" formControlName="credit_balance">
                             </div>
+                        </div>
                     </div>
                     <div class="w-100"></div>
                     <div class="col-md-4">
@@ -144,7 +144,7 @@
                                 <input type="text" class="form-control" name="registration_no" formControlName="registration_no">
                             </div>
                         </div>
-                        <div class="form-group row hidden" *ngIf="generalForm.value.buyer_type == 'PS'">
+                        <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'PS'">
                             <label for="last_name" class="col-sm-4 col-form-label">Last Name
                                 <span class="text-danger">(*)</span>
                             </label>
@@ -154,7 +154,7 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        
+
                         <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'PS'">
                             <label for="password" class="col-sm-4 col-form-label">Password</label>
                             <div class="col-sm-8">
@@ -195,6 +195,7 @@
                                     <th> City </th>
                                     <th> State </th>
                                     <th> Zip Code </th>
+                                    <th> Default </th>
                                     <th> Route </th>
                                     <th> Action </th>
                                 </tr>
@@ -236,9 +237,12 @@
                                         <input type="text" class="form-control" name="zip_code" [(ngModel)]="item.zip_code">
                                     </td>
                                     <td>
-                                        <select  [(ngModel)]="item.route_id" class="form-control" name="route_id" *ngIf="item.type == 2">
+                                        <input type="checkbox" name="is_default" (change)="checkIsDefault($event, i)" [(ngModel)]="item.is_default" [disabled]="item.type==3 || item.type==4">
+                                    </td>
+                                    <td>
+                                        <select [(ngModel)]="item.route_id" class="form-control" name="route_id" *ngIf="item.type == 2">
                                             <option value="null" selected="true">Select Route</option>
-                                            <option *ngFor="let item of routeList" value="{{item.id}}" >{{item.route_gatetime}}</option>
+                                            <option *ngFor="let item of routeList" value="{{item.id}}">{{item.route_gatetime}}</option>
                                         </select>
                                     </td>
                                     <td>
@@ -257,7 +261,7 @@
         </div>
 
 
-        <div class="row" style="margin-top:15px;" *ngIf="generalForm.value.is_parent == true && generalForm.value.buyer_type=='CP'" >
+        <div class="row" style="margin-top:15px;" *ngIf="generalForm.value.is_parent == true && generalForm.value.buyer_type=='CP'">
             <div class="col-sm-12">
                 <div class="custom-header">
                     <h3 class="custom-header">SITES:
