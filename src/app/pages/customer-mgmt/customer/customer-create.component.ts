@@ -83,7 +83,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         /**
          * Init Data
          */
-        this.listTypeAddress = [{ id: 2, name: 'Billing' }, { id: 3, name: 'Shipping' }];
+        this.listTypeAddress = [{ id: 1, name: 'Billing' }, { id: 2, name: 'Shipping' }];
         this.getListCustomerType();
         this.getListSalePerson();
         this.getListCountryAdmin();
@@ -158,24 +158,24 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         this.getListTypeAddress();
 
         if (this.generalForm.value.buyer_type === 'CP') {
-            const tempType = [{ id: 1, name: 'Head Office' }];
+            const tempType = [{ id: 4, name: 'Head Office' }];
 
             this.addresses = [{
-                type: 1, listType: tempType, listCountry: this.listCountry, listState: []
+                type: 4, listType: tempType, listCountry: this.listCountry, listState: []
+            }, {
+                type: 1, listType: this.listTypeAddress, listCountry: this.listCountry, listState: []
             }, {
                 type: 2, listType: this.listTypeAddress, listCountry: this.listCountry, listState: []
-            }, {
-                type: 3, listType: this.listTypeAddress, listCountry: this.listCountry, listState: []
             }];
         } else {
-            const tempType1 = [{ id: 1, name: 'Primary' }];
+            const tempType1 = [{ id: 3, name: 'Primary' }];
 
             this.addresses = [{
-                type: 1, listType: tempType1, listCountry: this.listCountry, listState: []
+                type: 3, listType: tempType1, listCountry: this.listCountry, listState: []
+            }, {
+                type: 1, listType: this.listTypeAddress, listCountry: this.listCountry, listState: []
             }, {
                 type: 2, listType: this.listTypeAddress, listCountry: this.listCountry, listState: []
-            }, {
-                type: 3, listType: this.listTypeAddress, listCountry: this.listCountry, listState: []
             }];
         }
 
@@ -218,7 +218,13 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         })[0];
     }
 
-
+    dupAddress() {
+        var p = this.addresses[0];
+        var k = Object.keys(p);
+        for (let i = 1; i < this.addresses.length; i++) {
+            k.map(key => { key != 'type' && key != 'listType' && (this.addresses[i][key] = p[key]) });
+        }
+    }
 
     //  add new row address
     addNewAddress() {
@@ -253,11 +259,29 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         this.contacts.splice(index, 1);
     }
 
+    checkIsDefault($event, idx) {
+        for (let i = 0; i < this.addresses.length; i++) {
+            const item = this.addresses[i];
+            if (idx != i && item.type == this.addresses[idx].type) {
+                item.is_default = false;
+            }
+        }
+    }
+
     //  add new Site
 
     addNewSite(item?) {
+        var k = ['name', 'country_code', 'address_1', 'city', 'state_id', 'zip_code'];
+        for (let i = 0; i < this.addresses.length; i++) {
+            for (let j = 0; j < k.length; j++) {
+                if (!this.addresses[i][k[j]]) {
+                    return this.toastr.error('Please fulfill all the addresses before creating the site.');
+                }
+            };
+        }
         const modalRef = this.modalService.open(SiteModalComponent, { size: 'lg' });
         modalRef.componentInstance.item = item;
+        modalRef.componentInstance.paddr = this.addresses;
         modalRef.result.then(res => {
             if (!this.helper.isEmptyObject(res)) {
                 console.log(res);

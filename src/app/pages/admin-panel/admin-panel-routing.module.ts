@@ -12,6 +12,8 @@ import { DiscountEditComponent } from './discount/discount-edit.component';
 import { DiscountComponent } from './discount/discount.component';
 import { InsuranceBranchComponent } from './insurance-company/branch/branch.component';
 import { InsuranceComponent } from './insurance-company/insurance.component';
+import { LateFeePolicyDetailComponent } from './late-fee-policy/late-fee-policy-detail.component';
+import { LateFeePolicyComponent } from './late-fee-policy/late-fee-policy.component';
 import { PayTermCreateComponent } from './payterm/payterm-create.component';
 import { PaymentTermComponent } from './payterm/payterm.component';
 import { ReturnReasonCreateComponent } from './return-reason/return-reason-create.component';
@@ -136,6 +138,22 @@ const routes: Routes = [
     {
         path: 'discount/clone/:id',
         component: DiscountCloneComponent
+    },
+    {
+        path: 'late-fee-policy',
+        component: LateFeePolicyComponent
+    },
+    {
+        path: 'late-fee-policy/create',
+        component: LateFeePolicyDetailComponent
+    },
+    {
+        path: 'late-fee-policy/view/:id',
+        component: LateFeePolicyDetailComponent
+    },
+    {
+        path: 'late-fee-policy/edit/:id',
+        component: LateFeePolicyDetailComponent
     }
 ];
 
