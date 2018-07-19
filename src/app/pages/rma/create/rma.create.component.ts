@@ -424,8 +424,8 @@ export class RmaCreateComponent implements OnInit {
         this.generalForm.patchValue({
             total_amount: this.order_info['total'],
             ship_fee: this.order_info['shipping_cost'],
-            discount: this.order_info['total_discount'],
-            tax: this.order_info['vat_percent_amount'],
+            discount: this.order_info['discount_percent'],
+            tax: this.order_info['vat_percent'],
             restocking_fee: this.order_info['restock_fee_amount'],
             restocking_fee_percent: this.order_info['restock_fee_percent'],
             sub_total: this.order_info['sub_total']
