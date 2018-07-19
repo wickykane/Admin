@@ -140,7 +140,7 @@ export class RmaCreateComponent implements OnInit {
             // Case 2: RMA Type: Refund, Return Time: Before Delivery
             if (data.return_time === 2) {
                 this.dataConfig = {
-                    carrier: 1,
+                    carrier: 5,
                     cover_ship: 'Yes',
                     return_via: 4,
                     apply_restock: 0,
