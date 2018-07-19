@@ -458,6 +458,12 @@ export class RmaCreateComponent implements OnInit {
             setTimeout(() => {
                 this.router.navigate(['/rma']);
             }, 500);
+        },err=>{
+            if(err){
+                if(err.data.return_reason){
+                    this.toastr.error('Return Reason is required');
+                }
+            }
         });
 
 
