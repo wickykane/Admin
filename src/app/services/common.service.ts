@@ -28,6 +28,11 @@ export class CommonService {
         const url = 'rma/get-order-by-customer/' + id;
         return this.apiService.get(url);
     }
+    
+    getMasterData() {
+        const url = 'rma/get-master-data';
+        return this.apiService.get(url);
+    }
 
     getListCarrier(params = {}) {
         const url = 'carrier';
