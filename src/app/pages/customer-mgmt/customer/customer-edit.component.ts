@@ -287,6 +287,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     //  add new row address
     addNewAddress() {
         this.addresses.push({
+            country_code: null, state_id: null,
             listType: this.listTypeAddress,
             listCountry: this.listCountry,
             listState: [], allow_remove: true
@@ -300,6 +301,9 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     //  add new row bank account
     addNewBankAccount() {
         this.bank_accounts.push({
+
+            bank_id: null,
+            branch_id: null,
             listBank: this.listBank,
             listBranch: []
         });
@@ -327,40 +331,58 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
 
     //  add new Site
     addNewSite() {
-        const modalRef = this.modalService.open(SiteModalComponent, { size: 'lg' });
+        var k = ['name', 'country_code', 'address_1', 'city', 'state_id', 'zip_code'];
+        for (let i = 0; i < this.addresses.length; i++) {
+            for (let j = 0; j < k.length; j++) {
+                if (!this.addresses[i][k[j]]) {
+                    return this.toastr.error('Please fulfill all the addresses before creating the site.');
+                }
+            };
+        }
+        var countCode, textCode;
+        this.customerService.generateSiteCode().subscribe(res => {
+            try {
+                console.log('start');
+                countCode = Number(res.data.CP.no);
+                textCode = res.data.CP.text;
+                const modalRef = this.modalService.open(SiteModalComponent, { size: 'lg' });
 
-        modalRef.componentInstance.paddr = this.addresses;
-        modalRef.result.then(res => {
-            if (!this.helper.isEmptyObject(res)) {
-                const state = this.addresses[0].listState.filter(x =>
-                    res.primary[0].state_id === x.id
-                );
-                const objSite = {
-                    code: res.code,
-                    full_name: res.full_name,
-                    country: this.addresses[0].listCountry.map(x => {
-                        if (res.primary[0].country_code === x.cd) {
-                            return x.name;
-                        }
-                    }),
-                    name: res.primary[0].name,
-                    address_line: res.primary[0].address_line,
-                    address_line2: res.primary[0].address_line2,
-                    city_name: res.primary[0].city_name,
-                    state: state[0].name,
-                    zip_code: res.primary[0].zip_code
+                modalRef.componentInstance.paddr = this.addresses;
+                modalRef.result.then(res => {
+                    if (!this.helper.isEmptyObject(res)) {
+                        const state = this.addresses[0].listState.filter(x =>
+                            res.primary[0].state_id === x.id
+                        );
+                        const objSite = {
+                            code: res.code,
+                            full_name: res.full_name,
+                            country: this.addresses[0].listCountry.map(x => {
+                                if (res.primary[0].country_code === x.cd) {
+                                    return x.name;
+                                }
+                            }),
+                            name: res.primary[0].name,
+                            address_line: res.primary[0].address_line,
+                            address_line2: res.primary[0].address_line2,
+                            city: res.primary[0].city,
+                            state: state[0].name,
+                            zip_code: res.primary[0].zip_code
+                        };
+
+                        this.sites.push(objSite);
+                        this.company_child.push(res);
+                        // this.countCode++;
+                    }
+                });
+                modalRef.componentInstance.info = {
+                    parent_company_name: this.generalForm.value.company_name,
+                    code: countCode,
+                    textCode: textCode
                 };
+            } catch (e) {
 
-                this.sites.push(objSite);
-                this.company_child.push(res);
-                this.countCode++;
             }
         });
-        modalRef.componentInstance.info = {
-            parent_company_name: this.generalForm.value.full_name,
-            code: this.countCode,
-            textCode: this.textCode
-        };
     }
 
     removeSite(index) {
