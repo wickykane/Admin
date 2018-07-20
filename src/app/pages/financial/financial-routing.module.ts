@@ -6,14 +6,14 @@ import { InvoiceCreateComponent } from './ar-invoice/invoice.create.component';
 import { InvoiceDetailComponent } from './ar-invoice/invoice.view.component';
 import { PaymentComponent } from './payment/payment.component';
 
-
 const routes: Routes = [
     {
         path: 'invoice',
         children: [
             { path: '', component: InvoiceComponent },
             { path: 'create', component: InvoiceCreateComponent },
-            { path: 'detail/:id', component: InvoiceDetailComponent }
+            { path: 'view/:id', component: InvoiceDetailComponent },
+            { path: 'edit/:id', component: InvoiceCreateComponent }
         ]
     },
     {
@@ -22,8 +22,6 @@ const routes: Routes = [
             { path: '', component: InvoiceComponent }
         ]
     }
-
-
 ];
 
 @NgModule({
