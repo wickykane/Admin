@@ -63,7 +63,7 @@ export class SaleOrderInformationTabComponent implements OnInit {
                 }
                 this.detail['subs'] = res.data.list.items;
                 this.detail['subs'].forEach( (item) => {
-                    this.totalQTY += item.qty;
+                    this.totalQTY += item.quantity;
                     this.totalShipQTY += item.qty_shipped;
                 });
                 this.detail['buyer_info'] = res.data.buyer_info;
