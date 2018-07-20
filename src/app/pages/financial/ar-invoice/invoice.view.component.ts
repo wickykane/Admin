@@ -24,15 +24,15 @@ export class InvoiceDetailComponent implements OnInit {
      */
 
     public data = {};
-    public orderId;
+    public invoiceId;
     public orderDetail = {
         order_sts_short_name: ''
     };
 
-
     /**
      * Init Data
      */
+
     constructor(public sanitizer: DomSanitizer,
         private modalService: NgbModal,
         public toastr: ToastrService,
@@ -45,20 +45,12 @@ export class InvoiceDetailComponent implements OnInit {
 
     ngOnInit() {
         this.data['id'] = this.route.snapshot.paramMap.get('id');
-        this.orderId = this.data['id'];
+        this.invoiceId = this.data['id'];
     }
     /**
      * Mater Data
      */
 
-    checkRender(detail) {
-        this.orderDetail = detail;
-    }
-    cancel() {
-        console.log('ab');
-        this.router.navigate(['/order-management/sale-order']);
-    }
-
-
+    cancel() {}
 
 }

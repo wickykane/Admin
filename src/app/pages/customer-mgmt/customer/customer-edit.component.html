@@ -225,7 +225,7 @@
                                         <input type="text" class="form-control" name="address_line2" [(ngModel)]="item.address_2">
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control" name="city_name" [(ngModel)]="item.city_name">
+                                        <input type="text" class="form-control" name="city" [(ngModel)]="item.city">
                                     </td>
                                     <td>
                                         <select class="form-control" name="state_id" [(ngModel)]="item.state_id">
@@ -297,10 +297,10 @@
                                         {{item.code}}
                                     </td>
                                     <td>
-                                        {{item.full_name}}
+                                        {{item.name}}
                                     </td>
                                     <td>
-                                        {{item.country}}
+                                        {{item.country_name}}
                                     </td>
                                     <td>
                                         {{item.address_line}}
@@ -309,7 +309,7 @@
                                         {{item.address_line2}}
                                     </td>
                                     <td>
-                                        {{item.city_name}}
+                                        {{item.city}}
                                     </td>
                                     <td>
                                         {{item.state}}

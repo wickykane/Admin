@@ -141,7 +141,7 @@
                                     <input type="text" class="form-control" name="address_2" [(ngModel)]="item.address_2">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" name="city_name" [(ngModel)]="item.city">
+                                    <input type="text" class="form-control" name="city" [(ngModel)]="item.city">
                                 </td>
                                 <td>
                                     <select class="form-control" name="state_id" [(ngModel)]="item.state_id">
@@ -157,7 +157,7 @@
                                 </td>
                                 <td>
                                     <select [(ngModel)]="item.route_id" class="form-control" name="route_id" *ngIf="item.type == 2">
-                                        <option value="null" selected="true" disabled>Select Route</option>
+                                        <option value="null" selected="true">Select Route</option>
                                         <option *ngFor="let item of routeList" value="{{item.id}}">{{item.route_gatetime}}</option>
                                     </select>
                                 </td>
@@ -165,8 +165,7 @@
                                     <button type="button" class="btn btn-default" (click)="removeAddress(i)">
                                         <i class="fa fa-times" aria-hidden="true"></i>
                                     </button>
-                                    <button ngbTooltip="Same address for Billing/Shipping Address" placement="left" *ngIf="item.type==3 || item.type==4" type="button"
-                                        class="btn btn-default" (click)="dupAddress()">
+                                    <button type="button" class="btn btn-default" (click)="dupAddress(item.type)">
                                         <i class="fa fa-clone" aria-hidden="true"></i>
                                     </button>
                                 </td>

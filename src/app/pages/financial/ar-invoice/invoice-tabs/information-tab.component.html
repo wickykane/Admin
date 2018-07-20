@@ -1,0 +1,279 @@
+<div class='address-tab'>
+    <div class="row tab-content">
+        <div class="col-5">
+            <div class="">
+                <h3 class="block-title" translate>INVOICE INFORMATION</h3>
+                <form class="information-tab-content">
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label text-label">Invoice #</label>
+                        <div class="col-sm-3">
+                            <label class="col-form-label control-label">{{detail['inv_num']}}</label>
+                        </div>
+                        <label class="col-sm-3 col-form-label text-label">Payment Method</label>
+                        <div class="col-sm-4">
+                            <label class="col-form-label control-label">{{detail['payment_method_name']}}</label>
+                        </div>
+                        <div class="w-100"></div>
+                        <label class="col-sm-2 col-form-label text-label">Sales Order #</label>
+                        <div class="col-sm-3">
+                            <label class="col-form-label control-label">{{detail.sales_order['code']}}</label>
+                        </div>
+                        <label class="col-sm-3 col-form-label text-label">Payment Terms</label>
+                        <div class="col-sm-4">
+                            <label class="col-form-label control-label">{{detail['payment_term_name']}}</label>
+                        </div>
+                        <div class="w-100"></div>
+                        <label class="col-sm-2 col-form-label text-label">Invoice Date</label>
+                        <div class="col-sm-3">
+                            <label class="col-form-label control-label">{{detail['inv_dt']}}</label>
+                        </div>
+                        <label class="col-sm-3 col-form-label text-label">Due Date</label>
+                        <div class="col-sm-4">
+                            <label class="col-form-label control-label">{{detail['due_dt']}}</label>
+                        </div>
+                        <div class="w-100"></div>
+                        <label class="col-sm-2 col-form-label text-label">Invoice Status</label>
+                        <div class="col-sm-3">
+                            <label class="col-form-label control-label">
+                                 <span class="label label-info">{{detail['invoice_status_name']}}</span>
+                            </label>
+                        </div>
+                        <label class="col-sm-3 col-form-label text-label">Approver</label>
+                        <div class="col-sm-4">
+                            <label class="col-form-label control-label">{{detail['aprvr_name']}}</label>
+                        </div>
+                        <div class="w-100"></div>
+                        <label class="col-sm-2 col-form-label text-label">Invoice Type</label>
+                        <div class="col-sm-3">
+                            <label class="col-form-label control-label">{{detail['inv_type']}}</label>
+                        </div>
+                        <label class="col-sm-3 col-form-label text-label">Created By</label>
+                        <div class="col-sm-4">
+                            <label class="col-form-label control-label">{{detail['created_by_user']}}</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-3 border-left">
+            <div class="">
+                <h3 class="block-title" translate>CUSTOMER INFORMATION</h3>
+                <form class="information-tab-content">
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label text-label">Name</label>
+                        <div class="col-sm-8">
+                            <label class="col-form-label control-label">{{detail.buyer_info['name']}}</label>
+                        </div>
+                        <label class="col-sm-4 col-form-label text-label">Country</label>
+                        <div class="col-sm-8">
+                            <label class="col-form-label control-label">{{detail.buyer_info['country_name']}}</label>
+                        </div>
+                        <label class="col-sm-4 col-form-label text-label">Address</label>
+                        <div class="col-sm-8">
+                            <label class="col-form-label control-label">{{detail.buyer_info['address_line']}}</label>
+                        </div>
+                        <label class="col-sm-4 col-form-label text-label">City</label>
+                        <div class="col-sm-8">
+                            <label class="col-form-label control-label">{{detail.buyer_info['city_name']}}</label>
+                        </div>
+                        <label class="col-sm-4 col-form-label text-label">State</label>
+                        <div class="col-sm-8">
+                            <label class="col-form-label control-label">{{detail.buyer_info['state_name']}}</label>
+                        </div>
+                        <label class="col-sm-4 col-form-label text-label">Zip Code</label>
+                        <div class="col-sm-8">
+                            <label class="col-form-label control-label">{{detail.buyer_info['zip_code']}}</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-2 border-left">
+            <div class="">
+                <h3 class="block-title" translate>BILLING ADDRESS</h3>
+                <form class="information-tab-content">
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label text-label">Name</label>
+                        <div class="col-sm-8">
+                            <label class="col-form-label control-label">{{detail.billing_address['name']}}</label>
+                        </div>
+                        <label class="col-sm-4 col-form-label text-label">Country</label>
+                        <div class="col-sm-8">
+                            <label class="col-form-label control-label">{{detail.billing_address['country_name']}}</label>
+                        </div>
+                        <label class="col-sm-4 col-form-label text-label">Address</label>
+                        <div class="col-sm-8">
+                            <label class="col-form-label control-label">{{detail.billing_address['address_line']}}</label>
+                        </div>
+                        <label class="col-sm-4 col-form-label text-label">City</label>
+                        <div class="col-sm-8">
+                            <label class="col-form-label control-label">{{detail.billing_address['city_name']}}</label>
+                        </div>
+                        <label class="col-sm-4 col-form-label text-label">State</label>
+                        <div class="col-sm-8">
+                            <label class="col-form-label control-label">{{detail.billing_address['state_name']}}</label>
+                        </div>
+                        <label class="col-sm-4 col-form-label text-label">Zip Code</label>
+                        <div class="col-sm-8">
+                            <label class="col-form-label control-label">{{detail.billing_address['zip_code']}}</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-2 border-left">
+            <div class="">
+                <h3 class="block-title" translate>SHIPPING ADDRESS</h3>
+                <form class="information-tab-content">
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label text-label">Name</label>
+                        <div class="col-sm-8">
+                            <label class="col-form-label control-label">{{detail.shipping_address['name']}}</label>
+                        </div>
+                        <label class="col-sm-4 col-form-label text-label">Country</label>
+                        <div class="col-sm-8">
+                            <label class="col-form-label control-label">{{detail.shipping_address['country_name']}}</label>
+                        </div>
+                        <label class="col-sm-4 col-form-label text-label">Address</label>
+                        <div class="col-sm-8">
+                            <label class="col-form-label control-label">{{detail.shipping_address['address_line']}}</label>
+                        </div>
+                        <label class="col-sm-4 col-form-label text-label">City</label>
+                        <div class="col-sm-8">
+                            <label class="col-form-label control-label">{{detail.shipping_address['city_name']}}</label>
+                        </div>
+                        <label class="col-sm-4 col-form-label text-label">State</label>
+                        <div class="col-sm-8">
+                            <label class="col-form-label control-label">{{detail.shipping_address['state_name']}}</label>
+                        </div>
+                        <label class="col-sm-4 col-form-label text-label">Zip Code</label>
+                        <div class="col-sm-8">
+                            <label class="col-form-label control-label">{{detail.shipping_address['zip_code']}}</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12" style="margin-bottom:15px">
+            <div class="block-header bg-gray-lighter">
+                <h3 class="block-title" translate>PRODUCTS INFO</h3>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="">
+                <table class="table table-striped table-vcenter custom-table">
+                    <thead class="bg-white">
+                        <tr>
+                            <th translate>No.</th>
+                            <th style="width:150px" translate>Product Code</th>
+                            <th translate>Description</th>
+                            <th translate>UOM</th>
+                            <th translate>Order QTY</th>
+                            <th translate>Invoice QTY</th>
+                            <th translate>Unit Price</th>
+                            <th translate>Price Source</th>
+                            <th translate>Discount %</th>
+                            <th translate>Final Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of detail.items; let i = index">
+                            <td>{{i+1}}</td>
+                            <td>{{item.sku}}</td>
+                            <td>{{item.name}} </td>
+                            <td></td>
+                            <td>{{item.order_detail_total_qty}}</td>
+                            <td>{{item.invoice_qty}}</td>
+                            <td>{{item.unit_price | currency:'$'}}</td>
+                            <td></td>
+                            <td></td>
+                            <td>{{item.final_price| currency:'$'}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"></td>
+                            <td>
+                                <strong class="text-danger text-left" translate>TOTAL</strong>
+                            </td>
+                            <td></td>
+                            <td>
+                                <strong>{{totalQTY}}</strong>
+                            </td>
+                            <td>
+                                <strong>{{totalInvoiceQTY}}</strong>
+                            </td>
+                            <td colspan="4"></td>
+
+                        </tr>
+                        <tr *ngIf="detail.items.length === 0">
+                            <td colspan="100%" class="text-center" translate>No data.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <form>
+                <div class="form-group">
+                    <label for="">Note</label>
+                    <textarea name="name" class="form-control" rows="4" value="{{detail['note']}}" disabled></textarea>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-5 offset-md-1">
+            <form class="information-tab-content">
+                <div class="form-group row">
+                    <label class="col-sm-4 offset-md-4 col-form-label text-label">Sub Total:</label>
+                    <div class="col-sm-4 text-right">
+                        <label class="col-form-label control-label">{{detail['sub_tot']|currency}}</label>
+                    </div>
+                    <div class="w-100"></div>
+                    <label class="col-sm-4 offset-md-4 col-form-label text-label">- Discount (%):</label>
+                    <div class="col-sm-4 text-right">
+                        <label class="col-form-label control-label">{{detail['dsct_amt']|currency}}</label>
+                    </div>
+                    <div class="w-100"></div>
+                    <label class="col-sm-4 offset-md-4 col-form-label text-label">+ TAX / VAT (%):</label>
+                    <div class="col-sm-4 text-right">
+                        <label class="col-form-label control-label">{{detail['tax_amt']|currency}}</label>
+                    </div>
+                    <div class="w-100"></div>
+                    <label class="col-sm-4 offset-md-4 col-form-label text-label">+ Shipping Cost ($):</label>
+                    <div class="col-sm-4 text-right">
+                        <label class="col-form-label control-label">{{detail['shp_cost']|currency}}</label>
+                    </div>
+                    <label class="col-sm-4 offset-md-4 col-form-label text-label">Total Due:</label>
+                    <div class="col-sm-4 text-right">
+                        <label class="col-form-label control-label">{{detail['tot_amt']|currency}}</label>
+                    </div>
+                    <div class="w-100"></div>
+                    <label class="col-sm-4 offset-md-4 col-form-label text-label">- Early Payment Incentive:</label>
+                    <div class="col-sm-4 text-right">
+                        <label class="col-form-label control-label">{{detail['incentive']|currency}}</label>
+                    </div>
+                    <div class="w-100"></div>
+                    <label class="col-sm-4 offset-md-4 col-form-label text-label"></label>
+                    <div class="col-sm-4 text-right">
+                        <label class="col-form-label control-label expire-warning">Expires YYYY-MM-DD</label>
+                    </div>
+                    <div class="w-100"></div>
+                    <label class="col-sm-4 offset-md-4 col-form-label text-label">Adjusted Total Due:</label>
+                    <div class="col-sm-4 text-right">
+                        <label class="col-form-label control-label">{{detail['tot_amt']|currency}}</label>
+                    </div>
+                    <div class="w-100"></div>
+                    <label class="col-sm-4 offset-md-4 col-form-label text-label">Paid Amount:</label>
+                    <div class="col-sm-4 text-right">
+                        <label class="col-form-label control-label">{{detail['paid_amt']|currency}}</label>
+                    </div>
+                    <div class="w-100"></div>
+                    <label class="col-sm-4 offset-md-4 col-form-label text-label">Balance Amount:</label>
+                    <div class="col-sm-4 text-right">
+                        <label class="col-form-label control-label">{{detail['bal_amt']|currency}}</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -248,7 +248,7 @@
     margin-top: 15px;
     border: none;
     background: none;
-    width: 400px;
+    width: 450px;
 
     tbody {
         tr {
@@ -264,10 +264,15 @@
                 input {
                     text-align: right;
                 }
+
+                &.expire-warning {
+                    color: red !important;
+                    font-style: italic;
+                }
             }
 
             td:first-child {
-                width: 150px;
+                width: 200px;
                 text-align: right;
                 color: #000;
                 font-weight: 600;
@@ -305,20 +310,54 @@
         max-width: 19.666667%;
     }
 }
-.block-button{
-    right:15px;
+
+.block-button {
+    right: 15px;
     display: block;
     position: absolute;
-    .list-btn-custom{
+
+    .list-btn-custom {
         list-style: none;
-        li{
+
+        li {
             display: inline-block;
             margin-left: 10px;
-            button{
-                i{
-                    margin-right:10px;
+
+            button {
+                i {
+                    margin-right: 10px;
                 }
             }
+        }
+    }
+}
+
+.status-ctn {
+    margin: 0;
+    padding: 15px 0 15px 15px;
+
+    .status-item {
+        position: relative;
+        display: inline-block;
+        width: 100px;
+        height: 60px;
+        text-align: center;
+        color: #dc3545;
+        border: 1px solid #dc3545;
+        font-weight: bold;
+        margin-right: 5px;
+
+        .status-count {
+            position: absolute;
+            right: 10px;
+            top: 5px;
+            font-size: 20px;
+        }
+
+        .status-lbl {
+            position: absolute;
+            right: 10px;
+            bottom: 5px;
         }
     }
 }
