@@ -10,15 +10,6 @@ export class FinancialService {
      * AR INVOICE
      */
     //
-    countOrderStatus() {
-        const url = 'reports/order-status-count';
-        return this.API.get(url);
-    }
-
-    getListStatus() {
-        const url = 'order/list-status';
-        return this.API.get(url);
-    }
 
     getListInvoice(params) {
         const url = 'ar-invoice';
@@ -26,7 +17,9 @@ export class FinancialService {
     }
 
     getAllCustomer() {
-        const url = 'buyer/get-all';
+        // const url = 'buyer/get-all';
+        // return this.API.get(url);
+        const url = 'ar-invoice/get-customer';
         return this.API.get(url);
     }
 
@@ -35,22 +28,53 @@ export class FinancialService {
         return this.API.get(url);
     }
 
-    getOrderReference() {
-        const url = 'order/reference-data';
+    getGenerateCode() {
+        const url = 'ar-invoice/general-code';
         return this.API.get(url);
     }
 
-    previewOrder(params) {
-        const url = 'order/preview-order';
+    getDetailInvoice(id) {
+        const url = 'ar-invoice/' + id;
+        return this.API.get(url);
+    }
+
+    countInvoiceStatus() {
+        const url = 'ar-invoice/count-by-status';
+        return this.API.get(url);
+    }
+
+    createInvoice(params) {
+        const url = 'ar-invoice/createInvoice';
         return this.API.post(url, params);
     }
 
-    createOrder(params) {
-        const url = 'order/create-order';
-        return this.API.post(url, params);
+    updateInvoice(id, params) {
+        const url = 'ar-invoice/updateInvoice/' + id;
+        return this.API.put(url, params);
     }
 
+    updateInvoiceStatus(id, params) {
+        const url = 'ar-invoice/change-status/' + id;
+        return this.API.put(url, params);
+    }
 
+    deleteInvoice(id) {
+        const url = 'ar-invoice/' + id;
+        return this.API.delete(url);
+    }
 
+    getListPaymentTerm() {
+        const params = {
+            page: 1,
+            length: 100
+        }
+        const url = ['payment-term'].join('/');
+        return this.API.get(url, params);
+    }
+
+    getOrderByCustomerId(params) {
+        const url = 'ar-invoice/get-order';
+        return this.API.get(url, params);
+    }
 
 }

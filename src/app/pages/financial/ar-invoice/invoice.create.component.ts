@@ -16,8 +16,6 @@ import { PromotionModalContent } from '../../../shared/modals/promotion.modal';
 import { CommonService } from './../../../services/common.service';
 import { InvoiceCreateKeyService } from './keys.create.control';
 
-
-
 @Component({
     selector: 'app-invoice-create',
     templateUrl: './invoice.create.component.html',
@@ -93,9 +91,18 @@ export class InvoiceCreateComponent implements OnInit {
         backItems: []
     };
     public payment;
+    public headerTitle;
+    public invoiceId;
     public promotionList = {};
     public copy_customer = {};
     public copy_addr = {};
+    public list_sales_order = [];
+    public invoice_details = {};
+    public order_details = {};
+    public isCreate = false;
+    public isEdit = false;
+    public applyEPI;
+    public applyLFP;
 
     /**
      * Init Data
@@ -112,47 +119,75 @@ export class InvoiceCreateComponent implements OnInit {
         private commonService: CommonService,
         private dt: DatePipe) {
         this.generalForm = fb.group({
+            'id': [null],
+            'invoice_status_name': [null],
+            'inv_type': [1],
+            'inv_status': [null],
+            'ear_payment_incentive': [null],
+            'apply_late_fee': [null],
+            'inv_num': [null, Validators.required],
             'company_id': [null, Validators.required],
-            'customer_po': [null, Validators.required],
-            'order_number': [null],
-            'type': [null, Validators.required],
-            'order_date': [null, Validators.required],
-            'delivery_date': [null],
-            'contact_user_id': [null],
-            'prio_level': [null],
-            'is_multi_shp_addr': [null],
-            'sales_person': [null],
-            'warehouse_id': [null],
-            'payment_method': [null],
-            'billing_id': [null],
-            'shipping_id': [null],
-            'note': [null]
+            'billing_address_id': [null, Validators.required],
+            'order_id': [null, Validators.required],
+            'order_num': [null, Validators.required],
+            'note': [null],
+            'inv_dt': [null, Validators.required],
+            'payment_method_id': [null, Validators.required],
+            'due_dt': [null],
+            'payment_term_id': [null, Validators.required],
+            'aprvr_id': [null, Validators.required],
+            'payment_term_range': [null],
+            'shipping_cost': [null],
+            'sub_total': [null],
+            'discount_percent': [null],
+            'tax_percent': [null],
+            'total_due': [null],
+            'discount_amount': [null],
+            'tax_amount': [null],
+            'address': [null],
+            'order_detail': [null],
+            // 'shp_cost': [null],
+            // 'sub_tot': [null],
+            // 'dsct_pct': [null],
+            // 'tax_pct': [null],
+            // 'tot_amt': [null],
+            // 'dsct_pct_amt': [null],
+            // 'tax_pct_amt': [null],
+            // 'address': [null],
+            // 'items': [null],
         });
     }
 
     ngOnInit() {
-        this.listMaster['multi_ship'] = [{ id: 0, label: 'No' }, { id: 1, label: 'Yes' }];
-        //  Item
-        this.list.items = this.router.getNavigatedData() || [];
-        const currentDt = this.dt.transform(new Date(), 'yyyy-MM-dd');
-        if (Object.keys(this.list.items).length === 0) { this.list.items = []; }
-        this.getListCustomerOption();
-        this.getOrderReference();
-        this.updateTotal();
-        this.copy_addr = {...this.copy_addr, ...this.addr_select};
-        this.copy_customer = {...this.copy_customer, ...this.customer};
-        this.generalForm.controls['is_multi_shp_addr'].patchValue(0);
-        this.generalForm.controls['order_date'].patchValue(currentDt);
-    }
-    /**
-     * Mater Data
-     */
-    numberMaskObject(max?) {
-        return createNumberMask({
-            allowDecimal: true,
-            prefix: '',
-            integerLimit: max || null
+        let path = window.location.pathname;
+        this.route.params.subscribe(params => {
+            if (params.id) {
+                this.isCreate = false;
+                this.isEdit = true;
+                this.headerTitle = "EDIT INVOICE";
+                this.invoiceId = params.id;
+                this.getDetailInvoice(this.invoiceId);
+            } else {
+                this.isCreate = true;
+                this.isEdit = false;
+                this.headerTitle = "CREATE NEW INVOICE";
+                const currentDt = this.dt.transform(new Date(), 'yyyy-MM-dd');
+                this.generalForm.controls['inv_dt'].patchValue(currentDt);
+                this.generalForm.controls['inv_status'].setValue(1);
+                this.getGenerateCode();
+            }
         });
+        this.listMaster['yes_no_options'] = [{ value: 0, label: 'No' }, { value: 1, label: 'Yes' }];
+        this.listMaster['payment_method'] = [
+            { id: 1, name: 'Bank Transfer' },
+            { id: 2, name: 'Cash on Delivery' },
+            { id: 3, name: 'Credit Card' }
+        ];
+        this.getListCustomerOption();
+        this.getListPaymentTerm();
+        this.updateTotal();
+        this.copy_addr = { ...this.copy_addr, ...this.addr_select };
+        this.copy_customer = { ...this.copy_customer, ...this.customer };
     }
 
     getListCustomerOption() {
@@ -164,23 +199,92 @@ export class InvoiceCreateComponent implements OnInit {
             }
         });
     }
+
+    getDetailInvoice(id) {
+        if (id) {
+            this.financialService.getDetailInvoice(id).subscribe(res => {
+                this.invoice_details = res.data;
+                this.generalForm.patchValue(this.invoice_details);
+                this.generalForm.controls['inv_dt'].patchValue(this.dt.transform(new Date(res.data.inv_dt), 'yyyy-MM-dd'));
+                this.generalForm.controls['due_dt'].patchValue(this.dt.transform(new Date(res.data.due_dt), 'yyyy-MM-dd'));
+                // this.list.items = res.data.items;
+                this.generalForm.patchValue({
+                    billing_address_id: this.invoice_details['billing_id']
+                });
+                if (res.data.company_id) {
+                    this.getDetailCustomerById(res.data.company_id);
+                    this.getOrderByCustomerId(res.data.company_id);
+                }
+                // if (res.data.address.billing[0]) {
+                //     this.addr_select.billing = res.data.address.billing[0];
+                // }
+                // if (res.data.address.shipping[0]) {
+                //     this.addr_select.shipping = res.data.address.shipping[0];
+                // }
+            }, err => {
+                console.log(err.message);
+            });
+        }
+    }
+
     getDetailCustomerById(company_id) {
         this.financialService.getDetailCompany(company_id).subscribe(res => {
             try {
                 this.customer = res.data;
+                this.addr_select.shipping = this.customer.shipping[0] ? this.customer.shipping[0] : {};
+                if (this.isCreate) {
+                    this.addr_select.billing = this.customer.billing[0] ? this.customer.billing[0] : {};
+                    this.generalForm.controls['billing_address_id'].setValue(this.customer.billing[0].address_id);
+                } else {
+                    this.addr_select.billing = this.findDataById(this.invoice_details['address'].billing[0].id, this.customer.billing);
+                }
             } catch (e) {
                 console.log(e);
             }
         });
     }
-    getOrderReference() {
-        this.financialService.getOrderReference().subscribe(res => {
+
+    getOrderByCustomerId(company_id) {
+        this.list_sales_order = [];
+        let params = {
+            cus_id: company_id
+        }
+        this.financialService.getOrderByCustomerId(params).subscribe(res => {
             try {
-                this.listMaster['pay_type'] = res.data.order_types;
-                this.listMaster['payment_method'] = res.data.payment_methods;
-                this.listMaster['priority'] = res.data.priority_levels;
-                this.listMaster['sale_mans'] = res.data.sale_mans;
-                this.listMaster['warehouses'] = res.data.warehouses;
+                this.list_sales_order = res.data;
+                if (res.data.length > 0) {
+                    this.list.items = res.data[0].detail;
+                    this.order_details = res.data[0].order;
+                    let orderId = this.order_details['id'];
+                    let orderNum = this.order_details['code'];
+                    let orderCreatorId = this.order_details['created_by'];
+                    this.generalForm.patchValue({
+                        order_id: orderId,
+                        order_num: orderNum,
+                        aprvr_id: orderCreatorId,
+                        shipping_cost: this.order_details['shipping'],
+                        sub_total: this.order_details['sub_total_price'],
+                        discount_percent: this.order_details['discount_percent'],
+                        tax_percent: this.order_details['vat_percent'],
+                        total_due: this.order_details['total_price'],
+                        discount_amount: this.order_details['discount'],
+                        tax_amount: this.order_details['vat']
+                    });
+                    this.generalForm.controls['due_dt'].setValue(this.order_details['payment_due_date']);
+                } else {
+                    this.list.items = [];
+                    this.order_details = {};
+                }
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
+
+    getListPaymentTerm() {
+        this.financialService.getListPaymentTerm().subscribe(res => {
+            try {
+                this.listMaster['payment_terms'] = res.data.rows;
             } catch (e) {
                 console.log(e);
             }
@@ -192,17 +296,74 @@ export class InvoiceCreateComponent implements OnInit {
      */
     selectData(data) { }
 
-    changeCustomer() {
+    changeCustomer(event) {
         const company_id = this.generalForm.value.company_id;
         this.customer = Object.create(this.copy_customer);
         this.addr_select = Object.create(this.copy_addr);
         if (company_id) {
             this.getDetailCustomerById(company_id);
+            this.getOrderByCustomerId(company_id);
         }
-        this.list.items = [];
         this.generalForm.controls['note'].patchValue('');
         this.updateTotal();
+        if (event && event.invoice_EIP.flg_invoice_EIP) {
+            this.generalForm.controls['ear_payment_incentive'].setValue(1);
+        } else {
+            this.generalForm.controls['ear_payment_incentive'].setValue(0);
+        }
+        if (event && event.invoice_LFP.flg_invoice_LFP) {
+            this.generalForm.controls['apply_late_fee'].setValue(1);
+        } else {
+            this.generalForm.controls['apply_late_fee'].setValue(0);
+        }
+        if (!event) {
+            this.generalForm.controls['order_id'].setValue(null);
+            this.generalForm.controls['aprvr_id'].setValue(null);
+            this.generalForm.controls['ear_payment_incentive'].setValue(null);
+            this.generalForm.controls['apply_late_fee'].setValue(null);
+            this.list_sales_order = [];
+            this.list.items = [];
+        }
+        // this.list_sales_order = [];
+        // this.generalForm.controls['ear_payment_incentive'].setValue(event.invoice_EIP.flg_invoice_EIP ? 1 : 0);
+        // this.generalForm.controls['apply_late_fee'].setValue(event.invoice_LFP.flg_invoice_LFP ? 1 : 0);
     }
+
+    changeSalesOrder(event) {
+        console.log(event)
+        if (event) {
+            this.list.items = event.detail;
+            this.order_details = event.order;
+        } else {
+            this.list.items = [];
+            this.order_details = {};
+        }
+        let orderId = this.order_details['id'];
+        let orderNum = this.order_details['code'];
+        let orderCreatorId = this.order_details['created_by'];
+        this.generalForm.patchValue({
+            order_id: orderId,
+            order_num: orderNum,
+            aprvr_id: orderCreatorId,
+            shipping_cost: this.order_details['shipping'],
+            sub_total: this.order_details['sub_total_price'],
+            discount_percent: this.order_details['discount_percent'],
+            tax_percent: this.order_details['vat_percent'],
+            total_due: this.order_details['total_price'],
+            discount_amount: this.order_details['discount'],
+            tax_amount: this.order_details['vat']
+        });
+        this.generalForm.controls['due_dt'].setValue(this.order_details['payment_due_date']);
+    }
+
+    changePaymentTerms() {
+        for (let i = 0; i < this.listMaster['payment_terms'].length; i++) {
+            if (this.listMaster['payment_terms'][i].id == this.generalForm.value['payment_term_id']) {
+                this.generalForm.controls['payment_term_range'].setValue(this.listMaster['payment_terms'][i].day_limit);
+            }
+        }
+    }
+
     selectAddress(type) {
         try {
             switch (type) {
@@ -213,9 +374,9 @@ export class InvoiceCreateComponent implements OnInit {
                     }
                     break;
                 case 'billing':
-                    const billing_id = this.generalForm.value.billing_id;
-                    if (billing_id) {
-                        this.addr_select.billing = this.findDataById(billing_id, this.customer.billing);
+                    const billing_address_id = this.generalForm.value.billing_address_id;
+                    if (billing_address_id) {
+                        this.addr_select.billing = this.findDataById(billing_address_id, this.customer.billing);
                     }
                     break;
             }
@@ -228,66 +389,99 @@ export class InvoiceCreateComponent implements OnInit {
         const item = arr.filter(x => x.address_id === id);
         return item[0];
     }
-    _keyPress(event: any) {
-        const pattern = /[0-9]/;
-        const inputChar = String.fromCharCode(event.charCode);
-        if (!pattern.test(inputChar)) {
-            //  invalid character, prevent input
-            event.preventDefault();
-        }
-    }
 
-    selectContact() {
-        const id = this.generalForm.value.contact_user_id;
-        if (id) {
-            const temp = this.customer.contact.filter(x => x.id === id);
-            this.addr_select.contact = temp[0];
-        }
-    }
-
-    cloneRecord(record, list) {
-        const newRecord = {...record};
-        const index = list.indexOf(record);
-        const objIndex = list[index];
-        objIndex.products.push(newRecord);
-        this.list.items = list;
-        this.updateTotal();
-    }
-
-    checkLengthRecord(id, list) {
-        let total = 0;
-        const _list = list || this.list.items;
-        _list.forEach( (record) => {
-            if (id === record.item_id) {
-                total++;
-            }
+    getGenerateCode() {
+        this.financialService.getGenerateCode().subscribe(res => {
+            this.generalForm.get('inv_num').patchValue(res.data.code);
         });
-        return total;
     }
-    checkCloneRecord(item, list) {
-        try {
-            const length = this.customer.shipping.length;
-            if (!item.hasOwnProperty('length')) {
-                item.length = function () {
-                    return this.checkLengthRecord(item, list);
-                };
-            }
 
-            if (length) {
-                let countItem = 1;
-
-                if (list.products.length > 0) {
-                    countItem += list.products.length;
-                }
-
-                return countItem < length;
-            }
-        } catch (e) {
-            return false;
+    payloadData(type) {
+        if (this.generalForm.get('id').value && this.isEdit) {
+            this.updateInvoice(type);
+        } else {
+            this.createInvoice();
         }
     }
-    changeFromSource(item) {
-        item.source = 'Manual';
+
+    createInvoice() {
+        let addressId = this.customer.primary[0]['address_id'];
+        let billingAddressId = this.addr_select.billing['address_id'];
+        let shippingAddressId = this.addr_select.shipping['address_id'];
+        let addressArrId = [addressId, billingAddressId, shippingAddressId]
+        let params = {}
+        params = { ...this.generalForm.value, ...params };
+        params['address'] = addressArrId;
+        params['order_detail'] = this.transformItemsList(this.list.items);
+
+        // console.log(this.generalForm.value)
+        console.log(params)
+        this.financialService.createInvoice(params).subscribe(res => {
+            try {
+                if (res.status) {
+                    this.toastr.success(res.message);
+                    this.router.navigate(['/financial/invoice']);
+                } else {
+                    this.toastr.error(res.message, null, { enableHtml: true });
+                }
+            } catch (e) {
+                console.log(e);
+            }
+        }, err => {
+            this.toastr.error(err.message);
+        });
+    }
+
+    updateInvoice(type) {
+        let addressId = this.customer.primary[0]['address_id'];
+        let billingAddressId = this.addr_select.billing['address_id'];
+        let shippingAddressId = this.addr_select.shipping['address_id'];
+        let addressArrId = [addressId, billingAddressId, shippingAddressId]
+        let params = {};
+        // params = { ...this.invoice_details, ...this.generalForm.value, ...params };
+        params = { ...this.generalForm.value, ...params };
+        params['address'] = addressArrId;
+        params['order_detail'] = this.transformItemsList(this.list.items);
+        console.log(params)
+        this.financialService.updateInvoice(this.invoiceId, params).subscribe(res => {
+            try {
+                if (res.status) {
+                    this.toastr.success(res.message);
+                    this.getDetailInvoice(this.invoiceId);
+                } else {
+                    this.toastr.error(res.message, null, { enableHtml: true });
+                }
+            } catch (e) {
+                console.log(e);
+            }
+        }, err => {
+            this.toastr.error(err.message);
+        });
+    }
+
+    transformItemsList(list) {
+        console.log(list)
+        let transformedArr = [];
+        for (let i = 0; i < list.length; i++) {
+            let tempItem = {
+                "order_detail_id": list[i].id,
+                "item_id": list[i].item_id,
+                "sku": list[i].sku,
+                "des": list[i].des,
+                "item_condition_id": list[i].item_condition_id,
+                "order_qty": list[i].qty,
+                "uom": list[i].uom_name,
+                "invoice_qty": list[i].qty,
+                "unit_price": list[i].price,
+                "price_source": list[i].quote_detail_id ? "From Quote" : "From Master",
+                "discount": list[i].discount,
+                "discount_percent": list[i].discount_percent,
+                "final_price": list[i].total_price
+            }
+            transformedArr.push(tempItem)
+        }
+        console.log(transformedArr)
+        return transformedArr;
     }
 
     updateTotal() {
@@ -320,7 +514,7 @@ export class InvoiceCreateComponent implements OnInit {
         this.order_info['alt_vat_percent'] = (this.order_info['vat_percent'] !== undefined ? this.order_info['vat_percent'] : 0);
         this.order_info['alt_discount'] = (this.order_info['discount_percent'] !== undefined ? this.order_info['discount_percent'] : 0);
         this.promotionList['total_invoice_discount'] = (this.promotionList['total_invoice_discount']
-        ? this.promotionList['total_invoice_discount'] : 0);
+            ? this.promotionList['total_invoice_discount'] : 0);
 
         this.order_info.total_discount = parseFloat((this.order_info.sub_total * Number(this.order_info['alt_discount']) / 100).toFixed(2));
         const sub_after_discount = this.order_info.sub_total - this.order_info.total_discount;
@@ -328,188 +522,12 @@ export class InvoiceCreateComponent implements OnInit {
         this.order_info.total = this.order_info.sub_total - this.order_info.total_discount + Number(this.order_info['shipping_cost']) + this.order_info['vat_percent_amount'] - this.promotionList['total_invoice_discount'];
     }
 
-    deleteAction(id) {
-        this.list.items = this.list.items.filter((item) => {
-            return item.item_id !== id;
+    numberMaskObject(max?) {
+        return createNumberMask({
+            allowDecimal: true,
+            prefix: '',
+            integerLimit: max || null
         });
-        this.updateTotal();
-    }
-
-
-    checkListPromotion(data) {
-        const modalRef = this.modalService.open(PromotionModalContent, { size: 'lg' });
-        modalRef.result.then(res => {
-            if ((res) instanceof Array && res.length > 0) {
-                this.order_info.selected_programs = res;
-                const params = {};
-                params['company_id'] = this.order_info.company_id;
-                params['selected_programs'] = this.order_info.selected_programs;
-                params['items'] = this.list.items;
-                this.financialService.previewOrder(params).subscribe(response => {
-                    try {
-                        this.promotionList = response.results.promotion;
-                        this.list.items = response.results.items;
-                    } catch (e) {
-                        console.log(e.message);
-                    }
-                });
-            }
-        });
-        modalRef.componentInstance.data = data;
-    }
-
-    addNewItem(list, type_get, buyer_id) {
-        const modalRef = this.modalService.open(ItemModalContent, { size: 'lg' });
-        modalRef.result.then(res => {
-            if (res instanceof Array && res.length > 0) {
-
-                const listAdded = [];
-                (this.list.items).forEach( (item) => {
-                    listAdded.push(item.item_id);
-                });
-                res.forEach( (item) => {
-                    if (item.sale_price) { item.sale_price = Number(item.sale_price); }
-                    item['products'] = [];
-                    item.order_quantity = 1;
-                    item.totalItem = item.sale_price;
-                    item.source = 'Manual';
-                });
-
-                this.list.items = this.list.items.concat(res.filter( (item) => {
-                    return listAdded.indexOf(item.item_id) < 0;
-                }));
-
-                this.updateTotal();
-            }
-        }, dismiss => { });
-    }
-    //  Show order history
-    showViewOrderHistory() {
-        if (this.generalForm.value.company_id !== null) {
-            const modalRef = this.modalService.open(OrderHistoryModalContent, { size: 'lg' });
-            modalRef.componentInstance.company_id = this.generalForm.value.company_id;
-            modalRef.result.then(res => {
-                if (res instanceof Array && res.length > 0) {
-                    console.log(res);
-                }
-            }, dismiss => { });
-        }
-    }
-    showSaleQuoteList() {
-        if (this.generalForm.value.company_id !== null) {
-            const modalRef = this.modalService.open(OrderSaleQuoteModalContent, { size: 'lg' });
-            modalRef.result.then(res => {
-                if (res instanceof Array && res.length > 0) {
-                    const listAdded = [];
-                    (this.list.items).forEach( (item) => {
-                        listAdded.push(item.item_id);
-                    });
-                    res.forEach(  (item) => {
-                        if (item.sale_price) { item.sale_price = Number(item.sale_price); }
-                        item['products'] = [];
-                        item.order_quantity = 1;
-                        item.totalItem = item.sale_price;
-                        item.source = 'From Quote';
-                    });
-
-                    this.list.items = this.list.items.concat(res.filter( (item)  => {
-                        return listAdded.indexOf(item.item_id) < 0;
-                    }));
-
-                    this.updateTotal();
-                    this.generateNote();
-                }
-            },
-                dismiss => { });
-            modalRef.componentInstance.company_id = this.generalForm.value.company_id;
-        }
-
-
-    }
-    generateNote() {
-        let arrSale = [];
-        const temp = this.list.items;
-        for (const unit in temp) {
-            if (typeof(unit['sale_quote_num']) !==  'undefined') {
-                arrSale.push(unit['sale_quote_num']);
-            }
-        }
-        arrSale = arrSale.reduce((x, y) => x.includes(y) ? x : [...x, y], []);
-        const stringNote = 'This sales order has items added from Quote:' + arrSale.toString();
-        this.generalForm.controls['note'].patchValue(stringNote);
-    }
-
-    remove = function (index) {
-        this.data['programs'].splice(index, 1);
-    };
-
-
-    createOrder(type) {
-        const products = [];
-        this.list.items.forEach((item) => {
-            products.push({
-                item_id: item.item_id,
-                item_type: item.item_type,
-                quantity: item.order_quantity,
-                sale_price: item.sale_price,
-                discount_percent: item.discount || 0,
-                shipping_address_id: item.shipping_address_id,
-                warehouse_id: item.warehouse_id || 1
-            });
-
-            if (item.products.length > 0) {
-                item.products.forEach( (subItem, index) => {
-                    products.push({
-                        item_id: subItem.item_id,
-                        item_type: item.item_type,
-                        quantity: subItem.order_quantity,
-                        sale_price: subItem.sale_price,
-                        discount_percent: subItem.discount || 0,
-                        shipping_address_id: subItem.shipping_address_id,
-                        warehouse_id: subItem.warehouse_id || 1
-                    });
-                });
-            }
-        });
-        let params = {};
-        switch (type) {
-            case 'create':
-                params = {
-                    'items': products,
-                    'is_draft_order': 0
-                };
-                break;
-            case 'quote':
-                params = {
-                    'items': products,
-                    'is_draft_order': 0
-                };
-                break;
-            case 'draft':
-                params = {
-                    'items': products,
-                    'is_draft_order': 1
-                };
-                break;
-        }
-        params = {...this.order_info, ...this.generalForm.value, ...params};
-        this.financialService.createOrder(params).subscribe(res => {
-            try {
-                if (res.data.status) {
-                    this.toastr.success(res.data.message);
-                    setTimeout(() => {
-                        this.router.navigate(['/order-management/sale-order']);
-                    }, 500);
-                } else {
-                    this.toastr.error(res.data.message, null, { enableHtml: true });
-                }
-            } catch (e) {
-                console.log(e);
-            }
-        },
-            err => {
-                  this.toastr.error(err.message);
-            });
     }
 
 }
