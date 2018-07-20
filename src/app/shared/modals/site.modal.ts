@@ -113,11 +113,11 @@ export class SiteModalComponent implements OnInit, OnDestroy {
         console.log('1');
         const tempType1 = [{ id: 4, name: 'Head Office' }];
         this.addresses = [{
-            type: 4, listType: tempType1, listCountry: this.listCountry, listState: []
+            type: 4, country_code: null, state_id: null, listType: tempType1, listCountry: this.listCountry, listState: []
         }, {
-            type: 1, listType: this.listTypeAddress, listCountry: this.listCountry, listState: [], is_default: false
+            type: 1, country_code: null, state_id: null, listType: this.listTypeAddress, listCountry: this.listCountry, listState: [], is_default: false
         }, {
-            type: 2, listType: this.listTypeAddress, listCountry: this.listCountry, listState: [], is_default: false
+            type: 2, country_code: null, state_id: null, listType: this.listTypeAddress, listCountry: this.listCountry, listState: [], is_default: false
         }];
 
 
@@ -168,11 +168,23 @@ export class SiteModalComponent implements OnInit, OnDestroy {
         }
     }
 
-    dupAddress() {
-        var p = this.addresses[0];
-        var k = Object.keys(p);
-        for (let i = 1; i < this.addresses.length; i++) {
-            k.map(key => { key != 'type' && key != 'listType' && (this.addresses[i][key] = p[key]) });
+    dupAddress(type) {
+        if (type == 3 || type == 4) {
+            var p = this.addresses[0];
+            var k = Object.keys(p);
+            for (let i = 1; i < this.addresses.length; i++) {
+                k.map(key => { key != 'type' && key != 'listType' && (this.addresses[i][key] = p[key]) });
+            }
+        }
+        else {
+            var tmp = {};
+            for (let i = 1; i < this.addresses.length; i++) {
+                if (this.addresses[i].type == type) {
+                    tmp = JSON.parse(JSON.stringify(this.addresses[i]));
+                    break;
+                }
+            }
+            this.addresses.push(tmp);
         }
     }
 
@@ -192,6 +204,9 @@ export class SiteModalComponent implements OnInit, OnDestroy {
     //  add new row bank account
     addNewBankAccount() {
         this.bank_accounts.push({
+
+            bank_id: null,
+            branch_id: null,
             listBank: this.listBank,
             listBranch: []
         });
