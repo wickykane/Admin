@@ -74,7 +74,7 @@ export class FinancialService {
         const params = {
             page: 1,
             length: 100
-        }
+        };
         const url = ['payment-term'].join('/');
         return this.API.get(url, params);
     }
