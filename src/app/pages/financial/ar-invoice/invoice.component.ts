@@ -3,6 +3,7 @@ import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FinancialService } from '../financial.service';
 import { TableService } from './../../../services/table.service';
+
 import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -131,7 +132,6 @@ export class InvoiceComponent implements OnInit {
         this.financialService.getListInvoiceItemsRef().subscribe(res => {
             try {
                 this.listInvoiceItemsRef = res.data;
-                console.log(this.listInvoiceItemsRef)
                 this.getList();
             } catch (e) {
                 console.log(e);
@@ -142,10 +142,13 @@ export class InvoiceComponent implements OnInit {
     }
 
     appendItemsToInvoice() {
-        for (let i = 0; i < this.list.items.length; i++) {
-            this.list.items[i].items_details = this.listInvoiceItemsRef[this.list.items[i].id]
+        const listItems = this.list.items;
+        const listItemsRef = this.listInvoiceItemsRef;
+        for (const unit of listItems) {
+            if (unit['id']) {
+                unit['items_details'] = listItemsRef[unit['id']];
+            }
         }
-        console.log(this.list.items)
     }
 
     convertStatus(id, key) {
