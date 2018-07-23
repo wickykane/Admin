@@ -23,8 +23,6 @@ import { MassPriceViewComponent } from './mass-price/mass-price.view.component';
 import { PartDetailComponent } from './part-mgmt/part-detail.component';
 import { PartEditComponent } from './part-mgmt/part-edit.component';
 import { PartListComponent } from './part-mgmt/part-list.component';
-import { ProductDefinitionCreateComponent } from './product-definition/product-definition-create.component';
-import { ProductDefinitionComponent } from './product-definition/product-definition.component';
 import { ProductMgmtRoutingModule } from './product-mgmt-routing.module';
 import { ProductMgmtComponent } from './product-mgmt.component';
 
@@ -48,8 +46,6 @@ import { ProductService } from './product-mgmt.service';
         BundleMgmtComponent,
         ConditionProductGroupComponent,
         ECatalogComponent,
-        ProductDefinitionComponent,
-        ProductDefinitionCreateComponent,
         BundleMgmtCreateComponent,
         BundleMgmtEditComponent,
         ConditionProductGroupCreateComponent,

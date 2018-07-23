@@ -1,10 +1,11 @@
 import { Component, Input, OnInit, ViewContainerRef } from '@angular/core';
-import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-    selector: 'terminate-policy-modal',
+    selector: 'app-terminate-policy-modal',
     templateUrl: './terminate-policy.modal.html'
 })
+// tslint:disable-next-line:component-class-suffix
 export class TerminatePolicyModalContent implements OnInit {
     @Input() message;
 
