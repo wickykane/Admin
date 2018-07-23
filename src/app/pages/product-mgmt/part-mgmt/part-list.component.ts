@@ -151,8 +151,23 @@ export class PartListComponent implements OnInit {
         const params = {
             ...this.tableService.getParams(),
             ...this.searchForm.value,
-            ...this.filterForm.value
         };
+<<<<<<< HEAD
+
+        // Change filter array
+        try {
+            Object.keys(this.filterForm.value).map(key => {
+                if (this.filterForm.value[key]) {
+                    const data = this.filterForm.value[key].toString().split(',').map(item => item.trim());
+                    if (data) {
+                        params[key + '[]'] = data;
+                    }
+                }
+            });
+
+        } catch (e) { }
+
+=======
         console.log(params);
         if (params.partlinks_no_filter) {
             params.partlinks_no_filter = _.trim(params.partlinks_no_filter);
@@ -162,11 +177,13 @@ export class PartListComponent implements OnInit {
             params.part_no_filter = _.map(params.part_no_filter.split(','), _.trim);
         }
         console.log(params);
+>>>>>>> 376a15b7b61859a23d80633e745f57a48b20beac
         Object.keys(params).forEach(
             key =>
                 (params[key] === null || params[key] === '') &&
                 delete params[key]
         );
+
         this.productService.getListItem(params).subscribe(res => {
             try {
                 if (!res.data.rows) {

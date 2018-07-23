@@ -695,3 +695,22 @@ ngu-carousel {
     }
     .ngucarouselPointDefault {}
 }
+
+.ngx-gallery-thumbnail {
+    .ngx-gallery-icon-content.black{
+        opacity: 0;
+        transition: all 300ms ease-in;
+    }
+    &:hover  .ngx-gallery-icon-content.black {
+        color: #495057;
+        opacity: 1;
+        transition: all 500ms ease-in-out;    
+    }
+  
+}
+
+.ngx-gallery-layout {
+    .ngx-gallery-icon-content {
+        color: #495057 !important;        
+    }
+}
