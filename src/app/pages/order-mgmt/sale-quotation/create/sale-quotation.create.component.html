@@ -224,6 +224,7 @@
                                         <th translate>Action</th>
                                         <th translate>Product Code</th>
                                         <th translate>Description</th>
+                                          <th translate>Condition</th>
                                         <th class="text-nowrap" translate>Order QTY</th>
                                         <!-- <th class="text-nowrap text-center" translate *ngIf="generalForm.value.is_multi_shp_addr == 1">Ship To</th> -->
                                         <th class="text-center" translate>Unit Price</th>
@@ -247,8 +248,9 @@
                                         </td>
                                         <td>{{item.sku}}</td>
                                         <td>{{item.des}}</td>
+                                        <td>{{item.condition_name}}</td>
                                         <td>
-                                            <input style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.order_quantity"
+                                            <input style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity"
                                                 (change)="updateTotal();changeFromSource(item)" (keypress)="_keyPress($event)">
                                         </td>
 
@@ -280,7 +282,7 @@
                                         <td></td>
                                         <td></td>
                                         <td>
-                                            <input style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="product.order_quantity" min="0" max="1000"
+                                            <input style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="product.quantity" min="0" max="1000"
                                                 (change)="updateTotal()" (keypress)="_keyPress($event)">
                                         </td>
                                         <td>
