@@ -84,4 +84,9 @@ export class FinancialService {
         return this.API.get(url, params);
     }
 
+    getInvoiceDueDate(params) {
+        const url = 'ar-invoice/set-due-date';
+        return this.API.get(url, params);
+    }
+
 }
