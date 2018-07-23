@@ -155,7 +155,8 @@ export class PartListComponent implements OnInit {
         };
         console.log(params);
         if (params.partlinks_no_filter) {
-            params.partlinks_no_filter = _.trim( params.partlinks_no_filter);
+            params.partlinks_no_filter = _.trim(params.partlinks_no_filter);
+            params['partlinks_no_filter[]'] = params.partlinks_no_filter;
         }
         if (params.part_no_filter) {
             params.part_no_filter = _.map(params.part_no_filter.split(','), _.trim);
