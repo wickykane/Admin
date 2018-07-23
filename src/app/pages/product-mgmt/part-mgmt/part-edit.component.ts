@@ -8,8 +8,9 @@ import { environment } from '../../../../environments/environment';
 import {
     NgxGalleryAnimation,
     NgxGalleryImage,
-    NgxGalleryOptions
+    NgxGalleryOptions,
 } from 'ngx-gallery';
+
 import { ProductService } from '../product-mgmt.service';
 import { PartKeyService } from './keys.control';
 
@@ -23,7 +24,6 @@ export class PartEditComponent implements OnInit {
     /**
      * Variable Declaration
      */
-    public carouselImages: NguCarousel;
     public generalForm: FormGroup;
     public part: any;
     public images: any = [];
@@ -34,7 +34,6 @@ export class PartEditComponent implements OnInit {
     };
     public item_condition;
     galleryOptions: NgxGalleryOptions[];
-    galleryImages: NgxGalleryImage[];
 
     constructor(
         private fb: FormBuilder,
@@ -61,72 +60,61 @@ export class PartEditComponent implements OnInit {
             {
                 width: '500px',
                 height: '400px',
-                thumbnailsOrder: 'row'
+                thumbnailsOrder: 'row',
+                'preview': false,
+                'imageAnimation': 'slide',
+                'imageArrows': false,
+                'thumbnailsArrows': true,
+                thumbnailActions: [{ icon: 'black fa fa-times-circle', onClick: this.deleteImage.bind(this), titleText: 'Delete' }]
             }
         ];
-        this.carouselImages = {
-            grid: { xs: 1, sm: 1, md: 1, lg: 1, all: 0 },
-            slide: 1,
-            speed: 400,
-            interval: 4000,
-            point: {
-                visible: true
-            },
-            load: 2,
-            touch: true,
-            loop: true,
-            custom: 'banner'
-        };
     }
-    uploadFile($event) {
-        console.log($event);
-        const fileUpload: File = $event.target.files;
-        console.log(fileUpload);
-        this.dataFile = fileUpload;
-        // const reader = new FileReader();
-        // reader.readAsDataURL(fileUpload);
-        // reader.onloadend = () => {
-        //     const base64 = reader.result;
-        //     const galleryImage = {
-        //         small: base64,
-        //         medium: base64,
-        //         big: base64
-        //     };
-        //     this.galleryImages.push(galleryImage);
 
-        //     const nguImage = {
-        //         origin_img: base64
-        //     };
-        //     this.images.push(nguImage);
-        //     this.list.files.push(reader.result);
-        // };
+    deleteImage(event, index) {
+        this.dataFile.splice(index - this.images.length, 1);
+        if (this.images[index]['item_image_id']) {
+            this.list.image_del.push(this.images[index]['item_image_id']);
+        }
+        this.images.splice(index, 1);
+    }
+
+    uploadFile($event) {
+        const fileUpload = $event.target.files;
+        this.dataFile = Array.from(fileUpload);
+        for (const file of fileUpload) {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+                const base64 = reader.result;
+                const galleryImage = {
+                    small: base64,
+                    medium: base64,
+                    big: base64
+                };
+                this.images.push(galleryImage);
+            };
+        }
     }
 
     updateItem() {
-        const  formData = new FormData();
-        console.log(this.generalForm.value);
+        const formData = new FormData();
         formData.append('data', JSON.stringify(this.generalForm.value));
-        for ( const file of this.dataFile) {
+        for (const file of this.dataFile) {
             formData.append('files[]', file);
         }
         formData.append('image_del', JSON.stringify(this.list.image_del));
         this.route.params.subscribe(params =>
-            this.productService.updateItem(params.id, formData ).subscribe(res => {
+            this.productService.updateItem(params.id, formData).subscribe(res => {
                 try {
                     if (res.status) {
-                        console.log(res.message);
                         this.toastr.success(res.message);
+                        this.router.navigate(['/product-management/part-list']);
                     }
                 } catch (e) {
                     console.log(e);
                 }
             })
         );
-    }
-
-    removeItem(index, item) {
-        this.images.splice(index, 1);
-        this.list.image_del.push(item.item_image_id);
     }
 
     getDetailPart(id) {
@@ -136,38 +124,17 @@ export class PartEditComponent implements OnInit {
                     this.part = res.data.item;
                     this.images = res.data.images;
                     this.item_condition = res.data.item_condition;
-                    // this.images
+                    this.images.map(item => {
+                        item['small'] = this.url_image + item.large_img;
+                        item['medium'] = this.url_image + item.origin_img;
+                        item['big'] = this.url_image + item.thumb_img;
+                        item['item_image_id'] = item.item_image_id;
+                    });
                     this.generalForm.patchValue(res.data.item);
                 }
-
-                console.log(res.data);
-                this.galleryImages = [
-                    {
-                        small:
-                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/1-small.jpeg',
-                        medium:
-                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/1-medium.jpeg',
-                        big:
-                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/1-big.jpeg'
-                    },
-                    {
-                        small:
-                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/5-small.jpeg',
-                        medium:
-                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/5-medium.jpeg',
-                        big:
-                            'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/5-big.jpeg'
-                    }
-                ];
             } catch (e) {
                 console.log(e);
             }
         });
-    }
-
-    myfunc(event: Event) {
-        // carouselLoad will trigger this funnction when your load value reaches
-        // it is helps to load the data by parts to increase the performance of the app
-        // must use feature to all carousel
     }
 }
