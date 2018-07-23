@@ -151,7 +151,6 @@ export class PartListComponent implements OnInit {
         const params = {
             ...this.tableService.getParams(),
             ...this.searchForm.value,
-            ...this.filterForm.value
         };
         console.log(params);
         if (params.partlinks_no_filter) {
@@ -167,6 +166,7 @@ export class PartListComponent implements OnInit {
                 (params[key] === null || params[key] === '') &&
                 delete params[key]
         );
+
         this.productService.getListItem(params).subscribe(res => {
             try {
                 if (!res.data.rows) {

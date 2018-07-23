@@ -464,7 +464,7 @@ export class SaleOrderCreateComponent implements OnInit {
                 quantity: item.quantity,
                 sale_price: item.sale_price,
                 order_detail_id: item.order_detail_id,
-                condition_id: item.condition_id,
+                item_condition_id: item.item_condition_id,
                 discount_percent: item.discount || 0,
                 shipping_address_id: item.shipping_address_id,
             });
@@ -477,7 +477,7 @@ export class SaleOrderCreateComponent implements OnInit {
                         quantity: subItem.quantity,
                         sale_price: subItem.sale_price,
                         discount_percent: subItem.discount || 0,
-                        condition_id: item.condition_id,
+                        item_condition_id: item.item_condition_id,
                         shipping_address_id: subItem.shipping_address_id,
                     });
                 });
