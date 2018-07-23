@@ -50,8 +50,10 @@ export class PartDetailComponent implements OnInit {
                 width: '500px',
                 height: '400px',
                 thumbnailsOrder: 'row',
-                // thumbnailsColumns: 4,
-                // thumbnailsRows: 1
+                'preview': false,
+                'imageAnimation': 'slide',
+                'imageArrows': false,
+                'thumbnailsArrows': true,
             }
         ];
     }

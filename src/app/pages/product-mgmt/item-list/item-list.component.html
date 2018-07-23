@@ -39,7 +39,7 @@
                             <div class="block-search">
                                 <select formControlName="manufacturer_id" class="form-control">
                                     <option value="null" selected="true" translate disabled>--Select--</option>
-                                    <option *ngFor="let de of listMaster['make']" [ngValue]="de.manufacturer_id">{{de.name}}</option>
+                                    <option *ngFor="let de of listMaster['make']" [ngValue]="de.make_id">{{de.name}}</option>
                                 </select>
                             </div>
                             <label for="type" class="control-label" translate>Model</label>
@@ -140,7 +140,7 @@
                     <div class="col-md-2 filter-item">
                         <label for="type" class="control-label" translate>Category</label>
                         <div class="block-search">
-                            <ng-select (change)="changeToGetSubCategory()" [multiple]="true" [items]="listMaster['categories']" bindLabel="name" bindValue="category_id"
+                            <ng-select class="select2-max-width" (change)="changeToGetSubCategory()" [multiple]="true" [items]="listMaster['categories']" bindLabel="name" bindValue="category_id"
                                 formControlName="category_id_filter">
                             </ng-select>
                         </div>
@@ -148,14 +148,14 @@
                     <div class="col-md-2 filter-item" *ngIf="filterForm.value.category_id_filter">
                         <label for="type" class="control-label" translate>Sub-Category</label>
                         <div class="block-search">
-                            <ng-select [multiple]="true" [items]="listMaster['sub_cat']" bindLabel="name" bindValue="category_id" formControlName="sub_category_id">
+                            <ng-select class="select2-max-width" [multiple]="true" [items]="listMaster['sub_cat']" bindLabel="name" bindValue="category_id" formControlName="sub_category_id">
                             </ng-select>
                         </div>
                     </div>
                     <div class="col-md-2 filter-item">
                         <label for="type" class="control-label" translate>Brand</label>
                         <div class="block-search">
-                            <ng-select [multiple]="true" [items]="listMaster['brands']" bindLabel="name" bindValue="brand_id" formControlName="brand_id_filter">
+                            <ng-select class="select2-max-width" [multiple]="true" [items]="listMaster['brands']" bindLabel="name" bindValue="brand_id" formControlName="brand_id_filter">
                             </ng-select>
                         </div>
                     </div>

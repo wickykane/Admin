@@ -61,10 +61,10 @@ export class SaleQuoteInformationTabComponent implements OnInit {
                 //  if (this.detail['total_paid'] === null) {
                 //      this.detail['total_paid'] = 0;
                 //  }
-                this.detail['subs'] = res.data.subs;
+                this.detail['subs'] = res.data.list.items;
                 this.detail['subs'].forEach( (item) => {
-                    this.totalQTY += item.qty;
-                    this.totalShipQTY += item.qty_shipped;
+                    this.totalQTY += item.quantity;
+                    // this.totalShipQTY += item.qty_shipped;
                 });
                 this.detail['buyer_info'] = res.data.buyer_info;
 
