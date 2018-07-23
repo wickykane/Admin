@@ -133,7 +133,7 @@ export class InvoiceCreateComponent implements OnInit {
             'note': [null],
             'inv_dt': [null, Validators.required],
             'payment_method_id': [null, Validators.required],
-            'due_dt': [null],
+            'due_dt': [null, Validators.required],
             'payment_term_id': [null, Validators.required],
             'aprvr_id': [null, Validators.required],
             'payment_term_range': [null],
@@ -271,7 +271,6 @@ export class InvoiceCreateComponent implements OnInit {
                         discount_amount: this.order_details['discount'],
                         tax_amount: this.order_details['vat']
                     });
-                    this.generalForm.controls['due_dt'].setValue(this.order_details['payment_due_date']);
                 } else {
                     this.list.items = [];
                     this.order_details = {};
@@ -354,7 +353,6 @@ export class InvoiceCreateComponent implements OnInit {
             discount_amount: this.order_details['discount'],
             tax_amount: this.order_details['vat']
         });
-        this.generalForm.controls['due_dt'].setValue(this.order_details['payment_due_date']);
     }
 
     changePaymentTerms() {
@@ -362,8 +360,27 @@ export class InvoiceCreateComponent implements OnInit {
         for (const unit of listPaymentTerms) {
             if (unit.id === this.generalForm.value['payment_term_id']) {
                 this.generalForm.controls['payment_term_range'].setValue(unit.day_limit);
+                this.getInvoiceDueDate(this.generalForm.value['payment_term_range']);
             }
         }
+    }
+
+    onIssueDateSelected(event) {
+        this.getInvoiceDueDate(this.generalForm.value['payment_term_range']);
+    }
+
+    getInvoiceDueDate(paymentTermDayLimit) {
+        const params = {
+            issue_dt: this.generalForm.value['inv_dt'],
+            payment_term_dt: paymentTermDayLimit
+        };
+        this.financialService.getInvoiceDueDate(params).subscribe(res => {
+            try {
+                this.generalForm.controls['due_dt'].setValue(res.data.due_dt);
+            } catch (e) {
+                console.log(e);
+            }
+        });
     }
 
     selectAddress(type) {
