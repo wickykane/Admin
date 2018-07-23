@@ -150,13 +150,27 @@ export class PartListComponent implements OnInit {
         const params = {
             ...this.tableService.getParams(),
             ...this.searchForm.value,
-            ...this.filterForm.value
         };
+
+        // Change filter array
+        try {
+            Object.keys(this.filterForm.value).map(key => {
+                if (this.filterForm.value[key]) {
+                    const data = this.filterForm.value[key].toString().split(',').map(item => item.trim());
+                    if (data) {
+                        params[key + '[]'] = data;
+                    }
+                }
+            });
+
+        } catch (e) { }
+
         Object.keys(params).forEach(
             key =>
                 (params[key] === null || params[key] === '') &&
                 delete params[key]
         );
+
         this.productService.getListItem(params).subscribe(res => {
             try {
                 if (!res.data.rows) {
