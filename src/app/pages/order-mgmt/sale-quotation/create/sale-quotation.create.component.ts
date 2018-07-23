@@ -307,7 +307,7 @@ export class SaleQuotationCreateComponent implements OnInit {
                 res.forEach(item => {
                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
                     item['products'] = [];
-                    item.order_quantity = 1;
+                    item.quantity = 1;
                     item.totalItem = item.sale_price;
                     item.source = 'Manual';
                 });
@@ -394,8 +394,9 @@ export class SaleQuotationCreateComponent implements OnInit {
             products.push({
               item_type: item.item_type,
                 item_id: item.item_id,
-                quantity: item.order_quantity,
+                quantity: item.quantity,
                 sale_price: item.sale_price,
+                item_condition_id: item.item_condition_id,
                 discount_percent: item.discount || 0,
                 shipping_address_id: item.shipping_address_id,
                 warehouse_id: item.warehouse_id || 1
@@ -406,8 +407,9 @@ export class SaleQuotationCreateComponent implements OnInit {
                     products.push({
                         item_id: subItem.item_id,
                         item_type: item.item_type,
-                        quantity: subItem.order_quantity,
+                        quantity: subItem.quantity,
                         sale_price: subItem.sale_price,
+                        item_condition_id: item.item_condition_id,
                         discount_percent: subItem.discount || 0,
                         shipping_address_id: subItem.shipping_address_id,
                         warehouse_id: subItem.warehouse_id || 1
