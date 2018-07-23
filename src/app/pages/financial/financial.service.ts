@@ -12,8 +12,15 @@ export class FinancialService {
     //
 
     getListInvoice(params) {
-        const url = 'ar-invoice';
+        // const url = 'ar-invoice';
+        // return this.API.get(url, params);
+        const url = 'ar-invoice/get-list';
         return this.API.get(url, params);
+    }
+
+    getListInvoiceItemsRef() {
+        const url = 'ar-invoice/getItemInfo';
+        return this.API.get(url);
     }
 
     getAllCustomer() {
