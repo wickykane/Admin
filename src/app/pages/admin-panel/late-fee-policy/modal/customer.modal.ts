@@ -90,7 +90,10 @@ export class CustomerModalContent implements OnInit {
     }
 
     getList() {
-        const params = { ...this.tableService.getParams(), ...this.searchForm.value };
+        let params = {
+            using_for: 'lfp'
+        };
+        params = { ...this.tableService.getParams(), ...this.searchForm.value, ...params };
         Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
 
         this.lateFeePolicyService.getListCustomer(params).subscribe(res => {

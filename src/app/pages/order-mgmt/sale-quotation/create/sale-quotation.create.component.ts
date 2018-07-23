@@ -419,21 +419,17 @@ export class SaleQuotationCreateComponent implements OnInit {
         });
         let params = {};
         switch (type) {
-            case 'create':
+                case 'validate':
                 params = {
                     'items': products,
+                    'sale_quote_status_id': 4,
                     'is_draft_order': 1
                 };
                 break;
-            case 'quote':
+                case 'submit':
                 params = {
                     'items': products,
-                    'is_draft_order': 1
-                };
-                break;
-            case 'draft':
-                params = {
-                    'items': products,
+                    'sale_quote_status_id': 2,
                     'is_draft_order': 1
                 };
                 break;

@@ -188,6 +188,9 @@ export class InvoiceCreateComponent implements OnInit {
         this.updateTotal();
         this.copy_addr = { ...this.copy_addr, ...this.addr_select };
         this.copy_customer = { ...this.copy_customer, ...this.customer };
+        this.generalForm.controls['inv_dt'].valueChanges.debounceTime(300).subscribe(data => {
+            this.getInvoiceDueDate(this.generalForm.value['payment_term_range']);
+        });
     }
 
     getListCustomerOption() {
@@ -205,16 +208,18 @@ export class InvoiceCreateComponent implements OnInit {
             this.financialService.getDetailInvoice(id).subscribe(res => {
                 this.invoice_details = res.data;
                 this.generalForm.patchValue(this.invoice_details);
-                this.generalForm.controls['inv_dt'].patchValue(this.dt.transform(new Date(res.data.inv_dt), 'yyyy-MM-dd'));
-                this.generalForm.controls['due_dt'].patchValue(this.dt.transform(new Date(res.data.due_dt), 'yyyy-MM-dd'));
-                // this.list.items = res.data.items;
                 this.generalForm.patchValue({
                     billing_address_id: this.invoice_details['billing_id'],
-                    inv_status: this.invoice_details['invoice_status_id']
+                    inv_status: this.invoice_details['invoice_status_id'],
+                    inv_dt: this.dt.transform(new Date(res.data.inv_dt), 'yyyy-MM-dd'),
+                    due_dt: this.dt.transform(new Date(res.data.due_dt), 'yyyy-MM-dd')
                 });
                 if (res.data.company_id) {
                     this.getDetailCustomerById(res.data.company_id);
                     this.getOrderByCustomerId(res.data.company_id);
+                }
+                if (!this.generalForm.value['payment_term_range']) {
+                    this.generalForm.controls['payment_term_range'].setValue(this.getPaymentTermRange(this.generalForm.value['payment_term_id']));
                 }
                 // if (res.data.address.billing[0]) {
                 //     this.addr_select.billing = res.data.address.billing[0];
@@ -291,6 +296,11 @@ export class InvoiceCreateComponent implements OnInit {
         });
     }
 
+    getPaymentTermRange(id) {
+        const paymentTerm = this.listMaster['payment_terms'].find(item => item.id === id);
+        return paymentTerm.day_limit;
+    }
+
     /**
      * Internal Function
      */
@@ -363,10 +373,6 @@ export class InvoiceCreateComponent implements OnInit {
                 this.getInvoiceDueDate(this.generalForm.value['payment_term_range']);
             }
         }
-    }
-
-    onIssueDateSelected(event) {
-        this.getInvoiceDueDate(this.generalForm.value['payment_term_range']);
     }
 
     getInvoiceDueDate(paymentTermDayLimit) {
