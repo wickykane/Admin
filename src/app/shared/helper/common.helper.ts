@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import * as _ from 'lodash';
 
 @Injectable()
 export class Helper {
@@ -15,6 +16,14 @@ export class Helper {
         } else {
             return 'alt';
         }
+    }
+    changeNumberToZero(num) {
+        console.log(num);
+        if (_.isNumber(num)) {
+            console.log(num);
+            return num;
+        }
+        return 0;
     }
 
 }

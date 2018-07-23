@@ -8,6 +8,7 @@ export class ProductService {
     constructor(private $http: Http, private apiService: ApiService) {}
 
     updateItem(id, data) {
+        console.log(data);
         const url = 'item/update/' + id;
         return this.apiService.postForm(url, data);
     }
