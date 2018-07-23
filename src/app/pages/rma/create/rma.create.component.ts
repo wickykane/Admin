@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewContainerRef, ViewEncapsulation } from '@angular/core';
-import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Form, FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -56,19 +56,18 @@ export class RmaCreateComponent implements OnInit {
         private commonService: CommonService,
         private dt: DatePipe) {
         this.generalForm = fb.group({
-            'company_id': [null, Validators.required],
+            'buyer': [null, Validators.required],
             'rma_number': [null, Validators.required],
             'rma_type': [1, Validators.required],
             'request_date': [moment().format('YYYY-MM-DD'), Validators.required],
             'order_id': [null, Validators.required],
             'return_via': [null, Validators.required],
             'carrier': [null, Validators.required],
-            'cover_ship': [1, Validators.required],
-            'apply_restock': [null],
+            'cover_ship': ['Yes', Validators.required],
+            'apply_restock': [0],
             'refund_method': [null, Validators.required],
             'payment_term': [null],
             'approver': [null],
-            'billing_id': [null],
             'address_id': [null],
             'note': [null],
             'contact_name': [null],
@@ -76,10 +75,20 @@ export class RmaCreateComponent implements OnInit {
             'phone': [null],
             // Extra data
             'return_time': [null],
-            'return_time_id': [null],
             'receiving_date': [null],
             'warehouse': [null],
+            'warehouseName': [null],
             'status': [null],
+            'rma_items': this.fb.array([]),
+            'total_amount': [null],
+            'ship_fee': [null],
+            'discount': [null],
+            'tax': [null],
+            'restocking_fee_percent': [null],
+            'restocking_fee': [null],
+            'sub_total': [null],
+            'return_time_name': [null]
+
         });
 
         //  Init Key
@@ -91,20 +100,27 @@ export class RmaCreateComponent implements OnInit {
         this.checkAll(null, true);
 
         // Master Data Init
-
-        this.getListRefundMethod();
-        this.getListPaymentTerm();
-        this.getListCoverShipFee();
-        this.getListCarrier();
-        this.getListApprover();
-        this.getListReturnReason();
+        this.getListMasterData();
+        // this.getListRefundMethod();
+        // this.getListPaymentTerm();
+        // this.getListCoverShipFee();
+        // this.getListCarrier();
+        // this.getListApprover();
+        // this.getListReturnReason();
 
         this.updateTotal();
 
         // Change form data event handle
         this.generalForm.get('return_via').valueChanges.subscribe(data => {
+            if (data == 1 || data == 2) {
+                this.generalForm.get('carrier').setValidators(Validators.required);
+            } else {
+                this.generalForm.get('carrier').clearValidators();
+            }
             this.generalForm.patchValue({ carrier: null });
         });
+
+        this.initConfig();
     }
 
     // Disable Config
@@ -112,61 +128,74 @@ export class RmaCreateComponent implements OnInit {
         const data = this.generalForm.value;
         if (this.generalForm.value.rma_type === 1) {
             // Case 1: RMA Type: Refund, Return Time: During WH Pickup, Receiving Date: Not yet received
-            if (data.return_time_id === 1 && data.receiving_date === 'Not yet received') {
+            console.log(data);
+            if (data.return_time === 1 && data.receiving_date === 'Not yet received') {
                 this.dataConfig = {
-                    carrier: { disable: true, value: null },
-                    cover_ship: { disable: true, value: 2 },
-                    return_via: { disable: false, value: 4 }
+                    carrier: 1,
+                    cover_ship: 'No',
+                    return_via: 4,
+                    apply_restock: 0,
                 };
-
             }
             // Case 2: RMA Type: Refund, Return Time: Before Delivery
-            if (data.return_time_id === 2) {
+            if (data.return_time === 2) {
                 this.dataConfig = {
-                    carrier: { disable: true, value: null },
-                    cover_ship: { disable: true, value: 1 },
-                    return_via: { disable: false, value: 4 }
+                    carrier: 5,
+                    cover_ship: 'Yes',
+                    return_via: 4,
+                    apply_restock: 0,
                 };
             }
 
             // Case 3: RMA Type: Refund, Return Time: At Delivery
-            if (data.return_time_id === 3) {
+            if (data.return_time === 3) {
                 this.dataConfig = {
+                    cover_ship: 'Yes',
+                    apply_restock: 0,
                 };
             }
 
             // Case 4: RMA Type: Refund, Return Time: <= 15
-            if (data.return_time_id === 4) {
+            if (data.return_time === 4) {
                 this.dataConfig = {
+                    cover_ship: 'Yes',
+                    apply_restock: 0,
                 };
             }
 
             // Case 5: RMA Type: Refund, Return Time: > 30
-            if (data.return_time_id === 5) {
+            if (data.return_time === 5) {
                 this.dataConfig = {
-                    apply_restock: { disable: true, value: 1 },
+                    cover_ship: 'Yes',
+                    apply_restock: 1,
                     validate: 1
                 };
             }
 
             // Case 5: RMA Type: Refund, Return Time: 16 - 30
-            if (data.return_time_id === 6) {
+            if (data.return_time === 6) {
                 this.dataConfig = {
-                    apply_restock: { disable: true, value: 1 },
+                    cover_ship: 'Yes',
+                    apply_restock: 1,
                     validate: 1
+                };
+            }
+            if(data.return_time ==null){
+                this.dataConfig = {
+                    cover_ship: 'Yes'
                 };
             }
 
             this.generalForm.patchValue({
-                apply_restock: (this.dataConfig['apply_restock'] || {}).value,
-                cover_ship: (this.dataConfig['cover_ship'] || {}).value,
-                return_via: (this.dataConfig['return_via'] || {}).value
+                apply_restock: this.dataConfig['apply_restock'],
+                cover_ship: this.dataConfig['cover_ship'],
+                return_via: this.dataConfig['return_via']
             });
+
         }
     }
     // Table event
     selectData(index) {
-        console.log(index);
     }
 
     checkAll(ev, flag?) {
@@ -194,11 +223,28 @@ export class RmaCreateComponent implements OnInit {
     getListOrderByCustomer(id) {
         this.commonService.getOrderByCustomer(id).subscribe(res => {
             const data = res.data;
+            // this.listMaster['sales_order'] = data.order;
+            // this.listMaster['return_time'] = data.return_time;
             this.listMaster['sales_order'] = data.order;
+            // this.listMaster['rma_type'] = data.rma_type;
+            // this.listMaster['return_via'] = data.return_via;
+            this.generalForm.patchValue({ rma_number: data.return_order_no });
+        });
+    }
+    getListMasterData() {
+        this.commonService.getMasterData().subscribe(res => {
+            const data = res.data;
+
             this.listMaster['return_time'] = data.return_time;
             this.listMaster['rma_type'] = data.rma_type;
             this.listMaster['return_via'] = data.return_via;
-            this.generalForm.patchValue({ rma_number: data.return_order_no });
+            this.listMaster['approver'] = data.approver;
+            this.listMaster['payment_term'] = data.payment_term;
+            this.listMaster['refund_method'] = data.refund_method;
+            this.listMaster['carrier'] = data.carrier;
+            this.listMaster['cover_ship'] = data.cover_ship_fee;
+            this.listMaster['reason'] = data.return_reason;
+            // this.generalForm.patchValue({ rma_number: data.return_order_no });
         });
     }
 
@@ -224,68 +270,85 @@ export class RmaCreateComponent implements OnInit {
     }
 
 
-    getListCarrier() {
-        const params = { is_all: 1 };
-        this.commonService.getListCarrier(params).subscribe(res => {
-            this.listMaster['carrier'] = res.data;
-        });
-    }
+    // getListCarrier() {
+    //     const params = { is_all: 1 };
+    //     this.commonService.getListCarrier(params).subscribe(res => {
+    //         this.listMaster['carrier'] = res.data;
+    //     });
+    // }
 
-    getListCoverShipFee() {
-        this.listMaster['cover_ship'] = [
-            { id: 1, name: 'YES' },
-            { id: 2, name: 'NO' }
-        ];
-    }
+    // getListCoverShipFee() {
+    //     this.listMaster['cover_ship'] = [
+    //         { id: 1, name: 'YES' },
+    //         { id: 2, name: 'NO' }
+    //     ];
+    // }
 
-    getListRefundMethod() {
-        this.rmaService.getRefundMethod().subscribe(res => {
-            this.listMaster['refund_method'] = res.data;
-        });
-    }
+    // getListRefundMethod() {
+    //     this.rmaService.getRefundMethod().subscribe(res => {
+    //         this.listMaster['refund_method'] = res.data;
+    //     });
+    // }
 
-    getListPaymentTerm() {
-        this.rmaService.getPaymentTerm().subscribe(res => {
-            this.listMaster['payment_term'] = res.data;
-        });
-    }
+    // getListPaymentTerm() {
+    //     this.rmaService.getPaymentTerm().subscribe(res => {
+    //         this.listMaster['payment_term'] = res.data;
+    //     });
+    // }
 
-    getListApprover() {
-        this.rmaService.getApprover().subscribe(res => {
-            this.listMaster['approver'] = res.data;
-        });
-    }
+    // getListApprover() {
+    //     this.rmaService.getApprover().subscribe(res => {
+    //         this.listMaster['approver'] = res.data;
+    //     });
+    // }
 
     getOrderReference(id) {
-        const params = {
-            type: 'data',
-            order_id: id,
-            request_date: this.generalForm.value.request_date
-        };
+        // const params = {
+        //     type: 'data',
+        //     order_id: id,
+        //     request_date: this.generalForm.value.request_date
+        // };
 
-        this.rmaService.getOrderReferenve(params).subscribe(res => {
+        // this.rmaService.getOrderReferenve(params).subscribe(res => {
+        //     const data = res.data;
+        //     this.list.items = data.items;
+        //     const return_time = (this.listMaster['return_time'].find(item => item.id === data.return_time)) || {};
+        //     this.generalForm.patchValue({
+        //         return_time: return_time.name,
+        //         receiving_date: data.receiving_date,
+        //         status: data.status,
+        //         warehouse: data.warehouse
+        //     });
+        //     this.checkAll(null, true);
+        //     this.updateTotal();
+        // });
+        const params = {
+            order_id: id
+        }
+        this.rmaService.getOrderInfo(params).subscribe(res => {
             const data = res.data;
+            console.log(res.data);
             this.list.items = data.items;
             const return_time = (this.listMaster['return_time'].find(item => item.id === data.return_time)) || {};
             this.generalForm.patchValue({
-                return_time: return_time.name,
-                return_time_id: return_time.id,
+                return_time: return_time.id,
+                return_time_name: return_time.name,
                 receiving_date: data.receiving_date,
                 status: data.status,
-                warehouse: data.warehouse
+                warehouseName: data.warehouse,
+                warehouse: data.warehouse_id
             });
-
             this.initConfig();
             this.checkAll(null, true);
             this.updateTotal();
         });
     }
 
-    getListReturnReason() {
-        this.rmaService.getReturnReason().subscribe(res => {
-            this.listMaster['reason'] = res.data;
-        });
-    }
+    // getListReturnReason() {
+    //     this.rmaService.getReturnReason().subscribe(res => {
+    //         this.listMaster['reason'] = res.data;
+    //     });
+    // }
 
     numberMaskObject(max?) {
         return createNumberMask({
@@ -301,11 +364,11 @@ export class RmaCreateComponent implements OnInit {
      * Internal Function
      */
     changeCustomer() {
-        const company_id = this.generalForm.value.company_id;
+        const buyer = this.generalForm.value.buyer;
         this.resetData();
-        if (company_id) {
-            this.getDetailCustomerById(company_id);
-            this.getListOrderByCustomer(company_id);
+        if (buyer) {
+            this.getDetailCustomerById(buyer);
+            this.getListOrderByCustomer(buyer);
         }
     }
 
@@ -358,8 +421,60 @@ export class RmaCreateComponent implements OnInit {
 
         this.order_info['total'] = this.order_info['sub_total'] - this.order_info['total_discount'] - this.order_info['restock_fee_amount'] + ((this.generalForm.value.cover_ship) ? this.order_info['shipping_cost'] : 0)
             + this.order_info['vat_percent_amount'];
+        this.generalForm.patchValue({
+            total_amount: this.order_info['total'],
+            ship_fee: this.order_info['shipping_cost'],
+            discount: this.order_info['discount_percent'],
+            tax: this.order_info['vat_percent'],
+            restocking_fee: this.order_info['restock_fee_amount'],
+            restocking_fee_percent: this.order_info['restock_fee_percent'],
+            sub_total: this.order_info['sub_total']
+        });
     }
 
-    createRMA() { }
+    createRMA() {
+        var rma_item =[];
+        var rmaObject = this.generalForm.value;
+        var list= this.list['items'].slice(0);
+        console.log(list);
+        list.forEach(item=>{
+            rma_item.push({
+                'return_reason':item.return_reason,
+                'return_qty':item.return_qty,
+                'order_detail_id':item.id
+            })
+        });
+        rmaObject['rma_items']=rma_item;
+        rmaObject['status'] = 1;
+        delete rmaObject['return_time'];
+        console.log(rmaObject);
+        // this.generalForm.patchValue({
+        //     rma_items: this.list['items'],
+        //     status:1
+        // });
+        // console.log(this.generalForm.value);
+        this.rmaService.createRMA(this.generalForm.value).subscribe(res => {
+            this.toastr.success(res.message);
+            setTimeout(() => {
+                this.router.navigate(['/rma']);
+            }, 500);
+        },err=>{
+            if(err){
+                if(err.data.return_reason){
+                    this.toastr.error('Return Reason is required');
+                }
+            }
+        });
+
+
+    }
+    checkApplyRestock(isCheck){
+
+        var val= isCheck?1:0;
+        console.log(val);
+        this.generalForm.patchValue({
+            apply_restock:val
+        });
+    }
 }
 

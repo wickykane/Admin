@@ -9,43 +9,23 @@
         <legend class="custom-border">GENERAL INFORMATION</legend>
         <form [formGroup]="generalForm" class="form-search full-width form-horizontal">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-5">
                     <div class="form-group row">
                         <label for="parent_company_name" class="col-sm-5 col-form-label">Parent Company Name</label>
                         <div class="col-sm-7">
                             <input type="text" readonly class="form-control-plaintext" name="parent_company_name" formControlName="parent_company_name">
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-5 col-form-label">Phone</label>
-                        <div class="col-sm-7">
-                            <input type="text" class="form-control" name="phone" formControlName="phone">
-                        </div>
-                    </div>
-                </div>
-                <div class="w-100"></div>
-                <div class="col-md-4">
+                    <div class="w-100"></div>
                     <div class="form-group row">
                         <label for="code" class="col-sm-5 col-form-label">Site Code
                             <span class="text-danger">(*)</span>
                         </label>
                         <div class="col-sm-7">
-                            <input type="text" class="form-control" name="code" formControlName="site_code">
+                            <input type="text" class="form-control" name="code" [disabled]="true" formControlName="site_code">
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group row">
-                        <label for="sale_person" class="col-sm-5 col-form-label">Fax</label>
-                        <div class="col-sm-7">
-                            <input type="text" class="form-control" name="fax" formControlName="fax">
-                        </div>
-                    </div>
-                </div>
-                <div class="w-100"></div>
-                <div class="col-md-4">
+                    <div class="w-100"></div>
                     <div class="form-group row">
                         <label for="full_name" class="col-sm-5 col-form-label">Site Name
                             <span class="text-danger">(*)</span>
@@ -54,27 +34,42 @@
                             <input type="text" class="form-control" name="full_name" formControlName="site_name">
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4">
+                    <div class="w-100"></div>
                     <div class="form-group row">
-                        <label for="line_of_credit" class="col-sm-5 col-form-label">Credit Limit</label>
+                        <label for="payment_make" class="col-sm-5 col-form-label">Payment Made By</label>
                         <div class="col-sm-7">
-                            <input type="text" class="form-control" name="line_of_credit" formControlName="line_of_credit">
+                            <select name="payment_make" (change)="changePayment($event)" formControlName="payment_make" class="form-control">
+                                <option value="0">Self-Pay</option>
+                                <option value="1">Corporate Pay</option>
+                            </select>
                         </div>
                     </div>
-                </div>
-                <div class="w-100"></div>
-                <div class="col-md-4">
-                    <div class="form-group row">
+                    <div class="w-100"></div>
+                    <div class="form-group row hidden">
                         <label for="registration" class="col-sm-5 col-form-label">Registration No</label>
                         <div class="col-sm-7">
                             <input type="text" class="form-control" name="registration" formControlName="credit_limit">
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-1 hidden-xs hidden-ms"></div>
+                <div class="col-md-5">
                     <div class="form-group row">
-                        <label for="sale_person_id" class="col-sm-5 col-form-label">Sale Person</label>
+                        <label for="inputPassword" class="col-sm-5 col-form-label">Phone</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" name="phone" formControlName="phone">
+                        </div>
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="form-group row">
+                        <label for="sale_person" class="col-sm-5 col-form-label">Fax</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" name="fax" formControlName="fax">
+                        </div>
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="form-group row">
+                        <label for="sale_person_id" class="col-sm-5 col-form-label">Saleperson</label>
                         <div class="col-sm-7">
                             <select class="form-control" name="sale_person_id" formControlName="sale_person_id">
                                 <option value="null" selected="true">--Select--</option>
@@ -116,6 +111,7 @@
                                 <th> City </th>
                                 <th> State </th>
                                 <th> Zip Code </th>
+                                <th>Default</th>
                                 <th> Route </th>
                                 <th> Action </th>
                             </tr>
@@ -145,7 +141,7 @@
                                     <input type="text" class="form-control" name="address_2" [(ngModel)]="item.address_2">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" name="city_name" [(ngModel)]="item.city">
+                                    <input type="text" class="form-control" name="city" [(ngModel)]="item.city">
                                 </td>
                                 <td>
                                     <select class="form-control" name="state_id" [(ngModel)]="item.state_id">
@@ -157,14 +153,20 @@
                                     <input type="text" class="form-control" name="zip_code" [(ngModel)]="item.zip_code">
                                 </td>
                                 <td>
-                                    <select [(ngModel)]="item.route_id" class="form-control" name="route_id" *ngIf="item.type == 3">
-                                        <option value="null" selected="true" disabled>Select Route</option>
+                                    <input type="checkbox" name="is_default" (change)="checkIsDefault($event, i)" [(ngModel)]="item.is_default" [disabled]="item.type==3 || item.type==4">
+                                </td>
+                                <td>
+                                    <select [(ngModel)]="item.route_id" class="form-control" name="route_id" *ngIf="item.type == 2">
+                                        <option value="null" selected="true">Select Route</option>
                                         <option *ngFor="let item of routeList" value="{{item.id}}">{{item.route_gatetime}}</option>
                                     </select>
                                 </td>
                                 <td>
                                     <button type="button" class="btn btn-default" (click)="removeAddress(i)">
                                         <i class="fa fa-times" aria-hidden="true"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default" (click)="dupAddress(item.type)">
+                                        <i class="fa fa-clone" aria-hidden="true"></i>
                                     </button>
                                 </td>
                             </tr>

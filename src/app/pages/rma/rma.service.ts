@@ -26,7 +26,7 @@ export class RmaService {
   }
 
   createRMA(params) {
-    const url = ['rma', 'create-rma'].join('/');
+    const url = ['rma', 'create'].join('/');
     return this.API.post(url, params);
   }
 
@@ -48,6 +48,10 @@ export class RmaService {
   getOrderReferenve(params) {
     const url = ['rma/create'].join('/');
     return this.API.post(url, params);
+  }
+  getOrderInfo(params) {
+    const url = ['rma/get-info-order/'].join('/');
+    return this.API.post(url,params);
   }
 
   getReturnReason() {

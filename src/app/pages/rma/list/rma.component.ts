@@ -6,13 +6,14 @@ import { routerTransition } from '../../../router.animations';
 import { TableService } from '../../../services/table.service';
 import { PurchaseService } from '../../purchase-mgmt/purchase.service';
 import { RMAKeyService } from './keys.control';
-
+import { CommonService } from './../../../services/common.service';
+import { ItemsControl } from '../../../../../node_modules/@ngu/carousel/src/ngu-carousel/ngu-carousel.interface';
 @Component({
     selector: 'app-rma',
     templateUrl: './rma.component.html',
     styleUrls: ['../rma.component.scss'],
     animations: [routerTransition()],
-    providers: [RMAKeyService]
+    providers: [RMAKeyService, CommonService]
 })
 export class RmaComponent implements OnInit {
 
@@ -40,15 +41,20 @@ export class RmaComponent implements OnInit {
         public tableService: TableService,
         private purchaseService: PurchaseService,
         public keyService: RMAKeyService,
+        private commonService: CommonService
     ) {
 
         this.searchForm = fb.group({
-            'cd': [null],
-            'purchase_quote_cd': [null],
-            'supplier_id': [null],
-            'contract_no': [null],
-            'po_status_id': [null],
-            'rqst_dt': [null]
+            'rma_no': [null],
+            'so_no': [null],
+            'customer': [null],
+            'rma_type': [null],
+            'status': [null],
+            'request_date_from': [null],
+            'request_date_to': [null],
+            'reception_date_from': [null],
+            'reception_date_to': [null],
+            'comment':[]
         });
 
         // Assign get list function name, override letiable here
@@ -60,10 +66,9 @@ export class RmaComponent implements OnInit {
 
     ngOnInit() {
         // Init Fn
-        this.listMoreFilter = [{ value: false, name: 'Requested On', type: 'date', model: 'rqst_dt' }];
+        this.listMoreFilter = { value1: false,value2:false};
         this.getList();
-        this.getListSupplier();
-        this.getListStatus();
+        this.getListMaster();
 
         this.user = JSON.parse(localStorage.getItem('currentUser'));
     }
@@ -139,35 +144,27 @@ export class RmaComponent implements OnInit {
 
     }
 
-    getListSupplier() {
-        const params = { page: 1, length: 100 };
-        this.purchaseService.getListSupplier(params).subscribe(res => {
-            try {
-                this.listMaster['supplier'] = res.results.rows;
-            } catch (e) {
-                console.log(e);
-            }
-        });
-    }
-
-    getListStatus() {
-        this.purchaseService.getListStatusOrder().subscribe(res => {
-            try {
-                this.listMaster['status'] = res.results;
-            } catch (e) {
-                console.log(e);
-            }
+    getListMaster() {
+        this.commonService.getMasterData().subscribe(res => {
+            const data = res.data;
+            console.log(data);
+            this.listMaster['rma_type'] = data.rma_type;
+            this.listMaster['status'] = data.rma_status;
         });
     }
 
     getList() {
         const params = { ...this.tableService.getParams(), ...this.searchForm.value };
         Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
-
+        console.log(params);
         this.purchaseService.getListPurchaseOrder(params).subscribe(res => {
             try {
-                this.list.items = res.results.rows;
-                this.tableService.matchPagingOption(res.results);
+                this.list.items = res.data.rows;
+                this.list.items.forEach(item=>{
+                    return item.collapseRows = false;
+                });
+                console.log(this.list.items);
+                this.tableService.matchPagingOption(res.data);
             } catch (e) {
                 console.log(e);
             }

@@ -9,35 +9,34 @@
 
                     </ng-template>
                 </ngb-tab>
-
                 <ngb-tab id="vehicle" title="VEHICLE">
                     <ng-template ngbTabContent>
                         <form class="form-horizontal form-search form-vehicle" [formGroup]="searchForm">
-                            <label for="type" class="control-label" translate>Year From</label>
+                            <label for="type" class="control-label">Year From</label>
                             <div class="block-search">
                                 <select formControlName="year_from" class="form-control">
-                                    <option value="null" selected="true" translate>--Select--</option>
+                                    <option value="null" selected="true" translate disabled>--Select--</option>
                                     <option *ngFor="let de of listMaster['years']" [ngValue]="de.id">{{de.name}}</option>
                                 </select>
                             </div>
                             <label for="type" class="control-label" translate>Year To</label>
                             <div class="block-search">
                                 <select formControlName="year_to" class="form-control">
-                                    <option value="null" selected="true" translate>--Select--</option>
+                                    <option value="null" selected="true" translate disabled>--Select--</option>
                                     <option *ngFor="let de of listMaster['years']" [ngValue]="de.id">{{de.name}}</option>
                                 </select>
                             </div>
                             <label for="type" class="control-label" translate>Make</label>
                             <div class="block-search">
-                                <select formControlName="manufacturer_id" class="form-control">
-                                    <option value="null" selected="true" translate>--Select--</option>
-                                    <option *ngFor="let de of listMaster['make']" [ngValue]="de.manufacturer_id">{{de.name}}</option>
+                                <select formControlName="make_id" class="form-control">
+                                    <option value="null" selected="true" translate disabled>--Select--</option>
+                                    <option *ngFor="let de of listMaster['makes']" [ngValue]="de.make_id">{{de.name}}</option>
                                 </select>
                             </div>
                             <label for="type" class="control-label" translate>Model</label>
                             <div class="block-search">
                                 <select (change)="changeToGetSubModel()" formControlName="model_id" class="form-control">
-                                    <option value="null" selected="true" translate>--Select--</option>
+                                    <option value="null" selected="true" translate disabled>--Select--</option>
                                     <option *ngFor="let de of listMaster['models']" [ngValue]="de.model_id">{{de.name}}</option>
                                 </select>
                             </div>
@@ -70,7 +69,7 @@
                             <div class="block-search">
                                 <select formControlName="certification" class="form-control">
                                     <option value="null" selected="true" translate>--Select--</option>
-                                    <option *ngFor="let de of listMaster['certification_partNumber']" [ngValue]="de.code">{{de.value}}</option>
+                                    <option *ngFor="let de of listMaster['certification']" [ngValue]="de.code">{{de.value}}</option>
                                 </select>
                             </div>
                             <div class="block-btn-search">
@@ -113,15 +112,13 @@
                     <div class="col-md-2 filter-item">
                         <label for="so" class="control-label" translate>Part Link</label>
                         <div class="block-search">
-                            <ng-select [multiple]="true" [items]="listMaster['partlinks_no']" bindLabel="code" bindValue="code" formControlName="partlinks_no_filter">
-                            </ng-select>
+                            <input type="text" class="form-control" formControlName="partlinks_no_filter">
                         </div>
                     </div>
                     <div class="col-md-2 filter-item">
                         <label for="so" class="control-label" translate>Part</label>
                         <div class="block-search">
-                            <ng-select [multiple]="true" [items]="listMaster['part_no']" bindLabel="code" bindValue="code" formControlName="part_no_filter">
-                            </ng-select>
+                            <input type="text" class="form-control" formControlName="part_no_filter">
                         </div>
                     </div>
                     <div class="col-md-2 filter-item">
@@ -146,27 +143,6 @@
                             </ng-select>
                         </div>
                     </div>
-                    <div class="col-md-2 filter-item">
-                        <label for="type" class="control-label" translate>Certification</label>
-                        <div class="block-search">
-                            <ng-select [multiple]="true" [items]="listMaster['certification']" bindLabel="value" bindValue="code" formControlName="certification_filter">
-                            </ng-select>
-                        </div>
-                    </div>
-                    <!-- <div class="col-md-3 filter-item">
-                        <label for="type" class="control-label" translate>Country</label>
-                        <div class="block-search">
-                            <ng-select [multiple]="true" [items]="listMaster['countries']" bindLabel="name" bindValue="country_id" formControlName="country_id_filter">
-                            </ng-select>
-                        </div>
-                    </div>
-                    <div class="col-md-3 filter-item">
-                        <label for="so" class="control-label" translate>Manufacturer</label>
-                        <div class="block-search">
-                            <ng-select [multiple]="true" [items]="listMaster['manufacturers']" bindLabel="name" bindValue="id" formControlName="manufacturer_id_filter">
-                            </ng-select>
-                        </div>
-                    </div> -->
                 </div>
                 <div class="d-block pt-3">
                     <button type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Apply</button>

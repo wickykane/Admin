@@ -83,7 +83,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         /**
          * Init Data
          */
-        this.listTypeAddress = [{ id: 2, name: 'Billing' }, { id: 3, name: 'Shipping' }];
+        this.listTypeAddress = [{ id: 1, name: 'Billing' }, { id: 2, name: 'Shipping' }];
         this.getListCustomerType();
         this.getListSalePerson();
         this.getListCountryAdmin();
@@ -158,27 +158,26 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         this.getListTypeAddress();
 
         if (this.generalForm.value.buyer_type === 'CP') {
-            const tempType = [{ id: 1, name: 'Head Office' }];
+            const tempType = [{ id: 4, name: 'Head Office' }];
 
             this.addresses = [{
-                type: 1, listType: tempType, listCountry: this.listCountry, listState: []
+                type: 4, country_code: null, state_id: null, listType: tempType, listCountry: this.listCountry, listState: []
             }, {
-                type: 2, listType: this.listTypeAddress, listCountry: this.listCountry, listState: []
+                type: 1, country_code: null, state_id: null, listType: this.listTypeAddress, listCountry: this.listCountry, listState: []
             }, {
-                type: 3, listType: this.listTypeAddress, listCountry: this.listCountry, listState: []
+                type: 2, country_code: null, state_id: null, listType: this.listTypeAddress, listCountry: this.listCountry, listState: []
             }];
         } else {
-            const tempType1 = [{ id: 1, name: 'Primary' }];
+            const tempType1 = [{ id: 3, name: 'Primary' }];
 
             this.addresses = [{
-                type: 1, listType: tempType1, listCountry: this.listCountry, listState: []
+                type: 3, country_code: null, state_id: null, listType: tempType1, listCountry: this.listCountry, listState: []
             }, {
-                type: 2, listType: this.listTypeAddress, listCountry: this.listCountry, listState: []
+                type: 1, country_code: null, state_id: null, listType: this.listTypeAddress, listCountry: this.listCountry, listState: []
             }, {
-                type: 3, listType: this.listTypeAddress, listCountry: this.listCountry, listState: []
+                type: 2, country_code: null, state_id: null, listType: this.listTypeAddress, listCountry: this.listCountry, listState: []
             }];
         }
-
     }
 
     changeCountry(item) {
@@ -218,7 +217,25 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         })[0];
     }
 
-
+    dupAddress(type) {
+        if (type == 3 || type == 4) {
+            var p = this.addresses[0];
+            var k = Object.keys(p);
+            for (let i = 1; i < this.addresses.length; i++) {
+                k.map(key => { key != 'type' && key != 'listType' && (this.addresses[i][key] = p[key]) });
+            }
+        }
+        else {
+            var tmp = {};
+            for (let i = 1; i < this.addresses.length; i++) {
+                if (this.addresses[i].type == type) {
+                    tmp = JSON.parse(JSON.stringify(this.addresses[i]));
+                    break;
+                }
+            }
+            this.addresses.push(tmp);
+        }
+    }
 
     //  add new row address
     addNewAddress() {
@@ -236,6 +253,8 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     //  add new row bank account
     addNewBankAccount() {
         this.bank_accounts.push({
+            bank_id: null,
+            branch_id: null,
             listBank: this.listBank,
             listBranch: []
         });
@@ -253,43 +272,72 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         this.contacts.splice(index, 1);
     }
 
+    checkIsDefault($event, idx) {
+        for (let i = 0; i < this.addresses.length; i++) {
+            const item = this.addresses[i];
+            if (idx != i && item.type == this.addresses[idx].type) {
+                item.is_default = false;
+            }
+        }
+    }
+
     //  add new Site
 
     addNewSite(item?) {
-        const modalRef = this.modalService.open(SiteModalComponent, { size: 'lg' });
-        modalRef.componentInstance.item = item;
-        modalRef.result.then(res => {
-            if (!this.helper.isEmptyObject(res)) {
-                console.log(res);
-                const state = res.addresses[0].listState.filter(x => {
-                    return res.addresses[0].state_id === x.id;
+        var k = ['name', 'country_code', 'address_1', 'city', 'state_id', 'zip_code'];
+        for (let i = 0; i < this.addresses.length; i++) {
+            for (let j = 0; j < k.length; j++) {
+                if (!this.addresses[i][k[j]]) {
+                    return this.toastr.error('Please fulfill all the addresses before creating the site.');
+                }
+            };
+        }
+        var countCode, textCode;
+        this.customerService.generateSiteCode().subscribe(res => {
+            try {
+                console.log('start');
+                countCode = Number(res.data.CP.no);
+                textCode = res.data.CP.text;
+                const modalRef = this.modalService.open(SiteModalComponent, { size: 'lg' });
+                modalRef.componentInstance.item = item;
+                modalRef.componentInstance.paddr = this.addresses;
+                modalRef.result.then(res => {
+                    if (!this.helper.isEmptyObject(res)) {
+                        console.log(res);
+                        const state = res.addresses[0].listState.filter(x => {
+                            return res.addresses[0].state_id === x.id;
+                        });
+                        const objSite = {
+                            code: res.code,
+                            full_name: res.full_name,
+                            country: res.addresses[0].listCountry.map(x => {
+                                if (res.addresses[0].country_code === x.cd) {
+                                    return x.name;
+                                }
+                            }),
+                            name: res.addresses[0].name,
+                            address_line: res.addresses[0].address_1,
+                            address_line2: res.addresses[0].address_2,
+                            city_name: res.addresses[0].city,
+                            state: state[0].name,
+                            zip_code: res.addresses[0].zip_code
+                        };
+                        const full_site = { ...objSite, ...res };
+                        this.sites.push(full_site);
+                        this.company_child.push(res);
+                        // this.countCode++;
+                    }
                 });
-                const objSite = {
-                    code: res.code,
-                    full_name: res.full_name,
-                    country: res.addresses[0].listCountry.map(x => {
-                        if (res.addresses[0].country_code === x.cd) {
-                            return x.name;
-                        }
-                    }),
-                    name: res.addresses[0].name,
-                    address_line: res.addresses[0].address_1,
-                    address_line2: res.addresses[0].address_2,
-                    city_name: res.addresses[0].city,
-                    state: state[0].name,
-                    zip_code: res.addresses[0].zip_code
+                modalRef.componentInstance.info = {
+                    parent_company_name: this.generalForm.value.company_name,
+                    code: countCode,
+                    textCode: textCode
                 };
-                const full_site = { ...objSite, ...res };
-                this.sites.push(full_site);
-                this.company_child.push(res);
-                this.countCode++;
+            } catch (e) {
+
             }
         });
-        modalRef.componentInstance.info = {
-            parent_company_name: this.generalForm.value.full_name,
-            code: this.countCode,
-            textCode: this.textCode
-        };
+
     }
 
     removeSite(index) {

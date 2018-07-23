@@ -46,7 +46,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     public listFile: any = [];
     public addressList: any = [];
     public imageSelected: string;
-    public idSupplier: string;
+    public idCustomer: string;
     public removedList: any = [];
     private primaryAddress = [];
     public ADDRESS_TYPE = {
@@ -86,10 +86,12 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             'username': [null],
             'pwd': [null],
             'pwd_cfrm': [null],
+            'company_name': [null],
             'primary': [null],
             'credit_used': [null],
             'credit_balance': [null],
-            'is_parent': [null]
+            'is_parent': [null],
+            'sites': [null]
 
         });
 
@@ -113,8 +115,8 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         this.customerService.getRoute().subscribe(res => { this.routeList = res.data; });
     }
     getDetailSupplier(id) {
-        this.idSupplier = id;
-        this.customerService.getDetailCustomer(this.idSupplier).subscribe(res => {
+        this.idCustomer = id;
+        this.customerService.getDetailCustomer(this.idCustomer).subscribe(res => {
             try {
                 this.detail = res.data;
                 this.generalForm.patchValue(this.detail);
@@ -122,7 +124,15 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                     'buyer_type': this.detail['company_type'],
                     'is_parent': this.detail['is_parent']
                 });
-                this.imageSelected = res.data.img;
+                if (this.detail['company_type'] === 'PS') {
+                    this.generalForm.patchValue({
+                        'email': this.detail['user'].length ? this.detail['user'][0]['email'] : [null],
+                        'first_name': this.detail['user'].length ? this.detail['user'][0]['first_name'] : [null],
+                        'last_name': this.detail['user'].length ? this.detail['user'][0]['last_name'] : [null],
+                        'phone': this.detail['user'].length ? this.detail['user'][0]['phone'] : [null],
+                        'username': this.detail['user'].length ? this.detail['user'][0]['username'] : [null]
+                    });
+                }
                 this.sites = res.data['sites'];
                 for (const s of this.sites) {
                     s.is_remove = false;
@@ -130,13 +140,13 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                 }
                 this.contacts = this.detail['user'];
                 // tslint:disable-next-line:no-unused-expression
-                this.detail['company_type'] === 'CP' && (res.data['primary'] = res.data['head_office']);
+                // this.detail['company_type'] === 'CP' && (res.data['primary'] = res.data['head_office']);
                 this.changeCustomerType();
                 this.getListBank();
                 //  this.changeCountry(res.data['primary'][0]['country_code'], 'states_primary');
                 //  this.addressList = this.mergeAddressList(res.data);
             } catch (e) {
-
+                console.log(e);
             }
         });
     }
@@ -162,7 +172,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             const tmp = this.generalForm.value.code.split('-');
             this.countCode = Number(tmp[1]);
             this.textCode = tmp[0] + '-';
-            this.generalForm.patchValue(this.detail['head_office'][0]);
+            // this.generalForm.patchValue(this.detail['head_office'][0]);
             //  this.generalForm.patchValue({primary: this})
         }
     }
@@ -192,7 +202,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         this.commonService.getAllListBank().subscribe(res => {
             try {
                 this.listBank = res.data;
-                this.bank_accounts = this.detail['banks'];
+                this.bank_accounts = this.detail['bank_accounts'];
                 for (const bank of this.bank_accounts) {
                     bank.listBank = this.listBank;
                     this.changeBank(bank);
@@ -212,27 +222,28 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             primary: { type: 3, listType: [{ id: 3, name: 'Primary' }] },
             billing: { type: 1, listType: this.listTypeAddress },
             shipping: { type: 2, listType: this.listTypeAddress },
-            general: {listCountry: this.listCountry, listState: [], allow_remove: false}
+            general: { listCountry: this.listCountry, listState: [], allow_remove: false }
         };
 
         const primary = this.detail[(this.generalForm.value.buyer_type === 'CP')
-        ? 'head_office' : 'primary'].map( item => {
-            return { ...item, ...addressConfig[(this.generalForm.value.buyer_type === 'CP')
-            ?
-            'head_office' : 'primary'],  ...addressConfig['general']};
+            ? 'head_office' : 'primary'].map(item => {
+                return {
+                    ...item, ...addressConfig[(this.generalForm.value.buyer_type === 'CP')
+                        ?
+                        'head_office' : 'primary'], ...addressConfig['general']
+                };
+            });
+        const billing = this.detail['billing'].map(item => {
+            return { ...item, ...addressConfig['billing'], ...addressConfig['general'] };
         });
-        const billing = this.detail['billing'].map( item => {
-             return { ...item, ...addressConfig['billing'], ...addressConfig['general']};
-             });
-        const shipping = this.detail['shipping'].map( item => {
-             return { ...item, ...addressConfig['shipping'],  ...addressConfig['general']}; });
+        const shipping = this.detail['shipping'].map(item => {
+            return { ...item, ...addressConfig['shipping'], ...addressConfig['general'] };
+        });
 
-        this.addresses = [ ...primary, ...billing, ...shipping ];
+        this.addresses = [...primary, ...billing, ...shipping];
         this.addresses.forEach(element => {
             this.changeCountry(element);
         });
-
-        console.log(this.addresses);
 
     }
 
@@ -276,6 +287,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     //  add new row address
     addNewAddress() {
         this.addresses.push({
+            country_code: null, state_id: null,
             listType: this.listTypeAddress,
             listCountry: this.listCountry,
             listState: [], allow_remove: true
@@ -289,6 +301,9 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     //  add new row bank account
     addNewBankAccount() {
         this.bank_accounts.push({
+
+            bank_id: null,
+            branch_id: null,
             listBank: this.listBank,
             listBranch: []
         });
@@ -301,16 +316,6 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         }
         this.bank_accounts.splice(index, 1);
     }
-    //  add new row bank card
-    // addNewBankCard() {
-    //     this.bank_card.push({
-    //         listCardType: []
-    //     });
-    // }
-
-    // removeBankCard(index) {
-    //     this.bank_card.splice(index, 1);
-    // }
     //  add new row contact
     addNewContact() {
         this.contacts.push({});
@@ -326,51 +331,79 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
 
     //  add new Site
     addNewSite() {
-        const modalRef = this.modalService.open(SiteModalComponent, { size: 'lg' });
-        modalRef.result.then(res => {
-            if (!this.helper.isEmptyObject(res)) {
-                const state = this.addresses[0].listState.filter(x =>
-                    res.primary[0].state_id === x.id
-                );
-                const objSite = {
-                    code: res.code,
-                    full_name: res.full_name,
-                    country: this.addresses[0].listCountry.map(x => {
-                        if (res.primary[0].country_code === x.cd) {
-                            return x.name;
-                        }
-                    }),
-                    name: res.primary[0].name,
-                    address_line: res.primary[0].address_line,
-                    address_line2: res.primary[0].address_line2,
-                    city_name: res.primary[0].city_name,
-                    state: state[0].name,
-                    zip_code: res.primary[0].zip_code
-                };
+        var k = ['name', 'country_code', 'address_1', 'city', 'state_id', 'zip_code'];
+        for (let i = 0; i < this.addresses.length; i++) {
+            for (let j = 0; j < k.length; j++) {
+                if (!this.addresses[i][k[j]]) {
+                    return this.toastr.error('Please fulfill all the addresses before creating the site.');
+                }
+            };
+        }
+        var countCode, textCode;
+        this.customerService.generateSiteCode().subscribe(res => {
+            try {
+                console.log('start');
+                countCode = Number(res.data.CP.no);
+                textCode = res.data.CP.text;
+                const modalRef = this.modalService.open(SiteModalComponent, { size: 'lg' });
 
-                this.sites.push(objSite);
-                this.company_child.push(res);
-                this.countCode++;
+                modalRef.componentInstance.paddr = this.addresses;
+                modalRef.result.then(res => {
+                    if (!this.helper.isEmptyObject(res)) {
+                        const state = this.addresses[0].listState.filter(x =>
+                            res.primary[0].state_id === x.id
+                        );
+                        const objSite = {
+                            code: res.code,
+                            full_name: res.full_name,
+                            country: this.addresses[0].listCountry.map(x => {
+                                if (res.primary[0].country_code === x.cd) {
+                                    return x.name;
+                                }
+                            }),
+                            name: res.primary[0].name,
+                            address_line: res.primary[0].address_line,
+                            address_line2: res.primary[0].address_line2,
+                            city: res.primary[0].city,
+                            state: state[0].name,
+                            zip_code: res.primary[0].zip_code
+                        };
+
+                        this.sites.push(objSite);
+                        this.company_child.push(res);
+                        // this.countCode++;
+                    }
+                });
+                modalRef.componentInstance.info = {
+                    parent_company_name: this.generalForm.value.company_name,
+                    code: countCode,
+                    textCode: textCode
+                };
+            } catch (e) {
+
             }
         });
-        modalRef.componentInstance.info = {
-            parent_company_name: this.generalForm.value.full_name,
-            code: this.countCode,
-            textCode: this.textCode
-        };
     }
 
     removeSite(index) {
         this.sites.splice(index, 1);
     }
 
+    checkIsDefault($event, idx) {
+        for (let i = 0; i < this.addresses.length; i++) {
+            const item = this.addresses[i];
+            if (idx != i && item.type == this.addresses[idx].type) {
+                item.is_default = false;
+            }
+        }
+    }
 
     updateCustomer() {
         this.contacts.forEach(obj => {
             obj['pwd_cfrm'] = obj.pwd;
         });
         if (this.generalForm.valid) {
-            const params = {...this.generalForm.value};
+            const params = { ...this.generalForm.value };
             params['user'] = [];
             if (this.contacts.length > 0) {
                 params['user'] = this.contacts;
@@ -399,6 +432,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                     params['shipping'].push(obj);
                 }
             });
+            params['addresses'] = [...params['primary'], ...params['billing'], ...params['shipping']]
 
             if (this.generalForm.value.buyer_type === 'CP') {
                 delete params.first_name;
@@ -411,8 +445,8 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                 params.pwd_cfrm = params.pwd;
             }
 
-            const data = {...params };
-            this.customerService.updateCustomer(this.idSupplier, data).subscribe(
+            const data = { ...params };
+            this.customerService.updateCustomer(this.idCustomer, data).subscribe(
                 res => {
                     try {
                         setTimeout(() => {

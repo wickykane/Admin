@@ -9,7 +9,7 @@ import { ItemService } from './item.service';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
-import {CommonService} from '../../services/common.service';
+import { CommonService } from '../../services/common.service';
 
 @Component({
     selector: 'app-site-modal',
@@ -19,6 +19,7 @@ import {CommonService} from '../../services/common.service';
 export class SiteModalComponent implements OnInit, OnDestroy {
     @Input() info;
     @Input() item;
+    @Input() paddr;
 
     /**
      * Variable Declaration
@@ -64,6 +65,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             'credit_limit': [null],
             'credit_sts': 2,
             'sale_person_id': [null],
+            'payment_make': [null]
         });
 
         this.hotkeyCtrlRight = hotkeysService.add(new Hotkey('alt+r', (event: KeyboardEvent): boolean => {
@@ -76,9 +78,9 @@ export class SiteModalComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         (async () => {
-           await this.itemService.getListCountryAdmin().subscribe(res => {this.listCountry = res.data; this.changeCustomerType(); });
+            await this.itemService.getListCountryAdmin().subscribe(res => { this.listCountry = res.data; this.changeCustomerType(); });
             this.listTypeAddress = [{ id: 2, name: 'Billing' }, { id: 3, name: 'Shipping' }];
-            await this.commonService.getOrderReference().subscribe(res =>  this.listMaster['salePersons'] = res.data.sale_mans);
+            await this.commonService.getOrderReference().subscribe(res => this.listMaster['salePersons'] = res.data.sale_mans);
             await this.commonService.getAllListBank().subscribe(res => this.listBank = res.data);
             await this.customerService.getRoute().subscribe(res => { this.routeList = res.data; });
             await this.setData();
@@ -102,20 +104,20 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             let code = this.info.code;
             code++;
             this.generalForm.patchValue({ parent_company_name: this.info.parent_company_name });
-            this.generalForm.patchValue({ code: String(this.info.textCode + '0000' + code) });
+            this.generalForm.patchValue({ site_code: String(this.info.textCode + '0000' + code) });
         }
     }
 
     //  change customer Type
     changeCustomerType() {
         console.log('1');
-        const tempType1 = [{ id: 1, name: 'Head Office' }];
+        const tempType1 = [{ id: 4, name: 'Head Office' }];
         this.addresses = [{
-            type: 1, listType: tempType1, listCountry: this.listCountry, listState: []
+            type: 4, country_code: null, state_id: null, listType: tempType1, listCountry: this.listCountry, listState: []
         }, {
-            type: 2, listType: this.listTypeAddress, listCountry: this.listCountry, listState: []
+            type: 1, country_code: null, state_id: null, listType: this.listTypeAddress, listCountry: this.listCountry, listState: [], is_default: false
         }, {
-            type: 3, listType: this.listTypeAddress, listCountry: this.listCountry, listState: []
+            type: 2, country_code: null, state_id: null, listType: this.listTypeAddress, listCountry: this.listCountry, listState: [], is_default: false
         }];
 
 
@@ -157,9 +159,34 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             }
         })[0];
     }
+    checkIsDefault($event, idx) {
+        for (let i = 0; i < this.addresses.length; i++) {
+            const item = this.addresses[i];
+            if (idx != i && item.type == this.addresses[idx].type) {
+                item.is_default = false;
+            }
+        }
+    }
 
-
-
+    dupAddress(type) {
+        if (type == 3 || type == 4) {
+            var p = this.addresses[0];
+            var k = Object.keys(p);
+            for (let i = 1; i < this.addresses.length; i++) {
+                k.map(key => { key != 'type' && key != 'listType' && (this.addresses[i][key] = p[key]) });
+            }
+        }
+        else {
+            var tmp = {};
+            for (let i = 1; i < this.addresses.length; i++) {
+                if (this.addresses[i].type == type) {
+                    tmp = JSON.parse(JSON.stringify(this.addresses[i]));
+                    break;
+                }
+            }
+            this.addresses.push(tmp);
+        }
+    }
 
     //  add new row addresses
     addNewAddress() {
@@ -177,6 +204,9 @@ export class SiteModalComponent implements OnInit, OnDestroy {
     //  add new row bank account
     addNewBankAccount() {
         this.bank_accounts.push({
+
+            bank_id: null,
+            branch_id: null,
             listBank: this.listBank,
             listBranch: []
         });
@@ -211,7 +241,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             obj['pwd_cfrm'] = obj.pwd;
         });
         if (this.generalForm.valid) {
-            const params = {...this.generalForm.value};
+            const params = { ...this.generalForm.value };
             params['contacts'] = this.contacts;
             params['addresses'] = this.addresses;
             params['bank_accounts'] = this.bank_accounts;
@@ -256,6 +286,30 @@ export class SiteModalComponent implements OnInit, OnDestroy {
         this.activeModal.close(data);
     }
 
-
+    changePayment(e) {
+        console.log(e.target.value, this.paddr);
+        let val = e.target.value;
+        let flag = !1;
+        if (val * 1 == 1) {
+            for (let i = 0; i < this.addresses.length; i++) {
+                if (this.addresses[i].type == 1) {
+                    for (let j = 0; j < this.paddr.length; j++) {
+                        if (this.paddr[j].type == 1 && this.paddr[j].is_default) {
+                            this.addresses[i] = JSON.parse(JSON.stringify(this.paddr[j]));
+                            flag = !0;
+                        }
+                    }
+                    if (!flag) {
+                        for (let j = 0; j < this.paddr.length; j++) {
+                            if (this.paddr[j].type == 1) {
+                                this.addresses[i] = JSON.parse(JSON.stringify(this.paddr[j]));
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
 }

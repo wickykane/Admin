@@ -1,0 +1,160 @@
+<div [@routerTransition]>
+    <app-page-header [heading]="headerTitle" [icon]="'fa-th-list'" *ngIf="isCreate"></app-page-header>
+    <app-page-header [heading]="headerTitle" [icon]="'fa-th-list'" *ngIf="!isCreate"></app-page-header>
+    <!-- <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut> -->
+    <form class="rma-page block" [formGroup]="generalForm">
+        <div style="margin: 15px 0">
+            <a class="btn btn-outline-info" [routerLink]="['/admin-panel/late-fee-policy']">
+                <i class="fa fa-arrow-left"></i> Back</a>
+        </div>
+        <fieldset class="custom-border">
+            <legend class="custom-border">GENERAL INFORMATION</legend>
+            <div class="form-search full-width form-horizontal">
+                <div class="row">
+                    <div class="col-sm-2 form-group">
+                        <label> Code
+                            <span class="text-danger">(*)</span>
+                        </label>
+                        <input type="text" class="form-control" [value]="listMaster['generate-code']" *ngIf="isCreate" disabled>
+                        <div *ngIf="!isCreate">{{generalForm.value['code']}}</div>
+                    </div>
+                    <div class="col-sm-2 form-group">
+                        <label> Description
+                            <span class="text-danger">(*)</span>
+                        </label>
+                        <input type="text" name="" class="form-control" formControlName="des" *ngIf="!isView">
+                        <div *ngIf="isView">{{generalForm.value['des']}}</div>
+                    </div>
+                    <div class="col-sm-2 form-group">
+                        <label> Apply For
+                            <span class="text-danger">(*)</span>
+                        </label>
+                        <select class="form-control" formControlName="apply_for" name="apply_for" *ngIf="isCreate">
+                            <option [ngValue]="null" selected="true">--Select--</option>
+                            <option *ngFor="let item of listMaster['applyFor']" [ngValue]="item.id">{{item.value}}</option>
+                        </select>
+                        <div *ngIf="!isCreate && generalForm.value['apply_for']">{{convertStatus(generalForm.value['apply_for'], 'applyFor')}}</div>
+                    </div>
+                    <div class="col-sm-2 form-group">
+                        <label> Status
+                            <span class="text-danger">(*)</span>
+                        </label>
+                        <select class="form-control" formControlName="ac" name="ac" *ngIf="!isView">
+                            <option [ngValue]="null" selected="true">--Select--</option>
+                            <option *ngFor="let item of listMaster['status']" [ngValue]="item.id">{{item.value}}</option>
+                        </select>
+                        <div *ngIf="isView && generalForm.value['ac'] != null">{{convertStatus(generalForm.value['ac'], 'status')}}</div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="custom-border" *ngIf="generalForm.value['apply_for'] == 2">
+            <legend class="custom-border">LIST OF CUSTOMERS</legend>
+            <div class="table-responsive list-customers">
+                <table class="table table-style table-order custom-table table-bg" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
+                    <thead>
+                        <tr>
+                            <th *ngIf="!isView && list.items.length > 0">
+                                <label class="css-input css-checkbox css-checkbox-default">
+                                    <input class="cb-all" type="checkbox" [(ngModel)]="checkAllItem" [ngModelOptions]="{standalone: true}" (change)="checkAll($event)">
+                                    <span></span>
+                                </label>
+                            </th>
+                            <th translate>ID</th>
+                            <th translate>Customer Type</th>
+                            <th translate>Customer Code</th>
+                            <th translate>Customer Name</th>
+                            <th *ngIf="!isView" translate>Action</th>
+                        </tr>
+                    </thead>
+                    <tr *ngIf="list['items'].length === 0">
+                        <td colspan="100%" class="text-center" translate>No data.</td>
+                    </tr>
+                    <tbody *ngFor="let item of list.items; let $index = index;">
+                        <tr>
+                            <td *ngIf="!isView">
+                                <label class="css-input css-checkbox css-checkbox-default">
+                                    <input class="cb-element" type="checkbox" [(ngModel)]="item.is_checked" [ngModelOptions]="{standalone: true}" (change)="isAllChecked()">
+                                    <span></span>
+                                </label>
+                            </td>
+                            <td>{{item.id}}</td>
+                            <td>{{convertCustomerType(item.buyer_type)}}</td>
+                            <td>{{ item.code }}</td>
+                            <td>{{item.name}}</td>
+                            <td *ngIf="!isView">
+                                <a class="btn btn-default" title="Remove customer" (click)="deleteAction(item.id)">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="mg-top-15">
+                <button *ngIf="!isView" (click)="addNewCustomer()" class="btn btn-outline-primary" translate>
+                    <i class="fa fa-plus"></i>Add new</button>
+                <button *ngIf="!isView" (click)="removeSelectedCustomers()" class="btn btn-outline-dark" [disabled]="list.checklist.length == 0">
+                    Remove selected customer</button>
+            </div>
+            <div class="mg-top-15">
+                Total Customers: {{list.items.length}}
+            </div>
+        </fieldset>
+        <fieldset class="custom-border late-fee-rules">
+            <legend class="custom-border">LATE FEE RULES</legend>
+            <div class="recurring-fee-toggle">
+                <div class="recurring-fee-lbl">Recurring fee</div>
+                <a class="btn btn-default recurring-fee-icon" title="Number of days to wait to generate continuously the late payment charges invoice if the customer still not fully pay the invoice">
+                    <i class="fa fa-question-circle" aria-hidden="true"></i>
+                </a>
+                <div class="toggle-button" [ngClass]="{'disabled': isView}">
+                    <label class="switch" data-toggle="tooltip" data-content="" data-trigger="hover" style="margin-bottom: 0px;">
+                        <input (click)="switchRule()" type="checkbox" formControlName="recuring_fee_status">
+                        <div class="slider round"></div>
+                   </label>
+                </div>
+                <input [textMask]="{mask: integerMaskObject()}" type="text" class="recurring-fee-input" formControlName="recuring_fee" *ngIf="!isView && generalForm.value['recuring_fee_status']">
+                <div class="recurring-fee-text" *ngIf="isView && generalForm.value['recuring_fee_status']">
+                    {{generalForm.value['recuring_fee']}}
+                </div>
+                <div class="recurring-fee-text" *ngIf="generalForm.value['recuring_fee_status']">day(s)</div>
+            </div>
+            <div class="mg-top-15" *ngIf="generalForm.value['recuring_fee_status']">
+                Rule
+            </div>
+            <div class="rule mg-top-15" *ngIf="generalForm.value['recuring_fee_status']">
+                <div class="recurring-fee-text">
+                    <span style="margin-right: 15px;">1</span>
+                    <span>Apply a</span>
+                </div>
+                <input [textMask]="{mask: decimalMaskObject()}" type="text" class="recurring-fee-input" formControlName="pay_value" *ngIf="!isView">
+                <div class="recurring-fee-text" *ngIf="isView">
+                    {{generalForm.value['pay_value']}}
+                    <span *ngIf="generalForm.value['pay_type'] == 1">%</span>
+                    <span *ngIf="generalForm.value['pay_type'] == 2">$</span>
+                </div>
+                <select class="form-control" formControlName="pay_type" *ngIf="!isView">
+                    <option [ngValue]="null" selected="true">--Select--</option>
+                    <option *ngFor="let item of listMaster['payType']" [ngValue]="item.id">{{item.value}}</option>
+                </select>
+                <div class="recurring-fee-text" *ngIf="isView && generalForm.value['pay_type']">
+                    {{convertStatus(generalForm.value['pay_type'], 'payType')}}
+                </div>
+                <div class="recurring-fee-text">fee if the invoice remain unpaid</div>
+                <input [textMask]="{mask: integerMaskObject()}" type="text" class="recurring-fee-input" formControlName="late_due_dt" *ngIf="!isView">
+                <div class="recurring-fee-text" *ngIf="isView">
+                    {{generalForm.value['late_due_dt']}}
+                </div>
+                <div class="recurring-fee-text">days after the due date</div>
+            </div>
+        </fieldset>
+    </form>
+    <div class="row">
+        <div class="col-md-12 mg-top-15 text-center">
+            <button class="btn btn btn-outline-primary" (click)="payloadData()" [disabled]="!generalForm.valid || !isValidLateFeeRules()" *ngIf="!isView">Save</button>
+            <button class="btn btn btn-outline-primary" (click)="editLateFeePolicy(generalForm.value['id'])" *ngIf="isView">Edit</button>
+            <button class="btn btn-default" type="button" [routerLink]="['/admin-panel/late-fee-policy']">Cancel</button>
+        </div>
+    </div>
+</div>

@@ -31,6 +31,7 @@ export class PartEditComponent implements OnInit {
     public list = {
         image_del: []
     };
+    public item_condition;
     galleryOptions: NgxGalleryOptions[];
     galleryImages: NgxGalleryImage[];
 
@@ -128,6 +129,7 @@ export class PartEditComponent implements OnInit {
                 if (res.status) {
                     this.part = res.data.item;
                     this.images = res.data.images;
+                    this.item_condition = res.data.item_condition;
                     // this.images
                     this.generalForm.patchValue(res.data.item);
                 }

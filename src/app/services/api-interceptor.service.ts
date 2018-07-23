@@ -20,7 +20,7 @@ export class ApiInterceptorService {
       if (err instanceof HttpErrorResponse) {
         if (err.status === 401) {
           //  redirect to the login route
-          window.location.href = '/#/login';
+          // window.location.href = '/#/login';
         } else {
           try {
             this.toastr.error(err.error.message);

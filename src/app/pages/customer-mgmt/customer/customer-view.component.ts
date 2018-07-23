@@ -20,6 +20,8 @@ export class CustomerViewComponent implements OnInit {
     public customer = {};
     public customerId;
     public listMaster = {};
+    public addresses = [];
+
 
     @ViewChild('tabSet') tabSet;
 
@@ -47,12 +49,28 @@ export class CustomerViewComponent implements OnInit {
         this.customerService.getDetailCustomer(this.customerId).subscribe(res => {
             try {
                 this.customer = res.data;
-                this.customer['address'] = [...((this.customer['company_type'] ===  'CP') ? res.data['head_office'] : res.data['primary']),
+                for (let i = 0; i < this.customer['head_office'].length; i++) {
+                    this.setAddressType(this.customer['head_office'][i], 1, this.customer['company_type'] === 'CP')
+                }
+                for (let i = 0; i < this.customer['primary'].length; i++) {
+                    this.setAddressType(this.customer['primary'][i], 1, this.customer['company_type'] === 'CP')
+                }
+                for (let i = 0; i < this.customer['billing'].length; i++) {
+                    this.setAddressType(this.customer['billing'][i], 2, this.customer['company_type'] === 'CP')
+                }
+                for (let i = 0; i < this.customer['shipping'].length; i++) {
+                    this.setAddressType(this.customer['shipping'][i], 3, this.customer['company_type'] === 'CP')
+                }
+                this.customer['address'] = [...((this.customer['company_type'] === 'CP') ? res.data['head_office'] : res.data['primary']),
                 ...res.data['billing'], ...res.data['shipping']];
             } catch (e) {
                 console.log(e);
             }
         });
     }
-
+    setAddressType(address, type, is_cp) {
+        var listTypeAddress = ['', 'Head Office', 'Billing', 'Shipping'];
+        is_cp && (address.address_type = listTypeAddress[type]);
+        !is_cp && (address.address_type = type > 1 ? listTypeAddress[type] : 'Primary');
+    }
 }

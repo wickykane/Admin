@@ -47,7 +47,7 @@ export class PartListComponent implements OnInit {
             vin: [null],
             year_from: [null],
             year_to: [null],
-            manufacturer_id: [null],
+            make_id: [null],
             model_id: [null],
             oem: [null],
             partlinks_no: [null],
@@ -56,15 +56,12 @@ export class PartListComponent implements OnInit {
         });
 
         this.filterForm = fb.group({
-            partlinks_no_filter: [null],
-            part_no_filter: [null],
             category_id_filter: [null],
             sub_category_id: [null],
             brand_id_filter: [null],
-            certification_filter: [null]
-            // oem_filter: [null],
-            // country_id_filter: [null],
-            // manufacturer_id_filter: [null]
+            certification_filter: [null],
+            partlinks_no_filter: [null],
+            part_no_filter: [null]
         });
 
         //  Assign get list function name, override variable here
@@ -75,11 +72,6 @@ export class PartListComponent implements OnInit {
     }
 
     ngOnInit() {
-        //  Init Fn
-        this.listMaster['certification_partNumber'] = [
-            { code: 'Y', value: 'Yes' },
-            { code: 'N', value: 'No' }
-        ];
         this.getListReference();
     }
     /**
@@ -90,11 +82,15 @@ export class PartListComponent implements OnInit {
         this.productService.getReferList().subscribe(res => {
             try {
                 this.listMaster['models'] = res.data.models;
+                this.listMaster['categories'] = res.data.categories;
+                this.listMaster['countries'] = res.data.countries;
+                this.listMaster['brands'] = res.data.brands;
                 this.listMaster['years'] = res.data.years.map(e => ({
                     id: e,
                     name: e
                 }));
-                this.listMaster['make'] = res.data.manufacturers;
+                this.listMaster['makes'] = res.data.makes;
+                this.listMaster['certification'] = res.data.certification;
             } catch (e) {
                 console.log(e.message);
             }
@@ -135,11 +131,6 @@ export class PartListComponent implements OnInit {
     changeToGetSubModel() {
         const id = this.searchForm.value.model_id;
         const arr = this.listMaster['models'];
-        for (const i of arr) {
-            if (arr['model_id'] === id) {
-                        return this.listMaster['sub_models'] = arr['sub_models'];
-                    }
-        }
     }
 
     changeToGetSubCategory() {
@@ -174,16 +165,7 @@ export class PartListComponent implements OnInit {
                 }
                 this.list.items = res.data.rows;
                 this.listMaster['brands'] = res.data.meta_filters.brands;
-                this.listMaster['categories'] =
-                    res.data.meta_filters.categories;
-                this.listMaster['certification'] =
-                    res.data.meta_filters.certification;
-                this.listMaster['countries'] = res.data.meta_filters.countries;
-                this.listMaster['partlinks_no'] =
-                    res.data.meta_filters.partlinks_no;
-                this.listMaster['part_no'] = res.data.meta_filters.part_no;
-                this.listMaster['manufacturers'] =
-                    res.data.meta_filters.manufacturers;
+                this.listMaster['categories'] = res.data.meta_filters.categories;
                 this.tableService.matchPagingOption(res.data);
             } catch (e) {
                 console.log(e);

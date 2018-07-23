@@ -79,11 +79,11 @@
                     <div class="w-100"></div>
                     <div class="col-md-4">
                         <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'CP'">
-                            <label for="full_name" class="col-sm-4 col-form-label">Company Name
+                            <label for="company_name" class="col-sm-4 col-form-label">Company Name
                                 <span class="text-danger">(*)</span>
                             </label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" name="full_name" formControlName="company_name" maxlength="100">
+                                <input type="text" class="form-control" name="company_name" formControlName="company_name" maxlength="100">
                             </div>
                         </div>
                         <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'PS'">
@@ -176,6 +176,7 @@
                                     <th> City </th>
                                     <th> State </th>
                                     <th> Zip Code </th>
+                                    <th>Default</th>
                                     <th> Route </th>
                                     <th> Action </th>
                                 </tr>
@@ -194,7 +195,7 @@
                                     </td>
                                     <td>
                                         <select class="form-control" name="country_code" [(ngModel)]="item.country_code" (change)="changeCountry(item)">
-                                            <option value="null" selected="true" disabled>--Select--</option>
+                                            <option value="null" selected>--Select--</option>
                                             <option *ngFor="let i of item.listCountry" [ngValue]="i.cd">{{i.name}}</option>
                                         </select>
                                     </td>
@@ -209,7 +210,7 @@
                                     </td>
                                     <td>
                                         <select class="form-control" name="state_id" [(ngModel)]="item.state_id">
-                                            <option value="null" selected="true" disabled>--Select--</option>
+                                            <option value="null" selected="true">--Select--</option>
                                             <option *ngFor="let i of item.listState" [ngValue]="i.id">{{i.name}}</option>
                                         </select>
                                     </td>
@@ -217,14 +218,20 @@
                                         <input type="text" class="form-control" name="zip_code" [(ngModel)]="item.zip_code">
                                     </td>
                                     <td>
-                                        <select [(ngModel)]="item.route_id" class="form-control" name="route_id" *ngIf="item.type == 3">
-                                            <option value="null" selected="true" disabled>Select Route</option>
+                                        <input type="checkbox" name="is_default" (change)="checkIsDefault($event, i)" [(ngModel)]="item.is_default" [disabled]="item.type==3 || item.type==4">
+                                    </td>
+                                    <td>
+                                        <select [(ngModel)]="item.route_id" class="form-control" name="route_id" *ngIf="item.type == 2">
+                                            <option value="null" selected="true">Select Route</option>
                                             <option *ngFor="let item of routeList" value="{{item.id}}">{{item.route_gatetime}}</option>
                                         </select>
                                     </td>
                                     <td>
-                                        <button [disabled]="item.type==1 || item.type==4" type="button" class="btn btn-default" (click)="removeAddress(i)">
+                                        <button [disabled]="item.type==3 || item.type==4" type="button" class="btn btn-default" (click)="removeAddress(i)">
                                             <i class="fa fa-times" aria-hidden="true"></i>
+                                        </button>
+                                        <button ngbTooltip="Same address for Billing/Shipping Address" placement="bottom" type="button" class="btn btn-default" (click)="dupAddress(item.type)">
+                                            <i class="fa fa-clone" aria-hidden="true"></i>
                                         </button>
                                     </td>
                                 </tr>
@@ -271,10 +278,10 @@
                                 <tr *ngFor="let item of sites; let i = index">
                                     <td>{{i+1}}</td>
                                     <td>
-                                        {{item.code}}
+                                        {{item.site_code}}
                                     </td>
                                     <td>
-                                        {{item.full_name}}
+                                        {{item.site_name}}
                                     </td>
                                     <td>
                                         {{item.country}}
@@ -347,7 +354,7 @@
                                     <td>{{i+1}}</td>
                                     <td>
                                         <select class="form-control" name="bank_id" [(ngModel)]="item.bank_id" (change)="changeBank(item)">
-                                            <option value="null" selected="true" disabled>--Select--</option>
+                                            <option value="null" selected="true">--Select--</option>
                                             <option *ngFor="let i of item.listBank" [ngValue]="i.id">{{i.name}}</option>
                                         </select>
                                     </td>
@@ -356,7 +363,7 @@
                                     </td>
                                     <td>
                                         <select class="form-control" name="branch_id" [(ngModel)]="item.branch_id" (change)="changeBranch(item)">
-                                            <option value="null" selected="true" disabled>--Select--</option>
+                                            <option value="null" selected="true">--Select--</option>
                                             <option *ngFor="let i of item.listBranch" [ngValue]="i.id">{{i.branch_name}}</option>
                                         </select>
                                     </td>

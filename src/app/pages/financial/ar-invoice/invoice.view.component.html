@@ -12,32 +12,32 @@
                 <li><button class="btn btn-outline-dark"><i class="fa fa-print"></i>Print</button></li>
             </ul>
         </div> -->
-        <!-- <ngb-tabset>
+        <ngb-tabset>
             <ngb-tab title="Information">
                 <ng-template ngbTabContent>
-                    <app-order-info-tab [orderId]="orderId" (stockValueChange)="checkRender($event)"></app-order-info-tab>
+                    <app-invoice-info-tab [invoiceId]="invoiceId"></app-invoice-info-tab>
                 </ng-template>
             </ngb-tab>
-            <ngb-tab title="Invoices">
+            <ngb-tab title="Credit Memo">
                 <ng-template ngbTabContent>
-                    <app-order-invoice-tab [orderId]="orderId"></app-order-invoice-tab>
+                    <app-invoice-credit-memo-tab></app-invoice-credit-memo-tab>
                 </ng-template>
             </ngb-tab>
-            <ngb-tab title="Payments">
+            <ngb-tab title="Debit Memo">
                 <ng-template ngbTabContent>
-                    <app-order-payment-tab [orderId]="orderId"></app-order-payment-tab>
+                    <app-invoice-debit-memo-tab></app-invoice-debit-memo-tab>
                 </ng-template>
             </ngb-tab>
-            <ngb-tab title="Shipments">
+            <ngb-tab title="Payment">
                 <ng-template ngbTabContent>
-                    <app-order-shipment-tab [orderId]="orderId"></app-order-shipment-tab>
+                    <app-invoice-payment-tab></app-invoice-payment-tab>
                 </ng-template>
             </ngb-tab>
-            <ngb-tab title="Order Timeline">
+            <ngb-tab title="Document">
                 <ng-template ngbTabContent>
-                    <app-order-timeline-tab [orderId]="orderId"></app-order-timeline-tab>
+                    <app-invoice-document-tab></app-invoice-document-tab>
                 </ng-template>
             </ngb-tab>
-        </ngb-tabset> -->
+        </ngb-tabset>
     </section>
 </div>

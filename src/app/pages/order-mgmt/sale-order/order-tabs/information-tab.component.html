@@ -30,13 +30,15 @@
                         <div class="w-100"></div>
                         <label class="col-sm-2 col-form-label text-label">Order Status</label>
                         <div class="col-sm-3">
-                            <label class="col-form-label control-label">
+                            <label class="col-form-label control-label">                                
                               <span class="label label-info" *ngIf="detail['order_sts_short_name'] == 'NW'">{{detail['order_sts_name']}}</span>
-                              <span class="label label-warning" *ngIf="detail['order_sts_short_name'] == 'PS'">{{detail['order_sts_name']}}</span>
+                              <span class="label label-warning" *ngIf="detail['order_sts_short_name'] == 'IP'">{{detail['order_sts_name']}}</span>
+                              <span class="label label-danger" *ngIf="detail['order_sts_short_name'] == 'PP'">{{detail['order_sts_name']}}</span>
+                              <span class="label  label-success" *ngIf="detail['order_sts_short_name'] == 'CP'">{{detail['order_sts_name']}}</span>
+                              <span class="label label-danger" *ngIf="detail['order_sts_short_name'] == 'AP'">{{detail['order_sts_name']}}</span>
+                              <span class="label  label-success" *ngIf="detail['order_sts_short_name'] == 'RS'">{{detail['order_sts_name']}}</span>
                               <span class="label label-danger" *ngIf="detail['order_sts_short_name'] == 'DL'">{{detail['order_sts_name']}}</span>
                               <span class="label  label-success" *ngIf="detail['order_sts_short_name'] == 'PD'">{{detail['order_sts_name']}}</span>
-                              <span class="label label-danger" *ngIf="detail['order_sts_short_name'] == 'AP'">{{detail['order_sts_name']}}</span>
-                              <span class="label  label-success" *ngIf="detail['order_sts_short_name'] == 'FD'">{{detail['order_sts_name']}}</span>
                             </label>
                         </div>
                         <label class="col-sm-3 col-form-label text-label">Warehouse</label>
