@@ -30,6 +30,7 @@ export class InvoiceComponent implements OnInit {
     public list = {
         items: []
     };
+    public listInvoiceItemsRef = {};
     public onoffFilter: any;
     public listMoreFilter: any = [];
     searchForm: FormGroup;
@@ -45,18 +46,16 @@ export class InvoiceComponent implements OnInit {
         private renderer: Renderer) {
 
         this.searchForm = fb.group({
-            'code': [null],
-            'cus_po': [null],
-            'sale_quote_num': [null],
-            'type': [null],
-            'sts': [null],
-            'buyer_name': [null],
-            'date_type': [null],
-            'date_to': [null],
-            'date_from': [null],
-            'ship_date_from': [null],
-            'ship_date_to': [null],
-
+            'inv_num': [null],
+            'cus_name': [null],
+            'order_num': [null],
+            'sku': [null],
+            'status': [null],
+            'inv_type': [null],
+            'inv_dt_from': [null],
+            'inv_dt_to': [null],
+            'inv_due_dt_from': [null],
+            'inv_due_dt_to': [null],
         });
 
         //  Assign get list function name, override letiable here
@@ -66,10 +65,20 @@ export class InvoiceComponent implements OnInit {
 
     ngOnInit() {
         //  Init Fn
-        this.listMaster['listFilter'] = [{ value: false, name: 'Date Filter' }];
-        this.listMaster['dateType'] = [{ id: 'issue_date', name: 'Issue Date' }, { id: 'due_date', name: 'Due Date' }];
+        this.listMoreFilter = [{ value: false, name: 'Date Filter' }];
+        this.listMaster['status'] = [
+            { id: 1, name: 'New' },
+            { id: 2, name: 'Submitted' },
+            { id: 3, name: 'Rejected' },
+            { id: 4, name: 'Approved' },
+            { id: 5, name: 'Partially Paid' },
+            { id: 6, name: 'Fully Paid' }
+        ];
+        this.listMaster['inv_type'] = [
+            { id: 1, name: 'Sales Order' }
+        ];
+        this.getListInvoiceItemsRef();
         this.countInvoiceStatus();
-        this.getList();
     }
     /**
      * Table Event
@@ -110,11 +119,38 @@ export class InvoiceComponent implements OnInit {
         this.financialService.getListInvoice(params).subscribe(res => {
             try {
                 this.list.items = res.data.rows;
+                this.appendItemsToInvoice();
                 this.tableService.matchPagingOption(res.data);
             } catch (e) {
                 console.log(e);
             }
         });
+    }
+
+    getListInvoiceItemsRef() {
+        this.financialService.getListInvoiceItemsRef().subscribe(res => {
+            try {
+                this.listInvoiceItemsRef = res.data;
+                console.log(this.listInvoiceItemsRef)
+                this.getList();
+            } catch (e) {
+                console.log(e);
+            }
+        }, err => {
+            this.getList();
+        });
+    }
+
+    appendItemsToInvoice() {
+        for (let i = 0; i < this.list.items.length; i++) {
+            this.list.items[i].items_details = this.listInvoiceItemsRef[this.list.items[i].id]
+        }
+        console.log(this.list.items)
+    }
+
+    convertStatus(id, key) {
+        const stt = this.listMaster[key].find(item => item.id === id);
+        return stt.name;
     }
 
     deleteInvoice(id) {

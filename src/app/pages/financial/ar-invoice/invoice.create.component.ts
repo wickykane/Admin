@@ -209,7 +209,8 @@ export class InvoiceCreateComponent implements OnInit {
                 this.generalForm.controls['due_dt'].patchValue(this.dt.transform(new Date(res.data.due_dt), 'yyyy-MM-dd'));
                 // this.list.items = res.data.items;
                 this.generalForm.patchValue({
-                    billing_address_id: this.invoice_details['billing_id']
+                    billing_address_id: this.invoice_details['billing_id'],
+                    inv_status: this.invoice_details['invoice_status_id']
                 });
                 if (res.data.company_id) {
                     this.getDetailCustomerById(res.data.company_id);
@@ -400,11 +401,11 @@ export class InvoiceCreateComponent implements OnInit {
         if (this.generalForm.get('id').value && this.isEdit) {
             this.updateInvoice(type);
         } else {
-            this.createInvoice();
+            this.createInvoice(type);
         }
     }
 
-    createInvoice() {
+    createInvoice(type) {
         let addressId = this.customer.primary[0]['address_id'];
         let billingAddressId = this.addr_select.billing['address_id'];
         let shippingAddressId = this.addr_select.shipping['address_id'];
@@ -413,14 +414,23 @@ export class InvoiceCreateComponent implements OnInit {
         params = { ...this.generalForm.value, ...params };
         params['address'] = addressArrId;
         params['order_detail'] = this.transformItemsList(this.list.items);
-
-        // console.log(this.generalForm.value)
         console.log(params)
         this.financialService.createInvoice(params).subscribe(res => {
             try {
                 if (res.status) {
-                    this.toastr.success(res.message);
-                    this.router.navigate(['/financial/invoice']);
+                    switch (type) {
+                        case 'draft':
+                            this.toastr.success(res.message);
+                            this.router.navigate(['/financial/invoice']);
+                            break;
+                        case 'submit':
+                            this.updateInvoiceStatus(res.data, 'SB');
+                            break;
+                        case 'createnew':
+                            this.toastr.success(res.message);
+                            this.router.navigate(['/financial/invoice']);
+                            break;
+                    }
                 } else {
                     this.toastr.error(res.message, null, { enableHtml: true });
                 }
@@ -446,8 +456,43 @@ export class InvoiceCreateComponent implements OnInit {
         this.financialService.updateInvoice(this.invoiceId, params).subscribe(res => {
             try {
                 if (res.status) {
+                    switch (type) {
+                        case 'draft':
+                            this.toastr.success(res.message);
+                            this.getDetailInvoice(this.invoiceId);
+                            break;
+                        case 'submit':
+                            this.updateInvoiceStatus(this.invoiceId, 'SB');
+                            break;
+                        case 'createnew':
+                            this.router.navigate(['/financial/invoice/create']);
+                            break;
+                    }
+                } else {
+                    this.toastr.error(res.message, null, { enableHtml: true });
+                }
+            } catch (e) {
+                console.log(e);
+            }
+        }, err => {
+            this.toastr.error(err.message);
+        });
+    }
+
+    updateInvoiceStatus(invoiceId, statusCode) {
+        let params = {
+            status_code: statusCode
+        }
+        this.financialService.updateInvoiceStatus(invoiceId, params).subscribe(res => {
+            try {
+                if (res.status) {
                     this.toastr.success(res.message);
-                    this.getDetailInvoice(this.invoiceId);
+                    if (this.isCreate) {
+                        this.router.navigate(['/financial/invoice']);
+                    } else {
+                        this.getDetailInvoice(this.invoiceId);
+                    }
+
                 } else {
                     this.toastr.error(res.message, null, { enableHtml: true });
                 }

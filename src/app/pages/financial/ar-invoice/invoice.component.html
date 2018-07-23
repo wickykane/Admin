@@ -40,33 +40,61 @@
         </section>
         <div class="block-content pd-bottom bg-gray-light">
             <div class="row">
-                <div class="col-6">
+                <div class="col-9">
                     <form class="row form-horizontal form-search filter-order-group" role="form" [formGroup]="searchForm">
-                        <div class="col-md-4">
-                            <label for="sale_quote_num" class="control-label">Invoice #</label>
-                            <input autofocus="true" type="text" name="sale_quote_num" formControlName="sale_quote_num" class="form-control" placeholder="">
+                        <div class="col-md-2">
+                            <label for="cd" class="control-label" translate>Invoice #</label>
+                            <input type="text" name="cd" class="form-control" formControlName="inv_num" id="cd" placeholder="" capitalize>
                         </div>
-                        <div class="col-md-4">
-                            <label for="buyer_name" class="control-label" translate>Customer Name</label>
-                            <input type="text" name="buyer_name" formControlName="buyer_name" class="form-control" placeholder="">
+                        <div class="col-md-2">
+                            <label for="cd" class="control-label" translate>Customer</label>
+                            <input type="text" name="cd" class="form-control" formControlName="cus_name" id="cd" placeholder="" capitalize>
                         </div>
-                        <div class="col-md-4">
-                            <label for="sts" class="control-label">Status</label>
-                            <ng-select [multiple]="true" [items]="listMaster['listStatus']" bindLabel="name" bindValue="id" formControlName="sts">
+                        <div class="col-md-2">
+                            <label for="cd" class="control-label" translate>Sales Order</label>
+                            <input type="text" name="cd" class="form-control" formControlName="order_num" id="cd" placeholder="" capitalize>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="cd" class="control-label" translate>Invoice Item Name</label>
+                            <input type="text" name="cd" class="form-control" formControlName="sku" id="cd" placeholder="" capitalize>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="po_status_id" class="control-label">Status</label>
+                            <ng-select [multiple]="false" [items]="listMaster['status']" bindLabel="name" bindValue="id" formControlName="status">
                             </ng-select>
                         </div>
-                        <ng-container *ngIf="listMaster['listFilter'][0].value">
-                            <div class="col-md-4">
-                                <label for="type" class="control-label" translate>Date Type</label>
-                                <select class="form-control" formControlName="type">
-                                    <option value="null" selected="true">--Select--</option>
-                                    <option *ngFor="let item of listMaster['dateType']" [ngValue]="item.id">{{item.name}}</option>
-                                </select>
+                        <div class="col-md-2">
+                            <label for="po_status_id" class="control-label">Invoice Type</label>
+                            <ng-select [multiple]="false" [items]="listMaster['inv_type']" bindLabel="name" bindValue="id" formControlName="inv_type">
+                            </ng-select>
+                        </div>
+                        <ng-container *ngIf="listMoreFilter[0].value">
+                            <div class="col-md-2">
+                                <label for="" class="control-label" translate> Invoice Date</label>
+                                <div clickOutside (clickOutside)="d.close()" class="input-group">
+                                    <input [maxDate]="searchForm.value.inv_dt_to | dateObj" class="form-control" formControlName="inv_dt_from" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-4">
-                                <label for="" class="control-label" translate>&nbsp;</label>
+                            <div class="col-md-2">
+                                <label for="" class="control-label" translate> &nbsp;</label>
+                                <div clickOutside (clickOutside)="dt.close()" class="input-group">
+                                    <input [minDate]="searchForm.value.inv_dt_from | dateObj" class="form-control" formControlName="inv_dt_to" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dt="ngbDatepicker">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" (click)="dt.toggle()" type="button">
+                                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="" class="control-label" translate> Due Date</label>
                                 <div clickOutside (clickOutside)="d1.close()" class="input-group">
-                                    <input [maxDate]="searchForm.value.date_to | dateObj" class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="date_from" ngbDatepicker #d1="ngbDatepicker">
+                                    <input [maxDate]="searchForm.value.inv_due_dt_to | dateObj" class="form-control" formControlName="inv_due_dt_from" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d1="ngbDatepicker">
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
                                             <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -74,12 +102,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-2">
                                 <label for="" class="control-label" translate> &nbsp;</label>
-                                <div clickOutside (clickOutside)="dt2.close()" class="input-group">
-                                    <input [minDate]="searchForm.value.date_from | dateObj" class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="date_to" ngbDatepicker #dt2="ngbDatepicker">
+                                <div clickOutside (clickOutside)="dt1.close()" class="input-group">
+                                    <input [minDate]="searchForm.value.inv_due_dt_from | dateObj" class="form-control" formControlName="inv_due_dt_to" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dt1="ngbDatepicker">
                                     <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary" (click)="dt2.toggle()" type="button">
+                                        <button class="btn btn-outline-secondary" (click)="dt1.toggle()" type="button">
                                             <i class="fa fa-calendar" aria-hidden="true"></i>
                                         </button>
                                     </div>
@@ -92,12 +120,12 @@
                     <div class="block-btn-search">
                         <label class="control-label">&nbsp;</label>
                         <div class="group-btn-search">
-                            <button type="button" class="btn btn-primary" (click)="moreFilter()">More Filter</button>
-                            <div class="show-more" [hidden]="!onoffFilter">
+                            <button type="button" class="btn btn-primary" (click)="onoffFilter = !onoffFilter">More Filter</button>
+                            <div class="show-more" *ngIf="onoffFilter">
                                 <ul>
-                                    <li *ngFor="let item of listMaster['listFilter']; let i = index;">
+                                    <li *ngFor="let item of listMoreFilter; let i = index;">
                                         <label for="{{i}}">
-                                            <input #inp type="checkbox" value="item.value" [(ngModel)]="item.value"> {{item.name}}
+                                            <input type="checkbox" value="item.value" [(ngModel)]="item.value"> {{item.name}}
                                         </label>
                                     </li>
                                 </ul>
@@ -115,43 +143,88 @@
                 <table class="table table-striped table-vcenter custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                     <thead class="bg-white">
                         <tr>
-                            <td>Invoice #</td>
-                            <td>Issue Date</td>
-                            <td>SO #</td>
-                            <td>Customer</td>
-                            <td>Due Date</td>
-                            <td>Total Due</td>
-                            <td>Incentive</td>
-                            <td>Penalty</td>
-                            <td>Balance Due</td>
-                            <td>Status</td>
-                            <td>Aged Overdue</td>
-                            <td>Action</td>
+                            <th></th>
+                            <th>Invoice #</th>
+                            <th>Customer</th>
+                            <th>Invoice Type</th>
+                            <th>Invoice Date</th>
+                            <th>Due Date</th>
+                            <th>Aging Overdue</th>
+                            <th>Sales Order</th>
+                            <th>Total Amount</th>
+                            <th>Paid Amount</th>
+                            <!-- <th>Incentive</th>
+                            <th>Penalty</th> -->
+                            <th>Balance Amount</th>
+                            <th>Status</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                         <tr>
+                            <td class="text-center" [ngClass]="{'expand-item' : item.collapseRows}">
+                                <a class="btn btn-default " title="Expand" (click)="item.collapseRows = !item.collapseRows;" *ngIf="!item.collapseRows">
+                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                </a>
+                                <a class="btn btn-default " title="Collapse" (click)="item.collapseRows = !item.collapseRows;" *ngIf="item.collapseRows">
+                                    <i class="fa fa-minus" aria-hidden="true"></i>
+                                </a>
+                            </td>
                             <td>{{item.inv_num}}</td>
+                            <td>{{item.name}}</td>
+                            <td>{{convertStatus(item.inv_type, 'inv_type')}}</td>
                             <td>{{item.inv_dt}}</td>
-                            <td>{{item.order_number}}</td>
-                            <td>{{item.customer_name}}</td>
                             <td>{{item.due_dt}}</td>
-                            <td>{{item.tot_amt|currency}}</td>
-                            <td>{{item.incentive|currency}}</td>
-                            <td>{{item.penalty|currency}}</td>
-                            <td>{{item.bal_amt|currency}}</td>
-                            <td>{{item.status}}</td>
-                            <td>{{item.ageing}}</td>
+                            <td>{{item.aging_overdue}}</td>
+                            <td>{{item.order_num}}</td>
+                            <td>{{item.total_amount|currency}}</td>
+                            <td>{{item.paid_amount|currency}}</td>
+                            <!-- <td>{{item.incentive|currency}}</td>
+                            <td>{{item.penalty|currency}}</td> -->
+                            <td>{{item.balance_amount|currency}}</td>
+                            <td>{{convertStatus(item.invoice_status_id, 'status')}}</td>
                             <td>
                                 <a class="btn btn-default " title="View" [routerLink]="['view', item.id]">
                                     <i class="fa fa-eye" aria-hidden="true"></i>
                                 </a>
-                                <a class="btn btn-default " title="Edit" [routerLink]="['edit', item.id]">
+                                <a class="btn btn-default " title="Edit" [routerLink]="['edit', item.id]" *ngIf="item.invoice_status_id == 1">
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                 </a>
-                                <a class="btn btn-default" (click)="deleteInvoice(item.id)" title="Delete Invoice">
+                                <!-- <a class="btn btn-default" (click)="deleteInvoice(item.id)" title="Delete Invoice">
                                     <i class="fa fa-trash" aria-hidden="true"></i>
-                                </a>
+                                </a> -->
+                            </td>
+                        </tr>
+                        <tr *ngIf="item.collapseRows">
+                            <td colspan="13" class="child-table">
+                                <table class="table table-vcenter custom-table" style="border: 1px solid #828282;">
+                                    <thead>
+                                        <tr style="background-color: #596470">
+                                            <th>SKU</th>
+                                            <th>Product Name</th>
+                                            <th>Order QTY</th>
+                                            <th>Received QTY</th>
+                                            <th>Returned QTY</th>
+                                            <th>UOM</th>
+                                            <th>Unit Price</th>
+                                            <th>Discount %</th>
+                                            <th>Sub Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let subItem of item.items_details; let i = index;">
+                                            <td>{{subItem.sku }}</td>
+                                            <td></td>
+                                            <td>{{subItem.order_qty}}</td>
+                                            <td>{{subItem.qty_shipped }}</td>
+                                            <td>{{subItem.qty_return }}</td>
+                                            <td>{{subItem.uom }}</td>
+                                            <td>{{subItem.unit_price | currency:'$'}}</td>
+                                            <td>{{subItem.discount_percent }}%</td>
+                                            <td>{{subItem.final_price | currency:'$'}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </td>
                         </tr>
                     </tbody>
