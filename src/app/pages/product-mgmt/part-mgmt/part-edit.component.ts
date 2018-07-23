@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NguCarousel } from '@ngu/carousel';
+import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../../../environments/environment';
 
 import {
@@ -40,7 +41,8 @@ export class PartEditComponent implements OnInit {
         public router: Router,
         public route: ActivatedRoute,
         public itemKeyService: PartKeyService,
-        private productService: ProductService
+        private productService: ProductService,
+        public toastr: ToastrService
     ) {
         this.generalForm = fb.group({
             is_quotable: [null],
@@ -101,7 +103,8 @@ export class PartEditComponent implements OnInit {
     }
 
     updateItem() {
-        const formData: FormData = new FormData();
+        const  formData = new FormData();
+        console.log(this.generalForm.value);
         formData.append('data', JSON.stringify(this.generalForm.value));
         for ( const file of this.dataFile) {
             formData.append('files[]', file);
@@ -110,7 +113,10 @@ export class PartEditComponent implements OnInit {
         this.route.params.subscribe(params =>
             this.productService.updateItem(params.id, formData ).subscribe(res => {
                 try {
-                    console.log(res);
+                    if (res.status) {
+                        console.log(res.message);
+                        this.toastr.success(res.message);
+                    }
                 } catch (e) {
                     console.log(e);
                 }

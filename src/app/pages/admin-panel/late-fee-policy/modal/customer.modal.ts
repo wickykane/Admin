@@ -54,8 +54,8 @@ export class CustomerModalContent implements OnInit {
     ngOnInit() {
         //  Init Fn
         this.listMaster['buyerType'] = [
-            { code: "CP", name: "Company" },
-            { code: "PS", name: "Personal" }
+            { code: 'CP', name: 'Company' },
+            { code: 'PS', name: 'Personal' }
         ];
         this.getList();
     }

@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbTab } from '@ng-bootstrap/ng-bootstrap';
+import * as  _ from 'lodash';
 import { ProductService } from '../product-mgmt.service';
 import { TableService } from './../../../services/table.service';
 import { PartKeyService } from './keys.control';
@@ -106,12 +107,12 @@ export class PartListComponent implements OnInit {
 
     checkAll(ev) {
         this.list.items.forEach(x => (x.is_checked = ev.target.checked));
-        this.list.checklist = this.list.items.filter(_ => _.is_checked);
+        this.list.checklist = this.list.items.filter(temp => temp.is_checked);
     }
 
     isAllChecked() {
-        this.checkAllItem = this.list.items.every(_ => _.is_checked);
-        this.list.checklist = this.list.items.filter(_ => _.is_checked);
+        this.checkAllItem = this.list.items.every(temp => temp.is_checked);
+        this.list.checklist = this.list.items.filter(temp => temp.is_checked);
     }
 
     /**
@@ -151,6 +152,7 @@ export class PartListComponent implements OnInit {
             ...this.tableService.getParams(),
             ...this.searchForm.value,
         };
+<<<<<<< HEAD
 
         // Change filter array
         try {
@@ -165,6 +167,17 @@ export class PartListComponent implements OnInit {
 
         } catch (e) { }
 
+=======
+        console.log(params);
+        if (params.partlinks_no_filter) {
+            params.partlinks_no_filter = _.trim(params.partlinks_no_filter);
+            params['partlinks_no_filter[]'] = params.partlinks_no_filter;
+        }
+        if (params.part_no_filter) {
+            params.part_no_filter = _.map(params.part_no_filter.split(','), _.trim);
+        }
+        console.log(params);
+>>>>>>> 376a15b7b61859a23d80633e745f57a48b20beac
         Object.keys(params).forEach(
             key =>
                 (params[key] === null || params[key] === '') &&

@@ -49,13 +49,13 @@ export class LateFeePolicyComponent implements OnInit {
 
     ngOnInit() {
         this.listMaster['applyFor'] = [
-            { id: 1, value: "All Customers" },
-            { id: 2, value: "Specific Customers" }
+            { id: 1, value: 'All Customers' },
+            { id: 2, value: 'Specific Customers' }
         ];
         this.listMaster['status'] = [
-            { id: 1, value: "Active" },
-            { id: 0, value: "Inactive" },
-            { id: 2, value: "Closed" }
+            { id: 1, value: 'Active' },
+            { id: 0, value: 'Inactive' },
+            { id: 2, value: 'Closed' }
         ];
         this.getList();
     }

@@ -57,49 +57,49 @@ export class LateFeePolicyDetailComponent implements OnInit {
     }
 
     ngOnInit() {
-        let path = window.location.pathname;
+        const path = window.location.pathname;
         this.route.params.subscribe(params => {
             if (params.id) {
                 this.isCreate = false;
-                if (path.indexOf('edit') != -1) {
+                if (path.indexOf('edit') !== -1) {
                     this.isView = false;
                     this.isEdit = true;
                 }
-                if (path.indexOf('view') != -1) {
+                if (path.indexOf('view') !== -1) {
                     this.isView = true;
                     this.isEdit = false;
                 }
                 this.listMaster['status'] = [
-                    { id: 1, value: "Active" },
-                    { id: 0, value: "Inactive" },
-                    { id: 2, value: "Closed" }
+                    { id: 1, value: 'Active' },
+                    { id: 0, value: 'Inactive' },
+                    { id: 2, value: 'Closed' }
                 ];
                 this.getDetailLateFeePolicy(params.id);
             } else {
                 this.isView = false;
                 this.isEdit = false;
-                if (path.indexOf('create') != -1) {
+                if (path.indexOf('create') !== -1) {
                     this.isCreate = true;
-                    this.headerTitle = "CREATE NEW POLICY";
+                    this.headerTitle = 'CREATE NEW POLICY';
                 }
                 this.listMaster['status'] = [
-                    { id: 1, value: "Active" },
-                    { id: 0, value: "Inactive" }
+                    { id: 1, value: 'Active' },
+                    { id: 0, value: 'Inactive' }
                 ];
                 this.getGenerateCode();
             }
         });
         this.listMaster['applyFor'] = [
-            { id: 1, value: "All Customers" },
-            { id: 2, value: "Specific Customers" }
+            { id: 1, value: 'All Customers' },
+            { id: 2, value: 'Specific Customers' }
         ];
         this.listMaster['payType'] = [
-            { id: 1, value: "Percent" },
-            { id: 2, value: "Fixed Amount" }
+            { id: 1, value: 'Percent' },
+            { id: 2, value: 'Fixed Amount' }
         ];
         this.listMaster['buyerType'] = [
-            { code: "CP", name: "Company" },
-            { code: "PS", name: "Personal" }
+            { code: 'CP', name: 'Company' },
+            { code: 'PS', name: 'Personal' }
         ];
         this.initLateFeeRules();
     }
@@ -142,7 +142,7 @@ export class LateFeePolicyDetailComponent implements OnInit {
     }
 
     initLateFeeRules() {
-        if (this.generalForm.value['recuring_fee_status'] == false) {
+        if (this.generalForm.value['recuring_fee_status'] === false) {
             this.generalForm.controls['recuring_fee'].disable();
             this.generalForm.controls['pay_value'].disable();
             this.generalForm.controls['pay_type'].disable();
@@ -162,7 +162,7 @@ export class LateFeePolicyDetailComponent implements OnInit {
 
     payloadData() {
         if (this.generalForm.get('id').value && this.isEdit) {
-            if (this.currentStatus != 2 && this.generalForm.value['ac'] == 2) {
+            if (this.currentStatus !== 2 && this.generalForm.value['ac'] === 2) {
                 this.openTerminateLFPModal();
             } else {
                 this.updateLateFeePolicy(this.generalForm.get('id').value);
@@ -236,12 +236,12 @@ export class LateFeePolicyDetailComponent implements OnInit {
                 if (res.data.invoice_lfp) {
                     this.generalForm.patchValue(res.data.invoice_lfp);
                     this.currentStatus = res.data.invoice_lfp.ac;
-                    if (res.data.invoice_lfp.recuring_fee_status == 1) {
+                    if (res.data.invoice_lfp.recuring_fee_status === 1) {
                         this.generalForm.controls['recuring_fee_status'].setValue(true);
                     } else {
                         this.generalForm.controls['recuring_fee_status'].setValue(false);
                     }
-                    this.headerTitle = this.generalForm.value['code'] + ": " + this.generalForm.value['des'];
+                    this.headerTitle = this.generalForm.value['code'] + ': ' + this.generalForm.value['des'];
                     this.initLateFeeRules();
                 }
                 if (res.data.detail) {

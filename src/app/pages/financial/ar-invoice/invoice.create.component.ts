@@ -133,7 +133,7 @@ export class InvoiceCreateComponent implements OnInit {
             'note': [null],
             'inv_dt': [null, Validators.required],
             'payment_method_id': [null, Validators.required],
-            'due_dt': [null],
+            'due_dt': [null, Validators.required],
             'payment_term_id': [null, Validators.required],
             'aprvr_id': [null, Validators.required],
             'payment_term_range': [null],
@@ -159,18 +159,18 @@ export class InvoiceCreateComponent implements OnInit {
     }
 
     ngOnInit() {
-        let path = window.location.pathname;
+        const path = window.location.pathname;
         this.route.params.subscribe(params => {
             if (params.id) {
                 this.isCreate = false;
                 this.isEdit = true;
-                this.headerTitle = "EDIT INVOICE";
+                this.headerTitle = 'EDIT INVOICE';
                 this.invoiceId = params.id;
                 this.getDetailInvoice(this.invoiceId);
             } else {
                 this.isCreate = true;
                 this.isEdit = false;
-                this.headerTitle = "CREATE NEW INVOICE";
+                this.headerTitle = 'CREATE NEW INVOICE';
                 const currentDt = this.dt.transform(new Date(), 'yyyy-MM-dd');
                 this.generalForm.controls['inv_dt'].patchValue(currentDt);
                 this.generalForm.controls['inv_status'].setValue(1);
@@ -247,18 +247,18 @@ export class InvoiceCreateComponent implements OnInit {
 
     getOrderByCustomerId(company_id) {
         this.list_sales_order = [];
-        let params = {
+        const params = {
             cus_id: company_id
-        }
+        };
         this.financialService.getOrderByCustomerId(params).subscribe(res => {
             try {
                 this.list_sales_order = res.data;
                 if (res.data.length > 0) {
                     this.list.items = res.data[0].detail;
                     this.order_details = res.data[0].order;
-                    let orderId = this.order_details['id'];
-                    let orderNum = this.order_details['code'];
-                    let orderCreatorId = this.order_details['created_by'];
+                    const orderId = this.order_details['id'];
+                    const orderNum = this.order_details['code'];
+                    const orderCreatorId = this.order_details['created_by'];
                     this.generalForm.patchValue({
                         order_id: orderId,
                         order_num: orderNum,
@@ -271,7 +271,6 @@ export class InvoiceCreateComponent implements OnInit {
                         discount_amount: this.order_details['discount'],
                         tax_amount: this.order_details['vat']
                     });
-                    this.generalForm.controls['due_dt'].setValue(this.order_details['payment_due_date']);
                 } else {
                     this.list.items = [];
                     this.order_details = {};
@@ -331,7 +330,7 @@ export class InvoiceCreateComponent implements OnInit {
     }
 
     changeSalesOrder(event) {
-        console.log(event)
+        console.log(event);
         if (event) {
             this.list.items = event.detail;
             this.order_details = event.order;
@@ -339,9 +338,9 @@ export class InvoiceCreateComponent implements OnInit {
             this.list.items = [];
             this.order_details = {};
         }
-        let orderId = this.order_details['id'];
-        let orderNum = this.order_details['code'];
-        let orderCreatorId = this.order_details['created_by'];
+        const orderId = this.order_details['id'];
+        const orderNum = this.order_details['code'];
+        const orderCreatorId = this.order_details['created_by'];
         this.generalForm.patchValue({
             order_id: orderId,
             order_num: orderNum,
@@ -354,15 +353,34 @@ export class InvoiceCreateComponent implements OnInit {
             discount_amount: this.order_details['discount'],
             tax_amount: this.order_details['vat']
         });
-        this.generalForm.controls['due_dt'].setValue(this.order_details['payment_due_date']);
     }
 
     changePaymentTerms() {
-        for (let i = 0; i < this.listMaster['payment_terms'].length; i++) {
-            if (this.listMaster['payment_terms'][i].id == this.generalForm.value['payment_term_id']) {
-                this.generalForm.controls['payment_term_range'].setValue(this.listMaster['payment_terms'][i].day_limit);
+        const listPaymentTerms = this.listMaster['payment_terms'];
+        for (const unit of listPaymentTerms) {
+            if (unit.id === this.generalForm.value['payment_term_id']) {
+                this.generalForm.controls['payment_term_range'].setValue(unit.day_limit);
+                this.getInvoiceDueDate(this.generalForm.value['payment_term_range']);
             }
         }
+    }
+
+    onIssueDateSelected(event) {
+        this.getInvoiceDueDate(this.generalForm.value['payment_term_range']);
+    }
+
+    getInvoiceDueDate(paymentTermDayLimit) {
+        const params = {
+            issue_dt: this.generalForm.value['inv_dt'],
+            payment_term_dt: paymentTermDayLimit
+        };
+        this.financialService.getInvoiceDueDate(params).subscribe(res => {
+            try {
+                this.generalForm.controls['due_dt'].setValue(res.data.due_dt);
+            } catch (e) {
+                console.log(e);
+            }
+        });
     }
 
     selectAddress(type) {
@@ -406,15 +424,15 @@ export class InvoiceCreateComponent implements OnInit {
     }
 
     createInvoice(type) {
-        let addressId = this.customer.primary[0]['address_id'];
-        let billingAddressId = this.addr_select.billing['address_id'];
-        let shippingAddressId = this.addr_select.shipping['address_id'];
-        let addressArrId = [addressId, billingAddressId, shippingAddressId]
-        let params = {}
+        const addressId = this.customer.primary[0]['address_id'];
+        const billingAddressId = this.addr_select.billing['address_id'];
+        const shippingAddressId = this.addr_select.shipping['address_id'];
+        const addressArrId = [addressId, billingAddressId, shippingAddressId];
+        let params = {};
         params = { ...this.generalForm.value, ...params };
         params['address'] = addressArrId;
         params['order_detail'] = this.transformItemsList(this.list.items);
-        console.log(params)
+        console.log(params);
         this.financialService.createInvoice(params).subscribe(res => {
             try {
                 if (res.status) {
@@ -443,16 +461,16 @@ export class InvoiceCreateComponent implements OnInit {
     }
 
     updateInvoice(type) {
-        let addressId = this.customer.primary[0]['address_id'];
-        let billingAddressId = this.addr_select.billing['address_id'];
-        let shippingAddressId = this.addr_select.shipping['address_id'];
-        let addressArrId = [addressId, billingAddressId, shippingAddressId]
+        const addressId = this.customer.primary[0]['address_id'];
+        const billingAddressId = this.addr_select.billing['address_id'];
+        const shippingAddressId = this.addr_select.shipping['address_id'];
+        const addressArrId = [addressId, billingAddressId, shippingAddressId];
         let params = {};
         // params = { ...this.invoice_details, ...this.generalForm.value, ...params };
         params = { ...this.generalForm.value, ...params };
         params['address'] = addressArrId;
         params['order_detail'] = this.transformItemsList(this.list.items);
-        console.log(params)
+        console.log(params);
         this.financialService.updateInvoice(this.invoiceId, params).subscribe(res => {
             try {
                 if (res.status) {
@@ -480,9 +498,9 @@ export class InvoiceCreateComponent implements OnInit {
     }
 
     updateInvoiceStatus(invoiceId, statusCode) {
-        let params = {
+        const params = {
             status_code: statusCode
-        }
+        };
         this.financialService.updateInvoiceStatus(invoiceId, params).subscribe(res => {
             try {
                 if (res.status) {
@@ -505,27 +523,27 @@ export class InvoiceCreateComponent implements OnInit {
     }
 
     transformItemsList(list) {
-        console.log(list)
-        let transformedArr = [];
-        for (let i = 0; i < list.length; i++) {
-            let tempItem = {
-                "order_detail_id": list[i].id,
-                "item_id": list[i].item_id,
-                "sku": list[i].sku,
-                "des": list[i].des,
-                "item_condition_id": list[i].item_condition_id,
-                "order_qty": list[i].qty,
-                "uom": list[i].uom_name,
-                "invoice_qty": list[i].qty,
-                "unit_price": list[i].price,
-                "price_source": list[i].quote_detail_id ? "From Quote" : "From Master",
-                "discount": list[i].discount,
-                "discount_percent": list[i].discount_percent,
-                "final_price": list[i].total_price
-            }
-            transformedArr.push(tempItem)
+        console.log(list);
+        const transformedArr = [];
+        for (const unit of list) {
+            const tempItem = {
+                order_detail_id: unit.id,
+                item_id: unit.item_id,
+                sku: unit.sku,
+                des: unit.des,
+                item_condition_id: unit.item_condition_id,
+                order_qty: unit.qty,
+                uom: unit.uom_name,
+                invoice_qty: unit.qty,
+                unit_price: unit.price,
+                price_source: unit.quote_detail_id ? 'From Quote' : 'From Master',
+                discount: unit.discount,
+                discount_percent: unit.discount_percent,
+                final_price: unit.total_price
+            };
+            transformedArr.push(tempItem);
         }
-        console.log(transformedArr)
+        console.log(transformedArr);
         return transformedArr;
     }
 
