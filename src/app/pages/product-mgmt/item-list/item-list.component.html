@@ -39,7 +39,7 @@
                             <div class="block-search">
                                 <select formControlName="manufacturer_id" class="form-control">
                                     <option value="null" selected="true" translate disabled>--Select--</option>
-                                    <option *ngFor="let de of listMaster['make']" [ngValue]="de.manufacturer_id">{{de.name}}</option>
+                                    <option *ngFor="let de of listMaster['makes']" [ngValue]="de.make_id">{{de.name}}</option>
                                 </select>
                             </div>
                             <label for="type" class="control-label" translate>Model</label>
