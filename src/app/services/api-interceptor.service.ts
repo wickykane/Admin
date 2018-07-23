@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 // tslint:disable-next-line:import-blacklist
 import { Observable } from 'rxjs/Rx';
+import { environment } from '../../environments/environment';
 import { AuthenticationService } from './authentication.service';
 
 @Injectable()
@@ -20,7 +21,7 @@ export class ApiInterceptorService {
       if (err instanceof HttpErrorResponse) {
         if (err.status === 401) {
           //  redirect to the login route
-          // window.location.href = '/#/login';
+          window.location.href = `${environment.nab_url}/#/login`;
         } else {
           try {
             this.toastr.error(err.error.message);

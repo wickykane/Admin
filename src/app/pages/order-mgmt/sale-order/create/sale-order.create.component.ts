@@ -9,6 +9,7 @@ import { routerTransition } from '../../../../router.animations';
 import { OrderService } from '../../order-mgmt.service';
 
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
+import { Helper } from '../../../../shared/helper/common.helper';
 import { ItemQuoteModalContent } from '../../../../shared/modals/item-quote.modal';
 import { ItemModalContent } from '../../../../shared/modals/item.modal';
 import { OrderHistoryModalContent } from '../../../../shared/modals/order-history.modal';
@@ -21,7 +22,7 @@ import { SaleOrderCreateKeyService } from './keys.control';
     selector: 'app-create-order',
     templateUrl: './sale-order.create.component.html',
     styleUrls: ['../sale-order.component.scss'],
-    providers: [SaleOrderCreateKeyService],
+    providers: [SaleOrderCreateKeyService, Helper],
     animations: [routerTransition()]
 })
 
@@ -108,7 +109,8 @@ export class SaleOrderCreateComponent implements OnInit {
         private modalService: NgbModal,
         private orderService: OrderService,
         public keyService: SaleOrderCreateKeyService,
-        private dt: DatePipe ) {
+        public helper: Helper,
+        private dt: DatePipe) {
         this.generalForm = fb.group({
             'company_id': [null, Validators.required],
             'customer_po': [null, Validators.required],
@@ -132,15 +134,16 @@ export class SaleOrderCreateComponent implements OnInit {
 
     ngOnInit() {
         this.listMaster['multi_ship'] = [{ id: 0, label: 'No' }, { id: 1, label: 'Yes' }];
+        this.orderService.getAllCustomer().subscribe(res => { this.listMaster['customer'] = res.data; });
+        this.orderService.getOrderReference().subscribe(res => {Object.assign(this.listMaster, res.data); });
         //  Item
         this.list.items = this.router.getNavigatedData() || [];
-        const currentDt = this.dt.transform(new Date(), 'yyyy-MM-dd');
+        const currentDt = this.dt.transform(new Date(), 'MM/dd/yyyy');
+        console.log(currentDt);
         if (Object.keys(this.list.items).length === 0) { this.list.items = []; }
-        this.getListCustomerOption();
-        this.getOrderReference();
         this.updateTotal();
-        this.copy_addr = {...this.copy_addr, ...this.addr_select};
-        this.copy_customer = {...this.copy_customer, ...this.customer};
+        this.copy_addr = { ...this.copy_addr, ...this.addr_select };
+        this.copy_customer = { ...this.copy_customer, ...this.customer };
         this.generalForm.controls['is_multi_shp_addr'].patchValue(0);
         this.generalForm.controls['order_date'].patchValue(currentDt);
     }
@@ -154,33 +157,10 @@ export class SaleOrderCreateComponent implements OnInit {
             integerLimit: max || null
         });
     }
-
-    getListCustomerOption() {
-        this.orderService.getAllCustomer().subscribe(res => {
-            try {
-                this.listMaster['customer'] = res.data;
-            } catch (e) {
-                console.log(e);
-            }
-        });
-    }
     getDetailCustomerById(company_id) {
         this.orderService.getDetailCompany(company_id).subscribe(res => {
             try {
                 this.customer = res.data;
-            } catch (e) {
-                console.log(e);
-            }
-        });
-    }
-    getOrderReference() {
-        this.orderService.getOrderReference().subscribe(res => {
-            try {
-                this.listMaster['pay_type'] = res.data.order_types;
-                this.listMaster['payment_method'] = res.data.payment_methods;
-                this.listMaster['priority'] = res.data.priority_levels;
-                this.listMaster['sale_mans'] = res.data.sale_mans;
-                this.listMaster['warehouses'] = res.data.warehouses;
             } catch (e) {
                 console.log(e);
             }
@@ -246,7 +226,7 @@ export class SaleOrderCreateComponent implements OnInit {
     }
 
     cloneRecord(record, list) {
-        const newRecord = {...record};
+        const newRecord = { ...record };
         const index = list.indexOf(record);
         const objIndex = list[index];
         objIndex.products.push(newRecord);
@@ -257,7 +237,7 @@ export class SaleOrderCreateComponent implements OnInit {
     checkLengthRecord(id, list) {
         let total = 0;
         const _list = list || this.list.items;
-        _list.forEach( (record) => {
+        _list.forEach((record) => {
             if (id === record.item_id) {
                 total++;
             }
@@ -298,29 +278,20 @@ export class SaleOrderCreateComponent implements OnInit {
                 let sub_quantity = 0;
                 item.discount = item.discount !== undefined ? item.discount : 0;
                 if (!item.products) { item.products = []; }
-                item.products.forEach((subItem, index) => {
-                    if (item.products.length > 0) {
-                        sub_quantity += Number(subItem.quantity);
-                    }
-                });
-
-                const value = (Number(item.sale_price) * (Number(item.quantity) + sub_quantity)
-                    - (Number(item.sale_price) * (Number(item.quantity) + sub_quantity)) * Number(item.discount) / 100)
-                    - (item.promotion_discount_amount ? item.promotion_discount_amount : 0);
-
-                item.totalItem = value;
-
-                if (value) {
-                    this.order_info.sub_total = this.order_info.sub_total + value;
+                item.products.map(sub_item => { sub_quantity += sub_item.quantity; });
+                item.totalItem = (Number(item.sale_price) * (Number(item.quantity) + sub_quantity)
+                - (Number(item.sale_price) * (Number(item.quantity) + sub_quantity)) * Number(item.discount) / 100)
+                - (item.promotion_discount_amount ? item.promotion_discount_amount : 0);
+                if (item.totalItem) {
+                    this.order_info.sub_total = this.order_info.sub_total + item.totalItem;
                 }
             });
-
         }
         this.order_info['shipping_cost'] = (this.order_info['shipping_cost'] !== undefined ? this.order_info['shipping_cost'] : 0);
         this.order_info['alt_vat_percent'] = (this.order_info['vat_percent'] !== undefined ? this.order_info['vat_percent'] : 0);
         this.order_info['alt_discount'] = (this.order_info['discount_percent'] !== undefined ? this.order_info['discount_percent'] : 0);
         this.promotionList['total_invoice_discount'] = (this.promotionList['total_invoice_discount']
-        ? this.promotionList['total_invoice_discount'] : 0);
+            ? this.promotionList['total_invoice_discount'] : 0);
 
         this.order_info.total_discount = parseFloat((this.order_info.sub_total * Number(this.order_info['alt_discount']) / 100).toFixed(2));
         const sub_after_discount = this.order_info.sub_total - this.order_info.total_discount;
@@ -359,13 +330,13 @@ export class SaleOrderCreateComponent implements OnInit {
     }
     getQtyAvail() {
         if (this.list.items && this.list.items.length > 0) {
-           this.list.items.map(item => {
-              item.warehouse.find(k => {
-                  if ( k['warehouse_id'] === this.generalForm.value.warehouse_id) {
-                      return item.qty_avail = k.qty_available;
-                  }
-               } );
-           });
+            this.list.items.map(item => {
+                item.warehouse.find(k => {
+                    if (k['warehouse_id'] === this.generalForm.value.warehouse_id) {
+                        return item.qty_avail = k.qty_available;
+                    }
+                });
+            });
         }
     }
 
@@ -374,10 +345,10 @@ export class SaleOrderCreateComponent implements OnInit {
         modalRef.result.then(res => {
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
-                (this.list.items).forEach( (item) => {
+                (this.list.items).forEach((item) => {
                     listAdded.push(item.item_id);
                 });
-                res.forEach( (item) => {
+                res.forEach((item) => {
                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
                     item['products'] = [];
                     item.quantity = 1;
@@ -386,7 +357,7 @@ export class SaleOrderCreateComponent implements OnInit {
                     item.source = 'Manual';
                 });
 
-                this.list.items = this.list.items.concat(res.filter( (item) => {
+                this.list.items = this.list.items.concat(res.filter((item) => {
                     return listAdded.indexOf(item.item_id) < 0;
                 }));
 
@@ -397,31 +368,31 @@ export class SaleOrderCreateComponent implements OnInit {
     }
     addNewItemFromQuote(list, type_get) {
         if (this.generalForm.value.company_id !== null) {
-        const modalRef = this.modalService.open(ItemQuoteModalContent, { size: 'lg' });
-        modalRef.componentInstance.company_id = this.generalForm.value.company_id;
-        modalRef.result.then(res => {
-            if (res instanceof Array && res.length > 0) {
-                const listAdded = [];
-                (this.list.items).forEach( (item) => {
-                    listAdded.push(item.item_id);
-                });
-                res.forEach( (item) => {
-                    if (item.sale_price) { item.sale_price = Number(item.sale_price); }
-                    item['products'] = [];
-                    item.quantity = 1;
-                    item.totalItem = item.sale_price;
-                    item.source = 'From Quote';
-                });
+            const modalRef = this.modalService.open(ItemQuoteModalContent, { size: 'lg' });
+            modalRef.componentInstance.company_id = this.generalForm.value.company_id;
+            modalRef.result.then(res => {
+                if (res instanceof Array && res.length > 0) {
+                    const listAdded = [];
+                    (this.list.items).forEach((item) => {
+                        listAdded.push(item.item_id);
+                    });
+                    res.forEach((item) => {
+                        if (item.sale_price) { item.sale_price = Number(item.sale_price); }
+                        item['products'] = [];
+                        item.quantity = 1;
+                        item.totalItem = item.sale_price;
+                        item.source = 'From Quote';
+                    });
 
-                this.list.items = this.list.items.concat(res.filter( (item) => {
-                    return listAdded.indexOf(item.item_id) < 0;
-                }));
+                    this.list.items = this.list.items.concat(res.filter((item) => {
+                        return listAdded.indexOf(item.item_id) < 0;
+                    }));
 
-                this.updateTotal();
-                this.getQtyAvail();
-            }
-        }, dismiss => { });
-    }
+                    this.updateTotal();
+                    this.getQtyAvail();
+                }
+            }, dismiss => { });
+        }
     }
     //  Show order history
     showViewOrderHistory() {
@@ -441,10 +412,10 @@ export class SaleOrderCreateComponent implements OnInit {
             modalRef.result.then(res => {
                 if (res instanceof Array && res.length > 0) {
                     const listAdded = [];
-                    (this.list.items).forEach( (item) => {
+                    (this.list.items).forEach((item) => {
                         listAdded.push(item.item_id);
                     });
-                    res.forEach(  (item) => {
+                    res.forEach((item) => {
                         if (item.sale_price) { item.sale_price = Number(item.sale_price); }
                         item['products'] = [];
                         item.quantity = 1;
@@ -452,7 +423,7 @@ export class SaleOrderCreateComponent implements OnInit {
                         item.source = 'From Quote';
                     });
 
-                    this.list.items = this.list.items.concat(res.filter( (item)  => {
+                    this.list.items = this.list.items.concat(res.filter((item) => {
                         return listAdded.indexOf(item.item_id) < 0;
                     }));
 
@@ -470,7 +441,7 @@ export class SaleOrderCreateComponent implements OnInit {
         let arrSale = [];
         const temp = this.list.items;
         for (const unit in temp) {
-            if (typeof(unit['sale_quote_num']) !==  'undefined') {
+            if (typeof (unit['sale_quote_num']) !== 'undefined') {
                 arrSale.push(unit['sale_quote_num']);
             }
         }
@@ -499,7 +470,7 @@ export class SaleOrderCreateComponent implements OnInit {
             });
 
             if (item.products.length > 0) {
-                item.products.forEach( (subItem, index) => {
+                item.products.forEach((subItem, index) => {
                     products.push({
                         item_id: subItem.item_id,
                         item_type: item.item_type,
@@ -533,7 +504,7 @@ export class SaleOrderCreateComponent implements OnInit {
                 };
                 break;
         }
-        params = {...this.order_info, ...this.generalForm.value, ...params};
+        params = { ...this.order_info, ...this.generalForm.value, ...params };
         this.orderService.createOrder(params).subscribe(res => {
             try {
                 if (res.data.status) {
@@ -549,7 +520,7 @@ export class SaleOrderCreateComponent implements OnInit {
             }
         },
             err => {
-                  this.toastr.error(err.message);
+                this.toastr.error(err.message);
             });
     }
 

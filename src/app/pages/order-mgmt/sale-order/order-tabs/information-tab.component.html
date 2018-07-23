@@ -160,6 +160,8 @@
                         <tr>
                             <th translate>SKU #</th>
                             <th translate>Product Name</th>
+                            <th translate>Condition</th>
+                            <th translate>UOM</th>
                             <th class="text-nowrap text-center " translate>Order QTY</th>
                             <th class="text-nowrap text-center" translate>Shipped QTY</th>
                             <!-- <th class="text-nowrap text-center" translate>Ship To</th> -->
@@ -171,9 +173,11 @@
                     <tbody>
                         <tr *ngFor="let item of detail.subs">
                             <td>{{item.sku}}</td>
-                            <td>{{item.des}}</td>
-                            <td class="text-center">{{item.qty}} </td>
-                            <td class="text-center">{{item.qty_shipped}}</td>
+                            <td>{{item.name}}</td>
+                            <td>{{item.condition_name}}</td>
+                            <td>{{item.uom_name}}</td>
+                            <td class="text-center">{{item.quantity}} </td>
+                            <td class="text-center">{{item.qty_shipped ? item.qty_shipped :0}}</td>
                             <!-- <td>
                                 <span>{{item.address_full}}</span>
                             </td> -->
@@ -182,6 +186,8 @@
                             <td class="text-center">{{item.total_price|currency:'$'}}</td>
                         </tr>
                         <tr>
+                            <td></td>
+                            <td></td>
                             <td></td>
                             <td class="text-right">
                                 <strong class="text-danger text-left" translate>TOTAL</strong>
