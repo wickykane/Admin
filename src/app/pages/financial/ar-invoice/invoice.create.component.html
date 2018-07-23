@@ -72,7 +72,7 @@
                                             </label>
                                             <div class='col-8 text-danger'>
                                                 <div clickOutside (clickOutside)="d.close()" class="input-group">
-                                                    <input class="form-control" formControlName="inv_dt" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker" (dateSelect)="onIssueDateSelected($event)">
+                                                    <input class="form-control" formControlName="inv_dt" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker" style="pointer-events: none;">
                                                     <div class="input-group-append">
                                                         <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
                                                             <i class="fa fa-calendar" aria-hidden="true"></i>
