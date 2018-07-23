@@ -102,8 +102,8 @@ export class ItemListComponent implements OnInit {
         this.productService.getReferList().subscribe(res => {
             try {
                 this.listMaster['models'] = res.data.models;
-                this.listMaster['years'] = res.data.years.map((e) => ({ id: e, name: e }));
-                this.listMaster['make'] = res.data.manufacturers;
+                this.listMaster['years'] = res.data.years.map((e) => ({id: e, name: e }));
+                this.listMaster['make'] = res.data.makes;
             } catch (e) {
                 console.log(e.message);
             }
@@ -147,8 +147,8 @@ export class ItemListComponent implements OnInit {
         const arr = this.listMaster['models'];
         for (const i of arr) {
             if (arr['model_id'] === id) {
-                return this.listMaster['sub_models'] = arr['sub_models'];
-            }
+                        return this.listMaster['sub_models'] = arr['sub_models'];
+                    }
         }
     }
 
@@ -166,8 +166,21 @@ export class ItemListComponent implements OnInit {
     }
 
     getList() {
-        const params = { ...this.tableService.getParams(), ...this.searchForm.value, ...this.filterForm.value };
-        Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
+        const params = {...this.tableService.getParams(), ...this.searchForm.value};
+           // Change filter array
+           try {
+            Object.keys(this.filterForm.value).map(key => {
+                if (this.filterForm.value[key]) {
+                    const data = this.filterForm.value[key].toString().split(',').map(item => item.trim());
+                    if (data) {
+                        params[key + '[]'] = data;
+                    }
+                }
+            });
+
+        } catch (e) { }
+
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
         this.productService.getListItem(params).subscribe(res => {
             try {
@@ -183,7 +196,6 @@ export class ItemListComponent implements OnInit {
                 this.listMaster['partlinks_no'] = res.data.meta_filters.partlinks_no;
                 this.listMaster['part_no'] = res.data.meta_filters.part_no;
                 this.listMaster['manufacturers'] = res.data.meta_filters.manufacturers;
-                this.listMaster['makes'] = res.data.meta_filters.makes;
                 this.tableService.matchPagingOption(res.data);
             } catch (e) {
                 console.log(e);
