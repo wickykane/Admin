@@ -147,7 +147,7 @@ export class SaleOrderCreateComponent implements OnInit {
         this.copy_addr = { ...this.copy_addr, ...this.addr_select };
         this.copy_customer = { ...this.copy_customer, ...this.customer };
         this.generalForm.controls['is_multi_shp_addr'].patchValue(0);
-        this.generalForm.controls['order_date'].patchValue(currentDt);
+        this.generalForm.controls['order_date'].patchValue(currentDt.toISOString().slice(0, 10));
         this.generalForm.controls['sales_person'].patchValue(user.id);
         this.orderService.generatePOCode().subscribe(res => {this.generalForm.controls['customer_po'].patchValue(res.data); });
     }
