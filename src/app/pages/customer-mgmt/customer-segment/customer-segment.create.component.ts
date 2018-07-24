@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbDateCustomParserFormatter } from '../../../shared/helper/dateformat';
 
+import { DatePipe } from '@angular/common';
 import { PromotionService } from '../../promotion-mgmt/promotion.service';
 import { CustomerService } from '../customer.service';
 
@@ -14,7 +15,7 @@ import { ToastrService } from 'ngx-toastr';
     selector: 'app-customer-segment',
     templateUrl: './customer-segment.create.component.html',
     styleUrls: ['./customer-segment.component.scss'],
-    providers: [PromotionService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }]
+    providers: [PromotionService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }, DatePipe]
 
 })
 
@@ -31,6 +32,7 @@ export class CustomerSegmentCreateComponent implements OnInit {
      */
     constructor(private vRef: ViewContainerRef,
         private fb: FormBuilder,
+        private datePipe: DatePipe,
         private promotionService: PromotionService,
         private customerService: CustomerService, public toastr: ToastrService, private router: Router, private modalService: NgbModal) {
 
@@ -132,6 +134,8 @@ export class CustomerSegmentCreateComponent implements OnInit {
     }
 
     createSegment = function() {
+        const myDate = this.datePipe.transform(this.generalForm.controls['crtd_on'].value, 'MM/dd/yyyy');
+        this.generalForm.patchValue({'crtd_on': myDate});
         const params = this.generalForm.value;
 
         params.detail = Array.from(this.data.segmentList);
