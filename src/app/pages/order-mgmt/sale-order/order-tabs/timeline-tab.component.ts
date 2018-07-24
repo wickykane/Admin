@@ -1,13 +1,13 @@
-import { TableService } from './../../../../services/table.service';
-import { Component, OnInit, ViewContainerRef, Input } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, Input, OnInit, ViewContainerRef } from '@angular/core';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { OrderService } from '../../../order-mgmt/order-mgmt.service';
+import { TableService } from './../../../../services/table.service';
 
 
 @Component({
-    selector: 'app-order-timeline-tab',
+    selector: 'app-sale-order-history-tab',
     templateUrl: './timeline-tab.component.html',
-    styleUrls: ['./order-tab.component.scss'],
+    styleUrls: ['./quote-history.scss'],
     providers: [OrderService]
 })
 export class SaleOrderTimelineTabComponent implements OnInit {
@@ -16,25 +16,35 @@ export class SaleOrderTimelineTabComponent implements OnInit {
      * letiable Declaration
      */
 
-    public order_id;
+    public _orderId;
     @Input() set orderId(id) {
         if (id) {
-            this.order_id = id;
+            this._orderId = id;
+            this.getList();
         }
     }
-    public detail = {
-        history: []
-      };
+
+    public listMaster = {};
+
+    public list = {
+        items: []
+    };
+
+    searchForm: FormGroup;
 
     constructor(
         public fb: FormBuilder,
         private vRef: ViewContainerRef,
         public tableService: TableService,
-        private orderService: OrderService) {
+        private orderService: OrderService
+    ) {
+        //  Assign get list function name, override letiable here
+        this.tableService.getListFnName = 'getList';
+        this.tableService.context = this;
     }
 
     ngOnInit() {
-        this.getList();
+        this.listMaster['timeline'] = [];
     }
 
     /**
@@ -42,9 +52,12 @@ export class SaleOrderTimelineTabComponent implements OnInit {
      */
 
     getList() {
-        this.orderService.getHistoryByCode(this.order_id).subscribe(res => {
+        const params = {...this.tableService.getParams()};
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
+
+        this.orderService.getHistoryByCode(this._orderId).subscribe(res => {
             try {
-                this.detail.history = res.data;
+                this.listMaster['timeline'] = res.data;
             } catch (e) {
                 console.log(e);
             }

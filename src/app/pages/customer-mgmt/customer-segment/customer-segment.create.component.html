@@ -45,7 +45,7 @@
                     <label for="created_on" class="control-label" translate>Created On </label>
                     <span class="text-danger">( * )</span>
                     <div class="input-group">
-                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="crtd_on" ngbDatepicker #d="ngbDatepicker">
+                        <input class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="crtd_on" ngbDatepicker #d="ngbDatepicker">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
                                 <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -83,7 +83,7 @@
                             <select class="form-control" [(ngModel)]="segment.type" name="customer_type" (change)="changeToGetCustomer(segment,$index)">
                                     <option value="" selected="true" hidden="true">--Select--</option>
                                     <option *ngFor="let item of listMaster['customerType']" [value]="item.id">{{ item.name }}</option>
-                        
+
                               </select>
                         </td>
                         <td>
@@ -94,7 +94,7 @@
                         </td>
                         <td>
                             <!-- <select class='multiple-select2 ' multiple ui-select2="{mutilple: true,  allowClear: true}" id="type" [(ngModel)]="segment.customers" (change)='checkCustomerList(segment)'>
-                                    <option *ngFor="let item of segment.customerList" [value]="item.country_code">{{ item.name }}</option>                                    
+                                    <option *ngFor="let item of segment.customerList" [value]="item.country_code">{{ item.name }}</option>
                                 </select> -->
                             <ng-select (change)='checkCustomerList(segment)'  [multiple]="true" [items]="segment.customerList" bindLabel="name" bindValue="id"  [(ngModel)]="segment.customers">
                             </ng-select>
@@ -115,7 +115,7 @@
                         <td>
                             <select class="form-control" [(ngModel)]="all_customer_type" name="customer_type">
                                 <option value="" selected="true" hidden="true" translate>--Select--</option>
-                                <option *ngFor="let item of listMaster['allType']" [value]="item.id">{{ item.name }}</option>                                    
+                                <option *ngFor="let item of listMaster['allType']" [value]="item.id">{{ item.name }}</option>
                               </select>
                         </td>
                         <td colspan="100%"></td>

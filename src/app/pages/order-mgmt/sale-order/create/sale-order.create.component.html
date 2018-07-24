@@ -94,7 +94,7 @@
                                     <div class="form-group row">
                                         <label class='col-4'>Item In Quote</label>
                                         <div class='col-8 text-success'>
-                                            <a (click)="showSaleQuoteList()"><strong>{{customer.items_in_quote}}</strong></a>
+                                            <a (click)="addNewItemFromQuote()"><strong>{{customer.items_in_quote}}</strong></a>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -379,7 +379,7 @@
                                         <td>{{item.condition_name}}</td>
                                         <td>{{item.qty_avail}}</td>
                                         <td>
-                                            <input style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.order_quantity"
+                                            <input style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity"
                                                 (change)="updateTotal();changeFromSource(item)" (keypress)="_keyPress($event)">
                                         </td>
 
@@ -439,9 +439,9 @@
                         </div>
                     </div>
                     <div class="col-md-12">
-                        <button (click)="addNewItem(list.items,1, order_info.company_id )" class="btn btn-outline-dark" translate>
+                        <button (click)="addNewItem()" class="btn btn-outline-dark" translate>
                             <i class="fa fa-plus"></i>Add New Item</button>
-                            <button (click)="addNewItemFromQuote(list.items,1 )" class="btn btn-outline-dark">
+                            <button (click)="addNewItemFromQuote()" class="btn btn-outline-dark">
                                 <i class="fa fa-plus"></i>Add New Item From Quote</button>
                     </div>
                     <div class="col-md-12 mg-top-15">
@@ -508,7 +508,7 @@
             <div class="col-md-12 mg-top-15 text-center">
                 <button type="button" class="btn btn-outline-info" (click)="createOrder('quote')" translate>Save As Quote</button>
                 <button type="button" class="btn btn-outline-warning" (click)="createOrder('draft')" translate>Save As Draft</button>
-                <button type="button" class="btn btn-outline-primary" (click)="createOrder('create')" translate>Save & Submit</button>
+                <button type="button" class="btn btn-outline-primary" (click)="createOrder('create')" ng-disabled="!generalForm.valid" translate>Save & Submit</button>
                 <button type="button" class="btn btn-default" [routerLink]="['/order-management/sale-order']" translate>Cancel</button>
             </div>
         </div>

@@ -182,6 +182,10 @@ export class OrderService {
         const url = 'order/get-order-code';
         return this.API.get(url);
     }
+    generatePOCode() {
+        const url = 'order/getPOCode';
+        return this.API.get(url);
+    }
     getHistoryByCode(id) {
         const url = 'order/history/' + id;
         return this.API.get(url);
