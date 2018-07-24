@@ -25,7 +25,9 @@ export class DiscountCategoryCreateComponent implements OnInit {
     public listMaster = {};
     public data = {};
     public flagAddress: boolean;
-    public flagSub = false;
+    public listCheckType = [];
+    public masterTypeArr = [];
+    // public flagSub = false;
 
     public listCheckSubCat = [];
 
@@ -67,8 +69,9 @@ export class DiscountCategoryCreateComponent implements OnInit {
         this.discountCategoryService.getListCategory().subscribe(
             res => {
                 this.listMaster['category'] = res.data.categories;
-                this.listMaster['type'] = res.data.apply_for;
-                this.initDisabledType(res.data.categories);
+                this.masterTypeArr = Array.of(...res.data.apply_for);
+                this.initDisabledType(this.listMaster['category']);
+                this.initDisabledType(this.masterTypeArr);
             },
             err => {
 
@@ -90,13 +93,8 @@ export class DiscountCategoryCreateComponent implements OnInit {
             if (id === obj.category_id) {
                 item.listSubCategory = obj['sub_categories'];
                 this.initDisabledType(item.listSubCategory);
+                item.listType = [{ id: 1, value: 'All', disabled: false }, { id: 2, value: 'Specific', disabled: false }];
 
-                if (item.listSubCategory.length <= 0) {
-                  item['apply_for'] = 1;
-                  this.flagSub = true;
-                } else {
-                  this.flagSub = false;
-                }
             }
         });
     }
@@ -118,6 +116,8 @@ export class DiscountCategoryCreateComponent implements OnInit {
                 obj['disabled'] = flag;
             }
         });
+        item.listType[0]['disabled'] = true;
+
     }
 
     isSameAnswer(currentValue, index, arr) {
@@ -136,6 +136,7 @@ export class DiscountCategoryCreateComponent implements OnInit {
                 }
             });
         });
+
     }
 
     changeCategory(id, item) {
@@ -146,26 +147,33 @@ export class DiscountCategoryCreateComponent implements OnInit {
                         item.listSubCategory = obj.listSubCategory;
                     }
                 });
+                this.listCheckType.map(obj => {
+                    if (id === obj.category_id) {
+                        item.listType = obj.listType;
+                    }
+                });
 
             } else {
                 this.listCheckSubCat.push(id);
                 this.getListSubCate(id, item);
+                this.listCheckType.push(item);
             }
         }
-
     }
 
 
     changeType(id, item) {
         if (id === 1) {
-            this.mapArrayValue(item, true);
+            this.listMaster['category'].map(obj => {
+                if (obj.category_id === item.category_id) {
+                    obj['disabled'] = true;
+                }
+            });
         }
     }
 
     changeToGetSubCategory(sub_category_id, item) {
-
         this.switchStatusSelected(item, true);
-        console.log(item.listSubCategory.every(this.isSameAnswer));
         this.mapArrayValue(item, item.listSubCategory.every(this.isSameAnswer) ? true : false);
     }
 
@@ -185,10 +193,43 @@ export class DiscountCategoryCreateComponent implements OnInit {
         this.data['products'].push({});
     }
 
+    isEmptyObject(obj) {
+        return (obj && (Object.keys(obj).length === 0));
+    }
+
     removeLine(index, item) {
-        this.data['products'].splice(index, 1);
-        this.mapArrayValue(item, false);
-        this.switchStatusSelected(item, false);
+        if (!this.isEmptyObject(item)) {
+            if (item.apply_for === 1) {
+                this.listMaster['category'].map(obj => {
+                    if (obj.category_id === item.category_id) {
+                        obj['disabled'] = false;
+                    }
+                });
+                this.data['products'].splice(index, 1);
+                const i = this.listCheckSubCat.indexOf(item.category_id);
+                this.listCheckSubCat.splice(i, 1);
+                this.listCheckType.splice(index, 1);
+            } else {
+                this.listMaster['category'].map(obj => {
+                    if (obj.category_id === item.category_id) {
+                        obj['disabled'] = false;
+                    }
+                });
+
+                item.listSubCategory.map(res => {
+                    item.sub_category_id.map(x => {
+                        if (x === res.category_id) {
+                            res['disabled'] = false;
+                        }
+                    });
+                });
+                this.data['products'].splice(index, 1);
+            }
+        } else {
+            this.data['products'].splice(index, 1);
+
+        }
+
 
     }
 
