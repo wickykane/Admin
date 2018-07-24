@@ -274,7 +274,7 @@ export class SaleOrderCreateComponent implements OnInit {
         this.order_info.total = 0;
         this.order_info.sub_total = 0;
         if (this.list.items !== undefined) {
-            (this.list.items || []).forEach((item) => {
+            (this.list.items || []).map((item) => {
                 let sub_quantity = 0;
                 item.discount = item.discount !== undefined ? item.discount : 0;
                 if (!item.products) { item.products = []; }
@@ -390,8 +390,11 @@ export class SaleOrderCreateComponent implements OnInit {
 
                     this.updateTotal();
                     this.getQtyAvail();
+                    this.generateNote();
+
                 }
             }, dismiss => { });
+            modalRef.componentInstance.company_id = this.generalForm.value.company_id;
         }
     }
     //  Show order history
@@ -406,43 +409,12 @@ export class SaleOrderCreateComponent implements OnInit {
             }, dismiss => { });
         }
     }
-    showSaleQuoteList() {
-        if (this.generalForm.value.company_id !== null) {
-            const modalRef = this.modalService.open(OrderSaleQuoteModalContent, { size: 'lg' });
-            modalRef.result.then(res => {
-                if (res instanceof Array && res.length > 0) {
-                    const listAdded = [];
-                    (this.list.items).forEach((item) => {
-                        listAdded.push(item.item_id);
-                    });
-                    res.forEach((item) => {
-                        if (item.sale_price) { item.sale_price = Number(item.sale_price); }
-                        item['products'] = [];
-                        item.quantity = 1;
-                        item.totalItem = item.sale_price;
-                        item.source = 'From Quote';
-                    });
-
-                    this.list.items = this.list.items.concat(res.filter((item) => {
-                        return listAdded.indexOf(item.item_id) < 0;
-                    }));
-
-                    this.updateTotal();
-                    this.generateNote();
-                }
-            },
-                dismiss => { });
-            modalRef.componentInstance.company_id = this.generalForm.value.company_id;
-        }
-
-
-    }
     generateNote() {
         let arrSale = [];
         const temp = this.list.items;
-        for (const unit in temp) {
-            if (typeof (unit['sale_quote_num']) !== 'undefined') {
-                arrSale.push(unit['sale_quote_num']);
+        for (const unit of temp) {
+            if (typeof (unit['cd']) !== 'undefined') {
+                arrSale.push(unit['cd']);
             }
         }
         arrSale = arrSale.reduce((x, y) => x.includes(y) ? x : [...x, y], []);

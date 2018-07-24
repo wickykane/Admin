@@ -66,7 +66,7 @@ export class SaleQuotationDetailComponent implements OnInit {
         this.orderService.sentMailToBuyer(id).subscribe(res => {
             try {
                 this.toastr.success(res.message);
-                this.router.navigate(['/order-management/sale-quotation/detail/', {id: this.orderId}]);
+                this.router.navigate(['/order-management/sale-quotation/detail/', {id: this.data['id']}]);
             } catch (e) {
                 console.log(e);
             }
@@ -78,7 +78,7 @@ export class SaleQuotationDetailComponent implements OnInit {
         this.orderService.updateSaleQuoteStatus(id, params).subscribe(res => {
             try {
                 this.toastr.success(res.message);
-                this.router.navigate(['/order-management/sale-quotation/detail/', {id: this.orderId}]);
+                this.router.navigate(['/order-management/sale-quotation/detail/', {id: this.data['id']}]);
 
             } catch (e) {
                 console.log(e);
@@ -92,7 +92,7 @@ export class SaleQuotationDetailComponent implements OnInit {
         this.orderService.updateSaleQuoteStatus(id, params).subscribe(res => {
             try {
                 this.toastr.success(res.message);
-                this.router.navigate(['/order-management/sale-quotation/detail/', {id: this.orderId}]);
+                this.router.navigate(['/order-management/sale-quotation/detail/', {id: this.data['id']}]);
 
             } catch (e) {
                 console.log(e);
@@ -105,30 +105,5 @@ export class SaleQuotationDetailComponent implements OnInit {
     /**
      * Internal Function
      */
-    //  showDetail(objInv) {
-    //    const modalRef = this.modalService.open(InvoiceModalContent, { size: 'lg' });
-    //    modalRef.result.then(
-    //      res => {
-    //        if (res) {
-    //          this.printInvoice();
-    //        }
-    //      },
-    //      reason => { }
-    //    );
-    //    modalRef.componentInstance.detail = objInv;
-    //    modalRef.componentInstance.name = 'INVOICE NO :' + objInv.general.invoice_num;
-    //  }
-
-    //  getInvoice(order_id) {
-    //    this.orderService.getInvoice(order_id).subscribe((res) => {
-    //      this.data['invList'] = res.results.rows;
-    //    });
-    //  }
-
-    //  getSrcIframe(order_num) {
-    //    const url = 'http:// wms360.nabp-demo.seldatdirect.com/fe-upload/?transaction=' + order_num;
-    //    return url;
-    //  }
-
 
 }
