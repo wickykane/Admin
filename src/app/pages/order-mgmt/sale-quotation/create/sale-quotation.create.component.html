@@ -251,7 +251,7 @@
                                         <td>{{item.condition_name}}</td>
                                         <td>
                                             <input style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity"
-                                                (change)="updateTotal();changeFromSource(item)" (keypress)="_keyPress($event)">
+                                                (change)="updateTotal()" (keypress)="_keyPress($event)">
                                         </td>
 
                                         <!-- <td *ngIf="generalForm.value.is_multi_shp_addr == 1">

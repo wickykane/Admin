@@ -31,9 +31,11 @@ import { SaleQuotationRfqCreateComponent } from './sale-quotation/sale-quotation
 import { SaleQuotationDetailComponent } from './sale-quotation/view/sale-quotation.detail.component';
 
 //  Saleorder Tab
+import { SaleOrderCreditNoteTabComponent } from './sale-order/order-tabs/credit-note-tab.component';
 import { SaleOrderInformationTabComponent } from './sale-order/order-tabs/information-tab.component';
 import { SaleOrderInvoiceTabComponent } from './sale-order/order-tabs/invoice-tab.component';
 import { SaleOrderPaymentTabComponent} from './sale-order/order-tabs/payment-tab.component';
+import { SaleOrderRMATabComponent} from './sale-order/order-tabs/rma-tab.component';
 import { SaleOrderShipmentTabComponent } from './sale-order/order-tabs/shipment-tab.component';
 import { SaleOrderTimelineTabComponent} from './sale-order/order-tabs/timeline-tab.component';
 
@@ -79,7 +81,9 @@ import { ItemModalModule } from '../../shared/modals/item.module';
         SaleOrderShipmentTabComponent,
         SaleOrderTimelineTabComponent,
         SaleQuoteInformationTabComponent,
-        SaleQuoteHistoryTabComponent
+        SaleQuoteHistoryTabComponent,
+        SaleOrderRMATabComponent,
+        SaleOrderCreditNoteTabComponent
         ],
     providers: [OrderService, TableService, DatePipe, Helper],
     entryComponents: []

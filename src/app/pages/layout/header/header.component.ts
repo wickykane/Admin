@@ -1,19 +1,19 @@
-import { environment } from './../../../../environments/environment';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { JwtService } from '../../../shared';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from './../../../../environments/environment';
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-    pushRightClass: string = 'push-right';
+    pushRightClass = 'push-right';
     infoUser: any = {};
 
-    constructor(private http: HttpClient, private translate: TranslateService, public router: Router, private JwtService: JwtService) {
+    constructor(private http: HttpClient, private translate: TranslateService, public router: Router, private jwtService: JwtService) {
 
         this.translate.addLangs(['en', 'fr', 'ur', 'es', 'it', 'fa', 'de', 'zh-CHS']);
         this.translate.setDefaultLang('en');
@@ -32,25 +32,24 @@ export class HeaderComponent implements OnInit {
     }
 
     ngOnInit() {
-        let user = (localStorage.getItem('currentUser'));
-        if (user) {            
+        const  user = (localStorage.getItem('currentUser'));
+        if (user) {
             this.infoUser = JSON.parse(user);
+        } else {
+            if (this.jwtService.getToken()) { this.getUserDetail(); }
         }
-        else{
-            if (this.JwtService.getToken()) this.getUserDetail();
-        }
-        
+
     }
 
     getUserDetail() {
-        let url = environment.api_url + 'auth/wms-user';
-        let httpOptions = {
-            headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.JwtService.getToken() }),
-        }
+        const url = environment.api_url + 'auth/wms-user';
+        const httpOptions = {
+            headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.jwtService.getToken() }),
+        };
         this.http.get(url, httpOptions).subscribe(res => {
             this.infoUser = res['data']['user'];
             localStorage.setItem('currentUser', JSON.stringify(res['data']['user']));
-        })
+        });
     }
 
 
@@ -70,14 +69,14 @@ export class HeaderComponent implements OnInit {
     }
 
     onLoggedout() {
-        this.JwtService.cleanLocalStorage();
+        this.jwtService.cleanLocalStorage();
     }
 
     changeLang(language: string) {
         this.translate.use(language);
-    }    
-    onlogOut(){
-        this.JwtService.cleanLocalStorage();
+    }
+    onlogOut() {
+        this.jwtService.cleanLocalStorage();
         window.location.href = environment.nab_url;
     }
     goToHome() {
