@@ -29,6 +29,7 @@ export class LateFeePolicyDetailComponent implements OnInit {
     public checkAllItem;
     public headerTitle;
     public currentStatus;
+    public applyRecurringFee = false;
     public isCreate = false;
     public isView = false;
     public isEdit = false;
@@ -155,8 +156,9 @@ export class LateFeePolicyDetailComponent implements OnInit {
         }
     }
 
-    switchRule() {
+    switchRule(event) {
         this.generalForm.controls['recuring_fee_status'].setValue(!this.generalForm.value['recuring_fee_status']);
+        this.applyRecurringFee = !this.applyRecurringFee;
         this.initLateFeeRules();
     }
 
@@ -188,12 +190,15 @@ export class LateFeePolicyDetailComponent implements OnInit {
         });
     }
 
-    isValidLateFeeRules() {
+    isValidLateFeePolicy() {
         if (this.generalForm.value['recuring_fee_status']) {
             if (!this.generalForm.value['recuring_fee'] || !this.generalForm.value['pay_value']
                 || !this.generalForm.value['pay_type'] || !this.generalForm.value['late_due_dt']) {
                 return false;
             }
+        }
+        if (this.generalForm.value['apply_for'] === 2 && this.list.items.length === 0) {
+            return false;
         }
         return true;
     }
@@ -224,7 +229,7 @@ export class LateFeePolicyDetailComponent implements OnInit {
         params['company'] = listCustomer;
         this.lateFeePolicyService.updateLateFeePolicy(id, params).subscribe(res => {
             this.toastr.success(res.message);
-            this.getDetailLateFeePolicy(id);
+            this.router.navigate(['/admin-panel/late-fee-policy']);
         }, err => {
             console.log(err);
         });
@@ -238,8 +243,10 @@ export class LateFeePolicyDetailComponent implements OnInit {
                     this.currentStatus = res.data.invoice_lfp.ac;
                     if (res.data.invoice_lfp.recuring_fee_status === 1) {
                         this.generalForm.controls['recuring_fee_status'].setValue(true);
+                        this.applyRecurringFee = true;
                     } else {
                         this.generalForm.controls['recuring_fee_status'].setValue(false);
+                        this.applyRecurringFee = false;
                     }
                     this.headerTitle = this.generalForm.value['code'] + ': ' + this.generalForm.value['des'];
                     this.initLateFeeRules();

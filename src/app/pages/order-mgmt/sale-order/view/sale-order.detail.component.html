@@ -23,6 +23,16 @@
                     <app-order-invoice-tab [orderId]="orderId"></app-order-invoice-tab>
                 </ng-template>
             </ngb-tab>
+            <ngb-tab title="RMA">
+                <ng-template ngbTabContent>
+                    <app-order-rma-tab [orderId]="orderId"></app-order-rma-tab>
+                </ng-template>
+            </ngb-tab>
+            <ngb-tab title="Credit Note">
+                <ng-template ngbTabContent>
+                    <app-order-credit-note-tab [orderId]="orderId"></app-order-credit-note-tab>
+                </ng-template>
+            </ngb-tab>
             <ngb-tab title="Payments">
                 <ng-template ngbTabContent>
                     <app-order-payment-tab [orderId]="orderId"></app-order-payment-tab>
@@ -35,7 +45,7 @@
             </ngb-tab>
             <ngb-tab title="Order Timeline">
                 <ng-template ngbTabContent>
-                    <app-order-timeline-tab [orderId]="orderId"></app-order-timeline-tab>
+                    <app-sale-order-history-tab [orderId]="orderId"></app-sale-order-history-tab>
                 </ng-template>
             </ngb-tab>
         </ngb-tabset>

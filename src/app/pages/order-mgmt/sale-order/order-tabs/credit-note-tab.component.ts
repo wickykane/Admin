@@ -5,12 +5,12 @@ import { TableService } from './../../../../services/table.service';
 
 
 @Component({
-    selector: 'app-sale-order-history-tab',
-    templateUrl: './timeline-tab.component.html',
-    styleUrls: ['./quote-history.scss'],
+    selector: 'app-order-credit-note-tab',
+    templateUrl: './credit-note-tab.component.html',
+    styleUrls: ['./order-tab.component.scss'],
     providers: [OrderService]
 })
-export class SaleOrderTimelineTabComponent implements OnInit {
+export class SaleOrderCreditNoteTabComponent implements OnInit {
 
     /**
      * letiable Declaration
@@ -37,15 +37,13 @@ export class SaleOrderTimelineTabComponent implements OnInit {
         private vRef: ViewContainerRef,
         public tableService: TableService,
         private orderService: OrderService
-    ) {
+      ) {
         //  Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
     }
 
-    ngOnInit() {
-        this.listMaster['timeline'] = [];
-    }
+    ngOnInit() {}
 
     /**
      * Internal Function
@@ -55,9 +53,10 @@ export class SaleOrderTimelineTabComponent implements OnInit {
         const params = {...this.tableService.getParams()};
         Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
-        this.orderService.getHistoryByCode(this._orderId).subscribe(res => {
+        this.orderService.getInvoice( this._orderId).subscribe(res => {
             try {
-                this.listMaster['timeline'] = res.data;
+                this.list.items = [] || res.data.rows;
+                this.tableService.matchPagingOption(res.data);
             } catch (e) {
                 console.log(e);
             }
