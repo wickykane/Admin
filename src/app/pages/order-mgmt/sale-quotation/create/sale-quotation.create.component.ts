@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectComponent } from '@ng-select/ng-select';
 
 import { ToastrService } from 'ngx-toastr';
@@ -10,9 +10,9 @@ import { routerTransition } from '../../../../router.animations';
 import { OrderService } from '../../order-mgmt.service';
 
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
+import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
 import { ItemModalContent } from '../../../../shared/modals/item.modal';
 import { OrderHistoryModalContent } from '../../../../shared/modals/order-history.modal';
-import { OrderSaleQuoteModalContent } from '../../../../shared/modals/order-salequote.modal';
 import { PromotionModalContent } from '../../../../shared/modals/promotion.modal';
 import { SaleQuoteCreateKeyService} from './keys.create.control';
 
@@ -22,7 +22,7 @@ import { SaleQuoteCreateKeyService} from './keys.create.control';
     selector: 'app-create-quotation',
     templateUrl: './sale-quotation.create.component.html',
     styleUrls: ['../sale-quotation.component.scss'],
-    providers: [SaleQuoteCreateKeyService],
+    providers: [SaleQuoteCreateKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }],
     animations: [routerTransition()]
 })
 
