@@ -90,12 +90,27 @@ export class LateFeePolicyComponent implements OnInit {
         this.router.navigate(['/admin-panel/late-fee-policy/create']);
     }
 
-    viewLateFeePolicy(id) {
-        this.router.navigate(['/admin-panel/late-fee-policy/view', id]);
+    viewLateFeePolicy(id?) {
+        if (id) {
+            this.router.navigate(['/admin-panel/late-fee-policy/view', id]);
+        } else {
+            const selectedPolicyId = this.list.items[this.selectedIndex].id;
+            if (selectedPolicyId) {
+                this.router.navigate(['/admin-panel/late-fee-policy/view', selectedPolicyId]);
+            }
+        }
     }
 
-    editLateFeePolicy(id) {
-        this.router.navigate(['/admin-panel/late-fee-policy/edit', id]);
+    editLateFeePolicy(id?) {
+        if (id) {
+            this.router.navigate(['/admin-panel/late-fee-policy/edit', id]);
+        } else {
+            const selectedPolicyId = this.list.items[this.selectedIndex].id;
+            const selectedPolicyStatus = this.list.items[this.selectedIndex].ac;
+            if (selectedPolicyId && selectedPolicyStatus !== 2) {
+                this.router.navigate(['/admin-panel/late-fee-policy/edit', selectedPolicyId]);
+            }
+        }
     }
 
     convertStatus(id, key) {

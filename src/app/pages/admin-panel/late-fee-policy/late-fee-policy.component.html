@@ -51,7 +51,7 @@
                             <a class="btn btn-default" (click)="viewLateFeePolicy(item.id)" title="View Late Fee Policy">
                                 <i class="fa fa-eye" aria-hidden="true"></i>
                             </a>
-                            <a class="btn btn-default" (click)="editLateFeePolicy(item.id)" title="Edit Late Fee Policy">
+                            <a class="btn btn-default" *ngIf="item.ac != 2" (click)="editLateFeePolicy(item.id)" title="Edit Late Fee Policy">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                             </a>
                         </td>
@@ -78,4 +78,8 @@
             </div>
         </div>
     </div>
+    <div class="block-content">
+        <button (click)="createLateFeePolicy()" style="margin: 10px 0;" class="btn btn-primary">Add Policy</button>
+    </div>
+    <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
 </div>
