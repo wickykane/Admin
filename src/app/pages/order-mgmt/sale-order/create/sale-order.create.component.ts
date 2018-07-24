@@ -2,11 +2,12 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewContainerRef, ViewEncapsulation } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 
+import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
+import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
 import { OrderService } from '../../order-mgmt.service';
 
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
@@ -22,7 +23,7 @@ import { SaleOrderCreateKeyService } from './keys.control';
     selector: 'app-create-order',
     templateUrl: './sale-order.create.component.html',
     styleUrls: ['../sale-order.component.scss'],
-    providers: [SaleOrderCreateKeyService],
+    providers: [SaleOrderCreateKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }],
     animations: [routerTransition()]
 })
 
@@ -139,7 +140,8 @@ export class SaleOrderCreateComponent implements OnInit {
         this.orderService.getOrderReference().subscribe(res => {Object.assign(this.listMaster, res.data); this.changeOrderType(); });
         //  Item
         this.list.items = this.router.getNavigatedData() || [];
-        const currentDt = this.dt.transform(new Date(), 'MM/dd/yyyy');
+        const currentDt = new Date();
+        console.log(currentDt);
         if (Object.keys(this.list.items).length === 0) { this.list.items = []; }
         this.updateTotal();
         this.copy_addr = { ...this.copy_addr, ...this.addr_select };
@@ -285,6 +287,7 @@ export class SaleOrderCreateComponent implements OnInit {
                     }
                 });
             });
+            this.generalForm.get('prio_level').patchValue('CW');
         } else {
             const selected_Code = ['SD', 'ND', 'OT'];
             selected_Code.forEach(key => {
@@ -294,6 +297,7 @@ export class SaleOrderCreateComponent implements OnInit {
                     }
                 });
             });
+            this.generalForm.get('prio_level').patchValue('SD');
         }
     }
 
