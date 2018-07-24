@@ -3,17 +3,17 @@ import { Component, OnInit, ViewContainerRef, ViewEncapsulation } from '@angular
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import * as _ from 'lodash';
 
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
 import { OrderService } from '../../order-mgmt.service';
 
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
-import { Helper } from '../../../../shared/helper/common.helper';
 import { ItemQuoteModalContent } from '../../../../shared/modals/item-quote.modal';
 import { ItemModalContent } from '../../../../shared/modals/item.modal';
 import { OrderHistoryModalContent } from '../../../../shared/modals/order-history.modal';
-import { OrderSaleQuoteModalContent } from '../../../../shared/modals/order-salequote.modal';
+// import { OrderSaleQuoteModalContent } from '../../../../shared/modals/order-salequote.modal';
 import { PromotionModalContent } from '../../../../shared/modals/promotion.modal';
 import { SaleOrderCreateKeyService } from './keys.control';
 
@@ -22,7 +22,7 @@ import { SaleOrderCreateKeyService } from './keys.control';
     selector: 'app-create-order',
     templateUrl: './sale-order.create.component.html',
     styleUrls: ['../sale-order.component.scss'],
-    providers: [SaleOrderCreateKeyService, Helper],
+    providers: [SaleOrderCreateKeyService],
     animations: [routerTransition()]
 })
 
@@ -96,6 +96,7 @@ export class SaleOrderCreateComponent implements OnInit {
     public promotionList = {};
     public copy_customer = {};
     public copy_addr = {};
+    public list_priority = [];
 
     /**
      * Init Data
@@ -109,7 +110,6 @@ export class SaleOrderCreateComponent implements OnInit {
         private modalService: NgbModal,
         private orderService: OrderService,
         public keyService: SaleOrderCreateKeyService,
-        public helper: Helper,
         private dt: DatePipe) {
         this.generalForm = fb.group({
             'company_id': [null, Validators.required],
@@ -133,19 +133,20 @@ export class SaleOrderCreateComponent implements OnInit {
     }
 
     ngOnInit() {
+        const user = JSON.parse(localStorage.getItem('currentUser'));
         this.listMaster['multi_ship'] = [{ id: 0, label: 'No' }, { id: 1, label: 'Yes' }];
         this.orderService.getAllCustomer().subscribe(res => { this.listMaster['customer'] = res.data; });
-        this.orderService.getOrderReference().subscribe(res => {Object.assign(this.listMaster, res.data); });
+        this.orderService.getOrderReference().subscribe(res => {Object.assign(this.listMaster, res.data); this.changeOrderType(); });
         //  Item
         this.list.items = this.router.getNavigatedData() || [];
         const currentDt = this.dt.transform(new Date(), 'MM/dd/yyyy');
-        console.log(currentDt);
         if (Object.keys(this.list.items).length === 0) { this.list.items = []; }
         this.updateTotal();
         this.copy_addr = { ...this.copy_addr, ...this.addr_select };
         this.copy_customer = { ...this.copy_customer, ...this.customer };
         this.generalForm.controls['is_multi_shp_addr'].patchValue(0);
         this.generalForm.controls['order_date'].patchValue(currentDt);
+        this.generalForm.controls['sales_person'].patchValue(user.id);
         this.orderService.generatePOCode().subscribe(res => {this.generalForm.controls['customer_po'].patchValue(res.data); });
     }
     /**
@@ -270,6 +271,30 @@ export class SaleOrderCreateComponent implements OnInit {
     }
     changeFromSource(item) {
         item.source = 'Manual';
+    }
+    changeOrderType() {
+        this.list_priority = [];
+        const temp_priority = _.cloneDeep(this.listMaster['priority_levels']);
+        const selected_type = this.generalForm.get('type').value;
+        if (selected_type === 'PKU') {
+            const selected_Code = ['CW', 'PK'];
+            selected_Code.forEach(key => {
+                temp_priority.map(item => {
+                    if (item.code === key) {
+                        this.list_priority.push(item);
+                    }
+                });
+            });
+        } else {
+            const selected_Code = ['SD', 'ND', 'OT'];
+            selected_Code.forEach(key => {
+                temp_priority.map(item => {
+                    if (item.code === key) {
+                        this.list_priority.push(item);
+                    }
+                });
+            });
+        }
     }
 
     updateTotal() {
