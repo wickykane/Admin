@@ -109,9 +109,13 @@
                     <i class="fa fa-question-circle" aria-hidden="true"></i>
                 </a>
                 <div class="toggle-button" [ngClass]="{'disabled': isView}">
-                    <label class="switch" data-toggle="tooltip" data-content="" data-trigger="hover" style="margin-bottom: 0px;">
+                    <!-- <label class="switch" data-toggle="tooltip" data-content="" data-trigger="hover" style="margin-bottom: 0px;">
                         <input (click)="switchRule()" type="checkbox" formControlName="recuring_fee_status">
                         <div class="slider round"></div>
+                   </label> -->
+                   <label class="switch" placement="top" style="margin-bottom: 0px;">
+                       <input type="checkbox" [ngModel]="applyRecurringFee" [ngModelOptions]="{standalone: true}" (ngModelChange)="switchRule($event)">
+                       <div class="slider round"></div>
                    </label>
                 </div>
                 <input [textMask]="{mask: integerMaskObject()}" type="text" class="recurring-fee-input" formControlName="recuring_fee" *ngIf="!isView && generalForm.value['recuring_fee_status']">
@@ -152,8 +156,8 @@
     </form>
     <div class="row">
         <div class="col-md-12 mg-top-15 text-center">
-            <button class="btn btn btn-outline-primary" (click)="payloadData()" [disabled]="!generalForm.valid || !isValidLateFeeRules()" *ngIf="!isView">Save</button>
-            <button class="btn btn btn-outline-primary" (click)="editLateFeePolicy(generalForm.value['id'])" *ngIf="isView">Edit</button>
+            <button class="btn btn btn-outline-primary" (click)="payloadData()" [disabled]="!generalForm.valid || !isValidLateFeePolicy()" *ngIf="!isView">Save</button>
+            <button class="btn btn btn-outline-primary" (click)="editLateFeePolicy(generalForm.value['id'])" *ngIf="isView && (currentStatus != 2)">Edit</button>
             <button class="btn btn-default" type="button" [routerLink]="['/admin-panel/late-fee-policy']">Cancel</button>
         </div>
     </div>
