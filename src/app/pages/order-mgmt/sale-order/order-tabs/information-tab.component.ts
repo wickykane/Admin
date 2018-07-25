@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import * as _ from 'lodash';
 import { OrderService } from '../../../order-mgmt/order-mgmt.service';
 import { TableService } from './../../../../services/table.service';
 
@@ -77,7 +78,15 @@ export class SaleOrderInformationTabComponent implements OnInit {
         this.orderService.getOrderDetail(this._orderId).subscribe(res => {
             try {
                 this.detail = res.data;
-                this.stockValueChange.emit(res.data) ;
+                if (res.data.is_draft_order) {
+                    if (res.data.shipping_address.length === 0) {
+                        this.detail['shipping_address'] = _.cloneDeep(this.addr_select.shipping);
+                    }
+                    if (res.data.billing_info.length === 0) {
+                        this.detail['billing'] = _.cloneDeep(this.addr_select.billing);
+                    }
+                } else {
+                    this.stockValueChange.emit(res.data) ;
                 this.detail['billing'] = res.data.billing_info[0];
                 this.detail['shipping_address'] = res.data.shipping_address[0];
                 if (this.detail['total_paid'] === null) {
@@ -89,6 +98,7 @@ export class SaleOrderInformationTabComponent implements OnInit {
                     this.totalShipQTY += item.qty_shipped;
                 });
                 this.detail['buyer_info'] = res.data.buyer_info;
+                }
 
             } catch (e) {
                 console.log(e);
