@@ -10,6 +10,8 @@ import { DiscountCreateComponent } from './discount/discount-create.component';
 import { DiscountDetailComponent } from './discount/discount-detail.component';
 import { DiscountEditComponent } from './discount/discount-edit.component';
 import { DiscountComponent } from './discount/discount.component';
+import { EPIPolicyDetailComponent } from './epi-policy/epi-policy-detail.component';
+import { EPIPolicyComponent } from './epi-policy/epi-policy.component';
 import { InsuranceBranchComponent } from './insurance-company/branch/branch.component';
 import { InsuranceComponent } from './insurance-company/insurance.component';
 import { LateFeePolicyDetailComponent } from './late-fee-policy/late-fee-policy-detail.component';
@@ -154,6 +156,22 @@ const routes: Routes = [
     {
         path: 'late-fee-policy/edit/:id',
         component: LateFeePolicyDetailComponent
+    },
+    {
+        path: 'epi-policy',
+        component: EPIPolicyComponent
+    },
+    {
+        path: 'epi-policy/create',
+        component: EPIPolicyDetailComponent
+    },
+    {
+        path: 'epi-policy/view/:id',
+        component: EPIPolicyDetailComponent
+    },
+    {
+        path: 'epi-policy/edit/:id',
+        component: EPIPolicyDetailComponent
     }
 ];
 

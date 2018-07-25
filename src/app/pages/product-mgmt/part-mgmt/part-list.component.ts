@@ -162,7 +162,7 @@ export class PartListComponent implements OnInit {
 
         } catch (e) { }
         Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
-        this.productService.getListItem(params).subscribe(res => {
+        this.productService.getPartList(params).subscribe(res => {
             try {
                 if (!res.data.rows) {
                     this.list.items = [];

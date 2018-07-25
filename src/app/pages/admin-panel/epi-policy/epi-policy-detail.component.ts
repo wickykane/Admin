@@ -6,19 +6,18 @@ import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
-import { LateFeePolicyDetailKeyService } from './keys.detail.control';
-import { LateFeePolicyService } from './late-fee-policy.service';
-import { CustomerModalContent } from './modal/customer.modal';
-import { TerminatePolicyModalContent } from './modal/terminate-policy.modal';
+import { EPIPolicyService } from './epi-policy.service';
+import { EPIPolicyListKeyService } from './keys.list.control';
+import { CustomerEPIModalContent } from './modal/customer.modal';
 
 @Component({
-    selector: 'app-late-fee-policy-detail',
-    templateUrl: './late-fee-policy-detail.component.html',
-    providers: [LateFeePolicyService, LateFeePolicyDetailKeyService],
-    styleUrls: ['./late-fee-policy.component.scss'],
+    selector: 'app-epi-policy-detail',
+    templateUrl: './epi-policy-detail.component.html',
+    providers: [EPIPolicyService, EPIPolicyListKeyService],
+    styleUrls: ['./epi-policy.component.scss'],
     animations: [routerTransition()]
 })
-export class LateFeePolicyDetailComponent implements OnInit {
+export class EPIPolicyDetailComponent implements OnInit {
 
     generalForm: FormGroup;
     public listMaster = {};
@@ -26,10 +25,11 @@ export class LateFeePolicyDetailComponent implements OnInit {
         items: [],
         checklist: []
     };
+    public listAddedPaymentTermId = [];
+    public listPaymentTerm = [];
     public checkAllItem;
     public headerTitle;
     public currentStatus;
-    public applyRecurringFee = false;
     public isCreate = false;
     public isView = false;
     public isEdit = false;
@@ -39,20 +39,16 @@ export class LateFeePolicyDetailComponent implements OnInit {
         public fb: FormBuilder,
         public toastr: ToastrService,
         private modalService: NgbModal,
-        public keyService: LateFeePolicyDetailKeyService,
-        private lateFeePolicyService: LateFeePolicyService) {
+        public keyService: EPIPolicyListKeyService,
+        private epiPolicyService: EPIPolicyService) {
         this.generalForm = fb.group({
             'id': [null],
             'code': [null, Validators.required],
             'des': [null, Validators.required],
             'apply_for': [null, Validators.required],
             'ac': [null, Validators.required],
-            'recuring_fee': [null],
-            'recuring_fee_status': [false],
-            'pay_type': [null],
-            'pay_value': [null],
-            'late_due_dt': [null],
-            'company': [null],
+            'payment_term': [null],
+            'company': [null]
         });
         this.keyService.watchContext.next(this);
     }
@@ -70,12 +66,7 @@ export class LateFeePolicyDetailComponent implements OnInit {
                     this.isView = true;
                     this.isEdit = false;
                 }
-                this.listMaster['status'] = [
-                    { id: 1, value: 'Active' },
-                    { id: 0, value: 'Inactive' },
-                    { id: 2, value: 'Closed' }
-                ];
-                this.getDetailLateFeePolicy(params.id);
+                this.getDetailEPIPolicy(params.id);
             } else {
                 this.isView = false;
                 this.isEdit = false;
@@ -83,16 +74,16 @@ export class LateFeePolicyDetailComponent implements OnInit {
                     this.isCreate = true;
                     this.headerTitle = 'CREATE NEW POLICY';
                 }
-                this.listMaster['status'] = [
-                    { id: 1, value: 'Active' },
-                    { id: 0, value: 'Inactive' }
-                ];
                 this.getGenerateCode();
             }
         });
         this.listMaster['applyFor'] = [
             { id: 1, value: 'All Customers' },
             { id: 2, value: 'Specific Customers' }
+        ];
+        this.listMaster['status'] = [
+            { id: 1, value: 'Active' },
+            { id: 0, value: 'Inactive' }
         ];
         this.listMaster['payType'] = [
             { id: 1, value: 'Percent' },
@@ -102,7 +93,7 @@ export class LateFeePolicyDetailComponent implements OnInit {
             { code: 'CP', name: 'Company' },
             { code: 'PS', name: 'Personal' }
         ];
-        this.initLateFeeRules();
+        this.getListPaymentTerm();
     }
 
     checkAll(ev) {
@@ -121,6 +112,10 @@ export class LateFeePolicyDetailComponent implements OnInit {
         });
     }
 
+    deleteRule(index, subIndex) {
+        this.listPaymentTerm[index].detail.splice(subIndex, 1);
+    }
+
     removeSelectedCustomers() {
         const listAdded = [];
         (this.list.checklist).forEach((item) => {
@@ -133,7 +128,7 @@ export class LateFeePolicyDetailComponent implements OnInit {
     }
 
     getListCustomerType() {
-        this.lateFeePolicyService.getListCustomerType().subscribe(res => {
+        this.epiPolicyService.getListCustomerType().subscribe(res => {
             try {
                 this.listMaster['buyerType'] = res.data;
             } catch (e) {
@@ -142,59 +137,81 @@ export class LateFeePolicyDetailComponent implements OnInit {
         });
     }
 
-    initLateFeeRules() {
-        if (this.generalForm.value['recuring_fee_status'] === false) {
-            this.generalForm.controls['recuring_fee'].disable();
-            this.generalForm.controls['pay_value'].disable();
-            this.generalForm.controls['pay_type'].disable();
-            this.generalForm.controls['late_due_dt'].disable();
-        } else {
-            this.generalForm.controls['recuring_fee'].enable();
-            this.generalForm.controls['pay_value'].enable();
-            this.generalForm.controls['pay_type'].enable();
-            this.generalForm.controls['late_due_dt'].enable();
+    getListPaymentTerm() {
+        this.epiPolicyService.getListPaymentTerm().subscribe(res => {
+            try {
+                this.listMaster['payment_terms'] = res.data.rows;
+                if (this.isCreate) {
+                    this.appendListPaymentTerm();
+                }
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
+
+    appendListPaymentTerm() {
+        const listPaymentTerms = this.listMaster['payment_terms'];
+        for (const unit of listPaymentTerms) {
+            if (unit.id) {
+                const tempPayment = {
+                    payment_term_id: unit.id,
+                    cd: unit.cd,
+                    detail: []
+                };
+                this.listPaymentTerm.push(tempPayment);
+            }
         }
     }
 
-    switchRule(event) {
-        this.generalForm.controls['recuring_fee_status'].setValue(!this.generalForm.value['recuring_fee_status']);
-        this.applyRecurringFee = !this.applyRecurringFee;
-        this.initLateFeeRules();
+    transformListPaymentTerm(paymentTerm) {
+        for (const key in paymentTerm) {
+            if (key) {
+                const tempPayment = {
+                    payment_term_id: paymentTerm[key].payment_term_id,
+                    cd: paymentTerm[key].cd,
+                    detail: []
+                };
+                for (const subKey in paymentTerm[key]) {
+                    if (subKey && subKey !== 'payment_term_id') {
+                        const tempItem = {
+                            pay_type: paymentTerm[key][subKey].pay_type,
+                            pay_value: paymentTerm[key][subKey].pay_value,
+                            before_due_dt: paymentTerm[key][subKey].before_due_dt
+                        };
+                        tempPayment.detail.push(tempItem);
+                    }
+                }
+                this.listPaymentTerm.push(tempPayment);
+            }
+        }
+        console.log(this.listPaymentTerm);
     }
 
     payloadData() {
         if (this.generalForm.get('id').value && this.isEdit) {
-            if (this.currentStatus !== 2 && this.generalForm.value['ac'] === 2) {
-                this.openTerminateLFPModal();
-            } else {
-                this.updateLateFeePolicy(this.generalForm.get('id').value);
-            }
+            this.updateEPIPolicy(this.generalForm.get('id').value);
         } else {
-            this.createLateFeePolicy();
+            this.createEPIPolicy();
         }
     }
 
     getGenerateCode() {
-        this.lateFeePolicyService.getGenerateCode().subscribe(res => {
+        this.epiPolicyService.getGenerateCode().subscribe(res => {
             this.generalForm.controls['code'].setValue(res.data.code);
             this.listMaster['generate-code'] = res.data.code;
         });
     }
 
-    openTerminateLFPModal() {
-        const modalRef = this.modalService.open(TerminatePolicyModalContent);
-        modalRef.result.then(result => {
-            if (result) {
-                this.updateLateFeePolicy(this.generalForm.get('id').value);
-            }
-        });
-    }
-
-    isValidLateFeePolicy() {
-        if (this.generalForm.value['recuring_fee_status']) {
-            if (!this.generalForm.value['recuring_fee'] || !this.generalForm.value['pay_value']
-                || !this.generalForm.value['pay_type'] || !this.generalForm.value['late_due_dt']) {
-                return false;
+    isValidEPIPolicy() {
+        const listPaymentTerms = this.listPaymentTerm;
+        for (const unit of listPaymentTerms) {
+            if (unit.payment_term_id && unit.detail.length > 0) {
+                for (const item of unit.detail) {
+                    if (!item.pay_type || !item.pay_value || !item.before_due_dt) {
+                        return false;
+                    }
+                }
             }
         }
         if (this.generalForm.value['apply_for'] === 2 && this.list.items.length === 0) {
@@ -203,82 +220,66 @@ export class LateFeePolicyDetailComponent implements OnInit {
         return true;
     }
 
-    createLateFeePolicy() {
+    createEPIPolicy() {
         const params = this.generalForm.value;
-        params['recuring_fee_status'] = this.generalForm.value['recuring_fee_status'] ? 1 : 0;
         const listCustomer = [];
         (this.list.items).forEach((item) => {
             listCustomer.push(item.id);
         });
         params['company'] = listCustomer;
-        this.lateFeePolicyService.createLateFeePolicy(params).subscribe(res => {
+        params['payment_term'] = this.listPaymentTerm;
+        console.log(params);
+        this.epiPolicyService.createEPIPolicy(params).subscribe(res => {
             this.toastr.success(res.message);
-            this.router.navigate(['/admin-panel/late-fee-policy']);
+            this.router.navigate(['/admin-panel/epi-policy']);
         }, err => {
             console.log(err);
         });
     }
 
-    updateLateFeePolicy(id) {
+    updateEPIPolicy(id) {
         const params = this.generalForm.value;
-        params['recuring_fee_status'] = this.generalForm.value['recuring_fee_status'] ? 1 : 0;
         const listCustomer = [];
         (this.list.items).forEach((item) => {
             listCustomer.push(item.id);
         });
         params['company'] = listCustomer;
-        this.lateFeePolicyService.updateLateFeePolicy(id, params).subscribe(res => {
+        params['payment_term'] = this.listPaymentTerm;
+        console.log(params);
+        this.epiPolicyService.updateEPIPolicy(id, params).subscribe(res => {
             this.toastr.success(res.message);
-            this.router.navigate(['/admin-panel/late-fee-policy']);
+            this.router.navigate(['/admin-panel/epi-policy']);
         }, err => {
             console.log(err);
         });
     }
 
-    getDetailLateFeePolicy(id) {
+    getDetailEPIPolicy(id) {
         if (id) {
-            this.lateFeePolicyService.getDetailLateFeePolicy(id).subscribe(res => {
-                if (res.data.invoice_lfp) {
-                    this.generalForm.patchValue(res.data.invoice_lfp);
-                    this.currentStatus = res.data.invoice_lfp.ac;
-                    if (res.data.invoice_lfp.recuring_fee_status === 1) {
-                        this.generalForm.controls['recuring_fee_status'].setValue(true);
-                        this.applyRecurringFee = true;
-                    } else {
-                        this.generalForm.controls['recuring_fee_status'].setValue(false);
-                        this.applyRecurringFee = false;
-                    }
+            this.epiPolicyService.getDetailEPIPolicy(id).subscribe(res => {
+                if (res.data.invoice_EIP) {
+                    this.generalForm.patchValue(res.data.invoice_EIP);
+                    this.currentStatus = res.data.invoice_EIP.ac;
                     this.headerTitle = this.generalForm.value['code'] + ': ' + this.generalForm.value['des'];
-                    this.initLateFeeRules();
                 }
-                if (res.data.detail) {
-                    this.list.items = res.data.detail;
+                if (res.data.company) {
+                    this.list.items = res.data.company;
                 }
-                this.keyService.watchContext.next(this);
+                if (res.data.payment_term) {
+                    this.transformListPaymentTerm(res.data.payment_term);
+                }
             }, err => {
                 console.log(err.message);
             });
         }
     }
 
-    editLateFeePolicy(id?) {
-        if (id) {
-            this.router.navigate(['/admin-panel/late-fee-policy/edit', id]);
-        } else {
-            const policyId = this.generalForm.value['id'];
-            const policyStatus = this.generalForm.value['ac'];
-            if (policyId && policyStatus !== 2) {
-                this.router.navigate(['/admin-panel/late-fee-policy/edit', policyId]);
-            }
-        }
-    }
-
-    backToList() {
-        this.router.navigate(['/admin-panel/late-fee-policy']);
+    editEPIPolicy(id) {
+        this.router.navigate(['/admin-panel/epi-policy/edit', id]);
     }
 
     addNewCustomer() {
-        const modalRef = this.modalService.open(CustomerModalContent, { size: 'lg' });
+        const modalRef = this.modalService.open(CustomerEPIModalContent, { size: 'lg' });
         modalRef.result.then(res => {
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
@@ -295,6 +296,14 @@ export class LateFeePolicyDetailComponent implements OnInit {
                 }));
             }
         }, dismiss => { });
+    }
+
+    addNewRule(index) {
+        this.listPaymentTerm[index].detail.push({
+            pay_type: null,
+            pay_value: null,
+            before_due_dt: null
+        });
     }
 
     convertCustomerType(code) {
