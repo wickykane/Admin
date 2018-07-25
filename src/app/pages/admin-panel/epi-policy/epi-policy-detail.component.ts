@@ -165,25 +165,34 @@ export class EPIPolicyDetailComponent implements OnInit {
     }
 
     transformListPaymentTerm(paymentTerm) {
-        for (const key in paymentTerm) {
-            if (key) {
-                const tempPayment = {
-                    payment_term_id: paymentTerm[key].payment_term_id,
-                    cd: paymentTerm[key].cd,
-                    detail: []
-                };
-                for (const subKey in paymentTerm[key]) {
-                    if (subKey && subKey !== 'payment_term_id') {
-                        const tempItem = {
-                            pay_type: paymentTerm[key][subKey].pay_type,
-                            pay_value: paymentTerm[key][subKey].pay_value,
-                            before_due_dt: paymentTerm[key][subKey].before_due_dt
-                        };
-                        tempPayment.detail.push(tempItem);
-                    }
-                }
-                this.listPaymentTerm.push(tempPayment);
-            }
+        // for (const key in paymentTerm) {
+        //     if (key) {
+        //         console.log(paymentTerm[key]);
+        //         const tempPayment = {
+        //             payment_term_id: paymentTerm[key].payment_term_id,
+        //             cd: paymentTerm[key].cd,
+        //             detail: []
+        //         };
+        //         for (const subKey in paymentTerm[key]) {
+        //             if (subKey && subKey !== 'payment_term_id') {
+        //                 const tempItem = {
+        //                     pay_type: paymentTerm[key][subKey].pay_type,
+        //                     pay_value: paymentTerm[key][subKey].pay_value,
+        //                     before_due_dt: paymentTerm[key][subKey].before_due_dt
+        //                 };
+        //                 tempPayment.detail.push(tempItem);
+        //             }
+        //         }
+        //         this.listPaymentTerm.push(tempPayment);
+        //     }
+        // }
+        for (const item of paymentTerm) {
+            const tempPayment = {
+                payment_term_id: item.payment_term.payment_term_id,
+                cd: item.payment_term.cd,
+                detail: item.payment_detail
+            };
+            this.listPaymentTerm.push(tempPayment);
         }
         console.log(this.listPaymentTerm);
     }
