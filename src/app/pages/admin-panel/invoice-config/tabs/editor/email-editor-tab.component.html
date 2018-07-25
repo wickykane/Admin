@@ -1,0 +1,11 @@
+<div>Editor</div>
+<button (click)="showContextMenu = !showContextMenu">Insert Field</button>
+<div class="show-more" *ngIf="showContextMenu">
+    <ul>
+        <li *ngFor="let field of listMaster['insertFields']">
+            <label>
+                <a (click)="onSelectField(field)">{{field.label}}</a>
+            </label>
+        </li>
+    </ul>
+</div>

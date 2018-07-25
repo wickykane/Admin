@@ -1,0 +1,88 @@
+fieldset.custom-border {
+    border: 1px solid #e0e0e0;
+    padding: 10px;
+    margin-top: 15px;
+
+    legend.custom-border {
+        font-size: 1.2em;
+        font-weight: bold;
+        text-align: left;
+        width: auto;
+        padding: 0 10px;
+        border-bottom: none;
+    }
+}
+
+.v-hr {
+    h5 {
+        margin-bottom: 17px;
+
+        span {
+            color: #dc3545;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+    }
+}
+
+.v-hr:nth-child(2) {
+    border-left: #bababa 2px solid;
+    border-right: #bababa 2px solid;
+}
+
+.due-date-section {
+    margin: 10px 0px;
+
+    label {
+        font-size: 1.2em;
+    }
+
+    .input-grp {
+        width: 100%;
+
+        input {
+            margin-right: 10px;
+            width: 50px;
+        }
+    }
+
+    .error {
+        color: #dc3545;
+    }
+
+    .select-grp {
+        width: 100%;
+
+        select {
+            width: 150px;
+        }
+    }
+}
+
+.due-date-section:first-child,
+.due-date-section:last-child {
+    margin: 0px;
+}
+
+.switcher {
+    .switch {
+        width: 40px !important;
+        height: 20px !important;
+
+        .slider.round:before {
+            height: 18px !important;
+            width: 18px !important;
+            top: 1px;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(20px);
+            transform: translateX(20px);
+        }
+    }
+
+    .switch-val {
+        font-size: 1.3em;
+        margin-left: 10px;
+    }
+}

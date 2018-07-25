@@ -47,6 +47,11 @@ import { CustomerEPIModalContent } from './epi-policy/modal/customer.modal';
 import { UserModule } from './user/user.module';
 import { WorkFlowModule } from './work-flow/work-flow.module';
 
+import { InvoiceConfigComponent } from './invoice-config/invoice-config.component';
+import { EmailTemplateModalContent } from './invoice-config/modals/email-template.modal';
+import { EmailEditorTab } from './invoice-config/tabs/editor/email-editor-tab.component';
+import { EmailPreviewTab } from './invoice-config/tabs/preview/email-preview-tab.component';
+
 import { CommonService, TableService } from '../../services/index';
 import {
     CommonShareModule,
@@ -100,7 +105,11 @@ import { AdminPanelService } from './admin-panel.service';
         TerminatePolicyModalContent,
         EPIPolicyDetailComponent,
         EPIPolicyComponent,
-        CustomerEPIModalContent
+        CustomerEPIModalContent,
+        InvoiceConfigComponent,
+        EmailTemplateModalContent,
+        EmailEditorTab,
+        EmailPreviewTab
     ],
     entryComponents: [
         BankModalComponent,
@@ -109,7 +118,8 @@ import { AdminPanelService } from './admin-panel.service';
         InsuranceModalComponent,
         CustomerModalContent,
         TerminatePolicyModalContent,
-        CustomerEPIModalContent
+        CustomerEPIModalContent,
+        EmailTemplateModalContent
     ],
     providers: [TableService, CommonService, AdminPanelService]
 })
