@@ -9,6 +9,7 @@ import { routerTransition } from '../../../router.animations';
 import { EPIPolicyService } from './epi-policy.service';
 import { EPIPolicyListKeyService } from './keys.list.control';
 import { CustomerEPIModalContent } from './modal/customer.modal';
+import { TerminateEPIPolicyModalContent } from './modal/terminate-policy.modal';
 
 @Component({
     selector: 'app-epi-policy-detail',
@@ -66,6 +67,11 @@ export class EPIPolicyDetailComponent implements OnInit {
                     this.isView = true;
                     this.isEdit = false;
                 }
+                this.listMaster['status'] = [
+                    { id: 1, value: 'Active' },
+                    { id: 0, value: 'Inactive' },
+                    { id: 2, value: 'Closed' }
+                ];
                 this.getDetailEPIPolicy(params.id);
             } else {
                 this.isView = false;
@@ -74,16 +80,16 @@ export class EPIPolicyDetailComponent implements OnInit {
                     this.isCreate = true;
                     this.headerTitle = 'CREATE NEW POLICY';
                 }
+                this.listMaster['status'] = [
+                    { id: 1, value: 'Active' },
+                    { id: 0, value: 'Inactive' }
+                ];
                 this.getGenerateCode();
             }
         });
         this.listMaster['applyFor'] = [
             { id: 1, value: 'All Customers' },
             { id: 2, value: 'Specific Customers' }
-        ];
-        this.listMaster['status'] = [
-            { id: 1, value: 'Active' },
-            { id: 0, value: 'Inactive' }
         ];
         this.listMaster['payType'] = [
             { id: 1, value: 'Percent' },
@@ -199,7 +205,11 @@ export class EPIPolicyDetailComponent implements OnInit {
 
     payloadData() {
         if (this.generalForm.get('id').value && this.isEdit) {
-            this.updateEPIPolicy(this.generalForm.get('id').value);
+            if (this.currentStatus !== 2 && this.generalForm.value['ac'] === 2) {
+                this.openTerminateEPIPolicyModal();
+            } else {
+                this.updateEPIPolicy(this.generalForm.get('id').value);
+            }
         } else {
             this.createEPIPolicy();
         }
@@ -209,6 +219,17 @@ export class EPIPolicyDetailComponent implements OnInit {
         this.epiPolicyService.getGenerateCode().subscribe(res => {
             this.generalForm.controls['code'].setValue(res.data.code);
             this.listMaster['generate-code'] = res.data.code;
+        });
+    }
+
+    openTerminateEPIPolicyModal() {
+        const modalRef = this.modalService.open(TerminateEPIPolicyModalContent);
+        modalRef.result.then(result => {
+            if (result) {
+                this.updateEPIPolicy(this.generalForm.get('id').value);
+            }
+        }, dismiss => {
+
         });
     }
 

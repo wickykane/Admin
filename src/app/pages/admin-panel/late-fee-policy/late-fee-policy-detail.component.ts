@@ -187,6 +187,8 @@ export class LateFeePolicyDetailComponent implements OnInit {
             if (result) {
                 this.updateLateFeePolicy(this.generalForm.get('id').value);
             }
+        }, dismiss => {
+
         });
     }
 

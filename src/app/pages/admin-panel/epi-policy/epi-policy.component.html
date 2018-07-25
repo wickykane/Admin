@@ -45,6 +45,7 @@
                         <td>
                             <span class="label label-success" *ngIf="item.ac == 1">{{convertStatus(item.ac, 'status')}}</span>
                             <span class="label label-danger" *ngIf="item.ac == 0">{{convertStatus(item.ac, 'status')}}</span>
+                            <span class="label label-draft" *ngIf="item.ac == 2">{{convertStatus(item.ac, 'status')}}</span>
                         </td>
                         <td>
                             <a class="btn btn-default" (click)="viewEPIPolicy(item.id)" title="View Early Payment Incentive Policy">
