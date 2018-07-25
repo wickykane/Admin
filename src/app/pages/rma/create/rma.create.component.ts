@@ -180,7 +180,7 @@ export class RmaCreateComponent implements OnInit {
                     validate: 1
                 };
             }
-            if(data.return_time ==null){
+            if (data.return_time === null) {
                 this.dataConfig = {
                     cover_ship: 'Yes'
                 };
