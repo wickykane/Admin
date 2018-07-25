@@ -1,7 +1,7 @@
 <div [@routerTransition]>
     <app-page-header [heading]="headerTitle" [icon]="'fa-th-list'" *ngIf="isCreate"></app-page-header>
     <app-page-header [heading]="headerTitle" [icon]="'fa-th-list'" *ngIf="!isCreate"></app-page-header>
-    <!-- <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut> -->
+    <app-shortcut [listShortcut]='keyService.getKeys()' *ngIf="isView"></app-shortcut>
     <form class="rma-page block" [formGroup]="generalForm">
         <div style="margin: 15px 0">
             <a class="btn btn-outline-info" [routerLink]="['/admin-panel/late-fee-policy']">
@@ -51,7 +51,7 @@
         <fieldset class="custom-border" *ngIf="generalForm.value['apply_for'] == 2">
             <legend class="custom-border">LIST OF CUSTOMERS</legend>
             <div class="table-responsive list-customers">
-                <table class="table table-style table-order custom-table table-bg" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
+                <table class="table table-style table-order custom-table table-bg">
                     <thead>
                         <tr>
                             <th *ngIf="!isView && list.items.length > 0">
@@ -113,10 +113,10 @@
                         <input (click)="switchRule()" type="checkbox" formControlName="recuring_fee_status">
                         <div class="slider round"></div>
                    </label> -->
-                   <label class="switch" placement="top" style="margin-bottom: 0px;">
+                    <label class="switch" placement="top" style="margin-bottom: 0px;">
                        <input type="checkbox" [ngModel]="applyRecurringFee" [ngModelOptions]="{standalone: true}" (ngModelChange)="switchRule($event)">
                        <div class="slider round"></div>
-                   </label>
+                    </label>
                 </div>
                 <input [textMask]="{mask: integerMaskObject()}" type="text" class="recurring-fee-input" formControlName="recuring_fee" *ngIf="!isView && generalForm.value['recuring_fee_status']">
                 <div class="recurring-fee-text" *ngIf="isView && generalForm.value['recuring_fee_status']">
@@ -158,7 +158,7 @@
         <div class="col-md-12 mg-top-15 text-center">
             <button class="btn btn btn-outline-primary" (click)="payloadData()" [disabled]="!generalForm.valid || !isValidLateFeePolicy()" *ngIf="!isView">Save</button>
             <button class="btn btn btn-outline-primary" (click)="editLateFeePolicy(generalForm.value['id'])" *ngIf="isView && (currentStatus != 2)">Edit</button>
-            <button class="btn btn-default" type="button" [routerLink]="['/admin-panel/late-fee-policy']">Cancel</button>
+            <button class="btn btn-default" type="button" (click)="backToList()">Cancel</button>
         </div>
     </div>
 </div>
