@@ -54,7 +54,8 @@ export class EPIPolicyComponent implements OnInit {
         ];
         this.listMaster['status'] = [
             { id: 1, value: 'Active' },
-            { id: 0, value: 'Inactive' }
+            { id: 0, value: 'Inactive' },
+            { id: 2, value: 'Closed' }
         ];
         this.getList();
     }
