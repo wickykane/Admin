@@ -131,7 +131,11 @@
                                 <button ngbTooltip="Click to Reject" data-toggle="tooltip" *ngIf="item.sts_code=='SM'" type="button" class="btn btn-default"
                                     (click)="rejectByManager(item.sale_quote_id)">
                                     <i class="fa fa-ban"></i>
-                                </button>                                
+                                </button>
+                                <button ngbTooltip="Click to Convert To SO" data-toggle="tooltip" *ngIf="item.sts_code=='AM'" type="button" class="btn btn-default"
+                                (click)="convertOrderToSO(item.sale_quote_id)">
+                                <i class="fa fa-check-square"></i>
+                            </button>                                
                                 <!-- <a ngbTooltip="Click to Update" class="btn btn-default " [routerLink]="['edit', item.id]" *ngIf="item.sts_code == 'SM'">
                                         <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                     </a> -->
