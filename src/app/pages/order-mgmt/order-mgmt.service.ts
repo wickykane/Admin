@@ -222,4 +222,8 @@ export class OrderService {
         const url = 'order/reference-data';
         return this.API.get(url);
     }
+    getRMAForOrder(order_id, params) {
+        const url = 'rma/get-data-by-order/' +  order_id;
+        return this.API.get(url, params);
+    }
 }
