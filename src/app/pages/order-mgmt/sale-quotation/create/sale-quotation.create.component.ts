@@ -103,6 +103,7 @@ export class SaleQuotationCreateComponent implements OnInit {
             'prio_level': [null],
             'is_multi_shp_addr': 0,
             'sales_person': [null],
+            'approver_id': [null],
             'billing_id': [null],
             'shipping_id': [null],
             'payment_method': [null],
@@ -118,11 +119,12 @@ export class SaleQuotationCreateComponent implements OnInit {
         }, 300);
 
         this.listMaster['multi_ship'] = [{ id: 0, label: 'No' }, { id: 1, label: 'Yes' }];
+        const user = JSON.parse(localStorage.getItem('currentUser'));
         //  Item
         this.list.items = this.router.getNavigatedData() || [];
         if (Object.keys(this.list.items).length === 0) { this.list.items = []; }
-        this.getListCustomerOption();
-        this.getOrderReference();
+        this.orderService.getAllCustomer().subscribe(res => { this.listMaster['customer'] = res.data; });
+        this.orderService.getOrderReference().subscribe(res => {Object.assign(this.listMaster, res.data); });
         this.updateTotal();
         this.copy_addr = { ...this.copy_addr, ...this.addr_select };
         this.copy_customer = { ...this.copy_customer, ...this.customer };
@@ -131,6 +133,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         d.setDate(d.getDate() + 30);
         this.generalForm.controls['expiry_date'].patchValue(d.toISOString().slice(0, 10));
         this.generalForm.controls['delivery_date'].patchValue(d.toISOString().slice(0, 10));
+        this.generalForm.get('approver_id').patchValue(user.id);
     }
 
     /**
@@ -143,33 +146,10 @@ export class SaleQuotationCreateComponent implements OnInit {
             integerLimit: max || null
         });
     }
-
-    getListCustomerOption() {
-        this.orderService.getAllCustomer().subscribe(res => {
-            try {
-                this.listMaster['customer'] = res.data;
-            } catch (e) {
-                console.log(e);
-            }
-        });
-    }
     getDetailCustomerById(company_id) {
         this.orderService.getDetailCompany(company_id).subscribe(res => {
             try {
                 this.customer = res.data;
-            } catch (e) {
-                console.log(e);
-            }
-        });
-    }
-    getOrderReference() {
-        this.orderService.getOrderReference().subscribe(res => {
-            try {
-                this.listMaster['pay_type'] = res.data.order_types;
-                this.listMaster['payment_method'] = res.data.payment_methods;
-                this.listMaster['priority'] = res.data.priority_levels;
-                this.listMaster['sale_mans'] = res.data.sale_mans;
-                this.listMaster['warehouses'] = res.data.warehouses;
             } catch (e) {
                 console.log(e);
             }

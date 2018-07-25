@@ -1,10 +1,10 @@
 <div [@routerTransition]>
     <app-page-header [heading]="headerTitle" [icon]="'fa-th-list'" *ngIf="isCreate"></app-page-header>
     <app-page-header [heading]="headerTitle" [icon]="'fa-th-list'" *ngIf="!isCreate"></app-page-header>
-    <app-shortcut [listShortcut]='keyService.getKeys()' *ngIf="isView"></app-shortcut>
+    <!-- <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut> -->
     <form class="rma-page block" [formGroup]="generalForm">
         <div style="margin: 15px 0">
-            <a class="btn btn-outline-info" [routerLink]="['/admin-panel/late-fee-policy']">
+            <a class="btn btn-outline-info" [routerLink]="['/admin-panel/epi-policy']">
                 <i class="fa fa-arrow-left"></i> Back</a>
         </div>
         <fieldset class="custom-border">
@@ -102,63 +102,82 @@
             </div>
         </fieldset>
         <fieldset class="custom-border late-fee-rules">
-            <legend class="custom-border">LATE FEE RULES</legend>
-            <div class="recurring-fee-toggle">
-                <div class="recurring-fee-lbl">Recurring fee</div>
-                <a class="btn btn-default recurring-fee-icon" title="Number of days to wait to generate continuously the late payment charges invoice if the customer still not fully pay the invoice">
-                    <i class="fa fa-question-circle" aria-hidden="true"></i>
-                </a>
-                <div class="toggle-button" [ngClass]="{'disabled': isView}">
-                    <!-- <label class="switch" data-toggle="tooltip" data-content="" data-trigger="hover" style="margin-bottom: 0px;">
-                        <input (click)="switchRule()" type="checkbox" formControlName="recuring_fee_status">
-                        <div class="slider round"></div>
-                   </label> -->
-                    <label class="switch" placement="top" style="margin-bottom: 0px;">
-                       <input type="checkbox" [ngModel]="applyRecurringFee" [ngModelOptions]="{standalone: true}" (ngModelChange)="switchRule($event)">
-                       <div class="slider round"></div>
-                    </label>
-                </div>
-                <input [textMask]="{mask: integerMaskObject()}" type="text" class="recurring-fee-input" formControlName="recuring_fee" *ngIf="!isView && generalForm.value['recuring_fee_status']">
-                <div class="recurring-fee-text" *ngIf="isView && generalForm.value['recuring_fee_status']">
-                    {{generalForm.value['recuring_fee']}}
-                </div>
-                <div class="recurring-fee-text" *ngIf="generalForm.value['recuring_fee_status']">day(s)</div>
-            </div>
-            <div class="mg-top-15" *ngIf="generalForm.value['recuring_fee_status']">
-                Rule
-            </div>
-            <div class="rule mg-top-15" *ngIf="generalForm.value['recuring_fee_status']">
-                <div class="recurring-fee-text">
-                    <span style="margin-right: 15px;">1</span>
-                    <span>Apply a</span>
-                </div>
-                <input [textMask]="{mask: decimalMaskObject()}" type="text" class="recurring-fee-input" formControlName="pay_value" *ngIf="!isView">
-                <div class="recurring-fee-text" *ngIf="isView">
-                    {{generalForm.value['pay_value']}}
-                    <span *ngIf="generalForm.value['pay_type'] == 1">%</span>
-                    <span *ngIf="generalForm.value['pay_type'] == 2">$</span>
-                </div>
-                <select class="form-control" formControlName="pay_type" *ngIf="!isView">
-                    <option [ngValue]="null" selected="true">--Select--</option>
-                    <option *ngFor="let item of listMaster['payType']" [ngValue]="item.id">{{item.value}}</option>
-                </select>
-                <div class="recurring-fee-text" *ngIf="isView && generalForm.value['pay_type']">
-                    {{convertStatus(generalForm.value['pay_type'], 'payType')}}
-                </div>
-                <div class="recurring-fee-text">fee if the invoice remain unpaid</div>
-                <input [textMask]="{mask: integerMaskObject()}" type="text" class="recurring-fee-input" formControlName="late_due_dt" *ngIf="!isView">
-                <div class="recurring-fee-text" *ngIf="isView">
-                    {{generalForm.value['late_due_dt']}}
-                </div>
-                <div class="recurring-fee-text">days after the due date</div>
+            <legend class="custom-border">INCENTIVE RULES</legend>
+            <div class="table-responsive">
+                <table class="table table-striped table-vcenter custom-table">
+                    <tbody *ngFor="let item of listPaymentTerm; let i = index;">
+                        <tr>
+                            <td style="width: 50px; font-weight: bold;">{{i+1}}</td>
+                            <td style="width: 200px; font-weight: bold;">{{item.cd}}</td>
+                            <td>
+                                Rule inside: <span style="font-weight: bold;">{{item.detail.length}} Rules</span>
+                            </td>
+                            <td class="text-right" [ngClass]="{'expand-item' : item.collapseRows}">
+                                <a class="btn btn-default " title="Expand" (click)="item.collapseRows = !item.collapseRows;" *ngIf="!item.collapseRows">
+                                    <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                                </a>
+                                <a class="btn btn-default " title="Collapse" (click)="item.collapseRows = !item.collapseRows;" *ngIf="item.collapseRows">
+                                    <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr *ngIf="item.collapseRows">
+                            <td colspan="4" class="child-table">
+                                <table class="table table-vcenter custom-table">
+                                    <tbody>
+                                        <tr *ngIf="!isView" style="background-color: #828282;">
+                                            <td style="border: 1px solid #828282;">
+                                                <button (click)="addNewRule(i)" class="btn btn-primary" translate>
+                                                    <i class="fa fa-plus"></i>Create new rule</button>
+                                            </td>
+                                        </tr>
+                                        <tr *ngFor="let subItem of item.detail; let j = index;">
+                                            <td style="border: 1px solid #828282;">
+                                                <span>Apply a</span>
+                                                <span class="recurring-fee-text" *ngIf="isView">
+                                                    {{subItem.pay_value}}
+                                                    <span *ngIf="subItem.pay_type == 1">%</span>
+                                                <span *ngIf="subItem.pay_type == 2">$</span>
+                                                </span>
+                                                <span class="recurring-fee-text" *ngIf="!isView">
+                                                    <input [textMask]="{mask: decimalMaskObject()}" type="text" class="recurring-fee-input" [(ngModel)]="subItem.pay_value" [ngModelOptions]="{standalone: true}">
+                                                </span>
+                                                <div class="recurring-fee-text" *ngIf="isView && subItem.pay_type">
+                                                    {{convertStatus(subItem.pay_type, 'payType')}}
+                                                </div>
+                                                <span class="recurring-fee-text" *ngIf="!isView">
+                                                    <select class="form-control" [(ngModel)]="subItem.pay_type" [ngModelOptions]="{standalone: true}">
+                                                        <option [ngValue]="null" selected="true">--Select--</option>
+                                                        <option *ngFor="let item of listMaster['payType']" [ngValue]="item.id">{{item.value}}</option>
+                                                    </select>
+                                                </span>
+                                                <span>deduction if the invoice is paid more than</span>
+                                                <span class="recurring-fee-text" *ngIf="isView">
+                                                    {{subItem.before_due_dt}}
+                                                </span>
+                                                <span class="recurring-fee-text" *ngIf="!isView">
+                                                    <input [textMask]="{mask: decimalMaskObject()}" type="text" class="recurring-fee-input" [(ngModel)]="subItem.before_due_dt" [ngModelOptions]="{standalone: true}">
+                                                </span>
+                                                <span>days before the due date</span>
+                                                <a class="btn btn-default" *ngIf="!isView" title="Remove rule" (click)="deleteRule(i, j)" style="float: right;">
+                                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </fieldset>
     </form>
     <div class="row">
         <div class="col-md-12 mg-top-15 text-center">
-            <button class="btn btn btn-outline-primary" (click)="payloadData()" [disabled]="!generalForm.valid || !isValidLateFeePolicy()" *ngIf="!isView">Save</button>
-            <button class="btn btn btn-outline-primary" (click)="editLateFeePolicy(generalForm.value['id'])" *ngIf="isView && (currentStatus != 2)">Edit</button>
-            <button class="btn btn-default" type="button" (click)="backToList()">Cancel</button>
+            <button class="btn btn btn-outline-primary" (click)="payloadData()" [disabled]="!generalForm.valid || !isValidEPIPolicy()" *ngIf="!isView">Save</button>
+            <button class="btn btn btn-outline-primary" (click)="editEPIPolicy(generalForm.value['id'])" *ngIf="isView && (currentStatus != 2)">Edit</button>
+            <button class="btn btn-default" type="button" [routerLink]="['/admin-panel/epi-policy']">Cancel</button>
         </div>
     </div>
 </div>
