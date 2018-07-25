@@ -226,4 +226,8 @@ export class OrderService {
         const url = 'rma/get-data-by-order/' +  order_id;
         return this.API.get(url, params);
     }
+    convertOrderToSO(buyer_id, params) {
+        const url = 'order/sale-quote/buyer-approved/' +  buyer_id;
+        return this.API.post(url, params);
+    }
 }
