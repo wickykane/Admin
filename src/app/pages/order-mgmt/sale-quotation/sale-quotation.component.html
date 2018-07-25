@@ -93,8 +93,7 @@
                             <th translate>Customer</th>
                             <th class="text-center" translate style="width:8%">Quote date</th>
                             <th class="text-center" translate style="width:8%">Expiry date</th>
-                            <th class="text-center" translate style="width:8%">Total</th>
-                            <th class="text-center" translate style="width:50px">Sent</th>
+                            <th class="text-center" translate style="width:8%">Total</th>                          
                             <th class="text-center" translate style="width:7%">Status</th>
                             <th translate>Action</th>
                         </tr>
@@ -107,20 +106,15 @@
                             <td>{{item.ref_num}}</td>
                             <td>{{item.buyer_name}}</td>
                             <td class="text-center">
-                                {{item.quote_date | date:'yyyy-mm-dd' }}
+                                {{item.quote_date | date:'mm/dd/yyyy' }}
 
                             </td>
                             <td class="text-center">
-                                <span ng-if="item.expiry_date!=null">{{item.expiry_date | date:'yyyy-mm-dd' }}</span>
+                                <span ng-if="item.expiry_date!=null">{{item.expiry_date | date:'mm/dd/yyyy' }}</span>
                             </td>
                             <td class="text-center">
                                 {{item.total_price | currency}}
-                            </td>
-                            <td class="text-center">
-                                <span ng-if="item.has_send_mail_to_buyer == 1" style="color:#46c37b">
-                                    <i class="fa fa-check"></i>
-                                </span>
-                            </td>
+                            </td>                          
                             <td>
                                 <span class="badge badge-info" *ngIf="item.sts_code == 'NW'">{{item.sts}}</span>
                                 <span class="badge badge-warning" *ngIf="item.sts_code == 'SM'">{{item.sts}}</span>
@@ -137,11 +131,7 @@
                                 <button ngbTooltip="Click to Reject" data-toggle="tooltip" *ngIf="item.sts_code=='SM'" type="button" class="btn btn-default"
                                     (click)="rejectByManager(item.sale_quote_id)">
                                     <i class="fa fa-ban"></i>
-                                </button>
-                                <button ngbTooltip="Click to Sent Buyer" data-toggle="tooltip" *ngIf="item.sts_code =='AM'"
-                                    type="button" class="btn btn-default" (click)="sentMailToBuyer(item.sale_quote_id)">
-                                    <i class="fa fa-envelope"></i>
-                                </button>
+                                </button>                                
                                 <!-- <a ngbTooltip="Click to Update" class="btn btn-default " [routerLink]="['edit', item.id]" *ngIf="item.sts_code == 'SM'">
                                         <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                     </a> -->
