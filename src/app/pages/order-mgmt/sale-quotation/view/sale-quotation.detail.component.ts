@@ -100,6 +100,18 @@ export class SaleQuotationDetailComponent implements OnInit {
         });
 
     }
+    convertOrderToSO(id) {
+        const params = {};
+        this.orderService.convertOrderToSO(id, params).subscribe(res => {
+            try {
+                this.toastr.success(res.message);
+                // this.router.navigate(['/order-management/sale-quotation/detail/', {id: this.data['id']}]);
+
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
 
 
     /**

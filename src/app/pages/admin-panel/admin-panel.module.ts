@@ -43,6 +43,7 @@ import { TerminatePolicyModalContent } from './late-fee-policy/modal/terminate-p
 import { EPIPolicyDetailComponent } from './epi-policy/epi-policy-detail.component';
 import { EPIPolicyComponent } from './epi-policy/epi-policy.component';
 import { CustomerEPIModalContent } from './epi-policy/modal/customer.modal';
+import { TerminateEPIPolicyModalContent } from './epi-policy/modal/terminate-policy.modal';
 
 import { UserModule } from './user/user.module';
 import { WorkFlowModule } from './work-flow/work-flow.module';
@@ -106,6 +107,7 @@ import { AdminPanelService } from './admin-panel.service';
         EPIPolicyDetailComponent,
         EPIPolicyComponent,
         CustomerEPIModalContent,
+        TerminateEPIPolicyModalContent,
         InvoiceConfigComponent,
         EmailTemplateModalContent,
         EmailEditorTab,
@@ -119,6 +121,7 @@ import { AdminPanelService } from './admin-panel.service';
         CustomerModalContent,
         TerminatePolicyModalContent,
         CustomerEPIModalContent,
+        TerminateEPIPolicyModalContent,
         EmailTemplateModalContent
     ],
     providers: [TableService, CommonService, AdminPanelService]
