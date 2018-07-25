@@ -148,25 +148,20 @@ export class PartListComponent implements OnInit {
     }
 
     getList() {
-        const params = {
-            ...this.tableService.getParams(),
-            ...this.searchForm.value,
-        };
-        console.log(params);
-        if (params.partlinks_no_filter) {
-            params.partlinks_no_filter = _.trim(params.partlinks_no_filter);
-            params['partlinks_no_filter[]'] = params.partlinks_no_filter;
-        }
-        if (params.part_no_filter) {
-            params.part_no_filter = _.map(params.part_no_filter.split(','), _.trim);
-        }
-        console.log(params);
-        Object.keys(params).forEach(
-            key =>
-                (params[key] === null || params[key] === '') &&
-                delete params[key]
-        );
+        const params = { ...this.tableService.getParams(), ...this.searchForm.value };
+        // Change filter array
+        try {
+            Object.keys(this.filterForm.value).map(key => {
+                if (this.filterForm.value[key]) {
+                    const data = this.filterForm.value[key].toString().split(',').map(item => item.trim());
+                    if (data) {
+                        params[key + '[]'] = data;
+                    }
+                }
+            });
 
+        } catch (e) { }
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
         this.productService.getListItem(params).subscribe(res => {
             try {
                 if (!res.data.rows) {
