@@ -30,6 +30,28 @@ export class SaleOrderInformationTabComponent implements OnInit {
         'subs': [],
         'buyer_info': {}
     };
+    public addr_select = {
+        shipping: {
+            'address_name': '',
+            'address_line': '',
+            'country_name': '',
+            'city_name': '',
+            'state_name': '',
+            'zip_code': ''
+        },
+        billing: {
+            'address_name': '',
+            'address_line': '',
+            'country_name': '',
+            'city_name': '',
+            'state_name': '',
+            'zip_code': ''
+        },
+        contact: {
+            'phone': '',
+            'email': ''
+        }
+    };
     data = {};
     public  totalQTY = 0;
     public totalShipQTY = 0;

@@ -139,4 +139,8 @@ export class ProductService {
         const url = 'item/mass/' + id;
         return this.apiService.get(url);
     }
+    getPartList(params) {
+        const url = 'item/part-list';
+        return this.apiService.get(url, params);
+    }
 }
