@@ -9,4 +9,9 @@ export class InvoiceConfigService {
         const url = "config/invoicechase/";
         return this.apiService.get(url);
     }
+
+    saveInvoiceConfigInfo(params) {
+        const url = "config/invoicechase/update";
+        return this.apiService.put(url,params);
+    }
 }

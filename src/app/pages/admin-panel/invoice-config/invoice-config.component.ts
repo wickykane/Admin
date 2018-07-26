@@ -104,7 +104,7 @@ export class InvoiceConfigComponent implements OnInit {
      */
     onChangeFrequency() {
         this.invoiceForm.controls.afterRemindFrequency
-            ? this.invoiceForm.controls.afterRemindValue.setValue(1)
+            ? this.invoiceForm.controls.afterRemindValue.setValue("1")
             : this.invoiceForm.controls.afterRemindValue.setValue(null);
     }
 
@@ -158,5 +158,31 @@ export class InvoiceConfigComponent implements OnInit {
     }
 
     onSave() {
-    }
+        let params = {
+            "apply_chase_for": this.applyChaseOption,
+            "before_due_date":
+            {
+                "enable": this.invoiceForm.value["beforeOn"] ? 1 : 0,
+                "send_reminder": this.invoiceForm.value["beforeRemind"]
+            },
+            "on_due_date":
+            {
+                "enable": this.invoiceForm.value["onDueDateOn"] ? 1 : 0
+            },
+            "after_due_date":
+            {
+                "enable": this.invoiceForm.value["afterDueDateOn"] ? 1 : 0,
+                "send_reminder_key": this.invoiceForm.value["afterRemindFrequency"],
+                "send_reminder_value": this.invoiceForm.value["afterRemindValue"]
+            }
+        }
+        this.invoiceService.saveInvoiceConfigInfo(params).subscribe(
+            res => {
+                console.log(res);
+                this.getInvoiceChaseInfo();
+            },
+            err => {
+
+            })
+;    }
 }
