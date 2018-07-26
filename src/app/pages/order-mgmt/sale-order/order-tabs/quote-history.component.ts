@@ -20,6 +20,7 @@ export class SaleQuoteHistoryTabComponent implements OnInit {
     @Input() set saleQuoteId(id) {
         if (id) {
             this._saleQuoteId = id;
+            console.log(this._saleQuoteId );
             this.getList();
         }
     }

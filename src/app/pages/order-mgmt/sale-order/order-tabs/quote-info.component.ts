@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import * as _ from 'lodash';
 import { OrderService } from '../../../order-mgmt/order-mgmt.service';
 import { TableService } from './../../../../services/table.service';
 
@@ -16,13 +17,18 @@ export class SaleQuoteInformationTabComponent implements OnInit {
      * letiable Declaration
      */
 
-    public _orderId;
-    @Input() set orderId(id) {
-        if (id) {
-            this._orderId = id;
+    public _detailOrder;
+    @Input() set detailOrder(data) {
+        if (data && (!_.isEmpty(data))) {
+            this.detail = data;
+            this.detail['subs'] = data.list.items;
+            this.detail['subs'].forEach( (item) => {
+                this.totalQTY += item.quantity;
+
+            });
+            this.detail['buyer_info'] = data.buyer_info;
         }
     }
-    @Output() stockValueChange = new EventEmitter();
 
     public detail = {
         'billing': {},
@@ -42,31 +48,6 @@ export class SaleQuoteInformationTabComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.getList();
 
     }
-
-    /**
-     * Internal Function
-     */
-
-    getList() {
-
-        this.orderService.getSaleQuoteDetail(this._orderId).subscribe(res => {
-            try {
-                this.detail = res.data;
-                this.stockValueChange.emit(res.data) ;
-                this.detail['subs'] = res.data.list.items;
-                this.detail['subs'].forEach( (item) => {
-                    this.totalQTY += item.quantity;
-
-                });
-                this.detail['buyer_info'] = res.data.buyer_info;
-
-            } catch (e) {
-                console.log(e);
-            }
-        });
-    }
-
 }
