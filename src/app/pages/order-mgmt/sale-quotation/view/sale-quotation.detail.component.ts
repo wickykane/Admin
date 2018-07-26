@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -18,16 +18,15 @@ import {SaleQuoteDetailKeyService} from './keys.detail.control';
     providers: [PrintHtmlService, SaleQuoteDetailKeyService]
 })
 
+
 export class SaleQuotationDetailComponent implements OnInit {
     /**
      * Variable Declaration
      */
 
-    data = {};
     public orderId;
-    public orderDetail = {
-        order_sts_short_name: ''
-    };
+    public orderDetail = {};
+    @Output() stockValueChange = new EventEmitter();
 
 
     /**
@@ -46,15 +45,15 @@ export class SaleQuotationDetailComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.data['id'] = this.route.snapshot.paramMap.get('id');
-        this.orderId = this.data['id'];
+        this.orderId =  this.route.snapshot.paramMap.get('id');
+        console.log(this.orderId);
+        this. getList();
     }
     /**
      * Mater Data
      */
 
     checkRender(detail) {
-        this.data['sale_quote_id'] = detail['sale_quote_id'];
         this.orderDetail = detail;
     }
 
@@ -62,24 +61,12 @@ export class SaleQuotationDetailComponent implements OnInit {
         this.router.navigate(['/order-management/sale-quotation']);
     }
 
-    sentMailToBuyer(id) {
-        this.orderService.sentMailToBuyer(id).subscribe(res => {
-            try {
-                this.toastr.success(res.message);
-                this.router.navigate(['/order-management/sale-quotation/detail/', {id: this.data['id']}]);
-            } catch (e) {
-                console.log(e);
-            }
-        });
-    }
-
     approveByManager(id) {
         const params = { status: 'AM' };
         this.orderService.updateSaleQuoteStatus(id, params).subscribe(res => {
             try {
                 this.toastr.success(res.message);
-                this.router.navigate(['/order-management/sale-quotation/detail/', {id: this.data['id']}]);
-
+                this.getList();
             } catch (e) {
                 console.log(e);
             }
@@ -92,8 +79,7 @@ export class SaleQuotationDetailComponent implements OnInit {
         this.orderService.updateSaleQuoteStatus(id, params).subscribe(res => {
             try {
                 this.toastr.success(res.message);
-                this.router.navigate(['/order-management/sale-quotation/detail/', {id: this.data['id']}]);
-
+                this.getList();
             } catch (e) {
                 console.log(e);
             }
@@ -105,7 +91,19 @@ export class SaleQuotationDetailComponent implements OnInit {
         this.orderService.convertOrderToSO(id, params).subscribe(res => {
             try {
                 this.toastr.success(res.message);
-                // this.router.navigate(['/order-management/sale-quotation/detail/', {id: this.data['id']}]);
+                this.getList();
+
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
+    getList() {
+
+        this.orderService.getSaleQuoteDetail(this.orderId).subscribe(res => {
+            try {
+                this.orderDetail = res.data;
+                this.stockValueChange.emit(res.data) ;
 
             } catch (e) {
                 console.log(e);
