@@ -3,8 +3,6 @@ import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 // tslint:disable-next-line:import-blacklist
 import { Subject } from 'rxjs/Rx';
 
-
-
 @Injectable()
 export class InvoiceCreateKeyService implements OnDestroy {
     public context: any;
@@ -34,18 +32,20 @@ export class InvoiceCreateKeyService implements OnDestroy {
 
     initKey() {
         this.resetKeys();
-        this._hotkeysService.add(new Hotkey('ctrl+f', (event: KeyboardEvent): any => {
+        this._hotkeysService.add(new Hotkey('shift+d', (event: KeyboardEvent): boolean => {
             event.preventDefault();
-            this.context.tableService.searchAction();
-            event.returnValue = false;
-            return event;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Search'));
-        this._hotkeysService.add(new Hotkey('ctrl+r', (event: KeyboardEvent): any => {
+            this.context.payloadData('draft');
+            return;
+        }, undefined, 'Save As Draft'));
+        this._hotkeysService.add(new Hotkey('shift+s', (event: KeyboardEvent): boolean => {
             event.preventDefault();
-            this.context.tableService.resetAction(this.context.searchForm);
-            event.returnValue = false;
-            return event;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset'));
-
+            this.context.payloadData('submit');
+            return;
+        }, undefined, 'Save & Submit'));
+        this._hotkeysService.add(new Hotkey('shift+c', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            this.context.payloadData('createnew');
+            return;
+        }, undefined, 'Save & Create New Invoice'));
     }
 }

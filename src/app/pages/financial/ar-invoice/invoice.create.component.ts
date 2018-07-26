@@ -145,17 +145,9 @@ export class InvoiceCreateComponent implements OnInit {
             'discount_amount': [null],
             'tax_amount': [null],
             'address': [null],
-            'order_detail': [null],
-            // 'shp_cost': [null],
-            // 'sub_tot': [null],
-            // 'dsct_pct': [null],
-            // 'tax_pct': [null],
-            // 'tot_amt': [null],
-            // 'dsct_pct_amt': [null],
-            // 'tax_pct_amt': [null],
-            // 'address': [null],
-            // 'items': [null],
+            'order_detail': [null]
         });
+        this.keyService.watchContext.next(this);
     }
 
     ngOnInit() {
@@ -164,7 +156,6 @@ export class InvoiceCreateComponent implements OnInit {
             if (params.id) {
                 this.isCreate = false;
                 this.isEdit = true;
-                this.headerTitle = 'EDIT INVOICE';
                 this.invoiceId = params.id;
                 this.getDetailInvoice(this.invoiceId);
             } else {
@@ -184,6 +175,7 @@ export class InvoiceCreateComponent implements OnInit {
             { id: 3, name: 'Credit Card' }
         ];
         this.getListCustomerOption();
+        this.getListApprover();
         this.getListPaymentTerm();
         this.updateTotal();
         this.copy_addr = { ...this.copy_addr, ...this.addr_select };
@@ -197,6 +189,16 @@ export class InvoiceCreateComponent implements OnInit {
         this.financialService.getAllCustomer().subscribe(res => {
             try {
                 this.listMaster['customer'] = res.data;
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
+
+    getListApprover() {
+        this.financialService.getListApprover().subscribe(res => {
+            try {
+                this.listMaster['approver'] = res.data;
             } catch (e) {
                 console.log(e);
             }
@@ -221,12 +223,7 @@ export class InvoiceCreateComponent implements OnInit {
                 if (!this.generalForm.value['payment_term_range']) {
                     this.generalForm.controls['payment_term_range'].setValue(this.getPaymentTermRange(this.generalForm.value['payment_term_id']));
                 }
-                // if (res.data.address.billing[0]) {
-                //     this.addr_select.billing = res.data.address.billing[0];
-                // }
-                // if (res.data.address.shipping[0]) {
-                //     this.addr_select.shipping = res.data.address.shipping[0];
-                // }
+                this.headerTitle = this.generalForm.value['inv_num'];
             }, err => {
                 console.log(err.message);
             });
@@ -267,7 +264,7 @@ export class InvoiceCreateComponent implements OnInit {
                     this.generalForm.patchValue({
                         order_id: orderId,
                         order_num: orderNum,
-                        aprvr_id: orderCreatorId,
+                        // aprvr_id: orderCreatorId,
                         shipping_cost: this.order_details['shipping'],
                         sub_total: this.order_details['sub_total_price'],
                         discount_percent: this.order_details['discount_percent'],
@@ -276,6 +273,9 @@ export class InvoiceCreateComponent implements OnInit {
                         discount_amount: this.order_details['discount'],
                         tax_amount: this.order_details['vat']
                     });
+                    if (!this.generalForm.value['aprvr_id']) {
+                        this.generalForm.controls['aprvr_id'].setValue(orderCreatorId);
+                    }
                 } else {
                     this.list.items = [];
                     this.order_details = {};
@@ -334,9 +334,6 @@ export class InvoiceCreateComponent implements OnInit {
             this.list_sales_order = [];
             this.list.items = [];
         }
-        // this.list_sales_order = [];
-        // this.generalForm.controls['ear_payment_incentive'].setValue(event.invoice_EIP.flg_invoice_EIP ? 1 : 0);
-        // this.generalForm.controls['apply_late_fee'].setValue(event.invoice_LFP.flg_invoice_LFP ? 1 : 0);
     }
 
     changeSalesOrder(event) {
@@ -354,7 +351,7 @@ export class InvoiceCreateComponent implements OnInit {
         this.generalForm.patchValue({
             order_id: orderId,
             order_num: orderNum,
-            aprvr_id: orderCreatorId,
+            // aprvr_id: orderCreatorId,
             shipping_cost: this.order_details['shipping'],
             sub_total: this.order_details['sub_total_price'],
             discount_percent: this.order_details['discount_percent'],
@@ -363,6 +360,9 @@ export class InvoiceCreateComponent implements OnInit {
             discount_amount: this.order_details['discount'],
             tax_amount: this.order_details['vat']
         });
+        if (!this.generalForm.value['aprvr_id']) {
+            this.generalForm.controls['aprvr_id'].setValue(orderCreatorId);
+        }
     }
 
     changePaymentTerms() {
@@ -422,10 +422,12 @@ export class InvoiceCreateComponent implements OnInit {
     }
 
     payloadData(type) {
-        if (this.generalForm.get('id').value && this.isEdit) {
-            this.updateInvoice(type);
-        } else {
-            this.createInvoice(type);
+        if (this.generalForm.valid && this.list.items.length > 0) {
+            if (this.generalForm.get('id').value && this.isEdit) {
+                this.updateInvoice(type);
+            } else {
+                this.createInvoice(type);
+            }
         }
     }
 
@@ -472,7 +474,6 @@ export class InvoiceCreateComponent implements OnInit {
         const shippingAddressId = this.addr_select.shipping['address_id'];
         const addressArrId = [addressId, billingAddressId, shippingAddressId];
         let params = {};
-        // params = { ...this.invoice_details, ...this.generalForm.value, ...params };
         params = { ...this.generalForm.value, ...params };
         params['address'] = addressArrId;
         params['order_detail'] = this.transformItemsList(this.list.items);
@@ -483,12 +484,13 @@ export class InvoiceCreateComponent implements OnInit {
                     switch (type) {
                         case 'draft':
                             this.toastr.success(res.message);
-                            this.getDetailInvoice(this.invoiceId);
+                            this.router.navigate(['/financial/invoice']);
                             break;
                         case 'submit':
                             this.updateInvoiceStatus(this.invoiceId, 'SB');
                             break;
                         case 'createnew':
+                            this.toastr.success(res.message);
                             this.router.navigate(['/financial/invoice/create']);
                             break;
                     }
@@ -511,12 +513,7 @@ export class InvoiceCreateComponent implements OnInit {
             try {
                 if (res.status) {
                     this.toastr.success(res.message);
-                    if (this.isCreate) {
-                        this.router.navigate(['/financial/invoice']);
-                    } else {
-                        this.getDetailInvoice(this.invoiceId);
-                    }
-
+                    this.router.navigate(['/financial/invoice']);
                 } else {
                     this.toastr.error(res.message, null, { enableHtml: true });
                 }
