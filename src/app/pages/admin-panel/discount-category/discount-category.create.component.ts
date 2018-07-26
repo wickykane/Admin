@@ -178,12 +178,14 @@ export class DiscountCategoryCreateComponent implements OnInit {
     }
 
     removeSelected(value: any, sub_category_id, item) {
+      console.log(value);
+      console.log(item);
         item.listSubCategory.map(obj => {
-            if (value.value.id === obj['id']) {
-                obj.disabled = false;
+            if (value.value.category_id === obj['category_id']) {
+                obj['disabled'] = false;
             }
         });
-        this.mapArrayValue(item, item.listSubCategory.every(this.isSameAnswer) ? true : false);
+
 
     }
 
@@ -224,12 +226,23 @@ export class DiscountCategoryCreateComponent implements OnInit {
                     });
                 });
                 this.data['products'].splice(index, 1);
+
+              if (item.listSubCategory.every(this.isSameAnswer)) {
+                this.data['products'].splice(index, 1);
+                const i = this.listCheckSubCat.indexOf(item.category_id);
+                this.listCheckSubCat.splice(i, 1);
+                this.listCheckType.splice(index, 1);
+                item = {};
+              }
             }
         } else {
             this.data['products'].splice(index, 1);
 
         }
-
+        console.log(this.data['products']);
+        console.log(item);
+        console.log(this.listCheckSubCat);
+        console.log(this.listCheckType);
 
     }
 
