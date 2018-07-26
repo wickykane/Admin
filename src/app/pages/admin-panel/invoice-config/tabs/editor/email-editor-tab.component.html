@@ -1,11 +1,30 @@
-<div>Editor</div>
-<button (click)="showContextMenu = !showContextMenu">Insert Field</button>
-<div class="show-more" *ngIf="showContextMenu">
-    <ul>
-        <li *ngFor="let field of listMaster['insertFields']">
-            <label>
-                <a (click)="onSelectField(field)">{{field.label}}</a>
-            </label>
-        </li>
-    </ul>
+<div class="top-left-bar">
+    <button class="btn btn-primary" (click)="showContextMenu = !showContextMenu" clickOutside (clickOutside)="showContextMenu = false">Insert Field</button>
+    <div class="show-more" *ngIf="showContextMenu">
+        <ul>
+            <li *ngFor="let field of listMaster['insertFields']">
+                <label>
+                    <a (click)="onSelectField(field)">{{field.label}}</a>
+                </label>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="row email-content mb-3">
+    <div class="col-md-12">
+        <label class="title">
+            <b>Subject</b>
+        </label>
+        <div class="content" [innerHTML]="subjectContent"></div>
+    </div>
+</div>
+
+<div class="row email-content">
+    <div class="col-md-12">
+        <label class="title">
+            <b>Body</b>
+        </label>
+        <div class="content" [innerHTML]="bodyContent"></div>
+    </div>
 </div>

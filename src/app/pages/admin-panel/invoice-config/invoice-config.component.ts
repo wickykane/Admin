@@ -5,11 +5,13 @@ import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ToastrService } from "ngx-toastr";
 import { routerTransition } from "../../../router.animations";
 import { ConfirmModalContent } from "../../../shared/modals/confirm.modal";
-import { EmailTemplateModalContent } from "./modals/email-template.modal";
+import { EmailTemplateModalContent } from "./modals/email-template/email-template.modal";
+import { InvoiceConfigService } from "./invoice-chasing-config.service";
 
 @Component({
     selector: "app-invoice-config",
     templateUrl: "invoice-config.component.html",
+    providers: [InvoiceConfigService],
     styleUrls: ["./invoice-config.component.scss"],
     animations: [routerTransition()]
 })
@@ -21,18 +23,18 @@ export class InvoiceConfigComponent implements OnInit {
 
     public listMaster = {
         reminderOptions: [
-            { value: 1, label: "By days" },
-            { value: 2, label: "Once a week" },
-            { value: 3, label: "Once a month" }
+            { value: "1", label: "By days" },
+            { value: "2", label: "Once a week" },
+            { value: "3", label: "Once a month" }
         ],
         daysOfWeek: [
-            { value: 1, label: "Monday" },
-            { value: 2, label: "Tuesday" },
-            { value: 3, label: "Wednesday" },
-            { value: 4, label: "Thursday" },
-            { value: 5, label: "Friday" },
-            { value: 6, label: "Saturday" },
-            { value: 0, label: "Sunday" }
+            { value: "1", label: "Monday" },
+            { value: "2", label: "Tuesday" },
+            { value: "3", label: "Wednesday" },
+            { value: "4", label: "Thursday" },
+            { value: "5", label: "Friday" },
+            { value: "6", label: "Saturday" },
+            { value: "0", label: "Sunday" }
         ],
         daysOfMonth: [
             1,
@@ -68,8 +70,13 @@ export class InvoiceConfigComponent implements OnInit {
             31
         ]
     };
+    public applyChaseOption = "1";
 
-    constructor(private fb: FormBuilder, private modalService: NgbModal) {
+    constructor(
+        private fb: FormBuilder,
+        private modalService: NgbModal,
+        private invoiceService: InvoiceConfigService
+    ) {
         this.invoiceForm = fb.group({
             beforeOn: [false],
             beforeRemind: [0],
@@ -80,7 +87,9 @@ export class InvoiceConfigComponent implements OnInit {
         });
     }
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.getInvoiceChaseInfo();
+    }
 
     /**
      * Table Event
@@ -107,7 +116,47 @@ export class InvoiceConfigComponent implements OnInit {
         modalRef.result.then(res => {}, dismiss => {});
     }
 
+    getInvoiceChaseInfo() {
+        this.invoiceService.getInvoiceConfigInfo().subscribe(
+            res => {
+                // Apply for
+                this.applyChaseOption = res.data.rows[0][
+                    "config_value"
+                ].toString();
+                // Before Due Date
+                this.invoiceForm.controls["beforeOn"].setValue(
+                    res.data.rows[1]["config_value"]["enable"] == 1
+                        ? true
+                        : false
+                );
+                this.invoiceForm.controls["beforeRemind"].setValue(
+                    res.data.rows[1]["config_value"]["send_reminder"]
+                );
+                //On Due Date
+                this.invoiceForm.controls["onDueDateOn"].setValue(
+                    res.data.rows[2]["config_value"]["enable"] == 1
+                        ? true
+                        : false
+                );
+                //After Due Date
+                this.invoiceForm.controls["afterDueDateOn"].setValue(
+                    res.data.rows[3]["config_value"]["enable"] == 1
+                        ? true
+                        : false
+                );
+                this.invoiceForm.controls["afterRemindFrequency"].setValue(
+                    res.data.rows[3]["config_value"]["send_reminder_key"]
+                );
+                this.invoiceForm.controls["afterRemindValue"].setValue(
+                    res.data.rows[3]["config_value"]["send_reminder_value"]
+                );
+            },
+            err => {
+                console.log(err);
+            }
+        );
+    }
+
     onSave() {
-        console.log(this.invoiceForm.value);
     }
 }

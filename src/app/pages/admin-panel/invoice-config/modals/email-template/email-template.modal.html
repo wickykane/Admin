@@ -8,18 +8,18 @@
     <ngb-tabset class="tab-header" type="pills">
         <ngb-tab id="editor" title="Email Editor">
             <ng-template ngbTabContent>
-                <tab-email-editor></tab-email-editor>
+                <tab-email-editor (emailTemplateChange)="getEmailTemplate($event)"></tab-email-editor>
             </ng-template>
         </ngb-tab>
         <ngb-tab id="preview" title="Email Preview">
             <ng-template ngbTabContent>
-                <tab-email-preview></tab-email-preview>
+                <tab-email-preview [emailTemplate]="emailTemplate"></tab-email-preview>
             </ng-template>
         </ngb-tab>
     </ngb-tabset>
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-primary" (click)="activeModal.dismiss()">SAVE CHANGES</button>
-    <button type="button" class="btn btn-outline-primary" (click)="activeModal.dismiss()">SEND SAMPLE</button>
+    <button type="button" class="btn btn-outline-primary" (click)="sendSampleEmail()">SEND SAMPLE</button>
     <button type="button" class="btn btn-default" (click)="activeModal.dismiss()">CANCEL</button>
 </div>

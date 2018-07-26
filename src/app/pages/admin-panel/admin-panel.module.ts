@@ -49,7 +49,8 @@ import { UserModule } from './user/user.module';
 import { WorkFlowModule } from './work-flow/work-flow.module';
 
 import { InvoiceConfigComponent } from './invoice-config/invoice-config.component';
-import { EmailTemplateModalContent } from './invoice-config/modals/email-template.modal';
+import { EmailTemplateModalContent } from './invoice-config/modals/email-template/email-template.modal';
+import { SendSampleModalContent } from './invoice-config/modals/send-sample/send-sample.modal';
 import { EmailEditorTab } from './invoice-config/tabs/editor/email-editor-tab.component';
 import { EmailPreviewTab } from './invoice-config/tabs/preview/email-preview-tab.component';
 
@@ -110,6 +111,7 @@ import { AdminPanelService } from './admin-panel.service';
         TerminateEPIPolicyModalContent,
         InvoiceConfigComponent,
         EmailTemplateModalContent,
+        SendSampleModalContent,
         EmailEditorTab,
         EmailPreviewTab
     ],
@@ -122,7 +124,8 @@ import { AdminPanelService } from './admin-panel.service';
         TerminatePolicyModalContent,
         CustomerEPIModalContent,
         TerminateEPIPolicyModalContent,
-        EmailTemplateModalContent
+        EmailTemplateModalContent,
+        SendSampleModalContent
     ],
     providers: [TableService, CommonService, AdminPanelService]
 })

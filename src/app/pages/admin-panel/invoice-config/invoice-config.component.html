@@ -1,46 +1,27 @@
 <div [@routerTransition]>
     <app-page-header [heading]="'INVOICE CHASING CONFIGURATION'" [icon]="'fa-th-list'"></app-page-header>
-    <form class="rma-page block" [formGroup]="invoiceForm">
-        <fieldset class="custom-border">
-            <legend class="custom-border">Apply Chasing For (*)</legend>
-            <div class="form-search full-width form-horizontal">
-                <div class="row">
-                    <div class="col-lg-2 col-xl-2 form-group">
-                        <label class="css-input css-checkbox css-checkbox-default">
-                            <input class="cb-element" type="checkbox">
-                            <span></span>
-                            Disable Chasing
-                        </label>
-                    </div>
-                    <div class="col-lg-2 col-xl-2 form-group">
-                        <label class="css-input css-checkbox css-checkbox-default">
-                            <input class="cb-element" type="checkbox">
-                            <span></span>
-                            All Customers
-                        </label>
-                    </div>
-                    <!-- <div class="col-lg-2 col-xl-2 form-group">
-                        <label class="css-input css-checkbox css-checkbox-default">
-                            <input class="cb-element" type="checkbox">
-                            <span></span>
-                            Selected Customer(s)
-                        </label>
-                    </div>
-                    <div class="col-lg-3 col-xl-2 form-group">
-                        <label class="css-input css-checkbox css-checkbox-default">
-                            <input class="cb-element" type="checkbox">
-                            <span></span>
-                            Exclude Selected Customer(s)
-                        </label>
-                    </div>
-                    <div class="col-lg-2 col-xl-2 block-btn-search">
-                        <div class="group-btn-search">
-                            <button type="button" class="btn btn-primary">Select Customer</button>
-                        </div>
-                    </div> -->
+    <fieldset class="custom-border">
+        <legend class="custom-border">Apply Chasing For (*)</legend>
+        <div class="form-search full-width form-horizontal">
+            <div class="row">
+                <div class="col-lg-2 col-xl-2 form-group">
+                    <label class="css-input css-checkbox css-checkbox-default">
+                        <input class="cb-element" type="radio" value="1" [(ngModel)]="applyChaseOption">
+                        <span></span>
+                        Disable Chasing
+                    </label>
+                </div>
+                <div class="col-lg-2 col-xl-2 form-group">
+                    <label class="css-input css-checkbox css-checkbox-default">
+                        <input class="cb-element" type="radio" value="2" [(ngModel)]="applyChaseOption">
+                        <span></span>
+                        All Customers
+                    </label>
                 </div>
             </div>
-        </fieldset>
+        </div>
+    </fieldset>
+    <form [formGroup]="invoiceForm">
         <fieldset class="custom-border">
             <div class="form-search full-width form-horizontal">
                 <div class="row">
@@ -125,7 +106,7 @@
                             </div>
                         </div>
                         <!-- Every day -->
-                        <div class="row due-date-section" *ngIf="invoiceForm.value.afterRemindFrequency === 1">
+                        <div class="row due-date-section" *ngIf="invoiceForm.value.afterRemindFrequency == 1">
                             <label>
                                 <b>Every</b>
                             </label>
@@ -135,7 +116,7 @@
                             </div>
                         </div>
                         <!-- Per week -->
-                        <div class="row due-date-section" *ngIf="invoiceForm.value.afterRemindFrequency === 2">
+                        <div class="row due-date-section" *ngIf="invoiceForm.value.afterRemindFrequency == 2">
                             <label>
                                 <b>On</b>
                             </label>
@@ -146,7 +127,7 @@
                             </div>
                         </div>
                         <!-- Per month -->
-                        <div class="row due-date-section" *ngIf="invoiceForm.value.afterRemindFrequency === 3">
+                        <div class="row due-date-section" *ngIf="invoiceForm.value.afterRemindFrequency == 3">
                             <label>
                                 <b>On</b>
                             </label>
@@ -156,7 +137,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="row due-date-section" *ngIf="!invoiceForm.value.afterRemindFrequency">
+                        <div class="row due-date-section" *ngIf="invoiceForm.value.afterRemindFrequency == null || invoiceForm.value.afterRemindFrequency == 'null'">
                             <label class="error">
                                 <b>Please select reminder frequency</b>
                             </label>

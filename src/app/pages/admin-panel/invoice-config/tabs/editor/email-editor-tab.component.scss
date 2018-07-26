@@ -1,15 +1,36 @@
+.top-left-bar {
+    margin: 15px 0px;
+    text-align: right;
+}
+
 .show-more {
     width: auto;
     border: 1px solid #ccc;
     position: absolute;
-    background: #FFFFFF;
+    background: #ffffff;
     z-index: 5001;
-    padding-left: 8px;
+    padding: 10px 0px;
     top: 0;
-    margin-top: 25px;
+    right: 0;
+    margin-top: 90px;
+    text-align: left;
     ul {
         list-style: none;
         padding: 0;
         margin: 0;
+        li {
+            a {
+                padding: 0px 10px;
+            }
+        }
+    }
+}
+
+.email-content {
+    .content {
+        border: 1px solid #e0e0e0;
+        min-height: 50px;
+        padding: 15px;
+        font-size: 1.2em;
     }
 }
