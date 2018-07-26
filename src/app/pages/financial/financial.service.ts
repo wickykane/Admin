@@ -89,4 +89,9 @@ export class FinancialService {
         return this.API.get(url, params);
     }
 
+    getListApprover() {
+        const url = 'ar-invoice/get-list-user';
+        return this.API.get(url);
+    }
+
 }
