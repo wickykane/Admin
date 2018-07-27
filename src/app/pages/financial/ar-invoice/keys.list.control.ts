@@ -47,6 +47,11 @@ export class InvoiceKeyService implements OnDestroy {
             this.context.viewInvoice();
             return;
         }, undefined, 'View Invoice'));
+        this._hotkeysService.add(new Hotkey('shift+c', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            this.context.cancelInvoice();
+            return;
+        }, undefined, 'Cancel Invoice'));
         this._hotkeysService.add(new Hotkey('shift+s', (event: KeyboardEvent): any => {
             event.preventDefault();
             this.context.tableService.searchAction();
