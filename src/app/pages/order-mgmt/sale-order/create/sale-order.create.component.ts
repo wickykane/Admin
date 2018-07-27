@@ -511,8 +511,8 @@ export class SaleOrderCreateComponent implements OnInit {
         params = { ...this.order_info, ...this.generalForm.value, ...params };
         this.orderService.createOrder(params).subscribe(res => {
             try {
-                if (res.data.status) {
-                    this.toastr.success(res.data.message);
+                if (res.status) {
+                    this.toastr.success(res.message);
                     setTimeout(() => {
                         this.router.navigate(['/order-management/sale-order']);
                     }, 500);
