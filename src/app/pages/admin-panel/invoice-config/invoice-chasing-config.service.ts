@@ -10,8 +10,18 @@ export class InvoiceConfigService {
         return this.apiService.get(url);
     }
 
+    getEmailTemplate(key) {
+        const url = "config/invoicechase/getbykey/" + key;
+        return this.apiService.get(url);
+    }
+
     saveInvoiceConfigInfo(params) {
         const url = "config/invoicechase/update";
+        return this.apiService.put(url,params);
+    }
+
+    saveEmailTemplate(id, params) {
+        const url = "config/invoicechase/update/" + id;
         return this.apiService.put(url,params);
     }
 }

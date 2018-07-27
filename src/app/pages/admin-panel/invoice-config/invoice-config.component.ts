@@ -113,7 +113,9 @@ export class InvoiceConfigComponent implements OnInit {
             size: "lg"
         });
         modalRef.componentInstance.duration = duration;
-        modalRef.result.then(res => {}, dismiss => {});
+        modalRef.result.then(res => {
+            // this.getInvoiceChaseInfo();
+        }, dismiss => {});
     }
 
     getInvoiceChaseInfo() {

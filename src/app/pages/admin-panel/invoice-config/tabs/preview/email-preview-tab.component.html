@@ -3,7 +3,7 @@
         <label class="title">
             <b>Subject</b>
         </label>
-        <div class="content" [innerHTML]="subjectContent"></div>
+        <div class="content" [innerHTML]="displayTemplate.email_tpl.subject"></div>
     </div>
 </div>
 
@@ -16,7 +16,9 @@
             <img src="assets/images/logo_footer.png">
             <label><h4>INVOICE REMINDER</h4></label>
         </div>
-        <div class="content" [innerHTML]="bodyContent"></div>
+        <div class="content" [innerHTML]="">
+            <pre>{{displayTemplate.email_tpl.body}}</pre>
+        </div>
         <div class="content body-footer"></div>
     </div>
 </div>

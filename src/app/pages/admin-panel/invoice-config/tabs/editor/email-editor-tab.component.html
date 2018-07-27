@@ -16,7 +16,9 @@
         <label class="title">
             <b>Subject</b>
         </label>
-        <div class="content" [innerHTML]="subjectContent"></div>
+        <div class="content">
+            <input type="text" [(ngModel)]="template.email_tpl.subject">
+        </div>
     </div>
 </div>
 
@@ -25,6 +27,8 @@
         <label class="title">
             <b>Body</b>
         </label>
-        <div class="content" [innerHTML]="bodyContent"></div>
+        <div class="content">
+            <textarea [(ngModel)]="template.email_tpl.body"></textarea>
+        </div>
     </div>
 </div>

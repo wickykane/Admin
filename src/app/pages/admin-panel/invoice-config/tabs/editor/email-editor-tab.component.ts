@@ -7,6 +7,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 })
 export class EmailEditorTab implements OnInit {
 
+    @Input() template = {};
     @Output() emailTemplateChange = new EventEmitter();
 
     public showContextMenu = false;
@@ -23,51 +24,6 @@ export class EmailEditorTab implements OnInit {
             { id: 9, label: "Your Company Address", value: "Your Company Address" }
         ]
     };
-    public subjectContent = `<b>#${this.listMaster.insertFields[0].value}</b>
-            Invoice <b>#${this.listMaster.insertFields[3].value}</b> is nearing it's due date!`
-
-    public bodyContent = `
-        <table>
-            <tr>
-                <td>
-                    Dear <b>#${this.listMaster.insertFields[1].value}</b>
-                </td>
-            </tr>
-            <tr><td><br></td></tr>
-            <tr>
-                <td>
-                    Our records show that invoice
-                    <b>${this.listMaster.insertFields[2].value}</b> for the amount of
-                    <b>${this.listMaster.insertFields[3].value}</b> will become past due on
-                    <b>${this.listMaster.insertFields[4].value}</b>
-                </td>
-            </tr>
-            <tr><td><br><br></td></tr>
-            <tr>
-                <td>
-                    This is just a friendly reminder to please make payment as son as possible to avoid late fee charges. We have attached a
-                    copy of the invoice for for convenience.
-                </td>
-            </tr>
-            <tr><td><br><br></td></tr>
-            <tr>
-                <td>
-                    We appreciate your business and prompt payment
-                </td>
-            </tr>
-            <tr><td><br></td></tr>
-             <tr>
-                <td>
-                    Thanks you
-                </td>
-            </tr>
-            <tr><td><br></td></tr>
-            <tr>
-                <td>
-                    The <b>${this.listMaster.insertFields[0].value}</b> team
-                </td>
-            </tr>
-        </table>`;
 
     constructor() {}
 
@@ -75,8 +31,7 @@ export class EmailEditorTab implements OnInit {
     }
 
     ngOnDestroy() {
-        let emailTemplateField = this.listMaster.insertFields;
-        this.emailTemplateChange.emit(emailTemplateField);
+        this.emailTemplateChange.emit(this.template);
     }
 
     onSelectField(field) {
