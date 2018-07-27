@@ -46,7 +46,8 @@ export class FinancialService {
     }
 
     countInvoiceStatus() {
-        const url = 'ar-invoice/count-by-status';
+        // const url = 'ar-invoice/count-by-status';
+        const url = 'ar-invoice/count-status';
         return this.API.get(url);
     }
 

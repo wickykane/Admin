@@ -103,11 +103,8 @@
                                         </div>
                                         <div class="form-group row">
                                             <label class='col-4'>Status</label>
-                                            <div class='col-8 text-success' *ngIf="isCreate">
-                                                <strong>1-NEW</strong>
-                                            </div>
-                                            <div class='col-8 text-success' *ngIf="!isCreate">
-                                                <strong>{{generalForm.value['invoice_status_name']}}</strong>
+                                            <div class='col-8 text-success'>
+                                                <span class="label label-info">New</span>
                                             </div>
                                         </div>
                                     </form>

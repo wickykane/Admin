@@ -27,7 +27,7 @@ export class InvoiceComponent implements OnInit {
 
     public listMaster = {};
     public selectedIndex = 0;
-    public countStatus = {};
+    public countStatus = [];
     public list = {
         items: []
     };
@@ -77,7 +77,9 @@ export class InvoiceComponent implements OnInit {
             { id: 3, name: 'Rejected' },
             { id: 4, name: 'Approved' },
             { id: 5, name: 'Partially Paid' },
-            { id: 6, name: 'Fully Paid' }
+            { id: 6, name: 'Fully Paid' },
+            { id: 7, name: 'Canceled' },
+            { id: 8, name: 'Overdue' }
         ];
         this.listMaster['inv_type'] = [
             { id: 1, name: 'Sales Order' }
@@ -126,6 +128,11 @@ export class InvoiceComponent implements OnInit {
         this.financialService.countInvoiceStatus().subscribe(res => {
             this.countStatus = res.data;
         });
+    }
+
+    getCountFromStatusName(name) {
+        const stt = this.countStatus.find(item => item.name === name);
+        return (stt && stt.count) ? stt.count : 0;
     }
 
     getList() {
@@ -212,15 +219,27 @@ export class InvoiceComponent implements OnInit {
         const selectedInvoiceStatus = this.list.items[this.selectedIndex].invoice_status_id;
         if (selectedInvoiceId && selectedInvoiceStatus === 1) {
             const modalRef = this.modalService.open(ConfirmModalContent);
+            modalRef.componentInstance.message = 'Are you sure you want to cancel this invoice?';
+            modalRef.componentInstance.yesButtonText = 'YES';
+            modalRef.componentInstance.noButtonText = 'NO';
             modalRef.result.then(result => {
                 if (result) {
-                    this.financialService.deleteInvoice(id).subscribe(res => {
+                    const params = {
+                        status_code: 'CC'
+                    };
+                    this.financialService.updateInvoiceStatus(selectedInvoiceId, params).subscribe(res => {
                         try {
-                            this.toastr.success(res.message);
-                            this.getList();
+                            if (res.status) {
+                                this.toastr.success(res.message);
+                                this.getList();
+                            } else {
+                                this.toastr.error(res.message, null, { enableHtml: true });
+                            }
                         } catch (e) {
                             console.log(e);
                         }
+                    }, err => {
+                        this.toastr.error(err.message);
                     });
                 }
             }, dismiss => { });
