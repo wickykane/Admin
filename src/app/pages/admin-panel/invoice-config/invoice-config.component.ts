@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ToastrService } from "ngx-toastr";
 import { routerTransition } from "../../../router.animations";
-import { ConfirmModalContent } from "../../../shared/modals/confirm.modal";
 import { EmailTemplateModalContent } from "./modals/email-template/email-template.modal";
 import { InvoiceConfigService } from "./invoice-chasing-config.service";
 
@@ -74,6 +73,7 @@ export class InvoiceConfigComponent implements OnInit {
 
     constructor(
         private fb: FormBuilder,
+        private toastr: ToastrService,
         private modalService: NgbModal,
         private invoiceService: InvoiceConfigService
     ) {
@@ -158,31 +158,36 @@ export class InvoiceConfigComponent implements OnInit {
     }
 
     onSave() {
-        let params = {
-            "apply_chase_for": this.applyChaseOption,
-            "before_due_date":
-            {
-                "enable": this.invoiceForm.value["beforeOn"] ? 1 : 0,
-                "send_reminder": this.invoiceForm.value["beforeRemind"]
-            },
-            "on_due_date":
-            {
-                "enable": this.invoiceForm.value["onDueDateOn"] ? 1 : 0
-            },
-            "after_due_date":
-            {
-                "enable": this.invoiceForm.value["afterDueDateOn"] ? 1 : 0,
-                "send_reminder_key": this.invoiceForm.value["afterRemindFrequency"],
-                "send_reminder_value": this.invoiceForm.value["afterRemindValue"]
+        if ( this.invoiceForm.value.afterRemindFrequency != null && this.invoiceForm.value.afterRemindFrequency != "null") {
+            let params = {
+                "apply_chase_for": this.applyChaseOption,
+                "before_due_date":
+                {
+                    "enable": this.invoiceForm.value["beforeOn"] ? 1 : 0,
+                    "send_reminder": this.invoiceForm.value["beforeRemind"]
+                },
+                "on_due_date":
+                {
+                    "enable": this.invoiceForm.value["onDueDateOn"] ? 1 : 0
+                },
+                "after_due_date":
+                {
+                    "enable": this.invoiceForm.value["afterDueDateOn"] ? 1 : 0,
+                    "send_reminder_key": this.invoiceForm.value["afterRemindFrequency"],
+                    "send_reminder_value": this.invoiceForm.value["afterRemindValue"]
+                }
             }
+            this.invoiceService.saveInvoiceConfigInfo(params).subscribe(
+                res => {
+                    this.toastr.success("Save successfully!");
+                    this.getInvoiceChaseInfo();
+                },
+                err => {
+                    console.log(err.message);
+                })
         }
-        this.invoiceService.saveInvoiceConfigInfo(params).subscribe(
-            res => {
-                console.log(res);
-                this.getInvoiceChaseInfo();
-            },
-            err => {
-
-            })
+        else {
+            this.toastr.error("Please select reminder frequency!");
+        }
 ;    }
 }
