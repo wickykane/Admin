@@ -85,16 +85,16 @@ export class SaleOrderInformationTabComponent implements OnInit {
                     this.stockValueChange.emit(res.data);
                     this.detail['billing'] = res.data.billing_info[0];
                     this.detail['shipping_address'] = res.data.shipping_address[0];
-                    if (this.detail['total_paid'] === null) {
-                        this.detail['total_paid'] = 0;
-                    }
-                    this.detail['subs'] = res.data.list.items;
-                    this.detail['subs'].forEach((item) => {
-                        this.totalQTY += item.quantity;
-                        this.totalShipQTY += item.qty_shipped;
-                    });
-                    this.detail['buyer_info'] = res.data.buyer_info;
                 }
+                if (this.detail['total_paid'] === null) {
+                    this.detail['total_paid'] = 0;
+                }
+                this.detail['subs'] = res.data.list.items;
+                this.detail['subs'].forEach((item) => {
+                    this.totalQTY += item.quantity;
+                    this.totalShipQTY += item.qty_shipped;
+                });
+                this.detail['buyer_info'] = res.data.buyer_info;
 
             } catch (e) {
                 console.log(e);
