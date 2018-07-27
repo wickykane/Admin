@@ -49,9 +49,9 @@ export class RmaService {
     const url = ['rma/create'].join('/');
     return this.API.post(url, params);
   }
-  getOrderInfo(params) {
-    const url = ['rma/get-info-order/'].join('/');
-    return this.API.post(url,params);
+  getOrderInfo(id) {
+    const url = ['rma/get-info-order'].join('/');
+    return this.API.get(url,id);
   }
 
   getReturnReason() {

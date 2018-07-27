@@ -322,10 +322,7 @@ export class RmaCreateComponent implements OnInit {
         //     this.checkAll(null, true);
         //     this.updateTotal();
         // });
-        const params = {
-            order_id: id
-        }
-        this.rmaService.getOrderInfo(params).subscribe(res => {
+        this.rmaService.getOrderInfo(id).subscribe(res => {
             const data = res.data;
             console.log(res.data);
             this.list.items = data.items;
@@ -416,8 +413,14 @@ export class RmaCreateComponent implements OnInit {
             this.order_info['restock_fee_percent'] = 0;
             this.order_info['restock_fee_amount'] = 0;
         }
+        console.log(this.generalForm.value['cover_ship']);
+        if(this.generalForm.value['cover_ship']=='Yes'){
+            this.order_info['shipping_cost'] = Number(this.order_info['shipping_cost'] || 0);
+        }
+        else{
+            this.order_info['shipping_cost'] =  0;
+        }
 
-        this.order_info['shipping_cost'] = Number(this.order_info['shipping_cost'] || 0);
 
         this.order_info['total'] = this.order_info['sub_total'] - this.order_info['total_discount'] - this.order_info['restock_fee_amount'] + ((this.generalForm.value.cover_ship) ? this.order_info['shipping_cost'] : 0)
             + this.order_info['vat_percent_amount'];
