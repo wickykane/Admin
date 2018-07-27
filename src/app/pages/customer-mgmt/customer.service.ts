@@ -107,10 +107,18 @@ export class CustomerService {
         const url = 'buyer/' + id;
         return this.API.get(url);
     }
+    getDetailCustomerEdit(id) {
+        const url = 'buyer/' + id + '/edit';
+        return this.API.get(url);
+    }
 
     /**
      * CUSTOMER
      */
+
+    getCreditCard() {
+        return this.API.get('buyer/credit-card-types');
+    }
 
     createCustomer(data) {
         const url = 'buyer';

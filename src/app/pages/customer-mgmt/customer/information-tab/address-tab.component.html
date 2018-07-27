@@ -22,13 +22,13 @@
                     <td>{{ item.address_type }}</td>
                     <td>{{ item.name }}</td>
                     <td>{{ item.country_name }}</td>
-                    <td>{{ item.address_line }}</td>
-                    <td>{{ item.address_line2 }}</td>
-                    <td>{{ item.city_name }}</td>
+                    <td>{{ item.address_1 }}</td>
+                    <td>{{ item.address_2 }}</td>
+                    <td>{{ item.city }}</td>
                     <td>{{ item.state_name }}</td>
                     <td>{{ item.zip_code }}</td>
                     <td>{{ item.is_default?'Yes':'No' }}</td>
-                    <td>{{ item.route_id }}</td>
+                    <td>{{ item.route_name }}</td>
                 </tr>
                 <tr *ngIf="list.items.length == 0">
                     <td colspan="100%" class="text-center">No data.</td>
