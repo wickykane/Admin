@@ -273,12 +273,12 @@
                                             <div>
                                                 <span>$</span>
                                                 <div style="display:inline-block;width:80%">
-                                                    <input [textMask]="{mask: numberMaskObject()}" class="form-control input-sm" type="number" [(ngModel)]="item.sale_price" (change)="updateTotal();changeFromSource(item)">
+                                                    <input [textMask]="{mask: numberMaskObject()}" class="form-control input-sm" type="number" [(ngModel)]="item.sale_price" (change)="updateTotal()">
                                                 </div>
                                             </div>
                                         </td>
                                         <td>
-                                            <input  [textMask]="{mask: numberMaskObject()}"  class="form-control input-sm" type="number" [(ngModel)]="item.discount" (change)="updateTotal();changeFromSource(item)">
+                                            <input  [textMask]="{mask: numberMaskObject()}"  class="form-control input-sm" type="number" [(ngModel)]="item.discount" (change)="updateTotal()">
                                         </td>
                                         <td class="text-center">
                                             <span>{{item.totalItem | currency}}</span>
