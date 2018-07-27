@@ -21,13 +21,13 @@ export class InvoiceInformationTabComponent implements OnInit {
             this._invoiceId = id;
         }
     }
-    public detail = {
-        'billing_address': {},
-        'shipping_address': {},
-        'items': [],
-        'buyer_info': {},
-        'sales_order': {}
-    };
+    public detail;
+    @Input() set orderDetail(detail) {
+        if (detail) {
+            this.detail = detail;
+            this.calculateQTY();
+        }
+    }
     data = {};
     public totalQTY = 0;
     public totalInvoiceQTY = 0;
@@ -39,31 +39,16 @@ export class InvoiceInformationTabComponent implements OnInit {
         private financialService: FinancialService) {
     }
 
-    ngOnInit() {
-        this.getDetailInvoice();
-
-    }
+    ngOnInit() { }
 
     /**
      * Internal Function
      */
 
-    getDetailInvoice() {
-        this.financialService.getDetailInvoice(this._invoiceId).subscribe(res => {
-            try {
-                this.detail = res.data;
-                this.detail['billing_address'] = res.data.address.billing[0];
-                this.detail['shipping_address'] = res.data.address.shipping[0];
-                this.detail['sales_order'] = res.data.orders[0];
-                this.detail['items'] = res.data.items;
-                this.detail['items'].forEach((item) => {
-                    this.totalQTY += item.order_detail_total_qty;
-                    this.totalInvoiceQTY += item.invoice_qty;
-                });
-                this.detail['buyer_info'] = res.data.address.list[0];
-            } catch (e) {
-                console.log(e);
-            }
+    calculateQTY() {
+        this.detail['items'].forEach((item) => {
+            this.totalQTY += item.order_detail_total_qty;
+            this.totalInvoiceQTY += item.invoice_qty;
         });
     }
 

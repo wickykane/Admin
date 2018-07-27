@@ -35,7 +35,14 @@
                         <label class="col-sm-2 col-form-label text-label">Invoice Status</label>
                         <div class="col-sm-3">
                             <label class="col-form-label control-label">
-                                 <span class="label label-info">{{detail['invoice_status_name']}}</span>
+                                <span class="label label-info" *ngIf="detail['invoice_status_id'] == 1">{{detail['invoice_status_name']}}</span>
+                                <span class="label label-warning" *ngIf="detail['invoice_status_id'] == 2">{{detail['invoice_status_name']}}</span>
+                                <span class="label label-danger" *ngIf="detail['invoice_status_id'] == 3">{{detail['invoice_status_name']}}</span>
+                                <span class="label label-success" *ngIf="detail['invoice_status_id'] == 4">{{detail['invoice_status_name']}}</span>
+                                <span class="label label-primary" *ngIf="detail['invoice_status_id'] == 5">{{detail['invoice_status_name']}}</span>
+                                <span class="label label-primary" *ngIf="detail['invoice_status_id'] == 6">{{detail['invoice_status_name']}}</span>
+                                <span class="label label-danger" *ngIf="detail['invoice_status_id'] == 7">{{detail['invoice_status_name']}}</span>
+                                <span class="label label-danger" *ngIf="detail['invoice_status_id'] == 8">{{detail['invoice_status_name']}}</span>
                             </label>
                         </div>
                         <label class="col-sm-3 col-form-label text-label">Approver</label>

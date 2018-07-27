@@ -5,35 +5,35 @@
         <section id="statusIndicator" class="status-indicator-section">
             <ul class="status-ctn">
                 <li class="status-item">
-                    <div class="status-count">{{countStatus['new']}}</div>
+                    <div class="status-count">{{getCountFromStatusName('New')}}</div>
                     <div class="status-lbl">NEW</div>
                 </li>
                 <li class="status-item">
-                    <div class="status-count">{{countStatus['submitted']}}</div>
+                    <div class="status-count">{{getCountFromStatusName('Submitted')}}</div>
                     <div class="status-lbl">SUBMITTED</div>
                 </li>
                 <li class="status-item">
-                    <div class="status-count">{{countStatus['approved']}}</div>
+                    <div class="status-count">{{getCountFromStatusName('Approved')}}</div>
                     <div class="status-lbl">APPROVED</div>
                 </li>
                 <li class="status-item">
-                    <div class="status-count">{{countStatus['rejected']}}</div>
+                    <div class="status-count">{{getCountFromStatusName('Rejected')}}</div>
                     <div class="status-lbl">REJECTED</div>
                 </li>
                 <li class="status-item">
-                    <div class="status-count">{{countStatus['partially_paid']}}</div>
-                    <div class="status-lbl">PARTIAL PAID</div>
+                    <div class="status-count">{{getCountFromStatusName('Partially Paid')}}</div>
+                    <div class="status-lbl">PARTIALLY PAID</div>
                 </li>
                 <li class="status-item">
-                    <div class="status-count">{{countStatus['fully_paid']}}</div>
+                    <div class="status-count">{{getCountFromStatusName('Fully Paid')}}</div>
                     <div class="status-lbl">FULLY PAID</div>
                 </li>
                 <li class="status-item">
-                    <div class="status-count">{{countStatus['over_due']}}</div>
+                    <div class="status-count">{{getCountFromStatusName('Overdue')}}</div>
                     <div class="status-lbl">OVERDUE</div>
                 </li>
                 <li class="status-item">
-                    <div class="status-count"></div>
+                    <div class="status-count">{{getCountFromStatusName('Canceled')}}</div>
                     <div class="status-lbl">CANCELED</div>
                 </li>
             </ul>
@@ -173,7 +173,16 @@
                             <td>{{item.incentive|currency}}</td>
                             <td>{{item.penalty|currency}}</td>
                             <td>{{item.balance_amount|currency}}</td>
-                            <td>{{convertStatus(item.invoice_status_id, 'status')}}</td>
+                            <td>
+                                <span class="label label-info" *ngIf="item.invoice_status_id == 1">{{convertStatus(item.invoice_status_id, 'status')}}</span>
+                                <span class="label label-warning" *ngIf="item.invoice_status_id == 2">{{convertStatus(item.invoice_status_id, 'status')}}</span>
+                                <span class="label label-danger" *ngIf="item.invoice_status_id == 3">{{convertStatus(item.invoice_status_id, 'status')}}</span>
+                                <span class="label label-success" *ngIf="item.invoice_status_id == 4">{{convertStatus(item.invoice_status_id, 'status')}}</span>
+                                <span class="label label-primary" *ngIf="item.invoice_status_id == 5">{{convertStatus(item.invoice_status_id, 'status')}}</span>
+                                <span class="label label-primary" *ngIf="item.invoice_status_id == 6">{{convertStatus(item.invoice_status_id, 'status')}}</span>
+                                <span class="label label-danger" *ngIf="item.invoice_status_id == 7">{{convertStatus(item.invoice_status_id, 'status')}}</span>
+                                <span class="label label-danger" *ngIf="item.invoice_status_id == 8">{{convertStatus(item.invoice_status_id, 'status')}}</span>
+                            </td>
                             <td>{{item.aging_overdue}}</td>
                             <!-- <td>{{item.paid_amount|currency}}</td> -->
                             <td>
@@ -183,9 +192,9 @@
                                 <a class="btn btn-default " title="Edit" (click)="editInvoice(item.id)" *ngIf="item.invoice_status_id == 1">
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                 </a>
-                                <!-- <a class="btn btn-default" title="Cancel" (click)="cancelInvoice(item.id)" *ngIf="item.invoice_status_id == 1">
+                                <a class="btn btn-default" title="Cancel" (click)="cancelInvoice(item.id)" *ngIf="item.invoice_status_id == 1">
                                     <i class="fa fa-ban" aria-hidden="true"></i>
-                                </a> -->
+                                </a>
                             </td>
                         </tr>
                         <!-- <tr *ngIf="item.collapseRows">
