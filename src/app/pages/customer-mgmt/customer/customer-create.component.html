@@ -393,7 +393,67 @@
                 </div>
             </div>
         </div>
-
+        <div class="row" style="margin-top:15px;">
+            <div class="col-sm-12">
+                <div class="custom-header">
+                    <h3 class="custom-header">CREDIT CARDS:
+                        <strong class="text-danger">{{credit_cards.length}}</strong>
+                        <span *ngIf="credit_cards.length > 1">Records</span>
+                        <span *ngIf="credit_cards.length <= 1">Record</span>
+                    </h3>
+                    <div class="wrap-keyboard right-toggle-button" (click)="flagCreditCard = !flagCreditCard">
+                        <span class="fa" [ngClass]="{'fa-minus': flagCreditCard,'fa-plus': !flagCreditCard}"></span>
+                    </div>
+                </div>
+                <div *ngIf="flagCreditCard">
+                    <div class="customer-content-toggle">
+                        <table class="table table-striped table-vcenter table-hover custom-table">
+                            <thead>
+                                <tr>
+                                    <th> No </th>
+                                    <th> Card Type </th>
+                                    <th> Card Name </th>
+                                    <th> Card Number </th>
+                                    <th> Expiration Month</th>
+                                    <th> Expiration Year</th>
+                                    <th> Action </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of credit_cards; let i = index" [ngClass]="{'hidden':item.is_deleted}">
+                                    <td>{{i+1}}</td>
+                                    <td>
+                                        <select class="form-control" name="type" [(ngModel)]="item.type">
+                                            <option value="null" selected="true">--Select--</option>
+                                            <option *ngFor="let i of item.listCard" [ngValue]="i.id">{{i.name}}</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="name" [(ngModel)]="item.name">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="no" [(ngModel)]="item.no">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="expiration_month" [(ngModel)]="item.expiration_month">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="expiration_year" [(ngModel)]="item.expiration_year">
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-default" (click)="removeCreditCard(i)">
+                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <button type="button" class="btn btn-outline-dark" (click)="addNewCreditCard()">
+                        <i class="fa fa-plus" aria-hidden="true"></i> Add new account</button>
+                </div>
+            </div>
+        </div>
 
 
 
