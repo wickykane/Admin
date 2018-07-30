@@ -48,6 +48,12 @@ import { TerminateEPIPolicyModalContent } from './epi-policy/modal/terminate-pol
 import { UserModule } from './user/user.module';
 import { WorkFlowModule } from './work-flow/work-flow.module';
 
+import { InvoiceConfigComponent } from './invoice-config/invoice-config.component';
+import { EmailTemplateModalContent } from './invoice-config/modals/email-template/email-template.modal';
+import { SendSampleModalContent } from './invoice-config/modals/send-sample/send-sample.modal';
+import { EmailEditorTab } from './invoice-config/tabs/editor/email-editor-tab.component';
+import { EmailPreviewTab } from './invoice-config/tabs/preview/email-preview-tab.component';
+
 import { CommonService, TableService } from '../../services/index';
 import {
     CommonShareModule,
@@ -56,6 +62,8 @@ import {
 } from '../../shared/index';
 
 import { AdminPanelService } from './admin-panel.service';
+
+import { CKEditorModule } from 'ng2-ckeditor';
 
 @NgModule({
     imports: [
@@ -67,7 +75,8 @@ import { AdminPanelService } from './admin-panel.service';
         PageHeaderModule,
         WorkFlowModule,
         CommonShareModule,
-        ItemModalModule
+        ItemModalModule,
+        CKEditorModule
     ],
     declarations: [
         AdminPanelComponent,
@@ -102,7 +111,12 @@ import { AdminPanelService } from './admin-panel.service';
         EPIPolicyDetailComponent,
         EPIPolicyComponent,
         CustomerEPIModalContent,
-        TerminateEPIPolicyModalContent
+        TerminateEPIPolicyModalContent,
+        InvoiceConfigComponent,
+        EmailTemplateModalContent,
+        SendSampleModalContent,
+        EmailEditorTab,
+        EmailPreviewTab
     ],
     entryComponents: [
         BankModalComponent,
@@ -112,7 +126,9 @@ import { AdminPanelService } from './admin-panel.service';
         CustomerModalContent,
         TerminatePolicyModalContent,
         CustomerEPIModalContent,
-        TerminateEPIPolicyModalContent
+        TerminateEPIPolicyModalContent,
+        EmailTemplateModalContent,
+        SendSampleModalContent
     ],
     providers: [TableService, CommonService, AdminPanelService]
 })

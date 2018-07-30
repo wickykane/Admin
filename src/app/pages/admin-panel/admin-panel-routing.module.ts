@@ -29,6 +29,7 @@ import { WarehouseEditComponent } from './warehouse/warehouse-edit.component';
 import { WarehouseComponent } from './warehouse/warehouse.component';
 import { WorkFlowComponent } from './work-flow/work-flow.component';
 import { WorkFlowEditComponent } from './work-flow/work-flow.edit.component';
+import { InvoiceConfigComponent } from './invoice-config/invoice-config.component';
 
 const routes: Routes = [
     {
@@ -172,6 +173,10 @@ const routes: Routes = [
     {
         path: 'epi-policy/edit/:id',
         component: EPIPolicyDetailComponent
+    },
+    {
+        path: 'invoice-config',
+        component: InvoiceConfigComponent
     }
 ];
 
