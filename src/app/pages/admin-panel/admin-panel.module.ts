@@ -51,8 +51,8 @@ import { WorkFlowModule } from './work-flow/work-flow.module';
 import { InvoiceConfigComponent } from './invoice-config/invoice-config.component';
 import { EmailTemplateModalContent } from './invoice-config/modals/email-template/email-template.modal';
 import { SendSampleModalContent } from './invoice-config/modals/send-sample/send-sample.modal';
-import { EmailEditorTab } from './invoice-config/tabs/editor/email-editor-tab.component';
-import { EmailPreviewTab } from './invoice-config/tabs/preview/email-preview-tab.component';
+import { EmailEditorTabComponent } from './invoice-config/tabs/editor/email-editor-tab.component';
+import { EmailPreviewTabComponent } from './invoice-config/tabs/preview/email-preview-tab.component';
 
 import { CommonService, TableService } from '../../services/index';
 import {
@@ -115,8 +115,8 @@ import { CKEditorModule } from 'ng2-ckeditor';
         InvoiceConfigComponent,
         EmailTemplateModalContent,
         SendSampleModalContent,
-        EmailEditorTab,
-        EmailPreviewTab
+        EmailEditorTabComponent,
+        EmailPreviewTabComponent
     ],
     entryComponents: [
         BankModalComponent,

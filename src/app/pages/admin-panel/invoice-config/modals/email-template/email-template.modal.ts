@@ -1,18 +1,18 @@
-import { Component, Input, OnInit } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import { NgbActiveModal, NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { ToastrService } from "ngx-toastr";
-import { InvoiceConfigService } from "../../invoice-chasing-config.service";
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
+import { InvoiceConfigService } from '../../invoice-chasing-config.service';
 
-import { SendSampleModalContent } from "../send-sample/send-sample.modal";
+import { SendSampleModalContent } from '../send-sample/send-sample.modal';
 
 declare var jQuery: any;
 @Component({
-    selector: "app-email-template-modal-content",
-    templateUrl: "./email-template.modal.html",
+    selector: 'app-email-template-modal-content',
+    templateUrl: './email-template.modal.html',
     providers: [InvoiceConfigService],
-    styleUrls: ["./email-template.modal.scss"]
+    styleUrls: ['./email-template.modal.scss']
 })
 // tslint:disable-next-line:component-class-suffix
 export class EmailTemplateModalContent implements OnInit {
@@ -20,14 +20,14 @@ export class EmailTemplateModalContent implements OnInit {
 
     public emailTemplate = {
         email_tpl: {
-            subject: "",
-            body: ""
+            subject: '',
+            body: ''
         }
     };
 
     public emailTemplateForDisplay = {
-        subject: "",
-        body: ""
+        subject: '',
+        body: ''
     };
 
     public fieldTags = [];
@@ -46,18 +46,18 @@ export class EmailTemplateModalContent implements OnInit {
     }
 
     getTemplateFromAPI() {
-        let  key = "";
-        switch(this.duration) {
-            case "BEFORE": {
-                key = "before_due_date";
+        let  key = '';
+        switch (this.duration) {
+            case 'BEFORE': {
+                key = 'before_due_date';
                 break;
             }
-            case "ON": {
-                key = "on_due_date";
+            case 'ON': {
+                key = 'on_due_date';
                 break;
             }
-            case "AFTER": {
-                key = "after_due_date";
+            case 'AFTER': {
+                key = 'after_due_date';
                 break;
             }
         }
@@ -68,7 +68,7 @@ export class EmailTemplateModalContent implements OnInit {
                 this.getFieldTags();
             },
             err => {
-                console.log(err)
+                console.log(err);
             }
         );
     }
@@ -81,12 +81,12 @@ export class EmailTemplateModalContent implements OnInit {
                     this.fieldTags.push({
                         tag: Object.keys(item)[0],
                         value: item[Object.keys(item)[0]]
-                    })
+                    });
                 });
                 this.fieldTags.forEach(item => {
-                    let regex = new RegExp(item.tag, "g");
-                    this.emailTemplate.email_tpl.subject = this.emailTemplate.email_tpl.subject.replace(regex,item.value);
-                    this.emailTemplate.email_tpl.body = this.emailTemplate.email_tpl.body.replace(regex,item.value);
+                    const regex = new RegExp(item.tag, 'g');
+                    this.emailTemplate.email_tpl.subject = this.emailTemplate.email_tpl.subject.replace(regex, item.value);
+                    this.emailTemplate.email_tpl.body = this.emailTemplate.email_tpl.body.replace(regex, item.value);
                 });
             },
             err => {
@@ -96,18 +96,18 @@ export class EmailTemplateModalContent implements OnInit {
     }
 
     saveTemplate() {
-        let params = {
+        const params = {
             subject: this.emailTemplate.email_tpl.subject,
             body: this.emailTemplate.email_tpl.body
-        }
+        };
         this.fieldTags.forEach(item => {
-            let regex = new RegExp(item.value, "g");
-            params.subject = params.subject.replace(regex,item.tag);
-            params.body = params.body.replace(regex,item.tag);
+            const regex = new RegExp(item.value, 'g');
+            params.subject = params.subject.replace(regex, item.tag);
+            params.body = params.body.replace(regex, item.tag);
         });
         this.invoiceService.saveEmailTemplate(this.id, params).subscribe(
             res => {
-                this.toastr.success("Save successfully");
+                this.toastr.success('Save successfully');
             },
             err => {
                 console.log(err);
@@ -117,39 +117,38 @@ export class EmailTemplateModalContent implements OnInit {
 
     sendSampleEmail() {
         const modalRef = this.modalService.open(SendSampleModalContent, {
-            size: "sm",
+            size: 'sm',
             centered: true,
-            backdrop: "static"
+            backdrop: 'static'
         });
         modalRef.result.then(
             res => {
-                jQuery("body").addClass("modal-open");
-                if(res && res.receiver) {
-                    let params = {
-                        "email_to": res.receiver,
-                        "email_subject": this.emailTemplate.email_tpl.subject,
-                        "email_body": this.emailTemplate.email_tpl.body
+                jQuery('body').addClass('modal-open');
+                if (res && res.receiver) {
+                    const params = {
+                        'email_to': res.receiver,
+                        'email_subject': this.emailTemplate.email_tpl.subject,
+                        'email_body': this.emailTemplate.email_tpl.body
                     };
                     this.fieldTags.forEach(item => {
-                        let regex = new RegExp(item.value, "g");
-                        params.email_subject = params.email_subject.replace(regex,item.tag);
-                        params.email_body = params.email_body.replace(regex,item.tag);
+                        const regex = new RegExp(item.value, 'g');
+                        params.email_subject = params.email_subject.replace(regex, item.tag);
+                        params.email_body = params.email_body.replace(regex, item.tag);
                     });
                     this.invoiceService.sendEmailSample(params).subscribe(
-                        res => {
-                            this.toastr.success("Email has been sent successfully.");
+                        _res => {
+                            this.toastr.success('Email has been sent successfully.');
                         },
                         err => {
                             console.log(err);
                         }
                     );
-                }
-                else {
-                    this.toastr.warning("Receiver's can not be empty.");
+                } else {
+                    this.toastr.warning('Receiver\'s can not be empty.');
                 }
             },
             dismiss => {
-                jQuery("body").addClass("modal-open");
+                jQuery('body').addClass('modal-open');
             }
         );
     }

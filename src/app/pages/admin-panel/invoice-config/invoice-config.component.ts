@@ -1,17 +1,17 @@
-import { Component, OnInit } from "@angular/core";
-import { Form, FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { ActivatedRoute, Router } from "@angular/router";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { ToastrService } from "ngx-toastr";
-import { routerTransition } from "../../../router.animations";
-import { EmailTemplateModalContent } from "./modals/email-template/email-template.modal";
-import { InvoiceConfigService } from "./invoice-chasing-config.service";
+
+import { Component, OnInit } from '@angular/core';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
+import { routerTransition } from '../../../router.animations';
+import { InvoiceConfigService } from './invoice-chasing-config.service';
+import { EmailTemplateModalContent } from './modals/email-template/email-template.modal';
 
 @Component({
-    selector: "app-invoice-config",
-    templateUrl: "invoice-config.component.html",
+    selector: 'app-invoice-config',
+    templateUrl: 'invoice-config.component.html',
     providers: [InvoiceConfigService],
-    styleUrls: ["./invoice-config.component.scss"],
+    styleUrls: ['./invoice-config.component.scss'],
     animations: [routerTransition()]
 })
 export class InvoiceConfigComponent implements OnInit {
@@ -22,18 +22,18 @@ export class InvoiceConfigComponent implements OnInit {
 
     public listMaster = {
         reminderOptions: [
-            { value: "1", label: "By days" },
-            { value: "2", label: "Once a week" },
-            { value: "3", label: "Once a month" }
+            { value: '1', label: 'By days' },
+            { value: '2', label: 'Once a week' },
+            { value: '3', label: 'Once a month' }
         ],
         daysOfWeek: [
-            { value: "1", label: "Monday" },
-            { value: "2", label: "Tuesday" },
-            { value: "3", label: "Wednesday" },
-            { value: "4", label: "Thursday" },
-            { value: "5", label: "Friday" },
-            { value: "6", label: "Saturday" },
-            { value: "0", label: "Sunday" }
+            { value: '1', label: 'Monday' },
+            { value: '2', label: 'Tuesday' },
+            { value: '3', label: 'Wednesday' },
+            { value: '4', label: 'Thursday' },
+            { value: '5', label: 'Friday' },
+            { value: '6', label: 'Saturday' },
+            { value: '0', label: 'Sunday' }
         ],
         daysOfMonth: [
             1,
@@ -69,7 +69,7 @@ export class InvoiceConfigComponent implements OnInit {
             31
         ]
     };
-    public applyChaseOption = "1";
+    public applyChaseOption = '1';
 
     constructor(
         private fb: FormBuilder,
@@ -103,13 +103,13 @@ export class InvoiceConfigComponent implements OnInit {
      */
     onChangeFrequency() {
         this.invoiceForm.controls.afterRemindFrequency
-            ? this.invoiceForm.controls.afterRemindValue.setValue("1")
+            ? this.invoiceForm.controls.afterRemindValue.setValue('1')
             : this.invoiceForm.controls.afterRemindValue.setValue(null);
     }
 
     editEmailTemplate(duration) {
         const modalRef = this.modalService.open(EmailTemplateModalContent, {
-            size: "lg"
+            size: 'lg'
         });
         modalRef.componentInstance.duration = duration;
         modalRef.result.then(res => {
@@ -123,42 +123,41 @@ export class InvoiceConfigComponent implements OnInit {
                 try {
                     let index = 0;
                     // Apply for
-                    index = res.data.rows.findIndex(item => { return item.config_key == "apply_chase_for" });
+                    index = res.data.rows.findIndex(item => item.config_key === 'apply_chase_for');
                     this.applyChaseOption = res.data.rows[index][
-                        "config_value"
+                        'config_value'
                     ].toString();
                     // Before Due Date
-                    index = res.data.rows.findIndex(item => { return item.config_key == "before_due_date" });
-                    this.invoiceForm.controls["beforeOn"].setValue(
-                        res.data.rows[index]["config_value"]["enable"] == 1
+                    index = res.data.rows.findIndex(item => item.config_key === 'before_due_date');
+                    this.invoiceForm.controls['beforeOn'].setValue(
+                        res.data.rows[index]['config_value']['enable'] === 1
                             ? true
                             : false
                     );
-                    this.invoiceForm.controls["beforeRemind"].setValue(
-                        res.data.rows[index]["config_value"]["send_reminder"]
+                    this.invoiceForm.controls['beforeRemind'].setValue(
+                        res.data.rows[index]['config_value']['send_reminder']
                     );
-                    //On Due Date
-                    index = res.data.rows.findIndex(item => { return item.config_key == "on_due_date" });
-                    this.invoiceForm.controls["onDueDateOn"].setValue(
-                        res.data.rows[index]["config_value"]["enable"] == 1
+                    // On Due Date
+                    index = res.data.rows.findIndex(item => item.config_key === 'on_due_date');
+                    this.invoiceForm.controls['onDueDateOn'].setValue(
+                        res.data.rows[index]['config_value']['enable'] === 1
                             ? true
                             : false
                     );
-                    //After Due Date
-                    index = res.data.rows.findIndex(item => { return item.config_key == "after_due_date" });
-                    this.invoiceForm.controls["afterDueDateOn"].setValue(
-                        res.data.rows[index]["config_value"]["enable"] == 1
+                    // After Due Date
+                    index = res.data.rows.findIndex(item => item.config_key === 'after_due_date');
+                    this.invoiceForm.controls['afterDueDateOn'].setValue(
+                        res.data.rows[index]['config_value']['enable'] === 1
                             ? true
                             : false
                     );
-                    this.invoiceForm.controls["afterRemindFrequency"].setValue(
-                        res.data.rows[index]["config_value"]["send_reminder_key"]
+                    this.invoiceForm.controls['afterRemindFrequency'].setValue(
+                        res.data.rows[index]['config_value']['send_reminder_key']
                     );
-                    this.invoiceForm.controls["afterRemindValue"].setValue(
-                        res.data.rows[index]["config_value"]["send_reminder_value"]
+                    this.invoiceForm.controls['afterRemindValue'].setValue(
+                        res.data.rows[index]['config_value']['send_reminder_value']
                     );
-                }
-                catch(err) {
+                } catch (err) {
                     console.log(err);
                 }
             },
@@ -169,36 +168,35 @@ export class InvoiceConfigComponent implements OnInit {
     }
 
     onSave() {
-        if ( this.invoiceForm.value.afterRemindFrequency != null && this.invoiceForm.value.afterRemindFrequency != "null") {
-            let params = {
-                "apply_chase_for": this.applyChaseOption,
-                "before_due_date":
+        if ( this.invoiceForm.value.afterRemindFrequency != null && this.invoiceForm.value.afterRemindFrequency !== 'null') {
+            const params = {
+                'apply_chase_for': this.applyChaseOption,
+                'before_due_date':
                 {
-                    "enable": this.invoiceForm.value["beforeOn"] ? 1 : 0,
-                    "send_reminder": this.invoiceForm.value["beforeRemind"]
+                    'enable': this.invoiceForm.value['beforeOn'] ? 1 : 0,
+                    'send_reminder': this.invoiceForm.value['beforeRemind']
                 },
-                "on_due_date":
+                'on_due_date':
                 {
-                    "enable": this.invoiceForm.value["onDueDateOn"] ? 1 : 0
+                    'enable': this.invoiceForm.value['onDueDateOn'] ? 1 : 0
                 },
-                "after_due_date":
+                'after_due_date':
                 {
-                    "enable": this.invoiceForm.value["afterDueDateOn"] ? 1 : 0,
-                    "send_reminder_key": this.invoiceForm.value["afterRemindFrequency"],
-                    "send_reminder_value": this.invoiceForm.value["afterRemindValue"]
+                    'enable': this.invoiceForm.value['afterDueDateOn'] ? 1 : 0,
+                    'send_reminder_key': this.invoiceForm.value['afterRemindFrequency'],
+                    'send_reminder_value': this.invoiceForm.value['afterRemindValue']
                 }
-            }
+            };
             this.invoiceService.saveInvoiceConfigInfo(params).subscribe(
                 res => {
-                    this.toastr.success("Save successfully!");
+                    this.toastr.success('Save successfully!');
                     this.getInvoiceChaseInfo();
                 },
                 err => {
                     console.log(err.message);
-                })
-        }
-        else {
-            this.toastr.error("Please select reminder frequency!");
+                });
+        } else {
+            this.toastr.error('Please select reminder frequency!');
         }
     }
 }
