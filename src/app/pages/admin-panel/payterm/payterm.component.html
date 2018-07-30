@@ -3,15 +3,18 @@
     <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
     <div class="block-content pd-bottom bg-gray-light short-width">
         <div class="row">
-            <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
-                <div class="block-search">
-                    <label for="code" class="control-label">Code</label>
-                    <input type="text" name="code" formControlName="cd" class="form-control" id="code" placeholder="">
-                </div>
+            <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">               
                 <div class="block-search">
                     <label for="name" class="control-label">Description</label>
                     <input type="text" name="des" formControlName="des" class="form-control" id="name" placeholder="">
-                </div>             
+                </div>
+                <div class="block-search">
+                    <label for="code" class="control-label">Status</label>
+                    <select class="form-control" formControlName="ac" name="status">
+                        <option value="null" selected="false">--Select--</option>
+                        <option *ngFor="let item of listMaster['status']" [ngValue]="item.key">{{item.value}}</option>
+                    </select>
+                </div>        
             </form>
             <div class="block-btn-search">
                 <label class="control-label">&nbsp;</label>
@@ -32,7 +35,10 @@
                     <tr>
                         <th>Code</th>
                         <th>Description</th>
-                        <th>Day Limit</th>
+                        <th>Term Days</th>
+                        <th>Discount Days</th>
+                        <th>Discount Type</th>
+                        <th>Discount Value</th>
                         <th>Status</th>
                         <th>Last Updated By</th>
                         <th>Last Updated On</th>
@@ -43,10 +49,13 @@
                     <tr>
                         <td>{{item.cd}}</td>
                         <td>{{item.des }}</td>
-                        <td>{{item.day_limit}}</td>
-                        <td>{{convertStatus(item.sts)}}</td>
-                        <td>{{item.crtd_by_name}}</td>
-                        <td>{{item.updated_dt}}</td>
+                        <td>{{item.term_day}}</td>
+                        <td>{{item.dsct_day}}</td>
+                        <td>{{item.dsct_type}}</td>
+                        <td>{{item.dsct_value}}</td>
+                        <td>{{item.early_pmt_incentive==1 ?'Yes':'No'}}</td>
+                        <td>{{item.full_name}}</td>
+                        <td>{{item.update_dt}}</td>
                         <td>
                             <a class="btn btn-default" (click)="editPayment(item.id)" title="Edit Payment Term">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>

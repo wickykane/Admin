@@ -7,7 +7,7 @@
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label text-label">Sale Quote No</label>
                         <div class="col-sm-3">
-                            <label class="col-form-label control-label">{{detail['code']}}</label>
+                            <label class="col-form-label control-label">{{detail['quote_no']}}</label>
                         </div>
                         <label class="col-sm-3 col-form-label text-label">Payment Method</label>
                         <div class="col-sm-3">
@@ -19,9 +19,9 @@
                           </label>
                         </div>
                         <div class="w-100"></div>
-                        <label class="col-sm-3 col-form-label text-label">Customer RFQ</label>
+                        <label class="col-sm-3 col-form-label text-label">Customer PO</label>
                         <div class="col-sm-3">
-                            <label class="col-form-label control-label">{{detail['sale_quote_num']}}</label>
+                            <label class="col-form-label control-label">{{detail['cus_po']}}</label>
                         </div>
                         <label class="col-sm-3 col-form-label text-label">Sales Person</label>
                         <div class="col-sm-3">
@@ -41,12 +41,12 @@
                         </div>
                         <label class="col-sm-3 col-form-label text-label">Quote Date</label>
                         <div class="col-sm-3">
-                            <label class="col-form-label control-label">{{detail['qt_dt']}}</label>
+                            <label class="col-form-label control-label">{{detail['qt_dt'] |date:'MM/dd/yyyy'}}</label>
                         </div>
                         <div class="w-100"></div>
                         <label class="col-sm-3 col-form-label text-label">Expiry Date</label>
                         <div class="col-sm-3">
-                            <label class="col-form-label control-label">{{detail['expiry_dt']}}</label>
+                            <label class="col-form-label control-label">{{detail['expiry_dt'] |date:'MM/dd/yyyy'}}</label>
                         </div>
                     </div>
                 </form>

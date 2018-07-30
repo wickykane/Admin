@@ -21,7 +21,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-3">
-                                    Last Sales Date: {{customer.last_sales_order}}
+                                    Last Sales Date: {{customer.last_sales_order|date:'MM/dd/yyyy'}}
                                 </div>
                                 <div class="col-md-2">
                                     <a (click)="showViewOrderHistory()" href="javascript:void()">View Order History</a>

@@ -9,16 +9,23 @@
         <div class="row">
             <form class="form-horizontal form-search" [formGroup]="searchForm">
                 <div class="block-search">
-                    <label for="so" class="control-label">Code</label>
+                    <label for="so" class="control-label">Quote No</label>
                     <input type="text" name="so" formControlName="cd" class="form-control">
                 </div>
                 <div class="block-search">
-                    <label for="so" class="control-label">Name</label>
-                    <input type="text" name="so" formControlName="name" class="form-control">
+                    <label for="so" class="control-label">SKU</label>
+                    <input type="text" name="so" formControlName="sku" class="form-control">
                 </div>
                 <div class="block-search">
-                    <label for="so" class="control-label">Status</label>
-                    <input type="text" name="so" formControlName="sts" class="form-control">
+                    <label for='date' class="control-label" translate>Date</label>
+                    <div clickOutside (clickOutside)="d.close()" class="input-group">
+                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="quote_date" ngbDatepicker #d="ngbDatepicker">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 <div class="block-btn-search">
                     <label class="control-label">&nbsp;</label>
@@ -28,8 +35,6 @@
                     </div>
                 </div>
             </form>
-
-
         </div>
     </div>
     <div class="block-content pd-top mt-2">
@@ -49,7 +54,7 @@
                         <th>Description</th>
                         <th class="text-center">Condition</th>
                         <th class="text-center">Qty</th>
-                        <th translate>WH Dallas</th>  
+                        <th translate>WH Dallas</th>
                         <th translate>WH Amazon</th>
                         <th class="text-center">Price</th>
                         <th class="text-center">Quote Price</th>
@@ -69,7 +74,7 @@
                     <td>{{item.sku}}</td>
                     <td>{{item.des}}</td>
                     <td class="text-center">{{item.condition_name}}</td>
-                    <td class="text-center">{{item.order_quantity}}</td>
+                    <td class="text-center">{{item.quantity}}</td>
                     <td>{{item.warehouse[0]['qty_available']}}</td>
                     <td>{{item.warehouse[1]['qty_available']}}</td>
                     <td class="text-center">{{item.sale_price|currency}}</td>
