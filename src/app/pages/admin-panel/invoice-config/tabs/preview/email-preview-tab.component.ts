@@ -15,8 +15,8 @@ export class EmailPreviewTab implements OnInit {
     ngOnInit() {
         this.displayTemplate = Object.assign({}, this.template);
         this.tags.forEach(field => {
-            this.displayTemplate.subject = this.displayTemplate.subject.replace(field.tag, field.label);
-            this.displayTemplate.body = this.displayTemplate.body.replace(field.tag, field.label);
+            this.displayTemplate.subject = this.displayTemplate.subject.replace(field.tag, field.value);
+            this.displayTemplate.body = this.displayTemplate.body.replace(field.tag, field.value);
         });
     }
 

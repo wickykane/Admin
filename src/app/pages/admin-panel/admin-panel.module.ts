@@ -63,6 +63,8 @@ import {
 
 import { AdminPanelService } from './admin-panel.service';
 
+import { CKEditorModule } from 'ng2-ckeditor';
+
 @NgModule({
     imports: [
         CommonModule,
@@ -73,7 +75,8 @@ import { AdminPanelService } from './admin-panel.service';
         PageHeaderModule,
         WorkFlowModule,
         CommonShareModule,
-        ItemModalModule
+        ItemModalModule,
+        CKEditorModule
     ],
     declarations: [
         AdminPanelComponent,

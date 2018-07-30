@@ -26,7 +26,7 @@ export class InvoiceConfigService {
     }
 
     saveEmailTemplate(id, params) {
-        const url = "config/invoicechase/update/" + id;
+        const url = "config/invoicechase/update-email/" + id;
         return this.apiService.put(url,params);
     }
 

@@ -17,7 +17,8 @@
             <b>Subject</b>
         </label>
         <div class="content">
-            <input type="text" [(ngModel)]="template.email_tpl.subject">
+            <ckeditor [(ngModel)]="template.email_tpl.subject" debounce="500" [config]="{height: '50'}"
+                #subjectEditor (focus)="isFocusingSubject = true; isFocusingBody = false"></ckeditor>
         </div>
     </div>
 </div>
@@ -28,7 +29,8 @@
             <b>Body</b>
         </label>
         <div class="content">
-            <textarea [(ngModel)]="template.email_tpl.body"></textarea>
+            <ckeditor [(ngModel)]="template.email_tpl.body" debounce="500"
+                #bodyEditor (focus)="isFocusingBody = true; isFocusingSubject = false"></ckeditor>
         </div>
     </div>
 </div>

@@ -7,6 +7,7 @@ import { InvoiceConfigService } from "../../invoice-chasing-config.service";
 
 import { SendSampleModalContent } from "../send-sample/send-sample.modal";
 
+declare var jQuery: any;
 @Component({
     selector: "app-email-template-modal-content",
     templateUrl: "./email-template.modal.html",
@@ -31,6 +32,8 @@ export class EmailTemplateModalContent implements OnInit {
 
     public fieldTags = [];
 
+    private id = null;
+
     constructor(
         public activeModal: NgbActiveModal,
         private modalService: NgbModal,
@@ -39,7 +42,6 @@ export class EmailTemplateModalContent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.getFieldTags();
         this.getTemplateFromAPI();
     }
 
@@ -62,6 +64,8 @@ export class EmailTemplateModalContent implements OnInit {
         this.invoiceService.getEmailTemplate(key).subscribe(
             res => {
                 this.emailTemplate = res.data.config_value;
+                this.id = res.data.id;
+                this.getFieldTags();
             },
             err => {
                 console.log(err)
@@ -74,12 +78,15 @@ export class EmailTemplateModalContent implements OnInit {
             res => {
                 this.fieldTags = [];
                 res.data.config_value.forEach(item => {
-                    let label = Object.keys(item)[0].toString().replace("{@@","%%").replace("@@}","%%").replace(/_/g,"").toUpperCase();
                     this.fieldTags.push({
                         tag: Object.keys(item)[0],
-                        value: Object.values(item)[0],
-                        label: label
+                        value: item[Object.keys(item)[0]]
                     })
+                });
+                this.fieldTags.forEach(item => {
+                    let regex = new RegExp(item.tag, "g");
+                    this.emailTemplate.email_tpl.subject = this.emailTemplate.email_tpl.subject.replace(regex,item.value);
+                    this.emailTemplate.email_tpl.body = this.emailTemplate.email_tpl.body.replace(regex,item.value);
                 });
             },
             err => {
@@ -89,25 +96,16 @@ export class EmailTemplateModalContent implements OnInit {
     }
 
     saveTemplate() {
-        let id = 0;
-        switch(this.duration) {
-            case "BEFORE": {
-                id = 12;
-                break;
-            }
-            case "ON": {
-                id = 13;
-                break;
-            }
-            case "AFTER": {
-                id = 14;
-                break;
-            }
-        }
         let params = {
-            "config_value": this.emailTemplate
-        };
-        this.invoiceService.saveEmailTemplate(id, params).subscribe(
+            subject: this.emailTemplate.email_tpl.subject,
+            body: this.emailTemplate.email_tpl.body
+        }
+        this.fieldTags.forEach(item => {
+            let regex = new RegExp(item.value, "g");
+            params.subject = params.subject.replace(regex,item.tag);
+            params.body = params.body.replace(regex,item.tag);
+        });
+        this.invoiceService.saveEmailTemplate(this.id, params).subscribe(
             res => {
                 this.toastr.success("Save successfully");
             },
@@ -125,12 +123,18 @@ export class EmailTemplateModalContent implements OnInit {
         });
         modalRef.result.then(
             res => {
+                jQuery("body").addClass("modal-open");
                 if(res && res.receiver) {
                     let params = {
                         "email_to": res.receiver,
                         "email_subject": this.emailTemplate.email_tpl.subject,
                         "email_body": this.emailTemplate.email_tpl.body
                     };
+                    this.fieldTags.forEach(item => {
+                        let regex = new RegExp(item.value, "g");
+                        params.email_subject = params.email_subject.replace(regex,item.tag);
+                        params.email_body = params.email_body.replace(regex,item.tag);
+                    });
                     this.invoiceService.sendEmailSample(params).subscribe(
                         res => {
                             this.toastr.success("Email has been sent successfully.");
@@ -145,7 +149,7 @@ export class EmailTemplateModalContent implements OnInit {
                 }
             },
             dismiss => {
-                // jQuery("body").addClass("modal-open");
+                jQuery("body").addClass("modal-open");
             }
         );
     }

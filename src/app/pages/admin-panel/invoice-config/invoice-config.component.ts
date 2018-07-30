@@ -120,37 +120,47 @@ export class InvoiceConfigComponent implements OnInit {
     getInvoiceChaseInfo() {
         this.invoiceService.getInvoiceConfigInfo().subscribe(
             res => {
-                // Apply for
-                this.applyChaseOption = res.data.rows[0][
-                    "config_value"
-                ].toString();
-                // Before Due Date
-                this.invoiceForm.controls["beforeOn"].setValue(
-                    res.data.rows[1]["config_value"]["enable"] == 1
-                        ? true
-                        : false
-                );
-                this.invoiceForm.controls["beforeRemind"].setValue(
-                    res.data.rows[1]["config_value"]["send_reminder"]
-                );
-                //On Due Date
-                this.invoiceForm.controls["onDueDateOn"].setValue(
-                    res.data.rows[2]["config_value"]["enable"] == 1
-                        ? true
-                        : false
-                );
-                //After Due Date
-                this.invoiceForm.controls["afterDueDateOn"].setValue(
-                    res.data.rows[3]["config_value"]["enable"] == 1
-                        ? true
-                        : false
-                );
-                this.invoiceForm.controls["afterRemindFrequency"].setValue(
-                    res.data.rows[3]["config_value"]["send_reminder_key"]
-                );
-                this.invoiceForm.controls["afterRemindValue"].setValue(
-                    res.data.rows[3]["config_value"]["send_reminder_value"]
-                );
+                try {
+                    let index = 0;
+                    // Apply for
+                    index = res.data.rows.findIndex(item => { return item.config_key == "apply_chase_for" });
+                    this.applyChaseOption = res.data.rows[index][
+                        "config_value"
+                    ].toString();
+                    // Before Due Date
+                    index = res.data.rows.findIndex(item => { return item.config_key == "before_due_date" });
+                    this.invoiceForm.controls["beforeOn"].setValue(
+                        res.data.rows[index]["config_value"]["enable"] == 1
+                            ? true
+                            : false
+                    );
+                    this.invoiceForm.controls["beforeRemind"].setValue(
+                        res.data.rows[index]["config_value"]["send_reminder"]
+                    );
+                    //On Due Date
+                    index = res.data.rows.findIndex(item => { return item.config_key == "on_due_date" });
+                    this.invoiceForm.controls["onDueDateOn"].setValue(
+                        res.data.rows[index]["config_value"]["enable"] == 1
+                            ? true
+                            : false
+                    );
+                    //After Due Date
+                    index = res.data.rows.findIndex(item => { return item.config_key == "after_due_date" });
+                    this.invoiceForm.controls["afterDueDateOn"].setValue(
+                        res.data.rows[index]["config_value"]["enable"] == 1
+                            ? true
+                            : false
+                    );
+                    this.invoiceForm.controls["afterRemindFrequency"].setValue(
+                        res.data.rows[index]["config_value"]["send_reminder_key"]
+                    );
+                    this.invoiceForm.controls["afterRemindValue"].setValue(
+                        res.data.rows[index]["config_value"]["send_reminder_value"]
+                    );
+                }
+                catch(err) {
+                    console.log(err);
+                }
             },
             err => {
                 console.log(err);

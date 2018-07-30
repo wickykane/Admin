@@ -1,5 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
-
+import { Component, OnInit, Input, Output, EventEmitter,ViewChild } from "@angular/core";
 @Component({
     selector: "tab-email-editor",
     templateUrl: "./email-editor-tab.component.html",
@@ -10,6 +9,11 @@ export class EmailEditorTab implements OnInit {
     @Input() template = {};
     @Input() tags = [];
     @Output() emailTemplateChange = new EventEmitter();
+    @ViewChild("subjectEditor") subjectEditor: any;
+    @ViewChild("bodyEditor") bodyEditor: any;
+
+    public isFocusingSubject = false;
+    public isFocusingBody = false;
 
     public showContextMenu = false;
 
@@ -23,6 +27,9 @@ export class EmailEditorTab implements OnInit {
     }
 
     onSelectField(field) {
+        console.log(field);
         this.showContextMenu = false;
+        this.isFocusingSubject ? this.subjectEditor.instance.insertHtml(field.value) : {};
+        this.isFocusingBody ? this.bodyEditor.instance.insertHtml(field.value) : {};
     }
 }
