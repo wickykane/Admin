@@ -1,0 +1,23 @@
+<div class="row email-content mb-3">
+    <div class="col-md-12">
+        <label class="title">
+            <b>Subject</b>
+        </label>
+        <div class="content" [innerHTML]="displayTemplate.subject"></div>
+    </div>
+</div>
+
+<div class="row email-content">
+    <div class="col-md-12">
+        <label class="title">
+            <b>Body</b>
+        </label>
+        <div class="content body-header">
+            <img src="assets/images/logo_footer.png">
+            <label><h4>INVOICE REMINDER</h4></label>
+        </div>
+        <div class="content" [innerHTML]="displayTemplate.body">
+        </div>
+        <div class="content body-footer"></div>
+    </div>
+</div>
