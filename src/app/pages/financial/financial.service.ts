@@ -46,7 +46,8 @@ export class FinancialService {
     }
 
     countInvoiceStatus() {
-        const url = 'ar-invoice/count-by-status';
+        // const url = 'ar-invoice/count-by-status';
+        const url = 'ar-invoice/count-status';
         return this.API.get(url);
     }
 
@@ -87,6 +88,11 @@ export class FinancialService {
     getInvoiceDueDate(params) {
         const url = 'ar-invoice/set-due-date';
         return this.API.get(url, params);
+    }
+
+    getListApprover() {
+        const url = 'ar-invoice/get-list-user';
+        return this.API.get(url);
     }
 
 }

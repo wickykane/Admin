@@ -4,7 +4,7 @@ import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { Subject } from 'rxjs/Rx';
 
 @Injectable()
-export class InvoiceKeyService implements OnDestroy {
+export class LateFeePolicyListKeyService implements OnDestroy {
     public context: any;
     public watchContext = new Subject<any>();
 
@@ -34,24 +34,19 @@ export class InvoiceKeyService implements OnDestroy {
         this.resetKeys();
         this._hotkeysService.add(new Hotkey('shift+n', (event: KeyboardEvent): boolean => {
             event.preventDefault();
-            this.context.createInvoice();
+            this.context.createLateFeePolicy();
             return;
-        }, undefined, 'Create Invoice'));
+        }, undefined, 'Create Policy'));
         this._hotkeysService.add(new Hotkey('shift+e', (event: KeyboardEvent): boolean => {
             event.preventDefault();
-            this.context.editInvoice();
+            this.context.editLateFeePolicy();
             return;
-        }, undefined, 'Edit Invoice'));
+        }, undefined, 'Edit Policy'));
         this._hotkeysService.add(new Hotkey('shift+v', (event: KeyboardEvent): boolean => {
             event.preventDefault();
-            this.context.viewInvoice();
+            this.context.viewLateFeePolicy();
             return;
-        }, undefined, 'View Invoice'));
-        this._hotkeysService.add(new Hotkey('shift+c', (event: KeyboardEvent): boolean => {
-            event.preventDefault();
-            this.context.cancelInvoice();
-            return;
-        }, undefined, 'Cancel Invoice'));
+        }, undefined, 'View Policy'));
         this._hotkeysService.add(new Hotkey('shift+s', (event: KeyboardEvent): any => {
             event.preventDefault();
             this.context.tableService.searchAction();

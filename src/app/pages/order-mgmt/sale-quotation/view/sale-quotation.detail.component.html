@@ -17,8 +17,8 @@
                   </button>
                 </li>
                 <li *ngIf="orderDetail['sts_code'] == 'AM'">
-                  <button ngbTooltip="Click to Sent Buyer" data-toggle="tooltip" type="button" class="btn btn-default" (click)="sentMailToBuyer(orderDetail['sale_quote_id'])">
-                      <i class="fa fa-envelope"></i> Send to Buyer
+                  <button ngbTooltip="Click to Sent Buyer" data-toggle="tooltip" type="button" class="btn btn-default" (click)="convertOrderToSO(orderDetail['sale_quote_id'])">
+                      <i class="fa fa-paper-plane"></i> Convert To SaleOrder
                   </button>
                 </li>
                 <li><button class="btn btn-outline-dark" (click)="back()"><i class="fa fa-arrow-left"></i>Back</button></li>
@@ -27,12 +27,12 @@
         <ngb-tabset>
             <ngb-tab title="INFORMATION">
                 <ng-template ngbTabContent>
-                    <app-sale-quote-info-tab [orderId]="orderId" (stockValueChange)="checkRender($event)"></app-sale-quote-info-tab>
+                    <app-sale-quote-info-tab [detailOrder]="orderDetail" (stockValueChange)="checkRender($event)"></app-sale-quote-info-tab>
                 </ng-template>
             </ngb-tab>
             <ngb-tab title="SALES QUOTE HISTORY">
                 <ng-template ngbTabContent>
-                    <app-sale-quote-history-tab [saleQuoteId]="data['sale_quote_id']"></app-sale-quote-history-tab>
+                    <app-sale-quote-history-tab [saleQuoteId]="orderId"></app-sale-quote-history-tab>
                 </ng-template>
             </ngb-tab>
         </ngb-tabset>

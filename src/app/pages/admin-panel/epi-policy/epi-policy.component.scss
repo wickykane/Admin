@@ -1,0 +1,90 @@
+fieldset.custom-border {
+    border: 1px solid #e0e0e0;
+    padding: 10px;
+    margin-top: 15px;
+
+    legend.custom-border {
+        font-size: 1.2em;
+        font-weight: bold;
+        text-align: left;
+        width: auto;
+        padding: 0 10px;
+        border-bottom: none;
+    }
+}
+
+div.custom-header {
+    border-bottom: 1px solid #ddd;
+
+    h3.custom-header {
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        line-height: 1.2;
+        display: inline;
+        color: #4f5050;
+
+        span {
+            text-transform: capitalize;
+            color: #7b7a7a;
+            font-weight: 400;
+        }
+    }
+
+    .wrap-keyboard {
+        span {
+            font-size: 13px;
+            cursor: pointer;
+            color: #dc3545;
+        }
+    }
+}
+
+.mg-top-15 {
+    margin-top: 15px;
+}
+
+.list-customers {
+    max-height: 220px;
+}
+
+.late-fee-rules {
+    .recurring-fee-toggle {
+        .recurring-fee-lbl {
+            display: inline-block;
+            font-weight: bold;
+        }
+
+        .recurring-fee-icon {
+            i {
+                font-size: 15px;
+            }
+        }
+
+        .toggle-button {
+            display: inline-block;
+            vertical-align: middle;
+
+            &.disabled {
+                pointer-events: none;
+            }
+        }
+    }
+
+    .rule {
+        select {
+            width: 150px;
+            margin-right: 5px;
+        }
+    }
+
+    .recurring-fee-input {
+        width: 50px;
+        height: 21px;
+        margin: 0 5px;
+    }
+
+    .recurring-fee-text {
+        display: inline-block;
+    }
+}

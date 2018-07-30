@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import * as _ from 'lodash';
 import { OrderService } from '../../../order-mgmt/order-mgmt.service';
 import { TableService } from './../../../../services/table.service';
 
@@ -30,8 +31,30 @@ export class SaleOrderInformationTabComponent implements OnInit {
         'subs': [],
         'buyer_info': {}
     };
+    public addr_select = {
+        shipping: {
+            'address_name': '',
+            'address_line': '',
+            'country_name': '',
+            'city_name': '',
+            'state_name': '',
+            'zip_code': ''
+        },
+        billing: {
+            'address_name': '',
+            'address_line': '',
+            'country_name': '',
+            'city_name': '',
+            'state_name': '',
+            'zip_code': ''
+        },
+        contact: {
+            'phone': '',
+            'email': ''
+        }
+    };
     data = {};
-    public  totalQTY = 0;
+    public totalQTY = 0;
     public totalShipQTY = 0;
 
     constructor(
@@ -55,14 +78,19 @@ export class SaleOrderInformationTabComponent implements OnInit {
         this.orderService.getOrderDetail(this._orderId).subscribe(res => {
             try {
                 this.detail = res.data;
-                this.stockValueChange.emit(res.data) ;
-                this.detail['billing'] = res.data.billing_info[0];
-                this.detail['shipping_address'] = res.data.shipping_address[0];
+                if (res.data.is_draft_order) {
+                    this.detail['shipping_address'] = (res.data.shipping_address.length === 0) ? _.cloneDeep(this.addr_select.shipping) : res.data.shipping_address[0];
+                    this.detail['billing'] = (res.data.billing_info.length === 0) ? _.cloneDeep(this.addr_select.billing) : this.detail['billing'] = res.data.billing_info[0];
+                } else {
+                    this.stockValueChange.emit(res.data);
+                    this.detail['billing'] = res.data.billing_info[0];
+                    this.detail['shipping_address'] = res.data.shipping_address[0];
+                }
                 if (this.detail['total_paid'] === null) {
                     this.detail['total_paid'] = 0;
                 }
                 this.detail['subs'] = res.data.list.items;
-                this.detail['subs'].forEach( (item) => {
+                this.detail['subs'].forEach((item) => {
                     this.totalQTY += item.quantity;
                     this.totalShipQTY += item.qty_shipped;
                 });

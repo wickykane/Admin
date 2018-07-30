@@ -1,0 +1,93 @@
+<div class="modal-header">
+    <span class="modal-title">LIST OF CUSTOMERS</span>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss([])">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="block-content pd-bottom bg-gray-light short-width">
+        <div class="row">
+            <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
+                <div class="block-search">
+                    <label for="cus_name" class="control-label">Customer Name</label>
+                    <input type="text" name="cus_name" formControlName="cus_name" class="form-control" id="cus_name" placeholder="" focus-element="focusAuto" capitalize>
+                </div>
+                <div class="block-search">
+                    <label for="cus_code" class="control-label">Customer Code</label>
+                    <input type="text" name="cus_code" formControlName="cus_code" class="form-control" id="cus_code" placeholder="" capitalize>
+                </div>
+                <div class="block-search">
+                    <label for="cus_type" class="control-label">Customer Type</label>
+                    <select class="form-control" formControlName="cus_type">
+                        <option value="null" selected="true">--Select--</option>
+                        <option *ngFor="let item of listMaster['buyerType']" [ngValue]="item.code">{{item.name}}</option>
+                    </select>
+                </div>
+            </form>
+            <div class="block-btn-search">
+                <label class="control-label">&nbsp;</label>
+                <div class="group-btn-search">
+                    <button type="button" class="btn btn-primary" (click)="tableService.searchAction()">Search</button>
+                    <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchForm)">Reset</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="block-content pd-top mt-2">
+        <div class="table-responsive">
+            <table class="table table-striped table-vcenter table-hover custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
+                <thead class="bg-white">
+                    <tr>
+                        <th>
+                            <label class="css-input css-checkbox css-checkbox-default">
+                                <input class="cb-all" type="checkbox" [(ngModel)]="checkAllItem" (change)="checkAll($event)">
+                                <span></span>
+                            </label>
+                        </th>
+                        <th translate>ID</th>
+                        <th translate>Type</th>
+                        <th translate>Customer Code</th>
+                        <th translate>Customer Name</th>
+                    </tr>
+                </thead>
+                <tr *ngFor="let item of list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
+                    <td>
+                        <label class="css-input css-checkbox css-checkbox-default">
+                            <input class="cb-element" type="checkbox" [(ngModel)]="item.is_checked" (change)="isAllChecked()">
+                            <span></span>
+                        </label>
+                    </td>
+                    <td>{{item.id}}</td>
+                    <td>{{convertCustomerType(item.buyer_type)}}</td>
+                    <td>{{ item.code }}</td>
+                    <td>{{item.name}}</td>
+                </tr>
+                <tr *ngIf="list.items.length === 0">
+                    <td colspan="100%" class="text-center">No data.</td>
+                </tr>
+            </table>
+        </div>
+        <div class="row normal-pagination" *ngIf="list.items.length > 0">
+            <div class="col-md-6">
+                <div class="text-left">
+                    <div class="col-md-6" style="padding-left: 0px;">
+                        <span style="float: left; padding-right: 10px;">{{list.items.length}}/{{tableService.pagination.total_record}} items </span>
+                        <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length" (change)="tableService.changeLength()">
+                            <option *ngFor="let option of tableService.itemPerPageOptions" [ngValue]="option">{{option}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="text-right">
+                    <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length" [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page" [maxSize]="tableService.maxSize"
+                        [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-outline-primary" (click)="activeModal.close(list.checklist)">OK</button>
+    <button type="button" class="btn btn-outline-dark" (click)="activeModal.close([])">Close</button>
+</div>

@@ -130,10 +130,22 @@ export class SaleQuotationComponent implements OnInit {
         });
 
     }
+    convertOrderToSO(id) {
+        const params = {};
+        this.orderService.convertOrderToSO(id, params).subscribe(res => {
+            try {
+                this.toastr.success(res.message);
+                setTimeout(() => {
+                    this.getList();
+                  }, 100);
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
 
     getList() {
         const params = { ...this.tableService.getParams(), ...this.searchForm.value };
-        // const params = Object.assign({}, this.tableService.getParams(), this.searchForm.value);
         Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
 
         this.orderService.getListSalesQuotation(params).subscribe(res => {

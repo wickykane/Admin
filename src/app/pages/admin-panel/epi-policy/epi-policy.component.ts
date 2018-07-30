@@ -6,17 +6,17 @@ import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 import { TableService } from '../../../services/index';
 import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
-import { LateFeePolicyListKeyService } from './keys.list.control';
-import { LateFeePolicyService } from './late-fee-policy.service';
+import { EPIPolicyService } from './epi-policy.service';
+import { EPIPolicyListKeyService } from './keys.list.control';
 
 @Component({
-    selector: 'app-late-fee-policy',
-    providers: [LateFeePolicyService, LateFeePolicyListKeyService],
-    templateUrl: 'late-fee-policy.component.html',
+    selector: 'app-epi-policy',
+    providers: [EPIPolicyService, EPIPolicyListKeyService],
+    templateUrl: 'epi-policy.component.html',
     animations: [routerTransition()]
 })
 
-export class LateFeePolicyComponent implements OnInit {
+export class EPIPolicyComponent implements OnInit {
     /**
      *  Variable
      */
@@ -33,8 +33,8 @@ export class LateFeePolicyComponent implements OnInit {
         public tableService: TableService,
         private activeRouter: ActivatedRoute,
         private router: Router,
-        private lateFeePolicyService: LateFeePolicyService,
-        public keyService: LateFeePolicyListKeyService,
+        private epiPolicyService: EPIPolicyService,
+        public keyService: EPIPolicyListKeyService,
         private modalService: NgbModal,
         private toastr: ToastrService) {
         this.searchForm = fb.group({
@@ -76,7 +76,7 @@ export class LateFeePolicyComponent implements OnInit {
         const params = { ...this.tableService.getParams(), ...this.searchForm.value };
         Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
 
-        this.lateFeePolicyService.getListLateFeePolicy(params).subscribe(res => {
+        this.epiPolicyService.getListEPIPolicy(params).subscribe(res => {
             try {
                 this.list.items = res.data.rows;
                 this.tableService.matchPagingOption(res.data);
@@ -86,29 +86,29 @@ export class LateFeePolicyComponent implements OnInit {
         });
     }
 
-    createLateFeePolicy() {
-        this.router.navigate(['/admin-panel/late-fee-policy/create']);
+    createEPIPolicy() {
+        this.router.navigate(['/admin-panel/epi-policy/create']);
     }
 
-    viewLateFeePolicy(id?) {
+    viewEPIPolicy(id?) {
         if (id) {
-            this.router.navigate(['/admin-panel/late-fee-policy/view', id]);
+            this.router.navigate(['/admin-panel/epi-policy/view', id]);
         } else {
             const selectedPolicyId = this.list.items[this.selectedIndex].id;
             if (selectedPolicyId) {
-                this.router.navigate(['/admin-panel/late-fee-policy/view', selectedPolicyId]);
+                this.router.navigate(['/admin-panel/epi-policy/view', selectedPolicyId]);
             }
         }
     }
 
-    editLateFeePolicy(id?) {
+    editEPIPolicy(id?) {
         if (id) {
-            this.router.navigate(['/admin-panel/late-fee-policy/edit', id]);
+            this.router.navigate(['/admin-panel/epi-policy/edit', id]);
         } else {
             const selectedPolicyId = this.list.items[this.selectedIndex].id;
             const selectedPolicyStatus = this.list.items[this.selectedIndex].ac;
             if (selectedPolicyId && selectedPolicyStatus !== 2) {
-                this.router.navigate(['/admin-panel/late-fee-policy/edit', selectedPolicyId]);
+                this.router.navigate(['/admin-panel/epi-policy/edit', selectedPolicyId]);
             }
         }
     }

@@ -497,7 +497,8 @@ export class SaleOrderCreateComponent implements OnInit {
             case 'quote':
                 params = {
                     'items': products,
-                    'is_draft_order': 0
+                    'is_draft_order': 0,
+                    'type': 'SAQ'
                 };
                 break;
             case 'draft':
@@ -510,13 +511,11 @@ export class SaleOrderCreateComponent implements OnInit {
         params = { ...this.order_info, ...this.generalForm.value, ...params };
         this.orderService.createOrder(params).subscribe(res => {
             try {
-                if (res.data.status) {
-                    this.toastr.success(res.data.message);
+                if (res.status) {
+                    this.toastr.success(res.message);
                     setTimeout(() => {
                         this.router.navigate(['/order-management/sale-order']);
                     }, 500);
-                } else {
-                    this.toastr.error(res.data.message, null, { enableHtml: true });
                 }
             } catch (e) {
                 console.log(e);

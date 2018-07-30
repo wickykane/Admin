@@ -151,6 +151,7 @@
                                 <span *ngIf="item.type == 'PKU'">Pickup</span>
                                 <span *ngIf="item.type == 'ONL'">Ecommerce</span>
                                 <span *ngIf="item.type == 'NO'">Regular Order</span>
+                                <span *ngIf="item.type == 'XD'">X-Docks</span>
                             </td>
                             <td class="text-center">{{item.order_date | date:'yyyy-MM-dd'}}</td>
                             <td class="text-center">{{item.ship_date | date:'yyyy-MM-dd'}}</td>
