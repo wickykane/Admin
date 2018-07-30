@@ -24,6 +24,13 @@ export class EmailTemplateModalContent implements OnInit {
         }
     };
 
+    public emailTemplateForDisplay = {
+        subject: "",
+        body: ""
+    };
+
+    public fieldTags = [];
+
     constructor(
         public activeModal: NgbActiveModal,
         private modalService: NgbModal,
@@ -32,6 +39,7 @@ export class EmailTemplateModalContent implements OnInit {
     ) {}
 
     ngOnInit() {
+        this.getFieldTags();
         this.getTemplateFromAPI();
     }
 
@@ -61,6 +69,25 @@ export class EmailTemplateModalContent implements OnInit {
         );
     }
 
+    getFieldTags() {
+        this.invoiceService.getFieldTags().subscribe(
+            res => {
+                this.fieldTags = [];
+                res.data.config_value.forEach(item => {
+                    let label = Object.keys(item)[0].toString().replace("{@@","%%").replace("@@}","%%").replace(/_/g,"").toUpperCase();
+                    this.fieldTags.push({
+                        tag: Object.keys(item)[0],
+                        value: Object.values(item)[0],
+                        label: label
+                    })
+                });
+            },
+            err => {
+                console.log(err);
+            }
+        );
+    }
+
     saveTemplate() {
         let id = 0;
         switch(this.duration) {
@@ -83,7 +110,6 @@ export class EmailTemplateModalContent implements OnInit {
         this.invoiceService.saveEmailTemplate(id, params).subscribe(
             res => {
                 this.toastr.success("Save successfully");
-                this.activeModal.close(true);
             },
             err => {
                 console.log(err);
@@ -98,7 +124,26 @@ export class EmailTemplateModalContent implements OnInit {
             backdrop: "static"
         });
         modalRef.result.then(
-            res => {},
+            res => {
+                if(res && res.receiver) {
+                    let params = {
+                        "email_to": res.receiver,
+                        "email_subject": this.emailTemplate.email_tpl.subject,
+                        "email_body": this.emailTemplate.email_tpl.body
+                    };
+                    this.invoiceService.sendEmailSample(params).subscribe(
+                        res => {
+                            this.toastr.success("Email has been sent successfully.");
+                        },
+                        err => {
+                            console.log(err);
+                        }
+                    );
+                }
+                else {
+                    this.toastr.warning("Receiver's can not be empty.");
+                }
+            },
             dismiss => {
                 // jQuery("body").addClass("modal-open");
             }
@@ -107,5 +152,6 @@ export class EmailTemplateModalContent implements OnInit {
 
     getEmailTemplate(event) {
         this.emailTemplate = event;
+        this.emailTemplateForDisplay = event.email_tpl;
     }
 }

@@ -8,11 +8,11 @@
     <div class="row">
         <div class="col-sm-12 form-group">
             <label> Send Sample Email:</label>
-            <input type="email" class="form-control" placeholder="example@gmail.com">
+            <input type="email" class="form-control" placeholder="example@gmail.com" [(ngModel)]="receiverEmail">
         </div>
     </div>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="activeModal.dismiss()">SEND TEST EMAIL</button>
+    <button type="button" class="btn btn-primary" (click)="onSendSample()">SEND TEST EMAIL</button>
     <button type="button" class="btn btn-default" (click)="activeModal.dismiss()">BACK</button>
 </div>

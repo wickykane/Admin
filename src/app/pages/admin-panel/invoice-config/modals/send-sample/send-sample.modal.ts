@@ -13,7 +13,15 @@ import { ToastrService } from "ngx-toastr";
 // tslint:disable-next-line:component-class-suffix
 export class SendSampleModalContent implements OnInit {
 
+    public receiverEmail = "";
+
     constructor(public activeModal: NgbActiveModal) {}
 
     ngOnInit() {}
+
+    onSendSample(){
+        this.activeModal.close({
+            receiver: this.receiverEmail
+        });
+    }
 }

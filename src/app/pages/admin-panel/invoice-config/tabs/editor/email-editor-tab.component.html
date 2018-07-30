@@ -2,9 +2,9 @@
     <button class="btn btn-primary" (click)="showContextMenu = !showContextMenu" clickOutside (clickOutside)="showContextMenu = false">Insert Field</button>
     <div class="show-more" *ngIf="showContextMenu">
         <ul>
-            <li *ngFor="let field of listMaster['insertFields']">
+            <li *ngFor="let field of tags">
                 <label>
-                    <a (click)="onSelectField(field)">{{field.label}}</a>
+                    <a (click)="onSelectField(field)">{{field.value}}</a>
                 </label>
             </li>
         </ul>

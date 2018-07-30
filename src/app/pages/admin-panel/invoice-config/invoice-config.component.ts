@@ -96,7 +96,6 @@ export class InvoiceConfigComponent implements OnInit {
      */
 
     selectData(index) {
-        console.log(index);
     }
 
     /**
@@ -191,5 +190,5 @@ export class InvoiceConfigComponent implements OnInit {
         else {
             this.toastr.error("Please select reminder frequency!");
         }
-;    }
+    }
 }
