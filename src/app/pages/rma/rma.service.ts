@@ -27,7 +27,7 @@ export class RmaService {
 
   createRMA(params) {
     const url = ['rma', 'create'].join('/');
-    return this.API.post(url, params);
+    return this.API.customPost(url, params);
   }
 
   getRefundMethod() {
@@ -50,8 +50,8 @@ export class RmaService {
     return this.API.post(url, params);
   }
   getOrderInfo(id) {
-    const url = ['rma/get-info-order'].join('/');
-    return this.API.get(url,id);
+    const url = 'rma/get-info-order/'+id;
+    return this.API.get(url,null);
   }
 
   getReturnReason() {

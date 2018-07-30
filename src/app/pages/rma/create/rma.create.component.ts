@@ -67,7 +67,7 @@ export class RmaCreateComponent implements OnInit {
             'apply_restock': [0],
             'refund_method': [null, Validators.required],
             'payment_term': [null],
-            'approver': [null],
+            'approver': [null,Validators.required],
             'address_id': [null],
             'note': [null],
             'contact_name': [null],
@@ -114,8 +114,10 @@ export class RmaCreateComponent implements OnInit {
         this.generalForm.get('return_via').valueChanges.subscribe(data => {
             if (data == 1 || data == 2) {
                 this.generalForm.get('carrier').setValidators(Validators.required);
+                this.generalForm.get('address_id').setValidators(Validators.required);
             } else {
                 this.generalForm.get('carrier').clearValidators();
+                this.generalForm.get('address_id').clearValidators();
             }
             this.generalForm.patchValue({ carrier: null });
         });

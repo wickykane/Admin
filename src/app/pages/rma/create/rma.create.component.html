@@ -15,7 +15,7 @@
                                         <label for="code" class="control-label" translate>Customer</label>
                                         <span class="text-danger">(*) </span>
                                         <div>
-                                            <ng-select style="width: 150px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="buyer">
+                                            <ng-select style="width: 150px;" class="custom" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="buyer">
                                             </ng-select>
                                         </div>
                                     </div>
@@ -439,7 +439,7 @@
                                         <td>+ Ship Fee ($):</td>
                                         <td></td>
                                         <td>
-                                            <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info['shipping_cost']" class="form-control" type="text" (change)="updateTotal()">
+                                            <input [textMask]="{mask: numberMaskObject()}" [disabled]="generalForm.value.cover_ship == 'No'" class="form-control" [(ngModel)]="order_info['shipping_cost']" class="form-control" type="text" (change)="updateTotal()">
                                         </td>
                                     </tr>
                                     <tr>
