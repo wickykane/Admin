@@ -280,7 +280,15 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
             }
         }
     }
-
+    isNumberKey(evt) {
+        console.log('ok');
+        var e = evt || window.event; // for trans-browser compatibility
+        var charCode = e.which || e.keyCode;
+        if (charCode > 31 && (charCode < 47 || charCode > 57))
+            return false;
+        if (e.shiftKey) return false;
+        return true;
+    }
     //  add new Site
 
     addNewSite(item?) {
@@ -384,6 +392,12 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
                 delete params['company_name'];
             }
 
+            if ((params['credit_limit'] + ' ').indexOf('.') >= 0) {
+                return this.toastr.success("The credit limit is invalid data");
+            }
+            if ((params['credit_limit'] + ' ').indexOf('.') >= 0) {
+                return this.toastr.success("The credit limit is invalid data");
+            }
             this.customerService.createCustomer(params).subscribe(
                 res => {
                     console.log(res);

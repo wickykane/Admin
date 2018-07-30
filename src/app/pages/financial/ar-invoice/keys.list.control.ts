@@ -3,8 +3,6 @@ import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 // tslint:disable-next-line:import-blacklist
 import { Subject } from 'rxjs/Rx';
 
-
-
 @Injectable()
 export class InvoiceKeyService implements OnDestroy {
     public context: any;
@@ -34,18 +32,37 @@ export class InvoiceKeyService implements OnDestroy {
 
     initKey() {
         this.resetKeys();
-        this._hotkeysService.add(new Hotkey('ctrl+f', (event: KeyboardEvent): any => {
+        this._hotkeysService.add(new Hotkey('shift+n', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            this.context.createInvoice();
+            return;
+        }, undefined, 'Create Invoice'));
+        this._hotkeysService.add(new Hotkey('shift+e', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            this.context.editInvoice();
+            return;
+        }, undefined, 'Edit Invoice'));
+        this._hotkeysService.add(new Hotkey('shift+v', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            this.context.viewInvoice();
+            return;
+        }, undefined, 'View Invoice'));
+        this._hotkeysService.add(new Hotkey('shift+c', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            this.context.cancelInvoice();
+            return;
+        }, undefined, 'Cancel Invoice'));
+        this._hotkeysService.add(new Hotkey('shift+s', (event: KeyboardEvent): any => {
             event.preventDefault();
             this.context.tableService.searchAction();
             event.returnValue = false;
             return event;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Search'));
-        this._hotkeysService.add(new Hotkey('ctrl+r', (event: KeyboardEvent): any => {
+        this._hotkeysService.add(new Hotkey('shift+r', (event: KeyboardEvent): any => {
             event.preventDefault();
             this.context.tableService.resetAction(this.context.searchForm);
             event.returnValue = false;
             return event;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset'));
-
     }
 }

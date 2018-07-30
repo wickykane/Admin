@@ -1,14 +1,17 @@
 import { Component, Input, OnInit, ViewContainerRef } from '@angular/core';
-import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'confirm-modal',
-  templateUrl: './confirm.modal.html'
+    selector: 'app-confirm-modal',
+    templateUrl: './confirm.modal.html'
 })
-export class ConfirmModalContent  implements OnInit  {
+// tslint:disable-next-line:component-class-suffix
+export class ConfirmModalContent implements OnInit {
     @Input() message;
+    @Input() yesButtonText;
+    @Input() noButtonText;
 
-    constructor(public activeModal: NgbActiveModal) {}
+    constructor(public activeModal: NgbActiveModal) { }
 
-    ngOnInit() {}
+    ngOnInit() { }
 }

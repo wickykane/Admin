@@ -129,7 +129,6 @@
             </div>
             <div class="rule mg-top-15" *ngIf="generalForm.value['recuring_fee_status']">
                 <div class="recurring-fee-text">
-                    <span style="margin-right: 15px;">1</span>
                     <span>Apply a</span>
                 </div>
                 <input [textMask]="{mask: decimalMaskObject()}" type="text" class="recurring-fee-input" formControlName="pay_value" *ngIf="!isView">

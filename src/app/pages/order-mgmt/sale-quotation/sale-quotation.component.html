@@ -106,11 +106,11 @@
                             <td>{{item.ref_num}}</td>
                             <td>{{item.buyer_name}}</td>
                             <td class="text-center">
-                                {{item.quote_date | date:'mm/dd/yyyy' }}
+                                {{item.quote_date | date:'MM/dd/yyyy' }}
 
                             </td>
                             <td class="text-center">
-                                <span ng-if="item.expiry_date!=null">{{item.expiry_date | date:'mm/dd/yyyy' }}</span>
+                                <span ng-if="item.expiry_date!=null">{{item.expiry_date | date:'MM/dd/yyyy' }}</span>
                             </td>
                             <td class="text-center">
                                 {{item.total_price | currency}}
@@ -134,11 +134,8 @@
                                 </button>
                                 <button ngbTooltip="Click to Convert To SO" data-toggle="tooltip" *ngIf="item.sts_code=='AM'" type="button" class="btn btn-default"
                                 (click)="convertOrderToSO(item.sale_quote_id)">
-                                <i class="fa fa-check-square"></i>
-                            </button>                                
-                                <!-- <a ngbTooltip="Click to Update" class="btn btn-default " [routerLink]="['edit', item.id]" *ngIf="item.sts_code == 'SM'">
-                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                    </a> -->
+                                <i class="fa fa-paper-plane"></i>
+                            </button> 
                                 <!-- <button ngbTooltip="Click to Update" data-toggle="tooltip" *ngIf="item.sts_code == 'SM'" type="button" class="btn btn-default"
                                     (click)="updateDetail(item.id)">
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>

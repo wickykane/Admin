@@ -1,7 +1,7 @@
 <div [@routerTransition]>
     <app-page-header [heading]="headerTitle" [icon]="'fa-th-list'" *ngIf="isCreate"></app-page-header>
     <app-page-header [heading]="headerTitle" [icon]="'fa-th-list'" *ngIf="!isCreate"></app-page-header>
-    <!-- <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut> -->
+    <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
     <section class="rma-page block main-container block-order">
         <div class="row">
             <div class="col-md-12 mg-top-15">
@@ -103,11 +103,8 @@
                                         </div>
                                         <div class="form-group row">
                                             <label class='col-4'>Status</label>
-                                            <div class='col-8 text-success' *ngIf="isCreate">
-                                                <strong>1-NEW</strong>
-                                            </div>
-                                            <div class='col-8 text-success' *ngIf="!isCreate">
-                                                <strong>{{generalForm.value['invoice_status_name']}}</strong>
+                                            <div class='col-8 text-success'>
+                                                <span class="label label-info">New</span>
                                             </div>
                                         </div>
                                     </form>
@@ -154,7 +151,7 @@
                                                 <!-- <select required class="form-control" id="priority" name="priority">
                                                     <option *ngFor="let item of listMaster['priority']" [ngValue]="item.code">{{item.value}}</option>
                                                 </select> -->
-                                                <ng-select [items]="listMaster['customer']" bindLabel="customer.name" bindValue="customer.id" formControlName="aprvr_id">
+                                                <ng-select [items]="listMaster['approver']" bindLabel="full_name" bindValue="id" formControlName="aprvr_id">
                                                 </ng-select>
                                                 <!-- <ng-select style="width: 150px;" (change)="changeCustomer($event)" [items]="listMaster['customer']" bindLabel="customer.name" bindValue="customer.id" formControlName="company_id">
                                                 </ng-select> -->
@@ -322,7 +319,7 @@
                     <h5 class="title-border" translate>ITEMS INFORMATION</h5>
                     <div class="col-md-12">
                         <div class="table-responsive">
-                            <table class="table table-style table-order custom-table table-bg" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
+                            <table class="table table-style table-order custom-table table-bg">
                                 <thead>
                                     <tr>
                                         <th translate>No.</th>
@@ -437,4 +434,5 @@
             </div>
         </div>
     </section>
+    <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
 </div>
