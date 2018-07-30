@@ -10,7 +10,8 @@ import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'app-item-modal-content',
-    templateUrl: './item.modal.html'
+    templateUrl: './item.modal.html',
+    providers: [TableService],
 })
 // tslint:disable-next-line:component-class-suffix
 export class ItemModalContent implements OnInit {

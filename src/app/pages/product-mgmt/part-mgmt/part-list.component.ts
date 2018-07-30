@@ -162,6 +162,20 @@ export class PartListComponent implements OnInit {
 
         } catch (e) { }
         Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
+
+        Object.keys(params).forEach((key) => {
+            if ((params[key] !== null || params[key] !== '')) {
+                if ((typeof params[key]) === 'object') {
+
+                    if (params[key][0] === null || params[key][0] === '' ) {
+                        delete params[key];
+                    }
+
+                }
+            }
+        });
+
+
         this.productService.getPartList(params).subscribe(res => {
             try {
                 if (!res.data.rows) {
