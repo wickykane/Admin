@@ -8,12 +8,12 @@
     <ngb-tabset class="tab-header" type="pills">
         <ngb-tab id="editor" title="Email Editor">
             <ng-template ngbTabContent>
-                <tab-email-editor [template]="emailTemplate" [tags]="fieldTags" (emailTemplateChange)="getEmailTemplate($event)"></tab-email-editor>
+                <app-tab-email-editor [template]="emailTemplate" [tags]="fieldTags" (emailTemplateChange)="getEmailTemplate($event)"></app-tab-email-editor>
             </ng-template>
         </ngb-tab>
         <ngb-tab id="preview" title="Email Preview">
             <ng-template ngbTabContent>
-                <tab-email-preview [template]="emailTemplateForDisplay" [tags]="fieldTags"></tab-email-preview>
+                <app-tab-email-preview [template]="emailTemplateForDisplay" [tags]="fieldTags"></app-tab-email-preview>
             </ng-template>
         </ngb-tab>
     </ngb-tabset>
