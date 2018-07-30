@@ -1,11 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
-    selector: "tab-email-preview",
-    templateUrl: "./email-preview-tab.component.html",
-    styleUrls: ["./email-preview-tab.component.scss"]
+    selector: 'app-tab-email-preview',
+    templateUrl: './email-preview-tab.component.html',
+    styleUrls: ['./email-preview-tab.component.scss']
 })
-export class EmailPreviewTab implements OnInit {
+export class EmailPreviewTabComponent implements OnInit {
     @Input() template: any;
     @Input() tags = [];
     public displayTemplate: any;
@@ -13,7 +13,7 @@ export class EmailPreviewTab implements OnInit {
     constructor() {}
 
     ngOnInit() {
-        this.displayTemplate = Object.assign({}, this.template);
+        this.displayTemplate = {...this.template};
         this.tags.forEach(field => {
             this.displayTemplate.subject = this.displayTemplate.subject.replace(field.tag, field.value);
             this.displayTemplate.body = this.displayTemplate.body.replace(field.tag, field.value);

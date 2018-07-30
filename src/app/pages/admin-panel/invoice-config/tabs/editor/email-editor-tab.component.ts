@@ -1,16 +1,21 @@
-import { Component, OnInit, Input, Output, EventEmitter,ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 @Component({
-    selector: "tab-email-editor",
-    templateUrl: "./email-editor-tab.component.html",
-    styleUrls: ["./email-editor-tab.component.scss"]
+    selector: 'app-tab-email-editor',
+    templateUrl: './email-editor-tab.component.html',
+    styleUrls: ['./email-editor-tab.component.scss']
 })
-export class EmailEditorTab implements OnInit {
+export class EmailEditorTabComponent implements OnInit, OnDestroy {
 
-    @Input() template = {};
+    @Input() template = {
+        email_tpl : {
+            subject: '',
+            body: ''
+        }
+    };
     @Input() tags = [];
     @Output() emailTemplateChange = new EventEmitter();
-    @ViewChild("subjectEditor") subjectEditor: any;
-    @ViewChild("bodyEditor") bodyEditor: any;
+    @ViewChild('subjectEditor') subjectEditor: any;
+    @ViewChild('bodyEditor') bodyEditor: any;
 
     public isFocusingSubject = false;
     public isFocusingBody = false;
@@ -29,7 +34,7 @@ export class EmailEditorTab implements OnInit {
     onSelectField(field) {
         console.log(field);
         this.showContextMenu = false;
-        this.isFocusingSubject ? this.subjectEditor.instance.insertHtml(field.value) : {};
-        this.isFocusingBody ? this.bodyEditor.instance.insertHtml(field.value) : {};
+        if (this.isFocusingSubject) { this.subjectEditor.instance.insertHtml(field.value); }
+        if (this.isFocusingBody) { this.bodyEditor.instance.insertHtml(field.value); }
     }
 }
