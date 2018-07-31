@@ -37,7 +37,7 @@
                             <div class="col-md-2">
                                 <label for="" class="control-label" translate> Order Date</label>
                                 <div clickOutside (clickOutside)="d.close()" class="input-group">
-                                    <input [maxDate]="searchForm.value.date_to | dateObj" class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="date_from"
+                                    <input [maxDate]="searchForm.value.date_to | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="date_from"
                                         ngbDatepicker #d="ngbDatepicker">
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
@@ -49,7 +49,7 @@
                             <div class="col-md-2">
                                 <label for="" class="control-label" translate> &nbsp;</label>
                                 <div clickOutside (clickOutside)="dt.close()" class="input-group">
-                                    <input [minDate]="searchForm.value.date_from | dateObj" class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="date_to"
+                                    <input [minDate]="searchForm.value.date_from | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="date_to"
                                         ngbDatepicker #dt="ngbDatepicker">
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-secondary" (click)="dt.toggle()" type="button">
@@ -61,7 +61,7 @@
                             <div class="col-md-2">
                                 <label for="" class="control-label" translate> Delivery Date</label>
                                 <div clickOutside (clickOutside)="d1.close()" class="input-group">
-                                    <input [maxDate]="searchForm.value.ship_date_to | dateObj" class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="ship_date_from"
+                                    <input [maxDate]="searchForm.value.ship_date_to | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="ship_date_from"
                                         ngbDatepicker #d1="ngbDatepicker">
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
@@ -73,7 +73,7 @@
                             <div class="col-md-2">
                                 <label for="" class="control-label" translate> &nbsp;</label>
                                 <div clickOutside (clickOutside)="dt1.close()" class="input-group">
-                                    <input [minDate]="searchForm.value.ship_date_from | dateObj" class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="date_to"
+                                    <input [minDate]="searchForm.value.ship_date_from | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="date_to"
                                         ngbDatepicker #dt1="ngbDatepicker">
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-secondary" (click)="dt1.toggle()" type="button">
@@ -139,7 +139,7 @@
                             </td>
                             <td><a [routerLink]="['detail', item.id]">{{item.code}}</a></td>
                             <td>{{item.cus_po}}</td>
-                            <td>{{item.sale_quote_num}}</td>
+                            <td>{{item.quote_no}}</td>
                             <td>{{item.buyer_name}}</td>
                             <td>{{item.salesperson}}</td>
                             <td class="text-center">

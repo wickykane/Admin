@@ -127,7 +127,7 @@ export class SaleOrderCreateComponent implements OnInit {
             'payment_method': ['CC'],
             'billing_id': [null],
             'shipping_id': [null],
-            'note': [null]
+            'description': [null]
         });
         //  Init Key
         this.keyService.watchContext.next(this);
@@ -136,6 +136,7 @@ export class SaleOrderCreateComponent implements OnInit {
     ngOnInit() {
         const user = JSON.parse(localStorage.getItem('currentUser'));
         this.listMaster['multi_ship'] = [{ id: 0, label: 'No' }, { id: 1, label: 'Yes' }];
+        this.listMaster['from_src'] = [{ id: 0, label: 'From Master' }, { id: 1, label: 'From Quote' }, { id: 2, label: 'Manual' }];
         this.orderService.getAllCustomer().subscribe(res => { this.listMaster['customer'] = res.data; });
         this.orderService.getOrderReference().subscribe(res => { Object.assign(this.listMaster, res.data); this.changeOrderType(); });
         //  Item
@@ -184,7 +185,7 @@ export class SaleOrderCreateComponent implements OnInit {
             this.getDetailCustomerById(company_id);
         }
         this.list.items = [];
-        this.generalForm.controls['note'].patchValue('');
+        this.generalForm.controls['description'].patchValue('');
         this.updateTotal();
     }
     selectAddress(type) {
@@ -271,6 +272,7 @@ export class SaleOrderCreateComponent implements OnInit {
         }
     }
     changeFromSource(item) {
+        item.source_id = 2;
         item.source = 'Manual';
     }
     changeOrderType() {
@@ -384,6 +386,7 @@ export class SaleOrderCreateComponent implements OnInit {
                     item.quantity = 1;
                     item['order_detail_id'] = null;
                     item.totalItem = item.sale_price;
+                    item.source_id = 0;
                     item.source = 'From Master';
                 });
 
@@ -411,6 +414,7 @@ export class SaleOrderCreateComponent implements OnInit {
                         item['products'] = [];
                         item.quantity = 1;
                         item.totalItem = item.sale_price;
+                        item.source_id = 1;
                         item.source = 'From Quote';
                     });
 
@@ -447,7 +451,7 @@ export class SaleOrderCreateComponent implements OnInit {
         }
         arrSale = arrSale.reduce((x, y) => x.includes(y) ? x : [...x, y], []);
         const stringNote = 'This sales order has items added from Quote:' + arrSale.toString();
-        this.generalForm.controls['note'].patchValue(stringNote);
+        this.generalForm.controls['description'].patchValue(stringNote);
     }
 
     remove = function (index) {
