@@ -414,6 +414,7 @@
                                     <th> Card Type </th>
                                     <th> Card Name </th>
                                     <th> Card Number </th>
+                                    <th> Cvv </th>
                                     <th> Expiration Month</th>
                                     <th> Expiration Year</th>
                                     <th> Action </th>
@@ -433,6 +434,9 @@
                                     </td>
                                     <td>
                                         <input type="text" class="form-control" name="no" [(ngModel)]="item.no">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="cvv" [(ngModel)]="item.cvv">
                                     </td>
                                     <td>
                                         <input type="text" class="form-control" name="expiration_month" [(ngModel)]="item.expiration_month">
