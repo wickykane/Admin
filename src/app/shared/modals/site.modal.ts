@@ -1,3 +1,4 @@
+import { state } from '@angular/animations';
 import { Component, Input, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -79,7 +80,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
     ngOnInit() {
         (async () => {
             await this.itemService.getListCountryAdmin().subscribe(res => { this.listCountry = res.data; this.changeCustomerType(); });
-            this.listTypeAddress = [{ id: 2, name: 'Billing' }, { id: 3, name: 'Shipping' }];
+            this.listTypeAddress = [{ id: 1, name: 'Billing' }, { id: 2, name: 'Shipping' }];
             await this.commonService.getOrderReference().subscribe(res => this.listMaster['salePersons'] = res.data.sale_mans);
             await this.commonService.getAllListBank().subscribe(res => this.listBank = res.data);
             await this.customerService.getRoute().subscribe(res => { this.routeList = res.data; });
@@ -97,8 +98,8 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             this.generalForm.patchValue(this.item);
             this.contacts = this.item.contacts;
             this.addresses = this.item.addresses;
-            console.log(this.addresses);
             this.bank_accounts = this.item.bank_accounts;
+            this.orderAddress(this.addresses);
         } else {
             console.log('2');
             let code = this.info.code;
@@ -108,6 +109,19 @@ export class SiteModalComponent implements OnInit, OnDestroy {
         }
     }
 
+
+    private orderAddress(address) {
+        var tmp = [];
+        var arr = [4, 3, 1, 2];
+        arr.forEach(v => {
+            for (let i = 0; i < address.length; i++) {
+                if (address[i].type == v) {
+                    tmp.push(address[i]);
+                }
+            }
+        });
+        this.addresses = JSON.parse(JSON.stringify(tmp));
+    }
     //  change customer Type
     changeCustomerType() {
         console.log('1');
@@ -124,18 +138,26 @@ export class SiteModalComponent implements OnInit, OnDestroy {
     }
 
     changeCountry(item) {
+        item.listCountry.forEach(element => {
+            element.cd == item.country_code && (item.country_name = element.name);
+        });
         const params = {
             country: item.country_code
         };
         this.itemService.getStateByCountry(params).subscribe(res => {
             try {
                 item.listState = res.data;
+
             } catch (e) {
 
             }
         });
     }
-
+    changeState(v, item) {
+        item.listState.forEach(element => {
+            element.id == v && (item.state_name = element.name);
+        });
+    }
     changeBank(item) {
         item.bank_swift = this.listBank.map(x => {
             if (item.bank_id === x.id) {

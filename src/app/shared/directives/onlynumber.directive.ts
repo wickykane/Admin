@@ -6,6 +6,7 @@ import { Directive, ElementRef, HostListener, Input } from '@angular/core';
 export class OnlyNumber {
     elemRef: ElementRef
     periodAllowed = false;
+    private regex: RegExp = new RegExp(/[0-9]/g);
 
     constructor(private el: ElementRef) {
         this.elemRef = el;
@@ -14,7 +15,6 @@ export class OnlyNumber {
     @Input() OnlyNumber: boolean;
     @Input() minValue: string;
     @Input() maxValue: string;
-    @Input() value: number;
 
     // <input OnlyNumber="true" minValue="1" maxValue="99" />
     @HostListener('keydown', ['$event']) onKeyDown(event) {
@@ -47,23 +47,14 @@ export class OnlyNumber {
     }
 
     @HostListener('keypress', ['$event']) onKeyPress(event: KeyboardEvent) {
-        const input = event.target as HTMLInputElement;
-        console.log(input.value);
-        console.log(this.value);
-        if (input.value) {
-            const val = Number(input.value);
 
-            if (this.minValue.length) {
-                if (val < parseInt(this.minValue, 10) || (isNaN(val) && event.key === '0')) {
-                    event.preventDefault();
-                }
-            }
+        const current: string = this.el.nativeElement.value;
+        const next: string = current.concat(event.key);
 
-            if (this.maxValue.length) {
-                if (val > parseInt(this.maxValue, 10)) {
-                    event.preventDefault();
-                }
-            }
+        if ((next && !String(next).match(this.regex)) ||
+            (Number(this.minValue) && +Number(next) < Number(this.minValue)) ||
+            (Number(this.maxValue) && +Number(next) > Number(this.maxValue))) {
+            event.preventDefault();
         }
     }
 }

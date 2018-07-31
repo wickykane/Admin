@@ -40,6 +40,8 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     public flagSite: boolean;
     public flagAccount: boolean;
     public flagContact: boolean;
+    public flagCreditCard = false;
+    public credit_cards = [];
 
     public countCode: number;
     public textCode: string;
@@ -58,19 +60,30 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         public helper: Helper) {
         this.generalForm = fb.group({
             'buyer_type': [null, Validators.required],
-            'code': [null, Validators.required],
-            'company_name': [null],
+            'addresses': [null],
+            'contacts': [null],
+            'code': [null],
+            'full_name': [null],
             'registration_no': [null],
-            'phone': [''],
-            'fax': [''],
+            'bank_accounts': [null],
+            'credit_cards': [null],
+            'phone': [null],
+            'fax': [null],
             'email': [null],
             'credit_limit': [null],
-            'credit_sts': 2,
+            // 'credit_sts': 2,
             'sale_person_id': [null],
             'first_name': [null],
             'last_name': [null],
             'username': [null],
-            'password': [null]
+            'password': [null],
+            'pwd_cfrm': [null],
+            'company_name': [null],
+            'primary': [null],
+            // 'credit_used': [null],
+            // 'credit_balance': [null],
+            'is_parent': [null],
+            'sites': [null]
         });
 
         this.hotkeyCtrlRight = hotkeysService.add(new Hotkey('alt+r', (event: KeyboardEvent): boolean => {
@@ -88,8 +101,15 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         this.getListSalePerson();
         this.getListCountryAdmin();
         this.getListBank();
+        this.getListCreditCard();
         this.customerService.getRoute().subscribe(res => { this.routeList = res.data; });
 
+    }
+    getListCreditCard() {
+        this.customerService.getCreditCard().subscribe(res => {
+            this.getListCreditCard = res.data;
+            this.credit_cards.forEach(card => { card.listCard = res.data });
+        })
     }
 
     ngOnDestroy() {
@@ -143,6 +163,25 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
                 console.log(e);
             }
         });
+    }
+    //  add new row credi
+    addNewCreditCard() {
+        this.credit_cards.push({
+            "type": null,
+            "no": "",
+            "name": "",
+            "expiration_month": null,
+            "expiration_year": null,
+            listCard: this.getListCreditCard
+        });
+    }
+
+    removeCreditCard(index) {
+        if (this.credit_cards[index].hasOwnProperty('id')) {
+            this.credit_cards[index].is_deleted = true;
+            return;
+        }
+        this.credit_cards.splice(index, 1);
     }
     getListSalePerson() {
         this.commonService.getOrderReference().subscribe(res => {
@@ -280,7 +319,20 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
             }
         }
     }
+    isNumberKey(evt) {
 
+        var e = evt || window.event; // for trans-browser compatibility
+        var charCode = e.which || e.keyCode;
+        if (charCode == 46) {
+            if (evt.target.value.indexOf('.') == -1)
+                return true;
+            return false;
+        }
+        if (charCode > 31 && (charCode < 47 || charCode > 57))
+            return false;
+        if (e.shiftKey) return false;
+        return true;
+    }
     //  add new Site
 
     addNewSite(item?) {
@@ -303,29 +355,9 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
                 modalRef.componentInstance.paddr = this.addresses;
                 modalRef.result.then(res => {
                     if (!this.helper.isEmptyObject(res)) {
-                        console.log(res);
-                        const state = res.addresses[0].listState.filter(x => {
-                            return res.addresses[0].state_id === x.id;
-                        });
-                        const objSite = {
-                            code: res.code,
-                            full_name: res.full_name,
-                            country: res.addresses[0].listCountry.map(x => {
-                                if (res.addresses[0].country_code === x.cd) {
-                                    return x.name;
-                                }
-                            }),
-                            name: res.addresses[0].name,
-                            address_line: res.addresses[0].address_1,
-                            address_line2: res.addresses[0].address_2,
-                            city_name: res.addresses[0].city,
-                            state: state[0].name,
-                            zip_code: res.addresses[0].zip_code
-                        };
-                        const full_site = { ...objSite, ...res };
-                        this.sites.push(full_site);
-                        this.company_child.push(res);
-                        // this.countCode++;
+                        if (!this.helper.isEmptyObject(res)) {
+                            this.sites.push(res);
+                        }
                     }
                 });
                 modalRef.componentInstance.info = {
@@ -352,6 +384,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
             params['addresses'] = _.cloneDeep(this.addresses);
             params['bank_accounts'] = _.cloneDeep(this.bank_accounts);
             params['contacts'] = _.cloneDeep(this.contacts);
+            params['credit_cards'] = _.cloneDeep(this.credit_cards);
             params['addresses'].forEach(item => {
                 delete item.listType;
                 delete item.listCountry;
@@ -361,7 +394,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
                 delete item.listBank;
                 delete item.listBranch;
             });
-            params['sites'] = _.cloneDeep(this.company_child);
+            params['sites'] = _.cloneDeep(this.sites);
             params['sites'].forEach(item => {
                 item.addresses.map(add => {
                     delete add.listType;
@@ -384,6 +417,12 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
                 delete params['company_name'];
             }
 
+            if ((params['credit_limit'] + ' ').indexOf('.') >= 0) {
+                return this.toastr.error("The credit limit is invalid data");
+            }
+            if ((params['credit_limit'] + ' ').indexOf('.') >= 0) {
+                return this.toastr.error("The credit limit is invalid data");
+            }
             this.customerService.createCustomer(params).subscribe(
                 res => {
                     console.log(res);

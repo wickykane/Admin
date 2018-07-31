@@ -144,7 +144,7 @@
                                     <input type="text" class="form-control" name="city" [(ngModel)]="item.city">
                                 </td>
                                 <td>
-                                    <select class="form-control" name="state_id" [(ngModel)]="item.state_id">
+                                    <select class="form-control" name="state_id" [(ngModel)]="item.state_id" (change)="changeState($event.target.value, item)">
                                         <option value="null" selected="true">--Select--</option>
                                         <option *ngFor="let i of item.listState" [ngValue]="i.id">{{i.name}}</option>
                                     </select>
