@@ -116,11 +116,7 @@ export class EmailTemplateModalContent implements OnInit {
     }
 
     sendSampleEmail() {
-        const modalRef = this.modalService.open(SendSampleModalContent, {
-            size: 'sm',
-            centered: true,
-            backdrop: 'static'
-        });
+        const modalRef = this.modalService.open(SendSampleModalContent, { size: 'sm' });
         modalRef.result.then(
             res => {
                 jQuery('body').addClass('modal-open');
