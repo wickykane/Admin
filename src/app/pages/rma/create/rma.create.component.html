@@ -229,7 +229,7 @@
                                         </label>
                                         <div class="col-7">
                                             <form [formGroup]="generalForm">
-                                                <ng-select class="custom" [multiple]="false" (change)="changeAddress('shipping')" [items]="customer['shipping']" bindLabel="label" bindValue="address_id" formControlName="address_id">
+                                                <ng-select class="custom" [multiple]="false" (change)="changeAddress('shipping')" [items]="customer['shipping']" bindLabel="name" bindValue="id" formControlName="address_id">
                                                 </ng-select>
                                             </form>
                                         </div>

@@ -15,12 +15,12 @@ export class CommonService {
     }
 
     getAllCustomer() {
-        const url = 'buyer/get-all';
+        const url = 'rma/get-all-customer';
         return this.apiService.get(url);
     }
 
     getDetailCustomer(id) {
-        const url = 'buyer/detail/' + id;
+        const url = 'rma/get-customer/' + id;
         return this.apiService.get(url);
     }
 

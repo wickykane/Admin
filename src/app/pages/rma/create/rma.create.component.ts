@@ -386,7 +386,7 @@ export class RmaCreateComponent implements OnInit {
     changeAddress(flag?) {
         if (flag === 'shipping') {
             const id = this.generalForm.value.address_id;
-            this.data.shipping = this.customer['shipping'].find(item => item.address_id === id);
+            this.data.shipping = this.customer['shipping'].find(item => item.id === id);
         }
     }
 
