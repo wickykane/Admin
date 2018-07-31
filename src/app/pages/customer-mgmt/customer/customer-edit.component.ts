@@ -240,11 +240,21 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                 this.changeCountry(this.sites[i].addresses[j]);
                 this.displayCountry(this.sites[i].addresses[j]);
             }
-            this.orderAddress(this.sites[i].addresses);
+            // this.orderAddress(this.sites[i].addresses);
         }
         this.orderAddress(this.addresses);
     }
 
+    private hasDot = false;
+    isNumberKey(evt) {
+        var e = evt || window.event; // for trans-browser compatibility
+        var charCode = e.which || e.keyCode;
+        if (charCode == 46 && !this.hasDot) { this.hasDot = true; return true; }
+        if (charCode > 31 && (charCode < 47 || charCode > 57))
+            return false;
+        if (e.shiftKey) return false;
+        return true;
+    }
     private orderAddress(address) {
         var tmp = [];
         var arr = [4, 3, 1, 2];
@@ -255,8 +265,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                 }
             }
         });
-        address = JSON.parse(JSON.stringify(tmp));
-        console.log(address);
+        this.addresses = JSON.parse(JSON.stringify(tmp));
     }
     displayCountry(item) {
         this.listCountry.forEach(element => {
@@ -418,12 +427,14 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     }
 
     updateCustomer() {
-        this.contacts.forEach(obj => {
-            obj['password'] = obj.pwd;
-        });
-        for (let i = 0; i < this.contacts.length; i++) {
-            this.contacts[i]['password'] = this.contacts[i]['pwd']
+        if (this.generalForm.value.buyer_type == 'CP') {
+            this.contacts.forEach(obj => {
+                obj['password'] = obj.pwd;
+            });
+            for (let i = 0; i < this.contacts.length; i++) {
+                this.contacts[i]['password'] = this.contacts[i]['pwd']
 
+            }
         }
         this.generalForm.patchValue({
             'addresses': this.addresses,
@@ -435,6 +446,16 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
 
         if (this.generalForm.valid) {
             const params = { ...this.generalForm.value };
+            if (params['buyer_type'] === 'CP') {
+                delete params['email'];
+                delete params['first_name'];
+                delete params['last_name'];
+                delete params['username'];
+                delete params['password'];
+                delete params['pwd_cfrm'];
+            } else {
+                delete params['company_name'];
+            }
             this.customerService.updateCustomer(this.idCustomer, params).subscribe(
                 res => {
                     try {

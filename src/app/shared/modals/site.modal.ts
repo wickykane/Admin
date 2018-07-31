@@ -99,6 +99,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             this.contacts = this.item.contacts;
             this.addresses = this.item.addresses;
             this.bank_accounts = this.item.bank_accounts;
+            this.orderAddress(this.addresses);
         } else {
             console.log('2');
             let code = this.info.code;
@@ -108,6 +109,19 @@ export class SiteModalComponent implements OnInit, OnDestroy {
         }
     }
 
+
+    private orderAddress(address) {
+        var tmp = [];
+        var arr = [4, 3, 1, 2];
+        arr.forEach(v => {
+            for (let i = 0; i < address.length; i++) {
+                if (address[i].type == v) {
+                    tmp.push(address[i]);
+                }
+            }
+        });
+        this.addresses = JSON.parse(JSON.stringify(tmp));
+    }
     //  change customer Type
     changeCustomerType() {
         console.log('1');

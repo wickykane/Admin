@@ -71,6 +71,11 @@ export class TableService {
     }
 
     searchAction() {
+        var fl = false;
+        Object.keys(this.context.searchForm.value).forEach(k => {
+            if (this.context.searchForm.value[k]) fl = true;
+        });
+        if (!fl) return false;
         this.temptParams = { ...this.getParams(), ...this.context.searchForm.value };
         this.pagination['page'] = 1;
         return this.context[this.getListFnName]();
