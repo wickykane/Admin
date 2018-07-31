@@ -63,6 +63,13 @@
         }
     }
 }
+
+.table thead th.vertical-top {
+	white-space: nowrap;
+	vertical-align: top;
+}
+
+
 @media (max-width: 1300px) {
     .filters-ctn {
         .control-label {
