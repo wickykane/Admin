@@ -725,9 +725,15 @@ ngu-carousel {
 
     }
     .custom.ng-single .ng-control .ng-arrow-zone .ng-arrow{
-        top:8px
+        top:8px;
     }
     .custom.opened > .ng-control .ng-arrow{
         top: 8px;
+    }
+    .custom.ng-untouched .ng-arrow{
+        top:0px !important;
+    }
+    .custom.ng-untouched.opened .ng-arrow{
+        top:8px !important;
     }
 }
