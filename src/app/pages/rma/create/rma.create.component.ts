@@ -67,7 +67,7 @@ export class RmaCreateComponent implements OnInit {
             'apply_restock': [0],
             'refund_method': [null, Validators.required],
             'payment_term': [null],
-            'approver': [null],
+            'approver': [null,Validators.required],
             'address_id': [null],
             'note': [null],
             'contact_name': [null],
@@ -114,8 +114,10 @@ export class RmaCreateComponent implements OnInit {
         this.generalForm.get('return_via').valueChanges.subscribe(data => {
             if (data == 1 || data == 2) {
                 this.generalForm.get('carrier').setValidators(Validators.required);
+                this.generalForm.get('address_id').setValidators(Validators.required);
             } else {
                 this.generalForm.get('carrier').clearValidators();
+                this.generalForm.get('address_id').clearValidators();
             }
             this.generalForm.patchValue({ carrier: null });
         });
@@ -180,7 +182,7 @@ export class RmaCreateComponent implements OnInit {
                     validate: 1
                 };
             }
-            if(data.return_time ==null){
+            if (data.return_time === null) {
                 this.dataConfig = {
                     cover_ship: 'Yes'
                 };
@@ -322,10 +324,7 @@ export class RmaCreateComponent implements OnInit {
         //     this.checkAll(null, true);
         //     this.updateTotal();
         // });
-        const params = {
-            order_id: id
-        }
-        this.rmaService.getOrderInfo(params).subscribe(res => {
+        this.rmaService.getOrderInfo(id).subscribe(res => {
             const data = res.data;
             console.log(res.data);
             this.list.items = data.items;
@@ -387,7 +386,7 @@ export class RmaCreateComponent implements OnInit {
     changeAddress(flag?) {
         if (flag === 'shipping') {
             const id = this.generalForm.value.address_id;
-            this.data.shipping = this.customer['shipping'].find(item => item.address_id === id);
+            this.data.shipping = this.customer['shipping'].find(item => item.id === id);
         }
     }
 
@@ -416,8 +415,14 @@ export class RmaCreateComponent implements OnInit {
             this.order_info['restock_fee_percent'] = 0;
             this.order_info['restock_fee_amount'] = 0;
         }
+        console.log(this.generalForm.value['cover_ship']);
+        if(this.generalForm.value['cover_ship']=='Yes'){
+            this.order_info['shipping_cost'] = Number(this.order_info['shipping_cost'] || 0);
+        }
+        else{
+            this.order_info['shipping_cost'] =  0;
+        }
 
-        this.order_info['shipping_cost'] = Number(this.order_info['shipping_cost'] || 0);
 
         this.order_info['total'] = this.order_info['sub_total'] - this.order_info['total_discount'] - this.order_info['restock_fee_amount'] + ((this.generalForm.value.cover_ship) ? this.order_info['shipping_cost'] : 0)
             + this.order_info['vat_percent_amount'];

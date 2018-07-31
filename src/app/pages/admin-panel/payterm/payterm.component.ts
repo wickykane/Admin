@@ -27,6 +27,7 @@ export class PaymentTermComponent implements OnInit {
     items: []
   };
 
+
   public data = {};
   constructor(
     private fb: FormBuilder,
@@ -38,7 +39,7 @@ export class PaymentTermComponent implements OnInit {
     private modalService: NgbModal,
     private toastr: ToastrService) {
     this.searchForm = fb.group({
-      'cd': [null],
+      'ac': [null],
       'des': [null]
     });
 
@@ -49,7 +50,7 @@ export class PaymentTermComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.listMaster['status'] = [{ key: 'IA', value: 'In Active' }, { key: 'AT', value: 'Active' }];
+    this.listMaster['status'] = [{ key: 0, value: 'In Active' }, { key: 1, value: 'Active' }];
     this.getList();
   }
 
@@ -99,9 +100,9 @@ export class PaymentTermComponent implements OnInit {
   editPayment(id) {
     this.router.navigate(['/admin-panel/payment-term/edit', id]);
   }
-  convertStatus(id) {
-    const stt = this.listMaster['status'].find(item => item.key === id);
-    return stt.value;
-  }
+  // convertStatus(id) {
+  //   const stt = this.listMaster['status'].find(item => item.key === id);
+  //   return stt.value;
+  // }
 
 }

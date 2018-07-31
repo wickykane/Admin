@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateCustomParserFormatter } from '../../../shared/helper/dateformat';
 import { ProductService } from '../product-mgmt.service';
 import { TableService } from './../../../services/table.service';
 
@@ -11,6 +13,7 @@ import { routerTransition } from '../../../router.animations';
     selector: 'app-mass-price',
     templateUrl: './mass-price.component.html',
     styleUrls: ['./mass-price.component.scss'],
+    providers: [{ provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }],
     animations: [routerTransition()]
 })
 export class MassPriceComponent implements OnInit {

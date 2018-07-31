@@ -27,12 +27,30 @@ export class PayTermCreateComponent implements OnInit {
         private paytermService: PaymentTermService) {
         this.generalForm = fb.group({
             'id': [null],
-            'cd': [{ value: null, disabled: true }, Validators.required],
+            'cd': [ null, Validators.required],
             'des': [null, Validators.required],
-            'day_limit': [null, Validators.required],
-            'sts': ['AT', Validators.required]
+            'early_pmt_incentive': [0],
+            'dsct_day': [null],
+            'dsct_value': [null],
+            'dsct_type': [1],
+            'term_day': [null, Validators.required],
+            'ac': [0, Validators.required]
         });
         this.keyService.watchContext.next(this);
+        this.generalForm.get('early_pmt_incentive').valueChanges.map(
+            value => {
+                console.log(value);
+                if (value) {
+                    this.generalForm.get('dsct_day').setValidators(Validators.required);
+                    this.generalForm.get('dsct_value').setValidators(Validators.required);
+                    this.generalForm.get('dsct_type').setValidators(Validators.required);
+                } else {
+                    this.generalForm.get('dsct_day').clearValidators();
+                    this.generalForm.get('dsct_value').clearValidators();
+                    this.generalForm.get('dsct_type').clearValidators();
+                }
+            }
+          );
     }
 
     ngOnInit() {
@@ -43,7 +61,8 @@ export class PayTermCreateComponent implements OnInit {
                 this.getGenerateCode();
             }
         });
-        this.listMaster['status'] = [{ key: 'IA', value: 'In Active' }, { key: 'AT', value: 'Active' }];
+        this.listMaster['status'] = [{ key: 0, value: 'In Active' }, { key: 1, value: 'Active' }];
+        this.listMaster['early'] = [{ key: 1, value: 'Percent' }, { key: 2, value: 'Fixed Amount' }];
     }
     payloadData() {
         if (this.generalForm.get('id').value) {
@@ -59,9 +78,13 @@ export class PayTermCreateComponent implements OnInit {
     }
     createPaymentTerm() {
         const params = this.generalForm.value;
+        params.early_pmt_incentive = (params.early_pmt_incentive) ? 1 : 0;
+        delete params.id;
         this.paytermService.createPayment(params).subscribe(res => {
             this.toastr.success(res.message);
-            this.router.navigate(['/admin-panel/payment-term']);
+            setTimeout(() => {
+                this.router.navigate(['/admin-panel/payment-term']);
+            }, 100);
         }, err => {
             console.log(err);
         });
@@ -77,8 +100,10 @@ export class PayTermCreateComponent implements OnInit {
     }
     updatePaymentTerm(id) {
         const params = this.generalForm.value;
+        params.early_pmt_incentive = (params.early_pmt_incentive) ? 1 : 0;
         this.paytermService.updatePayment(id, params).subscribe(res => {
             this.toastr.success(res.message);
+            this.router.navigate(['/admin-panel/payment-term']);
         }, err => {
             this.toastr.error(err.message);
         });

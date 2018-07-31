@@ -106,7 +106,7 @@ export class SaleQuotationCreateComponent implements OnInit {
             'approver_id': [null],
             'billing_id': [null],
             'shipping_id': [null],
-            'payment_method': [null],
+            'payment_method': ['CC'],
             'note': [null]
         });
 

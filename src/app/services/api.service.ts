@@ -60,6 +60,17 @@ export class ApiService {
         }
         return new ErrorObservable(err.error);
     }
+    private _customServerError(err) {
+        if (err.error instanceof ErrorEvent) {
+            return new ErrorObservable(JSON.parse(err._body));
+        }
+        else{
+            if(err.error.data.return_reason){
+                return new ErrorObservable(err.error)
+            }
+        }
+        return new ErrorObservable(err.error);
+    }
 
 
     get(path, params?): Observable<any> {
@@ -80,7 +91,14 @@ export class ApiService {
                 catchError(this._serverError)
             );
     }
-
+    customPost(path, params: object = {}): Observable<any> {
+        return this.httpClient.post(`${environment.api_url}${path}`, JSON.stringify(params), this.headerOptionDefault())
+            //  .map(res => res.json())  //  could raise an error if invalid JSON
+            //  .do(data => data)  //  debug
+            .pipe(
+                catchError(this._customServerError)
+            );
+    }
     put(path, params: object = {}): Observable<any> {
         return this.httpClient.put(`${environment.api_url}${path}`, JSON.stringify(params), this.headerOptionDefault())
             //  .map(res => res.json())  //  could raise an error if invalid JSON

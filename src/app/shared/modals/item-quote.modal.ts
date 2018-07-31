@@ -39,8 +39,8 @@ export class ItemQuoteModalContent implements OnInit {
         public tableService: TableService) {
         this.searchForm = fb.group({
             'cd': [null],
-            'name': [null],
-            'sts': [null]
+            'sku': [null],
+            'quote_date': [null]
         });
         //  Assign get list function name, override variable here
         console.log(this.company_id);

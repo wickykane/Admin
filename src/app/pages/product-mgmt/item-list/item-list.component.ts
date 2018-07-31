@@ -78,7 +78,7 @@ export class ItemListComponent implements OnInit {
     }
 
     ngOnInit() {
-
+        console.log(this.filterForm);
         //  Init Fn
         this.listMaster['certification_partNumber'] = [{ code: 'Y', value: 'Yes' }, { code: 'N', value: 'No' }];
         this.getListWarehouse();
@@ -102,7 +102,7 @@ export class ItemListComponent implements OnInit {
         this.productService.getReferList().subscribe(res => {
             try {
                 this.listMaster['models'] = res.data.models;
-                this.listMaster['years'] = res.data.years.map((e) => ({id: e, name: e }));
+                this.listMaster['years'] = res.data.years.map((e) => ({ id: e, name: e }));
                 this.listMaster['make'] = res.data.makes;
             } catch (e) {
                 console.log(e.message);
@@ -147,8 +147,8 @@ export class ItemListComponent implements OnInit {
         const arr = this.listMaster['models'];
         for (const i of arr) {
             if (arr['model_id'] === id) {
-                        return this.listMaster['sub_models'] = arr['sub_models'];
-                    }
+                return this.listMaster['sub_models'] = arr['sub_models'];
+            }
         }
     }
 
@@ -166,9 +166,9 @@ export class ItemListComponent implements OnInit {
     }
 
     getList() {
-        const params = {...this.tableService.getParams(), ...this.searchForm.value};
-           // Change filter array
-           try {
+        const params = { ...this.tableService.getParams(), ...this.searchForm.value };
+        // Change filter array
+        try {
             Object.keys(this.filterForm.value).map(key => {
                 if (this.filterForm.value[key]) {
                     const data = this.filterForm.value[key].toString().split(',').map(item => item.trim());
@@ -180,7 +180,21 @@ export class ItemListComponent implements OnInit {
 
         } catch (e) { }
 
-        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
+
+        Object.keys(params).forEach((key) => {
+            if ((params[key] !== null || params[key] !== '')) {
+                if ((typeof params[key]) === 'object') {
+
+                    if (params[key][0] === null || params[key][0] === '' ) {
+                        delete params[key];
+                    }
+
+                }
+            }
+        });
+
+
 
         this.productService.getListItem(params).subscribe(res => {
             try {

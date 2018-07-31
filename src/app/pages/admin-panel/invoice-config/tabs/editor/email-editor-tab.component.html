@@ -1,0 +1,36 @@
+<div class="top-left-bar">
+    <button class="btn btn-primary" (click)="showContextMenu = !showContextMenu" clickOutside (clickOutside)="showContextMenu = false">Insert Field</button>
+    <div class="show-more" *ngIf="showContextMenu">
+        <ul>
+            <li *ngFor="let field of tags">
+                <label>
+                    <a (click)="onSelectField(field)">{{field.value}}</a>
+                </label>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="row email-content mb-3">
+    <div class="col-md-12">
+        <label class="title">
+            <b>Subject</b>
+        </label>
+        <div class="content">
+            <ckeditor [(ngModel)]="template.email_tpl.subject" debounce="500" [config]="{height: '50'}"
+                #subjectEditor (focus)="isFocusingSubject = true; isFocusingBody = false"></ckeditor>
+        </div>
+    </div>
+</div>
+
+<div class="row email-content">
+    <div class="col-md-12">
+        <label class="title">
+            <b>Body</b>
+        </label>
+        <div class="content">
+            <ckeditor [(ngModel)]="template.email_tpl.body" debounce="500"
+                #bodyEditor (focus)="isFocusingBody = true; isFocusingSubject = false"></ckeditor>
+        </div>
+    </div>
+</div>
