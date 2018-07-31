@@ -23,7 +23,7 @@
                         <label for="part" class="control-label">RMA Type</label>
                         <div class="">
                             <select class="form-control" formControlName="rma_type">
-                                <option value="null" selected="true">--Select--</option>
+                                <option value="" selected="true">--Select--</option>
                                 <option *ngFor="let item of listMaster['rma_type']" [ngValue]="item.id">{{item.name}}</option>
                             </select>
                         </div>
@@ -31,7 +31,7 @@
                     <div class="block-search">
                         <label for="status" class="control-label">Status</label>
                         <select class="form-control" formControlName="status">
-                            <option value="null" selected="true">--Select--</option>
+                            <option value="" selected="true">--Select--</option>
                             <option *ngFor="let item of listMaster['status']" [ngValue]="item.id">{{item.name}}</option>
                         </select>
                     </div>
