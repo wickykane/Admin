@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --sourcemap=false",
     "build-dev": "ng build --prod --env=dev --base-href \"/sel2b/admin/\" --output-hashing=all && rimraf dist && mv dist-temp dist",
     "build-stag": "ng build --prod --env=stag --base-href \"/sel2b/admin/\" --output-hashing=all && rimraf dist && mv dist-temp dist",
     "build-qc": "ng build --prod --env=qc --base-href \"/sel2b/admin/\" --output-hashing=all && rimraf dist && mv dist-temp dist",
