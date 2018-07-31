@@ -14,19 +14,19 @@ import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateform
 import { ItemModalContent } from '../../../../shared/modals/item.modal';
 import { OrderHistoryModalContent } from '../../../../shared/modals/order-history.modal';
 import { PromotionModalContent } from '../../../../shared/modals/promotion.modal';
-import { SaleQuoteCreateKeyService} from './keys.create.control';
+import { SaleQuoteEditKeyService} from './keys.edit.control';
 
 
 
 @Component({
-    selector: 'app-create-quotation',
-    templateUrl: './sale-quotation.create.component.html',
+    selector: 'app-edit-quotation',
+    templateUrl: './sale-quotation.edit.component.html',
     styleUrls: ['../sale-quotation.component.scss'],
-    providers: [SaleQuoteCreateKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }],
+    providers: [SaleQuoteEditKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }],
     animations: [routerTransition()]
 })
 
-export class SaleQuotationCreateComponent implements OnInit {
+export class SaleQuotationEditComponent implements OnInit {
     /**
      * Variable Declaration
      */
@@ -89,7 +89,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         private route: ActivatedRoute,
         private modalService: NgbModal,
         private orderService: OrderService,
-        public keyService: SaleQuoteCreateKeyService,
+        public keyService: SaleQuoteEditKeyService,
         private dt: DatePipe) {
         this.generalForm = fb.group({
             'company_id': [null, Validators.required],
@@ -106,7 +106,7 @@ export class SaleQuotationCreateComponent implements OnInit {
             'approver_id': [null],
             'billing_id': [null],
             'shipping_id': [null],
-            'payment_method': ['CC'],
+            'payment_method': [null],
             'note': [null]
         });
 
