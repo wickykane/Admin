@@ -48,13 +48,13 @@ export class RmaComponent implements OnInit {
             'rma_no': [null],
             'so_no': [null],
             'customer': [null],
-            'rma_type': [null],
-            'status': [null],
+            'rma_type': [''],
+            'status': [''],
             'request_date_from': [null],
             'request_date_to': [null],
             'reception_date_from': [null],
             'reception_date_to': [null],
-            'comment':[]
+            'comment': []
         });
 
         // Assign get list function name, override letiable here
@@ -66,7 +66,7 @@ export class RmaComponent implements OnInit {
 
     ngOnInit() {
         // Init Fn
-        this.listMoreFilter = { value1: false,value2:false};
+        this.listMoreFilter = { value1: false, value2: false };
         this.getList();
         this.getListMaster();
 
@@ -160,7 +160,7 @@ export class RmaComponent implements OnInit {
         this.purchaseService.getListPurchaseOrder(params).subscribe(res => {
             try {
                 this.list.items = res.data.rows;
-                this.list.items.forEach(item=>{
+                this.list.items.forEach(item => {
                     return item.collapseRows = false;
                 });
                 console.log(this.list.items);

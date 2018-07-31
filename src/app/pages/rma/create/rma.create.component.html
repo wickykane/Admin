@@ -15,7 +15,7 @@
                                         <label for="code" class="control-label" translate>Customer</label>
                                         <span class="text-danger">(*) </span>
                                         <div>
-                                            <ng-select style="width: 150px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="buyer">
+                                            <ng-select style="width: 150px;" class="custom" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="buyer">
                                             </ng-select>
                                         </div>
                                     </div>
@@ -113,7 +113,7 @@
                                         <div class="form-group row">
                                             <label for="code" class="col-5">Sales Order <span class="text-danger">(*)</span></label>
                                             <div class="col-7">
-                                                <ng-select (change)="changeSaleOrder()" [items]="listMaster['sales_order']" bindLabel="code" bindValue="id" formControlName="order_id">
+                                                <ng-select class="custom" (change)="changeSaleOrder()" [items]="listMaster['sales_order']" bindLabel="code" bindValue="id" formControlName="order_id">
                                                 </ng-select>
                                             </div>
                                         </div>
@@ -203,7 +203,7 @@
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                             <div class='col-7'>
-                                                <ng-select [items]="listMaster['approver']" bindLabel="full_name" bindValue="id" formControlName="approver" aria-placeholder="Select">
+                                                <ng-select class="custom" [items]="listMaster['approver']" bindLabel="full_name" bindValue="id" formControlName="approver" aria-placeholder="Select">
                                                 </ng-select>
                                             </div>
                                         </div>
@@ -229,7 +229,7 @@
                                         </label>
                                         <div class="col-7">
                                             <form [formGroup]="generalForm">
-                                                <ng-select (change)="changeAddress('shipping')" [items]="customer['shipping']" bindLabel="label" bindValue="address_id" formControlName="address_id">
+                                                <ng-select class="custom" [multiple]="false" (change)="changeAddress('shipping')" [items]="customer['shipping']" bindLabel="name" bindValue="id" formControlName="address_id">
                                                 </ng-select>
                                             </form>
                                         </div>
@@ -439,7 +439,7 @@
                                         <td>+ Ship Fee ($):</td>
                                         <td></td>
                                         <td>
-                                            <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info['shipping_cost']" class="form-control" type="text" (change)="updateTotal()">
+                                            <input [textMask]="{mask: numberMaskObject()}" [disabled]="generalForm.value.cover_ship == 'No'" class="form-control" [(ngModel)]="order_info['shipping_cost']" class="form-control" type="text" (change)="updateTotal()">
                                         </td>
                                     </tr>
                                     <tr>
