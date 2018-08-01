@@ -83,9 +83,9 @@ export class PartListComponent implements OnInit {
         this.productService.getReferList().subscribe(res => {
             try {
                 this.listMaster['models'] = res.data.models;
-                this.listMaster['categories'] = res.data.categories;
+                this.listMaster['categories'] = _.orderBy(res.data.categories, ['name'], ['asc']);
                 this.listMaster['countries'] = res.data.countries;
-                this.listMaster['brands'] = res.data.brands;
+                this.listMaster['brands'] = _.orderBy(res.data.brands, ['name'], ['asc']);
                 this.listMaster['years'] = res.data.years.map(e => ({
                     id: e,
                     name: e
