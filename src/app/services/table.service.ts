@@ -73,7 +73,7 @@ export class TableService {
     searchAction() {
         var fl = false;
         Object.keys(this.context.searchForm.value).forEach(k => {
-            if (this.context.searchForm.value[k]) fl = true;
+            if (this.context.searchForm.value[k] && this.context.searchForm.value[k]!='null') fl = true;
         });
         if (!fl) return false;
         this.temptParams = { ...this.getParams(), ...this.context.searchForm.value };

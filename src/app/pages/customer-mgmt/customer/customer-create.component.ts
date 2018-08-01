@@ -172,6 +172,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
             "name": "",
             "expiration_month": null,
             "expiration_year": null,
+            "cvv": null,
             listCard: this.getListCreditCard
         });
     }
