@@ -182,6 +182,7 @@
                         <!-- <th class="vertical-top" translate>Alloc QTY</th> -->
                         <th class="vertical-top" translate>Avail QTY</th>
                         <th class="vertical-top" translate>OEM Price</th>
+                        <th class="vertical-top" translate>Cost Price</th>
                         <th class="vertical-top" translate>Sales Price</th>
                     </tr>
                 </thead>
@@ -207,7 +208,8 @@
                     <!-- <td>{{item.qty_remained}}</td> -->
                     <!-- <th>{{item.qty_reserved}}</th> -->
                     <td>{{item.qty_available}}</td>
-                    <td>{{item.oem_price |currency:'$'}}</td>
+                    <td>{{item.oem_price|currency:'$'}}</td>
+                    <td>{{item.cost_price|currency:'$'}}</td>
                     <th>{{item.sale_price|currency:'$'}}</th>
                 </tr>
                 <tr *ngIf="list.items.length === 0">
