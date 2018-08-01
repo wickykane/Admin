@@ -37,7 +37,7 @@
                             </div>
                             <label for="type" class="control-label" translate>Make</label>
                             <div class="block-search">
-                                <select formControlName="manufacturer_id" class="form-control">
+                                <select formControlName="make_id" class="form-control">
                                     <option value="null" selected="true" translate disabled>--Select--</option>
                                     <option *ngFor="let de of listMaster['make']" [ngValue]="de.make_id">{{de.name}}</option>
                                 </select>
