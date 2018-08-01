@@ -146,6 +146,7 @@ export class SaleQuotationComponent implements OnInit {
 
     getList() {
         const params = { ...this.tableService.getParams(), ...this.searchForm.value };
+        params['type'] = 'SAQ';
         Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
 
         this.orderService.getListSalesQuotation(params).subscribe(res => {
