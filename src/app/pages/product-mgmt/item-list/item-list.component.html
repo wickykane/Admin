@@ -59,8 +59,8 @@
                             <div class="block-btn-search">
                                 <label class="control-label">&nbsp;</label>
                                 <div>
-                                    <button type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Search</button>
-                                    <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchForm); tableService.resetAction(this.filterForm)" translate>Reset</button>
+                                    <button [disabled]="!searchForm.controls['warehouse'].value" type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Search</button>
+                                    <button [disabled]="!searchForm.controls['warehouse'].value" type="button" class="btn btn-default" (click)="tableService.resetAction(this.filterForm);tableService.resetAction(this.searchForm)" translate>Reset</button>
                                 </div>
                             </div>
                         </form>
@@ -91,9 +91,8 @@
                             <div class="block-btn-search">
                                 <label class="control-label">&nbsp;</label>
                                 <div>
-                                    <button type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Search</button>
-                                    <button type="button" class="btn btn-default" (click)="tableService.resetAction(searchForm); tableService.resetAction(filterForm)"
-                                        translate>Reset</button>
+                                  <button [disabled]="!searchForm.controls['warehouse'].value" type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Search</button>
+                                  <button [disabled]="!searchForm.controls['warehouse'].value" type="button" class="btn btn-default" (click)="tableService.resetAction(this.filterForm);tableService.resetAction(this.searchForm)" translate>Reset</button>
                                 </div>
                             </div>
                         </form>
@@ -109,9 +108,8 @@
                             <div class="block-btn-search">
                                 <label class="control-label">&nbsp;</label>
                                 <div>
-                                    <button type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Search</button>
-                                    <button type="button" class="btn btn-default" (click)="tableService.resetAction(searchForm); tableService.resetAction(filterForm)"
-                                        translate>Reset</button>
+                                  <button [disabled]="!searchForm.controls['warehouse'].value" type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Search</button>
+                                  <button [disabled]="!searchForm.controls['warehouse'].value" type="button" class="btn btn-default" (click)="tableService.resetAction(this.filterForm);tableService.resetAction(this.searchForm)" translate>Reset</button>
                                 </div>
                             </div>
                         </form>
@@ -122,49 +120,37 @@
         </div>
     </div>
     <div class="block-content pt-4" *ngIf="list.items.length > 0">
-        <h5 class="title-form">FILTER</h5>
+        <!-- <h5 class="title-form">FILTER</h5> -->
         <div class="row">
-            <form class="form-horizontal form-search col-md-12" [formGroup]="filterForm">
-                <div class="d-flex">
-                    <div class="col-md-2 filter-item">
+            <form class="form-horizontal form-search form-vehicle" [formGroup]="filterForm">
+                        <label class="control-label" translate><h4 class="name_form">FILTER: </h4></label>
                         <label for="so" class="control-label" translate>Part Link</label>
                         <div class="block-search">
                             <input type="text" class="form-control" formControlName="partlinks_no_filter">
                         </div>
-                    </div>
-                    <div class="col-md-2 filter-item">
                         <label for="so" class="control-label" translate>Part</label>
                         <div class="block-search">
                             <input type="text" class="form-control" formControlName="part_no_filter">
                         </div>
-                    </div>
-                    <div class="col-md-2 filter-item">
                         <label for="type" class="control-label" translate>Category</label>
                         <div class="block-search">
                             <ng-select class="select2-max-width" (change)="changeToGetSubCategory()" [multiple]="true" [items]="listMaster['categories']" bindLabel="name" bindValue="category_id"
                                 formControlName="category_id_filter">
                             </ng-select>
                         </div>
-                    </div>
-                    <div class="col-md-2 filter-item" *ngIf="filterForm.value.category_id_filter">
-                        <label for="type" class="control-label" translate>Sub-Category</label>
-                        <div class="block-search">
+                        <label *ngIf="filterForm.value.category_id_filter" for="type" class="control-label" translate>Sub-Category</label>
+                        <div class="block-search" *ngIf="filterForm.value.category_id_filter">
                             <ng-select class="select2-max-width" [multiple]="true" [items]="listMaster['sub_cat']" bindLabel="name" bindValue="category_id" formControlName="sub_category_id">
                             </ng-select>
                         </div>
-                    </div>
-                    <div class="col-md-2 filter-item">
                         <label for="type" class="control-label" translate>Brand</label>
                         <div class="block-search">
                             <ng-select class="select2-max-width" [multiple]="true" [items]="listMaster['brands']" bindLabel="name" bindValue="brand_id" formControlName="brand_id_filter">
                             </ng-select>
                         </div>
-                    </div>
-                </div>
-                <div class="d-block pt-3">
-                    <button type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Apply</button>
-                    <button type="button" class="btn btn-default" (click)="tableService.resetAction(filterForm)" translate>Reset</button>
-                </div>
+                      <label for="" class="control-label" translate>&nbsp;</label>
+                      <button type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Apply</button>
+                      <button type="button" class="btn btn-default" (click)="tableService.resetAction(filterForm)" translate>Reset</button>
             </form>
         </div>
     </div>
@@ -192,8 +178,8 @@
                         <th class="vertical-top" translate>Cert</th>
                         <th class="vertical-top" translate>UOM</th>
                         <th class="vertical-top" translate>Condition</th>
-                        <th class="vertical-top" translate>On Hand QTY</th>
-                        <th class="vertical-top" translate>Alloc QTY</th>
+                        <!-- <th class="vertical-top" translate>On Hand QTY</th> -->
+                        <!-- <th class="vertical-top" translate>Alloc QTY</th> -->
                         <th class="vertical-top" translate>Avail QTY</th>
                         <th class="vertical-top" translate>OEM Price</th>
                         <th class="vertical-top" translate>Sales Price</th>
@@ -218,8 +204,8 @@
                     <td>{{item.ctgry_name}}</td>
                     <td>{{item.uom_name}}</td>
                     <td>{{item.condition_name}}</td>
-                    <td>{{item.qty_remained}}</td>
-                    <th>{{item.qty_reserved}}</th>
+                    <!-- <td>{{item.qty_remained}}</td> -->
+                    <!-- <th>{{item.qty_reserved}}</th> -->
                     <td>{{item.qty_available}}</td>
                     <td>{{item.oem_price |currency:'$'}}</td>
                     <th>{{item.sale_price|currency:'$'}}</th>

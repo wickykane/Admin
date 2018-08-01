@@ -94,5 +94,9 @@ export class FinancialService {
         const url = 'ar-invoice/get-list-user';
         return this.API.get(url);
     }
+    getEarlyPaymentValue(issue_dt, payment_term_id, total_due) {
+        const url = `ar-invoice/set-early-payment-value?issue_dt=${issue_dt}&payment_term_id=${payment_term_id}&total_due=${total_due}`;
+        return this.API.get(url);
+    }
 
 }

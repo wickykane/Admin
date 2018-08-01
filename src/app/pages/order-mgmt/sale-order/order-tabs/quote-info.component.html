@@ -31,12 +31,15 @@
                         <label class="col-sm-3 col-form-label text-label">Status</label>
                         <div class="col-sm-3">
                             <label class="col-form-label control-label">
-                              <span class="label label-info" *ngIf="detail['order_sts_short_name'] == 'NW'">{{detail['order_sts_name']}}</span>
-                              <span class="label label-warning" *ngIf="detail['order_sts_short_name'] == 'SM'">{{detail['order_sts_name']}}</span>
-                              <span class="label label-danger" *ngIf="detail['order_sts_short_name'] == 'RM'">{{detail['order_sts_name']}}</span>
-                              <span class="label  label-success" *ngIf="detail['order_sts_short_name'] == 'AM'">{{detail['order_sts_name']}}</span>
-                              <span class="label label-danger" *ngIf="detail['order_sts_short_name'] == 'CC'">{{detail['order_sts_name']}}</span>
-                              <span class="label  label-success" *ngIf="detail['order_sts_short_name'] == 'SC'">{{detail['order_sts_name']}}</span>
+                              <span class="label label-info" *ngIf="detail['sts_code'] == 'NW'">{{detail['sts_name']}}</span>
+                              <span class="label label-warning" *ngIf="detail['sts_code'] == 'SM'">{{detail['sts_name']}}</span>
+                              <span class="label label-danger" *ngIf="detail['sts_code'] == 'RM'">{{detail['sts_name']}}</span>
+                              <span class="label  label-success" *ngIf="detail['sts_code'] == 'AM'">{{detail['sts_name']}}</span>
+                              <span class="label label-danger" *ngIf="detail['sts_code'] == 'CC'">{{detail['sts_name']}}</span>
+                              <span class="label  label-success" *ngIf="detail['sts_code'] == 'SC'">{{detail['sts_name']}}</span>
+                              <span class="label  label-success" *ngIf="detail['sts_code'] == 'RO'">{{detail['sts_name']}}</span>
+                              <span class="label label-danger" *ngIf="detail['sts_code'] == 'IU'">{{detail['sts_name']}}</span>
+                              <span class="label  label-success" *ngIf="detail['sts_code'] == 'EX'">{{detail['sts_name']}}</span>                              
                             </label>
                         </div>
                         <label class="col-sm-3 col-form-label text-label">Quote Date</label>
