@@ -34,18 +34,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-
-                        <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'CP'">
+                    <div class="col-md-4" *ngIf="generalForm.value.buyer_type == 'PS'">
+                        <div class="form-group row" >
                             <label for="credit_limit" class="col-sm-4 col-form-label">Credit Limit</label>
                             <div class="col-sm-8">
-                                <input type="number" (keypress)="isNumberKey($event)" class="form-control" name="credit_limit" formControlName="credit_limit">
-                            </div>
-                        </div>
-                        <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'PS'">
-                            <label for="credit_limit" class="col-sm-4 col-form-label">Credit Limit</label>
-                            <div class="col-sm-8">
-                                <input type="number" (keypress)="isNumberKey($event)" class="form-control" name="credit_limit" formControlName="credit_limit">
+                                <input type="text" (keypress)="isNumberKey($event)" class="form-control" name="credit_limit" formControlName="credit_limit">
                             </div>
                         </div>
                     </div>
@@ -75,12 +68,12 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'CP'">
+                        <!-- <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'CP'">
                             <label for="sale_person_id" class="col-sm-4 col-form-label">Credit Used</label>
                             <div class="col-sm-8">
-                                <input type="text" disabled class="form-control" name="credit_used" formControlName="credit_used">
+                                <input type="text" disabled class="form-control" name="credit_used">
                             </div>
-                        </div>
+                        </div> -->
                         <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'PS'">
                             <label for="sale_person_id" class="col-sm-4 col-form-label">Saleperson</label>
                             <div class="col-sm-8">
@@ -111,30 +104,29 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'PS'">
-                            <label for="username" class="col-sm-4 col-form-label">Username</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" name="username" formControlName="username">
-                            </div>
-                        </div>
+
                         <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'CP'">
-                            <label for="sale_person_id" class="col-sm-4 col-form-label">Saleperson</label>
+                            <label for="credit_limit" class="col-sm-4 col-form-label">Credit Limit</label>
                             <div class="col-sm-8">
-                                <select class="form-control" name="sale_person_id" formControlName="sale_person_id">
-                                    <option value="null" selected="true">--Select--</option>
-                                    <option *ngFor="let item of listMaster['salePersons']" [ngValue]="item.id">{{item.full_name}}</option>
-                                </select>
+                                <input type="number" (keypress)="isNumberKey($event)" class="form-control" name="credit_limit" formControlName="credit_limit">
                             </div>
                         </div>
+                            <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'PS'">
+                                <label for="username" class="col-sm-4 col-form-label">Username</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" name="username" formControlName="username">
+                                </div>
+                            </div>
                     </div>
-                    <div class="col-md-4">
+
+                    <!-- <div class="col-md-4">
                         <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'CP'">
                             <label for="sale_person_id" class="col-sm-4 col-form-label">Credit Balance</label>
                             <div class="col-sm-8">
-                                <input type="text" disabled class="form-control" name="credit_balance" formControlName="credit_balance">
+                                <input type="text" disabled class="form-control" name="credit_balance">
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="w-100"></div>
                     <div class="col-md-4">
                         <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'CP'">
@@ -149,6 +141,23 @@
                             </label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" name="last_name" formControlName="last_name">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <!-- <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'PS'">
+                            <label for="username" class="col-sm-4 col-form-label">Username</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="username" formControlName="username">
+                            </div>
+                        </div> -->
+                        <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'CP'">
+                            <label for="sale_person_id" class="col-sm-4 col-form-label">Saleperson</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" name="sale_person_id" formControlName="sale_person_id">
+                                    <option value="null" selected="true">--Select--</option>
+                                    <option *ngFor="let item of listMaster['salePersons']" [ngValue]="item.id">{{item.full_name}}</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -426,6 +435,7 @@
                                     <th> Card Type </th>
                                     <th> Card Name </th>
                                     <th> Card Number </th>
+                                    <th> Cvv </th>
                                     <th> Expiration Month</th>
                                     <th> Expiration Year</th>
                                     <th> Action </th>
@@ -445,6 +455,9 @@
                                     </td>
                                     <td>
                                         <input type="text" class="form-control" name="no" [(ngModel)]="item.no">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="cvv" [(ngModel)]="item.cvv">
                                     </td>
                                     <td>
                                         <input type="text" class="form-control" name="expiration_month" [(ngModel)]="item.expiration_month">
