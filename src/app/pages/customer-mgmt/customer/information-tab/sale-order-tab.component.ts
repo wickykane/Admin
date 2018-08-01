@@ -73,7 +73,7 @@ export class CustomerSaleOrderTabComponent implements OnInit {
 
         this.customerService.getListSO(this._customerId, params).subscribe(res => {
             try {
-                this.list.items = res.data || [];
+                this.list.items = res.data.rows || [];
                 this.tableService.matchPagingOption(res.data);
             } catch (e) {
                 console.log(e);

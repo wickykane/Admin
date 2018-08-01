@@ -98,8 +98,8 @@ export class OrderHistoryModalContent implements OnInit {
                     this.list.items = [];
                     return;
                 }
-                this.list.items = res.data;
-                //  this.tableService.matchPagingOption(res.data);
+                this.list.items = res.data.rows;
+                 this.tableService.matchPagingOption(res.data);
             } catch (e) {
                 console.log(e);
             }
