@@ -346,14 +346,24 @@ export class SaleQuotationCreateComponent implements OnInit {
                 params = {
                     'items': products,
                     'sale_quote_status_id': 4,
-                    'is_draft_order': 1
+                    'is_draft_order': 1,
+                    'type': 'SAQ'
                 };
                 break;
                 case 'submit':
                 params = {
                     'items': products,
                     'sale_quote_status_id': 2,
-                    'is_draft_order': 1
+                    'is_draft_order': 1,
+                    'type': 'SAQ'
+                };
+                break;
+                case 'draft':
+                params = {
+                    'items': products,
+                    'sale_quote_status_id': 1,
+                    'is_draft_order': 1,
+                    'type': 'SAQ'
                 };
                 break;
         }
