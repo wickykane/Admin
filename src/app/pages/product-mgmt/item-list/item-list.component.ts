@@ -49,7 +49,7 @@ export class ItemListComponent implements OnInit {
             'vin': [null],
             'year_from': [null],
             'year_to': [null],
-            'manufacturer_id': [null],
+            'make_id': [null],
             'model_id': [null],
             'sub_model_id': [null],
             'oem': [null],
