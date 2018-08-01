@@ -95,8 +95,8 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             'pwd_cfrm': [null],
             'company_name': [null],
             'primary': [null],
-            'credit_used': [null],
-            'credit_balance': [null],
+            // 'credit_used': [null],
+            // 'credit_balance': [null],
             'is_parent': [null],
             'sites': [null]
 
@@ -352,6 +352,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             "type": null,
             "no": "",
             "name": "",
+            "cvv": "",
             "expiration_month": null,
             "expiration_year": null,
             listCard: this.getListCreditCard
