@@ -128,7 +128,7 @@
                                                 <span class="text-danger">(*)</span>
                                             </label>
                                             <div class='col-8 text-primary'>
-                                                <select required class="form-control" formControlName="payment_term_id" (change)="changePaymentTerms()">
+                                                <select required class="form-control" formControlName="payment_term_id" (change)="changePaymentTerms();getEarlyPaymentValue()">
                                                     <!-- Workaround for IE 11 to prevent auto select first value -->
                                                     <option *ngIf="!generalForm.value.payment_term_id" [ngValue]="null" selected></option>
                                                     <option *ngFor="let item of listMaster['payment_terms']" [ngValue]="item.id">{{item.des}}</option>
@@ -402,7 +402,7 @@
                                         <!-- <td>{{generalForm.value['tot_amt'] | currency}}</td> -->
                                         <td>{{order_details['total_price'] | currency}}</td>
                                     </tr>
-                                    <tr>
+                                    <tr *ngIf="show_early">
                                         <td>- Early Payment Incentive:</td>
                                         <td>
                                             <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info.discount_percent" class="form-control" type="text" (change)="updateTotal()">
@@ -411,8 +411,8 @@
                                             <input class="form-control" readonly="true" [(ngModel)]="order_info.total_discount" class="form-control" value="0" type="number">
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td colspan="3" class="expire-warning">Expires YYYY-MM-DD</td>
+                                    <tr *ngIf="show_early">
+                                        <td colspan="3" class="expire-warning">Expires {{order_info.expires_dt}}</td>
                                     </tr>
                                     <tr>
                                         <td>Adjusted Total Due:</td>
