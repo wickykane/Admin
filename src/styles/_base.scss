@@ -714,3 +714,26 @@ ngu-carousel {
         color: #495057 !important;        
     }
 }
+@media all and (-ms-high-contrast:none){
+    .custom{
+        .ng-value {
+            position: absolute;
+        }
+        .ng-clear{
+            position: absolute;
+        }
+
+    }
+    .custom.ng-single .ng-control .ng-arrow-zone .ng-arrow{
+        top:8px;
+    }
+    .custom.opened > .ng-control .ng-arrow{
+        top: 8px;
+    }
+    .custom.ng-untouched .ng-arrow{
+        top:0px !important;
+    }
+    .custom.ng-untouched.opened .ng-arrow{
+        top:8px !important;
+    }
+}

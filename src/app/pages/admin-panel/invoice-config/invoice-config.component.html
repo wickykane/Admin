@@ -1,0 +1,156 @@
+<div [@routerTransition]>
+    <app-page-header [heading]="'INVOICE CHASING CONFIGURATION'" [icon]="'fa-th-list'"></app-page-header>
+    <fieldset class="custom-border">
+        <legend class="custom-border">Apply Chasing For (*)</legend>
+        <div class="form-search full-width form-horizontal">
+            <div class="row">
+                <div class="col-lg-2 col-xl-2 form-group">
+                    <label class="css-input css-checkbox css-checkbox-default">
+                        <input class="cb-element" type="radio" value="1" [(ngModel)]="applyChaseOption">
+                        <span></span>
+                        Disable Chasing
+                    </label>
+                </div>
+                <div class="col-lg-2 col-xl-2 form-group">
+                    <label class="css-input css-checkbox css-checkbox-default">
+                        <input class="cb-element" type="radio" value="2" [(ngModel)]="applyChaseOption">
+                        <span></span>
+                        All Customers
+                    </label>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+    <form [formGroup]="invoiceForm">
+        <fieldset class="custom-border">
+            <div class="form-search full-width form-horizontal">
+                <div class="row">
+                    <div class="col-md-4 form-group v-hr">
+                        <h5>
+                            <span>Before the due Date</span>
+                        </h5>
+                        <div class="row due-date-section switcher">
+                            <label class="switch">
+                                <input type="checkbox" formControlName="beforeOn">
+                                <span class="slider round"></span>
+                            </label>
+                            <label class="switch-val">{{invoiceForm.value.beforeOn ? 'ON' : 'OFF'}}</label>
+                        </div>
+                        <div class="row due-date-section">
+                            <label>
+                                <b>Email Template</b>
+                            </label>
+                            <div class="group-btn-search">
+                                <button type="button" class="btn btn-primary" (click)="editEmailTemplate('BEFORE')">Edit</button>
+                            </div>
+                        </div>
+                        <div class="row due-date-section">
+                            <label>
+                                <b>Send Reminder</b>
+                            </label>
+                            <div class="input-grp">
+                                <input type="number" formControlName="beforeRemind">
+                                <span>Day(s) before Due Date</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 form-group v-hr">
+                        <h5>
+                            <span>On the due Date</span>
+                        </h5>
+                        <div class="row due-date-section switcher">
+                            <label class="switch">
+                                <input type="checkbox" formControlName="onDueDateOn">
+                                <span class="slider round"></span>
+                            </label>
+                            <label class="switch-val">{{invoiceForm.value.onDueDateOn ? 'ON' : 'OFF'}}</label>
+                        </div>
+                        <div class="row due-date-section">
+                            <label>
+                                <b>Email Template</b>
+                            </label>
+                            <div class="group-btn-search">
+                                <button type="button" class="btn btn-primary" (click)="editEmailTemplate('ON')">Edit</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 form-group v-hr">
+                        <h5>
+                            <span>After due Date</span>
+                        </h5>
+                        <div class="row due-date-section switcher">
+                            <label class="switch">
+                                <input type="checkbox" formControlName="afterDueDateOn">
+                                <span class="slider round"></span>
+                            </label>
+                            <label class="switch-val">{{invoiceForm.value.afterDueDateOn ? 'ON' : 'OFF'}}</label>
+                        </div>
+                        <div class="row due-date-section">
+                            <label>
+                                <b>Email Template</b>
+                            </label>
+                            <div class="group-btn-search">
+                                <button type="button" class="btn btn-primary" (click)="editEmailTemplate('AFTER')">Edit</button>
+                            </div>
+                        </div>
+                        <!-- Select -->
+                        <div class="row due-date-section">
+                            <label>
+                                <b>Send Reminder</b>
+                            </label>
+                            <div class="select-grp">
+                                <select class="form-control" formControlName="afterRemindFrequency" (change)="onChangeFrequency()">
+                                    <option value="null">Select Frequency</option>
+                                    <option *ngFor="let item of listMaster['reminderOptions']" [ngValue]="item.value">{{item.label}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- Every day -->
+                        <div class="row due-date-section" *ngIf="invoiceForm.value.afterRemindFrequency == 1">
+                            <label>
+                                <b>Every</b>
+                            </label>
+                            <div class="input-grp">
+                                <input type="number" formControlName="afterRemindValue">
+                                <span>Day(s)</span>
+                            </div>
+                        </div>
+                        <!-- Per week -->
+                        <div class="row due-date-section" *ngIf="invoiceForm.value.afterRemindFrequency == 2">
+                            <label>
+                                <b>On</b>
+                            </label>
+                            <div class="select-grp">
+                                <select class="form-control" formControlName="afterRemindValue">
+                                    <option *ngFor="let item of listMaster['daysOfWeek']" [ngValue]="item.value">{{item.label}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- Per month -->
+                        <div class="row due-date-section" *ngIf="invoiceForm.value.afterRemindFrequency == 3">
+                            <label>
+                                <b>On</b>
+                            </label>
+                            <div class="select-grp">
+                                <select class="form-control" formControlName="afterRemindValue">
+                                    <option *ngFor="let item of listMaster['daysOfMonth']" [ngValue]="item">{{item}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row due-date-section" *ngIf="invoiceForm.value.afterRemindFrequency == null || invoiceForm.value.afterRemindFrequency == 'null'">
+                            <label class="error">
+                                <b>Please select reminder frequency</b>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    <div class="row">
+        <div class="col-md-12 mg-top-15 text-center">
+            <button class="btn btn-primary" type="button" (click)="onSave()">Save</button>
+            <button class="btn btn-default" type="button" [routerLink]="['/admin-panel']">Cancel</button>
+        </div>
+    </div>
+</div>

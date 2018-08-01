@@ -4,15 +4,17 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService } from '../order-mgmt.service';
 import { TableService } from './../../../services/table.service';
 
+import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
+import { NgbDateCustomParserFormatter } from '../../../shared/helper/dateformat';
 import {SaleOrderKeyService} from './keys.control';
 
 @Component({
   selector: 'app-sale-order',
   templateUrl: './sale-order.component.html',
   styleUrls: ['./sale-order.component.scss'],
-  providers: [SaleOrderKeyService],
+  providers: [SaleOrderKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }],
   animations: [routerTransition()]
 })
 export class SaleOrderComponent implements OnInit {

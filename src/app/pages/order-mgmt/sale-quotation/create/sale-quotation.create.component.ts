@@ -106,8 +106,8 @@ export class SaleQuotationCreateComponent implements OnInit {
             'approver_id': [null],
             'billing_id': [null],
             'shipping_id': [null],
-            'payment_method': [null],
-            'note': [null]
+            'payment_method': ['CC'],
+            'description': [null]
         });
 
         this.keyService.watchContext.next(this);
@@ -119,6 +119,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         }, 300);
 
         this.listMaster['multi_ship'] = [{ id: 0, label: 'No' }, { id: 1, label: 'Yes' }];
+        this.listMaster['from_src'] = [{ id: 0, label: 'From Master' }, { id: 1, label: 'From Quote' }, { id: 2, label: 'Manual' }];
         const user = JSON.parse(localStorage.getItem('currentUser'));
         //  Item
         this.list.items = this.router.getNavigatedData() || [];
@@ -134,6 +135,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         this.generalForm.controls['expiry_date'].patchValue(d.toISOString().slice(0, 10));
         this.generalForm.controls['delivery_date'].patchValue(d.toISOString().slice(0, 10));
         this.generalForm.get('approver_id').patchValue(user.id);
+        this.generalForm.get('sales_person').patchValue(user.id);
     }
 
     /**
@@ -169,7 +171,7 @@ export class SaleQuotationCreateComponent implements OnInit {
             this.getDetailCustomerById(company_id);
         }
         this.list.items = [];
-        this.generalForm.controls['note'].patchValue('');
+        this.generalForm.controls['description'].patchValue('');
         this.updateTotal();
     }
 
@@ -280,7 +282,8 @@ export class SaleQuotationCreateComponent implements OnInit {
                     item['products'] = [];
                     item.quantity = 1;
                     item.totalItem = item.sale_price;
-                    item.source = 'Manual';
+                    item.source_id = 0;
+                    item.source = 'From Master';
                 });
 
                 this.list.items = this.list.items.concat(res.filter(item => {

@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as  _ from 'lodash';
 import { ProductService } from '../product-mgmt.service';
 import { TableService } from './../../../services/table.service';
 import { ItemKeyService } from './keys.control';
-// import { NgbTab } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'app-item-list',
@@ -49,7 +49,7 @@ export class ItemListComponent implements OnInit {
             'vin': [null],
             'year_from': [null],
             'year_to': [null],
-            'manufacturer_id': [null],
+            'make_id': [null],
             'model_id': [null],
             'sub_model_id': [null],
             'oem': [null],
@@ -78,7 +78,7 @@ export class ItemListComponent implements OnInit {
     }
 
     ngOnInit() {
-
+        console.log(this.filterForm);
         //  Init Fn
         this.listMaster['certification_partNumber'] = [{ code: 'Y', value: 'Yes' }, { code: 'N', value: 'No' }];
         this.getListWarehouse();
@@ -102,7 +102,7 @@ export class ItemListComponent implements OnInit {
         this.productService.getReferList().subscribe(res => {
             try {
                 this.listMaster['models'] = res.data.models;
-                this.listMaster['years'] = res.data.years.map((e) => ({id: e, name: e }));
+                this.listMaster['years'] = res.data.years.map((e) => ({ id: e, name: e }));
                 this.listMaster['make'] = res.data.makes;
             } catch (e) {
                 console.log(e.message);
@@ -120,12 +120,12 @@ export class ItemListComponent implements OnInit {
 
     checkAll(ev) {
         this.list.items.forEach(x => x.is_checked = ev.target.checked);
-        this.list.checklist = this.list.items.filter(_ => _.is_checked);
+        this.list.checklist = this.list.items.filter(item => item.is_checked);
     }
 
     isAllChecked() {
-        this.checkAllItem = this.list.items.every(_ => _.is_checked);
-        this.list.checklist = this.list.items.filter(_ => _.is_checked);
+        this.checkAllItem = this.list.items.every(item => item.is_checked);
+        this.list.checklist = this.list.items.filter(item => item.is_checked);
     }
 
     /**
@@ -147,8 +147,8 @@ export class ItemListComponent implements OnInit {
         const arr = this.listMaster['models'];
         for (const i of arr) {
             if (arr['model_id'] === id) {
-                        return this.listMaster['sub_models'] = arr['sub_models'];
-                    }
+                return this.listMaster['sub_models'] = arr['sub_models'];
+            }
         }
     }
 
@@ -166,9 +166,9 @@ export class ItemListComponent implements OnInit {
     }
 
     getList() {
-        const params = {...this.tableService.getParams(), ...this.searchForm.value};
-           // Change filter array
-           try {
+        const params = { ...this.tableService.getParams(), ...this.searchForm.value };
+        // Change filter array
+        try {
             Object.keys(this.filterForm.value).map(key => {
                 if (this.filterForm.value[key]) {
                     const data = this.filterForm.value[key].toString().split(',').map(item => item.trim());
@@ -180,7 +180,21 @@ export class ItemListComponent implements OnInit {
 
         } catch (e) { }
 
-        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
+
+        Object.keys(params).forEach((key) => {
+            if ((params[key] !== null || params[key] !== '')) {
+                if ((typeof params[key]) === 'object') {
+
+                    if (params[key][0] === null || params[key][0] === '' ) {
+                        delete params[key];
+                    }
+
+                }
+            }
+        });
+
+
 
         this.productService.getListItem(params).subscribe(res => {
             try {
@@ -189,8 +203,8 @@ export class ItemListComponent implements OnInit {
                     return;
                 }
                 this.list.items = res.data.rows;
-                this.listMaster['brands'] = res.data.meta_filters.brands;
-                this.listMaster['categories'] = res.data.meta_filters.categories;
+                this.listMaster['brands'] = _.orderBy(res.data.meta_filters.brands, ['name'], ['asc']);
+                this.listMaster['categories'] = _.orderBy(res.data.meta_filters.categories, ['name'], ['asc']);
                 this.listMaster['certification'] = res.data.meta_filters.certification;
                 this.listMaster['countries'] = res.data.meta_filters.countries;
                 this.listMaster['partlinks_no'] = res.data.meta_filters.partlinks_no;
@@ -205,7 +219,7 @@ export class ItemListComponent implements OnInit {
 
     createOrder() {
         if (this.list.checklist.length === 0) { return; }
-        const ids: any = (this.list.checklist.map(_ => { _.order_quantity = 1; _.source = 'Manual'; return _; }) || []);
+        const ids: any = (this.list.checklist.map(item => { item.quantity = 1; item.source = 'From Master'; item.source_id = 1; return item; }) || []);
         console.log(ids);
         this.router.navigateByData({ url: ['order-management/sale-order/create'], data: ids });
         //  this.router.navigate(['order-management/sale-order/create', { data : ids }])

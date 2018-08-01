@@ -25,5 +25,8 @@ export class Helper {
         }
         return 0;
     }
+    sortArrayOfObj(arr, key_sort, order) {
+        return arr = _.orderBy(arr, [key_sort], [order]);
+    }
 
 }

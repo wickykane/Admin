@@ -8,7 +8,7 @@
                 <div class="block-search">
                     <label for="buyer_name" class="control-label">From Date</label>
                     <div class="input-group">
-                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="date_from" ngbDatepicker #d1="ngbDatepicker">
+                        <input class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="date_from" ngbDatepicker #d1="ngbDatepicker">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
                                 <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -19,7 +19,7 @@
                 <div class="block-search">
                     <label for="buyer_name" class="control-label">To Date</label>
                     <div class="input-group">
-                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="date_to" ngbDatepicker #d2="ngbDatepicker">
+                        <input class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="date_to" ngbDatepicker #d2="ngbDatepicker">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" (click)="d2.toggle()" type="button">
                                 <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -61,8 +61,8 @@
                     <tr>
                         <td>{{item.id}}</td>
                         <td>{{ item.file }}</td>
-                        <td>{{item.start}}</td>
-                        <td>{{item.end}}</td>
+                        <td>{{item.start|date:'MM/dd/yyyy hh:mm:ss'}}</td>
+                        <td>{{item.end|date:'MM/dd/yyyy hh:mm:ss'}}</td>
                         <td>{{item.username}}</td>
                         <td>
                             <span [ngClass]="{'text-primary': (item.status  === 1),'text-warning': (item.status  === 2), 'text-success': (item.status == 3)}">{{item.status_name}}</span>

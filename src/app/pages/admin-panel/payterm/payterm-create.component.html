@@ -14,7 +14,7 @@
                         <label> Code
                             <span class="text-danger">(*)</span>
                         </label>
-                        <input type="text" name="" class="form-control" formControlName="cd">
+                        <input type="text" name="" class="form-control" formControlName="cd" readonly>
                     </div>
                     <div class="col-sm-2 form-group">
                         <label> Description
@@ -26,16 +26,46 @@
                         <label> Day Limit
                             <span class="text-danger">(*)</span>
                         </label>
-                        <input  [textMask]="{mask: numberMaskObject()}" type="text" name="" class="form-control" formControlName="day_limit" maxlength="5">
+                        <input  [textMask]="{mask: numberMaskObject()}" type="text" name="" class="form-control" formControlName="term_day" maxlength="5">
                     </div>
                     <div class="col-sm-2 form-group">
                         <label> Status
                             <span class="text-danger">(*)</span>
                         </label>
-                        <select class="form-control" formControlName="sts" name="status">
+                        <select class="form-control" formControlName="ac" name="status">
                             <option value="null" selected="false">--Select--</option>
                             <option *ngFor="let item of listMaster['status']" [ngValue]="item.key">{{item.value}}</option>
                         </select>
+                    </div>
+                    <div class="col-sm-2 form-group">
+                        <label> Early Payment Incentive?
+                            <span class="text-danger">(*)</span>
+                        </label>
+                        <div class="">
+                            <input type="checkbox" name="" class="" formControlName="early_pmt_incentive" ng-true="1">
+                        </div>
+                    </div>
+                </div>
+                <div class="row" *ngIf="this.generalForm.get('early_pmt_incentive').value==1">
+                    <div class="col-sm-2 form-group">
+                        <label> Discount Days
+                            <span class="text-danger">(*)</span>
+                        </label>
+                        <input type="text" name="" class="form-control" formControlName="dsct_day" [textMask]="{mask: numberMaskObject()}">
+                    </div>
+                    <div class="col-sm-2 form-group">
+                        <label> Discount Type
+                            <span class="text-danger">(*)</span>
+                        </label>
+                        <select class="form-control" formControlName="dsct_type" name="dsct_type" >                            
+                            <option *ngFor="let item of listMaster['early']" [ngValue]="item.key" >{{item.value}}</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-2 form-group">
+                        <label> Discount Value
+                            <span class="text-danger">(*)</span>
+                        </label>
+                        <input type="text" name="" class="form-control" formControlName="dsct_value" [textMask]="{mask: numberMaskObject()}" >
                     </div>
                 </div>
             </form>

@@ -44,7 +44,8 @@
                                 <label class="control-label">&nbsp;</label>
                                 <div>
                                     <button type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Search</button>
-                                    <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchForm)" translate>Reset</button>
+                                    <button type="button" class="btn btn-default" (click)="tableService.resetAction(searchForm); tableService.resetAction(filterForm)"
+                                        translate>Reset</button>
                                 </div>
                             </div>
                         </form>
@@ -94,7 +95,7 @@
                                 <label class="control-label">&nbsp;</label>
                                 <div>
                                     <button type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Search</button>
-                                    <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchForm)" translate>Reset</button>
+                                    <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchForm);tableService.resetAction(this.filterForm)" translate>Reset</button>
                                 </div>
                             </div>
                         </form>
@@ -166,20 +167,20 @@
                                 <span></span>
                             </label>
                         </th>
-                        <th translate>Part No</th>
-                        <th translate>Partlinks No</th>
-                        <th translate>Description</th>
-                        <th translate>Make</th>
-                        <th translate>Model</th>
-                        <th translate>Category</th>
-                        <th translate>Sub Category</th>
-                        <th translate>Brand</th>
-                        <th translate>Cert</th>
-                        <th translate>UOM</th>                        
-                        <th translate>OEM Price</th>
-                        <th translate>Cost Price</th>
-                        <th class="text-center">Sales Price</th>
-                        <th translate>Action</th>
+                        <th class="vertical-top" translate>Part No</th>
+                        <th class="vertical-top" translate>Partlinks No</th>
+                        <th class="vertical-top" translate>Description</th>
+                        <th class="vertical-top" translate>Make</th>
+                        <th class="vertical-top" translate>Model</th>
+                        <th class="vertical-top" translate>Category</th>
+                        <th class="vertical-top" translate>Sub Category</th>
+                        <th class="vertical-top" translate>Brand</th>
+                        <th class="vertical-top" translate>Cert</th>
+                        <th class="vertical-top" translate>UOM</th>
+                        <th class="vertical-top" translate>OEM Price</th>
+                        <th class="vertical-top" translate>Cost Price</th>
+                        <th class="vertical-top" class="text-center">Sales Price</th>
+                        <th class="vertical-top" translate>Action</th>
                     </tr>
                 </thead>
 
@@ -198,8 +199,8 @@
                     <td>{{item.ctgry_name}}</td>
                     <td>{{item.sub_ctgry_name}}</td>
                     <td>{{item.brand_name}}</td>
-                    <td>{{item.cert=='Y'?'Yes':'No'}}</td>
-                    <td>{{item.uom_name}}</td>                  
+                    <td>{{item.cert_name}}</td>
+                    <td>{{item.uom_name}}</td>
                     <td>{{item.oem_price|currency:'$'}}</td>
                     <td>{{item.cost_price|currency:'$'}}</td>
                     <td>{{item.sale_price|currency:'$'}}</td>

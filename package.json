@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --sourcemap=false",
     "build-dev": "ng build --prod --env=dev --base-href \"/sel2b/admin/\" --output-hashing=all && rimraf dist && mv dist-temp dist",
     "build-stag": "ng build --prod --env=stag --base-href \"/sel2b/admin/\" --output-hashing=all && rimraf dist && mv dist-temp dist",
     "build-qc": "ng build --prod --env=qc --base-href \"/sel2b/admin/\" --output-hashing=all && rimraf dist && mv dist-temp dist",
@@ -48,6 +48,7 @@
     "ng-drag-drop": "^4.0.0",
     "ng-http-loader": "^0.7.1",
     "ng2-charts": "^1.6.0",
+    "ng2-ckeditor": "^1.2.1",
     "ng2-select": "^2.0.0",
     "ngx-gallery": "^5.6.0",
     "ngx-toastr": "^8.5.0",

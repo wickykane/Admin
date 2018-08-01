@@ -14,6 +14,7 @@ import { DeliveryOrderComponent } from './delivery-order/delivery-order.componen
 
 //  Sale Order
 import { SaleOrderCreateComponent } from './sale-order/create/sale-order.create.component';
+import { SaleOrderEditComponent } from './sale-order/edit/sale-order.edit.component';
 import { PrintInvoiceComponent } from './sale-order/print/print.invoice.component';
 import { PrintOrderComponent } from './sale-order/print/print.oder.component';
 import { SaleOrderComponent } from './sale-order/sale-order.component';
@@ -26,6 +27,7 @@ import { SalePriceComponent } from './sale-price/sale-price.component';
 
 //  Sale Quotation
 import { SaleQuotationCreateComponent } from './sale-quotation/create/sale-quotation.create.component';
+import { SaleQuotationEditComponent } from './sale-quotation/edit/sale-quotation.edit.component';
 import { SaleQuotationComponent } from './sale-quotation/sale-quotation.component';
 import { SaleQuotationRfqCreateComponent } from './sale-quotation/sale-quotation.rfq.create.component';
 import { SaleQuotationDetailComponent } from './sale-quotation/view/sale-quotation.detail.component';
@@ -83,7 +85,9 @@ import { ItemModalModule } from '../../shared/modals/item.module';
         SaleQuoteInformationTabComponent,
         SaleQuoteHistoryTabComponent,
         SaleOrderRMATabComponent,
-        SaleOrderCreditNoteTabComponent
+        SaleOrderCreditNoteTabComponent,
+        SaleOrderEditComponent,
+        SaleQuotationEditComponent
         ],
     providers: [OrderService, TableService, DatePipe, Helper],
     entryComponents: []
