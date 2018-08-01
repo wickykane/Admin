@@ -219,7 +219,7 @@ export class ItemListComponent implements OnInit {
 
     createOrder() {
         if (this.list.checklist.length === 0) { return; }
-        const ids: any = (this.list.checklist.map(item => { item.quantity = 1; item.source = 'From Master'; item.source_id = 1; return item; }) || []);
+        const ids: any = (this.list.checklist.map(item => { item.quantity = 1; item.qty_avail = item.qty_available; item.source = 'From Master'; item.source_id = 1; return item; }) || []);
         console.log(ids);
         this.router.navigateByData({ url: ['order-management/sale-order/create'], data: ids });
         //  this.router.navigate(['order-management/sale-order/create', { data : ids }])
