@@ -255,6 +255,15 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         if (e.shiftKey) return false;
         return true;
     }
+    isNumberKeyC(evt) {
+        var e = evt || window.event; // for trans-browser compatibility
+        var charCode = e.which || e.keyCode;
+        // if (charCode == 46 && !this.hasDot) { this.hasDot = true; return true; }
+        if (charCode > 31 && (charCode < 47 || charCode > 57))
+            return false;
+        if (e.shiftKey) return false;
+        return true;
+    }
     private orderAddress(address) {
         var tmp = [];
         var arr = [4, 3, 1, 2];

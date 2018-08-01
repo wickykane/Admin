@@ -334,6 +334,15 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         if (e.shiftKey) return false;
         return true;
     }
+    isNumberKeyC(evt) {
+
+        var e = evt || window.event; // for trans-browser compatibility
+        var charCode = e.which || e.keyCode;
+        if (charCode > 31 && (charCode < 47 || charCode > 57))
+            return false;
+        if (e.shiftKey) return false;
+        return true;
+    }
     //  add new Site
 
     addNewSite(item?) {
@@ -360,6 +369,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
                             this.sites.push(res);
                         }
                     }
+                    console.log(this.sites);
                 });
                 modalRef.componentInstance.info = {
                     parent_company_name: this.generalForm.value.company_name,

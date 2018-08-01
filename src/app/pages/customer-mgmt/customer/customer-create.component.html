@@ -374,7 +374,7 @@
                                         <input type="text" class="form-control" name="account_name" [(ngModel)]="item.account_name">
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control" name="account_no" [(ngModel)]="item.account_no">
+                                        <input type="text" class="form-control" name="account_no" (keypress)="isNumberKeyC($event)" [(ngModel)]="item.account_no">
                                     </td>
                                     <td>
                                         <input type="text" class="form-control" name="iban" [(ngModel)]="item.iban">
