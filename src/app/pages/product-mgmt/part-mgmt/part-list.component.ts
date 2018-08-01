@@ -183,8 +183,8 @@ export class PartListComponent implements OnInit {
                     return;
                 }
                 this.list.items = res.data.rows;
-                this.listMaster['brands'] = res.data.meta_filters.brands;
-                this.listMaster['categories'] = res.data.meta_filters.categories;
+                this.listMaster['brands'] = _.orderBy(res.data.meta_filters.brands, ['name'], ['asc']);
+                this.listMaster['categories'] = _.orderBy(res.data.meta_filters.categories, ['name'], ['asc']);
                 this.tableService.matchPagingOption(res.data);
             } catch (e) {
                 console.log(e);
