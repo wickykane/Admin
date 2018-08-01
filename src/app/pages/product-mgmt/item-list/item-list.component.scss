@@ -60,6 +60,11 @@
             &:not(:first-child) {
                 padding-left: 15px;
             }
+
+            .name_form {
+              font-size: 0.75rem;
+              font-weight: 700;
+            }
         }
     }
 }

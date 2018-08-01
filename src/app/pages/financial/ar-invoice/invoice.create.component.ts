@@ -83,7 +83,8 @@ export class InvoiceCreateComponent implements OnInit {
         selected_programs: [],
         discount_percent: 0,
         vat_percent: 0,
-        shipping_cost: 0
+        shipping_cost: 0,
+        expires_dt: ''
     };
 
     public list = {
@@ -103,6 +104,7 @@ export class InvoiceCreateComponent implements OnInit {
     public isEdit = false;
     public applyEPI;
     public applyLFP;
+    public show_early = true;
 
     /**
      * Init Data
@@ -246,6 +248,20 @@ export class InvoiceCreateComponent implements OnInit {
             }
         });
     }
+    getEarlyPaymentValue() {
+        const issue_dt = this.generalForm.get('inv_dt').value;
+        const payment_term_id = this.generalForm.get('payment_term_id').value;
+        const total_due = this.generalForm.get('total_due').value;
+        this.financialService.getEarlyPaymentValue(issue_dt, payment_term_id, total_due).subscribe(res => {
+            if (res.data) {
+               this.order_info.discount_percent = res.data.percent;
+               this.order_info.total_discount = res.data.value;
+               this.order_info.expires_dt = res.data.expires_dt;
+            } else {
+                this.show_early = false;
+            }
+        });
+    }
 
     getOrderByCustomerId(company_id) {
         this.list_sales_order = [];
@@ -337,7 +353,6 @@ export class InvoiceCreateComponent implements OnInit {
     }
 
     changeSalesOrder(event) {
-        console.log(event);
         if (event) {
             this.list.items = event.detail;
             this.order_details = event.order;
@@ -369,7 +384,7 @@ export class InvoiceCreateComponent implements OnInit {
         const listPaymentTerms = this.listMaster['payment_terms'];
         for (const unit of listPaymentTerms) {
             if (unit.id === this.generalForm.value['payment_term_id']) {
-                this.generalForm.controls['payment_term_range'].setValue(unit.day_limit);
+                this.generalForm.controls['payment_term_range'].setValue(unit.term_day);
                 this.getInvoiceDueDate(this.generalForm.value['payment_term_range']);
             }
         }

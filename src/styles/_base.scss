@@ -22,7 +22,7 @@ a {
     .nav-pills .show>.nav-link {
         color: #dc3545;
         background-color: inherit;
-        border-bottom: 1px solid #dc3545;
+        border: 1px solid #dc3545;
     }
     .nav-pills .nav-link:not(.disabled):hover {
         color: #dc3545;
@@ -704,14 +704,14 @@ ngu-carousel {
     &:hover  .ngx-gallery-icon-content.black {
         color: #495057;
         opacity: 1;
-        transition: all 500ms ease-in-out;    
+        transition: all 500ms ease-in-out;
     }
-  
+
 }
 
 .ngx-gallery-layout {
     .ngx-gallery-icon-content {
-        color: #495057 !important;        
+        color: #495057 !important;
     }
 }
 @media all and (-ms-high-contrast:none){
