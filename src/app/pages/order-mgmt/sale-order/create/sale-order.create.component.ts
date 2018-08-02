@@ -498,8 +498,9 @@ export class SaleOrderCreateComponent implements OnInit {
             case 'quote':
                 params = {
                     'items': products,
-                    'is_draft_order': 0,
-                    'type': 'SAQ'
+                    'is_draft_order': 1,
+                    'type': 'SAQ',
+                    'sale_quote_status_id': 1,
                 };
                 break;
             case 'draft':
