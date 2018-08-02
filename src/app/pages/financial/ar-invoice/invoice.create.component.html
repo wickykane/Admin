@@ -18,8 +18,8 @@
                                             <ng-select style="width: 150px;" (change)="changeCustomer($event)" [items]="listMaster['customer']" bindLabel="customer.name" bindValue="customer.id" formControlName="company_id">
                                             </ng-select>
                                         </div>
-                                        <div *ngIf="isEdit && invoice_details.company_name" style="margin-left: 50px;">
-                                            <strong>{{invoice_details.company_name}}</strong>
+                                        <div *ngIf="isEdit && invoice_details['company_name']" style="margin-left: 50px;">
+                                            <strong>{{invoice_details['company_name']}}</strong>
                                         </div>
                                     </div>
                                 </div>
@@ -94,7 +94,7 @@
                                                 </select> -->
                                                 <ng-select (change)="changeSalesOrder($event)" [items]="list_sales_order" bindLabel="order.code" bindValue="order.id" formControlName="order_id" *ngIf="isCreate">
                                                 </ng-select>
-                                                <strong *ngIf="isEdit && invoice_details.orders">{{invoice_details?.orders[0]?.code}}</strong>
+                                                <strong *ngIf="isEdit && invoice_details['orders']">{{invoice_details['orders'][0]?.code}}</strong>
                                             </div>
                                         </div>
                                         <div class="form-group row">
