@@ -104,8 +104,6 @@ export class InvoiceCreateComponent implements OnInit {
     public isEdit = false;
     public applyEPI;
     public applyLFP;
-    public show_early = true;
-
     /**
      * Init Data
      */
@@ -257,8 +255,6 @@ export class InvoiceCreateComponent implements OnInit {
                this.order_info.discount_percent = res.data.percent;
                this.order_info.total_discount = res.data.value;
                this.order_info.expires_dt = res.data.expires_dt;
-            } else {
-                this.show_early = false;
             }
         });
     }

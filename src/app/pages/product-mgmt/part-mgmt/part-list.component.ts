@@ -149,6 +149,7 @@ export class PartListComponent implements OnInit {
 
     getList() {
         const params = { ...this.tableService.getParams(), ...this.searchForm.value, ...this.filterForm.value };
+        console.log(params);
         // Change filter array
         try {
             Object.keys(this.filterForm.value).map(key => {
@@ -174,8 +175,6 @@ export class PartListComponent implements OnInit {
                 }
             }
         });
-
-
         this.productService.getPartList(params).subscribe(res => {
             try {
                 if (!res.data.rows) {

@@ -18,6 +18,7 @@ import { PaymentTermService } from './payterm.service';
 export class PayTermCreateComponent implements OnInit {
 
     generalForm: FormGroup;
+    public isEdit = false;
     public listMaster = {};
     constructor(public router: Router,
         public route: ActivatedRoute,
@@ -27,7 +28,7 @@ export class PayTermCreateComponent implements OnInit {
         private paytermService: PaymentTermService) {
         this.generalForm = fb.group({
             'id': [null],
-            'cd': [ null, Validators.required],
+            'cd': [null, Validators.required],
             'des': [null, Validators.required],
             'early_pmt_incentive': [0],
             'dsct_day': [null],
@@ -39,7 +40,6 @@ export class PayTermCreateComponent implements OnInit {
         this.keyService.watchContext.next(this);
         this.generalForm.get('early_pmt_incentive').valueChanges.map(
             value => {
-                console.log(value);
                 if (value) {
                     this.generalForm.get('dsct_day').setValidators(Validators.required);
                     this.generalForm.get('dsct_value').setValidators(Validators.required);
@@ -50,13 +50,14 @@ export class PayTermCreateComponent implements OnInit {
                     this.generalForm.get('dsct_type').clearValidators();
                 }
             }
-          );
+        );
     }
 
     ngOnInit() {
         this.route.params.subscribe(params => {
             if (params.id) {
                 this.getDetailPaymentTerm(params.id);
+                this.isEdit = true;
             } else {
                 this.getGenerateCode();
             }
@@ -73,7 +74,7 @@ export class PayTermCreateComponent implements OnInit {
     }
     getGenerateCode() {
         this.paytermService.getGenerateCode().subscribe(res => {
-            this.generalForm.get('cd').patchValue (res.message);
+            this.generalForm.get('cd').patchValue(res.message);
         });
     }
     createPaymentTerm() {
@@ -111,7 +112,15 @@ export class PayTermCreateComponent implements OnInit {
     numberMaskObject(max?) {
         return createNumberMask({
             allowDecimal: false,
-            includeThousandsSeparator : false,
+            includeThousandsSeparator: false,
+            prefix: '',
+            integerLimit: max || null
+        });
+    }
+    numberMaskObjectDecimal(max?) {
+        return createNumberMask({
+            allowDecimal: true,
+            includeThousandsSeparator: false,
             prefix: '',
             integerLimit: max || null
         });

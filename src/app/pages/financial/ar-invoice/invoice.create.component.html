@@ -161,14 +161,14 @@
                                 </div>
                                 <div class="col-md-3 customer-infomation bolder">
                                     <form [formGroup]="generalForm">
-                                        <div class="form-group row">
+                                        <!-- <div class="form-group row">
                                             <label class='col-4'>Early Payment Incentive</label>
                                             <div class='col-8 text-danger'>
                                                 <select class="form-control" formControlName="ear_payment_incentive">
                                                     <option *ngFor="let item of listMaster['yes_no_options']" [ngValue]="item.value">{{item.label}}</option>
                                                 </select>
                                             </div>
-                                        </div>
+                                        </div> -->
                                         <div class="form-group row">
                                             <label class='col-4'>Apply Late Fee</label>
                                             <div class='col-8 text-danger'>
@@ -402,7 +402,7 @@
                                         <!-- <td>{{generalForm.value['tot_amt'] | currency}}</td> -->
                                         <td>{{order_details['total_price'] | currency}}</td>
                                     </tr>
-                                    <tr *ngIf="show_early">
+                                    <tr *ngIf="order_info.expires_dt==null">
                                         <td>- Early Payment Incentive:</td>
                                         <td>
                                             <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info.discount_percent" class="form-control" type="text" (change)="updateTotal()">
@@ -411,7 +411,7 @@
                                             <input class="form-control" readonly="true" [(ngModel)]="order_info.total_discount" class="form-control" value="0" type="number">
                                         </td>
                                     </tr>
-                                    <tr *ngIf="show_early">
+                                    <tr *ngIf="order_info.expires_dt==null">
                                         <td colspan="3" class="expire-warning">Expires {{order_info.expires_dt}}</td>
                                     </tr>
                                     <tr>

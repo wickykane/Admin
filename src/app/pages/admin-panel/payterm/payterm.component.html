@@ -39,6 +39,7 @@
                         <th>Discount Days</th>
                         <th>Discount Type</th>
                         <th>Discount Value</th>
+                        <th class="text-center">Early Payment Incentive</th>
                         <th>Status</th>
                         <th>Last Updated By</th>
                         <th>Last Updated On</th>
@@ -53,16 +54,17 @@
                         <td>{{item.dsct_day}}</td>
                         <td>{{item.dsct_type==1 ? 'Percent': 'Fixed Amount'}}</td>
                         <td>{{item.dsct_value}}</td>
-                        <td>{{item.early_pmt_incentive==1 ?'Yes':'No'}}</td>
+                        <td class="text-center">{{item.early_pmt_incentive==1 ?'Yes':'No'}}</td>
+                        <td>{{item.ac==1 ?'Active':'In Active'}}</td>
                         <td>{{item.full_name}}</td>
                         <td>{{item.update_dt}}</td>
                         <td>
                             <a class="btn btn-default" (click)="editPayment(item.id)" title="Edit Payment Term">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                             </a>                           
-                            <a class="btn btn-default" (click)="deletePayment(item.id)" title="Delete Payment Term">
+                            <!-- <a class="btn btn-default" (click)="deletePayment(item.id)" title="Delete Payment Term">
                                 <i class="fa fa-trash" aria-hidden="true"></i>
-                            </a>
+                            </a> -->
                         </td>
                     </tr>
                 </tbody>
