@@ -71,12 +71,26 @@ export class TableService {
     }
 
     searchAction() {
-        var fl = false;
+        let fl = false;
         Object.keys(this.context.searchForm.value).forEach(k => {
-            if (this.context.searchForm.value[k] && this.context.searchForm.value[k]!='null') fl = true;
+            if (this.context.searchForm.value[k] && this.context.searchForm.value[k] !== 'null') { fl = true; }
         });
-        if (!fl) return false;
+        if (!fl) {return false; }
         this.temptParams = { ...this.getParams(), ...this.context.searchForm.value };
+        this.pagination['page'] = 1;
+        return this.context[this.getListFnName]();
+    }
+
+    searchActionWithFilter() {
+        // let fl = false;
+        // Object.keys(this.context.searchForm.value).forEach(k => {
+        //     if (this.context.searchForm.value[k] && this.context.searchForm.value[k] !== 'null') { fl = true; }
+        // });
+        // Object.keys(this.context.filterForm.value).forEach(k => {
+        //     if (this.context.filterForm.value[k] && this.context.filterForm.value[k] !== 'null') { f = true; }
+        // });
+        // if (!fl) {return false; }
+        this.temptParams = { ...this.getParams(), ...this.context.searchForm.value, ...this.context.filterForm.value };
         this.pagination['page'] = 1;
         return this.context[this.getListFnName]();
     }
