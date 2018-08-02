@@ -42,10 +42,17 @@ export class InvoiceCreateKeyService implements OnDestroy {
             this.context.payloadData('submit');
             return;
         }, undefined, 'Save & Submit'));
-        this._hotkeysService.add(new Hotkey('shift+c', (event: KeyboardEvent): boolean => {
+        this._hotkeysService.add(new Hotkey('shift+n', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             this.context.payloadData('createnew');
             return;
         }, undefined, 'Save & Create New Invoice'));
+        if (this.context['isEdit']) {
+            this._hotkeysService.add(new Hotkey('shift+c', (event: KeyboardEvent): boolean => {
+                event.preventDefault();
+                this.context.updateInvoiceStatus('CC');
+                return;
+            }, undefined, 'Cancel'));
+        }
     }
 }

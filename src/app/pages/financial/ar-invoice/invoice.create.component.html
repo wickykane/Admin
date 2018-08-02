@@ -14,9 +14,12 @@
                                     <div class="form-group">
                                         <label for="code" class="control-label" translate>Customer</label>
                                         <span class="text-danger">(*)</span>
-                                        <div>
+                                        <div *ngIf="isCreate">
                                             <ng-select style="width: 150px;" (change)="changeCustomer($event)" [items]="listMaster['customer']" bindLabel="customer.name" bindValue="customer.id" formControlName="company_id">
                                             </ng-select>
+                                        </div>
+                                        <div *ngIf="isEdit && invoice_details['company_name']" style="margin-left: 50px;">
+                                            <strong>{{invoice_details['company_name']}}</strong>
                                         </div>
                                     </div>
                                 </div>
@@ -85,19 +88,18 @@
                                             <label class='col-4'>Sales Order
                                                 <span class="text-danger">(*)</span>
                                             </label>
-                                            <div class='col-8 text-primary'>
+                                            <div class='col-8'>
                                                 <!-- <select required class="form-control" id="order_type" name="order-type" (change)="changeSalesOrder(item)" formControlName="order_id">
                                                     <option *ngFor="let item of list_sales_order" [ngValue]="item.order.id">{{item.order.code}}</option>
                                                 </select> -->
-                                                <ng-select (change)="changeSalesOrder($event)" [items]="list_sales_order" bindLabel="order.code" bindValue="order.id" formControlName="order_id">
+                                                <ng-select (change)="changeSalesOrder($event)" [items]="list_sales_order" bindLabel="order.code" bindValue="order.id" formControlName="order_id" *ngIf="isCreate">
                                                 </ng-select>
+                                                <strong *ngIf="isEdit && invoice_details['orders']">{{invoice_details['orders'][0]?.code}}</strong>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class='col-4'>Invoice Type</label>
                                             <div class='col-8'>
-                                                <!-- <strong *ngIf="isCreate">Sales Invoice</strong>
-                                                <strong *ngIf="!isCreate">{{generalForm.value['inv_type']}}</strong> -->
                                                 <strong>Sales Invoice</strong>
                                             </div>
                                         </div>
@@ -148,13 +150,8 @@
                                                 <span class="text-danger">(*)</span>
                                             </label>
                                             <div class='col-8 text-danger'>
-                                                <!-- <select required class="form-control" id="priority" name="priority">
-                                                    <option *ngFor="let item of listMaster['priority']" [ngValue]="item.code">{{item.value}}</option>
-                                                </select> -->
                                                 <ng-select [items]="listMaster['approver']" bindLabel="full_name" bindValue="id" formControlName="aprvr_id">
                                                 </ng-select>
-                                                <!-- <ng-select style="width: 150px;" (change)="changeCustomer($event)" [items]="listMaster['customer']" bindLabel="customer.name" bindValue="customer.id" formControlName="company_id">
-                                                </ng-select> -->
                                             </div>
                                         </div>
                                     </form>
@@ -373,34 +370,34 @@
                                     <tr>
                                         <td>Sub Total:</td>
                                         <td></td>
-                                        <!-- <td>{{generalForm.value['sub_tot'] | currency}}</td> -->
-                                        <td>{{order_details['sub_total_price']|currency}}</td>
+                                        <td>{{generalForm.value['sub_total'] | currency}}</td>
+                                        <!-- <td>{{order_details['sub_total_price']|currency}}</td> -->
                                     </tr>
                                     <tr>
                                         <td>- Discount (%):</td>
-                                        <!-- <td>{{generalForm.value['dsct_pct']}}%</td>
-                                        <td>{{generalForm.value['dsct_amt'] | currency}}</td> -->
-                                        <td>{{order_details['discount_percent']}}%</td>
-                                        <td>{{order_details['discount'] | currency}}</td>
+                                        <td>{{generalForm.value['discount_percent']}}%</td>
+                                        <td>{{generalForm.value['discount_amount'] | currency}}</td>
+                                        <!-- <td>{{order_details['discount_percent']}}%</td>
+                                        <td>{{order_details['discount'] | currency}}</td> -->
                                     </tr>
                                     <tr>
                                         <td>+ TAX/VAT (%):</td>
-                                        <!-- <td>{{generalForm.value['tax_pct']}}%</td>
-                                        <td>{{generalForm.value['tax_amt'] | currency}}</td> -->
-                                        <td>{{order_details['vat_percent']}}%</td>
-                                        <td>{{order_details['vat'] | currency}}</td>
+                                        <td>{{generalForm.value['tax_percent']}}%</td>
+                                        <td>{{generalForm.value['tax_amount'] | currency}}</td>
+                                        <!-- <td>{{order_details['vat_percent']}}%</td>
+                                        <td>{{order_details['vat'] | currency}}</td> -->
                                     </tr>
                                     <tr>
                                         <td>+ Shipping cost ($):</td>
                                         <td></td>
-                                        <!-- <td>{{generalForm.value['shp_cost'] | currency}}</td> -->
-                                        <td>{{order_details['shipping'] | currency}}</td>
+                                        <td>{{generalForm.value['shipping_cost'] | currency}}</td>
+                                        <!-- <td>{{order_details['shipping'] | currency}}</td> -->
                                     </tr>
                                     <tr>
                                         <td>Total Due:</td>
                                         <td></td>
-                                        <!-- <td>{{generalForm.value['tot_amt'] | currency}}</td> -->
-                                        <td>{{order_details['total_price'] | currency}}</td>
+                                        <td>{{generalForm.value['total_due'] | currency}}</td>
+                                        <!-- <td>{{order_details['total_price'] | currency}}</td> -->
                                     </tr>
                                     <tr *ngIf="order_info.expires_dt==null">
                                         <td>- Early Payment Incentive:</td>
@@ -416,7 +413,8 @@
                                     </tr>
                                     <tr>
                                         <td>Adjusted Total Due:</td>
-                                        <td colspan="2">{{order_details['total_price'] | currency}}</td>
+                                        <!-- <td colspan="2">{{order_details['total_price'] | currency}}</td> -->
+                                        <td colspan="2">{{generalForm.value['total_due'] | currency}}</td>
                                     </tr>
                                 </table>
                             </div>
