@@ -195,6 +195,9 @@
                                 <a class="btn btn-default" title="Cancel" (click)="cancelInvoice(item.id)" *ngIf="item.invoice_status_id == 1">
                                     <i class="fa fa-ban" aria-hidden="true"></i>
                                 </a>
+                                <a class="btn btn-default" title="Print" (click)="printPDF(item.id)" >
+                                        <i class="fa fa-download" aria-hidden="true"></i>
+                                    </a>
                             </td>
                         </tr>
                         <!-- <tr *ngIf="item.collapseRows">
