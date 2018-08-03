@@ -26,7 +26,7 @@
                         <label> Day Limit
                             <span class="text-danger">(*)</span>
                         </label>
-                        <input  [textMask]="{mask: numberMaskObject()}" type="text" name="" class="form-control" formControlName="term_day" maxlength="5" [disabled]="isEdit==true ?'true':null">
+                        <input  [textMask]="{mask: numberMaskObject()}" type="text" name="" class="form-control" formControlName="term_day" maxlength="5" [readonly]="isEdit">
                     </div>
                     <div class="col-sm-2 form-group">
                         <label> Status
@@ -42,7 +42,7 @@
                             <span class="text-danger">(*)</span>
                         </label>
                         <div class="">
-                            <input type="checkbox" name="" class="" formControlName="early_pmt_incentive" ng-true="1" [readonly]="isEdit">
+                            <input type="checkbox" name="" class="" formControlName="early_pmt_incentive" ng-true="1" >
                         </div>
                     </div>
                 </div>
