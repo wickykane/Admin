@@ -46,7 +46,8 @@ export class PartEditComponent implements OnInit {
         this.generalForm = fb.group({
             is_quotable: [null],
             is_show_price: [null],
-            sell_price: [null]
+            sell_price: [null],
+            short_des: [null]
         });
         //  Init Key
         this.itemKeyService.watchContext.next(this);
