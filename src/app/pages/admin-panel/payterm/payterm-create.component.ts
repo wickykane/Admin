@@ -58,6 +58,7 @@ export class PayTermCreateComponent implements OnInit {
             if (params.id) {
                 this.getDetailPaymentTerm(params.id);
                 this.isEdit = true;
+                this.generalForm.get('early_pmt_incentive').disable();
             } else {
                 this.getGenerateCode();
             }
