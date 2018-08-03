@@ -20,19 +20,19 @@
                         <label> Description
                             <span class="text-danger">(*)</span>
                         </label>
-                        <input type="text" name="" class="form-control" formControlName="des">
+                        <input type="text" name="" class="form-control" formControlName="des" [readonly]="isEdit">
                     </div>
                     <div class="col-sm-2 form-group">
                         <label> Day Limit
                             <span class="text-danger">(*)</span>
                         </label>
-                        <input  [textMask]="{mask: numberMaskObject()}" type="text" name="" class="form-control" formControlName="term_day" maxlength="5">
+                        <input  [textMask]="{mask: numberMaskObject()}" type="text" name="" class="form-control" formControlName="term_day" maxlength="5" [readonly]="isEdit">
                     </div>
                     <div class="col-sm-2 form-group">
                         <label> Status
                             <span class="text-danger">(*)</span>
                         </label>
-                        <select class="form-control" formControlName="ac" name="status">
+                        <select class="form-control" formControlName="ac" name="status" >
                             <option value="null" selected="false">--Select--</option>
                             <option *ngFor="let item of listMaster['status']" [ngValue]="item.key">{{item.value}}</option>
                         </select>
@@ -42,7 +42,7 @@
                             <span class="text-danger">(*)</span>
                         </label>
                         <div class="">
-                            <input type="checkbox" name="" class="" formControlName="early_pmt_incentive" ng-true="1">
+                            <input type="checkbox" name="" class="" formControlName="early_pmt_incentive" ng-true="1" >
                         </div>
                     </div>
                 </div>
@@ -51,13 +51,13 @@
                         <label> Discount Days
                             <span class="text-danger">(*)</span>
                         </label>
-                        <input type="text" name="" class="form-control" formControlName="dsct_day" [textMask]="{mask: numberMaskObject()}">
+                        <input type="text" name="" class="form-control" formControlName="dsct_day" [textMask]="{mask: numberMaskObject()}" [readonly]="isEdit">
                     </div>
                     <div class="col-sm-2 form-group">
                         <label> Discount Type
                             <span class="text-danger">(*)</span>
                         </label>
-                        <select class="form-control" formControlName="dsct_type" name="dsct_type" >                            
+                        <select class="form-control" formControlName="dsct_type" name="dsct_type" [attr.disabled]="isEdit==true ?'true':null" >                            
                             <option *ngFor="let item of listMaster['early']" [ngValue]="item.key" >{{item.value}}</option>
                         </select>
                     </div>
@@ -65,7 +65,7 @@
                         <label> Discount Value
                             <span class="text-danger">(*)</span>
                         </label>
-                        <input type="text" name="" class="form-control" formControlName="dsct_value" [textMask]="{mask: numberMaskObject()}" >
+                        <input type="text" name="" class="form-control" formControlName="dsct_value" [textMask]="{mask: numberMaskObjectDecimal()}" [readonly]="isEdit" >
                     </div>
                 </div>
             </form>

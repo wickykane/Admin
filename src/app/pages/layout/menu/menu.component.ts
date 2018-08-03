@@ -191,11 +191,11 @@ export class MenuComponent implements OnInit {
                     {
                         link: '/customer',
                         name: 'Customer'
-                    },
-                    {
-                        link: '/customer/customer-segment',
-                        name: 'Customer Segments'
                     }
+                    // {
+                    //     link: '/customer/customer-segment',
+                    //     name: 'Customer Segments'
+                    // }
                 ]
             },
             {

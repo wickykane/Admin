@@ -60,7 +60,9 @@ export class MassPriceCreateComponent implements OnInit {
         const data = {
             file: this.listFile[0]
         };
-        this.productService.postFileMassPrice(data).subscribe(
+        const formData = new FormData();
+        formData.append('file', data.file);
+        this.productService.postFileMassPrice(formData).subscribe(
             res => {
                 try {
                     this.toastr.success('The file has been imported successfully');

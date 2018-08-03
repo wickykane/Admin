@@ -138,11 +138,11 @@
                                 formControlName="category_id_filter">
                             </ng-select>
                         </div>
-                        <label *ngIf="filterForm.value.category_id_filter" for="type" class="control-label" translate>Sub-Category</label>
+                        <!-- <label *ngIf="filterForm.value.category_id_filter" for="type" class="control-label" translate>Sub-Category</label>
                         <div class="block-search" *ngIf="filterForm.value.category_id_filter">
                             <ng-select class="select2-max-width" [multiple]="true" [items]="listMaster['sub_cat']" bindLabel="name" bindValue="category_id" formControlName="sub_category_id">
                             </ng-select>
-                        </div>
+                        </div> -->
                         <label for="type" class="control-label" translate>Brand</label>
                         <div class="block-search">
                             <ng-select class="select2-max-width" [multiple]="true" [items]="listMaster['brands']" bindLabel="name" bindValue="brand_id" formControlName="brand_id_filter">
@@ -177,11 +177,10 @@
                         <th class="vertical-top" translate>Brand</th>
                         <th class="vertical-top" translate>Cert</th>
                         <th class="vertical-top" translate>UOM</th>
-                        <th class="vertical-top" translate>Condition</th>
-                        <!-- <th class="vertical-top" translate>On Hand QTY</th> -->
-                        <!-- <th class="vertical-top" translate>Alloc QTY</th> -->
+                        <th class="vertical-top" translate>Condition</th>                      
                         <th class="vertical-top" translate>Avail QTY</th>
                         <th class="vertical-top" translate>OEM Price</th>
+                        <th class="vertical-top" translate>Cost Price</th>
                         <th class="vertical-top" translate>Sales Price</th>
                     </tr>
                 </thead>
@@ -201,13 +200,12 @@
                     <td>{{item.ctgry_name}}</td>
                     <td>{{item.sub_ctgry_name}}</td>
                     <td>{{item.brand_name}}</td>
-                    <td>{{item.ctgry_name}}</td>
+                    <td>{{item.cert_name}}</td>
                     <td>{{item.uom_name}}</td>
-                    <td>{{item.condition_name}}</td>
-                    <!-- <td>{{item.qty_remained}}</td> -->
-                    <!-- <th>{{item.qty_reserved}}</th> -->
+                    <td>{{item.condition_name}}</td>                  
                     <td>{{item.qty_available}}</td>
-                    <td>{{item.oem_price |currency:'$'}}</td>
+                    <td>{{item.oem_price|currency:'$'}}</td>
+                    <td>{{item.cost_price|currency:'$'}}</td>
                     <th>{{item.sale_price|currency:'$'}}</th>
                 </tr>
                 <tr *ngIf="list.items.length === 0">

@@ -61,8 +61,8 @@
                     <tr>
                         <td>{{item.id}}</td>
                         <td>{{ item.file }}</td>
-                        <td>{{item.start|date:'MM/dd/yyyy hh:mm:ss'}}</td>
-                        <td>{{item.end|date:'MM/dd/yyyy hh:mm:ss'}}</td>
+                        <td>{{item.start|date:'MM/dd/yyyy h:mm:ss'}}</td>
+                        <td>{{item.end|date:'MM/dd/yyyy h:mm:ss'}}</td>
                         <td>{{item.username}}</td>
                         <td>
                             <span [ngClass]="{'text-primary': (item.status  === 1),'text-warning': (item.status  === 2), 'text-success': (item.status == 3)}">{{item.status_name}}</span>

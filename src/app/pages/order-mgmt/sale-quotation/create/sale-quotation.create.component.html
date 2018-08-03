@@ -377,7 +377,8 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12 mg-top-15 text-center">               
+            <div class="col-md-12 mg-top-15 text-center">
+                    <button type="button" class="btn btn-outline-primary" (click)="createOrder('draft')" translate>Save As Draft</button> 
                 <button type="button" class="btn btn-outline-primary" (click)="createOrder('validate')" translate>Save & Validate</button>
                 <button type="button" class="btn btn-outline-primary" (click)="createOrder('submit')" translate>Save & Submit</button>
                 <button type="button" class="btn btn-default" [routerLink]="['/order-management/sale-quotation']" translate>Cancel</button>

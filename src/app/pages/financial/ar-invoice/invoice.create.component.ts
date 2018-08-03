@@ -84,7 +84,7 @@ export class InvoiceCreateComponent implements OnInit {
         discount_percent: 0,
         vat_percent: 0,
         shipping_cost: 0,
-        expires_dt: ''
+        expires_dt: null
     };
 
     public list = {
@@ -104,8 +104,6 @@ export class InvoiceCreateComponent implements OnInit {
     public isEdit = false;
     public applyEPI;
     public applyLFP;
-    public show_early = true;
-
     /**
      * Init Data
      */
@@ -144,6 +142,7 @@ export class InvoiceCreateComponent implements OnInit {
             'discount_percent': [null],
             'tax_percent': [null],
             'total_due': [null],
+            'total_adj_due': [null],
             'discount_amount': [null],
             'tax_amount': [null],
             'address': [null],
@@ -160,6 +159,7 @@ export class InvoiceCreateComponent implements OnInit {
                 this.isEdit = true;
                 this.invoiceId = params.id;
                 this.getDetailInvoice(this.invoiceId);
+                this.keyService.watchContext.next(this);
             } else {
                 this.isCreate = true;
                 this.isEdit = false;
@@ -184,6 +184,7 @@ export class InvoiceCreateComponent implements OnInit {
         this.copy_customer = { ...this.copy_customer, ...this.customer };
         this.generalForm.controls['inv_dt'].valueChanges.debounceTime(300).subscribe(data => {
             this.getInvoiceDueDate(this.generalForm.value['payment_term_range']);
+            this.getEarlyPaymentValue();
         });
     }
 
@@ -215,12 +216,30 @@ export class InvoiceCreateComponent implements OnInit {
                 this.generalForm.patchValue({
                     billing_address_id: this.invoice_details['billing_id'],
                     inv_status: this.invoice_details['invoice_status_id'],
-                    inv_dt: this.dt.transform(new Date(res.data.inv_dt), 'yyyy-MM-dd'),
-                    due_dt: this.dt.transform(new Date(res.data.due_dt), 'yyyy-MM-dd')
+                    inv_dt: this.dt.transform(new Date(res.data.inv_dt), 'yyyy-MM-dd')
                 });
                 if (res.data.company_id) {
                     this.getDetailCustomerById(res.data.company_id);
-                    this.getOrderByCustomerId(res.data.company_id);
+                    if (this.isCreate) {
+                        this.getOrderByCustomerId(res.data.company_id);
+                    }
+                    if (this.isEdit) {
+                        this.list.items = this.transformInvoiceDetailsItems(this.invoice_details['items']);
+                        const orderId = this.invoice_details['orders'][0]['id'];
+                        const orderNum = this.invoice_details['orders'][0]['code'];
+                        this.generalForm.patchValue({
+                            order_id: this.invoice_details['orders'][0]['id'],
+                            order_num: this.invoice_details['orders'][0]['code'],
+                            shipping_cost: this.invoice_details['shp_cost'],
+                            sub_total: this.invoice_details['sub_tot'],
+                            discount_percent: this.invoice_details['dsct_pct'],
+                            tax_percent: this.invoice_details['tax_pct'],
+                            total_due: this.invoice_details['tot_amt'],
+                            total_adj_due: this.invoice_details['tot_amt'],
+                            discount_amount: this.invoice_details['dsct_amt'],
+                            tax_amount: this.invoice_details['tax_amt']
+                        });
+                    }
                 }
                 if (!this.generalForm.value['payment_term_range']) {
                     this.generalForm.controls['payment_term_range'].setValue(this.getPaymentTermRange(this.generalForm.value['payment_term_id']));
@@ -252,15 +271,20 @@ export class InvoiceCreateComponent implements OnInit {
         const issue_dt = this.generalForm.get('inv_dt').value;
         const payment_term_id = this.generalForm.get('payment_term_id').value;
         const total_due = this.generalForm.get('total_due').value;
-        this.financialService.getEarlyPaymentValue(issue_dt, payment_term_id, total_due).subscribe(res => {
-            if (res.data) {
-               this.order_info.discount_percent = res.data.percent;
-               this.order_info.total_discount = res.data.value;
-               this.order_info.expires_dt = res.data.expires_dt;
-            } else {
-                this.show_early = false;
-            }
-        });
+        if (issue_dt && payment_term_id && total_due ) {
+            this.financialService.getEarlyPaymentValue(issue_dt, payment_term_id, total_due).subscribe(res => {
+                if (res.data) {
+                   this.order_info.discount_percent = res.data.percent;
+                   this.order_info.total_discount = res.data.value;
+                   this.order_info.expires_dt = res.data.expires_dt;
+                   if (this.order_info.total_discount > 0 ) {
+                    //    console.log(this.generalForm.get('total_due').value - this.order_info.total_discount);
+                       const recalc = this.generalForm.get('total_due').value - this.order_info.total_discount;
+                       this.generalForm.get('total_adj_due').patchValue(recalc);
+                   }
+                }
+            });
+        }
     }
 
     getOrderByCustomerId(company_id) {
@@ -280,7 +304,6 @@ export class InvoiceCreateComponent implements OnInit {
                     this.generalForm.patchValue({
                         order_id: orderId,
                         order_num: orderNum,
-                        // aprvr_id: orderCreatorId,
                         shipping_cost: this.order_details['shipping'],
                         sub_total: this.order_details['sub_total_price'],
                         discount_percent: this.order_details['discount_percent'],
@@ -313,8 +336,10 @@ export class InvoiceCreateComponent implements OnInit {
     }
 
     getPaymentTermRange(id) {
-        const paymentTerm = this.listMaster['payment_terms'].find(item => item.id === id);
-        return paymentTerm.day_limit;
+        setTimeout(() => {
+            const paymentTerm = this.listMaster['payment_terms'].find(item => item.id === id);
+            return paymentTerm.term_day;
+        }, 1000);
     }
 
     /**
@@ -366,7 +391,6 @@ export class InvoiceCreateComponent implements OnInit {
         this.generalForm.patchValue({
             order_id: orderId,
             order_num: orderNum,
-            // aprvr_id: orderCreatorId,
             shipping_cost: this.order_details['shipping'],
             sub_total: this.order_details['sub_total_price'],
             discount_percent: this.order_details['discount_percent'],
@@ -397,7 +421,9 @@ export class InvoiceCreateComponent implements OnInit {
         };
         this.financialService.getInvoiceDueDate(params).subscribe(res => {
             try {
-                this.generalForm.controls['due_dt'].setValue(res.data.due_dt);
+                if (params['payment_term_dt'] && res.data.due_dt) {
+                    this.generalForm.controls['due_dt'].setValue(this.dt.transform(new Date(res.data.due_dt), 'MM/dd/yyyy'));
+                }
             } catch (e) {
                 console.log(e);
             }
@@ -465,7 +491,7 @@ export class InvoiceCreateComponent implements OnInit {
                             this.router.navigate(['/financial/invoice']);
                             break;
                         case 'submit':
-                            this.updateInvoiceStatus(res.data, 'SB');
+                            this.updateInvoiceStatus('SB', res.data);
                             break;
                         case 'createnew':
                             this.toastr.success(res.message);
@@ -502,7 +528,7 @@ export class InvoiceCreateComponent implements OnInit {
                             this.router.navigate(['/financial/invoice']);
                             break;
                         case 'submit':
-                            this.updateInvoiceStatus(this.invoiceId, 'SB');
+                            this.updateInvoiceStatus('SB', this.invoiceId);
                             break;
                         case 'createnew':
                             this.toastr.success(res.message);
@@ -520,11 +546,12 @@ export class InvoiceCreateComponent implements OnInit {
         });
     }
 
-    updateInvoiceStatus(invoiceId, statusCode) {
+    updateInvoiceStatus(statusCode, invoiceId?) {
+        const id = invoiceId ? invoiceId : this.invoiceId;
         const params = {
             status_code: statusCode
         };
-        this.financialService.updateInvoiceStatus(invoiceId, params).subscribe(res => {
+        this.financialService.updateInvoiceStatus(id, params).subscribe(res => {
             try {
                 if (res.status) {
                     this.toastr.success(res.message);
@@ -558,6 +585,31 @@ export class InvoiceCreateComponent implements OnInit {
                 discount: unit.discount,
                 discount_percent: unit.discount_percent,
                 final_price: unit.total_price
+            };
+            transformedArr.push(tempItem);
+        }
+        console.log(transformedArr);
+        return transformedArr;
+    }
+
+    transformInvoiceDetailsItems(list) {
+        console.log(list);
+        const transformedArr = [];
+        for (const unit of list) {
+            const tempItem = {
+                id: unit.order_detail_id,
+                item_id: unit.item_id,
+                sku: unit.sku,
+                des: unit.name,
+                item_condition_id: unit.item_condition_id,
+                qty: unit.order_detail_total_qty,
+                uom_name: unit.uom_name,
+                invoice_qty: unit.invoice_qty,
+                price: unit.unit_price,
+                price_source: unit.quote_detail_id ? 'From Quote' : 'From Master',
+                discount: unit.discount,
+                discount_percent: unit.discount_percent,
+                total_price: unit.order_detail_total_price
             };
             transformedArr.push(tempItem);
         }
@@ -601,6 +653,7 @@ export class InvoiceCreateComponent implements OnInit {
         const sub_after_discount = this.order_info.sub_total - this.order_info.total_discount;
         this.order_info['vat_percent_amount'] = parseFloat((sub_after_discount * Number(this.order_info['alt_vat_percent']) / 100).toFixed(2));
         this.order_info.total = this.order_info.sub_total - this.order_info.total_discount + Number(this.order_info['shipping_cost']) + this.order_info['vat_percent_amount'] - this.promotionList['total_invoice_discount'];
+        this.generalForm.get('total_adj_due').patchValue( this.generalForm.get('total_due').value - this.order_info.total_discount);
     }
 
     numberMaskObject(max?) {

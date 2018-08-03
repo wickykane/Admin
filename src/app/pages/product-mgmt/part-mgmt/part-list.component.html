@@ -43,7 +43,7 @@
                             <div class="block-btn-search">
                                 <label class="control-label">&nbsp;</label>
                                 <div>
-                                    <button type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Search</button>
+                                    <button type="button" class="btn btn-primary" (click)="tableService.searchActionWithFilter()" translate>Search</button>
                                     <button type="button" class="btn btn-default" (click)="tableService.resetAction(filterForm);tableService.resetAction(searchForm)"
                                         translate>Reset</button>
                                 </div>
@@ -76,7 +76,7 @@
                             <div class="block-btn-search">
                                 <label class="control-label">&nbsp;</label>
                                 <div>
-                                    <button type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Search</button>
+                                    <button type="button" class="btn btn-primary" (click)="tableService.searchActionWithFilter()" translate>Search</button>
                                     <button type="button" class="btn btn-default" (click)="tableService.resetAction(filterForm);tableService.resetAction(searchForm)"
                                         translate>Reset</button>
                                 </div>
@@ -94,7 +94,7 @@
                             <div class="block-btn-search">
                                 <label class="control-label">&nbsp;</label>
                                 <div>
-                                    <button type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Search</button>
+                                    <button type="button" class="btn btn-primary" (click)="tableService.searchActionWithFilter()" translate>Search</button>
                                     <button type="button" class="btn btn-default" (click)="tableService.resetAction(filterForm);tableService.resetAction(searchForm)"
                                         translate>Reset</button>
                                 </div>
@@ -110,41 +110,42 @@
         <!-- <h5 class="title-form">FILTER</h5> -->
         <div class="row">
             <form class="form-horizontal form-search form-vehicle" [formGroup]="filterForm">
-                        <label class="control-label" translate><h4 class="name_form">FILTER: </h4></label>
-                        <label for="so" class="control-label" translate>Part Link</label>
-                        <div class="block-search">
-                            <input type="text" class="form-control" formControlName="partlinks_no_filter">
-                        </div>
-                        <label for="so" class="control-label" translate>Part</label>
-                        <div class="block-search">
-                            <input type="text" class="form-control" formControlName="part_no_filter">
-                        </div>
-                        <label for="type" class="control-label" translate>Category</label>
-                        <div class="block-search">
-                            <ng-select class="select2-max-width" (change)="changeToGetSubCategory()" [multiple]="true" [items]="listMaster['categories']" bindLabel="name" bindValue="category_id"
-                                formControlName="category_id_filter">
-                            </ng-select>
-                        </div>
-                        <label *ngIf="filterForm.value.category_id_filter" for="type" class="control-label" translate>Sub-Category</label>
+                <label class="control-label" translate>
+                    <h4 class="name_form">FILTER: </h4>
+                </label>
+                <label for="so" class="control-label" translate>Part Link</label>
+                <div class="block-search">
+                    <input type="text" class="form-control" formControlName="partlinks_no_filter">
+                </div>
+                <label for="so" class="control-label" translate>Part</label>
+                <div class="block-search">
+                    <input type="text" class="form-control" formControlName="part_no_filter">
+                </div>
+                <label for="type" class="control-label" translate>Category</label>
+                <div class="block-search">
+                    <ng-select class="select2-max-width" (change)="changeToGetSubCategory()" [multiple]="true" [items]="listMaster['categories']"
+                        bindLabel="name" bindValue="category_id" formControlName="category_id_filter">
+                    </ng-select>
+                </div>
+                <!-- <label *ngIf="filterForm.value.category_id_filter" for="type" class="control-label" translate>Sub-Category</label>
                         <div class="block-search" *ngIf="filterForm.value.category_id_filter">
                             <ng-select class="select2-max-width" [multiple]="true" [items]="listMaster['sub_cat']" bindLabel="name" bindValue="category_id" formControlName="sub_category_id">
                             </ng-select>
-                        </div>
-                        <label for="type" class="control-label" translate>Brand</label>
-                        <div class="block-search">
-                            <ng-select class="select2-max-width" [multiple]="true" [items]="listMaster['brands']" bindLabel="name" bindValue="brand_id" formControlName="brand_id_filter">
-                            </ng-select>
-                        </div>
-                      <label for="" class="control-label" translate>&nbsp;</label>
-                      <button type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Apply</button>
-                      <button type="button" class="btn btn-default" (click)="tableService.resetAction(filterForm)" translate>Reset</button>
+                        </div> -->
+                <label for="type" class="control-label" translate>Brand</label>
+                <div class="block-search">
+                    <ng-select class="select2-max-width" [multiple]="true" [items]="listMaster['brands']" bindLabel="name" bindValue="brand_id"
+                        formControlName="brand_id_filter">
+                    </ng-select>
+                </div>
+                <label for="" class="control-label" translate>&nbsp;</label>
+                <button type="button" class="btn btn-primary" (click)="tableService.searchActionWithFilter()" translate>Apply</button>
+                <button type="button" class="btn btn-default" (click)="tableService.resetAction(filterForm)" translate>Reset</button>
             </form>
         </div>
     </div>
     <div class="block-content pt-3">
-        <!-- <button [disabled]="list.checklist.length == 0" (click)="createOrder()" class="btn btn-primary" translate>Create Order</button> -->
         <a class="btn btn-primary pull-right" routerLink="/product-management/mass-price"> Mass Update Price</a>
-
         <div class="table-responsive pt-3">
             <table class="table table-striped table-vcenter table-hover custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex"
                 (onEnter)="selectData($event)">
