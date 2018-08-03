@@ -302,9 +302,9 @@
                                         {{item.addresses[0].zip_code}}
                                     </td>
                                     <td>
-                                        <!-- <button type="button" class="btn btn-default" (click)="addNewSite(item)">
+                                        <button type="button" class="btn btn-default" (click)="addNewSite(item,i)">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                        </button> -->
+                                        </button>
                                         <button type="button" class="btn btn-default" (click)="removeSite(i)">
                                             <i class="fa fa-times" aria-hidden="true"></i>
                                         </button>
@@ -412,7 +412,7 @@
                                 <tr>
                                     <th> No </th>
                                     <th> Card Type <span class="text-danger">(*)</span></th>
-                                    <th> Card Name </th>
+                                    <th> Card Name <span class="text-danger">(*)</span></th>
                                     <th> Card Number  <span class="text-danger">(*)</span></th>
                                     <th> Cvv </th>
                                     <th> Expiration Month <span class="text-danger">(*)</span></th>

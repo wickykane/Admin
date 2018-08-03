@@ -21,6 +21,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
     @Input() info;
     @Input() item;
     @Input() paddr;
+    @Input() index;
 
     /**
      * Variable Declaration
@@ -85,7 +86,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             await this.commonService.getAllListBank().subscribe(res => this.listBank = res.data);
             await this.customerService.getRoute().subscribe(res => { this.routeList = res.data; });
             await this.customerService.getCreditCard().subscribe(res => { this.getListCreditCard = res.data; this.credit_cards.forEach(card => { card.listCard = res.data }); });
-            await this.setData();
+            this.setData();
         })();
     }
 
@@ -99,6 +100,9 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             this.contacts = this.item.contacts;
             this.addresses = this.item.addresses;
             this.bank_accounts = this.item.bank_accounts;
+            if(this.listCountry.length>0){
+                this.addresses['listCountry'] = this.listCountry;
+            }
             this.orderAddress(this.addresses);
         } else {
             let code = this.info.code;
@@ -131,7 +135,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
         }, {
             type: 2, country_code: null, state_id: null, listType: this.listTypeAddress, listCountry: this.listCountry, listState: [], is_default: false, name: "",address_1:"",zip_code:"",route_id:null
         }];
-
+        this.setData();
 
     }
     updatePayment(type) {
@@ -315,7 +319,13 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             //     await this.checkValidField(params);
             //     await this.closeModal(params);
             // })();
-            this.closeModal(params);
+            if(this.index!=undefined){
+                this.closeModal({params:params,index:this.index});
+            }
+            else{
+                this.closeModal(params);
+            }
+
 
         }
 
