@@ -120,7 +120,7 @@
                                             <div class='col-8 text-primary'>
                                                 <select class="form-control" id="payment_method" name="payment_method" formControlName="payment_method_id">
                                                     <!-- Workaround for IE 11 to prevent auto select first value -->
-                                                    <option *ngIf="!generalForm.value.payment_method_id" [ngValue]="null" selected></option>
+                                                    <option *ngIf="!generalForm.value.payment_method_id" [ngValue]="null" selected disabled></option>
                                                     <option *ngFor="let item of listMaster['payment_method']" [ngValue]="item.id">{{item.name}}</option>
                                                 </select>
                                             </div>
@@ -132,7 +132,7 @@
                                             <div class='col-8 text-primary'>
                                                 <select required class="form-control" formControlName="payment_term_id" (change)="changePaymentTerms();getEarlyPaymentValue()">
                                                     <!-- Workaround for IE 11 to prevent auto select first value -->
-                                                    <option *ngIf="!generalForm.value.payment_term_id" [ngValue]="null" selected></option>
+                                                    <option *ngIf="!generalForm.value.payment_term_id" [ngValue]="null" selected disabled></option>
                                                     <option *ngFor="let item of listMaster['payment_terms']" [ngValue]="item.id">{{item.des}}</option>
                                                 </select>
                                             </div>
@@ -340,12 +340,12 @@
                                         <td>{{$index+1}}</td>
                                         <td>{{item.sku}}</td>
                                         <td>{{item.des}}</td>
-                                        <td></td>
+                                        <td>{{item.condition_name}}</td>
                                         <td>{{item.qty}}</td>
                                         <td>{{item.uom_name}}</td>
                                         <td>{{item.qty}}</td>
                                         <td>{{item.price | currency:'$'}}</td>
-                                        <td></td>
+                                        <td>{{item.source_name}}</td>
                                         <td>{{item.discount_percent}}</td>
                                         <td>{{item.total_price| currency:'$'}}</td>
                                     </tr>
@@ -402,19 +402,19 @@
                                     <tr *ngIf="order_info.expires_dt!=null">
                                         <td>- Early Payment Incentive:</td>
                                         <td>
-                                            <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info.discount_percent" class="form-control" type="text" (change)="updateTotal()">
+                                            <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info.discount_percent" class="form-control" type="text" (change)="updateTotal()" readonly>
                                         </td>
                                         <td>
                                             <input class="form-control" readonly="true" [(ngModel)]="order_info.total_discount" class="form-control" value="0" type="number">
                                         </td>
                                     </tr>
-                                    <tr *ngIf="order_info.expires_dt==null">
+                                    <tr *ngIf="order_info.expires_dt!=null">
                                         <td colspan="3" class="expire-warning">Expires {{order_info.expires_dt}}</td>
                                     </tr>
-                                    <tr>
+                                    <tr *ngIf="order_info.expires_dt!=null">
                                         <td>Adjusted Total Due:</td>
                                         <!-- <td colspan="2">{{order_details['total_price'] | currency}}</td> -->
-                                        <td colspan="2">{{generalForm.value['total_due'] | currency}}</td>
+                                        <td colspan="2">{{generalForm.value['total_adj_due'] | currency}}</td>
                                     </tr>
                                 </table>
                             </div>
