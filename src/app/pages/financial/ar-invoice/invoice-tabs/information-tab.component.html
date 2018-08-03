@@ -176,7 +176,7 @@
                             <th translate>No.</th>
                             <th style="width:150px" translate>Product Code</th>
                             <th translate>Description</th>
-                            <th translate>UOM</th>
+                            <th translate>Condition</th>
                             <th translate>Order QTY</th>
                             <th translate>Invoice QTY</th>
                             <th translate>Unit Price</th>
@@ -190,11 +190,11 @@
                             <td>{{i+1}}</td>
                             <td>{{item.sku}}</td>
                             <td>{{item.name}} </td>
-                            <td></td>
+                            <td>{{item.condition_name}}</td>
                             <td>{{item.order_detail_total_qty}}</td>
                             <td>{{item.invoice_qty}}</td>
                             <td>{{item.unit_price | currency:'$'}}</td>
-                            <td></td>
+                            <td>{{item.source_name}}</td>
                             <td></td>
                             <td>{{item.final_price| currency:'$'}}</td>
                         </tr>
@@ -254,20 +254,20 @@
                     <div class="col-sm-4 text-right">
                         <label class="col-form-label control-label">{{detail['tot_amt']|currency}}</label>
                     </div>
-                    <div class="w-100"></div>
-                    <label class="col-sm-4 offset-md-4 col-form-label text-label">- Early Payment Incentive:</label>
-                    <div class="col-sm-4 text-right">
-                        <label class="col-form-label control-label">{{detail['incentive']|currency}}</label>
+                    <div class="w-100" *ngIf="detail['expires_dt']!=null"></div>
+                    <label class="col-sm-4 offset-md-4 col-form-label text-label" *ngIf="detail['expires_dt']!=null">- Early Payment Incentive:</label>
+                    <div class="col-sm-4 text-right" *ngIf="detail['expires_dt']!=null">
+                        <label class="col-form-label control-label">{{detail['total_discount']|currency}}</label>
                     </div>
-                    <div class="w-100"></div>
-                    <label class="col-sm-4 offset-md-4 col-form-label text-label"></label>
+                    <div class="w-100" *ngIf="detail['expires_dt']!=null"></div>
+                    <label class="col-sm-4 offset-md-4 col-form-label text-label" *ngIf="detail['expires_dt']!=null"></label>
                     <div class="col-sm-4 text-right">
-                        <label class="col-form-label control-label expire-warning">Expires YYYY-MM-DD</label>
+                        <label class="col-form-label control-label expire-warning" *ngIf="detail['expires_dt']!=null">Expires {{detail['expires_dt']}}</label>
                     </div>
-                    <div class="w-100"></div>
-                    <label class="col-sm-4 offset-md-4 col-form-label text-label">Adjusted Total Due:</label>
+                    <div class="w-100" *ngIf="detail['expires_dt']!=null"></div>
+                    <label class="col-sm-4 offset-md-4 col-form-label text-label" *ngIf="detail['expires_dt']!=null">Adjusted Total Due:</label>
                     <div class="col-sm-4 text-right">
-                        <label class="col-form-label control-label">{{detail['tot_amt']|currency}}</label>
+                        <label class="col-form-label control-label" *ngIf="detail['expires_dt']!=null">{{detail['total_adj_due']|currency}}</label>
                     </div>
                     <div class="w-100"></div>
                     <label class="col-sm-4 offset-md-4 col-form-label text-label">Paid Amount:</label>
