@@ -399,7 +399,7 @@
                                         <td>{{generalForm.value['total_due'] | currency}}</td>
                                         <!-- <td>{{order_details['total_price'] | currency}}</td> -->
                                     </tr>
-                                    <tr *ngIf="order_info.expires_dt==null">
+                                    <tr *ngIf="order_info.expires_dt!=null">
                                         <td>- Early Payment Incentive:</td>
                                         <td>
                                             <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info.discount_percent" class="form-control" type="text" (change)="updateTotal()">
