@@ -98,5 +98,8 @@ export class FinancialService {
         const url = `ar-invoice/set-early-payment-value?issue_dt=${issue_dt}&payment_term_id=${payment_term_id}&total_due=${total_due}`;
         return this.API.get(url);
     }
-
+    printPDF(id) {
+        const url = 'ar-invoice/export-invoice/' + id;
+        return url;
+    }
 }

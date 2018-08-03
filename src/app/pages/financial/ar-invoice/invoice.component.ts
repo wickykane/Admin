@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FinancialService } from '../financial.service';
 import { TableService } from './../../../services/table.service';
 
+import { environment } from '../../../../environments/environment';
 import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -212,6 +213,12 @@ export class InvoiceComponent implements OnInit {
     convertStatus(id, key) {
         const stt = this.listMaster[key].find(item => item.id === id);
         return stt.name;
+    }
+    printPDF(id) {
+        const path = 'ar-invoice/export-invoice/';
+        const url = `${environment.api_url}${path}${id}`;
+        window.open( url, '_blank');
+        window.close( );
     }
 
     cancelInvoice(id?) {
