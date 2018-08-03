@@ -401,7 +401,6 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         var countCode, textCode;
         this.customerService.generateSiteCode().subscribe(res => {
             try {
-                console.log('start');
                 countCode = Number(res.data.CP.no);
                 textCode = res.data.CP.text;
                 const modalRef = this.modalService.open(SiteModalComponent, { size: 'lg' });

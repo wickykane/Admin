@@ -26,13 +26,13 @@
                         <div class="form-group row">
                             <label for="inputPassword" class="col-sm-4 col-form-label">Phone</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" name="phone" formControlName="phone">
+                                <input type="text" class="form-control" (keypress)="isNumberKeyC($event)" name="phone" formControlName="phone">
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4" *ngIf="generalForm.value.buyer_type == 'PS'">
                         <div class="form-group row">
-                            <label for="credit_limit" class="col-sm-4 col-form-label">Credit Limit</label>
+                            <label for="credit_limit" class="col-sm-4 col-form-label">Credit Limit <span class="text-danger">(*)</span></label>
                             <div class="col-sm-8">
                                 <input type="text" (keypress)="isNumberKey($event)" class="form-control" name="credit_limit" formControlName="credit_limit">
                             </div>
@@ -97,7 +97,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'CP'">
-                            <label for="credit_limit" class="col-sm-4 col-form-label">Credit Limit</label>
+                            <label for="credit_limit" class="col-sm-4 col-form-label">Credit Limit <span class="text-danger">(*)</span></label>
                             <div class="col-sm-8">
                                 <input type="text" (keypress)="isNumberKey($event)" class="form-control" name="credit_limit" formControlName="credit_limit">
                             </div>
@@ -137,7 +137,7 @@
                             </div>
                         </div>
                         <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'PS'">
-                            <label for="password" class="col-sm-4 col-form-label">Password</label>
+                            <label for="password" class="col-sm-4 col-form-label">Password </label>
                             <div class="col-sm-8">
                                 <input type="password" class="form-control" name="pwd" formControlName="password">
                             </div>
@@ -169,15 +169,15 @@
                                 <tr>
                                     <th> No </th>
                                     <th> Type </th>
-                                    <th> Name </th>
-                                    <th> Country </th>
-                                    <th> Address 1 </th>
+                                    <th> Name <span class="text-danger"> (*)</span></th>
+                                    <th> Country <span class="text-danger"> (*)</span> </th>
+                                    <th> Address 1 <span class="text-danger"> (*)</span></th>
                                     <th> Address 2 </th>
-                                    <th> City </th>
-                                    <th> State </th>
-                                    <th> Zip Code </th>
+                                    <th> City <span class="text-danger"> (*)</span></th>
+                                    <th> State <span class="text-danger"> (*)</span></th>
+                                    <th> Zip Code <span class="text-danger"> (*)</span></th>
                                     <th>Default</th>
-                                    <th> Route </th>
+                                    <th> Route  <span class="text-danger">(*)</span></th>
                                     <th> Action </th>
                                 </tr>
                             </thead>
@@ -194,7 +194,7 @@
                                         <input type="text" class="form-control" name="name" [(ngModel)]="item.name">
                                     </td>
                                     <td>
-                                        <select class="form-control" name="country_code" [(ngModel)]="item.country_code" (change)="changeCountry(item)">
+                                        <select class="form-control" name="country_code" [(ngModel)]="item.country_code" (change)="checkIsDefault($event, i);changeCountry(item)">
                                             <option value="null" selected>--Select--</option>
                                             <option *ngFor="let i of item.listCountry" [ngValue]="i.cd">{{i.name}}</option>
                                         </select>
@@ -284,22 +284,22 @@
                                         {{item.site_name}}
                                     </td>
                                     <td>
-                                        {{item.country}}
+                                        {{item.addresses[0].country_name}}
                                     </td>
                                     <td>
-                                        {{item.address_1}}
+                                        {{item.addresses[0].address_1}}
                                     </td>
                                     <td>
-                                        {{item.address_2}}
+                                        {{item.addresses[0].address_2}}
                                     </td>
                                     <td>
-                                        {{item.city_name}}
+                                        {{item.addresses[0].city}}
                                     </td>
                                     <td>
                                         {{item.state}}
                                     </td>
                                     <td>
-                                        {{item.zip_code}}
+                                        {{item.addresses[0].zip_code}}
                                     </td>
                                     <td>
                                         <!-- <button type="button" class="btn btn-default" (click)="addNewSite(item)">
@@ -339,12 +339,12 @@
                             <thead>
                                 <tr>
                                     <th> No </th>
-                                    <th> Bank Name </th>
+                                    <th> Bank Name <span class="text-danger">(*)</span></th>
                                     <th> SWIFT </th>
-                                    <th> Branch </th>
+                                    <th> Branch <span class="text-danger">(*)</span></th>
                                     <th> Address </th>
-                                    <th> Account Name </th>
-                                    <th> Account No </th>
+                                    <th> Account Name <span class="text-danger">(*)</span></th>
+                                    <th> Account No <span class="text-danger">(*)</span></th>
                                     <th> IBAN </th>
                                     <th> Action </th>
                                 </tr>
@@ -411,12 +411,12 @@
                             <thead>
                                 <tr>
                                     <th> No </th>
-                                    <th> Card Type </th>
+                                    <th> Card Type <span class="text-danger">(*)</span></th>
                                     <th> Card Name </th>
-                                    <th> Card Number </th>
+                                    <th> Card Number  <span class="text-danger">(*)</span></th>
                                     <th> Cvv </th>
-                                    <th> Expiration Month</th>
-                                    <th> Expiration Year</th>
+                                    <th> Expiration Month <span class="text-danger">(*)</span></th>
+                                    <th> Expiration Year <span class="text-danger">(*)</span></th>
                                     <th> Action </th>
                                 </tr>
                             </thead>
@@ -546,13 +546,13 @@
                             <thead>
                                 <tr>
                                     <th> No </th>
-                                    <th> Name </th>
+                                    <th> Name <span class="text-danger">(*)</span></th>
                                     <th> Title </th>
                                     <th> Phone </th>
                                     <th> Fax </th>
-                                    <th> Email </th>
-                                    <th> Username </th>
-                                    <th> Password </th>
+                                    <th> Email <span class="text-danger">(*)</span></th>
+                                    <th> Username</th>
+                                    <th> Password</th>
                                     <th> Action </th>
                                 </tr>
                             </thead>

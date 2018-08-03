@@ -234,7 +234,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     }
 
     changeBank(item) {
-        console.log(item);
+
         item.bank_swift = this.listBank.map(x => {
             if (item.bank_id === x.id) {
                 return x.swift;
@@ -368,8 +368,8 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
                         if (!this.helper.isEmptyObject(res)) {
                             this.sites.push(res);
                         }
+                        console.log(this.sites);
                     }
-                    console.log(this.sites);
                 });
                 modalRef.componentInstance.info = {
                     parent_company_name: this.generalForm.value.company_name,
@@ -434,6 +434,22 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
             if ((params['credit_limit'] + ' ').indexOf('.') >= 0) {
                 return this.toastr.error("The credit limit is invalid data");
             }
+            // var isFieldRequired = false;
+            // if((params['first_name'] == null|| params['first_name'] == '' &&params['buyer_type'] == 'PS')){
+            //     this.toastr.error("The first name is required");
+            //     isFieldRequired = true;
+            // }
+            // if((params['last_name'] == null|| params['last_name'] == '' &&params['buyer_type'] == 'PS')){
+            //     this.toastr.error("The last name is required");
+            //     isFieldRequired = true;
+            // }
+            // if((params['email'] == null|| params['email'] == '' &&params['buyer_type'] == 'PS')){
+            //     this.toastr.error("The email is required");
+            //     isFieldRequired = true;
+            // }
+            // if(isFieldRequired == true){
+            //     return true;
+            // }
             this.customerService.createCustomer(params).subscribe(
                 res => {
                     console.log(res);
@@ -453,6 +469,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
                 });
 
         }
+
         // this.contacts.forEach(obj => {
         //     obj['pwd_cfrm'] = obj.pwd;
         // });
@@ -527,5 +544,4 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         // }
 
     }
-
 }
