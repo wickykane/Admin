@@ -43,6 +43,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
     public flagAddress: boolean;
     public flagAccount: boolean;
     public flagContact: boolean;
+    public flagCreditCard = false;
 
     hotkeyCtrlLeft: Hotkey | Hotkey[];
     hotkeyCtrlRight: Hotkey | Hotkey[];
