@@ -104,7 +104,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             if(this.listCountry.length>0){
                 this.addresses['listCountry'] = this.listCountry;
             }
-            this.orderAddress(this.addresses);
+            // this.orderAddress(this.addresses);
         } else {
             let code = this.info.code;
             code++;
@@ -163,7 +163,13 @@ export class SiteModalComponent implements OnInit, OnDestroy {
     }
     changeState(v, item) {
         item.listState.forEach(element => {
-            element.id == v && (item.state_name = element.name);
+            if(element.id == item.state_id){
+                item.state_name = element.name
+            }
+            else{
+                item.state_name = "";
+            }
+          
         });
     }
     changeBank(item) {

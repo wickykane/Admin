@@ -130,7 +130,7 @@
                                         <ng-container *ngIf="item.apply_for == '1'">All Sub Categories</ng-container>
                                     </td>
                                     <td>
-                                        <input type="number" class="form-control" name="discount" [(ngModel)]="item.discount">
+                                        <input type="number" OnlyNumber="true" class="form-control" name="discount" [(ngModel)]="item.discount">
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-default" (click)="removeLine(i, item)">
