@@ -14,6 +14,7 @@
                         <th>Status</th>
                         <th>Created On</th>
                         <th>Updated On</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
@@ -27,7 +28,11 @@
                         </td>
                         <td>{{item.created_dt}}</td>
                         <td>{{item.updated_dt}}</td>
-
+                        <td>
+                          <button type="button" class="btn btn-link" [routerLink]="['/admin-panel/discount-category/edit/', item.id]">
+                              <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                          </button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
