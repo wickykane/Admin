@@ -389,7 +389,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     }
 
     //  add new Site
-    addNewSite() {
+    addNewSite(item?,index?) {
         var k = ['name', 'country_code', 'address_1', 'city', 'state_id', 'zip_code'];
         for (let i = 0; i < this.addresses.length; i++) {
             for (let j = 0; j < k.length; j++) {
@@ -404,12 +404,20 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                 countCode = Number(res.data.CP.no);
                 textCode = res.data.CP.text;
                 const modalRef = this.modalService.open(SiteModalComponent, { size: 'lg' });
-
+                modalRef.componentInstance.item = item;
+                modalRef.componentInstance.index = index;
                 modalRef.componentInstance.paddr = this.addresses;
                 modalRef.result.then(res => {
+                    if( res['index']!=undefined){
+                        this.sites[res.index]= res.params;
+                    }
+                    else{
+
+                    
                     if (!this.helper.isEmptyObject(res)) {
                         this.sites.push(res);
                     }
+                }
                 });
                 modalRef.componentInstance.info = {
                     parent_company_name: this.generalForm.value.company_name,

@@ -326,6 +326,9 @@
                                         {{item.addresses[0].zip_code}}
                                     </td>
                                     <td>
+                                            <button type="button" class="btn btn-default" (click)="addNewSite(item,i)">
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                            </button>
                                         <button [disabled]="item.id != null" type="button" class="btn btn-default" (click)="removeSite(i)">
                                             <i class="fa fa-times" aria-hidden="true"></i>
                                         </button>
