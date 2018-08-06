@@ -80,7 +80,6 @@ export class ItemListComponent implements OnInit {
     ngOnInit() {
         console.log(this.filterForm);
         //  Init Fn
-        this.listMaster['certification_partNumber'] = [{ code: 'Y', value: 'Yes' }, { code: 'N', value: 'No' }];
         this.getListWarehouse();
         this.getListReference();
     }
@@ -104,6 +103,7 @@ export class ItemListComponent implements OnInit {
                 this.listMaster['models'] = res.data.models;
                 this.listMaster['years'] = res.data.years.map((e) => ({ id: e, name: e }));
                 this.listMaster['make'] = res.data.makes;
+                this.listMaster['certification_partNumber'] = res.data.certification;
             } catch (e) {
                 console.log(e.message);
             }
