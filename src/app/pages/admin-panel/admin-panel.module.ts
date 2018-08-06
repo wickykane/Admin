@@ -12,6 +12,7 @@ import { BankModalComponent } from './bank/modal/bank.modal';
 import { BranchModalComponent } from './bank/modal/branch.modal';
 import { DiscountCategoryComponent } from './discount-category/discount-category.component';
 import { DiscountCategoryCreateComponent } from './discount-category/discount-category.create.component';
+import { DiscountCategoryEditComponent } from './discount-category/discount-category.edit.component';
 
 import { DiscountCloneComponent } from './discount/discount-clone.component';
 import { DiscountCreateComponent } from './discount/discount-create.component';
@@ -93,6 +94,7 @@ import { CKEditorModule } from 'ng2-ckeditor';
         ReturnReasonComponent,
         DiscountCategoryComponent,
         DiscountCategoryCreateComponent,
+        DiscountCategoryEditComponent,
         PayTermCreateComponent,
         InsuranceComponent,
         InsuranceBranchComponent,
