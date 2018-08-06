@@ -328,7 +328,7 @@ export class InvoiceCreateComponent implements OnInit {
     getListPaymentTerm() {
         this.financialService.getListPaymentTerm().subscribe(res => {
             try {
-                this.listMaster['payment_terms'] = res.data.rows;
+                this.listMaster['payment_terms'] = res.data;
             } catch (e) {
                 console.log(e);
             }
