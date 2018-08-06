@@ -50,7 +50,7 @@ export class PaymentTermComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.listMaster['status'] = [{ key: 0, value: 'In Active' }, { key: 1, value: 'Active' }];
+    this.listMaster['status'] = [{ key: '0', value: 'In Active' }, { key: '1', value: 'Active' }];
     this.getList();
   }
 
