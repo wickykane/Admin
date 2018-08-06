@@ -14,8 +14,10 @@ import { EPIPolicyDetailComponent } from './epi-policy/epi-policy-detail.compone
 import { EPIPolicyComponent } from './epi-policy/epi-policy.component';
 import { InsuranceBranchComponent } from './insurance-company/branch/branch.component';
 import { InsuranceComponent } from './insurance-company/insurance.component';
+import { InvoiceConfigComponent } from './invoice-config/invoice-config.component';
 import { LateFeePolicyDetailComponent } from './late-fee-policy/late-fee-policy-detail.component';
 import { LateFeePolicyComponent } from './late-fee-policy/late-fee-policy.component';
+import { LedgerComponent } from './ledger/ledger.component';
 import { PayTermCreateComponent } from './payterm/payterm-create.component';
 import { PaymentTermComponent } from './payterm/payterm.component';
 import { ReturnReasonCreateComponent } from './return-reason/return-reason-create.component';
@@ -29,7 +31,6 @@ import { WarehouseEditComponent } from './warehouse/warehouse-edit.component';
 import { WarehouseComponent } from './warehouse/warehouse.component';
 import { WorkFlowComponent } from './work-flow/work-flow.component';
 import { WorkFlowEditComponent } from './work-flow/work-flow.edit.component';
-import { InvoiceConfigComponent } from './invoice-config/invoice-config.component';
 
 const routes: Routes = [
     {
@@ -177,6 +178,10 @@ const routes: Routes = [
     {
         path: 'invoice-config',
         component: InvoiceConfigComponent
+    },
+    {
+        path: 'ledger',
+        component: LedgerComponent
     }
 ];
 
@@ -184,4 +189,4 @@ const routes: Routes = [
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule]
 })
-export class AdminPanelRoutingModule {}
+export class AdminPanelRoutingModule { }

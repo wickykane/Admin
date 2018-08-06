@@ -1,0 +1,55 @@
+.button-group {
+    padding: 15px 0;
+    .btn-custom {
+        border-radius: 20px !important;
+        color: #ffffff;
+        width: 150px;
+        margin-bottom: 5px;
+    }
+    .btn-orange {
+        background-color: #e48600;
+    }
+    .btn-green {
+        background-color: #45c636;
+        width: 120px;
+    }
+}
+
+.parent-node {
+    list-style: none;
+    padding-left: 15px;
+    .child-node {
+        cursor: pointer;        
+        padding: 5px 0;
+    }
+}
+
+i.fa.blue {
+    color: #288dff;
+}
+
+.root-node {
+    padding-left: 0;
+}
+
+.fa-custom-circle {
+    font-size: 9px;
+    padding: 2px 3px;
+    border-radius: 50%;
+    margin-right: 5px;
+    border: 1px solid #ccc;
+}
+
+.ledger-container {
+    padding: 15px 30px;
+    background-color: #ffffff;
+}
+
+.title-underline {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+}
+
+.block-title {
+    color: #dc3545;
+}

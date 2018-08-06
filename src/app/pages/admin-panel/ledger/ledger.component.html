@@ -1,0 +1,29 @@
+<div [@routerTransition]>
+    <app-page-header [heading]="'GENERAL LEDGER'" [icon]="'fa-th-list'"></app-page-header>
+    <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
+    <div class="block-content pd-bottom bg-gray-light">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="button-group">
+                    <button class="btn btn-custom btn-orange">Add Account Type</button>
+                    <button class="btn btn-custom btn-green">Sync to QB</button>
+                    <button class="btn btn-custom btn-default">Add Detail Type</button>
+                </div>
+                <div class="account-tree">
+                    <app-account-tree [isRoot]="true" [items]="accountList" (selectedItem)="selectItem($event)"></app-account-tree>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="ledger-container">
+                    <h5 class="title-underline">
+                        <i class="fa fa-folder blue" aria-hidden="true"></i> New Account Type
+                    </h5>
+                    <div>
+                        <h3 class="block-title text-uppercase">General Information</h3>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
