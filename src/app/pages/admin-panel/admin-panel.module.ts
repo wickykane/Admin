@@ -54,6 +54,8 @@ import { SendSampleModalContent } from './invoice-config/modals/send-sample/send
 import { EmailEditorTabComponent } from './invoice-config/tabs/editor/email-editor-tab.component';
 import { EmailPreviewTabComponent } from './invoice-config/tabs/preview/email-preview-tab.component';
 
+import { TaxTypesComponent } from './tax-types/tax-types.component';
+
 import { CommonService, TableService } from '../../services/index';
 import {
     CommonShareModule,
@@ -116,7 +118,8 @@ import { CKEditorModule } from 'ng2-ckeditor';
         EmailTemplateModalContent,
         SendSampleModalContent,
         EmailEditorTabComponent,
-        EmailPreviewTabComponent
+        EmailPreviewTabComponent,
+        TaxTypesComponent
     ],
     entryComponents: [
         BankModalComponent,
