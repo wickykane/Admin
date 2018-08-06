@@ -84,7 +84,7 @@ export class InvoiceCreateComponent implements OnInit {
         discount_percent: 0,
         vat_percent: 0,
         shipping_cost: 0,
-        expires_dt: ''
+        expires_dt: null
     };
 
     public list = {
@@ -142,6 +142,7 @@ export class InvoiceCreateComponent implements OnInit {
             'discount_percent': [null],
             'tax_percent': [null],
             'total_due': [null],
+            'total_adj_due': [null],
             'discount_amount': [null],
             'tax_amount': [null],
             'address': [null],
@@ -183,6 +184,7 @@ export class InvoiceCreateComponent implements OnInit {
         this.copy_customer = { ...this.copy_customer, ...this.customer };
         this.generalForm.controls['inv_dt'].valueChanges.debounceTime(300).subscribe(data => {
             this.getInvoiceDueDate(this.generalForm.value['payment_term_range']);
+            this.getEarlyPaymentValue();
         });
     }
 
@@ -233,6 +235,7 @@ export class InvoiceCreateComponent implements OnInit {
                             discount_percent: this.invoice_details['dsct_pct'],
                             tax_percent: this.invoice_details['tax_pct'],
                             total_due: this.invoice_details['tot_amt'],
+                            total_adj_due: this.invoice_details['tot_amt'],
                             discount_amount: this.invoice_details['dsct_amt'],
                             tax_amount: this.invoice_details['tax_amt']
                         });
@@ -268,13 +271,20 @@ export class InvoiceCreateComponent implements OnInit {
         const issue_dt = this.generalForm.get('inv_dt').value;
         const payment_term_id = this.generalForm.get('payment_term_id').value;
         const total_due = this.generalForm.get('total_due').value;
-        this.financialService.getEarlyPaymentValue(issue_dt, payment_term_id, total_due).subscribe(res => {
-            if (res.data) {
-               this.order_info.discount_percent = res.data.percent;
-               this.order_info.total_discount = res.data.value;
-               this.order_info.expires_dt = res.data.expires_dt;
-            }
-        });
+        if (issue_dt && payment_term_id && total_due ) {
+            this.financialService.getEarlyPaymentValue(issue_dt, payment_term_id, total_due).subscribe(res => {
+                if (res.data) {
+                   this.order_info.discount_percent = res.data.percent;
+                   this.order_info.total_discount = res.data.value;
+                   this.order_info.expires_dt = res.data.expires_dt;
+                   if (this.order_info.total_discount > 0 ) {
+                    //    console.log(this.generalForm.get('total_due').value - this.order_info.total_discount);
+                       const recalc = this.generalForm.get('total_due').value - this.order_info.total_discount;
+                       this.generalForm.get('total_adj_due').patchValue(recalc);
+                   }
+                }
+            });
+        }
     }
 
     getOrderByCustomerId(company_id) {
@@ -318,7 +328,7 @@ export class InvoiceCreateComponent implements OnInit {
     getListPaymentTerm() {
         this.financialService.getListPaymentTerm().subscribe(res => {
             try {
-                this.listMaster['payment_terms'] = res.data.rows;
+                this.listMaster['payment_terms'] = res.data;
             } catch (e) {
                 console.log(e);
             }
@@ -643,6 +653,7 @@ export class InvoiceCreateComponent implements OnInit {
         const sub_after_discount = this.order_info.sub_total - this.order_info.total_discount;
         this.order_info['vat_percent_amount'] = parseFloat((sub_after_discount * Number(this.order_info['alt_vat_percent']) / 100).toFixed(2));
         this.order_info.total = this.order_info.sub_total - this.order_info.total_discount + Number(this.order_info['shipping_cost']) + this.order_info['vat_percent_amount'] - this.promotionList['total_invoice_discount'];
+        this.generalForm.get('total_adj_due').patchValue( this.generalForm.get('total_due').value - this.order_info.total_discount);
     }
 
     numberMaskObject(max?) {

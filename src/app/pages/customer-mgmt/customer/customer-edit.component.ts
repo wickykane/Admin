@@ -255,6 +255,15 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         if (e.shiftKey) return false;
         return true;
     }
+    isNumberKeyC(evt) {
+        var e = evt || window.event; // for trans-browser compatibility
+        var charCode = e.which || e.keyCode;
+        // if (charCode == 46 && !this.hasDot) { this.hasDot = true; return true; }
+        if (charCode > 31 && (charCode < 47 || charCode > 57))
+            return false;
+        if (e.shiftKey) return false;
+        return true;
+    }
     private orderAddress(address) {
         var tmp = [];
         var arr = [4, 3, 1, 2];
@@ -380,7 +389,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     }
 
     //  add new Site
-    addNewSite() {
+    addNewSite(item?,index?) {
         var k = ['name', 'country_code', 'address_1', 'city', 'state_id', 'zip_code'];
         for (let i = 0; i < this.addresses.length; i++) {
             for (let j = 0; j < k.length; j++) {
@@ -392,16 +401,23 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         var countCode, textCode;
         this.customerService.generateSiteCode().subscribe(res => {
             try {
-                console.log('start');
                 countCode = Number(res.data.CP.no);
                 textCode = res.data.CP.text;
                 const modalRef = this.modalService.open(SiteModalComponent, { size: 'lg' });
-
+                modalRef.componentInstance.item = item;
+                modalRef.componentInstance.index = index;
                 modalRef.componentInstance.paddr = this.addresses;
                 modalRef.result.then(res => {
+                    if( res['index']!=undefined){
+                        this.sites[res.index]= res.params;
+                    }
+                    else{
+
+                    
                     if (!this.helper.isEmptyObject(res)) {
                         this.sites.push(res);
                     }
+                }
                 });
                 modalRef.componentInstance.info = {
                     parent_company_name: this.generalForm.value.company_name,
