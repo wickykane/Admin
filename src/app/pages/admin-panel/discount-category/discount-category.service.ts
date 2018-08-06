@@ -24,4 +24,14 @@ export class DiscountCategoryService {
         const url = 'category/discount/create';
         return this.API.post(url, params);
     }
+
+    getDetailDiscountCategory(id) {
+        const url = 'category/discount/detail/' + id;
+        return this.API.get(url);
+    }
+
+    updatelDiscountCategory(id, params) {
+        const url = 'category/discount/update/' + id;
+        return this.API.put(url, params);
+    }
 }
