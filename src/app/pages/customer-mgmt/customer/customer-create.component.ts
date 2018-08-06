@@ -234,7 +234,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     }
 
     changeBank(item) {
-        console.log(item);
+
         item.bank_swift = this.listBank.map(x => {
             if (item.bank_id === x.id) {
                 return x.swift;
@@ -334,9 +334,18 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         if (e.shiftKey) return false;
         return true;
     }
+    isNumberKeyC(evt) {
+
+        var e = evt || window.event; // for trans-browser compatibility
+        var charCode = e.which || e.keyCode;
+        if (charCode > 31 && (charCode < 47 || charCode > 57))
+            return false;
+        if (e.shiftKey) return false;
+        return true;
+    }
     //  add new Site
 
-    addNewSite(item?) {
+    addNewSite(item?,index?) {
         var k = ['name', 'country_code', 'address_1', 'city', 'state_id', 'zip_code'];
         for (let i = 0; i < this.addresses.length; i++) {
             for (let j = 0; j < k.length; j++) {
@@ -353,13 +362,21 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
                 textCode = res.data.CP.text;
                 const modalRef = this.modalService.open(SiteModalComponent, { size: 'lg' });
                 modalRef.componentInstance.item = item;
+                modalRef.componentInstance.index = index;
                 modalRef.componentInstance.paddr = this.addresses;
                 modalRef.result.then(res => {
-                    if (!this.helper.isEmptyObject(res)) {
+                    if( res['index']!=undefined){
+                        this.sites[res.index]= res.params;
+                    }
+                    else{
                         if (!this.helper.isEmptyObject(res)) {
-                            this.sites.push(res);
+                            if (!this.helper.isEmptyObject(res)) {
+                                this.sites.push(res);
+                            }
+                            console.log(this.sites);
                         }
                     }
+
                 });
                 modalRef.componentInstance.info = {
                     parent_company_name: this.generalForm.value.company_name,
@@ -424,6 +441,22 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
             if ((params['credit_limit'] + ' ').indexOf('.') >= 0) {
                 return this.toastr.error("The credit limit is invalid data");
             }
+            // var isFieldRequired = false;
+            // if((params['first_name'] == null|| params['first_name'] == '' &&params['buyer_type'] == 'PS')){
+            //     this.toastr.error("The first name is required");
+            //     isFieldRequired = true;
+            // }
+            // if((params['last_name'] == null|| params['last_name'] == '' &&params['buyer_type'] == 'PS')){
+            //     this.toastr.error("The last name is required");
+            //     isFieldRequired = true;
+            // }
+            // if((params['email'] == null|| params['email'] == '' &&params['buyer_type'] == 'PS')){
+            //     this.toastr.error("The email is required");
+            //     isFieldRequired = true;
+            // }
+            // if(isFieldRequired == true){
+            //     return true;
+            // }
             this.customerService.createCustomer(params).subscribe(
                 res => {
                     console.log(res);
@@ -443,6 +476,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
                 });
 
         }
+
         // this.contacts.forEach(obj => {
         //     obj['pwd_cfrm'] = obj.pwd;
         // });
@@ -517,5 +551,4 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         // }
 
     }
-
 }

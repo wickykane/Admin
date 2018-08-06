@@ -21,6 +21,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
     @Input() info;
     @Input() item;
     @Input() paddr;
+    @Input() index;
 
     /**
      * Variable Declaration
@@ -37,8 +38,8 @@ export class SiteModalComponent implements OnInit, OnDestroy {
     public listCountry: any = [];
     public listBank: any = [];
     public routeList = [];
-
-
+    public credit_cards = [];
+    public getListCreditCard;
     public flagAddress: boolean;
     public flagAccount: boolean;
     public flagContact: boolean;
@@ -66,7 +67,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             'credit_limit': [null],
             'credit_sts': 2,
             'sale_person_id': [null],
-            'payment_make': [null]
+            'payment_make': [null, Validators.required]
         });
 
         this.hotkeyCtrlRight = hotkeysService.add(new Hotkey('alt+r', (event: KeyboardEvent): boolean => {
@@ -84,7 +85,8 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             await this.commonService.getOrderReference().subscribe(res => this.listMaster['salePersons'] = res.data.sale_mans);
             await this.commonService.getAllListBank().subscribe(res => this.listBank = res.data);
             await this.customerService.getRoute().subscribe(res => { this.routeList = res.data; });
-            await this.setData();
+            await this.customerService.getCreditCard().subscribe(res => { this.getListCreditCard = res.data; this.credit_cards.forEach(card => { card.listCard = res.data }); });
+            this.setData();
         })();
     }
 
@@ -94,14 +96,15 @@ export class SiteModalComponent implements OnInit, OnDestroy {
     }
     setData() {
         if (this.item) {
-            console.log('3');
             this.generalForm.patchValue(this.item);
             this.contacts = this.item.contacts;
             this.addresses = this.item.addresses;
             this.bank_accounts = this.item.bank_accounts;
+            if(this.listCountry.length>0){
+                this.addresses['listCountry'] = this.listCountry;
+            }
             this.orderAddress(this.addresses);
         } else {
-            console.log('2');
             let code = this.info.code;
             code++;
             this.generalForm.patchValue({ parent_company_name: this.info.parent_company_name });
@@ -124,19 +127,23 @@ export class SiteModalComponent implements OnInit, OnDestroy {
     }
     //  change customer Type
     changeCustomerType() {
-        console.log('1');
         const tempType1 = [{ id: 4, name: 'Head Office' }];
         this.addresses = [{
-            type: 4, country_code: null, state_id: null, listType: tempType1, listCountry: this.listCountry, listState: []
+            type: 4, country_code: null, state_id: null, listType: tempType1, listCountry: this.listCountry, listState: [], name: "",address_1:"",zip_code:""
         }, {
-            type: 1, country_code: null, state_id: null, listType: this.listTypeAddress, listCountry: this.listCountry, listState: [], is_default: false
+            type: 1, country_code: null, state_id: null, listType: this.listTypeAddress, listCountry: this.listCountry, listState: [], is_default: false, name: "",address_1:"",zip_code:""
         }, {
-            type: 2, country_code: null, state_id: null, listType: this.listTypeAddress, listCountry: this.listCountry, listState: [], is_default: false
+            type: 2, country_code: null, state_id: null, listType: this.listTypeAddress, listCountry: this.listCountry, listState: [], is_default: false, name: "",address_1:"",zip_code:"",route_id:null
         }];
-
+        this.setData();
 
     }
+    updatePayment(type) {
+        if (type == "1") {
+            this.generalForm.patchValue({ payment_make: '0' });
+        }
 
+    }
     changeCountry(item) {
         item.listCountry.forEach(element => {
             element.cd == item.country_code && (item.country_name = element.name);
@@ -203,6 +210,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             for (let i = 1; i < this.addresses.length; i++) {
                 if (this.addresses[i].type == type) {
                     tmp = JSON.parse(JSON.stringify(this.addresses[i]));
+                    tmp['is_default'] = false;
                     break;
                 }
             }
@@ -230,7 +238,9 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             bank_id: null,
             branch_id: null,
             listBank: this.listBank,
-            listBranch: []
+            listBranch: [],
+            account_name:'',
+            account_no:''
         });
     }
 
@@ -249,7 +259,9 @@ export class SiteModalComponent implements OnInit, OnDestroy {
     }
     //  add new row contacts
     addNewContact() {
-        this.contacts.push({});
+        this.contacts.push({
+            name:""
+        });
     }
 
     removeContact(index) {
@@ -262,11 +274,21 @@ export class SiteModalComponent implements OnInit, OnDestroy {
         this.contacts.forEach(obj => {
             obj['pwd_cfrm'] = obj.pwd;
         });
+        if(this.generalForm.value.site_code==""){
+            return this.toastr.error('Site Code is required');
+        }
+        if(this.generalForm.value.site_name==""){
+            return this.toastr.error('Site Name is required');
+        }
+        if(this.generalForm.value.payment_make=="" || this.generalForm.value.payment_make==null){
+            return this.toastr.error('Payment Made By is required');
+        }
         if (this.generalForm.valid) {
             const params = { ...this.generalForm.value };
             params['contacts'] = this.contacts;
             params['addresses'] = this.addresses;
             params['bank_accounts'] = this.bank_accounts;
+            params['credit_cards'] = this.credit_cards;
             // params['user'] = [];
             // if (this.contacts.length > 0) {
             //     params['user'] = this.contacts;
@@ -292,13 +314,124 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             //         params['shipping'].push(obj);
             //     }
             // });
+            // this.checkValidField(params);
+            // (async () => {
+            //     await this.checkValidField(params);
+            //     await this.closeModal(params);
+            // })();
+            if(this.index!=undefined){
+                this.closeModal({params:params,index:this.index});
+            }
+            else{
+                this.closeModal(params);
+            }
 
-            this.closeModal(params);
 
         }
 
     }
-
+    checkValidField(formData) {
+        (async () => {
+            var isInvalid = false;
+            await formData['contacts'].some((item, index) => {
+                if (item.name == "") {
+                    isInvalid = true;
+                    return this.toastr.error('Contact ' + (index + 1) + ': Name is required');
+                }
+            });
+             await formData['addresses'].some((item, index) => {
+                if (item.name == "") {
+                    isInvalid = true;
+                    return this.toastr.error('Address ' + (index + 1) + ': Name is required');
+                }
+                if (item.country_code == "null") {
+                    isInvalid = true;
+                    return this.toastr.error('Address ' + (index + 1) + ': Country is required');
+                }
+                if (item.address_1 == "") {
+                    isInvalid = true;
+                    return this.toastr.error('Address ' + (index + 1) + ': Address 1 is required');
+                }
+                if (item.city == "") {
+                    isInvalid = true;
+                    return this.toastr.error('Address ' + (index + 1) + ': City is required');
+                }
+                if (item.zip_code == "") {
+                    isInvalid = true;
+                    return this.toastr.error('Address ' + (index + 1) + ': Zip Code is required');
+                }
+                if (item.state_id == null || item.state_id == "null") {
+                    isInvalid = true;
+                    return this.toastr.error('Address ' + (index + 1) + ': State is required');
+                }
+                if ((item.route_id == null || item.route_id == "null") && item.type == 2) {
+                    isInvalid = true;
+                    return this.toastr.error('Contact ' + (index + 1) + ': Route is required');
+                }
+            });
+             await formData['bank_accounts'].some((item, index) => {
+                if (item.bank_id == null || item.bank_id == 'null') {
+                    isInvalid = true;
+                    return this.toastr.error('Bank Account ' + (index + 1) + ': Bank Name is required');
+                }
+                if (item.branch_id == null || item.branch_id == 'null') {
+                    isInvalid = true;
+                    return this.toastr.error('Bank Account ' + (index + 1) + ': Branch is required');
+                }
+                if (item.account_name == "") {
+                    isInvalid = true;
+                    return this.toastr.error('Bank Account ' + (index + 1) + ': Account Name is required');
+                }
+                if (item.account_no == "") {
+                    isInvalid = true;
+                    return this.toastr.error('Bank Account ' + (index + 1) + ': Account No is required');
+                }
+            });
+             await formData['credit_cards'].some((item, index) => {
+                if (item.type == null || item.type=="null") {
+                    isInvalid = true;
+                    return this.toastr.error('CREDIT CARD ' + (index + 1) + ': Type is required');
+                }
+                if (item.name == "") {
+                    isInvalid = true;
+                    return this.toastr.error('CREDIT CARD ' + (index + 1) + ': Card Name is required');
+                }
+                if (item.no == "") {
+                    isInvalid = true;
+                    return this.toastr.error('CREDIT CARD ' + (index + 1) + ': Card Number is required');
+                }
+                if (item.expiration_month == "") {
+                    isInvalid = true;
+                    return this.toastr.error('CREDIT CARD ' + (index + 1) + ': Expiration Month is required');
+                }
+                if (item.expiration_year == "") {
+                    isInvalid = true;
+                    return this.toastr.error('CREDIT CARD ' + (index + 1) + ': Expiration Year is required');
+                }
+            });
+            if (isInvalid == false) {
+                return this.closeModal(formData);
+            }
+        })();
+    }
+    removeCreditCard(index) {
+        if (this.credit_cards[index].hasOwnProperty('id')) {
+            this.credit_cards[index].is_deleted = true;
+            return;
+        }
+        this.credit_cards.splice(index, 1);
+    }
+    addNewCreditCard() {
+        this.credit_cards.push({
+            "type": null,
+            "no": "",
+            "name": "",
+            "expiration_month": "",
+            "expiration_year": "",
+            "cvv": null,
+            listCard: this.getListCreditCard
+        });
+    }
     closeModal(data) {
         this.activeModal.close(data);
     }
@@ -309,7 +442,6 @@ export class SiteModalComponent implements OnInit, OnDestroy {
     }
 
     changePayment(e) {
-        console.log(e.target.value, this.paddr);
         let val = e.target.value;
         let flag = !1;
         if (val * 1 == 1) {
