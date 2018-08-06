@@ -166,7 +166,7 @@
                         <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'PS'">
                             <label for="password" class="col-sm-4 col-form-label">Password</label>
                             <div class="col-sm-8">
-                                <input type="password" class="form-control" name="pwd" formControlName="pwd">
+                                <input type="password" class="form-control" name="password" formControlName="password">
                             </div>
                         </div>
                     </div>
@@ -532,7 +532,7 @@
                                         <input type="text" class="form-control" name="username" [(ngModel)]="item.username">
                                     </td>
                                     <td>
-                                        <input type="password" class="form-control" name="pwd" [(ngModel)]="item.password">
+                                        <input type="password" class="form-control" name="password" [(ngModel)]="item.password">
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-default" (click)="removeContact(i)">
