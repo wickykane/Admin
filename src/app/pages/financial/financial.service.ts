@@ -72,12 +72,8 @@ export class FinancialService {
     }
 
     getListPaymentTerm() {
-        const params = {
-            page: 1,
-            length: 100
-        };
-        const url = ['payment-term'].join('/');
-        return this.API.get(url, params);
+        const url = ['payment-term?app=inv'];
+        return this.API.get(url);
     }
 
     getOrderByCustomerId(params) {
