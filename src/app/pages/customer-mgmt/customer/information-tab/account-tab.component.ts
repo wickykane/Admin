@@ -14,7 +14,7 @@ export class CustomerAccountTabComponent implements OnInit {
      */
     @Input() set listData(data) {
         if (data) {
-            this.list.accounts = data['banks'] || [];
+            this.list.accounts = data['bank_accounts'] || [];
             this.list.cards = data['credit_cards'] || [];
         }
     }
