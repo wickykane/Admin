@@ -1,5 +1,5 @@
 <div class="block anchor-scroll">
-    <app-page-header [heading]="'LIST OF UOM'" [icon]="'fa-th-list'"></app-page-header>    
+    <app-page-header [heading]="'LIST OF TAX TYPES'" [icon]="'fa-th-list'"></app-page-header>    
     <div class="block-content pd-top">
         <button [routerLink]="['/promotion/budget/create']" style="margin: 10px 0;" class="btn btn-primary" translate>Add New</button>        
         <div class="table-responsive">
@@ -12,14 +12,11 @@
                         <th  translate>Tax Rate</th>
                         <th  translate>Status</th>
                         <th  translate>Used</th>
-                        <th translate class="text-center" >Action</th>
-                       
+                        <th translate class="text-center" >Action</th>                       
                     </tr>
                 </thead>
                 <tr *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
-                    <td>
-                        {{item.cd}}
-                    </td>
+                    <td>{{item.cd}}</td>
                     <td>{{item.name}}</td>
                     <td>{{item.base_uom_name}}</td>
                     <td> {{item.qty}} </td>                   
