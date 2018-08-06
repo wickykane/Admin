@@ -91,7 +91,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             'first_name': [null],
             'last_name': [null],
             'username': [null],
-            'pwd': [null],
+            'password': [null],
             'pwd_cfrm': [null],
             'company_name': [null],
             'primary': [null],
@@ -242,7 +242,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             }
             // this.orderAddress(this.sites[i].addresses);
         }
-        this.orderAddress(this.addresses);
+        // this.orderAddress(this.addresses);
     }
 
     private hasDot = false;
@@ -446,10 +446,10 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     updateCustomer() {
         if (this.generalForm.value.buyer_type == 'CP') {
             this.contacts.forEach(obj => {
-                obj['password'] = obj.pwd;
+                obj['password'] = obj.password;
             });
             for (let i = 0; i < this.contacts.length; i++) {
-                this.contacts[i]['password'] = this.contacts[i]['pwd']
+                this.contacts[i]['password'] = this.contacts[i]['password']
 
             }
         }
