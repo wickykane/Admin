@@ -107,6 +107,17 @@ export class TaxTypesComponent implements OnInit {
       }
     });
   }
+  changeStatus(id, sts) {
+    const params = {ac: sts};
+    this.taxTypesService.changeStatus(id, params).subscribe(res => {
+      try {
+        this.toastr.success(res.message);
+        this.getList();
+      } catch (e) {
+        console.log(e);
+      }
+    });
+  }
   editTaxTypes(flag?) {
     const modalRef = this.modalService.open(TaxTypesModalComponent, { windowClass: 'md-modal' });
     modalRef.componentInstance.modalTitle = (flag) ? 'EDIT TAX TYPE' : 'CREATE NEW TAX TYPE';
