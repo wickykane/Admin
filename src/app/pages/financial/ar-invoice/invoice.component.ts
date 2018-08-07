@@ -217,13 +217,13 @@ export class InvoiceComponent implements OnInit {
     printPDF(id) {
         const path = 'ar-invoice/export-invoice/';
         const url = `${environment.api_url}${path}${id}`;
-        window.open( url, '_blank');
-        window.close( );
+        window.open(url, '_blank');
+        window.close();
     }
 
-    cancelInvoice(id?) {
-        const selectedInvoiceId = id ? id : this.list.items[this.selectedIndex].id;
-        const selectedInvoiceStatus = this.list.items[this.selectedIndex].invoice_status_id;
+    cancelInvoice(item?) {
+        const selectedInvoiceId = item.id;
+        const selectedInvoiceStatus = item.invoice_status_id;
         if (selectedInvoiceId && selectedInvoiceStatus === 1) {
             const modalRef = this.modalService.open(ConfirmModalContent);
             modalRef.componentInstance.message = 'Are you sure you want to cancel this invoice?';
