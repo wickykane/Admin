@@ -38,6 +38,15 @@ export class PartEditComponent implements OnInit {
 
     public short_des;
     public full_des;
+    public ckeConfig = {
+        height: 90,
+        language: 'en',
+        allowedContent: true,
+        toolbar: [
+            { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat'] },
+            { name: 'justify', items: ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] }
+        ]
+    };
 
     constructor(
         private fb: FormBuilder,
