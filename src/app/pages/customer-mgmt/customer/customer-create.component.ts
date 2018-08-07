@@ -413,6 +413,9 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
                 delete item.listBank;
                 delete item.listBranch;
             });
+            params['credit_cards'].forEach(res => {
+                delete res.listCard;
+            });
             params['sites'] = _.cloneDeep(this.sites);
             params['sites'].forEach(item => {
                 item.addresses.map(add => {
@@ -423,6 +426,9 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
                 item.bank_accounts.map(add => {
                     delete add.listBank;
                     delete add.listBranch;
+                });
+                item.credit_cards.map(res => {
+                    delete res.listCard;
                 });
             });
             if (params['buyer_type'] === 'CP') {
