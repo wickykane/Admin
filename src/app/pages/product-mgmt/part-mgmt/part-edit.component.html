@@ -1,218 +1,319 @@
 <div class="block anchor-scroll">
     <app-page-header [heading]="'PART MANAGEMENT'" [icon]="'fa-th-list'"></app-page-header>
     <div class="row">
-        <section class="col-md-8 information-block" *ngIf="part">
-            <fieldset class="custom-border">
-                <legend class="custom-border">GENETAL INFORMATION</legend>
-                <div class="row pl-3 pr-3 mb-3">
-                    <div class="col-md-2">
-                        <label for="" class="control-label mb-2">Part No</label>
-                        <span class="text-danger">( * )</span>
-                        <div>
-                            <span>{{part.part_no}}</span>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <label for="" class="control-label mb-2">Partlink No</label>
-                        <span class="text-danger">( * )</span>
+        <section class="col-md-9 information-block" *ngIf="part">
+            <section class="row">
+                <div class="col-md-12">
+                    <fieldset class="custom-border">
+                        <legend class="custom-border">GENERAL INFORMATION</legend>
+                        <div class="row pl-3 pr-3 mb-3">
+                            <div class="col-md-2">
+                                <label for="" class="control-label mb-2">Part No</label>
+                                <span class="text-danger">( * )</span>
+                                <div>
+                                    <span>{{part.part_no}}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="" class="control-label mb-2">Partlink No</label>
+                                <span class="text-danger">( * )</span>
 
-                        <div>
-                            <span>{{part.partlinks_no}}</span>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <label for="" class="control-label mb-2">Product Description</label>
-                        <span class="text-danger">( * )</span>
-                        <div>
-                            <span>{{part.des}}</span>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <label for="" class="control-label mb-2">Category</label>
-                        <span class="text-danger">( * )</span>
-                        <div>
-                            <span>{{part.ctgry_name}}</span>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <label for="" class="control-label mb-2">Sub Category</label>
-                        <span class="text-danger">( * )</span>
-                        <div>
-                            <span>{{part.sub_ctgry_name}}</span>
-                        </div>
-                    </div>
-                    <div class="col-md-1">
-                        <label for="" class="control-label mb-2">UOM</label>
-                        <span class="text-danger">( * )</span>
-                        <div>
-                            <span>{{part.uom_name}}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="row pl-3 pr-3">
-                    <div class="col-md-2">
-                        <label for="" class="control-label mb-2">Make</label>
-                        <span class="text-danger">( * )</span>
-                        <div>
-                            <span>{{part.make_name}}</span>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <label for="" class="control-label mb-2">Model</label>
-                        <div>
-                            <span>{{part.model_name}}</span>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <label for="" class="control-label mb-2">Year From</label>
-                        <span class="text-danger">( * )</span>
-                        <div>
-                            <span>{{part.yr_from}}</span>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <label for="" class="control-label mb-2">Year To</label>
-                        <span class="text-danger">( * )</span>
-                        <div>
-                            <span>{{part.yr_to}}</span>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <label for="" class="control-label mb-2">Brand</label>
-                        <div>
-                            <span>{{part.brand_name}}</span>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <label for="" class="control-label mb-2">Certification</label>
-                        <div>
-                            <span>{{part.cert_name}}</span>
-                        </div>
-                    </div>
-                </div>
-            </fieldset>
-            <fieldset class="custom-border">
-                <legend class="custom-border">SHIPPING PACKAGE INFORMATION</legend>
-                <div class="row pl-3 pr-3">
-                    <div class="col-md-2">
-                        <label for="" class="control-label mb-2">Length (m)</label>
-                        <div>
-                            <span>{{part.len}}</span>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <label for="" class="control-label mb-2">Width (m)</label>
-
-                        <div>
-                            <span>{{part.width}}</span>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <label for="" class="control-label mb-2">Height (m)</label>
-                        <div>
-                            <span>{{part.height}}</span>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <label for="" class="control-label mb-2">Volume (cbm)</label>
-                        <div>
-                            <span>{{part.vol}}</span>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <label for="" class="control-label mb-2">Gross Weight</label>
-                        <div>
-                            <span>{{part.wt}}</span>
-                        </div>
-                    </div>
-                </div>
-            </fieldset>
-            <fieldset class="custom-border">
-                <legend class="custom-border">SELLING INFORMATION</legend>
-                <form class="form-horizontal" [formGroup]="generalForm">
-
-                    <div class="row pl-3 pr-3">
-                        <div class="col-md-2">
-                            <label for="" class="control-label mb-2">Quotable</label>
-                            <div>
-                                <!-- <span>{{part.is_quotable == 1 ? 'Yes' : 'No'}}</span> -->
-                                <select formControlName="is_quotable" class="form-control">
-                                    <option value="0" selected="true" translate>No</option>
-                                    <option value="1" translate>Yes</option>
-                                </select>
+                                <div>
+                                    <span>{{part.partlinks_no}}</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <label for="" class="control-label mb-2">Show Price on Store</label>
-                            <div>
-                                <!-- <span>{{part.is_show_price == 1 ? 'Yes' : 'No'}}</span> -->
-                                <select formControlName="is_show_price" class="form-control">
-                                    <option value="0" selected="true" translate>No</option>
-                                    <option value="1" translate>Yes</option>
-                                </select>
+                            <div class="col-md-3">
+                                <label for="" class="control-label mb-2">Product Description</label>
+                                <span class="text-danger">( * )</span>
+                                <div>
+                                    <span>{{part.des}}</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-2">
-                            <label for="" class="control-label mb-2">Cost Price</label>
-                            <span class="text-danger">( * )</span>
-                            <div>
-                                <span>{{part.cost_price}}</span>
+                            <div class="col-md-2">
+                                <label for="" class="control-label mb-2">Category</label>
+                                <span class="text-danger">( * )</span>
+                                <div>
+                                    <span>{{part.ctgry_name}}</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-2">
-                            <label for="" class="control-label mb-2">OEM Price</label>
-                            <span class="text-danger">( * )</span>
-                            <div>
-                                <span>{{part.oem_price}}</span>
+                            <div class="col-md-2">
+                                <label for="" class="control-label mb-2">Sub Category</label>
+                                <span class="text-danger">( * )</span>
+                                <div>
+                                    <span>{{part.sub_ctgry_name}}</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-2">
-                            <label for="" class="control-label mb-2">Sales Price</label>
-                            <span class="text-danger">( * )</span>
-                            <div class="input-group">
-                                <!-- <span>{{part.sell_price}}</span> -->
-                                <input type="text" class="form-control" formControlName="sell_price">
-                                <div class="input-group-append">
-                                    <span class="input-group-text">$</span>
+                            <div class="col-md-1">
+                                <label for="" class="control-label mb-2">UOM</label>
+                                <span class="text-danger">( * )</span>
+                                <div>
+                                    <span>{{part.uom_name}}</span>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <label for="" class="control-label mb-2">Description</label>
-                            <span class="text-danger">( * )</span>
-                            <div>
-                                <textarea rows="4" cols="50" class="form-control" formControlName="short_des" maxlength="500">
-                                </textarea>
+                        <div class="row pl-3 pr-3">
+                            <div class="col-md-2">
+                                <label for="" class="control-label mb-2">Make</label>
+                                <span class="text-danger">( * )</span>
+                                <div>
+                                    <span>{{part.make_name}}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="" class="control-label mb-2">Model</label>
+                                <div>
+                                    <span>{{part.model_name}}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="" class="control-label mb-2">Year From</label>
+                                <span class="text-danger">( * )</span>
+                                <div>
+                                    <span>{{part.yr_from}}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="" class="control-label mb-2">Year To</label>
+                                <span class="text-danger">( * )</span>
+                                <div>
+                                    <span>{{part.yr_to}}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="" class="control-label mb-2">Brand</label>
+                                <div>
+                                    <span>{{part.brand_name}}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="" class="control-label mb-2">Certification</label>
+                                <div>
+                                    <span>{{part.cert_name}}</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </form>
-            </fieldset>
-            <fieldset class="custom-border">
-                <legend class="custom-border">DISCOUNT INFORMATION</legend>
-                <div class="row pl-3 pr-3">
-                    <div class="col-md-4">
-                        <label for="" class="control-label mb-2">Category Discount (%)</label>
-                        <div>
-                            <span>{{part.percent}} %</span>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="" class="control-label mb-2">Discount on Product Condition (%)</label>
-                        <div class="row" *ngFor="let item of item_condition">
-                            <div class="col-md-6">
-                                <span>{{item.name}}</span>
-                            </div>
-                            <div class="col-md-6">
-                                <span>{{item.percent}} %</span>
-                            </div>
-                        </div>
-                    </div>
-
+                    </fieldset>
                 </div>
-            </fieldset>
+                <div class="col-md-5">
+                    <fieldset class="custom-border height-100">
+                        <legend class="custom-border">SHIPPING PACKAGE INFORMATION</legend>
+                        <form class="form-horizontal" [formGroup]="generalForm">
+                            <div class="row pl-3 pr-3 mb-3">
+                                <div class="col-md-4">
+                                    <label for="" class="control-label mb-2">Length (m)</label>
+                                    <div>
+                                        <span>{{part.len}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="" class="control-label mb-2">Width (m)</label>
+
+                                    <div>
+                                        <span>{{part.width}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="" class="control-label mb-2">Height (m)</label>
+                                    <div>
+                                        <span>{{part.height}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row pl-3 pr-3">
+                                <div class="col-md-4">
+                                    <label for="" class="control-label mb-2">Volume (cbm)</label>
+                                    <div>
+                                        <span>{{part.vol}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="" class="control-label mb-2">Gross Weight</label>
+                                    <div>
+                                        <span>{{part.wt}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="" class="control-label mb-2">Freight Class <span class="text-danger">( * )</span></label>
+                                    <div>
+                                        <select formControlName="freight_class" class="form-control">
+                                        <option value="null" selected="true" translate disabled>--Select--</option>
+                                        <option *ngFor="let de of listMaster['freight_class']" [ngValue]="de">{{de}}</option>
+                                      </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </fieldset>
+                </div>
+                <div class="col-md-7">
+                    <fieldset class="custom-border height-100">
+                        <legend class="custom-border">PRICING & ACCOUNT INFORMATION</legend>
+                        <form class="form-horizontal" [formGroup]="generalForm">
+
+                            <div class="row pl-3 pr-3 mb-3">
+                                <div class="col-md-3">
+                                    <label for="" class="control-label mb-2">Inventory Account</label>
+                                    <span class="text-danger">( * )</span>
+                                    <div>
+                                      <ng-select [items]="listMaster['account']" groupBy="group" formControlName="inventory_account_id" bindLabel="name" bindValue="id">
+                                        <ng-template ng-label-tmp let-item="item">
+                                          <b>{{item.name}}</b>
+                                        </ng-template>
+                                        <ng-template ng-optgroup-tmp let-item="item" let-index="index">
+                                          {{item.group}}
+                                        </ng-template>
+                                        <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                          <b>{{item.name}}</b>
+                                        </ng-template>
+                                      </ng-select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="" class="control-label mb-2">Income Account</label>
+                                    <span class="text-danger">( * )</span>
+                                    <div>
+                                      <ng-select [items]="listMaster['account']" groupBy="group" formControlName="income_account_id" bindLabel="name" bindValue="id">
+                                        <ng-template ng-label-tmp let-item="item">
+                                          <b>{{item.name}}</b>
+                                        </ng-template>
+                                        <ng-template ng-optgroup-tmp let-item="item" let-index="index">
+                                          {{item.group}}
+                                        </ng-template>
+                                        <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                          <b>{{item.name}}</b>
+                                        </ng-template>
+                                      </ng-select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="" class="control-label mb-2">Sales Price</label>
+                                    <span class="text-danger">( * )</span>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" formControlName="sell_price">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">$</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="" class="control-label mb-2">Expense Account</label>
+                                    <span class="text-danger">( * )</span>
+                                    <div>
+                                      <ng-select [items]="listMaster['account']" groupBy="group" formControlName="expense_account_id" bindLabel="name" bindValue="id">
+                                        <ng-template ng-label-tmp let-item="item">
+                                          <b>{{item.name}}</b>
+                                        </ng-template>
+                                        <ng-template ng-optgroup-tmp let-item="item" let-index="index">
+                                          {{item.group}}
+                                        </ng-template>
+                                        <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                          <b>{{item.name}}</b>
+                                        </ng-template>
+                                      </ng-select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row pl-3 pr-3 mb-3">
+                                <div class="col-md-3">
+                                    <label for="" class="control-label mb-2">Cost Price</label>
+                                    <span class="text-danger">( * )</span>
+                                    <div>
+                                        <span>{{part.cost_price}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="" class="control-label mb-2">OEM Price</label>
+                                    <span class="text-danger">( * )</span>
+                                    <div>
+                                        <span>{{part.oem_price}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="" class="control-label mb-2">Quotable</label>
+                                    <div>
+                                        <select formControlName="is_quotable" class="form-control">
+                                        <option value="0" selected="true" translate>No</option>
+                                        <option value="1" translate>Yes</option>
+                                    </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="" class="control-label mb-2">Show Price on Store</label>
+                                    <div>
+                                        <select formControlName="is_show_price" class="form-control">
+                                        <option value="0" selected="true" translate>No</option>
+                                        <option value="1" translate>Yes</option>
+                                    </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row pl-3 pr-3 mb-3">
+                                <div class="col-md-3">
+                                    <label for="is_taxable" class="control-label mb-2">Taxable Item</label>
+                                    <span class="text-danger">( * )</span>
+                                    <div>
+                                        <select formControlName="is_taxable" class="form-control">
+                                      <option value="0" selected="true" translate>No</option>
+                                      <option value="1" translate>Yes</option>
+                                  </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </fieldset>
+                </div>
+            </section>
+            <section class="row mt-15">
+              <div class="col-md-4">
+                <fieldset class="custom-border">
+                    <legend class="custom-border">DISCOUNT INFORMATION</legend>
+                    <div class="row pl-3 pr-3">
+                        <div class="col-md-12">
+                            <label for="" class="control-label mb-2">Category Discount (%)</label>
+                            <div>
+                                <span>{{part.percent}} %</span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="" class="control-label mb-2">Discount on Product Condition (%)</label>
+                        </div>
+                        <div class="col-md-12 discount-info">
+                            <div class="row" *ngFor="let item of item_condition">
+                                <div class="col-md-9">
+                                    <span>{{item.name}}</span>
+                                </div>
+                                <div class="col-md-3 text-right">
+                                    <span>{{item.percent}} %</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </fieldset>
+              </div>
+              <div class="col-md-8">
+                <fieldset class="custom-border">
+                    <legend class="custom-border">PRODUCT INFORMATION</legend>
+                    <div class="row pl-3 pr-3">
+                        <div class="col-md-12">
+                            <label for="" class="control-label mb-2">Short Description   <span class="text-danger">( * )</span></label>
+                            <div>
+                              <ckeditor [(ngModel)]="short_des" [config]="ckeConfig"></ckeditor>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="" class="control-label mb-2">Product Description   <span class="text-danger">( * )</span></label>
+                            <div>
+                              <ckeditor [(ngModel)]="full_des" [config]="ckeConfig"></ckeditor>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+              </div>
+            </section>
+
         </section>
-        <section class="col-md-4 images-block">
+        <section class="col-md-3 images-block">
             <fieldset class="custom-border">
                 <legend class="custom-border">IMAGES</legend>
                 <div class="mb-3">
@@ -228,7 +329,7 @@
         </section>
     </div>
     <div class="d-block pt-3 pb-3 text-center">
-        <a class="btn btn-primary text-white" (click)="updateItem()" translate>Save</a>
+        <button class="btn btn-primary text-white" [disabled]="!short_des || !full_des" (click)="updateItem()" translate>Save</button>
         <button class="btn btn-default" routerLink="/product-management/part-list/">Cancel</button>
     </div>
 </div>

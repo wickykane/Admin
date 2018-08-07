@@ -131,8 +131,8 @@ export class SaleQuotationComponent implements OnInit {
 
     }
     convertOrderToSO(id) {
-        const params = {};
-        this.orderService.convertOrderToSO(id, params).subscribe(res => {
+        const params = { status: 'SC' };
+        this.orderService.updateSaleQuoteStatus(id, params).subscribe(res => {
             try {
                 this.toastr.success(res.message);
                 setTimeout(() => {
