@@ -24,6 +24,7 @@ export class PartEditComponent implements OnInit {
     /**
      * Variable Declaration
      */
+    public listMaster = {};
     public generalForm: FormGroup;
     public part: any;
     public images: any = [];
@@ -34,6 +35,9 @@ export class PartEditComponent implements OnInit {
     };
     public item_condition;
     galleryOptions: NgxGalleryOptions[];
+
+    public short_des;
+    public full_des;
 
     constructor(
         private fb: FormBuilder,
@@ -46,14 +50,25 @@ export class PartEditComponent implements OnInit {
         this.generalForm = fb.group({
             is_quotable: [null],
             is_show_price: [null],
-            sell_price: [null],
-            short_des: [null]
+            sell_price: [null, Validators.required],
+            freight_class: [null, Validators.required],
+            is_taxable: [null, Validators.required],
+            inventory_account_id: [null, Validators.required],
+            income_account_id: [null, Validators.required],
+            expense_account_id: [null, Validators.required],
+            short_des: [null],
+            full_des: [null]
         });
         //  Init Key
+        this.listMaster['account'] = [];
+
         this.itemKeyService.watchContext.next(this);
+        this.getAccountType();
+
     }
 
     ngOnInit() {
+
         this.url_image = `${environment.api_url}file/view?path=`;
         this.part = {};
         this.route.params.subscribe(params => this.getDetailPart(params.id));
@@ -64,11 +79,26 @@ export class PartEditComponent implements OnInit {
                 thumbnailsOrder: 'row',
                 'preview': false,
                 'imageAnimation': 'slide',
-                'imageArrows': false,
                 'thumbnailsArrows': true,
                 thumbnailActions: [{ icon: 'black fa fa-times-circle', onClick: this.deleteImage.bind(this), titleText: 'Delete' }]
             }
         ];
+    }
+
+
+    getAccountType() {
+        this.productService.getAccountType().subscribe(
+            res => {
+                try {
+                    this.listMaster['account'] = res.data;
+                    console.log(JSON.stringify(this.listMaster['account']));
+
+                } catch (e) {
+                    console.log(e);
+                }
+            },
+            err => { }
+        );
     }
 
     deleteImage(event, index) {
@@ -98,12 +128,15 @@ export class PartEditComponent implements OnInit {
     }
 
     updateItem() {
+        this.generalForm.patchValue({ short_des: this.short_des });
+        this.generalForm.patchValue({ full_des: this.full_des });
         const formData = new FormData();
         formData.append('data', JSON.stringify(this.generalForm.value));
         for (const file of this.dataFile) {
             formData.append('files[]', file);
         }
         formData.append('image_del', JSON.stringify(this.list.image_del));
+
         this.route.params.subscribe(params =>
             this.productService.updateItem(params.id, formData).subscribe(res => {
                 try {
@@ -123,6 +156,9 @@ export class PartEditComponent implements OnInit {
             try {
                 if (res.status) {
                     this.part = res.data.item;
+                    this.short_des = res.data.item.short_des;
+                    this.full_des = res.data.item.full_des;
+                    this.listMaster['freight_class'] = res.data.freight_class;
                     this.images = res.data.images;
                     this.item_condition = res.data.item_condition;
                     this.images.map(item => {
