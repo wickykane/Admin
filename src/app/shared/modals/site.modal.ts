@@ -185,7 +185,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             if (item.bank_id === x.id) {
                 return x.swift;
             }
-        })[0];
+        });
 
         this.commonService.getListBranchByBank(item.bank_id).subscribe(res => {
             try {
