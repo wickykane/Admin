@@ -6,22 +6,37 @@ export class TaxTypesService {
     constructor(private API: ApiService) { }
 
     getListTaxTypes(params) {
-        const url = 'category/discount/list';
+        const url = 'tax/get-search-list';
         return this.API.get(url, params);
     }
 
-    getListCategory() {
-        const url = 'category/reference';
-        return this.API.get(url);
-    }
+     getListActiveTaxTypes() {
+         const url = 'tax/get-active-list';
+         return this.API.get(url);
+     }
+     getDetailTaxTypeById(id) {
+         const url = 'tax/get-detail/' + id;
+         return this.API.get(url);
+     }
 
-    generateCode() {
-        const url = 'category/discount/generate-code';
-        return this.API.get(url);
-    }
-
-    createDiscountCategory(params) {
-        const url = 'category/discount/create';
+     postTaxTypes(params) {
+        const url = 'tax/create' ;
         return this.API.post(url, params);
     }
+
+     updateTaxTypesByID(id, params) {
+        const url = 'tax/update/' + id;
+        return this.API.put(url, params);
+    }
+
+    changeStatus(id, params) {
+        const url = 'tax/update-status/' + id;
+        return this.API.put(url, params);
+    }
+
+    deleteTaxTypesById(id) {
+        const url = 'tax/delete/' + id;
+        return this.API.delete(url);
+    }
+
 }
