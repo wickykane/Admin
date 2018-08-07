@@ -36,7 +36,9 @@
                     </div>
                     <div class="w-100"></div>
                     <div class="form-group row">
-                        <label for="payment_make" class="col-sm-5 col-form-label">Payment Made By <span class="text-danger">(*)</span></label>
+                        <label for="payment_make" class="col-sm-5 col-form-label">Payment Made By
+                            <span class="text-danger">(*)</span>
+                        </label>
                         <div class="col-sm-7">
                             <select name="payment_make" (change)="changePayment($event)" formControlName="payment_make" class="form-control">
                                 <option value="null" hidden="true" selected="true">--Select--</option>
@@ -55,6 +57,12 @@
                 </div>
                 <div class="col-md-1 hidden-xs hidden-ms"></div>
                 <div class="col-md-5">
+                    <div class="form-group row">
+                        <label for="registration" class="col-sm-5 col-form-label">Registration No</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" name="registration" formControlName="registration_no">
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-5 col-form-label">Phone</label>
                         <div class="col-sm-7">
@@ -105,15 +113,29 @@
                             <tr>
                                 <th> No </th>
                                 <th> Type</th>
-                                <th> Name <span class="text-danger">(*)</span></th>
-                                <th> Country <span class="text-danger">(*)</span></th>
-                                <th> Address 1 <span class="text-danger">(*)</span></th>
+                                <th> Name
+                                    <span class="text-danger">(*)</span>
+                                </th>
+                                <th> Country
+                                    <span class="text-danger">(*)</span>
+                                </th>
+                                <th> Address 1
+                                    <span class="text-danger">(*)</span>
+                                </th>
                                 <th> Address 2 </th>
-                                <th> City <span class="text-danger">(*)</span></th>
-                                <th> State <span class="text-danger">(*)</span></th>
-                                <th> Zip Code <span class="text-danger">(*)</span></th>
+                                <th> City
+                                    <span class="text-danger">(*)</span>
+                                </th>
+                                <th> State
+                                    <span class="text-danger">(*)</span>
+                                </th>
+                                <th> Zip Code
+                                    <span class="text-danger">(*)</span>
+                                </th>
                                 <th>Default</th>
-                                <th> Route <span class="text-danger">(*)</span></th>
+                                <th> Route
+                                    <span class="text-danger">(*)</span>
+                                </th>
                                 <th> Action </th>
                             </tr>
                         </thead>
@@ -123,7 +145,7 @@
                                 <td>
                                     <select class="form-control" name="type" (change)="checkIsDefault($event, i);updatePayment(item.type)" [(ngModel)]="item.type">
                                         <option value="null" selected="true">--Select--</option>
-                                        <option *ngFor="let i of item.listType" [ngValue]="i.id" >{{i.name}}</option>
+                                        <option *ngFor="let i of item.listType" [ngValue]="i.id">{{i.name}}</option>
                                     </select>
                                 </td>
                                 <td>
@@ -154,7 +176,8 @@
                                     <input type="text" class="form-control" name="zip_code" (change)="updatePayment(item.type)" [(ngModel)]="item.zip_code">
                                 </td>
                                 <td>
-                                    <input type="checkbox" name="is_default" (change)="checkIsDefault($event, i);updatePayment(item.type)" [(ngModel)]="item.is_default" [disabled]="item.type==3 || item.type==4">
+                                    <input type="checkbox" name="is_default" (change)="checkIsDefault($event, i);updatePayment(item.type)" [(ngModel)]="item.is_default"
+                                        [disabled]="item.type==3 || item.type==4">
                                 </td>
                                 <td>
                                     <select [(ngModel)]="item.route_id" class="form-control" name="route_id" (change)="updatePayment(item.type)" *ngIf="item.type == 2">
@@ -201,12 +224,20 @@
                         <thead>
                             <tr>
                                 <th> No </th>
-                                <th> Bank Name <span class="text-danger">(*)</span></th>
+                                <th> Bank Name
+                                    <span class="text-danger">(*)</span>
+                                </th>
                                 <th> SWIFT </th>
-                                <th> Branch <span class="text-danger">(*)</span></th>
+                                <th> Branch
+                                    <span class="text-danger">(*)</span>
+                                </th>
                                 <th> Address </th>
-                                <th> Account Name <span class="text-danger">(*)</span></th>
-                                <th> Account No <span class="text-danger">(*)</span></th>
+                                <th> Account Name
+                                    <span class="text-danger">(*)</span>
+                                </th>
+                                <th> Account No
+                                    <span class="text-danger">(*)</span>
+                                </th>
                                 <th> IBAN </th>
                                 <th> Action </th>
                             </tr>
@@ -274,12 +305,22 @@
                         <thead>
                             <tr>
                                 <th> No </th>
-                                <th> Card Type <span class="text-danger">(*)</span></th>
-                                <th> Card Name <span class="text-danger">(*)</span></th>
-                                <th> Card Number <span class="text-danger">(*)</span></th>
+                                <th> Card Type
+                                    <span class="text-danger">(*)</span>
+                                </th>
+                                <th> Card Name
+                                    <span class="text-danger">(*)</span>
+                                </th>
+                                <th> Card Number
+                                    <span class="text-danger">(*)</span>
+                                </th>
                                 <th> Cvv </th>
-                                <th> Expiration Month <span class="text-danger">(*)</span></th>
-                                <th> Expiration Year <span class="text-danger">(*)</span></th>
+                                <th> Expiration Month
+                                    <span class="text-danger">(*)</span>
+                                </th>
+                                <th> Expiration Year
+                                    <span class="text-danger">(*)</span>
+                                </th>
                                 <th> Action </th>
                             </tr>
                         </thead>
@@ -409,11 +450,15 @@
                         <thead>
                             <tr>
                                 <th> No </th>
-                                <th> Name <span class="text-danger">(*)</span></th>
+                                <th> Name
+                                    <span class="text-danger">(*)</span>
+                                </th>
                                 <th> Title </th>
                                 <th> Phone </th>
                                 <th> Fax </th>
-                                <th> Email <span class="text-danger">(*)</span></th>
+                                <th> Email
+                                    <span class="text-danger">(*)</span>
+                                </th>
                                 <th> Username</th>
                                 <th> Password </th>
                                 <th> Action </th>
