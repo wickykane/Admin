@@ -51,6 +51,7 @@ import { WorkFlowModule } from './work-flow/work-flow.module';
 
 import { AccountTreeComponent } from './ledger/account-tree.component';
 import { LedgerComponent } from './ledger/ledger.component';
+import { AccountModalComponent } from './ledger/modal/account.modal';
 
 
 import { InvoiceConfigComponent } from './invoice-config/invoice-config.component';
@@ -125,6 +126,7 @@ import { CKEditorModule } from 'ng2-ckeditor';
         EmailPreviewTabComponent,
         LedgerComponent,
         AccountTreeComponent,
+        AccountModalComponent,
     ],
     entryComponents: [
         BankModalComponent,
@@ -136,8 +138,9 @@ import { CKEditorModule } from 'ng2-ckeditor';
         CustomerEPIModalContent,
         TerminateEPIPolicyModalContent,
         EmailTemplateModalContent,
-        SendSampleModalContent
+        SendSampleModalContent,
+        AccountModalComponent
     ],
     providers: [TableService, CommonService, AdminPanelService]
 })
-export class AdminPanelModule {}
+export class AdminPanelModule { }

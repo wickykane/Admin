@@ -1,10 +1,10 @@
 <ul class="parent-node" [ngClass]="{'root-node': isRoot}">
-    <li (click)="clickItem($event, child)" *ngFor="let child of items; let i=index" class="child-node">
+    <li [ngClass]="{'active': child.id == _item.id }"  *ngFor="let child of items; let i=index" class="child-node">
         <i (click)="collapse(child)" [ngClass]="{'invisible': !child.children }" *ngIf="!child.isCollapse" class="fa fa-minus fa-custom-circle" aria-hidden="true"></i>
         <i (click)="collapse(child)" [ngClass]="{'invisible': !child.children }" *ngIf="child.isCollapse" class="fa fa-plus fa-custom-circle" aria-hidden="true"></i>
         <i (click)="collapse(child)" *ngIf="child.isCollapse  ||  !child.children" class="fa fa-folder blue" aria-hidden="true"></i>
         <i (click)="collapse(child)" *ngIf="!child.isCollapse && child.children" class="fa fa-folder-open  blue" aria-hidden="true"></i>
-        <span [ngClass]="{ 'text-uppercase': isRoot}">{{ child.name }}</span>
-        <app-account-tree [ngClass]="{'collapse': child.isCollapse}" [items]="child.children" (selectedItem)="selectItem($event)"></app-account-tree>
+        <span (click)="clickItem($event, child)" [ngClass]="{ 'text-uppercase': isRoot}">{{ child.name }}</span>
+        <app-account-tree [currentItem]="_item" [ngClass]="{'collapse': child.isCollapse}" [items]="child.children" (selectedItem)="selectItem($event)"></app-account-tree>
     </li>
 </ul>

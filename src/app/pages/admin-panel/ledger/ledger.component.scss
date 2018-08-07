@@ -18,9 +18,19 @@
 .parent-node {
     list-style: none;
     padding-left: 15px;
+    &.hoverable {
+        li:hover > span {
+            color: #dc3545;
+        }
+    }
     .child-node {
-        cursor: pointer;        
+        cursor: pointer;
         padding: 5px 0;
+        &.active {
+            >span {
+                color: #ccc;
+            }
+        }
     }
 }
 
@@ -48,6 +58,7 @@ i.fa.blue {
 .title-underline {
     border-bottom: 1px solid #ccc;
     padding-bottom: 10px;
+    font-size: 12px;
 }
 
 .block-title {

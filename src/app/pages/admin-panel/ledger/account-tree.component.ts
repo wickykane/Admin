@@ -9,8 +9,12 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class AccountTreeComponent implements OnInit {
     constructor() { }
     @Input() items;
+    @Input() set currentItem(item) {
+        this._item = item || {};
+    }
     @Input() isRoot;
     @Output() selectedItem = new EventEmitter();
+    public _item;
     ngOnInit() { }
 
     selectItem(item) {

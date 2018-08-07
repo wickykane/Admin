@@ -3,11 +3,12 @@ import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { routerTransition } from '../../../router.animations';
 import { TableService } from '../../../services/index';
 import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
 import { LedgerService } from './ledger.service';
-import { BankModalComponent } from './modal/bank.modal';
+import { AccountModalComponent } from './modal/account.modal';
 
 import { LedgerKeyService } from './keys.control';
 
@@ -23,42 +24,88 @@ export class LedgerComponent implements OnInit {
   /**
    *  Variable
    */
+  public generalForm: FormGroup;
+  public generalDetailForm: FormGroup;
   public searchForm: FormGroup;
+
   public listMaster = {};
   public selectedIndex = 0;
+
   public list = {
     items: []
   };
 
-  public selectedAccount;
+  public data = {};
+
+  public screen = {
+    NEW_ACCOUNT_TYPE: 'account-type',
+    VIEW_ACCOUNT_TYPE: 'view_account-type',
+    NEW_DETAIL_TYPE: 'detail-type',
+    VIEW_DETAIL_TYPE: 'view-detaul-type',
+  };
+
   public accountList = [{
     id: 0,
+    level: 0,
     name: 'General Ledge - Accounts',
+    isRoot: true,
     children: [
-      { id: 1, name: 'Account 1' },
-      { id: 2, name: 'Account 2' },
+      {
+        id: 1, name: 'Account 1', level: 1, children: [
+          { id: 3, name: 'Account Child 1', level: 2 }
+        ]
+      },
+      { id: 2, name: 'Account 2', level: 1 },
     ]
   }];
 
-  public data = {};
+  public numberMask = createNumberMask({
+    allowDecimal: false,
+    includeThousandsSeparator: false,
+    allowLeadingZeroes: true,
+    prefix: '',
+    integerLimit: 6
+  });
+
+
   constructor(
     private fb: FormBuilder,
     public tableService: TableService,
-    private activeRouter: ActivatedRoute,
     private router: Router,
-    private bankService: LedgerService,
+    private ledgerService: LedgerService,
     private modalService: NgbModal,
     private toastr: ToastrService,
-    public keyService: LedgerKeyService, ) {
+    public keyService: LedgerKeyService,
+  ) {
+
+    this.generalForm = fb.group({
+      'code': [null, Validators.required],
+      'des': [null, Validators.required],
+      'range_start': [null, Validators.required],
+      'range_end': [null, Validators.required],
+      'credit': [null, Validators.required],
+      'note': [null],
+    });
+
+    this.generalDetailForm = fb.group({
+      'code': [null, Validators.required],
+      'des': [null, Validators.required],
+      'range_start': [null, Validators.required],
+      'range_end': [null, Validators.required],
+      'credit': [null, Validators.required],
+      'note': [null],
+    });
+
     this.searchForm = fb.group({
-      'code': [null],
-      'name': [null],
-      'swift': [null],
+      'no': [null],
+      'des': [null],
+      'sts': [null],
     });
 
     // Assign get list function name, override variable here
     this.tableService.getListFnName = 'getList';
     this.tableService.context = this;
+
     //  Init Key
     this.keyService.watchContext.next(this);
   }
@@ -71,8 +118,25 @@ export class LedgerComponent implements OnInit {
    * Tree Account
    */
   selectItem(data) {
-    this.selectedAccount = data;
-    console.log(data);
+    this.data['selectedAccount'] = data;
+    if (data.level === 0) {
+      this.data['show'] = null;
+    }
+
+    if (data.level === 1) {
+      this.data['show'] = this.screen.VIEW_ACCOUNT_TYPE;
+      this.generalForm.patchValue(data);
+    }
+    if (data.level === 2) {
+      this.data['show'] = this.screen.VIEW_DETAIL_TYPE;
+      this.generalDetailForm.patchValue(data);
+    }
+  }
+
+  actionInvoke(type) {
+    this.generalDetailForm.reset();
+    this.generalForm.reset();
+    this.data['show'] = type;
   }
 
   /**
@@ -80,7 +144,6 @@ export class LedgerComponent implements OnInit {
    */
 
   selectData(index) {
-    console.log(index);
   }
 
   /**
@@ -91,7 +154,7 @@ export class LedgerComponent implements OnInit {
     const params = { ...this.tableService.getParams(), ...this.searchForm.value };
     Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
 
-    this.bankService.getListBank(params).subscribe(res => {
+    this.ledgerService.getListAccount(params).subscribe(res => {
       try {
         this.list.items = res.data.rows;
         this.tableService.matchPagingOption(res.data);
@@ -101,8 +164,9 @@ export class LedgerComponent implements OnInit {
     });
   }
 
-  createBank(params) {
-    this.bankService.createBank(params).subscribe(res => {
+
+  updateAccount(id, params) {
+    this.ledgerService.updateAccount(id, params).subscribe(res => {
       try {
         this.toastr.success(res.message);
         this.getList();
@@ -112,22 +176,15 @@ export class LedgerComponent implements OnInit {
     });
   }
 
-  updateBank(id, params) {
-    this.bankService.updateBank(id, params).subscribe(res => {
-      try {
-        this.toastr.success(res.message);
-        this.getList();
-      } catch (e) {
-        console.log(e);
-      }
-    });
+  cancel() {
+    this.data['show'] = (this.data['show'] === this.screen.NEW_DETAIL_TYPE) ? this.screen.VIEW_ACCOUNT_TYPE : null;
   }
 
-  deleteBank(id) {
+  deleteAccount(id) {
     const modalRef = this.modalService.open(ConfirmModalContent);
     modalRef.result.then(result => {
       if (result) {
-        this.bankService.deleteBank(id).subscribe(res => {
+        this.ledgerService.deleteAccount(id).subscribe(res => {
           try {
             this.toastr.success(res.message);
             this.getList();
@@ -140,31 +197,15 @@ export class LedgerComponent implements OnInit {
   }
 
   // Modal
-  editBank(flag?) {
-    const modalRef = this.modalService.open(BankModalComponent, { windowClass: 'md-modal' });
-    modalRef.componentInstance.modalTitle = (flag) ? 'EDIT BANK' : 'CREATE NEW BANK';
+  newAccount(flag?) {
+    const modalRef = this.modalService.open(AccountModalComponent, { windowClass: 'md-modal' });
+    modalRef.componentInstance.modalTitle = (flag) ? flag.name : 'Add New Account';
     modalRef.componentInstance.isEdit = flag;
     modalRef.componentInstance.item = flag || {};
     modalRef.result.then(data => {
-      const params = { ...data };
-      if (!flag) {
-        this.createBank(params);
-      } else {
-        this.updateBank(flag.id, params);
-      }
+      this.getList();
     },
       dismiss => { });
   }
 
-
-  createBranch(bankId, params) {
-    this.bankService.createBranch(bankId, params).subscribe(res => {
-      try {
-        this.toastr.success(res.message);
-        this.getList();
-      } catch (e) {
-        console.log(e);
-      }
-    });
-  }
 }

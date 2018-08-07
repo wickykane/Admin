@@ -8,6 +8,12 @@ a {
     color: #444;
 }
 
+.custom-tabset {
+    .nav-tabs .nav-link.active {
+        color: #dc3545 !important;
+    }
+}
+
 .search-block {
     .tab-header {
         width: 100%;
