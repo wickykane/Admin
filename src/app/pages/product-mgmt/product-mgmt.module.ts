@@ -1,7 +1,10 @@
 // Module
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { NguCarouselModule } from '@ngu/carousel';
+import { CKEditorModule } from 'ng2-ckeditor';
 import { NgxGalleryModule } from 'ngx-gallery';
 import { CommonShareModule, PageHeaderModule } from '../../shared/index';
 import { ItemModalModule } from '../../shared/modals/item.module';
@@ -38,7 +41,10 @@ import { ProductService } from './product-mgmt.service';
         PageHeaderModule,
         ItemModalModule,
         NgxGalleryModule,
-        NguCarouselModule
+        NguCarouselModule,
+        NgSelectModule,
+        FormsModule,
+        CKEditorModule
     ],
     declarations: [
         ProductMgmtComponent,

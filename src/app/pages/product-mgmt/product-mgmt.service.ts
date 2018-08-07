@@ -126,6 +126,11 @@ export class ProductService {
         const url = 'warehouse/reference';
         return this.apiService.get(url);
     }
+
+    getAccountType() {
+      const url = 'item/get-account-type';
+      return this.apiService.get(url);
+    }
     // mass price
     getListMassPrice(params) {
         const url = 'item/mass';
