@@ -169,6 +169,10 @@ export class OrderService {
         const url = 'order/approved/' + ordId;
         return this.API.put(url);
     }
+    changeOrderStatus(orderNum, params) {
+        const url = 'order/update-order-status-by-code/' +  orderNum;
+        return this.API.put(url, params);
+    }
 
     cancelOrd(ordId) {
         const url = 'order/cancel/' + ordId;
