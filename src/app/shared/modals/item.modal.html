@@ -181,10 +181,10 @@
                         <th translate>To</th>
                         <th translate>Brand</th>
                         <th translate>Cert</th>  
-                        <th translate>WH Dallas</th>  
-                        <th translate>WH Amazon</th>  
-                        <!-- <th translate>{{getNameWarehouse(listMaster['warehouses'],1)}}</th>   -->
-                        <!-- <th translate>{{getNameWarehouse(listMaster['warehouses'],2)}}</th>                         -->
+                        <!-- <th translate>WH Dallas</th>  
+                        <th translate>WH Austin</th>   -->
+                        <th *ngIf="getNameWarehouse(listMaster['warehouses'],1)" translate>{{getNameWarehouse(listMaster['warehouses'],1) || 'WH Dallas'}}</th>
+                        <th *ngIf="getNameWarehouse(listMaster['warehouses'],1)" translate>{{getNameWarehouse(listMaster['warehouses'],2)|| 'WH Austin'}}</th>                        
                         <th translate>Sales Price</th>
                     </tr>
                 </thead>
