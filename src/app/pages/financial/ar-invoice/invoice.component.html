@@ -192,7 +192,7 @@
                                 <a class="btn btn-default " title="Edit" (click)="editInvoice(item.id)" *ngIf="item.invoice_status_id == 1">
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                 </a>
-                                <a class="btn btn-default" title="Cancel" (click)="cancelInvoice(item.id)" *ngIf="item.invoice_status_id == 1">
+                                <a class="btn btn-default" title="Cancel" (click)="cancelInvoice(item)" *ngIf="item.invoice_status_id == 1">
                                     <i class="fa fa-ban" aria-hidden="true"></i>
                                 </a>
                                 <a class="btn btn-default" title="Print" (click)="printPDF(item.id)" >
