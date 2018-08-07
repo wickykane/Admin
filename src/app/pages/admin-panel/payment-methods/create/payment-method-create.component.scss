@@ -1,0 +1,20 @@
+.create-section {
+    margin: 15px 0px;
+    padding: 0px 15px;
+
+    .create-section-data {
+        .create-section-info {
+            label {
+                max-width: 200px;
+                min-width: 200px;
+                width: 200px;
+            }
+
+            input, select {
+                max-width: 350px;
+                min-width: 350px;
+                width: 350px;
+            }
+        }
+    }
+}

@@ -1,0 +1,28 @@
+<div [@routerTransition]>
+    <app-page-header [heading]="'Add New Payment Method'" [icon]="'fa-th-list'"></app-page-header>
+    <form>
+        <div class="form-search full-width form-horizontal">
+            <div class="row create-section">
+                <div class="col-md-6 form-group create-section-data">
+                    <div class="row create-section-info">
+                        <label>
+                            <b>Select Payment Method Type (*)</b>
+                        </label>
+                        <select class="form-control">
+                            <option value="null" disabled>--Select--</option>
+                            <option *ngFor="let type of listMaster.paymentTypes" [value]="type.key">{{type.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4 create-section-img">
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="row">
+        <div class="col-md-12 mg-top-15 text-center">
+            <button class="btn btn-primary" type="button">Create</button>
+            <button class="btn btn-default" type="button" [routerLink]="['/admin-panel/payment-methods']">Cancel</button>
+        </div>
+    </div>
+</div>
