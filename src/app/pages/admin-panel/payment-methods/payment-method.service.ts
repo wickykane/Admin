@@ -16,7 +16,7 @@ export class PaymentMethodsService {
         return this.apiService.get(url);
     }
 
-    getPaymentProcessorTypes() {
+    getPaymentProcessors() {
         const url = 'payment-method/payment-processor-type';
         return this.apiService.get(url);
     }
@@ -29,6 +29,11 @@ export class PaymentMethodsService {
     getPaymentMethodDetail(id) {
         const url = 'payment-method/' + id;
         return this.apiService.get(url);
+    }
+
+    checkDupliateDisplayName(params) {
+        const url = 'payment-method/validate/name';
+        return this.apiService.post(url, params);
     }
 
     createPaymentMethod(params) {

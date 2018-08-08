@@ -1,27 +1,100 @@
 <div [@routerTransition]>
     <app-page-header [heading]="'Add New Payment Method'" [icon]="'fa-th-list'"></app-page-header>
-    <form>
+    <form [formGroup]="paymentForm">
         <div class="form-search full-width form-horizontal">
             <div class="row create-section">
-                <div class="col-md-6 form-group create-section-data">
+                <div class="col-lg-7 col-xl-6 form-group create-section-data">
                     <div class="row create-section-info">
                         <label>
                             <b>Select Payment Method Type (*)</b>
                         </label>
-                        <select class="form-control">
+                        <select class="form-control" formControlName="type">
                             <option value="null" disabled>--Select--</option>
                             <option *ngFor="let type of listMaster.paymentTypes" [value]="type.key">{{type.name}}</option>
                         </select>
+                        <span class="error" *ngIf="isClickedSave && this.paymentForm.controls.type.invalid">
+                            (!): Please select the Payment Method Type.
+                        </span>
                     </div>
+                    <div class="row create-section-info" *ngIf="this.paymentForm.value.type == 2">
+                        <label>
+                            <b>Select Payment Processor (*)</b>
+                        </label>
+                        <select class="form-control" formControlName="processor_type">
+                            <option value="null" disabled>--Select--</option>
+                            <option *ngFor="let type of listMaster.paymentProcessors" [value]="type.key">{{type.name}}</option>
+                        </select>
+                        <span class="error" *ngIf="isClickedSave && this.paymentForm.controls.processor_type.invalid">
+                            (!): Please select the Payment Processor.
+                        </span>
+                    </div>
+                    <div class="row create-section-info"
+                        *ngIf="this.paymentForm.value.type == 1 || (this.paymentForm.value.type == 2 && this.paymentForm.value.processor_type)">
+                        <label>
+                            <b>Display Name (*)</b>
+                        </label>
+                        <input type="text" maxlength="50" class="form-control" formControlName="name" (blur)="checkDuplicateDisplayName()">
+                        <span class="show-tooltip" ngbTooltip="The text in this box will be used to describe this payment method on your store front site.">
+                            <i class="fa fa-question-circle"></i>
+                        </span>
+                        <span class="error" *ngIf="isClickedSave && this.paymentForm.controls.name.invalid">
+                            (!): This field cannot be blank. Please input value.
+                        </span>
+                        <!-- <span class="error" *ngIf="isDuplicateDisplayName">
+                            (!): This name taken by another payment method. Please use a different name.
+                        </span> -->
+                    </div>
+
+                    <!-- Type is Manual -->
+                    <div class="row create-section-info" *ngIf="this.paymentForm.value.type == 1">
+                        <label>
+                            <b>Status (*)</b>
+                        </label>
+                        <select class="form-control" formControlName="ac">
+                            <option *ngFor="let status of listMaster.status" [value]="status.key" [disabled]="status.key === null">{{status.name}}</option>
+                        </select>
+                        <span class="show-tooltip" ngbTooltip="Only active payment method can be used in the back office and in the store front.">
+                            <i class="fa fa-question-circle"></i>
+                        </span>
+                        <span class="error" *ngIf="isClickedSave && this.paymentForm.controls.ac.invalid">
+                            (!): Please select the Payment Method Status.
+                        </span>
+                    </div>
+                    <div class="row create-section-info" *ngIf="this.paymentForm.value.type == 1">
+                        <label>
+                            <b>Show in Store (*)</b>
+                        </label>
+                        <select class="form-control" formControlName="show_in_store">
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                        <span class="show-tooltip" ngbTooltip="If Show in Store is Yes and Status is active, the payment method will be shown in Store Front site.">
+                            <i class="fa fa-question-circle"></i>
+                        </span>
+                    </div>
+                    <div class="row create-section-info textarea-info" *ngIf="this.paymentForm.value.type == 1">
+                        <label>
+                            <b>Payment Information (*)</b>
+                            <span class="show-tooltip" ngbTooltip="If a customer chooses to pay via this method, he will see the text you type here once he completes his order. You should include details on how he can send you the payment and any other information that he needs to know.">
+                                <i class="fa fa-question-circle"></i>
+                            </span>
+                        </label>
+                        <textarea class="form-control" rows="5" formControlName="desc" maxlength="200"></textarea>
+                        <span class="error" *ngIf="isClickedSave && this.paymentForm.controls.desc.invalid">
+                            (!): This field cannot be blank. Please input value.
+                        </span>
+                    </div>
+                    <!--  -->
+
                 </div>
-                <div class="col-md-4 create-section-img">
+                <div class="col-lg-5 col-xl-4 create-section-img">
                 </div>
             </div>
         </div>
     </form>
     <div class="row">
         <div class="col-md-12 mg-top-15 text-center">
-            <button class="btn btn-primary" type="button">Create</button>
+            <button class="btn btn-primary" type="button" (click)="savePaymentMethod()">Create</button>
             <button class="btn btn-default" type="button" [routerLink]="['/admin-panel/payment-methods']">Cancel</button>
         </div>
     </div>

@@ -1,9 +1,13 @@
 .create-section {
-    margin: 15px 0px;
+    background-color: #ededed;
+    margin: 0px;
     padding: 0px 15px;
 
     .create-section-data {
         .create-section-info {
+            margin-bottom: 15px;
+            margin-top: 15px;
+
             label {
                 max-width: 200px;
                 min-width: 200px;
@@ -11,9 +15,47 @@
             }
 
             input, select {
-                max-width: 350px;
-                min-width: 350px;
-                width: 350px;
+                max-width: 300px;
+                min-width: 300px;
+                width: 300px;
+            }
+
+            textarea {
+                max-width: 500px;
+                min-width: 500px;
+                width: 500px;
+            }
+
+            .fa-question-circle:before {
+                color: #2196f3;
+                font-size: 1.5em;
+                vertical-align: middle;
+            }
+
+            .show-tooltip {
+                margin-left: 15px;
+                i {
+                    vertical-align: sub;
+                }
+            }
+
+            .error {
+                color: #dc3545;
+                width: 100%;
+            }
+        }
+
+        .textarea-info {
+            label {
+                max-width: 100%;
+                min-width: 100%;
+                width: 100%;
+            }
+
+            .show-tooltip {
+                i {
+                    vertical-align: middle;
+                }
             }
         }
     }
