@@ -108,7 +108,7 @@ export class TaxTypesComponent implements OnInit {
     });
   }
   changeStatus(id, sts) {
-    const params = {ac: sts};
+    const params = {ac: (sts === 1) ? '1' : '0'};
     this.taxTypesService.changeStatus(id, params).subscribe(res => {
       try {
         this.toastr.success(res.message);
