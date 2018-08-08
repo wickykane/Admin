@@ -103,6 +103,7 @@ export class CreateComponent implements OnInit {
         return createNumberMask({
             allowDecimal: true,
             prefix: '',
+            includeThousandsSeparator : false,
             integerLimit: max || null
         });
     }

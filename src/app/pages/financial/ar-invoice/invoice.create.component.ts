@@ -224,7 +224,8 @@ export class InvoiceCreateComponent implements OnInit {
                         this.getOrderByCustomerId(res.data.company_id);
                     }
                     if (this.isEdit) {
-                        this.list.items = this.transformInvoiceDetailsItems(this.invoice_details['items']);
+                        // this.list.items = this.transformInvoiceDetailsItems(this.invoice_details['items']);
+                        this.list.items = this.invoice_details['inv_detail'];
                         const orderId = this.invoice_details['orders'][0]['id'];
                         const orderNum = this.invoice_details['orders'][0]['code'];
                         this.generalForm.patchValue({
@@ -271,17 +272,17 @@ export class InvoiceCreateComponent implements OnInit {
         const issue_dt = this.generalForm.get('inv_dt').value;
         const payment_term_id = this.generalForm.get('payment_term_id').value;
         const total_due = this.generalForm.get('total_due').value;
-        if (issue_dt && payment_term_id && total_due ) {
+        if (issue_dt && payment_term_id && total_due) {
             this.financialService.getEarlyPaymentValue(issue_dt, payment_term_id, total_due).subscribe(res => {
                 if (res.data) {
-                   this.order_info.discount_percent = res.data.percent;
-                   this.order_info.total_discount = res.data.value;
-                   this.order_info.expires_dt = res.data.expires_dt;
-                   if (this.order_info.total_discount > 0 ) {
-                    //    console.log(this.generalForm.get('total_due').value - this.order_info.total_discount);
-                       const recalc = this.generalForm.get('total_due').value - this.order_info.total_discount;
-                       this.generalForm.get('total_adj_due').patchValue(recalc);
-                   }
+                    this.order_info.discount_percent = res.data.percent;
+                    this.order_info.total_discount = res.data.value;
+                    this.order_info.expires_dt = res.data.expires_dt;
+                    if (this.order_info.total_discount > 0) {
+                        //    console.log(this.generalForm.get('total_due').value - this.order_info.total_discount);
+                        const recalc = this.generalForm.get('total_due').value - this.order_info.total_discount;
+                        this.generalForm.get('total_adj_due').patchValue(recalc);
+                    }
                 }
             });
         }
@@ -481,7 +482,17 @@ export class InvoiceCreateComponent implements OnInit {
         params = { ...this.generalForm.value, ...params };
         params['address'] = addressArrId;
         params['order_detail'] = this.transformItemsList(this.list.items);
-        console.log(params);
+        switch (type) {
+            case 'draft':
+                params['inv_sts'] = 1;
+                break;
+            case 'submit':
+                params['inv_sts'] = 2;
+                break;
+            case 'createnew':
+                params['inv_sts'] = 2;
+                break;
+        }
         this.financialService.createInvoice(params).subscribe(res => {
             try {
                 if (res.status) {
@@ -653,7 +664,7 @@ export class InvoiceCreateComponent implements OnInit {
         const sub_after_discount = this.order_info.sub_total - this.order_info.total_discount;
         this.order_info['vat_percent_amount'] = parseFloat((sub_after_discount * Number(this.order_info['alt_vat_percent']) / 100).toFixed(2));
         this.order_info.total = this.order_info.sub_total - this.order_info.total_discount + Number(this.order_info['shipping_cost']) + this.order_info['vat_percent_amount'] - this.promotionList['total_invoice_discount'];
-        this.generalForm.get('total_adj_due').patchValue( this.generalForm.get('total_due').value - this.order_info.total_discount);
+        this.generalForm.get('total_adj_due').patchValue(this.generalForm.get('total_due').value - this.order_info.total_discount);
     }
 
     numberMaskObject(max?) {

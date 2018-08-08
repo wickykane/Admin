@@ -26,12 +26,19 @@ export class TaxTypesModalComponent implements OnInit {
   ngOnInit() {
     if (this.item.id) {
       this.getDetailTaxTypes(this.item.id);
+    } else {
+      this.generateTaxTypes();
     }
   }
 
   getDetailTaxTypes(id) {
     this.taxTypeService.getDetailTaxTypeById(id).subscribe((res) => {
       this.taxType.patchValue(res.data);
+    });
+  }
+  generateTaxTypes() {
+    this.taxTypeService.generateCode().subscribe((res) => {
+      this.taxType.get('tax_code').patchValue(res.data.code);
     });
   }
 
