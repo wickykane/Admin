@@ -44,20 +44,6 @@ export class LedgerComponent implements OnInit {
     VIEW_DETAIL_TYPE: 'view-detaul-type',
   };
 
-  public accountList = [{
-    id: 0,
-    level: 0,
-    name: 'General Ledge - Accounts',
-    isRoot: true,
-    children: [
-      {
-        id: 1, name: 'Account 1', level: 1, children: [
-          { id: 3, name: 'Account Child 1', level: 2 }
-        ]
-      },
-      { id: 2, name: 'Account 2', level: 1 },
-    ]
-  }];
 
   public numberMask = createNumberMask({
     allowDecimal: false,
@@ -79,20 +65,16 @@ export class LedgerComponent implements OnInit {
   ) {
 
     this.generalForm = fb.group({
-      'code': [null, Validators.required],
+      'cd': [null, Validators.required],
       'des': [null, Validators.required],
       'range_start': [null, Validators.required],
       'range_end': [null, Validators.required],
-      'credit': [null, Validators.required],
+      'is_credit': [null, Validators.required],
       'note': [null],
     });
 
     this.generalDetailForm = fb.group({
-      'code': [null, Validators.required],
       'des': [null, Validators.required],
-      'range_start': [null, Validators.required],
-      'range_end': [null, Validators.required],
-      'credit': [null, Validators.required],
       'note': [null],
     });
 
@@ -111,12 +93,49 @@ export class LedgerComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getList();
+    this.getAccountTree();
   }
 
   /**
    * Tree Account
    */
+
+  getAccountTree() {
+    this.ledgerService.getAccountTree().subscribe(res => {
+      this.listMaster['account_list'] = [{ ...res.data, name: 'General Ledge - Accounts' }];
+    });
+  }
+
+  getAccountTypeById(id, flag?) {
+    this.ledgerService.getAccountTypeById(id).subscribe(res => {
+      this.generalForm.patchValue(res.data);
+      this.data['selectedAccount'] = (flag) ? res.data : this.data['selectedAccount'];
+      this.data['selectedAccount']['is_credit'] = res.data.is_credit;
+    });
+  }
+
+  getDetailAccountTypeById(id, flag?) {
+    this.ledgerService.getDetailAccountTypeById(id).subscribe(res => {
+      this.generalDetailForm.patchValue(res.data);
+      this.data['selectedAccount'] = (flag) ? res.data : this.data['selectedAccount'];
+      this.data['selectedAccount']['is_credit'] = res.data.is_credit;
+    });
+  }
+
+  getDetailAccountById(id, flag?) {
+    this.ledgerService.getDetailAccountById(id).subscribe(res => {
+      this.generalDetailForm.patchValue(res.data);
+      this.data['selectedAccount'] = (flag) ? res.data : this.data['selectedAccount'];
+      this.data['selectedAccount']['is_credit'] = res.data.is_credit;
+    });
+  }
+
+  getAccountCode() {
+    this.ledgerService.getAccountCode().subscribe(res => {
+      this.generalForm.patchValue({ cd: res.data });
+    });
+  }
+
   selectItem(data) {
     this.data['selectedAccount'] = data;
     if (data.level === 0) {
@@ -125,11 +144,12 @@ export class LedgerComponent implements OnInit {
 
     if (data.level === 1) {
       this.data['show'] = this.screen.VIEW_ACCOUNT_TYPE;
-      this.generalForm.patchValue(data);
+      this.getAccountTypeById(data.id);
     }
     if (data.level === 2) {
       this.data['show'] = this.screen.VIEW_DETAIL_TYPE;
-      this.generalDetailForm.patchValue(data);
+      this.getDetailAccountTypeById(data.id);
+      this.getList();
     }
   }
 
@@ -137,6 +157,55 @@ export class LedgerComponent implements OnInit {
     this.generalDetailForm.reset();
     this.generalForm.reset();
     this.data['show'] = type;
+    if (type === this.screen.NEW_ACCOUNT_TYPE) {
+      this.getAccountCode();
+    }
+  }
+
+  saveAccountType() {
+    const params = this.generalForm.value;
+    if (this.data['show'] === this.screen.NEW_ACCOUNT_TYPE) {
+      this.ledgerService.createAccountType(params).subscribe(res => {
+        if (res.status) {
+          this.toastr.success(res.message);
+          this.getAccountTree();
+          this.data['selectedAccount']['name'] = this.generalForm.value.des + '(' + this.generalForm.value.range_start + '-' + this.generalForm.value.range_end + ')';
+        }
+      });
+    } else {
+      const id = this.data['selectedAccount'].id;
+      this.ledgerService.updateAccountType(id, params).subscribe(res => {
+        if (res.status) {
+          this.toastr.success(res.message);
+          this.getAccountTree();
+          this.data['selectedAccount']['name'] = this.generalForm.value.des + '(' + this.generalForm.value.range_start + '-' + this.generalForm.value.range_end + ')';
+        }
+      });
+    }
+  }
+
+  saveDetailAccountType() {
+    const params = this.generalDetailForm.value;
+    params['account_type_id'] = this.data['selectedAccount'].id;
+
+    if (this.data['show'] === this.screen.NEW_DETAIL_TYPE) {
+      this.ledgerService.createDetailAccountType(params).subscribe(res => {
+        if (res.status) {
+          this.toastr.success(res.message);
+          this.getAccountTree();
+          this.data['selectedAccount']['des'] = this.generalDetailForm.value.des;
+        }
+      });
+    } else {
+      const id = this.data['selectedAccount'].id;
+      this.ledgerService.updateDetailAccountType(id, params).subscribe(res => {
+        if (res.status) {
+          this.toastr.success(res.message);
+          this.getAccountTree();
+          this.data['selectedAccount']['des'] = this.generalDetailForm.value.des;
+        }
+      });
+    }
   }
 
   /**
@@ -154,7 +223,7 @@ export class LedgerComponent implements OnInit {
     const params = { ...this.tableService.getParams(), ...this.searchForm.value };
     Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
 
-    this.ledgerService.getListAccount(params).subscribe(res => {
+    this.ledgerService.getListAccount(this.data['selectedAccount'].id, params).subscribe(res => {
       try {
         this.list.items = res.data.rows;
         this.tableService.matchPagingOption(res.data);
@@ -166,7 +235,7 @@ export class LedgerComponent implements OnInit {
 
 
   updateAccount(id, params) {
-    this.ledgerService.updateAccount(id, params).subscribe(res => {
+    this.ledgerService.updateAccountType(id, params).subscribe(res => {
       try {
         this.toastr.success(res.message);
         this.getList();
