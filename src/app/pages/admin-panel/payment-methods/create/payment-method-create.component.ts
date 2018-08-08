@@ -1,9 +1,7 @@
+import { transition } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TableService } from './../../../../services/table.service';
-
-import { environment } from '../../../../environments/environment';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -25,6 +23,7 @@ export class PaymentMethodsCreateComponent implements OnInit {
     public listMaster = {
         paymentTypes: [],
         paymentProcessors: [],
+        transactionTypes: [],
         status: [
             {
                 key: null,
@@ -41,7 +40,7 @@ export class PaymentMethodsCreateComponent implements OnInit {
         ]
     };
     public isClickedSave = false;
-    // public isDuplicateDisplayName = false;
+    public isDuplicateDisplayName = false;
     public paymentForm: FormGroup;
 
     constructor(
@@ -55,14 +54,19 @@ export class PaymentMethodsCreateComponent implements OnInit {
             processor_type: [null, Validators.required],
             name: [null, Validators.required],
             ac: [null, Validators.required],
-            show_in_store: [1, Validators.required],
-            desc: [null, Validators.required]
+            show_in_store: [null, Validators.required],
+            desc: [null, Validators.required],
+            transition_type: [null, Validators.required],
+            service_id: [null, Validators.required],
+            service_secret: [null, Validators.required],
+            sandbox: [null]
         });
     }
 
     ngOnInit() {
         this.getPaymentTypes();
         this.getPaymentProcessors();
+        this.getTransactionTypes();
     }
     /**
      * Internal Function
@@ -70,32 +74,54 @@ export class PaymentMethodsCreateComponent implements OnInit {
 
     getPaymentTypes() {
         this.paymentMethodService.getPaymentTypes().subscribe(
-          res => {
-            try {
-                this.listMaster.paymentTypes = res.data;
-            } catch (err) {
+            res => {
+                try {
+                    this.listMaster.paymentTypes = res.data;
+                } catch (err) {
+                    console.log(err);
+                }
+            },
+            err => {
                 console.log(err);
             }
-          },
-          err => {
-              console.log(err);
-          }
         );
     }
 
     getPaymentProcessors() {
         this.paymentMethodService.getPaymentProcessors().subscribe(
             res => {
-              try {
-                  this.listMaster.paymentProcessors = res.data;
-              } catch (err) {
-                  console.log(err);
-              }
+                try {
+                    this.listMaster.paymentProcessors = res.data;
+                } catch (err) {
+                    console.log(err);
+                }
             },
             err => {
                 console.log(err);
             }
-          );
+        );
+    }
+
+    getTransactionTypes() {
+        this.paymentMethodService.getPaymentTransactionTypes().subscribe(
+            res => {
+                try {
+                    this.listMaster.transactionTypes = res.data;
+                } catch (err) {
+                    console.log(err);
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        );
+    }
+
+    clearFieldWhenChangeType(selectedType) {
+        this.paymentForm.reset();
+        this.paymentForm.patchValue({ type: selectedType });
+        this.paymentForm.patchValue({ show_in_store: 1 });
+        if (selectedType === '2') { this.paymentForm.patchValue({ sandbox: 1 }); }
     }
 
     checkDuplicateDisplayName() {
@@ -106,10 +132,13 @@ export class PaymentMethodsCreateComponent implements OnInit {
         this.paymentMethodService.checkDupliateDisplayName(params).subscribe(
             res => {
                 try {
+                    this.isDuplicateDisplayName = false;
                 } catch (err) {
                     console.log(err);
                 }
-            }, err => {
+            },
+            err => {
+                this.isDuplicateDisplayName = true;
                 console.log(err);
             }
         );
@@ -118,15 +147,49 @@ export class PaymentMethodsCreateComponent implements OnInit {
     checkFormValidation() {
         switch (this.paymentForm.value.type) {
             case '1': {
-                if ( this.paymentForm.controls.name.valid && this.paymentForm.controls.ac.valid
-                && this.paymentForm.controls.show_in_store.valid && this.paymentForm.controls.desc.valid) {
+                // Manual
+                return this.checkFormValidationForManualType();
+            }
+            case '2': {
+                // Online
+                return this.checkFormValidationForOnlineType();
+            }
+        }
+        return false;
+    }
+
+    checkFormValidationForManualType() {
+        if (
+            this.paymentForm.controls.name.valid &&
+            this.paymentForm.controls.ac.valid &&
+            this.paymentForm.controls.show_in_store.valid &&
+            this.paymentForm.controls.desc.valid
+        ) {
+            return true;
+        }
+        return false;
+    }
+
+    checkFormValidationForOnlineType() {
+        switch (this.paymentForm.value.processor_type) {
+            case '1': {
+                // Authorize.Net
+                if (
+                    this.paymentForm.controls.name.valid &&
+                    this.paymentForm.controls.service_id.valid &&
+                    this.paymentForm.controls.sandbox.valid &&
+                    this.paymentForm.controls.show_in_store.valid &&
+                    this.paymentForm.controls.service_secret.valid &&
+                    this.paymentForm.controls.transition_type.valid &&
+                    this.paymentForm.controls.desc.valid
+                ) {
                     return true;
                 }
                 return false;
-                break;
             }
             case '2': {
-                break;
+                // Paypal
+                return false;
             }
         }
         return false;
@@ -136,7 +199,11 @@ export class PaymentMethodsCreateComponent implements OnInit {
         this.isClickedSave = true;
         if (this.checkFormValidation()) {
             const params = { ...this.paymentForm.value, ...{ messages: 1 } };
-            Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
+            Object.keys(params).forEach(
+                key =>
+                    (params[key] === null || params[key] === '') &&
+                    delete params[key]
+            );
             this.paymentMethodService.createPaymentMethod(params).subscribe(
                 res => {
                     try {
