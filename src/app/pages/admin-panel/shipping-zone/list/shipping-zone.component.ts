@@ -72,77 +72,11 @@ export class ShippingZoneComponent implements OnInit {
 
         this.user = JSON.parse(localStorage.getItem('currentUser'));
     }
-    /**
-     * Table Event
-     */
-    selectData(index) {
-        console.log(index);
-    }
-    /**
-     * Internal Function
-     */
-    toggleSubRow(id) {
-        // tslint:disable-next-line:prefer-conditional-expression
-        if (id === this.flagId) {
-            this.flagId = '0';
-        } else {
-            this.flagId = id;
-        }
-        //   this.showProduct = !this.showProduct;
-    }
 
-    showMorefilter() {
 
-    }
 
-    sendMail(id) {
-        const params = {
-            'sts': 'SP'
-        };
-        this.purchaseService.sendMailPO(params, id).subscribe(res => {
-            try {
-                this.toastr.success(res.message);
-                this.getList();
-            } catch (e) {
-                console.log(e);
-            }
-        });
-    }
 
-    sentToSuppPQ(id) {
-        this.purchaseService.sentToSuppPQ(id).subscribe(res => {
-            try {
-                this.toastr.success(res.message);
-                this.getList();
-            } catch (e) {
-                console.log(e);
-            }
-        });
-    }
 
-    approve(id) {
-        this.purchaseService.aprvByMgrPQ(id).subscribe(res => {
-            try {
-                this.toastr.success(res.message);
-                this.getList();
-            } catch (e) {
-                console.log(e);
-            }
-        });
-
-    }
-
-    reject(id) {
-        this.purchaseService.rjtByMgrPQ(id).subscribe(res => {
-            try {
-                this.toastr.success(res.message);
-                this.getList();
-            } catch (e) {
-                console.log(e);
-            }
-        });
-
-    }
 
     getListMaster() {
         this.commonService.getMasterData().subscribe(res => {

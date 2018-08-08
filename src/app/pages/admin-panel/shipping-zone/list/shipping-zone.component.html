@@ -16,10 +16,6 @@
                         <input type="text" name="so_no" formControlName="so_no" class="form-control" id="so_no" placeholder="" capitalize>
                     </div>
                     <div class="block-search">
-                        <label for="customer" class="control-label">Customer</label>
-                        <input type="text" name="customer" formControlName="customer" class="form-control" id="customer" placeholder="" capitalize>
-                    </div>
-                    <div class="block-search">
                         <label for="part" class="control-label">Status</label>
                         <div class="">
                             <select class="form-control" formControlName="rma_type">
@@ -41,86 +37,32 @@
 
 
         <div class="block-content list-order-table">
-            <button [routerLink]="['/rma/create']" style="margin: 10px 0;" class="btn btn-primary">Add New</button>
+            <button [routerLink]="['/admin-panel/shipping-zone/create']" style="margin: 10px 0;" class="btn btn-primary">Add New</button>
 
             <div class="table-responsive">
-                <table class="table table-striped table-vcenter custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex"
-                    (onEnter)="selectData($event)">
+                <table class="table table-striped table-vcenter custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex">
                     <thead class="bg-white">
                         <tr>
-                            <th></th>
-                            <th>RMA No</th>
-                            <th>SO No.</th>
-                            <th>Customer</th>
-                            <th>Request date</th>
-                            <th>Reception date</th>
-                            <th>RMA Type</th>
-                            <th>Comments</th>
-                            <th>Total Amount</th>
+                            <th>Zone No</th>
+                            <th>Zone Name</th>
+                            <th>Countries/Regions</th>
+                            <th>Shipping Methods</th>
                             <th>Status</th>
+                            <th>Used</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody  *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                         <tr>
-                            <!-- <td>
-                                <a ui-sref="app.rma.view({id : item.rma_id})">#{{item.rma_no}}</a>
-                            </td> -->
-                            <td class="text-center" [ngClass]="{'expand-item' : item.collapseRows}">
-                                    <a class="btn btn-default " title="Expand" (click)="item.collapseRows = !item.collapseRows;" *ngIf="!item.collapseRows">
-                                        <i class="fa fa-plus" aria-hidden="true"></i>
-                                    </a>
-                                    <a class="btn btn-default " title="Collapse" (click)="item.collapseRows = !item.collapseRows;" *ngIf="item.collapseRows">
-                                        <i class="fa fa-minus" aria-hidden="true"></i>
-                                    </a>
-                                </td>
                             <td>{{item.return_order_no}}</td>
                             <td>{{item.sale_order_no}}</td>
                             <td>{{item.buyer_name}}</td>
                             <td>
-                                <span ng-if="item.request_date">{{item.request_date | date:'yyyy-MM-dd' }}</span>
-                            </td>
-                            <td>
-                                <span ng-if="item.reception_date">{{item.reception_date | date:'yyyy-MM-dd' }}</span>
+                                <span *ngIf="item.request_date">{{item.request_date | date:'yyyy-MM-dd' }}</span>
                             </td>
                             <td>{{item.rma_type_name}}</td>
                             <td>{{item.note}}</td>
                             <td>{{item.total_amount}}</td>
-                            <td>{{item.status}}</td>
-                            <!-- <td>
-                                <span class="label label-info" ng-if="item.short_name == 'NEW'">{{item.sts}}</span>
-                                <span class="label label-warning" ng-if="item.short_name == 'P'">{{item.sts}}</span>
-                                <span class="label label-success" ng-if="item.short_name == 'CP'">{{item.sts}}</span>
-                            </td> -->
-                        </tr>
-                        <tr *ngIf="item.collapseRows">
-                            <td colspan="10" class="child-table">
-                                <table class="table table-vcenter custom-table" style="border: 1px solid #828282;">
-                                    <thead>
-                                        <tr style="background-color: #596470">
-                                            <th>SKU</th>
-                                            <th>Product Name</th>
-                                            <th>Order QTY</th>
-                                            <th>Returned QTY</th>
-                                            <th>UOM</th>
-                                            <th>Unit Price</th>
-                                            <th>Discount</th>
-                                            <th>Sub Total</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let subItem of item.detail; let i = index;">
-                                            <td>{{subItem.sku }}</td>
-                                            <td>{{subItem.product_name }}</td>
-                                            <td>{{subItem.order_qty}}</td>
-                                            <td>{{subItem.return_qty }}</td>
-                                            <td>{{subItem.uom }}</td>
-                                            <td>{{subItem.price}}</td>
-                                            <td>{{subItem.discount }} % </td>
-                                            <td>{{subItem.sub_total }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </td>
                         </tr>
                     </tbody>
                 </table>
