@@ -23,6 +23,10 @@ export class TaxTypesService {
         const url = 'tax/create' ;
         return this.API.post(url, params);
     }
+    generateCode() {
+        const url = 'tax/generate-tax-code';
+        return this.API.get(url);
+    }
 
      updateTaxTypesByID(id, params) {
         const url = 'tax/update/' + id;
