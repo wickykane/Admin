@@ -218,7 +218,17 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             }
         });
     }
-
+    getListBankSites(item) {
+        this.commonService.getAllListBank().subscribe(res => {
+            try {
+                var listBank = res.data;
+                item.listBank =listBank;
+                this.changeBankSites(item,listBank);
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
 
     //  change customer Type
     changeCustomerType() {
@@ -239,6 +249,9 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                 this.sites[i].addresses[j] = { ...this.sites[i].addresses[j], ...addressConfig[this.sites[i].addresses[j].type], ...addressConfig[5] }
                 this.changeCountry(this.sites[i].addresses[j]);
                 this.displayCountry(this.sites[i].addresses[j]);
+            }
+            for (let j = 0; j < this.sites[i].bank_accounts.length; j++) {
+                this.getListBankSites(this.sites[i].bank_accounts[j]);
             }
             // this.orderAddress(this.sites[i].addresses);
         }
@@ -303,6 +316,21 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         for (let i = 0; i < this.listBank.length; i++) {
             if (item.bank_id === this.listBank[i].id) {
                 item.bank_swift = this.listBank[i].swift;
+            }
+        }
+        this.commonService.getListBranchByBank(item.bank_id).subscribe(res => {
+            try {
+                item.listBranch = res.data;
+                this.changeBranch(item);
+            } catch (e) {
+
+            }
+        });
+    }
+    changeBankSites(item,listBank) {
+        for (let i = 0; i < listBank.length; i++) {
+            if (item.bank_id === listBank[i].id) {
+                item.bank_swift = listBank[i].swift;
             }
         }
         this.commonService.getListBranchByBank(item.bank_id).subscribe(res => {
