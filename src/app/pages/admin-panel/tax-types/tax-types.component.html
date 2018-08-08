@@ -45,7 +45,7 @@
                     <td>{{item.tax_rate}}</td>
                     <td>
                         <label class="switch" placement="top" ngbTooltip="Click to Active or Inactive">
-                            <input trueFalseValue trueValue="1" falseValue="0" type="checkbox" [(ngModel)]="item.ac" (change)="changeStatus(item.id,item.ac)">
+                            <input  trueValue="'1'" falseValue="'0'" type="checkbox" [(ngModel)]="item.ac" (change)="changeStatus(item.id,item.ac)">
                             <div class="slider round"></div>
                         </label>
                     </td>

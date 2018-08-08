@@ -15,7 +15,7 @@
                         <span class="text-danger">(*) </span>
                     </label>
                     <div class="col-6">
-                        <input type="text" formControlName="tax_code" class="form-control">
+                        <input type="text" formControlName="tax_code" class="form-control" readonly>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -25,7 +25,7 @@
                     <div class="col-6">
                         <input type="text" formControlName="description" class="form-control">
                         <span style="border-color: #999;" placement="top" ngbTooltip="An abbreviated name, used when selecting tax types in sales & purchase orders."
-                            class="nav-link mt-1 col-md-1" [routerLink]="['/']">
+                            class="mt-1">
                             <i class="fa fa-question-circle"></i>
                         </span>
                     </div>

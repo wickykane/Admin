@@ -17,7 +17,7 @@ export class TaxTypesModalComponent implements OnInit {
 
   constructor(public activeModal: NgbActiveModal, private fb: FormBuilder, private taxTypeService: TaxTypesService) {
     this.taxType = fb.group({
-      'tax_code': [{value: null, disabled: true }],
+      'tax_code': [null],
       'tax_rate': [null, Validators.required],
       'description': [null, Validators.required],
     });
@@ -38,8 +38,7 @@ export class TaxTypesModalComponent implements OnInit {
   }
   generateTaxTypes() {
     this.taxTypeService.generateCode().subscribe((res) => {
-      console.log(res.data);
-      this.taxType.patchValue(res.data);
+      this.taxType.get('tax_code').patchValue(res.data.code);
     });
   }
 
