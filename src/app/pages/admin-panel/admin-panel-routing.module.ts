@@ -25,6 +25,7 @@ import { PaymentTermComponent } from './payterm/payterm.component';
 import { ReturnReasonCreateComponent } from './return-reason/return-reason-create.component';
 import { ReturnReasonComponent } from './return-reason/return-reason.component';
 import { ShipmentMethodComponent } from './shipment-method/shipment-method.component';
+import { TaxTypesComponent } from './tax-types/tax-types.component';
 import { UnitMeasureComponent } from './unit-measure/unit-measure.component';
 import { UserCreateComponent } from './user/user-create.component';
 import { UserComponent } from './user/user.component';
@@ -192,7 +193,11 @@ const routes: Routes = [
     {
         path: 'payment-methods/create',
         component: PaymentMethodsCreateComponent
-    }
+    },
+    {
+        path: 'tax-types',
+        component: TaxTypesComponent
+    },
 ];
 
 @NgModule({

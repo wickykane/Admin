@@ -58,6 +58,9 @@ import { EmailPreviewTabComponent } from './invoice-config/tabs/preview/email-pr
 import { PaymentMethodsCreateComponent } from './payment-methods/create/payment-method-create.component';
 import { PaymentMethodsListComponent } from './payment-methods/list/payment-methods-list.component';
 
+import { TaxTypesModalComponent } from './tax-types/modal/tax-types.modal';
+import { TaxTypesComponent } from './tax-types/tax-types.component';
+
 import { CommonService, TableService } from '../../services/index';
 import {
     CommonShareModule,
@@ -123,11 +126,14 @@ import { CKEditorModule } from 'ng2-ckeditor';
         EmailEditorTabComponent,
         EmailPreviewTabComponent,
         PaymentMethodsListComponent,
-        PaymentMethodsCreateComponent
+        PaymentMethodsCreateComponent,
+        TaxTypesComponent,
+        TaxTypesModalComponent
     ],
     entryComponents: [
         BankModalComponent,
         BranchModalComponent,
+        TaxTypesModalComponent,
         InsuranceBranchModalComponent,
         InsuranceModalComponent,
         CustomerModalContent,

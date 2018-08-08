@@ -214,7 +214,7 @@
             <form>
                 <div class="form-group">
                     <label for="">Remarks</label>
-                    <textarea name="description" class="form-control" rows="4"></textarea>
+                    <textarea name="description" class="form-control" rows="4">{{detail['description']}}</textarea>
                 </div>
             </form>
         </div>
@@ -237,16 +237,19 @@
                   </div> -->
                   <div class="w-100"></div>
                   <label class="col-sm-4 offset-md-4 col-form-label text-label">- Discount (%):</label>
-                  <div class="col-sm-4 text-right">
+                  <div class="col-sm-2 text-right">
                       <label class="col-form-label control-label">{{detail['discount_percent']}}</label>
                   </div>
+                  <div class="col-sm-2 text-right">
+                    <label class="col-form-label control-label">{{detail['discount']|currency}}</label>
+                </div>
                   <div class="w-100"></div>
                   <label class="col-sm-4 offset-md-4 col-form-label text-label">+ TAX / VAT (%):</label>
                   <div class="col-sm-2 text-right">
                       <label class="col-form-label control-label">{{detail['vat_percent']}}</label>
                   </div>
                   <div class="col-sm-2 text-right">
-                      <label class="col-form-label control-label">{{detail['discount']|currency}}</label>
+                      <label class="col-form-label control-label">{{detail['vat']|currency}}</label>
                   </div>
                   <div class="w-100"></div>
                   <label class="col-sm-4 offset-md-4 col-form-label text-label">Total:</label>
