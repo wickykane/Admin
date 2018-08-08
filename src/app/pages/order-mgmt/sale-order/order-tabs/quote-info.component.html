@@ -133,7 +133,7 @@
                             <th class="text-nowrap text-center" translate>UOM</th>
                             <th class="text-nowrap text-center " translate>Order QTY</th>
                             <th class="text-center" translate>Unit Price</th>
-                            <th class="text-center" translate>Promo Discount</th>
+                            <th class="text-center" translate>Discount</th>
                             <th class="text-center" translate>Amount</th>
                             <th class="text-center" translate>In</th>
                         </tr>
@@ -202,16 +202,19 @@
                   </div> -->
                   <div class="w-100"></div>
                   <label class="col-sm-4 offset-md-4 col-form-label text-label">- Discount (%):</label>
-                  <div class="col-sm-4 text-right">
+                  <div class="col-sm-2 text-right">
                       <label class="col-form-label control-label">{{detail['discount_percent']}}</label>
                   </div>
+                  <div class="col-sm-2 text-right">
+                    <label class="col-form-label control-label">{{detail['discount']|currency}}</label>
+                </div>
                   <div class="w-100"></div>
                   <label class="col-sm-4 offset-md-4 col-form-label text-label">+ TAX / VAT (%):</label>
                   <div class="col-sm-2 text-right">
                       <label class="col-form-label control-label">{{detail['vat_percent']}}</label>
                   </div>
                   <div class="col-sm-2 text-right">
-                      <label class="col-form-label control-label">{{detail['discount']|currency}}</label>
+                      <label class="col-form-label control-label">{{detail['vat']|currency}}</label>
                   </div>
                   <div class="w-100"></div>
                   <label class="col-sm-4 offset-md-4 col-form-label text-label">Total:</label>
