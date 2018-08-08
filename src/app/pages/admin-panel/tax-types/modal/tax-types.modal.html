@@ -1,0 +1,50 @@
+<div class="modal-style">
+    <div class="modal-header">
+        <p class="second-title">{{ modalTitle }}</p>
+        <button type="button" (click)="cancel()" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body" style="padding-bottom:10px;">
+        <form [formGroup]="taxType" class="form-horizontal" role="form">
+            <div class="">
+
+                <!-- *ngIf="isEdit" -->
+                <div class="form-group row">
+                    <label for="" class="col-md-4 control-label" translate>Code
+                        <span class="text-danger">(*) </span>
+                    </label>
+                    <div class="col-6">
+                        <input type="text" formControlName="tax_code" class="form-control" readonly>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="" class="control-label col-4" translate>Description
+                        <span class="text-danger">(*) </span>
+                    </label>
+                    <div class="col-6">
+                        <input type="text" formControlName="description" class="form-control">
+                        <span style="border-color: #999;" placement="top" ngbTooltip="An abbreviated name, used when selecting tax types in sales & purchase orders."
+                            class="mt-1">
+                            <i class="fa fa-question-circle"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="" class="control-label col-4" translate>Tax Rate  <span class="text-danger">(*) </span></label>                   
+                   <div class="col-6">
+                        <input type="text" formControlName="tax_rate" class="form-control">
+                   </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer" style="padding-top: 0">
+        <div class="form-group" style="margin-top: 20px;">
+            <div class="text-center">
+                <button [disabled]="!taxType.valid" style="width: 70px" class="btn btn-primary" type="button" (click)="ok()" translate>OK</button>
+                <button class="btn btn-default" type="button" (click)="cancel()" translate>Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

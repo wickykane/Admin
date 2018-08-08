@@ -22,7 +22,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
     @Input() item;
     @Input() paddr;
     @Input() index;
-
+    @Input() isEdit;
     /**
      * Variable Declaration
      */
@@ -68,7 +68,8 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             'credit_limit': [null],
             'credit_sts': 2,
             'sale_person_id': [null],
-            'payment_make': [null, Validators.required]
+            'payment_make': [null, Validators.required],
+            'site_id':[null]
         });
 
         this.hotkeyCtrlRight = hotkeysService.add(new Hotkey('alt+r', (event: KeyboardEvent): boolean => {
@@ -101,13 +102,19 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             this.contacts = this.item.contacts;
             this.addresses = this.item.addresses;
             this.bank_accounts = this.item.bank_accounts;
-            if(this.listCountry.length>0){
-                this.addresses['listCountry'] = this.listCountry;
+            this.credit_cards = this.item.credit_cards;
+            if(this.item['site_id']!==undefined){
+                this.isEdit = true;
             }
+            else{
+                this.isEdit = false;
+            }
+
             // this.orderAddress(this.addresses);
         } else {
             let code = this.info.code;
             code++;
+            this.isEdit = false;
             this.generalForm.patchValue({ parent_company_name: this.info.parent_company_name });
             this.generalForm.patchValue({ site_code: String(this.info.textCode + '0000' + code) });
         }
@@ -164,20 +171,21 @@ export class SiteModalComponent implements OnInit, OnDestroy {
     changeState(v, item) {
         item.listState.forEach(element => {
             if(element.id == item.state_id){
-                item.state_name = element.name
+                item.state_name = element.name;
             }
-            else{
-                item.state_name = "";
-            }
+
           
         });
+        if(item.state_id =="null"){
+            item.state_name = '';
+        }
     }
     changeBank(item) {
-        item.bank_swift = this.listBank.map(x => {
+         this.listBank.map(x => {
             if (item.bank_id === x.id) {
-                return x.swift;
+                item.bank_swift = x.swift;
             }
-        })[0];
+        });
 
         this.commonService.getListBranchByBank(item.bank_id).subscribe(res => {
             try {
@@ -279,7 +287,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
 
     applyData() {
         this.contacts.forEach(obj => {
-            obj['pwd_cfrm'] = obj.pwd;
+            obj['pwd_cfrm'] = obj.password;
         });
         if(this.generalForm.value.site_code==""){
             return this.toastr.error('Site Code is required');
@@ -326,6 +334,9 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             //     await this.checkValidField(params);
             //     await this.closeModal(params);
             // })();
+            if(this.isEdit==false){
+                delete params.site_id;
+            }
             if(this.index!=undefined){
                 this.closeModal({params:params,index:this.index});
             }

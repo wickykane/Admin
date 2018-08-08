@@ -80,6 +80,10 @@ export class CreateComponent implements OnInit {
         })();
     }
 
+    toNumber(str) {
+      return Number(str);
+    }
+
     setData(data) {
         this.getStateByCountry(data.primary.country_code, 'primary');
         this.getStateByCountry(data.billing.country_code, 'billing');
@@ -99,6 +103,7 @@ export class CreateComponent implements OnInit {
         return createNumberMask({
             allowDecimal: true,
             prefix: '',
+            includeThousandsSeparator : false,
             integerLimit: max || null
         });
     }
