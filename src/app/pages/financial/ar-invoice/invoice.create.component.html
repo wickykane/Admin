@@ -14,7 +14,7 @@
                                     <div class="form-group">
                                         <label for="code" class="control-label" translate>Customer</label>
                                         <span class="text-danger">(*)</span>
-                                        <div *ngIf="isCreate">
+                                        <div *ngIf="isCreate || (invoice_details['is_crtd_by_order'] ==0)">
                                             <ng-select style="width: 150px;" (change)="changeCustomer($event)" [items]="listMaster['customer']" bindLabel="customer.name" bindValue="customer.id" formControlName="company_id">
                                             </ng-select>
                                         </div>
@@ -343,7 +343,7 @@
                                         <td>{{item.condition_name}}</td>
                                         <td>{{item.qty}}</td>
                                         <td>{{item.uom_name}}</td>
-                                        <td>{{item.qty}}</td>
+                                        <td>{{item.qty_inv}}</td>
                                         <td>{{item.price | currency:'$'}}</td>
                                         <td>{{item.source_name}}</td>
                                         <td>{{item.discount_percent}}</td>
@@ -426,7 +426,7 @@
         <div class="row">
             <div class="col-md-12 mg-top-15 text-center">
                 <button type="button" class="btn btn-default" [routerLink]="['/financial/invoice']" translate>Back To List</button>
-                <button type="button" class="btn btn-outline-warning" (click)="payloadData('draft')" [disabled]="!generalForm.valid || list.items.length == 0" *ngIf="generalForm.value['inv_status'] < 2" translate>Save As Draft</button>
+                <!-- <button type="button" class="btn btn-outline-warning" (click)="payloadData('draft')" [disabled]="!generalForm.valid || list.items.length == 0" *ngIf="generalForm.value['inv_status'] < 2" translate>Save As Draft</button> -->
                 <button type="button" class="btn btn-outline-primary" (click)="payloadData('submit')" [disabled]="!generalForm.valid || list.items.length == 0" *ngIf="generalForm.value['inv_status'] < 2" translate>Save & Submit</button>
                 <button type="button" class="btn btn-outline-info" (click)="payloadData('createnew')" [disabled]="!generalForm.valid || list.items.length == 0" *ngIf="generalForm.value['inv_status'] < 2" translate>Save & Create New Invoice</button>
             </div>

@@ -138,7 +138,9 @@ export class ItemModalContent implements OnInit {
         }
     }
     getNameWarehouse(arr, id) {
-        return arr.find(item => item.warehouse_id === id)['name'];
+        if (arr) {
+            return 'WH' + arr.find(item => item.warehouse_id === id)['name'];
+        }
     }
 
     getList() {

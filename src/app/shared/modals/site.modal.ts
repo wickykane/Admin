@@ -103,10 +103,18 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             this.addresses = this.item.addresses;
             this.bank_accounts = this.item.bank_accounts;
             this.credit_cards = this.item.credit_cards;
+            if(this.item['site_id']!==undefined){
+                this.isEdit = true;
+            }
+            else{
+                this.isEdit = false;
+            }
+
             // this.orderAddress(this.addresses);
         } else {
             let code = this.info.code;
             code++;
+            this.isEdit = false;
             this.generalForm.patchValue({ parent_company_name: this.info.parent_company_name });
             this.generalForm.patchValue({ site_code: String(this.info.textCode + '0000' + code) });
         }
@@ -173,11 +181,11 @@ export class SiteModalComponent implements OnInit, OnDestroy {
         }
     }
     changeBank(item) {
-        item.bank_swift = this.listBank.map(x => {
+         this.listBank.map(x => {
             if (item.bank_id === x.id) {
-                return x.swift;
+                item.bank_swift = x.swift;
             }
-        })[0];
+        });
 
         this.commonService.getListBranchByBank(item.bank_id).subscribe(res => {
             try {

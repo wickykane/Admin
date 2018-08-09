@@ -737,6 +737,7 @@ ngu-carousel {
         top:8px !important;
     }
 }
+
 .table-custom{
     margin:25px;
     padding: 15px;
@@ -788,4 +789,7 @@ ngu-carousel {
     margin: 10px auto;
     position:relative;
     text-align:center
+}
+.ng-select .ng-control .ng-value-container {
+  top: 0
 }
