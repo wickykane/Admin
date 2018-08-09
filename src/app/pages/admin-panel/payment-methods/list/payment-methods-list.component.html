@@ -71,7 +71,7 @@
                         <td>{{paymentMethod.type_name}}</td>
                         <td>
                             <label class="switch" placement="top">
-                                <input type="checkbox" [(ngModel)]="paymentMethod.ac">
+                                <input type="checkbox" [(ngModel)]="paymentMethod.ac" (change)="changePaymentMethodStatus(paymentMethod)">
                                 <div class="slider round"></div>
                             </label>
                         </td>

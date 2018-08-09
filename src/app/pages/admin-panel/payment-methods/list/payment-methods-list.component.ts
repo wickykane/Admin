@@ -117,8 +117,22 @@ export class PaymentMethodsListComponent implements OnInit {
         this.router.navigate(['/admin-panel/payment-methods/create']);
     }
 
-    changePaymentMethodStatus() {
-        console.log('Change status');
+    changePaymentMethodStatus(payment) {
+        payment.ac = payment.ac ? 1 : 0;
+        const params = { ac: payment.ac, ...{ messages: 1 } };
+        this.paymentMethodService.editPaymentMethod(payment.id, params).subscribe(
+            res => {
+                try {
+                    this.toastr.success(res.message);
+                } catch (err) {
+                    console.log(err);
+                    payment.ac = payment.ac ? 0 : 1;
+                }
+            },
+            err => {
+                console.log(err);
+                payment.ac = payment.ac ? 0 : 1;
+            });
     }
 
     editPaymentMethod(paymentMethodId) {
