@@ -31,7 +31,7 @@
                     <span class="text-danger">(*)</span>
                 </div>
                 <div class="col-md-7">
-                    <input type="text" class="form-control" formControlName="no">
+                    <input type="text" class="form-control" formControlName="cd">
                 </div>
             </div>
             <div class="row form-group">
@@ -93,8 +93,8 @@
                     <span class="text-danger">(*)</span>
                 </div>
                 <div class="col-md-7">
-                    <select formControlName="sts" class="form-control">
-                        <option [ngValue]="null" selected="true">--Select--</option>
+                    <select formControlName="ac" class="form-control">
+                        <option [hidden]="true" [disabled]="true" [ngValue]="null" selected="true">--Select--</option>
                         <option *ngFor="let status of listMaster['status']" [ngValue]="status.id">{{status.value}}</option>
                     </select>
                 </div>

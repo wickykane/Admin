@@ -55,6 +55,12 @@ export class LedgerService {
         return this.apiService.get(url);
     }
 
+    createAccount(id, params) {
+        const url = ['account', id].join('/');
+        return this.apiService.post(url, params);
+    }
+
+
     deleteAccount(id) {
         const url = ['bank', id].join('/');
         return this.apiService.delete(url);

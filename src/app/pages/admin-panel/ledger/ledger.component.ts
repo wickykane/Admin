@@ -119,6 +119,7 @@ export class LedgerComponent implements OnInit {
       this.generalDetailForm.patchValue(res.data);
       this.data['selectedAccount'] = (flag) ? res.data : this.data['selectedAccount'];
       this.data['selectedAccount']['is_credit'] = res.data.is_credit;
+      this.data['selectedAccount']['account_type_name'] = res.data.account_type_name;
     });
   }
 
@@ -271,6 +272,7 @@ export class LedgerComponent implements OnInit {
     modalRef.componentInstance.modalTitle = (flag) ? flag.name : 'Add New Account';
     modalRef.componentInstance.isEdit = flag;
     modalRef.componentInstance.item = flag || {};
+    modalRef.componentInstance.parent = this.data['selectedAccount'];
     modalRef.result.then(data => {
       this.getList();
     },

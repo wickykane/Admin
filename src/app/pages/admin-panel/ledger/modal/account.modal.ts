@@ -15,6 +15,7 @@ export class AccountModalComponent implements OnInit {
   public accountForm: FormGroup;
   public listMaster = {};
   @Input() item;
+  @Input() parent;
   @Input() modalTitle;
   @Input() isEdit;
   @ViewChild('select') select;
@@ -22,18 +23,31 @@ export class AccountModalComponent implements OnInit {
 
   constructor(private toastr: ToastrService, private ledgerService: LedgerService, public activeModal: NgbActiveModal, private fb: FormBuilder) {
     this.accountForm = fb.group({
-      'type': [null, Validators.required],
-      'detail_type': [null, Validators.required],
-      'no': [null, Validators.required],
+      'type': [null],
+      'detail_type': [null],
+      'cd': [null, Validators.required],
       'des': [null, Validators.required],
-      'credit': [null, Validators.required],
+      'credit': [null],
       'is_sub_acc': [null],
       'parent_id': [null],
-      'sts': [null, Validators.required],
+      'ac': [1, Validators.required],
     });
   }
 
   ngOnInit() {
+    if (this.parent) {
+      this.accountForm.patchValue({
+        type: this.parent.account_type_name,
+        detail_type: this.parent.des,
+        credit: (this.parent.credit) ? 'Credit' : 'Debit',
+      });
+    }
+
+    this.listMaster['status'] = [
+      { id: 0, value: 'Inactive' },
+      { id: 1, value: 'Active' },
+    ];
+
     this.listMaster['parents'] = [{
       id: 0,
       name: 'General Ledge - Accounts',
@@ -62,7 +76,7 @@ export class AccountModalComponent implements OnInit {
   }
 
   ok() {
-    this.activeModal.close(this.accountForm.value);
+    this.createAccount();
   }
 
   cancel() {
@@ -77,10 +91,12 @@ export class AccountModalComponent implements OnInit {
   }
 
 
-  createAccount(params) {
-    this.ledgerService.createAccount(params).subscribe(res => {
+  createAccount() {
+    const params = this.accountForm.value;
+    this.ledgerService.createAccount(this.parent.id, params).subscribe(res => {
       try {
         this.toastr.success(res.message);
+        this.activeModal.close(this.accountForm.value);
       } catch (e) {
         console.log(e);
       }
