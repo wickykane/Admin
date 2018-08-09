@@ -38,7 +38,7 @@ export class PaymentMethodsKeyService implements OnDestroy {
         }, undefined, 'Add New'));
         this._hotkeysService.add(new Hotkey('f2', (event: KeyboardEvent): any => {
             event.preventDefault();
-            this.context.changePaymentMethodStatus();
+            this.context.changePaymentMethodStatusMulti();
             return event;
         }, undefined, 'Active/Inactive'));
         this._hotkeysService.add(new Hotkey('f3', (event: KeyboardEvent): any => {

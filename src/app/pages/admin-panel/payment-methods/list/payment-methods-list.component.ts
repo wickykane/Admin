@@ -77,6 +77,14 @@ export class PaymentMethodsListComponent implements OnInit {
         console.log(index);
     }
 
+    checkAll(ev) {
+        this.paymentMethods.forEach(paymentMethod => (paymentMethod.checked = ev.target.checked));
+    }
+
+    isAllChecked() {
+        this.isCheckedAllPaymentMethod = this.paymentMethods.every(_ => _.checked);
+    }
+
     /**
      * Internal Function
      */
@@ -87,6 +95,7 @@ export class PaymentMethodsListComponent implements OnInit {
             res => {
                 try {
                     this.paymentMethods = res.data.rows;
+                    this.isAllChecked();
                     this.tableService.matchPagingOption(res.data);
                 } catch (err) {
                     console.log(err);
@@ -133,6 +142,30 @@ export class PaymentMethodsListComponent implements OnInit {
                 console.log(err);
                 payment.ac = payment.ac ? 0 : 1;
             });
+    }
+
+    changePaymentMethodStatusMulti() {
+        const params = {
+            payment_method_ids: this.paymentMethods.filter(_ => _.checked).map(_ => _.id),
+            messages: 1
+        };
+        if (params.payment_method_ids.length) {
+            this.paymentMethodService.changeStatusForMultiPaymentMethod(params).subscribe(
+                res => {
+                    try {
+                        this.toastr.success(res.message);
+                        this.getListPaymentMethods();
+                    } catch (err) {
+                        console.log(err);
+                    }
+                },
+                err => {
+                    console.log(err);
+                }
+            );
+        } else {
+            this.toastr.error('Please select at least 1 Payment Method to change status!');
+        }
     }
 
     editPaymentMethod(paymentMethodId) {

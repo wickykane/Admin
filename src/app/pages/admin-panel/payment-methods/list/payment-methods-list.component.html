@@ -42,7 +42,7 @@
                     <tr>
                         <th>
                             <label class="css-input css-checkbox css-checkbox-default">
-                                <input class="cb-all" type="checkbox" [(ngModel)]="isCheckedAllPaymentMethod">
+                                <input class="cb-all" type="checkbox" [(ngModel)]="isCheckedAllPaymentMethod" (change)="checkAll($event)">
                                 <span></span>
                             </label>
                         </th>
@@ -62,7 +62,7 @@
                     <tr *ngFor="let paymentMethod of paymentMethods">
                         <td>
                             <label class="css-input css-checkbox css-checkbox-default">
-                                <input class="cb-element" type="checkbox" [(ngModel)]="paymentMethod.checked">
+                                <input class="cb-element" type="checkbox" [(ngModel)]="paymentMethod.checked" (change)="isAllChecked()">
                                 <span></span>
                             </label>
                         </td>

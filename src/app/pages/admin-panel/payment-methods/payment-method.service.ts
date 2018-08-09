@@ -46,6 +46,11 @@ export class PaymentMethodsService {
         return this.apiService.put(url, params);
     }
 
+    changeStatusForMultiPaymentMethod(params) {
+        const url = 'payment-method/swap-active-array';
+        return this.apiService.put(url, params);
+    }
+
     deletePaymentMethod(id) {
         const url = 'payment-method/' + id;
         return this.apiService.delete(url);
