@@ -94,11 +94,15 @@ export class LedgerComponent implements OnInit {
 
   ngOnInit() {
     this.getAccountTree();
+    this.listMaster['expands'] = [];
   }
 
   /**
    * Tree Account
    */
+  expand(items) {
+    this.listMaster['expands'] = items;
+  }
 
   getAccountTree() {
     this.ledgerService.getAccountTree().subscribe(res => {
@@ -221,13 +225,12 @@ export class LedgerComponent implements OnInit {
    */
 
   getList() {
-    const params = { ...this.tableService.getParams(), ...this.searchForm.value };
+    const params = {...this.searchForm.value };
     Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
 
     this.ledgerService.getListAccount(this.data['selectedAccount'].id, params).subscribe(res => {
       try {
-        this.list.items = res.data.rows;
-        this.tableService.matchPagingOption(res.data);
+        this.list.items = res.data;
       } catch (e) {
         console.log(e);
       }
@@ -269,7 +272,7 @@ export class LedgerComponent implements OnInit {
   // Modal
   newAccount(flag?) {
     const modalRef = this.modalService.open(AccountModalComponent, { windowClass: 'md-modal' });
-    modalRef.componentInstance.modalTitle = (flag) ? flag.name : 'Add New Account';
+    modalRef.componentInstance.modalTitle = (flag) ? flag.des : 'Add New Account';
     modalRef.componentInstance.isEdit = flag;
     modalRef.componentInstance.item = flag || {};
     modalRef.componentInstance.parent = this.data['selectedAccount'];

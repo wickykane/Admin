@@ -48,6 +48,8 @@ export class AccountModalComponent implements OnInit {
       { id: 1, value: 'Active' },
     ];
 
+    this.getListParentAccount();
+
     this.listMaster['parents'] = [{
       id: 0,
       name: 'General Ledge - Accounts',
@@ -64,19 +66,24 @@ export class AccountModalComponent implements OnInit {
         { id: 6, name: 'HEY?' }
       ]
     }];
+
     if (this.item.id) {
       this.getDetailAccount(this.item.id);
     }
   }
 
   getDetailAccount(id) {
-    this.ledgerService.getDetailAccount(id).subscribe((res) => {
-      this.accountForm.patchValue(res.data);
+    this.ledgerService.getDetailAccountById(id).subscribe((res) => {
+      this.accountForm.patchValue({ ...res.data, is_sub_acc: (res.data.parent_id) ? 1 : 0 });
     });
   }
 
   ok() {
-    this.createAccount();
+    if (this.item.id) {
+      this.updateAccount();
+    } else {
+      this.createAccount();
+    }
   }
 
   cancel() {
@@ -90,10 +97,31 @@ export class AccountModalComponent implements OnInit {
     this.select.close();
   }
 
+  getListParentAccount() {
+    this.ledgerService.getListAccount(this.parent.id, {}).subscribe(res => {
+      try {
+        this.listMaster['parents'] = res.data;
+      } catch (e) {
+        console.log(e);
+      }
+    });
+  }
 
   createAccount() {
     const params = this.accountForm.value;
     this.ledgerService.createAccount(this.parent.id, params).subscribe(res => {
+      try {
+        this.toastr.success(res.message);
+        this.activeModal.close(this.accountForm.value);
+      } catch (e) {
+        console.log(e);
+      }
+    });
+  }
+
+  updateAccount() {
+    const params = this.accountForm.value;
+    this.ledgerService.updateAccount(this.item.id, params).subscribe(res => {
       try {
         this.toastr.success(res.message);
         this.activeModal.close(this.accountForm.value);

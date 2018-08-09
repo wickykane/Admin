@@ -10,7 +10,7 @@
                     <button [disabled]="!data['selectedAccount'] || data['selectedAccount'] && data['selectedAccount'].level !== 1" (click)="actionInvoke(screen.NEW_DETAIL_TYPE)" class="btn btn-custom btn-default">Add Detail Type</button>
                 </div>
                 <div class="account-tree">
-                    <app-account-tree [currentItem]="data['selectedAccount']" [isRoot]="true" [items]="listMaster['account_list']" (selectedItem)="selectItem($event)"></app-account-tree>
+                    <app-account-tree (expandItem)="expand($event)" [expands]="listMaster['expands']" [currentItem]="data['selectedAccount']" [isRoot]="true" [items]="listMaster['account_list']" (selectedItem)="selectItem($event)"></app-account-tree>
                 </div>
             </div>
             <div class="col-md-9">
@@ -205,10 +205,10 @@
                                                 </thead>
                                                 <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                                                     <tr>
-                                                        <td>{{item.no}}</td>
+                                                        <td>{{item.cd}}</td>
                                                         <td>{{item.des }}</td>
-                                                        <td>{{item.credit}}</td>
-                                                        <td class="text-center">{{item.ac==1 ?'Active':'In Active'}}</td>
+                                                        <td>{{item.is_credit_text}}</td>
+                                                        <td class="text-center">{{item.ac_text}}</td>
                                                         <td class="text-center">
                                                             <span class="text-success">
                                                                 <i class="fa fa-check"></i>
@@ -229,25 +229,6 @@
                                                     </tr>
                                                 </tbody>
                                             </table>
-                                        </div>
-
-                                        <div class="row normal-pagination" *ngIf="list.items.length > 0">
-                                            <div class="col-md-6">
-                                                <div class="text-left">
-                                                    <div class="col-md-6" style="padding-left: 0px;">
-                                                        <span style="float: left; padding-right: 10px;">{{list.items.length}}/{{tableService.pagination.total_record}} items </span>
-                                                        <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length" (change)="tableService.changeLength()">
-                                                  <option *ngFor="let option of tableService.itemPerPageOptions" [ngValue]="option">{{option}}</option>
-                                              </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="text-right">
-                                                    <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length" [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page" [maxSize]="tableService.maxSize"
-                                                        [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>

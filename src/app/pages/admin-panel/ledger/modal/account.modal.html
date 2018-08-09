@@ -69,21 +69,23 @@
                     <span class="text-danger">(*)</span>
                 </div>
                 <div class="col-md-7">
-                    <ng-select #select [items]="listMaster['parents']" formControlName="parent_id" bindLabel="name" bindValue="id">
+                    <!-- <ng-select #select [items]="listMaster['parents']" formControlName="parent_id" bindLabel="des" bindValue="id">
                         <ng-template ng-label-tmp let-item="item">
-                            {{selectedParent.name}}
+                            {{selectedParent.des}}
                         </ng-template>
-                        <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                        <ng-template *ngIf="item.id != selectedParent.id" ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
                             <ul class="parent-node hoverable">
-                                <li (click)="selectParent($event, item)" class="child-node"> <span>{{ item.name }}</span>
+                                <li (click)="selectParent($event, item)" class="child-node"> <span>{{ item.des }}</span>
                                     <ul class="parent-node" *ngIf="item.children">
                                         <li (click)="selectParent($event, c2)" class="child-node" *ngFor="let c2 of item.children">
-                                            <span>  {{ c2.name }}</span>
+                                            <span>  {{ c2.des }}</span>
                                         </li>
                                     </ul>
                                 </li>
                             </ul>
                         </ng-template>
+                    </ng-select> -->
+                    <ng-select [items]="listMaster['parents']" formControlName="parent_id" bindLabel="des" bindValue="id">
                     </ng-select>
                 </div>
             </div>

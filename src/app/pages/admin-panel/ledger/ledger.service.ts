@@ -6,7 +6,7 @@ export class LedgerService {
     constructor(private apiService: ApiService) { }
 
     getListAccount(id, params) {
-        const url = ['account', id].join('/');
+        const url = ['account', 'getList', id].join('/');
         return this.apiService.get(url, params);
     }
 
@@ -51,7 +51,7 @@ export class LedgerService {
     }
 
     getDetailAccountById(id) {
-        const url = ['account', id].join('/');
+        const url = ['account', 'getDetail', id].join('/');
         return this.apiService.get(url);
     }
 
@@ -60,14 +60,14 @@ export class LedgerService {
         return this.apiService.post(url, params);
     }
 
+    updateAccount(id, params) {
+        const url = ['account', id].join('/');
+        return this.apiService.put(url, params);
+    }
 
     deleteAccount(id) {
         const url = ['bank', id].join('/');
         return this.apiService.delete(url);
     }
 
-    getDetailAccount(id) {
-        const url = ['bank', id].join('/');
-        return this.apiService.get(url);
-    }
 }
