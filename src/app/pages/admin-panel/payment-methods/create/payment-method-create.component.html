@@ -135,9 +135,13 @@
                             <option value="null" disabled>--Select--</option>
                             <option *ngFor="let type of listMaster.transactionTypes" [value]="type.key">{{type.name}}</option>
                         </select>
-                        <span class="show-tooltip" ngbTooltip="The 16-character transaction key that was supplied when your Authorize.net account was created. This is used to verify order details after payment is completed.">
+                        <span class="show-tooltip" [ngbTooltip]="tooltipTransactionType">
                             <i class="fa fa-question-circle"></i>
                         </span>
+                        <ng-template #tooltipTransactionType>
+                            <div><b>Authorize Only: </b>A credit card transaction that reserves funds on a customer’s credit card. An Authorize Only transaction does not charge the card until you confirm it.</div>
+                            <div><b>Authorize & Capture: </b>A credit card transaction that immediately charges a customer’s credit card.</div>
+                        </ng-template>
                         <span class="error" *ngIf="isClickedSave && this.paymentForm.controls.transaction_type.invalid">
                             (!): Please select the Transaction Type.
                         </span>

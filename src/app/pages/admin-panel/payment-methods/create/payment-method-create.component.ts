@@ -40,6 +40,7 @@ export class PaymentMethodsCreateComponent implements OnInit {
         ]
     };
     public paymentMethodId = null;
+    private paymentMethodDetail = {};
     public isClickedSave = false;
     public paymentForm: FormGroup;
 
@@ -126,8 +127,8 @@ export class PaymentMethodsCreateComponent implements OnInit {
         this.paymentMethodService.getPaymentMethodDetail(this.paymentMethodId).subscribe(
             res => {
                 try {
+                    this.paymentMethodDetail = res.data;
                     this.paymentForm.patchValue({ ...res.data, ...res.data.online_configuration });
-                    console.log(this.paymentForm.value);
                 } catch (err) {
                     console.log(err);
                 }
@@ -141,9 +142,20 @@ export class PaymentMethodsCreateComponent implements OnInit {
     clearFieldWhenChangeType(selectedType) {
         this.isClickedSave = false;
         this.paymentForm.reset();
+        if (this.paymentMethodId === null || this.paymentMethodId === undefined) {
+            this.paymentForm.patchValue({ show_in_store: 1 });
+            if (selectedType.toString() === '2') { this.paymentForm.patchValue({ sandbox: 1 }); }
+        } else {
+            if (selectedType.toString() === '2') {
+                this.paymentForm.patchValue({ ...this.paymentMethodDetail, ...this.paymentMethodDetail['online_configuration'] });
+                if (this.paymentForm.value.sandbox === null || this.paymentForm.value.sandbox === undefined) {
+                    this.paymentForm.patchValue({ sandbox: 1 });
+                }
+            } else {
+                this.paymentForm.patchValue({ ...this.paymentMethodDetail });
+            }
+        }
         this.paymentForm.patchValue({ type: selectedType });
-        this.paymentForm.patchValue({ show_in_store: 1 });
-        if (selectedType === '2') { this.paymentForm.patchValue({ sandbox: 1 }); }
     }
 
     checkDuplicateDisplayName() {
@@ -187,7 +199,7 @@ export class PaymentMethodsCreateComponent implements OnInit {
 
     checkFormValidationForOnlineType() {
         if (
-            this.paymentForm.value.processor_type &&
+            this.paymentForm.controls.processor_type.valid &&
             this.paymentForm.controls.name.valid &&
             this.paymentForm.controls.ac.valid &&
             this.paymentForm.controls.service_id.valid &&
