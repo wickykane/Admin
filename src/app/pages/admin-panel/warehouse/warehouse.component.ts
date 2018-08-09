@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { routerTransition } from '../../../router.animations';
 
 // Services
+import { ToastrService } from 'ngx-toastr';
 import { TableService } from '../../../services/index';
 import { WarehouseService } from './warehouse.service';
 
@@ -23,6 +24,7 @@ export class WarehouseComponent implements OnInit {
 
     constructor(
         public tableService: TableService,
+        public toastr: ToastrService,
         private warehouseService: WarehouseService
     ) {
         //  Assign get list function name, override letiable here
@@ -31,12 +33,34 @@ export class WarehouseComponent implements OnInit {
     }
 
     selectData(index) {
-      console.log(index);
+        console.log(index);
     }
 
     ngOnInit() {
         this.getList();
         this.user = JSON.parse(localStorage.getItem('currentUser'));
+    }
+
+    changeStatus(id, status) {
+        this.warehouseService.changeStatus(id, status).subscribe(res => {
+            try {
+                this.toastr.success(res.message);
+                this.getList();
+            } catch (e) {
+
+            }
+        });
+    }
+
+    setShipping(id) {
+        this.warehouseService.setShipping(id).subscribe(res => {
+            try {
+                this.toastr.success(res.message);
+                this.getList();
+            } catch (e) {
+
+            }
+        });
     }
 
     getList() {
