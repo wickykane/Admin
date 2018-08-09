@@ -61,7 +61,9 @@ export class PaymentMethodsCreateComponent implements OnInit {
             transaction_type: [null, Validators.required],
             service_id: [null, Validators.required],
             service_secret: [null, Validators.required],
-            sandbox: [null]
+            sandbox: [null, Validators.required],
+            username: [null, Validators.required],
+            password: [null, Validators.required]
         });
     }
 
@@ -202,6 +204,8 @@ export class PaymentMethodsCreateComponent implements OnInit {
             this.paymentForm.controls.processor_type.valid &&
             this.paymentForm.controls.name.valid &&
             this.paymentForm.controls.ac.valid &&
+            this.paymentForm.controls.username.valid &&
+            this.paymentForm.controls.password.valid &&
             this.paymentForm.controls.service_id.valid &&
             this.paymentForm.controls.sandbox.valid &&
             this.paymentForm.controls.show_in_store.valid &&

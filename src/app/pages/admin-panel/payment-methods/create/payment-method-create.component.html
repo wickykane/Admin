@@ -13,6 +13,9 @@
                             <option value="null" disabled>--Select--</option>
                             <option *ngFor="let type of listMaster.paymentTypes" [value]="type.key">{{type.name}}</option>
                         </select>
+                        <span class="show-tooltip" ngbTooltip="Payment Method Type.">
+                            <i class="fa fa-question-circle"></i>
+                        </span>
                         <span class="error" *ngIf="isClickedSave && this.paymentForm.controls.type.invalid">
                             (!): Please select the Payment Method Type.
                         </span>
@@ -26,6 +29,9 @@
                             <option value="null" disabled>--Select--</option>
                             <option *ngFor="let type of listMaster.paymentProcessors" [value]="type.key">{{type.name}}</option>
                         </select>
+                        <span class="show-tooltip" ngbTooltip="Payment Method Processor.">
+                            <i class="fa fa-question-circle"></i>
+                        </span>
                         <span class="error" *ngIf="isClickedSave && this.paymentForm.controls.processor_type.invalid">
                             (!): Please select the Payment Processor.
                         </span>
@@ -91,6 +97,39 @@
                     </div>
 
                     <!-- Type Online -->
+                    <div class="row create-section-info" *ngIf="this.paymentForm.value.type == 2 && this.paymentForm.value.processor_type">
+                        <label>
+                            <b *ngIf="this.paymentForm.value.processor_type == 1">Authorize.Net Account (*)</b>
+                            <b *ngIf="this.paymentForm.value.processor_type == 2">Paypal Account (*)</b>
+                        </label>
+                        <input type="text" class="form-control" formControlName="username">
+                        <span *ngIf="this.paymentForm.value.processor_type == 1" class="show-tooltip" ngbTooltip="Your Authorize.Net account.">
+                            <i class="fa fa-question-circle"></i>
+                        </span>
+                        <span *ngIf="this.paymentForm.value.processor_type == 2" class="show-tooltip" ngbTooltip="Your Paypal account.">
+                            <i class="fa fa-question-circle"></i>
+                        </span>
+                        <span class="error" *ngIf="isClickedSave && this.paymentForm.controls.username.invalid">
+                            (!): This field cannot be blank. Please input value.
+                        </span>
+                    </div>
+                    <div class="row create-section-info" *ngIf="this.paymentForm.value.type == 2 && this.paymentForm.value.processor_type">
+                        <label>
+                            <b>Password (*)</b>
+                        </label>
+                        <input type="password" class="form-control" formControlName="password">
+                        <span *ngIf="this.paymentForm.value.processor_type == 1" class="show-tooltip"
+                            ngbTooltip="The password to login with your Authorize.Net account. The password will be encrypted for security.">
+                            <i class="fa fa-question-circle"></i>
+                        </span>
+                        <span *ngIf="this.paymentForm.value.processor_type == 2" class="show-tooltip"
+                            ngbTooltip="The password to login with your Paypal account. The password will be encrypted for security.">
+                            <i class="fa fa-question-circle"></i>
+                        </span>
+                        <span class="error" *ngIf="isClickedSave && this.paymentForm.controls.password.invalid">
+                            (!): This field cannot be blank. Please input value.
+                        </span>
+                    </div>
                     <div class="row create-section-info" *ngIf="this.paymentForm.value.type == 2 && this.paymentForm.value.processor_type">
                         <label>
                             <b *ngIf="this.paymentForm.value.processor_type == 1">API Login ID (*)</b>
