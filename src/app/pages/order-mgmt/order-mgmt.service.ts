@@ -166,7 +166,7 @@ export class OrderService {
     }
 
     approveOrd(ordId) {
-        const url = 'order/approved/' + ordId;
+        const url = 'order/submit/' + ordId;
         return this.API.put(url);
     }
     changeOrderStatus(orderNum, params) {
