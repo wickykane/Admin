@@ -130,9 +130,9 @@ export class SaleOrderComponent implements OnInit {
     );
   };
 
-  putApproveOrder(order_num) {
-    const params = {'status_code': 'AP'};
-    this.orderService.changeOrderStatus(order_num, params).subscribe(res => {
+  putApproveOrder(order_id) {
+    // const params = {'status_code': 'AP'};
+    this.orderService.approveOrd(order_id).subscribe(res => {
       this.toastr.success(res.message);
       setTimeout(() => {
         this.getList();
