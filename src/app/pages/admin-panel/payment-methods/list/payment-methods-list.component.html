@@ -85,7 +85,7 @@
                             <a class="btn btn-primary-outline">
                                 <i class="fa fa-pencil" aria-hidden="true"></i>
                             </a>
-                            <a class="btn btn-primary-outline">
+                            <a class="btn btn-primary-outline" [hidden]="paymentMethod.used" (click)="deletePaymentMethod(paymentMethod)">
                                 <i class="fa fa-trash" aria-hidden="true"></i>
                             </a>
                         </td>

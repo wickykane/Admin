@@ -12,6 +12,8 @@ import { routerTransition } from '../../../../router.animations';
 import { PaymentMethodsKeyService } from '../keys.control';
 import { PaymentMethodsService } from '../payment-method.service';
 
+import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
+
 @Component({
     selector: 'app-payment-methods-list',
     templateUrl: './payment-methods-list.component.html',
@@ -50,6 +52,7 @@ export class PaymentMethodsListComponent implements OnInit {
         public toastr: ToastrService,
         public tableService: TableService,
         public keyService: PaymentMethodsKeyService,
+        public ngbModal: NgbModal,
         public paymentMethodService: PaymentMethodsService
     ) {
         this.searchForm = fb.group({
@@ -122,7 +125,24 @@ export class PaymentMethodsListComponent implements OnInit {
         console.log('Edit Payment');
     }
 
-    deletePaymentMethod() {
-        console.log('Delete Payment');
+    deletePaymentMethod(payment) {
+        const modalRef = this.ngbModal.open(ConfirmModalContent);
+        modalRef.result.then(result => {
+            if (result) {
+                this.paymentMethodService.deletePaymentMethod(payment.id).subscribe(
+                    res => {
+                        try {
+                            this.toastr.success(res.message);
+                            this.getListPaymentMethods();
+                        } catch (err) {
+                            console.log(err);
+                        }
+                    },
+                    err => {
+                        console.log(err);
+                    }
+                );
+            }
+        });
     }
 }

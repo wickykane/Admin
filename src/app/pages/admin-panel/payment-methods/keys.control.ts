@@ -43,13 +43,13 @@ export class PaymentMethodsKeyService implements OnDestroy {
         }, undefined, 'Active/Inactive'));
         this._hotkeysService.add(new Hotkey('f3', (event: KeyboardEvent): any => {
             event.preventDefault();
-            this.context.onSearchList();
+            this.context.tableService.searchAction();
             event.returnValue = false;
             return event;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Execute Search'));
         this._hotkeysService.add(new Hotkey('f4', (event: KeyboardEvent): any => {
             event.preventDefault();
-            this.context.onResetList();
+            this.context.tableService.resetAction(this.context.searchForm);
             event.returnValue = false;
             return event;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset'));
