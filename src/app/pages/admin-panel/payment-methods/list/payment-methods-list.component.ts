@@ -121,8 +121,8 @@ export class PaymentMethodsListComponent implements OnInit {
         console.log('Change status');
     }
 
-    editPaymentMethod() {
-        console.log('Edit Payment');
+    editPaymentMethod(paymentMethodId) {
+        this.router.navigate(['/admin-panel/payment-methods/edit', paymentMethodId]);
     }
 
     deletePaymentMethod(payment) {

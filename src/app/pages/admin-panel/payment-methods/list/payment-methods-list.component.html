@@ -82,7 +82,7 @@
                             <i *ngIf="paymentMethod.used" class="fa fa-check" aria-hidden="true"></i>
                         </td>
                         <td class="text-center">
-                            <a class="btn btn-primary-outline">
+                            <a class="btn btn-primary-outline" (click)="editPaymentMethod(paymentMethod.id)">
                                 <i class="fa fa-pencil" aria-hidden="true"></i>
                             </a>
                             <a class="btn btn-primary-outline" [hidden]="paymentMethod.used" (click)="deletePaymentMethod(paymentMethod)">

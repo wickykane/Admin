@@ -39,12 +39,13 @@ export class PaymentMethodsCreateComponent implements OnInit {
             }
         ]
     };
+    public paymentMethodId = null;
     public isClickedSave = false;
-    // public isDuplicateDisplayName = false;
     public paymentForm: FormGroup;
 
     constructor(
         public router: Router,
+        public route: ActivatedRoute,
         public fb: FormBuilder,
         public toastr: ToastrService,
         public paymentMethodService: PaymentMethodsService
@@ -56,7 +57,7 @@ export class PaymentMethodsCreateComponent implements OnInit {
             ac: [null, Validators.required],
             show_in_store: [null, Validators.required],
             desc: [null, Validators.required],
-            transition_type: [null, Validators.required],
+            transaction_type: [null, Validators.required],
             service_id: [null, Validators.required],
             service_secret: [null, Validators.required],
             sandbox: [null]
@@ -67,6 +68,10 @@ export class PaymentMethodsCreateComponent implements OnInit {
         this.getPaymentTypes();
         this.getPaymentProcessors();
         this.getTransactionTypes();
+        this.route.params.subscribe(params => {
+            this.paymentMethodId = params.id;
+            if (this.paymentMethodId) { this.getPaymentMethodDetail(); }
+        });
     }
     /**
      * Internal Function
@@ -117,6 +122,22 @@ export class PaymentMethodsCreateComponent implements OnInit {
         );
     }
 
+    getPaymentMethodDetail() {
+        this.paymentMethodService.getPaymentMethodDetail(this.paymentMethodId).subscribe(
+            res => {
+                try {
+                    this.paymentForm.patchValue({ ...res.data, ...res.data.online_configuration });
+                    console.log(this.paymentForm.value);
+                } catch (err) {
+                    console.log(err);
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        );
+    }
+
     clearFieldWhenChangeType(selectedType) {
         this.isClickedSave = false;
         this.paymentForm.reset();
@@ -131,22 +152,15 @@ export class PaymentMethodsCreateComponent implements OnInit {
             type: this.paymentForm.value.type
         };
         this.paymentMethodService.checkDupliateDisplayName(params).subscribe(
-            res => {
-                try {
-                    // this.isDuplicateDisplayName = false;
-                } catch (err) {
-                    console.log(err);
-                }
-            },
+            res => {},
             err => {
-                // this.isDuplicateDisplayName = true;
                 console.log(err);
             }
         );
     }
 
     checkFormValidation() {
-        switch (this.paymentForm.value.type) {
+        switch (this.paymentForm.value.type.toString()) {
             case '1': {
                 // Manual
                 return this.checkFormValidationForManualType();
@@ -180,7 +194,7 @@ export class PaymentMethodsCreateComponent implements OnInit {
             this.paymentForm.controls.sandbox.valid &&
             this.paymentForm.controls.show_in_store.valid &&
             this.paymentForm.controls.service_secret.valid &&
-            this.paymentForm.controls.transition_type.valid &&
+            this.paymentForm.controls.transaction_type.valid &&
             this.paymentForm.controls.desc.valid
         ) {
             return true;
@@ -192,27 +206,42 @@ export class PaymentMethodsCreateComponent implements OnInit {
         this.isClickedSave = true;
         if (this.checkFormValidation()) {
             const params = { ...this.paymentForm.value, ...{ messages: 1 } };
-            Object.keys(params).forEach(
-                key =>
-                    (params[key] === null || params[key] === '') &&
-                    delete params[key]
-            );
-            this.paymentMethodService.createPaymentMethod(params).subscribe(
-                res => {
-                    try {
-                        this.isClickedSave = false;
-                        this.toastr.success(res.message);
-                        setTimeout(() => {
-                            window.history.back();
-                        }, 500);
-                    } catch (err) {
-                        console.log(err);
-                    }
-                },
-                err => {
-                    console.log(err);
-                }
-            );
+            Object.keys(params).forEach(key => (params[key] === null || params[key] === '') && delete params[key]);
+            this.paymentMethodId !== null && this.paymentMethodId !== undefined ? this.doEditPaymentMethod(params) : this.doCreatePaymentMethod(params);
+        }
+    }
+
+    doCreatePaymentMethod(params) {
+        this.paymentMethodService.createPaymentMethod(params).subscribe(
+            res => {
+                this.handleSavePaymentMethodSuccessfully(res);
+            },
+            err => {
+                console.log(err);
+            }
+        );
+    }
+
+    doEditPaymentMethod(params) {
+        this.paymentMethodService.editPaymentMethod(this.paymentMethodId, params).subscribe(
+            res => {
+                this.handleSavePaymentMethodSuccessfully(res);
+            },
+            err => {
+                console.log(err);
+            }
+        );
+    }
+
+    handleSavePaymentMethodSuccessfully(res) {
+        try {
+            this.isClickedSave = false;
+            this.toastr.success(res.message);
+            setTimeout(() => {
+                window.history.back();
+            }, 500);
+        } catch (err) {
+            console.log(err);
         }
     }
 }

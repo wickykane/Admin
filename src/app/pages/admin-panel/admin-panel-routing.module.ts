@@ -195,6 +195,10 @@ const routes: Routes = [
         component: PaymentMethodsCreateComponent
     },
     {
+        path: 'payment-methods/edit/:id',
+        component: PaymentMethodsCreateComponent
+    },
+    {
         path: 'tax-types',
         component: TaxTypesComponent
     },

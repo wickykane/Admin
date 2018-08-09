@@ -1,5 +1,6 @@
 <div [@routerTransition]>
-    <app-page-header [heading]="'Add New Payment Method'" [icon]="'fa-th-list'"></app-page-header>
+    <app-page-header *ngIf="!paymentMethodId" [heading]="'Add New Payment Method'" [icon]="'fa-th-list'"></app-page-header>
+    <app-page-header *ngIf="paymentMethodId" [heading]="'Edit Payment Method'" [icon]="'fa-th-list'"></app-page-header>
     <form [formGroup]="paymentForm">
         <div class="form-search full-width form-horizontal">
             <div class="row create-section">
@@ -130,14 +131,14 @@
                         <label>
                             <b>Transaction Type (*)</b>
                         </label>
-                        <select class="form-control" formControlName="transition_type">
+                        <select class="form-control" formControlName="transaction_type">
                             <option value="null" disabled>--Select--</option>
                             <option *ngFor="let type of listMaster.transactionTypes" [value]="type.key">{{type.name}}</option>
                         </select>
                         <span class="show-tooltip" ngbTooltip="The 16-character transaction key that was supplied when your Authorize.net account was created. This is used to verify order details after payment is completed.">
                             <i class="fa fa-question-circle"></i>
                         </span>
-                        <span class="error" *ngIf="isClickedSave && this.paymentForm.controls.transition_type.invalid">
+                        <span class="error" *ngIf="isClickedSave && this.paymentForm.controls.transaction_type.invalid">
                             (!): Please select the Transaction Type.
                         </span>
                     </div>
@@ -164,7 +165,9 @@
     </form>
     <div class="row">
         <div class="col-md-12 mg-top-15 text-center">
-            <button class="btn btn-primary" type="button" (click)="savePaymentMethod()">Create</button>
+            <button class="btn btn-primary" type="button" (click)="savePaymentMethod()">
+                {{ paymentMethodId === null || paymentMethodId === undefined ?  'Create' : 'Edit' }}
+            </button>
             <button class="btn btn-default" type="button" [routerLink]="['/admin-panel/payment-methods']">Cancel</button>
         </div>
     </div>
