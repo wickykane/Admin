@@ -4,7 +4,7 @@
 
     <div class="block-content pd-bottom bg-gray-light short-width">
         <div class="row">
-            <form class="form-horizontal form-search" role="form" [formGroup]="searchForm" (ngSubmit)="onSearchList()">
+            <form class="form-horizontal form-search" role="form" [formGroup]="searchForm" (ngSubmit)="tableService.searchAction()">
                 <div class="block-search">
                     <label class="control-label">Description</label>
                     <input type="text" class="form-control" formControlName="name">
@@ -26,7 +26,7 @@
                     <label class="control-label">&nbsp;</label>
                     <div class="group-btn-search">
                         <button type="submit" class="btn btn-primary">Search</button>
-                        <button type="button" class="btn btn-default" (click)="onResetList()">Reset</button>
+                        <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchForm)">Reset</button>
                     </div>
                 </div>
             </form>

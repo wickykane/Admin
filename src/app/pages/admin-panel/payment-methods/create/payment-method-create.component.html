@@ -59,9 +59,8 @@
                             (!): This name taken by another payment method. Please use a different name.
                         </span> -->
                     </div>
-
-                    <!-- Type is Manual -->
-                    <div class="row create-section-info" *ngIf="this.paymentForm.value.type == 1">
+                    <div class="row create-section-info"
+                        *ngIf="this.paymentForm.value.type == 1 || (this.paymentForm.value.type == 2 && this.paymentForm.value.processor_type)">
                         <label>
                             <b>Status (*)</b>
                         </label>
@@ -75,7 +74,6 @@
                             (!): Please select the Payment Method Status.
                         </span>
                     </div>
-                    <!--  -->
 
                     <div class="row create-section-info"
                         *ngIf="this.paymentForm.value.type == 1 || (this.paymentForm.value.type == 2 && this.paymentForm.value.processor_type)">
@@ -91,25 +89,37 @@
                         </span>
                     </div>
 
-                    <!-- Type Online and Processor is AUTHORIZE.NET -->
-                    <div class="row create-section-info" *ngIf="this.paymentForm.value.type == 2 && this.paymentForm.value.processor_type == 1">
+                    <!-- Type Online -->
+                    <div class="row create-section-info" *ngIf="this.paymentForm.value.type == 2 && this.paymentForm.value.processor_type">
                         <label>
-                            <b>API Login ID (*)</b>
+                            <b *ngIf="this.paymentForm.value.processor_type == 1">API Login ID (*)</b>
+                            <b *ngIf="this.paymentForm.value.processor_type == 2">Client ID (*)</b>
                         </label>
-                        <input type="text" maxlength="50" class="form-control" formControlName="service_id">
-                        <span class="show-tooltip" ngbTooltip="The API Login ID that was supplied when your Authorize.Net account was created.">
+                        <input type="text" class="form-control" formControlName="service_id">
+                        <span *ngIf="this.paymentForm.value.processor_type == 1" class="show-tooltip"
+                            ngbTooltip="The API Login ID that was supplied when your Authorize.Net account was created.">
+                            <i class="fa fa-question-circle"></i>
+                        </span>
+                        <span *ngIf="this.paymentForm.value.processor_type == 2" class="show-tooltip"
+                            ngbTooltip="The client ID will be provided by Paypal after registration an application.">
                             <i class="fa fa-question-circle"></i>
                         </span>
                         <span class="error" *ngIf="isClickedSave && this.paymentForm.controls.service_id.invalid">
                             (!): This field cannot be blank. Please input value.
                         </span>
                     </div>
-                    <div class="row create-section-info" *ngIf="this.paymentForm.value.type == 2 && this.paymentForm.value.processor_type == 1">
+                    <div class="row create-section-info" *ngIf="this.paymentForm.value.type == 2 && this.paymentForm.value.processor_type">
                         <label>
-                            <b>Transaction Key (*)</b>
+                            <b *ngIf="this.paymentForm.value.processor_type == 1">Transaction Key (*)</b>
+                            <b *ngIf="this.paymentForm.value.processor_type == 2">Secret ID (*)</b>
                         </label>
-                        <input type="text" maxlength="50" class="form-control" formControlName="service_secret">
-                        <span class="show-tooltip" ngbTooltip="The 16-character transaction key that was supplied when your Authorize.net account was created. This is used to verify order details after payment is completed.">
+                        <input type="text" class="form-control" formControlName="service_secret">
+                        <span *ngIf="this.paymentForm.value.processor_type == 1" class="show-tooltip"
+                            ngbTooltip="The 16-character transaction key that was supplied when your Authorize.net account was created. This is used to verify order details after payment is completed.">
+                            <i class="fa fa-question-circle"></i>
+                        </span>
+                        <span *ngIf="this.paymentForm.value.processor_type == 2" class="show-tooltip"
+                            ngbTooltip="The secret ID will be provided by Paypal after registration an application.">
                             <i class="fa fa-question-circle"></i>
                         </span>
                         <span class="error" *ngIf="isClickedSave && this.paymentForm.controls.service_secret.invalid">

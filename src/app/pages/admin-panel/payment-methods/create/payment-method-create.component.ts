@@ -40,7 +40,7 @@ export class PaymentMethodsCreateComponent implements OnInit {
         ]
     };
     public isClickedSave = false;
-    public isDuplicateDisplayName = false;
+    // public isDuplicateDisplayName = false;
     public paymentForm: FormGroup;
 
     constructor(
@@ -118,6 +118,7 @@ export class PaymentMethodsCreateComponent implements OnInit {
     }
 
     clearFieldWhenChangeType(selectedType) {
+        this.isClickedSave = false;
         this.paymentForm.reset();
         this.paymentForm.patchValue({ type: selectedType });
         this.paymentForm.patchValue({ show_in_store: 1 });
@@ -132,13 +133,13 @@ export class PaymentMethodsCreateComponent implements OnInit {
         this.paymentMethodService.checkDupliateDisplayName(params).subscribe(
             res => {
                 try {
-                    this.isDuplicateDisplayName = false;
+                    // this.isDuplicateDisplayName = false;
                 } catch (err) {
                     console.log(err);
                 }
             },
             err => {
-                this.isDuplicateDisplayName = true;
+                // this.isDuplicateDisplayName = true;
                 console.log(err);
             }
         );
@@ -171,26 +172,18 @@ export class PaymentMethodsCreateComponent implements OnInit {
     }
 
     checkFormValidationForOnlineType() {
-        switch (this.paymentForm.value.processor_type) {
-            case '1': {
-                // Authorize.Net
-                if (
-                    this.paymentForm.controls.name.valid &&
-                    this.paymentForm.controls.service_id.valid &&
-                    this.paymentForm.controls.sandbox.valid &&
-                    this.paymentForm.controls.show_in_store.valid &&
-                    this.paymentForm.controls.service_secret.valid &&
-                    this.paymentForm.controls.transition_type.valid &&
-                    this.paymentForm.controls.desc.valid
-                ) {
-                    return true;
-                }
-                return false;
-            }
-            case '2': {
-                // Paypal
-                return false;
-            }
+        if (
+            this.paymentForm.value.processor_type &&
+            this.paymentForm.controls.name.valid &&
+            this.paymentForm.controls.ac.valid &&
+            this.paymentForm.controls.service_id.valid &&
+            this.paymentForm.controls.sandbox.valid &&
+            this.paymentForm.controls.show_in_store.valid &&
+            this.paymentForm.controls.service_secret.valid &&
+            this.paymentForm.controls.transition_type.valid &&
+            this.paymentForm.controls.desc.valid
+        ) {
+            return true;
         }
         return false;
     }

@@ -41,7 +41,6 @@ export class PaymentMethodsListComponent implements OnInit {
         ]
     };
     public searchForm: FormGroup;
-    public searchData = {};
     public paymentMethods = [];
     public isCheckedAllPaymentMethod = false;
 
@@ -75,21 +74,11 @@ export class PaymentMethodsListComponent implements OnInit {
         console.log(index);
     }
 
-    onSearchList() {
-        this.searchData = this.searchForm.value;
-        this.getListPaymentMethods();
-    }
-
-    onResetList() {
-        this.searchForm.reset();
-        this.searchData = this.searchForm.value;
-        this.getListPaymentMethods();
-    }
     /**
      * Internal Function
      */
     getListPaymentMethods() {
-        const params = { ...this.tableService.getParams(), ...this.searchData};
+        const params = { ...this.tableService.getParams(), ...this.searchForm.value };
         Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
         this.paymentMethodService.getPaymentMethods(params).subscribe(
             res => {
@@ -104,7 +93,6 @@ export class PaymentMethodsListComponent implements OnInit {
                 console.log(err);
             }
         );
-        console.log(this.searchData);
     }
 
     getPaymentTypes() {
