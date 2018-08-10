@@ -213,6 +213,10 @@
                     </div>
                 </div>
                 <div class="col-lg-5 col-xl-4 create-section-img">
+                    <div *ngIf="this.paymentForm.value.type == 2 && this.paymentForm.value.processor_type">
+                        <img *ngIf="this.paymentForm.value.processor_type == 1" src="assets/images/logo_authorize.net.png" alt="Authorize.Net Logo" style="margin-top: 200px">
+                        <img *ngIf="this.paymentForm.value.processor_type == 2" src="assets/images/logo_paypal.png" alt="Paypal Logo" style="margin-top: 50px">
+                    </div>
                 </div>
             </div>
         </div>
