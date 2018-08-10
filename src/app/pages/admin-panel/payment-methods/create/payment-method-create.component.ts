@@ -39,10 +39,11 @@ export class PaymentMethodsCreateComponent implements OnInit {
             }
         ]
     };
-    public paymentMethodId = null;
     private paymentMethodDetail = {};
+    public paymentMethodId = null;
     public isClickedSave = false;
     public isClickedTestConnection = false;
+    public isChangePassword = false;
     public messageTestConnection = '';
     public testConnectionResult = false;
     public paymentForm: FormGroup;
@@ -164,6 +165,14 @@ export class PaymentMethodsCreateComponent implements OnInit {
         this.clearTestConnectionResult();
     }
 
+    checkShowPasswordField() { // Check when user edit a payment method and change type from 'Manual' to 'Online' and vice versa
+        if ( !this.paymentMethodId ||
+            (this.paymentMethodId && this.paymentMethodDetail['type'].toString() === '1' && this.paymentForm.value.type === '2')) { // user change type from 'Manual' to 'Online'
+            return true; // user change type from 'Manual' to 'Online'
+        }
+        return false;
+    }
+
     clearTestConnectionResult() {
         this.isClickedTestConnection = false;
         this.messageTestConnection = '';
@@ -176,7 +185,9 @@ export class PaymentMethodsCreateComponent implements OnInit {
             type: this.paymentForm.value.type
         };
         this.paymentMethodService.checkDupliateDisplayName(params).subscribe(
-            res => {},
+            res => {
+                this.toastr.success('This name can be used!');
+            },
             err => {
                 console.log(err);
             }
@@ -184,14 +195,17 @@ export class PaymentMethodsCreateComponent implements OnInit {
     }
 
     checkFormValidation() {
-        switch (this.paymentForm.value.type.toString()) {
-            case '1': {
-                // Manual
-                return this.checkFormValidationForManualType();
-            }
-            case '2': {
-                // Online
-                return this.checkFormValidationForOnlineType();
+        if (this.paymentForm.controls.type.valid) {
+            switch (this.paymentForm.value.type.toString()) {
+                case '1': {
+                    // Manual
+                    return this.checkFormValidationForManualType();
+                }
+                case '2': {
+                    // Online
+                    return this.checkFormValidationForOnlineType();
+                }
+                default : return false;
             }
         }
         return false;
@@ -214,12 +228,23 @@ export class PaymentMethodsCreateComponent implements OnInit {
             this.paymentForm.controls.processor_type.valid &&
             this.checkFormValidationForManualType() &&
             this.paymentForm.controls.username.valid &&
-            this.paymentForm.controls.password.valid &&
+            // this.paymentForm.controls.password.valid &&
+            this.checkPasswordIsValid() &&
             this.paymentForm.controls.service_id.valid &&
             this.paymentForm.controls.sandbox.valid &&
             this.paymentForm.controls.service_secret.valid &&
             this.paymentForm.controls.transaction_type.valid
         ) {
+            return true;
+        }
+        return false;
+    }
+
+    checkPasswordIsValid() {
+        if ( (!this.paymentMethodId && this.paymentForm.controls.password.valid) // Create Payment Method
+            || (this.paymentMethodId && this.paymentForm.controls.password.valid && this.isChangePassword) // Edit and change password
+            || (this.paymentMethodId && this.paymentForm.controls.password.invalid && !this.isChangePassword) // Edit and do not change password
+            || (this.checkShowPasswordField() && this.paymentForm.controls.password.valid)) { // edit and change type from 'Manual' to 'Online'
             return true;
         }
         return false;

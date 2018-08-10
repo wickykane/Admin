@@ -113,9 +113,29 @@
                             (!): This field cannot be blank. Please input value.
                         </span>
                     </div>
+
                     <div class="row create-section-info" *ngIf="this.paymentForm.value.type == 2 && this.paymentForm.value.processor_type">
                         <label>
                             <b>Password (*)</b>
+                        </label>
+                        <input *ngIf="checkShowPasswordField()" type="password" class="form-control" formControlName="password">
+                        <a *ngIf="!isChangePassword && !checkShowPasswordField()" (click)="isChangePassword = true">Change Password</a>
+                        <a *ngIf="isChangePassword && !checkShowPasswordField()" (click)="paymentForm.controls.password.reset(); isChangePassword = false">Cancel Change</a>
+                        <span *ngIf="this.paymentForm.value.processor_type == 1 && !isChangePassword" class="show-tooltip"
+                            ngbTooltip="The password to login with your Authorize.Net account. The password will be encrypted for security.">
+                            <i class="fa fa-question-circle"></i>
+                        </span>
+                        <span *ngIf="this.paymentForm.value.processor_type == 2 && !isChangePassword" class="show-tooltip"
+                            ngbTooltip="The password to login with your Paypal account. The password will be encrypted for security.">
+                            <i class="fa fa-question-circle"></i>
+                        </span>
+                        <span class="error" *ngIf="isClickedSave && this.paymentForm.controls.password.invalid && checkShowPasswordField()">
+                            (!): This field cannot be blank. Please input value.
+                        </span>
+                    </div>
+                    <div class="row create-section-info" *ngIf="isChangePassword">
+                        <label>
+                            <b>New password (*)</b>
                         </label>
                         <input type="password" class="form-control" formControlName="password">
                         <span *ngIf="this.paymentForm.value.processor_type == 1" class="show-tooltip"
@@ -130,6 +150,7 @@
                             (!): This field cannot be blank. Please input value.
                         </span>
                     </div>
+
                     <div class="row create-section-info" *ngIf="this.paymentForm.value.type == 2 && this.paymentForm.value.processor_type">
                         <label>
                             <b *ngIf="this.paymentForm.value.processor_type == 1">API Login ID (*)</b>
