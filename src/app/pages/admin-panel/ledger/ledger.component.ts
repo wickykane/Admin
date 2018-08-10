@@ -79,9 +79,9 @@ export class LedgerComponent implements OnInit {
     });
 
     this.searchForm = fb.group({
-      'no': [null],
+      'cd': [null],
       'des': [null],
-      'sts': [null],
+      'ac': [null],
     });
 
     // Assign get list function name, override variable here
@@ -95,6 +95,10 @@ export class LedgerComponent implements OnInit {
   ngOnInit() {
     this.getAccountTree();
     this.listMaster['expands'] = [];
+    this.listMaster['status'] = [
+      { id: 0, value: 'Inactive' },
+      { id: 1, value: 'Active' },
+    ];
   }
 
   /**
@@ -225,12 +229,19 @@ export class LedgerComponent implements OnInit {
    */
 
   getList() {
-    const params = {...this.searchForm.value };
+    const params = { ...this.searchForm.value };
     Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
 
     this.ledgerService.getListAccount(this.data['selectedAccount'].id, params).subscribe(res => {
       try {
-        this.list.items = res.data;
+        this.list.items = res.data.filter(item => {
+          for (const key in params) {
+            if ((String(item[key]).toLowerCase()).indexOf(String(params[key]).trim().toLowerCase()) === -1) {
+              return false;
+            }
+          }
+          return true;
+        });
       } catch (e) {
         console.log(e);
       }

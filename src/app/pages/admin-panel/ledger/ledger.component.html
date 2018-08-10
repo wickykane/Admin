@@ -163,7 +163,7 @@
                                             <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
                                                 <div class="block-search">
                                                     <label for="name" class="control-label">Account No</label>
-                                                    <input type="text" name="no" formControlName="no" class="form-control" id="name" placeholder="">
+                                                    <input type="text" name="no" formControlName="cd" class="form-control" id="name" placeholder="">
                                                 </div>
                                                 <div class="block-search">
                                                     <label for="name" class="control-label">Description</label>
@@ -171,16 +171,16 @@
                                                 </div>
                                                 <div class="block-search">
                                                     <label for="code" class="control-label">Status</label>
-                                                    <select class="form-control" formControlName="sts" name="status">
+                                                    <select class="form-control" formControlName="ac" name="status">
                                                     <option value="null" selected="false">--Select--</option>
-                                                    <option *ngFor="let item of listMaster['status']" [ngValue]="item.key">{{item.value}}</option>
+                                                    <option *ngFor="let item of listMaster['status']" [ngValue]="item.id">{{item.value}}</option>
                                                 </select>
                                                 </div>
                                             </form>
                                             <div class="block-btn-search">
                                                 <label class="control-label">&nbsp;</label>
                                                 <div class="group-btn-search">
-                                                    <button type="button" class="btn btn-primary" (click)="tableService.searchAction()">Search</button>
+                                                    <button type="button" class="btn btn-primary" (click)="getList()">Search</button>
                                                     <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchForm)">Reset</button>
                                                 </div>
                                             </div>
@@ -206,7 +206,7 @@
                                                 <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                                                     <tr>
                                                         <td>{{item.cd}}</td>
-                                                        <td>{{item.des }}</td>
+                                                        <td [ngClass]="{'pl-3': item.level == 1, 'pl-5': item.level == 2}">{{item.des }}</td>
                                                         <td>{{item.is_credit_text}}</td>
                                                         <td class="text-center">{{item.ac_text}}</td>
                                                         <td class="text-center">

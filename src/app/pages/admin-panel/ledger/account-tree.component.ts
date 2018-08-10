@@ -36,7 +36,7 @@ export class AccountTreeComponent implements OnInit {
     }
 
     collapse(item) {
-        item.isCollapse = !(this._expands.indexOf(item.id) === -1);
+        item.isCollapse = !(this._expands.indexOf(item.id) !== -1);
         if (item.isCollapse) {
             if (this._expands.indexOf(item.id) === -1) {
                 this._expands.push(item.id);

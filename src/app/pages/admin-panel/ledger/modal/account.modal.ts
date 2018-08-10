@@ -50,26 +50,13 @@ export class AccountModalComponent implements OnInit {
 
     this.getListParentAccount();
 
-    this.listMaster['parents'] = [{
-      id: 0,
-      name: 'General Ledge - Accounts',
-      isRoot: true,
-      children: [
-        { id: 1, name: 'Account 1' },
-        { id: 2, name: 'Account 2' },
-      ]
-    }, {
-      id: 4, name: 'TEST 01'
-    },
-    {
-      id: 5, name: 'TEST 2 CHILD', children: [
-        { id: 6, name: 'HEY?' }
-      ]
-    }];
-
     if (this.item.id) {
       this.getDetailAccount(this.item.id);
     }
+  }
+
+  changeSubAccount() {
+    this.accountForm.patchValue({ parent_id: null });
   }
 
   getDetailAccount(id) {
@@ -101,6 +88,9 @@ export class AccountModalComponent implements OnInit {
     this.ledgerService.getListAccount(this.parent.id, {}).subscribe(res => {
       try {
         this.listMaster['parents'] = res.data;
+        this.listMaster['parents'].forEach(item => {
+          item.disabled = item.id === this.item.id;
+        });
       } catch (e) {
         console.log(e);
       }

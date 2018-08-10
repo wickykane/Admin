@@ -1,10 +1,10 @@
 <ul class="parent-node" [ngClass]="{'root-node': isRoot}">
     <li [ngClass]="{'active': child.id == _item.id && child.level == _item.level }" *ngFor="let child of items; let i=index" class="child-node">
-        <i (click)="collapse(child)" [ngClass]="{'invisible': !child.children }" *ngIf="!child.isCollapse || _expands.indexOf(child.id) == -1" class="fa fa-minus fa-custom-circle" aria-hidden="true"></i>
-        <i (click)="collapse(child)" [ngClass]="{'invisible': !child.children }" *ngIf="child.isCollapse || _expands.indexOf(child.id) != -1" class="fa fa-plus fa-custom-circle" aria-hidden="true"></i>
-        <i (click)="collapse(child)" *ngIf="child.isCollapse || _expands.indexOf(child.id) != -1 ||  !child.children" class="fa fa-folder blue" aria-hidden="true"></i>
-        <i (click)="collapse(child)" *ngIf="(!child.isCollapse || _expands.indexOf(child.id) == -1) && child.children" class="fa fa-folder-open  blue" aria-hidden="true"></i>
+        <i (click)="collapse(child)" [ngClass]="{'invisible': !child.children }" *ngIf="_expands.indexOf(child.id) == -1" class="fa fa-minus fa-custom-circle" aria-hidden="true"></i>
+        <i (click)="collapse(child)" [ngClass]="{'invisible': !child.children }" *ngIf="_expands.indexOf(child.id) != -1" class="fa fa-plus fa-custom-circle" aria-hidden="true"></i>
+        <i (click)="collapse(child)" *ngIf="_expands.indexOf(child.id) != -1 ||  !child.children" class="fa fa-folder blue" aria-hidden="true"></i>
+        <i (click)="collapse(child)" *ngIf="(_expands.indexOf(child.id) == -1) && child.children" class="fa fa-folder-open  blue" aria-hidden="true"></i>
         <span (click)="clickItem($event, child)" [ngClass]="{ 'text-uppercase': isRoot}">{{ child.name || child.des }}</span>
-        <app-account-tree [expands]="_expands" (expandItem)="expand($event)" [currentItem]="_item" [ngClass]="{'collapse': child.isCollapse}" [items]="child.children" (selectedItem)="selectItem($event)"></app-account-tree>
+        <app-account-tree [expands]="_expands" (expandItem)="expand($event)" [currentItem]="_item" [ngClass]="{'collapse': _expands.indexOf(child.id) != -1}" [items]="child.children" (selectedItem)="selectItem($event)"></app-account-tree>
     </li>
 </ul>

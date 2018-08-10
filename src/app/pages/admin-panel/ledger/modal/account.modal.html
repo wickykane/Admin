@@ -31,7 +31,7 @@
                     <span class="text-danger">(*)</span>
                 </div>
                 <div class="col-md-7">
-                    <input type="text" class="form-control" formControlName="cd">
+                    <input [OnlyNumber]="true" type="text" class="form-control" formControlName="cd">
                 </div>
             </div>
             <div class="row form-group">
@@ -58,7 +58,7 @@
                 </div>
                 <div class="col-md-7">
                     <label class="css-input css-checkbox css-checkbox-default">
-                        <input class="cb-all" type="checkbox" formControlName="is_sub_acc">
+                        <input (change)="changeSubAccount()"  class="cb-all" type="checkbox" formControlName="is_sub_acc">
                         <span></span>
                     </label>
                 </div>
@@ -86,6 +86,9 @@
                         </ng-template>
                     </ng-select> -->
                     <ng-select [items]="listMaster['parents']" formControlName="parent_id" bindLabel="des" bindValue="id">
+                        <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                            <span [ngClass]="{'pl-3': item.level == 1, 'pl-5': item.level == 2}">{{ item.des }}</span>
+                        </ng-template>
                     </ng-select>
                 </div>
             </div>

@@ -66,7 +66,7 @@ export class LedgerService {
     }
 
     deleteAccount(id) {
-        const url = ['bank', id].join('/');
+        const url = ['account', id].join('/');
         return this.apiService.delete(url);
     }
 
