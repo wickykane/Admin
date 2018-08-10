@@ -530,6 +530,17 @@ export class InvoiceCreateComponent implements OnInit {
         params['address'] = addressArrId;
         params['order_detail'] = this.transformItemsList(this.list.items);
         console.log(params);
+        switch (type) {
+            case 'draft':
+                params['inv_sts'] = 1;
+                break;
+            case 'submit':
+                params['inv_sts'] = 2;
+                break;
+            case 'createnew':
+                params['inv_sts'] = 1;
+                break;
+        }
         this.financialService.updateInvoice(this.invoiceId, params).subscribe(res => {
             try {
                 if (res.status) {
