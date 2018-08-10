@@ -1,0 +1,255 @@
+<div [@routerTransition]>
+    <app-page-header *ngIf="!paymentMethodId" [heading]="'Add New Payment Method'" [icon]="'fa-th-list'"></app-page-header>
+    <app-page-header *ngIf="paymentMethodId" [heading]="'Edit Payment Method'" [icon]="'fa-th-list'"></app-page-header>
+    <form [formGroup]="paymentForm">
+        <div class="form-search full-width form-horizontal">
+            <div class="row create-section">
+                <div class="col-lg-7 col-xl-6 form-group create-section-data">
+                    <div class="row create-section-info">
+                        <label>
+                            <b>Select Payment Method Type (*)</b>
+                        </label>
+                        <select class="form-control" formControlName="type" (change)="clearFieldWhenChangeType($event.target.value)">
+                            <option value="null" disabled>--Select--</option>
+                            <option *ngFor="let type of listMaster.paymentTypes" [value]="type.key">{{type.name}}</option>
+                        </select>
+                        <span class="show-tooltip" ngbTooltip="Payment Method Type.">
+                            <i class="fa fa-question-circle"></i>
+                        </span>
+                        <span class="error" *ngIf="isClickedSave && this.paymentForm.controls.type.invalid">
+                            (!): Please select the Payment Method Type.
+                        </span>
+                    </div>
+                    <!-- For only Online -->
+                    <div class="row create-section-info" *ngIf="this.paymentForm.value.type == 2">
+                        <label>
+                            <b>Select Payment Processor (*)</b>
+                        </label>
+                        <select class="form-control" formControlName="processor_type" (change)="clearTestConnectionResult()">
+                            <option value="null" disabled>--Select--</option>
+                            <option *ngFor="let type of listMaster.paymentProcessors" [value]="type.key">{{type.name}}</option>
+                        </select>
+                        <span class="show-tooltip" ngbTooltip="Payment Method Processor.">
+                            <i class="fa fa-question-circle"></i>
+                        </span>
+                        <span class="error" *ngIf="isClickedSave && this.paymentForm.controls.processor_type.invalid">
+                            (!): Please select the Payment Processor.
+                        </span>
+                    </div>
+                    <div class="row create-section-info" *ngIf="this.paymentForm.value.type == 2 && this.paymentForm.value.processor_type">
+                        <label>
+                            <b>Sandbox (*)</b>
+                        </label>
+                        <select class="form-control" formControlName="sandbox">
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+                        <span class="error" *ngIf="isClickedSave && this.paymentForm.controls.sandbox.invalid">
+                            (!): Please select the Sandbox.
+                        </span>
+                    </div>
+                    <!--  -->
+
+                    <div class="row create-section-info"
+                        *ngIf="this.paymentForm.value.type == 1 || (this.paymentForm.value.type == 2 && this.paymentForm.value.processor_type)">
+                        <label>
+                            <b>Display Name (*)</b>
+                        </label>
+                        <input type="text" maxlength="50" class="form-control" formControlName="name" (blur)="checkDuplicateDisplayName()">
+                        <span class="show-tooltip" ngbTooltip="The text in this box will be used to describe this payment method on your store front site.">
+                            <i class="fa fa-question-circle"></i>
+                        </span>
+                        <span class="error" *ngIf="isClickedSave && this.paymentForm.controls.name.invalid">
+                            (!): This field cannot be blank. Please input value.
+                        </span>
+                        <!-- <span class="error" *ngIf="isDuplicateDisplayName && this.paymentForm.controls.name.valid">
+                            (!): This name taken by another payment method. Please use a different name.
+                        </span> -->
+                    </div>
+                    <div class="row create-section-info"
+                        *ngIf="this.paymentForm.value.type == 1 || (this.paymentForm.value.type == 2 && this.paymentForm.value.processor_type)">
+                        <label>
+                            <b>Status (*)</b>
+                        </label>
+                        <select class="form-control" formControlName="ac">
+                            <option *ngFor="let status of listMaster.status" [value]="status.key" [disabled]="status.key === null">{{status.name}}</option>
+                        </select>
+                        <span class="show-tooltip" ngbTooltip="Only active payment method can be used in the back office and in the store front.">
+                            <i class="fa fa-question-circle"></i>
+                        </span>
+                        <span class="error" *ngIf="isClickedSave && this.paymentForm.controls.ac.invalid">
+                            (!): Please select the Payment Method Status.
+                        </span>
+                    </div>
+
+                    <div class="row create-section-info"
+                        *ngIf="this.paymentForm.value.type == 1 || (this.paymentForm.value.type == 2 && this.paymentForm.value.processor_type)">
+                        <label>
+                            <b>Show in Store (*)</b>
+                        </label>
+                        <select class="form-control" formControlName="show_in_store">
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                        <span class="show-tooltip" ngbTooltip="If Show in Store is Yes and Status is active, the payment method will be shown in Store Front site.">
+                            <i class="fa fa-question-circle"></i>
+                        </span>
+                    </div>
+
+                    <!-- Type Online -->
+                    <div class="row create-section-info" *ngIf="this.paymentForm.value.type == 2 && this.paymentForm.value.processor_type">
+                        <label>
+                            <b *ngIf="this.paymentForm.value.processor_type == 1">Authorize.Net Account (*)</b>
+                            <b *ngIf="this.paymentForm.value.processor_type == 2">Paypal Account (*)</b>
+                        </label>
+                        <input type="text" class="form-control" formControlName="username">
+                        <span *ngIf="this.paymentForm.value.processor_type == 1" class="show-tooltip" ngbTooltip="Your Authorize.Net account.">
+                            <i class="fa fa-question-circle"></i>
+                        </span>
+                        <span *ngIf="this.paymentForm.value.processor_type == 2" class="show-tooltip" ngbTooltip="Your Paypal account.">
+                            <i class="fa fa-question-circle"></i>
+                        </span>
+                        <span class="error" *ngIf="isClickedSave && this.paymentForm.controls.username.invalid">
+                            (!): This field cannot be blank. Please input value.
+                        </span>
+                    </div>
+
+                    <div class="row create-section-info" *ngIf="this.paymentForm.value.type == 2 && this.paymentForm.value.processor_type">
+                        <label>
+                            <b>Password (*)</b>
+                        </label>
+                        <input *ngIf="checkShowPasswordField()" type="password" class="form-control" formControlName="password">
+                        <a *ngIf="!isChangePassword && !checkShowPasswordField()" (click)="isChangePassword = true">Change Password</a>
+                        <a *ngIf="isChangePassword && !checkShowPasswordField()" (click)="paymentForm.controls.password.reset(); isChangePassword = false">Cancel Change</a>
+                        <span *ngIf="this.paymentForm.value.processor_type == 1 && !isChangePassword" class="show-tooltip"
+                            ngbTooltip="The password to login with your Authorize.Net account. The password will be encrypted for security.">
+                            <i class="fa fa-question-circle"></i>
+                        </span>
+                        <span *ngIf="this.paymentForm.value.processor_type == 2 && !isChangePassword" class="show-tooltip"
+                            ngbTooltip="The password to login with your Paypal account. The password will be encrypted for security.">
+                            <i class="fa fa-question-circle"></i>
+                        </span>
+                        <span class="error" *ngIf="isClickedSave && this.paymentForm.controls.password.invalid && checkShowPasswordField()">
+                            (!): This field cannot be blank. Please input value.
+                        </span>
+                    </div>
+                    <div class="row create-section-info" *ngIf="isChangePassword">
+                        <label>
+                            <b>New password (*)</b>
+                        </label>
+                        <input type="password" class="form-control" formControlName="password">
+                        <span *ngIf="this.paymentForm.value.processor_type == 1" class="show-tooltip"
+                            ngbTooltip="The password to login with your Authorize.Net account. The password will be encrypted for security.">
+                            <i class="fa fa-question-circle"></i>
+                        </span>
+                        <span *ngIf="this.paymentForm.value.processor_type == 2" class="show-tooltip"
+                            ngbTooltip="The password to login with your Paypal account. The password will be encrypted for security.">
+                            <i class="fa fa-question-circle"></i>
+                        </span>
+                        <span class="error" *ngIf="isClickedSave && this.paymentForm.controls.password.invalid">
+                            (!): This field cannot be blank. Please input value.
+                        </span>
+                    </div>
+
+                    <div class="row create-section-info" *ngIf="this.paymentForm.value.type == 2 && this.paymentForm.value.processor_type">
+                        <label>
+                            <b *ngIf="this.paymentForm.value.processor_type == 1">API Login ID (*)</b>
+                            <b *ngIf="this.paymentForm.value.processor_type == 2">Client ID (*)</b>
+                        </label>
+                        <input type="text" class="form-control" formControlName="service_id">
+                        <span *ngIf="this.paymentForm.value.processor_type == 1" class="show-tooltip"
+                            ngbTooltip="The API Login ID that was supplied when your Authorize.Net account was created.">
+                            <i class="fa fa-question-circle"></i>
+                        </span>
+                        <span *ngIf="this.paymentForm.value.processor_type == 2" class="show-tooltip"
+                            ngbTooltip="The client ID will be provided by Paypal after registration an application.">
+                            <i class="fa fa-question-circle"></i>
+                        </span>
+                        <span class="error" *ngIf="(isClickedSave || isClickedTestConnection) && this.paymentForm.controls.service_id.invalid">
+                            (!): This field cannot be blank. Please input value.
+                        </span>
+                    </div>
+                    <div class="row create-section-info" *ngIf="this.paymentForm.value.type == 2 && this.paymentForm.value.processor_type">
+                        <label>
+                            <b *ngIf="this.paymentForm.value.processor_type == 1">Transaction Key (*)</b>
+                            <b *ngIf="this.paymentForm.value.processor_type == 2">Secret ID (*)</b>
+                        </label>
+                        <input type="text" class="form-control" formControlName="service_secret">
+                        <span *ngIf="this.paymentForm.value.processor_type == 1" class="show-tooltip"
+                            ngbTooltip="The 16-character transaction key that was supplied when your Authorize.net account was created. This is used to verify order details after payment is completed.">
+                            <i class="fa fa-question-circle"></i>
+                        </span>
+                        <span *ngIf="this.paymentForm.value.processor_type == 2" class="show-tooltip"
+                            ngbTooltip="The secret ID will be provided by Paypal after registration an application.">
+                            <i class="fa fa-question-circle"></i>
+                        </span>
+                        <span class="error" *ngIf="(isClickedSave || isClickedTestConnection) && this.paymentForm.controls.service_secret.invalid">
+                            (!): This field cannot be blank. Please input value.
+                        </span>
+                    </div>
+                    <div class="row create-section-info" *ngIf="this.paymentForm.value.type == 2 && this.paymentForm.value.processor_type">
+                        <label>
+                            <b>Transaction Type (*)</b>
+                        </label>
+                        <select class="form-control" formControlName="transaction_type">
+                            <option value="null" disabled>--Select--</option>
+                            <option *ngFor="let type of listMaster.transactionTypes" [value]="type.key">{{type.name}}</option>
+                        </select>
+                        <span class="show-tooltip" [ngbTooltip]="tooltipTransactionType">
+                            <i class="fa fa-question-circle"></i>
+                        </span>
+                        <ng-template #tooltipTransactionType>
+                            <div><b>Authorize Only: </b>A credit card transaction that reserves funds on a customer’s credit card. An Authorize Only transaction does not charge the card until you confirm it.</div>
+                            <div><b>Authorize & Capture: </b>A credit card transaction that immediately charges a customer’s credit card.</div>
+                        </ng-template>
+                        <span class="error" *ngIf="isClickedSave && this.paymentForm.controls.transaction_type.invalid">
+                            (!): Please select the Transaction Type.
+                        </span>
+                    </div>
+                    <!--  -->
+
+                    <div class="row create-section-info textarea-info"
+                        *ngIf="this.paymentForm.value.type == 1 || (this.paymentForm.value.type == 2 && this.paymentForm.value.processor_type)">
+                        <label>
+                            <b>Payment Information (*)</b>
+                            <span class="show-tooltip" ngbTooltip="If a customer chooses to pay via this method, he will see the text you type here once he completes his order. You should include details on how he can send you the payment and any other information that he needs to know.">
+                                <i class="fa fa-question-circle"></i>
+                            </span>
+                        </label>
+                        <textarea class="form-control" rows="5" formControlName="desc" maxlength="200"></textarea>
+                        <span class="error" *ngIf="isClickedSave && this.paymentForm.controls.desc.invalid">
+                            (!): This field cannot be blank. Please input value.
+                        </span>
+                    </div>
+                    <div class="row create-section-info bottom-message" *ngIf="isClickedTestConnection">
+                        <span class="success" *ngIf="testConnectionResult && this.paymentForm.value.processor_type == 1">
+                            <b>(*): Connection to Authorize.net successfully</b>
+                        </span>
+                        <span class="success" *ngIf="testConnectionResult && this.paymentForm.value.processor_type == 2">
+                            <b>(*): Connection to Paypal successfully</b>
+                        </span>
+                        <span class="error" *ngIf="!testConnectionResult && messageTestConnection">
+                            <b>(!): {{messageTestConnection}}</b>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-5 col-xl-4 create-section-img">
+                    <div *ngIf="this.paymentForm.value.type == 2 && this.paymentForm.value.processor_type">
+                        <img *ngIf="this.paymentForm.value.processor_type == 1" src="assets/images/logo_authorize.net.png" alt="Authorize.Net Logo" style="margin-top: 200px">
+                        <img *ngIf="this.paymentForm.value.processor_type == 2" src="assets/images/logo_paypal.png" alt="Paypal Logo" style="margin-top: 50px">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="row">
+        <div class="col-md-12 mg-top-15 text-center">
+            <button class="btn btn-default" type="button" [routerLink]="['/admin-panel/payment-methods']">CANCEL</button>
+            <button class="btn btn-primary" type="button" (click)="savePaymentMethod()">
+                {{ paymentMethodId === null || paymentMethodId === undefined ?  'CREATE' : 'EDIT' }}
+            </button>
+            <button *ngIf="this.paymentForm.value.type == 2 && this.paymentForm.value.processor_type"
+                class="btn btn-success" type="button" (click)="testConnection()">TEST CONNECTION</button>
+        </div>
+    </div>
+</div>

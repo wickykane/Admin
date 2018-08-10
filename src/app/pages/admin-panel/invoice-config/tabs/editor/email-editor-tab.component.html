@@ -16,9 +16,10 @@
         <label class="title">
             <b>Subject</b>
         </label>
-        <div class="content">
-            <ckeditor [(ngModel)]="template.email_tpl.subject" debounce="500" [config]="{height: '50'}"
-                #subjectEditor (focus)="isFocusingSubject = true; isFocusingBody = false"></ckeditor>
+        <div class="content subject">
+            <!-- <ckeditor [(ngModel)]="template.email_tpl.subject" debounce="500" [config]="{height: '50', toolbar: []}"
+                #subjectEditor (focus)="isFocusingSubject = true; isFocusingBody = false"></ckeditor> -->
+            <input type="text" #subjectEditor [(ngModel)]="template.email_tpl.subject" (focus)="onFocusSubject()">
         </div>
     </div>
 </div>
