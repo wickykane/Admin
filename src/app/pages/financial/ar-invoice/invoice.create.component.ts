@@ -490,7 +490,7 @@ export class InvoiceCreateComponent implements OnInit {
                 params['inv_sts'] = 2;
                 break;
             case 'createnew':
-                params['inv_sts'] = 2;
+                params['inv_sts'] = 1;
                 break;
         }
         this.financialService.createInvoice(params).subscribe(res => {
