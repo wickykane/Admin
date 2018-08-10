@@ -378,7 +378,7 @@ export class SaleOrderCreateComponent implements OnInit {
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
-                    listAdded.push(item.item_id);
+                    listAdded.push(item.item_id + item.item_condition_id);
                 });
                 res.forEach((item) => {
                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
@@ -389,9 +389,9 @@ export class SaleOrderCreateComponent implements OnInit {
                     item.source_id = 0;
                     item.source = 'From Master';
                 });
-
+                console.log(this.list.items);
                 this.list.items = this.list.items.concat(res.filter((item) => {
-                    return listAdded.indexOf(item.item_id) < 0;
+                    return listAdded.indexOf(item.item_id + item.item_condition_id) < 0;
                 }));
 
                 this.updateTotal();
@@ -407,19 +407,17 @@ export class SaleOrderCreateComponent implements OnInit {
                 if (res instanceof Array && res.length > 0) {
                     const listAdded = [];
                     (this.list.items).forEach((item) => {
-                        listAdded.push(item.item_id);
+                        listAdded.push(item.item_id + item.item_condition_id);
                     });
                     res.forEach((item) => {
                         if (item.sale_price) { item.sale_price = Number(item.sale_price); }
                         item['products'] = [];
-                        item.quantity = 1;
                         item.totalItem = item.sale_price;
                         item.source_id = 1;
                         item.source = 'From Quote';
                     });
-
                     this.list.items = this.list.items.concat(res.filter((item) => {
-                        return listAdded.indexOf(item.item_id) < 0;
+                        return listAdded.indexOf(item.item_id +  item.item_condition_id) < 0 ;
                     }));
                     this.updateTotal();
                     this.getQtyAvail();
