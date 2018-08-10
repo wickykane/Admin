@@ -13,7 +13,9 @@ import { routerTransition } from '../../../../router.animations';
 import { CommonService } from './../../../../services/common.service';
 
 import * as moment from 'moment';
+import { StateFilterModalComponent } from '../../../../shared/modals/stateFilter.modal';
 
+import { FreeShippingOptionsModalComponent } from '../../../../shared/modals/free-shipping-options.modal';
 @Component({
     selector: 'app-create-shipping-zone',
     templateUrl: './shipping-zone.create.component.html',
@@ -29,7 +31,11 @@ export class ShippingZoneCreateComponent implements OnInit {
     public generalForm: FormGroup;
     public listMaster = {};
     public listShipping = [];
+    public listCountry = [];
+    public tempListCountry =[];
     public listMasterData ={};
+    public countryFilter = '';
+    public listSelectCountry = [];
     constructor(
         public keyService: RMACreateKeyService,
         private vRef: ViewContainerRef,
@@ -87,14 +93,76 @@ export class ShippingZoneCreateComponent implements OnInit {
     getListMasterData(){
         this.shippingZoneService.getMasterData().subscribe(res => {
             this.listMasterData = res.data;
+            this.listCountry = res.data['country'];
+            this.tempListCountry = this.listCountry.slice(0);
+            this.unSelectCountry();
             this.listShipping =res.data["shipping_quotes_type"];
-            console.log(this.listShipping);
         })
     }
+    filterCountry(key) {
+        console.log(key);
+        this.listCountry = this.filterbyfieldName(this.tempListCountry, 'name', key);
+      }
+    filterbyfieldName(arr:any[], fieldname:string , value:any):any[]{
+        var isSearch = (data:any): boolean => {
+          var isAll = false;
+          if(typeof data === 'object' && typeof data[fieldname] !== 'undefined'){
+            isAll = isSearch(data[fieldname]);
+          } else {
+            if(typeof value === 'number'){
+              isAll = data === value;
+            } else {
+              isAll = data.toString().match( new RegExp(value, 'i') );
+            }
+          }
+          return isAll;
+        };
+        return arr.filter(isSearch);
+      }
+      selectCountry(isSelect,item){
+          console.log(isSelect,item);
+        if(isSelect){
+            this.listSelectCountry.push(item);
+        }
+        else{
+            this.listSelectCountry.forEach((res,index)=>{
+
+                if(res.country_id == item.country_id){
+                    this.listSelectCountry.splice(index,1);
+                }
+            });
+        }
+      }
+      unSelectCountry(){
+        this.listCountry.forEach(item => {
+            return item.selected = false;
+        });
+      }
+      openState(code){
+        const modalRef = this.modalService.open(StateFilterModalComponent);
+
+        modalRef.componentInstance.isEdit = false;
+        modalRef.componentInstance.stateList = this.listMasterData['state'][code];
+        modalRef.result.then(res => {
 
 
+        });
+       
+    }
+
+    openShippingModal(id){
+        var modalRef :any;
+        if(id=="1"){
+        modalRef   = this.modalService.open(FreeShippingOptionsModalComponent,{size:'lg'});
+        }
+        
+
+        modalRef.componentInstance.isEdit = false;
+        modalRef.result.then(res => {
 
 
+        });
+    }
 
 
 
