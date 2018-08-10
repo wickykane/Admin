@@ -331,9 +331,11 @@ export class SaleOrderCreateComponent implements OnInit {
         this.order_info.total = this.order_info.sub_total - this.order_info.total_discount + Number(this.order_info['shipping_cost']) + this.order_info['vat_percent_amount'] - this.promotionList['total_invoice_discount'];
     }
 
-    deleteAction(id) {
+    deleteAction(id, item_condition) {
+        console.log(id);
+        console.log(item_condition);
         this.list.items = this.list.items.filter((item) => {
-            return item.item_id !== id;
+            return (item.item_id + item.item_condition_id) !== (id + item_condition );
         });
         this.updateTotal();
     }
@@ -516,6 +518,8 @@ export class SaleOrderCreateComponent implements OnInit {
                     setTimeout(() => {
                         this.router.navigate(['/order-management/sale-order']);
                     }, 500);
+                } else {
+                    this.toastr.error(res.message);
                 }
             } catch (e) {
                 console.log(e);
