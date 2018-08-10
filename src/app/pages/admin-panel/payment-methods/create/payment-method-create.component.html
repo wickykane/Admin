@@ -25,7 +25,7 @@
                         <label>
                             <b>Select Payment Processor (*)</b>
                         </label>
-                        <select class="form-control" formControlName="processor_type">
+                        <select class="form-control" formControlName="processor_type" (change)="clearTestConnectionResult()">
                             <option value="null" disabled>--Select--</option>
                             <option *ngFor="let type of listMaster.paymentProcessors" [value]="type.key">{{type.name}}</option>
                         </select>
@@ -144,7 +144,7 @@
                             ngbTooltip="The client ID will be provided by Paypal after registration an application.">
                             <i class="fa fa-question-circle"></i>
                         </span>
-                        <span class="error" *ngIf="isClickedSave && this.paymentForm.controls.service_id.invalid">
+                        <span class="error" *ngIf="(isClickedSave || isClickedTestConnection) && this.paymentForm.controls.service_id.invalid">
                             (!): This field cannot be blank. Please input value.
                         </span>
                     </div>
@@ -162,7 +162,7 @@
                             ngbTooltip="The secret ID will be provided by Paypal after registration an application.">
                             <i class="fa fa-question-circle"></i>
                         </span>
-                        <span class="error" *ngIf="isClickedSave && this.paymentForm.controls.service_secret.invalid">
+                        <span class="error" *ngIf="(isClickedSave || isClickedTestConnection) && this.paymentForm.controls.service_secret.invalid">
                             (!): This field cannot be blank. Please input value.
                         </span>
                     </div>
@@ -200,6 +200,17 @@
                             (!): This field cannot be blank. Please input value.
                         </span>
                     </div>
+                    <div class="row create-section-info bottom-message" *ngIf="isClickedTestConnection">
+                        <span class="success" *ngIf="testConnectionResult && this.paymentForm.value.processor_type == 1">
+                            <b>(*): Connection to Authorize.net successfully</b>
+                        </span>
+                        <span class="success" *ngIf="testConnectionResult && this.paymentForm.value.processor_type == 2">
+                            <b>(*): Connection to Paypal successfully</b>
+                        </span>
+                        <span class="error" *ngIf="!testConnectionResult && messageTestConnection">
+                            <b>(!): {{messageTestConnection}}</b>
+                        </span>
+                    </div>
                 </div>
                 <div class="col-lg-5 col-xl-4 create-section-img">
                 </div>
@@ -208,10 +219,12 @@
     </form>
     <div class="row">
         <div class="col-md-12 mg-top-15 text-center">
+            <button class="btn btn-default" type="button" [routerLink]="['/admin-panel/payment-methods']">CANCEL</button>
             <button class="btn btn-primary" type="button" (click)="savePaymentMethod()">
-                {{ paymentMethodId === null || paymentMethodId === undefined ?  'Create' : 'Edit' }}
+                {{ paymentMethodId === null || paymentMethodId === undefined ?  'CREATE' : 'EDIT' }}
             </button>
-            <button class="btn btn-default" type="button" [routerLink]="['/admin-panel/payment-methods']">Cancel</button>
+            <button *ngIf="this.paymentForm.value.type == 2 && this.paymentForm.value.processor_type"
+                class="btn btn-success" type="button" (click)="testConnection()">TEST CONNECTION</button>
         </div>
     </div>
 </div>

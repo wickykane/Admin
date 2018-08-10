@@ -42,6 +42,9 @@ export class PaymentMethodsCreateComponent implements OnInit {
     public paymentMethodId = null;
     private paymentMethodDetail = {};
     public isClickedSave = false;
+    public isClickedTestConnection = false;
+    public messageTestConnection = '';
+    public testConnectionResult = false;
     public paymentForm: FormGroup;
 
     constructor(
@@ -158,6 +161,13 @@ export class PaymentMethodsCreateComponent implements OnInit {
             }
         }
         this.paymentForm.patchValue({ type: selectedType });
+        this.clearTestConnectionResult();
+    }
+
+    clearTestConnectionResult() {
+        this.isClickedTestConnection = false;
+        this.messageTestConnection = '';
+        this.testConnectionResult = false;
     }
 
     checkDuplicateDisplayName() {
@@ -202,20 +212,43 @@ export class PaymentMethodsCreateComponent implements OnInit {
     checkFormValidationForOnlineType() {
         if (
             this.paymentForm.controls.processor_type.valid &&
-            this.paymentForm.controls.name.valid &&
-            this.paymentForm.controls.ac.valid &&
+            this.checkFormValidationForManualType() &&
             this.paymentForm.controls.username.valid &&
             this.paymentForm.controls.password.valid &&
             this.paymentForm.controls.service_id.valid &&
             this.paymentForm.controls.sandbox.valid &&
-            this.paymentForm.controls.show_in_store.valid &&
             this.paymentForm.controls.service_secret.valid &&
-            this.paymentForm.controls.transaction_type.valid &&
-            this.paymentForm.controls.desc.valid
+            this.paymentForm.controls.transaction_type.valid
         ) {
             return true;
         }
         return false;
+    }
+
+    testConnection() {
+        this.isClickedTestConnection = true;
+        const params = {
+            processor_type: this.paymentForm.value.processor_type,
+            sandbox: this.paymentForm.value.sandbox,
+            service_id: this.paymentForm.value.service_id,
+            service_secret: this.paymentForm.value.service_secret
+        };
+        this.paymentMethodService.testConnection(params).subscribe(
+            res => {
+                try {
+                    this.toastr.success(res.message);
+                    this.messageTestConnection = res.message;
+                    this.testConnectionResult = true;
+                } catch (err) {
+                    console.log(err);
+                }
+            },
+            err => {
+                console.log(err);
+                this.messageTestConnection = err.message;
+                this.testConnectionResult = false;
+            }
+        );
     }
 
     savePaymentMethod() {

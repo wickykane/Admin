@@ -31,6 +31,11 @@ export class PaymentMethodsService {
         return this.apiService.get(url);
     }
 
+    testConnection(params) {
+        const url = 'payment-method/online/test';
+        return this.apiService.post(url, params);
+    }
+
     checkDupliateDisplayName(params) {
         const url = 'payment-method/validate/name';
         return this.apiService.post(url, params);
