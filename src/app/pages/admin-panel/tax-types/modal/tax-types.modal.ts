@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { TaxTypesService } from '../tax-types.service';
 
 @Component({
@@ -41,6 +42,14 @@ export class TaxTypesModalComponent implements OnInit {
       this.taxType.get('tax_code').patchValue(res.data.code);
     });
   }
+  numberMaskObjectDecimal(max?) {
+    return createNumberMask({
+        allowDecimal: true,
+        includeThousandsSeparator: false,
+        prefix: '',
+        integerLimit: max || null
+    });
+}
 
   ok() {
     this.activeModal.close(this.taxType.value);

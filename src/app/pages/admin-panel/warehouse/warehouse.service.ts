@@ -7,19 +7,19 @@ export class WarehouseService {
 
     getListWarehouse(params) {
         // const url = 'warehouse/index';
-        const url = 'buyer/index';
+        const url = 'warehouse/get-list';
         return this.API.get(url, params);
     }
-    createWarehouse(data) {
-        const url = 'warehouse/create';
-        return this.API.postForm(url, data);
-    }
-    updateWarehouse(data) {
-        const url = 'warehouse/update';
-        return this.API.postForm(url, data);
-    }
     getDetailWarehouse(id) {
-        const url = 'warehouse/detail/' + id;
+        const url = 'warehouse/get-detail/' + id;
         return this.API.get(url);
+    }
+    changeStatus(id, status) {
+        const url = 'warehouse/setActive/' + id + '/' + status;
+        return this.API.put(url);
+    }
+    setShipping(id) {
+        const url = 'warehouse/setShippingOrigin/' + id;
+        return this.API.put(url);
     }
 }

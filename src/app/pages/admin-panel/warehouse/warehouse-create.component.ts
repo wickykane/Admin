@@ -95,23 +95,23 @@ export class WarehouseCreateComponent implements OnInit {
                 data: JSON.stringify(params)
             };
 
-            this.warehouseService.createWarehouse(data).subscribe(
-                res => {
-                    console.log(res);
-                    try {
-                        setTimeout(() => {
-                            this.router.navigate(['/warehouse']);
-                        }, 2000);
-                        this.toastr.success(res.message);
-                    } catch (e) {
-                        console.log(e);
-                    }
-                },
-                err => {
-                    console.log(err);
-                    this.toastr.error(err.message);
-                }
-            );
+            // this.warehouseService.createWarehouse(data).subscribe(
+            //     res => {
+            //         console.log(res);
+            //         try {
+            //             setTimeout(() => {
+            //                 this.router.navigate(['/warehouse']);
+            //             }, 2000);
+            //             this.toastr.success(res.message);
+            //         } catch (e) {
+            //             console.log(e);
+            //         }
+            //     },
+            //     err => {
+            //         console.log(err);
+            //         this.toastr.error(err.message);
+            //     }
+            // );
         }
     }
 }
