@@ -272,10 +272,9 @@ export class SaleQuotationCreateComponent implements OnInit {
         const modalRef = this.modalService.open(ItemModalContent, { size: 'lg' });
         modalRef.result.then(res => {
             if (res instanceof Array && res.length > 0) {
-
                 const listAdded = [];
                 (this.list.items).forEach(item => {
-                    listAdded.push(item.item_id);
+                    listAdded.push(item.item_id + item.item_condition_id);
                 });
                 res.forEach(item => {
                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
@@ -286,8 +285,8 @@ export class SaleQuotationCreateComponent implements OnInit {
                     item.source = 'From Master';
                 });
 
-                this.list.items = this.list.items.concat(res.filter(item => {
-                    return listAdded.indexOf(item.item_id) < 0;
+                this.list.items = this.list.items.concat(res.filter((item) => {
+                    return listAdded.indexOf(item.item_id + item.item_condition_id) < 0;
                 }));
 
                 this.updateTotal();

@@ -49,6 +49,11 @@ import { TerminateEPIPolicyModalContent } from './epi-policy/modal/terminate-pol
 import { UserModule } from './user/user.module';
 import { WorkFlowModule } from './work-flow/work-flow.module';
 
+import { AccountTreeComponent } from './ledger/account-tree.component';
+import { LedgerComponent } from './ledger/ledger.component';
+import { AccountModalComponent } from './ledger/modal/account.modal';
+
+
 import { InvoiceConfigComponent } from './invoice-config/invoice-config.component';
 import { EmailTemplateModalContent } from './invoice-config/modals/email-template/email-template.modal';
 import { SendSampleModalContent } from './invoice-config/modals/send-sample/send-sample.modal';
@@ -122,6 +127,9 @@ import { CKEditorModule } from 'ng2-ckeditor';
         SendSampleModalContent,
         EmailEditorTabComponent,
         EmailPreviewTabComponent,
+        LedgerComponent,
+        AccountTreeComponent,
+        AccountModalComponent,
         TaxTypesComponent,
         TaxTypesModalComponent
     ],
@@ -136,8 +144,9 @@ import { CKEditorModule } from 'ng2-ckeditor';
         CustomerEPIModalContent,
         TerminateEPIPolicyModalContent,
         EmailTemplateModalContent,
-        SendSampleModalContent
+        SendSampleModalContent,
+        AccountModalComponent
     ],
     providers: [TableService, CommonService, AdminPanelService]
 })
-export class AdminPanelModule {}
+export class AdminPanelModule { }

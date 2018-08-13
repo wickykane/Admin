@@ -1,0 +1,117 @@
+<div class="modal-style">
+    <div class="modal-header">
+        <h5 class="second-title">{{ modalTitle }}</h5>
+        <button type="button" (click)="cancel()" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body" style="padding-bottom:10px;">
+        <form [formGroup]="accountForm" class="form-horizontal" role="form">
+            <div class="row form-group">
+                <div class="col-md-5">
+                    <label for="" class="control-label" translate>Account Type</label>
+                    <span class="text-danger">(*)</span>
+                </div>
+                <div class="col-md-7">
+                    <div> {{ accountForm.value.type }}</div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-5">
+                    <label for="" class="control-label" translate>Detail Type</label>
+                    <span class="text-danger">(*)</span>
+                </div>
+                <div class="col-md-7">
+                    <div> {{ accountForm.value.detail_type }}</div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-5">
+                    <label for="" class="control-label" translate>Account Number</label>
+                    <span class="text-danger">(*)</span>
+                </div>
+                <div class="col-md-7">
+                    <input [OnlyNumber]="true" type="text" class="form-control" formControlName="cd">
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-5">
+                    <label for="" class="control-label" translate>Description</label>
+                    <span class="text-danger">(*)</span>
+                </div>
+                <div class="col-md-7">
+                    <input type="text" class="form-control" formControlName="des">
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-5">
+                    <label for="" class="control-label" translate>Credit/Debit</label>
+                    <span class="text-danger">(*)</span>
+                </div>
+                <div class="col-md-7">
+                    <div> {{ accountForm.value.credit }}</div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-5">
+                    <label for="" class="control-label" translate>Is sub-account</label>
+                </div>
+                <div class="col-md-7">
+                    <label class="css-input css-checkbox css-checkbox-default">
+                        <input (change)="changeSubAccount()"  class="cb-all" type="checkbox" formControlName="is_sub_acc">
+                        <span></span>
+                    </label>
+                </div>
+            </div>
+            <div class="row form-group" *ngIf="accountForm.value.is_sub_acc">
+                <div class="col-md-5">
+                    <label for="" class="control-label" translate>Parent Account</label>
+                    <span class="text-danger">(*)</span>
+                </div>
+                <div class="col-md-7">
+                    <!-- <ng-select #select [items]="listMaster['parents']" formControlName="parent_id" bindLabel="des" bindValue="id">
+                        <ng-template ng-label-tmp let-item="item">
+                            {{selectedParent.des}}
+                        </ng-template>
+                        <ng-template *ngIf="item.id != selectedParent.id" ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                            <ul class="parent-node hoverable">
+                                <li (click)="selectParent($event, item)" class="child-node"> <span>{{ item.des }}</span>
+                                    <ul class="parent-node" *ngIf="item.children">
+                                        <li (click)="selectParent($event, c2)" class="child-node" *ngFor="let c2 of item.children">
+                                            <span>  {{ c2.des }}</span>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </ng-template>
+                    </ng-select> -->
+                    <ng-select [items]="listMaster['parents']" formControlName="parent_id" bindLabel="des" bindValue="id">
+                        <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                            <span [ngClass]="{'pl-3': item.level == 1, 'pl-5': item.level == 2}">{{ item.des }}</span>
+                        </ng-template>
+                    </ng-select>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-5">
+                    <label for="" class="control-label" translate>Status</label>
+                    <span class="text-danger">(*)</span>
+                </div>
+                <div class="col-md-7">
+                    <select formControlName="ac" class="form-control">
+                        <option [hidden]="true" [disabled]="true" [ngValue]="null" selected="true">--Select--</option>
+                        <option *ngFor="let status of listMaster['status']" [ngValue]="status.id">{{status.value}}</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer" style="padding-top: 0">
+        <div class="form-group" style="margin-top: 20px;">
+            <div class="text-center">
+                <button [disabled]="!accountForm.valid" style="width: 70px" class="btn btn-primary" type="button" (click)="ok()" translate>OK</button>
+                <button class="btn btn-default" type="button" (click)="cancel()" translate>Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
