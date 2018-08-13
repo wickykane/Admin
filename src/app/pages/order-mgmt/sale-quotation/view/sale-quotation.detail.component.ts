@@ -25,6 +25,7 @@ export class SaleQuotationDetailComponent implements OnInit {
      */
 
     public orderId;
+    public saleQuoteId;
     public orderDetail = {};
     @Output() stockValueChange = new EventEmitter();
 
@@ -99,10 +100,10 @@ export class SaleQuotationDetailComponent implements OnInit {
         });
     }
     getList() {
-
         this.orderService.getSaleQuoteDetail(this.orderId).subscribe(res => {
             try {
                 this.orderDetail = res.data;
+                this.saleQuoteId = res.data.sale_quote_id;
                 this.stockValueChange.emit(res.data) ;
 
             } catch (e) {

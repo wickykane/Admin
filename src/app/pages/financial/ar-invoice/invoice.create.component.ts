@@ -2,17 +2,14 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewContainerRef, ViewEncapsulation } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateCustomParserFormatter } from '../../../shared/helper/dateformat';
 
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 import { FinancialService } from '../financial.service';
 
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
-import { ItemModalContent } from '../../../shared/modals/item.modal';
-import { OrderHistoryModalContent } from '../../../shared/modals/order-history.modal';
-import { OrderSaleQuoteModalContent } from '../../../shared/modals/order-salequote.modal';
-import { PromotionModalContent } from '../../../shared/modals/promotion.modal';
 import { CommonService } from './../../../services/common.service';
 import { InvoiceCreateKeyService } from './keys.create.control';
 
@@ -21,7 +18,7 @@ import { InvoiceCreateKeyService } from './keys.create.control';
     templateUrl: './invoice.create.component.html',
     styleUrls: ['./invoice.component.scss'],
     animations: [routerTransition()],
-    providers: [DatePipe, InvoiceCreateKeyService, CommonService]
+    providers: [DatePipe, InvoiceCreateKeyService, CommonService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }]
 })
 
 export class InvoiceCreateComponent implements OnInit {
@@ -165,7 +162,7 @@ export class InvoiceCreateComponent implements OnInit {
                 this.isEdit = false;
                 this.headerTitle = 'CREATE NEW INVOICE';
                 const currentDt = this.dt.transform(new Date(), 'yyyy-MM-dd');
-                this.generalForm.controls['inv_dt'].patchValue(currentDt);
+                // this.generalForm.controls['inv_dt'].patchValue(currentDt);
                 this.generalForm.controls['inv_status'].setValue(1);
                 this.getGenerateCode();
             }
@@ -306,6 +303,7 @@ export class InvoiceCreateComponent implements OnInit {
                         order_id: orderId,
                         order_num: orderNum,
                         shipping_cost: this.order_details['shipping'],
+                        payment_method_id: this.order_details['payment_method'],
                         sub_total: this.order_details['sub_total_price'],
                         discount_percent: this.order_details['discount_percent'],
                         tax_percent: this.order_details['vat_percent'],
@@ -330,6 +328,7 @@ export class InvoiceCreateComponent implements OnInit {
         this.financialService.getListPaymentTerm().subscribe(res => {
             try {
                 this.listMaster['payment_terms'] = res.data;
+                this.generalForm.patchValue({payment_term_id: this.listMaster['payment_terms'][0]});
             } catch (e) {
                 console.log(e);
             }

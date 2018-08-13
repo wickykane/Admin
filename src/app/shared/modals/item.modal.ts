@@ -137,11 +137,11 @@ export class ItemModalContent implements OnInit {
             }
         }
     }
-    getNameWarehouse(arr, id) {
-        if (arr) {
-            return 'WH' + arr.find(item => item.warehouse_id === id)['name'];
-        }
-    }
+    // getNameWarehouse(arr, id) {
+    //     if (arr) {
+    //         return 'WH' + arr.find(item => item.warehouse_id === id)['name'];
+    //     }
+    // }
 
     getList() {
         const params = {...this.tableService.getParams(), ...this.searchForm.value, ...this.filterForm.value};
@@ -159,7 +159,6 @@ export class ItemModalContent implements OnInit {
                 this.listMaster['certification'] = res.data.meta_filters.certification;
                 this.listMaster['countries'] = res.data.meta_filters.countries;
                 this.listMaster['warehouses'] = res.data.warehouses;
-                console.log(this.listMaster['warehouses'][0]);
                 this.tableService.matchPagingOption(res.data);
             } catch (e) {
                 console.log(e);
