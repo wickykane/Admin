@@ -25,6 +25,7 @@ export class SaleQuotationDetailComponent implements OnInit {
      */
 
     public orderId;
+    public saleQuoteId;
     public orderDetail = {};
     @Output() stockValueChange = new EventEmitter();
 
@@ -87,8 +88,8 @@ export class SaleQuotationDetailComponent implements OnInit {
 
     }
     convertOrderToSO(id) {
-        const params = {};
-        this.orderService.convertOrderToSO(id, params).subscribe(res => {
+            const params = { status: 'SC' };
+            this.orderService.updateSaleQuoteStatus(id, params).subscribe(res => {
             try {
                 this.toastr.success(res.message);
                 this.getList();
@@ -99,10 +100,10 @@ export class SaleQuotationDetailComponent implements OnInit {
         });
     }
     getList() {
-
         this.orderService.getSaleQuoteDetail(this.orderId).subscribe(res => {
             try {
                 this.orderDetail = res.data;
+                this.saleQuoteId = res.data.sale_quote_id;
                 this.stockValueChange.emit(res.data) ;
 
             } catch (e) {

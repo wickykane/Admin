@@ -189,7 +189,7 @@ export class InvoiceConfigComponent implements OnInit {
             };
             this.invoiceService.saveInvoiceConfigInfo(params).subscribe(
                 res => {
-                    this.toastr.success('Save successfully!');
+                    this.toastr.success(res.message);
                     this.getInvoiceChaseInfo();
                 },
                 err => {

@@ -71,6 +71,7 @@ export class SaleOrderCreateComponent implements OnInit {
             'zip_code': ''
         },
         contact: {
+            'full_name': '',
             'phone': '',
             'email': ''
         }
@@ -166,6 +167,10 @@ export class SaleOrderCreateComponent implements OnInit {
         this.orderService.getDetailCompany(company_id).subscribe(res => {
             try {
                 this.customer = res.data;
+                if (res.data.buyer_type === 'PS') {
+                    this.addr_select.contact = res.data.contact[0];
+                    this.generalForm.patchValue({contact_user_id: res.data.contact[0]['id']});
+                }
             } catch (e) {
                 console.log(e);
             }
@@ -331,9 +336,11 @@ export class SaleOrderCreateComponent implements OnInit {
         this.order_info.total = this.order_info.sub_total - this.order_info.total_discount + Number(this.order_info['shipping_cost']) + this.order_info['vat_percent_amount'] - this.promotionList['total_invoice_discount'];
     }
 
-    deleteAction(id) {
+    deleteAction(id, item_condition) {
+        console.log(id);
+        console.log(item_condition);
         this.list.items = this.list.items.filter((item) => {
-            return item.item_id !== id;
+            return (item.item_id + item.item_condition_id) !== (id + item_condition );
         });
         this.updateTotal();
     }
@@ -378,7 +385,7 @@ export class SaleOrderCreateComponent implements OnInit {
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
-                    listAdded.push(item.item_id);
+                    listAdded.push(item.item_id + item.item_condition_id);
                 });
                 res.forEach((item) => {
                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
@@ -389,9 +396,9 @@ export class SaleOrderCreateComponent implements OnInit {
                     item.source_id = 0;
                     item.source = 'From Master';
                 });
-
+                console.log(this.list.items);
                 this.list.items = this.list.items.concat(res.filter((item) => {
-                    return listAdded.indexOf(item.item_id) < 0;
+                    return listAdded.indexOf(item.item_id + item.item_condition_id) < 0;
                 }));
 
                 this.updateTotal();
@@ -407,19 +414,17 @@ export class SaleOrderCreateComponent implements OnInit {
                 if (res instanceof Array && res.length > 0) {
                     const listAdded = [];
                     (this.list.items).forEach((item) => {
-                        listAdded.push(item.item_id);
+                        listAdded.push(item.item_id + item.item_condition_id);
                     });
                     res.forEach((item) => {
                         if (item.sale_price) { item.sale_price = Number(item.sale_price); }
                         item['products'] = [];
-                        item.quantity = 1;
                         item.totalItem = item.sale_price;
                         item.source_id = 1;
                         item.source = 'From Quote';
                     });
-
                     this.list.items = this.list.items.concat(res.filter((item) => {
-                        return listAdded.indexOf(item.item_id) < 0;
+                        return listAdded.indexOf(item.item_id +  item.item_condition_id) < 0 ;
                     }));
                     this.updateTotal();
                     this.getQtyAvail();
@@ -518,6 +523,8 @@ export class SaleOrderCreateComponent implements OnInit {
                     setTimeout(() => {
                         this.router.navigate(['/order-management/sale-order']);
                     }, 500);
+                } else {
+                    this.toastr.error(res.message);
                 }
             } catch (e) {
                 console.log(e);
