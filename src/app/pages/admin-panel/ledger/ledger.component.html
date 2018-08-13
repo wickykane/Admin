@@ -1,0 +1,243 @@
+<div [@routerTransition]>
+    <app-page-header [heading]="'GENERAL LEDGER'" [icon]="'fa-th-list'"></app-page-header>
+    <!-- <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut> -->
+    <div class="block-content pd-bottom bg-gray-light">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="button-group">
+                    <button [disabled]="!data['selectedAccount'] || data['selectedAccount'] && data['selectedAccount'].level !== 0" (click)="actionInvoke(screen.NEW_ACCOUNT_TYPE)" class="btn btn-custom btn-orange">Add Account Type</button>
+                    <button class="btn btn-custom btn-green">Sync to QB</button>
+                    <button [disabled]="!data['selectedAccount'] || data['selectedAccount'] && data['selectedAccount'].level !== 1" (click)="actionInvoke(screen.NEW_DETAIL_TYPE)" class="btn btn-custom btn-default">Add Detail Type</button>
+                </div>
+                <div class="account-tree">
+                    <app-account-tree (expandItem)="expand($event)" [expands]="listMaster['expands']" [currentItem]="data['selectedAccount']" [isRoot]="true" [items]="listMaster['account_list']" (selectedItem)="selectItem($event)"></app-account-tree>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div *ngIf="data['show'] == screen.NEW_ACCOUNT_TYPE || data['show'] == screen.VIEW_ACCOUNT_TYPE" class="ledger-container account-type">
+                    <h5 class="title-underline">
+                        <i class="fa fa-folder blue" aria-hidden="true"></i> {{ (data['selectedAccount'].level == 0)? 'New Account Type' : data['selectedAccount'].name }}
+                    </h5>
+                    <div>
+                        <h3 class="block-title text-uppercase">General Information</h3>
+                    </div>
+                    <div>
+                        <form class="mt-4" [formGroup]="generalForm">
+                            <div class="form-group row">
+                                <label for="name" class="col-md-3">Code <span class="text-danger">(*)</span></label>
+                                <div class="col-md-4">
+                                    {{ generalForm.value.cd }}
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="name" class="col-md-3">Description <span class="text-danger">(*)</span></label>
+                                <div class="col-md-4">
+                                    <input type="text" formControlName="des" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="name" class="col-md-3">Allowabe Range <span class="text-danger">(*)</span></label>
+                                <div class="col-md-4">
+                                    <input [textMask]="{mask: numberMask}" type="text" maxlength="6" formControlName="range_start" class="col-md-5 form-control"> -
+                                    <input [textMask]="{mask: numberMask}" type="text" maxlength="6" formControlName="range_end" class="col-md-5 form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="name" class="col-md-3">Credit/Debit <span class="text-danger">(*)</span></label>
+                                <div class="col-md-4">
+                                    <select *ngIf="data['show'] != screen.VIEW_ACCOUNT_TYPE" class="col-md-10 form-control" formControlName="is_credit">
+                                        <option [ngValue]="null" [disabled]="true" [hidden]="true">Select</option>
+                                        <option [ngValue]="1">Credit</option>
+                                        <option [ngValue]="0">Debit</option>
+                                    </select>
+                                    <div *ngIf="data['show'] == screen.VIEW_ACCOUNT_TYPE">
+                                        {{ (generalForm.value.is_credit)? 'Credit' : 'Debit' }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="name" class="col-md-3">Note</label>
+                                <div class="col-md-8">
+                                    <textarea class="form-control" formControlName="note" cols="30" rows="10"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-12 text-right">
+                                    <button (click)="saveAccountType()" [disabled]="!generalForm.valid" class="btn btn btn-outline-primary">Save</button>
+                                    <button (click)="cancel()" class="btn btn-default">Cancel</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div *ngIf="data['show'] == screen.NEW_DETAIL_TYPE" class="ledger-container account-detail">
+                    <h5 class="title-underline">
+                        <i class="fa fa-folder blue" aria-hidden="true"></i> New Account Detail Type
+                    </h5>
+                    <div>
+                        <h3 class="block-title text-uppercase">General Information</h3>
+                    </div>
+                    <div>
+                        <form class="mt-4" [formGroup]="generalDetailForm">
+                            <div class="form-group row">
+                                <label for="name" class="col-md-3">Description <span class="text-danger">(*)</span></label>
+                                <div class="col-md-4">
+                                    <input type="text" formControlName="des" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="name" class="col-md-3">Credit/Debit <span class="text-danger">(*)</span></label>
+                                <div class="col-md-4">
+                                    <!-- <select class="col-md-10 form-control" formControlName="credit">
+                                        <option [ngValue]="null" [disabled]="true" [hidden]="true">Select</option>
+                                        <option [ngValue]="1">Credit</option>
+                                        <option [ngValue]="2">Debit</option>
+                                    </select> -->
+                                    {{ (data['selectedAccount'].is_credit) ? 'Credit': 'Debit'}}
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="name" class="col-md-3">Note</label>
+                                <div class="col-md-8">
+                                    <textarea class="form-control" formControlName="note" cols="30" rows="10"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-12 text-right">
+                                    <button (click)="saveDetailAccountType()" [disabled]="!generalDetailForm.valid" class="btn btn btn-outline-primary">Save</button>
+                                    <button (click)="cancel()" class="btn btn-default">Cancel</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div *ngIf="data['show'] == screen.VIEW_DETAIL_TYPE" class="custom-tabset ledger-container view-account-detail">
+                    <h5 class="title-underline">
+                        <i class="fa fa-folder blue" aria-hidden="true"></i> {{ data['selectedAccount']['des'] }}
+                    </h5>
+                    <ngb-tabset #tabSet>
+                        <ngb-tab title="General Information">
+                            <ng-template ngbTabContent>
+                                <div>
+                                    <form class="mt-4" [formGroup]="generalDetailForm">
+                                        <div class="form-group row">
+                                            <label for="name" class="col-md-3">Description <span class="text-danger">(*)</span></label>
+                                            <div class="col-md-4">
+                                                <input type="text" formControlName="des" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="name" class="col-md-3">Credit/Debit <span class="text-danger">(*)</span></label>
+                                            <div class="col-md-4">
+                                                <!-- <select class="col-md-10 form-control" formControlName="credit">
+                                                    <option [ngValue]="null" [disabled]="true" [hidden]="true">Select</option>
+                                                    <option [ngValue]="1">Credit</option>
+                                                    <option [ngValue]="2">Debit</option>
+                                                </select> -->
+                                                {{ (data['selectedAccount'].is_credit) ? 'Credit': 'Debit'}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="name" class="col-md-3">Note</label>
+                                            <div class="col-md-8">
+                                                <textarea class="form-control" formControlName="note" cols="30" rows="10"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-12 text-right">
+                                                <button (click)="saveDetailAccountType()" [disabled]="!generalDetailForm.valid" class="btn btn btn-outline-primary">Save</button>
+                                                <button (click)="cancel()" class="btn btn-default">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </ng-template>
+                        </ngb-tab>
+
+                        <ngb-tab title="List of Accounts">
+                            <ng-template ngbTabContent>
+                                <div>
+                                    <div class="block-content pd-bottom bg-gray-light short-width">
+                                        <div class="row">
+                                            <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
+                                                <div class="block-search">
+                                                    <label for="name" class="control-label">Account No</label>
+                                                    <input type="text" name="no" formControlName="cd" class="form-control" id="name" placeholder="">
+                                                </div>
+                                                <div class="block-search">
+                                                    <label for="name" class="control-label">Description</label>
+                                                    <input type="text" name="des" formControlName="des" class="form-control" id="name" placeholder="">
+                                                </div>
+                                                <div class="block-search">
+                                                    <label for="code" class="control-label">Status</label>
+                                                    <select class="form-control" formControlName="ac" name="status">
+                                                    <option value="null" selected="false">--Select--</option>
+                                                    <option *ngFor="let item of listMaster['status']" [ngValue]="item.id">{{item.value}}</option>
+                                                </select>
+                                                </div>
+                                            </form>
+                                            <div class="block-btn-search">
+                                                <label class="control-label">&nbsp;</label>
+                                                <div class="group-btn-search">
+                                                    <button type="button" class="btn btn-primary" (click)="getList()">Search</button>
+                                                    <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchForm)">Reset</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="p-0  block-content list-order-table">
+                                        <button (click)="newAccount()" style="margin: 10px 0;" class="btn btn-primary">Add new account</button>
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-vcenter custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
+                                                <thead class="bg-white">
+                                                    <tr>
+                                                        <th>Account No</th>
+                                                        <th>Account Description</th>
+                                                        <th>Credit/Debit</th>
+                                                        <th class="text-center">Status</th>
+                                                        <th class="text-center">Used Type</th>
+                                                        <th class="text-center">Sync To Quickbooks</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
+                                                    <tr>
+                                                        <td>{{item.cd}}</td>
+                                                        <td [ngClass]="{'pl-3': item.level == 1, 'pl-5': item.level == 2}">{{item.des }}</td>
+                                                        <td>{{item.is_credit_text}}</td>
+                                                        <td class="text-center">{{item.ac_text}}</td>
+                                                        <td class="text-center">
+                                                            <span class="text-success">
+                                                                <i class="fa fa-check"></i>
+                                                            </span>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <img *ngIf="!item.sync" src="assets/img/qbicon-gray.png" width="20px" height="20px">
+                                                            <img *ngIf="item.sync" src="assets/img/qbicon.png" width="20px" height="20px">
+                                                        </td>
+                                                        <td>
+                                                            <a class="btn btn-default" (click)="newAccount(item)" title="Edit">
+                                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                            </a>
+                                                            <a class="btn btn-default" (click)="deleteAccount(item.id)" title="Delete">
+                                                                <i class="fa fa-trash" aria-hidden="true"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ngb-tab>
+
+                    </ngb-tabset>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

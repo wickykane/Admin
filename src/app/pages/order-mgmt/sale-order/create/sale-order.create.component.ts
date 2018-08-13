@@ -71,6 +71,7 @@ export class SaleOrderCreateComponent implements OnInit {
             'zip_code': ''
         },
         contact: {
+            'full_name': '',
             'phone': '',
             'email': ''
         }
@@ -166,6 +167,10 @@ export class SaleOrderCreateComponent implements OnInit {
         this.orderService.getDetailCompany(company_id).subscribe(res => {
             try {
                 this.customer = res.data;
+                if (res.data.buyer_type === 'PS') {
+                    this.addr_select.contact = res.data.contact[0];
+                    this.generalForm.patchValue({contact_user_id: res.data.contact[0]['id']});
+                }
             } catch (e) {
                 console.log(e);
             }
@@ -531,4 +536,3 @@ export class SaleOrderCreateComponent implements OnInit {
     }
 
 }
-
