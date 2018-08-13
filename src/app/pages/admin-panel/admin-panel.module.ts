@@ -55,6 +55,9 @@ import { SendSampleModalContent } from './invoice-config/modals/send-sample/send
 import { EmailEditorTabComponent } from './invoice-config/tabs/editor/email-editor-tab.component';
 import { EmailPreviewTabComponent } from './invoice-config/tabs/preview/email-preview-tab.component';
 
+import { PaymentMethodsCreateComponent } from './payment-methods/create/payment-method-create.component';
+import { PaymentMethodsListComponent } from './payment-methods/list/payment-methods-list.component';
+
 import { TaxTypesModalComponent } from './tax-types/modal/tax-types.modal';
 import { TaxTypesComponent } from './tax-types/tax-types.component';
 
@@ -80,7 +83,7 @@ import { CKEditorModule } from 'ng2-ckeditor';
         WorkFlowModule,
         CommonShareModule,
         ItemModalModule,
-        CKEditorModule
+        CKEditorModule,
     ],
     declarations: [
         AdminPanelComponent,
@@ -122,6 +125,8 @@ import { CKEditorModule } from 'ng2-ckeditor';
         SendSampleModalContent,
         EmailEditorTabComponent,
         EmailPreviewTabComponent,
+        PaymentMethodsListComponent,
+        PaymentMethodsCreateComponent,
         TaxTypesComponent,
         TaxTypesModalComponent
     ],

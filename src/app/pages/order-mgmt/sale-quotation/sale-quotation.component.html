@@ -86,6 +86,8 @@
                         <tr>
                             <th translate style="width:8%">Sales Quote #</th>                           
                             <th translate>Customer</th>
+                            <th translate>Salesperson</th>
+                            <th translate>Aprrover</th>
                             <th class="text-center" translate style="width:8%">Quote date</th>
                             <th class="text-center" translate style="width:8%">Expiry date</th>
                             <th class="text-center" translate style="width:8%">Total</th>
@@ -98,7 +100,9 @@
                             <td>
                                 <a class="text-primary" [routerLink]="['detail', item.id]">{{item.sale_quote_num}}</a>
                             </td>
-                            <td>{{item.buyer_name}}</td>                            
+                            <td>{{item.buyer_name}}</td> 
+                            <td>{{item.sale_person_name}}</td> 
+                            <td>{{item.approver_name}}</td>                          
                             <td class="text-center">{{item.quote_date | date:'MM/dd/yyyy' }}</td>
                             <td class="text-center">
                                 <span ng-if="item.expiry_date!=null">{{item.expiry_date | date:'MM/dd/yyyy' }}</span>

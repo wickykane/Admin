@@ -1,0 +1,37 @@
+.table-responsive {
+    table {
+        tbody {
+            tr {
+                td {
+                    input:checked + .slider {
+                        background-color: #28a745;
+                    }
+
+                    .fa-check:before {
+                        color: #28a745;
+                        font-size: 1.5em;
+                    }
+
+                    .fa-trash:before,
+                    .fa-pencil:before {
+                        color: #2196f3;
+                        font-size: 1.5em;
+                    }
+                }
+            }
+
+            tr td:nth-child(1) {
+                max-width: 50px;
+                width: 50px;
+            }
+
+            tr td:nth-child(5),
+            tr td:nth-child(6),
+            tr td:nth-child(7),
+            tr td:nth-child(8) {
+                max-width: 100px;
+                width: 100px;
+            }
+        }
+    }
+}

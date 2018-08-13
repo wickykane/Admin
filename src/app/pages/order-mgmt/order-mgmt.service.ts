@@ -155,11 +155,6 @@ export class OrderService {
         return this.API.post(url, params);
     }
 
-    getOrderNumber(id) {
-        const url = ['order', 'generate-order-number', id].join('/');
-        return this.API.get(url);
-    }
-
     getStatisticalOrder(params) {
         const url = 'order/statistical-order';
         return this.API.get(url, params);
@@ -181,6 +176,10 @@ export class OrderService {
     sendEmail(params) {
         const url = 'order/sent-message';
         return this.API.put(url, params);
+    }
+    generateSaleQuoteCode() {
+        const url = 'order/getSQCode';
+        return this.API.get(url);
     }
     generateSO() {
         const url = 'order/get-order-code';
