@@ -56,6 +56,7 @@ export class SaleOrderDetailComponent implements OnInit {
    */
 
   checkRender(detail) {
+    console.log(detail);
     this.orderDetail = detail;
   }
   cancel() {
