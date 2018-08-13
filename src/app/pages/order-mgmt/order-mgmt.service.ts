@@ -155,7 +155,6 @@ export class OrderService {
         return this.API.post(url, params);
     }
 
-<<<<<<< HEAD
     updateOrder(params, id) {
         const url = 'order/update-order/' + id;
         return this.API.put(url, params);
@@ -166,8 +165,6 @@ export class OrderService {
         return this.API.get(url);
     }
 
-=======
->>>>>>> 2e4d895383e70a85094919622df2dcf94d86d9ac
     getStatisticalOrder(params) {
         const url = 'order/statistical-order';
         return this.API.get(url, params);
