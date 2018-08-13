@@ -187,17 +187,21 @@ export class InvoiceConfigComponent implements OnInit {
                     'send_reminder_value': this.invoiceForm.value['afterRemindValue']
                 }
             };
-            this.invoiceService.saveInvoiceConfigInfo(params).subscribe(
-                res => {
-                    this.toastr.success(res.message);
-                    // this.getInvoiceChaseInfo();
-                    setTimeout(() => {
-                        window.history.back();
-                    }, 500);
-                },
-                err => {
-                    console.log(err.message);
+            if (params['after_due_date']['send_reminder_key'] === '1' && params['after_due_date']['send_reminder_value'] < 1) {
+                this.toastr.error('The day number to send reminder after due date must be great than 0');
+            } else {
+                this.invoiceService.saveInvoiceConfigInfo(params).subscribe(
+                    res => {
+                        this.toastr.success(res.message);
+                        // this.getInvoiceChaseInfo();
+                        setTimeout(() => {
+                            window.history.back();
+                        }, 500);
+                    },
+                    err => {
+                        console.log(err.message);
                 });
+            }
         } else {
             this.toastr.error('Please select reminder frequency!');
         }
