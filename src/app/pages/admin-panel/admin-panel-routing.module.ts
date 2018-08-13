@@ -19,6 +19,8 @@ import { InvoiceConfigComponent } from './invoice-config/invoice-config.componen
 import { LateFeePolicyDetailComponent } from './late-fee-policy/late-fee-policy-detail.component';
 import { LateFeePolicyComponent } from './late-fee-policy/late-fee-policy.component';
 import { LedgerComponent } from './ledger/ledger.component';
+import { PaymentMethodsCreateComponent } from './payment-methods/create/payment-method-create.component';
+import { PaymentMethodsListComponent } from './payment-methods/list/payment-methods-list.component';
 import { PayTermCreateComponent } from './payterm/payterm-create.component';
 import { PaymentTermComponent } from './payterm/payterm.component';
 import { ReturnReasonCreateComponent } from './return-reason/return-reason-create.component';
@@ -188,6 +190,18 @@ const routes: Routes = [
     {
         path: 'ledger',
         component: LedgerComponent
+    },
+    {
+        path: 'payment-methods',
+        component: PaymentMethodsListComponent
+    },
+    {
+        path: 'payment-methods/create',
+        component: PaymentMethodsCreateComponent
+    },
+    {
+        path: 'payment-methods/edit/:id',
+        component: PaymentMethodsCreateComponent
     },
     {
         path: 'tax-types',

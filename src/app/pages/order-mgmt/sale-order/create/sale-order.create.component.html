@@ -91,6 +91,26 @@
                                             {{addr_select.contact.email}}
                                         </div>
                                     </div>
+                                    <div class="form-group row" *ngIf="customer.buyer_type !='CP'">
+                                            <label class='col-4 control-label'>Contact</label>
+                                            <div class='col-8 text-primary'>
+                                                {{addr_select.contact.full_name}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" *ngIf="customer.buyer_type !='CP'">
+                                            <label class='col-4'>Contact Phone</label>
+                                            <div class='col-8'>
+                                                    {{addr_select.contact.phone}}
+                                               
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" *ngIf="customer.buyer_type !='CP'">
+                                            <label class='col-4'>Contact Email</label>
+                                            <div class='col-8'>
+                                                    {{addr_select.contact.email}}
+                                                
+                                            </div>
+                                        </div>
                                     <div class="form-group row">
                                         <label class='col-4'>Item In Quote</label>
                                         <div class='col-8 text-success'>
@@ -366,7 +386,7 @@
                                 <tbody *ngFor="let item of list.items; let $index = index;">
                                     <tr>
                                         <td>
-                                            <button class="btn btn-danger btn-xs" type="button" (click)="deleteAction(item.item_id)">
+                                            <button class="btn btn-danger btn-xs" type="button" (click)="deleteAction(item.item_id, item.item_condition_id)">
                                                 <i class="fa fa-trash"></i>
                                             </button>
                                             <button *ngIf="generalForm.value.is_multi_shp_addr == 1" class="btn btn-primary btn-xs" type="button" (click)="cloneRecord(item, list.items)"

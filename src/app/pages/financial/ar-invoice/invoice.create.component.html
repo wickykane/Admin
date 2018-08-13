@@ -75,7 +75,7 @@
                                             </label>
                                             <div class='col-8 text-danger'>
                                                 <div clickOutside (clickOutside)="d.close()" class="input-group">
-                                                    <input class="form-control" formControlName="inv_dt" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker" style="pointer-events: none;">
+                                                    <input class="form-control" formControlName="inv_dt" placeholder="mm/dd/yyyy" name="dp" ngbDatepicker #d="ngbDatepicker" style="pointer-events: none;">
                                                     <div class="input-group-append">
                                                         <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
                                                             <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -142,7 +142,7 @@
                                                 <span class="text-danger">(*)</span>
                                             </label>
                                             <div class='col-8'>
-                                                <strong>{{generalForm.value['due_dt']}}</strong>
+                                                <strong>{{generalForm.value['due_dt']| date :'MM/dd/yyyy'}}</strong>
                                             </div>
                                         </div>
                                         <div class="form-group row">

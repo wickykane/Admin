@@ -23,7 +23,7 @@
                         <span class="text-danger">(*) </span>
                     </label>
                     <div class="col-6">
-                        <input type="text" formControlName="description" class="form-control">
+                        <input type="text" formControlName="description" class="form-control" style="width: 92%">
                         <span style="border-color: #999;" placement="top" ngbTooltip="An abbreviated name, used when selecting tax types in sales & purchase orders."
                             class="mt-1">
                             <i class="fa fa-question-circle"></i>
@@ -33,7 +33,7 @@
                 <div class="form-group row">
                     <label for="" class="control-label col-4" translate>Tax Rate  <span class="text-danger">(*) </span></label>                   
                    <div class="col-6">
-                        <input type="text" formControlName="tax_rate" class="form-control">
+                        <input [textMask]="{mask: numberMaskObjectDecimal()}" type="text" formControlName="tax_rate" class="form-control">
                    </div>
                 </div>
             </div>

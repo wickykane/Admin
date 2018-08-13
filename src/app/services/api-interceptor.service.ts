@@ -21,7 +21,7 @@ export class ApiInterceptorService {
       if (err instanceof HttpErrorResponse) {
         if (err.status === 401) {
           //  redirect to the login route
-          // window.location.href = `${environment.nab_url}/#/login`;
+          window.location.href = `${environment.nab_url}/#/login`;
         } else {
           try {
             this.toastr.error(err.error.message);
