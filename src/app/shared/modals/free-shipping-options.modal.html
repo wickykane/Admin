@@ -10,23 +10,18 @@
             <div class="row">
                 <div class="col-md-5">
                     <div class="form-group row">
-                        <!-- <label for="code" class="col-sm-5 col-form-label">Site Code
-                            <span class="text-danger">(*)</span>
-                        </label>
-                        <div class="col-sm-7">
-                            <input type="text" class="form-control" name="code" [disabled]="true" formControlName="site_code">
-                        </div> -->
+
                         <label class='col-5 col-form-label' >
                             <input type="checkbox"> Apply only for Free Shipping Items
                         </label>
                     </div>
                     <div class="w-100"></div>
                     <div class="form-group row">
-                        <label for="full_name" class="col-sm-5 col-form-label">Site Name
-                            <span class="text-danger">(*)</span>
-                        </label>
-                        <div class="col-sm-7">
-                            <input type="text" class="form-control" name="full_name" formControlName="site_name">
+                        <div class="form-group row">
+
+                            <label class='col-5 col-form-label' >
+                                <input type="checkbox"> Limit to order over <span></span>
+                            </label>
                         </div>
                     </div>
                     <div class="w-100"></div>
@@ -47,38 +42,6 @@
                         <label for="registration" class="col-sm-5 col-form-label">Registration No</label>
                         <div class="col-sm-7">
                             <input type="text" class="form-control" name="registration" formControlName="credit_limit">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-1 hidden-xs hidden-ms"></div>
-                <div class="col-md-5">
-                    <div class="form-group row">
-                        <label for="registration" class="col-sm-5 col-form-label">Registration No</label>
-                        <div class="col-sm-7">
-                            <input type="text" class="form-control" name="registration" formControlName="registration_no">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-5 col-form-label">Phone</label>
-                        <div class="col-sm-7">
-                            <input type="text" class="form-control" name="phone" formControlName="phone">
-                        </div>
-                    </div>
-                    <div class="w-100"></div>
-                    <div class="form-group row">
-                        <label for="sale_person" class="col-sm-5 col-form-label">Fax</label>
-                        <div class="col-sm-7">
-                            <input type="text" class="form-control" name="fax" formControlName="fax">
-                        </div>
-                    </div>
-                    <div class="w-100"></div>
-                    <div class="form-group row">
-                        <label for="sale_person_id" class="col-sm-5 col-form-label">Saleperson</label>
-                        <div class="col-sm-7">
-                            <select class="form-control" name="sale_person_id" formControlName="sale_person_id">
-                                <option value="null" selected="true">--Select--</option>
-                                <!-- <option *ngFor="let item of listMaster['salePersons']" [ngValue]="item.id">{{item.full_name}}</option> -->
-                            </select>
                         </div>
                     </div>
                 </div>
