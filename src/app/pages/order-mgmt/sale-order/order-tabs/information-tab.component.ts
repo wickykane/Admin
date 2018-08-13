@@ -78,11 +78,11 @@ export class SaleOrderInformationTabComponent implements OnInit {
         this.orderService.getOrderDetail(this._orderId).subscribe(res => {
             try {
                 this.detail = res.data;
+                this.stockValueChange.emit(res.data);
                 if (res.data.is_draft_order) {
                     this.detail['shipping_address'] = (res.data.shipping_address.length === 0) ? _.cloneDeep(this.addr_select.shipping) : res.data.shipping_address[0];
                     this.detail['billing'] = (res.data.billing_info.length === 0) ? _.cloneDeep(this.addr_select.billing) : this.detail['billing'] = res.data.billing_info[0];
                 } else {
-                    this.stockValueChange.emit(res.data);
                     this.detail['billing'] = res.data.billing_info[0];
                     this.detail['shipping_address'] = res.data.shipping_address[0];
                 }

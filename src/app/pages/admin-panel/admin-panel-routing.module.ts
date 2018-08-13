@@ -18,6 +18,7 @@ import { InsuranceComponent } from './insurance-company/insurance.component';
 import { InvoiceConfigComponent } from './invoice-config/invoice-config.component';
 import { LateFeePolicyDetailComponent } from './late-fee-policy/late-fee-policy-detail.component';
 import { LateFeePolicyComponent } from './late-fee-policy/late-fee-policy.component';
+import { LedgerComponent } from './ledger/ledger.component';
 import { PaymentMethodsCreateComponent } from './payment-methods/create/payment-method-create.component';
 import { PaymentMethodsListComponent } from './payment-methods/list/payment-methods-list.component';
 import { PayTermCreateComponent } from './payterm/payterm-create.component';
@@ -187,6 +188,10 @@ const routes: Routes = [
         component: InvoiceConfigComponent
     },
     {
+        path: 'ledger',
+        component: LedgerComponent
+    },
+    {
         path: 'payment-methods',
         component: PaymentMethodsListComponent
     },
@@ -208,4 +213,4 @@ const routes: Routes = [
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule]
 })
-export class AdminPanelRoutingModule {}
+export class AdminPanelRoutingModule { }

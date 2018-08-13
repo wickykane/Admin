@@ -4,10 +4,10 @@
     <section class="main-container block-order-detail">
         <div class="block-button">
             <ul class="list-btn-custom">
+                <li><button class="btn btn-outline-dark" (click)="cancel()"><i class="fa fa-share-square" ></i>Cancel</button></li>
                 <li *ngIf="orderDetail['order_sts_short_name'] == 'NW'"><button class="btn btn-outline-dark"><i class="fa fa-check-square"></i>Approve</button></li>
                 <li><button class="btn btn-outline-dark"><i class="fa fa-edit"></i>Edit</button></li>
                 <li><button class="btn btn-outline-dark"><i class="fa fa-clone"></i>Clone</button></li>
-                <li><button class="btn btn-outline-dark" (click)="cancel()"><i class="fa fa-share-square" ></i>Cancel</button></li>
                 <li><button class="btn btn-outline-dark"><i class="fa fa-trash"></i>Delete</button></li>
                 <li><button class="btn btn-outline-dark"><i class="fa fa-print"></i>Print</button></li>
             </ul>

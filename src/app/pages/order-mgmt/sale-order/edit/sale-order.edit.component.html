@@ -1,5 +1,5 @@
 <div [@routerTransition]>
-    <app-page-header [heading]="'CREATE NEW SALES ORDER'"></app-page-header>
+    <app-page-header [heading]="'EDIT SALES ORDER'"></app-page-header>
     <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
     <section class="rma-page block main-container block-order">
         <div class="row">
@@ -17,7 +17,7 @@
                                             <ng-select style="width: 150px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id"
                                                 formControlName="company_id">
                                             </ng-select>
-                                        </div>                                      
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -224,7 +224,7 @@
                                     <div class="form-group row">
                                         <label class="control-label col-3" translate>Address Line</label>
                                         <div class="col-8">
-                                            {{addr_select.billing.address_line}}
+                                            {{addr_select.billing['address_line']}}
                                         </div>
                                     </div>
                                 </div>
@@ -232,7 +232,7 @@
                                     <div class="form-group row">
                                         <label class="control-label col-3" translate>Country</label>
                                         <div class="col-8">
-                                            {{addr_select.billing.country_name}}
+                                            {{addr_select.billing['country_name']}}
                                         </div>
                                     </div>
                                 </div>
@@ -240,7 +240,7 @@
                                     <div class="form-group row">
                                         <label class=" control-label col-3" translate>City</label>
                                         <div class="col-8">
-                                            {{addr_select.billing.city_name}}
+                                            {{addr_select.billing['city_name']}}
                                         </div>
                                     </div>
                                 </div>
@@ -248,7 +248,7 @@
                                     <div class="form-group row">
                                         <label class=" control-label col-3" translate>State/Province</label>
                                         <div class="col-8">
-                                            {{addr_select.billing.state_name}}
+                                            {{addr_select.billing['state_name']}}
                                         </div>
                                     </div>
                                 </div>
@@ -256,7 +256,7 @@
                                     <div class="form-group row">
                                         <label class="control-label col-3" translate>Zip Code</label>
                                         <div class="col-8">
-                                            {{addr_select.billing.zip_code}}
+                                            {{addr_select.billing['zip_code']}}
                                         </div>
                                     </div>
                                 </div>
@@ -274,7 +274,7 @@
                                 <p>This order ships to {{customer.shipping.length}} shipping addresses.</p>
                                 <a> View detail below</a>
                             </div>
-                        </div>                       
+                        </div>
                         <div class="col-md-12"  *ngIf="generalForm.value.is_multi_shp_addr == 0">
                             <div class="">
                                 <div class="col-12">
@@ -295,7 +295,7 @@
                                     <div class="form-group row">
                                         <label class=" control-label col-3" translate>Address Line</label>
                                         <div class="col-8">
-                                            {{addr_select.shipping.address_line}}
+                                            {{addr_select.shipping['address_line']}}
                                         </div>
                                     </div>
                                 </div>
@@ -303,7 +303,7 @@
                                     <div class="form-group row">
                                         <label class="control-label col-3" translate>Country</label>
                                         <div class="col-8">
-                                            {{addr_select.shipping.country_name}}
+                                            {{addr_select.shipping['country_name']}}
                                         </div>
                                     </div>
                                 </div>
@@ -311,7 +311,7 @@
                                     <div class="form-group row">
                                         <label class=" control-label col-3" translate>City</label>
                                         <div class="col-8">
-                                            {{addr_select.shipping.city_name}}
+                                            {{addr_select.shipping['city_name']}}
                                         </div>
                                     </div>
                                 </div>
@@ -319,7 +319,7 @@
                                     <div class="form-group row">
                                         <label class=" control-label col-3" translate>State/Province</label>
                                         <div class="col-8">
-                                            {{addr_select.shipping.state_name}}
+                                            {{addr_select.shipping['state_name']}}
                                         </div>
                                     </div>
                                 </div>
@@ -327,7 +327,7 @@
                                     <div class="form-group row">
                                         <label class=" control-label col-3" translate>Zip Code</label>
                                         <div class="col-8">
-                                            {{addr_select.shipping.zip_code}}
+                                            {{addr_select.shipping['zip_code']}}
                                         </div>
                                     </div>
                                 </div>
@@ -447,10 +447,10 @@
                     <div class="col-md-12 mg-top-15">
                         <div class="row">
                             <div class="col-md-4">
-                                <label for="">Note</label>
+                                <label for="description">Note</label>
                                 <form [formGroup]="generalForm">
                                     <div>
-                                        <textarea class="form-control" formControlName="note" name="" id="" rows="5" style="resize:none"></textarea>
+                                        <textarea class="form-control" formControlName="description" name="description" id="" rows="5" style="resize:none"></textarea>
                                     </div>
                                 </form>
                             </div>
@@ -506,9 +506,9 @@
         </div>
         <div class="row">
             <div class="col-md-12 mg-top-15 text-center">
-                <button type="button" class="btn btn-outline-info" (click)="createOrder('quote')" translate>Save As Quote</button>
-                <button type="button" class="btn btn-outline-warning" (click)="createOrder('draft')" translate>Save As Draft</button>
-                <button type="button" class="btn btn-outline-primary" (click)="createOrder('create')" ng-disabled="!generalForm.valid" translate>Save & Submit</button>
+                <!-- <button type="button" class="btn btn-outline-info" (click)="createOrder('quote')" translate>Save As Quote</button>
+                <button type="button" class="btn btn-outline-warning" (click)="createOrder('draft')" translate>Save As Draft</button> -->
+                <button type="button" class="btn btn-outline-primary" (click)="createOrder('create')" ng-disabled="!generalForm.valid" translate>Update</button>
                 <button type="button" class="btn btn-default" [routerLink]="['/order-management/sale-order']" translate>Cancel</button>
             </div>
         </div>
