@@ -86,7 +86,8 @@ export class SaleOrderEditComponent implements OnInit {
         selected_programs: [],
         discount_percent: 0,
         vat_percent: 0,
-        shipping_cost: 0
+        shipping_cost: 0,
+        vat: 0
     };
 
     public list = {
@@ -113,21 +114,21 @@ export class SaleOrderEditComponent implements OnInit {
         public keyService: SaleOrderCreateKeyService,
         private dt: DatePipe) {
         this.generalForm = fb.group({
-            'company_id': [null, Validators.required],
-            'customer_po': [null, Validators.required],
-            'order_number': [null],
-            'type': ['NO', Validators.required],
-            'order_date': [null, Validators.required],
-            'delivery_date': [null],
-            'contact_user_id': [null],
-            'prio_level': [null],
-            'is_multi_shp_addr': [null],
-            'sales_person': [null],
-            'warehouse_id': [1, Validators.required],
-            'payment_method': ['CC'],
-            'billing_id': [null],
-            'shipping_id': [null],
-            'note': [null]
+            'company_id': [null], // buyer_id
+            'customer_po': [null], // cus_po
+            'order_number': [null], // code
+            'type': [null], // type
+            'order_date': [null], // order_date
+            'delivery_date': [null], //
+            'contact_user_id': [null], // contact_user_id
+            'prio_level': [null], // prio_level
+            'is_multi_shp_addr': [null], // is_multi_shp_addr
+            'sales_person': [null], // sale_person_id
+            'warehouse_id': [null], // warehouse_id
+            'payment_method': [null], // payment_method
+            'billing_id': [null], // billing_info[0]['id']
+            'shipping_id': [null], // shipping_id
+            'description': [null] // description
         });
         //  Init Key
         this.keyService.watchContext.next(this);
@@ -145,14 +146,53 @@ export class SaleOrderEditComponent implements OnInit {
         this.updateTotal();
         this.copy_addr = { ...this.copy_addr, ...this.addr_select };
         this.copy_customer = { ...this.copy_customer, ...this.customer };
-        this.generalForm.controls['is_multi_shp_addr'].patchValue(0);
-        this.generalForm.controls['order_date'].patchValue(currentDt.toISOString().slice(0, 10));
-        this.generalForm.controls['sales_person'].patchValue(user.id);
-        this.orderService.generatePOCode().subscribe(res => { this.generalForm.controls['customer_po'].patchValue(res.data); });
+
+        this.getDetailOrder();
     }
     /**
      * Mater Data
      */
+    getDetailOrder() {
+        this.orderService.getOrderDetail(this.route.snapshot.paramMap.get('id')).subscribe(res => {
+            try {
+                this.list.items = res.data.list.items;
+
+                this.generalForm.patchValue({ 'company_id': res.data.buyer_id });
+                this.generalForm.patchValue({ 'customer_po': res.data.cus_po });
+                this.generalForm.patchValue({ 'order_number': res.data.code });
+                this.generalForm.patchValue({ 'type': res.data.type });
+                this.generalForm.patchValue({ 'order_date': res.data.order_date });
+                this.generalForm.patchValue({ 'contact_user_id': res.data.contact_user_id });
+                this.generalForm.patchValue({ 'prio_level': res.data.prio_level });
+                this.generalForm.patchValue({ 'is_multi_shp_addr': res.data.is_multi_shp_addr });
+                this.generalForm.patchValue({ 'sales_person': res.data.sale_person_id });
+                this.generalForm.patchValue({ 'warehouse_id': res.data.warehouse_id });
+                this.generalForm.patchValue({ 'payment_method': res.data.payment_method });
+                if (res.data.billing_info.length > 0) {
+                    this.generalForm.patchValue({ 'billing_id': res.data.billing_info[0]['id'] });
+                }
+                this.generalForm.patchValue({ 'shipping_id': res.data.shipping_id });
+                this.generalForm.patchValue({ 'description': res.data.description });
+
+
+                this.order_info.total = res.data['total_price'];
+                this.order_info.sub_total = res.data['sub_total_price'];
+                this.order_info.total_discount = res.data['discount'];
+                this.order_info.discount_percent = res.data['discount_percent'];
+                this.order_info.vat_percent = res.data['vat_percent'];
+                this.order_info.shipping_cost = res.data['shipping'];
+                this.order_info.vat = res.data['vat'];
+
+                this.updateTotal();
+                this.changeCustomer();
+
+
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
+
     numberMaskObject(max?) {
         return createNumberMask({
             allowDecimal: true,
@@ -165,6 +205,9 @@ export class SaleOrderEditComponent implements OnInit {
         this.orderService.getDetailCompany(company_id).subscribe(res => {
             try {
                 this.customer = res.data;
+
+                this.selectAddress('billing');
+                this.selectAddress('shipping');
             } catch (e) {
                 console.log(e);
             }
@@ -183,10 +226,10 @@ export class SaleOrderEditComponent implements OnInit {
         if (company_id) {
             this.getDetailCustomerById(company_id);
         }
-        this.list.items = [];
-        this.generalForm.controls['note'].patchValue('');
+        // this.list.items = [];
         this.updateTotal();
     }
+
     selectAddress(type) {
         try {
             switch (type) {
@@ -252,7 +295,7 @@ export class SaleOrderEditComponent implements OnInit {
         try {
             const length = this.customer.shipping.length;
             if (!item.hasOwnProperty('length')) {
-                item.length = function () {
+                item.length = function() {
                     return this.checkLengthRecord(item, list);
                 };
             }
@@ -450,7 +493,7 @@ export class SaleOrderEditComponent implements OnInit {
         this.generalForm.controls['note'].patchValue(stringNote);
     }
 
-    remove = function (index) {
+    remove = function(index) {
         this.data['programs'].splice(index, 1);
     };
 
@@ -460,7 +503,7 @@ export class SaleOrderEditComponent implements OnInit {
         this.list.items.forEach((item) => {
             products.push({
                 item_id: item.item_id,
-                item_type: item.item_type,
+                item_type: 'single_item',
                 quantity: item.quantity,
                 sale_price: item.sale_price,
                 order_detail_id: item.order_detail_id,
@@ -473,7 +516,7 @@ export class SaleOrderEditComponent implements OnInit {
                 item.products.forEach((subItem, index) => {
                     products.push({
                         item_id: subItem.item_id,
-                        item_type: item.item_type,
+                        item_type: 'single_item',
                         quantity: subItem.quantity,
                         sale_price: subItem.sale_price,
                         discount_percent: subItem.discount || 0,
@@ -506,7 +549,7 @@ export class SaleOrderEditComponent implements OnInit {
                 break;
         }
         params = { ...this.order_info, ...this.generalForm.value, ...params };
-        this.orderService.createOrder(params).subscribe(res => {
+        this.orderService.updateOrder(params, this.route.snapshot.paramMap.get('id')).subscribe(res => {
             try {
                 if (res.status) {
                     this.toastr.success(res.message);
@@ -524,4 +567,3 @@ export class SaleOrderEditComponent implements OnInit {
     }
 
 }
-

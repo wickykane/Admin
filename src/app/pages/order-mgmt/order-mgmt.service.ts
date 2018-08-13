@@ -155,6 +155,11 @@ export class OrderService {
         return this.API.post(url, params);
     }
 
+    updateOrder(params, id) {
+        const url = 'order/update-order/' + id;
+        return this.API.put(url, params);
+    }
+
     getOrderNumber(id) {
         const url = ['order', 'generate-order-number', id].join('/');
         return this.API.get(url);
