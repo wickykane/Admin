@@ -53,6 +53,7 @@ export class SaleQuotationCreateComponent implements OnInit {
 
     public addr_select = {
         contact: {
+            'full_name': '',
             'phone': '',
             'email': ''
         }
@@ -126,6 +127,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         if (Object.keys(this.list.items).length === 0) { this.list.items = []; }
         this.orderService.getAllCustomer().subscribe(res => { this.listMaster['customer'] = res.data; });
         this.orderService.getOrderReference().subscribe(res => {Object.assign(this.listMaster, res.data); });
+        this.orderService.generateSaleQuoteCode().subscribe(res => {this.generalForm.get('sale_quote_no').patchValue(res.data); });
         this.updateTotal();
         this.copy_addr = { ...this.copy_addr, ...this.addr_select };
         this.copy_customer = { ...this.copy_customer, ...this.customer };
@@ -152,6 +154,11 @@ export class SaleQuotationCreateComponent implements OnInit {
         this.orderService.getDetailCompany(company_id).subscribe(res => {
             try {
                 this.customer = res.data;
+                if (res.data.buyer_type === 'PS') {
+                    this.addr_select.contact = res.data.contact[0];
+                    this.generalForm.patchValue({contact_user_id: res.data.contact[0]['id']});
+                }
+                console.log(this.customer);
             } catch (e) {
                 console.log(e);
             }
@@ -374,6 +381,8 @@ export class SaleQuotationCreateComponent implements OnInit {
                     setTimeout(() => {
                         this.router.navigate(['/order-management/sale-quotation']);
                     }, 500);
+                } else {
+                    this.toastr.error(res.message);
                 }
             } catch (e) {
                 console.log(e);
