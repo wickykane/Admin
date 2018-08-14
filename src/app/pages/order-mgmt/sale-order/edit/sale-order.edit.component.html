@@ -14,8 +14,7 @@
                                         <label for="code" class="control-label" translate>Customer Name</label>
                                         <span class="text-danger">(*)</span>
                                         <div>
-                                            <ng-select style="width: 150px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id"
-                                                formControlName="company_id">
+                                            <ng-select  [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 150px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="company_id">
                                             </ng-select>
                                         </div>
                                     </div>

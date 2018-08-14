@@ -116,7 +116,7 @@ export class SaleQuotationCreateComponent implements OnInit {
 
     ngOnInit() {
         setTimeout(() => {
-            this.inp.focusSearchInput();
+            // this.inp.focusSearchInput();
         }, 300);
 
         this.listMaster['multi_ship'] = [{ id: 0, label: 'No' }, { id: 1, label: 'Yes' }];
