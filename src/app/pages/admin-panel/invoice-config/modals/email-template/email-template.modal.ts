@@ -108,6 +108,9 @@ export class EmailTemplateModalContent implements OnInit {
         this.invoiceService.saveEmailTemplate(this.id, params).subscribe(
             res => {
                 this.toastr.success(res.message);
+                setTimeout(() => {
+                    this.activeModal.close();
+                }, 500);
             },
             err => {
                 console.log(err);
