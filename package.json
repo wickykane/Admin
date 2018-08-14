@@ -28,7 +28,7 @@
     "@angular/platform-browser-dynamic": "^5.2.0",
     "@angular/router": "^5.2.0",
     "@ng-bootstrap/ng-bootstrap": "^1.0.0",
-    "@ng-select/ng-select": "^0.31.1",
+    "@ng-select/ng-select": "^1.4.1",
     "@ngu/carousel": "^1.4.8",
     "@ngx-translate/core": "^9.1.1",
     "@ngx-translate/http-loader": "^2.0.1",

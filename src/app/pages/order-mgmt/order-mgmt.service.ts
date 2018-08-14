@@ -175,7 +175,7 @@ export class OrderService {
         return this.API.put(url);
     }
     changeOrderStatus(orderNum, params) {
-        const url = 'order/update-order-status-by-code/' +  orderNum;
+        const url = 'order/update-order-status-by-code/' + orderNum;
         return this.API.put(url, params);
     }
 
@@ -226,9 +226,9 @@ export class OrderService {
         return this.API.get(url);
     }
 
-    getAllCustomer() {
+    getAllCustomer(params?) {
         const url = 'buyer/get-all';
-        return this.API.get(url);
+        return this.API.get(url, params);
     }
 
     getOrderReference() {
@@ -236,11 +236,11 @@ export class OrderService {
         return this.API.get(url);
     }
     getRMAForOrder(order_id, params) {
-        const url = 'rma/get-data-by-order/' +  order_id;
+        const url = 'rma/get-data-by-order/' + order_id;
         return this.API.get(url, params);
     }
     convertOrderToSO(buyer_id, params) {
-        const url = 'order/sale-quote/buyer-approved/' +  buyer_id;
+        const url = 'order/sale-quote/buyer-approved/' + buyer_id;
         return this.API.post(url, params);
     }
 }

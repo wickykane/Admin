@@ -15,13 +15,19 @@ export class SendSampleModalContent implements OnInit {
 
     public receiverEmail = '';
 
-    constructor(public activeModal: NgbActiveModal) {}
+    constructor(public activeModal: NgbActiveModal,
+            private toastr: ToastrService) {}
 
     ngOnInit() {}
 
     onSendSample() {
-        this.activeModal.close({
-            receiver: this.receiverEmail
-        });
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (emailRegex.test(this.receiverEmail)) {
+            this.activeModal.close({
+                receiver: this.receiverEmail
+            });
+        } else {
+            this.toastr.error('Email is invalid!');
+        }
     }
 }
