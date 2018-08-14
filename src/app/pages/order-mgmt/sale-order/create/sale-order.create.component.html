@@ -73,6 +73,7 @@
                                         <div class='col-8 text-primary'>
                                             <form [formGroup]="generalForm">
                                                 <select class="form-control" id="contact" formControlName="contact_user_id" name="contact" (change)="selectContact()">
+                                                    <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                                     <option *ngFor="let item of customer.contact" [ngValue]="item.id">{{item.full_name}}</option>
                                                 </select>
                                             </form>
@@ -139,6 +140,7 @@
                                             </label>
                                             <div class='col-8 text-primary'>
                                                 <select required class="form-control" id="order_type" name="order-type" formControlName="type" (change)="changeOrderType()">
+                                                    <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                                     <option *ngFor="let item of listMaster['order_types']" [ngValue]="item.code">{{item.value}}</option>
                                                 </select>
                                             </div>
@@ -162,6 +164,7 @@
                                             <label class='col-4'>Priority</label>
                                             <div class='col-8 text-danger'>
                                                 <select required class="form-control" id="priority" name="priority" formControlName="prio_level">
+                                                    <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                                     <option *ngFor="let item of list_priority" [ngValue]="item.code">{{item.value}}</option>
                                                 </select>
                                             </div>
@@ -180,6 +183,7 @@
                                             <label class='col-4'>Payment Method</label>
                                             <div class='col-8 text-primary'>
                                                 <select class="form-control" id="payment_method" name="payment_method" formControlName="payment_method">
+                                                    <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                                     <option *ngFor="let item of listMaster['payment_methods']" [ngValue]="item.code">{{item.value}}</option>
                                                 </select>
                                             </div>
@@ -188,6 +192,7 @@
                                             <label class='col-4'>Salesperson</label>
                                             <div class='col-8 text-primary'>
                                                 <select class="form-control" id="sales_person" name="sales_person" formControlName="sales_person">
+                                                    <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                                     <option *ngFor="let item of listMaster['sale_mans']" [ngValue]="item.id">{{item.full_name}}</option>
                                                 </select>
                                             </div>
@@ -196,6 +201,7 @@
                                             <label class='col-4'>Multi Ship Addr</label>
                                             <div class='col-8 text-danger'>
                                                 <select [attr.disabled]=t rue class="form-control" id="is_multi_shp_addr" name="is_multi_shp_addr" formControlName="is_multi_shp_addr">
+                                                    <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                                     <option *ngFor="let item of listMaster['multi_ship']" [ngValue]="item.id">{{item.label}}</option>
                                                 </select>
                                             </div>
@@ -206,6 +212,7 @@
                                             </label>
                                             <div class='col-8'>
                                                 <select (change)="getQtyAvail()" class="form-control" id="warehouse_id" name="warehouse_id" formControlName="warehouse_id">
+                                                    <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                                     <option *ngFor="let item of listMaster['warehouses']" [ngValue]="item.id">{{item.name}}</option>
                                                 </select>
                                             </div>
@@ -233,6 +240,7 @@
                                         <div class="col-5">
                                             <form [formGroup]="generalForm">
                                                 <select required class="form-control" id="billing_to" name="search_type" formControlName="billing_id" (change)="selectAddress('billing')">
+                                                    <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                                     <option *ngFor="let item of customer.billing" [ngValue]="item.address_id">{{item.label}}</option>
                                                 </select>
                                             </form>
@@ -304,6 +312,7 @@
                                         <div class="col-5">
                                             <form [formGroup]="generalForm">
                                                 <select required class="form-control" id="shiping_to" name="search_type" formControlName="shipping_id" (change)="selectAddress('shipping')">
+                                                    <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                                     <option *ngFor="let item of customer.shipping" [ngValue]="item.address_id">{{item.label}}</option>
                                                 </select>
                                             </form>

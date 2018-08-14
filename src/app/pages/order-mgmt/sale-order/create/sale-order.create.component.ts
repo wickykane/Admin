@@ -156,11 +156,12 @@ export class SaleOrderCreateComponent implements OnInit {
         this.orderService.generatePOCode().subscribe(res => { this.generalForm.controls['customer_po'].patchValue(res.data); });
 
         // Lazy Load filter
-        this.orderService.getAllCustomer().subscribe(res => {
+        this.data['page'] = 1;
+        const params = { page: this.data['page'], length: 15 };
+        this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
         });
-        this.data['page'] = 1;
         this.searchKey.subscribe(key => {
             this.data['page'] = 1;
             this.searchCustomer(key);
@@ -576,4 +577,3 @@ export class SaleOrderCreateComponent implements OnInit {
         });
     }
 }
-
