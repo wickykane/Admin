@@ -168,7 +168,8 @@ export class SaleOrderEditComponent implements OnInit {
                 this.list.items = res.data.list.items;
 
                 // Lazy Load filter
-                this.orderService.getAllCustomer().subscribe(result => {
+                const params = { page: this.data['page'], length: 15 };
+                this.orderService.getAllCustomer(params).subscribe(result => {
                     const idList = result.data.rows.map(item => item.id);
                     this.listMaster['customer'] = result.data.rows;
                     if (idList.indexOf(res.data.buyer_id) === -1) {
@@ -225,7 +226,9 @@ export class SaleOrderEditComponent implements OnInit {
         this.orderService.getDetailCompany(company_id).subscribe(res => {
             try {
                 this.customer = res.data;
-
+                if (res.data.buyer_type === 'PS') {
+                    this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
+                }
                 this.selectAddress('billing');
                 this.selectAddress('shipping');
             } catch (e) {
