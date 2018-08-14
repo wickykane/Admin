@@ -174,7 +174,7 @@ export class InvoiceConfigComponent implements OnInit {
                 'before_due_date':
                 {
                     'enable': this.invoiceForm.value['beforeOn'] ? 1 : 0,
-                    'send_reminder': this.invoiceForm.value['beforeRemind']
+                    'send_reminder': this.invoiceForm.value['beforeRemind'] ? this.invoiceForm.value['beforeRemind'] : 0
                 },
                 'on_due_date':
                 {
