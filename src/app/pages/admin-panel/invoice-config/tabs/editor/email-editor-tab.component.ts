@@ -41,7 +41,8 @@ export class EmailEditorTabComponent implements OnInit, OnDestroy {
             this.insertFieldToSubject(field.value);
         }
         if (this.isFocusingBody) {
-            this.bodyEditor.instance.insertHtml(field.value);
+            // this.bodyEditor.instance.insertHtml(field.value);
+            this.bodyEditor.instance.insertHtml('<span class="marker">' + field.value + '</span> ');
         }
     }
 
