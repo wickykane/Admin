@@ -49,7 +49,7 @@
                                 <b>Send Reminder</b>
                             </label>
                             <div class="input-grp">
-                                <input type="number" formControlName="beforeRemind">
+                                <input type="number" OnlyNumber="true" min="0" formControlName="beforeRemind">
                                 <span>Day(s) before Due Date</span>
                             </div>
                         </div>
@@ -111,7 +111,7 @@
                                 <b>Every</b>
                             </label>
                             <div class="input-grp">
-                                <input type="number" formControlName="afterRemindValue">
+                                <input type="number" OnlyNumber="true" min="0" formControlName="afterRemindValue">
                                 <span>Day(s)</span>
                             </div>
                         </div>
