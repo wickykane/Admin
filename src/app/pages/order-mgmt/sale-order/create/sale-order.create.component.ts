@@ -396,7 +396,6 @@ export class SaleOrderCreateComponent implements OnInit {
                     item.source_id = 0;
                     item.source = 'From Master';
                 });
-                console.log(this.list.items);
                 this.list.items = this.list.items.concat(res.filter((item) => {
                     return listAdded.indexOf(item.item_id + item.item_condition_id) < 0;
                 }));

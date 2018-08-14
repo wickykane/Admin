@@ -235,7 +235,8 @@ export class InvoiceCreateComponent implements OnInit {
                             total_due: this.invoice_details['tot_amt'],
                             total_adj_due: this.invoice_details['tot_amt'],
                             discount_amount: this.invoice_details['dsct_amt'],
-                            tax_amount: this.invoice_details['tax_amt']
+                            tax_amount: this.invoice_details['tax_amt'],
+                            inv_dt: this.invoice_details['inv_dt']
                         });
                     }
                 }
@@ -309,7 +310,8 @@ export class InvoiceCreateComponent implements OnInit {
                         tax_percent: this.order_details['vat_percent'],
                         total_due: this.order_details['total_price'],
                         discount_amount: this.order_details['discount'],
-                        tax_amount: this.order_details['vat']
+                        tax_amount: this.order_details['vat'],
+                        inv_dt: this.order_details['inv_dt']
                     });
                     if (!this.generalForm.value['aprvr_id']) {
                         this.generalForm.controls['aprvr_id'].setValue(orderCreatorId);
