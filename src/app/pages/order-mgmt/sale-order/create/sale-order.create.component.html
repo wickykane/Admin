@@ -180,7 +180,7 @@
                                             <label class='col-4'>Payment Method</label>
                                             <div class='col-8 text-primary'>
                                                 <select class="form-control" id="payment_method" name="payment_method" formControlName="payment_method">
-                                                    <option *ngFor="let item of listMaster['payment_methods']" [ngValue]="item.code">{{item.value}}</option>
+                                                    <option *ngFor="let item of listMaster['payment_methods']" [ngValue]="item.cd">{{item.name}}</option>
                                                 </select>
                                             </div>
                                         </div>

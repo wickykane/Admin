@@ -143,6 +143,7 @@ export class SaleOrderCreateComponent implements OnInit {
         this.listMaster['multi_ship'] = [{ id: 0, label: 'No' }, { id: 1, label: 'Yes' }];
         this.listMaster['from_src'] = [{ id: 0, label: 'From Master' }, { id: 1, label: 'From Quote' }, { id: 2, label: 'Manual' }];
         this.orderService.getOrderReference().subscribe(res => { Object.assign(this.listMaster, res.data); this.changeOrderType(); });
+        this.orderService.getPaymentMethod().subscribe(res => this.listMaster['payment_methods'] = res.data );
         //  Item
         this.list.items = this.router.getNavigatedData() || [];
         const currentDt = new Date();
