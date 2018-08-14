@@ -10,6 +10,8 @@ import { routerTransition } from '../../../../router.animations';
 import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
 import { OrderService } from '../../order-mgmt.service';
 
+// tslint:disable-next-line:import-blacklist
+import { Subject } from 'rxjs';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { ItemQuoteModalContent } from '../../../../shared/modals/item-quote.modal';
 import { ItemModalContent } from '../../../../shared/modals/item.modal';
@@ -100,6 +102,8 @@ export class SaleOrderEditComponent implements OnInit {
     public copy_addr = {};
     public list_priority = [];
 
+    public searchKey = new Subject<any>(); // Lazy load filter
+
     /**
      * Init Data
      */
@@ -137,7 +141,7 @@ export class SaleOrderEditComponent implements OnInit {
     ngOnInit() {
         const user = JSON.parse(localStorage.getItem('currentUser'));
         this.listMaster['multi_ship'] = [{ id: 0, label: 'No' }, { id: 1, label: 'Yes' }];
-        this.orderService.getAllCustomer().subscribe(res => { this.listMaster['customer'] = res.data; });
+
         this.orderService.getOrderReference().subscribe(res => { Object.assign(this.listMaster, res.data); this.changeOrderType(); });
         //  Item
         this.list.items = this.router.getNavigatedData() || [];
@@ -148,6 +152,12 @@ export class SaleOrderEditComponent implements OnInit {
         this.copy_customer = { ...this.copy_customer, ...this.customer };
 
         this.getDetailOrder();
+
+        this.data['page'] = 1;
+        this.searchKey.subscribe(key => {
+            this.data['page'] = 1;
+            this.searchCustomer(key);
+        });
     }
     /**
      * Mater Data
@@ -156,6 +166,16 @@ export class SaleOrderEditComponent implements OnInit {
         this.orderService.getOrderDetail(this.route.snapshot.paramMap.get('id')).subscribe(res => {
             try {
                 this.list.items = res.data.list.items;
+
+                // Lazy Load filter
+                this.orderService.getAllCustomer().subscribe(result => {
+                    const idList = result.data.rows.map(item => item.id);
+                    this.listMaster['customer'] = result.data.rows;
+                    if (idList.indexOf(res.data.buyer_id) === -1) {
+                        this.listMaster['customer'].push({ id: res.data.buyer_id, company_name: res.data.buyer_info.buyer_name })
+                    }
+                    this.data['total_page'] = result.data.total_page;
+                });
 
                 this.generalForm.patchValue({ 'company_id': res.data.buyer_id });
                 this.generalForm.patchValue({ 'customer_po': res.data.cus_po });
@@ -295,7 +315,7 @@ export class SaleOrderEditComponent implements OnInit {
         try {
             const length = this.customer.shipping.length;
             if (!item.hasOwnProperty('length')) {
-                item.length = function() {
+                item.length = function () {
                     return this.checkLengthRecord(item, list);
                 };
             }
@@ -493,7 +513,7 @@ export class SaleOrderEditComponent implements OnInit {
         this.generalForm.controls['note'].patchValue(stringNote);
     }
 
-    remove = function(index) {
+    remove = function (index) {
         this.data['programs'].splice(index, 1);
     };
 
@@ -564,6 +584,33 @@ export class SaleOrderEditComponent implements OnInit {
             err => {
                 this.toastr.error(err.message);
             });
+    }
+
+    fetchMoreCustomer(data?) {
+        this.data['page']++;
+        if (this.data['page'] > this.data['total_page']) {
+            return;
+        }
+        const params = { page: this.data['page'], length: 15 };
+        if (this.data['searchKey']) {
+            params['company_name'] = this.data['searchKey'];
+        }
+        this.orderService.getAllCustomer(params).subscribe(res => {
+            this.listMaster['customer'] = this.listMaster['customer'].concat(res.data.rows);
+            this.data['total_page'] = res.data.total_page;
+        });
+    }
+
+    searchCustomer(key) {
+        this.data['searchKey'] = key;
+        const params = { page: this.data['page'], length: 15 };
+        if (key) {
+            params['company_name'] = key;
+        }
+        this.orderService.getAllCustomer(params).subscribe(res => {
+            this.listMaster['customer'] = res.data.rows;
+            this.data['total_page'] = res.data.total_page;
+        });
     }
 
 }

@@ -554,13 +554,18 @@ export class SaleOrderCreateComponent implements OnInit {
         if (this.data['page'] > this.data['total_page']) {
             return;
         }
-        this.orderService.getAllCustomer({ page: this.data['page'], length: 15 }).subscribe(res => {
+        const params = { page: this.data['page'], length: 15 };
+        if (this.data['searchKey']) {
+            params['company_name'] = this.data['searchKey'];
+        }
+        this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = this.listMaster['customer'].concat(res.data.rows);
             this.data['total_page'] = res.data.total_page;
         });
     }
 
     searchCustomer(key) {
+        this.data['searchKey'] = key;
         const params = { page: this.data['page'], length: 15 };
         if (key) {
             params['company_name'] = key;
