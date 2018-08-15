@@ -14,8 +14,7 @@
                                         <label for="code" class="control-label" translate>Customer Name</label>
                                         <span class="text-danger">(*)</span>
                                         <div>
-                                            <ng-select #inp style="width: 150px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id"
-                                                formControlName="company_id">
+                                            <ng-select  [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 150px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="company_id">
                                             </ng-select>
                                         </div>
                                     </div>
@@ -101,16 +100,16 @@
                                         <label class='col-4'>Contact Phone</label>
                                         <div class='col-8'>
                                                 {{addr_select.contact.phone}}
-                                           
+
                                         </div>
                                     </div>
                                     <div class="form-group row" *ngIf="customer.buyer_type !='CP'">
                                         <label class='col-4'>Contact Email</label>
                                         <div class='col-8'>
                                                 {{addr_select.contact.email}}
-                                            
+
                                         </div>
-                                    </div>                                   
+                                    </div>
                                     <div class="form-group row">
                                         <label class='col-4'>Discount Level</label>
                                         <div class='col-8 text-success'>
@@ -392,7 +391,7 @@
         </div>
         <div class="row">
             <div class="col-md-12 mg-top-15 text-center">
-                    <button type="button" class="btn btn-outline-primary" (click)="createOrder('draft')" translate>Save As Draft</button> 
+                    <button type="button" class="btn btn-outline-primary" (click)="createOrder('draft')" translate>Save As Draft</button>
                 <button type="button" class="btn btn-outline-primary" (click)="createOrder('validate')" translate>Save & Validate</button>
                 <button type="button" class="btn btn-outline-primary" (click)="createOrder('submit')" translate>Save & Submit</button>
                 <button type="button" class="btn btn-default" [routerLink]="['/order-management/sale-quotation']" translate>Cancel</button>
