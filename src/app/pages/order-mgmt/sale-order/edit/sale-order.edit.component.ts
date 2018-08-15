@@ -318,7 +318,7 @@ export class SaleOrderEditComponent implements OnInit {
         try {
             const length = this.customer.shipping.length;
             if (!item.hasOwnProperty('length')) {
-                item.length = function () {
+                item.length = function() {
                     return this.checkLengthRecord(item, list);
                 };
             }
@@ -442,7 +442,7 @@ export class SaleOrderEditComponent implements OnInit {
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
-                    listAdded.push(item.item_id);
+                    listAdded.push(item.item_id + item.item_condition_id);
                 });
                 res.forEach((item) => {
                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
@@ -450,11 +450,11 @@ export class SaleOrderEditComponent implements OnInit {
                     item.quantity = 1;
                     item['order_detail_id'] = null;
                     item.totalItem = item.sale_price;
-                    item.source = 'From Master';
+                    item.source_id = 0;
+                    item.source_name = 'From Master';
                 });
-
                 this.list.items = this.list.items.concat(res.filter((item) => {
-                    return listAdded.indexOf(item.item_id) < 0;
+                    return listAdded.indexOf(item.item_id + item.item_condition_id) < 0;
                 }));
 
                 this.updateTotal();
@@ -470,18 +470,17 @@ export class SaleOrderEditComponent implements OnInit {
                 if (res instanceof Array && res.length > 0) {
                     const listAdded = [];
                     (this.list.items).forEach((item) => {
-                        listAdded.push(item.item_id);
+                        listAdded.push(item.item_id + item.item_condition_id);
                     });
                     res.forEach((item) => {
                         if (item.sale_price) { item.sale_price = Number(item.sale_price); }
                         item['products'] = [];
-                        item.quantity = 1;
                         item.totalItem = item.sale_price;
-                        item.source = 'From Quote';
+                        item.source_id = 1;
+                        item.source_name = 'From Quote';
                     });
-
                     this.list.items = this.list.items.concat(res.filter((item) => {
-                        return listAdded.indexOf(item.item_id) < 0;
+                        return listAdded.indexOf(item.item_id + item.item_condition_id) < 0;
                     }));
                     this.updateTotal();
                     this.getQtyAvail();
@@ -516,7 +515,7 @@ export class SaleOrderEditComponent implements OnInit {
         this.generalForm.controls['note'].patchValue(stringNote);
     }
 
-    remove = function (index) {
+    remove = function(index) {
         this.data['programs'].splice(index, 1);
     };
 
