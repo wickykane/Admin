@@ -294,7 +294,7 @@ export class SaleOrderCreateComponent implements OnInit {
     }
     changeFromSource(item) {
         item.source_id = 2;
-        item.source = 'Manual';
+        item.source_name = 'Manual';
     }
     changeOrderType() {
         this.list_priority = [];
@@ -410,7 +410,7 @@ export class SaleOrderCreateComponent implements OnInit {
                     item['order_detail_id'] = null;
                     item.totalItem = item.sale_price;
                     item.source_id = 0;
-                    item.source = 'From Master';
+                    item.source_name = 'From Master';
                 });
                 console.log(this.list.items);
                 this.list.items = this.list.items.concat(res.filter((item) => {
@@ -437,7 +437,7 @@ export class SaleOrderCreateComponent implements OnInit {
                         item['products'] = [];
                         item.totalItem = item.sale_price;
                         item.source_id = 1;
-                        item.source = 'From Quote';
+                        item.source_name = 'From Quote';
                     });
                     this.list.items = this.list.items.concat(res.filter((item) => {
                         return listAdded.indexOf(item.item_id + item.item_condition_id) < 0;
