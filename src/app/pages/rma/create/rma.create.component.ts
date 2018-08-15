@@ -1,12 +1,14 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewContainerRef, ViewEncapsulation } from '@angular/core';
-import { Form, FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { Form, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { ToastrService } from 'ngx-toastr';
+import { Subject } from 'rxjs/Subject';
+import { OrderService } from '../../order-mgmt/order-mgmt.service';
 import { RmaService } from '../rma.service';
 import { RMACreateKeyService } from './keys.control';
+import { ToastrService } from 'ngx-toastr';
 
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { routerTransition } from '../../../router.animations';
@@ -19,7 +21,7 @@ import * as moment from 'moment';
     templateUrl: './rma.create.component.html',
     styleUrls: ['../rma.component.scss'],
     animations: [routerTransition()],
-    providers: [DatePipe, RMACreateKeyService, CommonService]
+    providers: [DatePipe, RMACreateKeyService, CommonService, OrderService]
 })
 
 export class RmaCreateComponent implements OnInit {
@@ -39,8 +41,22 @@ export class RmaCreateComponent implements OnInit {
     };
     public checkAllItem = true;
     customer = {};
-    order_info = {};
     public dataConfig = {};
+
+    public pagination = {};
+    public searchKey = new Subject<any>(); // Lazy load filter
+
+    public order_info = {
+        total: 0,
+        sub_total: 0,
+        total_discount: 0,
+        restock_fee_percent: 0,
+        restock_fee_amount: 0,
+        discount_percent: 0,
+        vat_percent: 0,
+        vat_percent_amount: 0,
+        shipping_cost: 0
+    };
     /**
      * Init Data
      */
@@ -54,6 +70,7 @@ export class RmaCreateComponent implements OnInit {
         private modalService: NgbModal,
         private rmaService: RmaService,
         private commonService: CommonService,
+        private orderService: OrderService,
         private dt: DatePipe) {
         this.generalForm = fb.group({
             'buyer': [null, Validators.required],
@@ -67,7 +84,7 @@ export class RmaCreateComponent implements OnInit {
             'apply_restock': [0],
             'refund_method': [null, Validators.required],
             'payment_term': [null],
-            'approver': [null,Validators.required],
+            'approver': [null, Validators.required],
             'address_id': [null],
             'note': [null],
             'contact_name': [null],
@@ -87,7 +104,8 @@ export class RmaCreateComponent implements OnInit {
             'restocking_fee_percent': [null],
             'restocking_fee': [null],
             'sub_total': [null],
-            'return_time_name': [null]
+            'return_time_name': [null],
+            'company_id': [null]
 
         });
 
@@ -96,7 +114,7 @@ export class RmaCreateComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.getListCustomer();
+        // this.getListCustomer();
         this.checkAll(null, true);
 
         // Master Data Init
@@ -108,11 +126,10 @@ export class RmaCreateComponent implements OnInit {
         // this.getListApprover();
         // this.getListReturnReason();
 
-        this.updateTotal();
 
         // Change form data event handle
         this.generalForm.get('return_via').valueChanges.subscribe(data => {
-            if (data == 1 || data == 2) {
+            if (data === 1 || data === 2) {
                 this.generalForm.get('carrier').setValidators(Validators.required);
                 this.generalForm.get('address_id').setValidators(Validators.required);
             } else {
@@ -122,7 +139,20 @@ export class RmaCreateComponent implements OnInit {
             this.generalForm.patchValue({ carrier: null });
         });
 
+        this.updateTotal();
         this.initConfig();
+
+        // Lazy Load filter
+        this.pagination['page'] = 1;
+        const params = { page: this.pagination['page'], length: 15 };
+        this.orderService.getAllCustomer(params).subscribe(res => {
+            this.listMaster['customer'] = res.data.rows;
+            this.pagination['total_page'] = res.data.total_page;
+        });
+        this.searchKey.subscribe(key => {
+            this.pagination['page'] = 1;
+            this.searchCustomer(key);
+        });
     }
 
     // Disable Config
@@ -251,7 +281,7 @@ export class RmaCreateComponent implements OnInit {
     }
 
     getListCustomer() {
-        this.commonService.getAllCustomer().subscribe(res => {
+        this.orderService.getAllCustomer().subscribe(res => {
             try {
                 this.listMaster['customer'] = res.data;
             } catch (e) {
@@ -416,12 +446,13 @@ export class RmaCreateComponent implements OnInit {
             this.order_info['restock_fee_amount'] = 0;
         }
         console.log(this.generalForm.value['cover_ship']);
-        if(this.generalForm.value['cover_ship']=='Yes'){
-            this.order_info['shipping_cost'] = Number(this.order_info['shipping_cost'] || 0);
-        }
-        else{
-            this.order_info['shipping_cost'] =  0;
-        }
+        this.order_info['shipping_cost'] = this.generalForm.value['cover_ship'] === 'Yes' ? Number(this.order_info['shipping_cost']) : 0;
+        // if (this.generalForm.value['cover_ship'] === 'Yes') {
+        //     this.order_info['shipping_cost'] = Number(this.order_info['shipping_cost'] || 0);
+        // }
+        // else {
+        //     this.order_info['shipping_cost'] =  0;
+        // }
 
 
         this.order_info['total'] = this.order_info['sub_total'] - this.order_info['total_discount'] - this.order_info['restock_fee_amount'] + ((this.generalForm.value.cover_ship) ? this.order_info['shipping_cost'] : 0)
@@ -438,18 +469,18 @@ export class RmaCreateComponent implements OnInit {
     }
 
     createRMA() {
-        var rma_item =[];
-        var rmaObject = this.generalForm.value;
-        var list= this.list['items'].slice(0);
+        const rma_item = [];
+        const rmaObject = this.generalForm.value;
+        const list = this.list['items'].slice(0);
         console.log(list);
-        list.forEach(item=>{
+        list.forEach(item => {
             rma_item.push({
-                'return_reason':item.return_reason,
-                'return_qty':item.return_qty,
-                'order_detail_id':item.id
-            })
+                'return_reason': item.return_reason,
+                'return_qty': item.return_qty,
+                'order_detail_id': item.id
+            });
         });
-        rmaObject['rma_items']=rma_item;
+        rmaObject['rma_items'] = rma_item;
         rmaObject['status'] = 1;
         delete rmaObject['return_time'];
         console.log(rmaObject);
@@ -463,9 +494,9 @@ export class RmaCreateComponent implements OnInit {
             setTimeout(() => {
                 this.router.navigate(['/rma']);
             }, 500);
-        },err=>{
-            if(err){
-                if(err.data.return_reason){
+        }, err => {
+            if (err) {
+                if (err.data.return_reason) {
                     this.toastr.error('Return Reason is required');
                 }
             }
@@ -473,13 +504,41 @@ export class RmaCreateComponent implements OnInit {
 
 
     }
-    checkApplyRestock(isCheck){
 
-        var val= isCheck?1:0;
+    checkApplyRestock(isCheck) {
+
+        const val = isCheck ? 1 : 0;
         console.log(val);
         this.generalForm.patchValue({
-            apply_restock:val
+            apply_restock: val
         });
     }
-}
 
+    fetchMoreCustomer(data?) {
+        this.pagination['page']++;
+        if (this.pagination['page'] > this.pagination['total_page']) {
+            return;
+        }
+        const params = { page: this.pagination['page'], length: 15 };
+        if (this.pagination['searchKey']) {
+            params['company_name'] = this.pagination['searchKey'];
+        }
+        this.orderService.getAllCustomer(params).subscribe(res => {
+            this.listMaster['customer'] = this.listMaster['customer'].concat(res.data.rows);
+            this.pagination['total_page'] = res.data.total_page;
+        });
+    }
+
+    searchCustomer(key) {
+        this.pagination['searchKey'] = key;
+        const params = { page: this.pagination['page'], length: 15 };
+        if (key) {
+            params['company_name'] = key;
+        }
+        this.orderService.getAllCustomer(params).subscribe(res => {
+            this.listMaster['customer'] = res.data.rows;
+            this.pagination['total_page'] = res.data.total_page;
+        });
+    }
+
+}
