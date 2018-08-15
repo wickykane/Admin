@@ -178,7 +178,10 @@ export class LedgerComponent implements OnInit {
         if (res.status) {
           this.toastr.success(res.message);
           this.getAccountTree();
+          this.selectItem({...res.data, level: 1});
           this.data['selectedAccount']['name'] = this.generalForm.value.des + '(' + this.generalForm.value.range_start + '-' + this.generalForm.value.range_end + ')';
+        } else {
+          this.toastr.error(res.message);
         }
       });
     } else {
@@ -188,6 +191,8 @@ export class LedgerComponent implements OnInit {
           this.toastr.success(res.message);
           this.getAccountTree();
           this.data['selectedAccount']['name'] = this.generalForm.value.des + '(' + this.generalForm.value.range_start + '-' + this.generalForm.value.range_end + ')';
+        } else {
+          this.toastr.error(res.message);
         }
       });
     }
@@ -202,7 +207,10 @@ export class LedgerComponent implements OnInit {
         if (res.status) {
           this.toastr.success(res.message);
           this.getAccountTree();
+          this.selectItem({...res.data, level: 2});
           this.data['selectedAccount']['des'] = this.generalDetailForm.value.des;
+        } else {
+          this.toastr.error(res.message);
         }
       });
     } else {
@@ -212,6 +220,8 @@ export class LedgerComponent implements OnInit {
           this.toastr.success(res.message);
           this.getAccountTree();
           this.data['selectedAccount']['des'] = this.generalDetailForm.value.des;
+        } else {
+          this.toastr.error(res.message);
         }
       });
     }
