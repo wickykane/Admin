@@ -261,11 +261,7 @@ export class InvoiceCreateComponent implements OnInit {
                             total_adj_due: this.invoice_details['tot_amt'],
                             discount_amount: this.invoice_details['dsct_amt'],
                             tax_amount: this.invoice_details['tax_amt'],
-<<<<<<< HEAD
                             inv_dt: this.invoice_details['inv_dt']
-=======
-                            inv_dt: this.dt.transform(new Date(this.invoice_details['inv_dt']), 'yyyy-MM-dd' )
->>>>>>> develop
                         });
                         console.log(this.generalForm.value['inv_dt']);
                     }
