@@ -1,0 +1,79 @@
+<div class="modal-header">
+    <span class="modal-title">Flat Rate Options</span>
+    <button type="button" class="close" aria-label="Close" (click)="closeX()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+
+        <form [formGroup]="generalForm" class="form-search full-width form-horizontal">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                        <label class='col-6' > Display name<span class="text-danger">(*)</span>
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control">
+                        </div>
+                    </div>
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <label class='col-6' >
+                                Type<span class="text-danger">(*)</span>
+                            </label>
+                            <div class="col-sm-12">
+                            <select name="condition" (change)="changePayment($event)" formControlName="condition" class="form-control">
+                                <option *ngFor="let item of condition"[value]='item.id'>{{item.name}}</option>
+                                <option value="">Blank</option>
+                            </select>
+                        </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class='col-6' > Shipping Fee<span class="text-danger">(*)</span>
+                            </label>
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <label class='col-6' >
+                                Handling Fee Type
+                            </label>
+                            <div class="col-sm-12">
+                            <select name="condition" (change)="changePayment($event)" formControlName="condition" class="form-control">
+                                <option *ngFor="let item of condition"[value]='item.id'>{{item.name}}</option>
+                                <option value="">Blank</option>
+                            </select>
+                        </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class='col-6' >Handling Fee
+                            </label>
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-100"></div>
+                </div>
+            </div>
+        </form>
+
+
+
+
+
+
+
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-outline-primary" (click)="applyData()">OK</button>
+    <button type="button" class="btn btn-outline-dark" (click)="closeX()">Close</button>
+</div>

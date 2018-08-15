@@ -16,6 +16,7 @@ import * as moment from 'moment';
 import { StateFilterModalComponent } from '../../../../shared/modals/stateFilter.modal';
 
 import { FreeShippingOptionsModalComponent } from '../../../../shared/modals/free-shipping-options.modal';
+import { FlatRateOptionsModalComponent } from '../../../../shared/modals/flat-rate-options.modal';
 @Component({
     selector: 'app-create-shipping-zone',
     templateUrl: './shipping-zone.create.component.html',
@@ -155,6 +156,9 @@ export class ShippingZoneCreateComponent implements OnInit {
         if(id=="1"){
         modalRef   = this.modalService.open(FreeShippingOptionsModalComponent,{size:'lg'});
         }
+        if(id=="2"){
+            modalRef   = this.modalService.open(FlatRateOptionsModalComponent,{size:'lg'});
+            }
         
         modalRef.componentInstance.condition = this.listMasterData['condition'];
         modalRef.componentInstance.isEdit = false;
