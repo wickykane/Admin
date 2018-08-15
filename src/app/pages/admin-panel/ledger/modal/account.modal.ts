@@ -101,8 +101,12 @@ export class AccountModalComponent implements OnInit {
     const params = this.accountForm.value;
     this.ledgerService.createAccount(this.parent.id, params).subscribe(res => {
       try {
-        this.toastr.success(res.message);
-        this.activeModal.close(this.accountForm.value);
+        if (res.status) {
+          this.toastr.success(res.message);
+          this.activeModal.close(this.accountForm.value);
+        } else {
+          this.toastr.error(res.message);
+        }
       } catch (e) {
         console.log(e);
       }
@@ -113,8 +117,12 @@ export class AccountModalComponent implements OnInit {
     const params = this.accountForm.value;
     this.ledgerService.updateAccount(this.item.id, params).subscribe(res => {
       try {
-        this.toastr.success(res.message);
-        this.activeModal.close(this.accountForm.value);
+        if (res.status) {
+          this.toastr.success(res.message);
+          this.activeModal.close(this.accountForm.value);
+        } else {
+          this.toastr.error(res.message);
+        }
       } catch (e) {
         console.log(e);
       }
