@@ -14,7 +14,9 @@
                                         <label for="code" class="control-label" translate>Customer Name</label>
                                         <span class="text-danger">(*)</span>
                                         <div>
-                                            <ng-select  [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 150px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="company_id">
+                                            <ng-select [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 150px;"
+                                                (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name"
+                                                bindValue="id" formControlName="company_id">
                                             </ng-select>
                                         </div>
                                     </div>
@@ -114,7 +116,9 @@
                                     <div class="form-group row">
                                         <label class='col-4'>Item In Quote</label>
                                         <div class='col-8 text-success'>
-                                            <a (click)="addNewItemFromQuote()"><strong>{{customer.items_in_quote}}</strong></a>
+                                            <a (click)="addNewItemFromQuote()">
+                                                <strong>{{customer.items_in_quote}}</strong>
+                                            </a>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -200,8 +204,7 @@
                                         <div class="form-group row">
                                             <label class='col-4'>Multi Ship Addr</label>
                                             <div class='col-8 text-danger'>
-                                                <select [attr.disabled]="true" class="form-control" id="is_multi_shp_addr" name="is_multi_shp_addr" formControlName="is_multi_shp_addr">
-                                                    <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
+                                                <select [attr.disabled]= 'true' class="form-control" id="is_multi_shp_addr" name="is_multi_shp_addr" formControlName="is_multi_shp_addr">
                                                     <option *ngFor="let item of listMaster['multi_ship']" [ngValue]="item.id">{{item.label}}</option>
                                                 </select>
                                             </div>
@@ -371,7 +374,8 @@
                     <h5 class="title-border" translate>PRODUCTS DETAILS</h5>
                     <div class="col-md-12">
                         <div class="table-responsive">
-                            <table class="table table-style table-order custom-table table-bg" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
+                            <table class="table table-style table-order custom-table table-bg" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex"
+                                (onEnter)="selectData($event)">
                                 <thead>
                                     <tr>
                                         <th style="width:100px" translate>Action</th>
@@ -396,7 +400,8 @@
                                             <button class="btn btn-danger btn-xs" type="button" (click)="deleteAction(item.item_id, item.item_condition_id)">
                                                 <i class="fa fa-trash"></i>
                                             </button>
-                                            <button *ngIf="generalForm.value.is_multi_shp_addr == 1" class="btn btn-primary btn-xs" type="button" (click)="cloneRecord(item, list.items)" [disabled]="!checkCloneRecord(item, list.items[$index])" title="Add new shipping address">
+                                            <button *ngIf="generalForm.value.is_multi_shp_addr == 1" class="btn btn-primary btn-xs" type="button" (click)="cloneRecord(item, list.items)"
+                                                [disabled]="!checkCloneRecord(item, list.items[$index])" title="Add new shipping address">
                                                 <i class="fa fa-plus-circle" aria-hidden="true"></i>
                                             </button>
                                         </td>
@@ -405,7 +410,8 @@
                                         <td>{{item.condition_name}}</td>
                                         <td>{{item.qty_avail}}</td>
                                         <td>
-                                            <input style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (change)="updateTotal()" (keypress)="_keyPress($event)">
+                                            <input style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (change)="updateTotal()"
+                                                (keypress)="_keyPress($event)">
                                         </td>
 
                                         <td *ngIf="generalForm.value.is_multi_shp_addr == 1">
@@ -419,7 +425,8 @@
                                             <div>
                                                 <span>$</span>
                                                 <div style="display:inline-block;width:80%">
-                                                    <input [textMask]="{mask: numberMaskObject()}" class="form-control input-sm" type="number" [(ngModel)]="item.sale_price" (change)="updateTotal();changeFromSource(item)">
+                                                    <input [textMask]="{mask: numberMaskObject()}" class="form-control input-sm" type="number" [(ngModel)]="item.sale_price"
+                                                        (change)="updateTotal();changeFromSource(item)">
                                                 </div>
                                             </div>
                                         </td>
@@ -441,7 +448,8 @@
                                         <td></td>
                                         <td></td>
                                         <td>
-                                            <input style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="product.quantity" min="0" max="1000" (change)="updateTotal()" (keypress)="_keyPress($event)">
+                                            <input style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="product.quantity" min="0" max="1000"
+                                                (change)="updateTotal()" (keypress)="_keyPress($event)">
                                         </td>
                                         <td>
                                             <select class="form-control" name="search_type" [(ngModel)]="product.shipping_address_id">
@@ -466,7 +474,7 @@
                         <button (click)="addNewItem()" class="btn btn-outline-dark" translate>
                             <i class="fa fa-plus"></i>Add New Item</button>
                         <button (click)="addNewItemFromQuote()" class="btn btn-outline-dark">
-                                <i class="fa fa-plus"></i>Add New Item From Quote</button>
+                            <i class="fa fa-plus"></i>Add New Item From Quote</button>
                     </div>
                     <div class="col-md-12 mg-top-15">
                         <div class="row">
@@ -490,7 +498,8 @@
                                     <tr>
                                         <td>- Discount (%):</td>
                                         <td>
-                                            <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info.discount_percent" class="form-control" type="text" (change)="updateTotal()">
+                                            <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info.discount_percent" class="form-control"
+                                                type="text" (change)="updateTotal()">
                                         </td>
                                         <td>
                                             <input class="form-control" readonly="true" [(ngModel)]="order_info.total_discount" class="form-control" value="0" type="number">
@@ -499,17 +508,20 @@
                                     <tr>
                                         <td>+ TAX/VAT (%):</td>
                                         <td>
-                                            <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info.vat_percent" class="form-control" type="text" (change)="updateTotal()">
+                                            <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info.vat_percent" class="form-control"
+                                                type="text" (change)="updateTotal()">
                                         </td>
                                         <td>
-                                            <input class="form-control" readonly="true" [(ngModel)]="order_info['vat_percent_amount']" class="form-control" value="0" type="number">
+                                            <input class="form-control" readonly="true" [(ngModel)]="order_info['vat_percent_amount']" class="form-control" value="0"
+                                                type="number">
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>+ Shipping cost ($):</td>
                                         <td></td>
                                         <td>
-                                            <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info.shipping_cost" class="form-control" type="text" (change)="updateTotal()">
+                                            <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info.shipping_cost" class="form-control"
+                                                type="text" (change)="updateTotal()">
                                         </td>
                                     </tr>
                                     <tr>
