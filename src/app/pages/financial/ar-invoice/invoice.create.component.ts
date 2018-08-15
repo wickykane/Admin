@@ -6,6 +6,8 @@ import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/n
 import { NgbDateCustomParserFormatter } from '../../../shared/helper/dateformat';
 
 import { ToastrService } from 'ngx-toastr';
+// tslint:disable-next-line:import-blacklist
+import { Subject } from 'rxjs';
 import { routerTransition } from '../../../router.animations';
 import { FinancialService } from '../financial.service';
 
@@ -101,6 +103,8 @@ export class InvoiceCreateComponent implements OnInit {
     public isEdit = false;
     public applyEPI;
     public applyLFP;
+    public searchKey = new Subject<any>(); // Lazy load filter
+
     /**
      * Init Data
      */
@@ -131,9 +135,9 @@ export class InvoiceCreateComponent implements OnInit {
             'inv_dt': [null, Validators.required],
             'payment_method_id': [null, Validators.required],
             'due_dt': [null, Validators.required],
+            'payment_term_range': [null],
             'payment_term_id': [null, Validators.required],
             'aprvr_id': [null, Validators.required],
-            'payment_term_range': [null],
             'shipping_cost': [null],
             'sub_total': [null],
             'discount_percent': [null],
@@ -149,6 +153,8 @@ export class InvoiceCreateComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.getListApprover();
+        this.getListPaymentTerm();
         const path = window.location.pathname;
         this.route.params.subscribe(params => {
             if (params.id) {
@@ -161,37 +167,57 @@ export class InvoiceCreateComponent implements OnInit {
                 this.isCreate = true;
                 this.isEdit = false;
                 this.headerTitle = 'CREATE NEW INVOICE';
-                const currentDt = this.dt.transform(new Date(), 'yyyy-MM-dd');
-                // this.generalForm.controls['inv_dt'].patchValue(currentDt);
                 this.generalForm.controls['inv_status'].setValue(1);
                 this.getGenerateCode();
             }
         });
         this.listMaster['yes_no_options'] = [{ value: 0, label: 'No' }, { value: 1, label: 'Yes' }];
-        this.listMaster['payment_method'] = [
-            { id: 1, name: 'Bank Transfer' },
-            { id: 2, name: 'Cash on Delivery' },
-            { id: 3, name: 'Credit Card' }
-        ];
-        this.getListCustomerOption();
-        this.getListApprover();
-        this.getListPaymentTerm();
+        this.financialService.getPaymentMethod().subscribe(res => {this.listMaster['payment_method'] = res.data; });
+          // Lazy Load filter
+          this.data['page'] = 1;
+          const param = { page: this.data['page'], length: 15 };
+          this.financialService.getAllCustomer(param).subscribe(res => {
+              this.listMaster['customer'] = res.data.rows;
+              this.data['total_page'] = res.data.total_page;
+          });
+          this.searchKey.subscribe(key => {
+              this.data['page'] = 1;
+              this.searchCustomer(key);
+          });
         this.updateTotal();
         this.copy_addr = { ...this.copy_addr, ...this.addr_select };
         this.copy_customer = { ...this.copy_customer, ...this.customer };
         this.generalForm.controls['inv_dt'].valueChanges.debounceTime(300).subscribe(data => {
+            this.generalForm.controls['payment_term_range'].setValue(this.getPaymentTermRange(this.generalForm.value['payment_term_id']));
             this.getInvoiceDueDate(this.generalForm.value['payment_term_range']);
             this.getEarlyPaymentValue();
         });
     }
+    // lazyload
+    fetchMoreCustomer(data?) {
+        this.data['page']++;
+        if (this.data['page'] > this.data['total_page']) {
+            return;
+        }
+        const params = { page: this.data['page'], length: 15 };
+        if (this.data['searchKey']) {
+            params['company_name'] = this.data['searchKey'];
+        }
+        this.financialService.getAllCustomer(params).subscribe(res => {
+            this.listMaster['customer'] = this.listMaster['customer'].concat(res.data.rows);
+            this.data['total_page'] = res.data.total_page;
+        });
+    }
 
-    getListCustomerOption() {
-        this.financialService.getAllCustomer().subscribe(res => {
-            try {
-                this.listMaster['customer'] = res.data;
-            } catch (e) {
-                console.log(e);
-            }
+    searchCustomer(key) {
+        this.data['searchKey'] = key;
+        const params = { page: this.data['page'], length: 15 };
+        if (key) {
+            params['company_name'] = key;
+        }
+        this.financialService.getAllCustomer(params).subscribe(res => {
+            this.listMaster['customer'] = res.data.rows;
+            this.data['total_page'] = res.data.total_page;
         });
     }
 
@@ -213,7 +239,6 @@ export class InvoiceCreateComponent implements OnInit {
                 this.generalForm.patchValue({
                     billing_address_id: this.invoice_details['billing_id'],
                     inv_status: this.invoice_details['invoice_status_id'],
-                    inv_dt: this.dt.transform(new Date(res.data.inv_dt), 'yyyy-MM-dd')
                 });
                 if (res.data.company_id) {
                     this.getDetailCustomerById(res.data.company_id);
@@ -235,8 +260,10 @@ export class InvoiceCreateComponent implements OnInit {
                             total_due: this.invoice_details['tot_amt'],
                             total_adj_due: this.invoice_details['tot_amt'],
                             discount_amount: this.invoice_details['dsct_amt'],
-                            tax_amount: this.invoice_details['tax_amt']
+                            tax_amount: this.invoice_details['tax_amt'],
+                            inv_dt: this.invoice_details['inv_dt']
                         });
+                        console.log(this.generalForm.value['inv_dt']);
                     }
                 }
                 if (!this.generalForm.value['payment_term_range']) {
@@ -309,7 +336,8 @@ export class InvoiceCreateComponent implements OnInit {
                         tax_percent: this.order_details['vat_percent'],
                         total_due: this.order_details['total_price'],
                         discount_amount: this.order_details['discount'],
-                        tax_amount: this.order_details['vat']
+                        tax_amount: this.order_details['vat'],
+                        inv_dt:  this.order_details['inv_dt']
                     });
                     if (!this.generalForm.value['aprvr_id']) {
                         this.generalForm.controls['aprvr_id'].setValue(orderCreatorId);
@@ -328,7 +356,8 @@ export class InvoiceCreateComponent implements OnInit {
         this.financialService.getListPaymentTerm().subscribe(res => {
             try {
                 this.listMaster['payment_terms'] = res.data;
-                this.generalForm.patchValue({payment_term_id: this.listMaster['payment_terms'][0]});
+                this.generalForm.patchValue({payment_term_id: this.listMaster['payment_terms'][0]['id']});
+                this.getPaymentTermRange(this.generalForm.value['payment_term_id']);
             } catch (e) {
                 console.log(e);
             }
@@ -336,10 +365,11 @@ export class InvoiceCreateComponent implements OnInit {
     }
 
     getPaymentTermRange(id) {
-        setTimeout(() => {
+        console.log(id);
+        if (this.listMaster['payment_terms'] && this.listMaster['payment_terms'].length > 0 ) {
             const paymentTerm = this.listMaster['payment_terms'].find(item => item.id === id);
             return paymentTerm.term_day;
-        }, 1000);
+        }
     }
 
     /**
