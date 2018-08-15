@@ -21,17 +21,18 @@ export class InvoiceInformationTabComponent implements OnInit {
             this._invoiceId = id;
         }
     }
+    public totalQTY;
+    public totalInvoiceQTY;
     public detail;
     @Input() set orderDetail(detail) {
         if (detail) {
             this.detail = detail;
+            this.totalQTY = 0;
+            this.totalInvoiceQTY = 0;
             this.calculateQTY();
         }
     }
     data = {};
-    public totalQTY = 0;
-    public totalInvoiceQTY = 0;
-
     constructor(
         public fb: FormBuilder,
         private vRef: ViewContainerRef,

@@ -243,4 +243,8 @@ export class OrderService {
         const url = 'order/sale-quote/buyer-approved/' + buyer_id;
         return this.API.post(url, params);
     }
+    getPaymentMethod() {
+        const url = 'ar-invoice/get-payment-method';
+        return this.API.get(url);
+    }
 }

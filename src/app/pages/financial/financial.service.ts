@@ -23,11 +23,9 @@ export class FinancialService {
         return this.API.get(url);
     }
 
-    getAllCustomer() {
-        // const url = 'buyer/get-all';
-        // return this.API.get(url);
-        const url = 'ar-invoice/get-customer';
-        return this.API.get(url);
+    getAllCustomer(params?) {
+        const url = 'buyer/get-all';
+        return this.API.get(url, params);
     }
 
     getDetailCompany(id) {
@@ -97,5 +95,9 @@ export class FinancialService {
     printPDF(id) {
         const url = 'ar-invoice/export-invoice/' + id;
         return url;
+    }
+    getPaymentMethod() {
+        const url = 'ar-invoice/get-payment-method';
+        return this.API.get(url);
     }
 }
