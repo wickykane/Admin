@@ -77,6 +77,10 @@ const routes: Routes = [
         loadChildren: './carrier/carrier.module#CarrierModule'
     },
     {
+        path: 'shipping-zone',
+        loadChildren: './shipping-zone/shipping-zone.module#ShippingZoneModule'
+    },
+    {
         path: 'payment-term',
         component: PaymentTermComponent
     },

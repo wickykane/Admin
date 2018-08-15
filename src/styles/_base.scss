@@ -757,6 +757,61 @@ ngu-carousel {
         top:8px !important;
     }
 }
+
+.table-custom{
+    margin:25px;
+    padding: 15px;
+    border:1px solid black;
+    .header{
+        margin: 0 -30px 0 0;
+        .title{
+            border-bottom: 1px solid black;
+            margin-left: -15px;
+        }
+        .title:nth-last-child(1){
+            border: none;
+        }
+        .body{
+            margin-top: 5px;
+        }
+    }
+
+}
+.table-custom1{
+    .header{
+        margin: 0 30px 0 0;
+        border:1px solid black;
+        .title{
+            border-bottom: 1px solid black;
+            >div{
+                margin-bottom: 0;
+            margin-top: 10px;
+            }
+        }
+        .title:nth-last-child(1){
+            border: none;
+        }
+        .body{
+            margin-top: 5px;
+        }
+    }
+
+}
+.center-line:after {
+    content:"";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    border-left: 1px solid black;
+    transform: translate(-50%);
+}
+
+.center-line {
+    margin: 10px auto;
+    position:relative;
+    text-align:center
+}
 .ng-select .ng-control .ng-value-container {
   top: 0
 }
