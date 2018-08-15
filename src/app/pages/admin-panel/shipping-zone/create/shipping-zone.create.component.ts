@@ -156,7 +156,7 @@ export class ShippingZoneCreateComponent implements OnInit {
         modalRef   = this.modalService.open(FreeShippingOptionsModalComponent,{size:'lg'});
         }
         
-
+        modalRef.componentInstance.condition = this.listMasterData['condition'];
         modalRef.componentInstance.isEdit = false;
         modalRef.result.then(res => {
 

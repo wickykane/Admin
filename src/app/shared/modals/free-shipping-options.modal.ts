@@ -19,7 +19,7 @@ import { CommonService } from '../../services/common.service';
 export class FreeShippingOptionsModalComponent implements OnInit, OnDestroy {
 
     generalForm: FormGroup;
-
+    @Input() condition;
 
 
     hotkeyCtrlLeft: Hotkey | Hotkey[];
@@ -36,17 +36,10 @@ export class FreeShippingOptionsModalComponent implements OnInit, OnDestroy {
         public activeModal: NgbActiveModal) {
 
         this.generalForm = fb.group({
-            'parent_company_name': [null],
-            'site_code': [null, Validators.required],
-            'site_name': [null, Validators.required],
-            'registration_no': [null],
-            'phone': [''],
-            'fax': [''],
-            'credit_limit': [null],
-            'credit_sts': 2,
-            'sale_person_id': [null],
-            'payment_make': [null, Validators.required],
-            'site_id':[null]
+            'free_shipping_item': [0],
+            'limit_order_over': [0],
+            'condition': [''],
+            'limit_total_weight':[0]
         });
 
 
@@ -71,7 +64,9 @@ export class FreeShippingOptionsModalComponent implements OnInit, OnDestroy {
         const data = {};
         this.activeModal.close(data);
     }
-
+    applyData(){
+        console.log(this.generalForm.value);
+    }
 
 
 }
