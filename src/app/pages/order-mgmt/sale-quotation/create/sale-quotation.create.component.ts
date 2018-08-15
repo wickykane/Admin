@@ -5,16 +5,17 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectComponent } from '@ng-select/ng-select';
 
-import { ToastrService } from 'ngx-toastr';
+import { Subject } from 'rxjs/Subject';
 import { routerTransition } from '../../../../router.animations';
 import { OrderService } from '../../order-mgmt.service';
+import { ToastrService } from 'ngx-toastr';
 
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
 import { ItemModalContent } from '../../../../shared/modals/item.modal';
 import { OrderHistoryModalContent } from '../../../../shared/modals/order-history.modal';
 import { PromotionModalContent } from '../../../../shared/modals/promotion.modal';
-import { SaleQuoteCreateKeyService} from './keys.create.control';
+import { SaleQuoteCreateKeyService } from './keys.create.control';
 
 
 
@@ -53,6 +54,7 @@ export class SaleQuotationCreateComponent implements OnInit {
 
     public addr_select = {
         contact: {
+            'full_name': '',
             'phone': '',
             'email': ''
         }
@@ -78,6 +80,8 @@ export class SaleQuotationCreateComponent implements OnInit {
     public promotionList = {};
     public copy_customer = {};
     public copy_addr = {};
+
+    public searchKey = new Subject<any>(); // Lazy load filter
 
     /**
      * Init Data
@@ -115,7 +119,7 @@ export class SaleQuotationCreateComponent implements OnInit {
 
     ngOnInit() {
         setTimeout(() => {
-            this.inp.focusSearchInput();
+            // this.inp.focusSearchInput();
         }, 300);
 
         this.listMaster['multi_ship'] = [{ id: 0, label: 'No' }, { id: 1, label: 'Yes' }];
@@ -124,8 +128,8 @@ export class SaleQuotationCreateComponent implements OnInit {
         //  Item
         this.list.items = this.router.getNavigatedData() || [];
         if (Object.keys(this.list.items).length === 0) { this.list.items = []; }
-        this.orderService.getAllCustomer().subscribe(res => { this.listMaster['customer'] = res.data; });
-        this.orderService.getOrderReference().subscribe(res => {Object.assign(this.listMaster, res.data); });
+        this.orderService.getOrderReference().subscribe(res => { Object.assign(this.listMaster, res.data); });
+        this.orderService.generateSaleQuoteCode().subscribe(res => { this.generalForm.get('sale_quote_no').patchValue(res.data); });
         this.updateTotal();
         this.copy_addr = { ...this.copy_addr, ...this.addr_select };
         this.copy_customer = { ...this.copy_customer, ...this.customer };
@@ -136,6 +140,18 @@ export class SaleQuotationCreateComponent implements OnInit {
         this.generalForm.controls['delivery_date'].patchValue(d.toISOString().slice(0, 10));
         this.generalForm.get('approver_id').patchValue(user.id);
         this.generalForm.get('sales_person').patchValue(user.id);
+
+        // Lazy Load filter
+        this.data['page'] = 1;
+        const params = { page: this.data['page'], length: 15 };
+        this.orderService.getAllCustomer(params).subscribe(res => {
+            this.listMaster['customer'] = res.data.rows;
+            this.data['total_page'] = res.data.total_page;
+        });
+        this.searchKey.subscribe(key => {
+            this.data['page'] = 1;
+            this.searchCustomer(key);
+        });
     }
 
     /**
@@ -152,6 +168,11 @@ export class SaleQuotationCreateComponent implements OnInit {
         this.orderService.getDetailCompany(company_id).subscribe(res => {
             try {
                 this.customer = res.data;
+                if (res.data.buyer_type === 'PS') {
+                    this.addr_select.contact = res.data.contact[0];
+                    this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
+                }
+                console.log(this.customer);
             } catch (e) {
                 console.log(e);
             }
@@ -272,10 +293,9 @@ export class SaleQuotationCreateComponent implements OnInit {
         const modalRef = this.modalService.open(ItemModalContent, { size: 'lg' });
         modalRef.result.then(res => {
             if (res instanceof Array && res.length > 0) {
-
                 const listAdded = [];
                 (this.list.items).forEach(item => {
-                    listAdded.push(item.item_id);
+                    listAdded.push(item.item_id + item.item_condition_id);
                 });
                 res.forEach(item => {
                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
@@ -286,8 +306,8 @@ export class SaleQuotationCreateComponent implements OnInit {
                     item.source = 'From Master';
                 });
 
-                this.list.items = this.list.items.concat(res.filter(item => {
-                    return listAdded.indexOf(item.item_id) < 0;
+                this.list.items = this.list.items.concat(res.filter((item) => {
+                    return listAdded.indexOf(item.item_id + item.item_condition_id) < 0;
                 }));
 
                 this.updateTotal();
@@ -315,7 +335,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         const products = [];
         this.list.items.forEach(item => {
             products.push({
-              item_type: item.item_type,
+                item_type: item.item_type,
                 item_id: item.item_id,
                 quantity: item.quantity,
                 sale_price: item.sale_price,
@@ -342,7 +362,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         });
         let params = {};
         switch (type) {
-                case 'validate':
+            case 'validate':
                 params = {
                     'items': products,
                     'sale_quote_status_id': 4,
@@ -350,7 +370,7 @@ export class SaleQuotationCreateComponent implements OnInit {
                     'type': 'SAQ'
                 };
                 break;
-                case 'submit':
+            case 'submit':
                 params = {
                     'items': products,
                     'sale_quote_status_id': 2,
@@ -358,7 +378,7 @@ export class SaleQuotationCreateComponent implements OnInit {
                     'type': 'SAQ'
                 };
                 break;
-                case 'draft':
+            case 'draft':
                 params = {
                     'items': products,
                     'sale_quote_status_id': 1,
@@ -375,6 +395,8 @@ export class SaleQuotationCreateComponent implements OnInit {
                     setTimeout(() => {
                         this.router.navigate(['/order-management/sale-quotation']);
                     }, 500);
+                } else {
+                    this.toastr.error(res.message);
                 }
             } catch (e) {
                 console.log(e);
@@ -383,6 +405,33 @@ export class SaleQuotationCreateComponent implements OnInit {
             err => {
                 this.toastr.error(err.message);
             });
+    }
+
+    fetchMoreCustomer(data?) {
+        this.data['page']++;
+        if (this.data['page'] > this.data['total_page']) {
+            return;
+        }
+        const params = { page: this.data['page'], length: 15 };
+        if (this.data['searchKey']) {
+            params['company_name'] = this.data['searchKey'];
+        }
+        this.orderService.getAllCustomer(params).subscribe(res => {
+            this.listMaster['customer'] = this.listMaster['customer'].concat(res.data.rows);
+            this.data['total_page'] = res.data.total_page;
+        });
+    }
+
+    searchCustomer(key) {
+        this.data['searchKey'] = key;
+        const params = { page: this.data['page'], length: 15 };
+        if (key) {
+            params['company_name'] = key;
+        }
+        this.orderService.getAllCustomer(params).subscribe(res => {
+            this.listMaster['customer'] = res.data.rows;
+            this.data['total_page'] = res.data.total_page;
+        });
     }
 
 }

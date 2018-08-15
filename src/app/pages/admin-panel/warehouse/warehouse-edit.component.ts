@@ -31,21 +31,21 @@ export class WarehouseEditComponent implements OnInit {
     ) {
         this.generalForm = fb.group({
             name: [null, Validators.required],
-            address_line: [null, Validators.required],
-            city_name: [null, Validators.required],
-            country_code: [null, Validators.required],
-            state_id: [null, Validators.required],
-            zip_code: [null, Validators.required],
-            telephone: [null, Validators.required],
-            mobile_phone: [null, Validators.required],
-            fax: [null, Validators.required]
+            addr: [null, Validators.required],
+            city: [null, Validators.required],
+            ctr: [null, Validators.required],
+            st: [null, Validators.required],
+            zip_cd: [null, Validators.required],
+            ctt_phone: [null, Validators.required],
+            mbl_phone: [null, Validators.required],
+            fax_no: [null, Validators.required]
         });
 
         this.contactForm = fb.group({
-            name: [null],
-            job: [null],
-            emal: [null],
-            phone: [null]
+            ctt_name: [null],
+            job_title: [null],
+            ctt_email: [null],
+            ctt_phone: [null]
         });
     }
 
@@ -63,6 +63,7 @@ export class WarehouseEditComponent implements OnInit {
             .subscribe(res => {
                 try {
                     this.generalForm.patchValue(res.data);
+                    this.contactForm.patchValue(res.data);
                 } catch (e) {}
             });
     }
@@ -111,23 +112,23 @@ export class WarehouseEditComponent implements OnInit {
                 data: JSON.stringify(params)
             };
 
-            this.warehouseService.updateWarehouse(data).subscribe(
-                res => {
-                    console.log(res);
-                    try {
-                        setTimeout(() => {
-                            this.router.navigate(['/warehouse']);
-                        }, 2000);
-                        this.toastr.success(res.message);
-                    } catch (e) {
-                        console.log(e);
-                    }
-                },
-                err => {
-                    console.log(err);
-                    this.toastr.error(err.message);
-                }
-            );
+            // this.warehouseService.updateWarehouse(data).subscribe(
+            //     res => {
+            //         console.log(res);
+            //         try {
+            //             setTimeout(() => {
+            //                 this.router.navigate(['/warehouse']);
+            //             }, 2000);
+            //             this.toastr.success(res.message);
+            //         } catch (e) {
+            //             console.log(e);
+            //         }
+            //     },
+            //     err => {
+            //         console.log(err);
+            //         this.toastr.error(err.message);
+            //     }
+            // );
         }
     }
 }

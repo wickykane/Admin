@@ -10,6 +10,8 @@ import { routerTransition } from '../../../../router.animations';
 import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
 import { OrderService } from '../../order-mgmt.service';
 
+// tslint:disable-next-line:import-blacklist
+import { Subject } from 'rxjs';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { ItemQuoteModalContent } from '../../../../shared/modals/item-quote.modal';
 import { ItemModalContent } from '../../../../shared/modals/item.modal';
@@ -86,7 +88,8 @@ export class SaleOrderEditComponent implements OnInit {
         selected_programs: [],
         discount_percent: 0,
         vat_percent: 0,
-        shipping_cost: 0
+        shipping_cost: 0,
+        vat: 0
     };
 
     public list = {
@@ -98,6 +101,8 @@ export class SaleOrderEditComponent implements OnInit {
     public copy_customer = {};
     public copy_addr = {};
     public list_priority = [];
+
+    public searchKey = new Subject<any>(); // Lazy load filter
 
     /**
      * Init Data
@@ -113,21 +118,21 @@ export class SaleOrderEditComponent implements OnInit {
         public keyService: SaleOrderCreateKeyService,
         private dt: DatePipe) {
         this.generalForm = fb.group({
-            'company_id': [null, Validators.required],
-            'customer_po': [null, Validators.required],
-            'order_number': [null],
-            'type': ['NO', Validators.required],
-            'order_date': [null, Validators.required],
-            'delivery_date': [null],
-            'contact_user_id': [null],
-            'prio_level': [null],
-            'is_multi_shp_addr': [null],
-            'sales_person': [null],
-            'warehouse_id': [1, Validators.required],
-            'payment_method': ['CC'],
-            'billing_id': [null],
-            'shipping_id': [null],
-            'note': [null]
+            'company_id': [null], // buyer_id
+            'customer_po': [null], // cus_po
+            'order_number': [null], // code
+            'type': [null], // type
+            'order_date': [null], // order_date
+            'delivery_date': [null], //
+            'contact_user_id': [null], // contact_user_id
+            'prio_level': [null], // prio_level
+            'is_multi_shp_addr': [null], // is_multi_shp_addr
+            'sales_person': [null], // sale_person_id
+            'warehouse_id': [null], // warehouse_id
+            'payment_method': [null], // payment_method
+            'billing_id': [null], // billing_info[0]['id']
+            'shipping_id': [null], // shipping_id
+            'description': [null] // description
         });
         //  Init Key
         this.keyService.watchContext.next(this);
@@ -136,7 +141,7 @@ export class SaleOrderEditComponent implements OnInit {
     ngOnInit() {
         const user = JSON.parse(localStorage.getItem('currentUser'));
         this.listMaster['multi_ship'] = [{ id: 0, label: 'No' }, { id: 1, label: 'Yes' }];
-        this.orderService.getAllCustomer().subscribe(res => { this.listMaster['customer'] = res.data; });
+
         this.orderService.getOrderReference().subscribe(res => { Object.assign(this.listMaster, res.data); this.changeOrderType(); });
         //  Item
         this.list.items = this.router.getNavigatedData() || [];
@@ -145,14 +150,70 @@ export class SaleOrderEditComponent implements OnInit {
         this.updateTotal();
         this.copy_addr = { ...this.copy_addr, ...this.addr_select };
         this.copy_customer = { ...this.copy_customer, ...this.customer };
-        this.generalForm.controls['is_multi_shp_addr'].patchValue(0);
-        this.generalForm.controls['order_date'].patchValue(currentDt.toISOString().slice(0, 10));
-        this.generalForm.controls['sales_person'].patchValue(user.id);
-        this.orderService.generatePOCode().subscribe(res => { this.generalForm.controls['customer_po'].patchValue(res.data); });
+
+        this.getDetailOrder();
+
+        this.data['page'] = 1;
+        this.searchKey.subscribe(key => {
+            this.data['page'] = 1;
+            this.searchCustomer(key);
+        });
     }
     /**
      * Mater Data
      */
+    getDetailOrder() {
+        this.orderService.getOrderDetail(this.route.snapshot.paramMap.get('id')).subscribe(res => {
+            try {
+                this.list.items = res.data.list.items;
+
+                // Lazy Load filter
+                const params = { page: this.data['page'], length: 15 };
+                this.orderService.getAllCustomer(params).subscribe(result => {
+                    const idList = result.data.rows.map(item => item.id);
+                    this.listMaster['customer'] = result.data.rows;
+                    if (idList.indexOf(res.data.buyer_id) === -1) {
+                        this.listMaster['customer'].push({ id: res.data.buyer_id, company_name: res.data.buyer_info.buyer_name });
+                    }
+                    this.data['total_page'] = result.data.total_page;
+                });
+
+                this.generalForm.patchValue({ 'company_id': res.data.buyer_id });
+                this.generalForm.patchValue({ 'customer_po': res.data.cus_po });
+                this.generalForm.patchValue({ 'order_number': res.data.code });
+                this.generalForm.patchValue({ 'type': res.data.type });
+                this.generalForm.patchValue({ 'order_date': res.data.order_date });
+                this.generalForm.patchValue({ 'contact_user_id': res.data.contact_user_id });
+                this.generalForm.patchValue({ 'prio_level': res.data.prio_level });
+                this.generalForm.patchValue({ 'is_multi_shp_addr': res.data.is_multi_shp_addr });
+                this.generalForm.patchValue({ 'sales_person': res.data.sale_person_id });
+                this.generalForm.patchValue({ 'warehouse_id': res.data.warehouse_id });
+                this.generalForm.patchValue({ 'payment_method': res.data.payment_method });
+                if (res.data.billing_info.length > 0) {
+                    this.generalForm.patchValue({ 'billing_id': res.data.billing_info[0]['id'] });
+                }
+                this.generalForm.patchValue({ 'shipping_id': res.data.shipping_id });
+                this.generalForm.patchValue({ 'description': res.data.description });
+
+
+                this.order_info.total = res.data['total_price'];
+                this.order_info.sub_total = res.data['sub_total_price'];
+                this.order_info.total_discount = res.data['discount'];
+                this.order_info.discount_percent = res.data['discount_percent'];
+                this.order_info.vat_percent = res.data['vat_percent'];
+                this.order_info.shipping_cost = res.data['shipping'];
+                this.order_info.vat = res.data['vat'];
+
+                this.updateTotal();
+                this.changeCustomer();
+
+
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
+
     numberMaskObject(max?) {
         return createNumberMask({
             allowDecimal: true,
@@ -165,6 +226,11 @@ export class SaleOrderEditComponent implements OnInit {
         this.orderService.getDetailCompany(company_id).subscribe(res => {
             try {
                 this.customer = res.data;
+                if (res.data.buyer_type === 'PS') {
+                    this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
+                }
+                this.selectAddress('billing');
+                this.selectAddress('shipping');
             } catch (e) {
                 console.log(e);
             }
@@ -183,10 +249,10 @@ export class SaleOrderEditComponent implements OnInit {
         if (company_id) {
             this.getDetailCustomerById(company_id);
         }
-        this.list.items = [];
-        this.generalForm.controls['note'].patchValue('');
+        // this.list.items = [];
         this.updateTotal();
     }
+
     selectAddress(type) {
         try {
             switch (type) {
@@ -460,7 +526,7 @@ export class SaleOrderEditComponent implements OnInit {
         this.list.items.forEach((item) => {
             products.push({
                 item_id: item.item_id,
-                item_type: item.item_type,
+                item_type: 'single_item',
                 quantity: item.quantity,
                 sale_price: item.sale_price,
                 order_detail_id: item.order_detail_id,
@@ -473,7 +539,7 @@ export class SaleOrderEditComponent implements OnInit {
                 item.products.forEach((subItem, index) => {
                     products.push({
                         item_id: subItem.item_id,
-                        item_type: item.item_type,
+                        item_type: 'single_item',
                         quantity: subItem.quantity,
                         sale_price: subItem.sale_price,
                         discount_percent: subItem.discount || 0,
@@ -506,7 +572,7 @@ export class SaleOrderEditComponent implements OnInit {
                 break;
         }
         params = { ...this.order_info, ...this.generalForm.value, ...params };
-        this.orderService.createOrder(params).subscribe(res => {
+        this.orderService.updateOrder(params, this.route.snapshot.paramMap.get('id')).subscribe(res => {
             try {
                 if (res.status) {
                     this.toastr.success(res.message);
@@ -523,5 +589,31 @@ export class SaleOrderEditComponent implements OnInit {
             });
     }
 
-}
+    fetchMoreCustomer(data?) {
+        this.data['page']++;
+        if (this.data['page'] > this.data['total_page']) {
+            return;
+        }
+        const params = { page: this.data['page'], length: 15 };
+        if (this.data['searchKey']) {
+            params['company_name'] = this.data['searchKey'];
+        }
+        this.orderService.getAllCustomer(params).subscribe(res => {
+            this.listMaster['customer'] = this.listMaster['customer'].concat(res.data.rows);
+            this.data['total_page'] = res.data.total_page;
+        });
+    }
 
+    searchCustomer(key) {
+        this.data['searchKey'] = key;
+        const params = { page: this.data['page'], length: 15 };
+        if (key) {
+            params['company_name'] = key;
+        }
+        this.orderService.getAllCustomer(params).subscribe(res => {
+            this.listMaster['customer'] = res.data.rows;
+            this.data['total_page'] = res.data.total_page;
+        });
+    }
+
+}

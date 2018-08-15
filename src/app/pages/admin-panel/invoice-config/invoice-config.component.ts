@@ -174,7 +174,7 @@ export class InvoiceConfigComponent implements OnInit {
                 'before_due_date':
                 {
                     'enable': this.invoiceForm.value['beforeOn'] ? 1 : 0,
-                    'send_reminder': this.invoiceForm.value['beforeRemind']
+                    'send_reminder': this.invoiceForm.value['beforeRemind'] ? this.invoiceForm.value['beforeRemind'] : 0
                 },
                 'on_due_date':
                 {
@@ -187,14 +187,21 @@ export class InvoiceConfigComponent implements OnInit {
                     'send_reminder_value': this.invoiceForm.value['afterRemindValue']
                 }
             };
-            this.invoiceService.saveInvoiceConfigInfo(params).subscribe(
-                res => {
-                    this.toastr.success('Save successfully!');
-                    this.getInvoiceChaseInfo();
-                },
-                err => {
-                    console.log(err.message);
+            if (params['after_due_date']['send_reminder_key'] === '1' && params['after_due_date']['send_reminder_value'] < 1) {
+                this.toastr.error('The day number to send reminder after due date must be great than 0');
+            } else {
+                this.invoiceService.saveInvoiceConfigInfo(params).subscribe(
+                    res => {
+                        this.toastr.success(res.message);
+                        // this.getInvoiceChaseInfo();
+                        setTimeout(() => {
+                            window.history.back();
+                        }, 500);
+                    },
+                    err => {
+                        console.log(err.message);
                 });
+            }
         } else {
             this.toastr.error('Please select reminder frequency!');
         }

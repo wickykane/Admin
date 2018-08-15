@@ -6,6 +6,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
+import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
 import { InvoiceModalContent } from '../../../shared/modals/invoice.modal';
 import { FinancialService } from '../financial.service';
 import { InvoiceDetailKeyService } from './keys.view.control';
@@ -105,6 +106,37 @@ export class InvoiceDetailComponent implements OnInit {
         }, err => {
             this.toastr.error(err.message);
         });
+    }
+    cancelInvoice() {
+        const selectedInvoiceId = this.invoiceId;
+        const selectedInvoiceStatus = status;
+        if (selectedInvoiceId) {
+            const modalRef = this.modalService.open(ConfirmModalContent);
+            modalRef.componentInstance.message = 'Are you sure you want to cancel this invoice?';
+            modalRef.componentInstance.yesButtonText = 'YES';
+            modalRef.componentInstance.noButtonText = 'NO';
+            modalRef.result.then(result => {
+                if (result) {
+                    const params = {
+                        status_code: 'CC'
+                    };
+                    this.financialService.updateInvoiceStatus(selectedInvoiceId, params).subscribe(res => {
+                        try {
+                            if (res.status) {
+                                this.toastr.success(res.message);
+                                this.getDetailInvoice();
+                            } else {
+                                this.toastr.error(res.message, null, { enableHtml: true });
+                            }
+                        } catch (e) {
+                            console.log(e);
+                        }
+                    }, err => {
+                        this.toastr.error(err.message);
+                    });
+                }
+            }, dismiss => { });
+        }
     }
 
     editInvoice(id?) {

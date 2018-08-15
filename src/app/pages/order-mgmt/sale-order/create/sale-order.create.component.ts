@@ -10,6 +10,8 @@ import { routerTransition } from '../../../../router.animations';
 import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
 import { OrderService } from '../../order-mgmt.service';
 
+// tslint:disable-next-line:import-blacklist
+import { Subject } from 'rxjs';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { ItemQuoteModalContent } from '../../../../shared/modals/item-quote.modal';
 import { ItemModalContent } from '../../../../shared/modals/item.modal';
@@ -71,6 +73,7 @@ export class SaleOrderCreateComponent implements OnInit {
             'zip_code': ''
         },
         contact: {
+            'full_name': '',
             'phone': '',
             'email': ''
         }
@@ -98,6 +101,8 @@ export class SaleOrderCreateComponent implements OnInit {
     public copy_customer = {};
     public copy_addr = {};
     public list_priority = [];
+
+    public searchKey = new Subject<any>(); // Lazy load filter
 
     /**
      * Init Data
@@ -137,8 +142,8 @@ export class SaleOrderCreateComponent implements OnInit {
         const user = JSON.parse(localStorage.getItem('currentUser'));
         this.listMaster['multi_ship'] = [{ id: 0, label: 'No' }, { id: 1, label: 'Yes' }];
         this.listMaster['from_src'] = [{ id: 0, label: 'From Master' }, { id: 1, label: 'From Quote' }, { id: 2, label: 'Manual' }];
-        this.orderService.getAllCustomer().subscribe(res => { this.listMaster['customer'] = res.data; });
         this.orderService.getOrderReference().subscribe(res => { Object.assign(this.listMaster, res.data); this.changeOrderType(); });
+        this.orderService.getPaymentMethod().subscribe(res => this.listMaster['payment_methods'] = res.data );
         //  Item
         this.list.items = this.router.getNavigatedData() || [];
         const currentDt = new Date();
@@ -150,6 +155,18 @@ export class SaleOrderCreateComponent implements OnInit {
         this.generalForm.controls['order_date'].patchValue(currentDt.toISOString().slice(0, 10));
         this.generalForm.controls['sales_person'].patchValue(user.id);
         this.orderService.generatePOCode().subscribe(res => { this.generalForm.controls['customer_po'].patchValue(res.data); });
+
+        // Lazy Load filter
+        this.data['page'] = 1;
+        const params = { page: this.data['page'], length: 15 };
+        this.orderService.getAllCustomer(params).subscribe(res => {
+            this.listMaster['customer'] = res.data.rows;
+            this.data['total_page'] = res.data.total_page;
+        });
+        this.searchKey.subscribe(key => {
+            this.data['page'] = 1;
+            this.searchCustomer(key);
+        });
     }
     /**
      * Mater Data
@@ -166,6 +183,10 @@ export class SaleOrderCreateComponent implements OnInit {
         this.orderService.getDetailCompany(company_id).subscribe(res => {
             try {
                 this.customer = res.data;
+                if (res.data.buyer_type === 'PS') {
+                    this.addr_select.contact = res.data.contact[0];
+                    this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
+                }
             } catch (e) {
                 console.log(e);
             }
@@ -273,7 +294,7 @@ export class SaleOrderCreateComponent implements OnInit {
     }
     changeFromSource(item) {
         item.source_id = 2;
-        item.source = 'Manual';
+        item.source_name = 'Manual';
     }
     changeOrderType() {
         this.list_priority = [];
@@ -331,9 +352,11 @@ export class SaleOrderCreateComponent implements OnInit {
         this.order_info.total = this.order_info.sub_total - this.order_info.total_discount + Number(this.order_info['shipping_cost']) + this.order_info['vat_percent_amount'] - this.promotionList['total_invoice_discount'];
     }
 
-    deleteAction(id) {
+    deleteAction(id, item_condition) {
+        console.log(id);
+        console.log(item_condition);
         this.list.items = this.list.items.filter((item) => {
-            return item.item_id !== id;
+            return (item.item_id + item.item_condition_id) !== (id + item_condition);
         });
         this.updateTotal();
     }
@@ -378,7 +401,7 @@ export class SaleOrderCreateComponent implements OnInit {
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
-                    listAdded.push(item.item_id);
+                    listAdded.push(item.item_id + item.item_condition_id);
                 });
                 res.forEach((item) => {
                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
@@ -387,11 +410,10 @@ export class SaleOrderCreateComponent implements OnInit {
                     item['order_detail_id'] = null;
                     item.totalItem = item.sale_price;
                     item.source_id = 0;
-                    item.source = 'From Master';
+                    item.source_name = 'From Master';
                 });
-
                 this.list.items = this.list.items.concat(res.filter((item) => {
-                    return listAdded.indexOf(item.item_id) < 0;
+                    return listAdded.indexOf(item.item_id + item.item_condition_id) < 0;
                 }));
 
                 this.updateTotal();
@@ -407,19 +429,17 @@ export class SaleOrderCreateComponent implements OnInit {
                 if (res instanceof Array && res.length > 0) {
                     const listAdded = [];
                     (this.list.items).forEach((item) => {
-                        listAdded.push(item.item_id);
+                        listAdded.push(item.item_id + item.item_condition_id);
                     });
                     res.forEach((item) => {
                         if (item.sale_price) { item.sale_price = Number(item.sale_price); }
                         item['products'] = [];
-                        item.quantity = 1;
                         item.totalItem = item.sale_price;
                         item.source_id = 1;
-                        item.source = 'From Quote';
+                        item.source_name = 'From Quote';
                     });
-
                     this.list.items = this.list.items.concat(res.filter((item) => {
-                        return listAdded.indexOf(item.item_id) < 0;
+                        return listAdded.indexOf(item.item_id + item.item_condition_id) < 0;
                     }));
                     this.updateTotal();
                     this.getQtyAvail();
@@ -518,6 +538,8 @@ export class SaleOrderCreateComponent implements OnInit {
                     setTimeout(() => {
                         this.router.navigate(['/order-management/sale-order']);
                     }, 500);
+                } else {
+                    this.toastr.error(res.message);
                 }
             } catch (e) {
                 console.log(e);
@@ -528,5 +550,30 @@ export class SaleOrderCreateComponent implements OnInit {
             });
     }
 
-}
+    fetchMoreCustomer(data?) {
+        this.data['page']++;
+        if (this.data['page'] > this.data['total_page']) {
+            return;
+        }
+        const params = { page: this.data['page'], length: 15 };
+        if (this.data['searchKey']) {
+            params['company_name'] = this.data['searchKey'];
+        }
+        this.orderService.getAllCustomer(params).subscribe(res => {
+            this.listMaster['customer'] = this.listMaster['customer'].concat(res.data.rows);
+            this.data['total_page'] = res.data.total_page;
+        });
+    }
 
+    searchCustomer(key) {
+        this.data['searchKey'] = key;
+        const params = { page: this.data['page'], length: 15 };
+        if (key) {
+            params['company_name'] = key;
+        }
+        this.orderService.getAllCustomer(params).subscribe(res => {
+            this.listMaster['customer'] = res.data.rows;
+            this.data['total_page'] = res.data.total_page;
+        });
+    }
+}

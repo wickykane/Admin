@@ -107,7 +107,10 @@ export class EmailTemplateModalContent implements OnInit {
         });
         this.invoiceService.saveEmailTemplate(this.id, params).subscribe(
             res => {
-                this.toastr.success('Save successfully');
+                this.toastr.success(res.message);
+                setTimeout(() => {
+                    this.activeModal.close();
+                }, 500);
             },
             err => {
                 console.log(err);
@@ -133,14 +136,14 @@ export class EmailTemplateModalContent implements OnInit {
                     });
                     this.invoiceService.sendEmailSample(params).subscribe(
                         _res => {
-                            this.toastr.success('Email has been sent successfully.');
+                            this.toastr.success(_res.message);
                         },
                         err => {
                             console.log(err);
                         }
                     );
                 } else {
-                    this.toastr.warning('Receiver\'s can not be empty.');
+                    this.toastr.warning('Receiver\'s email can not be empty.');
                 }
             },
             dismiss => {
