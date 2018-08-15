@@ -15,7 +15,7 @@
                                         <label for="code" class="control-label" translate>Customer</label>
                                         <span class="text-danger">(*) </span>
                                         <div>
-                                            <ng-select style="width: 150px;" class="custom" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="buyer">
+                                            <ng-select  [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 150px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="company_id">
                                             </ng-select>
                                         </div>
                                     </div>
@@ -184,7 +184,7 @@
                                             <label class='col-5'>Refund Method <span class="text-danger">(*)</span></label>
                                             <div class='col-7 text-primary'>
                                                 <select class="form-control" formControlName="refund_method">
-                                                    <option value="undefined" hidden="true">Select</option>                                                        
+                                                    <option value="undefined" hidden="true">Select</option>
                                                     <option *ngFor="let item of listMaster['refund_method']" [ngValue]="item.id">{{item.name}}</option>
                                                 </select>
                                             </div>
@@ -193,7 +193,7 @@
                                             <label class='col-5'>Payment Terms</label>
                                             <div class='col-7 text-primary'>
                                                 <select class="form-control" formControlName="payment_term">
-                                                    <option value="undefined" hidden="true">Select</option>                                                                                                                
+                                                    <option value="undefined" hidden="true">Select</option>
                                                     <option *ngFor="let item of listMaster['payment_term']" [ngValue]="item.id">{{item.cd}}</option>
                                                 </select>
                                             </div>

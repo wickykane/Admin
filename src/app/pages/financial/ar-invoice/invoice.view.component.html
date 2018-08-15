@@ -15,7 +15,7 @@
                     </button>
                 </li>
                 <li *ngIf="detail['invoice_status_id'] == 1">
-                    <button ngbTooltip="Click to Cancel" data-toggle="tooltip" type="button" class="btn btn-default" (click)="updateInvoiceStatus('CC')">
+                    <button ngbTooltip="Click to Cancel" data-toggle="tooltip" type="button" class="btn btn-default" (click)="cancelInvoice()">
                         <i class="fa fa-ban"></i>Cancel
                     </button>
                 </li>
