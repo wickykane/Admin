@@ -14,9 +14,9 @@ export class CommonService {
         return this.apiService.get(url, params);
     }
 
-    getAllCustomer() {
+    getAllCustomer(params?) {
         const url = 'rma/get-all-customer';
-        return this.apiService.get(url);
+        return this.apiService.get(url, params);
     }
 
     getDetailCustomer(id) {
@@ -28,7 +28,7 @@ export class CommonService {
         const url = 'rma/get-order-by-customer/' + id;
         return this.apiService.get(url);
     }
-    
+
     getMasterData() {
         const url = 'rma/get-master-data';
         return this.apiService.get(url);
