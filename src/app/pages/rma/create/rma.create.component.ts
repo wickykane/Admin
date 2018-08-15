@@ -57,6 +57,7 @@ export class RmaCreateComponent implements OnInit {
         vat_percent_amount: 0,
         shipping_cost: 0
     };
+    
     /**
      * Init Data
      */
