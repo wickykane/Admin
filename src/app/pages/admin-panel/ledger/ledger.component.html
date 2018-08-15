@@ -7,7 +7,7 @@
                 <div class="button-group">
                     <button [disabled]="!data['selectedAccount'] || data['selectedAccount'] && data['selectedAccount'].level !== 0" (click)="actionInvoke(screen.NEW_ACCOUNT_TYPE)" class="btn btn-custom btn-orange">Add Account Type</button>
                     <button class="btn btn-custom btn-green">Sync to QB</button>
-                    <button [disabled]="!data['selectedAccount'] || data['selectedAccount'] && data['selectedAccount'].level !== 1" (click)="actionInvoke(screen.NEW_DETAIL_TYPE)" class="btn btn-custom btn-default">Add Detail Type</button>
+                    <button [disabled]="!data['selectedAccount'] || data['selectedAccount'] && data['selectedAccount'].level !== 1" (click)="actionInvoke(screen.NEW_DETAIL_TYPE)" class="btn btn-custom btn-dark">Add Detail Type</button>
                 </div>
                 <div class="account-tree">
                     <app-account-tree (expandItem)="expand($event)" [expands]="listMaster['expands']" [currentItem]="data['selectedAccount']" [isRoot]="true" [items]="listMaster['account_list']" (selectedItem)="selectItem($event)"></app-account-tree>
