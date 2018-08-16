@@ -6,7 +6,7 @@ const routes: Routes = [
     {
         path: '', component: SignupComponent
     }
-];
+]; 
 
 @NgModule({
     imports: [RouterModule.forChild(routes)],

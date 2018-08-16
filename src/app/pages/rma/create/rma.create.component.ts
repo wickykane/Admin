@@ -104,8 +104,7 @@ export class RmaCreateComponent implements OnInit {
             'restocking_fee_percent': [null],
             'restocking_fee': [null],
             'sub_total': [null],
-            'return_time_name': [null],
-            'company_id': [null]
+            'return_time_name': [null]
 
         });
 
