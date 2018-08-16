@@ -14,11 +14,9 @@
                         <div class="col-md-12">
                             <div class="form-group row">
                                 <div class="col-md-12">
-                                    <label class='col-12'> AccessKey
+                                    <label class='col-12'> Access Key
                                         <span class="text-danger">(*)</span>
-                                        <span class="show-tooltip" ngbTooltip="This name will be shown on the store front site.">
-                                            <i class="fa fa-question-circle"></i>
-                                        </span>
+                                       
                                     </label>
 
                                     <div class="col-sm-12">
@@ -65,22 +63,38 @@
                                 </div>
                             <div class="w-100"></div>
                             <div class="form-group row">
-                                <div class="col-md-3">
-                                    <label class='col-12'>
-                                        Warehouse
-                                        <span class="text-danger">(*)</span>
-                                        <span class="show-tooltip" ngbTooltip="Payment Method Type.">
-                                            <i class="fa fa-question-circle"></i>
-                                        </span>
-                                    </label>
-
-                                    <div class="col-sm-12">
-                                        <select class="form-control" formControlName="charge_shipping" id="charge_shipping">
-                                            <option *ngFor="let item of wareHouseList" [value]='item.id'>{{item.name}}</option>
-                                        </select>
-                                    </div>
-                                </div>
+                                <label class='col-12 col-form-label' >
+                                    <input type="checkbox"  name="" > Use nenegotiated rates
+                                </label>
                             </div>
+                            <div class="w-100"></div>
+
+                            <div class="form-group row">
+                                    <div class="col-md-6">
+                                        <label class='col-12'> The Shipper UPS's account number
+                                            <span class="text-danger">(*)</span>
+                                        </label>
+    
+                                        <div class="col-sm-12">
+                                            <input type="text" formControlName="name" id="name" class="form-control">
+                                        </div>
+                                        <span style="color: red" *ngIf="generalForm.controls.name.errors?.required">
+                                            (!) This field cannot be blank.
+                                        </span>
+                                    </div>
+                                    <div class="col-md-6">
+                                            <label class='col-12'> UPS Customer Classfication
+                                                <span class="text-danger">(*)</span>
+                                            </label>
+        
+                                            <div class="col-sm-12">
+                                                <input type="password" formControlName="name" id="name" class="form-control">
+                                            </div>
+                                            <span style="color: red" *ngIf="generalForm.controls.name.errors?.required">
+                                                (!) This field cannot be blank.
+                                            </span>
+                                        </div>
+                                </div>
                         </div>
                     </div>
                 </form>

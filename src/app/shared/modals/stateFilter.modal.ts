@@ -24,7 +24,7 @@ export class StateFilterModalComponent implements OnInit {
     generalForm: FormGroup;
 
     public tempStateList =[];
-
+    public selectAll = false;
     hotkeyCtrlLeft: Hotkey | Hotkey[];
     hotkeyCtrlRight: Hotkey | Hotkey[];
     public stateNameFilter = '';
@@ -83,11 +83,21 @@ export class StateFilterModalComponent implements OnInit {
         return arr.filter(isSearch);
       }
       unSelectState(){
-        this.stateList.forEach(item => {
-            return item.selected = false;
-        });
-      }
+          console.log(this.selectAll);
+            this.stateList.forEach(item => {
+                return item.selected = false;
+            });
+          
 
+      }
+      selectState(){
+        console.log(this.selectAll);
+          this.stateList.forEach(item => {
+              return item.selected = this.selectAll?false:true;
+          });
+        
+
+    }
 
 
 
@@ -106,6 +116,9 @@ export class StateFilterModalComponent implements OnInit {
     }
     SelectedState(item){
         console.log(item);
+    }
+    save(){
+        this.activeModal.close(this.stateList);
     }
 
 }

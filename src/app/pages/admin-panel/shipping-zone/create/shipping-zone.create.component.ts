@@ -179,7 +179,15 @@ public pickupList = {
 
         modalRef.componentInstance.isEdit = false;
         modalRef.componentInstance.stateList = this.listMasterData['state'][code];
+        modalRef.componentInstance.code= code;
         modalRef.result.then(res => {
+            if(res['code']){
+                this.listSelectCountry.forEach(item=>{
+                    if(item.country_code == res.code){
+                        item['state']=res.state;
+                    }
+                })
+            }
 
 
         });
