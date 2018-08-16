@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
 import { TableService } from '../../../../services/table.service';
-import { PurchaseService } from '../../../purchase-mgmt/purchase.service';
+import { ShippingZoneService } from '../shipping-zone.service';
 import { RMAKeyService } from './keys.control';
 import { CommonService } from './../../../../services/common.service';
 import { ItemsControl } from '../../../../../../node_modules/@ngu/carousel/src/ngu-carousel/ngu-carousel.interface';
@@ -39,7 +39,7 @@ export class ShippingZoneComponent implements OnInit {
         public toastr: ToastrService,
         private vRef: ViewContainerRef,
         public tableService: TableService,
-        private purchaseService: PurchaseService,
+        private shippingZoneService: ShippingZoneService,
         public keyService: RMAKeyService,
         private commonService: CommonService
     ) {
@@ -91,7 +91,7 @@ export class ShippingZoneComponent implements OnInit {
         const params = { ...this.tableService.getParams(), ...this.searchForm.value };
         Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
         console.log(params);
-        this.purchaseService.getListPurchaseOrder(params).subscribe(res => {
+        this.shippingZoneService.getList(params).subscribe(res => {
             try {
                 this.list.items = res.data.rows;
                 this.list.items.forEach(item => {

@@ -58,4 +58,8 @@ export class ShippingZoneService {
     const url = ['shipping-zone/master-data'].join('/');
     return this.API.get(url);
   }
+  getList(params) {
+    const url = ['shipping-zone/list'].join('/');
+    return this.API.get(url);
+  }
 }

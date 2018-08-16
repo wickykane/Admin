@@ -20,8 +20,8 @@ export class FreeShippingOptionsModalComponent implements OnInit, OnDestroy {
 
     generalForm: FormGroup;
     @Input() condition;
-
-
+    @Input() id;
+    @Input() shippingList;
     hotkeyCtrlLeft: Hotkey | Hotkey[];
     hotkeyCtrlRight: Hotkey | Hotkey[];
 
@@ -39,7 +39,9 @@ export class FreeShippingOptionsModalComponent implements OnInit, OnDestroy {
             'free_shipping_item': [0],
             'limit_order_over': [0],
             'condition': [''],
-            'limit_total_weight':[0]
+            'limit_total_weight':[0],
+            'id':[1],
+            'price':[]
         });
 
 
@@ -47,6 +49,9 @@ export class FreeShippingOptionsModalComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        if(this.shippingList){
+            this.generalForm.patchValue(this.shippingList);
+        }
     }
 
     ngOnDestroy() {
@@ -66,6 +71,10 @@ export class FreeShippingOptionsModalComponent implements OnInit, OnDestroy {
     }
     applyData(){
         console.log(this.generalForm.value);
+        this.itemService.checkCondition(this.generalForm.value).subscribe(res => {
+            console.log(res);
+            this.activeModal.close({id:'1',data:this.generalForm.value});
+        });
     }
 
 

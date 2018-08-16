@@ -13,18 +13,19 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonService } from '../../services/common.service';
 
 @Component({
-    selector: 'app-flat-rate-options-modal',
-    templateUrl: './flat-rate-options.modal.html'
+    selector: 'app-custom-rate-options-modal',
+    templateUrl: './custom-rate-options.modal.html'
 })
-export class FlatRateOptionsModalComponent implements OnInit, OnDestroy {
+export class CustomRateOptionsModalComponent implements OnInit, OnDestroy {
 
     generalForm: FormGroup;
     @Input() typeList;
     @Input() typeFreeList;
-    @Input() flatRateList;
+    @Input() customRateList;
     hotkeyCtrlLeft: Hotkey | Hotkey[];
     hotkeyCtrlRight: Hotkey | Hotkey[];
-    handlingFeeTooltipText=''; 
+    ranges: any = [];
+    isSave =false;
     constructor(public fb: FormBuilder,
         public router: Router,
         public toastr: ToastrService,
@@ -36,12 +37,14 @@ export class FlatRateOptionsModalComponent implements OnInit, OnDestroy {
         public activeModal: NgbActiveModal) {
 
         this.generalForm = fb.group({
-            "name": ['',Validators.required],
+            "name": ['', Validators.required],
             "type": [''],
             "shipping_fee": [''],
             "fee_type": [''],
             "handling_fee": [''],
-            "id": "2"
+            "id": "3",
+            "charge_shipping": "",
+            // 'ranges':[this.fb.array([])]
         });
 
 
@@ -49,8 +52,9 @@ export class FlatRateOptionsModalComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        if(this.flatRateList){
-            this.generalForm.patchValue(this.flatRateList);
+        if (this.customRateList) {
+            this.generalForm.patchValue(this.customRateList);
+            this.ranges = this.customRateList.ranges;
         }
     }
 
@@ -70,26 +74,44 @@ export class FlatRateOptionsModalComponent implements OnInit, OnDestroy {
         this.activeModal.close(data);
     }
     applyData() {
-        // console.log(this.generalForm);
-        this.itemService.checkCondition(this.generalForm.value).subscribe(res => {
+        console.log(this.generalForm.value);
+        this.checkRanges();
+        console.log(this.isSave);
+        if(this.isSave==true){
+        var params = Object.assign({},this.generalForm.value);
+        params['ranges']=this.ranges;
+        this.itemService.checkCondition(params).subscribe(res => {
             console.log(res);
-            this.activeModal.close({ id: '2', data: this.generalForm.value });
+            this.activeModal.close({ id: '3', data: params });
         });
-    }
-    checkTooltip(id){
-        console.log(id);
-        console.log(this.generalForm.value.fee_Type);
-                // if(this.generalForm.value.fee_Type){
-            
-        // }
-        if(id==1){
-            this.handlingFeeTooltipText = "A flat handling fee of $x will be charged in the order";
         }
         else{
-            this.handlingFeeTooltipText = "Percentage of the total shipping fee of the order.";
+            return;
         }
 
     }
+    addNewRange() {
+        this.ranges.push({ 'lbs_from': '0', 'lbs_to': '0', 'shipping_fee': '0' });
+    }
+    removeRangeItem(index) {
+        this.ranges.splice(index, 1);
+    }
+    checkRanges() {
+        //    return this.ranges.forEach(item => {
+        //         if(item.lbs_to>item.lbs_from){
+        //             break;
+        //         }
+        //     });
+        for (var i = 0; i < this.ranges.length; i++) {
+            if (this.ranges[i].lbs_to < this.ranges[i].lbs_from) {
+                this.isSave =false;
+                break;
+                
+            }
+            else{
+                this.isSave =true;
+            }
 
-
+        }
+    }
 }

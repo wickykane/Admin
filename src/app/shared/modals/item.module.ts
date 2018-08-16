@@ -16,6 +16,10 @@ import { SiteModalComponent } from './site.modal';
 import { StateFilterModalComponent } from './stateFilter.modal';
 import { FreeShippingOptionsModalComponent } from './free-shipping-options.modal';
 import { FlatRateOptionsModalComponent } from './flat-rate-options.modal';
+import { CustomRateOptionsModalComponent } from './custom-rate-options.modal';
+import { PickupOptionsModalComponent} from './pickup-options.modal';
+import { UPSConfigurationModalComponent} from './ups-configuration.modal';
+
 import { InvoiceModalContent } from './invoice.modal';
 import { OrderHistoryModalContent } from './order-history.modal';
 import { OrderSaleQuoteModalContent } from './order-salequote.modal';
@@ -30,15 +34,15 @@ import { OrderSaleQuoteModalContent } from './order-salequote.modal';
     ],
     declarations: [ItemModalContent, AddressModalContent, ConfirmModalContent,
          PromotionModalContent, SiteModalComponent,StateFilterModalComponent,FreeShippingOptionsModalComponent,FlatRateOptionsModalComponent, OrderSaleQuoteModalContent,
-         ItemQuoteModalContent,
-          InvoiceModalContent, OrderHistoryModalContent],
+         ItemQuoteModalContent,CustomRateOptionsModalComponent,PickupOptionsModalComponent,
+          InvoiceModalContent, OrderHistoryModalContent,UPSConfigurationModalComponent],
     providers: [TableService, ItemService],
     exports: [ItemModalContent, AddressModalContent, ConfirmModalContent, ItemQuoteModalContent,
          PromotionModalContent, SiteModalComponent,StateFilterModalComponent,FreeShippingOptionsModalComponent,FlatRateOptionsModalComponent, OrderSaleQuoteModalContent,
-          InvoiceModalContent, OrderHistoryModalContent],
+          InvoiceModalContent,CustomRateOptionsModalComponent, OrderHistoryModalContent,PickupOptionsModalComponent,UPSConfigurationModalComponent],
     entryComponents: [ItemModalContent, AddressModalContent, ItemQuoteModalContent,
          ConfirmModalContent, PromotionModalContent, SiteModalComponent,StateFilterModalComponent,FreeShippingOptionsModalComponent,FlatRateOptionsModalComponent,
-          OrderSaleQuoteModalContent, InvoiceModalContent, OrderHistoryModalContent]
+          OrderSaleQuoteModalContent, InvoiceModalContent, OrderHistoryModalContent,CustomRateOptionsModalComponent,PickupOptionsModalComponent,UPSConfigurationModalComponent]
 
 })
 export class ItemModalModule { }
