@@ -1,0 +1,154 @@
+<div [@routerTransition]>
+    <app-page-header [heading]="'CREATE NEW SHIPPING ZONE'"></app-page-header>
+    <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
+
+    <section class="rma-page block main-container block-order">
+        <div class="row">
+            <div class="col-md-12 mg-top-15">
+                <div class="block-border">
+                    <h5 class="title-border" translate>GENERAL INFORMATION</h5>
+                    <div class="row informaion">
+                        <div class="col-md-12">
+                            <form [formGroup]="generalForm" class="form-search full-width form-inline">
+                                <div class="col-md-4">
+                                    <div class="form-group row">
+                                        <label for="code" class="control-label col-5" translate>Zone No
+                                            <span class="text-danger">(*) </span>
+                                        </label>
+
+                                        <div class="col-7">
+                                            ZONE-00001
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group row">
+                                        <label for="code" class="control-label col-5" translate>Zone Name
+                                            <span class="text-danger">(*) </span>
+                                        </label>
+
+                                        <div class="col-7">
+                                            <input type="text" class="form-control" maxlength="200" style="width: 100%">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group row">
+                                        <label for="code" class="control-label col-5" translate>Status
+                                            <span class="text-danger">(*) </span>
+                                        </label>
+
+                                        <div class="col-7">
+                                            <ng-select class="custom" autocomplete="off" [multiple]="false">
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 mg-top-15">
+                <div class="block-border full-block">
+                    <h5 class="title-border" translate>SHIPPING COUNTRIES & REGIONS</h5>
+                    <div class="row">
+                        <div class="col-md-5 table-custom">
+                            <div class="header">
+                                <div class="col-12 title">
+                                    <div class="form-group row">
+                                        <label class="control-label col-5" for="shipping_to" translate> Filter
+                                        </label>
+                                        <div class="col-7">
+                                            <form [formGroup]="generalForm">
+                                                <input type="text" class="form-control" style="width: 100%" placeholder="Start searching for a country" (ngModelChange)="filterCountry($event)"
+                                                    [ngModel]="countryFilter" [ngModelOptions]="{standalone: true}">
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-11 body" style="height: 200px;overflow: scroll;">
+                                    <div class="form-group row" *ngFor="let country of listCountry;let i = index">
+                                        <label class='col-5'>
+                                            <input type="checkbox" [(ngModel)]="country.selected" (change)="selectCountry($event.target.checked,country)"> {{country.name}}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1 center-line"></div>
+                        <div class="col-md-5 table-custom">
+                            <div class="header">
+                                <div class="col-12 title" *ngFor="let item of listSelectCountry">
+                                    <div class="form-group row">
+                                        <label class="control-label col-5" for="shipping_to" translate>
+                                            <span class="text-danger"></span> {{item.name}}
+
+                                        </label>
+                                        <div class="col-7" style="text-align: right">
+                                            <label>0 of {{listMasterData['state'][item.country_code].length}} States</label>
+                                            <a class="btn btn-default " title="Edit" (click)="openState(item.country_code)">
+                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 mg-top-15">
+                <div class="block-border full-block">
+                    <h5 class="title-border" translate>SETUP SHIPPING QUOTES</h5>
+                    <div class="col-md-12" *ngFor="let item of listShipping">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="title-border" translate style="margin-top: 10px">{{item.name}}</h6>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 table-custom1">
+                                <div class="header">
+                                    <div class="col-12 title" *ngFor="let subItem of item.data">
+                                        <div class="form-group row">
+                                            <label class="control-label col-4 text-danger" for="shipping_to" translate>{{subItem.name}}
+
+                                            </label>
+                                            <label class="control-label col-5" for="shipping_to" translate>{{subItem.des}}
+
+                                            </label>
+                                            <div class="col-2">
+                                                <div class="switcher">
+                                                    <label class="switch">
+                                                        <input type="checkbox">
+                                                        <span class="slider round"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-1">
+                                                <button type="button" class="btn btn-primary" (click)="openShippingModal(subItem.id)">
+                                                    Edit
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 mg-top-15 text-center">
+                <button type="button" class="btn btn-primary" [disabled]="generalForm.invalid" (click)="createRMA()" translate>Create</button>
+                <button type="button" class="btn btn-default" [routerLink]="['/admin-panel/shipping-zone']" translate>Cancel</button>
+            </div>
+        </div>
+    </section>
+</div>

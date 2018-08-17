@@ -13,7 +13,8 @@ import { ItemModalContent } from './item.modal';
 
 import { PromotionModalContent } from './promotion.modal';
 import { SiteModalComponent } from './site.modal';
-
+import { StateFilterModalComponent } from './stateFilter.modal';
+import { FreeShippingOptionsModalComponent } from './free-shipping-options.modal';
 import { InvoiceModalContent } from './invoice.modal';
 import { OrderHistoryModalContent } from './order-history.modal';
 import { OrderSaleQuoteModalContent } from './order-salequote.modal';
@@ -27,15 +28,15 @@ import { OrderSaleQuoteModalContent } from './order-salequote.modal';
         CommonShareModule
     ],
     declarations: [ItemModalContent, AddressModalContent, ConfirmModalContent,
-         PromotionModalContent, SiteModalComponent, OrderSaleQuoteModalContent,
+         PromotionModalContent, SiteModalComponent,StateFilterModalComponent,FreeShippingOptionsModalComponent, OrderSaleQuoteModalContent,
          ItemQuoteModalContent,
           InvoiceModalContent, OrderHistoryModalContent],
     providers: [TableService, ItemService],
     exports: [ItemModalContent, AddressModalContent, ConfirmModalContent, ItemQuoteModalContent,
-         PromotionModalContent, SiteModalComponent, OrderSaleQuoteModalContent,
+         PromotionModalContent, SiteModalComponent,StateFilterModalComponent,FreeShippingOptionsModalComponent, OrderSaleQuoteModalContent,
           InvoiceModalContent, OrderHistoryModalContent],
     entryComponents: [ItemModalContent, AddressModalContent, ItemQuoteModalContent,
-         ConfirmModalContent, PromotionModalContent, SiteModalComponent,
+         ConfirmModalContent, PromotionModalContent, SiteModalComponent,StateFilterModalComponent,FreeShippingOptionsModalComponent,
           OrderSaleQuoteModalContent, InvoiceModalContent, OrderHistoryModalContent]
 
 })
