@@ -41,7 +41,9 @@ export class FreeShippingOptionsModalComponent implements OnInit, OnDestroy {
             'condition': [''],
             'limit_total_weight':[0],
             'id':[1],
-            'price':[]
+            'price':[],
+            'lbs_from':[],
+            'lbs_to1':[null]
         });
 
 
@@ -77,5 +79,12 @@ export class FreeShippingOptionsModalComponent implements OnInit, OnDestroy {
         });
     }
 
-
+    checkCondition(){
+        if(this.generalForm.value.condition!=''){
+            this.generalForm.patchValue({'limit_total_weight':true})
+        }
+    }
+    upToValue(){
+        this.generalForm.patchValue({'lbs_to1':''});
+    }
 }

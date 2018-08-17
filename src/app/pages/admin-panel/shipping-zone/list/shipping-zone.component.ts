@@ -45,16 +45,9 @@ export class ShippingZoneComponent implements OnInit {
     ) {
 
         this.searchForm = fb.group({
-            'rma_no': [null],
-            'so_no': [null],
-            'customer': [null],
-            'rma_type': [''],
-            'status': [''],
-            'request_date_from': [null],
-            'request_date_to': [null],
-            'reception_date_from': [null],
-            'reception_date_to': [null],
-            'comment': []
+            'zone_name': [null],
+            'country_code':[null],
+            'status':['']
         });
 
         // Assign get list function name, override letiable here
@@ -94,9 +87,6 @@ export class ShippingZoneComponent implements OnInit {
         this.shippingZoneService.getList(params).subscribe(res => {
             try {
                 this.list.items = res.data.rows;
-                this.list.items.forEach(item => {
-                    return item.collapseRows = false;
-                });
                 console.log(this.list.items);
                 this.tableService.matchPagingOption(res.data);
             } catch (e) {

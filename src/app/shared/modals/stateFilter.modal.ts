@@ -18,6 +18,7 @@ import { CommonService } from '../../services/common.service';
 })
 export class StateFilterModalComponent implements OnInit {
     @Input() stateList;
+    @Input() code;
     /**
      * Variable Declaration
      */
@@ -118,7 +119,7 @@ export class StateFilterModalComponent implements OnInit {
         console.log(item);
     }
     save(){
-        this.activeModal.close(this.stateList);
+        this.activeModal.close({'code':this.code,'state':this.stateList});
     }
 
 }

@@ -28,7 +28,7 @@
                                         </label>
 
                                         <div class="col-7">
-                                            <input type="text" class="form-control" maxlength="200" style="width: 100%">
+                                            <input type="text" class="form-control" formControlName="name" maxlength="200" style="width: 100%">
                                         </div>
                                     </div>
                                 </div>
@@ -39,8 +39,11 @@
                                         </label>
 
                                         <div class="col-7">
-                                            <ng-select class="custom" autocomplete="off" [multiple]="false">
-                                            </ng-select>
+                                            <!-- <ng-select class="custom" formControlName="status" [items]="listStatus" bindLabel="name" bindValue="id" autocomplete="off" [multiple]="false">
+                                            </ng-select> -->
+                                            <select formControlName="status" class="form-group">
+                                                <option *ngFor="let item of listStatus" [value]='item.id'>{{item.name}}</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -88,7 +91,7 @@
 
                                         </label>
                                         <div class="col-7" style="text-align: right">
-                                            <label>0 of {{listMasterData['state'][item.country_code].length}} States</label>
+                                            <label>0 of <span *ngIf="listMasterData['state'][item.country_code]">{{listMasterData['state'][item.country_code].length}} States</span><span *ngIf="listMasterData['state'][item.country_code] == undefined">0 States</span></label>
                                             <a class="btn btn-default " title="Edit" (click)="openState(item.country_code)">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
@@ -114,7 +117,7 @@
                         <div class="row">
                             <div class="col-md-12 table-custom1">
                                 <div class="header">
-                                    <div class="col-12 title" *ngFor="let subItem of item.data">
+                                    <div class="col-12 title" *ngFor="let subItem of item.data;trackBy: trackByFn;let i2 =index">
                                         <div class="form-group row">
                                             <label class="control-label col-4 text-danger" for="shipping_to" translate>{{subItem.name}}
 
@@ -125,13 +128,13 @@
                                             <div class="col-2">
                                                 <div class="switcher">
                                                     <label class="switch">
-                                                        <input type="checkbox">
+                                                        <input type="checkbox" [(ngModel)]="subItem.checked"  checked="{{subItem.checked ? true:null}}" value="{{subItem.checked}}" [ngModelOptions]="{standalone: true}" (ngModelChange)="checkValidate(item.data,subItem)">
                                                         <span class="slider round"></span>
                                                     </label>
                                                 </div>
                                             </div>
                                             <div class="col-1">
-                                                <button type="button" class="btn btn-primary" (click)="openShippingModal(subItem.id)">
+                                                <button type="button" [disabled]="subItem.checked == false" class="btn btn-primary" (click)="openShippingModal(subItem.id)">
                                                     Edit
                                                 </button>
                                             </div>
@@ -146,7 +149,7 @@
         </div>
         <div class="row">
             <div class="col-md-12 mg-top-15 text-center">
-                <button type="button" class="btn btn-primary" [disabled]="generalForm.invalid" (click)="createRMA()" translate>Create</button>
+                <button type="button" class="btn btn-primary" [disabled]="generalForm.invalid" (click)="save()" translate>Create</button>
                 <button type="button" class="btn btn-default" [routerLink]="['/admin-panel/shipping-zone']" translate>Cancel</button>
             </div>
         </div>

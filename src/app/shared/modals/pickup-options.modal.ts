@@ -39,12 +39,9 @@ export class PickupOptionsModalComponent implements OnInit, OnDestroy {
 
         this.generalForm = fb.group({
             "name": ['', Validators.required],
-            "type": [''],
-            "shipping_fee": [''],
-            "fee_type": [''],
+            "pickup": [''],
             "handling_fee": [''],
             "id": "4",
-            "charge_shipping": "",
             // 'ranges':[this.fb.array([])]
         });
 
@@ -56,10 +53,17 @@ export class PickupOptionsModalComponent implements OnInit, OnDestroy {
         if (this.pickupList) {
             this.generalForm.patchValue(this.pickupList);
             this.ranges = this.pickupList.ranges;
+            if(this.pickupList['bussiness_hours']){
+                this.weekDaysList = this.pickupList['bussiness_hours'];
+            }
+            else{
+                this.weekDaysList.forEach(item=>{
+                    item['data']=[{from:'',to:''}];
+                    item['selected']= false;
+                })
+            }
         }
-        this.weekDaysList.forEach(item=>{
-            item['data']=[{from:'',to:''}];
-        })
+
     }
 
     ngOnDestroy() {
@@ -83,41 +87,23 @@ export class PickupOptionsModalComponent implements OnInit, OnDestroy {
     applyData() {
         console.log(this.generalForm.value);
         console.log(this.weekDaysList);
-        // this.checkRanges();
-        // console.log(this.isSave);
-        // if(this.isSave==true){
-        // var params = Object.assign({},this.generalForm.value);
-        // params['ranges']=this.ranges;
-        // this.itemService.checkCondition(params).subscribe(res => {
-        //     console.log(res);
-        //     this.activeModal.close({ id: '3', data: params });
-        // });
-        // }
-        // else{
-        //     return;
-        // }
-
-    }
+        var params = Object.assign({},this.generalForm.value);
+        var weekDaysList1 = this.weekDaysList.slice(0);
+        console.log(weekDaysList1);
+        weekDaysList1.forEach((item,index,object)=>{
+            console.log(item);
+            if(item.selected == false){
+                object.splice(index,1);
+            }
+        });
+        params['bussiness_hours']=weekDaysList1;
+        this.itemService.checkCondition(params).subscribe(res => {
+            console.log(res);
+            this.activeModal.close({ id: '4', data: params });
+        });
+        }
 
     removeHoursItem(index,item) {
         item.splice(index, 1);
-    }
-    checkRanges() {
-        //    return this.ranges.forEach(item => {
-        //         if(item.lbs_to>item.lbs_from){
-        //             break;
-        //         }
-        //     });
-        for (var i = 0; i < this.ranges.length; i++) {
-            if (this.ranges[i].lbs_to < this.ranges[i].lbs_from) {
-                this.isSave =false;
-                break;
-                
-            }
-            else{
-                this.isSave =true;
-            }
-
-        }
     }
 }
