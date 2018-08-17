@@ -1,0 +1,41 @@
+<div class="modal-header">
+    <span class="modal-title">List State</span>
+    <button type="button" class="close" aria-label="Close" (click)="closeX()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body form-style">
+    <div class="form-group">
+        <input type="text" class="form-control input-filter" (ngModelChange)="filterState($event)" [ngModel]="stateNameFilter"
+            placeholder="Start searching for a country" [ngModelOptions]="{standalone: true}" />
+    </div>
+    <div style="overflow-y: scroll;height: 50vh">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="column-checkbox">
+                        <input (ngModelChange)="CheckAllWareHouse($event,'allWarehouses','selectedAddedWareHouse')" [ngModel]="selectedAddedWareHouse"
+                            [ngModelOptions]="{standalone: true}" id='ck-first' type="checkbox" /> All States
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of stateList">
+                    <td>
+                        <input  [(ngModel)]="item.selected" value="{{item}}"
+                            [ngModelOptions]="{standalone: true}" type="checkbox">
+                    </td>
+                    <td class="whs-code col-md-4">{{item.name}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <span *ngIf="stateList.length==0">No Results Found.</span>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary  pull-right" data-dismiss="modal" (click)="addWarehousesToUser()">
+        <i class="icon-plus"></i>Add
+    </button>
+    <button type="button" class="btn btn-default  pull-right" data-dismiss="modal" (click)="closeX()">
+        <i class="icon-close"></i>Close
+    </button>
+</div>
