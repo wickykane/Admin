@@ -39,31 +39,31 @@
                            <div class="form-group row">
                               <label class='col-4 control-label'>Address</label>
                               <div class='col-8'>
-                                 {{customer.primary[0].address_line}} asdfasdfa d asdfasdfsd
+                                 {{customer.primary[0].address_line}}
                               </div>
                            </div>
                            <div class="form-group row">
                               <label class='col-4 control-label'>City</label>
                               <div class='col-8'>
-                                 {{customer.primary[0].city_name}} adsfasdfa sdfasdf
+                                 {{customer.primary[0].city_name}}
                               </div>
                            </div>
                            <div class="form-group row">
                               <label class='col-4 control-label'>State</label>
                               <div class='col-8'>
-                                 {{customer.primary[0].state_name}} adsf asdfadfasdfdas
+                                 {{customer.primary[0].state_name}}
                               </div>
                            </div>
                            <div class="form-group row">
                               <label class='col-4 control-label'>Zip</label>
                               <div class='col-8'>
-                                 {{customer.primary[0].zip_code}} asdf asdasfdfdas
+                                 {{customer.primary[0].zip_code}}
                               </div>
                            </div>
                            <div class="form-group row">
                               <label class='col-4 control-label'>Country</label>
                               <div class='col-8'>
-                                 {{customer.primary[0].country_name}} asdfasddfds
+                                 {{customer.primary[0].country_name}}
                               </div>
                            </div>
                         </div>
@@ -82,13 +82,13 @@
                            <div class="form-group row" *ngIf="customer.buyer_type =='CP'">
                               <label class='col-6'>Phone</label>
                               <div class='col-6 '>
-                                 {{addr_select.contact.phone}} adsfasdf
+                                 {{addr_select.contact.phone}}
                               </div>
                            </div>
                            <div class="form-group row" *ngIf="customer.buyer_type =='CP'">
                               <label class='col-6'>Email</label>
                               <div class='col-6 '>
-                                 {{addr_select.contact.email}} asdfasdf
+                                 {{addr_select.contact.email}}
                               </div>
                            </div>
                            <div class="form-group row" *ngIf="customer.buyer_type !='CP'">
@@ -100,13 +100,13 @@
                            <div class="form-group row" *ngIf="customer.buyer_type !='CP'">
                               <label class='col-6'>Phone</label>
                               <div class='col-6'>
-                                 {{addr_select.contact.phone}} asdfadsf
+                                 {{addr_select.contact.phone}}
                               </div>
                            </div>
                            <div class="form-group row" *ngIf="customer.buyer_type !='CP'">
                               <label class='col-6'>Email</label>
                               <div class='col-6'>
-                                 {{addr_select.contact.email}} adsfasdf
+                                 {{addr_select.contact.email}}
                               </div>
                            </div>
                            <div class="form-group row">
@@ -446,10 +446,10 @@
                         <th translate style="width:100px">Price Source</th>
                      </tr>
                   </thead>
-                  <!-- <tr *ngIf="list['items'].length === 0">
+                  <tr *ngIf="list['items'].length === 0">
                      <td colspan="100%" class="text-center" translate>No data.</td>
-                     </tr> -->
-                  <tbody *ngFor="let item of [{},{}]; let $index = index;">
+                     </tr>
+                  <tbody *ngFor="let item of list['items']; let $index = index;">
                      <tr>
                         <td>
                            <button class="btn btn-danger btn-xs" type="button" (click)="deleteAction(item.item_id, item.item_condition_id)">
@@ -552,37 +552,37 @@
                      <div class="form-group row">
                         <label class='col-7 control-label'>Total Items</label>
                         <div class='col-5'>
-                           <span class="text-success">30</span>
+                           <span class="text-success"></span>
                         </div>
                      </div>
                      <div class="form-group row">
                         <label class='col-7 control-label'>Total COGS</label>
                         <div class='col-5'>
-                           <span class="text-success">30 lbs</span>
+                           <span class="text-success"></span>
                         </div>
                      </div>
                      <div class="form-group row">
                         <label class='col-7 control-label'>Total Weight</label>
                         <div class='col-5'>
-                           <span class="text-success">30$</span>
+                           <span class="text-success"></span>
                         </div>
                      </div>
                      <div class="form-group row">
                         <label class='col-7 control-label'>Total Volume</label>
                         <div class='col-5'>
-                           <span class="text-success">30$</span>
+                           <span class="text-success"></span>
                         </div>
                      </div>
                      <div class="form-group row">
                         <label class='col-7 control-label'>Original Shipping Cost</label>
                         <div class='col-5'>
-                           <span class="text-success">30.000CBM</span>
+                           <span class="text-success"></span>
                         </div>
                      </div>
                      <div class="form-group row">
                         <label class='col-7 control-label'>Origin. Handle Fee</label>
                         <div class='col-5'>
-                           <span class="text-success">30$</span>
+                           <span class="text-success"></span>
                         </div>
                      </div>
                   </div>
@@ -603,7 +603,7 @@
                         <strong class="text-warning">Sub Total</strong>
                         </label>
                         <div class='col-6 offset-md-1 padding-lr-10'>
-                           <strong>{{order_info.sub_total | currency}}$20000</strong>
+                           <strong>{{order_info.sub_total | currency}}</strong>
                         </div>
                      </div>
                      <div class="form-group row">
@@ -629,7 +629,7 @@
                         <strong>Grand Total:</strong>
                         </label>
                         <div class="col-6 offset-md-1 padding-lr-5">
-                           <strong>{{order_info.total | currency}} $3000000</strong>
+                           <strong>{{order_info.total | currency}}</strong>
                         </div>
                      </div>
                   </div>
