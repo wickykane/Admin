@@ -3,7 +3,7 @@
 <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
 <section class="rma-page block main-container block-order">
    <div class="row">
-      <div class="col-md-7 l-5">
+      <div class="col-md-7 paddingleft-5">
          <div class="card height-100">
             <div class="card-header">
                <strong>Information</strong>
@@ -12,7 +12,7 @@
                <div class="row information  height-100">
                   <div class="col-md-12">
                      <form [formGroup]="generalForm" class="form-search full-width form-inline border-bottom">
-                        <div class="col-md-4 lr-5">
+                        <div class="col-md-4 padding-lr-5">
                            <div class="form-group">
                               <label for="code" class="control-label" translate> <strong>Customer Name</strong> </label>
                               <span class="text-danger">(*)</span>
@@ -22,20 +22,20 @@
                               </div>
                            </div>
                         </div>
-                        <div class="col-md-3 lr-5">
+                        <div class="col-md-3 padding-lr-5">
                            <i>Last Sales Date:</i> {{customer.last_sales_order|date:'MM/dd/yyyy'}}
                         </div>
-                        <div class="col-md-2 lr-5">
+                        <div class="col-md-2 padding-lr-5">
                            <strong>Current Debt:</strong> {{customer.current_dept |currency}}
                         </div>
-                        <div class="col-md-2 lr-5">
+                        <div class="col-md-2 padding-lr-5">
                            <strong>Current Credit:</strong> {{customer.current_dept |currency}}
                         </div>
                      </form>
                   </div>
                   <div class="col-md-12 fix-padding">
                      <div class="row">
-                        <div class="col-md-3 lr-5 ">
+                        <div class="col-md-3 padding-lr-5 ">
                            <div class="form-group row">
                               <label class='col-4 control-label'>Address</label>
                               <div class='col-8'>
@@ -67,7 +67,7 @@
                               </div>
                            </div>
                         </div>
-                        <div class="col-md-3 customer-infomation bolder lr-5">
+                        <div class="col-md-3 customer-infomation bolder padding-lr-5">
                            <div class="form-group row" *ngIf="customer.buyer_type =='CP'">
                               <label class='col-6 control-label'>Contact</label>
                               <div class='col-6 text-primary'>
@@ -116,7 +116,7 @@
                               </div>
                            </div>
                         </div>
-                        <div class="col-md-3 customer-infomation lr-5 ">
+                        <div class="col-md-3 customer-infomation padding-lr-5 ">
                            <form [formGroup]="generalForm">
                               <div class="form-group row">
                                  <label class='col-6'>Customer PO
@@ -169,7 +169,7 @@
                               </div>
                            </form>
                         </div>
-                        <div class="col-md-3 customer-infomation bolder lr-5 ">
+                        <div class="col-md-3 customer-infomation bolder padding-lr-5 ">
                            <form [formGroup]="generalForm">
                               <div class="form-group row">
                                  <label class='col-7'>Payment Method<span class="text-danger">(*)</span></label>
@@ -218,9 +218,9 @@
             </div>
          </div>
       </div>
-      <div class="col-md-5 l-5">
+      <div class="col-md-5 paddingleft-5">
          <div class="row  height-100">
-            <div class="col-4 lr-5">
+            <div class="col-4 padding-lr-5">
                <div class="card height-100">
                   <div class="card-header">
                      <strong>Bill To</strong>
@@ -278,7 +278,7 @@
                   </div>
                </div>
             </div>
-            <div class="col-4 lr-5">
+            <div class="col-4 padding-lr-5">
                <div class="card height-100">
                   <div class="card-header">
                      <strong>Ship To</strong>
@@ -289,7 +289,6 @@
                            <p>This order ships to {{customer.shipping.length}} shipping addresses.</p>
                            <a> View detail below</a>
                         </div>
-                        <ng-container *ngIf="generalForm.value.is_multi_shp_addr == 0">
                            <div class="col-12">
                               <div class="form-group row">
                                  <label class=" control-label col-5" for="shiping_to" translate>Label
@@ -337,12 +336,11 @@
                                  </div>
                               </div>
                            </div>
-                        </ng-container>
                      </div>
                   </div>
                </div>
             </div>
-            <div class="col-4 lr-5">
+            <div class="col-4 padding-lr-5">
                <div class="card height-100">
                   <div class="card-header">
                      <strong>Shipping Method</strong>
@@ -350,6 +348,7 @@
                   <div class="card-body">
                      <div class="row">
                         <div class="col-12">
+                          <form [formGroup]="generalForm">
                            <div class="form-group row">
                               <label class='col-6'>Warehouse
                               <span class="text-danger">(*)</span>
@@ -361,8 +360,7 @@
                                  </select>
                               </div>
                            </div>
-                        </div>
-                        <div class="col-12">
+
                            <div class="form-group row">
                               <label class='col-6'>Ship Via
                               <span class="text-danger">(*)</span>
@@ -374,8 +372,7 @@
                                  </select>
                               </div>
                            </div>
-                        </div>
-                        <div class="col-12">
+
                            <div class="form-group row">
                               <label class='col-6'>Option
                               <span class="text-danger">(*)</span>
@@ -387,8 +384,7 @@
                                  </select>
                               </div>
                            </div>
-                        </div>
-                        <div class="col-12">
+
                            <div class="form-group row">
                               <label class='col-6'>Ship Rate
                               <span class="text-danger">(*)</span>
@@ -400,8 +396,7 @@
                                  </select>
                               </div>
                            </div>
-                        </div>
-                        <div class="col-12">
+
                            <div class="form-group row">
                               <label class='col-6'>Delivery Date
                               <span class="text-danger">(*)</span>
@@ -417,6 +412,7 @@
                                  </div>
                               </div>
                            </div>
+                         </form>
                         </div>
                      </div>
                   </div>
@@ -426,7 +422,7 @@
       </div>
    </div>
    <div class="row mg-top-10">
-      <div class="col-12 lr-5">
+      <div class="col-12 padding-lr-5">
          <div class="card no-border">
             <div class="card-header">
                <strong>Line Items</strong>
@@ -531,7 +527,7 @@
       </div>
    </div>
    <div class="row mg-top-10">
-      <div class="col-md-3 offset-md-5 lr-5">
+      <div class="col-md-3 offset-md-5 padding-lr-5">
          <div class="card height-100">
             <div class="card-header">
                <strong>Note</strong>
@@ -545,7 +541,7 @@
             </div>
          </div>
       </div>
-      <div class="col-md-2 lr-5">
+      <div class="col-md-2 padding-lr-5">
          <div class="card height-100">
             <div class="card-header">
                <strong>Order Summary</strong>
@@ -594,7 +590,7 @@
             </div>
          </div>
       </div>
-      <div class="col-md-2 lr-5">
+      <div class="col-md-2 padding-lr-5">
          <div class="card height-100">
             <div class="card-header">
                <strong>Order Total</strong>
@@ -606,7 +602,7 @@
                         <label class='col-5 control-label'>
                         <strong class="text-warning">Sub Total</strong>
                         </label>
-                        <div class='col-6 offset-md-1 lr-10'>
+                        <div class='col-6 offset-md-1 padding-lr-10'>
                            <strong>{{order_info.sub_total | currency}}$20000</strong>
                         </div>
                      </div>
@@ -615,7 +611,7 @@
                         <div class='col-2 no-padding'>
                            <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info.discount_percent" class="form-control" type="text" (change)="updateTotal()">
                         </div>
-                        <div class='col-5 lr-10'>
+                        <div class='col-5 padding-lr-10'>
                            <input class="form-control" readonly="true" [(ngModel)]="order_info.total_discount" class="form-control" value="0" type="number">
                         </div>
                      </div>
@@ -624,16 +620,16 @@
                         <div class='col-2 no-padding'>
                            <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info.vat_percent" class="form-control" type="text" (change)="updateTotal()">
                         </div>
-                        <div class='col-5 lr-10'>
+                        <div class='col-5 padding-lr-10'>
                            <input class="form-control" readonly="true" [(ngModel)]="order_info['vat_percent_amount']" class="form-control" value="0" type="number">
                         </div>
                      </div>
-                     <div class="form-group row">
-                        <label class='col-5 control-label text-danger'>
+                     <div class="form-group row margin-lr-0 text-light bg-danger">
+                        <label class="col-5 control-label padding-lr-5">
                         <strong>Grand Total:</strong>
                         </label>
-                        <div class="col-6 offset-md-1">
-                           <strong class="text-danger">{{order_info.total | currency}} $3000000</strong>
+                        <div class="col-6 offset-md-1 padding-lr-5">
+                           <strong>{{order_info.total | currency}} $3000000</strong>
                         </div>
                      </div>
                   </div>
