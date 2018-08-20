@@ -188,7 +188,7 @@ export class OrderService {
         return this.API.put(url, params);
     }
     generateSaleQuoteCode() {
-        const url = 'order/getSQCode';
+        const url = 'sale-quote/get-sale-quote-code';
         return this.API.get(url);
     }
     generateSO() {
@@ -245,6 +245,14 @@ export class OrderService {
     }
     getPaymentMethod() {
         const url = 'ar-invoice/get-payment-method';
+        return this.API.get(url);
+    }
+    getSQReference() {
+        const url = 'sale-quote/sq-references';
+        return this.API.get(url);
+    }
+    getShippingReference(id) {
+        const url = 'shipping-zone/configuration-by-address/' + id;
         return this.API.get(url);
     }
 }
