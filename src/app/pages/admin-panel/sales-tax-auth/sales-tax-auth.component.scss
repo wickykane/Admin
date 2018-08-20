@@ -1,0 +1,85 @@
+.create-section {
+    background-color: #ededed;
+    margin: 0px;
+    padding: 0px 15px;
+
+    .create-section-list {
+        margin-top: 15px;
+        padding: 0px;
+
+        .btn-list {
+            button {
+                margin: 5px;
+            }
+        }
+
+        .country-list {
+            .country {
+                color: #2196f3;
+                margin: 10px;
+
+                .state {
+                    color: #2196f3;
+                    margin: 10px 10px 10px 20px;
+                }
+            }
+        }
+    }
+
+    .create-section-data {
+        .section-title {
+            color: #dc3545;
+            font-size: 1.7em;
+            font-weight: bold;
+            height: 30px;
+            margin-top: 15px;
+        }
+
+        .create-section-info {
+            margin-bottom: 15px;
+            margin-left: 15px;
+            margin-top: 15px;
+
+            a {
+                color: #2196f3;
+                text-decoration: underline;
+            }
+
+            label {
+                max-width: 170px;
+                min-width: 170px;
+                width: 170px;
+            }
+
+            input, select {
+                max-width: 200px;
+                min-width: 200px;
+                width: 200px;
+            }
+
+            .fa-question-circle:before {
+                color: #2196f3;
+                font-size: 1.5em;
+                vertical-align: middle;
+            }
+
+            .show-tooltip {
+                margin-left: 15px;
+                i {
+                    vertical-align: sub;
+                }
+            }
+
+            .error {
+                color: #dc3545;
+                width: 100%;
+            }
+        }
+
+        .bottom-message {
+            .success {
+                color: #28a745;
+            }
+        }
+    }
+}

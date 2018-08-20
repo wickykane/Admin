@@ -1,0 +1,231 @@
+<div [@routerTransition]>
+    <app-page-header [heading]="'SALES TAX AUTHORITY'" [icon]="'fa-th-list'"></app-page-header>
+    <div class="form-search full-width form-horizontal">
+        <div class="row create-section">
+            <div class="col-lg-2 col-xl-2 form-group create-section-list">
+                <div class="btn-list">
+                    <button class="btn btn-primary" type="button" (click)="onClickNew('country')"> + New Country</button>
+                    <button class="btn btn-primary" type="button" (click)="onClickNew('state')" [disabled]="!selectedCountryTax.display_name"> + New State</button>
+                </div>
+                <div class="country-list">
+                    <div class="country" *ngFor="let country of listSalesTax">
+                        <label class="css-input css-checkbox css-checkbox-default">
+                            <input class="cb-element" type="radio" [value]="country.display_name" [(ngModel)]="selectedCountryTax.display_name"
+                                (click)="onSelectCountryTax(country)">
+                            <span></span>
+                            {{country.display_name}}
+                        </label>
+                        <div class="state" *ngFor="let state of country.tax_authority_states">
+                            <label class="css-input css-checkbox css-checkbox-default">
+                                <input class="cb-element" type="radio" [value]="state.display_name" [(ngModel)]="selectedStateTax.display_name"
+                                (click)="onSelectStateTax(state, country)">
+                                <span></span>
+                                {{state.display_name}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-10 col-xl-10 form-group create-section-data" *ngIf="currentForm === 'country'">
+                <h3 class="section-title">New Country</h3>
+                <fieldset class="custom-border">
+                    <legend class="custom-border">GENERAL INFORMATION</legend>
+                    <form [formGroup]="countryGeneralForm">
+                        <div class="row create-section-info">
+                            <label>
+                                <b>Select Country (*)</b>
+                            </label>
+                            <select class="form-control" formControlName="country_id" [attr.disabled]="selectedCountryTax.id">
+                                <option value="null" disabled>--Select--</option>
+                                <option *ngFor="let country of listMaster.countries" [value]="country.country_id">{{country.name}}</option>
+                            </select>
+                            <span class="error" *ngIf="isClickedSave && this.countryGeneralForm.controls.country_id.invalid">
+                                (!): This field cannot be blank. Please select Country.
+                            </span>
+                        </div>
+                        <div class="row create-section-info">
+                            <label>
+                                <b>Display Name (*)</b>
+                            </label>
+                            <input type="text" maxlength="50" class="form-control" formControlName="display_name">
+                            <span class="error" *ngIf="isClickedSave && this.countryGeneralForm.controls.display_name.invalid">
+                                (!): This field cannot be blank. Please input value.
+                            </span>
+                        </div>
+                        <div class="row create-section-info">
+                            <label>
+                                <b>Tax Authority (*)</b>
+                            </label>
+                            <select class="form-control" formControlName="tax_type_id" [attr.disabled]="selectedCountryTax.id">
+                                <option value="null" disabled>--Select--</option>
+                                <option *ngFor="let type of listMaster.tax_auth_types" [value]="type.id">{{type.display_name}}</option>
+                            </select>
+                            <span class="error" *ngIf="isClickedSave && this.countryGeneralForm.controls.tax_type_id.invalid">
+                                (!): This field cannot be blank. Please select Tax Authority.
+                            </span>
+                        </div>
+                        <div class="row create-section-info">
+                            <label>
+                                <b>Status (*)</b>
+                            </label>
+                            <select class="form-control" formControlName="ac">
+                                <option *ngFor="let status of listMaster.status" [value]="status.key" [disabled]="status.key === null">{{status.name}}</option>
+                            </select>
+                            <span class="error" *ngIf="isClickedSave && this.countryGeneralForm.controls.ac.invalid">
+                                (!): This field cannot be blank. Please select Status.
+                            </span>
+                        </div>
+                    </form>
+                </fieldset>
+            </div>
+            <div class="col-lg-5 col-xl-5 form-group create-section-data" *ngIf="currentForm === 'state'">
+                <h3 class="section-title">New State</h3>
+                <fieldset class="custom-border">
+                    <legend class="custom-border">GENERAL INFORMATION</legend>
+                    <form [formGroup]="stateGeneralForm">
+                        <div class="row create-section-info">
+                            <label>
+                                <b>Select State (*)</b>
+                            </label>
+                            <select class="form-control" formControlName="state">
+                                <option value="null" disabled>--Select--</option>
+                            </select>
+                            <span class="error" *ngIf="">
+                                (!): This field cannot be blank. Please select State.
+                            </span>
+                        </div>
+                        <div class="row create-section-info">
+                            <label>
+                                <b>State Code (*)</b>
+                            </label>
+                            <input type="text" maxlength="50" class="form-control" formControlName="code">
+                            <span class="error" *ngIf="">
+                                (!): This field cannot be blank. Please input State Code.
+                            </span>
+                        </div>
+                        <div class="row create-section-info">
+                            <label>
+                                <b>Display Name (*)</b>
+                            </label>
+                            <input type="text" maxlength="50" class="form-control" formControlName="name">
+                            <span class="error" *ngIf="">
+                                (!): This field cannot be blank. Please input Display Name.
+                            </span>
+                        </div>
+                        <div class="row create-section-info">
+                            <label>
+                                <b>State Nexus? (*)</b>
+                            </label>
+                            <select class="form-control" formControlName="nexus">
+                                <option value="null" disabled>--Select--</option>
+                            </select>
+                            <span class="error" *ngIf="">
+                                (!): This field cannot be blank.
+                            </span>
+                        </div>
+                        <div class="row create-section-info">
+                            <label>
+                                <b>Calculated Tax Based On (*)</b>
+                            </label>
+                            <select class="form-control" formControlName="base">
+                                <option value="null" disabled>--Select--</option>
+                            </select>
+                            <span class="show-tooltip" ngbTooltip="This setting control, which address should be used to determine the sales tax calculated on the sales order. Choose Shipping Address to base the applicable sales tax on a customer’s shipping address or choose Store Address if sales tax should be determined by your store’s address.">
+                                <i class="fa fa-question-circle"></i>
+                            </span>
+                            <span class="error" *ngIf="">
+                                (!): This field cannot be blank.
+                            </span>
+                        </div>
+                        <div class="row create-section-info">
+                            <label>
+                                <b>Sales Tax On Shipping (*)</b>
+                            </label>
+                            <select class="form-control" formControlName="shipping">
+                                <option value="null" disabled>--Select--</option>
+                            </select>
+                            <span class="show-tooltip" ngbTooltip="This setting control to define if the freight charges are the subjects to tax based on the shipping items.">
+                                <i class="fa fa-question-circle"></i>
+                            </span>
+                            <span class="error" *ngIf="">
+                                (!): This field cannot be blank.
+                            </span>
+                        </div>
+                        <div class="row create-section-info">
+                            <label>
+                                <b>Status (*)</b>
+                            </label>
+                            <select class="form-control" formControlName="status">
+                                <option value="null" disabled>--Select--</option>
+                            </select>
+                            <span class="error" *ngIf="">
+                                (!): This field cannot be blank. Please select Status.
+                            </span>
+                        </div>
+                    </form>
+                </fieldset>
+            </div>
+            <div class="col-lg-5 col-xl-5 form-group create-section-data" *ngIf="currentForm === 'state'">
+                <h3 class="section-title"></h3>
+                <fieldset class="custom-border">
+                    <legend class="custom-border">RATE INFORMATION</legend>
+                    <form [formGroup]="stateRateForm">
+                        <div class="row create-section-info">
+                            <label>
+                                <b>Current Rate (*)</b>
+                            </label>
+                            <input type="text" maxlength="50" class="form-control" formControlName="current_rate">
+                            <span class="error" *ngIf="">
+                                (!): This field cannot be blank. Please input Current Rate.
+                            </span>
+                        </div>
+                        <div class="row create-section-info">
+                            <label>
+                                <b>Effective Date (*)</b>
+                            </label>
+                            <input type="text" maxlength="50" class="form-control" formControlName="effect_date">
+                            <span class="error" *ngIf="">
+                                (!): This field cannot be blank. Please input Effective Date.
+                            </span>
+                        </div>
+                        <div class="row create-section-info">
+                            <label>
+                                <b>G/L Account (*)</b>
+                            </label>
+                            <select class="form-control" formControlName="gl_acc">
+                                <option value="null" disabled>--Select--</option>
+                            </select>
+                            <span class="error" *ngIf="">
+                                (!): This field cannot be blank. Please select G/L Account.
+                            </span>
+                        </div>
+                        <div class="row create-section-info">
+                            <label>
+                                <b>Created by</b>
+                            </label>
+                            <input type="text" maxlength="50" class="form-control" [attr.disabled]="true">
+                        </div>
+                        <div class="row create-section-info">
+                            <label>
+                                <b>Last Updated On</b>
+                            </label>
+                            <input type="text" maxlength="50" class="form-control" [attr.disabled]="true">
+                        </div>
+                        <div class="row create-section-info">
+                            <label>
+                                <b>Last Updated By</b>
+                            </label>
+                            <input type="text" maxlength="50" class="form-control" [attr.disabled]="true">
+                        </div>
+                    </form>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 mg-top-15 text-center">
+            <button *ngIf="currentForm" class="btn btn-default" type="button" (click)="onClickReset()">RESET</button>
+            <button *ngIf="currentForm" class="btn btn-primary" type="button" (click)="onSaveTaxAuthority()">{{ isCreateNew ? 'CREATE' : 'SAVE' }}</button>
+        </div>
+    </div>
+</div>
