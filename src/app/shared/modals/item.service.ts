@@ -30,6 +30,14 @@ export class ItemService {
         const url = 'order/getMasterItems';
         return this.API.get(url, params);
     }
+    getMiscItems(params) {
+        const url = 'misc';
+        return this.API.get(url, params);
+    }
+    getMiscType() {
+        const url = 'misc/types';
+        return this.API.get(url);
+    }
     getListAllItemFromQuote(id, params) {
         const url = ['order', 'getQuoteItems', id].join('/');
         return this.API.get(url, params);
