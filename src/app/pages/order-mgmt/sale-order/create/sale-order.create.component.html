@@ -112,7 +112,7 @@
                            <div class="form-group row">
                               <label class='col-6'>Discount Level</label>
                               <div class='col-6 text-success'>
-                                 {{customer.discount_level}} asdfasd
+                                 {{customer.discount_level}}
                               </div>
                            </div>
                         </div>
@@ -185,8 +185,8 @@
                                  <span class="text-danger">(*)</span>
                                  </label>
                                  <div class='col-5 text-danger'>
-                                    <select [attr.disabled]='true' class="form-control" id="is_multi_shp_addr" name="is_multi_shp_addr" formControlName="is_multi_shp_addr">
-                                    <option *ngFor="let item of listMaster['multi_ship']" [ngValue]="item.id">{{item.label}}</option>
+                                    <select [attr.disabled]='true' class="form-control" name="payment_term" formControlName="payment_term">
+                                    <option *ngFor="let item of listMaster['payment_term']" [ngValue]="item.id">{{item.label}}</option>
                                     </select>
                                  </div>
                               </div>
@@ -204,9 +204,9 @@
                                  <span class="text-danger">(*)</span>
                                  </label>
                                  <div class='col-5'>
-                                    <select (change)="getQtyAvail()" class="form-control" id="warehouse_id" name="warehouse_id" formControlName="warehouse_id">
+                                    <select (change)="getQtyAvail()" class="form-control" name="aprrover_id" formControlName="aprrover_id">
                                     <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
-                                    <option *ngFor="let item of listMaster['warehouses']" [ngValue]="item.id">{{item.name}}</option>
+                                    <option *ngFor="let item of listMaster['approver']" [ngValue]="item.id">{{item.name}}</option>
                                     </select>
                                  </div>
                               </div>
@@ -284,11 +284,10 @@
                      <strong>Ship To</strong>
                   </div>
                   <div class="card-body">
-                     <div class="row">
-                        <div class="col-md-12" *ngIf="generalForm.value.is_multi_shp_addr == 1">
-                           <p>This order ships to {{customer.shipping.length}} shipping addresses.</p>
-                           <a> View detail below</a>
-                        </div>
+                    <div class="" *ngIf="generalForm.get('ship_via').value == 1">
+                      Customer will pickup goods in store
+                    </div>
+                     <div class="row" *ngIf="generalForm.get('ship_via').value != 1">
                            <div class="col-12">
                               <div class="form-group row">
                                  <label class=" control-label col-5" for="shiping_to" translate>Label
@@ -354,7 +353,7 @@
                               <span class="text-danger">(*)</span>
                               </label>
                               <div class='col-6'>
-                                 <select (change)="getQtyAvail()" class="form-control" id="warehouse_id" name="warehouse_id" formControlName="warehouse_id">
+                                 <select (change)="getQtyAvail()" class="form-control" name="warehouse_id" formControlName="warehouse_id">
                                  <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                  <option *ngFor="let item of listMaster['warehouses']" [ngValue]="item.id">{{item.name}}</option>
                                  </select>
@@ -366,9 +365,9 @@
                               <span class="text-danger">(*)</span>
                               </label>
                               <div class='col-6'>
-                                 <select (change)="getQtyAvail()" class="form-control" id="warehouse_id" name="warehouse_id" formControlName="warehouse_id">
+                                 <select (change)="changeShipVia()" class="form-control" name="ship_via" formControlName="ship_via">
                                  <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
-                                 <option *ngFor="let item of listMaster['warehouses']" [ngValue]="item.id">{{item.name}}</option>
+                                 <option *ngFor="let item of listMaster['ship_via']" [ngValue]="item.id">{{item.name}}</option>
                                  </select>
                               </div>
                            </div>
@@ -378,9 +377,9 @@
                               <span class="text-danger">(*)</span>
                               </label>
                               <div class='col-6'>
-                                 <select (change)="getQtyAvail()" class="form-control" id="warehouse_id" name="warehouse_id" formControlName="warehouse_id">
+                                 <select class="form-control" name="ship_option" formControlName="ship_option" [attr.disabled]="generalForm.get('ship_via').value != 2">
                                  <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
-                                 <option *ngFor="let item of listMaster['warehouses']" [ngValue]="item.id">{{item.name}}</option>
+                                 <option *ngFor="let item of listMaster['ship_option']" [ngValue]="item.id">{{item.name}}</option>
                                  </select>
                               </div>
                            </div>
@@ -390,20 +389,19 @@
                               <span class="text-danger">(*)</span>
                               </label>
                               <div class='col-6'>
-                                 <select (change)="getQtyAvail()" class="form-control" id="warehouse_id" name="warehouse_id" formControlName="warehouse_id">
+                                 <select class="form-control" name="ship_rate" formControlName="ship_rate" [attr.disabled]="generalForm.get('ship_via').value != 2">
                                  <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
-                                 <option *ngFor="let item of listMaster['warehouses']" [ngValue]="item.id">{{item.name}}</option>
+                                 <option *ngFor="let item of listMaster['ship_rate']" [ngValue]="item.id">{{item.name}}</option>
                                  </select>
                               </div>
                            </div>
 
                            <div class="form-group row">
                               <label class='col-6'>Delivery Date
-                              <span class="text-danger">(*)</span>
                               </label>
                               <div class='col-6'>
                                  <div clickOutside (clickOutside)="da.close()" class="input-group">
-                                    <input class="form-control" placeholder="mm/dd/yyyy" name="dp" [placement]="'left'" formControlName="order_date" ngbDatepicker #da="ngbDatepicker">
+                                    <input class="form-control" placeholder="mm/dd/yyyy" name="dp" [placement]="'left'" formControlName="delivery_date" ngbDatepicker #da="ngbDatepicker">
                                     <div class="input-group-append">
                                        <button class="btn btn-outline-secondary" (click)="da.toggle()" type="button">
                                        <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -455,9 +453,6 @@
                            <button class="btn btn-danger btn-xs" type="button" (click)="deleteAction(item.item_id, item.item_condition_id)">
                            <i class="fa fa-trash"></i>
                            </button>
-                           <button *ngIf="generalForm.value.is_multi_shp_addr == 1" class="btn btn-primary btn-xs" type="button" (click)="cloneRecord(item, list.items)" [disabled]="!checkCloneRecord(item, list.items[$index])" title="Add new shipping address">
-                           <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                           </button>
                         </td>
                         <td>{{item.sku}}</td>
                         <td>{{item.des}}</td>
@@ -479,7 +474,7 @@
                            <input [textMask]="{mask: numberMaskObject()}" class="form-control input-sm" type="number" [(ngModel)]="item.discount" (change)="updateTotal();changeFromSource(item)">
                         </td>
                         <td>
-                           <input [textMask]="{mask: numberMaskObject()}" class="form-control input-sm" type="number" [(ngModel)]="item.discount" (change)="updateTotal();changeFromSource(item)">
+                           <input [textMask]="{mask: numberMaskObject()}" class="form-control input-sm" type="number" [(ngModel)]="item.tax" (change)="updateTotal();changeFromSource(item)">
                         </td>
                         <td class="text-center">
                            <span>{{item.totalItem | currency}}</span>
@@ -490,37 +485,15 @@
                            </span>
                         </td>
                      </tr>
-                     <tr *ngFor="let product of item.products">
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                           <input style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="product.quantity" min="0" max="1000" (change)="updateTotal()" (keypress)="_keyPress($event)">
-                        </td>
-                        <td>
-                           <select class="form-control" name="search_type" [(ngModel)]="product.shipping_address_id">
-                           <option value="undefined" selected="true" hidden="true" translate>Please select</option>
-                           <option *ngFor="let item of customer.shipping" [ngValue]="item.address_id">{{((item.address_line+', '+item.city_name+', '+tate_name+', '+item.zip_code+',
-                           '+item.country_name) | uppercase)}}</option>
-                           </select>
-                        </td>
-                        <td>
-                           <button class="btn btn-danger btn-xs" type="button" (click)="removeSubProduct(product, item.products, list.items)" style="line-height: 18px;">
-                           <i class="fa fa-times" aria-hidden="true"></i>
-                           </button>
-                        </td>
-                        <td></td>
-                        <td></td>
-                     </tr>
                   </tbody>
                   </table>
                </div>
                <div class="col-12 no-padding">
                   <button (click)="addNewItem()" class="btn btn-link" translate>
                   <i class="fa fa-plus"></i>Add New Item</button>
-                  <button (click)="addNewItemFromQuote()" class="btn btn-link">
-                  <i class="fa fa-plus"></i>Add New Item From Quote</button>
+                  <button (click)="addNewMisc()" class="btn btn-link">
+                  <i class="fa fa-plus"></i>Misc Item</button>
+                  <button (click)="calcTaxShipping()" class="btn btn-link">Calc Tax & Shipping</button>
                </div>
             </div>
          </div>
@@ -602,25 +575,14 @@
                         <label class='col-5 control-label'>
                         <strong class="text-warning">Sub Total</strong>
                         </label>
-                        <div class='col-6 offset-md-1 padding-lr-10'>
+                        <div class='col-6 offset-md-1 padding-lr-5'>
                            <strong>{{order_info.sub_total | currency}}</strong>
                         </div>
                      </div>
-                     <div class="form-group row">
-                        <label class='col-5 control-label'>- Discount (%)</label>
-                        <div class='col-2 no-padding'>
-                           <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info.discount_percent" class="form-control" type="text" (change)="updateTotal()">
-                        </div>
-                        <div class='col-5 padding-lr-10'>
-                           <input class="form-control" readonly="true" [(ngModel)]="order_info.total_discount" class="form-control" value="0" type="number">
-                        </div>
-                     </div>
+
                      <div class="form-group row">
                         <label class='col-5 control-label'>+ TAX/VAT (%):</label>
-                        <div class='col-2 no-padding'>
-                           <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info.vat_percent" class="form-control" type="text" (change)="updateTotal()">
-                        </div>
-                        <div class='col-5 padding-lr-10'>
+                        <div class='col-6 offset-md-1'>
                            <input class="form-control" readonly="true" [(ngModel)]="order_info['vat_percent_amount']" class="form-control" value="0" type="number">
                         </div>
                      </div>
