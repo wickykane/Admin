@@ -39,31 +39,31 @@
                            <div class="form-group row">
                               <label class='col-4 control-label'>Address</label>
                               <div class='col-8'>
-                                 {{customer.primary[0].address_line}} asdfasdfa d asdfasdfsd
+                                 {{customer.primary[0].address_line}}
                               </div>
                            </div>
                            <div class="form-group row">
                               <label class='col-4 control-label'>City</label>
                               <div class='col-8'>
-                                 {{customer.primary[0].city_name}} adsfasdfa sdfasdf
+                                 {{customer.primary[0].city_name}}
                               </div>
                            </div>
                            <div class="form-group row">
                               <label class='col-4 control-label'>State</label>
                               <div class='col-8'>
-                                 {{customer.primary[0].state_name}} adsf asdfadfasdfdas
+                                 {{customer.primary[0].state_name}}
                               </div>
                            </div>
                            <div class="form-group row">
                               <label class='col-4 control-label'>Zip</label>
                               <div class='col-8'>
-                                 {{customer.primary[0].zip_code}} asdf asdasfdfdas
+                                 {{customer.primary[0].zip_code}}
                               </div>
                            </div>
                            <div class="form-group row">
                               <label class='col-4 control-label'>Country</label>
                               <div class='col-8'>
-                                 {{customer.primary[0].country_name}} asdfasddfds
+                                 {{customer.primary[0].country_name}}
                               </div>
                            </div>
                         </div>
@@ -82,13 +82,13 @@
                            <div class="form-group row" *ngIf="customer.buyer_type =='CP'">
                               <label class='col-6'>Phone</label>
                               <div class='col-6 '>
-                                 {{addr_select.contact.phone}} adsfasdf
+                                 {{addr_select.contact.phone}}
                               </div>
                            </div>
                            <div class="form-group row" *ngIf="customer.buyer_type =='CP'">
                               <label class='col-6'>Email</label>
                               <div class='col-6 '>
-                                 {{addr_select.contact.email}} asdfasdf
+                                 {{addr_select.contact.email}}
                               </div>
                            </div>
                            <div class="form-group row" *ngIf="customer.buyer_type !='CP'">
@@ -100,19 +100,19 @@
                            <div class="form-group row" *ngIf="customer.buyer_type !='CP'">
                               <label class='col-6'>Phone</label>
                               <div class='col-6'>
-                                 {{addr_select.contact.phone}} asdfadsf
+                                 {{addr_select.contact.phone}}
                               </div>
                            </div>
                            <div class="form-group row" *ngIf="customer.buyer_type !='CP'">
                               <label class='col-6'>Email</label>
                               <div class='col-6'>
-                                 {{addr_select.contact.email}} adsfasdf
+                                 {{addr_select.contact.email}}
                               </div>
                            </div>
                            <div class="form-group row">
                               <label class='col-6'>Discount Level</label>
                               <div class='col-6 text-success'>
-                                 {{customer.discount_level}} asdfasd
+                                 {{customer.discount_level}}
                               </div>
                            </div>
                         </div>
@@ -185,8 +185,8 @@
                                  <span class="text-danger">(*)</span>
                                  </label>
                                  <div class='col-5 text-danger'>
-                                    <select [attr.disabled]='true' class="form-control" id="is_multi_shp_addr" name="is_multi_shp_addr" formControlName="is_multi_shp_addr">
-                                    <option *ngFor="let item of listMaster['multi_ship']" [ngValue]="item.id">{{item.label}}</option>
+                                    <select [attr.disabled]='true' class="form-control" name="payment_term" formControlName="payment_term">
+                                    <option *ngFor="let item of listMaster['payment_term']" [ngValue]="item.id">{{item.label}}</option>
                                     </select>
                                  </div>
                               </div>
@@ -204,9 +204,9 @@
                                  <span class="text-danger">(*)</span>
                                  </label>
                                  <div class='col-5'>
-                                    <select (change)="getQtyAvail()" class="form-control" id="warehouse_id" name="warehouse_id" formControlName="warehouse_id">
+                                    <select (change)="getQtyAvail()" class="form-control" name="aprrover_id" formControlName="aprrover_id">
                                     <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
-                                    <option *ngFor="let item of listMaster['warehouses']" [ngValue]="item.id">{{item.name}}</option>
+                                    <option *ngFor="let item of listMaster['approver']" [ngValue]="item.id">{{item.name}}</option>
                                     </select>
                                  </div>
                               </div>
@@ -284,11 +284,10 @@
                      <strong>Ship To</strong>
                   </div>
                   <div class="card-body">
-                     <div class="row">
-                        <div class="col-md-12" *ngIf="generalForm.value.is_multi_shp_addr == 1">
-                           <p>This order ships to {{customer.shipping.length}} shipping addresses.</p>
-                           <a> View detail below</a>
-                        </div>
+                    <div class="" *ngIf="generalForm.get('ship_via').value == 1">
+                      Customer will pickup goods in store
+                    </div>
+                     <div class="row" *ngIf="generalForm.get('ship_via').value != 1">
                            <div class="col-12">
                               <div class="form-group row">
                                  <label class=" control-label col-5" for="shiping_to" translate>Label
@@ -354,7 +353,7 @@
                               <span class="text-danger">(*)</span>
                               </label>
                               <div class='col-6'>
-                                 <select (change)="getQtyAvail()" class="form-control" id="warehouse_id" name="warehouse_id" formControlName="warehouse_id">
+                                 <select (change)="getQtyAvail()" class="form-control" name="warehouse_id" formControlName="warehouse_id">
                                  <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                  <option *ngFor="let item of listMaster['warehouses']" [ngValue]="item.id">{{item.name}}</option>
                                  </select>
@@ -366,9 +365,9 @@
                               <span class="text-danger">(*)</span>
                               </label>
                               <div class='col-6'>
-                                 <select (change)="getQtyAvail()" class="form-control" id="warehouse_id" name="warehouse_id" formControlName="warehouse_id">
+                                 <select (change)="changeShipVia()" class="form-control" name="ship_via" formControlName="ship_via">
                                  <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
-                                 <option *ngFor="let item of listMaster['warehouses']" [ngValue]="item.id">{{item.name}}</option>
+                                 <option *ngFor="let item of listMaster['ship_via']" [ngValue]="item.id">{{item.name}}</option>
                                  </select>
                               </div>
                            </div>
@@ -378,9 +377,9 @@
                               <span class="text-danger">(*)</span>
                               </label>
                               <div class='col-6'>
-                                 <select (change)="getQtyAvail()" class="form-control" id="warehouse_id" name="warehouse_id" formControlName="warehouse_id">
+                                 <select class="form-control" name="ship_option" formControlName="ship_option" [attr.disabled]="generalForm.get('ship_via').value != 2">
                                  <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
-                                 <option *ngFor="let item of listMaster['warehouses']" [ngValue]="item.id">{{item.name}}</option>
+                                 <option *ngFor="let item of listMaster['ship_option']" [ngValue]="item.id">{{item.name}}</option>
                                  </select>
                               </div>
                            </div>
@@ -390,20 +389,19 @@
                               <span class="text-danger">(*)</span>
                               </label>
                               <div class='col-6'>
-                                 <select (change)="getQtyAvail()" class="form-control" id="warehouse_id" name="warehouse_id" formControlName="warehouse_id">
+                                 <select class="form-control" name="ship_rate" formControlName="ship_rate" [attr.disabled]="generalForm.get('ship_via').value != 2">
                                  <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
-                                 <option *ngFor="let item of listMaster['warehouses']" [ngValue]="item.id">{{item.name}}</option>
+                                 <option *ngFor="let item of listMaster['ship_rate']" [ngValue]="item.id">{{item.name}}</option>
                                  </select>
                               </div>
                            </div>
 
                            <div class="form-group row">
                               <label class='col-6'>Delivery Date
-                              <span class="text-danger">(*)</span>
                               </label>
                               <div class='col-6'>
                                  <div clickOutside (clickOutside)="da.close()" class="input-group">
-                                    <input class="form-control" placeholder="mm/dd/yyyy" name="dp" [placement]="'left'" formControlName="order_date" ngbDatepicker #da="ngbDatepicker">
+                                    <input class="form-control" placeholder="mm/dd/yyyy" name="dp" [placement]="'left'" formControlName="delivery_date" ngbDatepicker #da="ngbDatepicker">
                                     <div class="input-group-append">
                                        <button class="btn btn-outline-secondary" (click)="da.toggle()" type="button">
                                        <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -446,17 +444,14 @@
                         <th translate style="width:100px">Price Source</th>
                      </tr>
                   </thead>
-                  <!-- <tr *ngIf="list['items'].length === 0">
+                  <tr *ngIf="list['items'].length === 0">
                      <td colspan="100%" class="text-center" translate>No data.</td>
-                     </tr> -->
-                  <tbody *ngFor="let item of [{},{}]; let $index = index;">
+                     </tr>
+                  <tbody *ngFor="let item of list['items']; let $index = index;">
                      <tr>
                         <td>
                            <button class="btn btn-danger btn-xs" type="button" (click)="deleteAction(item.item_id, item.item_condition_id)">
                            <i class="fa fa-trash"></i>
-                           </button>
-                           <button *ngIf="generalForm.value.is_multi_shp_addr == 1" class="btn btn-primary btn-xs" type="button" (click)="cloneRecord(item, list.items)" [disabled]="!checkCloneRecord(item, list.items[$index])" title="Add new shipping address">
-                           <i class="fa fa-plus-circle" aria-hidden="true"></i>
                            </button>
                         </td>
                         <td>{{item.sku}}</td>
@@ -479,7 +474,7 @@
                            <input [textMask]="{mask: numberMaskObject()}" class="form-control input-sm" type="number" [(ngModel)]="item.discount" (change)="updateTotal();changeFromSource(item)">
                         </td>
                         <td>
-                           <input [textMask]="{mask: numberMaskObject()}" class="form-control input-sm" type="number" [(ngModel)]="item.discount" (change)="updateTotal();changeFromSource(item)">
+                           <input [textMask]="{mask: numberMaskObject()}" class="form-control input-sm" type="number" [(ngModel)]="item.tax" (change)="updateTotal();changeFromSource(item)">
                         </td>
                         <td class="text-center">
                            <span>{{item.totalItem | currency}}</span>
@@ -490,37 +485,15 @@
                            </span>
                         </td>
                      </tr>
-                     <tr *ngFor="let product of item.products">
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                           <input style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="product.quantity" min="0" max="1000" (change)="updateTotal()" (keypress)="_keyPress($event)">
-                        </td>
-                        <td>
-                           <select class="form-control" name="search_type" [(ngModel)]="product.shipping_address_id">
-                           <option value="undefined" selected="true" hidden="true" translate>Please select</option>
-                           <option *ngFor="let item of customer.shipping" [ngValue]="item.address_id">{{((item.address_line+', '+item.city_name+', '+tate_name+', '+item.zip_code+',
-                           '+item.country_name) | uppercase)}}</option>
-                           </select>
-                        </td>
-                        <td>
-                           <button class="btn btn-danger btn-xs" type="button" (click)="removeSubProduct(product, item.products, list.items)" style="line-height: 18px;">
-                           <i class="fa fa-times" aria-hidden="true"></i>
-                           </button>
-                        </td>
-                        <td></td>
-                        <td></td>
-                     </tr>
                   </tbody>
                   </table>
                </div>
                <div class="col-12 no-padding">
                   <button (click)="addNewItem()" class="btn btn-link" translate>
                   <i class="fa fa-plus"></i>Add New Item</button>
-                  <button (click)="addNewItemFromQuote()" class="btn btn-link">
-                  <i class="fa fa-plus"></i>Add New Item From Quote</button>
+                  <button (click)="addNewMisc()" class="btn btn-link">
+                  <i class="fa fa-plus"></i>Misc Item</button>
+                  <button (click)="calcTaxShipping()" class="btn btn-link">Calc Tax & Shipping</button>
                </div>
             </div>
          </div>
@@ -552,37 +525,37 @@
                      <div class="form-group row">
                         <label class='col-7 control-label'>Total Items</label>
                         <div class='col-5'>
-                           <span class="text-success">30</span>
+                           <span class="text-success"></span>
                         </div>
                      </div>
                      <div class="form-group row">
                         <label class='col-7 control-label'>Total COGS</label>
                         <div class='col-5'>
-                           <span class="text-success">30 lbs</span>
+                           <span class="text-success"></span>
                         </div>
                      </div>
                      <div class="form-group row">
                         <label class='col-7 control-label'>Total Weight</label>
                         <div class='col-5'>
-                           <span class="text-success">30$</span>
+                           <span class="text-success"></span>
                         </div>
                      </div>
                      <div class="form-group row">
                         <label class='col-7 control-label'>Total Volume</label>
                         <div class='col-5'>
-                           <span class="text-success">30$</span>
+                           <span class="text-success"></span>
                         </div>
                      </div>
                      <div class="form-group row">
                         <label class='col-7 control-label'>Original Shipping Cost</label>
                         <div class='col-5'>
-                           <span class="text-success">30.000CBM</span>
+                           <span class="text-success"></span>
                         </div>
                      </div>
                      <div class="form-group row">
                         <label class='col-7 control-label'>Origin. Handle Fee</label>
                         <div class='col-5'>
-                           <span class="text-success">30$</span>
+                           <span class="text-success"></span>
                         </div>
                      </div>
                   </div>
@@ -602,25 +575,14 @@
                         <label class='col-5 control-label'>
                         <strong class="text-warning">Sub Total</strong>
                         </label>
-                        <div class='col-6 offset-md-1 padding-lr-10'>
-                           <strong>{{order_info.sub_total | currency}}$20000</strong>
+                        <div class='col-6 offset-md-1 padding-lr-5'>
+                           <strong>{{order_info.sub_total | currency}}</strong>
                         </div>
                      </div>
-                     <div class="form-group row">
-                        <label class='col-5 control-label'>- Discount (%)</label>
-                        <div class='col-2 no-padding'>
-                           <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info.discount_percent" class="form-control" type="text" (change)="updateTotal()">
-                        </div>
-                        <div class='col-5 padding-lr-10'>
-                           <input class="form-control" readonly="true" [(ngModel)]="order_info.total_discount" class="form-control" value="0" type="number">
-                        </div>
-                     </div>
+
                      <div class="form-group row">
                         <label class='col-5 control-label'>+ TAX/VAT (%):</label>
-                        <div class='col-2 no-padding'>
-                           <input [textMask]="{mask: numberMaskObject()}" class="form-control" [(ngModel)]="order_info.vat_percent" class="form-control" type="text" (change)="updateTotal()">
-                        </div>
-                        <div class='col-5 padding-lr-10'>
+                        <div class='col-6 offset-md-1'>
                            <input class="form-control" readonly="true" [(ngModel)]="order_info['vat_percent_amount']" class="form-control" value="0" type="number">
                         </div>
                      </div>
@@ -629,7 +591,7 @@
                         <strong>Grand Total:</strong>
                         </label>
                         <div class="col-6 offset-md-1 padding-lr-5">
-                           <strong>{{order_info.total | currency}} $3000000</strong>
+                           <strong>{{order_info.total | currency}}</strong>
                         </div>
                      </div>
                   </div>
