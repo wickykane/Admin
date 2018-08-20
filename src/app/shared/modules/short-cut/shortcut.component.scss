@@ -1,18 +1,19 @@
 .shortcut-container {
-    background-color: #ebebed;
+    background-color: #fff;
     .list-inline {
         padding: 2px 0px;
         margin-bottom: 0;
-        background-color: #ececec;
+        background-color: #fff;
         .list-inline-item {
-            padding: 5px 8px;        
+            padding: 5px 0px;        
         }          
     }
   
     .key {
-        padding: 5px;
+        padding: 3px;
         border: 1px solid #ccc;
         border-radius: 4px;
+        font-size: 11px;
         background: #feffff;
         background: -moz-linear-gradient(top, #feffff 0%, #ebebeb 50%, #ffffff 100%);
         background: -webkit-linear-gradient(top, #feffff 0%, #ebebeb 50%, #ffffff 100%);
