@@ -81,7 +81,9 @@ export class SaleOrderCreateComponent implements OnInit {
 
     public order_info = {
         total: 0,
+        order_summary: {},
         sub_total: 0,
+        order_date: '',
         customer_po: '',
         total_discount: 0,
         company_id: null,
@@ -125,14 +127,14 @@ export class SaleOrderCreateComponent implements OnInit {
             'delivery_date': [null],
             'contact_user_id': [null],
             'prio_level': [null],
-            'payment_term': [null],
+            'payment_term_id': [null],
             'sales_person': [null],
             'warehouse_id': [1, Validators.required],
-            'payment_method': ['CC'],
+            'payment_method': [null],
             'billing_id': [null],
             'shipping_id': [null],
             'description': [null],
-            'aprrover_id': [null],
+            'approver_id': [null],
             'carrier_id': [null],
             'ship_rate': [null],
             'ship_method_option': [null]
@@ -143,8 +145,13 @@ export class SaleOrderCreateComponent implements OnInit {
 
     ngOnInit() {
         const user = JSON.parse(localStorage.getItem('currentUser'));
-        this.orderService.getOrderReference().subscribe(res => { Object.assign(this.listMaster, res.data); this.changeOrderType(); });
-        this.orderService.getPaymentMethod().subscribe(res => this.listMaster['payment_methods'] = res.data);
+        this.orderService.getOrderReference().subscribe(res => {
+            Object.assign(this.listMaster, res.data);
+            this.changeOrderType();
+        });
+        this.orderService.getSQReference().subscribe(res => {
+            this.listMaster = { ...this.listMaster, ...res.data };
+        });
 
         //  Item
         this.list.items = this.router.getNavigatedData() || [];
@@ -157,6 +164,8 @@ export class SaleOrderCreateComponent implements OnInit {
         this.generalForm.controls['order_date'].patchValue(currentDt.toISOString().slice(0, 10));
         this.generalForm.controls['delivery_date'].patchValue(currentDt.toISOString().slice(0, 10));
         this.generalForm.controls['sales_person'].patchValue(user.id);
+        this.generalForm.controls['approver_id'].patchValue(user.id);
+
         this.orderService.generatePOCode().subscribe(res => { this.generalForm.controls['customer_po'].patchValue(res.data); });
 
         // Lazy Load filter
@@ -242,10 +251,10 @@ export class SaleOrderCreateComponent implements OnInit {
     }
 
     changeShipVia() {
-      const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id);
-      this.listMaster['options'] = carrier.options || [];
-      this.listMaster['ship_rates'] = carrier.ship_rate || [];
-      this.generalForm.patchValue({ ship_method_option: null, ship_rate: null });
+        const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id);
+        this.listMaster['options'] = carrier.options || [];
+        this.listMaster['ship_rates'] = carrier.ship_rate || [];
+        this.generalForm.patchValue({ ship_method_option: null, ship_rate: null });
     }
 
     findDataById(id, arr) {
@@ -270,6 +279,9 @@ export class SaleOrderCreateComponent implements OnInit {
     }
 
     changeFromSource(item) {
+        if (+item.source_id === 3) {
+            return;
+        }
         item.source_id = 2;
         item.source_name = 'Manual';
     }
@@ -300,38 +312,49 @@ export class SaleOrderCreateComponent implements OnInit {
         }
     }
 
+    groupTax(items) {
+        this.order_info['taxs'] = [];
+        this.order_info['total_tax'] = 0;
+        const taxs = items.map(item => item.tax_percent || 0);
+        const unique = taxs.filter((i, index) => taxs.indexOf(i) === index);
+        unique.forEach((tax, index) => {
+            let taxAmount = 0;
+            items.filter(item => item.tax_percent === tax).map(i => {
+                taxAmount += (+i.tax_percent * +i.quantity * (+i.sale_price || 0) / 100);
+            });
+            this.order_info['total_tax'] = this.order_info['total_tax'] + taxAmount.toFixed(2);
+            this.order_info['taxs'].push({
+                value: tax, amount: taxAmount.toFixed(2)
+            });
+        });
+    }
+
     updateTotal() {
         this.order_info.total = 0;
         this.order_info.sub_total = 0;
-        if (this.list.items !== undefined) {
-            (this.list.items || []).map((item) => {
-                let sub_quantity = 0;
-                item.discount = item.discount !== undefined ? item.discount : 0;
-                if (!item.products) { item.products = []; }
-                item.products.map(sub_item => { sub_quantity += sub_item.quantity; });
-                item.totalItem = (Number(item.sale_price) * (Number(item.quantity) + sub_quantity)
-                    - (Number(item.sale_price) * (Number(item.quantity) + sub_quantity)) * Number(item.discount) / 100)
-                    - (item.promotion_discount_amount ? item.promotion_discount_amount : 0);
-                if (item.totalItem) {
-                    this.order_info.sub_total = this.order_info.sub_total + item.totalItem;
-                }
-            });
-        }
-        this.order_info['shipping_cost'] = (this.order_info['shipping_cost'] !== undefined ? this.order_info['shipping_cost'] : 0);
-        this.order_info['alt_vat_percent'] = (this.order_info['vat_percent'] !== undefined ? this.order_info['vat_percent'] : 0);
-        this.order_info['alt_discount'] = (this.order_info['discount_percent'] !== undefined ? this.order_info['discount_percent'] : 0);
-        this.promotionList['total_invoice_discount'] = (this.promotionList['total_invoice_discount']
-            ? this.promotionList['total_invoice_discount'] : 0);
 
-        this.order_info.total_discount = parseFloat((this.order_info.sub_total * Number(this.order_info['alt_discount']) / 100).toFixed(2));
-        const sub_after_discount = this.order_info.sub_total - this.order_info.total_discount;
-        this.order_info['vat_percent_amount'] = parseFloat((sub_after_discount * Number(this.order_info['alt_vat_percent']) / 100).toFixed(2));
-        this.order_info.total = this.order_info.sub_total - this.order_info.total_discount + Number(this.order_info['shipping_cost']) + this.order_info['vat_percent_amount'] - this.promotionList['total_invoice_discount'];
+        const items = this.list.items.filter(i => !i.misc_id);
+        this.groupTax(this.list.items);
+        this.order_info.order_summary = {};
+        this.order_info.order_summary['total_item'] = items.length;
+        items.forEach(item => {
+            this.order_info.order_summary['total_cogs'] = (this.order_info.order_summary['total_cogs'] || 0) + (+item.cost_price || 0) * (item.quantity || 0);
+            this.order_info.order_summary['total_vol'] = (this.order_info.order_summary['total_vol'] || 0) + (+item.vol || 0);
+            this.order_info.order_summary['total_weight'] = (this.order_info.order_summary['total_weight'] || 0) + (+item.wt || 0);
+        });
+
+
+        this.list.items.forEach(item => {
+            item.amount = (+item.quantity * (+item.sale_price || 0)) * (100 - (+item.discount || 0)) / 100;
+            this.order_info.sub_total += item.amount;
+        });
+
+        this.order_info.total = +this.order_info['total_tax'] + +this.order_info.sub_total;
     }
 
     deleteAction(id, item_condition) {
         this.list.items = this.list.items.filter((item) => {
-            return (item.item_id + item.item_condition_id) !== (id + item_condition);
+            return (item.item_id + (item.item_condition_id || 'mis') !== (id + (item.item_condition_id || 'mis')));
         });
         this.updateTotal();
     }
@@ -350,7 +373,38 @@ export class SaleOrderCreateComponent implements OnInit {
     }
 
     calcTaxShipping() {
+        const params = {
+            'customer': this.generalForm.value.company_id,
+            'address': this.generalForm.value.shipping_id,
+            'ship_via': this.generalForm.value.carrier_id,
+            'option': this.generalForm.value.ship_method_option,
+            'ship_rate': this.generalForm.value.ship_rate,
+            'items': this.list.items.filter(item => !item.misc_id)
+        };
+        this.orderService.getTaxShipping(params).subscribe(res => {
 
+            try {
+                if (res.status) {
+                    this.list.items = res.data.items;
+                    const misc = res.data.mics.map(item => {
+                        item.is_misc = 1;
+                        item.misc_id = item.id;
+                        return item;
+                    });
+                    this.list.items = this.list.items.concat(misc);
+                    this.updateTotal();
+                    this.order_info['original_ship_cost'] = res.data.price;
+                } else {
+                    this.toastr.error(res.message);
+                }
+            } catch (e) {
+                console.log(e);
+            }
+
+        },
+            err => {
+                this.toastr.error(err.message);
+            });
     }
 
     addNewItem() {
@@ -375,7 +429,6 @@ export class SaleOrderCreateComponent implements OnInit {
                 }));
 
                 this.updateTotal();
-                this.getQtyAvail();
             }
         }, dismiss => { });
     }
@@ -386,22 +439,22 @@ export class SaleOrderCreateComponent implements OnInit {
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
-                    listAdded.push(item.item_id + item.item_condition_id);
+                    listAdded.push(item.id + (item.item_condition_id || 'misc'));
                 });
 
                 res.forEach((item) => {
                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
+                    item.source_id = 3;
+                    item.source_name = 'System';
                     item.quantity = 1;
                     item.is_misc = 1;
                     item.uom_name = item.uom;
-                    item.item_id = item.id;
+                    item.misc_id = item.id;
                     item.sku = item.no;
-                    item.source_id = 3;
-                    item.source_name = 'System';
                 });
 
                 this.list.items = this.list.items.concat(res.filter((item) => {
-                    return listAdded.indexOf(item.item_id + (item.item_condition_id || 'misc')) < 0;
+                    return listAdded.indexOf(item.id + (item.item_condition_id || 'misc')) < 0;
                 }));
 
                 this.updateTotal();
@@ -410,33 +463,17 @@ export class SaleOrderCreateComponent implements OnInit {
     }
 
     createOrder(type) {
-        const products = [];
-        this.list.items.forEach((item) => {
-            products.push({
-                item_id: item.item_id,
-                item_type: item.item_type,
-                quantity: item.quantity,
-                sale_price: item.sale_price,
-                order_detail_id: item.order_detail_id,
-                item_condition_id: item.item_condition_id,
-                discount_percent: item.discount || 0,
-                shipping_address_id: item.shipping_address_id,
-            });
-
-            if (item.products.length > 0) {
-                item.products.forEach((subItem, index) => {
-                    products.push({
-                        item_id: subItem.item_id,
-                        item_type: item.item_type,
-                        quantity: subItem.quantity,
-                        sale_price: subItem.sale_price,
-                        discount_percent: subItem.discount || 0,
-                        item_condition_id: item.item_condition_id,
-                        shipping_address_id: subItem.shipping_address_id,
-                    });
-                });
-            }
+        const products = this.list.items.map(item => {
+            item.discount_percent = item.discount;
+            item.is_item = (item.misc_id) ? 0 : 1;
+            item.misc_id = (item.misc_id) ? null : 1;
+            item.is_shipping_free = 1;
+            item.item_id = (item.item_id) ? (item.item_id) : (item.id);
+            item.item_type = (item.item_type) ? (item.item_type) : (item.type);
+            item.item_condition_id = (item.item_condition_id) ? (item.item_condition_id) : null;
+            return item;
         });
+
         let params = {};
         switch (type) {
             case 'create':
@@ -462,7 +499,8 @@ export class SaleOrderCreateComponent implements OnInit {
                 };
                 break;
         }
-        params = { ...this.order_info, ...this.generalForm.value, ...params };
+        params = { ...this.generalForm.value, ...params };
+        console.log(params);
         this.orderService.createOrder(params).subscribe(res => {
             try {
                 if (res.status) {
