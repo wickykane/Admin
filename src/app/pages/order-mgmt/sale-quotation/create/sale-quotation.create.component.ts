@@ -136,7 +136,7 @@ export class SaleQuotationCreateComponent implements OnInit {
             'contact_user_id': [null],
 
             'sales_person': [null, Validators.required],
-            'payment_method': [null, Validators.required],
+            'payment_method_id': [null, Validators.required],
             'payment_term_id': [null, Validators.required],
             'billing_id': [null, Validators.required],
             'shipping_id': [null, Validators.required],

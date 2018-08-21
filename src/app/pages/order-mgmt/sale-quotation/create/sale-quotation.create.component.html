@@ -137,9 +137,9 @@
                                             <div class="form-group row">
                                                 <label class='col-6'>Payment Method<span class="text-danger">(*)</span></label>
                                                 <div class='col-6 text-primary'>
-                                                    <select class="form-control" id="payment_method" name="payment_method" formControlName="payment_method">
+                                                    <select class="form-control" id="payment_method_id" name="payment_method_id" formControlName="payment_method_id">
                                                         <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
-                                                        <option *ngFor="let item of listMaster['payment_method']" [ngValue]="item.cd">{{item.name}}</option>
+                                                        <option *ngFor="let item of listMaster['payment_method']" [ngValue]="item.id">{{item.name}}</option>
                                                     </select>
                                                 </div>
                                             </div>

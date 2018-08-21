@@ -43,10 +43,10 @@ export class SaleQuotationComponent implements OnInit {
         private renderer: Renderer) {
 
         this.searchForm = fb.group({
-            'sale_quote_num': [null],
+            'quote_no': [null],
             'buyer_name': [null],
             'sts': [null],
-            'type': [null],
+            'date_type': [null],
             'date_from': [null],
             'date_to': [null]
         });
@@ -62,7 +62,7 @@ export class SaleQuotationComponent implements OnInit {
     ngOnInit() {
         //  Init Fn
         this.listMaster['listFilter'] = [{ value: false, name: 'Date Filter' }];
-        this.listMaster['dateType'] = [{ id: 'quote_date', name: 'Quote Date' }, { id: 'expiry_dt', name: 'Expiry Date' }, { id: 'ship_date', name: 'Delivery Date' }];
+        this.listMaster['dateType'] = [{ id: 'quote_date', name: 'Quote Date' }, { id: 'expiry_dt', name: 'Expiry Date' }, { id: 'delivery_dt', name: 'Delivery Date' }];
         this.getList();
         this.getListStatus();
         this.user = JSON.parse(localStorage.getItem('currentUser'));
@@ -149,7 +149,7 @@ export class SaleQuotationComponent implements OnInit {
 
     getList() {
         const params = { ...this.tableService.getParams(), ...this.searchForm.value };
-        params['type'] = 'SAQ';
+
         Object.keys(params).forEach((key) => {
             if (params[key] instanceof Array) {
                 params[key] = params[key].join(',');
