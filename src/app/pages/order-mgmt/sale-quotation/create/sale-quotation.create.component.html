@@ -248,12 +248,12 @@
                                 <strong>Ship To</strong>
                             </div>
                             <div class="card-body p-25">
-                                <div class="row">
-                                    <div class="col-md-12 " *ngIf="generalForm.value.is_multi_shp_addr == 1">
+                                <div class="row" *ngIf="generalForm.value.carrier_id == 999">
+                                    <div class="col-md-12 ">
                                         <p>Customer will pickup goods in stores.</p>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="row" *ngIf="generalForm.value.carrier_id != 999">
                                     <div class="col-12 ">
                                         <div class="form-group row">
                                             <label class=" control-label col-5" for="shiping_to" translate>Label
@@ -492,7 +492,7 @@
                     <div class="card-body no-padding">
                         <form [formGroup]="generalForm">
                             <div>
-                                <textarea class="form-control border-0" formControlName="description" rows="11" style="resize:none"></textarea>
+                                <textarea class="form-control border-0" formControlName="note" rows="11" style="resize:none"></textarea>
                             </div>
                         </form>
                     </div>
@@ -507,32 +507,32 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-group row">
-                                    <label class='col-7 control-label'>Total Items</label>
-                                    <div class='col-5'>
+                                    <label class='col-8 control-label'>Total Items</label>
+                                    <div class='col-4'>
                                         <span class="text-success">{{ order_info.order_summary['total_item'] || 0}}</span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class='col-7 control-label'>Total COGS</label>
-                                    <div class='col-5'>
+                                    <label class='col-8 control-label'>Total COGS</label>
+                                    <div class='col-4'>
                                         <span class="text-success">{{ (order_info.order_summary['total_cogs'] || 0) | currency}} </span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class='col-7 control-label'>Total Weight</label>
-                                    <div class='col-5'>
+                                    <label class='col-8 control-label'>Total Weight</label>
+                                    <div class='col-4'>
                                         <span class="text-success">{{ (order_info.order_summary['total_weight'] || 0)}} lbs</span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class='col-7 control-label'>Total Volume</label>
-                                    <div class='col-5'>
+                                    <label class='col-8 control-label'>Total Volume</label>
+                                    <div class='col-4'>
                                         <span class="text-success">{{ (order_info.order_summary['total_vol'] || 0)}} CBM</span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class='col-7 control-label'>Original Shipping Cost</label>
-                                    <div class='col-5'>
+                                    <label class='col-8 control-label'>Original Shipping Cost</label>
+                                    <div class='col-4'>
                                         <span class="text-success">{{ (order_info['original_ship_cost'] || 0) | currency}}</span>
                                     </div>
                                 </div>
