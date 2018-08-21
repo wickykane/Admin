@@ -53,9 +53,17 @@ export class ShippingZoneService {
   //   const url = 'rma/get-info-order/'+id;
   //   return this.API.get(url,null);
   // }
-
+  createShippingZone(params) {
+    const url = ['shipping-zone/create'].join('/');
+    return this.API.post(url, params);
+  }
+  
   getMasterData() {
     const url = ['shipping-zone/master-data'].join('/');
     return this.API.get(url);
+  }
+  getList(params) {
+    const url = ['shipping-zone/list'].join('/');
+    return this.API.get(url,params);
   }
 }

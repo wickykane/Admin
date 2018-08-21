@@ -98,14 +98,14 @@
                     <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                         <tr>
                             <td>
-                                <a class="text-primary" [routerLink]="['detail', item.id]">{{item.sale_quote_num}}</a>
+                                <a class="text-primary" [routerLink]="['detail', item.id]">{{item.quote_no}}</a>
                             </td>
                             <td>{{item.buyer_name}}</td> 
                             <td>{{item.sale_person_name}}</td> 
                             <td>{{item.approver_name}}</td>                          
                             <td class="text-center">{{item.quote_date | date:'MM/dd/yyyy' }}</td>
                             <td class="text-center">
-                                <span ng-if="item.expiry_date!=null">{{item.expiry_date | date:'MM/dd/yyyy' }}</span>
+                                <span ng-if="item.expiry_date!=null">{{item.expire_dt | date:'MM/dd/yyyy' }}</span>
                             </td>
                             <td class="text-center">
                                 {{item.total_price | currency}}
