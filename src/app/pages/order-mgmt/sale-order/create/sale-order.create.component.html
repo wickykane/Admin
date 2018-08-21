@@ -142,7 +142,7 @@
                                  <div class='col-6 text-primary'>
                                     <select class="form-control" id="payment_method" name="payment_method" formControlName="payment_method">
                                     <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
-                                    <option *ngFor="let item of listMaster['payment_methods']" [ngValue]="item.cd">{{item.name}}</option>
+                                    <option *ngFor="let item of listMaster['payment_method']" [ngValue]="item.cd">{{item.name}}</option>
                                     </select>
                                  </div>
                               </div>
@@ -151,8 +151,9 @@
                                  <span class="text-danger">(*)</span>
                                  </label>
                                  <div class='col-6 text-danger'>
-                                    <select [attr.disabled]='true' class="form-control" name="payment_term" formControlName="payment_term">
-                                    <option *ngFor="let item of listMaster['payment_term']" [ngValue]="item.id">{{item.label}}</option>
+                                    <select class="form-control" name="payment_term_id" formControlName="payment_term_id">
+                                    <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
+                                    <option *ngFor="let item of listMaster['payment_term']" [ngValue]="item.id">{{item.des}}</option>
                                     </select>
                                  </div>
                               </div>
@@ -170,9 +171,9 @@
                                  <span class="text-danger">(*)</span>
                                  </label>
                                  <div class='col-6'>
-                                    <select (change)="getQtyAvail()" class="form-control" name="aprrover_id" formControlName="aprrover_id">
-                                    <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
-                                    <option *ngFor="let item of listMaster['approver']" [ngValue]="item.id">{{item.name}}</option>
+                                    <select (change)="getQtyAvail()" class="form-control" name="approver_id" formControlName="approver_id">
+                                    <option [hidden]="true" [disabled]="false"  [ngValue]="null">--Select--</option>
+                                    <option *ngFor="let item of listMaster['sale_mans']" [ngValue]="item.id">{{item.full_name}}</option>
                                     </select>
                                  </div>
                               </div>
@@ -343,9 +344,9 @@
                               <span class="text-danger">(*)</span>
                               </label>
                               <div class='col-6'>
-                                 <select class="form-control" name="ship_method_option" formControlName="ship_method_option" [attr.disabled]="generalForm.get('carrier_id').value != 2">
+                                 <select class="form-control" name="ship_method_option" formControlName="ship_method_option">
                                  <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
-                                 <option *ngFor="let item of listMaster['options']" [ngValue]="item.id">{{item.name}}</option>
+                                 <option *ngFor="let item of listMaster['options']" [ngValue]="item.cd">{{item.name}}</option>
                                  </select>
                               </div>
                            </div>
@@ -355,7 +356,7 @@
                               <span class="text-danger">(*)</span>
                               </label>
                               <div class='col-6'>
-                                 <select class="form-control" name="ship_rate" formControlName="ship_rate" [attr.disabled]="generalForm.get('carrier_id').value != 2">
+                                 <select class="form-control" name="ship_rate" formControlName="ship_rate">
                                  <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                  <option *ngFor="let item of listMaster['ship_rates']" [ngValue]="item.id">{{item.name}}</option>
                                  </select>
@@ -408,6 +409,7 @@
                         <th style="width:100px" translate>Disc %</th>
                         <th style="width:100px" translate>Tax %</th>
                         <th translate style="width:100px">Amount</th>
+                        <th translate style="width:100px">G/L Account</th>
                         <th translate style="width:100px">Price Source</th>
                      </tr>
                   </thead>
@@ -426,7 +428,7 @@
                         <td>{{item.condition_name}}</td>
                         <td>{{item.uom_name}}</td>
                         <td class="text-center">
-                            <i *ngIf="item.free_ship" class="text-success fa fa-check"></i>
+                            <i *ngIf="item.is_shipping_free" class="text-success fa fa-check"></i>
                         </td>
                         <td>{{item.qty_avail}}</td>
                         <td>
@@ -447,7 +449,10 @@
                            <input [textMask]="{mask: numberMaskObject()}" class="form-control input-sm" type="number" [(ngModel)]="item.tax_percent" (change)="updateTotal();changeFromSource(item)">
                         </td>
                         <td class="text-center">
-                           <span>{{item.totalItem | currency}}</span>
+                           <span>{{item.amount | currency}}</span>
+                        </td>
+                        <td>
+                            {{ item.income_account_name }}
                         </td>
                         <td class="text-center">
                            <span>
@@ -495,39 +500,39 @@
                      <div class="form-group row">
                         <label class='col-7 control-label'>Total Items</label>
                         <div class='col-5'>
-                           <span class="text-success"></span>
+                           <span class="text-success">{{ order_info.order_summary['total_item'] || 0}}</span>
                         </div>
                      </div>
                      <div class="form-group row">
                         <label class='col-7 control-label'>Total COGS</label>
                         <div class='col-5'>
-                           <span class="text-success"></span>
+                           <span class="text-success">{{ (order_info.order_summary['total_cogs'] || 0) | currency}}</span>
                         </div>
                      </div>
                      <div class="form-group row">
                         <label class='col-7 control-label'>Total Weight</label>
                         <div class='col-5'>
-                           <span class="text-success"></span>
+                           <span class="text-success">{{ (order_info.order_summary['total_weight'] || 0)}} lbs</span>
                         </div>
                      </div>
                      <div class="form-group row">
                         <label class='col-7 control-label'>Total Volume</label>
                         <div class='col-5'>
-                           <span class="text-success"></span>
+                           <span class="text-success">{{ (order_info.order_summary['total_vol'] || 0)}} CBM</span>
                         </div>
                      </div>
                      <div class="form-group row">
                         <label class='col-7 control-label'>Original Shipping Cost</label>
                         <div class='col-5'>
-                           <span class="text-success"></span>
+                           <span class="text-success">{{ (order_info['original_ship_cost'] || 0) | currency}}</span>
                         </div>
                      </div>
-                     <div class="form-group row">
+                     <!-- <div class="form-group row">
                         <label class='col-7 control-label'>Origin. Handle Fee</label>
                         <div class='col-5'>
-                           <span class="text-success"></span>
+                           <span class="text-success">{{ (order_info['original_ship_cost'] || 0) | currency}}</span>
                         </div>
-                     </div>
+                     </div> -->
                   </div>
                </div>
             </div>
@@ -550,19 +555,19 @@
                         </div>
                      </div>
 
-                     <div class="form-group row">
-                        <label class='col-5 control-label'>+ TAX/VAT (%):</label>
-                        <div class='col-6 offset-md-1'>
-                           <input class="form-control" readonly="true" [(ngModel)]="order_info['vat_percent_amount']" class="form-control" value="0" type="number">
-                        </div>
+                     <div *ngFor="let item of order_info['taxs']" class="form-group row">
+                         <label class='col-5 control-label'>+ TAX ({{item.value}}%):</label>
+                         <div class='col-5 padding-lr-10'>
+                             <input class="form-control" readonly="true" [(ngModel)]="item.amount" class="form-control" value="0" type="number">
+                         </div>
                      </div>
                      <div class="form-group row margin-lr-0 text-light bg-danger">
-                        <label class="col-5 control-label padding-lr-5">
-                        <strong>Grand Total:</strong>
-                        </label>
-                        <div class="col-6 offset-md-1">
-                           <strong>{{order_info.total | currency}}</strong>
-                        </div>
+                         <label class="col-5 control-label ">
+                             <strong>Grand Total:</strong>
+                         </label>
+                         <div class="col-6 offset-md-1 ">
+                             <strong>{{order_info.total | currency}}</strong>
+                         </div>
                      </div>
                   </div>
                </div>

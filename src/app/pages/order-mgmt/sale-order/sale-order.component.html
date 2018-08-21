@@ -190,13 +190,13 @@
                                    <td class="text-center">{{item.total_price | currency}}</td>
                                    <td>
                                        <span class="label label-draft" *ngIf="item.sts_code == 'NW'">{{item.sts}}</span>
-                                       <span class="label label-warning" *ngIf="item.sts_code == 'IP'">{{item.sts}}</span>
+                                       <span class="label label-warning" *ngIf="item.sts_code == 'SM'">{{item.sts}}</span>
                                        <span class="label label-draft" *ngIf="item.sts_code == 'PP'">{{item.sts}}</span>
                                        <span class="label  label-success" *ngIf="item.sts_code == 'CP'">{{item.sts}}</span>
                                        <span class="label  label-success" *ngIf="item.sts_code == 'AP'">{{item.sts}}</span>
                                        <span class="label label-draft" *ngIf="item.sts_code == 'RS'">{{item.sts}}</span>
                                        <span class="label  label-draft" *ngIf="item.sts_code == 'DL'">{{item.sts}}</span>
-                                       <span class="label label-danger" *ngIf="item.sts_code == 'PD'">{{item.sts}}</span>
+                                       <span class="label label-danger" *ngIf="item.sts_code == 'RJ'">{{item.sts}}</span>
                                        <span class="label  label-draft" *ngIf="item.sts_code == 'Draft'">{{item.sts}}</span>
                                    </td>
                                    <td class="text-nowrap">
