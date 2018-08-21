@@ -23,7 +23,7 @@
                         <ng-container *ngIf="listMaster['listFilter'][0].value">
                             <div class="col-md-4">
                                 <label for="type" class="control-label" translate>Date Type</label>
-                                <select class="form-control" formControlName="type">
+                                <select class="form-control" formControlName="date_type">
                                     <option value="null" selected="true">--Select--</option>
                                     <option *ngFor="let item of listMaster['dateType']" [ngValue]="item.id">{{item.name}}</option>
                                 </select>
