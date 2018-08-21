@@ -174,6 +174,12 @@ export class OrderService {
         const url = 'order/submit/' + ordId;
         return this.API.put(url);
     }
+
+    updateStatusOrder(order_id, status) {
+      const url = '/order/updateStatus/' + order_id + '/' + status;
+      return this.API.put(url);
+    }
+
     changeOrderStatus(orderNum, params) {
         const url = 'order/update-order-status-by-code/' + orderNum;
         return this.API.put(url, params);

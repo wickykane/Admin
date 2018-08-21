@@ -133,9 +133,9 @@ export class SaleOrderCreateComponent implements OnInit {
             'shipping_id': [null],
             'description': [null],
             'aprrover_id': [null],
-            'ship_via': [null],
+            'carrier_id': [null],
             'ship_rate': [null],
-            'ship_option': [null]
+            'ship_method_option': [null]
         });
         //  Init Key
         this.keyService.watchContext.next(this);
@@ -143,24 +143,9 @@ export class SaleOrderCreateComponent implements OnInit {
 
     ngOnInit() {
         const user = JSON.parse(localStorage.getItem('currentUser'));
-        this.listMaster['multi_ship'] = [{ id: 0, label: 'No' }, { id: 1, label: 'Yes' }];
-        this.listMaster['from_src'] = [{ id: 0, label: 'From Master' }, { id: 1, label: 'From Quote' }, { id: 2, label: 'Manual' }];
         this.orderService.getOrderReference().subscribe(res => { Object.assign(this.listMaster, res.data); this.changeOrderType(); });
         this.orderService.getPaymentMethod().subscribe(res => this.listMaster['payment_methods'] = res.data);
 
-        this.listMaster['ship_via'] = [{
-            id: 1,
-            name: 'Pickup in Store'
-        }, {
-            id: 2,
-            name: 'UPS'
-        }, {
-            id: 3,
-            name: 'SEFL'
-        }, {
-            id: 4,
-            name: 'Other'
-        }];
         //  Item
         this.list.items = this.router.getNavigatedData() || [];
         const currentDt = new Date();
@@ -227,6 +212,7 @@ export class SaleOrderCreateComponent implements OnInit {
         this.generalForm.controls['description'].patchValue('');
         this.updateTotal();
     }
+
     selectAddress(type) {
         try {
             switch (type) {
@@ -234,6 +220,7 @@ export class SaleOrderCreateComponent implements OnInit {
                     const ship_id = this.generalForm.value.shipping_id;
                     if (ship_id) {
                         this.addr_select.shipping = this.findDataById(ship_id, this.customer.shipping);
+                        this.getShippingReference(ship_id);
                     }
                     break;
                 case 'billing':
@@ -248,24 +235,17 @@ export class SaleOrderCreateComponent implements OnInit {
         }
     }
 
+    getShippingReference(id) {
+        this.orderService.getShippingReference(id).subscribe(res => {
+            this.listMaster['carriers'] = res.data;
+        });
+    }
+
     changeShipVia() {
-        const id = this.generalForm.value.ship_via;
-        switch (id) {
-            case 1:
-                this.listMaster['ship_option'] = [{}];
-                this.listMaster['ship_rate'] = ['Rates Associated with Account', 'Free Ship Rules'];
-                break;
-            case 2:
-                this.generalForm.patchValue({'ship_option': 1});
-                this.generalForm.patchValue({'ship_rate': 1});
-                break;
-            case 3:
-            this.generalForm.patchValue({'ship_option': 2});
-            this.generalForm.patchValue({'ship_rate': 2});
-                break;
-            default:
-                break;
-        }
+      const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id);
+      this.listMaster['options'] = carrier.options || [];
+      this.listMaster['ship_rates'] = carrier.ship_rate || [];
+      this.generalForm.patchValue({ ship_method_option: null, ship_rate: null });
     }
 
     findDataById(id, arr) {
@@ -400,14 +380,33 @@ export class SaleOrderCreateComponent implements OnInit {
         }, dismiss => { });
     }
 
-    addNewMisc() {
-
+    addNewMiscItem() {
         const modalRef = this.modalService.open(ItemMiscModalContent, { size: 'lg' });
-        modalRef.componentInstance.company_id = this.generalForm.value.company_id;
         modalRef.result.then(res => {
+            if (res instanceof Array && res.length > 0) {
+                const listAdded = [];
+                (this.list.items).forEach((item) => {
+                    listAdded.push(item.item_id + item.item_condition_id);
+                });
 
+                res.forEach((item) => {
+                    if (item.sale_price) { item.sale_price = Number(item.sale_price); }
+                    item.quantity = 1;
+                    item.is_misc = 1;
+                    item.uom_name = item.uom;
+                    item.item_id = item.id;
+                    item.sku = item.no;
+                    item.source_id = 3;
+                    item.source_name = 'System';
+                });
+
+                this.list.items = this.list.items.concat(res.filter((item) => {
+                    return listAdded.indexOf(item.item_id + (item.item_condition_id || 'misc')) < 0;
+                }));
+
+                this.updateTotal();
+            }
         }, dismiss => { });
-
     }
 
     createOrder(type) {
