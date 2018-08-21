@@ -46,5 +46,6 @@ import { StateFilterModalComponent } from './stateFilter.modal';
          ConfirmModalContent, PromotionModalContent, SiteModalComponent,StateFilterModalComponent,FreeShippingOptionsModalComponent,FlatRateOptionsModalComponent,
           OrderSaleQuoteModalContent, InvoiceModalContent, OrderHistoryModalContent,CustomRateOptionsModalComponent,PickupOptionsModalComponent,UPSConfigurationModalComponent]
 
+
 })
 export class ItemModalModule { }
