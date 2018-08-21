@@ -1,38 +1,16 @@
 <div [@routerTransition]>
-    <app-page-header [heading]="'DETAIL'" [icon]="'fa-th-list'"></app-page-header>
-    <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
+    <app-page-header [heading]="'ORDERS DETAIL'" [icon]="'fa-th-list'"></app-page-header>
+    <!-- <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut> -->
     <section class="main-container block-order-detail">
-        <div class="block-button">
-            <ul class="list-btn-custom">
-                <li *ngIf="orderDetail['sts_code'] == 'SM'">
-                  <button ngbTooltip="Click to Approve" data-toggle="tooltip" type="button" class="btn btn-default"
-                      (click)="approveByManager(orderDetail['sale_quote_id'])">
-                      <i class="fa fa-check-square"></i> Approve
-                  </button>
-                </li>
-                <li *ngIf="orderDetail['sts_code'] == 'SM'">
-                  <button ngbTooltip="Click to Reject" data-toggle="tooltip" type="button" class="btn btn-default"
-                      (click)="rejectByManager(orderDetail['sale_quote_id'])"> Reject
-                      <i class="fa fa-ban"></i>
-                  </button>
-                </li>
-                <li *ngIf="orderDetail['sts_code'] == 'AM'">
-                  <button ngbTooltip="Click to Sent Buyer" data-toggle="tooltip" type="button" class="btn btn-default" (click)="convertOrderToSO(orderDetail['sale_quote_id'])">
-                      <i class="fa fa-paper-plane"></i> Convert To SaleOrder
-                  </button>
-                </li>
-                <li><button class="btn btn-outline-dark" (click)="back()"><i class="fa fa-arrow-left"></i>Back</button></li>
-            </ul>
-        </div>
-        <ngb-tabset>
-            <ngb-tab title="INFORMATION">
+        <ngb-tabset class="tabs-order full-width">
+            <ngb-tab title="Information">
                 <ng-template ngbTabContent>
-                    <app-sale-quote-info-tab [detailOrder]="orderDetail" (stockValueChange)="checkRender($event)"></app-sale-quote-info-tab>
+                    <app-quote-info-tab [orderId]="orderId" [orderDetail]="orderDetail" (stockValueChange)="checkRender($event)"></app-quote-info-tab>
                 </ng-template>
             </ngb-tab>
-            <ngb-tab title="SALES QUOTE HISTORY">
+            <ngb-tab title="History">
                 <ng-template ngbTabContent>
-                    <app-sale-quote-history-tab [saleQuoteId]="saleQuoteId"></app-sale-quote-history-tab>
+                    <app-sale-order-history-tab [orderId]="orderId"></app-sale-order-history-tab>
                 </ng-template>
             </ngb-tab>
         </ngb-tabset>

@@ -117,7 +117,7 @@ export class OrderService {
         return this.API.get(url, params);
     }
     getSaleQuoteDetail(id) {
-        const url = ['sale-quote', id].join('/');
+        const url = ['sale-quote', 'detail', id].join('/');
         return this.API.get(url);
     }
     getSaleQuoteHistory(id) {
@@ -176,8 +176,8 @@ export class OrderService {
     }
 
     updateStatusOrder(order_id, status) {
-      const url = '/order/updateStatus/' + order_id + '/' + status;
-      return this.API.put(url);
+        const url = '/order/updateStatus/' + order_id + '/' + status;
+        return this.API.put(url);
     }
 
     changeOrderStatus(orderNum, params) {
