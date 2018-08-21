@@ -533,7 +533,7 @@
                                 <div class="form-group row">
                                     <label class='col-7 control-label'>Original Shipping Cost</label>
                                     <div class='col-5'>
-                                        <span class="text-success">{{ (order_info.order_summary['original_ship_cost'] || 0) | currency}}</span>
+                                        <span class="text-success">{{ (order_info['original_ship_cost'] || 0) | currency}}</span>
                                     </div>
                                 </div>
                             </div>
