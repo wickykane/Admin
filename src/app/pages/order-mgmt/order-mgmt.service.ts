@@ -113,7 +113,7 @@ export class OrderService {
 
     //  Sale Quotation
     getListSalesQuotation(params) {
-        const url = 'sale-quote';
+        const url = 'sale-quote/get-list';
         return this.API.get(url, params);
     }
     getSaleQuoteDetail(id) {
@@ -254,5 +254,13 @@ export class OrderService {
     getShippingReference(id) {
         const url = 'shipping-zone/configuration-by-address/' + id;
         return this.API.get(url);
+    }
+    getTaxShipping(params) {
+        const url = 'shipping-zone/calc-tax-shipping';
+        return this.API.post(url, params);
+    }
+    createQuoteOrder(params) {
+        const url = 'sale-quote/create';
+        return this.API.post(url, params);
     }
 }
