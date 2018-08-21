@@ -182,7 +182,19 @@
                             <label>
                                 <b>Current Rate (*)</b>
                             </label>
-                            <input type="text" OnlyNumber="true" maxlength="50" class="form-control" formControlName="current_rate">
+                            <input *ngIf="isCreateNew" type="text" OnlyNumber="true" maxlength="50" class="form-control" formControlName="current_rate">
+                            <span class="show-tooltip" style="font-size: 1.3em; margin-left: 5px;">
+                                {{ !isCreateNew ? selectedStateTax.current_rate : ''}} %
+                            </span>
+                            <span class="error" *ngIf="isClickedSave && stateRateForm.controls.current_rate.invalid">
+                                (!): This field cannot be blank. Please input Current Rate.
+                            </span>
+                        </div>
+                        <div class="row create-section-info" *ngIf="!isCreateNew">
+                            <label>
+                                <b>New Rate (*)</b>
+                            </label>
+                            <input type="text" OnlyNumber="true" maxlength="50" class="form-control" [(ngModel)]="newRate" [ngModelOptions]="{standalone: true}">
                             <span class="show-tooltip" style="font-size: 1.3em; margin-left: 5px;">
                                 %
                             </span>
@@ -194,9 +206,8 @@
                             <label>
                                 <b>Effective Date (*)</b>
                             </label>
-                            <!-- <input type="text" maxlength="50" class="form-control" formControlName="effect_date"> -->
                             <div class="input-group" clickOutside (clickOutside)="d&&d.close()">
-                                <input class="form-control" placeholder="yyyy-mm-dd" name="from_dt" disabled
+                                <input type="date" class="form-control" placeholder="yyyy-mm-dd" name="from_dt" [disabled]="true"
                                     (click)="d.toggle()" (keydown)="$event.preventDefault()"
                                     formControlName="effective_date" ngbDatepicker #d="ngbDatepicker">
                                 <div class="input-group-append">
@@ -208,6 +219,12 @@
                             <span class="error" *ngIf="isClickedSave && stateRateForm.controls.effective_date.invalid">
                                 (!): This field cannot be blank. Please input Effective Date.
                             </span>
+                        </div>
+                        <div class="row create-section-info" *ngIf="!isCreateNew">
+                            <label>
+                                <b>Old Rate (*)</b>
+                            </label>
+                            <span>{{oldRate ? oldRate + '%' : '' }}</span>
                         </div>
                         <div class="row create-section-info">
                             <label>

@@ -72,6 +72,9 @@ export class SalesTaxAuthComponent implements OnInit {
     public countryGeneralForm: FormGroup;
     public stateGeneralForm: FormGroup;
     public stateRateForm: FormGroup;
+
+    public oldRate = null;
+    public newRate = null;
     //#endregion initialize variables
 
     //#region constructor
@@ -302,11 +305,15 @@ export class SalesTaxAuthComponent implements OnInit {
 
     onSelectCountryTax(countryTax) {
         this.selectedStateTax = {};
+        this.newRate = null;
+        this.oldRate = null;
         this.getCountryTaxAuthorityDetail(countryTax['id']);
     }
 
     onSelectStateTax(stateTax) {
         this.selectedCountryTax = {};
+        this.newRate = null;
+        this.oldRate = null;
         this.getStateTaxAuthorityDetail(stateTax['id']);
     }
 
@@ -402,21 +409,27 @@ export class SalesTaxAuthComponent implements OnInit {
 
     onUpdateStateTaxAuthority() {
         const params =  { ...this.stateGeneralForm.value, ...this.stateRateForm.value };
-        console.log(this.selectedStateTax['id']);
-        console.log(params)
-        // this.salesTaxAuthService.updateStateTaxAuthority(this.selectedStateTax['id'], params).subscribe(
-        //     res => {
-        //         try {
-        //             this.handleFinishSaveState();
-        //             this.toastr.success(res.message);
-        //         } catch (err) {
-        //             console.log(err);
-        //         }
-        //     },
-        //     err => {
-        //         console.log(err);
-        //     }
-        // );
+        params['tax_authority_country_id'] = this.selectedStateTax['tax_authority_country_id'];
+        params['current_rate'] = this.newRate !== null ? this.newRate : params['current_rate'];
+        Object.keys(params).forEach(key => {
+            params[key] = params[key].toString();
+        })
+        this.salesTaxAuthService.updateStateTaxAuthority(this.selectedStateTax['id'], params).subscribe(
+            res => {
+                try {
+                    this.getListSalesTaxAuthority();
+                    this.getStateTaxAuthorityDetail(this.selectedStateTax['id']);
+                    this.oldRate = this.newRate !== null ? this.newRate : null;
+                    this.newRate = null;
+                    this.toastr.success(res.message);
+                } catch (err) {
+                    console.log(err);
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        );
     }
     //#endregion call API for Save data
 
