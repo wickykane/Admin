@@ -410,7 +410,7 @@ export class SaleQuotationCreateComponent implements OnInit {
             });
             this.list.items = this.list.items.concat(misc);
             this.updateTotal();
-            this.order_info.order_summary['original_ship_cost'] = res.data.price;
+            this.order_info['original_ship_cost'] = res.data.price;
         });
     }
 
@@ -441,7 +441,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         const params = {
             ...this.generalForm.value,
             status_id: type,
-            original_ship_cost: this.order_info.order_summary['original_ship_cost'],
+            original_ship_cost:  this.order_info['original_ship_cost'],
             items
         };
 
