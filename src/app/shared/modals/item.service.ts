@@ -90,5 +90,18 @@ export class ItemService {
         const url = 'buyer/sales-orders/' + company_id;
         return this.API.get(url);
     }
+    checkCondition(params) {
+        var data = Object.assign({}, params);
+        for (var property in data) {
+            if (data[property] == true) {
+                data[property] = "1";
+            }
+            else if (data[property] == false) {
+                data[property] = "0";
+            }
+        }
+        const url = 'shipping-zone/check-condition';
+        return this.API.post(url, data);
+    }
 
 }

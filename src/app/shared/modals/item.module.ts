@@ -14,6 +14,11 @@ import { ItemModalContent } from './item.modal';
 
 
 import { FreeShippingOptionsModalComponent } from './free-shipping-options.modal';
+import { FlatRateOptionsModalComponent } from './flat-rate-options.modal';
+import { CustomRateOptionsModalComponent } from './custom-rate-options.modal';
+import { PickupOptionsModalComponent} from './pickup-options.modal';
+import { UPSConfigurationModalComponent} from './ups-configuration.modal';
+
 import { InvoiceModalContent } from './invoice.modal';
 import { OrderHistoryModalContent } from './order-history.modal';
 import { OrderSaleQuoteModalContent } from './order-salequote.modal';
@@ -29,17 +34,18 @@ import { StateFilterModalComponent } from './stateFilter.modal';
         CommonModule,
         CommonShareModule
     ],
-    declarations: [ItemMiscModalContent, ItemModalContent, AddressModalContent, ConfirmModalContent,
-        PromotionModalContent, SiteModalComponent, StateFilterModalComponent, FreeShippingOptionsModalComponent, OrderSaleQuoteModalContent,
-        ItemQuoteModalContent,
-        InvoiceModalContent, OrderHistoryModalContent],
+    declarations: [ItemMiscModalContent,ItemModalContent, AddressModalContent, ConfirmModalContent,
+         PromotionModalContent, SiteModalComponent,StateFilterModalComponent,FreeShippingOptionsModalComponent,FlatRateOptionsModalComponent, OrderSaleQuoteModalContent,
+         ItemQuoteModalContent,CustomRateOptionsModalComponent,PickupOptionsModalComponent,
+          InvoiceModalContent, OrderHistoryModalContent,UPSConfigurationModalComponent],
     providers: [TableService, ItemService],
-    exports: [ItemMiscModalContent, ItemModalContent, AddressModalContent, ConfirmModalContent, ItemQuoteModalContent,
-        PromotionModalContent, SiteModalComponent, StateFilterModalComponent, FreeShippingOptionsModalComponent, OrderSaleQuoteModalContent,
-        InvoiceModalContent, OrderHistoryModalContent],
-    entryComponents: [ItemMiscModalContent, ItemModalContent, AddressModalContent, ItemQuoteModalContent,
-        ConfirmModalContent, PromotionModalContent, SiteModalComponent, StateFilterModalComponent, FreeShippingOptionsModalComponent,
-        OrderSaleQuoteModalContent, InvoiceModalContent, OrderHistoryModalContent]
+    exports: [ItemMiscModalContent,ItemModalContent, AddressModalContent, ConfirmModalContent, ItemQuoteModalContent,
+         PromotionModalContent, SiteModalComponent,StateFilterModalComponent,FreeShippingOptionsModalComponent,FlatRateOptionsModalComponent, OrderSaleQuoteModalContent,
+          InvoiceModalContent,CustomRateOptionsModalComponent, OrderHistoryModalContent,PickupOptionsModalComponent,UPSConfigurationModalComponent],
+    entryComponents: [ItemMiscModalContent,ItemModalContent, AddressModalContent, ItemQuoteModalContent,
+         ConfirmModalContent, PromotionModalContent, SiteModalComponent,StateFilterModalComponent,FreeShippingOptionsModalComponent,FlatRateOptionsModalComponent,
+          OrderSaleQuoteModalContent, InvoiceModalContent, OrderHistoryModalContent,CustomRateOptionsModalComponent,PickupOptionsModalComponent,UPSConfigurationModalComponent]
+
 
 })
 export class ItemModalModule { }
