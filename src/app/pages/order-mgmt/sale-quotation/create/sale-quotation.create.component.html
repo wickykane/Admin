@@ -345,7 +345,7 @@
                                                 <div class='col-6'>
                                                     <select class="form-control" id="ship_method_option" name="ship_method_option" formControlName="ship_method_option">
                                                     <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
-                                                    <option *ngFor="let item of listMaster['options']" [ngValue]="item.id">{{item.name}}</option>
+                                                    <option *ngFor="let item of listMaster['options']" [ngValue]="item.cd">{{item.name}}</option>
                                                 </select>
                                                 </div>
                                             </div>
@@ -435,7 +435,7 @@
                                                 <i *ngIf="item.free_ship" class="text-success fa fa-check"></i>
                                             </td>
                                             <td>
-                                                <input [disabled]="item.is_misc" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (change)="updateTotal()" (keypress)="_keyPress($event)">
+                                                <input [disabled]="item.misc_id" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (change)="updateTotal()" (keypress)="_keyPress($event)">
                                             </td>
                                             <td>
                                                 <div>
@@ -449,10 +449,10 @@
                                                 <input OnlyNumber class="form-control input-sm" type="number" [(ngModel)]="item.discount" (change)="updateTotal();changeFromSource(item)">
                                             </td>
                                             <td>
-                                                <input OnlyNumber class="form-control input-sm" type="number" [(ngModel)]="item.discount" (change)="updateTotal();changeFromSource(item)">
+                                                <input OnlyNumber class="form-control input-sm" type="number" [(ngModel)]="item.tax_percent" (change)="updateTotal();changeFromSource(item)">
                                             </td>
                                             <td class="text-center">
-                                                <span>{{item.totalItem | currency}}</span>
+                                                <span>{{item.amount | currency}}</span>
                                             </td>
                                             <td>
                                                 {{ item.income_account_name }}
@@ -476,7 +476,7 @@
                                 <i class="fa fa-plus"></i>Misc Item
                             </button>
                             <button (click)="calculateShipping()" class="btn btn-link">
-                                Calculate Shipping
+                                Calculate Tax & Shipping
                             </button>
                         </div>
                     </div>
@@ -509,37 +509,31 @@
                                 <div class="form-group row">
                                     <label class='col-7 control-label'>Total Items</label>
                                     <div class='col-5'>
-                                        <span class="text-success">30</span>
+                                        <span class="text-success">{{ order_info.order_summary['total_item'] || 0}}</span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class='col-7 control-label'>Total COGS</label>
                                     <div class='col-5'>
-                                        <span class="text-success">30 lbs</span>
+                                        <span class="text-success">{{ (order_info.order_summary['total_cogs'] || 0) | currency}} </span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class='col-7 control-label'>Total Weight</label>
                                     <div class='col-5'>
-                                        <span class="text-success">30$</span>
+                                        <span class="text-success">{{ (order_info.order_summary['total_weight'] || 0)}} lbs</span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class='col-7 control-label'>Total Volume</label>
                                     <div class='col-5'>
-                                        <span class="text-success">30$</span>
+                                        <span class="text-success">{{ (order_info.order_summary['total_vol'] || 0)}} CBM</span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class='col-7 control-label'>Original Shipping Cost</label>
                                     <div class='col-5'>
-                                        <span class="text-success">30.000CBM</span>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class='col-7 control-label'>Origin. Handle Fee</label>
-                                    <div class='col-5'>
-                                        <span class="text-success">30$</span>
+                                        <span class="text-success">{{ (order_info.order_summary['original_ship_cost'] || 0) | currency}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -563,7 +557,7 @@
                                         <strong>{{order_info.sub_total | currency}}</strong>
                                     </div>
                                 </div>
-                                <div class="form-group row">
+                                <!-- <div class="form-group row">
                                     <label class='col-5 control-label'>- Discount (%)</label>
                                     <div class='col-2 no-padding'>
                                         <input OnlyNumber class="form-control" [(ngModel)]="order_info.discount_percent" class="form-control" type="text" (change)="updateTotal()">
@@ -571,14 +565,11 @@
                                     <div class='col-5 padding-lr-10'>
                                         <input class="form-control" readonly="true" [(ngModel)]="order_info.total_discount" class="form-control" value="0" type="number">
                                     </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class='col-5 control-label'>+ TAX/VAT (%):</label>
-                                    <div class='col-2 no-padding'>
-                                        <input OnlyNumber class="form-control" [(ngModel)]="order_info.vat_percent" class="form-control" type="text" (change)="updateTotal()">
-                                    </div>
+                                </div> -->
+                                <div *ngFor="let item of order_info['taxs']" class="form-group row">
+                                    <label class='col-5 control-label'>+ TAX ({{item.value}}%):</label>
                                     <div class='col-5 padding-lr-10'>
-                                        <input class="form-control" readonly="true" [(ngModel)]="order_info['vat_percent_amount']" class="form-control" value="0" type="number">
+                                        <input class="form-control" readonly="true" [(ngModel)]="item.amount" class="form-control" value="0" type="number">
                                     </div>
                                 </div>
                                 <div class="form-group row margin-lr-0 text-light bg-danger">
@@ -597,9 +588,9 @@
         </div>
         <div class="row">
             <div class="col-md-12 mg-top-15 text-right">
-                <button type="button" class="btn btn-outline-info" (click)="createOrder('quote')" translate>Save As Quote</button>
-                <button type="button" class="btn btn-outline-warning" (click)="createOrder('draft')" translate>Save As Draft</button>
-                <button type="button" class="btn btn-outline-primary" (click)="createOrder('create')" ng-disabled="!generalForm.valid" translate>Save & Submit</button>
+                <button type="button" class="btn btn-outline-info" (click)="createOrder(1)" translate>Save As Quote</button>
+                <button type="button" class="btn btn-outline-warning" (click)="createOrder(4)" translate>Save As Draft</button>
+                <button type="button" class="btn btn-outline-primary" (click)="createOrder(2)" ng-disabled="!generalForm.valid" translate>Save & Submit</button>
                 <button type="button" class="btn btn-default" [routerLink]="['/order-management/sale-order']" translate>Cancel</button>
             </div>
         </div>

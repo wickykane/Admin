@@ -84,6 +84,7 @@ export class SaleQuotationCreateComponent implements OnInit {
 
     public order_info = {
         total: 0,
+        order_summary: {},
         sub_total: 0,
         order_date: '',
         customer_po: '',
@@ -99,11 +100,10 @@ export class SaleQuotationCreateComponent implements OnInit {
         items: [],
         backItems: []
     };
-    public payment;
-    public promotionList = {};
+
     public copy_customer = {};
     public copy_addr = {};
-    public list_priority = [];
+
 
     public searchKey = new Subject<any>(); // Lazy load filter
 
@@ -262,6 +262,9 @@ export class SaleQuotationCreateComponent implements OnInit {
     }
 
     changeFromSource(item) {
+        if (+item.source_id === 3) {
+            return;
+        }
         item.source_id = 2;
         item.source_name = 'Manual';
     }
@@ -269,30 +272,24 @@ export class SaleQuotationCreateComponent implements OnInit {
     updateTotal() {
         this.order_info.total = 0;
         this.order_info.sub_total = 0;
-        if (this.list.items !== undefined) {
-            (this.list.items || []).map((item) => {
-                let sub_quantity = 0;
-                item.discount = item.discount !== undefined ? item.discount : 0;
-                if (!item.products) { item.products = []; }
-                item.products.map(sub_item => { sub_quantity += sub_item.quantity; });
-                item.totalItem = (Number(item.sale_price) * (Number(item.quantity) + sub_quantity)
-                    - (Number(item.sale_price) * (Number(item.quantity) + sub_quantity)) * Number(item.discount) / 100)
-                    - (item.promotion_discount_amount ? item.promotion_discount_amount : 0);
-                if (item.totalItem) {
-                    this.order_info.sub_total = this.order_info.sub_total + item.totalItem;
-                }
-            });
-        }
-        this.order_info['shipping_cost'] = (this.order_info['shipping_cost'] !== undefined ? this.order_info['shipping_cost'] : 0);
-        this.order_info['alt_vat_percent'] = (this.order_info['vat_percent'] !== undefined ? this.order_info['vat_percent'] : 0);
-        this.order_info['alt_discount'] = (this.order_info['discount_percent'] !== undefined ? this.order_info['discount_percent'] : 0);
-        this.promotionList['total_invoice_discount'] = (this.promotionList['total_invoice_discount']
-            ? this.promotionList['total_invoice_discount'] : 0);
 
-        this.order_info.total_discount = parseFloat((this.order_info.sub_total * Number(this.order_info['alt_discount']) / 100).toFixed(2));
-        const sub_after_discount = this.order_info.sub_total - this.order_info.total_discount;
-        this.order_info['vat_percent_amount'] = parseFloat((sub_after_discount * Number(this.order_info['alt_vat_percent']) / 100).toFixed(2));
-        this.order_info.total = this.order_info.sub_total - this.order_info.total_discount + Number(this.order_info['shipping_cost']) + this.order_info['vat_percent_amount'] - this.promotionList['total_invoice_discount'];
+        const items = this.list.items.filter(i => !i.misc_id);
+        this.groupTax(this.list.items);
+        this.order_info.order_summary = {};
+        this.order_info.order_summary['total_item'] = items.length;
+        items.forEach(item => {
+            this.order_info.order_summary['total_cogs'] = (this.order_info.order_summary['total_cogs'] || 0) + (+item.cost_price || 0) * (item.quantity || 0);
+            this.order_info.order_summary['total_vol'] = (this.order_info.order_summary['total_vol'] || 0) + (+item.vol || 0);
+            this.order_info.order_summary['total_weight'] = (this.order_info.order_summary['total_weight'] || 0) + (+item.wt || 0);
+        });
+
+
+        this.list.items.forEach(item => {
+            item.amount = (+item.quantity * (+item.sale_price || 0)) * (100 - (+item.discount || 0)) / 100;
+            this.order_info.sub_total += item.amount;
+        });
+
+        this.order_info.total = +this.order_info['total_tax'] + +this.order_info.sub_total;
     }
 
     deleteAction(id, item_condition) {
@@ -335,22 +332,22 @@ export class SaleQuotationCreateComponent implements OnInit {
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
-                    listAdded.push(item.item_id + item.item_condition_id);
+                    listAdded.push(item.id + (item.item_condition_id || 'misc'));
                 });
 
                 res.forEach((item) => {
                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
+                    item.source_id = 2;
+                    item.source_name = 'Manual';
                     item.quantity = 1;
                     item.is_misc = 1;
                     item.uom_name = item.uom;
-                    item.item_id = item.id;
+                    item.misc_id = item.id;
                     item.sku = item.no;
-                    item.source_id = 0;
-                    item.source_name = 'From Master';
                 });
 
                 this.list.items = this.list.items.concat(res.filter((item) => {
-                    return listAdded.indexOf(item.item_id + (item.item_condition_id || 'misc')) < 0;
+                    return listAdded.indexOf(item.id + (item.item_condition_id || 'misc')) < 0;
                 }));
 
                 this.updateTotal();
@@ -395,64 +392,65 @@ export class SaleQuotationCreateComponent implements OnInit {
     };
 
 
-    createOrder(type) {
-        const products = [];
-        this.list.items.forEach((item) => {
-            products.push({
-                item_id: item.item_id,
-                item_type: item.item_type,
-                quantity: item.quantity,
-                sale_price: item.sale_price,
-                order_detail_id: item.order_detail_id,
-                item_condition_id: item.item_condition_id,
-                discount_percent: item.discount || 0,
-                shipping_address_id: item.shipping_address_id,
+    calculateShipping() {
+        const params = {
+            'customer': this.generalForm.value.company_id,
+            'address': this.generalForm.value.shipping_id,
+            'ship_via': this.generalForm.value.carrier_id,
+            'option': this.generalForm.value.ship_method_option,
+            'ship_rate': this.generalForm.value.ship_rate,
+            'items': this.list.items.filter(item => !item.misc_id)
+        };
+        this.orderService.getTaxShipping(params).subscribe(res => {
+            this.list.items = res.data.items;
+            const misc = res.data.mics.map(item => {
+                item.is_misc = 1;
+                item.misc_id = item.id;
+                return item;
             });
-
-            if (item.products.length > 0) {
-                item.products.forEach((subItem, index) => {
-                    products.push({
-                        item_id: subItem.item_id,
-                        item_type: item.item_type,
-                        quantity: subItem.quantity,
-                        sale_price: subItem.sale_price,
-                        discount_percent: subItem.discount || 0,
-                        item_condition_id: item.item_condition_id,
-                        shipping_address_id: subItem.shipping_address_id,
-                    });
-                });
-            }
+            this.list.items = this.list.items.concat(misc);
+            this.updateTotal();
+            this.order_info.order_summary['original_ship_cost'] = res.data.price;
         });
-        let params = {};
-        switch (type) {
-            case 'create':
-                params = {
-                    'items': products,
-                    'is_draft_order': 0
-                };
-                break;
-            case 'quote':
-                params = {
-                    'items': products,
-                    'is_draft_order': 1,
-                    'type': 'SAQ',
-                    'sale_quote_status_id': 1,
-                };
-                break;
-            case 'draft':
-                params = {
-                    'items': products,
-                    'is_draft_order': 1
-                };
-                break;
-        }
-        params = { ...this.order_info, ...this.generalForm.value, ...params };
-        this.orderService.createOrder(params).subscribe(res => {
+    }
+
+    groupTax(items) {
+        this.order_info['taxs'] = [];
+        this.order_info['total_tax'] = 0;
+        const taxs = items.map(item => item.tax_percent || 0);
+        const unique = taxs.filter((i, index) => taxs.indexOf(i) === index);
+        unique.forEach((tax, index) => {
+            let taxAmount = 0;
+            items.filter(item => item.tax_percent === tax).map(i => {
+                taxAmount += (+i.tax_percent * +i.quantity * (+i.sale_price || 0) / 100);
+            });
+            this.order_info['total_tax'] = this.order_info['total_tax'] + taxAmount.toFixed(2);
+            this.order_info['taxs'].push({
+                value: tax, amount: taxAmount.toFixed(2)
+            });
+        });
+    }
+
+    createOrder(type) {
+        const items = this.list.items.map(item => {
+            item.discount_percent = item.discount;
+            item.is_item = (item.misc_id) ? 0 : 1;
+            return item;
+        });
+
+        const params = {
+            ...this.generalForm.value,
+            status_id: type,
+            original_ship_cost: this.order_info.order_summary['original_ship_cost'],
+            items
+        };
+
+        this.orderService.createQuoteOrder(params).subscribe(res => {
             try {
                 if (res.status) {
                     this.toastr.success(res.message);
                     setTimeout(() => {
-                        this.router.navigate(['/order-management/sale-order']);
+                        this.router.navigate(['/order-management/sale-quotation']);
                     }, 500);
                 } else {
                     this.toastr.error(res.message);
