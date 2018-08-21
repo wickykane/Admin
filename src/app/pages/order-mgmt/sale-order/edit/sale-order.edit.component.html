@@ -2,17 +2,17 @@
     <app-page-header [heading]="'EDIT SALES ORDER'"></app-page-header>
     <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
     <section class="rma-page block main-container block-order">
-       <div class="row">
-          <div class="col-md-7 paddingleft-5">
+      <div class="row block-info">
+          <div class="col-md-6 p-l-5 p-r-2">
              <div class="card height-100">
                 <div class="card-header">
                    <strong>Information</strong>
                 </div>
                 <div class="card-body">
                    <div class="row information  height-100">
-                      <div class="col-md-12">
+                      <div class="col-md-12 p-l-5 p-r-5">
                          <form [formGroup]="generalForm" class="form-search full-width form-inline border-bottom">
-                            <div class="col-md-4 padding-lr-5">
+                            <div class="col-md-4">
                                <div class="form-group">
                                   <label for="code" class="control-label" translate> <strong>Customer Name</strong> </label>
                                   <span class="text-danger">(*)</span>
@@ -22,52 +22,18 @@
                                   </div>
                                </div>
                             </div>
-                            <div class="col-md-3 padding-lr-5">
-                               <i>Last Sales Date:</i> {{customer.last_sales_order|date:'MM/dd/yyyy'}}
+                            <div class="col-md-3">
+                                <i>Last Sales Date:</i> {{customer.last_sales_order|date:'MM/dd/yyyy'}}
                             </div>
-                            <div class="col-md-2 padding-lr-5">
-                               <strong>Current Debt:</strong> {{customer.current_dept |currency}}
-                            </div>
-                            <div class="col-md-2 padding-lr-5">
-                               <strong>Current Credit:</strong> {{customer.current_dept |currency}}
+                            <div class="col-md-5 ">
+                                <i class="text-warning fa fa-exclamation-circle"></i> <strong>Current Debt:</strong> <span class="text-warning">{{customer.current_dept |currency}}</span>
+                                <strong class="ml-2">Current Store Credit:</strong> <span class="text-success">{{customer.current_dept |currency}}</span>
                             </div>
                          </form>
                       </div>
                       <div class="col-md-12 fix-padding">
                          <div class="row">
-                            <div class="col-md-3 padding-lr-5 ">
-                               <div class="form-group row">
-                                  <label class='col-4 control-label'>Address</label>
-                                  <div class='col-8'>
-                                     {{customer.primary[0].address_line}}
-                                  </div>
-                               </div>
-                               <div class="form-group row">
-                                  <label class='col-4 control-label'>City</label>
-                                  <div class='col-8'>
-                                     {{customer.primary[0].city_name}}
-                                  </div>
-                               </div>
-                               <div class="form-group row">
-                                  <label class='col-4 control-label'>State</label>
-                                  <div class='col-8'>
-                                     {{customer.primary[0].state_name}}
-                                  </div>
-                               </div>
-                               <div class="form-group row">
-                                  <label class='col-4 control-label'>Zip</label>
-                                  <div class='col-8'>
-                                     {{customer.primary[0].zip_code}}
-                                  </div>
-                               </div>
-                               <div class="form-group row">
-                                  <label class='col-4 control-label'>Country</label>
-                                  <div class='col-8'>
-                                     {{customer.primary[0].country_name}}
-                                  </div>
-                               </div>
-                            </div>
-                            <div class="col-md-3 customer-infomation bolder padding-lr-5">
+                            <div class="col-md-4 bolder">
                                <div class="form-group row" *ngIf="customer.buyer_type =='CP'">
                                   <label class='col-6 control-label'>Contact</label>
                                   <div class='col-6 text-primary'>
@@ -116,7 +82,7 @@
                                   </div>
                                </div>
                             </div>
-                            <div class="col-md-3 customer-infomation padding-lr-5 ">
+                              <div class="col-md-4 customer-infomation">
                                <form [formGroup]="generalForm">
                                   <div class="form-group row">
                                      <label class='col-6'>Customer PO
@@ -169,11 +135,11 @@
                                   </div>
                                </form>
                             </div>
-                            <div class="col-md-3 customer-infomation bolder padding-lr-5 ">
+                              <div class="col-md-4 customer-infomation bolder">
                                <form [formGroup]="generalForm">
                                   <div class="form-group row">
-                                     <label class='col-7'>Payment Method<span class="text-danger">(*)</span></label>
-                                     <div class='col-5 text-primary'>
+                                     <label class='col-6'>Payment Method<span class="text-danger">(*)</span></label>
+                                     <div class='col-6 text-primary'>
                                         <select class="form-control" id="payment_method" name="payment_method" formControlName="payment_method">
                                         <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                         <option *ngFor="let item of listMaster['payment_methods']" [ngValue]="item.cd">{{item.name}}</option>
@@ -181,18 +147,18 @@
                                      </div>
                                   </div>
                                   <div class="form-group row">
-                                     <label class='col-7'>Payment Terms
+                                     <label class='col-6'>Payment Terms
                                      <span class="text-danger">(*)</span>
                                      </label>
-                                     <div class='col-5 text-danger'>
+                                     <div class='col-6 text-danger'>
                                         <select [attr.disabled]='true' class="form-control" id="is_multi_shp_addr" name="is_multi_shp_addr" formControlName="is_multi_shp_addr">
                                         <option *ngFor="let item of listMaster['multi_ship']" [ngValue]="item.id">{{item.label}}</option>
                                         </select>
                                      </div>
                                   </div>
                                   <div class="form-group row">
-                                     <label class='col-7'>Salesperson<span class="text-danger">(*)</span></label>
-                                     <div class='col-5 text-primary'>
+                                     <label class='col-6'>Salesperson<span class="text-danger">(*)</span></label>
+                                     <div class='col-6 text-primary'>
                                         <select class="form-control" id="sales_person" name="sales_person" formControlName="sales_person">
                                         <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                         <option *ngFor="let item of listMaster['sale_mans']" [ngValue]="item.id">{{item.full_name}}</option>
@@ -200,10 +166,10 @@
                                      </div>
                                   </div>
                                   <div class="form-group row">
-                                     <label class='col-7'>Approver
+                                     <label class='col-6'>Approver
                                      <span class="text-danger">(*)</span>
                                      </label>
-                                     <div class='col-5'>
+                                     <div class='col-6'>
                                         <select (change)="getQtyAvail()" class="form-control" id="warehouse_id" name="warehouse_id" formControlName="warehouse_id">
                                         <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                         <option *ngFor="let item of listMaster['warehouses']" [ngValue]="item.id">{{item.name}}</option>
@@ -218,14 +184,14 @@
                 </div>
              </div>
           </div>
-          <div class="col-md-5 paddingleft-5">
+          <div class="col-md-6" style="padding-right: 18px;">
              <div class="row  height-100">
-                <div class="col-4 padding-lr-5">
+                <div class="col-4 p-l-0 p-r-2">
                    <div class="card height-100">
                       <div class="card-header">
                          <strong>Bill To</strong>
                       </div>
-                      <div class="card-body">
+                      <div class="card-body p-25">
                          <div class="row">
                             <div class="col-12">
                                <div class="form-group row">
@@ -278,12 +244,12 @@
                       </div>
                    </div>
                 </div>
-                <div class="col-4 padding-lr-5">
+                <div class="col-4 p-l-0 p-r-2">
                    <div class="card height-100">
                       <div class="card-header">
                          <strong>Ship To</strong>
                       </div>
-                      <div class="card-body">
+                      <div class="card-body p-25">
                          <div class="row">
                             <div class="col-md-12" *ngIf="generalForm.value.is_multi_shp_addr == 1">
                                <p>This order ships to {{customer.shipping.length}} shipping addresses.</p>
@@ -340,12 +306,12 @@
                       </div>
                    </div>
                 </div>
-                <div class="col-4 padding-lr-5">
+                <div class="col-4 p-l-0 p-r-2">
                    <div class="card height-100">
                       <div class="card-header">
                          <strong>Shipping Method</strong>
                       </div>
-                      <div class="card-body">
+                      <div class="card-body  p-25">
                          <div class="row">
                             <div class="col-12">
                               <form [formGroup]="generalForm">
@@ -526,8 +492,8 @@
              </div>
           </div>
        </div>
-       <div class="row mg-top-10">
-          <div class="col-md-3 offset-md-5 padding-lr-5">
+       <div class="row mg-top-10 padding-child-5 justify-content-end">
+          <div class="col-md-3">
              <div class="card height-100">
                 <div class="card-header">
                    <strong>Note</strong>
@@ -535,13 +501,13 @@
                 <div class="card-body no-padding">
                    <form [formGroup]="generalForm">
                       <div>
-                         <textarea class="form-control" formControlName="description" rows="11" style="resize:none"></textarea>
+                         <textarea class="form-control border-0" formControlName="description" rows="11" style="resize:none"></textarea>
                       </div>
                    </form>
                 </div>
              </div>
           </div>
-          <div class="col-md-2 padding-lr-5">
+          <div class="col-md-2">
              <div class="card height-100">
                 <div class="card-header">
                    <strong>Order Summary</strong>
@@ -590,12 +556,12 @@
                 </div>
              </div>
           </div>
-          <div class="col-md-2 padding-lr-5">
+          <div class="col-md-3" style="max-width: 250px;">
              <div class="card height-100">
                 <div class="card-header">
                    <strong>Order Total</strong>
                 </div>
-                <div class="card-body">
+                <div class="card-body p-17">
                    <div class="row">
                       <div class="col-12">
                          <div class="form-group row">
