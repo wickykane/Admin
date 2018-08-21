@@ -1,0 +1,129 @@
+<div class="modal-header">
+    <span class="modal-title">Custom Rate Options</span>
+    <button type="button" class="close" aria-label="Close" (click)="closeX()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+
+    <form [formGroup]="generalForm" class="form-search full-width form-horizontal">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <label class='col-12'> Display name
+                            <span class="text-danger">(*)</span>
+                            <span class="show-tooltip" ngbTooltip="This name will be shown on the store front site.">
+                                <i class="fa fa-question-circle"></i>
+                            </span>
+                        </label>
+
+                        <div class="col-sm-12">
+                            <input type="text" formControlName="name" id="name" class="form-control">
+                        </div>
+                        <span style="color: red" *ngIf="generalForm.controls.name.errors?.required">
+                            (!) This field cannot be blank.
+                        </span>
+                    </div>
+                </div>
+                <div class="w-100"></div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <label class='col-12'>
+                            Charge Shipping
+                            <span class="text-danger">(*)</span>
+                            <span class="show-tooltip" ngbTooltip="Payment Method Type.">
+                                <i class="fa fa-question-circle"></i>
+                            </span>
+                        </label>
+
+                        <div class="col-sm-12">
+                            <select class="form-control" formControlName="charge_shipping" id="charge_shipping">
+                                <option *ngFor="let item of typeList" [value]='item.id'>{{item.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-100"></div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <label class='col-12'>
+                            Handling Fee Type
+                        </label>
+                        <div class="col-sm-12">
+                            <select formControlName="fee_type" id="fee_type" class="form-control">
+                                <option *ngFor="let item of typeFreeList" [value]='item.id'>{{item.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class='col-12'>Handling Fee
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="text" formControlName="handling_fee" id="handling_fee" class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-100"></div>
+            </div>
+        </div>
+    </form>
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="form-group row">
+                <h1>Ranges</h1>
+            </div>
+            <div class="form-group row" *ngFor="let item of ranges;let i=index">
+                <div class="col-md-3">
+                    <label class='col-12'>
+                        From
+                    </label>
+                    <div class="col-sm-12">
+                        <input type="number" [(ngModel)]="item.lbs_from" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class='col-12'>Up to
+                    </label>
+                    <div class="col-sm-12">
+                        <input type="number" [(ngModel)]="item.lbs_to" class="form-control">
+                    </div>
+                    <span style="color: red" *ngIf="item.lbs_to<item.lbs_from">
+                            (!): The up to value cannot be minor than the value in From.
+                    </span>
+                </div>
+                <div class="col-md-3">
+                    <label class='col-12'>Shipping Fee
+                    </label>
+                    <div class="col-sm-12">
+                        <input type="number" [(ngModel)]="item.shipping_fee" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label>&nbsp;</label>
+                    <div class="col-sm-12">
+                        <button *ngIf="i==ranges.length-1" type="button" (click)="addNewRange()" class="btn btn-outline-dark">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                        <button type="button" *ngIf="ranges.length>1" (click)="removeRangeItem(i)" class="btn btn-outline-dark">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-outline-primary" (click)="applyData()">OK</button>
+    <button type="button" class="btn btn-outline-dark" (click)="closeX()">Close</button>
+</div>

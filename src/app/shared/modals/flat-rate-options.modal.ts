@@ -13,18 +13,18 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonService } from '../../services/common.service';
 
 @Component({
-    selector: 'app-free-shipping-options-modal',
-    templateUrl: './free-shipping-options.modal.html'
+    selector: 'app-flat-rate-options-modal',
+    templateUrl: './flat-rate-options.modal.html'
 })
-export class FreeShippingOptionsModalComponent implements OnInit, OnDestroy {
+export class FlatRateOptionsModalComponent implements OnInit, OnDestroy {
 
     generalForm: FormGroup;
-    @Input() condition;
-    @Input() id;
-    @Input() shippingList;
+    @Input() typeList;
+    @Input() typeFreeList;
+    @Input() flatRateList;
     hotkeyCtrlLeft: Hotkey | Hotkey[];
     hotkeyCtrlRight: Hotkey | Hotkey[];
-
+    handlingFeeTooltipText=''; 
     constructor(public fb: FormBuilder,
         public router: Router,
         public toastr: ToastrService,
@@ -36,14 +36,12 @@ export class FreeShippingOptionsModalComponent implements OnInit, OnDestroy {
         public activeModal: NgbActiveModal) {
 
         this.generalForm = fb.group({
-            'free_shipping_item': [0],
-            'limit_order_over': [0],
-            'condition': [''],
-            'limit_total_weight':[0],
-            'id':[1],
-            'price':[],
-            'lbs_from':[],
-            'lbs_to1':[null]
+            "name": ['',Validators.required],
+            "type": [''],
+            "shipping_fee": [''],
+            "fee_type": [''],
+            "handling_fee": [''],
+            "id": "2"
         });
 
 
@@ -51,8 +49,8 @@ export class FreeShippingOptionsModalComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        if(this.shippingList){
-            this.generalForm.patchValue(this.shippingList);
+        if(this.flatRateList){
+            this.generalForm.patchValue(this.flatRateList);
         }
     }
 
@@ -71,20 +69,27 @@ export class FreeShippingOptionsModalComponent implements OnInit, OnDestroy {
         const data = {};
         this.activeModal.close(data);
     }
-    applyData(){
-        console.log(this.generalForm.value);
+    applyData() {
+        // console.log(this.generalForm);
         this.itemService.checkCondition(this.generalForm.value).subscribe(res => {
             console.log(res);
-            this.activeModal.close({id:'1',data:this.generalForm.value});
+            this.activeModal.close({ id: '2', data: this.generalForm.value });
         });
     }
-
-    checkCondition(){
-        if(this.generalForm.value.condition!=''){
-            this.generalForm.patchValue({'limit_total_weight':true})
+    checkTooltip(id){
+        console.log(id);
+        console.log(this.generalForm.value.fee_Type);
+                // if(this.generalForm.value.fee_Type){
+            
+        // }
+        if(id==1){
+            this.handlingFeeTooltipText = "A flat handling fee of $x will be charged in the order";
         }
+        else{
+            this.handlingFeeTooltipText = "Percentage of the total shipping fee of the order.";
+        }
+
     }
-    upToValue(){
-        this.generalForm.patchValue({'lbs_to1':''});
-    }
+
+
 }

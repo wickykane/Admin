@@ -18,13 +18,15 @@ import { CommonService } from '../../services/common.service';
 })
 export class StateFilterModalComponent implements OnInit {
     @Input() stateList;
+    @Input() code;
+    @Input() listSelectCountry;
     /**
      * Variable Declaration
      */
     generalForm: FormGroup;
 
     public tempStateList =[];
-
+    public selectAll = false;
     hotkeyCtrlLeft: Hotkey | Hotkey[];
     hotkeyCtrlRight: Hotkey | Hotkey[];
     public stateNameFilter = '';
@@ -57,6 +59,7 @@ export class StateFilterModalComponent implements OnInit {
     }
 
     ngOnInit() {
+        console.log(this.listSelectCountry);
         if(this.stateList){
             this.unSelectState();
             this.tempStateList = this.stateList.slice(0);
@@ -83,11 +86,21 @@ export class StateFilterModalComponent implements OnInit {
         return arr.filter(isSearch);
       }
       unSelectState(){
-        this.stateList.forEach(item => {
-            return item.selected = false;
-        });
-      }
+          console.log(this.selectAll);
+            this.listSelectCountry.state.forEach(item => {
+                return item.selected = false;
+            });
+          
 
+      }
+      selectState(){
+        console.log(this.selectAll);
+          this.listSelectCountry.state.forEach(item => {
+              return item.selected = this.selectAll?false:true;
+          });
+        
+
+    }
 
 
 
@@ -106,6 +119,10 @@ export class StateFilterModalComponent implements OnInit {
     }
     SelectedState(item){
         console.log(item);
+    }
+    save(){
+        console.log(this.listSelectCountry.state);
+        this.activeModal.close({'code':this.code,'state':this.listSelectCountry.state});
     }
 
 }

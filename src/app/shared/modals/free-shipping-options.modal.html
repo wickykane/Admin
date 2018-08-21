@@ -6,55 +6,84 @@
 </div>
 <div class="modal-body">
 
-        <form [formGroup]="generalForm" class="form-search full-width form-horizontal">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group row">
+    <form [formGroup]="generalForm" class="form-search full-width form-horizontal">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group row">
 
-                        <label class='col-12 col-form-label' >
-                            <input type="checkbox"  name="free_shipping_item" formControlName="free_shipping_item"> Apply only for Free Shipping Items
-                        </label>
-                    </div>
-                    <div class="w-100"></div>
-                    <div class="form-group row">
-
-                            <label class='col-12 col-form-label' >
-                                <input type="checkbox" name="limit_order_over" formControlName="limit_order_over"> Limit to order over <span style="font-weight: bold">(Sub Total after all discount)</span>
-                            </label>
-                            <select name="condition" (change)="changePayment($event)" formControlName="condition" class="form-control">
-                                <option *ngFor="let item of condition"[value]='item.id'>{{item.name}}</option>
-                                <option value="">Blank</option>
-                            </select>
-                    </div>
-                    <div class="w-100"></div>
-                    <div class="form-group row">
-
-                            <label class='col-12 col-form-label' >
-                                <input type="checkbox" name="limit_total_weight" formControlName="limit_total_weight"> Limit to Total Weight of Items
-                            </label>
-                    </div>
-
-                    <div class="w-100"></div>
-                    <div class="form-group row">
-                        <div class="col-md-3">
-                            <label class='col-6' > Lbs
-                            </label>
-                            <div class="col-sm-6">
-                                <input type="text" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <label class='col-6 col-form-label' > Lbs
-                            </label>
-                            <div class="col-sm-6">
-                                <input type="text" class="form-control">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="w-100"></div>
+                    <label class='col-12 col-form-label'>
+                        <input type="checkbox" name="free_shipping_item" formControlName="free_shipping_item"> Apply only for Free Shipping Items
+                    </label>
                 </div>
+                <div class="w-100"></div>
+                <div class="form-group row">
+
+                    <label class='col-4 col-form-label'>
+                        <input type="checkbox" name="limit_order_over" formControlName="limit_order_over"> Limit to order over
+                        <span style="font-weight: bold">(Sub Total after all discount)</span>
+                    </label>
+                    <select name="condition" (change)="checkCondition()" formControlName="condition" class="col-2 form-control">
+                        <option *ngFor="let item of condition" [value]='item.id'>{{item.name}}</option>
+                        <option value="">Blank</option>
+                    </select>
+                </div>
+                <div class="w-100"></div>
+                <div class="form-group row">
+
+                    <label class='col-4 col-form-label'>
+                        $
+                        <input type="input" name="price" formControlName="price" class="col-2 form-control">
+                    </label>
+
+                </div>
+                <div class="w-100"></div>
+                <div class="form-group row">
+
+                    <label class='col-3 col-form-label'>
+                        <input type="checkbox" name="limit_total_weight" formControlName="limit_total_weight"> Limit to Total Weight of Items
+                    </label>
+                </div>
+
+                <div class="w-100"></div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <label class='col-6'> Lbs
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" formControlName="lbs_from">
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <label class='col-6 col-form-label'> &nbsp;
+                        </label>
+                        <div class="col-sm-12">
+                            <span>
+                                <i class="fa fa-minus"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3" *ngIf="generalForm.value.lbs_to1==null">
+                        <label class='col-6 col-form-label'> &nbsp;
+                        </label>
+                        <div class="col-sm-12">
+                            <span class='col-6 col-form-label' (click)="upToValue()" style="color: #0069d9"> And Up
+                            </span>
+                        </div>
+
+                    </div>
+                    <div class="col-md-3" *ngIf="generalForm.value.lbs_to1!=null">
+                        <label class='col-6 col-form-label'> Lbs
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" formControlName="lbs_to1">
+                        </div>
+                    </div>
+                </div>
+                <div class="w-100"></div>
             </div>
-        </form>
+        </div>
+    </form>
 
 
 

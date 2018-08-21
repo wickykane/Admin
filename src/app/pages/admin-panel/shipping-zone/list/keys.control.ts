@@ -3,7 +3,7 @@ import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 // tslint:disable-next-line:import-blacklist
 import { Subject } from 'rxjs/Rx';
 @Injectable()
-export class RMAKeyService implements OnDestroy {
+export class ShippingZoneKeyService implements OnDestroy {
     public context: any;
     public watchContext = new Subject<any>();
 
@@ -31,18 +31,30 @@ export class RMAKeyService implements OnDestroy {
 
     initKey() {
         this.resetKeys();
-        this._hotkeysService.add(new Hotkey('ctrl+f', (event: KeyboardEvent): any => {
+        this._hotkeysService.add(new Hotkey('f1', (event: KeyboardEvent): any => {
+            event.preventDefault();
+            console.log('f1');
+            this.context.createShippingZone();
+            return ;
+        }, undefined, 'Add New Zone'));
+        this._hotkeysService.add(new Hotkey('f2', (event: KeyboardEvent): any => {
             event.preventDefault();
             this.context.tableService.searchAction();
             event.returnValue = false;
             return event;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Search'));
-        this._hotkeysService.add(new Hotkey('ctrl+r', (event: KeyboardEvent): any => {
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Start Search'));
+        this._hotkeysService.add(new Hotkey('f3', (event: KeyboardEvent): any => {
+            event.preventDefault();
+            this.context.tableService.searchAction();
+            event.returnValue = false;
+            return event;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Execute Search'));
+        this._hotkeysService.add(new Hotkey('f4', (event: KeyboardEvent): any => {
             event.preventDefault();
             this.context.tableService.resetAction(this.context.searchForm);
             event.returnValue = false;
             return event;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset'));
+        }, ['INPUT', 'INPUT', 'SELECT'], 'Reset Search'));
 
     }
 }

@@ -197,11 +197,11 @@ export class SiteModalComponent implements OnInit, OnDestroy {
     }
 
     changeBranch(item) {
-        item.full_address = item.listBranch.map(x => {
+        item.listBranch.map(x => {
             if (item.branch_id === x.id) {
-                return x.address;
+                item.full_address = x.address;
             }
-        })[0];
+        }); 
     }
     checkIsDefault($event, idx) {
         for (let i = 0; i < this.addresses.length; i++) {
@@ -467,6 +467,12 @@ export class SiteModalComponent implements OnInit, OnDestroy {
                 if (this.addresses[i].type == 1) {
                     for (let j = 0; j < this.paddr.length; j++) {
                         if (this.paddr[j].type == 1 && this.paddr[j].is_default) {
+                                if(this.addresses[i].address_id){
+                                    this.paddr[j].address_id= this.addresses[i].address_id;
+                                }
+                                else{
+                                    delete this.paddr[j].address_id;
+                                }
                             this.addresses[i] = JSON.parse(JSON.stringify(this.paddr[j]));
                             flag = !0;
                         }
@@ -474,6 +480,12 @@ export class SiteModalComponent implements OnInit, OnDestroy {
                     if (!flag) {
                         for (let j = 0; j < this.paddr.length; j++) {
                             if (this.paddr[j].type == 1) {
+                                if(this.addresses[i].address_id){
+                                    this.paddr[j].address_id= this.addresses[i].address_id;
+                                }
+                                else{
+                                    delete this.paddr[j].address_id;
+                                }
                                 this.addresses[i] = JSON.parse(JSON.stringify(this.paddr[j]));
                                 break;
                             }

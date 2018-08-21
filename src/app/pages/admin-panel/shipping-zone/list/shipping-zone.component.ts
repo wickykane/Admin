@@ -4,8 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
 import { TableService } from '../../../../services/table.service';
-import { PurchaseService } from '../../../purchase-mgmt/purchase.service';
-import { RMAKeyService } from './keys.control';
+import { ShippingZoneService } from '../shipping-zone.service';
+import { ShippingZoneKeyService } from './keys.control';
 import { CommonService } from './../../../../services/common.service';
 import { ItemsControl } from '../../../../../../node_modules/@ngu/carousel/src/ngu-carousel/ngu-carousel.interface';
 @Component({
@@ -13,7 +13,7 @@ import { ItemsControl } from '../../../../../../node_modules/@ngu/carousel/src/n
     templateUrl: './shipping-zone.component.html',
     styleUrls: ['../shipping-zone.component.scss'],
     animations: [routerTransition()],
-    providers: [RMAKeyService, CommonService]
+    providers: [ShippingZoneKeyService, CommonService]
 })
 export class ShippingZoneComponent implements OnInit {
 
@@ -39,22 +39,15 @@ export class ShippingZoneComponent implements OnInit {
         public toastr: ToastrService,
         private vRef: ViewContainerRef,
         public tableService: TableService,
-        private purchaseService: PurchaseService,
-        public keyService: RMAKeyService,
+        private shippingZoneService: ShippingZoneService,
+        public keyService: ShippingZoneKeyService,
         private commonService: CommonService
     ) {
 
         this.searchForm = fb.group({
-            'rma_no': [null],
-            'so_no': [null],
-            'customer': [null],
-            'rma_type': [''],
-            'status': [''],
-            'request_date_from': [null],
-            'request_date_to': [null],
-            'reception_date_from': [null],
-            'reception_date_to': [null],
-            'comment': []
+            'zone_name': [null],
+            'country_code':[null],
+            'status':[null]
         });
 
         // Assign get list function name, override letiable here
@@ -91,18 +84,21 @@ export class ShippingZoneComponent implements OnInit {
         const params = { ...this.tableService.getParams(), ...this.searchForm.value };
         Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
         console.log(params);
-        this.purchaseService.getListPurchaseOrder(params).subscribe(res => {
+        this.shippingZoneService.getList(params).subscribe(res => {
             try {
                 this.list.items = res.data.rows;
-                this.list.items.forEach(item => {
-                    return item.collapseRows = false;
-                });
                 console.log(this.list.items);
                 this.tableService.matchPagingOption(res.data);
             } catch (e) {
                 console.log(e);
             }
         });
+    }
+    createShippingZone(){
+        console.log('open createShipping');
+        // setTimeout(() => {
+        this.router.navigate(['/admin-panel/shipping-zone/create']);
+        // },500);
     }
 
 }
