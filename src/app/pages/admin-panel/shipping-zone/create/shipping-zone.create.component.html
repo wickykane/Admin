@@ -1,6 +1,6 @@
 <div [@routerTransition]>
     <app-page-header [heading]="'CREATE NEW SHIPPING ZONE'"></app-page-header>
-    <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
+    <!-- <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut> -->
 
     <section class="rma-page block main-container block-order">
         <div class="row">
@@ -84,14 +84,14 @@
                         <div class="col-md-1 center-line"></div>
                         <div class="col-md-5 table-custom">
                             <div class="header">
-                                <div class="col-12 title" *ngFor="let item of listSelectCountry">
+                                <div class="col-12 title list-items" *ngFor="let item of listSelectCountry">
                                     <div class="form-group row">
                                         <label class="control-label col-5" for="shipping_to" translate>
                                             <span class="text-danger"></span> {{item.name}}
 
                                         </label>
                                         <div class="col-7" style="text-align: right">
-                                            <label>0 of <span *ngIf="listMasterData['state'][item.country_code]">{{listMasterData['state'][item.country_code].length}} States</span><span *ngIf="listMasterData['state'][item.country_code] == undefined">0 States</span></label>
+                                            <label>{{item.state.length}} of <span *ngIf="listMasterData['state'][item.country_code]">{{listMasterData['state'][item.country_code].length}} States</span><span *ngIf="listMasterData['state'][item.country_code] == undefined">0 States</span></label>
                                             <a class="btn btn-default " title="Edit" (click)="openState(item.country_code)">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
@@ -128,7 +128,7 @@
                                             <div class="col-2">
                                                 <div class="switcher">
                                                     <label class="switch">
-                                                        <input type="checkbox" [(ngModel)]="subItem.checked"  checked="{{subItem.checked ? true:null}}" value="{{subItem.checked}}" [ngModelOptions]="{standalone: true}" (ngModelChange)="checkValidate(item.data,subItem)">
+                                                        <input type="checkbox" [(ngModel)]="subItem.checked"  checked="{{subItem.checked ? true:null}}" value="{{subItem.checked}}" (click)="checkValidate(item.data,subItem,$event)"  >
                                                         <span class="slider round"></span>
                                                     </label>
                                                 </div>

@@ -110,7 +110,7 @@ export class LedgerComponent implements OnInit {
 
   getAccountTree() {
     this.ledgerService.getAccountTree().subscribe(res => {
-      this.listMaster['account_list'] = [{ ...res.data, name: 'General Ledge - Accounts' }];
+      this.listMaster['account_list'] = [{ ...res.data, name: 'General Ledger - Accounts' }];
     });
   }
 

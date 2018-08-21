@@ -19,6 +19,7 @@ import { CommonService } from '../../services/common.service';
 export class StateFilterModalComponent implements OnInit {
     @Input() stateList;
     @Input() code;
+    @Input() listSelectCountry;
     /**
      * Variable Declaration
      */
@@ -58,6 +59,7 @@ export class StateFilterModalComponent implements OnInit {
     }
 
     ngOnInit() {
+        console.log(this.listSelectCountry);
         if(this.stateList){
             this.unSelectState();
             this.tempStateList = this.stateList.slice(0);
@@ -85,7 +87,7 @@ export class StateFilterModalComponent implements OnInit {
       }
       unSelectState(){
           console.log(this.selectAll);
-            this.stateList.forEach(item => {
+            this.listSelectCountry.state.forEach(item => {
                 return item.selected = false;
             });
           
@@ -93,7 +95,7 @@ export class StateFilterModalComponent implements OnInit {
       }
       selectState(){
         console.log(this.selectAll);
-          this.stateList.forEach(item => {
+          this.listSelectCountry.state.forEach(item => {
               return item.selected = this.selectAll?false:true;
           });
         
@@ -119,7 +121,8 @@ export class StateFilterModalComponent implements OnInit {
         console.log(item);
     }
     save(){
-        this.activeModal.close({'code':this.code,'state':this.stateList});
+        console.log(this.listSelectCountry.state);
+        this.activeModal.close({'code':this.code,'state':this.listSelectCountry.state});
     }
 
 }

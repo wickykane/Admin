@@ -18,11 +18,17 @@ export class SaleOrderInformationTabComponent implements OnInit {
      */
 
     public _orderId;
+    public _orderDetail;
     @Input() set orderId(id) {
         if (id) {
             this._orderId = id;
         }
     }
+
+    @Input() set orderDetail(obj) {
+        this._orderDetail = obj;
+    }
+
     @Output() stockValueChange = new EventEmitter();
 
     public detail = {

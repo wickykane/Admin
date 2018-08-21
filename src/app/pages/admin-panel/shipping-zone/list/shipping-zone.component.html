@@ -19,7 +19,7 @@
                         <label for="part" class="control-label">Status</label>
                         <div class="">
                             <select class="form-control" formControlName="status">
-                                <option value="" selected="true">--Select--</option>
+                                <option value="null" selected="true">--Select--</option>
                                 <option value="1">Active</option>
                                 <option value="0" >InActive</option>
                             </select>
@@ -38,7 +38,7 @@
 
 
         <div class="block-content list-order-table">
-            <button [routerLink]="['/admin-panel/shipping-zone/create']" style="margin: 10px 0;" class="btn btn-primary">Add New</button>
+            <button [routerLink]="['/admin-panel/shipping-zone/create']" (click)="createShippingZone" style="margin: 10px 0;" class="btn btn-primary">Add New</button>
 
             <div class="table-responsive">
                 <table class="table table-striped table-vcenter custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex">
@@ -66,6 +66,7 @@
                                 </label>
                             </td>
                             <td>{{item.used}}</td>
+                            <td></td>
                         </tr>
                     </tbody>
                 </table>

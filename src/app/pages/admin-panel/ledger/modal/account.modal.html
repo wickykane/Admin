@@ -109,7 +109,7 @@
     <div class="modal-footer" style="padding-top: 0">
         <div class="form-group" style="margin-top: 20px;">
             <div class="text-center">
-                <button [disabled]="!accountForm.valid" style="width: 70px" class="btn btn-primary" type="button" (click)="ok()" translate>OK</button>
+                <button [disabled]="!accountForm.valid || accountForm.value.is_sub_acc && !accountForm.value.parent_id " style="width: 70px" class="btn btn-primary" type="button" (click)="ok()" translate>OK</button>
                 <button class="btn btn-default" type="button" (click)="cancel()" translate>Cancel</button>
             </div>
         </div>

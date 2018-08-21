@@ -140,6 +140,7 @@ export class ShippingZoneCreateComponent implements OnInit {
     }
     selectCountry(isSelect, item) {
         console.log(isSelect, item);
+        item.state = this.listMasterData['state'][item.country_code];
         if (isSelect) {
             this.listSelectCountry.push(item);
         }
@@ -163,6 +164,13 @@ export class ShippingZoneCreateComponent implements OnInit {
         modalRef.componentInstance.isEdit = false;
         if(this.listMasterData['state'][code]){
             modalRef.componentInstance.stateList = this.listMasterData['state'][code];
+            // modalRef.componentInstance.listSelectCountry = this.listMasterData['state'][code];
+            console.log(this.listSelectCountry);
+            this.listSelectCountry.forEach(item=>{
+                if(item.code = code){
+                    modalRef.componentInstance.listSelectCountry = item;  
+                }
+            })
         }
         else{
             modalRef.componentInstance.stateList= [];
@@ -171,7 +179,6 @@ export class ShippingZoneCreateComponent implements OnInit {
         modalRef.componentInstance.code = code;
         modalRef.result.then(res => {
             if (res['code']) {
-                console.log(res);
                 this.listSelectCountry.forEach(item => {
                     if (item.country_code == res.code) {
                         item['state'] = res.state;
@@ -264,9 +271,37 @@ export class ShippingZoneCreateComponent implements OnInit {
             listCountry[i].code = listCountry[i].country_code;
             delete listCountry[i].country_code;
         }
-        console.log(listCountry)
         var params = this.generalForm.value;
-        params['shipping_quotes'] = [this.freeShippingList, this.flatRateList, this.customRateList, this.pickupList];
+        // if()
+        params['shipping_quotes'] =[];
+        // params['shipping_quotes'] = [this.freeShippingList, this.flatRateList, this.customRateList, this.pickupList];
+        for(var i =0;i<this.listShipping.length;i++){
+            for(var j=0 ;j<this.listShipping[i]['data'].length;j++){
+                var item = this.listShipping[i]['data'][j];
+                if(item['checked']==true){
+                    if(item['id']==1){
+                        params['shipping_quotes'].push(this.freeShippingList);
+                    }
+                    if(item['id']==2){
+                        params['shipping_quotes'].push(this.flatRateList);
+                    }
+                    if(item['id']==3){
+                        params['shipping_quotes'].push(this.customRateList);
+                    }
+                    if(item['id']==4){
+                        params['shipping_quotes'].push(this.pickupList);
+                    }
+                    // if(item['id']==5){
+                    //     params['shipping_quotes'].push(this.freeShippingList);
+                    // }
+                    // if(item['id']==6){
+                    //     params['shipping_quotes'].push(this.freeShippingList);
+                    // }
+                }
+            }
+        }
+        console.log(this.listShipping);
+      
         params['country'] = listCountry;
         // var listShipping = this.listShipping.slice(0);
         // for (var i = 0; i < listShipping.length; i++) {
@@ -284,59 +319,26 @@ export class ShippingZoneCreateComponent implements OnInit {
 
         });
     }
-    checkValidate(items, subItem) {
-        // items.forEach(item => {
-        //     if ((item.checked && item.id == 2) || (item.checked && item.id == 3)) {
-        //         console.log(1)
-        //         if (items[0].id == 1 && items[0].checked) {
-        //             console.log(2);
+    checkValidate(items, subItem,event) {
+    if(subItem.id ==1 && !subItem.checked){
+        items.forEach(item=>{
+            if(item.id ==2 || item.id ==3){
+               return item.checked = false;
+            }
+});
 
-        //             items[1].checked = false;
-        //             items[2].checked = false;
-        //         }
-        //     }
-        // });
-            console.log(items,subItem);
-            if(subItem.id ==1 && subItem.checked){
-                      items.forEach(item=>{
-                          if(item.id ==2 || item.id ==3){
-                             return item.checked = false;
-                          }
-            });
-
-        }
-      else if((subItem.id ==2 && subItem.checked) ||(subItem.id ==3 && subItem.checked)){
-            console.log(1);
-                  items.forEach(item=>{
-                    if((subItem.id ==2 && subItem.checked) ||(subItem.id ==3 && subItem.checked)){
-                        console.log(2);
-                        console.log(items);
+}
+else if((subItem.id ==2 && !subItem.checked) ||(subItem.id ==3 && !subItem.checked)){
+            console.log(items);
                         if(items[0].id==1 &&items[0].checked){
-                            return subItem.checked =false;
+                            console.log(event);
+                            this.toastr.error('There is a conflict. You cannot active this Quote because Free Shipping is ON')
+                            event.preventDefault();
                         }
-                      }
-        });
 
     }
+// console.log(event);
 
-            // debugger;
-        // if (items[0].checked && items[0].type == 1) {
-        //     items.forEach(item => {
-        //         if (item.id == 2 || item.id == 3) {
-        //             return item.checked = false;
-        //         }
-        //     });
-        // }
-        // if ((items[1].checked && items[1].type == 1) || (items[2].checked && items[2].type == 1)) {
-        //             if (items[0].checked && items[0].type == 1) {
-        //                 console.log('vo roi');
-        //                 items.forEach(item => {
-        //                     if (item.id == 2 || item.id == 3) {
-        //                          item.checked = false;
-        //                     }
-        //                 });
-        //             }
-        //         }
     
 }
 // checkDisabled(item,subItem){

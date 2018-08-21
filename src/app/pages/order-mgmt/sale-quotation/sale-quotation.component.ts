@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from './../../../services/table.service';
 import { SaleQuoteKeyService } from './keys.list.control';
 
+import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 import { OrderService } from '../order-mgmt.service';
@@ -37,6 +38,7 @@ export class SaleQuotationComponent implements OnInit {
         public toastr: ToastrService,
         public tableService: TableService,
         private orderService: OrderService,
+        private _hotkeysService: HotkeysService,
         public saleQuoteKeyService: SaleQuoteKeyService,
         private renderer: Renderer) {
 
@@ -53,7 +55,8 @@ export class SaleQuotationComponent implements OnInit {
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
         //  Init Key
-        this.saleQuoteKeyService.watchContext.next(this);
+        this.saleQuoteKeyService.watchContext.next({ context: this, service: this._hotkeysService });
+
     }
 
     ngOnInit() {
@@ -137,7 +140,7 @@ export class SaleQuotationComponent implements OnInit {
                 this.toastr.success(res.message);
                 setTimeout(() => {
                     this.getList();
-                  }, 100);
+                }, 100);
             } catch (e) {
                 console.log(e);
             }
@@ -149,11 +152,11 @@ export class SaleQuotationComponent implements OnInit {
         params['type'] = 'SAQ';
         Object.keys(params).forEach((key) => {
             if (params[key] instanceof Array) {
-              params[key] = params[key].join(',');
+                params[key] = params[key].join(',');
             }
             // tslint:disable-next-line:no-unused-expression
-            (params[key] === null || params[key] ===  '') && delete params[key];
-          });
+            (params[key] === null || params[key] === '') && delete params[key];
+        });
         Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
 
         this.orderService.getListSalesQuotation(params).subscribe(res => {

@@ -14,21 +14,22 @@
             <thead>
                 <tr>
                     <th colspan="2" class="column-checkbox">
+                        <label>
                         <input (ngModelChange)="selectState()" [(ngModel)]="selectAll"
-                            id='ck-first' type="checkbox" /> All States
+                            id='ck-first' type="checkbox" /> All States</label>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of stateList">
+                <tr *ngFor="let item of listSelectCountry.state">
                     <td>
-                        <input  [(ngModel)]="item.selected" value="{{item}}"
+                        <input  [(ngModel)]="item.selected"
                             [ngModelOptions]="{standalone: true}" type="checkbox">
                     </td>
                     <td class="whs-code col-md-4">{{item.name}}</td>
                 </tr>
             </tbody>
         </table>
-        <span *ngIf="stateList.length==0">No Results Found.</span>
+        <span *ngIf="listSelectCountry.state.length==0">No Results Found.</span>
     </div>
 </div>
 <div class="modal-footer">

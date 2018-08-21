@@ -5,7 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
 import { TableService } from '../../../../services/table.service';
 import { ShippingZoneService } from '../shipping-zone.service';
-import { RMAKeyService } from './keys.control';
+import { ShippingZoneKeyService } from './keys.control';
 import { CommonService } from './../../../../services/common.service';
 import { ItemsControl } from '../../../../../../node_modules/@ngu/carousel/src/ngu-carousel/ngu-carousel.interface';
 @Component({
@@ -13,7 +13,7 @@ import { ItemsControl } from '../../../../../../node_modules/@ngu/carousel/src/n
     templateUrl: './shipping-zone.component.html',
     styleUrls: ['../shipping-zone.component.scss'],
     animations: [routerTransition()],
-    providers: [RMAKeyService, CommonService]
+    providers: [ShippingZoneKeyService, CommonService]
 })
 export class ShippingZoneComponent implements OnInit {
 
@@ -40,14 +40,14 @@ export class ShippingZoneComponent implements OnInit {
         private vRef: ViewContainerRef,
         public tableService: TableService,
         private shippingZoneService: ShippingZoneService,
-        public keyService: RMAKeyService,
+        public keyService: ShippingZoneKeyService,
         private commonService: CommonService
     ) {
 
         this.searchForm = fb.group({
             'zone_name': [null],
             'country_code':[null],
-            'status':['']
+            'status':[null]
         });
 
         // Assign get list function name, override letiable here
@@ -93,6 +93,12 @@ export class ShippingZoneComponent implements OnInit {
                 console.log(e);
             }
         });
+    }
+    createShippingZone(){
+        console.log('open createShipping');
+        // setTimeout(() => {
+        this.router.navigate(['/admin-panel/shipping-zone/create']);
+        // },500);
     }
 
 }

@@ -57,6 +57,7 @@ export class RmaCreateComponent implements OnInit {
         vat_percent_amount: 0,
         shipping_cost: 0
     };
+    
     /**
      * Init Data
      */
@@ -104,8 +105,7 @@ export class RmaCreateComponent implements OnInit {
             'restocking_fee_percent': [null],
             'restocking_fee': [null],
             'sub_total': [null],
-            'return_time_name': [null],
-            'company_id': [null]
+            'return_time_name': [null]
 
         });
 
