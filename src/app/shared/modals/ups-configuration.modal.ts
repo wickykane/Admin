@@ -19,14 +19,14 @@ import { CommonService } from '../../services/common.service';
 export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
 
     generalForm: FormGroup;
-    @Input() wareHouseList;
-    @Input() weekDaysList;
-    @Input() dayHoursList;
     @Input() pickupList;
+    @Input() typeFreeList;
+    
     hotkeyCtrlLeft: Hotkey | Hotkey[];
     hotkeyCtrlRight: Hotkey | Hotkey[];
     ranges: any = [];
     isSave =false;
+    typeList:any =[];
     constructor(public fb: FormBuilder,
         public router: Router,
         public toastr: ToastrService,
@@ -38,13 +38,14 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
         public activeModal: NgbActiveModal) {
 
         this.generalForm = fb.group({
-            "name": ['', Validators.required],
-            "type": [''],
-            "shipping_fee": [''],
-            "fee_type": [''],
-            "handling_fee": [''],
-            "id": "4",
-            "charge_shipping": "",
+            "access_key": ['', Validators.required],
+            "user_id": ['', Validators.required],
+            "password": ['', Validators.required],
+            "rates":[false],
+            "account_number":['', Validators.required],
+            "ups_customer":['', Validators.required],
+            "fee_type":[''],
+            "handling_fee":['']
             // 'ranges':[this.fb.array([])]
         });
 
@@ -53,13 +54,12 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.typeList = this.typeFreeList.slice(0);
         if (this.pickupList) {
             this.generalForm.patchValue(this.pickupList);
             this.ranges = this.pickupList.ranges;
         }
-        this.weekDaysList.forEach(item=>{
-            item['data']=[{from:'',to:''}];
-        })
+        this.checkName();
     }
 
     ngOnDestroy() {
@@ -82,7 +82,6 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
     }
     applyData() {
         console.log(this.generalForm.value);
-        console.log(this.weekDaysList);
         // this.checkRanges();
         // console.log(this.isSave);
         // if(this.isSave==true){
@@ -119,5 +118,30 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
             }
 
         }
+    }
+    checkName(){
+        console.log(this.generalForm);
+    }
+    testConnection(){
+        var params ={
+            "access_key":this.generalForm.value.access_key,
+            "user_id":this.generalForm.value.user_id,
+            "password":this.generalForm.value.password,
+        };
+        if(this.generalForm.invalid)
+        {
+            for (let inner in this.generalForm.controls) {
+                this.generalForm.get(inner).markAsTouched();
+                // this.generalForm.get(inner).updateValueAndValidity();
+            }
+            console.log(this.generalForm);
+            return false;
+        }
+        this.itemService.checkConnection(params).subscribe(res=>{
+            console.log(res);
+            this.toastr.success(res.message);
+        },error=>{
+            console.log(error);
+        });
     }
 }

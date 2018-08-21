@@ -119,7 +119,6 @@ export class ShippingZoneCreateComponent implements OnInit {
         })
     }
     filterCountry(key) {
-        console.log(key);
         this.listCountry = this.filterbyfieldName(this.tempListCountry, 'name', key);
     }
     filterbyfieldName(arr: any[], fieldname: string, value: any): any[] {
@@ -139,8 +138,18 @@ export class ShippingZoneCreateComponent implements OnInit {
         return arr.filter(isSearch);
     }
     selectCountry(isSelect, item) {
-        console.log(isSelect, item);
         item.state = this.listMasterData['state'][item.country_code];
+        if(item.state){
+            item.state.forEach(res=>{
+                console.log(res);
+              return res.selected = true;
+            })
+        }
+        else{
+            item.state =[];
+        }
+
+        console.log(item);
         if (isSelect) {
             this.listSelectCountry.push(item);
         }
@@ -165,9 +174,9 @@ export class ShippingZoneCreateComponent implements OnInit {
         if(this.listMasterData['state'][code]){
             modalRef.componentInstance.stateList = this.listMasterData['state'][code];
             // modalRef.componentInstance.listSelectCountry = this.listMasterData['state'][code];
-            console.log(this.listSelectCountry);
             this.listSelectCountry.forEach(item=>{
                 if(item.code = code){
+                    console.log(item);
                     modalRef.componentInstance.listSelectCountry = item;  
                 }
             })
@@ -194,13 +203,13 @@ export class ShippingZoneCreateComponent implements OnInit {
     openShippingModal(id) {
         var modalRef: any;
         if (id == "1") {
-            modalRef = this.modalService.open(FreeShippingOptionsModalComponent, { size: 'lg' });
+            modalRef = this.modalService.open(FreeShippingOptionsModalComponent);
             modalRef.componentInstance.condition = this.listMasterData['condition'];
             modalRef.componentInstance.id = id;
             modalRef.componentInstance.shippingList = this.freeShippingList;
         }
         if (id == "2") {
-            modalRef = this.modalService.open(FlatRateOptionsModalComponent, { size: 'lg' });
+            modalRef = this.modalService.open(FlatRateOptionsModalComponent);
             modalRef.componentInstance.typeList = this.listMasterData['type'];
             modalRef.componentInstance.typeFreeList = this.listMasterData['type_free'];
             modalRef.componentInstance.id = id;
@@ -221,17 +230,17 @@ export class ShippingZoneCreateComponent implements OnInit {
             modalRef.componentInstance.id = id;
             modalRef.componentInstance.pickupList = this.pickupList;
         }
-        // if (id == "5") {
-        //     modalRef = this.modalService.open(UPSConfigurationModalComponent);
-        //     modalRef.componentInstance.wareHouseList = this.listMasterData['warehouse'];
-        //     modalRef.componentInstance.weekDaysList = this.listMasterData['day_of_week'];
-        //     modalRef.componentInstance.dayHoursList = this.listMasterData['hours_of_day'];
-        //     modalRef.componentInstance.id = id;
-        //     modalRef.componentInstance.pickupList = this.pickupList;
-        // }
+        if (id == "5") {
+            modalRef = this.modalService.open(UPSConfigurationModalComponent);
+            // modalRef.componentInstance.wareHouseList = this.listMasterData['warehouse'];
+            // modalRef.componentInstance.weekDaysList = this.listMasterData['day_of_week'];
+            // modalRef.componentInstance.dayHoursList = this.listMasterData['hours_of_day'];
+            modalRef.componentInstance.id = id;
+            modalRef.componentInstance.pickupList = this.pickupList;
+            modalRef.componentInstance.typeFreeList = this.listMasterData['type_free'];
+        }
         modalRef.componentInstance.isEdit = false;
         modalRef.result.then(res => {
-            console.log(res);
             if (res['id']) {
                 if (res['id'] == '1') {
                     this.freeShippingList = res['data'];
@@ -250,17 +259,11 @@ export class ShippingZoneCreateComponent implements OnInit {
         });
     }
     save() {
-        console.log(this.listSelectCountry);
-        // console.log(this.flatRateList);
-        // console.log(this.customRateList);
-        // console.log(this.pickupList);
-        // console.log(this.generalForm.value);
 
         var listCountry = this.listSelectCountry.slice(0);
         for (var i = 0; i < listCountry.length; i++) {
             var listId = [];
             for (var j = 0; j < listCountry[i].state.length; j++) {
-                console.log(listCountry[i].state[j].id);
                 listId.push(listCountry[i].state[j].id);
             }
             listCountry[i].state = listId;
@@ -300,7 +303,6 @@ export class ShippingZoneCreateComponent implements OnInit {
                 }
             }
         }
-        console.log(this.listShipping);
       
         params['country'] = listCountry;
         // var listShipping = this.listShipping.slice(0);
@@ -329,15 +331,12 @@ export class ShippingZoneCreateComponent implements OnInit {
 
 }
 else if((subItem.id ==2 && !subItem.checked) ||(subItem.id ==3 && !subItem.checked)){
-            console.log(items);
                         if(items[0].id==1 &&items[0].checked){
-                            console.log(event);
                             this.toastr.error('There is a conflict. You cannot active this Quote because Free Shipping is ON')
                             event.preventDefault();
                         }
 
     }
-// console.log(event);
 
     
 }
@@ -351,6 +350,16 @@ else if((subItem.id ==2 && !subItem.checked) ||(subItem.id ==3 && !subItem.check
 // }
 trackByFn(index, item) {
     return index; // or item.id
+  }
+  calculateStateLength(item){
+      var count=0;
+      console.log(item);
+    item.forEach(res=>{
+        if(res.selected){
+            count++;
+        }
+    });
+    return count;
   }
 }
 
