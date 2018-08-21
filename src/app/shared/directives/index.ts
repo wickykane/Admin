@@ -6,3 +6,4 @@ export * from './sticky.directive';
 export * from './clickOutside.directive';
 export * from './numericInput.directive';
 export * from './onlynumber.directive';
+export * from './keyNavigate.directive';

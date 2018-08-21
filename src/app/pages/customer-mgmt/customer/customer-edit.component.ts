@@ -336,7 +336,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         this.commonService.getListBranchByBank(item.bank_id).subscribe(res => {
             try {
                 item.listBranch = res.data;
-                this.changeBranch(item);
+                this.changeBranchSites(item);
             } catch (e) {
 
             }
@@ -350,7 +350,13 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             }
         }
     }
-
+    changeBranchSites(item) {
+        for (let i = 0; i < item.listBranch.length; i++) {
+            if (item.branch_id === item.listBranch[i].id) {
+                item.full_address = item.listBranch[i].address;
+            }
+        }
+    }
     //  add new row address
     addNewAddress() {
         this.addresses.push({

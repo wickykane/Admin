@@ -30,6 +30,14 @@ export class ItemService {
         const url = 'order/getMasterItems';
         return this.API.get(url, params);
     }
+    getMiscItems(params) {
+        const url = 'misc';
+        return this.API.get(url, params);
+    }
+    getMiscType() {
+        const url = 'misc/types';
+        return this.API.get(url);
+    }
     getListAllItemFromQuote(id, params) {
         const url = ['order', 'getQuoteItems', id].join('/');
         return this.API.get(url, params);
@@ -81,6 +89,19 @@ export class ItemService {
     getListSaleOrderByCompany(company_id) {
         const url = 'buyer/sales-orders/' + company_id;
         return this.API.get(url);
+    }
+    checkCondition(params) {
+        var data = Object.assign({}, params);
+        for (var property in data) {
+            if (data[property] == true) {
+                data[property] = "1";
+            }
+            else if (data[property] == false) {
+                data[property] = "0";
+            }
+        }
+        const url = 'shipping-zone/check-condition';
+        return this.API.post(url, data);
     }
 
 }
