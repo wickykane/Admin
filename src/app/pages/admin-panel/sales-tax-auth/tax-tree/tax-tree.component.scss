@@ -1,0 +1,22 @@
+.parent-node {
+    list-style: none;
+    padding-left: 15px;
+    &.hoverable {
+        li:hover > span {
+            color: #dc3545;
+        }
+    }
+    .child-node {
+        cursor: pointer;
+        padding: 5px 0;
+        &.active {
+            >span {
+                color: #ccc;
+            }
+        }
+    }
+}
+
+i.fa.blue {
+    color: #288dff;
+}

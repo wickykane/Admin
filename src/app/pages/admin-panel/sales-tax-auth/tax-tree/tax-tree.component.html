@@ -1,0 +1,12 @@
+<ul class="parent-node">
+    <li *ngFor="let country of taxAuthorityCountries; let i=index" class="child-node">
+        <i class="fa fa-folder blue" aria-hidden="true"></i>
+        <span (click)="onClickCountry($event, country)" (class)="text-uppercase">{{ country.display_name }}</span>
+        <ul class="parent-node">
+            <li *ngFor="let state of country.tax_authority_states; let i=index" class="child-node">
+                <i class="fa fa-folder blue" aria-hidden="true"></i>
+                <span (click)="onClickState($event, state)" (class)="text-uppercase">{{ state.display_name }}</span>
+            </li>
+        </ul>
+    </li>
+</ul>

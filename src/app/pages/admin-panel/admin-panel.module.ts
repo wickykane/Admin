@@ -67,6 +67,7 @@ import { TaxTypesModalComponent } from './tax-types/modal/tax-types.modal';
 import { TaxTypesComponent } from './tax-types/tax-types.component';
 
 import { SalesTaxAuthComponent } from './sales-tax-auth/sales-tax-auth.component';
+import { TaxTreeComponent } from './sales-tax-auth/tax-tree/tax-tree.component';
 
 import { CommonService, TableService } from '../../services/index';
 import {
@@ -139,7 +140,8 @@ import { CKEditorModule } from 'ng2-ckeditor';
         PaymentMethodsCreateComponent,
         TaxTypesComponent,
         TaxTypesModalComponent,
-        SalesTaxAuthComponent
+        SalesTaxAuthComponent,
+        TaxTreeComponent
     ],
     entryComponents: [
         BankModalComponent,

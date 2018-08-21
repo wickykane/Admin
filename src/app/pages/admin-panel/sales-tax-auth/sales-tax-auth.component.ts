@@ -11,6 +11,7 @@ import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
 
 import { SalesTaxAuthService } from './sales-tax-auth.service';
 
+import * as moment from 'moment';
 @Component({
     selector: 'app-sales-tax-auth',
     templateUrl: './sales-tax-auth.component.html',
@@ -22,6 +23,7 @@ export class SalesTaxAuthComponent implements OnInit {
     /**
      * letiable Declaration
      */
+    //#region initialize variables
     public listMaster = {
         countries: [],
         tax_auth_types: [],
@@ -38,7 +40,25 @@ export class SalesTaxAuthComponent implements OnInit {
                 key: 1,
                 name: 'Active'
             }
-        ]
+        ],
+        state_nexus: [
+            {
+                key: null,
+                name: '--Select--'
+            },
+            {
+                key: 0,
+                name: 'Yes'
+            },
+            {
+                key: 1,
+                name: 'No'
+            }
+        ],
+        states: [],
+        cal_tax_base_on: [],
+        sale_tax_on_shippping: [],
+        gl_accounts: []
     };
 
     public currentForm = null;
@@ -52,7 +72,9 @@ export class SalesTaxAuthComponent implements OnInit {
     public countryGeneralForm: FormGroup;
     public stateGeneralForm: FormGroup;
     public stateRateForm: FormGroup;
+    //#endregion initialize variables
 
+    //#region constructor
     constructor(
         public router: Router,
         public fb: FormBuilder,
@@ -69,31 +91,129 @@ export class SalesTaxAuthComponent implements OnInit {
         });
 
         this.stateGeneralForm = fb.group({
-            state: [null, Validators.required],
-            code: [null, Validators.required],
-            name: [null, Validators.required],
-            nexus: [null, Validators.required],
-            base: [null, Validators.required],
-            shipping: [null, Validators.required],
-            status: [null, Validators.required]
+            state_id: [null, Validators.required],
+            state_code: [null, Validators.required],
+            display_name: [null, Validators.required],
+            state_nexus: [null, Validators.required],
+            cal_tax_based_on: [null, Validators.required],
+            tax_on_shipping: [null, Validators.required],
+            ac: [null, Validators.required]
         });
         this.stateRateForm = fb.group({
             current_rate: [null, Validators.required],
-            effect_date: [null, Validators.required],
-            gl_acc: [null, Validators.required]
+            effective_date: [null, Validators.required],
+            gl_account_id: [null, Validators.required]
         });
     }
+    //#endregion constructor
 
+    //#region lifecycle hook
     ngOnInit() {
         this.getListSalesTaxAuthority();
         this.getListCountryDropDown();
         this.getTaxAuthorityTypes();
+        this.getStateList();
+        this.getCalTaxBaseOn();
+        this.getSaleTaxOnShipping();
+        this.getGLAccount();
     }
+    //#endregion lifecycle hook
 
     /**
      * Internal Function
      */
+    //#region load list master
+    getListCountryDropDown() {
+        this.salesTaxAuthService.getListCountryDropDown().subscribe(
+            res => {
+                try {
+                    this.listMaster.countries = res.data;
+                } catch (err) {
+                    console.log(err);
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        );
+    }
 
+    getTaxAuthorityTypes() {
+        this.salesTaxAuthService.getTaxAuthorityTypes().subscribe(
+            res => {
+                try {
+                    this.listMaster.tax_auth_types = res.data;
+                } catch (err) {
+                    console.log(err);
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        );
+    }
+
+    getStateList() {
+        this.salesTaxAuthService.getStateDropdownList().subscribe(
+            res => {
+                try {
+                    this.listMaster.states = res.data;
+                } catch (err) {
+                    console.log(err);
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        );
+    }
+
+    getCalTaxBaseOn() {
+        this.salesTaxAuthService.getCalTaxBaseOn().subscribe(
+            res => {
+                try {
+                    this.listMaster.cal_tax_base_on = res.data;
+                } catch (err) {
+                    console.log(err);
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        );
+    }
+
+    getSaleTaxOnShipping() {
+        this.salesTaxAuthService.getSalesTaxOnShipping().subscribe(
+            res => {
+                try {
+                    this.listMaster.sale_tax_on_shippping = res.data;
+                } catch (err) {
+                    console.log(err);
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        );
+    }
+    getGLAccount() {
+        this.salesTaxAuthService.getGLAccount().subscribe(
+            res => {
+                try {
+                    this.listMaster.gl_accounts = res.data;
+                } catch (err) {
+                    console.log(err);
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        );
+    }
+    //#endregion load list master
+
+    //#region load tree list and detail
     getListSalesTaxAuthority() {
         this.salesTaxAuthService.getListSalesTax().subscribe(
             res => {
@@ -128,11 +248,18 @@ export class SalesTaxAuthComponent implements OnInit {
         );
     }
 
-    getListCountryDropDown() {
-        this.salesTaxAuthService.getListCountryDropDown().subscribe(
+    getStateTaxAuthorityDetail(stateId) {
+        this.salesTaxAuthService.getStateTaxAuthorityDetail(stateId).subscribe(
             res => {
                 try {
-                    this.listMaster.countries = res.data;
+                    this.selectedStateTax = res.data ;
+                    this.stateGeneralForm.patchValue(this.selectedStateTax);
+                    this.stateRateForm.patchValue(this.selectedStateTax);
+                    const state = this.listMaster.states.find(_ => _.id === res.data.state_id );
+                    this.stateGeneralForm.controls.state_code.setValue(state.code);
+                    this.currentForm = 'state';
+                    this.isClickedSave = false;
+                    this.isCreateNew = false;
                 } catch (err) {
                     console.log(err);
                 }
@@ -142,30 +269,11 @@ export class SalesTaxAuthComponent implements OnInit {
             }
         );
     }
+    //#endregion load tree list and detail
 
-    getTaxAuthorityTypes() {
-        this.salesTaxAuthService.getTaxAuthorityTypes().subscribe(
-            res => {
-                try {
-                    res.data = [res.data];
-                    res.data.forEach(item => {
-                        this.listMaster.tax_auth_types.push({
-                            id: Object.keys(item)[0],
-                            display_name: item[Object.keys(item)[0]]
-                        });
-                    });
-                } catch (err) {
-                    console.log(err);
-                }
-            },
-            err => {
-                console.log(err);
-            }
-        );
-    }
-
+    //#region handle onlick-onselect
     onClickNew(type) {
-        if ((type === 'country' && this.selectedCountryTax['id']) || (type === 'country' && this.selectedCountryTax['id'])) {
+        if (type === 'country' && this.selectedCountryTax['id']) {
             const modalRef = this.modalService.open(ConfirmModalContent);
             modalRef.componentInstance.message = 'Unsaved data will be lost! Do you want to continue?';
             modalRef.componentInstance.yesButtonText = 'YES';
@@ -176,15 +284,19 @@ export class SalesTaxAuthComponent implements OnInit {
                     this.isCreateNew = true;
                     this.selectedCountryTax = {};
                     this.selectedStateTax = {};
-                    this.onClickReset();
+                    this.onResetForm();
                 }
             }, dismiss => { });
         } else {
             this.currentForm = type;
             this.isCreateNew = true;
-            this.selectedCountryTax = {};
             this.selectedStateTax = {};
-            this.onClickReset();
+            this.onResetForm();
+            if (type === 'state') {
+                this.stateRateForm.controls.effective_date.setValue(moment().format('YYYY-MM-DD'));
+            } else {
+                this.selectedCountryTax = {};
+            }
         }
     }
 
@@ -193,9 +305,137 @@ export class SalesTaxAuthComponent implements OnInit {
         this.getCountryTaxAuthorityDetail(countryTax['id']);
     }
 
-    onSelectStateTax(stateTax, countryTax) {
-        this.selectedStateTax = stateTax;
+    onSelectStateTax(stateTax) {
         this.selectedCountryTax = {};
+        this.getStateTaxAuthorityDetail(stateTax['id']);
+    }
+
+    onSelectStateDropdown(selectedState) {
+        const state = this.listMaster.states.find(_ => _.id === selectedState.id );
+        this.stateGeneralForm.controls.state_code.setValue(state.code);
+    }
+
+    onClickReset() {
+        this.onResetForm();
+        if (this.selectedCountryTax['id']) {
+            this.countryGeneralForm.patchValue(this.selectedCountryTax);
+        }
+        if (this.selectedStateTax['id']) {
+            this.stateGeneralForm.patchValue(this.selectedStateTax);
+            this.stateRateForm.patchValue(this.selectedStateTax);
+            const state = this.listMaster.states.find(_ => _.id === this.selectedStateTax['state_id'] );
+            this.stateGeneralForm.controls.state_code.setValue(state.code);
+        }
+    }
+
+    onSaveTaxAuthority() {
+        this.isClickedSave = true;
+        if ( this.isCreateNew && this.currentForm === 'country' && this.validateCountryGeneralForm()) {
+            this.onCreateCountryTaxAuthority();
+        }
+        if ( this.isCreateNew && this.currentForm === 'state' && this.validateStateGeneralForm() && this.validateStateRateForm()) {
+            this.onCreateStateTaxAuthority();
+        }
+        if ( !this.isCreateNew && this.currentForm === 'country' && this.validateCountryGeneralForm()) {
+            this.onUpdateCountryTaxAuthority();
+        }
+        if ( !this.isCreateNew && this.currentForm === 'state' && this.validateStateGeneralForm() && this.validateStateRateForm()) {
+            this.onUpdateStateTaxAuthority();
+        }
+    }
+    //#endregion handle onclick-onselect
+
+    //#region call API for Save data
+    onCreateCountryTaxAuthority() {
+        const params =  { ...this.countryGeneralForm.value };
+        params['ac'] = params['ac'].toString();
+        this.salesTaxAuthService.createCountryTaxAuthority(params).subscribe(
+            res => {
+                try {
+                    this.handleFinishSaveCountry();
+                    this.toastr.success(res.message);
+                } catch (err) {
+                    console.log(err);
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        );
+    }
+
+    onUpdateCountryTaxAuthority() {
+        const params =  { ...this.countryGeneralForm.value };
+        params['ac'] = params['ac'].toString();
+        this.salesTaxAuthService.updateCountryTaxAuthority(this.selectedCountryTax['id'] , params).subscribe(
+            res => {
+                try {
+                    this.handleFinishSaveCountry();
+                    this.toastr.success(res.message);
+                } catch (err) {
+                    console.log(err);
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        );
+    }
+
+    onCreateStateTaxAuthority() {
+        const params =  { ...this.stateGeneralForm.value, ...this.stateRateForm.value };
+        params['tax_authority_country_id'] = this.selectedCountryTax['id'];
+        this.salesTaxAuthService.createStateTaxAuthority(params).subscribe(
+            res => {
+                try {
+                    this.handleFinishSaveState();
+                    this.toastr.success(res.message);
+                } catch (err) {
+                    console.log(err);
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        );
+    }
+
+    onUpdateStateTaxAuthority() {
+        const params =  { ...this.stateGeneralForm.value, ...this.stateRateForm.value };
+        console.log(this.selectedStateTax['id']);
+        console.log(params)
+        // this.salesTaxAuthService.updateStateTaxAuthority(this.selectedStateTax['id'], params).subscribe(
+        //     res => {
+        //         try {
+        //             this.handleFinishSaveState();
+        //             this.toastr.success(res.message);
+        //         } catch (err) {
+        //             console.log(err);
+        //         }
+        //     },
+        //     err => {
+        //         console.log(err);
+        //     }
+        // );
+    }
+    //#endregion call API for Save data
+
+    //#region utility functions
+    handleFinishSaveCountry() {
+        this.isClickedSave = false;
+        this.currentForm = '';
+        this.isCreateNew = false;
+        this.selectedCountryTax = {};
+        this.countryGeneralForm.reset();
+        this.getListSalesTaxAuthority();
+    }
+
+    handleFinishSaveState() {
+        this.handleFinishSaveCountry();
+        this.selectedStateTax = {};
+        this.stateGeneralForm.reset();
+        this.stateRateForm.reset();
+        this.stateRateForm.controls.effective_date.setValue(moment().format('YYYY-MM-DD'));
     }
 
     validateCountryGeneralForm() {
@@ -219,81 +459,12 @@ export class SalesTaxAuthComponent implements OnInit {
         return true;
     }
 
-    onSaveTaxAuthority() {
-        this.isClickedSave = true;
-        if ( this.isCreateNew && this.currentForm === 'country' && this.validateCountryGeneralForm()) {
-            this.onCreateCountryTaxAuthority();
-        }
-        if ( this.isCreateNew && this.currentForm === 'state' && this.validateStateGeneralForm() && this.validateStateRateForm()) {
-            this.onCreateStateTaxAuthority();
-        }
-        if ( !this.isCreateNew && this.currentForm === 'country' && this.validateCountryGeneralForm()) {
-            this.onUpdateCountryTaxAuthority();
-        }
-        if ( !this.isCreateNew && this.currentForm === 'state' && this.validateStateGeneralForm() && this.validateStateRateForm()) {
-            this.onUpdateStateTaxAuthority();
-        }
-    }
-
-    onCreateCountryTaxAuthority() {
-        const params =  { ...this.countryGeneralForm.value };
-        params['ac'] = params['ac'].toString();
-        this.salesTaxAuthService.createCountryTaxAuthority(params).subscribe(
-            res => {
-                try {
-                    this.isClickedSave = false;
-                    this.currentForm = {};
-                    this.isCreateNew = false;
-                    this.countryGeneralForm.reset();
-                    this.getListSalesTaxAuthority();
-                    this.toastr.success(res.message);
-                } catch (err) {
-                    console.log(err);
-                }
-            },
-            err => {
-                console.log(err);
-            }
-        );
-    }
-
-    onUpdateCountryTaxAuthority() {
-        const params =  { ...this.countryGeneralForm.value };
-        params['ac'] = params['ac'].toString();
-        this.salesTaxAuthService.updateCountryTaxAuthority(this.selectedCountryTax['id'] , params).subscribe(
-            res => {
-                try {
-                    this.isClickedSave = false;
-                    this.currentForm = {};
-                    this.isCreateNew = false;
-                    this.countryGeneralForm.reset();
-                    this.getListSalesTaxAuthority();
-                    this.toastr.success(res.message);
-                } catch (err) {
-                    console.log(err);
-                }
-            },
-            err => {
-                console.log(err);
-            }
-        );
-    }
-
-    onCreateStateTaxAuthority() {
-        const params =  { ...this.stateGeneralForm.value, ...this.stateRateForm.value };
-        console.log(params);
-    }
-
-    onUpdateStateTaxAuthority() {
-        const params =  { ...this.stateGeneralForm.value, ...this.stateRateForm.value };
-        console.log(params);
-    }
-
-    onClickReset() {
+    onResetForm() {
         this.countryGeneralForm.reset();
         this.stateGeneralForm.reset();
         this.stateRateForm.reset();
-
+        this.stateRateForm.controls.effective_date.setValue(moment().format('YYYY-MM-DD'));
         this.isClickedSave = false;
     }
+    //#endregion utility functions
 }
