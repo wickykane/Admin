@@ -854,3 +854,10 @@ ngu-carousel {
   background: linear-gradient(to bottom, #feffff 0%, #ebebeb 50%, #ffffff 100%);
   cursor: pointer;
 }
+
+.tabs-order.full-width {
+    .nav-tabs {
+        margin-left: -10px;
+        margin-right: -10px;        
+    }
+}

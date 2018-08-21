@@ -127,20 +127,20 @@ export class SaleQuotationCreateComponent implements OnInit {
             'quote_date': [null, Validators.required],
             'expiry_date': [null, Validators.required],
             'company_id': [null, Validators.required],
-            'carrier_id': [null, Validators.required],
-            'ship_rate': [null, Validators.required],
-            'ship_method_option': [null, Validators.required],
+            'carrier_id': [2], // Default Ups
+            'ship_rate': [null],
+            'ship_method_option': [null],
             'warehouse_id': [1, Validators.required],
 
             'delivery_date': [null],
             'contact_user_id': [null],
 
-            'sales_person': [null],
-            'payment_method': [null],
-            'payment_term_id': [null],
-            'billing_id': [null],
-            'shipping_id': [null],
-            'description': [null]
+            'sales_person': [null, Validators.required],
+            'payment_method_id': [null, Validators.required],
+            'payment_term_id': [null, Validators.required],
+            'billing_id': [null, Validators.required],
+            'shipping_id': [null, Validators.required],
+            'note': [null]
         });
         //  Init Key
         this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
@@ -216,7 +216,6 @@ export class SaleQuotationCreateComponent implements OnInit {
             this.getDetailCustomerById(company_id);
         }
         this.list.items = [];
-        this.generalForm.controls['description'].patchValue('');
         this.updateTotal();
     }
 
@@ -245,6 +244,7 @@ export class SaleQuotationCreateComponent implements OnInit {
     getShippingReference(id) {
         this.orderService.getShippingReference(id).subscribe(res => {
             this.listMaster['carriers'] = res.data;
+            this.changeShip();
         });
     }
 
@@ -359,8 +359,30 @@ export class SaleQuotationCreateComponent implements OnInit {
         const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id);
         this.listMaster['options'] = carrier.options || [];
         this.listMaster['ship_rates'] = carrier.ship_rate || [];
-        this.generalForm.patchValue({ ship_method_option: null, ship_rate: null });
+        let default_option = null;
+        let default_ship_rate = null;
+        if (+this.generalForm.value.carrier_id === 3 || this.generalForm.value.carrier_id !== 999 && !carrier.own_carrirer) {
+            default_option = 888;
+            default_ship_rate = 8;
+        }
+
+        if (+this.generalForm.value.carrier_id === 999) {
+            default_ship_rate = 8;
+            this.generalForm.patchValue({ shipping_id: null });
+            this.generalForm.get('shipping_id').setValidators(null);
+        } else {
+            this.generalForm.get('shipping_id').setValidators([Validators.required]);
+        }
+
+        if (carrier.own_carrirer) {
+            default_option = null;
+            default_ship_rate = 7;
+        }
+
+        this.generalForm.patchValue({ ship_method_option: default_option, ship_rate: default_ship_rate });
+        this.generalForm.updateValueAndValidity();
     }
+
     //  Show order history
     showViewOrderHistory() {
         if (this.generalForm.value.company_id !== null) {
@@ -441,7 +463,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         const params = {
             ...this.generalForm.value,
             status_id: type,
-            original_ship_cost:  this.order_info['original_ship_cost'],
+            original_ship_cost: this.order_info['original_ship_cost'],
             items
         };
 
