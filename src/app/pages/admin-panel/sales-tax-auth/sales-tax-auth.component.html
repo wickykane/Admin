@@ -2,33 +2,16 @@
     <app-page-header [heading]="'SALES TAX AUTHORITY'" [icon]="'fa-th-list'"></app-page-header>
     <div class="form-search full-width form-horizontal">
         <div class="row create-section">
-            <div class="col-lg-2 col-xl-2 create-section-list">
+            <div class="create-section-list" [ngClass]="{'col-lg-3 col-xl-3' : ( !currentForm || currentForm === 'country'), 'col-lg-2 col-xl-2' : currentForm === 'state' }">
                 <div class="btn-list">
                     <button class="btn btn-primary" type="button" (click)="onClickNew('country')"> + New Country</button>
                     <button class="btn btn-primary" type="button" (click)="onClickNew('state')" [disabled]="!selectedCountryTax.display_name"> + New State</button>
                 </div>
                 <div class="country-list">
-                    <!-- <div class="country" *ngFor="let country of listSalesTax">
-                        <label class="css-input css-checkbox css-checkbox-default">
-                            <input class="cb-element" type="radio" [value]="country.display_name" [(ngModel)]="selectedCountryTax.display_name"
-                                (click)="onSelectCountryTax(country)">
-                            <span></span>
-                            {{country.display_name}}
-                        </label>
-                        <div class="state" *ngFor="let state of country.tax_authority_states">
-                            <label class="css-input css-checkbox css-checkbox-default">
-                                <input class="cb-element" type="radio" [value]="state.display_name" [(ngModel)]="selectedStateTax.display_name"
-                                (click)="onSelectStateTax(state)">
-                                <span></span>
-                                {{state.display_name}}
-                            </label>
-                        </div>
-                    </div> -->
-                    <app-tax-tree [taxAuthorityCountries]="listSalesTax" (selectedCountry)="onSelectCountryTax($event)"
-                        (selectedState)="onSelectStateTax($event)"></app-tax-tree>
+                    <app-tax-tree [taxAuthorityCountries]="listSalesTax" (selectedCountry)="onSelectCountryTax($event)" (selectedState)="onSelectStateTax($event)"></app-tax-tree>
                 </div>
             </div>
-            <div class="col-lg-10 col-xl-10 create-section-data" *ngIf="currentForm === 'country'">
+            <div class="col-lg-9 col-xl-9 create-section-data" *ngIf="currentForm === 'country'">
                 <h3 class="section-title">
                     <i class="fa fa-folder blue" aria-hidden="true"></i> New Country
                 </h3>
@@ -96,7 +79,7 @@
                             <select class="form-control" formControlName="state_id" [attr.disabled]="true" *ngIf="selectedStateTax.id">
                                 <option *ngFor="let state of listMaster.states" [value]="state.id">{{state.name}}</option>
                             </select>
-                            <ng-select class="form-control" formControlName="state_id" (change)="onSelectStateDropdown($event)" [disabled]="disabled"
+                            <ng-select class="form-control" formControlName="state_id" (change)="onSelectStateDropdown($event)"
                                 [items]="listMaster['states']" bindLabel="name" bindValue="id" *ngIf="!selectedStateTax.id">
                             </ng-select>
                             <span class="error" *ngIf="isClickedSave && stateGeneralForm.controls.state_id.invalid">
@@ -194,7 +177,8 @@
                             <label>
                                 <b>New Rate (*)</b>
                             </label>
-                            <input type="text" OnlyNumber="true" maxlength="50" class="form-control" [(ngModel)]="newRate" [ngModelOptions]="{standalone: true}">
+                            <input type="text" OnlyNumber="true" maxlength="50" class="form-control" [(ngModel)]="newRate"
+                            [ngModelOptions]="{standalone: true}" (blur)="onCheckNewRate()">
                             <span class="show-tooltip" style="font-size: 1.3em; margin-left: 5px;">
                                 %
                             </span>
@@ -207,11 +191,11 @@
                                 <b>Effective Date (*)</b>
                             </label>
                             <div class="input-group" clickOutside (clickOutside)="d&&d.close()">
-                                <input type="date" class="form-control" placeholder="yyyy-mm-dd" name="from_dt" [disabled]="true"
-                                    (click)="d.toggle()" (keydown)="$event.preventDefault()"
+                                <input class="form-control" placeholder="yyyy-mm-dd" name="from_dt" [disabled]="newRate === null || newRate === ''"
+                                    (click)="d.toggle()" (keydown)="$event.preventDefault()" (dateSelect)="checkEffectiveDate()"
                                     formControlName="effective_date" ngbDatepicker #d="ngbDatepicker">
                                 <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button" [attr.disabled]="isCreateNew">
+                                    <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button" [disabled]="newRate === null || newRate === ''">
                                         <i class="fa fa-calendar" aria-hidden="true"></i>
                                     </button>
                                 </div>

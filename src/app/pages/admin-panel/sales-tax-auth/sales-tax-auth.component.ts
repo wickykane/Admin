@@ -75,6 +75,8 @@ export class SalesTaxAuthComponent implements OnInit {
 
     public oldRate = null;
     public newRate = null;
+
+    private todayDate = moment().format('YYYY-MM-DD');
     //#endregion initialize variables
 
     //#region constructor
@@ -251,7 +253,7 @@ export class SalesTaxAuthComponent implements OnInit {
         );
     }
 
-    getStateTaxAuthorityDetail(stateId) {
+    getStateTaxAuthorityDetail(stateId, currentRate) {
         this.salesTaxAuthService.getStateTaxAuthorityDetail(stateId).subscribe(
             res => {
                 try {
@@ -260,6 +262,7 @@ export class SalesTaxAuthComponent implements OnInit {
                     this.stateRateForm.patchValue(this.selectedStateTax);
                     const state = this.listMaster.states.find(_ => _.id === res.data.state_id );
                     this.stateGeneralForm.controls.state_code.setValue(state.code);
+                    this.selectedStateTax['current_rate'] = currentRate ? currentRate : res.data['current_rate'];
                     this.currentForm = 'state';
                     this.isClickedSave = false;
                     this.isCreateNew = false;
@@ -296,7 +299,7 @@ export class SalesTaxAuthComponent implements OnInit {
             this.selectedStateTax = {};
             this.onResetForm();
             if (type === 'state') {
-                this.stateRateForm.controls.effective_date.setValue(moment().format('YYYY-MM-DD'));
+                this.stateRateForm.controls.effective_date.setValue(this.todayDate);
             } else {
                 this.selectedCountryTax = {};
             }
@@ -314,12 +317,25 @@ export class SalesTaxAuthComponent implements OnInit {
         this.selectedCountryTax = {};
         this.newRate = null;
         this.oldRate = null;
-        this.getStateTaxAuthorityDetail(stateTax['id']);
+        this.getStateTaxAuthorityDetail(stateTax['id'], null);
     }
 
     onSelectStateDropdown(selectedState) {
         const state = this.listMaster.states.find(_ => _.id === selectedState.id );
         this.stateGeneralForm.controls.state_code.setValue(state.code);
+    }
+
+    checkEffectiveDate() {
+        if (moment(this.stateRateForm.value.effective_date).isBefore(this.todayDate)) {
+            this.toastr.error('The new effective Date can not be less than current date.');
+            this.stateRateForm.controls.effective_date.setValue(this.todayDate);
+        }
+    }
+
+    onCheckNewRate() {
+        if (this.newRate === null || this.newRate === '') {
+            this.stateRateForm.controls.effective_date.setValue(this.selectedStateTax['effective_date']);
+        }
     }
 
     onClickReset() {
@@ -410,17 +426,25 @@ export class SalesTaxAuthComponent implements OnInit {
     onUpdateStateTaxAuthority() {
         const params =  { ...this.stateGeneralForm.value, ...this.stateRateForm.value };
         params['tax_authority_country_id'] = this.selectedStateTax['tax_authority_country_id'];
-        params['current_rate'] = this.newRate !== null ? this.newRate : params['current_rate'];
+        params['current_rate'] = (this.newRate !== null && this.newRate !== '') ? this.newRate : params['current_rate'];
         Object.keys(params).forEach(key => {
             params[key] = params[key].toString();
-        })
+        });
+
+        const tempOldRate = this.selectedStateTax['current_rate'];
+
         this.salesTaxAuthService.updateStateTaxAuthority(this.selectedStateTax['id'], params).subscribe(
             res => {
                 try {
                     this.getListSalesTaxAuthority();
-                    this.getStateTaxAuthorityDetail(this.selectedStateTax['id']);
-                    this.oldRate = this.newRate !== null ? this.newRate : null;
-                    this.newRate = null;
+                    // this.oldRate = this.newRate !== null ? this.newRate : null;
+                    if (!moment(this.stateRateForm.value.effective_date).isAfter(this.todayDate)) {
+                        this.getStateTaxAuthorityDetail(this.selectedStateTax['id'], null);
+                        this.oldRate = tempOldRate;
+                        this.newRate = null;
+                    } else {
+                        this.getStateTaxAuthorityDetail(this.selectedStateTax['id'], this.selectedStateTax['current_rate']);
+                    }
                     this.toastr.success(res.message);
                 } catch (err) {
                     console.log(err);
