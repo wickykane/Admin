@@ -18,7 +18,7 @@ import { FlatRateOptionsModalComponent } from './flat-rate-options.modal';
 import { CustomRateOptionsModalComponent } from './custom-rate-options.modal';
 import { PickupOptionsModalComponent} from './pickup-options.modal';
 import { UPSConfigurationModalComponent} from './ups-configuration.modal';
-
+import { SEFLConfigurationModalComponent} from './sefl-configuration.modal';
 import { InvoiceModalContent } from './invoice.modal';
 import { OrderHistoryModalContent } from './order-history.modal';
 import { OrderSaleQuoteModalContent } from './order-salequote.modal';
@@ -37,14 +37,14 @@ import { StateFilterModalComponent } from './stateFilter.modal';
     declarations: [ItemMiscModalContent,ItemModalContent, AddressModalContent, ConfirmModalContent,
          PromotionModalContent, SiteModalComponent,StateFilterModalComponent,FreeShippingOptionsModalComponent,FlatRateOptionsModalComponent, OrderSaleQuoteModalContent,
          ItemQuoteModalContent,CustomRateOptionsModalComponent,PickupOptionsModalComponent,
-          InvoiceModalContent, OrderHistoryModalContent,UPSConfigurationModalComponent],
+          InvoiceModalContent, OrderHistoryModalContent,UPSConfigurationModalComponent,SEFLConfigurationModalComponent],
     providers: [TableService, ItemService],
     exports: [ItemMiscModalContent,ItemModalContent, AddressModalContent, ConfirmModalContent, ItemQuoteModalContent,
          PromotionModalContent, SiteModalComponent,StateFilterModalComponent,FreeShippingOptionsModalComponent,FlatRateOptionsModalComponent, OrderSaleQuoteModalContent,
-          InvoiceModalContent,CustomRateOptionsModalComponent, OrderHistoryModalContent,PickupOptionsModalComponent,UPSConfigurationModalComponent],
+          InvoiceModalContent,CustomRateOptionsModalComponent, OrderHistoryModalContent,PickupOptionsModalComponent,UPSConfigurationModalComponent,SEFLConfigurationModalComponent],
     entryComponents: [ItemMiscModalContent,ItemModalContent, AddressModalContent, ItemQuoteModalContent,
          ConfirmModalContent, PromotionModalContent, SiteModalComponent,StateFilterModalComponent,FreeShippingOptionsModalComponent,FlatRateOptionsModalComponent,
-          OrderSaleQuoteModalContent, InvoiceModalContent, OrderHistoryModalContent,CustomRateOptionsModalComponent,PickupOptionsModalComponent,UPSConfigurationModalComponent]
+          OrderSaleQuoteModalContent, InvoiceModalContent, OrderHistoryModalContent,CustomRateOptionsModalComponent,PickupOptionsModalComponent,UPSConfigurationModalComponent,SEFLConfigurationModalComponent]
 
 
 })

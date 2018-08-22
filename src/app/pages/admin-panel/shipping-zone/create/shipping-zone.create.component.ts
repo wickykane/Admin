@@ -15,6 +15,7 @@ import { CommonService } from './../../../../services/common.service';
 import * as moment from 'moment';
 import { StateFilterModalComponent } from '../../../../shared/modals/stateFilter.modal';
 import { UPSConfigurationModalComponent } from '../../../../shared/modals/ups-configuration.modal';
+import { SEFLConfigurationModalComponent } from '../../../../shared/modals/sefl-configuration.modal';
 import { FreeShippingOptionsModalComponent } from '../../../../shared/modals/free-shipping-options.modal';
 import { FlatRateOptionsModalComponent } from '../../../../shared/modals/flat-rate-options.modal';
 import { CustomRateOptionsModalComponent } from '../../../../shared/modals/custom-rate-options.modal';
@@ -84,7 +85,7 @@ export class ShippingZoneCreateComponent implements OnInit {
         "access_key": "",
         "user_id": "",
         "password": "",
-        "rates": "0",
+        "rates": false,
         "account_number": "",
         "ups_customer": "",
         "fee_type": "1",
@@ -93,6 +94,17 @@ export class ShippingZoneCreateComponent implements OnInit {
         "markup_type_value": "0",
         "ship_options": ["01"]
     }
+    public seflList= {
+        "account": '',
+        "username":'',
+        "password": '',
+        "markup_type_value": '0.00',
+        "markup_type": '1',
+        "fee_type": '1',
+        "handling_fee": '0.00',
+        'id':'6'
+    }
+    
     public pickupStoreList = [];
     constructor(
         public keyService: RMACreateKeyService,
@@ -155,15 +167,12 @@ export class ShippingZoneCreateComponent implements OnInit {
         item.state = this.listMasterData['state'][item.country_code];
         if (item.state) {
             item.state.forEach(res => {
-                console.log(res);
                 return res.selected = true;
             })
         }
         else {
             item.state = [];
         }
-
-        console.log(item);
         if (isSelect) {
             this.listSelectCountry.push(item);
         }
@@ -190,7 +199,6 @@ export class ShippingZoneCreateComponent implements OnInit {
             // modalRef.componentInstance.listSelectCountry = this.listMasterData['state'][code];
             this.listSelectCountry.forEach(item => {
                 if (item.code = code) {
-                    console.log(item);
                     modalRef.componentInstance.listSelectCountry = item;
                 }
             })
@@ -254,6 +262,16 @@ export class ShippingZoneCreateComponent implements OnInit {
             modalRef.componentInstance.typeFreeList = this.listMasterData['type_free'];
             modalRef.componentInstance.upsList = this.listMasterData['ups'];
         }
+        if (id == "6") {
+            modalRef = this.modalService.open(SEFLConfigurationModalComponent);
+            // modalRef.componentInstance.wareHouseList = this.listMasterData['warehouse'];
+            // modalRef.componentInstance.weekDaysList = this.listMasterData['day_of_week'];
+            // modalRef.componentInstance.dayHoursList = this.listMasterData['hours_of_day'];
+            modalRef.componentInstance.id = id;
+            modalRef.componentInstance.seflModalList = this.seflList;
+            modalRef.componentInstance.typeFreeList = this.listMasterData['type_free'];
+            modalRef.componentInstance.upsList = this.listMasterData['ups'];
+        }
         modalRef.componentInstance.isEdit = false;
         modalRef.result.then(res => {
             if (res['id']) {
@@ -271,6 +289,9 @@ export class ShippingZoneCreateComponent implements OnInit {
                 }
                 if (res['id'] == '5') {
                     this.upsList = res['data'];
+                }
+                if (res['id'] == '6') {
+                    this.seflList = res['data'];
                 }
             }
 
@@ -312,12 +333,12 @@ export class ShippingZoneCreateComponent implements OnInit {
                     if (item['id'] == 4) {
                         params['shipping_quotes'].push(this.pickupList);
                     }
-                    // if(item['id']==5){
-                    //     params['shipping_quotes'].push(this.freeShippingList);
-                    // }
-                    // if(item['id']==6){
-                    //     params['shipping_quotes'].push(this.freeShippingList);
-                    // }
+                    if(item['id']==5){
+                        params['shipping_quotes'].push(this.upsList);
+                    }
+                    if(item['id']==6){
+                        params['shipping_quotes'].push(this.seflList);
+                    }
                 }
             }
         }
@@ -371,7 +392,6 @@ export class ShippingZoneCreateComponent implements OnInit {
     }
     calculateStateLength(item) {
         var count = 0;
-        console.log(item);
         item.forEach(res => {
             if (res.selected) {
                 count++;
