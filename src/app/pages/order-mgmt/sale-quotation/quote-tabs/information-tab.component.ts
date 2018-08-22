@@ -6,12 +6,12 @@ import { TableService } from './../../../../services/table.service';
 
 
 @Component({
-    selector: 'app-order-info-tab',
+    selector: 'app-quote-info-tab',
     templateUrl: './information-tab.component.html',
-    styleUrls: ['./order-tab.component.scss'],
+    styleUrls: ['./quote-tab.component.scss'],
     providers: [OrderService]
 })
-export class SaleOrderInformationTabComponent implements OnInit {
+export class QuoteInformationTabComponent implements OnInit {
 
     /**
      * letiable Declaration
@@ -34,9 +34,10 @@ export class SaleOrderInformationTabComponent implements OnInit {
     public detail = {
         'billing': {},
         'shipping_address': {},
-        'subs': [],
+        'items': [],
         'buyer_info': {}
     };
+
     public addr_select = {
         shipping: {
             'address_name': '',
@@ -80,27 +81,30 @@ export class SaleOrderInformationTabComponent implements OnInit {
      */
 
     getList() {
-
-        this.orderService.getOrderDetail(this._orderId).subscribe(res => {
+        this.orderService.getSaleQuoteDetail(this._orderId).subscribe(res => {
             try {
                 this.detail = res.data;
                 this.stockValueChange.emit(res.data);
-                if (res.data.is_draft_order) {
-                    this.detail['shipping_address'] = (res.data.shipping_address.length === 0) ? _.cloneDeep(this.addr_select.shipping) : res.data.shipping_address[0];
-                    this.detail['billing'] = (res.data.billing_info.length === 0) ? _.cloneDeep(this.addr_select.billing) : this.detail['billing'] = res.data.billing_info[0];
-                } else {
-                    this.detail['billing'] = res.data.billing_info[0];
-                    this.detail['shipping_address'] = res.data.shipping_address[0];
-                }
-                if (this.detail['total_paid'] === null) {
-                    this.detail['total_paid'] = 0;
-                }
-                this.detail['subs'] = res.data.list.items;
-                this.detail['subs'].forEach((item) => {
-                    this.totalQTY += item.quantity;
-                    this.totalShipQTY += item.qty_shipped;
-                });
-                this.detail['buyer_info'] = res.data.buyer_info;
+                // if (res.data.is_draft_order) {
+                //     this.detail['shipping_address'] = (res.data.shipping_address.length === 0) ? _.cloneDeep(this.addr_select.shipping) : res.data.shipping_address[0];
+                //     this.detail['billing'] = (res.data.billing_info.length === 0) ? _.cloneDeep(this.addr_select.billing) : this.detail['billing'] = res.data.billing_info[0];
+                // } else {
+                //     this.detail['billing'] = res.data.billing_info[0];
+                //     this.detail['shipping_address'] = res.data.shipping_address[0];
+                // }
+                // if (this.detail['total_paid'] === null) {
+                //     this.detail['total_paid'] = 0;
+                // }
+                // this.detail['subs'] = res.data.list.items;
+                // this.detail['subs'].forEach((item) => {
+                //     this.totalQTY += item.quantity;
+                //     this.totalShipQTY += item.qty_shipped;
+                // });
+                // this.detail['buyer_info'] = res.data.buyer_info;
+                this.detail['buyer_info'] = {};
+                this.detail['billing'] = {};
+                this.detail['shipping'] = {};
+                this.detail['shipping_address'] = {};
 
             } catch (e) {
                 console.log(e);

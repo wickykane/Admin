@@ -113,11 +113,11 @@ export class OrderService {
 
     //  Sale Quotation
     getListSalesQuotation(params) {
-        const url = 'sale-quote';
+        const url = 'sale-quote/get-list';
         return this.API.get(url, params);
     }
     getSaleQuoteDetail(id) {
-        const url = ['sale-quote', id].join('/');
+        const url = ['sale-quote', 'detail', id].join('/');
         return this.API.get(url);
     }
     getSaleQuoteHistory(id) {
@@ -174,6 +174,12 @@ export class OrderService {
         const url = 'order/submit/' + ordId;
         return this.API.put(url);
     }
+
+    updateStatusOrder(order_id, status) {
+        const url = '/order/updateStatus/' + order_id + '/' + status;
+        return this.API.put(url);
+    }
+
     changeOrderStatus(orderNum, params) {
         const url = 'order/update-order-status-by-code/' + orderNum;
         return this.API.put(url, params);
@@ -188,7 +194,7 @@ export class OrderService {
         return this.API.put(url, params);
     }
     generateSaleQuoteCode() {
-        const url = 'order/getSQCode';
+        const url = 'sale-quote/get-sale-quote-code';
         return this.API.get(url);
     }
     generateSO() {
@@ -246,5 +252,21 @@ export class OrderService {
     getPaymentMethod() {
         const url = 'ar-invoice/get-payment-method';
         return this.API.get(url);
+    }
+    getSQReference() {
+        const url = 'sale-quote/sq-references';
+        return this.API.get(url);
+    }
+    getShippingReference(id) {
+        const url = 'shipping-zone/configuration-by-address/' + id;
+        return this.API.get(url);
+    }
+    getTaxShipping(params) {
+        const url = 'shipping-zone/calc-tax-shipping';
+        return this.API.post(url, params);
+    }
+    createQuoteOrder(params) {
+        const url = 'sale-quote/create';
+        return this.API.post(url, params);
     }
 }

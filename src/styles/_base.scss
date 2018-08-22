@@ -777,6 +777,9 @@ ngu-carousel {
     }
 
 }
+.list-items:nth-child(1n+2) {
+    margin-top: 15px;
+}
 .table-custom1{
     .header{
         margin: 0 30px 0 0;
@@ -816,3 +819,45 @@ ngu-carousel {
   top: 0
 }
 
+
+.tabs-order {
+    ul.nav-tabs {
+        background: linear-gradient(to bottom, rgba(240,249,255,1) 0%,rgb(229, 245, 255) 47%,rgb(194, 230, 253) 100%);
+        border-bottom: 1px solid #7ac3f3;
+        border-top: 1px solid #7ac3f3;
+
+        li {
+            .nav-link {
+                display: block;
+                padding: 5px 10px;
+            }
+
+            .nav-link.active {
+                color: #282b2b;
+                border-color: orange;
+                font-weight: 600;
+                border-top: 1px solid orange;
+                border-bottom: 1px solid orange;
+                background: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(234,218,213,1) 48%,rgba(237,173,151,1) 100%);
+            }
+        }
+    }
+}
+
+.btn-default-custom {
+  padding: 3px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 11px;
+  background: #feffff;
+  background: -webkit-gradient(linear, left top, left bottom, from(#feffff), color-stop(50%, #ebebeb), to(#ffffff));
+  background: linear-gradient(to bottom, #feffff 0%, #ebebeb 50%, #ffffff 100%);
+  cursor: pointer;
+}
+
+.tabs-order.full-width {
+    .nav-tabs {
+        margin-left: -10px;
+        margin-right: -10px;        
+    }
+}

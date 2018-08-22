@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from './../../../services/table.service';
 import { SaleQuoteKeyService } from './keys.list.control';
 
+import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 import { OrderService } from '../order-mgmt.service';
@@ -37,14 +38,15 @@ export class SaleQuotationComponent implements OnInit {
         public toastr: ToastrService,
         public tableService: TableService,
         private orderService: OrderService,
+        private _hotkeysService: HotkeysService,
         public saleQuoteKeyService: SaleQuoteKeyService,
         private renderer: Renderer) {
 
         this.searchForm = fb.group({
-            'sale_quote_num': [null],
+            'quote_no': [null],
             'buyer_name': [null],
             'sts': [null],
-            'type': [null],
+            'date_type': [null],
             'date_from': [null],
             'date_to': [null]
         });
@@ -53,13 +55,14 @@ export class SaleQuotationComponent implements OnInit {
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
         //  Init Key
-        this.saleQuoteKeyService.watchContext.next(this);
+        this.saleQuoteKeyService.watchContext.next({ context: this, service: this._hotkeysService });
+
     }
 
     ngOnInit() {
         //  Init Fn
         this.listMaster['listFilter'] = [{ value: false, name: 'Date Filter' }];
-        this.listMaster['dateType'] = [{ id: 'quote_date', name: 'Quote Date' }, { id: 'expiry_dt', name: 'Expiry Date' }, { id: 'ship_date', name: 'Delivery Date' }];
+        this.listMaster['dateType'] = [{ id: 'quote_date', name: 'Quote Date' }, { id: 'expiry_dt', name: 'Expiry Date' }, { id: 'delivery_dt', name: 'Delivery Date' }];
         this.getList();
         this.getListStatus();
         this.user = JSON.parse(localStorage.getItem('currentUser'));
@@ -137,7 +140,7 @@ export class SaleQuotationComponent implements OnInit {
                 this.toastr.success(res.message);
                 setTimeout(() => {
                     this.getList();
-                  }, 100);
+                }, 100);
             } catch (e) {
                 console.log(e);
             }
@@ -146,14 +149,14 @@ export class SaleQuotationComponent implements OnInit {
 
     getList() {
         const params = { ...this.tableService.getParams(), ...this.searchForm.value };
-        params['type'] = 'SAQ';
+
         Object.keys(params).forEach((key) => {
             if (params[key] instanceof Array) {
-              params[key] = params[key].join(',');
+                params[key] = params[key].join(',');
             }
             // tslint:disable-next-line:no-unused-expression
-            (params[key] === null || params[key] ===  '') && delete params[key];
-          });
+            (params[key] === null || params[key] === '') && delete params[key];
+        });
         Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
 
         this.orderService.getListSalesQuotation(params).subscribe(res => {

@@ -13,18 +13,20 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonService } from '../../services/common.service';
 
 @Component({
-    selector: 'app-free-shipping-options-modal',
-    templateUrl: './free-shipping-options.modal.html'
+    selector: 'app-pickup-options-modal',
+    templateUrl: './pickup-options.modal.html'
 })
-export class FreeShippingOptionsModalComponent implements OnInit, OnDestroy {
+export class PickupOptionsModalComponent implements OnInit, OnDestroy {
 
     generalForm: FormGroup;
-    @Input() condition;
-    @Input() id;
-    @Input() shippingList;
+    @Input() wareHouseList;
+    @Input() weekDaysList;
+    @Input() dayHoursList;
+    @Input() pickupList;
     hotkeyCtrlLeft: Hotkey | Hotkey[];
     hotkeyCtrlRight: Hotkey | Hotkey[];
-
+    ranges: any = [];
+    isSave =false;
     constructor(public fb: FormBuilder,
         public router: Router,
         public toastr: ToastrService,
@@ -36,14 +38,11 @@ export class FreeShippingOptionsModalComponent implements OnInit, OnDestroy {
         public activeModal: NgbActiveModal) {
 
         this.generalForm = fb.group({
-            'free_shipping_item': [0],
-            'limit_order_over': [0],
-            'condition': [''],
-            'limit_total_weight':[0],
-            'id':[1],
-            'price':[],
-            'lbs_from':[],
-            'lbs_to1':[null]
+            "name": ['', Validators.required],
+            "pickup": [''],
+            "handling_fee": [''],
+            "id": "4",
+            // 'ranges':[this.fb.array([])]
         });
 
 
@@ -51,14 +50,28 @@ export class FreeShippingOptionsModalComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        if(this.shippingList){
-            this.generalForm.patchValue(this.shippingList);
+        if (this.pickupList) {
+            this.generalForm.patchValue(this.pickupList);
+            this.ranges = this.pickupList.ranges;
+            if(this.pickupList['bussiness_hours']){
+                this.weekDaysList = this.pickupList['bussiness_hours'];
+            }
+            else{
+                this.weekDaysList.forEach(item=>{
+                    item['data']=[{from:'',to:''}];
+                    item['selected']= false;
+                })
+            }
         }
+
     }
 
     ngOnDestroy() {
         this.hotkeysService.remove(this.hotkeyCtrlLeft);
         this.hotkeysService.remove(this.hotkeyCtrlRight);
+    }
+    addNewHours(item){
+        item.push({from:'',to:''});
     }
 
 
@@ -71,20 +84,26 @@ export class FreeShippingOptionsModalComponent implements OnInit, OnDestroy {
         const data = {};
         this.activeModal.close(data);
     }
-    applyData(){
+    applyData() {
         console.log(this.generalForm.value);
-        this.itemService.checkCondition(this.generalForm.value).subscribe(res => {
-            console.log(res);
-            this.activeModal.close({id:'1',data:this.generalForm.value});
+        console.log(this.weekDaysList);
+        var params = Object.assign({},this.generalForm.value);
+        var weekDaysList1 = this.weekDaysList.slice(0);
+        console.log(weekDaysList1);
+        weekDaysList1.forEach((item,index,object)=>{
+            console.log(item);
+            if(item.selected == false){
+                object.splice(index,1);
+            }
         });
-    }
-
-    checkCondition(){
-        if(this.generalForm.value.condition!=''){
-            this.generalForm.patchValue({'limit_total_weight':true})
+        params['bussiness_hours']=weekDaysList1;
+        this.itemService.checkCondition(params).subscribe(res => {
+            console.log(res);
+            this.activeModal.close({ id: '4', data: params });
+        });
         }
-    }
-    upToValue(){
-        this.generalForm.patchValue({'lbs_to1':''});
+
+    removeHoursItem(index,item) {
+        item.splice(index, 1);
     }
 }
