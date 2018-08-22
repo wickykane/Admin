@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
+import { ToastrService } from 'ngx-toastr';
 import { OrderService } from '../../../order-mgmt/order-mgmt.service';
 import { TableService } from './../../../../services/table.service';
 
@@ -33,9 +35,8 @@ export class SaleOrderInformationTabComponent implements OnInit {
 
     public detail = {
         'billing': {},
-        'shipping_address': {},
-        'subs': [],
-        'buyer_info': {}
+        'shipping': {},
+        'subs': []
     };
     public addr_select = {
         shipping: {
@@ -65,6 +66,8 @@ export class SaleOrderInformationTabComponent implements OnInit {
 
     constructor(
         public fb: FormBuilder,
+        public toastr: ToastrService,
+        private router: Router,
         private vRef: ViewContainerRef,
         public tableService: TableService,
         private orderService: OrderService) {
@@ -85,27 +88,56 @@ export class SaleOrderInformationTabComponent implements OnInit {
             try {
                 this.detail = res.data;
                 this.stockValueChange.emit(res.data);
-                if (res.data.is_draft_order) {
-                    this.detail['shipping_address'] = (res.data.shipping_address.length === 0) ? _.cloneDeep(this.addr_select.shipping) : res.data.shipping_address[0];
-                    this.detail['billing'] = (res.data.billing_info.length === 0) ? _.cloneDeep(this.addr_select.billing) : this.detail['billing'] = res.data.billing_info[0];
-                } else {
-                    this.detail['billing'] = res.data.billing_info[0];
-                    this.detail['shipping_address'] = res.data.shipping_address[0];
-                }
-                if (this.detail['total_paid'] === null) {
-                    this.detail['total_paid'] = 0;
-                }
-                this.detail['subs'] = res.data.list.items;
+
+                this.detail['billing'] = (res.data.billing_address === null) ? _.cloneDeep(this.addr_select.billing) : res.data.billing_address[0];
+                this.detail['shipping'] = (res.data.shipping_address === null) ? _.cloneDeep(this.addr_select.shipping) : res.data.shipping_address[0];
+
+                this.detail['subs'] = res.data.items;
                 this.detail['subs'].forEach((item) => {
                     this.totalQTY += item.quantity;
                     this.totalShipQTY += item.qty_shipped;
                 });
-                this.detail['buyer_info'] = res.data.buyer_info;
+
 
             } catch (e) {
                 console.log(e);
             }
         });
+    }
+
+    putApproveOrder(order_id) {
+        // const params = {'status_code': 'AP'};
+        this.orderService.approveOrd(order_id).subscribe(res => {
+            if (res.status) {
+                this.toastr.success(res.message);
+                setTimeout(() => {
+                    this.router.navigate(['/order-management/sale-order']);
+                }, 500);
+            } else {
+                this.toastr.error(res.message);
+            }
+        },
+            err => {
+                this.toastr.error(err.message);
+            }
+        );
+    }
+
+    updateStatusOrder(order_id, status) {
+        this.orderService.updateStatusOrder(order_id, status).subscribe(res => {
+            if (res.status) {
+                this.toastr.success(res.message);
+                setTimeout(() => {
+                    this.router.navigate(['/order-management/sale-order']);
+                }, 500);
+            } else {
+                this.toastr.error(res.message);
+            }
+        },
+            err => {
+                this.toastr.error(err.message);
+            }
+        );
     }
 
 }
