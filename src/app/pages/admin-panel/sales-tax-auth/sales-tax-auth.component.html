@@ -5,7 +5,7 @@
             <div class="create-section-list" [ngClass]="{'col-lg-3 col-xl-3' : ( !currentForm || currentForm === 'country'), 'col-lg-2 col-xl-2' : currentForm === 'state' }">
                 <div class="btn-list">
                     <button class="btn btn-primary" type="button" (click)="onClickNew('country')"> + New Country</button>
-                    <button class="btn btn-primary" type="button" (click)="onClickNew('state')" [disabled]="!selectedCountryTax.display_name"> + New State</button>
+                    <button class="btn btn-primary" type="button" (click)="onClickNew('state')" [disabled]="!selectedCountryTax['display_name']"> + New State</button>
                 </div>
                 <div class="country-list">
                     <app-tax-tree [taxAuthorityCountries]="listSalesTax" (selectedCountry)="onSelectCountryTax($event)" (selectedState)="onSelectStateTax($event)"></app-tax-tree>
