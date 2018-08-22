@@ -140,4 +140,9 @@ export class SaleOrderInformationTabComponent implements OnInit {
         );
     }
 
+    cancel() {
+      console.log('ab');
+      this.router.navigate(['/order-management/sale-order']);
+    }
+
 }
