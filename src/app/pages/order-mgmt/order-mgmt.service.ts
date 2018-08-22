@@ -129,7 +129,7 @@ export class OrderService {
         return this.API.get(url);
     }
     updateSaleQuoteStatus(sale_quote_id, params) {
-        const url = 'order/update-sale-quote-status/' + sale_quote_id;
+        const url = 'sale-quote/update-status/' + sale_quote_id;
         return this.API.put(url, params);
     }
     sentMailToBuyer(sale_quote_id) {

@@ -10,12 +10,14 @@ import { routerTransition } from '../../../../router.animations';
 import { OrderService } from '../../order-mgmt.service';
 import { SaleQuoteDetailKeyService } from './keys.detail.control';
 
+import { HotkeysService } from 'angular2-hotkeys';
+
 @Component({
     selector: 'app-detail-quotation',
     templateUrl: './sale-quotation.detail.component.html',
     styleUrls: ['../sale-quotation.component.scss'],
     animations: [routerTransition()],
-    providers: [PrintHtmlService, SaleQuoteDetailKeyService]
+    providers: [PrintHtmlService, HotkeysService, SaleQuoteDetailKeyService]
 })
 
 
@@ -37,10 +39,11 @@ export class SaleQuotationDetailComponent implements OnInit {
         public toastr: ToastrService,
         private router: Router,
         private orderService: OrderService,
+        private _hotkeysService: HotkeysService,
         public keyService: SaleQuoteDetailKeyService,
         private route: ActivatedRoute) {
         //  Init Key
-        this.keyService.watchContext.next(this);
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
 
     }
 
@@ -53,12 +56,11 @@ export class SaleQuotationDetailComponent implements OnInit {
      */
 
     checkRender(detail) {
-        console.log(detail);
         this.orderDetail = detail;
     }
+
     cancel() {
-        console.log('ab');
-        this.router.navigate(['/order-management/sale-order']);
+        this.router.navigate(['/order-management/sale-quotation']);
     }
 
     putApproveOrder(order_id) {
