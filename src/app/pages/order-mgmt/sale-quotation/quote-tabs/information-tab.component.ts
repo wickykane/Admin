@@ -101,4 +101,15 @@ export class QuoteInformationTabComponent implements OnInit {
             }
         });
     }
+
+    cloneQuote() {
+        this.orderService.cloneQuote(this._orderId).subscribe(res => {
+            try {
+                this.toastr.success(res.message);
+                this.getList();
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
 }

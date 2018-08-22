@@ -158,7 +158,7 @@
                                             <span class="badge badge-warning" *ngIf="item.sts_code == 'SM'">{{item.sts}}</span>
                                             <span class="badge badge-danger" *ngIf="item.sts_code == 'RM'">{{item.sts}}</span>
                                             <span class="badge badge-success" *ngIf="item.sts_code == 'AM'">{{item.sts}}</span>
-                                            <span class="badge badge-primary" *ngIf="item.sts_code == 'CC'">{{item.sts}}</span>
+                                            <span class="badge badge-danger" *ngIf="item.sts_code == 'CC'">{{item.sts}}</span>
                                             <span class="badge badge-primary" *ngIf="item.sts_code == 'SC'">{{item.sts}}</span>
                                             <span class="badge badge-primary" *ngIf="item.sts_code == 'RO'">{{item.sts}}</span>
                                             <span class="badge badge-primary" *ngIf="item.sts_code == 'IU'">{{item.sts}}</span>
@@ -169,8 +169,8 @@
                                             <button ngbTooltip="Submit" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" (click)="updateStatus(item.id, 'SM')"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></button>
                                             <button ngbTooltip="Cancel" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" (click)="updateStatus(item.id, 'CC')"><i class="fa fa-times-circle" aria-hidden="true"></i></button>
                                             <button ngbTooltip="Approve" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="updateStatus(item.id, 'AM')"><i class="fa fa-check-square"></i></button>
-                                            <button ngbTooltip="Reject" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="updateStatus(item.id, 'RB')"><i class="fa fa-ban" aria-hidden="true"></i></button>
-                                            <button ngbTooltip="Clone" class="btn btn-default" (click)="updateStatus('clone')"><i class="fa fa-clone"></i></button>
+                                            <button ngbTooltip="Reject" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="updateStatus(item.id, 'RM')"><i class="fa fa-ban" aria-hidden="true"></i></button>
+                                            <button ngbTooltip="Clone" class="btn btn-default" (click)="cloneQuote(item.id)"><i class="fa fa-clone"></i></button>
                                         </td>
                                     </tr>
 

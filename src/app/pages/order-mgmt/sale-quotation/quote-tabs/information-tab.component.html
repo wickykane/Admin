@@ -5,8 +5,8 @@
         <button *ngIf="detail['sale_quote_status_id'] == 1" class="btn btn-outline-warning" (click)="updateStatus('SM')"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i> Submit</button>
         <button *ngIf="detail['sale_quote_status_id'] == 1" class="btn btn-outline-danger" (click)="updateStatus('CC')"><i class="fa fa-times-circle" aria-hidden="true"></i> Cancel</button>
         <button *ngIf="detail['sale_quote_status_id'] == 2" class="btn btn-outline-success" (click)="updateStatus('AM')"><i class="fa fa-check-square"></i> Approve</button>
-        <button *ngIf="detail['sale_quote_status_id'] == 2" class="btn btn-outline-danger" (click)="updateStatus('RB')"><i class="fa fa-ban" aria-hidden="true"></i> Reject</button>
-        <button class="btn btn-outline-info" (click)="updateStatus('clone')"><i class="fa fa-clone"></i> Clone</button>
+        <button *ngIf="detail['sale_quote_status_id'] == 2" class="btn btn-outline-danger" (click)="updateStatus('RM')"><i class="fa fa-ban" aria-hidden="true"></i> Reject</button>
+        <button class="btn btn-outline-info" (click)="cloneQuote()"><i class="fa fa-clone"></i> Clone</button>
     </div>
     <section class="rma-page block main-container block-order">
         <div class="row">
@@ -288,14 +288,14 @@
                                         <th class="text-center" translate>Description</th>
                                         <th class="text-center" translate>Condition</th>
                                         <th class="text-center" translate>UOM</th>
-                                        <th class="text-center" translate style="width:150px">Free Ship</th>
-                                        <th class="text-nowrap text-center" style="width:100px" translate>Order QTY</th>
-                                        <th class="text-center" style="width:100px" translate>Unit Price</th>
-                                        <th class="text-center" style="width:100px" translate>Disc %</th>
-                                        <th class="text-center" style="width:100px" translate>Tax %</th>
-                                        <th class="text-center" translate style="width:100px">Amount</th>
-                                        <th class="text-center" translate style="width:100px">G/L Account</th>
-                                        <th class="text-center" translate style="width:100px">Price Source</th>
+                                        <th class="text-center" translate>Free Ship</th>
+                                        <th class="text-nowrap text-center" translate>Order QTY</th>
+                                        <th class="text-center" translate>Unit Price</th>
+                                        <th class="text-center" translate>Disc %</th>
+                                        <th class="text-center" translate>Tax %</th>
+                                        <th class="text-center" translate>Amount</th>
+                                        <th class="text-center" translate>G/L Account</th>
+                                        <th class="text-center" translate>Price Source</th>
                                     </tr>
                                 </thead>
                                 <tr *ngIf="detail.items.length === 0">
@@ -305,10 +305,10 @@
                                     <tr>
                                         <td>{{item.sku || item.misc_no}}</td>
                                         <td>{{item.des || item.misc_name}}</td>
-                                        <td>{{item.condition_name}}</td>
+                                        <td class="text-center">{{item.condition_name}}</td>
                                         <td>{{item.uom_name || item.uom}}</td>
-                                        <td>
-                                            <i *ngIf="item.free_ship" class="text-success fa fa-check"></i>
+                                        <td class="text-center">
+                                            <i *ngIf="item.is_shipping_free" class="text-success fa fa-check"></i>
                                         </td>
                                         <td class="text-right">{{item.qty}}</td>
                                         <td class="text-right">
