@@ -312,6 +312,7 @@ export class SaleQuotationCreateComponent implements OnInit {
                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
                     item['products'] = [];
                     item.quantity = 1;
+                    item.is_shipping_free = item.is_shipping_free || item.free_ship;
                     item['order_detail_id'] = null;
                     item.totalItem = item.sale_price;
                     item.source_id = 0;
@@ -370,6 +371,14 @@ export class SaleQuotationCreateComponent implements OnInit {
             default_ship_rate = 8;
             this.generalForm.patchValue({ shipping_id: null });
             this.generalForm.get('shipping_id').setValidators(null);
+            this.addr_select.shipping = {
+                'address_name': '',
+                'address_line': '',
+                'country_name': '',
+                'city_name': '',
+                'state_name': '',
+                'zip_code': ''
+            };
         } else {
             this.generalForm.get('shipping_id').setValidators([Validators.required]);
         }

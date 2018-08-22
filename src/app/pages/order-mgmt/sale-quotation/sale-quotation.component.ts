@@ -21,7 +21,6 @@ export class SaleQuotationComponent implements OnInit {
     /**
      * letiable Declaration
      */
-    @ViewChild('inp') inp: ElementRef;
 
     public listMaster = {};
     public selectedIndex = 0;
@@ -86,66 +85,10 @@ export class SaleQuotationComponent implements OnInit {
         });
     }
 
-    createOrder() {
-        this.router.navigate(['/order-management/sale-quotation/create']);
-    }
-
     moreFilter() {
         this.onoffFilter = !this.onoffFilter;
-        setTimeout(() => {
-            this.renderer.invokeElementMethod(this.inp.nativeElement, 'focus');
-        }, 300);
     }
 
-    sentMailToBuyer(id) {
-        this.orderService.sentMailToBuyer(id).subscribe(res => {
-            try {
-                this.toastr.success(res.message);
-                this.getList();
-            } catch (e) {
-                console.log(e);
-            }
-        });
-    }
-
-    approveByManager(id) {
-        const params = { status: 'AM' };
-        this.orderService.updateSaleQuoteStatus(id, params).subscribe(res => {
-            try {
-                this.toastr.success(res.message);
-                this.getList();
-            } catch (e) {
-                console.log(e);
-            }
-        });
-
-    }
-
-    rejectByManager(id) {
-        const params = { status: 'RM' };
-        this.orderService.updateSaleQuoteStatus(id, params).subscribe(res => {
-            try {
-                this.toastr.success(res.message);
-                this.getList();
-            } catch (e) {
-                console.log(e);
-            }
-        });
-
-    }
-    convertOrderToSO(id) {
-        const params = { status: 'SC' };
-        this.orderService.updateSaleQuoteStatus(id, params).subscribe(res => {
-            try {
-                this.toastr.success(res.message);
-                setTimeout(() => {
-                    this.getList();
-                }, 100);
-            } catch (e) {
-                console.log(e);
-            }
-        });
-    }
 
     getList() {
         const params = { ...this.tableService.getParams(), ...this.searchForm.value };
@@ -169,4 +112,15 @@ export class SaleQuotationComponent implements OnInit {
         });
     }
 
+    updateStatus(id, status) {
+        const params = { status };
+        this.orderService.updateSaleQuoteStatus(id, params).subscribe(res => {
+            try {
+                this.toastr.success(res.message);
+                this.getList();
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
 }

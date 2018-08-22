@@ -291,7 +291,11 @@
     .no-border {
         border: none;
         border-top: 1px solid rgba(0, 0, 0, 0.125);
-        border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+        // border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+        .card-header {
+            border-left:  1px solid rgba(0, 0, 0, 0.125);
+            border-right:  1px solid rgba(0, 0, 0, 0.125);
+        }
     }
 }
 
@@ -445,7 +449,7 @@
         flex: 0 0 19.666667%;
         max-width: 19.666667%;
     }
-    input, select, .ng-select, .date-group {
+    .control-label + input, select, .ng-select, .date-group {
         max-width: 120px;
         margin-left: 5px;
         display: inline-block;

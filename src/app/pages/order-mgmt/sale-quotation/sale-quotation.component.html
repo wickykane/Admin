@@ -99,7 +99,7 @@
                         <div class="mt-1 group-btn-search">
                             <button type="button" class="btn-default-custom" (click)="moreFilter()">More Filter</button>
                             <div class="show-more" [hidden]="!onoffFilter">
-                                <ul>
+                                <ul class="mt-2">
                                     <li *ngFor="let item of listMaster['listFilter']; let i = index;">
                                         <label for="{{i}}">
                                             <input #inp type="checkbox" value="item.value" [(ngModel)]="item.value"> {{item.name}}
@@ -143,7 +143,7 @@
                                         <td>
                                             <a class="text-primary" [routerLink]="['detail', item.id]">{{item.quote_no}}</a>
                                         </td>
-                                        <td class="text-center">{{item.buyer_name}}</td>
+                                        <td>{{item.buyer_name}}</td>
                                         <td class="text-center">{{item.sale_person_name}}</td>
                                         <td class="text-center">{{item.approver_name}}</td>
                                         <td class="text-center">{{item.quote_date | date:'MM/dd/yyyy' }}</td>
@@ -165,19 +165,12 @@
                                             <span class="badge badge-primary" *ngIf="item.sts_code == 'EX'">{{item.sts}}</span>
                                         </td>
                                         <td class="text-center">
-                                            <button ngbTooltip="Click to Approve" data-toggle="tooltip" *ngIf="item.sts_code=='SM'" type="button" class="btn btn-default" (click)="approveByManager(item.sale_quote_id)">
-                                                <i class="fa fa-check-square"></i>
-                                            </button>
-                                            <button ngbTooltip="Click to Reject" data-toggle="tooltip" *ngIf="item.sts_code=='SM'" type="button" class="btn btn-default" (click)="rejectByManager(item.sale_quote_id)">
-                                                <i class="fa fa-ban"></i>
-                                            </button>
-                                            <button ngbTooltip="Click to Convert To SO" data-toggle="tooltip" *ngIf="item.sts_code=='AM'" type="button" class="btn btn-default" (click)="convertOrderToSO(item.sale_quote_id)">
-                                                <i class="fa fa-paper-plane"></i>
-                                            </button>
-                                            <!-- <button ngbTooltip="Click to Update" data-toggle="tooltip" *ngIf="item.sts_code == 'SM'" type="button" class="btn btn-default"
-                                                (click)="updateDetail(item.id)">
-                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                            </button> -->
+                                            <button ngbTooltip="Edit" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" [routerLink]="['/order-management/sale-quotation/edit', item.id]"><i class="fa fa-pencil-square" aria-hidden="true"></i></button>
+                                            <button ngbTooltip="Submit" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" (click)="updateStatus(item.id, 'SM')"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></button>
+                                            <button ngbTooltip="Cancel" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" (click)="updateStatus(item.id, 'CC')"><i class="fa fa-times-circle" aria-hidden="true"></i></button>
+                                            <button ngbTooltip="Approve" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="updateStatus(item.id, 'AM')"><i class="fa fa-check-square"></i></button>
+                                            <button ngbTooltip="Reject" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="updateStatus(item.id, 'RB')"><i class="fa fa-ban" aria-hidden="true"></i></button>
+                                            <button ngbTooltip="Clone" class="btn btn-default" (click)="updateStatus('clone')"><i class="fa fa-clone"></i></button>
                                         </td>
                                     </tr>
 

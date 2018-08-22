@@ -1,10 +1,12 @@
 <div class='address-tab'>
     <div class="bd-example text-right">
-        <button class="btn btn-outline-dark" [routerLink]="['/order-management/sale-quotation']"><i class="fa fa-share-square" ></i>Back</button>
-        <button class="btn btn-outline-dark" (click)="updateStatus('cancel')"><i class="fa fa-share-square" ></i>Cancel</button>
-        <button class="btn btn-outline-dark" (click)="putApproveOrder(orderId)"><i class="fa fa-check-square"></i>Approve</button>
-        <button class="btn btn-outline-dark" (click)="putApproveOrder(orderId)"><i class="fa fa-check-square"></i>Reject</button>
-        <button class="btn btn-outline-dark"><i class="fa fa-clone"></i>Clone</button>
+        <button class="btn btn-outline-secondary" [routerLink]="['/order-management/sale-quotation']"><i class="fa fa-share-square" ></i> Back</button>
+        <button *ngIf="detail['sale_quote_status_id'] == 1" class="btn btn-outline-primary" [routerLink]="['/order-management/sale-quotation/edit', _orderId]"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit</button>
+        <button *ngIf="detail['sale_quote_status_id'] == 1" class="btn btn-outline-warning" (click)="updateStatus('SM')"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i> Submit</button>
+        <button *ngIf="detail['sale_quote_status_id'] == 1" class="btn btn-outline-danger" (click)="updateStatus('CC')"><i class="fa fa-times-circle" aria-hidden="true"></i> Cancel</button>
+        <button *ngIf="detail['sale_quote_status_id'] == 2" class="btn btn-outline-success" (click)="updateStatus('AM')"><i class="fa fa-check-square"></i> Approve</button>
+        <button *ngIf="detail['sale_quote_status_id'] == 2" class="btn btn-outline-danger" (click)="updateStatus('RB')"><i class="fa fa-ban" aria-hidden="true"></i> Reject</button>
+        <button class="btn btn-outline-info" (click)="updateStatus('clone')"><i class="fa fa-clone"></i> Clone</button>
     </div>
     <section class="rma-page block main-container block-order">
         <div class="row">
@@ -27,7 +29,7 @@
                                         <div class="form-group row">
                                             <label class='col-6 control-label'>Sales Order No</label>
                                             <div class='col-6'>
-                                                {{ detail['order_cd']}}
+                                                {{ detail['sale_order_no']}}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -53,38 +55,39 @@
                                         <div class="form-group row">
                                             <label class='col-6 control-label'>Quote Status</label>
                                             <div class='col-6'>
-                                                <span class="label label-info" *ngIf="detail['sts'] == 'NW'">{{detail['sts_name']}}</span>
-                                                <span class="label label-warning" *ngIf="detail['sts'] == 'IP'">{{detail['sts_name']}}</span>
-                                                <span class="label label-danger" *ngIf="detail['sts'] == 'PP'">{{detail['sts_name']}}</span>
-                                                <span class="label  label-success" *ngIf="detail['sts'] == 'CP'">{{detail['sts_name']}}</span>
-                                                <span class="label label-danger" *ngIf="detail['sts'] == 'AP'">{{detail['sts_name']}}</span>
-                                                <span class="label  label-success" *ngIf="detail['sts'] == 'RS'">{{detail['sts_name']}}</span>
-                                                <span class="label label-danger" *ngIf="detail['sts'] == 'DL'">{{detail['sts_name']}}</span>
-                                                <span class="label  label-success" *ngIf="detail['sts'] == 'PD'">{{detail['sts_name']}}</span>
+                                                <span class="badge badge-info" *ngIf="detail['sale_quote_status_id'] == 1">{{detail['sale_quote_status_name']}}</span>
+                                                <span class="badge badge-warning" *ngIf="detail['sale_quote_status_id'] == 2">{{detail['sale_quote_status_name']}}</span>
+                                                <span class="badge badge-danger" *ngIf="detail['sale_quote_status_id'] == 3">{{detail['sale_quote_status_name']}}</span>
+                                                <span class="badge badge-success" *ngIf="detail['sale_quote_status_id'] == 4">{{detail['sale_quote_status_name']}}</span>
+                                                <span class="badge badge-primary" *ngIf="detail['sale_quote_status_id'] == 7">{{detail['sale_quote_status_name']}}</span>
+                                                <span class="badge badge-primary" *ngIf="detail['sale_quote_status_id'] == 8">{{detail['sale_quote_status_name']}}</span>
+                                                <span class="badge badge-primary" *ngIf="detail['sale_quote_status_id'] == 9">{{detail['sale_quote_status_name']}}</span>
+                                                <span class="badge badge-primary" *ngIf="detail['sale_quote_status_id'] == 10">{{detail['sale_quote_status_name']}}</span>
+                                                <span class="badge badge-primary" *ngIf="detail['sale_quote_status_id'] == 11">{{detail['sale_quote_status_name']}}</span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class='col-6 control-label'>Payment Method</label>
                                             <div class='col-6'>
-                                                {{ detail['payment_method']}}
+                                                {{ detail['payment_method_name']}}
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class='col-6 control-label'>Payment Terms</label>
                                             <div class='col-6'>
-                                                {{ detail['payment_term_id']}}
+                                                {{ detail['payment_term_name']}}
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class='col-6 control-label'>Saleperson</label>
                                             <div class='col-6'>
-                                                {{detail['sale_person_id']}}
+                                                {{detail['sale_person_name']}}
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class='col-6 control-label'>Approver</label>
                                             <div class='col-6'>
-                                                {{ detail['approver_id']}}
+                                                {{ detail['approver_name']}}
                                             </div>
                                         </div>
                                     </div>
@@ -105,27 +108,27 @@
                                 <div class="form-group row">
                                     <label class="control-label col-6" translate>Customer Name</label>
                                     <div class="col-6">
-                                        {{detail.buyer_info['buyer_name']}}
+                                        {{detail['buyer_name']}}
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class=" control-label col-6" translate>Contact Name</label>
                                     <div class="col-6">
-                                        {{detail['contact_user_name']}}
+                                        {{detail['contact_user']['full_name']}}
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
                                     <label class="control-label col-6" translate>Phone</label>
                                     <div class="col-6">
-                                        {{detail['contact_user_phone']}}
+                                        {{detail['contact_user']['phone']}}
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
                                     <label class="control-label col-6" translate>Email</label>
                                     <div class="col-6">
-                                        {{detail.buyer_info['buyer_email']}}
+                                        {{detail['contact_user']['email']}}
                                     </div>
                                 </div>
                             </div>
@@ -144,7 +147,7 @@
                                 <div class="form-group row">
                                     <label class="control-label col-6" translate>Label</label>
                                     <div class="col-6">
-
+                                        {{ detail.billing['name']}}
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -189,7 +192,7 @@
                                 <div class="form-group row">
                                     <label class="control-label col-6" translate>Label</label>
                                     <div class="col-6">
-
+                                        {{ detail.shipping_address['name']}}
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -234,26 +237,26 @@
                                 <div class="form-group row">
                                     <label class="control-label col-6" translate>Warehouse</label>
                                     <div class="col-6">
-                                        {{detail['warehouse_id'] }}
+                                        {{detail['warehouse_name'] }}
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class=" control-label col-6" translate>Ship Via</label>
                                     <div class="col-6">
-                                        {{detail['carrier_id'] }}
+                                        {{detail['shipping_method']?.carrier_name }}
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
                                     <label class="control-label col-6" translate>Option</label>
                                     <div class="col-6">
-                                        {{ detail['ship_method_option'] }}
+                                        {{detail['shipping_method']?.options_name }}
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="control-label col-6" translate>Ship rate</label>
                                     <div class="col-6">
-                                        {{ detail['ship_method_rate'] }}
+                                        {{detail['shipping_method']?.ship_rate_name }}
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -278,7 +281,7 @@
                     </div>
                     <div class="card-body no-padding">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-order" cdArrowTable [collection]="detail.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
+                            <table class="table table-bordered table-order">
                                 <thead>
                                     <tr>
                                         <th class="text-center" style="width:150px" translate>Item No</th>
@@ -300,10 +303,10 @@
                                 </tr>
                                 <tbody *ngFor="let item of detail.items; let $index = index;">
                                     <tr>
-                                        <td>{{item.sku}}</td>
-                                        <td>{{item.des}}</td>
+                                        <td>{{item.sku || item.misc_no}}</td>
+                                        <td>{{item.des || item.misc_name}}</td>
                                         <td>{{item.condition_name}}</td>
-                                        <td>{{item.uom_name}}</td>
+                                        <td>{{item.uom_name || item.uom}}</td>
                                         <td>
                                             <i *ngIf="item.free_ship" class="text-success fa fa-check"></i>
                                         </td>
@@ -347,7 +350,7 @@
                     <div class="card-header">
                         <strong>Note</strong>
                     </div>
-                    <div class="card-body no-padding">
+                    <div class="card-body">
                         {{detail['note']}}
                     </div>
                 </div>
@@ -411,22 +414,16 @@
                                         <strong>{{detail['sub_total_price']|currency}}</strong>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label class='col-5 control-label'>- Discount (%)</label>
-                                    <div class='col-7 padding-lr-10'>
-                                        {{detail['discount_percent']}}
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class='col-5 control-label'>+ TAX/VAT (%):</label>
-                                    <div class='col-7 padding-lr-10'>
-                                        {{detail['vat_percent']}}
+                                <div *ngFor="let item of order_info['taxs']" class="form-group row">
+                                    <label class='col-5 control-label'>+ TAX ({{item.value}}%):</label>
+                                    <div class='col-6 padding-lr-10'>
+                                        <input class="form-control" readonly="true" [(ngModel)]="item.amount" class="form-control" value="0" type="number">
                                     </div>
                                 </div>
                                 <div class="form-group row margin-lr-0 text-light bg-danger">
                                     <label class="col-5 control-label padding-lr-5">
-                             <strong>Grand Total:</strong>
-                             </label>
+                                        <strong>Grand Total:</strong>
+                                    </label>
                                     <div class="col-6 offset-md-1 padding-lr-5">
                                         <strong>{{detail['total_price'] |currency}}</strong>
                                     </div>
