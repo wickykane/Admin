@@ -21,12 +21,13 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
     generalForm: FormGroup;
     @Input() pickupList;
     @Input() typeFreeList;
-    
+    @Input() upsList;
+    @Input() pickupModalList;
     hotkeyCtrlLeft: Hotkey | Hotkey[];
     hotkeyCtrlRight: Hotkey | Hotkey[];
     ranges: any = [];
-    isSave =false;
-    typeList:any =[];
+    isSave = false;
+    typeList: any = [];
     constructor(public fb: FormBuilder,
         public router: Router,
         public toastr: ToastrService,
@@ -41,11 +42,11 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
             "access_key": ['', Validators.required],
             "user_id": ['', Validators.required],
             "password": ['', Validators.required],
-            "rates":[false],
-            "account_number":['', Validators.required],
-            "ups_customer":['', Validators.required],
-            "fee_type":[''],
-            "handling_fee":['']
+            "rates": [false],
+            "account_number": [''],
+            "ups_customer": [''],
+            "fee_type": [''],
+            "handling_fee": ['']
             // 'ranges':[this.fb.array([])]
         });
 
@@ -59,15 +60,15 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
             this.generalForm.patchValue(this.pickupList);
             this.ranges = this.pickupList.ranges;
         }
-        this.checkName();
+        this.checkAllUPS(true);
     }
 
     ngOnDestroy() {
         this.hotkeysService.remove(this.hotkeyCtrlLeft);
         this.hotkeysService.remove(this.hotkeyCtrlRight);
     }
-    addNewHours(item){
-        item.push({from:'',to:''});
+    addNewHours(item) {
+        item.push({ from: '', to: '' });
     }
 
 
@@ -98,7 +99,7 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
 
     }
 
-    removeHoursItem(index,item) {
+    removeHoursItem(index, item) {
         item.splice(index, 1);
     }
     checkRanges() {
@@ -109,27 +110,23 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
         //     });
         for (var i = 0; i < this.ranges.length; i++) {
             if (this.ranges[i].lbs_to < this.ranges[i].lbs_from) {
-                this.isSave =false;
+                this.isSave = false;
                 break;
-                
+
             }
-            else{
-                this.isSave =true;
+            else {
+                this.isSave = true;
             }
 
         }
     }
-    checkName(){
-        console.log(this.generalForm);
-    }
-    testConnection(){
-        var params ={
-            "access_key":this.generalForm.value.access_key,
-            "user_id":this.generalForm.value.user_id,
-            "password":this.generalForm.value.password,
+    testConnection() {
+        var params = {
+            "access_key": this.generalForm.value.access_key,
+            "user_id": this.generalForm.value.user_id,
+            "password": this.generalForm.value.password,
         };
-        if(this.generalForm.invalid)
-        {
+        if (this.generalForm.invalid) {
             for (let inner in this.generalForm.controls) {
                 this.generalForm.get(inner).markAsTouched();
                 // this.generalForm.get(inner).updateValueAndValidity();
@@ -137,11 +134,34 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
             console.log(this.generalForm);
             return false;
         }
-        this.itemService.checkConnection(params).subscribe(res=>{
+        this.itemService.checkConnection(params).subscribe(res => {
             console.log(res);
             this.toastr.success(res.message);
-        },error=>{
+        }, error => {
             console.log(error);
         });
+    }
+    checkRates() {
+        if (this.generalForm.value.rates) {
+            this.generalForm.controls.account_number.setErrors(Validators.required);
+            this.generalForm.controls.ups_customer.setErrors(Validators.required);
+        }
+    }
+    calculateUPSLength() {
+        var count = 0;
+        this.upsList.forEach(res => {
+            if (res.selected) {
+                count++;
+            }
+        });
+        return count;
+    }
+    checkUPS(item, event) {
+        return item.selected = event.target.checked;
+    }
+    checkAllUPS(isTrue){
+        this.upsList.forEach(item=>{
+            item.selected = isTrue;
+        })
     }
 }

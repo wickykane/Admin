@@ -63,9 +63,11 @@
                             </div>
                             <div class="w-100"></div>
                             <div class="form-group row">
-                                <label class='col-6 col-form-label'>
-                                    <input type="checkbox" name="" formControlName="rates"> Use nenegotiated rates
-                                </label>
+                                <div class="col-md-6">
+                                    <label class='col-form-label' (change)="checkRates()">
+                                        <input type="checkbox" name="" formControlName="rates"> Use nenegotiated rates
+                                    </label>
+                                </div>
                             </div>
                             <div class="w-100"></div>
 
@@ -132,13 +134,62 @@
                             </div>
                             <div class="form-group row">
                                 <div class="col-md-12">
-                                        <h5 style="font-weight:600;margin-left: 10px">Shipping Options</h5>
+                                    <h5 style="font-weight:600;margin-left: 10px">Shipping Options</h5>
                                 </div>
-                               <div class="col-md-12">
-                                    <label>active shipping methods out of</label>
-                               </div>
+                                <div class="col-md-12">
+                                    <label>{{calculateUPSLength()}} active shipping methods out of {{upsList.length}}</label>
+                                </div>
 
                             </div>
+                            <div class="form-group row">
+                                <div class="col-md-12">
+                                    <button type="button" class="btn btn-outline-primary" (click)="checkAllUPS(true)">Enable All</button>
+                                    <button type="button" class="btn btn-outline-primary" (click)="checkAllUPS(false)">Disabled All</button>
+                                    <span class="text-danger" *ngIf="calculateUPSLength()==0">(!) At least one shipping method is active.</span>
+                                </div>
+                            </div>
+                            <div class="form-group" style="height: 150px;overflow: scroll">
+                                <div class="row" *ngFor="let item of upsList" style="margin: 10px 0 10px 0;">
+                                <div class="col-md-8">
+                                    <label class='col-12'>
+                                       {{item.name}}
+                                    </label>
+                                </div>
+                                <div class="col-md-4">
+                                        <label class="switch">
+                                                <input type="checkbox" (change)="checkUPS(item,$event)" [checked]="item.selected" value="true">
+                                                <span class="slider round"></span>
+                                            </label>
+                                        <span *ngIf="item.selected">Enabled</span>
+                                        <span *ngIf="item.selected ==false ||item.selected ==undefined">Disabled</span>
+                                </div>
+                            </div>
+                            </div>
+                            <div class="form-group row">
+                                    <div class="col-md-12">
+                                            <h5 style="font-weight:600;margin-left: 10px">Shipping Markup</h5>
+                                        </div>
+                                    <div class="col-md-6">
+                                        <label class='col-12'>
+                                            Markup Type
+                                        </label>
+                                        <div class="col-sm-12">
+                                            <select name="fee_type" (change)="checkTooltip($event.target.value)" formControlName="fee_type" class="form-control">
+                                                <option *ngFor="let item of typeList" [value]='item.id'>{{item.name}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class='col-12'>Value
+                                            <span class="show-tooltip" [ngbTooltip]="handlingFeeTooltipText">
+                                                <i class="fa fa-question-circle"></i>
+                                            </span>
+                                        </label>
+                                        <div class="col-sm-12">
+                                            <input type="text" name="handling_fee" formControlName="handling_fee" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
                         </div>
                     </div>
                 </form>
