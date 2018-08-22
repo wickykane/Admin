@@ -25,6 +25,7 @@ import { PayTermCreateComponent } from './payterm/payterm-create.component';
 import { PaymentTermComponent } from './payterm/payterm.component';
 import { ReturnReasonCreateComponent } from './return-reason/return-reason-create.component';
 import { ReturnReasonComponent } from './return-reason/return-reason.component';
+import { SalesTaxAuthComponent } from './sales-tax-auth/sales-tax-auth.component';
 import { ShipmentMethodComponent } from './shipment-method/shipment-method.component';
 import { TaxTypesComponent } from './tax-types/tax-types.component';
 import { UnitMeasureComponent } from './unit-measure/unit-measure.component';
@@ -211,6 +212,10 @@ const routes: Routes = [
         path: 'tax-types',
         component: TaxTypesComponent
     },
+    {
+        path: 'sales-tax-auth',
+        component: SalesTaxAuthComponent
+    }
 ];
 
 @NgModule({

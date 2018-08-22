@@ -27,7 +27,7 @@ export class SendSampleModalContent implements OnInit {
                 receiver: this.receiverEmail
             });
         } else {
-            this.toastr.error('Email is invalid!');
+            this.receiverEmail ? this.toastr.error('Email is invalid!') : this.toastr.error('Email is empty!');
         }
     }
 }
