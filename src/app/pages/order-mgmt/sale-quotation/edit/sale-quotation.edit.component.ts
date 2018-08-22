@@ -202,6 +202,7 @@ export class SaleQuotationEditComponent implements OnInit {
                     item.uom_name = item.uom_name || item.uom;
                     item.sku = item.sku || item.misc_no;
                     item.des = item.des || item.misc_name;
+                    item.tax_percent = item.tax_percent || 0;
                     return item;
                 });
                 this.updateTotal();
