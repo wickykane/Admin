@@ -269,4 +269,13 @@ export class OrderService {
         const url = 'sale-quote/create';
         return this.API.post(url, params);
     }
+    updateQuoteOrder(id, params) {
+        const url = 'sale-quote/update/' + id;
+        return this.API.put(url, params);
+    }
+    cloneQuote(id) {
+        const url = 'sale-quote/clone/' + id;
+        return this.API.post(url);
+    }
+
 }

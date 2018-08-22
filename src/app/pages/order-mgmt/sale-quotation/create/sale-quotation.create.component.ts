@@ -279,8 +279,8 @@ export class SaleQuotationCreateComponent implements OnInit {
         this.order_info.order_summary['total_item'] = items.length;
         items.forEach(item => {
             this.order_info.order_summary['total_cogs'] = (this.order_info.order_summary['total_cogs'] || 0) + (+item.cost_price || 0) * (item.quantity || 0);
-            this.order_info.order_summary['total_vol'] = (this.order_info.order_summary['total_vol'] || 0) + (+item.vol || 0);
-            this.order_info.order_summary['total_weight'] = (this.order_info.order_summary['total_weight'] || 0) + (+item.wt || 0);
+            this.order_info.order_summary['total_vol'] = (this.order_info.order_summary['total_vol'] || 0) + (+item.vol || 0) * (item.quantity || 0);
+            this.order_info.order_summary['total_weight'] = (this.order_info.order_summary['total_weight'] || 0) + (+item.wt || 0) * (item.quantity || 0);
         });
 
 
@@ -433,13 +433,17 @@ export class SaleQuotationCreateComponent implements OnInit {
             'items': this.list.items.filter(item => !item.misc_id)
         };
         this.orderService.getTaxShipping(params).subscribe(res => {
-            this.list.items = res.data.items;
+            const old_misc = this.list.items.filter(item => item.misc_id && +item.source_id !== 3);
+            const items = res.data.items;
             const misc = res.data.mics.map(item => {
                 item.is_misc = 1;
                 item.misc_id = item.id;
                 return item;
             });
-            this.list.items = this.list.items.concat(misc);
+            this.list.items = items.concat(misc, old_misc);
+
+            // Assign tax to all item
+            this.list.items.forEach(item => item.tax_percent = res.data.tax_percent);
             this.updateTotal();
             this.order_info['original_ship_cost'] = res.data.price;
         });
