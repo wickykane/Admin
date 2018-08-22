@@ -430,7 +430,7 @@
                                         <td class="text-center">
                                             <i *ngIf="item.is_shipping_free" class="text-success fa fa-check"></i>
                                         </td>
-                                        <td>{{item.qty_avail}}</td>
+                                        <td>{{item.qty_available}}</td>
                                         <td>
                                             <input [disabled]="item.is_misc" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (change)="updateTotal()" (keypress)="_keyPress($event)">
                                         </td>

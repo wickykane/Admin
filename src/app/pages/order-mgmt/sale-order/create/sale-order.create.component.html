@@ -160,7 +160,7 @@
                               <div class="form-group row">
                                  <label class='col-6'>Salesperson<span class="text-danger">(*)</span></label>
                                  <div class='col-6 text-primary'>
-                                    <select class="form-control" name="sale_person_id" formControlName="sales_pesale_person_idrson">
+                                    <select class="form-control" name="sale_person_id" formControlName="sale_person_id">
                                     <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                     <option *ngFor="let item of listMaster['sale_mans']" [ngValue]="item.id">{{item.full_name}}</option>
                                     </select>
@@ -430,7 +430,7 @@
                         <td class="text-center">
                             <i *ngIf="item.is_shipping_free" class="text-success fa fa-check"></i>
                         </td>
-                        <td>{{item.qty_avail}}</td>
+                        <td>{{item.qty_available}}</td>
                         <td>
                            <input [disabled]="item.is_misc" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (change)="updateTotal()" (keypress)="_keyPress($event)">
                         </td>
