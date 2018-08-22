@@ -153,7 +153,6 @@ export class SaleQuotationEditComponent implements OnInit {
         this.orderService.getSQReference().subscribe(res => {
             this.listMaster = { ...this.listMaster, ...res.data };
         });
-        this.orderService.generateSaleQuoteCode().subscribe(res => { this.generalForm.get('sale_quote_no').patchValue(res.data); });
 
         //  Item
         this.list.items = [];
@@ -192,7 +191,8 @@ export class SaleQuotationEditComponent implements OnInit {
                     expiry_date: data.expire_dt,
                     shipping_id: data.shipping_id.id,
                     billing_id: data.billing_id.id,
-                    ship_rate: +data.ship_method_rate
+                    ship_rate: +data.ship_method_rate,
+                    sale_quote_no: data.cd
                 });
 
                 // Set item and update
@@ -203,8 +203,11 @@ export class SaleQuotationEditComponent implements OnInit {
                     item.sku = item.sku || item.misc_no;
                     item.des = item.des || item.misc_name;
                     item.tax_percent = item.tax_percent || 0;
+                    item.discount = item.discount_percent || 0;
                     return item;
                 });
+
+                this.order_info['original_ship_cost'] = data.original_ship_cost;
                 this.updateTotal();
 
                 this.changeCustomer(1);
@@ -325,8 +328,8 @@ export class SaleQuotationEditComponent implements OnInit {
         this.order_info.order_summary['total_item'] = items.length;
         items.forEach(item => {
             this.order_info.order_summary['total_cogs'] = (this.order_info.order_summary['total_cogs'] || 0) + (+item.cost_price || 0) * (item.quantity || 0);
-            this.order_info.order_summary['total_vol'] = (this.order_info.order_summary['total_vol'] || 0) + (+item.vol || 0);
-            this.order_info.order_summary['total_weight'] = (this.order_info.order_summary['total_weight'] || 0) + (+item.wt || 0);
+            this.order_info.order_summary['total_vol'] = (this.order_info.order_summary['total_vol'] || 0) + (+item.vol || 0) * (item.quantity || 0);
+            this.order_info.order_summary['total_weight'] = (this.order_info.order_summary['total_weight'] || 0) + (+item.wt || 0) * (item.quantity || 0);
         });
 
 
@@ -485,13 +488,17 @@ export class SaleQuotationEditComponent implements OnInit {
             'items': this.list.items.filter(item => !item.misc_id)
         };
         this.orderService.getTaxShipping(params).subscribe(res => {
-            this.list.items = res.data.items;
+            const old_misc = this.list.items.filter(item => item.misc_id && +item.source_id !== 3);
+            const items = res.data.items;
             const misc = res.data.mics.map(item => {
                 item.is_misc = 1;
                 item.misc_id = item.id;
                 return item;
             });
-            this.list.items = this.list.items.concat(misc);
+            this.list.items = items.concat(misc, old_misc);
+
+            // Assign tax to all item
+            this.list.items.forEach(item => item.tax_percent = res.data.tax_percent);
             this.updateTotal();
             this.order_info['original_ship_cost'] = res.data.price;
         });
@@ -528,7 +535,7 @@ export class SaleQuotationEditComponent implements OnInit {
             items
         };
 
-        this.orderService.createQuoteOrder(params).subscribe(res => {
+        this.orderService.updateQuoteOrder(this.data['id'], params).subscribe(res => {
             try {
                 if (res.status) {
                     this.toastr.success(res.message);
