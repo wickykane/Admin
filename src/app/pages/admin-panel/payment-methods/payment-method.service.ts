@@ -11,20 +11,25 @@ export class PaymentMethodsService {
         return this.apiService.get(url, params);
     }
 
+    getListMaster(paymentId) {
+        const url = 'payment-method/payment-option?ignore_id=' + paymentId;
+        return this.apiService.get(url);
+    }
+
     getPaymentTypes() {
         const url = 'payment-method/payment-type';
         return this.apiService.get(url);
     }
 
-    getPaymentProcessors() {
-        const url = 'payment-method/payment-processor-type';
-        return this.apiService.get(url);
-    }
+    // getPaymentProcessors() {
+    //     const url = 'payment-method/payment-processor-type';
+    //     return this.apiService.get(url);
+    // }
 
-    getPaymentTransactionTypes() {
-        const url = 'payment-method/payment-transaction-type';
-        return this.apiService.get(url);
-    }
+    // getPaymentTransactionTypes() {
+    //     const url = 'payment-method/payment-transaction-type';
+    //     return this.apiService.get(url);
+    // }
 
     getPaymentMethodDetail(id) {
         const url = 'payment-method/' + id;
