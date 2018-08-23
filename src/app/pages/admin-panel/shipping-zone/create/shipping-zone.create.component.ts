@@ -78,7 +78,7 @@ export class ShippingZoneCreateComponent implements OnInit {
         "name": '',
         "handling_fee": '',
         "id": "4",
-        'pickup': '',
+        'warehouse': '1',
     };
     public upsList = {
         "id": '5',

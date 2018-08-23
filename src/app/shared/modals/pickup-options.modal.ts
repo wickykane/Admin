@@ -27,6 +27,7 @@ export class PickupOptionsModalComponent implements OnInit, OnDestroy {
     hotkeyCtrlRight: Hotkey | Hotkey[];
     ranges: any = [];
     isSave =false;
+    timeList:any;
     constructor(public fb: FormBuilder,
         public router: Router,
         public toastr: ToastrService,
@@ -36,10 +37,9 @@ export class PickupOptionsModalComponent implements OnInit, OnDestroy {
         private hotkeysService: HotkeysService,
         private commonService: CommonService,
         public activeModal: NgbActiveModal) {
-
         this.generalForm = fb.group({
             "name": ['', Validators.required],
-            "pickup": [''],
+            "warehouse": [''],
             "handling_fee": [''],
             "id": "4",
             // 'ranges':[this.fb.array([])]
@@ -62,7 +62,13 @@ export class PickupOptionsModalComponent implements OnInit, OnDestroy {
                     item['selected']= false;
                 })
             }
+            var weekDaysList = Object.assign([],this.weekDaysList);
+            this.wareHouseList.map(item=>{
+                item['data']= Object.assign([],weekDaysList);
+            });
+            this.setWareHouseTimer(this.generalForm.value.warehouse);
         }
+
 
     }
 
@@ -105,5 +111,22 @@ export class PickupOptionsModalComponent implements OnInit, OnDestroy {
 
     removeHoursItem(index,item) {
         item.splice(index, 1);
+    }
+    setWareHouseTimer(id){
+        console.log(this.timeList);
+        this.wareHouseList.forEach(item=>{
+            if(item.id ==id){
+                this.timeList = item;
+            }
+        });
+        // this.timeList = item.data;
+    }
+    checkValue(isCheck,item){
+        return item.selected = isCheck;
+        console.log(isCheck);
+        console.log(this.wareHouseList);
+    }
+    trackByFn(index, item) {
+        return index; // or item.id
     }
 }

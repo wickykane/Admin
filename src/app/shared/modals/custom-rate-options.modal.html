@@ -21,7 +21,7 @@
                         <div class="col-sm-12">
                             <input type="text" formControlName="name" id="name" class="form-control">
                         </div>
-                        <span style="color: red" *ngIf="generalForm.controls.name.errors?.required">
+                        <span class="col-md-12" style="color: red" *ngIf="generalForm.controls.name.touched&&generalForm.controls.name.errors?.required">
                             (!) This field cannot be blank.
                         </span>
                     </div>
