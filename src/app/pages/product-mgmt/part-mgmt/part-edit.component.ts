@@ -100,7 +100,6 @@ export class PartEditComponent implements OnInit {
             res => {
                 try {
                     this.listMaster['account'] = res.data;
-                    console.log(JSON.stringify(this.listMaster['account']));
 
                 } catch (e) {
                     console.log(e);
@@ -120,20 +119,27 @@ export class PartEditComponent implements OnInit {
 
     uploadFile($event) {
         const fileUpload = $event.target.files;
-        this.dataFile = Array.from(fileUpload);
-        for (const file of fileUpload) {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => {
-                const base64 = reader.result;
-                const galleryImage = {
-                    small: base64,
-                    medium: base64,
-                    big: base64
+        console.log(fileUpload.length);
+        if (fileUpload.length <= 5) {
+            this.dataFile = Array.from(fileUpload);
+            for (const file of fileUpload) {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => {
+                    const base64 = reader.result;
+                    const galleryImage = {
+                        small: base64,
+                        medium: base64,
+                        big: base64
+                    };
+                    this.images.push(galleryImage);
                 };
-                this.images.push(galleryImage);
-            };
+            }
+        } else {
+          this.toastr.error('The maximum image upload is 5 !');
         }
+
+
     }
 
     updateItem() {

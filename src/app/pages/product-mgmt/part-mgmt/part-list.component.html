@@ -69,7 +69,7 @@
                             <label for="type" class="control-label" translate>Cert</label>
                             <div class="block-search">
                                 <select formControlName="certification" class="form-control">
-                                    <option value="null" selected="true" translate>--Select--</option>
+                                    <option value="null" selected="true" disabled translate>--Select--</option>
                                     <option *ngFor="let de of listMaster['certification']" [ngValue]="de.code">{{de.value}}</option>
                                 </select>
                             </div>
