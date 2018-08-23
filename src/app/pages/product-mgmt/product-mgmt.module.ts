@@ -28,6 +28,7 @@ import { PartEditComponent } from './part-mgmt/part-edit.component';
 import { PartListComponent } from './part-mgmt/part-list.component';
 import { ProductMgmtRoutingModule } from './product-mgmt-routing.module';
 import { ProductMgmtComponent } from './product-mgmt.component';
+import { MiscellaneousItemsComponent } from './miscellaneous-items/list/miscellaneous-items.component';
 
 // Services
 import { TableService } from '../../services/index';
@@ -63,7 +64,8 @@ import { ProductService } from './product-mgmt.service';
         MassPriceViewComponent,
         PartListComponent,
         PartDetailComponent,
-        PartEditComponent
+        PartEditComponent,
+        MiscellaneousItemsComponent
     ],
     providers: [ProductService, TableService],
     entryComponents: []
