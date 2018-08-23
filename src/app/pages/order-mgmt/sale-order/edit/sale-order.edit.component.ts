@@ -118,25 +118,25 @@ export class SaleOrderEditComponent implements OnInit {
         public keyService: SaleOrderCreateKeyService,
         private dt: DatePipe) {
         this.generalForm = fb.group({
-            'buyer_id': [null], // buyer_id
-            'customer_po': [null], // cus_po
-            'order_number': [null], // code
-            'type': [null], // type
-            'order_date': [null], // order_date
-            'delivery_date': [null], //
-            'contact_user_id': [null], // contact_user_id
-            'prio_level': [null], // prio_level
-            'sale_person_id': [null], // sale_person_id
-            'warehouse_id': [null], // warehouse_id
-            'payment_method_id': [null], // payment_method_id
-            'billing_id': [null], // billing_info[0]['id']
-            'shipping_id': [null], // shipping_id
-            'description': [null], // description
-            'payment_term_id': [null],
-            'approver_id': [null],
-            'carrier_id': [null],
-            'ship_method_rate': [null],
-            'ship_method_option': [null]
+            'buyer_id': [null, Validators.required],
+            'customer_po': [null, Validators.required],
+            'order_number': [null],
+            'type': ['NO', Validators.required],
+            'order_date': [null, Validators.required],
+            'delivery_date': [null],
+            'contact_user_id': [null],
+            'prio_level': [null],
+            'sale_person_id': [null, Validators.required],
+            'warehouse_id': [1, Validators.required],
+            'payment_method_id': [null, Validators.required],
+            'billing_id': [null],
+            'shipping_id': [null],
+            'description': [null],
+            'payment_term_id': [null, Validators.required],
+            'approver_id': [null, Validators.required],
+            'carrier_id': [null, Validators.required],
+            'ship_method_rate': [null, Validators.required],
+            'ship_method_option': [null, Validators.required]
         });
         //  Init Key
         this.keyService.watchContext.next(this);
@@ -159,13 +159,14 @@ export class SaleOrderEditComponent implements OnInit {
         this.copy_addr = { ...this.copy_addr, ...this.addr_select };
         this.copy_customer = { ...this.copy_customer, ...this.customer };
 
-        this.getDetailOrder();
-
         this.data['page'] = 1;
         this.searchKey.subscribe(key => {
             this.data['page'] = 1;
             this.searchCustomer(key);
         });
+
+
+        this.getDetailOrder();
     }
     /**
      * Mater Data
@@ -173,8 +174,24 @@ export class SaleOrderEditComponent implements OnInit {
     getDetailOrder() {
         this.orderService.getOrderDetail(this.route.snapshot.paramMap.get('id')).subscribe(res => {
             try {
-                this.list.items = res.data.items;
 
+                const data = res.data;
+                this.generalForm.patchValue(data);
+                this.generalForm.patchValue({
+                    order_number: data.code
+                });
+
+
+                // Set item and update
+                this.list.items = (data.items || []).map(item => {
+                    item.discount = item.discount_percent || 0;
+                    return item;
+                });
+
+
+                this.order_info['original_ship_cost'] = data.original_ship_cost;
+                this.updateTotal();
+                this.changeCustomer(1);
                 // Lazy Load filter
                 const params = { page: this.data['page'], length: 15 };
                 this.orderService.getAllCustomer(params).subscribe(result => {
@@ -185,29 +202,6 @@ export class SaleOrderEditComponent implements OnInit {
                     }
                     this.data['total_page'] = result.data.total_page;
                 });
-
-                this.generalForm.patchValue({ 'buyer_id': res.data.buyer_id });
-                this.generalForm.patchValue({ 'customer_po': res.data.customer_po });
-                this.generalForm.patchValue({ 'order_number': res.data.code });
-                this.generalForm.patchValue({ 'type': res.data.type });
-                this.generalForm.patchValue({ 'order_date': res.data.order_date });
-                this.generalForm.patchValue({ 'contact_user_id': res.data.contact_user_id });
-                this.generalForm.patchValue({ 'prio_level': res.data.prio_level });
-                this.generalForm.patchValue({ 'sale_person_id': res.data.sale_person_id });
-                this.generalForm.patchValue({ 'warehouse_id': res.data.warehouse_id });
-                this.generalForm.patchValue({ 'payment_method_id': res.data.payment_method_id });
-                if (res.data.billing_info.length > 0) {
-                    this.generalForm.patchValue({ 'billing_id': res.data.billing_info[0]['id'] });
-                }
-                this.generalForm.patchValue({ 'shipping_id': res.data.shipping_id });
-                this.generalForm.patchValue({ 'description': res.data.description });
-
-
-                this.order_info.total = res.data['total_price'];
-                this.order_info.sub_total = res.data['sub_total_price'];
-
-                this.updateTotal();
-                this.changeCustomer();
 
 
             } catch (e) {
@@ -224,7 +218,7 @@ export class SaleOrderEditComponent implements OnInit {
         });
     }
 
-    getDetailCustomerById(buyer_id) {
+    getDetailCustomerById(buyer_id, flag?) {
         this.orderService.getDetailCompany(buyer_id).subscribe(res => {
             try {
                 this.customer = res.data;
@@ -232,8 +226,8 @@ export class SaleOrderEditComponent implements OnInit {
                     this.addr_select.contact = res.data.contact[0];
                     this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
                 }
-                this.selectAddress('billing');
-                this.selectAddress('shipping');
+                this.selectAddress('billing', flag);
+                this.selectAddress('shipping', flag);
             } catch (e) {
                 console.log(e);
             }
@@ -245,24 +239,27 @@ export class SaleOrderEditComponent implements OnInit {
      */
     selectData(data) { }
 
-    changeCustomer() {
+    changeCustomer(flag?) {
         const buyer_id = this.generalForm.value.buyer_id;
         this.customer = Object.create(this.copy_customer);
         this.addr_select = Object.create(this.copy_addr);
         if (buyer_id) {
-            this.getDetailCustomerById(buyer_id);
+            this.getDetailCustomerById(buyer_id, flag);
         }
-        this.updateTotal();
+        if (!flag) {
+            this.list.items = [];
+            this.updateTotal();
+        }
     }
 
-    selectAddress(type) {
+    selectAddress(type, flag?) {
         try {
             switch (type) {
                 case 'shipping':
                     const ship_id = this.generalForm.value.shipping_id;
                     if (ship_id) {
                         this.addr_select.shipping = this.findDataById(ship_id, this.customer.shipping);
-                        this.getShippingReference(ship_id);
+                        this.getShippingReference(ship_id, flag);
                     }
                     break;
                 case 'billing':
@@ -277,14 +274,14 @@ export class SaleOrderEditComponent implements OnInit {
         }
     }
 
-    getShippingReference(id) {
+    getShippingReference(id, flag?) {
         this.orderService.getShippingReference(id).subscribe(res => {
             this.listMaster['carriers'] = res.data;
-            this.changeShipVia();
+            this.changeShipVia(flag);
         });
     }
 
-    changeShipVia() {
+    changeShipVia(flag?) {
         const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id);
         this.listMaster['options'] = carrier.options || [];
         this.listMaster['ship_rates'] = carrier.ship_rate || [];
@@ -299,6 +296,14 @@ export class SaleOrderEditComponent implements OnInit {
             default_ship_rate = 8;
             this.generalForm.patchValue({ shipping_id: null });
             this.generalForm.get('shipping_id').setValidators(null);
+            this.addr_select.shipping = {
+                'address_name': '',
+                'address_line': '',
+                'country_name': '',
+                'city_name': '',
+                'state_name': '',
+                'zip_code': ''
+            };
         } else {
             this.generalForm.get('shipping_id').setValidators([Validators.required]);
         }
@@ -376,9 +381,6 @@ export class SaleOrderEditComponent implements OnInit {
     }
 
     changeFromSource(item) {
-        if (+item.source_id === 3) {
-            return;
-        }
         item.source_id = 2;
         item.source_name = 'Manual';
     }
@@ -451,10 +453,10 @@ export class SaleOrderEditComponent implements OnInit {
     }
 
     deleteAction(id) {
-      this.list.items = this.list.items.filter((item) => {
-          return (item.item_id + (item.item_condition_id || 'mis') !== (id + (item.item_condition_id || 'mis')));
-      });
-      this.updateTotal();
+        this.list.items = this.list.items.filter((item) => {
+            return (item.item_id + (item.item_condition_id || 'mis') !== (id + (item.item_condition_id || 'mis')));
+        });
+        this.updateTotal();
     }
 
 
@@ -502,29 +504,20 @@ export class SaleOrderEditComponent implements OnInit {
             'items': this.list.items.filter(item => !item.misc_id)
         };
         this.orderService.getTaxShipping(params).subscribe(res => {
-
-            try {
-                if (res.status) {
-                    this.list.items = res.data.items;
-                    const misc = res.data.mics.map(item => {
-                        item.is_misc = 1;
-                        item.misc_id = item.id;
-                        return item;
-                    });
-                    this.list.items = this.list.items.concat(misc);
-                    this.updateTotal();
-                    this.order_info['original_ship_cost'] = res.data.price;
-                } else {
-                    this.toastr.error(res.message);
-                }
-            } catch (e) {
-                console.log(e);
-            }
-
-        },
-            err => {
-                this.toastr.error(err.message);
+            const old_misc = this.list.items.filter(item => item.misc_id && +item.source_id !== 3);
+            const items = res.data.items;
+            const misc = res.data.mics.map(item => {
+                item.is_misc = 1;
+                item.misc_id = item.id;
+                return item;
             });
+            this.list.items = items.concat(misc, old_misc);
+
+            // Assign tax to all item
+            this.list.items.forEach(item => item.tax_percent = res.data.tax_percent);
+            this.updateTotal();
+            this.order_info['original_ship_cost'] = res.data.price;
+        });
     }
 
     addNewItem() {
@@ -537,12 +530,13 @@ export class SaleOrderEditComponent implements OnInit {
                 });
                 res.forEach((item) => {
                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
-                    item['products'] = [];
+                    // item['products'] = [];
                     item.quantity = 1;
                     item['order_detail_id'] = null;
-                    item.totalItem = item.sale_price;
+                    // item.sale_price = item.sale_price;
                     item.source_id = 0;
                     item.source_name = 'From Master';
+                    item.is_shipping_free = item.free_ship;
                 });
                 this.list.items = this.list.items.concat(res.filter((item) => {
                     return listAdded.indexOf(item.item_id + item.item_condition_id) < 0;
@@ -564,13 +558,16 @@ export class SaleOrderEditComponent implements OnInit {
 
                 res.forEach((item) => {
                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
-                    item.source_id = 3;
-                    item.source_name = 'System';
+                    item.source_id = 2;
+                    item.source_name = 'Manual';
                     item.quantity = 1;
                     item.is_misc = 1;
                     item.uom_name = item.uom;
                     item.misc_id = item.id;
                     item.sku = item.no;
+                    item.is_shipping_free = 0;
+                    item.income_account_name = item.account_name;
+                    item.income_account_id = item.account_id;
                 });
 
                 this.list.items = this.list.items.concat(res.filter((item) => {
@@ -612,40 +609,43 @@ export class SaleOrderEditComponent implements OnInit {
 
 
     createOrder(type) {
-      const products = this.list.items.map(item => {
-          item.discount_percent = item.discount;
-          item.is_item = (item.misc_id) ? 0 : 1;
-          item.misc_id = (item.misc_id) ? null : 1;
-          item.is_shipping_free = 1;
-          item.item_id = (item.item_id) ? (item.item_id) : (item.id);
-          item.item_type = (item.item_type) ? (item.item_type) : (item.type);
-          item.item_condition_id = (item.item_condition_id) ? (item.item_condition_id) : null;
-          return item;
-      });
+        const products = this.list.items.map(item => {
+            item.discount_percent = item.discount;
+            item.is_item = (item.misc_id) ? 0 : 1;
+            item.misc_id = (item.misc_id) ? null : 1;
+            item.is_shipping_free = 1;
+            item.item_id = (item.item_id) ? (item.item_id) : (item.id);
+            item.item_type = (item.item_type) ? (item.item_type) : (item.type);
+            item.item_condition_id = (item.is_item) ? (item.item_condition_id) : null;
+            return item;
+        });
 
         let params = {};
         switch (type) {
             case 'create':
                 params = {
                     'items': products,
-                    'is_draft_order': 0
+                    'is_draft_order': 0,
+                    'order_sts_id': 6
                 };
                 break;
             case 'quote':
                 params = {
                     'items': products,
-                    'is_draft_order': 0,
-                    'type': 'SAQ'
+                    'is_draft_order': 1,
+                    'type': 'SAQ',
+                    'sale_quote_status_id': 1,
                 };
                 break;
             case 'draft':
                 params = {
                     'items': products,
-                    'is_draft_order': 1
+                    'is_draft_order': 1,
+                    'order_sts_id': 1
                 };
                 break;
         }
-        params = {...this.generalForm.value, ...params };
+        params = { ...this.generalForm.value, ...params };
         this.orderService.updateOrder(params, this.route.snapshot.paramMap.get('id')).subscribe(res => {
             try {
                 if (res.status) {

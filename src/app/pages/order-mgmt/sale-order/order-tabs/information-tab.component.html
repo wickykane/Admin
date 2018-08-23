@@ -19,11 +19,11 @@
 
                             <div class="col-md-4">
                                <div class="form-group">
-                                  <label for="code" class="control-label" translate> <strong>Customer Name</strong> </label>
-                                  <span class="text-danger">(*)</span>
+                                  <label for="code" class="control-label" translate> <strong>Customer Name : {{detail['buyer_name']}}</strong> </label>
+                                  <!-- <span class="text-danger">(*)</span>
                                   <div>
-                                     {{detail['company_name']}}
-                                  </div>
+                                     {{detail['buyer_name']}}
+                                  </div> -->
                                </div>
                             </div>
 
@@ -63,7 +63,7 @@
                                      <span class="text-danger">(*)</span>
                                      </label>
                                      <div class='col-6 text-primary'>
-                                        {{detail['cus_po']}}
+                                        {{detail['customer_po']}}
                                      </div>
                                   </div>
                                   <div class="form-group row">
@@ -109,7 +109,7 @@
                                      <span class="text-danger">(*)</span>
                                      </label>
                                      <div class='col-6 text-danger'>
-                                          {{detail['payment_term']}}
+                                          {{detail['payment_term_name']}}
                                      </div>
                                   </div>
                                   <div class="form-group row">
@@ -143,16 +143,6 @@
                       </div>
                       <div class="card-body p-25">
                          <div class="row">
-                            <div class="col-12">
-                               <div class="form-group row">
-                                  <label class="control-label col-5" for="billing_to" translate> Label
-                                  <span class="text-danger">(*)</span>
-                                  </label>
-                                  <div class="col-7">
-                                     {{detail.billing['address_name']}}
-                                  </div>
-                               </div>
-                            </div>
                             <div class="col-12">
                                <div class="form-group row">
                                   <label class="control-label col-5" translate>Address</label>
@@ -196,16 +186,6 @@
                       </div>
                       <div class="card-body p-25">
                          <div class="row">
-                            <div class="col-12">
-                               <div class="form-group row">
-                                  <label class="control-label col-5" for="billing_to" translate> Label
-                                  <span class="text-danger">(*)</span>
-                                  </label>
-                                  <div class="col-7">
-                                     {{detail.shipping['address_name']}}
-                                  </div>
-                               </div>
-                            </div>
                             <div class="col-12">
                                <div class="form-group row">
                                   <label class="control-label col-5" translate>Address</label>
@@ -274,7 +254,7 @@
                                   <span class="text-danger">(*)</span>
                                   </label>
                                   <div class='col-6'>
-                                     {{detail['ship_method_option']}}
+                                     {{detail['ship_method_option_name']}}
                                   </div>
                                </div>
 
@@ -283,7 +263,7 @@
                                   <span class="text-danger">(*)</span>
                                   </label>
                                   <div class='col-6'>
-                                     {{detail['ship_rate']}}
+                                     {{detail['ship_rate_name']}}
                                   </div>
                                </div>
 
@@ -314,7 +294,7 @@
                       <table class="table table-bordered table-order">
                       <thead>
                          <tr>
-                            <th style="width:100px" translate>Action</th>
+                            <!-- <th style="width:100px" translate>Action</th> -->
                             <th style="width:150px" translate>Item No</th>
                             <th translate>Description</th>
                             <th translate>Condition</th>
@@ -335,11 +315,8 @@
                          </tr>
                       <tbody *ngFor="let item of detail['subs']; let $index = index;">
                          <tr>
-                            <td>
-                               <!-- <button class="btn btn-danger btn-xs" type="button" (click)="deleteAction(item.item_id, item.item_condition_id)">
-                               <i class="fa fa-trash"></i>
-                               </button> -->
-                            </td>
+                            <!-- <td>
+                            </td> -->
                             <td>{{item.sku}}</td>
                             <td>{{item.des}}</td>
                             <td>{{item.condition_name}}</td>
@@ -347,7 +324,7 @@
                             <td class="text-center">
                                 <i *ngIf="item.is_shipping_free" class="text-success fa fa-check"></i>
                             </td>
-                            <td>{{item.qty_avail}}</td>
+                            <td>{{item.qty_available}}</td>
                             <td>
                                <input [disabled]="item.is_misc" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (change)="updateTotal()" (keypress)="_keyPress($event)">
                             </td>
@@ -366,7 +343,7 @@
                                <input class="form-control input-sm" type="number" [(ngModel)]="item.tax_percent" (change)="updateTotal();changeFromSource(item)">
                             </td>
                             <td class="text-center">
-                               <span>{{item.amount | currency}}</span>
+                               <span>{{item.total_price | currency}}</span>
                             </td>
                             <td>
                                 {{ item.income_account_name }}
@@ -459,10 +436,10 @@
                             </div>
                          </div>
 
-                         <div *ngFor="let item of detail['taxs']" class="form-group row">
+                         <div *ngFor="let item of order_info['taxs']" class="form-group row">
                              <label class='col-5 control-label'>+ TAX ({{item.value}}%):</label>
                              <div class='col-5 padding-lr-10'>
-
+                               {{item.amount}}
                              </div>
                          </div>
                          <div class="form-group row margin-lr-0 text-light bg-danger">
@@ -470,7 +447,7 @@
                                  <strong>Grand Total:</strong>
                              </label>
                              <div class="col-6 offset-md-1 ">
-                                 <strong>{{detail['total'] | currency}}</strong>
+                                 <strong>{{order_info['total'] | currency}}</strong>
                              </div>
                          </div>
                       </div>
