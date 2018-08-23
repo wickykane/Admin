@@ -8,26 +8,26 @@ import { PrintHtmlService } from '../../../../services/print.service';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
 import { OrderService } from '../../order-mgmt.service';
-import {SaleQuoteDetailKeyService} from './keys.detail.control';
+import { SaleQuoteDetailKeyService } from './keys.detail.control';
+
+import { HotkeysService } from 'angular2-hotkeys';
 
 @Component({
     selector: 'app-detail-quotation',
     templateUrl: './sale-quotation.detail.component.html',
     styleUrls: ['../sale-quotation.component.scss'],
     animations: [routerTransition()],
-    providers: [PrintHtmlService, SaleQuoteDetailKeyService]
+    providers: [PrintHtmlService, HotkeysService, SaleQuoteDetailKeyService]
 })
 
 
 export class SaleQuotationDetailComponent implements OnInit {
-    /**
-     * Variable Declaration
-     */
 
+    data = {};
     public orderId;
-    public saleQuoteId;
-    public orderDetail = {};
-    @Output() stockValueChange = new EventEmitter();
+    public orderDetail = {
+        order_sts_short_name: ''
+    };
 
 
     /**
@@ -39,16 +39,17 @@ export class SaleQuotationDetailComponent implements OnInit {
         public toastr: ToastrService,
         private router: Router,
         private orderService: OrderService,
+        private _hotkeysService: HotkeysService,
         public keyService: SaleQuoteDetailKeyService,
         private route: ActivatedRoute) {
-        this.keyService.watchContext.next(this);
+        //  Init Key
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
 
     }
 
     ngOnInit() {
-        this.orderId =  this.route.snapshot.paramMap.get('id');
-        console.log(this.orderId);
-        this. getList();
+        this.data['id'] = this.route.snapshot.paramMap.get('id');
+        this.orderId = this.data['id'];
     }
     /**
      * Mater Data
@@ -58,63 +59,26 @@ export class SaleQuotationDetailComponent implements OnInit {
         this.orderDetail = detail;
     }
 
-    back() {
+    cancel() {
         this.router.navigate(['/order-management/sale-quotation']);
     }
 
-    approveByManager(id) {
-        const params = { status: 'AM' };
-        this.orderService.updateSaleQuoteStatus(id, params).subscribe(res => {
-            try {
+    putApproveOrder(order_id) {
+        // const params = {'status_code': 'AP'};
+        this.orderService.approveOrd(order_id).subscribe(res => {
+            if (res.status) {
                 this.toastr.success(res.message);
-                this.getList();
-            } catch (e) {
-                console.log(e);
+                setTimeout(() => {
+                    this.router.navigate(['/order-management/sale-order']);
+                }, 500);
+            } else {
+                this.toastr.error(res.message);
             }
-        });
-
-    }
-
-    rejectByManager(id) {
-        const params = { status: 'RM' };
-        this.orderService.updateSaleQuoteStatus(id, params).subscribe(res => {
-            try {
-                this.toastr.success(res.message);
-                this.getList();
-            } catch (e) {
-                console.log(e);
+        },
+            err => {
+                this.toastr.error(err.message);
             }
-        });
-
+        );
     }
-    convertOrderToSO(id) {
-            const params = { status: 'SC' };
-            this.orderService.updateSaleQuoteStatus(id, params).subscribe(res => {
-            try {
-                this.toastr.success(res.message);
-                this.getList();
-
-            } catch (e) {
-                console.log(e);
-            }
-        });
-    }
-    getList() {
-        this.orderService.getSaleQuoteDetail(this.orderId).subscribe(res => {
-            try {
-                this.orderDetail = res.data;
-                this.saleQuoteId = res.data.sale_quote_id;
-                this.stockValueChange.emit(res.data) ;
-
-            } catch (e) {
-                console.log(e);
-            }
-        });
-    }
-
-
-    /**
-     * Internal Function
-     */
 
 }

@@ -21,7 +21,6 @@ export class SaleQuotationComponent implements OnInit {
     /**
      * letiable Declaration
      */
-    @ViewChild('inp') inp: ElementRef;
 
     public listMaster = {};
     public selectedIndex = 0;
@@ -43,10 +42,10 @@ export class SaleQuotationComponent implements OnInit {
         private renderer: Renderer) {
 
         this.searchForm = fb.group({
-            'sale_quote_num': [null],
+            'quote_no': [null],
             'buyer_name': [null],
             'sts': [null],
-            'type': [null],
+            'date_type': [null],
             'date_from': [null],
             'date_to': [null]
         });
@@ -62,7 +61,7 @@ export class SaleQuotationComponent implements OnInit {
     ngOnInit() {
         //  Init Fn
         this.listMaster['listFilter'] = [{ value: false, name: 'Date Filter' }];
-        this.listMaster['dateType'] = [{ id: 'quote_date', name: 'Quote Date' }, { id: 'expiry_dt', name: 'Expiry Date' }, { id: 'ship_date', name: 'Delivery Date' }];
+        this.listMaster['dateType'] = [{ id: 'quote_date', name: 'Quote Date' }, { id: 'expiry_dt', name: 'Expiry Date' }, { id: 'delivery_dt', name: 'Delivery Date' }];
         this.getList();
         this.getListStatus();
         this.user = JSON.parse(localStorage.getItem('currentUser'));
@@ -86,70 +85,14 @@ export class SaleQuotationComponent implements OnInit {
         });
     }
 
-    createOrder() {
-        this.router.navigate(['/order-management/sale-quotation/create']);
-    }
-
     moreFilter() {
         this.onoffFilter = !this.onoffFilter;
-        setTimeout(() => {
-            this.renderer.invokeElementMethod(this.inp.nativeElement, 'focus');
-        }, 300);
     }
 
-    sentMailToBuyer(id) {
-        this.orderService.sentMailToBuyer(id).subscribe(res => {
-            try {
-                this.toastr.success(res.message);
-                this.getList();
-            } catch (e) {
-                console.log(e);
-            }
-        });
-    }
-
-    approveByManager(id) {
-        const params = { status: 'AM' };
-        this.orderService.updateSaleQuoteStatus(id, params).subscribe(res => {
-            try {
-                this.toastr.success(res.message);
-                this.getList();
-            } catch (e) {
-                console.log(e);
-            }
-        });
-
-    }
-
-    rejectByManager(id) {
-        const params = { status: 'RM' };
-        this.orderService.updateSaleQuoteStatus(id, params).subscribe(res => {
-            try {
-                this.toastr.success(res.message);
-                this.getList();
-            } catch (e) {
-                console.log(e);
-            }
-        });
-
-    }
-    convertOrderToSO(id) {
-        const params = { status: 'SC' };
-        this.orderService.updateSaleQuoteStatus(id, params).subscribe(res => {
-            try {
-                this.toastr.success(res.message);
-                setTimeout(() => {
-                    this.getList();
-                }, 100);
-            } catch (e) {
-                console.log(e);
-            }
-        });
-    }
 
     getList() {
         const params = { ...this.tableService.getParams(), ...this.searchForm.value };
-        params['type'] = 'SAQ';
+
         Object.keys(params).forEach((key) => {
             if (params[key] instanceof Array) {
                 params[key] = params[key].join(',');
@@ -169,4 +112,26 @@ export class SaleQuotationComponent implements OnInit {
         });
     }
 
+    updateStatus(id, status) {
+        const params = { status };
+        this.orderService.updateSaleQuoteStatus(id, params).subscribe(res => {
+            try {
+                this.toastr.success(res.message);
+                this.getList();
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
+
+    cloneQuote(id) {
+        this.orderService.cloneQuote(id).subscribe(res => {
+            try {
+                this.toastr.success(res.message);
+                this.getList();
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
 }

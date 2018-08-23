@@ -843,3 +843,21 @@ ngu-carousel {
         }
     }
 }
+
+.btn-default-custom {
+  padding: 3px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 11px;
+  background: #feffff;
+  background: -webkit-gradient(linear, left top, left bottom, from(#feffff), color-stop(50%, #ebebeb), to(#ffffff));
+  background: linear-gradient(to bottom, #feffff 0%, #ebebeb 50%, #ffffff 100%);
+  cursor: pointer;
+}
+
+.tabs-order.full-width {
+    .nav-tabs {
+        margin-left: -10px;
+        margin-right: -10px;        
+    }
+}
