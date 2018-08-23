@@ -4,6 +4,6 @@ export * from './uppercase.directive';
 export * from './trueFalseInput.directive';
 export * from './sticky.directive';
 export * from './clickOutside.directive';
-export * from './numericInput.directive';
+export * from './number.directive';
 export * from './onlynumber.directive';
 export * from './keyNavigate.directive';
