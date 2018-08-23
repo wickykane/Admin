@@ -111,7 +111,7 @@ export class SaleOrderInformationTabComponent implements OnInit {
                     this.totalShipQTY += item.qty_shipped;
                 });
 
-                this.updateTotal();
+                this.groupTax();
 
 
             } catch (e) {
@@ -120,14 +120,14 @@ export class SaleOrderInformationTabComponent implements OnInit {
         });
     }
 
-    groupTax(items) {
+    groupTax() {
         this.order_info['taxs'] = [];
         this.order_info['total_tax'] = 0;
-        const taxs = items.map(item => item.tax_percent || 0);
+        const taxs = this.detail['subs'].map(item => item.tax_percent || 0);
         const unique = taxs.filter((i, index) => taxs.indexOf(i) === index);
         unique.forEach((tax, index) => {
             let taxAmount = 0;
-            items.filter(item => item.tax_percent === tax).map(i => {
+            this.detail['subs'].filter(item => item.tax_percent === tax).map(i => {
                 taxAmount += (+i.tax_percent * +i.quantity * (+i.sale_price || 0) / 100);
             });
             this.order_info['total_tax'] = this.order_info['total_tax'] + taxAmount.toFixed(2);
@@ -135,14 +135,9 @@ export class SaleOrderInformationTabComponent implements OnInit {
                 value: tax, amount: taxAmount.toFixed(2)
             });
         });
-    }
-
-    updateTotal() {
-        this.order_info.total = 0;
-        this.order_info.sub_total = 0;
-        this.groupTax(this.detail['subs']);
 
         this.order_info.total = +this.order_info['total_tax'] + this.detail['sub_total_price'];
+
     }
 
     putApproveOrder(order_id) {
@@ -181,8 +176,8 @@ export class SaleOrderInformationTabComponent implements OnInit {
     }
 
     cancel() {
-      console.log('ab');
-      this.router.navigate(['/order-management/sale-order']);
+        console.log('ab');
+        this.router.navigate(['/order-management/sale-order']);
     }
 
 }

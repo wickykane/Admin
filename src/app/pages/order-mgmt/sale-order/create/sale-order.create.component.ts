@@ -266,6 +266,14 @@ export class SaleOrderCreateComponent implements OnInit {
           default_ship_rate = 8;
           this.generalForm.patchValue({ shipping_id: null });
           this.generalForm.get('shipping_id').setValidators(null);
+          this.addr_select.shipping = {
+              'address_name': '',
+              'address_line': '',
+              'country_name': '',
+              'city_name': '',
+              'state_name': '',
+              'zip_code': ''
+          };
       } else {
           this.generalForm.get('shipping_id').setValidators([Validators.required]);
       }
@@ -392,39 +400,29 @@ export class SaleOrderCreateComponent implements OnInit {
     }
 
     calcTaxShipping() {
-        const params = {
-            'customer': this.generalForm.value.buyer_id,
-            'address': this.generalForm.value.shipping_id,
-            'ship_via': this.generalForm.value.carrier_id,
-            'option': this.generalForm.value.ship_method_option,
-            'ship_rate': this.generalForm.value.ship_method_rate,
-            'items': this.list.items.filter(item => !item.misc_id)
-        };
-        this.orderService.getTaxShipping(params).subscribe(res => {
+      const params = {
+          'customer': this.generalForm.value.buyer_id,
+          'address': this.generalForm.value.shipping_id,
+          'ship_via': this.generalForm.value.carrier_id,
+          'option': this.generalForm.value.ship_method_option,
+          'ship_rate': this.generalForm.value.ship_method_rate,
+          'items': this.list.items.filter(item => !item.misc_id)
+      };
+      this.orderService.getTaxShipping(params).subscribe(res => {
+          const old_misc = this.list.items.filter(item => item.misc_id && +item.source_id !== 3);
+          const items = res.data.items;
+          const misc = res.data.mics.map(item => {
+              item.is_misc = 1;
+              item.misc_id = item.id;
+              return item;
+          });
+          this.list.items = items.concat(misc, old_misc);
 
-            try {
-                if (res.status) {
-                    // this.list.items = res.data.items;
-                    console.log(this.list.items);
-                    const misc = res.data.mics.map(item => {
-                        item.is_misc = 1;
-                        item.misc_id = item.id;
-                        return item;
-                    });
-                    this.list.items = this.list.items.concat(misc);
-                    this.updateTotal();
-                    this.order_info['original_ship_cost'] = res.data.price;
-                } else {
-                    this.toastr.error(res.message);
-                }
-            } catch (e) {
-                console.log(e);
-            }
-
-        },
-            err => {
-                this.toastr.error(err.message);
-            });
+          // Assign tax to all item
+          this.list.items.forEach(item => item.tax_percent = res.data.tax_percent);
+          this.updateTotal();
+          this.order_info['original_ship_cost'] = res.data.price;
+      });
     }
 
     addNewItem() {
