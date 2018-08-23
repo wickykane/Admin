@@ -72,53 +72,26 @@ export class PaymentMethodsCreateComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.getPaymentTypes();
-        this.getPaymentProcessors();
-        this.getTransactionTypes();
         this.route.params.subscribe(params => {
             this.paymentMethodId = params.id;
-            if (this.paymentMethodId) { this.getPaymentMethodDetail(); }
+            if (this.paymentMethodId) {
+                this.getListMaster(this.paymentMethodId);
+                this.getPaymentMethodDetail();
+            } else {
+                this.getListMaster('');
+            }
         });
     }
     /**
      * Internal Function
      */
-
-    getPaymentTypes() {
-        this.paymentMethodService.getPaymentTypes().subscribe(
+    getListMaster(paymentMethodId) {
+        this.paymentMethodService.getListMaster(paymentMethodId).subscribe(
             res => {
                 try {
-                    this.listMaster.paymentTypes = res.data;
-                } catch (err) {
-                    console.log(err);
-                }
-            },
-            err => {
-                console.log(err);
-            }
-        );
-    }
-
-    getPaymentProcessors() {
-        this.paymentMethodService.getPaymentProcessors().subscribe(
-            res => {
-                try {
-                    this.listMaster.paymentProcessors = res.data;
-                } catch (err) {
-                    console.log(err);
-                }
-            },
-            err => {
-                console.log(err);
-            }
-        );
-    }
-
-    getTransactionTypes() {
-        this.paymentMethodService.getPaymentTransactionTypes().subscribe(
-            res => {
-                try {
-                    this.listMaster.transactionTypes = res.data;
+                    this.listMaster.paymentTypes = res.data['payment_type'];
+                    this.listMaster.paymentProcessors = res.data['payment_processor_type'];
+                    this.listMaster.transactionTypes = res.data['payment_transaction_type'];
                 } catch (err) {
                     console.log(err);
                 }
