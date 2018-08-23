@@ -29,6 +29,7 @@ import { PartListComponent } from './part-mgmt/part-list.component';
 import { ProductMgmtRoutingModule } from './product-mgmt-routing.module';
 import { ProductMgmtComponent } from './product-mgmt.component';
 import { MiscellaneousItemsComponent } from './miscellaneous-items/list/miscellaneous-items.component';
+import { MiscellaneousItemsModalComponent } from './miscellaneous-items/controlMisscellaneous/misscellaneous-items.modal';
 
 // Services
 import { TableService } from '../../services/index';
@@ -65,9 +66,10 @@ import { ProductService } from './product-mgmt.service';
         PartListComponent,
         PartDetailComponent,
         PartEditComponent,
-        MiscellaneousItemsComponent
+        MiscellaneousItemsComponent,
+        MiscellaneousItemsModalComponent
     ],
     providers: [ProductService, TableService],
-    entryComponents: []
+    entryComponents: [MiscellaneousItemsModalComponent]
 })
 export class ProductMgmtModule {}

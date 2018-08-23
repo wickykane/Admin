@@ -24,90 +24,10 @@
                             </select>
                         </div>
                     </div>
-                    <div class="block-search">
-                        <label for="status" class="control-label">Status</label>
-                        <select class="form-control" formControlName="status">
-                            <option value="" selected="true">--Select--</option>
-                            <option *ngFor="let item of listMaster['status']" [ngValue]="item.id">{{item.name}}</option>
-                        </select>
-                    </div>
-                    <div *ngIf="listMoreFilter.value1">
-                        <div class="block-search">
-                            <label for="request_date_from" class="control-label">Request Date</label>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="input-group">
-                                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="request_date_from" ngbDatepicker #d="ngbDatepicker">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
-                                                <i class="fa fa-calendar" aria-hidden="true"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="input-group">
-                                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="request_date_to" ngbDatepicker #c="ngbDatepicker">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-outline-secondary" (click)="c.toggle()" type="button">
-                                                <i class="fa fa-calendar" aria-hidden="true"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="block-search">
-                            <label for="request_date_from" class="control-label">Reception Date</label>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="input-group">
-                                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="reception_date_from" ngbDatepicker #f="ngbDatepicker">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-outline-secondary" (click)="f.toggle()" type="button">
-                                                <i class="fa fa-calendar" aria-hidden="true"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="input-group">
-                                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="reception_date_to" ngbDatepicker #g="ngbDatepicker">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-outline-secondary" (click)="g.toggle()" type="button">
-                                                <i class="fa fa-calendar" aria-hidden="true"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="block-search" *ngIf="listMoreFilter.value2">
-                            <label for="comment" class="control-label">Comments</label>
-                            <input type="text" name="comment" formControlName="comment" class="form-control" id="comment" placeholder="">
-                        </div>
-                    </div>
                 </form>
                 <div class="block-btn-search">
                     <label class="control-label">&nbsp;</label>
                     <div class="group-btn-search">
-                        <button type="button" class="btn btn-primary" (click)="onoffFilter = !onoffFilter">More Filter</button>
-                        <div class="show-more" *ngIf="onoffFilter">
-                            <ul>
-                                <li>
-                                    <label for="listMoreFilter.value1">
-                                        <input type="checkbox" value="listMoreFilter.value1" [(ngModel)]="listMoreFilter.value1"> Date Filter
-                                    </label>
-                                </li>
-                                <li>
-                                    <label for="listMoreFilter.value2">
-                                        <input type="checkbox" value="listMoreFilter.value2" [(ngModel)]="listMoreFilter.value2"> Comments
-                                    </label>
-                                </li>
-                            </ul>
-                        </div>
                         <button type="button" class="btn btn-primary" (click)="tableService.searchAction()">Search</button>
                         <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchForm)">Reset</button>
                     </div>
@@ -117,86 +37,33 @@
 
 
         <div class="block-content list-order-table">
-            <button [routerLink]="['/rma/create']" style="margin: 10px 0;" class="btn btn-primary">Add New</button>
+            <button style="margin: 10px 0;" class="btn btn-primary" (click)="openModal()">Add New</button>
 
             <div class="table-responsive">
                 <table class="table table-striped table-vcenter custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex"
                     (onEnter)="selectData($event)">
                     <thead class="bg-white">
                         <tr>
-                            <th></th>
-                            <th>RMA No</th>
-                            <th>SO No.</th>
-                            <th>Customer</th>
-                            <th>Request date</th>
-                            <th>Reception date</th>
-                            <th>RMA Type</th>
-                            <th>Comments</th>
-                            <th>Total Amount</th>
-                            <th>Status</th>
+                            <th>Item</th>
+                            <th>Description</th>
+                            <th>Item Type</th>
+                            <th>UOM</th>
+                            <th>G/L Account</th>
+                            <th>Status/th>
+                            <th>Used</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody  *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                         <tr>
-                            <!-- <td>
-                                <a ui-sref="app.rma.view({id : item.rma_id})">#{{item.rma_no}}</a>
-                            </td> -->
-                            <td class="text-center" [ngClass]="{'expand-item' : item.collapseRows}">
-                                    <a class="btn btn-default " title="Expand" (click)="item.collapseRows = !item.collapseRows;" *ngIf="!item.collapseRows">
-                                        <i class="fa fa-plus" aria-hidden="true"></i>
-                                    </a>
-                                    <a class="btn btn-default " title="Collapse" (click)="item.collapseRows = !item.collapseRows;" *ngIf="item.collapseRows">
-                                        <i class="fa fa-minus" aria-hidden="true"></i>
-                                    </a>
-                                </td>
-                            <td>{{item.return_order_no}}</td>
-                            <td>{{item.sale_order_no}}</td>
-                            <td>{{item.buyer_name}}</td>
-                            <td>
-                                <span ng-if="item.request_date">{{item.request_date | date:'yyyy-MM-dd' }}</span>
-                            </td>
-                            <td>
-                                <span ng-if="item.reception_date">{{item.reception_date | date:'yyyy-MM-dd' }}</span>
-                            </td>
-                            <td>{{item.rma_type_name}}</td>
-                            <td>{{item.note}}</td>
-                            <td>{{item.total_amount}}</td>
-                            <td>{{item.status}}</td>
-                            <!-- <td>
-                                <span class="label label-info" ng-if="item.short_name == 'NEW'">{{item.sts}}</span>
-                                <span class="label label-warning" ng-if="item.short_name == 'P'">{{item.sts}}</span>
-                                <span class="label label-success" ng-if="item.short_name == 'CP'">{{item.sts}}</span>
-                            </td> -->
-                        </tr>
-                        <tr *ngIf="item.collapseRows">
-                            <td colspan="10" class="child-table">
-                                <table class="table table-vcenter custom-table" style="border: 1px solid #828282;">
-                                    <thead>
-                                        <tr style="background-color: #596470">
-                                            <th>SKU</th>
-                                            <th>Product Name</th>
-                                            <th>Order QTY</th>
-                                            <th>Returned QTY</th>
-                                            <th>UOM</th>
-                                            <th>Unit Price</th>
-                                            <th>Discount</th>
-                                            <th>Sub Total</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let subItem of item.detail; let i = index;">
-                                            <td>{{subItem.sku }}</td>
-                                            <td>{{subItem.product_name }}</td>
-                                            <td>{{subItem.order_qty}}</td>
-                                            <td>{{subItem.return_qty }}</td>
-                                            <td>{{subItem.uom }}</td>
-                                            <td>{{subItem.price}}</td>
-                                            <td>{{subItem.discount }} % </td>
-                                            <td>{{subItem.sub_total }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                         </tr>
                     </tbody>
                 </table>

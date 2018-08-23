@@ -212,7 +212,7 @@ export class MenuComponent implements OnInit {
                     {
                         link: '/product-management/item-list',
                         name: 'Inventory Items'
-                    }
+                    },
                     {
                         link: '/product-management/miscellaneous-list',
                         name: 'Miscellaneous Items'

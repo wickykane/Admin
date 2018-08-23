@@ -7,8 +7,11 @@ import { TableService } from '../../../../services/table.service';
 import { MiscellaneousItemsKeyService } from '../keys.control';
 import { CommonService } from '../../../../services/common.service';
 import { ItemsControl } from '../../../../../../node_modules/@ngu/carousel/src/ngu-carousel/ngu-carousel.interface';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MiscellaneousItemsModalComponent } from '../controlMisscellaneous/misscellaneous-items.modal';
+
 @Component({
-    selector: 'app-rma',
+    selector: 'app-miscellaneous',
     templateUrl: './miscellaneous-items.component.html',
     animations: [routerTransition()],
     providers: [MiscellaneousItemsKeyService, CommonService]
@@ -24,11 +27,9 @@ export class MiscellaneousItemsComponent implements OnInit {
         items: []
     };
     //  public showProduct: boolean = false;
-    public onoffFilter: any;
     public flagId = '';
 
     public user: any;
-    public listMoreFilter: any = [];
 
     searchForm: FormGroup;
 
@@ -38,7 +39,8 @@ export class MiscellaneousItemsComponent implements OnInit {
         private vRef: ViewContainerRef,
         public tableService: TableService,
         public keyService: MiscellaneousItemsKeyService,
-        private commonService: CommonService
+        private commonService: CommonService,
+        private modalService: NgbModal
     ) {
 
         this.searchForm = fb.group({
@@ -63,7 +65,6 @@ export class MiscellaneousItemsComponent implements OnInit {
 
     ngOnInit() {
         // Init Fn
-        this.listMoreFilter = { value1: false, value2: false };
         this.getList();
         // this.getListMaster();
 
@@ -88,10 +89,6 @@ export class MiscellaneousItemsComponent implements OnInit {
         //   this.showProduct = !this.showProduct;
     }
 
-    showMorefilter() {
-
-    }
-
 
 
 
@@ -109,9 +106,6 @@ export class MiscellaneousItemsComponent implements OnInit {
         // this.purchaseService.getListPurchaseOrder(params).subscribe(res => {
         //     try {
         //         this.list.items = res.data.rows;
-        //         this.list.items.forEach(item => {
-        //             return item.collapseRows = false;
-        //         });
         //         console.log(this.list.items);
         //         this.tableService.matchPagingOption(res.data);
         //     } catch (e) {
@@ -119,5 +113,7 @@ export class MiscellaneousItemsComponent implements OnInit {
         //     }
         // });
     }
-
+    openModal(){
+       const modalRef = this.modalService.open(MiscellaneousItemsModalComponent);
+    }
 }
