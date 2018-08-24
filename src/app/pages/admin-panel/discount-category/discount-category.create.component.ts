@@ -178,8 +178,6 @@ export class DiscountCategoryCreateComponent implements OnInit {
     }
 
     removeSelected(value: any, sub_category_id, item) {
-      console.log(value);
-      console.log(item);
         item.listSubCategory.map(obj => {
             if (value.value.category_id === obj['category_id']) {
                 obj['disabled'] = false;

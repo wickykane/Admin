@@ -176,7 +176,7 @@ export class OrderService {
     }
 
     updateStatusOrder(order_id, status) {
-        const url = '/order/updateStatus/' + order_id + '/' + status;
+        const url = 'order/updateStatus/' + order_id + '/' + status;
         return this.API.put(url);
     }
 
