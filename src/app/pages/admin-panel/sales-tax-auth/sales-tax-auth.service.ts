@@ -21,8 +21,8 @@ export class SalesTaxAuthService {
         return this.apiService.get(url);
     }
 
-    getStateDropdownList() {
-        const url = 'state/get-dropdown-list';
+    getStateDropdownList(countryCode) {
+        const url = 'state/get-dropdown-list?country_code=' + countryCode;
         return this.apiService.get(url);
     }
 
