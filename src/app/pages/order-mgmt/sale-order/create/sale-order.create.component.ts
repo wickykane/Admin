@@ -81,16 +81,11 @@ export class SaleOrderCreateComponent implements OnInit {
 
     public order_info = {
         total: 0,
-        order_summary: {},
         sub_total: 0,
         order_date: '',
         customer_po: '',
-        total_discount: 0,
         buyer_id: null,
-        selected_programs: [],
-        discount_percent: 0,
-        vat_percent: 0,
-        shipping_cost: 0
+        order_summary: {}
     };
 
     public list = {
@@ -135,7 +130,7 @@ export class SaleOrderCreateComponent implements OnInit {
             'description': [null],
             'payment_term_id': [null, Validators.required],
             'approver_id': [null, Validators.required],
-            'carrier_id': [null, Validators.required],
+            'carrier_id': [2],
             'ship_method_rate': [null, Validators.required],
             'ship_method_option': [null, Validators.required]
         });
@@ -372,7 +367,7 @@ export class SaleOrderCreateComponent implements OnInit {
 
 
         this.list.items.forEach(item => {
-            item.amount = (+item.quantity * (+item.sale_price || 0)) * (100 - (+item.discount || 0)) / 100;
+            item.amount = (+item.quantity * (+item.sale_price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
             this.order_info.sub_total += item.amount;
         });
 
@@ -486,12 +481,10 @@ export class SaleOrderCreateComponent implements OnInit {
 
     createOrder(type) {
         const products = this.list.items.map(item => {
-            item.discount_percent = item.discount;
             item.is_item = (item.misc_id) ? 0 : 1;
-            item.misc_id = (item.misc_id) ? null : 1;
-            item.is_shipping_free = 1;
-            item.item_id = (item.item_id) ? (item.item_id) : (item.id);
-            item.item_type = (item.item_type) ? (item.item_type) : (item.type);
+            item.misc_id = (item.misc_id) ? item.misc_id : null;
+            item.item_id = (item.item_id) ? (item.item_id) : null;
+            item.is_shipping_free = (item.is_item) ? (item.is_shipping_free) : 0;
             item.item_condition_id = (item.is_item) ? (item.item_condition_id) : null;
             return item;
         });
@@ -522,7 +515,7 @@ export class SaleOrderCreateComponent implements OnInit {
                 break;
         }
         params = { ...this.generalForm.value, ...params };
-
+        console.log(params);
         this.orderService.createOrder(params).subscribe(res => {
             try {
                 if (res.status) {
