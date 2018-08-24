@@ -226,7 +226,7 @@
                             <label>
                                 <b>Created by</b>
                             </label>
-                            <input type="text" maxlength="50" class="form-control" [value]="selectedStateTax.created_by_username" [attr.disabled]="true">
+                            <input type="text" maxlength="50" class="form-control" [value]="selectedStateTax.created_by_full_name" [attr.disabled]="true">
                         </div>
                         <div class="row create-section-info" *ngIf="!isCreateNew">
                             <label>
@@ -238,7 +238,7 @@
                             <label>
                                 <b>Last Updated By</b>
                             </label>
-                            <input type="text" maxlength="50" class="form-control" [value]="selectedStateTax.updated_by_username" [attr.disabled]="true">
+                            <input type="text" maxlength="50" class="form-control" [value]="selectedStateTax.updated_by_full_name" [attr.disabled]="true">
                         </div>
                     </form>
                 </fieldset>
