@@ -102,8 +102,8 @@ export class SaleOrderInformationTabComponent implements OnInit {
                 this.detail = res.data;
                 this.stockValueChange.emit(res.data);
 
-                this.detail['billing'] = (res.data.billing_address === null) ? _.cloneDeep(this.addr_select.billing) : res.data.billing_address;
-                this.detail['shipping'] = (res.data.shipping_address === null) ? _.cloneDeep(this.addr_select.shipping) : res.data.shipping_address;
+                this.detail.shipping = res.data.shipping_address;
+                this.detail.billing = res.data.billing_address;
 
                 this.detail['subs'] = res.data.items;
                 this.detail['subs'].forEach((item) => {
@@ -111,7 +111,7 @@ export class SaleOrderInformationTabComponent implements OnInit {
                     this.totalShipQTY += item.qty_shipped;
                 });
 
-                this.groupTax();
+                this.groupTax(this.detail['subs']);
 
 
             } catch (e) {
@@ -120,14 +120,14 @@ export class SaleOrderInformationTabComponent implements OnInit {
         });
     }
 
-    groupTax() {
+    groupTax(items) {
         this.order_info['taxs'] = [];
         this.order_info['total_tax'] = 0;
-        const taxs = this.detail['subs'].map(item => item.tax_percent || 0);
+        const taxs = items.map(item => item.tax_percent || 0);
         const unique = taxs.filter((i, index) => taxs.indexOf(i) === index);
         unique.forEach((tax, index) => {
             let taxAmount = 0;
-            this.detail['subs'].filter(item => item.tax_percent === tax).map(i => {
+            items.filter(item => item.tax_percent === tax).map(i => {
                 taxAmount += (+i.tax_percent * +i.quantity * (+i.sale_price || 0) / 100);
             });
             this.order_info['total_tax'] = this.order_info['total_tax'] + taxAmount.toFixed(2);
@@ -135,9 +135,6 @@ export class SaleOrderInformationTabComponent implements OnInit {
                 value: tax, amount: taxAmount.toFixed(2)
             });
         });
-
-        this.order_info.total = +this.order_info['total_tax'] + this.detail['sub_total_price'];
-
     }
 
     putApproveOrder(order_id) {
