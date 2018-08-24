@@ -117,7 +117,6 @@ export class SalesTaxAuthComponent implements OnInit {
         this.getListSalesTaxAuthority();
         this.getListCountryDropDown();
         this.getTaxAuthorityTypes();
-        this.getStateList();
         this.getCalTaxBaseOn();
         this.getSaleTaxOnShipping();
         this.getGLAccount();
@@ -158,8 +157,8 @@ export class SalesTaxAuthComponent implements OnInit {
         );
     }
 
-    getStateList() {
-        this.salesTaxAuthService.getStateDropdownList().subscribe(
+    getStateList(countryCode) {
+        this.salesTaxAuthService.getStateDropdownList(countryCode).subscribe(
             res => {
                 try {
                     this.listMaster.states = res.data;
@@ -243,6 +242,7 @@ export class SalesTaxAuthComponent implements OnInit {
                     this.currentForm = 'country';
                     this.isClickedSave = false;
                     this.isCreateNew = false;
+                    this.getStateList(this.selectedCountryTax['country_code']);
                 } catch (err) {
                     console.log(err);
                 }
@@ -260,9 +260,9 @@ export class SalesTaxAuthComponent implements OnInit {
                     this.selectedStateTax = res.data ;
                     this.stateGeneralForm.patchValue(this.selectedStateTax);
                     this.stateRateForm.patchValue(this.selectedStateTax);
-                    const state = this.listMaster.states.find(_ => _.id === res.data.state_id );
-                    this.stateGeneralForm.controls.state_code.setValue(state.code);
-                    this.selectedStateTax['current_rate'] = currentRate ? currentRate : res.data['current_rate'];
+                    this.stateGeneralForm.controls.state_code.setValue(this.selectedStateTax['state']['code']);
+                    this.getStateList(this.selectedStateTax['state']['country_code']);
+                    this.selectedStateTax['current_rate'] = currentRate || res.data['current_rate'];
                     this.currentForm = 'state';
                     this.isClickedSave = false;
                     this.isCreateNew = false;
