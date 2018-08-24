@@ -78,6 +78,7 @@ export class ReturnReasonCreateComponent implements OnInit {
         const params = this.generalForm.value;
         this.returnReasonService.updateReturnReason(id, params).subscribe(res => {
             this.toastr.success(res.message);
+            this.router.navigate(['/admin-panel/return-reason']);
         }, err => {
             this.toastr.error(err.message);
         });
