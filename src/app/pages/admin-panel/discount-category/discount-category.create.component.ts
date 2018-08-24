@@ -39,7 +39,7 @@ export class DiscountCategoryCreateComponent implements OnInit {
         this.generalForm = fb.group({
             'code': [null],
             'description': [null],
-            'ac': [null],
+            'ac': [null, Validators.required],
             'start_date': [null],
             'create_by': 'Khiet Pham',
             'create_dt': new Date().toLocaleDateString()
@@ -80,10 +80,10 @@ export class DiscountCategoryCreateComponent implements OnInit {
 
     getListStatus() {
         this.listMaster['status'] = [{
-            code: '0',
+            code: 0,
             name: 'In-Active'
         }, {
-            code: '1',
+            code: 1,
             name: 'Active '
         }];
     }
