@@ -47,7 +47,7 @@
 
                         <div class="col-sm-12">
                             <select class="form-control" (change)="setWareHouseTimer($event.target.value)" formControlName="warehouse" id="warehouse">
-                                <option *ngFor="let item of wareHouseList" [value]='item.id'>{{item.name}}</option>
+                                <option *ngFor="let item of _wareHouseList" [value]='item.id'>{{item.name}}</option>
                             </select>
                         </div>
                     </div>
@@ -61,7 +61,7 @@
             <div class="form-group row">
                     <h5 style="font-weight:600;margin-left: 10px">Business Hours</h5>
             </div>
-            <div class="form-group row" *ngFor="let item of timeList.data;let i=index;trackBy:trackByFn">
+            <div class="form-group row" *ngFor="let item of timeList.bussiness_hours;let i=index;trackBy:trackByFn">
                 <div class="col-md-1">
                     <input [(ngModel)]="item.selected" (change)="checkValue($event.target.checked,item)" value="{{item.selected}}" [checked]="item.selected" type="checkbox">
                 </div>

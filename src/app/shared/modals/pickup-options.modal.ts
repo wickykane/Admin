@@ -19,8 +19,14 @@ import { CommonService } from '../../services/common.service';
 export class PickupOptionsModalComponent implements OnInit, OnDestroy {
 
     generalForm: FormGroup;
-    @Input() wareHouseList;
-    @Input() weekDaysList;
+    private _weekDaysList:any;
+    private _wareHouseList:any;
+    @Input('wareHouseList') set wareHouseList(value: any) {
+        this._wareHouseList = value;
+    }
+    @Input('weekDaysList') set weekDaysList(value: any) {
+        this._weekDaysList = value;
+    }
     @Input() dayHoursList;
     @Input() pickupList;
     hotkeyCtrlLeft: Hotkey | Hotkey[];
@@ -57,14 +63,14 @@ export class PickupOptionsModalComponent implements OnInit, OnDestroy {
                 this.weekDaysList = this.pickupList['bussiness_hours'];
             }
             else{
-                this.weekDaysList.forEach(item=>{
+                this._weekDaysList.forEach(item=>{
                     item['data']=[{from:'',to:''}];
                     item['selected']= false;
                 })
             }
-            var weekDaysList = Object.assign([],this.weekDaysList);
-            this.wareHouseList.map(item=>{
-                item['data']= weekDaysList;
+            var weekDaysList = Object.assign([],this._weekDaysList);
+            this._wareHouseList.map(item=>{
+                item['bussiness_hours']= weekDaysList;
             });
             this.setWareHouseTimer(this.generalForm.value.warehouse);
         }
@@ -94,15 +100,16 @@ export class PickupOptionsModalComponent implements OnInit, OnDestroy {
         console.log(this.generalForm.value);
         console.log(this.weekDaysList);
         var params = Object.assign({},this.generalForm.value);
-        var weekDaysList1 = this.weekDaysList.slice(0);
-        console.log(weekDaysList1);
-        weekDaysList1.forEach((item,index,object)=>{
-            console.log(item);
-            if(item.selected == false){
-                object.splice(index,1);
-            }
-        });
-        params['bussiness_hours']=weekDaysList1;
+        // var weekDaysList1 = this._wareHouseList.slice(0);
+        // console.log(weekDaysList1);
+        // weekDaysList1.forEach((item,index,object)=>{
+        //     console.log(item);
+        //     if(item.selected == false){
+        //         object.splice(index,1);
+        //     }
+        // });
+        // params['bussiness_hours']=weekDaysList1;
+        params['warehouse'] = this._wareHouseList;
         this.itemService.checkCondition(params).subscribe(res => {
             console.log(res);
             this.activeModal.close({ id: '4', data: params });
@@ -113,7 +120,7 @@ export class PickupOptionsModalComponent implements OnInit, OnDestroy {
         item.splice(index, 1);
     }
     setWareHouseTimer(id){
-        this.wareHouseList.forEach(item=>{
+        this._wareHouseList.forEach(item=>{
             if(item.id ==id){
                 this.timeList = item;
             }
