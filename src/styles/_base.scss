@@ -861,3 +861,20 @@ ngu-carousel {
         margin-right: -10px;        
     }
 }
+.icon-blue{
+    i::before{
+     color:#2196f3;
+    }
+
+}
+.icon-green{
+    i::before{
+     color:green;
+    }
+
+}         
+.checkbox-green{
+ input:checked + .slider {
+     background-color: green;
+ }
+} 

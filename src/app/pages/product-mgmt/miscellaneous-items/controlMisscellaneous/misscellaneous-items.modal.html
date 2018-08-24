@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <span class="modal-title">Add new miscellaneous item</span>
+    <span class="modal-title">{{title}} miscellaneous item</span>
     <button type="button" class="close" aria-label="Close" (click)="closeX()">
         <span aria-hidden="true">&times;</span>
     </button>
@@ -9,83 +9,85 @@
     <form [formGroup]="generalForm" class="form-search full-width form-horizontal">
         <div class="row">
             <div class="col-md-12">
-                <div class="row">
+                <div class="row mb-2">
                     <div class="col-md-4">
                         <label> Item No
-                            <span class="text-danger">(*)</span>
+                            <span *ngIf="!isView" class="text-danger">(*)</span>
 
                         </label>
                     </div>
                     <div class="col-md-8">
-                        <input type="text"  id="name" class="form-control">
+                        <input type="text" disabled formControlName="no"  id="name" class="form-control">
                     </div>
                 </div>
-                <div class="row">
+                <div class="row mb-2">
                     <div class="col-md-4">
-                        <label> Item  Type
-                            <span class="text-danger">(*)</span>
+                        <label> Item Type
+                            <span *ngIf="!isView" class="text-danger">(*)</span>
 
                         </label>
                     </div>
                     <div class="col-md-8">
-                        <select name="type"   class="form-control">
-                            <!-- <option *ngFor="let item of typeList"[value]='item.id'>{{item.name}}</option> -->
+                        <select name="type" formControlName="type"   class="form-control">
+                            <option *ngFor="let item of miscTypeList"[value]='item.id'>{{item.name}}</option>
                         </select>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row mb-2">
                     <div class="col-md-4">
                         <label> Description
-                            <span class="text-danger">(*)</span>
+                            <span *ngIf="!isView" class="text-danger">(*)</span>
 
                         </label>
                     </div>
                     <div class="col-md-8">
-                        <input type="text"  id="name" class="form-control">
+                        <input type="text" formControlName="des"  id="name" class="form-control">
                     </div>
                 </div>
-                <div class="row">
+                <div class="row mb-2">
                     <div class="col-md-4">
                         <label> G/L Account
-                            <span class="text-danger">(*)</span>
-
+                            <span *ngIf="!isView" class="text-danger">(*)</span>
                         </label>
                     </div>
                     <div class="col-md-8">
-                        <select name="type"   class="form-control">
-                            <!-- <option *ngFor="let item of typeList"[value]='item.id'>{{item.name}}</option> -->
+                        <select name="type" formControlName="account_id"  class="form-control">
+                            <option *ngFor="let item of accountList"[value]='item.id'>{{item.name}}</option>
                         </select>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row mb-2">
                     <div class="col-md-4">
                         <label> UOM
-                            <span class="text-danger">(*)</span>
+                            <span *ngIf="!isView" class="text-danger">(*)</span>
 
                         </label>
                     </div>
                     <div class="col-md-8">
-                        <input type="text"  id="name" disabled value="Each" class="form-control">
+                        <!-- <input type="text"  id="name" disabled value="Each" class="form-control"> -->
+                    <label>{{generalForm.getRawValue().uom}}</label>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row mb-2">
                     <div class="col-md-4">
                         <label> Status
-                            <span class="text-danger">(*)</span>
+                            <span *ngIf="!isView" class="text-danger">(*)</span>
 
                         </label>
                     </div>
                     <div class="col-md-8">
                         <label class="switch">
-                            <input type="checkbox" disabled="true" >
+                            <input type="checkbox" formControlName="sts"  >
                             <span class="slider round"></span>
                         </label>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12">
-                        <button type="button" class="btn btn-outline-primary" (click)="applyData()">OK</button>
-                        <button type="button" class="btn btn-outline-dark" (click)="closeX()">Close</button>
+                    <div class="col-md-12" style="text-align: center">
+                        <button *ngIf="Action==false && isView == false" type="button" class="btn btn-outline-primary" (click)="saveModal()">Update</button>
+                        <button type="button" *ngIf="Action==true" class="btn btn-outline-primary" (click)="saveModal()">Add</button>
+                        <button *ngIf="isView ==false" type="button" class="btn btn-outline-dark" (click)="closeX()">Cancel</button>
+                        <button *ngIf="isView" type="button" class="btn btn-outline-dark" (click)="closeX()">Close</button>
                     </div>
                 </div>
             </div>

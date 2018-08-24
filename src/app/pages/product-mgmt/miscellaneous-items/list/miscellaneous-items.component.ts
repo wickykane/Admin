@@ -9,12 +9,13 @@ import { CommonService } from '../../../../services/common.service';
 import { ItemsControl } from '../../../../../../node_modules/@ngu/carousel/src/ngu-carousel/ngu-carousel.interface';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MiscellaneousItemsModalComponent } from '../controlMisscellaneous/misscellaneous-items.modal';
-
+import { ProductService } from '../../product-mgmt.service';
+import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 @Component({
     selector: 'app-miscellaneous',
     templateUrl: './miscellaneous-items.component.html',
     animations: [routerTransition()],
-    providers: [MiscellaneousItemsKeyService, CommonService]
+    providers: [MiscellaneousItemsKeyService, CommonService,ProductService]
 })
 export class MiscellaneousItemsComponent implements OnInit {
 
@@ -32,7 +33,7 @@ export class MiscellaneousItemsComponent implements OnInit {
     public user: any;
 
     searchForm: FormGroup;
-
+    miscTypeList:any;
     constructor(public router: Router,
         public fb: FormBuilder,
         public toastr: ToastrService,
@@ -40,20 +41,14 @@ export class MiscellaneousItemsComponent implements OnInit {
         public tableService: TableService,
         public keyService: MiscellaneousItemsKeyService,
         private commonService: CommonService,
+        private productService:ProductService,
         private modalService: NgbModal
     ) {
 
         this.searchForm = fb.group({
-            'rma_no': [null],
-            'so_no': [null],
-            'customer': [null],
-            'rma_type': [''],
-            'status': [''],
-            'request_date_from': [null],
-            'request_date_to': [null],
-            'reception_date_from': [null],
-            'reception_date_to': [null],
-            'comment': []
+            'no': [null],
+            'des': [null],
+            'type': [null],
         });
 
         // Assign get list function name, override letiable here
@@ -65,6 +60,7 @@ export class MiscellaneousItemsComponent implements OnInit {
 
     ngOnInit() {
         // Init Fn
+        this.getMiscType();
         this.getList();
         // this.getListMaster();
 
@@ -88,32 +84,50 @@ export class MiscellaneousItemsComponent implements OnInit {
         }
         //   this.showProduct = !this.showProduct;
     }
-
-
-
-
-
-
-
-
-
-
-
+    getMiscType() {
+        this.productService.getMiscTypeList().subscribe(res => {
+            this.miscTypeList = res['data'];
+        });
+    }
     getList() {
         const params = { ...this.tableService.getParams(), ...this.searchForm.value };
         Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
-        console.log(params);
-        // this.purchaseService.getListPurchaseOrder(params).subscribe(res => {
-        //     try {
-        //         this.list.items = res.data.rows;
-        //         console.log(this.list.items);
-        //         this.tableService.matchPagingOption(res.data);
-        //     } catch (e) {
-        //         console.log(e);
-        //     }
-        // });
+        this.productService.getMiscList(params).subscribe(res => {
+            try {
+                this.list.items = res.data.rows;
+                this.tableService.matchPagingOption(res.data);
+            } catch (e) {
+                console.log(e);
+            }
+        });
     }
-    openModal(){
+    openModal(isNew,isView,item ={}){
        const modalRef = this.modalService.open(MiscellaneousItemsModalComponent);
+       modalRef.componentInstance.Action= isNew;
+       modalRef.componentInstance.isView= isView;
+       modalRef.componentInstance.miscItems= item;
+       modalRef.result.then(res => {
+           if(res){
+            this.getList();
+           }
+
+
+    });
+
+    }
+      delete(id){
+        const modalRef = this.modalService.open(ConfirmModalContent);
+        modalRef.result.then(result => {
+          if (result) {
+            this.productService.deleteMisc(id).subscribe(res => {
+              try {
+                this.toastr.success(res.message);
+                this.getList();
+              } catch (e) {
+                console.log(e);
+              }
+            });
+          }
+        }); 
     }
 }

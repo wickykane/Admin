@@ -31,13 +31,19 @@ export class MiscellaneousItemsKeyService implements OnDestroy {
 
     initKey() {
         this.resetKeys();
-        this._hotkeysService.add(new Hotkey('ctrl+f', (event: KeyboardEvent): any => {
+        this._hotkeysService.add(new Hotkey('f1', (event: KeyboardEvent): any => {
+            event.preventDefault();
+            this.context.openModal(true,false);
+            event.returnValue = false;
+            return event;
+        }, undefined, 'Create'));
+        this._hotkeysService.add(new Hotkey('f2', (event: KeyboardEvent): any => {
             event.preventDefault();
             this.context.tableService.searchAction();
             event.returnValue = false;
             return event;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Search'));
-        this._hotkeysService.add(new Hotkey('ctrl+r', (event: KeyboardEvent): any => {
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Execute Search'));
+        this._hotkeysService.add(new Hotkey('f3', (event: KeyboardEvent): any => {
             event.preventDefault();
             this.context.tableService.resetAction(this.context.searchForm);
             event.returnValue = false;
