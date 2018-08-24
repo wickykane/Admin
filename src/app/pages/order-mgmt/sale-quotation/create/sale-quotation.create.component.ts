@@ -459,7 +459,7 @@ export class SaleQuotationCreateComponent implements OnInit {
             items.filter(item => item.tax_percent === tax).map(i => {
                 taxAmount += (+i.tax_percent * +i.quantity * (+i.sale_price || 0) / 100);
             });
-            this.order_info['total_tax'] = this.order_info['total_tax'] + taxAmount.toFixed(2);
+            this.order_info['total_tax'] = this.order_info['total_tax'] + +(taxAmount.toFixed(2));
             this.order_info['taxs'].push({
                 value: tax, amount: taxAmount.toFixed(2)
             });
