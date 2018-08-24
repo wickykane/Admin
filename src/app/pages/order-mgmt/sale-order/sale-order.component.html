@@ -186,7 +186,7 @@
                                        <span *ngIf="item.type == 'XD'">X-Docks</span>
                                    </td>
                                    <td class="text-center">{{item.order_date | date:'MM/dd/yyy'}}</td>
-                                   <td class="text-center">{{item.ship_date | date:'MM/dd/yyyy'}}</td>
+                                   <td class="text-center">{{item.delivery_date | date:'MM/dd/yyyy'}}</td>
                                    <td class="text-center">{{item.total_price | currency}}</td>
                                    <td>
                                        <span class="label label-draft" *ngIf="item.sts_code == 'NW'">{{item.sts}}</span>

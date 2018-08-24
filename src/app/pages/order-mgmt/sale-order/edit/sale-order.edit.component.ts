@@ -79,17 +79,12 @@ export class SaleOrderEditComponent implements OnInit {
     };
 
     public order_info = {
-        total: 0,
-        order_summary: {},
-        sub_total: 0,
-        order_date: '',
-        customer_po: '',
-        total_discount: 0,
-        buyer_id: null,
-        selected_programs: [],
-        discount_percent: 0,
-        vat_percent: 0,
-        shipping_cost: 0
+      total: 0,
+      sub_total: 0,
+      order_date: '',
+      customer_po: '',
+      buyer_id: null,
+      order_summary: {}
     };
 
     public list = {
@@ -134,9 +129,9 @@ export class SaleOrderEditComponent implements OnInit {
             'description': [null],
             'payment_term_id': [null, Validators.required],
             'approver_id': [null, Validators.required],
-            'carrier_id': [null, Validators.required],
+            'carrier_id': [2],
             'ship_method_rate': [null, Validators.required],
-            'ship_method_option': [null, Validators.required]
+            'ship_method_option': [null]
         });
         //  Init Key
         this.keyService.watchContext.next(this);
@@ -152,14 +147,19 @@ export class SaleOrderEditComponent implements OnInit {
             this.listMaster = { ...this.listMaster, ...res.data };
         });
         //  Item
-        this.list.items = this.router.getNavigatedData() || [];
+        this.list.items = [];
         const currentDt = new Date();
-        if (Object.keys(this.list.items).length === 0) { this.list.items = []; }
         this.updateTotal();
         this.copy_addr = { ...this.copy_addr, ...this.addr_select };
         this.copy_customer = { ...this.copy_customer, ...this.customer };
 
+        // Lazy Load filter
         this.data['page'] = 1;
+        const params = { page: this.data['page'], length: 15 };
+        this.orderService.getAllCustomer(params).subscribe(res => {
+            this.listMaster['customer'] = res.data.rows;
+            this.data['total_page'] = res.data.total_page;
+        });
         this.searchKey.subscribe(key => {
             this.data['page'] = 1;
             this.searchCustomer(key);
@@ -178,15 +178,13 @@ export class SaleOrderEditComponent implements OnInit {
                 const data = res.data;
                 this.generalForm.patchValue(data);
                 this.generalForm.patchValue({
-                    order_number: data.code
+                    order_number: data.code,
+                    ship_method_rate: +data.ship_method_rate,
                 });
 
 
                 // Set item and update
-                this.list.items = (data.items || []).map(item => {
-                    item.discount = item.discount_percent || 0;
-                    return item;
-                });
+                this.list.items = (data.items || []);
 
 
                 this.order_info['original_ship_cost'] = data.original_ship_cost;
@@ -198,7 +196,7 @@ export class SaleOrderEditComponent implements OnInit {
                     const idList = result.data.rows.map(item => item.id);
                     this.listMaster['customer'] = result.data.rows;
                     if (idList.indexOf(res.data.buyer_id) === -1) {
-                        this.listMaster['customer'].push({ id: res.data.buyer_id, company_name: res.data.buyer_info.buyer_name });
+                        this.listMaster['customer'].push({ id: res.data.buyer_id, company_name: res.data.buyer_name });
                     }
                     this.data['total_page'] = result.data.total_page;
                 });
@@ -282,39 +280,49 @@ export class SaleOrderEditComponent implements OnInit {
     }
 
     changeShipVia(flag?) {
-        const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id);
-        this.listMaster['options'] = carrier.options || [];
-        this.listMaster['ship_rates'] = carrier.ship_rate || [];
-        let default_option = null;
-        let default_ship_rate = null;
-        if (+this.generalForm.value.carrier_id === 3 || this.generalForm.value.carrier_id !== 999 && !carrier.own_carrirer) {
-            default_option = 888;
-            default_ship_rate = 8;
-        }
+      const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id);
+      console.log(carrier);
+      this.listMaster['options'] = carrier.options || [];
+      this.listMaster['ship_rates'] = carrier.ship_rate || [];
 
-        if (+this.generalForm.value.carrier_id === 999) {
-            default_ship_rate = 8;
-            this.generalForm.patchValue({ shipping_id: null });
-            this.generalForm.get('shipping_id').setValidators(null);
-            this.addr_select.shipping = {
-                'address_name': '',
-                'address_line': '',
-                'country_name': '',
-                'city_name': '',
-                'state_name': '',
-                'zip_code': ''
-            };
-        } else {
-            this.generalForm.get('shipping_id').setValidators([Validators.required]);
-        }
+      // Edit first time not init data
+      if (flag) {
+          return;
+      }
 
-        if (carrier.own_carrirer) {
-            default_option = null;
-            default_ship_rate = 7;
-        }
+      let default_option = null;
+      let default_ship_rate = null;
+      if (+this.generalForm.value.carrier_id === 3 || this.generalForm.value.carrier_id !== 999 && !carrier.own_carrirer) {
+          default_option = 888;
+          default_ship_rate = 8;
+      }
 
-        this.generalForm.patchValue({ ship_method_option: default_option, ship_method_rate: default_ship_rate });
-        this.generalForm.updateValueAndValidity();
+      if (+this.generalForm.value.carrier_id === 999) {
+          default_ship_rate = 8;
+          this.generalForm.patchValue({ shipping_id: null });
+          this.generalForm.get('shipping_id').setValidators(null);
+          this.addr_select.shipping = {
+              'address_name': '',
+              'address_line': '',
+              'country_name': '',
+              'city_name': '',
+              'state_name': '',
+              'zip_code': ''
+          };
+      } else {
+          this.generalForm.get('shipping_id').setValidators([Validators.required]);
+      }
+
+      if (carrier.own_carrirer) {
+          default_option = null;
+          default_ship_rate = 7;
+      }
+
+      console.log(default_ship_rate);
+      console.log(default_option);
+
+      this.generalForm.patchValue({ ship_method_option: default_option, ship_method_rate: default_ship_rate });
+      this.generalForm.updateValueAndValidity();
     }
 
     findDataById(id, arr) {
@@ -422,7 +430,8 @@ export class SaleOrderEditComponent implements OnInit {
             items.filter(item => item.tax_percent === tax).map(i => {
                 taxAmount += (+i.tax_percent * +i.quantity * (+i.sale_price || 0) / 100);
             });
-            this.order_info['total_tax'] = this.order_info['total_tax'] + taxAmount.toFixed(2);
+
+            this.order_info['total_tax'] = this.order_info['total_tax'] + +(taxAmount.toFixed(2));
             this.order_info['taxs'].push({
                 value: tax, amount: taxAmount.toFixed(2)
             });
@@ -436,6 +445,7 @@ export class SaleOrderEditComponent implements OnInit {
         const items = this.list.items.filter(i => !i.misc_id);
         this.groupTax(this.list.items);
         this.order_info.order_summary = {};
+        console.log(items);
         this.order_info.order_summary['total_item'] = items.length;
         items.forEach(item => {
             this.order_info.order_summary['total_cogs'] = (this.order_info.order_summary['total_cogs'] || 0) + (+item.cost_price || 0) * (item.quantity || 0);
@@ -445,7 +455,7 @@ export class SaleOrderEditComponent implements OnInit {
 
 
         this.list.items.forEach(item => {
-            item.amount = (+item.quantity * (+item.sale_price || 0)) * (100 - (+item.discount || 0)) / 100;
+            item.amount = (+item.quantity * (+item.sale_price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
             this.order_info.sub_total += item.amount;
         });
 
@@ -464,10 +474,8 @@ export class SaleOrderEditComponent implements OnInit {
         const modalRef = this.modalService.open(PromotionModalContent, { size: 'lg' });
         modalRef.result.then(res => {
             if ((res) instanceof Array && res.length > 0) {
-                this.order_info.selected_programs = res;
                 const params = {};
                 params['buyer_id'] = this.order_info.buyer_id;
-                params['selected_programs'] = this.order_info.selected_programs;
                 params['items'] = this.list.items;
                 this.orderService.previewOrder(params).subscribe(response => {
                     try {
@@ -610,14 +618,12 @@ export class SaleOrderEditComponent implements OnInit {
 
     createOrder(type) {
         const products = this.list.items.map(item => {
-            item.discount_percent = item.discount;
-            item.is_item = (item.misc_id) ? 0 : 1;
-            item.misc_id = (item.misc_id) ? null : 1;
-            item.is_shipping_free = 1;
-            item.item_id = (item.item_id) ? (item.item_id) : (item.id);
-            item.item_type = (item.item_type) ? (item.item_type) : (item.type);
-            item.item_condition_id = (item.is_item) ? (item.item_condition_id) : null;
-            return item;
+          item.is_item = (item.misc_id) ? 0 : 1;
+          item.misc_id = (item.misc_id) ? item.misc_id : null;
+          item.item_id = (item.item_id) ? (item.item_id) : null;
+          item.is_shipping_free = (item.is_item) ? (item.is_shipping_free) : 0;
+          item.item_condition_id = (item.is_item) ? (item.item_condition_id) : null;
+          return item;
         });
 
         let params = {};
@@ -626,7 +632,7 @@ export class SaleOrderEditComponent implements OnInit {
                 params = {
                     'items': products,
                     'is_draft_order': 0,
-                    'order_sts_id': 6
+                    'order_sts_id': 1
                 };
                 break;
             case 'quote':
@@ -653,6 +659,8 @@ export class SaleOrderEditComponent implements OnInit {
                     setTimeout(() => {
                         this.router.navigate(['/order-management/sale-order']);
                     }, 500);
+                } else {
+                    this.toastr.error(res.message);
                 }
             } catch (e) {
                 console.log(e);
