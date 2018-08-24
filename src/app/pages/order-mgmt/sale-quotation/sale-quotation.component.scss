@@ -81,50 +81,66 @@
     // margin-left: -5px;
 }
 
-.dashboard-content .dashboard-stat.blue {
-    background-color: #70BAEB;
+.dashboard-content .dashboard-stat.blue, .bg-blue {
+    background-color: #70BAEB !important;
+    color: #fff !important;
 }
 
-.dashboard-content .dashboard-stat.darkblue {
+.dashboard-content .dashboard-stat.darkblue,  .bg-darkblue  {
     background-color: #7197EA;
+    color: #fff !important;    
 }
 
-.dashboard-content .dashboard-stat.red {
+.dashboard-content .dashboard-stat.red, .bg-red {
     background-color: #E74F5B;
+    color: #fff !important;    
 }
 
-.dashboard-content .dashboard-stat.lemon {
+.dashboard-content .dashboard-stat.lemon, .bg-lemon {
     background-color: #C2C262;
+    color: #fff !important;    
 }
 
-.dashboard-content .dashboard-stat.green {
+.dashboard-content .dashboard-stat.green, .bg-green {
     background-color: #32c5d2;
+    color: #fff !important;    
 }
 
-.dashboard-content .dashboard-stat.magenta {
+.dashboard-content .dashboard-stat.magenta, .bg-magenta {
     background-color: #A48AD4;
+    color: #fff !important;    
 }
 
-.dashboard-content .dashboard-stat.strong-green {
+.dashboard-content .dashboard-stat.strong-green, .bg-strong-green {
     background-color: #45C37A;
+    color: #fff !important;    
 }
 
-.dashboard-content .dashboard-stat.bright-grey {
+.dashboard-content .dashboard-stat.bright-grey, .bg-bright-grey {
     background-color: #999999;
+    color: #fff !important;    
 }
 
-.dashboard-content .dashboard-stat.rock-blue {
+.dashboard-content .dashboard-stat.rock-blue, .bg-rock-blue {
     background-color: #949FB1;
+    color: #fff !important;    
 }
 
-.dashboard-content .dashboard-stat.texas-rose {
+.dashboard-content .dashboard-stat.texas-rose, .bg-texas-rose {
     background-color: #FDB45C;
+    color: #fff !important;    
 }
 
 .dashboard-content .dashboard-stat {
     display: block;
     margin-bottom: 0;
     overflow: hidden;
+    img {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        opacity: 0.2;
+    }
 }
 
 .dashboard-content .dashboard-stat.dashboard-stat-v2 .visual {

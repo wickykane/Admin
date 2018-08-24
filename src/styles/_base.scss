@@ -866,3 +866,10 @@ ngu-carousel {
 .ng-select .ng-select-container .ng-value-container {
     top: 0 !important;
 }
+
+// Modal
+.modal-md {
+    .modal-dialog {
+        max-width: 500px;        
+    }
+}
