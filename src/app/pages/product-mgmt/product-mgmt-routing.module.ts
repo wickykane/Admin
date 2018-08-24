@@ -23,7 +23,7 @@ import { ProductMgmtComponent } from './product-mgmt.component';
 import { MassPriceComponent } from './mass-price/mass-price.component';
 import { MassPriceCreateComponent } from './mass-price/mass-price.create.component';
 import { MassPriceViewComponent } from './mass-price/mass-price.view.component';
-
+import { MiscellaneousItemsComponent } from './miscellaneous-items/list/miscellaneous-items.component';
 const routes: Routes = [
     {
         path: '',
@@ -36,6 +36,10 @@ const routes: Routes = [
     {
         path: 'part-list',
         component: PartListComponent
+    },
+    {
+        path: 'miscellaneous-list',
+        component: MiscellaneousItemsComponent
     },
     {
         path: 'part-list/detail/:id',
