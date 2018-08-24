@@ -148,4 +148,33 @@ export class ProductService {
         const url = 'item/part-list';
         return this.apiService.get(url, params);
     }
+    getMiscTypeList() {
+        const url = 'misc/types';
+        return this.apiService.get(url);
+    }
+    getMiscList(params) {
+        const url = 'misc';
+        return this.apiService.get(url,params);
+    }
+    createNewMiscItems(params) {
+        const url = 'misc';
+        return this.apiService.post(url,params);
+    }
+    updateMiscItems(id,params) {
+        const url = 'misc/'+id;
+        return this.apiService.put(url,params);
+    }
+    generateMiscNumber(){
+        const url = 'misc/generate-number';
+        return this.apiService.get(url);
+    }
+    getAccountList(){
+        const url = 'account/getTree';
+        return this.apiService.get(url);
+    }
+    deleteMisc(id){
+        const url = 'misc/'+id;
+        return this.apiService.delete(url);
+    }
+    
 }
