@@ -397,20 +397,20 @@
                   <table class="table table-bordered table-order" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                   <thead>
                      <tr>
-                        <th style="width:100px" translate>Action</th>
-                        <th style="width:150px" translate>Item No</th>
+                        <th style="width:70px" translate>Action</th>
+                        <th style="width:100px" translate>Item No</th>
                         <th translate>Description</th>
                         <th translate>Condition</th>
                         <th translate>UOM</th>
                         <th translate>Free Ship</th>
-                        <th translate style="width:100px">Avail QTY</th>
+                        <th translate>Avail QTY</th>
                         <th class="text-nowrap" style="width:100px" translate>Order QTY</th>
                         <th class="text-center" style="width:100px" translate>Unit Price</th>
                         <th style="width:100px" translate>Disc %</th>
                         <th style="width:100px" translate>Tax %</th>
-                        <th translate style="width:100px">Amount</th>
-                        <th translate style="width:100px">G/L Account</th>
-                        <th translate style="width:100px">Price Source</th>
+                        <th translate>Amount</th>
+                        <th translate>G/L Account</th>
+                        <th translate>Price Source</th>
                      </tr>
                   </thead>
                   <tr *ngIf="list['items'].length === 0">
