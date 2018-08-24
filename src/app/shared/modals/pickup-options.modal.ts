@@ -64,7 +64,7 @@ export class PickupOptionsModalComponent implements OnInit, OnDestroy {
             }
             var weekDaysList = Object.assign([],this.weekDaysList);
             this.wareHouseList.map(item=>{
-                item['data']= Object.assign([],weekDaysList);
+                item['data']= weekDaysList;
             });
             this.setWareHouseTimer(this.generalForm.value.warehouse);
         }
@@ -113,7 +113,6 @@ export class PickupOptionsModalComponent implements OnInit, OnDestroy {
         item.splice(index, 1);
     }
     setWareHouseTimer(id){
-        console.log(this.timeList);
         this.wareHouseList.forEach(item=>{
             if(item.id ==id){
                 this.timeList = item;
@@ -123,8 +122,6 @@ export class PickupOptionsModalComponent implements OnInit, OnDestroy {
     }
     checkValue(isCheck,item){
         return item.selected = isCheck;
-        console.log(isCheck);
-        console.log(this.wareHouseList);
     }
     trackByFn(index, item) {
         return index; // or item.id
