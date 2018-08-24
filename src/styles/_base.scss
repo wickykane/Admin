@@ -858,7 +858,7 @@ ngu-carousel {
 .tabs-order.full-width {
     .nav-tabs {
         margin-left: -10px;
-        margin-right: -10px;        
+        margin-right: -10px;
     }
 }
 .icon-blue{
@@ -878,3 +878,8 @@ ngu-carousel {
      background-color: green;
  }
 } 
+
+// Custom Select 2
+.ng-select .ng-select-container .ng-value-container {
+    top: 0 !important;
+}

@@ -38,19 +38,7 @@ export class PayTermCreateComponent implements OnInit {
             'ac': [0, Validators.required]
         });
         this.keyService.watchContext.next(this);
-        this.generalForm.get('early_pmt_incentive').valueChanges.map(
-            value => {
-                if (value) {
-                    this.generalForm.get('dsct_day').setValidators(Validators.required);
-                    this.generalForm.get('dsct_value').setValidators(Validators.required);
-                    this.generalForm.get('dsct_type').setValidators(Validators.required);
-                } else {
-                    this.generalForm.get('dsct_day').clearValidators();
-                    this.generalForm.get('dsct_value').clearValidators();
-                    this.generalForm.get('dsct_type').clearValidators();
-                }
-            }
-        );
+        this.changeIncentive();
     }
 
     ngOnInit() {
@@ -91,10 +79,41 @@ export class PayTermCreateComponent implements OnInit {
             console.log(err);
         });
     }
+
+    changeIncentive(e?) {
+        if (e) {
+            if (e.target.checked) {
+                this.generalForm.get('dsct_day').setValidators(Validators.required);
+                this.generalForm.get('dsct_value').setValidators(Validators.required);
+                this.generalForm.get('dsct_type').setValidators(Validators.required);
+            } else {
+                this.generalForm.get('dsct_day').clearValidators();
+                this.generalForm.get('dsct_value').clearValidators();
+                this.generalForm.get('dsct_type').clearValidators();
+            }
+
+        } else {
+            this.generalForm.get('early_pmt_incentive').valueChanges.map(
+                value => {
+                    if (value) {
+                        this.generalForm.get('dsct_day').setValidators(Validators.required);
+                        this.generalForm.get('dsct_value').setValidators(Validators.required);
+                        this.generalForm.get('dsct_type').setValidators(Validators.required);
+                    } else {
+                        this.generalForm.get('dsct_day').clearValidators();
+                        this.generalForm.get('dsct_value').clearValidators();
+                        this.generalForm.get('dsct_type').clearValidators();
+                    }
+                }
+            );
+        }
+    }
+
     getDetailPaymentTerm(id) {
         if (id) {
             this.paytermService.getDetailPayment(id).subscribe(res => {
                 this.generalForm.patchValue(res.data);
+                this.changeIncentive();
             }, err => {
                 console.log(err.message);
             });

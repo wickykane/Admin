@@ -160,7 +160,7 @@
                               <div class="form-group row">
                                  <label class='col-6'>Salesperson<span class="text-danger">(*)</span></label>
                                  <div class='col-6 text-primary'>
-                                    <select class="form-control" name="sale_person_id" formControlName="sales_pesale_person_idrson">
+                                    <select class="form-control" name="sale_person_id" formControlName="sale_person_id">
                                     <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                     <option *ngFor="let item of listMaster['sale_mans']" [ngValue]="item.id">{{item.full_name}}</option>
                                     </select>
@@ -430,7 +430,7 @@
                         <td class="text-center">
                             <i *ngIf="item.is_shipping_free" class="text-success fa fa-check"></i>
                         </td>
-                        <td>{{item.qty_avail}}</td>
+                        <td>{{item.qty_available}}</td>
                         <td>
                            <input [disabled]="item.is_misc" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (change)="updateTotal()" (keypress)="_keyPress($event)">
                         </td>
@@ -438,15 +438,15 @@
                            <div>
                               <span>$</span>
                               <div style="display:inline-block;width:80%">
-                                 <input [textMask]="{mask: numberMaskObject()}" class="form-control input-sm" type="number" [(ngModel)]="item.sale_price" (change)="updateTotal();changeFromSource(item)">
+                                 <input OnlyNumber [textMask]="{mask: numberMaskObject()}" class="form-control input-sm" type="number" [(ngModel)]="item.sale_price" (change)="updateTotal();changeFromSource(item)">
                               </div>
                            </div>
                         </td>
                         <td>
-                           <input [textMask]="{mask: numberMaskObject()}" class="form-control input-sm" type="number" [(ngModel)]="item.discount" (change)="updateTotal();changeFromSource(item)">
+                           <input OnlyNumber [textMask]="{mask: numberMaskObject()}" class="form-control input-sm" type="number" [(ngModel)]="item.discount_percent" (change)="updateTotal();changeFromSource(item)">
                         </td>
                         <td>
-                           <input [textMask]="{mask: numberMaskObject()}" class="form-control input-sm" type="number" [(ngModel)]="item.tax_percent" (change)="updateTotal();changeFromSource(item)">
+                           <input [disabled]="true" OnlyNumber [textMask]="{mask: numberMaskObject()}" class="form-control input-sm" type="number" [(ngModel)]="item.tax_percent" (change)="updateTotal();changeFromSource(item)">
                         </td>
                         <td class="text-center">
                            <span>{{item.amount | currency}}</span>
@@ -557,7 +557,7 @@
 
                      <div *ngFor="let item of order_info['taxs']" class="form-group row">
                          <label class='col-5 control-label'>+ TAX ({{item.value}}%):</label>
-                         <div class='col-5 padding-lr-10'>
+                         <div class='col-6 offset-md-1 padding-lr-10'>
                              <input class="form-control" readonly="true" [(ngModel)]="item.amount" class="form-control" value="0" type="number">
                          </div>
                      </div>

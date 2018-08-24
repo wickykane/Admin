@@ -40,7 +40,8 @@ export class ItemMiscModalContent implements OnInit {
         this.searchForm = fb.group({
             'no': [null],
             'des': [null],
-            'type': [null]
+            'type': [null],
+            'tax': 1
         });
 
         //  Assign get list function name, override variable here

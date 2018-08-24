@@ -1,10 +1,10 @@
 <div class='address-tab'>
     <div class="bd-example text-right">
         <button class="btn btn-outline-dark" (click)="cancel()"><i class="fa fa-share-square" ></i>Cancel</button>
-        <button *ngIf="_orderDetail['order_sts_short_name'] == 'SM'" class="btn btn-outline-dark" (click)="putApproveOrder(orderId)"><i class="fa fa-check-square"></i>Approve</button>
-        <button *ngIf="_orderDetail['order_sts_short_name'] == 'SM'" class="btn btn-outline-dark" (click)="updateStatusOrder(orderId, 7)"><i class="fa fa-ban"></i>Reject</button>
-        <button *ngIf="_orderDetail['order_sts_short_name'] == 'NW'" class="btn btn-outline-dark" (click)="updateStatusOrder(orderId, 6)"><i class="fa fa-check-circle"></i>Submit</button>
-        <a *ngIf="_orderDetail['order_sts_short_name'] == 'NW'" class="btn btn-outline-dark" [routerLink]="['/order-management/sale-order/edit/', orderId]"><i class="fa fa-edit"></i>Edit</a>
+        <button *ngIf="_orderDetail['order_sts_short_name'] == 'SM'" class="btn btn-outline-dark" (click)="putApproveOrder(_orderId)"><i class="fa fa-check-square"></i>Approve</button>
+        <button *ngIf="_orderDetail['order_sts_short_name'] == 'SM'" class="btn btn-outline-dark" (click)="updateStatusOrder(_orderId, 7)"><i class="fa fa-ban"></i>Reject</button>
+        <button *ngIf="_orderDetail['order_sts_short_name'] == 'NW'" class="btn btn-outline-dark" (click)="updateStatusOrder(_orderId, 6)"><i class="fa fa-check-circle"></i>Submit</button>
+        <a *ngIf="_orderDetail['order_sts_short_name'] == 'NW'" class="btn btn-outline-dark" [routerLink]="['/order-management/sale-order/edit/', _orderId]"><i class="fa fa-edit"></i>Edit</a>
     </div>
     <section class="rma-page block main-container block-order">
        <div class="row block-info">
@@ -19,11 +19,11 @@
 
                             <div class="col-md-4">
                                <div class="form-group">
-                                  <label for="code" class="control-label" translate> <strong>Customer Name</strong> </label>
-                                  <span class="text-danger">(*)</span>
+                                  <label for="code" class="control-label" translate> <strong>Customer Name : {{detail['buyer_name']}}</strong> </label>
+                                  <!-- <span class="text-danger">(*)</span>
                                   <div>
-                                     {{detail['company_name']}}
-                                  </div>
+                                     {{detail['buyer_name']}}
+                                  </div> -->
                                </div>
                             </div>
 
@@ -63,7 +63,7 @@
                                      <span class="text-danger">(*)</span>
                                      </label>
                                      <div class='col-6 text-primary'>
-                                        {{detail['cus_po']}}
+                                        {{detail['customer_po']}}
                                      </div>
                                   </div>
                                   <div class="form-group row">
@@ -109,7 +109,7 @@
                                      <span class="text-danger">(*)</span>
                                      </label>
                                      <div class='col-6 text-danger'>
-                                          {{detail['payment_term']}}
+                                          {{detail['payment_term_name']}}
                                      </div>
                                   </div>
                                   <div class="form-group row">
@@ -143,16 +143,6 @@
                       </div>
                       <div class="card-body p-25">
                          <div class="row">
-                            <div class="col-12">
-                               <div class="form-group row">
-                                  <label class="control-label col-5" for="billing_to" translate> Label
-                                  <span class="text-danger">(*)</span>
-                                  </label>
-                                  <div class="col-7">
-                                     {{detail.billing['address_name']}}
-                                  </div>
-                               </div>
-                            </div>
                             <div class="col-12">
                                <div class="form-group row">
                                   <label class="control-label col-5" translate>Address</label>
@@ -196,16 +186,6 @@
                       </div>
                       <div class="card-body p-25">
                          <div class="row">
-                            <div class="col-12">
-                               <div class="form-group row">
-                                  <label class="control-label col-5" for="billing_to" translate> Label
-                                  <span class="text-danger">(*)</span>
-                                  </label>
-                                  <div class="col-7">
-                                     {{detail.shipping['address_name']}}
-                                  </div>
-                               </div>
-                            </div>
                             <div class="col-12">
                                <div class="form-group row">
                                   <label class="control-label col-5" translate>Address</label>
@@ -274,7 +254,7 @@
                                   <span class="text-danger">(*)</span>
                                   </label>
                                   <div class='col-6'>
-                                     {{detail['ship_method_option']}}
+                                     {{detail['shipping_method_option_name']}}
                                   </div>
                                </div>
 
@@ -283,7 +263,7 @@
                                   <span class="text-danger">(*)</span>
                                   </label>
                                   <div class='col-6'>
-                                     {{detail['ship_rate']}}
+                                     {{detail['shipping_method_rate_name']}}
                                   </div>
                                </div>
 
@@ -314,7 +294,7 @@
                       <table class="table table-bordered table-order">
                       <thead>
                          <tr>
-                            <th style="width:100px" translate>Action</th>
+                            <!-- <th style="width:100px" translate>Action</th> -->
                             <th style="width:150px" translate>Item No</th>
                             <th translate>Description</th>
                             <th translate>Condition</th>
@@ -335,11 +315,8 @@
                          </tr>
                       <tbody *ngFor="let item of detail['subs']; let $index = index;">
                          <tr>
-                            <td>
-                               <!-- <button class="btn btn-danger btn-xs" type="button" (click)="deleteAction(item.item_id, item.item_condition_id)">
-                               <i class="fa fa-trash"></i>
-                               </button> -->
-                            </td>
+                            <!-- <td>
+                            </td> -->
                             <td>{{item.sku}}</td>
                             <td>{{item.des}}</td>
                             <td>{{item.condition_name}}</td>
@@ -347,26 +324,26 @@
                             <td class="text-center">
                                 <i *ngIf="item.is_shipping_free" class="text-success fa fa-check"></i>
                             </td>
-                            <td>{{item.qty_avail}}</td>
+                            <td>{{item.qty_available}}</td>
                             <td>
-                               <input [disabled]="item.is_misc" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (change)="updateTotal()" (keypress)="_keyPress($event)">
+                               <input readonly [disabled]="item.is_misc" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (change)="updateTotal()" (keypress)="_keyPress($event)">
                             </td>
                             <td>
                                <div>
                                   <span>$</span>
                                   <div style="display:inline-block;width:80%">
-                                     <input class="form-control input-sm" type="number" [(ngModel)]="item.sale_price" (change)="updateTotal();changeFromSource(item)">
+                                     <input readonly class="form-control input-sm" type="number" [(ngModel)]="item.sale_price" (change)="updateTotal();changeFromSource(item)">
                                   </div>
                                </div>
                             </td>
                             <td>
-                               <input class="form-control input-sm" type="number" [(ngModel)]="item.discount" (change)="updateTotal();changeFromSource(item)">
+                               <input readonly class="form-control input-sm" type="number" [(ngModel)]="item.discount_percent" (change)="updateTotal();changeFromSource(item)">
                             </td>
                             <td>
-                               <input class="form-control input-sm" type="number" [(ngModel)]="item.tax_percent" (change)="updateTotal();changeFromSource(item)">
+                               <input readonly class="form-control input-sm" type="number" [(ngModel)]="item.tax_percent" (change)="updateTotal();changeFromSource(item)">
                             </td>
                             <td class="text-center">
-                               <span>{{item.amount | currency}}</span>
+                               <span>{{item.total_price | currency}}</span>
                             </td>
                             <td>
                                 {{ item.income_account_name }}
@@ -458,11 +435,10 @@
                                <strong>{{detail['sub_total_price'] | currency}}</strong>
                             </div>
                          </div>
-
-                         <div *ngFor="let item of detail['taxs']" class="form-group row">
+                         <div *ngFor="let item of order_info['taxs']" class="form-group row">
                              <label class='col-5 control-label'>+ TAX ({{item.value}}%):</label>
-                             <div class='col-5 padding-lr-10'>
-
+                             <div class='col-6 offset-md-1 padding-lr-10'>
+                                 <input class="form-control" readonly="true" [(ngModel)]="item.amount" class="form-control" value="0" type="number">
                              </div>
                          </div>
                          <div class="form-group row margin-lr-0 text-light bg-danger">
@@ -470,7 +446,7 @@
                                  <strong>Grand Total:</strong>
                              </label>
                              <div class="col-6 offset-md-1 ">
-                                 <strong>{{detail['total'] | currency}}</strong>
+                                 <strong>{{detail['total_price'] | currency}}</strong>
                              </div>
                          </div>
                       </div>
