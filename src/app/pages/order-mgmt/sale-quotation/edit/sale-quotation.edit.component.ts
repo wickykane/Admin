@@ -521,7 +521,7 @@ export class SaleQuotationEditComponent implements OnInit {
         });
     }
 
-    createOrder(type) {
+    createOrder(type, is_draft_sq?) {
         const items = this.list.items.map(item => {
             item.discount_percent = item.discount;
             item.is_item = (item.misc_id) ? 0 : 1;
@@ -532,7 +532,8 @@ export class SaleQuotationEditComponent implements OnInit {
             ...this.generalForm.value,
             status_id: type,
             original_ship_cost: this.order_info['original_ship_cost'],
-            items
+            items,
+            is_draft_sq: is_draft_sq || 0,
         };
 
         this.orderService.updateQuoteOrder(this.data['id'], params).subscribe(res => {

@@ -277,5 +277,9 @@ export class OrderService {
         const url = 'sale-quote/clone/' + id;
         return this.API.post(url);
     }
+    getQuoteCountStatus() {
+        const url = 'sale-quote/count-status';
+        return this.API.get(url);
+    }
 
 }
