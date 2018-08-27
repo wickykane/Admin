@@ -132,7 +132,7 @@ export class SaleOrderCreateComponent implements OnInit {
             'approver_id': [null, Validators.required],
             'carrier_id': [2],
             'ship_method_rate': [null, Validators.required],
-            'ship_method_option': [null, Validators.required]
+            'ship_method_option': [null]
         });
         //  Init Key
         this.keyService.watchContext.next(this);
