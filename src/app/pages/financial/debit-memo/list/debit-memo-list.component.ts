@@ -98,7 +98,9 @@ export class DebitMemoListComponent implements OnInit {
         this.renderer.invokeElementMethod(this.drNoInput.nativeElement, 'focus');
     }
 
-    addNewDebitMemo() {}
+    addNewDebitMemo() {
+        this.router.navigate(['/financial/debit-memo/create']);
+    }
 
     onSubmitDebitMemo() {
         const modalRef = this.modalService.open(ConfirmModalContent);

@@ -1,0 +1,419 @@
+<div [@routerTransition]>
+    <app-page-header [heading]="'CREATE NEW DEBIT MEMO'"></app-page-header>
+    <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
+    <section class="rma-page block main-container block-order">
+        <div class="row block-info">
+            <div class="col-md-6 p-l-5 p-r-2">
+                <div class="card height-100">
+                    <div class="card-header">
+                        <strong>GENERAL INFORMATION</strong>
+                    </div>
+                    <div class="card-body">
+                        <div class="row information height-100">
+                            <form class="form-search full-width form-inline border-bottom">
+                                <div class="col-md-12 p-l-5 p-r-5">
+                                    <div class="form-group">
+                                        <label for="code" class="control-label" translate><strong>Customer Name</strong>
+                                        </label>
+                                        <span class="text-danger">(*)</span>
+                                        <div>
+                                            <ng-select style="width: 110px; margin-left: 2px;">
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="col-md-12 fix-padding">
+                                <form>
+                                    <div class="row">
+                                        <div class="col-md-4 bolder">
+                                            <div class="form-group row">
+                                                <label class='col-6 control-label'>Contact</label>
+                                                <div class='col-6 text-primary'>
+                                                    <form>
+                                                        <select class="form-control">
+                                                            <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
+                                                        </select>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class='col-6'>Phone</label>
+                                                <div class='col-6 '></div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class='col-6'>Email</label>
+                                                <div class='col-6 '></div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class='col-6'>Discount Level</label>
+                                                <div class='col-6 text-success'></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group row">
+                                                <label class='col-6'>Debit Memo No<span class="text-danger">(*)</span>
+                                                </label>
+                                                <div class='col-6 text-primary'></div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class='col-6'>Issue Date
+                                                    <span class="text-danger">(*)</span>
+                                                </label>
+                                                <div class='col-6 text-danger'>
+                                                    <div clickOutside (clickOutside)="d.close()" class="input-group">
+                                                        <input class="form-control" placeholder="mm/dd/yyyy" name="dp" ngbDatepicker #d="ngbDatepicker">
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                                                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class='col-6'>Document Type
+                                                    <span class="text-danger">(*)</span>
+                                                </label>
+                                                <div class='col-6 text-primary'>
+                                                    <select required class="form-control" id="order_type">
+                                                        <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class='col-6'>Document No
+                                                    <span class="text-danger">(*)</span>
+                                                </label>
+                                                <div class='col-6 text-primary'>
+                                                    <select required class="form-control" id="order_type">
+                                                        <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class='col-6'>Status
+                                                    <span class="text-danger">(*)</span>
+                                                </label>
+                                                <div class='col-6 text-primary'>
+                                                    1 - New
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 bolder">
+                                            <div class="form-group row">
+                                                <label class='col-6'>Payment Method<span class="text-danger">(*)</span></label>
+                                                <div class='col-6 text-primary'>
+                                                    <select class="form-control" name="payment_method_id">
+                                                        <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class='col-6'>Payment Terms<span class="text-danger">(*)</span>
+                                                </label>
+                                                <div class='col-6 text-danger'>
+                                                    <select class="form-control" name="payment_term_id">
+                                                        <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class='col-6'>Due Date<span class="text-danger">(*)</span>
+                                                </label>
+                                                <div class='col-6 text-primary'>
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class='col-6'>Salesperson<span class="text-danger">(*)</span></label>
+                                                <div class='col-6 text-primary'>
+                                                    <select class="form-control" name="sale_person_id">
+                                                        <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class='col-6'>Approver<span class="text-danger">(*)</span>
+                                                </label>
+                                                <div class='col-6'>
+                                                    <select class="form-control" name="approver_id">
+                                                        <option [hidden]="true" [disabled]="false" [ngValue]="null">--Select--</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6" style="padding-right: 18px;">
+                <div class="row  height-100">
+                    <div class="col-4 p-l-0 p-r-2">
+                        <div class="card height-100">
+                            <div class="card-header">
+                                <strong>Bill To</strong>
+                            </div>
+                            <div class="card-body p-25">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <form>
+                                            <div class="form-group row">
+                                                <label class="control-label col-5" translate> Label
+                                                    <span class="text-danger">(*)</span>
+                                                </label>
+                                                <div class="col-7">
+                                                    <select required class="form-control" id="billing_to" name="search_type">
+                                                        <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group row">
+                                            <label class="control-label col-5" translate>Address</label>
+                                            <div class="col-7"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group row">
+                                            <label class=" control-label col-5" translate>City / State</label>
+                                            <div class="col-7"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group row">
+                                            <label class="control-label col-5" translate>Zip</label>
+                                            <div class="col-7"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group row">
+                                            <label class="control-label col-5" translate>Country</label>
+                                            <div class="col-7"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4 p-l-0 p-r-2">
+                        <div class="card height-100">
+                            <div class="card-header">
+                                <strong>Ship To</strong>
+                            </div>
+                            <div class="card-body p-25">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-group row">
+                                            <label class=" control-label col-5" translate>Label</label>
+                                            <div class="col-7"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group row">
+                                            <label class=" control-label col-5" translate>Address</label>
+                                            <div class="col-7"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group row">
+                                            <label class=" control-label col-5" translate>City / State</label>
+                                            <div class="col-7"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group row">
+                                            <label class=" control-label col-5" translate>Zip</label>
+                                            <div class="col-7"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group row">
+                                            <label class="control-label col-5" translate>Country</label>
+                                            <div class="col-7"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4 p-l-0 p-r-2">
+                        <div class="card height-100">
+                            <div class="card-header">
+                                <strong>Shipping Method</strong>
+                            </div>
+                            <div class="card-body p-25">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-group row">
+                                            <label class='col-6'>Warehouse
+                                                <span class="text-danger">(*)</span>
+                                            </label>
+                                            <div class="col-6"></div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-6'>Ship Via
+                                                <span class="text-danger">(*)</span>
+                                            </label>
+                                            <div class="col-6"></div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-6'>Option
+                                                <span class="text-danger">(*)</span>
+                                            </label>
+                                            <div class='col-6'></div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-6'>Ship Rate
+                                                <span class="text-danger">(*)</span>
+                                            </label>
+                                            <div class='col-6'></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mg-top-10">
+            <div class="col-12 padding-lr-5">
+                <div class="card no-border">
+                    <div class="card-header">
+                        <strong>Line Items</strong>
+                    </div>
+                    <div class="card-body no-padding">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-order">
+                                <thead>
+                                    <tr>
+                                        <th style="width:70px" translate><b>Action</b></th>
+                                        <th><b>Item No</b></th>
+                                        <th><b>Description</b></th>
+                                        <th><b>Condition</b></th>
+                                        <th><b>UOM</b></th>
+                                        <th><b>QTY</b></th>
+                                        <th><b>Unit Price</b></th>
+                                        <th><b>Disc %</b></th>
+                                        <th><b>Tax %</b></th>
+                                        <th><b>Amount</b></th>
+                                        <th><b>G/L Account</b></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="100%" class="text-center" translate>No data.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <button class="btn btn-xs" type="button">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </td>
+                                        <td>SKU-00003</td>
+                                        <td>0198SE1</td>
+                                        <td>Good</td>
+                                        <td>Each</td>
+                                        <td>
+                                            <input>
+                                        </td>
+                                        <td>
+                                            <span>$</span>
+                                            <input>
+                                        </td>
+                                        <td>
+                                            <input>
+                                        </td>
+                                        <td>
+                                            <input>
+                                        </td>
+                                        <td>$ 2,250,000.00</td>
+                                        <td>G/L Account 1</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-12 no-padding">
+                            <button class="btn btn-link" (click)="openModalAddItemsOrder()" translate>
+                                <i class="fa fa-plus"></i> Item From Order
+                            </button>
+                            <button class="btn btn-link" (click)="openModalAddMiscItems()" translate>
+                                <i class="fa fa-plus"></i> Misc Item
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mg-top-10 padding-child-5 justify-content-end">
+            <div class="col-md-5">
+                <div class="card height-100">
+                    <div class="card-header">
+                        <strong>Note</strong>
+                    </div>
+                    <div class="card-body no-padding">
+                        <form>
+                            <div>
+                                <textarea class="form-control border-0" rows="11" style="resize:none"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card height-100">
+                    <div class="card-header">
+                        <strong>Debit Memo Total</strong>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group row">
+                                    <label class='col-3 control-label'>Sub Total</label>
+                                    <div class='col-9'>
+                                        <span class="text-success">$ 3,300,000.00</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class='col-3 control-label'>Tax (10%0</label>
+                                    <div class='col-9'>
+                                        <span class="text-success">$</span>
+                                        <input>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class='col-3 control-label'>Tax 20%</label>
+                                    <div class='col-9'>
+                                        <span class="text-success">$</span>
+                                        <input>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class='col-3 control-label'>Total Due</label>
+                                    <div class='col-9'>
+                                        <span class="text-success">$ 3,660,000.00</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 mg-top-15 text-center">
+                <button type="button" class="btn btn-secondary" translate>BACK TO LIST</button>
+                <button type="button" class="btn btn-primary" translate>SAVE AS DRAFT</button>
+                <button type="button" class="btn btn-danger" translate>SAVE & SUBMIT</button>
+                <button type="button" class="btn btn-default" translate>SAVE & VALIDATE</button>
+                <button type="button" class="btn btn-success" translate>SAVE & CREATE NEW DEBIT</button>
+            </div>
+        </div>
+    </section>
+</div>

@@ -22,9 +22,13 @@ import { FinancialRoutingModule } from './financial-routing.module';
 import { FinancialService } from './financial.service';
 import { PaymentComponent } from './payment/payment.component';
 
+import { DebitMemoCreateComponent } from './debit-memo/create/debit-memo-create.component';
 import { DebitMemoService } from './debit-memo/debit-memo.service';
 import { DebitMemoListComponent } from './debit-memo/list/debit-memo-list.component';
+import { ItemsOrderDebitModalContent } from './debit-memo/modals/items-order/items-order.modal';
+import { MiscItemsDebitModalContent } from './debit-memo/modals/misc-items/misc-items.modal';
 import { SendMailDebitModalContent } from './debit-memo/modals/send-email/send-mail.modal';
+
 
 import { CKEditorModule } from 'ng2-ckeditor';
 
@@ -55,11 +59,16 @@ import { ItemModalModule } from '../../shared/modals/item.module';
         InvoiceDocumentTabComponent,
         PaymentComponent,
         DebitMemoListComponent,
-        SendMailDebitModalContent
+        DebitMemoCreateComponent,
+        SendMailDebitModalContent,
+        ItemsOrderDebitModalContent,
+        MiscItemsDebitModalContent
     ],
     providers: [FinancialService, DebitMemoService, TableService, DatePipe, Helper],
     entryComponents: [
-        SendMailDebitModalContent
+        SendMailDebitModalContent,
+        ItemsOrderDebitModalContent,
+        MiscItemsDebitModalContent
     ]
 })
 export class FinancialModule { }
