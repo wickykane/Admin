@@ -41,7 +41,8 @@ export class ItemMiscModalContent implements OnInit {
             'no': [null],
             'des': [null],
             'type': [null],
-            'tax': 1
+            'tax': 1,
+            'sts': 1
         });
 
         //  Assign get list function name, override variable here
