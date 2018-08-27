@@ -17,7 +17,7 @@
                                         </label>
 
                                         <div class="col-7">
-                                            ZONE-00001
+                                            {{listMasterData['cd']}}
                                         </div>
                                     </div>
                                 </div>
@@ -91,7 +91,7 @@
 
                                         </label>
                                         <div class="col-7" style="text-align: right">
-                                            <label>{{item.state.length}} of <span *ngIf="listMasterData['state'][item.country_code]">{{listMasterData['state'][item.country_code].length}} States</span><span *ngIf="listMasterData['state'][item.country_code] == undefined">0 States</span></label>
+                                            <label>{{calculateStateLength(item.state)}} of <span *ngIf="listMasterData['state'][item.country_code]">{{listMasterData['state'][item.country_code].length}} States</span><span *ngIf="listMasterData['state'][item.country_code] == undefined">0 States</span></label>
                                             <a class="btn btn-default " title="Edit" (click)="openState(item.country_code)">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>

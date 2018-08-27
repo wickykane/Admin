@@ -843,6 +843,40 @@ ngu-carousel {
         }
     }
 }
+.input-append{
+    .col-sm-10{
+        padding-right: 0;
+    }
+    .col-sm-2{
+        padding-left: 0;
+    }
+}
+.input-append1{
+    .col-sm-2{
+        padding-right: 0;
+    }
+    .col-sm-10{
+        padding-left: 0;
+    }
+    .col-sm-1{
+        padding-right: 0;
+    }
+    .col-sm-11{
+        padding-left: 0;
+    }
+
+}
+.icon-blue{
+       i::before{
+        color:#2196f3;
+       }
+
+}       
+.checkbox-blue{
+    input:checked + .slider {
+        background-color: #2196f3;
+    }
+   } 
 
 .btn-default-custom {
   padding: 3px;
