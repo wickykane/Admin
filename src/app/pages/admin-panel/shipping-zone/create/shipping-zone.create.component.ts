@@ -191,10 +191,11 @@ export class ShippingZoneCreateComponent implements OnInit {
         });
     }
     openState(code) {
-        const modalRef = this.modalService.open(StateFilterModalComponent);
 
-        modalRef.componentInstance.isEdit = false;
         if (this.listMasterData['state'][code]) {
+            const modalRef = this.modalService.open(StateFilterModalComponent);
+
+            modalRef.componentInstance.isEdit = false;
             modalRef.componentInstance.stateList = this.listMasterData['state'][code];
             // modalRef.componentInstance.listSelectCountry = this.listMasterData['state'][code];
             this.listSelectCountry.forEach(item => {
@@ -202,23 +203,24 @@ export class ShippingZoneCreateComponent implements OnInit {
                     modalRef.componentInstance.listSelectCountry = item;
                 }
             })
+            modalRef.componentInstance.code = code;
+            modalRef.result.then(res => {
+                if (res['code']) {
+                    this.listSelectCountry.forEach(item => {
+                        if (item.country_code == res.code) {
+                            item['state'] = res.state;
+                        }
+                    })
+                }
+    
+    
+            });
         }
-        else {
-            modalRef.componentInstance.stateList = [];
+        else{
+            return false;
         }
 
-        modalRef.componentInstance.code = code;
-        modalRef.result.then(res => {
-            if (res['code']) {
-                this.listSelectCountry.forEach(item => {
-                    if (item.country_code == res.code) {
-                        item['state'] = res.state;
-                    }
-                })
-            }
 
-
-        });
 
     }
 
@@ -299,12 +301,16 @@ export class ShippingZoneCreateComponent implements OnInit {
     }
     save() {
 
-        var listCountry = this.listSelectCountry.slice(0);
+        var listCountry = JSON.parse(JSON.stringify(this.listSelectCountry));
         for (var i = 0; i < listCountry.length; i++) {
             var listId = [];
             for (var j = 0; j < listCountry[i].state.length; j++) {
-                listId.push(listCountry[i].state[j].id);
+                if(listCountry[i].state[j].selected){
+                    listId.push(listCountry[i].state[j].id);
+                }
+
             }
+            console.log(listId);
             listCountry[i].state = listId;
             delete listCountry[i].selected;
             delete listCountry[i].index;
