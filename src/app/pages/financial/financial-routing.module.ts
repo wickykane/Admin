@@ -6,6 +6,8 @@ import { InvoiceCreateComponent } from './ar-invoice/invoice.create.component';
 import { InvoiceDetailComponent } from './ar-invoice/invoice.view.component';
 import { PaymentComponent } from './payment/payment.component';
 
+import { DebitMemoListComponent } from './debit-memo/list/debit-memo-list.component';
+
 const routes: Routes = [
     {
         path: 'invoice',
@@ -20,6 +22,12 @@ const routes: Routes = [
         path: 'payment',
         children: [
             { path: '', component: InvoiceComponent }
+        ]
+    },
+    {
+        path: 'debit-memo',
+        children: [
+            { path: '', component: DebitMemoListComponent }
         ]
     }
 ];

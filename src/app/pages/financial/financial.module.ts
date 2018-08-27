@@ -22,6 +22,12 @@ import { FinancialRoutingModule } from './financial-routing.module';
 import { FinancialService } from './financial.service';
 import { PaymentComponent } from './payment/payment.component';
 
+import { DebitMemoService } from './debit-memo/debit-memo.service';
+import { DebitMemoListComponent } from './debit-memo/list/debit-memo-list.component';
+import { SendMailDebitModalContent } from './debit-memo/modals/send-email/send-mail.modal';
+
+import { CKEditorModule } from 'ng2-ckeditor';
+
 //  Modal
 import { ItemModalModule } from '../../shared/modals/item.module';
 
@@ -35,7 +41,8 @@ import { ItemModalModule } from '../../shared/modals/item.module';
         FormsModule,
         ReactiveFormsModule,
         ChartsModule,
-        ItemModalModule
+        ItemModalModule,
+        CKEditorModule
     ],
     declarations: [
         InvoiceComponent,
@@ -46,10 +53,13 @@ import { ItemModalModule } from '../../shared/modals/item.module';
         InvoiceDebitMemoTabComponent,
         InvoicePaymentTabComponent,
         InvoiceDocumentTabComponent,
-        PaymentComponent
-
+        PaymentComponent,
+        DebitMemoListComponent,
+        SendMailDebitModalContent
     ],
-    providers: [FinancialService, TableService, DatePipe, Helper],
-    entryComponents: []
+    providers: [FinancialService, DebitMemoService, TableService, DatePipe, Helper],
+    entryComponents: [
+        SendMailDebitModalContent
+    ]
 })
 export class FinancialModule { }
