@@ -16,11 +16,14 @@ import { InvoiceDocumentTabComponent } from './ar-invoice/invoice-tabs/document-
 import { InvoiceInformationTabComponent } from './ar-invoice/invoice-tabs/information-tab.component';
 import { InvoicePaymentTabComponent } from './ar-invoice/invoice-tabs/payment-tab.component';
 import { CreditMemoListComponent } from './credit-memo//list/credit-memo-list.component';
+import { CreditMemoCreateComponent } from './credit-memo//create/credit-memo-create.component';
+import { CreditMemoService } from './credit-memo/credit-memo.service'
 import { TableService } from '../../services/index';
 import { CommonShareModule, Helper, PageHeaderModule } from '../../shared/index';
 import { FinancialRoutingModule } from './financial-routing.module';
 import { FinancialService } from './financial.service';
 import { PaymentComponent } from './payment/payment.component';
+import { OrderService } from '../order-mgmt/order-mgmt.service';
 
 //  Modal
 import { ItemModalModule } from '../../shared/modals/item.module';
@@ -47,9 +50,10 @@ import { ItemModalModule } from '../../shared/modals/item.module';
         InvoicePaymentTabComponent,
         InvoiceDocumentTabComponent,
         PaymentComponent,
-        CreditMemoListComponent
+        CreditMemoListComponent,
+        CreditMemoCreateComponent
     ],
-    providers: [FinancialService, TableService, DatePipe, Helper],
+    providers: [FinancialService, TableService, DatePipe, Helper,CreditMemoService,OrderService],
     entryComponents: []
 })
 export class FinancialModule { }

@@ -36,7 +36,7 @@ export class CreditMemoListKeyService implements OnDestroy {
             event.preventDefault();
             this.context.addNewDebitMemo();
             return event;
-        }, undefined, 'Create New DR'));
+        }, undefined, 'Create New CR'));
         this._hotkeysService.add(new Hotkey('f2', (event: KeyboardEvent): any => {
             event.preventDefault();
             this.context.onStartSearch();
@@ -74,15 +74,15 @@ export class CreditMemoListKeyService implements OnDestroy {
             this.context.onRejectDebitMemo();
             return event;
         }, undefined, 'Reject'));
-        this._hotkeysService.add(new Hotkey('f9', (event: KeyboardEvent): any => {
-            event.preventDefault();
-            this.context.onReopenDebitMemo();
-            return event;
-        }, undefined, 'Re-open'));
-        this._hotkeysService.add(new Hotkey('f10', (event: KeyboardEvent): any => {
-            event.preventDefault();
-            this.context.onViewDebitMemo();
-            return event;
-        }, undefined, 'View'));
+        // this._hotkeysService.add(new Hotkey('f9', (event: KeyboardEvent): any => {
+        //     event.preventDefault();
+        //     this.context.onReopenDebitMemo();
+        //     return event;
+        // }, undefined, 'Re-open'));
+        // this._hotkeysService.add(new Hotkey('f10', (event: KeyboardEvent): any => {
+        //     event.preventDefault();
+        //     this.context.onViewDebitMemo();
+        //     return event;
+        // }, undefined, 'View'));
     }
 }

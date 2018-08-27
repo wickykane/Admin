@@ -12,7 +12,7 @@ import { routerTransition } from '../../../../router.animations';
 import { CreditMemoListKeyService } from './keys.list.control';
 
 import { SendMailDebitModalContent } from '../modals/send-email/send-mail.modal';
-
+import { CreditMemoService } from '../credit-memo.service'
 @Component({
     selector: 'app-credit-memo-list',
     templateUrl: './credit-memo-list.component.html',
@@ -39,7 +39,8 @@ export class CreditMemoListComponent implements OnInit {
         private modalService: NgbModal,
         public keyService: CreditMemoListKeyService,
         public tableService: TableService,
-        private renderer: Renderer) {
+        private renderer: Renderer,
+        public creditMemoService: CreditMemoService) {
 
         this.searchForm = fb.group({
             dr_no: [null],
@@ -98,76 +99,78 @@ export class CreditMemoListComponent implements OnInit {
         this.renderer.invokeElementMethod(this.drNoInput.nativeElement, 'focus');
     }
 
-    addNewDebitMemo() {}
+    addNewDebitMemo() { 
+        
+    }
 
     onSubmitDebitMemo() {
         const modalRef = this.modalService.open(ConfirmModalContent);
-            modalRef.componentInstance.message = 'Are you sure that you want to submit the debit memo to approver?';
-            modalRef.componentInstance.yesButtonText = 'YES';
-            modalRef.componentInstance.noButtonText = 'NO';
-            modalRef.result.then(yes => {
-                if (yes) {
-                }
-            }, no => { });
+        modalRef.componentInstance.message = 'Are you sure that you want to submit the debit memo to approver?';
+        modalRef.componentInstance.yesButtonText = 'YES';
+        modalRef.componentInstance.noButtonText = 'NO';
+        modalRef.result.then(yes => {
+            if (yes) {
+            }
+        }, no => { });
     }
 
     onApproveDebitMemo() {
         const modalRef = this.modalService.open(ConfirmModalContent);
-            modalRef.componentInstance.message = 'Are you sure that you want to approve the debit memo?';
-            modalRef.componentInstance.yesButtonText = 'YES';
-            modalRef.componentInstance.noButtonText = 'NO';
-            modalRef.result.then(yes => {
-                if (yes) {
-                }
-            }, no => { });
+        modalRef.componentInstance.message = 'Are you sure that you want to approve the debit memo?';
+        modalRef.componentInstance.yesButtonText = 'YES';
+        modalRef.componentInstance.noButtonText = 'NO';
+        modalRef.result.then(yes => {
+            if (yes) {
+            }
+        }, no => { });
     }
 
     onCancelDebitMemo() {
         const modalRef = this.modalService.open(ConfirmModalContent);
-            modalRef.componentInstance.message = 'Are you sure that you want to cancel the debit memo?';
-            modalRef.componentInstance.yesButtonText = 'YES';
-            modalRef.componentInstance.noButtonText = 'NO';
-            modalRef.result.then(yes => {
-                if (yes) {
-                }
-            }, no => { });
+        modalRef.componentInstance.message = 'Are you sure that you want to cancel the debit memo?';
+        modalRef.componentInstance.yesButtonText = 'YES';
+        modalRef.componentInstance.noButtonText = 'NO';
+        modalRef.result.then(yes => {
+            if (yes) {
+            }
+        }, no => { });
     }
 
     onRejectDebitMemo() {
         const modalRef = this.modalService.open(ConfirmModalContent);
-            modalRef.componentInstance.message = 'Are you sure that you want to reject the debit memo?';
-            modalRef.componentInstance.yesButtonText = 'YES';
-            modalRef.componentInstance.noButtonText = 'NO';
-            modalRef.result.then(yes => {
-                if (yes) {
-                }
-            }, no => { });
+        modalRef.componentInstance.message = 'Are you sure that you want to reject the debit memo?';
+        modalRef.componentInstance.yesButtonText = 'YES';
+        modalRef.componentInstance.noButtonText = 'NO';
+        modalRef.result.then(yes => {
+            if (yes) {
+            }
+        }, no => { });
     }
 
     onReopenDebitMemo() {
         const modalRef = this.modalService.open(ConfirmModalContent);
-            modalRef.componentInstance.message = 'Are you sure that you want to re-open the debit memo?';
-            modalRef.componentInstance.yesButtonText = 'YES';
-            modalRef.componentInstance.noButtonText = 'NO';
-            modalRef.result.then(yes => {
-                if (yes) {
-                }
-            }, no => { });
+        modalRef.componentInstance.message = 'Are you sure that you want to re-open the debit memo?';
+        modalRef.componentInstance.yesButtonText = 'YES';
+        modalRef.componentInstance.noButtonText = 'NO';
+        modalRef.result.then(yes => {
+            if (yes) {
+            }
+        }, no => { });
     }
 
-    onViewDebitMemo() {}
+    onViewDebitMemo() { }
 
-    onEditDebitMemo() {}
+    onEditDebitMemo() { }
 
-    onPrintDebitMemo() {}
+    onPrintDebitMemo() { }
 
-    onReceivePayment() {}
+    onReceivePayment() { }
 
     onSendMail() {
         const modalRef = this.modalService.open(SendMailDebitModalContent, {
             size: 'lg'
         });
         modalRef.result.then(res => {
-        }, dismiss => {});
+        }, dismiss => { });
     }
 }
