@@ -450,7 +450,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         if (+this.generalForm.value.carrier_id === 999) {
             default_ship_rate = 8;
             this.generalForm.patchValue({ shipping_id: null });
-            this.generalForm.get('shipping_id').setValidators(null);
+            this.generalForm.get('shipping_id').clearValidators();
             this.addr_select.shipping = {
                 'address_name': '',
                 'address_line': '',
