@@ -1,323 +1,376 @@
-<div class="block anchor-scroll">
-    <app-page-header [heading]="'PART MANAGEMENT'" [icon]="'fa-th-list'"></app-page-header>
-    <div class="row">
-        <section class="col-md-9 information-block" *ngIf="part">
-            <section class="row">
-                <div class="col-md-12">
-                    <fieldset class="custom-border">
-                        <legend class="custom-border">GENERAL INFORMATION</legend>
-                        <div class="row pl-3 pr-3 mb-3">
-                            <div class="col-md-2">
-                                <label for="" class="control-label mb-2">Part No</label>
-                                <span class="text-danger">( * )</span>
-                                <div>
-                                    <span>{{part.part_no}}</span>
-                                </div>
+<div [@routerTransition]>
+    <app-page-header [heading]="'EDIT PART MANAGEMENT'" [icon]="'fa-th-list'"></app-page-header>
+    <!-- <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut> -->
+    <div class="row main-container block-order">
+        <div class="col-md-9">
+            <section class="rma-page block mt-7">
+                <div class="row block-info">
+                    <div class="col-md-7 p-l-5 p-r-2">
+                        <div class="card height-100">
+                            <div class="card-header">
+                                <strong>Information</strong>
                             </div>
-                            <div class="col-md-2">
-                                <label for="" class="control-label mb-2">Partlink No</label>
-                                <span class="text-danger">( * )</span>
-
-                                <div>
-                                    <span>{{part.partlinks_no}}</span>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <label for="" class="control-label mb-2">Product Description</label>
-                                <span class="text-danger">( * )</span>
-                                <div>
-                                    <span>{{part.des}}</span>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <label for="" class="control-label mb-2">Category</label>
-                                <span class="text-danger">( * )</span>
-                                <div>
-                                    <span>{{part.ctgry_name}}</span>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <label for="" class="control-label mb-2">Sub Category</label>
-                                <span class="text-danger">( * )</span>
-                                <div>
-                                    <span>{{part.sub_ctgry_name}}</span>
-                                </div>
-                            </div>
-                            <div class="col-md-1">
-                                <label for="" class="control-label mb-2">UOM</label>
-                                <span class="text-danger">( * )</span>
-                                <div>
-                                    <span>{{part.uom_name}}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row pl-3 pr-3">
-                            <div class="col-md-2">
-                                <label for="" class="control-label mb-2">Make</label>
-                                <span class="text-danger">( * )</span>
-                                <div>
-                                    <span>{{part.make_name}}</span>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <label for="" class="control-label mb-2">Model</label>
-                                <div>
-                                    <span>{{part.model_name}}</span>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <label for="" class="control-label mb-2">Year From</label>
-                                <span class="text-danger">( * )</span>
-                                <div>
-                                    <span>{{part.yr_from}}</span>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <label for="" class="control-label mb-2">Year To</label>
-                                <span class="text-danger">( * )</span>
-                                <div>
-                                    <span>{{part.yr_to}}</span>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <label for="" class="control-label mb-2">Brand</label>
-                                <div>
-                                    <span>{{part.brand_name}}</span>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <label for="" class="control-label mb-2">Certification</label>
-                                <div>
-                                    <span>{{part.cert_name}}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </fieldset>
-                </div>
-                <div class="col-md-5">
-                    <fieldset class="custom-border height-100">
-                        <legend class="custom-border">SHIPPING PACKAGE INFORMATION</legend>
-                        <form class="form-horizontal" [formGroup]="generalForm">
-                            <div class="row pl-3 pr-3 mb-3">
-                                <div class="col-md-4">
-                                    <label for="" class="control-label mb-2">Length (m)</label>
-                                    <div>
-                                        <span>{{part.len}}</span>
+                            <div class="card-body">
+                                <div class="row information height-100">
+                                    <div class="col-md-5 bolder padding-l-25">
+                                        <div class="form-group row">
+                                            <label for="" class="col-6">Part No</label>
+                                            <div class='col-6'>
+                                                {{part.part_no}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-6'>Make</label>
+                                            <div class='col-6 '>
+                                                {{part.make_name}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-6'>Partlink No</label>
+                                            <div class='col-6 '>
+                                                {{part.partlinks_no}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-6'>Product Description</label>
+                                            <div class='col-6'>
+                                                {{part.des}}
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="" class="control-label mb-2">Width (m)</label>
-
-                                    <div>
-                                        <span>{{part.width}}</span>
+                                    <div class="col-md-3 customer-infomation">
+                                        <div class="form-group row">
+                                            <label for="" class="col-5">Year From</label>
+                                            <div class='col-7'>
+                                                {{part.yr_from}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-5'>Year To</label>
+                                            <div class='col-7'>
+                                                {{part.yr_to}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-5'>Brand</label>
+                                            <div class='col-7'>
+                                                {{part.brand_name}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-5'>Model</label>
+                                            <div class='col-7'>
+                                                {{part.model_name}}
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="" class="control-label mb-2">Height (m)</label>
-                                    <div>
-                                        <span>{{part.height}}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row pl-3 pr-3">
-                                <div class="col-md-4">
-                                    <label for="" class="control-label mb-2">Volume (cbm)</label>
-                                    <div>
-                                        <span>{{part.vol}}</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="" class="control-label mb-2">Gross Weight</label>
-                                    <div>
-                                        <span>{{part.wt}}</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="" class="control-label mb-2">Freight Class <span class="text-danger">( * )</span></label>
-                                    <div>
-                                        <select formControlName="freight_class" class="form-control">
-                                        <option value="null" selected="true" translate disabled>--Select--</option>
-                                        <option *ngFor="let de of listMaster['freight_class']" [ngValue]="de">{{de}}</option>
-                                      </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </fieldset>
-                </div>
-                <div class="col-md-7">
-                    <fieldset class="custom-border height-100">
-                        <legend class="custom-border">PRICING & ACCOUNT INFORMATION</legend>
-                        <form class="form-horizontal" [formGroup]="generalForm">
-
-                            <div class="row pl-3 pr-3 mb-3">
-                                <div class="col-md-3">
-                                    <label for="" class="control-label mb-2">Inventory Account</label>
-                                    <span class="text-danger">( * )</span>
-                                    <div>
-                                      <ng-select [items]="listMaster['account']" groupBy="group" formControlName="inventory_account_id" bindLabel="name" bindValue="id">
-                                        <ng-template ng-label-tmp let-item="item">
-                                          <b>{{item.name}}</b>
-                                        </ng-template>
-                                        <ng-template ng-optgroup-tmp let-item="item" let-index="index">
-                                          {{item.group}}
-                                        </ng-template>
-                                        <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
-                                          <b>{{item.name}}</b>
-                                        </ng-template>
-                                      </ng-select>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="" class="control-label mb-2">Income Account</label>
-                                    <span class="text-danger">( * )</span>
-                                    <div>
-                                      <ng-select [items]="listMaster['account']" groupBy="group" formControlName="income_account_id" bindLabel="name" bindValue="id">
-                                        <ng-template ng-label-tmp let-item="item">
-                                          <b>{{item.name}}</b>
-                                        </ng-template>
-                                        <ng-template ng-optgroup-tmp let-item="item" let-index="index">
-                                          {{item.group}}
-                                        </ng-template>
-                                        <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
-                                          <b>{{item.name}}</b>
-                                        </ng-template>
-                                      </ng-select>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="" class="control-label mb-2">Sales Price</label>
-                                    <span class="text-danger">( * )</span>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" formControlName="sell_price">
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">$</span>
+                                    <div class="col-md-4 customer-infomation bolder">
+                                        <div class="form-group row">
+                                            <label for="" class="col-5">Category</label>
+                                            <div class='col-7'>
+                                                {{part.ctgry_name}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-5'>Sub Category</label>
+                                            <div class='col-7'>
+                                                {{part.sub_ctgry_name}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-5'>UOM</label>
+                                            <div class='col-7'>
+                                                {{part.uom_name}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-5'>Certification</label>
+                                            <div class='col-7'>
+                                                {{part.cert_name}}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
-                                    <label for="" class="control-label mb-2">Expense Account</label>
-                                    <span class="text-danger">( * )</span>
-                                    <div>
-                                      <ng-select [items]="listMaster['account']" groupBy="group" formControlName="expense_account_id" bindLabel="name" bindValue="id">
-                                        <ng-template ng-label-tmp let-item="item">
-                                          <b>{{item.name}}</b>
-                                        </ng-template>
-                                        <ng-template ng-optgroup-tmp let-item="item" let-index="index">
-                                          {{item.group}}
-                                        </ng-template>
-                                        <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
-                                          <b>{{item.name}}</b>
-                                        </ng-template>
-                                      </ng-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5 p-l-5 p-r-2">
+                        <div class="card height-100">
+                            <div class="card-header">
+                                <strong>Shipping Package Information</strong>
+                            </div>
+                            <div class="card-body">
+                                <div class="row information height-100">
+                                    <div class="col-md-6 bolder padding-l-25">
+                                        <div class="form-group row">
+                                            <label for="" class="col-6">Length (m)</label>
+                                            <div class='col-6'>
+                                                {{part.len}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-6'>Width (m)</label>
+                                            <div class='col-6 '>
+                                                {{part.width}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-6'>Height (m)</label>
+                                            <div class='col-6 '>
+                                                {{part.height}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-6'>Volume (cbm)</label>
+                                            <div class='col-6'>
+                                                {{part.vol}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 customer-infomation">
+                                        <div class="form-group row">
+                                            <label class='col-6'>Gross Weight</label>
+                                            <div class='col-6'>
+                                                {{part.wt}}
+                                            </div>
+                                        </div>
+                                        <form class="form-horizontal" [formGroup]="generalForm">
+                                            <div class="form-group row">
+                                                <label for="" class="col-6">Freight Class <span class="text-danger">(*)</span></label>
+                                                <div class='col-6'>
+                                                    <select formControlName="freight_class" class="form-control">
+                                            <option value="null" selected="true" translate disabled>--Select--</option>
+                                            <option *ngFor="let de of listMaster['freight_class']" [ngValue]="de.id">{{de.name}}</option>
+                                          </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="" class="col-6">Free Shipping<span class="text-danger">(*)</span></label>
+                                                <div class='col-6'>
+                                                    <select formControlName="free_ship" class="form-control">
+                                            <option value="null" selected="true" translate disabled>--Select--</option>
+                                            <option *ngFor="let de of listMaster['listQuestion']" [ngValue]="de.id">{{de.name}}</option>
+                                          </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="" class="col-6">UPS Shippable<span class="text-danger">(*)</span></label>
+                                                <div class='col-6'>
+                                                    <select formControlName="ups" class="form-control">
+                                            <option value="null" selected="true" translate disabled>--Select--</option>
+                                            <option *ngFor="let de of listMaster['listQuestion']" [ngValue]="de.id">{{de.name}}</option>
+                                          </select>
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row pl-3 pr-3 mb-3">
-                                <div class="col-md-3">
-                                    <label for="" class="control-label mb-2">Cost Price</label>
-                                    <span class="text-danger">( * )</span>
-                                    <div>
-                                        <span>{{part.cost_price}}</span>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-7 p-l-5 p-r-2 mt-7">
+                        <div class="card height-100">
+                            <div class="card-header">
+                                <strong>Pricing & Account Information</strong>
+                            </div>
+                            <div class="card-body">
+                                <form class="form-horizontal" [formGroup]="generalForm">
+                                    <div class="row information height-100">
+                                        <div class="col-md-6 bolder padding-l-25">
+                                            <div class="form-group row">
+                                                <label for="" class="col-6">Inventory Account
+                                                  <span class="text-danger">(*)</span>
+                                                </label>
+                                                <div class='col-6'>
+                                                    <ng-select [items]="listMaster['account']" groupBy="group" formControlName="inventory_account_id" bindLabel="name" bindValue="id">
+                                                        <ng-template ng-label-tmp let-item="item">
+                                                            <b>{{item.name}}</b>
+                                                        </ng-template>
+                                                        <ng-template ng-optgroup-tmp let-item="item" let-index="index">
+                                                            {{item.group}}
+                                                        </ng-template>
+                                                        <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                                            <b>{{item.name}}</b>
+                                                        </ng-template>
+                                                    </ng-select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class='col-6'>
+                                                  Income Account
+                                                  <span class="text-danger">(*)</span>
+                                                </label>
+                                                <div class='col-6 '>
+                                                    <ng-select [items]="listMaster['account']" groupBy="group" formControlName="income_account_id" bindLabel="name" bindValue="id">
+                                                        <ng-template ng-label-tmp let-item="item">
+                                                            <b>{{item.name}}</b>
+                                                        </ng-template>
+                                                        <ng-template ng-optgroup-tmp let-item="item" let-index="index">
+                                                            {{item.group}}
+                                                        </ng-template>
+                                                        <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                                            <b>{{item.name}}</b>
+                                                        </ng-template>
+                                                    </ng-select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class='col-6'>Sales Price
+                                                  <span class="text-danger">(*)</span>
+                                                </label>
+                                                <div class='col-6 '>
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" formControlName="sell_price">
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">$</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class='col-6'>Expense Account
+                                                    <span class="text-danger">(*)</span>
+                                                </label>
+                                                <div class='col-6'>
+                                                    <ng-select [items]="listMaster['account']" groupBy="group" formControlName="expense_account_id" bindLabel="name" bindValue="id">
+                                                        <ng-template ng-label-tmp let-item="item">
+                                                            <b>{{item.name}}</b>
+                                                        </ng-template>
+                                                        <ng-template ng-optgroup-tmp let-item="item" let-index="index">
+                                                            {{item.group}}
+                                                        </ng-template>
+                                                        <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                                            <b>{{item.name}}</b>
+                                                        </ng-template>
+                                                    </ng-select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="" class="col-6">Taxable Item
+                                                    <span class="text-danger">(*)</span>
+                                                </label>
+                                                <div class='col-6'>
+                                                    <select formControlName="is_taxable" class="form-control">
+                                          <option value="null" selected="true" translate disabled>--Select--</option>
+                                          <option *ngFor="let de of listMaster['listQuestion']" [ngValue]="de.id">{{de.name}}</option>
+                                        </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 customer-infomation">
+                                            <div class="form-group row">
+                                                <label for="" class="col-5">Cost Price
+                                                  <span class="text-danger">(*)</span>
+                                                </label>
+                                                <div class='col-7'>
+                                                    {{part.cost_price}}
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="" class="col-5">OEM Price
+                                                  <span class="text-danger">(*)</span>
+                                                </label>
+                                                <div class='col-7'>
+                                                    {{part.oem_price}}
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class='col-5'>Quotable</label>
+                                                <div class='col-7'>
+                                                    <select formControlName="is_quotable" class="form-control">
+                                          <option value="null" selected="true" translate disabled>--Select--</option>
+                                          <option *ngFor="let de of listMaster['listQuestion']" [ngValue]="de.id">{{de.name}}</option>
+                                        </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class='col-5'>Show Price on Store</label>
+                                                <div class='col-7'>
+                                                    <select formControlName="is_show_price" class="form-control">
+                                          <option value="null" selected="true" translate disabled>--Select--</option>
+                                          <option *ngFor="let de of listMaster['listQuestion']" [ngValue]="de.id">{{de.name}}</option>
+                                        </select>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="" class="control-label mb-2">OEM Price</label>
-                                    <span class="text-danger">( * )</span>
-                                    <div>
-                                        <span>{{part.oem_price}}</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="" class="control-label mb-2">Quotable</label>
-                                    <div>
-                                        <select formControlName="is_quotable" class="form-control">
-                                        <option value="0" selected="true" translate>No</option>
-                                        <option value="1" translate>Yes</option>
-                                    </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="" class="control-label mb-2">Show Price on Store</label>
-                                    <div>
-                                        <select formControlName="is_show_price" class="form-control">
-                                        <option value="0" selected="true" translate>No</option>
-                                        <option value="1" translate>Yes</option>
-                                    </select>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5 p-l-5 p-r-2  mt-7">
+                        <div class="card height-100">
+                            <div class="card-header">
+                                <strong>Discount Information</strong>
+                            </div>
+                            <div class="card-body">
+                                <div class="row information height-100">
+                                    <div class="col-md-12 bolder padding-l-25">
+                                        <div class="form-group row">
+                                            <label for="" class="col-8">
+                                              <span class="text-primary">Category Discount (%)</span>
+                                            </label>
+                                            <div class='col-4'>
+                                                {{part.percent}} %
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-12'>
+                                              <span class="text-primary">Discount on Product Condition (%)</span></label>
+                                        </div>
+                                        <div class="form-group row discount-info">
+                                            <ng-container *ngFor="let item of item_condition">
+                                                <div class="col-md-8">
+                                                    <span>{{item.name}}</span>
+                                                </div>
+                                                <div class="col-md-4 text-right">
+                                                    <span>{{item.percent}} %</span>
+                                                </div>
+                                            </ng-container>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row pl-3 pr-3 mb-3">
-                                <div class="col-md-3">
-                                    <label for="is_taxable" class="control-label mb-2">Taxable Item</label>
-                                    <span class="text-danger">( * )</span>
-                                    <div>
-                                        <select formControlName="is_taxable" class="form-control">
-                                      <option value="0" selected="true" translate>No</option>
-                                      <option value="1" translate>Yes</option>
-                                  </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12 p-l-5 p-r-2  mt-7">
+                        <div class="card height-100">
+                            <div class="card-header">
+                                <strong>Product Information</strong>
+                            </div>
+                            <div class="card-body">
+                                <div class="row information height-100">
+                                    <div class="col-md-6 padding-l-25">
+                                        <div class="form-group row">
+                                            <label for="" class="col-12">
+                                              <span class="text-primary">Short Description</span>
+                                            </label>
+                                            <div class='col-12'>
+                                              <textarea name="name" rows="8" class="form-control" [(ngModel)]="short_des"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 padding-l-25">
+                                        <div class="form-group row">
+                                            <label for="" class="col-12">
+                                              <span class="text-primary">Product Description</span>
+                                            </label>
+                                            <div class='col-12'>
+                                              <ckeditor [(ngModel)]="full_des" [config]="ckeConfig"></ckeditor>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </form>
-                    </fieldset>
+                        </div>
+                    </div>
                 </div>
             </section>
-            <section class="row mt-15">
-              <div class="col-md-4">
-                <fieldset class="custom-border">
-                    <legend class="custom-border">DISCOUNT INFORMATION</legend>
-                    <div class="row pl-3 pr-3">
-                        <div class="col-md-12">
-                            <label for="" class="control-label mb-2">Category Discount (%)</label>
-                            <div>
-                                <span>{{part.percent}} %</span>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <label for="" class="control-label mb-2">Discount on Product Condition (%)</label>
-                        </div>
-                        <div class="col-md-12 discount-info">
-                            <div class="row" *ngFor="let item of item_condition">
-                                <div class="col-md-9">
-                                    <span>{{item.name}}</span>
-                                </div>
-                                <div class="col-md-3 text-right">
-                                    <span>{{item.percent}} %</span>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </fieldset>
-              </div>
-              <div class="col-md-8">
-                <fieldset class="custom-border">
-                    <legend class="custom-border">PRODUCT INFORMATION</legend>
-                    <div class="row pl-3 pr-3">
-                        <div class="col-md-12">
-                            <label for="" class="control-label mb-2">Short Description   <span class="text-danger">( * )</span></label>
-                            <div>
-                              <textarea name="name" rows="5" class="form-control" [(ngModel)]="short_des"></textarea>
-                              <!-- <ckeditor [(ngModel)]="short_des" [config]="ckeConfig"></ckeditor> -->
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <label for="" class="control-label mb-2">Product Description   <span class="text-danger">( * )</span></label>
-                            <div>
-                              <textarea name="name" rows="5"  class="form-control" [(ngModel)]="full_des"></textarea>
-                              <!-- <ckeditor [(ngModel)]="full_des" [config]="ckeConfig"></ckeditor> -->
-                            </div>
-                        </div>
-                    </div>
-                </fieldset>
-              </div>
-            </section>
-
-        </section>
-        <section class="col-md-3 images-block">
+        </div>
+        <div class="col-md-3 images-block p-l-5 p-r-2">
             <fieldset class="custom-border">
-                <legend class="custom-border">IMAGES</legend>
                 <div class="mb-3">
                     <input type="file" class="hidden" accept="image/*" #file (change)="uploadFile($event)" multiple>
                     <button class="btn btn-block btn-upload" (click)="file.click()">Select File Here To Upload</button>
@@ -328,10 +381,12 @@
                     </div>
                 </div>
             </fieldset>
-        </section>
+        </div>
     </div>
-    <div class="d-block pt-3 pb-3 text-center">
-        <button class="btn btn-primary text-white" [disabled]="!short_des || !full_des" (click)="updateItem()" translate>Save</button>
-        <button class="btn btn-default" routerLink="/product-management/part-list/">Cancel</button>
+    <div class="row text-center">
+        <div class="col-md-12 mg-top-15">
+            <button class="btn btn-primary text-white" [disabled]="!short_des || !full_des" (click)="updateItem()" translate>Save</button>
+            <button class="btn btn-default" routerLink="/product-management/part-list/">Cancel</button>
+        </div>
     </div>
 </div>

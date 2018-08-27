@@ -538,13 +538,13 @@ export class SaleOrderEditComponent implements OnInit {
                 });
                 res.forEach((item) => {
                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
-                    // item['products'] = [];
+                    item.tax_percent = 0;
                     item.quantity = 1;
                     item['order_detail_id'] = null;
-                    // item.sale_price = item.sale_price;
+                    item.discount_percent = 0;
                     item.source_id = 0;
                     item.source_name = 'From Master';
-                    item.is_shipping_free = item.free_ship;
+                    item.is_shipping_free  = item.free_ship;
                 });
                 this.list.items = this.list.items.concat(res.filter((item) => {
                     return listAdded.indexOf(item.item_id + item.item_condition_id) < 0;
@@ -566,6 +566,9 @@ export class SaleOrderEditComponent implements OnInit {
 
                 res.forEach((item) => {
                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
+                    item.discount_percent = 0;
+                    item.tax_percent = 0;
+                    item.sale_price = 0;
                     item.source_id = 2;
                     item.source_name = 'Manual';
                     item.quantity = 1;
