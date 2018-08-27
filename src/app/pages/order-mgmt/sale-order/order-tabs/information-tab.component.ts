@@ -102,8 +102,8 @@ export class SaleOrderInformationTabComponent implements OnInit {
                 this.detail = res.data;
                 this.stockValueChange.emit(res.data);
 
-                this.detail.shipping = res.data.shipping_address;
-                this.detail.billing = res.data.billing_address;
+                this.detail.shipping = res.data.shipping_address ? res.data.shipping_address : this.addr_select.shipping ;
+                this.detail.billing = res.data.billing_address ? res.data.billing_address : this.addr_select.billing;
 
                 this.detail['subs'] = res.data.items;
                 this.detail['subs'].forEach((item) => {
