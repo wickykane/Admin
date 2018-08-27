@@ -1,6 +1,6 @@
 <div [@routerTransition]>
-    <app-page-header [heading]="'ORDERS DETAIL'" [icon]="'fa-th-list'"></app-page-header>
-    <!-- <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut> -->
+    <app-page-header [heading]="'SALES QUOTATION DETAIL'" [icon]="'fa-th-list'"></app-page-header>
+    <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
     <section class="main-container block-order-detail">
         <ngb-tabset class="tabs-order full-width">
             <ngb-tab title="Information">
@@ -10,7 +10,7 @@
             </ngb-tab>
             <ngb-tab title="History">
                 <ng-template ngbTabContent>
-                    <app-sale-order-history-tab [orderId]="orderId"></app-sale-order-history-tab>
+                    <app-quote-history-tab [saleQuoteId]="orderId"></app-quote-history-tab>
                 </ng-template>
             </ngb-tab>
         </ngb-tabset>

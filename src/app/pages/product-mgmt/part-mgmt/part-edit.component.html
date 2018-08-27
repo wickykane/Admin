@@ -298,13 +298,15 @@
                         <div class="col-md-12">
                             <label for="" class="control-label mb-2">Short Description   <span class="text-danger">( * )</span></label>
                             <div>
-                              <ckeditor [(ngModel)]="short_des" [config]="ckeConfig"></ckeditor>
+                              <textarea name="name" rows="5" class="form-control" [(ngModel)]="short_des"></textarea>
+                              <!-- <ckeditor [(ngModel)]="short_des" [config]="ckeConfig"></ckeditor> -->
                             </div>
                         </div>
                         <div class="col-md-12">
                             <label for="" class="control-label mb-2">Product Description   <span class="text-danger">( * )</span></label>
                             <div>
-                              <ckeditor [(ngModel)]="full_des" [config]="ckeConfig"></ckeditor>
+                              <textarea name="name" rows="5"  class="form-control" [(ngModel)]="full_des"></textarea>
+                              <!-- <ckeditor [(ngModel)]="full_des" [config]="ckeConfig"></ckeditor> -->
                             </div>
                         </div>
                     </div>

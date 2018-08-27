@@ -39,14 +39,13 @@
                     </div>
                     <div class="col-sm-2 form-group">
                         <label> Early Payment Incentive?
-                            <span class="text-danger">(*)</span>
                         </label>
                         <div class="">
-                            <input type="checkbox" name="" class="" formControlName="early_pmt_incentive" ng-true="1" >
+                            <input type="checkbox" name="" class="" formControlName="early_pmt_incentive" ng-true="1" (change)="changeIncentive($event)">
                         </div>
                     </div>
                 </div>
-                <div class="row" *ngIf="this.generalForm.get('early_pmt_incentive').value==1">
+                <div class="row" *ngIf="this.generalForm.get('early_pmt_incentive').value == 1">
                     <div class="col-sm-2 form-group">
                         <label> Discount Days
                             <span class="text-danger">(*)</span>
@@ -57,7 +56,7 @@
                         <label> Discount Type
                             <span class="text-danger">(*)</span>
                         </label>
-                        <select class="form-control" formControlName="dsct_type" name="dsct_type" [attr.disabled]="isEdit==true ?'true':null" >                            
+                        <select class="form-control" formControlName="dsct_type" name="dsct_type" [attr.disabled]="isEdit==true ?'true':null" >
                             <option *ngFor="let item of listMaster['early']" [ngValue]="item.key" >{{item.value}}</option>
                         </select>
                     </div>
@@ -70,11 +69,11 @@
                 </div>
             </form>
         </fieldset>
-        
+
     </section>
     <div class="row">
         <div class="col-md-12 mg-top-15 text-center">
-            <button class="btn btn btn-outline-primary" (click)="payloadData()" [disabled]="!generalForm.valid">Save</button>            
+            <button class="btn btn btn-outline-primary" (click)="payloadData()" [disabled]="!generalForm.valid">Save</button>
             <button class="btn btn-default" type="button" [routerLink]="['/admin-panel/payment-term']">Cancel</button>
         </div>
     </div>

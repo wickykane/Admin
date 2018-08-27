@@ -20,6 +20,7 @@ import { SaleQuoteCreateKeyService } from './keys.create.control';
 
 import { HotkeysService } from 'angular2-hotkeys';
 import * as _ from 'lodash';
+import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 
 
 @Component({
@@ -40,7 +41,13 @@ export class SaleQuotationCreateComponent implements OnInit {
     public selectedIndex = 0;
     public data = {};
 
-    public customer = {
+    public messageConfig = {
+        '2': 'Are you sure that you want to save & submit this quotation to approver?',
+        '4': 'Are you sure that you want to validate this quotation?',
+        'default': 'The data you have entered may not be saved, are you sure that you want to leave?',
+    };
+
+    public customer: any = {
         'last_sales_order': '',
         'current_dept': '',
         'discount_level': '',
@@ -58,7 +65,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         contact: []
     };
 
-    public addr_select = {
+    public addr_select: any = {
         shipping: {
             'address_name': '',
             'address_line': '',
@@ -147,6 +154,9 @@ export class SaleQuotationCreateComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.data['id'] = this.route.snapshot.queryParams['quote_id'];
+        this.data['is_copy'] = this.route.snapshot.queryParams['is_copy'] || 0;
+
         const user = JSON.parse(localStorage.getItem('currentUser'));
         this.listMaster['multi_ship'] = [{ id: 0, label: 'No' }, { id: 1, label: 'Yes' }];
         this.listMaster['from_src'] = [{ id: 0, label: 'From Master' }, { id: 1, label: 'From Quote' }, { id: 2, label: 'Manual' }];
@@ -184,18 +194,78 @@ export class SaleQuotationCreateComponent implements OnInit {
             this.data['page'] = 1;
             this.searchCustomer(key);
         });
+
+        // Clone quote handle
+        if (this.data['is_copy'] && this.data['id']) {
+            this.getDetailQuote();
+        }
     }
     /**
      * Mater Data
      */
 
-    getDetailCustomerById(company_id) {
+    getDetailQuote() {
+        this.orderService.getSaleQuoteDetail(this.data['id']).subscribe(res => {
+            try {
+                const data = res.data;
+                this.generalForm.patchValue(data);
+                this.generalForm.patchValue({
+                    company_id: data.buyer_id,
+                    sales_person: data.sale_person_id,
+                    quote_date: data.qt_dt,
+                    expiry_date: data.expire_dt,
+                    shipping_id: data.shipping_id.id,
+                    billing_id: data.billing_id.id,
+                    ship_rate: +data.ship_method_rate,
+                });
+
+                // Set item and update
+                this.list.items = (data.items || []).map(item => {
+                    item.quantity = item.quantity || item.qty;
+                    item.sale_price = item.sale_price || item.price;
+                    item.uom_name = item.uom_name || item.uom;
+                    item.sku = item.sku || item.misc_no;
+                    item.des = item.des || item.misc_name;
+                    item.tax_percent = item.tax_percent || 0;
+                    item.discount = item.discount_percent || 0;
+                    return item;
+                });
+
+                this.order_info['original_ship_cost'] = data.original_ship_cost;
+                this.updateTotal();
+
+                this.changeCustomer(1);
+
+                // Lazy Load filter
+                const params = { page: this.data['page'], length: 15 };
+                this.orderService.getAllCustomer(params).subscribe(result => {
+                    const idList = result.data.rows.map(item => item.id);
+                    this.listMaster['customer'] = result.data.rows;
+                    if (idList.indexOf(res.data.buyer_id) === -1) {
+                        this.listMaster['customer'].push({ id: res.data.buyer_id, company_name: res.data.buyer_info.buyer_name });
+                    }
+                    this.data['total_page'] = result.data.total_page;
+                });
+
+
+
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
+
+    getDetailCustomerById(company_id, flag?) {
         this.orderService.getDetailCompany(company_id).subscribe(res => {
             try {
                 this.customer = res.data;
                 if (res.data.buyer_type === 'PS') {
                     this.addr_select.contact = res.data.contact[0];
                     this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
+                }
+                if (flag) {
+                    this.selectAddress('billing', flag);
+                    this.selectAddress('shipping', flag);
                 }
             } catch (e) {
                 console.log(e);
@@ -208,25 +278,29 @@ export class SaleQuotationCreateComponent implements OnInit {
      */
     selectData(data) { }
 
-    changeCustomer() {
+    changeCustomer(flag?) {
         const company_id = this.generalForm.value.company_id;
-        this.customer = Object.create(this.copy_customer);
-        this.addr_select = Object.create(this.copy_addr);
+        this.customer = { ...this.copy_customer };
+        this.addr_select = { ...this.copy_addr };
+
         if (company_id) {
-            this.getDetailCustomerById(company_id);
+            this.getDetailCustomerById(company_id, flag);
         }
-        this.list.items = [];
-        this.updateTotal();
+        if (!flag) {
+            this.list.items = [];
+            this.updateTotal();
+        }
     }
 
-    selectAddress(type) {
+
+    selectAddress(type, flag?) {
         try {
             switch (type) {
                 case 'shipping':
                     const ship_id = this.generalForm.value.shipping_id;
                     if (ship_id) {
                         this.addr_select.shipping = this.findDataById(ship_id, this.customer.shipping);
-                        this.getShippingReference(ship_id);
+                        this.getShippingReference(ship_id, flag);
                     }
                     break;
                 case 'billing':
@@ -241,10 +315,10 @@ export class SaleQuotationCreateComponent implements OnInit {
         }
     }
 
-    getShippingReference(id) {
+    getShippingReference(id, flag?) {
         this.orderService.getShippingReference(id).subscribe(res => {
             this.listMaster['carriers'] = res.data;
-            this.changeShip();
+            this.changeShip(flag);
         });
     }
 
@@ -279,8 +353,8 @@ export class SaleQuotationCreateComponent implements OnInit {
         this.order_info.order_summary['total_item'] = items.length;
         items.forEach(item => {
             this.order_info.order_summary['total_cogs'] = (this.order_info.order_summary['total_cogs'] || 0) + (+item.cost_price || 0) * (item.quantity || 0);
-            this.order_info.order_summary['total_vol'] = (this.order_info.order_summary['total_vol'] || 0) + (+item.vol || 0);
-            this.order_info.order_summary['total_weight'] = (this.order_info.order_summary['total_weight'] || 0) + (+item.wt || 0);
+            this.order_info.order_summary['total_vol'] = (this.order_info.order_summary['total_vol'] || 0) + (+item.vol || 0) * (item.quantity || 0);
+            this.order_info.order_summary['total_weight'] = (this.order_info.order_summary['total_weight'] || 0) + (+item.wt || 0) * (item.quantity || 0);
         });
 
 
@@ -312,6 +386,7 @@ export class SaleQuotationCreateComponent implements OnInit {
                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
                     item['products'] = [];
                     item.quantity = 1;
+                    item.is_shipping_free = item.is_shipping_free || item.free_ship;
                     item['order_detail_id'] = null;
                     item.totalItem = item.sale_price;
                     item.source_id = 0;
@@ -355,10 +430,16 @@ export class SaleQuotationCreateComponent implements OnInit {
         }, dismiss => { });
     }
 
-    changeShip() {
+    changeShip(flag?) {
         const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id);
         this.listMaster['options'] = carrier.options || [];
         this.listMaster['ship_rates'] = carrier.ship_rate || [];
+
+        // Edit first time not init data
+        if (flag) {
+            return;
+        }
+
         let default_option = null;
         let default_ship_rate = null;
         if (+this.generalForm.value.carrier_id === 3 || this.generalForm.value.carrier_id !== 999 && !carrier.own_carrirer) {
@@ -370,6 +451,14 @@ export class SaleQuotationCreateComponent implements OnInit {
             default_ship_rate = 8;
             this.generalForm.patchValue({ shipping_id: null });
             this.generalForm.get('shipping_id').setValidators(null);
+            this.addr_select.shipping = {
+                'address_name': '',
+                'address_line': '',
+                'country_name': '',
+                'city_name': '',
+                'state_name': '',
+                'zip_code': ''
+            };
         } else {
             this.generalForm.get('shipping_id').setValidators([Validators.required]);
         }
@@ -382,6 +471,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         this.generalForm.patchValue({ ship_method_option: default_option, ship_rate: default_ship_rate });
         this.generalForm.updateValueAndValidity();
     }
+
 
     //  Show order history
     showViewOrderHistory() {
@@ -424,13 +514,17 @@ export class SaleQuotationCreateComponent implements OnInit {
             'items': this.list.items.filter(item => !item.misc_id)
         };
         this.orderService.getTaxShipping(params).subscribe(res => {
-            this.list.items = res.data.items;
+            const old_misc = this.list.items.filter(item => item.misc_id && +item.source_id !== 3);
+            const items = res.data.items;
             const misc = res.data.mics.map(item => {
                 item.is_misc = 1;
                 item.misc_id = item.id;
                 return item;
             });
-            this.list.items = this.list.items.concat(misc);
+            this.list.items = items.concat(misc, old_misc);
+
+            // Assign tax to all item
+            this.list.items.forEach(item => item.tax_percent = res.data.tax_percent);
             this.updateTotal();
             this.order_info['original_ship_cost'] = res.data.price;
         });
@@ -446,14 +540,14 @@ export class SaleQuotationCreateComponent implements OnInit {
             items.filter(item => item.tax_percent === tax).map(i => {
                 taxAmount += (+i.tax_percent * +i.quantity * (+i.sale_price || 0) / 100);
             });
-            this.order_info['total_tax'] = this.order_info['total_tax'] + taxAmount.toFixed(2);
+            this.order_info['total_tax'] = this.order_info['total_tax'] + +(taxAmount.toFixed(2));
             this.order_info['taxs'].push({
                 value: tax, amount: taxAmount.toFixed(2)
             });
         });
     }
 
-    createOrder(type) {
+    createOrder(type, is_draft_sq?) {
         const items = this.list.items.map(item => {
             item.discount_percent = item.discount;
             item.is_item = (item.misc_id) ? 0 : 1;
@@ -464,16 +558,20 @@ export class SaleQuotationCreateComponent implements OnInit {
             ...this.generalForm.value,
             status_id: type,
             original_ship_cost: this.order_info['original_ship_cost'],
-            items
+            items,
+            is_draft_sq: is_draft_sq || 0,
+            is_copy: this.data['is_copy'] || 0
         };
 
         this.orderService.createQuoteOrder(params).subscribe(res => {
             try {
                 if (res.status) {
                     this.toastr.success(res.message);
+                    this.data['quote_id'] = res.data;
                     setTimeout(() => {
-                        this.router.navigate(['/order-management/sale-quotation']);
+                        this.router.navigate(['/order-management/sale-quotation/detail/' + this.data['quote_id']]);
                     }, 500);
+
                 } else {
                     this.toastr.error(res.message);
                 }
@@ -484,6 +582,22 @@ export class SaleQuotationCreateComponent implements OnInit {
             err => {
                 this.toastr.error(err.message);
             });
+    }
+
+    confirmModal(type, is_draft_sq?) {
+        const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
+        modalRef.result.then(res => {
+            if (res) {
+                if (type) {
+                    this.createOrder(type, is_draft_sq);
+                } else {
+                    this.router.navigate(['/order-management/sale-quotation']);
+                }
+            }
+        }, dismiss => { });
+        modalRef.componentInstance.message = this.messageConfig[type || 'default'];
+        modalRef.componentInstance.yesButtonText = 'Yes';
+        modalRef.componentInstance.noButtonText = 'No';
     }
 
     fetchMoreCustomer(data?) {

@@ -81,16 +81,11 @@ export class SaleOrderCreateComponent implements OnInit {
 
     public order_info = {
         total: 0,
-        order_summary: {},
         sub_total: 0,
         order_date: '',
         customer_po: '',
-        total_discount: 0,
-        company_id: null,
-        selected_programs: [],
-        discount_percent: 0,
-        vat_percent: 0,
-        shipping_cost: 0
+        buyer_id: null,
+        order_summary: {}
     };
 
     public list = {
@@ -119,7 +114,7 @@ export class SaleOrderCreateComponent implements OnInit {
         public keyService: SaleOrderCreateKeyService,
         private dt: DatePipe) {
         this.generalForm = fb.group({
-            'company_id': [null, Validators.required],
+            'buyer_id': [null, Validators.required],
             'customer_po': [null, Validators.required],
             'order_number': [null],
             'type': ['NO', Validators.required],
@@ -127,17 +122,17 @@ export class SaleOrderCreateComponent implements OnInit {
             'delivery_date': [null],
             'contact_user_id': [null],
             'prio_level': [null],
-            'payment_term_id': [null],
-            'sales_person': [null],
+            'sale_person_id': [null, Validators.required],
             'warehouse_id': [1, Validators.required],
-            'payment_method': [null],
+            'payment_method_id': [null, Validators.required],
             'billing_id': [null],
             'shipping_id': [null],
             'description': [null],
-            'approver_id': [null],
-            'carrier_id': [null],
-            'ship_rate': [null],
-            'ship_method_option': [null]
+            'payment_term_id': [null, Validators.required],
+            'approver_id': [null, Validators.required],
+            'carrier_id': [2],
+            'ship_method_rate': [null, Validators.required],
+            'ship_method_option': [null, Validators.required]
         });
         //  Init Key
         this.keyService.watchContext.next(this);
@@ -163,7 +158,7 @@ export class SaleOrderCreateComponent implements OnInit {
 
         this.generalForm.controls['order_date'].patchValue(currentDt.toISOString().slice(0, 10));
         this.generalForm.controls['delivery_date'].patchValue(currentDt.toISOString().slice(0, 10));
-        this.generalForm.controls['sales_person'].patchValue(user.id);
+        this.generalForm.controls['sale_person_id'].patchValue(user.id);
         this.generalForm.controls['approver_id'].patchValue(user.id);
 
         this.orderService.generatePOCode().subscribe(res => { this.generalForm.controls['customer_po'].patchValue(res.data); });
@@ -191,8 +186,8 @@ export class SaleOrderCreateComponent implements OnInit {
         });
     }
 
-    getDetailCustomerById(company_id) {
-        this.orderService.getDetailCompany(company_id).subscribe(res => {
+    getDetailCustomerById(buyer_id) {
+        this.orderService.getDetailCompany(buyer_id).subscribe(res => {
             try {
                 this.customer = res.data;
                 if (res.data.buyer_type === 'PS') {
@@ -211,11 +206,11 @@ export class SaleOrderCreateComponent implements OnInit {
     selectData(data) { }
 
     changeCustomer() {
-        const company_id = this.generalForm.value.company_id;
+        const buyer_id = this.generalForm.value.buyer_id;
         this.customer = Object.create(this.copy_customer);
         this.addr_select = Object.create(this.copy_addr);
-        if (company_id) {
-            this.getDetailCustomerById(company_id);
+        if (buyer_id) {
+            this.getDetailCustomerById(buyer_id);
         }
         this.list.items = [];
         this.generalForm.controls['description'].patchValue('');
@@ -247,14 +242,44 @@ export class SaleOrderCreateComponent implements OnInit {
     getShippingReference(id) {
         this.orderService.getShippingReference(id).subscribe(res => {
             this.listMaster['carriers'] = res.data;
+            this.changeShipVia();
         });
     }
 
     changeShipVia() {
-        const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id);
-        this.listMaster['options'] = carrier.options || [];
-        this.listMaster['ship_rates'] = carrier.ship_rate || [];
-        this.generalForm.patchValue({ ship_method_option: null, ship_rate: null });
+      const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id);
+      this.listMaster['options'] = carrier.options || [];
+      this.listMaster['ship_rates'] = carrier.ship_rate || [];
+      let default_option = null;
+      let default_ship_rate = null;
+      if (+this.generalForm.value.carrier_id === 3 || this.generalForm.value.carrier_id !== 999 && !carrier.own_carrirer) {
+          default_option = 888;
+          default_ship_rate = 8;
+      }
+
+      if (+this.generalForm.value.carrier_id === 999) {
+          default_ship_rate = 8;
+          this.generalForm.patchValue({ shipping_id: null });
+          this.generalForm.get('shipping_id').setValidators(null);
+          this.addr_select.shipping = {
+              'address_name': '',
+              'address_line': '',
+              'country_name': '',
+              'city_name': '',
+              'state_name': '',
+              'zip_code': ''
+          };
+      } else {
+          this.generalForm.get('shipping_id').setValidators([Validators.required]);
+      }
+
+      if (carrier.own_carrirer) {
+          default_option = null;
+          default_ship_rate = 7;
+      }
+
+      this.generalForm.patchValue({ ship_method_option: default_option, ship_method_rate: default_ship_rate });
+      this.generalForm.updateValueAndValidity();
     }
 
     findDataById(id, arr) {
@@ -279,9 +304,6 @@ export class SaleOrderCreateComponent implements OnInit {
     }
 
     changeFromSource(item) {
-        if (+item.source_id === 3) {
-            return;
-        }
         item.source_id = 2;
         item.source_name = 'Manual';
     }
@@ -339,13 +361,13 @@ export class SaleOrderCreateComponent implements OnInit {
         this.order_info.order_summary['total_item'] = items.length;
         items.forEach(item => {
             this.order_info.order_summary['total_cogs'] = (this.order_info.order_summary['total_cogs'] || 0) + (+item.cost_price || 0) * (item.quantity || 0);
-            this.order_info.order_summary['total_vol'] = (this.order_info.order_summary['total_vol'] || 0) + (+item.vol || 0);
-            this.order_info.order_summary['total_weight'] = (this.order_info.order_summary['total_weight'] || 0) + (+item.wt || 0);
+            this.order_info.order_summary['total_vol'] = (this.order_info.order_summary['total_vol'] || 0) + (+item.vol || 0) * (item.quantity || 0);
+            this.order_info.order_summary['total_weight'] = (this.order_info.order_summary['total_weight'] || 0) + (+item.wt || 0) * (item.quantity || 0);
         });
 
 
         this.list.items.forEach(item => {
-            item.amount = (+item.quantity * (+item.sale_price || 0)) * (100 - (+item.discount || 0)) / 100;
+            item.amount = (+item.quantity * (+item.sale_price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
             this.order_info.sub_total += item.amount;
         });
 
@@ -373,38 +395,29 @@ export class SaleOrderCreateComponent implements OnInit {
     }
 
     calcTaxShipping() {
-        const params = {
-            'customer': this.generalForm.value.company_id,
-            'address': this.generalForm.value.shipping_id,
-            'ship_via': this.generalForm.value.carrier_id,
-            'option': this.generalForm.value.ship_method_option,
-            'ship_rate': this.generalForm.value.ship_rate,
-            'items': this.list.items.filter(item => !item.misc_id)
-        };
-        this.orderService.getTaxShipping(params).subscribe(res => {
+      const params = {
+          'customer': this.generalForm.value.buyer_id,
+          'address': this.generalForm.value.shipping_id,
+          'ship_via': this.generalForm.value.carrier_id,
+          'option': this.generalForm.value.ship_method_option,
+          'ship_rate': this.generalForm.value.ship_method_rate,
+          'items': this.list.items.filter(item => !item.misc_id)
+      };
+      this.orderService.getTaxShipping(params).subscribe(res => {
+          const old_misc = this.list.items.filter(item => item.misc_id && +item.source_id !== 3);
+          const items = res.data.items;
+          const misc = res.data.mics.map(item => {
+              item.is_misc = 1;
+              item.misc_id = item.id;
+              return item;
+          });
+          this.list.items = items.concat(misc, old_misc);
 
-            try {
-                if (res.status) {
-                    this.list.items = res.data.items;
-                    const misc = res.data.mics.map(item => {
-                        item.is_misc = 1;
-                        item.misc_id = item.id;
-                        return item;
-                    });
-                    this.list.items = this.list.items.concat(misc);
-                    this.updateTotal();
-                    this.order_info['original_ship_cost'] = res.data.price;
-                } else {
-                    this.toastr.error(res.message);
-                }
-            } catch (e) {
-                console.log(e);
-            }
-
-        },
-            err => {
-                this.toastr.error(err.message);
-            });
+          // Assign tax to all item
+          this.list.items.forEach(item => item.tax_percent = res.data.tax_percent);
+          this.updateTotal();
+          this.order_info['original_ship_cost'] = res.data.price;
+      });
     }
 
     addNewItem() {
@@ -417,12 +430,13 @@ export class SaleOrderCreateComponent implements OnInit {
                 });
                 res.forEach((item) => {
                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
-                    item['products'] = [];
+                    // item['products'] = [];
                     item.quantity = 1;
                     item['order_detail_id'] = null;
-                    item.totalItem = item.sale_price;
+                    // item.sale_price = item.sale_price;
                     item.source_id = 0;
                     item.source_name = 'From Master';
+                    item.is_shipping_free  = item.free_ship;
                 });
                 this.list.items = this.list.items.concat(res.filter((item) => {
                     return listAdded.indexOf(item.item_id + item.item_condition_id) < 0;
@@ -444,13 +458,16 @@ export class SaleOrderCreateComponent implements OnInit {
 
                 res.forEach((item) => {
                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
-                    item.source_id = 3;
-                    item.source_name = 'System';
+                    item.source_id = 2;
+                    item.source_name = 'Manual';
                     item.quantity = 1;
                     item.is_misc = 1;
                     item.uom_name = item.uom;
                     item.misc_id = item.id;
                     item.sku = item.no;
+                    item.is_shipping_free = 0;
+                    item.income_account_name = item.account_name;
+                    item.income_account_id = item.account_id;
                 });
 
                 this.list.items = this.list.items.concat(res.filter((item) => {
@@ -464,13 +481,11 @@ export class SaleOrderCreateComponent implements OnInit {
 
     createOrder(type) {
         const products = this.list.items.map(item => {
-            item.discount_percent = item.discount;
             item.is_item = (item.misc_id) ? 0 : 1;
-            item.misc_id = (item.misc_id) ? null : 1;
-            item.is_shipping_free = 1;
-            item.item_id = (item.item_id) ? (item.item_id) : (item.id);
-            item.item_type = (item.item_type) ? (item.item_type) : (item.type);
-            item.item_condition_id = (item.item_condition_id) ? (item.item_condition_id) : null;
+            item.misc_id = (item.misc_id) ? item.misc_id : null;
+            item.item_id = (item.item_id) ? (item.item_id) : null;
+            item.is_shipping_free = (item.is_item) ? (item.is_shipping_free) : 0;
+            item.item_condition_id = (item.is_item) ? (item.item_condition_id) : null;
             return item;
         });
 

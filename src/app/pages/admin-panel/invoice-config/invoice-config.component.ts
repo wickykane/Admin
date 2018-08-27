@@ -70,6 +70,7 @@ export class InvoiceConfigComponent implements OnInit {
         ]
     };
     public applyChaseOption = '1';
+    public isProcessingRequest = false;
 
     constructor(
         private fb: FormBuilder,
@@ -168,6 +169,7 @@ export class InvoiceConfigComponent implements OnInit {
     }
 
     onSave() {
+        this.isProcessingRequest = true;
         if ( this.invoiceForm.value.afterRemindFrequency != null && this.invoiceForm.value.afterRemindFrequency !== 'null') {
             const params = {
                 'apply_chase_for': this.applyChaseOption,
@@ -188,9 +190,19 @@ export class InvoiceConfigComponent implements OnInit {
                 }
             };
             if (params['after_due_date']['send_reminder_key'] === '1' && params['after_due_date']['send_reminder_value'] < 1) {
+                this.toastr.clear();
                 this.toastr.error('The day number to send reminder after due date must be great than 0');
+                setTimeout(() => {
+                    this.isProcessingRequest = false;
+                }, 1000);
             } else {
-                this.invoiceService.saveInvoiceConfigInfo(params).subscribe(
+                this.invoiceService.saveInvoiceConfigInfo(params)
+                .finally(() => {
+                    setTimeout(() => {
+                        this.isProcessingRequest = false;
+                    }, 1000);
+                })
+                .subscribe(
                     res => {
                         this.toastr.success(res.message);
                         // this.getInvoiceChaseInfo();
@@ -203,7 +215,11 @@ export class InvoiceConfigComponent implements OnInit {
                 });
             }
         } else {
+            this.toastr.clear();
             this.toastr.error('Please select reminder frequency!');
+            setTimeout(() => {
+                this.isProcessingRequest = false;
+            }, 1000);
         }
     }
 }
