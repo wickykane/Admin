@@ -20,7 +20,7 @@ export class PickupOptionsModalComponent implements OnInit, OnDestroy {
 
     generalForm: FormGroup;
     private _weekDaysList: any;
-    private _wareHouseList: any;
+    public _wareHouseList: any;
     @Input('wareHouseList') set wareHouseList(value: any) {
         this._wareHouseList = value;
     }
