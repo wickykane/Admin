@@ -53,7 +53,7 @@ export class SaleQuotationComponent implements OnInit {
         'CC': { color: 'red', name: 'Canceled', img: './assets/images/icon/cancel.png' },
         'SC': { color: 'lemon', name: 'Completed', img: './assets/images/icon/full_delivered.png' },
         // 'RO': { color: 'darkblue', name: 'Reopen' },
-        'IU': { color: 'darkblue', name: 'In use' },
+        // 'IU': { color: 'darkblue', name: 'In use' },
         'EX': { color: 'bright-grey', name: 'Expired' },
     };
 
