@@ -5,7 +5,7 @@ import { InvoiceComponent } from './ar-invoice/invoice.component';
 import { InvoiceCreateComponent } from './ar-invoice/invoice.create.component';
 import { InvoiceDetailComponent } from './ar-invoice/invoice.view.component';
 import { PaymentComponent } from './payment/payment.component';
-
+import { CreditMemoListComponent } from './credit-memo//list/credit-memo-list.component';
 const routes: Routes = [
     {
         path: 'invoice',
@@ -20,6 +20,12 @@ const routes: Routes = [
         path: 'payment',
         children: [
             { path: '', component: InvoiceComponent }
+        ]
+    },
+    {
+        path: 'creditCard',
+        children: [
+            { path: '', component: CreditMemoListComponent }
         ]
     }
 ];

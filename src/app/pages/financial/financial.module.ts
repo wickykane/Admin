@@ -15,7 +15,7 @@ import { InvoiceDebitMemoTabComponent } from './ar-invoice/invoice-tabs/debit-me
 import { InvoiceDocumentTabComponent } from './ar-invoice/invoice-tabs/document-tab.component';
 import { InvoiceInformationTabComponent } from './ar-invoice/invoice-tabs/information-tab.component';
 import { InvoicePaymentTabComponent } from './ar-invoice/invoice-tabs/payment-tab.component';
-
+import { CreditMemoListComponent } from './credit-memo//list/credit-memo-list.component';
 import { TableService } from '../../services/index';
 import { CommonShareModule, Helper, PageHeaderModule } from '../../shared/index';
 import { FinancialRoutingModule } from './financial-routing.module';
@@ -46,8 +46,8 @@ import { ItemModalModule } from '../../shared/modals/item.module';
         InvoiceDebitMemoTabComponent,
         InvoicePaymentTabComponent,
         InvoiceDocumentTabComponent,
-        PaymentComponent
-
+        PaymentComponent,
+        CreditMemoListComponent
     ],
     providers: [FinancialService, TableService, DatePipe, Helper],
     entryComponents: []
