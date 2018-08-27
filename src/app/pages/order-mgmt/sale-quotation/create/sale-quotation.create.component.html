@@ -137,9 +137,9 @@
                                             <div class="form-group row">
                                                 <label class='col-6'>Payment Method<span class="text-danger">(*)</span></label>
                                                 <div class='col-6 text-primary'>
-                                                    <select class="form-control" id="payment_method" name="payment_method" formControlName="payment_method">
+                                                    <select class="form-control" id="payment_method_id" name="payment_method_id" formControlName="payment_method_id">
                                                         <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
-                                                        <option *ngFor="let item of listMaster['payment_method']" [ngValue]="item.cd">{{item.name}}</option>
+                                                        <option *ngFor="let item of listMaster['payment_method']" [ngValue]="item.id">{{item.name}}</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -248,12 +248,12 @@
                                 <strong>Ship To</strong>
                             </div>
                             <div class="card-body p-25">
-                                <div class="row">
-                                    <div class="col-md-12 " *ngIf="generalForm.value.is_multi_shp_addr == 1">
+                                <div class="row" *ngIf="generalForm.value.carrier_id == 999">
+                                    <div class="col-md-12 ">
                                         <p>Customer will pickup goods in stores.</p>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="row" *ngIf="generalForm.value.carrier_id != 999">
                                     <div class="col-12 ">
                                         <div class="form-group row">
                                             <label class=" control-label col-5" for="shiping_to" translate>Label
@@ -345,7 +345,7 @@
                                                 <div class='col-6'>
                                                     <select class="form-control" id="ship_method_option" name="ship_method_option" formControlName="ship_method_option">
                                                     <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
-                                                    <option *ngFor="let item of listMaster['options']" [ngValue]="item.id">{{item.name}}</option>
+                                                    <option *ngFor="let item of listMaster['options']" [ngValue]="item.cd">{{item.name}}</option>
                                                 </select>
                                                 </div>
                                             </div>
@@ -429,30 +429,30 @@
                                             </td>
                                             <td>{{item.sku}}</td>
                                             <td>{{item.des}}</td>
-                                            <td>{{item.condition_name}}</td>
+                                            <td class="text-center">{{item.condition_name}}</td>
                                             <td>{{item.uom_name}}</td>
                                             <td class="text-center">
-                                                <i *ngIf="item.free_ship" class="text-success fa fa-check"></i>
+                                                <i *ngIf="item.is_shipping_free" class="text-success fa fa-check"></i>
                                             </td>
                                             <td>
-                                                <input [disabled]="item.is_misc" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (change)="updateTotal()" (keypress)="_keyPress($event)">
+                                                <input [isDecimal]="true" numberDirective [min]="0" [disabled]="item.misc_id" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (change)="updateTotal()">
                                             </td>
                                             <td>
                                                 <div>
-                                                    <span>$</span>
+
                                                     <div style="display:inline-block;width:80%">
-                                                        <input OnlyNumber class="form-control input-sm" type="number" [(ngModel)]="item.sale_price" (change)="updateTotal();changeFromSource(item)">
+                                                        <input [isDecimal]="true" numberDirective [min]="0" class="form-control input-sm" type="number" [(ngModel)]="item.sale_price" (change)="updateTotal();changeFromSource(item)">
                                                     </div>
                                                 </div>
                                             </td>
                                             <td>
-                                                <input OnlyNumber class="form-control input-sm" type="number" [(ngModel)]="item.discount" (change)="updateTotal();changeFromSource(item)">
+                                                <input [isDecimal]="true" numberDirective [min]="0" class="form-control input-sm" type="number" [(ngModel)]="item.discount" (change)="updateTotal();changeFromSource(item)">
                                             </td>
                                             <td>
-                                                <input OnlyNumber class="form-control input-sm" type="number" [(ngModel)]="item.discount" (change)="updateTotal();changeFromSource(item)">
+                                                <input [isDecimal]="true" [disabled]="true" numberDirective [min]="0" class="form-control input-sm" type="number" [(ngModel)]="item.tax_percent" (change)="updateTotal();changeFromSource(item)">
                                             </td>
                                             <td class="text-center">
-                                                <span>{{item.totalItem | currency}}</span>
+                                                <span>{{item.amount | currency}}</span>
                                             </td>
                                             <td>
                                                 {{ item.income_account_name }}
@@ -476,7 +476,7 @@
                                 <i class="fa fa-plus"></i>Misc Item
                             </button>
                             <button (click)="calculateShipping()" class="btn btn-link">
-                                Calculate Shipping
+                                Calculate Tax & Shipping
                             </button>
                         </div>
                     </div>
@@ -492,7 +492,7 @@
                     <div class="card-body no-padding">
                         <form [formGroup]="generalForm">
                             <div>
-                                <textarea class="form-control border-0" formControlName="description" rows="11" style="resize:none"></textarea>
+                                <textarea class="form-control border-0" formControlName="note" rows="7" style="resize:none"></textarea>
                             </div>
                         </form>
                     </div>
@@ -507,39 +507,33 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-group row">
-                                    <label class='col-7 control-label'>Total Items</label>
-                                    <div class='col-5'>
-                                        <span class="text-success">30</span>
+                                    <label class='col-8 control-label'>Total Items</label>
+                                    <div class='col-4 p-l-0'>
+                                        <span class="text-success">{{ order_info.order_summary['total_item'] || 0}}</span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class='col-7 control-label'>Total COGS</label>
-                                    <div class='col-5'>
-                                        <span class="text-success">30 lbs</span>
+                                    <label class='col-8 control-label'>Total COGS</label>
+                                    <div class='col-4 p-l-0'>
+                                        <span class="text-success">{{ (order_info.order_summary['total_cogs'] || 0) | currency}} </span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class='col-7 control-label'>Total Weight</label>
-                                    <div class='col-5'>
-                                        <span class="text-success">30$</span>
+                                    <label class='col-8 control-label'>Total Weight</label>
+                                    <div class='col-4 p-l-0'>
+                                        <span class="text-success">{{ (order_info.order_summary['total_weight'] || 0)}} lbs</span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class='col-7 control-label'>Total Volume</label>
-                                    <div class='col-5'>
-                                        <span class="text-success">30$</span>
+                                    <label class='col-8 control-label'>Total Volume</label>
+                                    <div class='col-4 p-l-0'>
+                                        <span class="text-success">{{ (order_info.order_summary['total_vol'] || 0)}} CBM</span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class='col-7 control-label'>Original Shipping Cost</label>
-                                    <div class='col-5'>
-                                        <span class="text-success">30.000CBM</span>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class='col-7 control-label'>Origin. Handle Fee</label>
-                                    <div class='col-5'>
-                                        <span class="text-success">30$</span>
+                                    <label class='col-8 control-label'>Original Shipping Cost</label>
+                                    <div class='col-4 p-l-0'>
+                                        <span class="text-success">{{ (order_info['original_ship_cost'] || 0) | currency}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -563,7 +557,7 @@
                                         <strong>{{order_info.sub_total | currency}}</strong>
                                     </div>
                                 </div>
-                                <div class="form-group row">
+                                <!-- <div class="form-group row">
                                     <label class='col-5 control-label'>- Discount (%)</label>
                                     <div class='col-2 no-padding'>
                                         <input OnlyNumber class="form-control" [(ngModel)]="order_info.discount_percent" class="form-control" type="text" (change)="updateTotal()">
@@ -571,14 +565,11 @@
                                     <div class='col-5 padding-lr-10'>
                                         <input class="form-control" readonly="true" [(ngModel)]="order_info.total_discount" class="form-control" value="0" type="number">
                                     </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class='col-5 control-label'>+ TAX/VAT (%):</label>
-                                    <div class='col-2 no-padding'>
-                                        <input OnlyNumber class="form-control" [(ngModel)]="order_info.vat_percent" class="form-control" type="text" (change)="updateTotal()">
-                                    </div>
+                                </div> -->
+                                <div *ngFor="let item of order_info['taxs']" class="form-group row">
+                                    <label class='col-5 control-label'>+ TAX ({{item.value}}%):</label>
                                     <div class='col-5 padding-lr-10'>
-                                        <input class="form-control" readonly="true" [(ngModel)]="order_info['vat_percent_amount']" class="form-control" value="0" type="number">
+                                        <input class="form-control" readonly="true" [(ngModel)]="item.amount" class="form-control" value="0" type="number">
                                     </div>
                                 </div>
                                 <div class="form-group row margin-lr-0 text-light bg-danger">
@@ -597,10 +588,10 @@
         </div>
         <div class="row">
             <div class="col-md-12 mg-top-15 text-right">
-                <button type="button" class="btn btn-outline-info" (click)="createOrder('quote')" translate>Save As Quote</button>
-                <button type="button" class="btn btn-outline-warning" (click)="createOrder('draft')" translate>Save As Draft</button>
-                <button type="button" class="btn btn-outline-primary" (click)="createOrder('create')" ng-disabled="!generalForm.valid" translate>Save & Submit</button>
-                <button type="button" class="btn btn-default" [routerLink]="['/order-management/sale-order']" translate>Cancel</button>
+                <button type="button" class="btn btn-outline-info" (click)="createOrder(1, 1)" translate>Save As Draft</button>
+                <button type="button" class="btn btn-outline-success" (click)="confirmModal(4)" [disabled]="!generalForm.valid" translate>Save & Validate</button>
+                <button type="button" class="btn btn-outline-danger" (click)="confirmModal(2)" [disabled]="!generalForm.valid" translate>Save & Submit For Approval</button>
+                <button type="button" class="btn btn-default" (click)="confirmModal(0)" translate>Cancel</button>
             </div>
         </div>
     </section>

@@ -77,46 +77,70 @@
 }
 
 .dashboard-content {
-    margin-top: 10px;
-    margin-left: -5px;
+    // margin-top: 10px;
+    // margin-left: -5px;
 }
 
-.dashboard-content .dashboard-stat.blue {
-    background-color: #3598dc;
+.dashboard-content .dashboard-stat.blue, .bg-blue {
+    background-color: #70BAEB !important;
+    color: #fff !important;
 }
 
-.dashboard-content .dashboard-stat.red {
-    background-color: #e7505a;
+.dashboard-content .dashboard-stat.darkblue,  .bg-darkblue  {
+    background-color: #7197EA;
+    color: #fff !important;    
 }
 
-.dashboard-content .dashboard-stat.green {
+.dashboard-content .dashboard-stat.red, .bg-red {
+    background-color: #E74F5B;
+    color: #fff !important;    
+}
+
+.dashboard-content .dashboard-stat.lemon, .bg-lemon {
+    background-color: #C2C262;
+    color: #fff !important;    
+}
+
+.dashboard-content .dashboard-stat.green, .bg-green {
     background-color: #32c5d2;
+    color: #fff !important;    
 }
 
-.dashboard-content .dashboard-stat.magenta {
-    background-color: #803690;
+.dashboard-content .dashboard-stat.magenta, .bg-magenta {
+    background-color: #A48AD4;
+    color: #fff !important;    
 }
 
-.dashboard-content .dashboard-stat.strong-green {
-    background-color: #55c51c;
+.dashboard-content .dashboard-stat.strong-green, .bg-strong-green {
+    background-color: #45C37A;
+    color: #fff !important;    
 }
 
-.dashboard-content .dashboard-stat.bright-grey {
-    background-color: #4D5360;
+.dashboard-content .dashboard-stat.bright-grey, .bg-bright-grey {
+    background-color: #999999;
+    color: #fff !important;    
 }
 
-.dashboard-content .dashboard-stat.rock-blue {
+.dashboard-content .dashboard-stat.rock-blue, .bg-rock-blue {
     background-color: #949FB1;
+    color: #fff !important;    
 }
 
-.dashboard-content .dashboard-stat.texas-rose {
+.dashboard-content .dashboard-stat.texas-rose, .bg-texas-rose {
     background-color: #FDB45C;
+    color: #fff !important;    
 }
 
 .dashboard-content .dashboard-stat {
     display: block;
     margin-bottom: 0;
     overflow: hidden;
+    img {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        opacity: 0.2;
+    }
 }
 
 .dashboard-content .dashboard-stat.dashboard-stat-v2 .visual {
@@ -207,6 +231,11 @@
         max-height: 150px;
         overflow-y: auto;
     }
+    .table-responsive.list {
+        height: auto;
+        max-height: 250px;
+        overflow-y: auto;
+    }
     table.table-bg {
         background: #ededed;
     }
@@ -226,9 +255,9 @@
         padding-left: 5px;
         padding-right: 5px;
     }
-    .paddingleft-5 {
-        padding-left: 5px;
-        padding-right: 15px;
+    .padding-lr-0 {
+        padding-left: 0px;
+        padding-right: 0px;
     }
     .margin-lr-0 {
         margin-left: 0;
@@ -259,6 +288,7 @@
         .card-body {
             padding: 5px;
             .table-order {
+                font-size: 11px;
                 margin-bottom: 0;
                 th {
                     padding: 5px;
@@ -278,18 +308,22 @@
     .no-border {
         border: none;
         border-top: 1px solid rgba(0, 0, 0, 0.125);
-        border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+        // border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+        .card-header {
+            border-left:  1px solid rgba(0, 0, 0, 0.125);
+            border-right:  1px solid rgba(0, 0, 0, 0.125);
+        }
     }
 }
 
 .p-25 {
     .col-12 {
-        padding: 0 27px;        
+        padding: 0 27px;
     }
 }
 .p-17 {
     .col-12 {
-        padding: 0 17px;        
+        padding: 0 17px;
     }
 }
 .p-l-0 {
@@ -421,9 +455,21 @@
 }
 
 .filter-order-group {
+    & > div {
+        padding-right: 0 !important;
+    }
+    .control-label {
+        width: 72px;
+        text-align: left;
+    }
     .col-md-2 {
         flex: 0 0 19.666667%;
         max-width: 19.666667%;
+    }
+    .control-label + input, select, .ng-select, .date-group {
+        max-width: 120px;
+        margin-left: 5px;
+        display: inline-block;
     }
 }
 
@@ -447,4 +493,33 @@
 
 .border-bottom {
     border-bottom: 1px solid #ccc;
+}
+
+.status-ctn {
+    margin: 0;
+    padding: 0;
+
+    .status-item {
+        position: relative;
+        display: inline-block;
+        width: 110px;
+        height: 60px;
+        text-align: center;
+        color: #ffffff;
+        font-weight: bold;
+        margin-right: 5px;
+
+        .status-count {
+            position: absolute;
+            right: 10px;
+            top: 5px;
+            font-size: 20px;
+        }
+
+        .status-lbl {
+            position: absolute;
+            right: 10px;
+            bottom: 5px;
+        }
+    }
 }

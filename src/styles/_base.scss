@@ -877,3 +877,50 @@ ngu-carousel {
         background-color: #2196f3;
     }
    } 
+
+.btn-default-custom {
+  padding: 3px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 11px;
+  background: #feffff;
+  background: -webkit-gradient(linear, left top, left bottom, from(#feffff), color-stop(50%, #ebebeb), to(#ffffff));
+  background: linear-gradient(to bottom, #feffff 0%, #ebebeb 50%, #ffffff 100%);
+  cursor: pointer;
+}
+
+.tabs-order.full-width {
+    .nav-tabs {
+        margin-left: -10px;
+        margin-right: -10px;
+    }
+}
+.icon-blue{
+    i::before{
+     color:#2196f3;
+    }
+
+}
+.icon-green{
+    i::before{
+     color:green;
+    }
+
+}         
+.checkbox-green{
+ input:checked + .slider {
+     background-color: green;
+ }
+} 
+
+// Custom Select 2
+.ng-select .ng-select-container .ng-value-container {
+    top: 0 !important;
+}
+
+// Modal
+.modal-md {
+    .modal-dialog {
+        max-width: 500px;        
+    }
+}

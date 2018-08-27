@@ -65,21 +65,38 @@ export class SaleOrderDetailComponent implements OnInit {
   }
 
   putApproveOrder(order_id) {
-    // const params = {'status_code': 'AP'};
-    this.orderService.approveOrd(order_id).subscribe(res => {
-      if ( res.status ) {
-        this.toastr.success(res.message);
-        setTimeout(() => {
-          this.router.navigate(['/order-management/sale-order']);
-        }, 500);
-      } else {
-        this.toastr.error(res.message);
-      }
-    },
-      err => {
-          this.toastr.error(err.message);
-      }
-    );
+      // const params = {'status_code': 'AP'};
+      this.orderService.approveOrd(order_id).subscribe(res => {
+          if (res.status) {
+              this.toastr.success(res.message);
+              setTimeout(() => {
+                  this.router.navigate(['/order-management/sale-order']);
+              }, 500);
+          } else {
+              this.toastr.error(res.message);
+          }
+      },
+          err => {
+              this.toastr.error(err.message);
+          }
+      );
+  }
+
+  updateStatusOrder(order_id, status) {
+      this.orderService.updateStatusOrder(order_id, status).subscribe(res => {
+          if (res.status) {
+              this.toastr.success(res.message);
+              setTimeout(() => {
+                  this.router.navigate(['/order-management/sale-order']);
+              }, 500);
+          } else {
+              this.toastr.error(res.message);
+          }
+      },
+          err => {
+              this.toastr.error(err.message);
+          }
+      );
   }
 
 

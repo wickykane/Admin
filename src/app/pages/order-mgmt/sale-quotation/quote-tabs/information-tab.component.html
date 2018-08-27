@@ -1,0 +1,440 @@
+<div class='address-tab'>
+    <div class="bd-example text-right">
+        <button class="btn btn-outline-secondary" [routerLink]="['/order-management/sale-quotation']"><i class="fa fa-share-square" ></i> Back</button>
+        <button *ngIf="detail['sale_quote_status_id'] == 1" class="btn btn-outline-primary" [routerLink]="['/order-management/sale-quotation/edit', _orderId]"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit</button>
+        <button *ngIf="detail['sale_quote_status_id'] == 1" class="btn btn-outline-warning" (click)="confirmModal(_orderId,'SM')"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i> Submit</button>
+        <button *ngIf="detail['sale_quote_status_id'] == 1" class="btn btn-outline-danger" (click)="confirmModal(_orderId, 'CC')"><i class="fa fa-times-circle" aria-hidden="true"></i> Cancel</button>
+        <button *ngIf="detail['sale_quote_status_id'] == 2" class="btn btn-outline-success" (click)="confirmModal(_orderId,'AM')"><i class="fa fa-check-square"></i> Approve</button>
+        <button *ngIf="detail['sale_quote_status_id'] == 2" class="btn btn-outline-danger" (click)="confirmModal(_orderId,'RM')"><i class="fa fa-ban" aria-hidden="true"></i> Reject</button>
+        <button class="btn btn-outline-info" (click)="confirmModal(_orderId,'CLONE')"><i class="fa fa-clone"></i> Copy</button>
+        <button *ngIf="detail['sale_quote_status_id'] == 4" class="btn btn-outline-dark" (click)="confirmModal(item.id, 'SC')"><i class="fa fa-exchange" aria-hidden="true"></i> Convert to SO</button>
+
+    </div>
+    <section class="rma-page block main-container block-order">
+        <div class="row">
+            <div class="col-md-4 padding-lr-5">
+                <div class="card height-100">
+                    <div class="card-header">
+                        <strong>Quote Information</strong>
+                    </div>
+                    <div class="card-body">
+                        <div class="row information  height-100">
+                            <div class="col-md-12 fix-padding">
+                                <div class="row">
+                                    <div class="col-md-6 padding-lr-5 ">
+                                        <div class="form-group row">
+                                            <label class='col-6 control-label'>Sales Quote No</label>
+                                            <div class='col-6'>
+                                                {{detail['cd']}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-6 control-label'>Sales Order No</label>
+                                            <div class='col-6'>
+                                                {{ detail['sale_order_no']}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-6 control-label'>Customer PO</label>
+                                            <div class='col-6'>
+                                                {{detail['cus_po']}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-6 control-label'>Quote Date</label>
+                                            <div class='col-6'>
+                                                {{detail['qt_dt']}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-6 control-label'>Expiry Date</label>
+                                            <div class='col-6'>
+                                                {{detail['expire_dt']}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 customer-infomation bolder padding-lr-5">
+                                        <div class="form-group row">
+                                            <label class='col-6 control-label'>Quote Status</label>
+                                            <div class='col-6'>
+                                                <span class="badge badge-info bg-blue" *ngIf="detail['sale_quote_status_id'] == 1">{{detail['sale_quote_status_name']}}</span>
+                                                <span class="badge badge-warning bg-texas-rose" *ngIf="detail['sale_quote_status_id'] == 2">{{detail['sale_quote_status_name']}}</span>
+                                                <span class="badge badge-danger bg-magenta" *ngIf="detail['sale_quote_status_id'] == 3">{{detail['sale_quote_status_name']}}</span>
+                                                <span class="badge badge-success bg-strong-green" *ngIf="detail['sale_quote_status_id'] == 4">{{detail['sale_quote_status_name']}}</span>
+                                                <span class="badge badge-danger bg-red" *ngIf="detail['sale_quote_status_id'] == 7">{{detail['sale_quote_status_name']}}</span>
+                                                <span class="badge badge-primary bg-lemon" *ngIf="detail['sale_quote_status_id'] == 8">{{detail['sale_quote_status_name']}}</span>
+                                                <span class="badge badge-primary" *ngIf="detail['sale_quote_status_id'] == 9">{{detail['sale_quote_status_name']}}</span>
+                                                <span class="badge badge-primary bg-darkblue" *ngIf="detail['sale_quote_status_id'] == 10">{{detail['sale_quote_status_name']}}</span>
+                                                <span class="badge badge-primary bg-bright-grey" *ngIf="detail['sale_quote_status_id'] == 11">{{detail['sale_quote_status_name']}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-6 control-label'>Payment Method</label>
+                                            <div class='col-6'>
+                                                {{ detail['payment_method_name']}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-6 control-label'>Payment Terms</label>
+                                            <div class='col-6'>
+                                                {{ detail['payment_term_name']}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-6 control-label'>Saleperson</label>
+                                            <div class='col-6'>
+                                                {{detail['sale_person_name']}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-6 control-label'>Approver</label>
+                                            <div class='col-6'>
+                                                {{ detail['approver_name']}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 padding-lr-5">
+                <div class="card height-100">
+                    <div class="card-header">
+                        <strong>Customer Information</strong>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group row">
+                                    <label class="control-label col-6" translate>Customer Name</label>
+                                    <div class="col-6">
+                                        {{detail['buyer_name']}}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class=" control-label col-6" translate>Contact Name</label>
+                                    <div class="col-6">
+                                        {{detail['contact_user']['full_name']}}
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="control-label col-6" translate>Phone</label>
+                                    <div class="col-6">
+                                        {{detail['contact_user']['phone']}}
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="control-label col-6" translate>Email</label>
+                                    <div class="col-6">
+                                        {{detail['contact_user']['email']}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 padding-lr-5">
+                <div class="card height-100">
+                    <div class="card-header">
+                        <strong>Bill To</strong>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group row">
+                                    <label class="control-label col-6" translate>Label</label>
+                                    <div class="col-6">
+                                        {{ detail.billing['name']}}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class=" control-label col-6" translate>Address</label>
+                                    <div class="col-6">
+                                        {{detail.billing['address_line']}}
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="control-label col-6" translate>City/State</label>
+                                    <div class="col-6">
+                                        {{detail.billing['city_name']}}/{{detail.billing['state_name']}}
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="control-label col-6" translate>Zip</label>
+                                    <div class="col-6">
+                                        {{detail.billing['zip_code']}}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="control-label col-6" translate>Country</label>
+                                    <div class="col-6">
+                                        {{detail.billing['country_name']}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 padding-lr-5">
+                <div class="card height-100">
+                    <div class="card-header">
+                        <strong>Ship To</strong>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group row">
+                                    <label class="control-label col-6" translate>Label</label>
+                                    <div class="col-6">
+                                        {{ detail.shipping_address['name']}}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class=" control-label col-6" translate>Address</label>
+                                    <div class="col-6">
+                                        {{detail.shipping_address['address_line']}}
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="control-label col-6" translate>City/State</label>
+                                    <div class="col-6">
+                                        {{detail.shipping_address['city_name']}}/{{detail.shipping_address['state_name']}}
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="control-label col-6" translate>Zip</label>
+                                    <div class="col-6">
+                                        {{detail.shipping_address['zip_code']}}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="control-label col-6" translate>Country</label>
+                                    <div class="col-6">
+                                        {{detail.shipping_address['country_name']}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 padding-lr-5">
+                <div class="card height-100">
+                    <div class="card-header">
+                        <strong>Shipping Method</strong>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group row">
+                                    <label class="control-label col-6" translate>Warehouse</label>
+                                    <div class="col-6">
+                                        {{detail['warehouse_name'] }}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class=" control-label col-6" translate>Ship Via</label>
+                                    <div class="col-6">
+                                        {{detail['shipping_method']?.carrier_name }}
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="control-label col-6" translate>Option</label>
+                                    <div class="col-6">
+                                        {{detail['shipping_method']?.options_name }}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="control-label col-6" translate>Ship rate</label>
+                                    <div class="col-6">
+                                        {{detail['shipping_method']?.ship_rate_name }}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="control-label col-6" translate>Exp. Delivery Date</label>
+                                    <div class="col-6">
+                                        {{ detail['delivery_date'] }}
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mg-top-10">
+            <div class="col-12 padding-lr-5">
+                <div class="card no-border">
+                    <div class="card-header">
+                        <strong>Line Items</strong>
+                    </div>
+                    <div class="card-body no-padding">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-order">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" style="width:150px" translate>Item No</th>
+                                        <th class="text-center" translate>Description</th>
+                                        <th class="text-center" translate>Condition</th>
+                                        <th class="text-center" translate>UOM</th>
+                                        <th class="text-center" translate>Free Ship</th>
+                                        <th class="text-nowrap text-center" translate>Order QTY</th>
+                                        <th class="text-center" translate>Unit Price</th>
+                                        <th class="text-center" translate>Disc %</th>
+                                        <th class="text-center" translate>Tax %</th>
+                                        <th class="text-center" translate>Amount</th>
+                                        <th class="text-center" translate>G/L Account</th>
+                                        <th class="text-center" translate>Price Source</th>
+                                    </tr>
+                                </thead>
+                                <tr *ngIf="detail.items.length === 0">
+                                    <td colspan="100%" class="text-center" translate>No data.</td>
+                                </tr>
+                                <tbody *ngFor="let item of detail.items; let $index = index;">
+                                    <tr>
+                                        <td>{{item.sku || item.misc_no}}</td>
+                                        <td>{{item.des || item.misc_name}}</td>
+                                        <td class="text-center">{{item.condition_name}}</td>
+                                        <td>{{item.uom_name || item.uom}}</td>
+                                        <td class="text-center">
+                                            <i *ngIf="item.is_shipping_free" class="text-success fa fa-check"></i>
+                                        </td>
+                                        <td class="text-right">{{item.qty}}</td>
+                                        <td class="text-right">
+                                            <div>
+                                                <span>$</span>
+                                                <div style="display:inline-block;width:80%">
+                                                    {{ item.price }}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-right">
+                                            {{item.discount_percent}}
+                                        </td>
+                                        <td class="text-right">
+                                            {{item.tax_percent}}
+                                        </td>
+                                        <td class="text-right">
+                                            <span>{{item.total_price | currency}}</span>
+                                        </td>
+                                        <td class="text-center">
+                                            {{ item.income_account_name }}
+                                        </td>
+                                        <td class="text-center">
+                                            <span>
+                                                {{item.source_name}}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mg-top-10">
+            <div class="col-md-3 offset-md-5 padding-lr-5">
+                <div class="card height-100">
+                    <div class="card-header">
+                        <strong>Note</strong>
+                    </div>
+                    <div class="card-body">
+                        {{detail['note']}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 padding-lr-5">
+                <div class="card height-100">
+                    <div class="card-header">
+                        <strong>Order Summary</strong>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group row">
+                                    <label class='col-8 control-label'>Total Items</label>
+                                    <div class='col-4'>
+                                        <span class="text-success">{{ detail['total_item']}}</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class='col-8 control-label'>Total COGS</label>
+                                    <div class='col-4'>
+                                        <span class="text-success">{{ detail['total_cogs'] | currency}}</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class='col-8 control-label'>Total Weight</label>
+                                    <div class='col-4'>
+                                        <span class="text-success">{{detail['total_weight']}} lbs</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class='col-8 control-label'>Total Volume</label>
+                                    <div class='col-4'>
+                                        <span class="text-success">{{detail['total_vol']}} CBM</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class='col-8 control-label'>Original Shipping Cost</label>
+                                    <div class='col-4'>
+                                        <span class="text-success">{{ detail['original_ship_cost'] | currency}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 padding-lr-5">
+                <div class="card height-100">
+                    <div class="card-header">
+                        <strong>Order Total</strong>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group row">
+                                    <label class='col-5 control-label'>
+                             <strong class="text-warning">Sub Total</strong>
+                             </label>
+                                    <div class='col-6 offset-md-1 padding-lr-10'>
+                                        <strong>{{detail['sub_total_price']|currency}}</strong>
+                                    </div>
+                                </div>
+                                <div *ngFor="let item of order_info['taxs']" class="form-group row">
+                                    <label class='col-5 control-label'>+ TAX ({{item.value}}%):</label>
+                                    <div class='col-6 padding-lr-10'>
+                                        <input class="form-control" readonly="true" [(ngModel)]="item.amount" class="form-control" value="0" type="number">
+                                    </div>
+                                </div>
+                                <div class="form-group row margin-lr-0 text-light bg-danger">
+                                    <label class="col-5 control-label padding-lr-5">
+                                        <strong>Grand Total:</strong>
+                                    </label>
+                                    <div class="col-6 offset-md-1 padding-lr-5">
+                                        <strong>{{detail['total_price'] |currency}}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

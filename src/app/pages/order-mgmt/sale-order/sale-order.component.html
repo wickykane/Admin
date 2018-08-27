@@ -1,8 +1,44 @@
 <div [@routerTransition]>
     <app-page-header [heading]="'LIST OF ORDERS'" [icon]="'fa-th-list'"></app-page-header>
     <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
-    <div class="block anchor-scroll">
-        <div class="block-content pd-bottom bg-gray-light">
+    <div class="block anchor-scroll block-order">
+      <section id="statusIndicator" class="status-indicator-section">
+          <ul class="status-ctn dashboard-content">
+              <li class="status-item dashboard-stat blue">
+                  <div class="status-count">1</div>
+                  <div class="status-lbl">NEW</div>
+              </li>
+              <li class="status-item dashboard-stat texas-rose">
+                  <div class="status-count">1</div>
+                  <div class="status-lbl">SUBMITTED</div>
+              </li>
+              <li class="status-item dashboard-stat strong-green">
+                  <div class="status-count">2</div>
+                  <div class="status-lbl">APPROVED</div>
+              </li>
+              <li class="status-item dashboard-stat magenta">
+                  <div class="status-count">1</div>
+                  <div class="status-lbl">REJECTED</div>
+              </li>
+              <li class="status-item dashboard-stat lemon">
+                  <div class="status-count">1</div>
+                  <div class="status-lbl">PARTIALLY PAID</div>
+              </li>
+              <li class="status-item dashboard-stat bright-grey">
+                  <div class="status-count">2</div>
+                  <div class="status-lbl">FULLY PAID</div>
+              </li>
+              <li class="status-item dashboard-stat darkblue">
+                  <div class="status-count">1</div>
+                  <div class="status-lbl">OVERDUE</div>
+              </li>
+              <li class="status-item dashboard-stat red">
+                  <div class="status-count">2</div>
+                  <div class="status-lbl">CANCELED</div>
+              </li>
+          </ul>
+      </section>
+        <div class="block-content pd-bottom padding-lr-0">
             <div class="row">
                 <div class="col-9">
                     <form class="row form-horizontal form-search filter-order-group" role="form" [formGroup]="searchForm">
@@ -37,8 +73,7 @@
                             <div class="col-md-2">
                                 <label for="" class="control-label" translate> Order Date</label>
                                 <div clickOutside (clickOutside)="d.close()" class="input-group">
-                                    <input [maxDate]="searchForm.value.date_to | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="date_from"
-                                        ngbDatepicker #d="ngbDatepicker">
+                                    <input [maxDate]="searchForm.value.date_to | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="date_from" ngbDatepicker #d="ngbDatepicker">
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
                                             <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -49,8 +84,7 @@
                             <div class="col-md-2">
                                 <label for="" class="control-label" translate> &nbsp;</label>
                                 <div clickOutside (clickOutside)="dt.close()" class="input-group">
-                                    <input [minDate]="searchForm.value.date_from | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="date_to"
-                                        ngbDatepicker #dt="ngbDatepicker">
+                                    <input [minDate]="searchForm.value.date_from | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="date_to" ngbDatepicker #dt="ngbDatepicker">
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-secondary" (click)="dt.toggle()" type="button">
                                             <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -61,8 +95,7 @@
                             <div class="col-md-2">
                                 <label for="" class="control-label" translate> Delivery Date</label>
                                 <div clickOutside (clickOutside)="d1.close()" class="input-group">
-                                    <input [maxDate]="searchForm.value.ship_date_to | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="ship_date_from"
-                                        ngbDatepicker #d1="ngbDatepicker">
+                                    <input [maxDate]="searchForm.value.ship_date_to | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="ship_date_from" ngbDatepicker #d1="ngbDatepicker">
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
                                             <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -73,8 +106,7 @@
                             <div class="col-md-2">
                                 <label for="" class="control-label" translate> &nbsp;</label>
                                 <div clickOutside (clickOutside)="dt1.close()" class="input-group">
-                                    <input [minDate]="searchForm.value.ship_date_from | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="date_to"
-                                        ngbDatepicker #dt1="ngbDatepicker">
+                                    <input [minDate]="searchForm.value.ship_date_from | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="date_to" ngbDatepicker #dt1="ngbDatepicker">
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-secondary" (click)="dt1.toggle()" type="button">
                                             <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -89,7 +121,7 @@
                     <div class="block-btn-search">
                         <label class="control-label">&nbsp;</label>
                         <div class="group-btn-search">
-                            <button type="button" class="btn btn-primary" (click)="onoffFilter = !onoffFilter">More Filter</button>
+                            <button type="button" class="btn-default-custom" (click)="onoffFilter = !onoffFilter">More Filter</button>
                             <div class="show-more" *ngIf="onoffFilter">
                                 <ul>
                                     <li *ngFor="let item of listMoreFilter; let i = index;">
@@ -99,19 +131,124 @@
                                     </li>
                                 </ul>
                             </div>
-                            <button type="button" class="btn btn-primary" (click)="tableService.searchAction()">Search</button>
-                            <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchForm)">Reset</button>
+                            <button type="button" class="btn-default-custom" (click)="tableService.searchAction()">Search</button>
+                            <button type="button" class="btn-default-custom" (click)="tableService.resetAction(this.searchForm)">Reset</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="block-content list-order-table">
+        <div class="row mg-top-10">
+           <div class="col-12">
+              <div class="card no-border">
+                 <div class="card-header">
+                    <strong>Line Items</strong>
+                    <button [routerLink]="['create']" style="margin:0; float:right" class="btn btn-link"> <i class="fa fa-plus text-success"></i> Create Order</button>
+                 </div>
+                 <div class="card-body no-padding">
+                   <div class="table-responsive list">
+                       <table class="table table-bordered table-order" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
+                           <thead class="bg-white">
+                               <tr>
+                                   <th style="width:50px"></th>
+                                   <th translate>SO #</th>
+                                   <th translate>Cust PO #</th>
+                                   <th translate>Sales Quote #</th>
+                                   <th translate>Customer</th>
+                                   <th translate>Salesperson</th>
+                                   <th class="text-center " translate>Type</th>
+                                   <th class="text-center" translate>Order date</th>
+                                   <th class="text-center" translate>Delivery date</th>
+                                   <th class="text-center" translate>Total</th>
+                                   <th translate>Status</th>
+                                   <th translate>Action</th>
+                               </tr>
+                           </thead>
+                           <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
+                               <tr>
+                                   <td>
+                                       <img *ngIf="item.sts_code!='CP'" src="assets/img/qbicon-gray.png" width="20px" height="20px">
+                                       <a *ngIf="item.sts_code=='CP'" href="https://sandbox.qbo.intuit.com/app/sales" target="_blank">
+                                           <img placement="top" ngbTooltip="Sent Invoice To QuickBooks {{item.updated_at}}" src="../../assets/img/qbicons.png"
+                                               width="20px" height="20px">
+                                       </a>
+                                   </td>
+                                   <td><a [routerLink]="['detail', item.id]">{{item.code}}</a></td>
+                                   <td>{{item.cus_po}}</td>
+                                   <td>{{item.quote_no}}</td>
+                                   <td>{{item.buyer_name}}</td>
+                                   <td>{{item.sale_person_name}}</td>
+                                   <td class="text-center">
+                                       <span *ngIf="item.type == 'PKU'">Pickup</span>
+                                       <span *ngIf="item.type == 'ONL'">Ecommerce</span>
+                                       <span *ngIf="item.type == 'NO'">Regular Order</span>
+                                       <span *ngIf="item.type == 'XD'">X-Docks</span>
+                                   </td>
+                                   <td class="text-center">{{item.order_date | date:'MM/dd/yyy'}}</td>
+                                   <td class="text-center">{{item.delivery_date | date:'MM/dd/yyyy'}}</td>
+                                   <td class="text-center">{{item.total_price | currency}}</td>
+                                   <td>
+                                       <span class="label label-draft" *ngIf="item.sts_code == 'NW'">{{item.sts}}</span>
+                                       <span class="label label-warning" *ngIf="item.sts_code == 'SM'">{{item.sts}}</span>
+                                       <span class="label label-draft" *ngIf="item.sts_code == 'PP'">{{item.sts}}</span>
+                                       <span class="label  label-success" *ngIf="item.sts_code == 'CP'">{{item.sts}}</span>
+                                       <span class="label  label-success" *ngIf="item.sts_code == 'AP'">{{item.sts}}</span>
+                                       <span class="label label-draft" *ngIf="item.sts_code == 'RS'">{{item.sts}}</span>
+                                       <span class="label  label-draft" *ngIf="item.sts_code == 'DL'">{{item.sts}}</span>
+                                       <span class="label label-danger" *ngIf="item.sts_code == 'RJ'">{{item.sts}}</span>
+                                       <span class="label  label-draft" *ngIf="item.sts_code == 'Draft'">{{item.sts}}</span>
+                                   </td>
+                                   <td class="text-nowrap">
+                                       <button placement="top" ngbTooltip="Submited" *ngIf="item.sts_code == 'NW'" type="button" class="btn btn-default" (click)="updateStatusOrder(item.id, 6)"><i class="fa fa-check-circle"></i></button>
+                                       <button placement="top" ngbTooltip="Approve" *ngIf="item.sts_code == 'SM'" type="button" class="btn btn-default" (click)="putApproveOrder(item.id)"><i class="fa fa-check-square"></i></button>
+                                       <button ngbTooltip="Click to Reject" data-toggle="tooltip" *ngIf="item.sts_code=='SM'" type="button" class="btn btn-default" (click)="updateStatusOrder(item.id, 7)">
+                                           <i class="fa fa-ban"></i>
+                                       </button>
+                                       <a *ngIf="item.sts_code == 'NW'" class="btn btn-default" [routerLink]="['edit', item.id]"> <i class="fa fa-pencil"></i> </a>
+                                   </td>
+                               </tr>
+                           </tbody>
+                           <tbody *ngIf="list.items.length == 0">
+                               <tr>
+                                   <td colspan="100%" class="text-center" translate>No data.</td>
+                               </tr>
+                           </tbody>
+                       </table>
+                   </div>
+                    <div class="col-12 no-padding">
+
+                    </div>
+                 </div>
+              </div>
+           </div>
+        </div>
+
+        <div class="row normal-pagination mg-top-10" *ngIf="list.items.length > 0">
+            <div class="col-md-6 padding-lr-0">
+                <div class="text-left">
+                    <div class="col-md-6" style="padding-left: 0px;">
+                        <span style="float: left; padding-right: 10px;">{{list.items.length}}/{{tableService.pagination.total_record}} items </span>
+                        <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length" (change)="tableService.changeLength()">
+                            <option *ngFor="let option of tableService.itemPerPageOptions" [ngValue]="option">{{option}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 padding-lr-0">
+                <div class="text-right">
+                    <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length" [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page" [maxSize]="tableService.maxSize"
+                      [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- <div class="block-content list-order-table">
             <button [routerLink]="['create']" style="margin: 10px 0;" class="btn btn-primary">Create Order</button>
             <div class="table-responsive">
-                <table class="table table-striped table-vcenter custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex"
-                    (onEnter)="selectData($event)">
+                <table class="table table-striped table-vcenter custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                     <thead class="bg-white">
                         <tr>
                             <th style="width:50px"></th>
@@ -163,9 +300,12 @@
                                 <span class="label  label-draft" *ngIf="item.sts_code == 'Draft'">{{item.sts}}</span>
                             </td>
                             <td class="text-nowrap">
-                                <button placement="top" ngbTooltip="Approve" *ngIf="item.sts_code == 'NW'" type="button" class="btn btn-default" (click)="putApproveOrder(item.id)"><i class="fa fa-check-square"></i></button>
+                                <button placement="top" ngbTooltip="Submited" *ngIf="item.sts_code == 'NW'" type="button" class="btn btn-default" (click)="updateStatusOrder(item.id, 6)"><i class="fa fa-check-circle"></i></button>
+                                <button placement="top" ngbTooltip="Approve" *ngIf="item.sts_code == 'SM'" type="button" class="btn btn-default" (click)="putApproveOrder(item.id)"><i class="fa fa-check-square"></i></button>
+                                <button ngbTooltip="Click to Reject" data-toggle="tooltip" *ngIf="item.sts_code=='SM'" type="button" class="btn btn-default" (click)="updateStatusOrder(item.id, 7)">
+                                    <i class="fa fa-ban"></i>
+                                </button>
                                 <a *ngIf="item.sts_code == 'NW'" class="btn btn-default" [routerLink]="['edit', item.id]"> <i class="fa fa-pencil"></i> </a>
-                                <!-- <button placement="top" ngbTooltip="Clone Order" type="button" class="btn btn-default" (click)="cloneOrder(item.id)"><i class="fa fa-clone"></i></button> -->
                             </td>
                         </tr>
                     </tbody>
@@ -191,12 +331,11 @@
                 </div>
                 <div class="col-md-6">
                     <div class="text-right">
-                        <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length"
-                            [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page"
-                            [maxSize]="tableService.maxSize" [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+                        <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length" [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page" [maxSize]="tableService.maxSize"
+                          [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </div>

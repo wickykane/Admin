@@ -50,6 +50,8 @@ import { CommonShareModule, Helper,  PageHeaderModule } from '../../shared/index
 import { OrderService } from './order-mgmt.service';
 
 import { ItemModalModule } from '../../shared/modals/item.module';
+import { QuoteInformationTabComponent } from './sale-quotation/quote-tabs/information-tab.component';
+import { QuoteHistoryTabComponent } from './sale-quotation/quote-tabs/quote-history.component';
 
 
 @NgModule({
@@ -87,7 +89,9 @@ import { ItemModalModule } from '../../shared/modals/item.module';
         SaleOrderRMATabComponent,
         SaleOrderCreditNoteTabComponent,
         SaleOrderEditComponent,
-        SaleQuotationEditComponent
+        SaleQuotationEditComponent,
+        QuoteInformationTabComponent,
+        QuoteHistoryTabComponent
         ],
     providers: [OrderService, TableService, DatePipe, Helper],
     entryComponents: []

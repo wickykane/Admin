@@ -20,6 +20,7 @@ import { SaleQuoteCreateKeyService } from './keys.create.control';
 
 import { HotkeysService } from 'angular2-hotkeys';
 import * as _ from 'lodash';
+import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 
 
 @Component({
@@ -40,7 +41,13 @@ export class SaleQuotationCreateComponent implements OnInit {
     public selectedIndex = 0;
     public data = {};
 
-    public customer = {
+    public messageConfig = {
+        '2': 'Are you sure that you want to save & submit this quotation to approver?',
+        '4': 'Are you sure that you want to validate this quotation?',
+        'default': 'The data you have entered may not be saved, are you sure that you want to leave?',
+    };
+
+    public customer: any = {
         'last_sales_order': '',
         'current_dept': '',
         'discount_level': '',
@@ -58,7 +65,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         contact: []
     };
 
-    public addr_select = {
+    public addr_select: any = {
         shipping: {
             'address_name': '',
             'address_line': '',
@@ -84,6 +91,7 @@ export class SaleQuotationCreateComponent implements OnInit {
 
     public order_info = {
         total: 0,
+        order_summary: {},
         sub_total: 0,
         order_date: '',
         customer_po: '',
@@ -99,11 +107,10 @@ export class SaleQuotationCreateComponent implements OnInit {
         items: [],
         backItems: []
     };
-    public payment;
-    public promotionList = {};
+
     public copy_customer = {};
     public copy_addr = {};
-    public list_priority = [];
+
 
     public searchKey = new Subject<any>(); // Lazy load filter
 
@@ -127,26 +134,29 @@ export class SaleQuotationCreateComponent implements OnInit {
             'quote_date': [null, Validators.required],
             'expiry_date': [null, Validators.required],
             'company_id': [null, Validators.required],
-            'carrier_id': [null, Validators.required],
-            'ship_rate': [null, Validators.required],
-            'ship_method_option': [null, Validators.required],
+            'carrier_id': [2], // Default Ups
+            'ship_rate': [null],
+            'ship_method_option': [null],
             'warehouse_id': [1, Validators.required],
 
             'delivery_date': [null],
             'contact_user_id': [null],
 
-            'sales_person': [null],
-            'payment_method': [null],
-            'payment_term_id': [null],
-            'billing_id': [null],
-            'shipping_id': [null],
-            'description': [null]
+            'sales_person': [null, Validators.required],
+            'payment_method_id': [null, Validators.required],
+            'payment_term_id': [null, Validators.required],
+            'billing_id': [null, Validators.required],
+            'shipping_id': [null, Validators.required],
+            'note': [null]
         });
         //  Init Key
         this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {
+        this.data['id'] = this.route.snapshot.queryParams['quote_id'];
+        this.data['is_copy'] = this.route.snapshot.queryParams['is_copy'] || 0;
+
         const user = JSON.parse(localStorage.getItem('currentUser'));
         this.listMaster['multi_ship'] = [{ id: 0, label: 'No' }, { id: 1, label: 'Yes' }];
         this.listMaster['from_src'] = [{ id: 0, label: 'From Master' }, { id: 1, label: 'From Quote' }, { id: 2, label: 'Manual' }];
@@ -184,18 +194,78 @@ export class SaleQuotationCreateComponent implements OnInit {
             this.data['page'] = 1;
             this.searchCustomer(key);
         });
+
+        // Clone quote handle
+        if (this.data['is_copy'] && this.data['id']) {
+            this.getDetailQuote();
+        }
     }
     /**
      * Mater Data
      */
 
-    getDetailCustomerById(company_id) {
+    getDetailQuote() {
+        this.orderService.getSaleQuoteDetail(this.data['id']).subscribe(res => {
+            try {
+                const data = res.data;
+                this.generalForm.patchValue(data);
+                this.generalForm.patchValue({
+                    company_id: data.buyer_id,
+                    sales_person: data.sale_person_id,
+                    quote_date: data.qt_dt,
+                    expiry_date: data.expire_dt,
+                    shipping_id: data.shipping_id.id,
+                    billing_id: data.billing_id.id,
+                    ship_rate: +data.ship_method_rate,
+                });
+
+                // Set item and update
+                this.list.items = (data.items || []).map(item => {
+                    item.quantity = item.quantity || item.qty;
+                    item.sale_price = item.sale_price || item.price;
+                    item.uom_name = item.uom_name || item.uom;
+                    item.sku = item.sku || item.misc_no;
+                    item.des = item.des || item.misc_name;
+                    item.tax_percent = item.tax_percent || 0;
+                    item.discount = item.discount_percent || 0;
+                    return item;
+                });
+
+                this.order_info['original_ship_cost'] = data.original_ship_cost;
+                this.updateTotal();
+
+                this.changeCustomer(1);
+
+                // Lazy Load filter
+                const params = { page: this.data['page'], length: 15 };
+                this.orderService.getAllCustomer(params).subscribe(result => {
+                    const idList = result.data.rows.map(item => item.id);
+                    this.listMaster['customer'] = result.data.rows;
+                    if (idList.indexOf(res.data.buyer_id) === -1) {
+                        this.listMaster['customer'].push({ id: res.data.buyer_id, company_name: res.data.buyer_info.buyer_name });
+                    }
+                    this.data['total_page'] = result.data.total_page;
+                });
+
+
+
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
+
+    getDetailCustomerById(company_id, flag?) {
         this.orderService.getDetailCompany(company_id).subscribe(res => {
             try {
                 this.customer = res.data;
                 if (res.data.buyer_type === 'PS') {
                     this.addr_select.contact = res.data.contact[0];
                     this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
+                }
+                if (flag) {
+                    this.selectAddress('billing', flag);
+                    this.selectAddress('shipping', flag);
                 }
             } catch (e) {
                 console.log(e);
@@ -208,26 +278,29 @@ export class SaleQuotationCreateComponent implements OnInit {
      */
     selectData(data) { }
 
-    changeCustomer() {
+    changeCustomer(flag?) {
         const company_id = this.generalForm.value.company_id;
-        this.customer = Object.create(this.copy_customer);
-        this.addr_select = Object.create(this.copy_addr);
+        this.customer = { ...this.copy_customer };
+        this.addr_select = { ...this.copy_addr };
+
         if (company_id) {
-            this.getDetailCustomerById(company_id);
+            this.getDetailCustomerById(company_id, flag);
         }
-        this.list.items = [];
-        this.generalForm.controls['description'].patchValue('');
-        this.updateTotal();
+        if (!flag) {
+            this.list.items = [];
+            this.updateTotal();
+        }
     }
 
-    selectAddress(type) {
+
+    selectAddress(type, flag?) {
         try {
             switch (type) {
                 case 'shipping':
                     const ship_id = this.generalForm.value.shipping_id;
                     if (ship_id) {
                         this.addr_select.shipping = this.findDataById(ship_id, this.customer.shipping);
-                        this.getShippingReference(ship_id);
+                        this.getShippingReference(ship_id, flag);
                     }
                     break;
                 case 'billing':
@@ -242,9 +315,10 @@ export class SaleQuotationCreateComponent implements OnInit {
         }
     }
 
-    getShippingReference(id) {
+    getShippingReference(id, flag?) {
         this.orderService.getShippingReference(id).subscribe(res => {
             this.listMaster['carriers'] = res.data;
+            this.changeShip(flag);
         });
     }
 
@@ -262,6 +336,9 @@ export class SaleQuotationCreateComponent implements OnInit {
     }
 
     changeFromSource(item) {
+        if (+item.source_id === 3) {
+            return;
+        }
         item.source_id = 2;
         item.source_name = 'Manual';
     }
@@ -269,30 +346,24 @@ export class SaleQuotationCreateComponent implements OnInit {
     updateTotal() {
         this.order_info.total = 0;
         this.order_info.sub_total = 0;
-        if (this.list.items !== undefined) {
-            (this.list.items || []).map((item) => {
-                let sub_quantity = 0;
-                item.discount = item.discount !== undefined ? item.discount : 0;
-                if (!item.products) { item.products = []; }
-                item.products.map(sub_item => { sub_quantity += sub_item.quantity; });
-                item.totalItem = (Number(item.sale_price) * (Number(item.quantity) + sub_quantity)
-                    - (Number(item.sale_price) * (Number(item.quantity) + sub_quantity)) * Number(item.discount) / 100)
-                    - (item.promotion_discount_amount ? item.promotion_discount_amount : 0);
-                if (item.totalItem) {
-                    this.order_info.sub_total = this.order_info.sub_total + item.totalItem;
-                }
-            });
-        }
-        this.order_info['shipping_cost'] = (this.order_info['shipping_cost'] !== undefined ? this.order_info['shipping_cost'] : 0);
-        this.order_info['alt_vat_percent'] = (this.order_info['vat_percent'] !== undefined ? this.order_info['vat_percent'] : 0);
-        this.order_info['alt_discount'] = (this.order_info['discount_percent'] !== undefined ? this.order_info['discount_percent'] : 0);
-        this.promotionList['total_invoice_discount'] = (this.promotionList['total_invoice_discount']
-            ? this.promotionList['total_invoice_discount'] : 0);
 
-        this.order_info.total_discount = parseFloat((this.order_info.sub_total * Number(this.order_info['alt_discount']) / 100).toFixed(2));
-        const sub_after_discount = this.order_info.sub_total - this.order_info.total_discount;
-        this.order_info['vat_percent_amount'] = parseFloat((sub_after_discount * Number(this.order_info['alt_vat_percent']) / 100).toFixed(2));
-        this.order_info.total = this.order_info.sub_total - this.order_info.total_discount + Number(this.order_info['shipping_cost']) + this.order_info['vat_percent_amount'] - this.promotionList['total_invoice_discount'];
+        const items = this.list.items.filter(i => !i.misc_id);
+        this.groupTax(this.list.items);
+        this.order_info.order_summary = {};
+        this.order_info.order_summary['total_item'] = items.length;
+        items.forEach(item => {
+            this.order_info.order_summary['total_cogs'] = (this.order_info.order_summary['total_cogs'] || 0) + (+item.cost_price || 0) * (item.quantity || 0);
+            this.order_info.order_summary['total_vol'] = (this.order_info.order_summary['total_vol'] || 0) + (+item.vol || 0) * (item.quantity || 0);
+            this.order_info.order_summary['total_weight'] = (this.order_info.order_summary['total_weight'] || 0) + (+item.wt || 0) * (item.quantity || 0);
+        });
+
+
+        this.list.items.forEach(item => {
+            item.amount = (+item.quantity * (+item.sale_price || 0)) * (100 - (+item.discount || 0)) / 100;
+            this.order_info.sub_total += item.amount;
+        });
+
+        this.order_info.total = +this.order_info['total_tax'] + +this.order_info.sub_total;
     }
 
     deleteAction(id, item_condition) {
@@ -315,6 +386,7 @@ export class SaleQuotationCreateComponent implements OnInit {
                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
                     item['products'] = [];
                     item.quantity = 1;
+                    item.is_shipping_free = item.is_shipping_free || item.free_ship;
                     item['order_detail_id'] = null;
                     item.totalItem = item.sale_price;
                     item.source_id = 0;
@@ -335,22 +407,22 @@ export class SaleQuotationCreateComponent implements OnInit {
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
-                    listAdded.push(item.item_id + item.item_condition_id);
+                    listAdded.push(item.id + (item.item_condition_id || 'misc'));
                 });
 
                 res.forEach((item) => {
                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
+                    item.source_id = 2;
+                    item.source_name = 'Manual';
                     item.quantity = 1;
                     item.is_misc = 1;
                     item.uom_name = item.uom;
-                    item.item_id = item.id;
+                    item.misc_id = item.id;
                     item.sku = item.no;
-                    item.source_id = 0;
-                    item.source_name = 'From Master';
                 });
 
                 this.list.items = this.list.items.concat(res.filter((item) => {
-                    return listAdded.indexOf(item.item_id + (item.item_condition_id || 'misc')) < 0;
+                    return listAdded.indexOf(item.id + (item.item_condition_id || 'misc')) < 0;
                 }));
 
                 this.updateTotal();
@@ -358,12 +430,49 @@ export class SaleQuotationCreateComponent implements OnInit {
         }, dismiss => { });
     }
 
-    changeShip() {
+    changeShip(flag?) {
         const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id);
         this.listMaster['options'] = carrier.options || [];
         this.listMaster['ship_rates'] = carrier.ship_rate || [];
-        this.generalForm.patchValue({ ship_method_option: null, ship_rate: null });
+
+        // Edit first time not init data
+        if (flag) {
+            return;
+        }
+
+        let default_option = null;
+        let default_ship_rate = null;
+        if (+this.generalForm.value.carrier_id === 3 || this.generalForm.value.carrier_id !== 999 && !carrier.own_carrirer) {
+            default_option = 888;
+            default_ship_rate = 8;
+        }
+
+        if (+this.generalForm.value.carrier_id === 999) {
+            default_ship_rate = 8;
+            this.generalForm.patchValue({ shipping_id: null });
+            this.generalForm.get('shipping_id').setValidators(null);
+            this.addr_select.shipping = {
+                'address_name': '',
+                'address_line': '',
+                'country_name': '',
+                'city_name': '',
+                'state_name': '',
+                'zip_code': ''
+            };
+        } else {
+            this.generalForm.get('shipping_id').setValidators([Validators.required]);
+        }
+
+        if (carrier.own_carrirer) {
+            default_option = null;
+            default_ship_rate = 7;
+        }
+
+        this.generalForm.patchValue({ ship_method_option: default_option, ship_rate: default_ship_rate });
+        this.generalForm.updateValueAndValidity();
     }
+
+
     //  Show order history
     showViewOrderHistory() {
         if (this.generalForm.value.company_id !== null) {
@@ -395,65 +504,74 @@ export class SaleQuotationCreateComponent implements OnInit {
     };
 
 
-    createOrder(type) {
-        const products = [];
-        this.list.items.forEach((item) => {
-            products.push({
-                item_id: item.item_id,
-                item_type: item.item_type,
-                quantity: item.quantity,
-                sale_price: item.sale_price,
-                order_detail_id: item.order_detail_id,
-                item_condition_id: item.item_condition_id,
-                discount_percent: item.discount || 0,
-                shipping_address_id: item.shipping_address_id,
+    calculateShipping() {
+        const params = {
+            'customer': this.generalForm.value.company_id,
+            'address': this.generalForm.value.shipping_id,
+            'ship_via': this.generalForm.value.carrier_id,
+            'option': this.generalForm.value.ship_method_option,
+            'ship_rate': this.generalForm.value.ship_rate,
+            'items': this.list.items.filter(item => !item.misc_id)
+        };
+        this.orderService.getTaxShipping(params).subscribe(res => {
+            const old_misc = this.list.items.filter(item => item.misc_id && +item.source_id !== 3);
+            const items = res.data.items;
+            const misc = res.data.mics.map(item => {
+                item.is_misc = 1;
+                item.misc_id = item.id;
+                return item;
             });
+            this.list.items = items.concat(misc, old_misc);
 
-            if (item.products.length > 0) {
-                item.products.forEach((subItem, index) => {
-                    products.push({
-                        item_id: subItem.item_id,
-                        item_type: item.item_type,
-                        quantity: subItem.quantity,
-                        sale_price: subItem.sale_price,
-                        discount_percent: subItem.discount || 0,
-                        item_condition_id: item.item_condition_id,
-                        shipping_address_id: subItem.shipping_address_id,
-                    });
-                });
-            }
+            // Assign tax to all item
+            this.list.items.forEach(item => item.tax_percent = res.data.tax_percent);
+            this.updateTotal();
+            this.order_info['original_ship_cost'] = res.data.price;
         });
-        let params = {};
-        switch (type) {
-            case 'create':
-                params = {
-                    'items': products,
-                    'is_draft_order': 0
-                };
-                break;
-            case 'quote':
-                params = {
-                    'items': products,
-                    'is_draft_order': 1,
-                    'type': 'SAQ',
-                    'sale_quote_status_id': 1,
-                };
-                break;
-            case 'draft':
-                params = {
-                    'items': products,
-                    'is_draft_order': 1
-                };
-                break;
-        }
-        params = { ...this.order_info, ...this.generalForm.value, ...params };
-        this.orderService.createOrder(params).subscribe(res => {
+    }
+
+    groupTax(items) {
+        this.order_info['taxs'] = [];
+        this.order_info['total_tax'] = 0;
+        const taxs = items.map(item => item.tax_percent || 0);
+        const unique = taxs.filter((i, index) => taxs.indexOf(i) === index);
+        unique.forEach((tax, index) => {
+            let taxAmount = 0;
+            items.filter(item => item.tax_percent === tax).map(i => {
+                taxAmount += (+i.tax_percent * +i.quantity * (+i.sale_price || 0) / 100);
+            });
+            this.order_info['total_tax'] = this.order_info['total_tax'] + +(taxAmount.toFixed(2));
+            this.order_info['taxs'].push({
+                value: tax, amount: taxAmount.toFixed(2)
+            });
+        });
+    }
+
+    createOrder(type, is_draft_sq?) {
+        const items = this.list.items.map(item => {
+            item.discount_percent = item.discount;
+            item.is_item = (item.misc_id) ? 0 : 1;
+            return item;
+        });
+
+        const params = {
+            ...this.generalForm.value,
+            status_id: type,
+            original_ship_cost: this.order_info['original_ship_cost'],
+            items,
+            is_draft_sq: is_draft_sq || 0,
+            is_copy: this.data['is_copy'] || 0
+        };
+
+        this.orderService.createQuoteOrder(params).subscribe(res => {
             try {
                 if (res.status) {
                     this.toastr.success(res.message);
+                    this.data['quote_id'] = res.data;
                     setTimeout(() => {
-                        this.router.navigate(['/order-management/sale-order']);
+                        this.router.navigate(['/order-management/sale-quotation/detail/' + this.data['quote_id']]);
                     }, 500);
+
                 } else {
                     this.toastr.error(res.message);
                 }
@@ -464,6 +582,22 @@ export class SaleQuotationCreateComponent implements OnInit {
             err => {
                 this.toastr.error(err.message);
             });
+    }
+
+    confirmModal(type, is_draft_sq?) {
+        const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
+        modalRef.result.then(res => {
+            if (res) {
+                if (type) {
+                    this.createOrder(type, is_draft_sq);
+                } else {
+                    this.router.navigate(['/order-management/sale-quotation']);
+                }
+            }
+        }, dismiss => { });
+        modalRef.componentInstance.message = this.messageConfig[type || 'default'];
+        modalRef.componentInstance.yesButtonText = 'Yes';
+        modalRef.componentInstance.noButtonText = 'No';
     }
 
     fetchMoreCustomer(data?) {

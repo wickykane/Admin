@@ -113,11 +113,11 @@ export class OrderService {
 
     //  Sale Quotation
     getListSalesQuotation(params) {
-        const url = 'sale-quote';
+        const url = 'sale-quote/get-list';
         return this.API.get(url, params);
     }
     getSaleQuoteDetail(id) {
-        const url = ['sale-quote', id].join('/');
+        const url = ['sale-quote', 'detail', id].join('/');
         return this.API.get(url);
     }
     getSaleQuoteHistory(id) {
@@ -129,7 +129,7 @@ export class OrderService {
         return this.API.get(url);
     }
     updateSaleQuoteStatus(sale_quote_id, params) {
-        const url = 'order/update-sale-quote-status/' + sale_quote_id;
+        const url = 'sale-quote/update-status/' + sale_quote_id;
         return this.API.put(url, params);
     }
     sentMailToBuyer(sale_quote_id) {
@@ -174,6 +174,12 @@ export class OrderService {
         const url = 'order/submit/' + ordId;
         return this.API.put(url);
     }
+
+    updateStatusOrder(order_id, status) {
+        const url = 'order/updateStatus/' + order_id + '/' + status;
+        return this.API.put(url);
+    }
+
     changeOrderStatus(orderNum, params) {
         const url = 'order/update-order-status-by-code/' + orderNum;
         return this.API.put(url, params);
@@ -255,4 +261,25 @@ export class OrderService {
         const url = 'shipping-zone/configuration-by-address/' + id;
         return this.API.get(url);
     }
+    getTaxShipping(params) {
+        const url = 'shipping-zone/calc-tax-shipping';
+        return this.API.post(url, params);
+    }
+    createQuoteOrder(params) {
+        const url = 'sale-quote/create';
+        return this.API.post(url, params);
+    }
+    updateQuoteOrder(id, params) {
+        const url = 'sale-quote/update/' + id;
+        return this.API.put(url, params);
+    }
+    cloneQuote(id) {
+        const url = 'sale-quote/clone/' + id;
+        return this.API.post(url);
+    }
+    getQuoteCountStatus() {
+        const url = 'sale-quote/count-status';
+        return this.API.get(url);
+    }
+
 }
