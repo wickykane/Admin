@@ -26,6 +26,7 @@ export class StateFilterModalComponent implements OnInit {
     generalForm: FormGroup;
 
     public templistSelectCountry =[];
+    public _listSelectCountry:any;
     public selectAll = false;
     hotkeyCtrlLeft: Hotkey | Hotkey[];
     hotkeyCtrlRight: Hotkey | Hotkey[];
@@ -59,16 +60,16 @@ export class StateFilterModalComponent implements OnInit {
     }
 
     ngOnInit() {
-        console.log(this.listSelectCountry);
         if(this.listSelectCountry.state){
             // this.unSelectState();
-            this.templistSelectCountry = this.listSelectCountry.state.slice(0);
+            this.templistSelectCountry = JSON.parse(JSON.stringify(this.listSelectCountry));
+            this._listSelectCountry= JSON.parse(JSON.stringify(this.listSelectCountry));
             this.checkState();
         }
     }
 
     filterState(key) {
-        this.listSelectCountry.state = this.filterbyfieldName(this.templistSelectCountry, 'name', key);
+        this._listSelectCountry.state = this.filterbyfieldName(this.templistSelectCountry, 'name', key);
       }
     filterbyfieldName(arr:any[], fieldname:string , value:any):any[]{
         var isSearch = (data:any): boolean => {
@@ -87,30 +88,28 @@ export class StateFilterModalComponent implements OnInit {
         return arr.filter(isSearch);
       }
       unSelectState(){
-          console.log(this.selectAll);
-            this.listSelectCountry.state.forEach(item => {
+            this._listSelectCountry.state.forEach(item => {
                 return item.selected = false;
             });
           
 
       }
       selectState(){
-        console.log(this.selectAll);
-          this.listSelectCountry.state.forEach(item => {
+          this._listSelectCountry.state.forEach(item => {
               return item.selected = this.selectAll;
           });
         
 
     }
 checkState(){
-    // this.listSelectCountry.state.forEach(item => {
+    // this._listSelectCountry.state.forEach(item => {
     //     if(item.selected == false){
     //      return this.selectAll = false;
     //     }
     // });
-    for(var i=0;i< this.listSelectCountry.state.length;i++){
-        if(this.listSelectCountry.state[i].selected){
-            if(i==this.listSelectCountry.state.length-1){
+    for(var i=0;i< this._listSelectCountry.state.length;i++){
+        if(this._listSelectCountry.state[i].selected){
+            if(i==this._listSelectCountry.state.length-1){
                 return this.selectAll = true;
             }
         }
@@ -138,8 +137,7 @@ checkState(){
         console.log(item);
     }
     save(){
-        console.log(this.listSelectCountry.state);
-        this.activeModal.close({'code':this.code,'state':this.listSelectCountry.state});
+        this.activeModal.close({'code':this.code,'state':this._listSelectCountry.state});
     }
 
 }
