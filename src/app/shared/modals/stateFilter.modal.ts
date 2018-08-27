@@ -25,7 +25,7 @@ export class StateFilterModalComponent implements OnInit {
      */
     generalForm: FormGroup;
 
-    public tempStateList =[];
+    public templistSelectCountry =[];
     public selectAll = false;
     hotkeyCtrlLeft: Hotkey | Hotkey[];
     hotkeyCtrlRight: Hotkey | Hotkey[];
@@ -60,14 +60,15 @@ export class StateFilterModalComponent implements OnInit {
 
     ngOnInit() {
         console.log(this.listSelectCountry);
-        if(this.stateList){
-            this.unSelectState();
-            this.tempStateList = this.stateList.slice(0);
+        if(this.listSelectCountry.state){
+            // this.unSelectState();
+            this.templistSelectCountry = this.listSelectCountry.state.slice(0);
+            this.checkState();
         }
     }
 
     filterState(key) {
-        this.stateList = this.filterbyfieldName(this.tempStateList, 'name', key);
+        this.listSelectCountry.state = this.filterbyfieldName(this.templistSelectCountry, 'name', key);
       }
     filterbyfieldName(arr:any[], fieldname:string , value:any):any[]{
         var isSearch = (data:any): boolean => {
@@ -96,12 +97,28 @@ export class StateFilterModalComponent implements OnInit {
       selectState(){
         console.log(this.selectAll);
           this.listSelectCountry.state.forEach(item => {
-              return item.selected = this.selectAll?false:true;
+              return item.selected = this.selectAll;
           });
         
 
     }
-
+checkState(){
+    // this.listSelectCountry.state.forEach(item => {
+    //     if(item.selected == false){
+    //      return this.selectAll = false;
+    //     }
+    // });
+    for(var i=0;i< this.listSelectCountry.state.length;i++){
+        if(this.listSelectCountry.state[i].selected){
+            if(i==this.listSelectCountry.state.length-1){
+                return this.selectAll = true;
+            }
+        }
+        else{
+            return this.selectAll = false;
+        }
+    }
+}
 
 
 

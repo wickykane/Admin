@@ -13,16 +13,16 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonService } from '../../services/common.service';
 
 @Component({
-    selector: 'app-ups-options-modal',
-    templateUrl: './ups-configuration.modal.html'
+    selector: 'app-sefl-options-modal',
+    templateUrl: './sefl-configuration.modal.html'
 })
-export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
+export class SEFLConfigurationModalComponent implements OnInit, OnDestroy {
 
     generalForm: FormGroup;
     @Input() pickupList;
     @Input() typeFreeList;
     @Input() upsList;
-    @Input() pickupModalList;
+    @Input() seflModalList;
     hotkeyCtrlLeft: Hotkey | Hotkey[];
     hotkeyCtrlRight: Hotkey | Hotkey[];
     ranges: any = [];
@@ -39,16 +39,14 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
         public activeModal: NgbActiveModal) {
 
         this.generalForm = fb.group({
-            "access_key": ['', Validators.required],
-            "user_id": ['', Validators.required],
+            "account": ['', Validators.required],
+            "username": ['', Validators.required],
             "password": ['', Validators.required],
-            "rates": [false],
-            "account_number": [''],
-            "ups_customer": [''],
+            "markup_type_value": [''],
+            "markup_type": [''],
             "fee_type": [''],
             "handling_fee": [''],
-            "markup_type":[''],
-            "markup_type_value":['']
+            'id': '6'
             // 'ranges':[this.fb.array([])]
         });
 
@@ -58,10 +56,9 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.typeList = this.typeFreeList.slice(0);
-        if (this.pickupModalList) {
-            this.generalForm.patchValue(this.pickupModalList);
+        if (this.seflModalList) {
+            this.generalForm.patchValue(this.seflModalList);
         }
-        this.checkAllUPS(true);
     }
 
     ngOnDestroy() {
@@ -84,15 +81,20 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
     }
     applyData() {
         console.log(this.generalForm.value);
-        // this.checkRanges();
-        // console.log(this.isSave);
-        // if(this.isSave==true){
-        var params = Object.assign({},this.generalForm.value);
+        if (this.generalForm.invalid) {
+            for (let inner in this.generalForm.controls) {
+                this.generalForm.get(inner).markAsTouched();
+                // this.generalForm.get(inner).updateValueAndValidity();
+            }
+            console.log(this.generalForm);
+            return false;
+        }
+        var params = Object.assign({}, this.generalForm.value);
         // params['ranges']=this.ranges;
-        // this.itemService.checkCondition(params).subscribe(res => {
-        //     console.log(res);
-            this.activeModal.close({ id: '5', data: params });
-        // });
+        this.itemService.checkCondition(params).subscribe(res => {
+            console.log(res);
+            this.activeModal.close({ id: '6', data: params });
+        });
         // }
         // else{
         //     return;
@@ -103,28 +105,10 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
     removeHoursItem(index, item) {
         item.splice(index, 1);
     }
-    checkRanges() {
-        //    return this.ranges.forEach(item => {
-        //         if(item.lbs_to>item.lbs_from){
-        //             break;
-        //         }
-        //     });
-        for (var i = 0; i < this.ranges.length; i++) {
-            if (this.ranges[i].lbs_to < this.ranges[i].lbs_from) {
-                this.isSave = false;
-                break;
-
-            }
-            else {
-                this.isSave = true;
-            }
-
-        }
-    }
     testConnection() {
         var params = {
-            "access_key": this.generalForm.value.access_key,
-            "user_id": this.generalForm.value.user_id,
+            "account": this.generalForm.value.account,
+            "username": this.generalForm.value.username,
             "password": this.generalForm.value.password,
         };
         if (this.generalForm.invalid) {
@@ -135,18 +119,12 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
             console.log(this.generalForm);
             return false;
         }
-        this.itemService.checkConnection(params).subscribe(res => {
+        this.itemService.checkSEFLConnection(params).subscribe(res => {
             console.log(res);
             this.toastr.success(res.message);
         }, error => {
             console.log(error);
         });
-    }
-    checkRates() {
-        if (this.generalForm.value.rates) {
-            this.generalForm.controls.account_number.setErrors(Validators.required);
-            this.generalForm.controls.ups_customer.setErrors(Validators.required);
-        }
     }
     calculateUPSLength() {
         var count = 0;
@@ -156,13 +134,5 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
             }
         });
         return count;
-    }
-    checkUPS(item, event) {
-        return item.selected = event.target.checked;
-    }
-    checkAllUPS(isTrue){
-        this.upsList.forEach(item=>{
-            item.selected = isTrue;
-        })
     }
 }

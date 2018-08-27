@@ -103,5 +103,12 @@ export class ItemService {
         const url = 'shipping-zone/check-condition';
         return this.API.post(url, data);
     }
-
+    checkConnection(data){
+        const url = 'shipping-zone/test-conection-ups';
+        return this.API.post(url, data);
+    }
+    checkSEFLConnection(data){
+        const url = 'shipping-zone/test-conection-sefl';
+        return this.API.post(url, data);
+    }
 }
