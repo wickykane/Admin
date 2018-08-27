@@ -596,9 +596,9 @@ table.custom-table {
 }
 
 fieldset.custom-border {
-    border: 1px solid #e0e0e0;
+    // border: 1px solid #e0e0e0;
     padding: 10px;
-    margin-top: 15px;
+    margin-top: 0px;
     legend.custom-border {
         font-size: 1.2em;
         font-weight: bold;
@@ -872,12 +872,12 @@ ngu-carousel {
      color:green;
     }
 
-}         
+}
 .checkbox-green{
  input:checked + .slider {
      background-color: green;
  }
-} 
+}
 
 // Custom Select 2
 .ng-select .ng-select-container .ng-value-container {
@@ -887,6 +887,10 @@ ngu-carousel {
 // Modal
 .modal-md {
     .modal-dialog {
-        max-width: 500px;        
+        max-width: 500px;
     }
+}
+
+.cke_contents.cke_reset {
+  height: 60px !important;
 }
