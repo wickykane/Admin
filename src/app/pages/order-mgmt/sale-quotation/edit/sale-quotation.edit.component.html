@@ -435,21 +435,21 @@
                                                 <i *ngIf="item.is_shipping_free" class="text-success fa fa-check"></i>
                                             </td>
                                             <td>
-                                                <input [disabled]="item.misc_id" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (change)="updateTotal()">
+                                                <input [isDecimal]="true" numberDirective [min]="0" [disabled]="item.misc_id" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (change)="updateTotal()">
                                             </td>
                                             <td>
                                                 <div>
                                                     <span>$</span>
                                                     <div style="display:inline-block;width:80%">
-                                                        <input OnlyNumber class="form-control input-sm" type="number" [(ngModel)]="item.sale_price" (change)="updateTotal();changeFromSource(item)">
+                                                        <input [isDecimal]="true" numberDirective [min]="0"  class="form-control input-sm" type="number" [(ngModel)]="item.sale_price" (change)="updateTotal();changeFromSource(item)">
                                                     </div>
                                                 </div>
                                             </td>
                                             <td>
-                                                <input OnlyNumber class="form-control input-sm" type="number" [(ngModel)]="item.discount" (change)="updateTotal();changeFromSource(item)">
+                                                <input [isDecimal]="true" numberDirective [min]="0" class="form-control input-sm" type="number" [(ngModel)]="item.discount" (change)="updateTotal();changeFromSource(item)">
                                             </td>
                                             <td>
-                                                <input [disabled]="true" OnlyNumber class="form-control input-sm" type="number" [(ngModel)]="item.tax_percent" (change)="updateTotal();changeFromSource(item)">
+                                                <input [isDecimal]="true" numberDirective [min]="0" class="form-control input-sm" type="number" [(ngModel)]="item.tax_percent" (change)="updateTotal();changeFromSource(item)">
                                             </td>
                                             <td class="text-center">
                                                 <span>{{item.amount | currency}}</span>
@@ -560,7 +560,7 @@
                                 <!-- <div class="form-group row">
                                         <label class='col-5 control-label'>- Discount (%)</label>
                                         <div class='col-2 no-padding'>
-                                            <input OnlyNumber class="form-control" [(ngModel)]="order_info.discount_percent" class="form-control" type="text" (change)="updateTotal()">
+                                            <input  class="form-control" [(ngModel)]="order_info.discount_percent" class="form-control" type="text" (change)="updateTotal()">
                                         </div>
                                         <div class='col-5 padding-lr-10'>
                                             <input class="form-control" readonly="true" [(ngModel)]="order_info.total_discount" class="form-control" value="0" type="number">
@@ -588,10 +588,10 @@
         </div>
         <div class="row">
             <div class="col-md-12 mg-top-15 text-right">
-                <button type="button" class="btn btn-outline-info" (click)="createOrder(1)" [disabled]="!generalForm.valid" translate>Save As Draft</button>
-                <button type="button" class="btn btn-outline-success" (click)="createOrder(4)" [disabled]="!generalForm.valid" translate>Save & Validate</button>
-                <button type="button" class="btn btn-outline-danger" (click)="createOrder(2)" [disabled]="!generalForm.valid" translate>Save & Submit For Approval</button>
-                <button type="button" class="btn btn-default" [routerLink]="['/order-management/sale-quotation']" translate>Cancel</button>
+                <button type="button" class="btn btn-outline-info" (click)="createOrder(1, 1)" translate>Save As Draft</button>
+                <button type="button" class="btn btn-outline-success" (click)="confirmModal(4)" [disabled]="!generalForm.valid" translate>Save & Validate</button>
+                <button type="button" class="btn btn-outline-danger" (click)="confirmModal(2)" [disabled]="!generalForm.valid" translate>Save & Submit For Approval</button>
+                <button type="button" class="btn btn-default" (click)="confirmModal(0)" translate>Cancel</button>
             </div>
         </div>
     </section>

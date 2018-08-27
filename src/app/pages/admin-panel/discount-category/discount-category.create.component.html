@@ -50,7 +50,7 @@
                           </label>
                             <div class="col-sm-8">
                                 <select class="form-control" name="ac" formControlName="ac">
-                                  <option value="null" selected="true">--Select--</option>
+                                  <option value="null" selected="true" disabled>--Select--</option>
                                   <option *ngFor="let item of listMaster['status']" [ngValue]="item.code">{{item.name}}</option>
                               </select>
                             </div>
@@ -117,10 +117,6 @@
                                     <td>
                                       <ng-select (change)="changeType(item.apply_for, item)" [items]="item.listType" [disabled]="disabled" bindLabel="value" bindValue="id" [(ngModel)]="item.apply_for">
                                       </ng-select>
-                                        <!-- <select class="form-control" name="type" [(ngModel)]="item.apply_for" (click)="changeType(item.apply_for, item)" [disabled]="flagSub">
-                                            <option value="null" selected="true">--Select--</option>
-                                            <option *ngFor="let i of listMaster['type']" [ngValue]="i.id">{{i.value}}</option>
-                                        </select> -->
                                     </td>
                                     <td>
                                         <ng-container *ngIf="item.apply_for == '2'">

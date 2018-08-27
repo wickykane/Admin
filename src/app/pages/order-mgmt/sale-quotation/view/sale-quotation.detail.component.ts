@@ -63,22 +63,4 @@ export class SaleQuotationDetailComponent implements OnInit {
         this.router.navigate(['/order-management/sale-quotation']);
     }
 
-    putApproveOrder(order_id) {
-        // const params = {'status_code': 'AP'};
-        this.orderService.approveOrd(order_id).subscribe(res => {
-            if (res.status) {
-                this.toastr.success(res.message);
-                setTimeout(() => {
-                    this.router.navigate(['/order-management/sale-order']);
-                }, 500);
-            } else {
-                this.toastr.error(res.message);
-            }
-        },
-            err => {
-                this.toastr.error(err.message);
-            }
-        );
-    }
-
 }

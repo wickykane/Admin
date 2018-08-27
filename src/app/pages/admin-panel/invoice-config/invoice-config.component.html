@@ -149,7 +149,7 @@
     </form>
     <div class="row">
         <div class="col-md-12 mg-top-15 text-center">
-            <button class="btn btn-primary" type="button" (click)="onSave()">Save</button>
+            <button class="btn btn-primary" type="button" [disabled]="isProcessingRequest" (click)="onSave()">Save</button>
             <button class="btn btn-default" type="button" [routerLink]="['/admin-panel']">Cancel</button>
         </div>
     </div>
