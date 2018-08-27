@@ -66,10 +66,10 @@ export class MiscellaneousItemsModalComponent implements OnInit, OnDestroy {
             } if(!this.isView) {
                 this.title = "Edit";
             }
-            if(this.miscItems.is_sys==1){
+            if(this.miscItems.is_sys==1 || this.miscItems.used!=0){
                 this.editSystemForm();
             }
-            if(this.miscItems.is_sys==0){
+            if(this.miscItems.is_sys==0 && this.miscItems.used==0){
                 this.editForm();
             }
         }
