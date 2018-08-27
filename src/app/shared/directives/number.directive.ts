@@ -10,16 +10,21 @@ import { NgModel } from '@angular/forms';
 export class NumberDirective implements OnInit {
     @Input() max;
     @Input() min;
+    @Input() isDecimal;
     public regexStr = '^[0-9]*$';
+
     constructor(private number: DecimalPipe, private element: ElementRef, private ngModel: NgModel) {
 
     }
 
     @HostListener('ngModelChange', ['$event'])
     onInputChange(event) {
-        const value = (event > this.max) ? this.max : (event < this.min) ? this.min : event;
-        this.ngModel.valueAccessor.writeValue(value);
-        // this.ngModel.viewToModelUpdate(Numbervalue);
+        if (event > this.max) {
+            this.ngModel.valueAccessor.writeValue(this.max);
+        }
+        if (event < this.min) {
+            this.ngModel.valueAccessor.writeValue(this.min);
+        }
     }
 
     @HostListener('keydown', ['$event'])
@@ -39,7 +44,10 @@ export class NumberDirective implements OnInit {
             // let it happen, don't do anything
             return;
         }
-        const ch = String.fromCharCode(e.keyCode);
+
+        const current: string = this.element.nativeElement.value;
+        const ch: string = current.concat(e.key);
+
         const regEx = new RegExp(this.regexStr);
         if (regEx.test(ch)) {
             return;
@@ -49,6 +57,7 @@ export class NumberDirective implements OnInit {
 
     }
     ngOnInit() {
+        this.regexStr = (this.isDecimal) ? '^[0-9]+[.]?[0-9]*$' : this.regexStr;
         this.max = this.max || Number.POSITIVE_INFINITY;
         this.min = this.min || 0;
     }

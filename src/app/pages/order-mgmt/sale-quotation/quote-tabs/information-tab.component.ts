@@ -76,8 +76,9 @@ export class QuoteInformationTabComponent implements OnInit {
         this.orderService.getSaleQuoteDetail(this._orderId).subscribe(res => {
             try {
                 this.detail = res.data;
-                this.detail.shipping_address = res.data.shipping_id;
-                this.detail.billing = res.data.billing_id;
+                this.detail.contact_user = res.data.contact_user || [];
+                this.detail.shipping_address = res.data.shipping_id || [];
+                this.detail.billing = res.data.billing_id || [];
                 this.groupTax(this.detail.items);
                 this.stockValueChange.emit(res.data);
 

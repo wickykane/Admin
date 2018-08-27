@@ -19,6 +19,7 @@ import { ItemMiscModalContent } from './../../../../shared/modals/item-misc.moda
 import { SaleQuoteEditKeyService } from './keys.edit.control';
 
 import { HotkeysService } from 'angular2-hotkeys';
+import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 
 @Component({
     selector: 'app-edit-quotation',
@@ -37,6 +38,12 @@ export class SaleQuotationEditComponent implements OnInit {
     public listMaster = {};
     public selectedIndex = 0;
     public data = {};
+
+    public messageConfig = {
+        '2': 'Are you sure that you want to save & submit this quotation to approver?',
+        '4': 'Are you sure that you want to validate this quotation?',
+        'default': 'The data you have entered may not be saved, are you sure that you want to leave?',
+    };
 
     public customer: any = {
         'last_sales_order': '',
@@ -520,6 +527,23 @@ export class SaleQuotationEditComponent implements OnInit {
             });
         });
     }
+
+    confirmModal(type, is_draft_sq?) {
+        const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
+        modalRef.result.then(res => {
+            if (res) {
+                if (type) {
+                    this.createOrder(type, is_draft_sq);
+                } else {
+                    this.router.navigate(['/order-management/sale-quotation']);
+                }
+            }
+        }, dismiss => { });
+        modalRef.componentInstance.message = this.messageConfig[type || 'default'];
+        modalRef.componentInstance.yesButtonText = 'Yes';
+        modalRef.componentInstance.noButtonText = 'No';
+    }
+
 
     createOrder(type, is_draft_sq?) {
         const items = this.list.items.map(item => {
