@@ -409,6 +409,7 @@ export class SaleOrderCreateComponent implements OnInit {
           const misc = res.data.mics.map(item => {
               item.is_misc = 1;
               item.misc_id = item.id;
+              item.discount_percent = 0;
               return item;
           });
           this.list.items = items.concat(misc, old_misc);
@@ -430,10 +431,11 @@ export class SaleOrderCreateComponent implements OnInit {
                 });
                 res.forEach((item) => {
                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
-                    // item['products'] = [];
+                    item.sale_price = 0;
+                    item.tax_percent = 0;
                     item.quantity = 1;
                     item['order_detail_id'] = null;
-                    // item.sale_price = item.sale_price;
+                    item.discount_percent = 0;
                     item.source_id = 0;
                     item.source_name = 'From Master';
                     item.is_shipping_free  = item.free_ship;
@@ -458,6 +460,9 @@ export class SaleOrderCreateComponent implements OnInit {
 
                 res.forEach((item) => {
                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
+                    item.discount_percent = 0;
+                    item.tax_percent = 0;
+                    item.sale_price = 0;
                     item.source_id = 2;
                     item.source_name = 'Manual';
                     item.quantity = 1;
