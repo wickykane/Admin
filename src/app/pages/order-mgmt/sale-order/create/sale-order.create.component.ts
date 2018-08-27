@@ -142,6 +142,7 @@ export class SaleOrderCreateComponent implements OnInit {
         const user = JSON.parse(localStorage.getItem('currentUser'));
         this.orderService.getOrderReference().subscribe(res => {
             Object.assign(this.listMaster, res.data);
+            this.listMaster['order_types'] = this.listMaster['order_types'].filter(item => item.code !== 'ONL');
             this.changeOrderType();
         });
         this.orderService.getSQReference().subscribe(res => {
