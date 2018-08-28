@@ -247,7 +247,9 @@
     </div>
     <div class="row">
         <div class="col-md-12 mg-top-15 text-center">
-            <button *ngIf="currentForm" class="btn btn-default" type="button" (click)="onClickReset()">RESET</button>
+            <button *ngIf="currentForm" class="btn btn-default" type="button" (click)="onClickReset()">
+                {{ selectedStateTax.id ? 'CANCEL' : 'RESET'}}
+            </button>
             <button *ngIf="currentForm" class="btn btn-primary" type="button" (click)="onSaveTaxAuthority()">{{ isCreateNew ? 'CREATE' : 'SAVE' }}</button>
         </div>
     </div>
