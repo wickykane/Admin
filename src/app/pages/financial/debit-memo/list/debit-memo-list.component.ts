@@ -11,6 +11,8 @@ import { routerTransition } from '../../../../router.animations';
 
 import { DebitMemoListKeyService } from './keys.list.control';
 
+import { DebitMemoService } from '../debit-memo.service';
+
 import { SendMailDebitModalContent } from '../modals/send-email/send-mail.modal';
 
 @Component({
@@ -39,6 +41,7 @@ export class DebitMemoListComponent implements OnInit {
         private modalService: NgbModal,
         public keyService: DebitMemoListKeyService,
         public tableService: TableService,
+        public debitMemoService: DebitMemoService,
         private renderer: Renderer) {
 
         this.searchForm = fb.group({
@@ -61,32 +64,58 @@ export class DebitMemoListComponent implements OnInit {
             { id: 0, name: 'Issue Date' },
             { id: 1, name: 'Due Date' }
         ];
-        this.listMaster['status'] = [
-            { id: 1, name: 'New' },
-            { id: 2, name: 'Submitted' },
-            { id: 3, name: 'Rejected' },
-            { id: 4, name: 'Approved' },
-            { id: 5, name: 'Partially Paid' },
-            { id: 6, name: 'Fully Paid' },
-            { id: 7, name: 'Canceled' },
-            { id: 8, name: 'Overdue' }
-        ];
 
+        this.getDebitStatusList();
         this.getTotalSummary();
         this.getListDebitMemo();
     }
 
+    getDebitStatusList() {
+        this.debitMemoService.getDebitStatusList().subscribe(
+            res => {
+                try {
+                    console.log(res);
+                    this.listMaster['status'] = [
+                        { id: 1, name: 'New' },
+                        { id: 2, name: 'Submitted' },
+                        { id: 3, name: 'Rejected' },
+                        { id: 4, name: 'Approved' },
+                        { id: 5, name: 'Partially Paid' },
+                        { id: 6, name: 'Fully Paid' },
+                        { id: 7, name: 'Canceled' },
+                        { id: 8, name: 'Overdue' }
+                    ];
+                } catch (err) {
+                    console.log(err);
+                }
+            }, err => {
+                console.log(err);
+            }
+        );
+    }
+
     getTotalSummary() {
-        this.totalSummary = {
-            numberOfNew: '7',
-            numberOfSubmit: '15',
-            numberOfApproved: '4',
-            numberOfRejected: '8',
-            numberOfPartiallyPaid: '0',
-            numberOfFullyPaid: '0',
-            numberOfOverdue: '19',
-            numberOfCanceled: '15',
-        };
+        this.debitMemoService.getDebitReportTotal().subscribe(
+            res => {
+                try {
+                    console.log(res);
+                    this.totalSummary = {
+                        numberOfNew: '7',
+                        numberOfSubmit: '15',
+                        numberOfApproved: '4',
+                        numberOfRejected: '8',
+                        numberOfPartiallyPaid: '0',
+                        numberOfFullyPaid: '0',
+                        numberOfOverdue: '19',
+                        numberOfCanceled: '15',
+                    };
+                } catch (err) {
+                    console.log(err);
+                }
+            }, err => {
+                console.log(err);
+            }
+        );
     }
 
     getListDebitMemo() {

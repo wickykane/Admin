@@ -35,14 +35,17 @@ export class DebitMemoCreateKeyService implements OnDestroy {
         this.resetKeys();
         this._hotkeysService.add(new Hotkey('f1', (event: KeyboardEvent): any => {
             event.preventDefault();
+            this.context.onClickSave('draft');
             return event;
         }, undefined, 'Save as Draft'));
         this._hotkeysService.add(new Hotkey('f2', (event: KeyboardEvent): any => {
             event.preventDefault();
+            this.context.onClickSave('submit');
             return event;
         }, undefined, 'Save & Submit'));
         this._hotkeysService.add(new Hotkey('f3', (event: KeyboardEvent): any => {
             event.preventDefault();
+            this.context.onClickSave('new');
             return event;
         }, undefined, 'Save & Create New'));
         this._hotkeysService.add(new Hotkey('f6', (event: KeyboardEvent): any => {
