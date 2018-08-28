@@ -50,7 +50,7 @@
                         <label class='col-6'> Lbs
                         </label>
                         <div class="col-sm-12">
-                            <input type="text" class="form-control" formControlName="lbs_from">
+                            <input type="text" class="form-control" placeholder="From" formControlName="lbs_from">
                         </div>
                     </div>
                     <div class="col-md-1">
@@ -63,7 +63,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-3" *ngIf="generalForm.value.lbs_to1==null">
+                    <div class="col-md-3" *ngIf="generalForm.value.lbs_to==null">
                         <label class='col-6 col-form-label'> &nbsp;
                         </label>
                         <div class="col-sm-12">
@@ -72,11 +72,11 @@
                         </div>
 
                     </div>
-                    <div class="col-md-3" *ngIf="generalForm.value.lbs_to1!=null">
+                    <div class="col-md-3" *ngIf="generalForm.value.lbs_to!=null">
                         <label class='col-6 col-form-label'> Lbs
                         </label>
                         <div class="col-sm-12">
-                            <input type="text" class="form-control" formControlName="lbs_to1">
+                            <input type="text" class="form-control" placeholder="To" formControlName="lbs_to">
                         </div>
                     </div>
                 </div>

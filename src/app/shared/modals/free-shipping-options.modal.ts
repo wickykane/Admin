@@ -43,7 +43,7 @@ export class FreeShippingOptionsModalComponent implements OnInit, OnDestroy {
             'id':[1],
             'price':[],
             'lbs_from':[],
-            'lbs_to1':[null]
+            'lbs_to':[null]
         });
 
 

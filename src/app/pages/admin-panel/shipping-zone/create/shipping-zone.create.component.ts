@@ -58,9 +58,9 @@ export class ShippingZoneCreateComponent implements OnInit {
     }]
     public flatRateList = {
         "name": '',
-        "type": '',
+        "type": '1',
         "shipping_fee": '',
-        "fee_type": '',
+        "fee_type": '1',
         "handling_fee": '',
         "id": "2"
     };
@@ -68,8 +68,8 @@ export class ShippingZoneCreateComponent implements OnInit {
         "name": '',
         "type": '',
         "shipping_fee": '',
-        "fee_type": '',
-        "handling_fee": '',
+        "fee_type": '1',
+        "handling_fee": '1',
         "id": "3",
         "charge_shipping": "",
         "ranges": [{ 'lbs_from': '0', 'lbs_to': '0', 'shipping_fee': '0' }]
