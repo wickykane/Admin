@@ -175,7 +175,7 @@
                         </div>
                         <div class="row create-section-info" *ngIf="!isCreateNew">
                             <label>
-                                <b>New Rate (*)</b>
+                                <b>New Rate</b>
                             </label>
                             <input type="text" OnlyNumber="true" maxlength="50" class="form-control" [(ngModel)]="newRate"
                             [ngModelOptions]="{standalone: true}" (blur)="onCheckNewRate()">
@@ -206,7 +206,7 @@
                         </div>
                         <div class="row create-section-info" *ngIf="!isCreateNew">
                             <label>
-                                <b>Old Rate (*)</b>
+                                <b>Old Rate</b>
                             </label>
                             <span>{{oldRate ? oldRate + '%' : '' }}</span>
                         </div>
