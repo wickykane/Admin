@@ -47,6 +47,7 @@ export class PartEditComponent implements OnInit {
         wt: '',
         cost_price: '',
         oem_price: '',
+        uom_name: '',
     };
     public images: any = [];
     public dataFile: any = [];
