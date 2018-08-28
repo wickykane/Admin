@@ -142,7 +142,7 @@
                                 (!): This field cannot be blank.
                             </span>
                         </div>
-                        <div class="row create-section-info">
+                        <div class="row create-section-info" *ngIf="!isCreateNew">
                             <label>
                                 <b>Status (*)</b>
                             </label>
