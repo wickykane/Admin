@@ -72,13 +72,13 @@
                 <fieldset class="custom-border">
                     <legend class="custom-border block-title">GENERAL INFORMATION</legend>
                     <form [formGroup]="stateGeneralForm">
-                        <div class="row create-section-info">
+                        <div class="row create-section-info" *ngIf="isCreateNew">
                             <label>
                                 <b>Select State (*)</b>
                             </label>
-                            <select class="form-control" formControlName="state_id" [attr.disabled]="true" *ngIf="selectedStateTax.id">
+                            <!-- <select class="form-control" formControlName="state_id" [attr.disabled]="true" *ngIf="selectedStateTax.id">
                                 <option *ngFor="let state of listMaster.states" [value]="state.id">{{state.name}}</option>
-                            </select>
+                            </select> -->
                             <ng-select class="form-control" formControlName="state_id" (change)="onSelectStateDropdown($event)"
                                 [items]="listMaster['states']" bindLabel="name" bindValue="id" *ngIf="!selectedStateTax.id">
                             </ng-select>
