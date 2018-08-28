@@ -15,21 +15,21 @@
                 <tr>
                     <th colspan="2" class="column-checkbox">
                         <label>
-                        <input (ngModelChange)="selectState()" [(ngModel)]="selectAll"
+                        <input (change)="selectState()" [(ngModel)]="selectAll"
                             id='ck-first' type="checkbox" /> All States</label>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of listSelectCountry.state">
+                <tr *ngFor="let item of _listSelectCountry.state">
                     <td>
                         <input  [(ngModel)]="item.selected"
-                            [ngModelOptions]="{standalone: true}" type="checkbox">
+                            [ngModelOptions]="{standalone: true}" type="checkbox" (change)="checkState()">
                     </td>
                     <td class="whs-code col-md-4">{{item.name}}</td>
                 </tr>
             </tbody>
         </table>
-        <span *ngIf="listSelectCountry.state.length==0">No Results Found.</span>
+        <span *ngIf="_listSelectCountry.state.length==0">No Results Found.</span>
     </div>
 </div>
 <div class="modal-footer">

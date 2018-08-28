@@ -93,15 +93,16 @@ export class ItemService {
     checkCondition(params) {
         var data = Object.assign({}, params);
         for (var property in data) {
-            if (data[property] == true) {
-                data[property] = "1";
-            }
-            else if (data[property] == false) {
-                data[property] = "0";
-            }
         }
         const url = 'shipping-zone/check-condition';
         return this.API.post(url, data);
     }
-
+    checkConnection(data){
+        const url = 'shipping-zone/test-conection-ups';
+        return this.API.post(url, data);
+    }
+    checkSEFLConnection(data){
+        const url = 'shipping-zone/test-conection-sefl';
+        return this.API.post(url, data);
+    }
 }

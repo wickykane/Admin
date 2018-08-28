@@ -64,7 +64,14 @@
                         <label> Discount Value
                             <span class="text-danger">(*)</span>
                         </label>
-                        <input type="text" name="" class="form-control" formControlName="dsct_value" [textMask]="{mask: numberMaskObjectDecimal()}" [readonly]="isEdit" >
+                        <!-- <input type="text" name="" class="form-control" formControlName="dsct_value" [textMask]="{mask: numberMaskObjectDecimal()}" [readonly]="isEdit" > -->
+                        <div class="input-group">
+                            <input type="text" name="" class="form-control" formControlName="dsct_value" [textMask]="{mask: numberMaskObjectDecimal()}" [readonly]="isEdit">
+                            <div class="input-group-append">
+                                <span class="input-group-text" *ngIf="this.generalForm.get('dsct_type').value == 1">%</span>
+                                <span class="input-group-text" *ngIf="this.generalForm.get('dsct_type').value == 2">$</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>

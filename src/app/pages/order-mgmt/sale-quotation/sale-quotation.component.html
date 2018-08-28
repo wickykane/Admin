@@ -2,42 +2,15 @@
     <app-page-header [heading]="'LIST OF SALES QUOTATION'" [icon]="'fa-th-list'"></app-page-header>
     <app-shortcut [listShortcut]='saleQuoteKeyService.getKeys()'></app-shortcut>
     <div class="block anchor-scroll block-order">
-        <!-- <section id="statusIndicator" class="status-indicator-section">
+        <section id="statusIndicator" class="status-indicator-section">
             <ul class="status-ctn dashboard-content">
-                <li class="status-item dashboard-stat blue">
-                    <div class="status-count">1</div>
-                    <div class="status-lbl">NEW</div>
-                </li>
-                <li class="status-item dashboard-stat texas-rose">
-                    <div class="status-count">1</div>
-                    <div class="status-lbl">SUBMITTED</div>
-                </li>
-                <li class="status-item dashboard-stat strong-green">
-                    <div class="status-count">2</div>
-                    <div class="status-lbl">APPROVED</div>
-                </li>
-                <li class="status-item dashboard-stat magenta">
-                    <div class="status-count">1</div>
-                    <div class="status-lbl">REJECTED</div>
-                </li>
-                <li class="status-item dashboard-stat lemon">
-                    <div class="status-count">1</div>
-                    <div class="status-lbl">PARTIALLY PAID</div>
-                </li>
-                <li class="status-item dashboard-stat bright-grey">
-                    <div class="status-count">2</div>
-                    <div class="status-lbl">FULLY PAID</div>
-                </li>
-                <li class="status-item dashboard-stat darkblue">
-                    <div class="status-count">1</div>
-                    <div class="status-lbl">OVERDUE</div>
-                </li>
-                <li class="status-item dashboard-stat red">
-                    <div class="status-count">2</div>
-                    <div class="status-lbl">CANCELED</div>
+                <li style="cursor: pointer;" (click)="filter(item.status)" *ngFor="let item of listMaster['count-status']" class="status-item dashboard-stat {{item.color}}">
+                    <img *ngIf="item.img" [src]="item.img" alt="">
+                    <div class="status-count">{{ item.count || 0 }}</div>
+                    <div class="status-lbl text-uppercase">{{ item.name }}</div>
                 </li>
             </ul>
-        </section> -->
+        </section>
 
         <div class="block-content pd-bottom padding-lr-0 mt-2">
             <div class="row">
@@ -154,23 +127,25 @@
                                             {{item.total_price | currency}}
                                         </td>
                                         <td class="text-center">
-                                            <span class="badge badge-info" *ngIf="item.sts_code == 'NW'">{{item.sts}}</span>
-                                            <span class="badge badge-warning" *ngIf="item.sts_code == 'SM'">{{item.sts}}</span>
-                                            <span class="badge badge-danger" *ngIf="item.sts_code == 'RM'">{{item.sts}}</span>
-                                            <span class="badge badge-success" *ngIf="item.sts_code == 'AM'">{{item.sts}}</span>
-                                            <span class="badge badge-danger" *ngIf="item.sts_code == 'CC'">{{item.sts}}</span>
-                                            <span class="badge badge-primary" *ngIf="item.sts_code == 'SC'">{{item.sts}}</span>
+                                            <span class="badge badge-info bg-blue" *ngIf="item.sts_code == 'NW'">{{item.sts}}</span>
+                                            <span class="badge badge-warning bg-texas-rose" *ngIf="item.sts_code == 'SM'">{{item.sts}}</span>
+                                            <span class="badge badge-danger bg-magenta" *ngIf="item.sts_code == 'RM'">{{item.sts}}</span>
+                                            <span class="badge badge-success bg-strong-green" *ngIf="item.sts_code == 'AM'">{{item.sts}}</span>
+                                            <span class="badge badge-danger bg-red" *ngIf="item.sts_code == 'CC'">{{item.sts}}</span>
+                                            <span class="badge badge-primary bg-lemon" *ngIf="item.sts_code == 'SC'">{{item.sts}}</span>
                                             <span class="badge badge-primary" *ngIf="item.sts_code == 'RO'">{{item.sts}}</span>
-                                            <span class="badge badge-primary" *ngIf="item.sts_code == 'IU'">{{item.sts}}</span>
-                                            <span class="badge badge-primary" *ngIf="item.sts_code == 'EX'">{{item.sts}}</span>
+                                            <span class="badge badge-primary bg-darkblue" *ngIf="item.sts_code == 'IU'">{{item.sts}}</span>
+                                            <span class="badge badge-primary bg-bright-grey" *ngIf="item.sts_code == 'EX'">{{item.sts}}</span>
                                         </td>
                                         <td class="text-center">
                                             <button ngbTooltip="Edit" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" [routerLink]="['/order-management/sale-quotation/edit', item.id]"><i class="fa fa-pencil-square" aria-hidden="true"></i></button>
-                                            <button ngbTooltip="Submit" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" (click)="updateStatus(item.id, 'SM')"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></button>
-                                            <button ngbTooltip="Cancel" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" (click)="updateStatus(item.id, 'CC')"><i class="fa fa-times-circle" aria-hidden="true"></i></button>
-                                            <button ngbTooltip="Approve" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="updateStatus(item.id, 'AM')"><i class="fa fa-check-square"></i></button>
-                                            <button ngbTooltip="Reject" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="updateStatus(item.id, 'RM')"><i class="fa fa-ban" aria-hidden="true"></i></button>
-                                            <button ngbTooltip="Clone" class="btn btn-default" (click)="cloneQuote(item.id)"><i class="fa fa-clone"></i></button>
+                                            <button ngbTooltip="Submit" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" (click)="confirmModal(item.id, 'SM')"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></button>
+                                            <button ngbTooltip="Cancel" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" (click)="confirmModal(item.id, 'CC')"><i class="fa fa-times-circle" aria-hidden="true"></i></button>
+                                            <button ngbTooltip="Approve" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="confirmModal(item.id, 'AM')"><i class="fa fa-check-square"></i></button>
+                                            <button ngbTooltip="Reject" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="confirmModal(item.id, 'RM')"><i class="fa fa-ban" aria-hidden="true"></i></button>
+                                            <button ngbTooltip="Copy" class="btn btn-default" (click)="confirmModal(item.id, 'CLONE')"><i class="fa fa-clone"></i></button>
+                                            <button ngbTooltip="View" *ngIf="item['sts_code'] == 'AM' || item['sts_code'] == 'EM'" class="btn btn-default" [routerLink]="['/order-management/sale-quotation/detail', item.id]"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                                            <button ngbTooltip="Convert to SO" *ngIf="item['sts_code'] == 'AM'" class="btn btn-default" (click)="confirmModal(item.id, 'SC')"><i class="fa fa-exchange" aria-hidden="true"></i></button>
                                         </td>
                                     </tr>
 

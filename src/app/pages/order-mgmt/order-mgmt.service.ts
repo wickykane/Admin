@@ -176,7 +176,7 @@ export class OrderService {
     }
 
     updateStatusOrder(order_id, status) {
-        const url = '/order/updateStatus/' + order_id + '/' + status;
+        const url = 'order/updateStatus/' + order_id + '/' + status;
         return this.API.put(url);
     }
 
@@ -276,6 +276,10 @@ export class OrderService {
     cloneQuote(id) {
         const url = 'sale-quote/clone/' + id;
         return this.API.post(url);
+    }
+    getQuoteCountStatus() {
+        const url = 'sale-quote/count-status';
+        return this.API.get(url);
     }
 
 }

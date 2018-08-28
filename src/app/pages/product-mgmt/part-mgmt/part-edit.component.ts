@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NguCarousel } from '@ngu/carousel';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../../../environments/environment';
+import { routerTransition } from '../../../router.animations';
 
 import {
     NgxGalleryAnimation,
@@ -18,7 +19,8 @@ import { PartKeyService } from './keys.control';
     selector: 'app-part-edit',
     templateUrl: './part-edit.component.html',
     styleUrls: ['./part-list.component.scss'],
-    providers: [PartKeyService]
+    providers: [PartKeyService],
+    animations: [routerTransition()]
 })
 export class PartEditComponent implements OnInit {
     /**
@@ -66,7 +68,9 @@ export class PartEditComponent implements OnInit {
             income_account_id: [null, Validators.required],
             expense_account_id: [null, Validators.required],
             short_des: [null],
-            full_des: [null]
+            full_des: [null],
+            free_ship: [null, Validators.required],
+            ups: [null, Validators.required]
         });
         //  Init Key
         this.listMaster['account'] = [];
@@ -77,7 +81,7 @@ export class PartEditComponent implements OnInit {
     }
 
     ngOnInit() {
-
+        this.listMaster['listQuestion'] = [{id: 0, name: 'No'}, {id: 1, name: 'Yes'}];
         this.url_image = `${environment.api_url}file/view?path=`;
         this.part = {};
         this.route.params.subscribe(params => this.getDetailPart(params.id));

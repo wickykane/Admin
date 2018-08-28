@@ -2,11 +2,13 @@
     <div class="bd-example text-right">
         <button class="btn btn-outline-secondary" [routerLink]="['/order-management/sale-quotation']"><i class="fa fa-share-square" ></i> Back</button>
         <button *ngIf="detail['sale_quote_status_id'] == 1" class="btn btn-outline-primary" [routerLink]="['/order-management/sale-quotation/edit', _orderId]"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit</button>
-        <button *ngIf="detail['sale_quote_status_id'] == 1" class="btn btn-outline-warning" (click)="updateStatus('SM')"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i> Submit</button>
-        <button *ngIf="detail['sale_quote_status_id'] == 1" class="btn btn-outline-danger" (click)="updateStatus('CC')"><i class="fa fa-times-circle" aria-hidden="true"></i> Cancel</button>
-        <button *ngIf="detail['sale_quote_status_id'] == 2" class="btn btn-outline-success" (click)="updateStatus('AM')"><i class="fa fa-check-square"></i> Approve</button>
-        <button *ngIf="detail['sale_quote_status_id'] == 2" class="btn btn-outline-danger" (click)="updateStatus('RM')"><i class="fa fa-ban" aria-hidden="true"></i> Reject</button>
-        <button class="btn btn-outline-info" (click)="cloneQuote()"><i class="fa fa-clone"></i> Clone</button>
+        <button *ngIf="detail['sale_quote_status_id'] == 1" class="btn btn-outline-warning" (click)="confirmModal(_orderId,'SM')"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i> Submit</button>
+        <button *ngIf="detail['sale_quote_status_id'] == 1" class="btn btn-outline-danger" (click)="confirmModal(_orderId, 'CC')"><i class="fa fa-times-circle" aria-hidden="true"></i> Cancel</button>
+        <button *ngIf="detail['sale_quote_status_id'] == 2" class="btn btn-outline-success" (click)="confirmModal(_orderId,'AM')"><i class="fa fa-check-square"></i> Approve</button>
+        <button *ngIf="detail['sale_quote_status_id'] == 2" class="btn btn-outline-danger" (click)="confirmModal(_orderId,'RM')"><i class="fa fa-ban" aria-hidden="true"></i> Reject</button>
+        <button class="btn btn-outline-info" (click)="confirmModal(_orderId,'CLONE')"><i class="fa fa-clone"></i> Copy</button>
+        <button *ngIf="detail['sale_quote_status_id'] == 4" class="btn btn-outline-dark" (click)="confirmModal(item.id, 'SC')"><i class="fa fa-exchange" aria-hidden="true"></i> Convert to SO</button>
+
     </div>
     <section class="rma-page block main-container block-order">
         <div class="row">
@@ -55,15 +57,15 @@
                                         <div class="form-group row">
                                             <label class='col-6 control-label'>Quote Status</label>
                                             <div class='col-6'>
-                                                <span class="badge badge-info" *ngIf="detail['sale_quote_status_id'] == 1">{{detail['sale_quote_status_name']}}</span>
-                                                <span class="badge badge-warning" *ngIf="detail['sale_quote_status_id'] == 2">{{detail['sale_quote_status_name']}}</span>
-                                                <span class="badge badge-danger" *ngIf="detail['sale_quote_status_id'] == 3">{{detail['sale_quote_status_name']}}</span>
-                                                <span class="badge badge-success" *ngIf="detail['sale_quote_status_id'] == 4">{{detail['sale_quote_status_name']}}</span>
-                                                <span class="badge badge-primary" *ngIf="detail['sale_quote_status_id'] == 7">{{detail['sale_quote_status_name']}}</span>
-                                                <span class="badge badge-primary" *ngIf="detail['sale_quote_status_id'] == 8">{{detail['sale_quote_status_name']}}</span>
+                                                <span class="badge badge-info bg-blue" *ngIf="detail['sale_quote_status_id'] == 1">{{detail['sale_quote_status_name']}}</span>
+                                                <span class="badge badge-warning bg-texas-rose" *ngIf="detail['sale_quote_status_id'] == 2">{{detail['sale_quote_status_name']}}</span>
+                                                <span class="badge badge-danger bg-magenta" *ngIf="detail['sale_quote_status_id'] == 3">{{detail['sale_quote_status_name']}}</span>
+                                                <span class="badge badge-success bg-strong-green" *ngIf="detail['sale_quote_status_id'] == 4">{{detail['sale_quote_status_name']}}</span>
+                                                <span class="badge badge-danger bg-red" *ngIf="detail['sale_quote_status_id'] == 7">{{detail['sale_quote_status_name']}}</span>
+                                                <span class="badge badge-primary bg-lemon" *ngIf="detail['sale_quote_status_id'] == 8">{{detail['sale_quote_status_name']}}</span>
                                                 <span class="badge badge-primary" *ngIf="detail['sale_quote_status_id'] == 9">{{detail['sale_quote_status_name']}}</span>
-                                                <span class="badge badge-primary" *ngIf="detail['sale_quote_status_id'] == 10">{{detail['sale_quote_status_name']}}</span>
-                                                <span class="badge badge-primary" *ngIf="detail['sale_quote_status_id'] == 11">{{detail['sale_quote_status_name']}}</span>
+                                                <span class="badge badge-primary bg-darkblue" *ngIf="detail['sale_quote_status_id'] == 10">{{detail['sale_quote_status_name']}}</span>
+                                                <span class="badge badge-primary bg-bright-grey" *ngIf="detail['sale_quote_status_id'] == 11">{{detail['sale_quote_status_name']}}</span>
                                             </div>
                                         </div>
                                         <div class="form-group row">

@@ -13,7 +13,7 @@
                     <div class="col-md-3">
                         <label class='col-12'> Display name
                             <span class="text-danger">(*)</span>
-                            <span class="show-tooltip" ngbTooltip="This name will be shown on the store front site.">
+                            <span class="show-tooltip icon-blue" ngbTooltip="This name will be shown on the store front site.">
                                 <i class="fa fa-question-circle"></i>
                             </span>
                         </label>
@@ -21,7 +21,7 @@
                         <div class="col-sm-12">
                             <input type="text" formControlName="name" id="name" class="form-control">
                         </div>
-                        <span style="color: red" *ngIf="generalForm.controls.name.errors?.required">
+                        <span class="col-md-12" style="color: red" *ngIf="generalForm.controls.name.touched&&generalForm.controls.name.errors?.required">
                             (!) This field cannot be blank.
                         </span>
                     </div>
@@ -32,7 +32,7 @@
                         <label class='col-12'>
                             Charge Shipping
                             <span class="text-danger">(*)</span>
-                            <span class="show-tooltip" ngbTooltip="Payment Method Type.">
+                            <span class="show-tooltip icon-blue" ngbTooltip="">
                                 <i class="fa fa-question-circle"></i>
                             </span>
                         </label>
@@ -58,9 +58,17 @@
                     </div>
                     <div class="col-md-3">
                         <label class='col-12'>Handling Fee
+                                <span *ngIf="generalForm.value.fee_type==1" class="show-tooltip icon-blue" ngbTooltip="A flat handling fee of $x will be charged in the order.">
+                                        <i class="fa fa-question-circle"></i>
+                                    </span>
+                                    <span *ngIf="generalForm.value.fee_type==2" class="show-tooltip icon-blue" ngbTooltip="Percentage of the total shipping fee of the order.">
+                                            <i class="fa fa-question-circle"></i>
+                                        </span>
                         </label>
-                        <div class="col-sm-12">
-                            <input type="text" formControlName="handling_fee" id="handling_fee" class="form-control">
+                        <div class="col-sm-12 row">
+                                <input *ngIf="generalForm.value.fee_type ==2" style="text-align:center" type="text" value="%" disabled class="form-control col-sm-2">
+                                <input *ngIf="generalForm.value.fee_type ==1" style="text-align:center" type="text" value="$" disabled class="form-control col-sm-2">
+                            <input type="text" formControlName="handling_fee" id="handling_fee" class="form-control col-sm-10">
                         </div>
                     </div>
                 </div>
@@ -73,32 +81,48 @@
         <div class="col-md-12">
 
             <div class="form-group row">
-                <h1>Ranges</h1>
+                <h5 style="font-weight:600;margin-left: 10px">Ranges</h5>
             </div>
             <div class="form-group row" *ngFor="let item of ranges;let i=index">
                 <div class="col-md-3">
                     <label class='col-12'>
                         From
                     </label>
-                    <div class="col-sm-12">
-                        <input type="number" [(ngModel)]="item.lbs_from" class="form-control">
+                    <div class="row input-append">
+                        <div class="col-sm-10">
+                            <input type="number" [(ngModel)]="item.lbs_from" class="form-control">
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="text" value="lbs" disabled="true" class="form-control">
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <label class='col-12'>Up to
                     </label>
-                    <div class="col-sm-12">
-                        <input type="number" [(ngModel)]="item.lbs_to" class="form-control">
-                    </div>
-                    <span style="color: red" *ngIf="item.lbs_to<item.lbs_from">
+                    <div class="row input-append">
+                        <div class="col-sm-10">
+                            <input type="number" [(ngModel)]="item.lbs_to" class="form-control">
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="text" value="lbs" disabled="true" class="form-control">
+                        </div>
+                        <span style="color: red" *ngIf="item.lbs_to<item.lbs_from">
                             (!): The up to value cannot be minor than the value in From.
-                    </span>
+                        </span>
+
+                    </div>
                 </div>
                 <div class="col-md-3">
                     <label class='col-12'>Shipping Fee
                     </label>
-                    <div class="col-sm-12">
-                        <input type="number" [(ngModel)]="item.shipping_fee" class="form-control">
+                    <div class="row input-append1">
+                        <div class="col-sm-2">
+                            <input type="text" value="$" disabled="true" class="form-control">
+                        </div>
+                        <div class="col-sm-10">
+                            <input type="number" [(ngModel)]="item.shipping_fee" class="form-control">
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -124,6 +148,6 @@
 
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-outline-primary" (click)="applyData()">OK</button>
+    <button type="button" class="btn btn-outline-primary" [disabled]="generalForm.invalid" (click)="applyData()">OK</button>
     <button type="button" class="btn btn-outline-dark" (click)="closeX()">Close</button>
 </div>

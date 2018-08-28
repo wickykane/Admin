@@ -251,10 +251,10 @@
                                 <strong>Ship To</strong>
                             </div>
                             <div class="card-body p-25">
-                                <div class="" *ngIf="generalForm.get('carrier_id').value == 1">
+                                <div class="" *ngIf="generalForm.get('carrier_id').value == 999">
                                     Customer will pickup goods in store
                                 </div>
-                                <div class="row" *ngIf="generalForm.get('carrier_id').value != 1">
+                                <div class="row" *ngIf="generalForm.get('carrier_id').value != 999">
                                     <div class="col-12">
                                         <div class="form-group row">
                                             <label class=" control-label col-5" for="shiping_to" translate>Label
@@ -397,8 +397,8 @@
                             <table class="table table-bordered table-order" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                                 <thead>
                                     <tr>
-                                        <th style="width:100px" translate>Action</th>
-                                        <th style="width:150px" translate>Item No</th>
+                                        <th style="width:50px" translate>Action</th>
+                                        <th style="width:70px" translate>Item No</th>
                                         <th translate>Description</th>
                                         <th translate>Condition</th>
                                         <th translate>UOM</th>
@@ -575,7 +575,7 @@
         </div>
         <div class="row">
             <div class="col-md-12 mg-top-15 text-right">
-                <button type="button" class="btn btn-outline-primary" (click)="createOrder('create')" ng-disabled="!generalForm.valid" translate>Update</button>
+                <button type="button" class="btn btn-outline-primary" (click)="createOrder('create')" [disabled]="!generalForm.valid" translate>Update</button>
                 <button type="button" class="btn btn-default" [routerLink]="['/order-management/sale-order']" translate>Cancel</button>
             </div>
         </div>

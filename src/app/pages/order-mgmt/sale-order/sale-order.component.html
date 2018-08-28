@@ -174,7 +174,7 @@
                                                width="20px" height="20px">
                                        </a>
                                    </td>
-                                   <td><a [routerLink]="['detail', item.id]">{{item.code}}</a></td>
+                                   <td>{{item.code}}</td>
                                    <td>{{item.cus_po}}</td>
                                    <td>{{item.quote_no}}</td>
                                    <td>{{item.buyer_name}}</td>
@@ -200,12 +200,22 @@
                                        <span class="label  label-draft" *ngIf="item.sts_code == 'Draft'">{{item.sts}}</span>
                                    </td>
                                    <td class="text-nowrap">
-                                       <button placement="top" ngbTooltip="Submited" *ngIf="item.sts_code == 'NW'" type="button" class="btn btn-default" (click)="updateStatusOrder(item.id, 6)"><i class="fa fa-check-circle"></i></button>
-                                       <button placement="top" ngbTooltip="Approve" *ngIf="item.sts_code == 'SM'" type="button" class="btn btn-default" (click)="putApproveOrder(item.id)"><i class="fa fa-check-square"></i></button>
-                                       <button ngbTooltip="Click to Reject" data-toggle="tooltip" *ngIf="item.sts_code=='SM'" type="button" class="btn btn-default" (click)="updateStatusOrder(item.id, 7)">
-                                           <i class="fa fa-ban"></i>
-                                       </button>
-                                       <a *ngIf="item.sts_code == 'NW'" class="btn btn-default" [routerLink]="['edit', item.id]"> <i class="fa fa-pencil"></i> </a>
+                                       <a placement="top" ngbTooltip="Submit" *ngIf="item.sts_code == 'NW'" class="btn btn-default" (click)="updateStatusOrder(item.id, 6)"><i class="fa fa-check-circle"></i></a>
+                                       <a placement="top" ngbTooltip="Approve" *ngIf="item.sts_code == 'SM'" class="btn btn-default" (click)="putApproveOrder(item.id)"><i class="fa fa-check-square"></i></a>
+                                       <a placement="top" ngbTooltip="Reject" *ngIf="item.sts_code=='SM'" class="btn btn-default" (click)="updateStatusOrder(item.id, 7)"><i class="fa fa-ban"></i></a>
+                                       <a placement="top" ngbTooltip="Edit Order" *ngIf="item.sts_code == 'NW'" class="btn btn-default" [routerLink]="['edit', item.id]"> <i class="fa fa-pencil"></i> </a>
+                                       <a placement="top" ngbTooltip="View Order" class="btn btn-default" [routerLink]="['detail', item.id]"><i class="fa fa-eye"></i></a>
+
+
+                                       <!-- <button ngbTooltip="Edit" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" [routerLink]="['/order-management/sale-order/edit', item.id]"><i class="fa fa-pencil-square" aria-hidden="true"></i></button>
+                                       <button ngbTooltip="Submit" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" (click)="confirmModal(item.id, 'SM')"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></button>
+
+                                       <button ngbTooltip="Cancel" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" (click)="confirmModal(item.id, 'CC')"><i class="fa fa-times-circle" aria-hidden="true"></i></button>
+                                       <button ngbTooltip="Approve" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="confirmModal(item.id, 'AM')"><i class="fa fa-check-square"></i></button>
+                                       <button ngbTooltip="Reject" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="confirmModal(item.id, 'RM')"><i class="fa fa-ban" aria-hidden="true"></i></button>
+                                       <button ngbTooltip="Copy" class="btn btn-default" (click)="confirmModal(item.id, 'CLONE')"><i class="fa fa-clone"></i></button>
+                                       <button ngbTooltip="View" *ngIf="item['sts_code'] == 'AM' || item['sts_code'] == 'EM'" class="btn btn-default" [routerLink]="['/order-management/sale-quotation/detail', item.id]"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                                       <button ngbTooltip="Convert to SO" *ngIf="item['sts_code'] == 'AM'" class="btn btn-default" (click)="confirmModal(item.id, 'SC')"><i class="fa fa-exchange" aria-hidden="true"></i></button> -->
                                    </td>
                                </tr>
                            </tbody>

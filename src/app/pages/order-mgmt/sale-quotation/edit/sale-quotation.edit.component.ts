@@ -19,6 +19,7 @@ import { ItemMiscModalContent } from './../../../../shared/modals/item-misc.moda
 import { SaleQuoteEditKeyService } from './keys.edit.control';
 
 import { HotkeysService } from 'angular2-hotkeys';
+import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 
 @Component({
     selector: 'app-edit-quotation',
@@ -37,6 +38,12 @@ export class SaleQuotationEditComponent implements OnInit {
     public listMaster = {};
     public selectedIndex = 0;
     public data = {};
+
+    public messageConfig = {
+        '2': 'Are you sure that you want to save & submit this quotation to approver?',
+        '4': 'Are you sure that you want to validate this quotation?',
+        'default': 'The data you have entered may not be saved, are you sure that you want to leave?',
+    };
 
     public customer: any = {
         'last_sales_order': '',
@@ -425,7 +432,7 @@ export class SaleQuotationEditComponent implements OnInit {
         if (+this.generalForm.value.carrier_id === 999) {
             default_ship_rate = 8;
             this.generalForm.patchValue({ shipping_id: null });
-            this.generalForm.get('shipping_id').setValidators(null);
+            this.generalForm.get('shipping_id').clearValidators();
             this.addr_select.shipping = {
                 'address_name': '',
                 'address_line': '',
@@ -521,7 +528,24 @@ export class SaleQuotationEditComponent implements OnInit {
         });
     }
 
-    createOrder(type) {
+    confirmModal(type, is_draft_sq?) {
+        const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
+        modalRef.result.then(res => {
+            if (res) {
+                if (type) {
+                    this.createOrder(type, is_draft_sq);
+                } else {
+                    this.router.navigate(['/order-management/sale-quotation']);
+                }
+            }
+        }, dismiss => { });
+        modalRef.componentInstance.message = this.messageConfig[type || 'default'];
+        modalRef.componentInstance.yesButtonText = 'Yes';
+        modalRef.componentInstance.noButtonText = 'No';
+    }
+
+
+    createOrder(type, is_draft_sq?) {
         const items = this.list.items.map(item => {
             item.discount_percent = item.discount;
             item.is_item = (item.misc_id) ? 0 : 1;
@@ -532,7 +556,8 @@ export class SaleQuotationEditComponent implements OnInit {
             ...this.generalForm.value,
             status_id: type,
             original_ship_cost: this.order_info['original_ship_cost'],
-            items
+            items,
+            is_draft_sq: is_draft_sq || 0,
         };
 
         this.orderService.updateQuoteOrder(this.data['id'], params).subscribe(res => {
