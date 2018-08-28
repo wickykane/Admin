@@ -12,23 +12,24 @@
                    <div class="row information height-100">
                       <div class="col-md-12 p-l-5 p-r-5">
                          <form [formGroup]="generalForm" class="form-search full-width form-inline border-bottom">
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                <div class="form-group">
-                                  <label for="code" class="control-label" translate> <strong>Customer Name</strong> </label>
-                                  <span class="text-danger">(*)</span>
-                                  <div>
+                                   <div class="col-md-6 mb-2">
+                                  <label for="code" class="control-label" translate> <strong>Customer</strong> <span class="text-danger">(*)</span></label>
+                                   </div>
+                                  <div class="col-md-6">
                                      <ng-select [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 110px; margin-left: 2px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="buyer_id">
                                      </ng-select>
                                   </div>
                                </div>
                             </div>
-                            <div *ngIf="generalForm.value.buyer_id" class="col-md-3 ">
+                            <!-- <div *ngIf="generalForm.value.buyer_id" class="col-md-3 ">
                                 <i>Last Sales Date:</i> {{customer.last_sales_order|date:'MM/dd/yyyy'}}
                             </div>
                             <div *ngIf="generalForm.value.buyer_id" class="col-md-5 ">
                                 <i class="text-warning fa fa-exclamation-circle"></i> <strong>Current Debt:</strong> <span class="text-warning">{{customer.current_dept |currency}}</span>
                                 <strong class="ml-2">Current Store Credit:</strong> <span class="text-success">{{customer.current_dept |currency}}</span>
-                            </div>
+                            </div> -->
                          </form>
                       </div>
                       <div class="col-md-12 fix-padding">
@@ -85,7 +86,7 @@
                             <div class="col-md-4 customer-infomation">
                                <form [formGroup]="generalForm">
                                   <div class="form-group row">
-                                     <label class='col-6'>Customer PO
+                                     <label class='col-6'>Credit Memo No
                                      <span class="text-danger">(*)</span>
                                      </label>
                                      <div class='col-6 text-primary'>
@@ -93,7 +94,22 @@
                                      </div>
                                   </div>
                                   <div class="form-group row">
-                                     <label class='col-6'>Order Type
+                                        <label class='col-6'>Issue Date
+                                        <span class="text-danger">(*)</span>
+                                        </label>
+                                        <div class='col-6 text-danger'>
+                                           <div clickOutside (clickOutside)="d.close()" class="input-group">
+                                              <input class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="order_date" ngbDatepicker #d="ngbDatepicker">
+                                              <div class="input-group-append">
+                                                 <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                                                 <i class="fa fa-calendar" aria-hidden="true"></i>
+                                                 </button>
+                                              </div>
+                                           </div>
+                                        </div>
+                                     </div>
+                                  <div class="form-group row">
+                                     <label class='col-6'>Document Type
                                      <span class="text-danger">(*)</span>
                                      </label>
                                      <div class='col-6 text-primary'>
@@ -103,23 +119,9 @@
                                         </select>
                                      </div>
                                   </div>
+
                                   <div class="form-group row">
-                                     <label class='col-6'>Order Date
-                                     <span class="text-danger">(*)</span>
-                                     </label>
-                                     <div class='col-6 text-danger'>
-                                        <div clickOutside (clickOutside)="d.close()" class="input-group">
-                                           <input class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="order_date" ngbDatepicker #d="ngbDatepicker">
-                                           <div class="input-group-append">
-                                              <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
-                                              <i class="fa fa-calendar" aria-hidden="true"></i>
-                                              </button>
-                                           </div>
-                                        </div>
-                                     </div>
-                                  </div>
-                                  <div class="form-group row">
-                                     <label class='col-6'>Priority</label>
+                                     <label class='col-6'>Document No</label>
                                      <div class='col-6 text-danger'>
                                         <select required class="form-control" id="priority" name="priority" formControlName="prio_level">
                                         <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
@@ -128,7 +130,7 @@
                                      </div>
                                   </div>
                                   <div class="form-group row">
-                                     <label class='col-6'>Order Status</label>
+                                     <label class='col-6'>Status</label>
                                      <div class='col-6 text-success'>
                                         <strong>1-NEW</strong>
                                      </div>
@@ -316,7 +318,7 @@
                             <div class="col-12">
                               <form [formGroup]="generalForm">
                                <div class="form-group row">
-                                  <label class='col-6'>Warehouse
+                                  <label class='col-6' style="padding-right: 0">Warehouse
                                   <span class="text-danger">(*)</span>
                                   </label>
                                   <div class='col-6'>
@@ -328,7 +330,7 @@
                                </div>
     
                                <div class="form-group row">
-                                  <label class='col-6'>Ship Via
+                                  <label class='col-6' style="padding-right: 0">Ship Via
                                   <span class="text-danger">(*)</span>
                                   </label>
                                   <div class='col-6'>
@@ -340,7 +342,7 @@
                                </div>
     
                                <div class="form-group row">
-                                  <label class='col-6'>Option
+                                  <label class='col-6' style="padding-right: 0">Option
                                   <span class="text-danger">(*)</span>
                                   </label>
                                   <div class='col-6'>
@@ -352,7 +354,7 @@
                                </div>
     
                                <div class="form-group row">
-                                  <label class='col-6'>Ship Rate
+                                  <label class='col-6' style="padding-right: 0">Ship Rate
                                   <span class="text-danger">(*)</span>
                                   </label>
                                   <div class='col-6'>
@@ -364,7 +366,7 @@
                                </div>
     
                                <div class="form-group row">
-                                  <label class='col-6'>Delivery Date
+                                  <label class='col-6' style="padding-right: 0">Delivery Date
                                   </label>
                                   <div class='col-6'>
                                      <div clickOutside (clickOutside)="da.close()" class="input-group">
@@ -387,7 +389,7 @@
           </div>
        </div>
        <div class="row mg-top-10">
-          <div class="col-12 padding-lr-5">
+          <div class="col-12 padding-lr-5 mt-2">
              <div class="card no-border">
                 <div class="card-header">
                    <strong>Line Items</strong>
@@ -402,15 +404,11 @@
                             <th translate>Description</th>
                             <th translate>Condition</th>
                             <th translate>UOM</th>
-                            <th translate>Free Ship</th>
                             <th translate>Avail QTY</th>
-                            <th class="text-nowrap" style="width:100px" translate>Order QTY</th>
                             <th class="text-center" style="width:100px" translate>Unit Price</th>
                             <th style="width:100px" translate>Disc %</th>
                             <th style="width:100px" translate>Tax %</th>
                             <th translate>Amount</th>
-                            <th translate>G/L Account</th>
-                            <th translate>Price Source</th>
                          </tr>
                       </thead>
                       <tr *ngIf="list['items'].length === 0">
@@ -427,10 +425,6 @@
                             <td>{{item.des}}</td>
                             <td>{{item.condition_name}}</td>
                             <td>{{item.uom_name}}</td>
-                            <td class="text-center">
-                                <i *ngIf="item.is_shipping_free" class="text-success fa fa-check"></i>
-                            </td>
-                            <td>{{item.qty_available}}</td>
                             <td>
                                <input [disabled]="item.is_misc" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (change)="updateTotal()" (keypress)="_keyPress($event)">
                             </td>
@@ -451,14 +445,6 @@
                             <td class="text-center">
                                <span>{{item.amount | currency}}</span>
                             </td>
-                            <td>
-                                {{ item.income_account_name }}
-                            </td>
-                            <td class="text-center">
-                               <span>
-                               {{item.source_name}}
-                               </span>
-                            </td>
                          </tr>
                       </tbody>
                       </table>
@@ -474,11 +460,11 @@
              </div>
           </div>
        </div>
-       <div class="row mg-top-10 padding-child-5 justify-content-end">
-          <div class="col-md-3">
+       <div class="row mt-2 padding-child-5">
+          <div class="col-md-6">
              <div class="card height-100">
                 <div class="card-header">
-                   <strong>Note</strong>
+                   <strong>Notes</strong>
                 </div>
                 <div class="card-body no-padding">
                    <form [formGroup]="generalForm">
@@ -489,7 +475,7 @@
                 </div>
              </div>
           </div>
-          <div class="col-md-2">
+          <!-- <div class="col-md-2">
              <div class="card height-100">
                 <div class="card-header">
                    <strong>Order Summary</strong>
@@ -527,21 +513,15 @@
                                <span class="text-success">{{ (order_info['original_ship_cost'] || 0) | currency}}</span>
                             </div>
                          </div>
-                         <!-- <div class="form-group row">
-                            <label class='col-7 control-label'>Origin. Handle Fee</label>
-                            <div class='col-5'>
-                               <span class="text-success">{{ (order_info['original_ship_cost'] || 0) | currency}}</span>
-                            </div>
-                         </div> -->
                       </div>
                    </div>
                 </div>
              </div>
-          </div>
-          <div class="col-md-3" style="max-width: 250px;">
+          </div> -->
+          <div class="col-md-6" >
              <div class="card height-100">
                 <div class="card-header">
-                   <strong>Order Total</strong>
+                   <strong>Credit Memo Total</strong>
                 </div>
                 <div class="card-body p-17">
                    <div class="row">
@@ -561,9 +541,9 @@
                                  <input class="form-control" readonly="true" [(ngModel)]="item.amount" class="form-control" value="0" type="number">
                              </div>
                          </div>
-                         <div class="form-group row margin-lr-0 text-light bg-danger">
+                         <div class="form-group row margin-lr-0">
                              <label class="col-5 control-label ">
-                                 <strong>Grand Total:</strong>
+                                 <strong>Total Amount</strong>
                              </label>
                              <div class="col-6 offset-md-1 ">
                                  <strong>{{order_info.total | currency}}</strong>
@@ -576,7 +556,7 @@
           </div>
        </div>
        <div class="row">
-          <div class="col-md-12 mg-top-15 text-right">
+          <div class="col-md-12 mg-top-15 text-center">
              <button type="button" class="btn btn-outline-info" (click)="createOrder('quote')" [disabled]="!generalForm.valid" translate>Save As Quote</button>
              <button type="button" class="btn btn-outline-warning" (click)="createOrder('draft')" [disabled]="!generalForm.valid" translate>Save As Draft</button>
              <button type="button" class="btn btn-outline-primary" (click)="createOrder('create')" [disabled]="!generalForm.valid" translate>Save & Submit</button>

@@ -24,7 +24,7 @@ const routes: Routes = [
         ]
     },
     {
-        path: 'creditCard',
+        path: 'creditMemo',
         children: [
             { path: '', component: CreditMemoListComponent },
             { path: 'create', component: CreditMemoCreateComponent },
