@@ -87,12 +87,11 @@ export class ShippingZoneCreateComponent implements OnInit {
         "password": "",
         "rates": false,
         "account_number": "",
-        "ups_customer": "",
+        "ups_customer": "00",
         "fee_type": "1",
         "handling_fee": "0",
         "markup_type": "1",
         "markup_type_value": "0",
-        "ship_options": ["01"]
     }
     public seflList= {
         "account": '',
@@ -263,6 +262,8 @@ export class ShippingZoneCreateComponent implements OnInit {
             modalRef.componentInstance.pickupModalList = this.upsList;
             modalRef.componentInstance.typeFreeList = this.listMasterData['type_free'];
             modalRef.componentInstance.upsList = this.listMasterData['ups'];
+            modalRef.componentInstance.customer_classificationList = this.listMasterData['customer_classification'];
+            
         }
         if (id == "6") {
             modalRef = this.modalService.open(SEFLConfigurationModalComponent);

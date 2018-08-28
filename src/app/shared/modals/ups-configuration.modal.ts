@@ -23,11 +23,13 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
     @Input() typeFreeList;
     @Input() upsList;
     @Input() pickupModalList;
+    @Input() customer_classificationList;
     hotkeyCtrlLeft: Hotkey | Hotkey[];
     hotkeyCtrlRight: Hotkey | Hotkey[];
     ranges: any = [];
     isSave = false;
     typeList: any = [];
+    tempCustomer_classificationList:any;
     constructor(public fb: FormBuilder,
         public router: Router,
         public toastr: ToastrService,
@@ -59,8 +61,10 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.typeList = this.typeFreeList.slice(0);
+        this.tempCustomer_classificationList = JSON.parse(JSON.stringify(this.customer_classificationList));
         if (this.pickupModalList) {
             this.generalForm.patchValue(this.pickupModalList);
+            console.log(this.pickupModalList.ship_options);
             if (this.pickupModalList.ship_options) {
                 this.checkUPSbyForm();
             }
@@ -156,10 +160,10 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
             this.generalForm.controls.account_number.setErrors(Validators.required);
             this.generalForm.controls.ups_customer.setErrors(Validators.required);
         }
-        // else{
-        //     this.generalForm.controls.account_number.setErrors(null);
-        //     this.generalForm.controls.ups_customer.setErrors(null);
-        // }
+        else{
+            this.generalForm.controls.account_number.setErrors(null);
+            this.generalForm.controls.ups_customer.setErrors(null);
+        }
     }
     calculateUPSLength() {
         var count = 0;

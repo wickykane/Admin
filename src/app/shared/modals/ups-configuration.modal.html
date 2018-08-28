@@ -90,7 +90,9 @@
                                     </label>
 
                                     <div class="col-sm-12">
-                                        <input type="text" id="ups_customer" class="form-control">
+                                        <select name="ups_customer" formControlName="ups_customer" class="form-control">
+                                            <option *ngFor="let item of tempCustomer_classificationList" [value]='item.id'>{{item.name}}</option>
+                                        </select>
                                     </div>
                                     <span class="col-md-12" style="color: red" *ngIf="generalForm.controls.ups_customer.touched&&generalForm.controls.ups_customer.errors?.required">
                                         (!) This field cannot be blank.
