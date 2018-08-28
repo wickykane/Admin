@@ -69,7 +69,7 @@ export class ShippingZoneCreateComponent implements OnInit {
         "type": '',
         "shipping_fee": '',
         "fee_type": '1',
-        "handling_fee": '',
+        "handling_fee": '0.00',
         "id": "3",
         "charge_shipping": "1",
         "ranges": [{ 'lbs_from': '0', 'lbs_to': '0', 'shipping_fee': '0' }]

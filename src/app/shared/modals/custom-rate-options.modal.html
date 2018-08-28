@@ -32,7 +32,7 @@
                         <label class='col-12'>
                             Charge Shipping
                             <span class="text-danger">(*)</span>
-                            <span class="show-tooltip icon-blue" ngbTooltip="Payment Method Type.">
+                            <span class="show-tooltip icon-blue" ngbTooltip="">
                                 <i class="fa fa-question-circle"></i>
                             </span>
                         </label>
@@ -58,9 +58,17 @@
                     </div>
                     <div class="col-md-3">
                         <label class='col-12'>Handling Fee
+                                <span *ngIf="generalForm.value.fee_type==1" class="show-tooltip icon-blue" ngbTooltip="A flat handling fee of $x will be charged in the order.">
+                                        <i class="fa fa-question-circle"></i>
+                                    </span>
+                                    <span *ngIf="generalForm.value.fee_type==2" class="show-tooltip icon-blue" ngbTooltip="Percentage of the total shipping fee of the order.">
+                                            <i class="fa fa-question-circle"></i>
+                                        </span>
                         </label>
-                        <div class="col-sm-12">
-                            <input type="text" formControlName="handling_fee" id="handling_fee" class="form-control">
+                        <div class="col-sm-12 row">
+                                <input *ngIf="generalForm.value.fee_type ==2" style="text-align:center" type="text" value="%" disabled class="form-control col-sm-2">
+                                <input *ngIf="generalForm.value.fee_type ==1" style="text-align:center" type="text" value="$" disabled class="form-control col-sm-2">
+                            <input type="text" formControlName="handling_fee" id="handling_fee" class="form-control col-sm-10">
                         </div>
                     </div>
                 </div>
@@ -140,6 +148,6 @@
 
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-outline-primary" (click)="applyData()">OK</button>
+    <button type="button" class="btn btn-outline-primary" [disabled]="generalForm.invalid" (click)="applyData()">OK</button>
     <button type="button" class="btn btn-outline-dark" (click)="closeX()">Close</button>
 </div>
