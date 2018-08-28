@@ -47,8 +47,9 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
             "ups_customer": [''],
             "fee_type": [''],
             "handling_fee": [''],
-            "markup_type":[''],
-            "markup_type_value":['']
+            "markup_type": [''],
+            "markup_type_value": [''],
+            "id": "5"
             // 'ranges':[this.fb.array([])]
         });
 
@@ -60,8 +61,14 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
         this.typeList = this.typeFreeList.slice(0);
         if (this.pickupModalList) {
             this.generalForm.patchValue(this.pickupModalList);
+            if (this.pickupModalList.ship_options) {
+                this.checkUPSbyForm();
+            }
+            else{
+                this.checkAllUPS(true);
+            }
         }
-        this.checkAllUPS(true);
+
     }
 
     ngOnDestroy() {
@@ -87,12 +94,14 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
         // this.checkRanges();
         // console.log(this.isSave);
         // if(this.isSave==true){
-        var params = Object.assign({},this.generalForm.value);
+        var params = Object.assign({}, this.generalForm.value);
         // params['ranges']=this.ranges;
-        // this.itemService.checkCondition(params).subscribe(res => {
-        //     console.log(res);
+        params['ship_options'] = this.getShipOptions();
+        console.log(params)
+        this.itemService.checkCondition(params).subscribe(res => {
+            console.log(res);
             this.activeModal.close({ id: '5', data: params });
-        // });
+        });
         // }
         // else{
         //     return;
@@ -147,6 +156,10 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
             this.generalForm.controls.account_number.setErrors(Validators.required);
             this.generalForm.controls.ups_customer.setErrors(Validators.required);
         }
+        // else{
+        //     this.generalForm.controls.account_number.setErrors(null);
+        //     this.generalForm.controls.ups_customer.setErrors(null);
+        // }
     }
     calculateUPSLength() {
         var count = 0;
@@ -160,9 +173,30 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
     checkUPS(item, event) {
         return item.selected = event.target.checked;
     }
-    checkAllUPS(isTrue){
-        this.upsList.forEach(item=>{
+    checkAllUPS(isTrue) {
+        this.upsList.forEach(item => {
             item.selected = isTrue;
         })
+    }
+    getShipOptions() {
+        var ship_options = JSON.parse(JSON.stringify(this.upsList));
+        var tempShip_options = [];
+        for (var i = 0; i < ship_options.length; i++) {
+            if (ship_options[i].selected) {
+                tempShip_options.push(ship_options[i].id);
+            }
+        }
+        return tempShip_options;
+    }
+    checkUPSbyForm() {
+        var ship_options = JSON.parse(JSON.stringify(this.pickupModalList.ship_options));
+        for (var i = 0; i < this.upsList.length; i++) {
+            for (var j = 0; j < ship_options.length; j++) {
+                if (this.upsList[i].id ==ship_options[j]) {
+                    this.upsList[i].selected;
+                }
+            }
+
+        }
     }
 }

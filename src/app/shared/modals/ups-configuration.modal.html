@@ -20,7 +20,7 @@
                                     </label>
 
                                     <div class="col-sm-12">
-                                        <input type="text" (change)="checkName()" formControlName="access_key" id="access_key" name="access_key" class="form-control">
+                                        <input type="text" formControlName="access_key" id="access_key" name="access_key" class="form-control">
                                     </div>
                                     <span class="col-md-12" style="color: red" *ngIf="generalForm.controls.access_key.touched&&generalForm.controls.access_key.errors?.required">
                                         (!) This field cannot be blank.
