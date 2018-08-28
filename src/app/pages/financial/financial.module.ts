@@ -28,6 +28,9 @@ import { DebitMemoListComponent } from './debit-memo/list/debit-memo-list.compon
 import { ItemsOrderDebitModalContent } from './debit-memo/modals/items-order/items-order.modal';
 import { MiscItemsDebitModalContent } from './debit-memo/modals/misc-items/misc-items.modal';
 import { SendMailDebitModalContent } from './debit-memo/modals/send-email/send-mail.modal';
+import { DebitMemoViewComponent } from './debit-memo/view/debit-memo-view.component';
+
+import { DebitInformationTabComponent } from './debit-memo/tabs/debit-information/debit-information-tab.component';
 
 
 import { CKEditorModule } from 'ng2-ckeditor';
@@ -62,13 +65,16 @@ import { ItemModalModule } from '../../shared/modals/item.module';
         DebitMemoCreateComponent,
         SendMailDebitModalContent,
         ItemsOrderDebitModalContent,
-        MiscItemsDebitModalContent
+        MiscItemsDebitModalContent,
+        DebitMemoViewComponent,
+        DebitInformationTabComponent
     ],
     providers: [FinancialService, DebitMemoService, TableService, DatePipe, Helper],
     entryComponents: [
         SendMailDebitModalContent,
         ItemsOrderDebitModalContent,
-        MiscItemsDebitModalContent
+        MiscItemsDebitModalContent,
+        DebitInformationTabComponent
     ]
 })
 export class FinancialModule { }

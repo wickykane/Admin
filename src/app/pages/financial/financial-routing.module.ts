@@ -8,6 +8,7 @@ import { PaymentComponent } from './payment/payment.component';
 
 import { DebitMemoCreateComponent } from './debit-memo/create/debit-memo-create.component';
 import { DebitMemoListComponent } from './debit-memo/list/debit-memo-list.component';
+import { DebitMemoViewComponent } from './debit-memo/view/debit-memo-view.component';
 
 const routes: Routes = [
     {
@@ -29,7 +30,8 @@ const routes: Routes = [
         path: 'debit-memo',
         children: [
             { path: '', component: DebitMemoListComponent },
-            { path: 'create', component: DebitMemoCreateComponent }
+            { path: 'create', component: DebitMemoCreateComponent },
+            { path: 'view', component: DebitMemoViewComponent }
         ]
     }
 ];

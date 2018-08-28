@@ -157,7 +157,9 @@ export class DebitMemoListComponent implements OnInit {
             }, no => { });
     }
 
-    onViewDebitMemo() {}
+    onViewDebitMemo() {
+        this.router.navigate(['/financial/debit-memo/view']);
+    }
 
     onEditDebitMemo() {}
 
