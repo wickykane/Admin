@@ -85,6 +85,6 @@ export class FreeShippingOptionsModalComponent implements OnInit, OnDestroy {
         }
     }
     upToValue(){
-        this.generalForm.patchValue({'lbs_to1':''});
+        this.generalForm.patchValue({'lbs_to':''});
     }
 }

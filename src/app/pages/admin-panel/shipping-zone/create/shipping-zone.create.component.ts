@@ -59,9 +59,9 @@ export class ShippingZoneCreateComponent implements OnInit {
     public flatRateList = {
         "name": '',
         "type": '1',
-        "shipping_fee": '',
+        "shipping_fee": '0.00',
         "fee_type": '1',
-        "handling_fee": '',
+        "handling_fee": '0.00',
         "id": "2"
     };
     public customRateList = {
@@ -69,14 +69,14 @@ export class ShippingZoneCreateComponent implements OnInit {
         "type": '',
         "shipping_fee": '',
         "fee_type": '1',
-        "handling_fee": '1',
+        "handling_fee": '0.00',
         "id": "3",
-        "charge_shipping": "",
+        "charge_shipping": "1",
         "ranges": [{ 'lbs_from': '0', 'lbs_to': '0', 'shipping_fee': '0' }]
     };
     public pickupList = {
         "name": '',
-        "handling_fee": '',
+        "handling_fee": '0.00',
         "id": "4",
         'warehouse': '1',
     };
@@ -101,7 +101,7 @@ export class ShippingZoneCreateComponent implements OnInit {
         "markup_type_value": '0.00',
         "markup_type": '1',
         "fee_type": '1',
-        "handling_fee": '0.00',
+        "handling_fee": '   ',
         'id':'6'
     }
     
