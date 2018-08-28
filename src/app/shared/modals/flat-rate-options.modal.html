@@ -39,6 +39,9 @@
                             <div class="col-sm-12">
                                 <input type="text" name="shipping_fee" formControlName="shipping_fee" class="form-control">
                             </div>
+                            <span class="col-md-12" style="color: red" *ngIf="generalForm.controls.shipping_fee.touched&&generalForm.controls.shipping_fee.errors?.required">
+                                (!) This field cannot be blank.
+                        </span>
                         </div>
                     </div>
                     <div class="w-100"></div>

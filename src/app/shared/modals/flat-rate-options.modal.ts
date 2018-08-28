@@ -38,7 +38,7 @@ export class FlatRateOptionsModalComponent implements OnInit, OnDestroy {
         this.generalForm = fb.group({
             "name": ['',Validators.required],
             "type": [''],
-            "shipping_fee": [''],
+            "shipping_fee": ['',Validators.required],
             "fee_type": [''],
             "handling_fee": [''],
             "id": "2"
