@@ -102,7 +102,7 @@ export class SalesTaxAuthComponent implements OnInit {
             state_nexus: [null, Validators.required],
             cal_tax_based_on: [null, Validators.required],
             tax_on_shipping: [null, Validators.required],
-            ac: [null, Validators.required]
+            ac: [null]
         });
         this.stateRateForm = fb.group({
             current_rate: [null, Validators.required],
@@ -408,6 +408,7 @@ export class SalesTaxAuthComponent implements OnInit {
     onCreateStateTaxAuthority() {
         const params =  { ...this.stateGeneralForm.value, ...this.stateRateForm.value };
         params['tax_authority_country_id'] = this.selectedCountryTax['id'];
+        params['ac'] = '1';
         this.salesTaxAuthService.createStateTaxAuthority(params).subscribe(
             res => {
                 try {
