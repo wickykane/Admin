@@ -131,7 +131,8 @@ export class SaleOrderEditComponent implements OnInit {
             'approver_id': [null, Validators.required],
             'carrier_id': [2],
             'ship_method_rate': [null, Validators.required],
-            'ship_method_option': [null]
+            'ship_method_option': [null],
+            'order_sts_name': [null]
         });
         //  Init Key
         this.keyService.watchContext.next(this);
@@ -447,9 +448,8 @@ export class SaleOrderEditComponent implements OnInit {
         const items = this.list.items.filter(i => !i.misc_id);
         this.groupTax(this.list.items);
         this.order_info.order_summary = {};
-        console.log(items);
-        this.order_info.order_summary['total_item'] = items.length;
         items.forEach(item => {
+            this.order_info.order_summary['total_item'] = (this.order_info.order_summary['total_item'] || 0 ) + (+item.quantity);
             this.order_info.order_summary['total_cogs'] = (this.order_info.order_summary['total_cogs'] || 0) + (+item.cost_price || 0) * (item.quantity || 0);
             this.order_info.order_summary['total_vol'] = (this.order_info.order_summary['total_vol'] || 0) + (+item.vol || 0);
             this.order_info.order_summary['total_weight'] = (this.order_info.order_summary['total_weight'] || 0) + (+item.wt || 0);
