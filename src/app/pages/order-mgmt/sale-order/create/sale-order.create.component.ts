@@ -142,6 +142,7 @@ export class SaleOrderCreateComponent implements OnInit {
         const user = JSON.parse(localStorage.getItem('currentUser'));
         this.orderService.getOrderReference().subscribe(res => {
             Object.assign(this.listMaster, res.data);
+            this.listMaster['order_types'] = this.listMaster['order_types'].filter(item => item.code !== 'ONL');
             this.changeOrderType();
         });
         this.orderService.getSQReference().subscribe(res => {
@@ -260,7 +261,8 @@ export class SaleOrderCreateComponent implements OnInit {
       if (+this.generalForm.value.carrier_id === 999) {
           default_ship_rate = 8;
           this.generalForm.patchValue({ shipping_id: null });
-          this.generalForm.get('shipping_id').setValidators(null);
+          this.generalForm.get('shipping_id').clearValidators();
+          this.generalForm.get('shipping_id').updateValueAndValidity();
           this.addr_select.shipping = {
               'address_name': '',
               'address_line': '',
@@ -269,8 +271,10 @@ export class SaleOrderCreateComponent implements OnInit {
               'state_name': '',
               'zip_code': ''
           };
+          console.log(this.generalForm.get('shipping_id'));
       } else {
           this.generalForm.get('shipping_id').setValidators([Validators.required]);
+          console.log(this.generalForm.get('shipping_id'));
       }
 
       if (carrier.own_carrirer) {
@@ -458,7 +462,6 @@ export class SaleOrderCreateComponent implements OnInit {
                 });
 
                 res.forEach((item) => {
-                    if (item.sale_price) { item.sale_price = Number(item.sale_price); }
                     item.discount_percent = 0;
                     item.tax_percent = 0;
                     item.sale_price = 0;
