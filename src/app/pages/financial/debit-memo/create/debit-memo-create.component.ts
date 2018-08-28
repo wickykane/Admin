@@ -44,8 +44,9 @@ export class DebitMemoCreateComponent implements OnInit {
         ship_info: {},
         shipping_method: {}
     };
+    public listLineItems = [];
     public todayDate = moment().format('YYYY-MM-DD');
-    public isClickedSave = false;
+    public payment_term_date = 0;
 
     public debitMemoForm: FormGroup;
     //#endregion initialize variables
@@ -68,16 +69,16 @@ export class DebitMemoCreateComponent implements OnInit {
             debt_no: [null, Validators.required],
             issue_date: [null, Validators.required],
             doc_type: [null, Validators.required],
-            doc_no: [null, Validators.required],
-            ac: [1],
+            order_id: [null, Validators.required],
+            sts: [1],
 
-            payment_method: [null, Validators.required],
-            payment_term: [null, Validators.required],
+            payment_method_id: [null, Validators.required],
+            payment_term_id: [null, Validators.required],
             due_date: [null, Validators.required],
-            sale_person: [null, Validators.required],
-            approver: [null, Validators.required],
+            sale_person_id: [null, Validators.required],
+            approver_id: [null, Validators.required],
 
-            bill_to: [null, Validators.required],
+            billing_id: [null, Validators.required],
 
             note: [null]
         });
@@ -125,7 +126,7 @@ export class DebitMemoCreateComponent implements OnInit {
         this.debitService.getDebitMemoNoAuto().subscribe(
             res => {
                 try {
-                    console.log(res);
+                    this.debitMemoForm.controls.debt_no.setValue(res.message);
                 } catch (err) {
                     console.log(err);
                 }
@@ -223,7 +224,12 @@ export class DebitMemoCreateComponent implements OnInit {
         this.debitService.getOrderInformation(orderId).subscribe(
             res => {
                 try {
-                    console.log(res);
+                    this.orderInformation.bill_info = res.data.bill_addr;
+                    this.orderInformation.ship_info = res.data.ship_addr;
+                    this.orderInformation.shipping_method = res.data.shipping_method;
+
+                    this.debitMemoForm.controls.sale_person.setValue(res.data.sale_person_id);
+                    this.debitMemoForm.controls.approver.setValue(res.data.approver_id);
                 } catch (err) {
                     console.log(err);
                 }
@@ -251,7 +257,7 @@ export class DebitMemoCreateComponent implements OnInit {
         this.debitService.getListLineItems(orderId).subscribe(
             res => {
                 try {
-                    console.log(res);
+                    this.listLineItems = res.data.items;
                 } catch (err) {
                     console.log(err);
                 }
@@ -264,9 +270,11 @@ export class DebitMemoCreateComponent implements OnInit {
 
     //#region handle onSelect/ onClick
     onSelectCustomer() {
-        this.getCustomerContacts(this.debitMemoForm.value.customer_id);
-        this.getListOrder(this.debitMemoForm.value.customer_id);
-        this.getListBillOfCustomer(this.debitMemoForm.value.customer_id);
+        if (this.debitMemoForm.value.customer_id) {
+            this.getCustomerContacts(this.debitMemoForm.value.customer_id);
+            this.getListOrder(this.debitMemoForm.value.customer_id);
+            this.getListBillOfCustomer(this.debitMemoForm.value.customer_id);
+        }
     }
 
     onSelectContact(contactId) {
@@ -276,6 +284,13 @@ export class DebitMemoCreateComponent implements OnInit {
     onSelectOrder(orderId) {
         this.getOrderInformation(orderId);
         this.getListLineItems(orderId);
+    }
+
+    onUpdateDueDate(termId) {
+        const termDays = this.listMaster['payment_terms'].find(term => term.id.toString() === termId)['term_day'] || 0;
+        this.debitMemoForm.controls.due_date.setValue(
+            moment(this.debitMemoForm.value.issue_date).add(termDays, 'days').format('YYYY-MM-DD')
+        );
     }
 
     openModalAddItemsOrder() {
@@ -324,5 +339,8 @@ export class DebitMemoCreateComponent implements OnInit {
     //#endregion call api submit
 
     //#region utility functions
+    validateData() {
+        return this.debitMemoForm.invalid;
+    }
     //#endregion utility functions
 }

@@ -62,7 +62,7 @@ export class DebitMemoService {
     }
 
     getListBillOfCustomer(customerId) {
-        const url = 'debit/buyers/' + customerId + '/billing-address';
+        const url = 'debit/buyer/' + customerId + '/billing-addresses';
         return this.API.get(url);
     }
 
