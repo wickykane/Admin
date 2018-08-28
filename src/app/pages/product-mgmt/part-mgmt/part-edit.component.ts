@@ -28,7 +28,26 @@ export class PartEditComponent implements OnInit {
      */
     public listMaster = {};
     public generalForm: FormGroup;
-    public part: any;
+    public part = {
+        part_no: '',
+        make_name: '',
+        partlinks_no: '',
+        des: '',
+        yr_from: '',
+        yr_to: '',
+        brand_name: '',
+        model_name: '',
+        ctgry_name: '',
+        sub_ctgry_name: '',
+        cert_name: '',
+        len: '',
+        width: '',
+        height: '',
+        vol: '',
+        wt: '',
+        cost_price: '',
+        oem_price: '',
+    };
     public images: any = [];
     public dataFile: any = [];
     public url_image;
@@ -38,8 +57,12 @@ export class PartEditComponent implements OnInit {
     public item_condition;
     galleryOptions: NgxGalleryOptions[];
 
-    public short_des;
-    public full_des;
+    public detail = {
+        short_des: '',
+        full_des: '',
+        category_discounts: {discount: ''}
+    };
+
     public ckeConfig = {
         height: 90,
         language: 'en',
@@ -81,9 +104,8 @@ export class PartEditComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.listMaster['listQuestion'] = [{id: 0, name: 'No'}, {id: 1, name: 'Yes'}];
+        this.listMaster['listQuestion'] = [{ id: 0, name: 'No' }, { id: 1, name: 'Yes' }];
         this.url_image = `${environment.api_url}file/view?path=`;
-        this.part = {};
         this.route.params.subscribe(params => this.getDetailPart(params.id));
         this.galleryOptions = [
             {
@@ -140,15 +162,15 @@ export class PartEditComponent implements OnInit {
                 };
             }
         } else {
-          this.toastr.error('The maximum image upload is 5 !');
+            this.toastr.error('The maximum image upload is 5 !');
         }
 
 
     }
 
     updateItem() {
-        this.generalForm.patchValue({ short_des: this.short_des });
-        this.generalForm.patchValue({ full_des: this.full_des });
+        this.generalForm.patchValue({ short_des: this.detail.short_des });
+        this.generalForm.patchValue({ full_des: this.detail.full_des });
         const formData = new FormData();
         formData.append('data', JSON.stringify(this.generalForm.value));
         for (const file of this.dataFile) {
@@ -174,9 +196,10 @@ export class PartEditComponent implements OnInit {
         this.productService.getDetailPart(id).subscribe(res => {
             try {
                 if (res.status) {
-                    this.part = res.data.item;
-                    this.short_des = res.data.item.short_des;
-                    this.full_des = res.data.item.full_des;
+                    this.part = res.data.item ? res.data.item : this.part;
+                    this.detail.short_des = res.data.item ?  res.data.item.short_des : null;
+                    this.detail.full_des = res.data.item ? res.data.item.full_des : null;
+                    this.detail.category_discounts = res.data.category_discounts;
                     this.listMaster['freight_class'] = res.data.freight_class;
                     this.images = res.data.images;
                     this.item_condition = res.data.item_condition;

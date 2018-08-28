@@ -313,7 +313,7 @@
                                               <span class="text-primary">Category Discount (%)</span>
                                             </label>
                                             <div class='col-4'>
-                                                {{part.percent}} %
+                                                {{detail.category_discounts.discount}} %
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -348,7 +348,7 @@
                                               <span class="text-primary">Short Description</span>
                                             </label>
                                             <div class='col-12'>
-                                              <textarea readonly name="name" rows="8" class="form-control" [(ngModel)]="short_des"></textarea>
+                                              <textarea readonly name="name" rows="8" class="form-control" [(ngModel)]="detail.short_des"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -358,7 +358,7 @@
                                               <span class="text-primary">Product Description</span>
                                             </label>
                                             <div class='col-12'>
-                                              <ckeditor readonly [(ngModel)]="full_des" [config]="ckeConfig"></ckeditor>
+                                              <ckeditor readonly [(ngModel)]="detail.full_des" [config]="ckeConfig"></ckeditor>
                                             </div>
                                         </div>
                                     </div>
@@ -389,4 +389,7 @@
             <button class="btn btn-default" routerLink="/product-management/part-list/">Cancel</button>
         </div>
     </div> -->
+    <div class="block-content block-content-full text-center">
+        <button type="button" class="btn btn-default" [routerLink]="['/product-management/part-list/']" translate>Back To List</button>
+    </div>
 </div>
