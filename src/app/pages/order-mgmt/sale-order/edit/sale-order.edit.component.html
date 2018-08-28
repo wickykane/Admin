@@ -130,7 +130,7 @@
                                             <div class="form-group row">
                                                 <label class='col-6'>Order Status</label>
                                                 <div class='col-6 text-success'>
-                                                    <strong>1-NEW</strong>
+                                                    <input type="text" readonly name="" formControlName="order_sts_name">
                                                 </div>
                                             </div>
                                         </form>
@@ -576,7 +576,7 @@
         <div class="row">
             <div class="col-md-12 mg-top-15 text-right">
                 <button type="button" class="btn btn-outline-primary" (click)="createOrder('create')" [disabled]="!generalForm.valid" translate>Update</button>
-                <button type="button" class="btn btn-default" [routerLink]="['/order-management/sale-order']" translate>Cancel</button>
+                <button type="button" class="btn btn-default" [routerLink]="['/order-management/sale-order']" translate>Back To List</button>
             </div>
         </div>
     </section>

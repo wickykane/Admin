@@ -8,6 +8,7 @@ import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/n
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 import { NgbDateCustomParserFormatter } from '../../../shared/helper/dateformat';
+import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
 import { SaleOrderKeyService } from './keys.control';
 
 @Component({
@@ -22,6 +23,14 @@ export class SaleOrderComponent implements OnInit {
     /**
      * letiable Declaration
      */
+    public messageConfig = {
+        'SM': 'Are you sure that you want to submit current order ?',
+        'CC': 'Are you sure that you want to cancel current order?',
+        'CLONE': 'Are you sure that you want to copy current order?',
+        'AP': 'Are you sure that you want to approve current order?',
+        'RJ': 'Are you sure that you want to reject current order?',
+        'RO': 'Are you sure that you want to re-open current order?',
+    };
     public listMaster = {};
     public selectedIndex = 0;
     public countStatus = {};
@@ -39,6 +48,7 @@ export class SaleOrderComponent implements OnInit {
         public toastr: ToastrService,
         private vRef: ViewContainerRef,
         public keyService: SaleOrderKeyService,
+        private modalService: NgbModal,
         public tableService: TableService,
         private orderService: OrderService) {
 
@@ -129,6 +139,37 @@ export class SaleOrderComponent implements OnInit {
             }
         );
     };
+
+    confirmModal(id, status) {
+        const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
+        modalRef.result.then(res => {
+            if (res) {
+                switch (status) {
+                    case 'SM':
+                        this.updateStatusOrder(id, 6);
+                        break;
+                    case 'AP':
+                        this.putApproveOrder(id);
+                        break;
+                    case 'RJ':
+                        this.updateStatusOrder(id, 11);
+                        break;
+                    case 'CC':
+                        this.updateStatusOrder(id, 7);
+                        break;
+                    case 'RO':
+                        this.updateStatusOrder(id, 1);
+                        break;
+                    case 'CLONE':
+                        console.log('code');
+                        break;
+                }
+            }
+        }, dismiss => { });
+        modalRef.componentInstance.message = this.messageConfig[status];
+        modalRef.componentInstance.yesButtonText = 'Yes';
+        modalRef.componentInstance.noButtonText = 'No';
+    }
 
     putApproveOrder(order_id) {
         // const params = {'status_code': 'AP'};

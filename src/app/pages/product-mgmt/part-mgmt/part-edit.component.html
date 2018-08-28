@@ -313,7 +313,7 @@
                                               <span class="text-primary">Category Discount (%)</span>
                                             </label>
                                             <div class='col-4'>
-                                                {{part.percent}} %
+                                                {{detail.category_discounts.discount}} %
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -348,7 +348,7 @@
                                               <span class="text-primary">Short Description</span>
                                             </label>
                                             <div class='col-12'>
-                                              <textarea name="name" rows="8" class="form-control" [(ngModel)]="short_des"></textarea>
+                                              <textarea name="name" rows="8" class="form-control" [(ngModel)]="detail.short_des"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -358,7 +358,7 @@
                                               <span class="text-primary">Product Description</span>
                                             </label>
                                             <div class='col-12'>
-                                              <ckeditor [(ngModel)]="full_des" [config]="ckeConfig"></ckeditor>
+                                              <ckeditor [(ngModel)]="detail.full_des" [config]="ckeConfig"></ckeditor>
                                             </div>
                                         </div>
                                     </div>
@@ -385,7 +385,7 @@
     </div>
     <div class="row text-center">
         <div class="col-md-12 mg-top-15">
-            <button class="btn btn-primary text-white" [disabled]="!short_des || !full_des" (click)="updateItem()" translate>Save</button>
+            <button class="btn btn-primary text-white" [disabled]="!detail.short_des || !detail.full_des || generalForm.invalid" (click)="updateItem()" translate>Save</button>
             <button class="btn btn-default" routerLink="/product-management/part-list/">Cancel</button>
         </div>
     </div>
