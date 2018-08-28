@@ -110,7 +110,7 @@ export class MiscellaneousItemsModalComponent implements OnInit, OnDestroy {
             'des': [''],
             'account_id': ['1'],
             "uom": "Each",
-            "sts": [''],
+            "sts": [false],
             "no": ['']
         });
     }
