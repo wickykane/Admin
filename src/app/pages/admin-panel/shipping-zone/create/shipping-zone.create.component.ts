@@ -58,25 +58,25 @@ export class ShippingZoneCreateComponent implements OnInit {
     }]
     public flatRateList = {
         "name": '',
-        "type": '',
-        "shipping_fee": '',
-        "fee_type": '',
-        "handling_fee": '',
+        "type": '1',
+        "shipping_fee": '0.00',
+        "fee_type": '1',
+        "handling_fee": '0.00',
         "id": "2"
     };
     public customRateList = {
         "name": '',
         "type": '',
         "shipping_fee": '',
-        "fee_type": '',
-        "handling_fee": '',
+        "fee_type": '1',
+        "handling_fee": '0.00',
         "id": "3",
-        "charge_shipping": "",
+        "charge_shipping": "1",
         "ranges": [{ 'lbs_from': '0', 'lbs_to': '0', 'shipping_fee': '0' }]
     };
     public pickupList = {
         "name": '',
-        "handling_fee": '',
+        "handling_fee": '0.00',
         "id": "4",
         'warehouse': '1',
     };
@@ -87,12 +87,11 @@ export class ShippingZoneCreateComponent implements OnInit {
         "password": "",
         "rates": false,
         "account_number": "",
-        "ups_customer": "",
+        "ups_customer": "00",
         "fee_type": "1",
         "handling_fee": "0",
         "markup_type": "1",
         "markup_type_value": "0",
-        "ship_options": ["01"]
     }
     public seflList= {
         "account": '',
@@ -101,7 +100,7 @@ export class ShippingZoneCreateComponent implements OnInit {
         "markup_type_value": '0.00',
         "markup_type": '1',
         "fee_type": '1',
-        "handling_fee": '0.00',
+        "handling_fee": '   ',
         'id':'6'
     }
     
@@ -263,6 +262,8 @@ export class ShippingZoneCreateComponent implements OnInit {
             modalRef.componentInstance.pickupModalList = this.upsList;
             modalRef.componentInstance.typeFreeList = this.listMasterData['type_free'];
             modalRef.componentInstance.upsList = this.listMasterData['ups'];
+            modalRef.componentInstance.customer_classificationList = this.listMasterData['customer_classification'];
+            
         }
         if (id == "6") {
             modalRef = this.modalService.open(SEFLConfigurationModalComponent);

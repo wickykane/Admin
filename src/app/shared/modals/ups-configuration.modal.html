@@ -20,7 +20,7 @@
                                     </label>
 
                                     <div class="col-sm-12">
-                                        <input type="text" (change)="checkName()" formControlName="access_key" id="access_key" name="access_key" class="form-control">
+                                        <input type="text" formControlName="access_key" id="access_key" name="access_key" class="form-control">
                                     </div>
                                     <span class="col-md-12" style="color: red" *ngIf="generalForm.controls.access_key.touched&&generalForm.controls.access_key.errors?.required">
                                         (!) This field cannot be blank.
@@ -90,7 +90,9 @@
                                     </label>
 
                                     <div class="col-sm-12">
-                                        <input type="text" id="ups_customer" class="form-control">
+                                        <select name="ups_customer" formControlName="ups_customer" class="form-control">
+                                            <option *ngFor="let item of tempCustomer_classificationList" [value]='item.id'>{{item.name}}</option>
+                                        </select>
                                     </div>
                                     <span class="col-md-12" style="color: red" *ngIf="generalForm.controls.ups_customer.touched&&generalForm.controls.ups_customer.errors?.required">
                                         (!) This field cannot be blank.
@@ -123,13 +125,16 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class='col-12'>Handling Fee
-                                        <span class="show-tooltip icon-blue" [ngbTooltip]="handlingFeeTooltipText">
+                                        <span *ngIf="generalForm.value.fee_type==1" class="show-tooltip icon-blue" ngbTooltip="A flat handling fee of $x will be charged in the order.">
+                                            <i class="fa fa-question-circle"></i>
+                                        </span>
+                                        <span *ngIf="generalForm.value.fee_type==2" class="show-tooltip icon-blue" ngbTooltip="Percentage of the total shipping fee of the order.">
                                             <i class="fa fa-question-circle"></i>
                                         </span>
                                     </label>
                                     <div class="col-sm-12 row">
-                                            <input *ngIf="generalForm.value.fee_type ==2" style="text-align:center" type="text" value="%" disabled class="form-control col-sm-2">
-                                            <input *ngIf="generalForm.value.fee_type ==1" style="text-align:center" type="text" value="$" disabled class="form-control col-sm-2">
+                                        <input *ngIf="generalForm.value.fee_type ==2" style="text-align:center" type="text" value="%" disabled class="form-control col-sm-2">
+                                        <input *ngIf="generalForm.value.fee_type ==1" style="text-align:center" type="text" value="$" disabled class="form-control col-sm-2">
                                         <input type="text" name="handling_fee" formControlName="handling_fee" class="form-control col-sm-10">
                                     </div>
                                 </div>
@@ -152,48 +157,48 @@
                             </div>
                             <div class="form-group" style="height: 150px;overflow: scroll;border:1px solid #7f7f7f">
                                 <div class="row" *ngFor="let item of upsList" style="margin: 10px 0 10px 0;">
-                                <div class="col-md-8">
-                                    <label class='col-12'>
-                                       {{item.name}}
-                                    </label>
-                                </div>
-                                <div class="col-md-4" style="display: flex">
-                                        <label class="switch checkbox-blue" >
-                                                <input type="checkbox" (change)="checkUPS(item,$event)" [checked]="item.selected" value="true">
-                                                <span class="slider round"></span>
-                                            </label>
+                                    <div class="col-md-8">
+                                        <label class='col-12'>
+                                            {{item.name}}
+                                        </label>
+                                    </div>
+                                    <div class="col-md-4" style="display: flex">
+                                        <label class="switch checkbox-blue">
+                                            <input type="checkbox" (change)="checkUPS(item,$event)" [checked]="item.selected" value="true">
+                                            <span class="slider round"></span>
+                                        </label>
                                         <span *ngIf="item.selected" style="margin-left:5px;color: #28a745;font-weight: bold">Enabled</span>
                                         <span *ngIf="item.selected ==false ||item.selected ==undefined" style="margin-left:5px;font-weight: bold">Disabled</span>
+                                    </div>
                                 </div>
-                            </div>
                             </div>
                             <div class="form-group row">
-                                    <div class="col-md-12">
-                                            <h5 style="font-weight:600;margin-left: 10px">Shipping Markup</h5>
-                                        </div>
-                                    <div class="col-md-6">
-                                        <label class='col-12'>
-                                            Markup Type
-                                        </label>
-                                        <div class="col-sm-12">
-                                            <select name="fee_type" (change)="checkTooltip($event.target.value)" formControlName="markup_type" class="form-control">
-                                                <option *ngFor="let item of typeList" [value]='item.id'>{{item.name}}</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class='col-12'>Value
-                                            <span class="show-tooltip icon-blue" [ngbTooltip]="handlingFeeTooltipText">
-                                                <i class="fa fa-question-circle"></i>
-                                            </span>
-                                        </label>
-                                        <div class="col-sm-12 row">
-                                                <input *ngIf="generalForm.value.markup_type ==2" style="text-align:center" type="text" value="%" disabled class="form-control col-sm-2">
-                                                <input *ngIf="generalForm.value.markup_type ==1" style="text-align:center" type="text" value="$" disabled class="form-control col-sm-2">
-                                            <input type="text" name="markup_type_value" formControlName="markup_type_value" class="form-control col-sm-10">
-                                        </div>
+                                <div class="col-md-12">
+                                    <h5 style="font-weight:600;margin-left: 10px">Shipping Markup</h5>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class='col-12'>
+                                        Markup Type
+                                    </label>
+                                    <div class="col-sm-12">
+                                        <select name="fee_type" (change)="checkTooltip($event.target.value)" formControlName="markup_type" class="form-control">
+                                            <option *ngFor="let item of typeList" [value]='item.id'>{{item.name}}</option>
+                                        </select>
                                     </div>
                                 </div>
+                                <div class="col-md-6">
+                                    <label class='col-12'>Value
+                                        <span class="show-tooltip icon-blue" ngbTooltip="">
+                                            <i class="fa fa-question-circle"></i>
+                                        </span>
+                                    </label>
+                                    <div class="col-sm-12 row">
+                                        <input *ngIf="generalForm.value.markup_type ==2" style="text-align:center" type="text" value="%" disabled class="form-control col-sm-2">
+                                        <input *ngIf="generalForm.value.markup_type ==1" style="text-align:center" type="text" value="$" disabled class="form-control col-sm-2">
+                                        <input type="text" name="markup_type_value" formControlName="markup_type_value" class="form-control col-sm-10">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </form>
