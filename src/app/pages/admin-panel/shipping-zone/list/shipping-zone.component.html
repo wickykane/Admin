@@ -65,7 +65,9 @@
                                     <span class="slider round"></span>
                                 </label>
                             </td>
-                            <td>{{item.used}}</td>
+                            <td><label *ngIf="item.used!=0">
+                                    <i style="color: green" class="fa fa-check"></i>
+                                </label></td>
                             <td></td>
                         </tr>
                     </tbody>
