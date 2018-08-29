@@ -12,7 +12,7 @@
                 <div class="form-group row">
                     <div class="col-md-3">
                         <label class='col-12'> Display name
-                            <span class="text-danger">(*)</span>
+                            <span class="text-danger" *ngIf="!isView">(*)</span>
                             <span class="show-tooltip icon-blue" ngbTooltip="This name will be shown on the store front site.">
                                 <i class="fa fa-question-circle"></i>
                             </span>
@@ -43,7 +43,7 @@
                     <div class="col-md-3">
                         <label class='col-12'>
                             Warehouse
-                            <span class="text-danger">(*)</span>
+                            <span class="text-danger" *ngIf="!isView">(*)</span>
                         </label>
 
                         <div class="col-sm-12">
@@ -64,7 +64,7 @@
             </div>
             <div class="form-group row" *ngFor="let item of timeList.bussiness_hours;let i=index;trackBy:trackByFn">
                 <div class="col-md-1">
-                    <input [(ngModel)]="item.selected" (change)="checkValue($event.target.checked,item)" value="{{item.selected}}" [checked]="item.selected"
+                    <input [(ngModel)]="item.selected" [disabled]="isView" (change)="checkValue($event.target.checked,item)" value="{{item.selected}}" [checked]="item.selected"
                         type="checkbox">
                 </div>
                 <div class="col-md-6">
@@ -74,20 +74,20 @@
                 </div>
                 <div class="col-md-5" *ngIf="item['data']">
                     <div class="col-md-10 form-group" *ngFor="let subItem of item['data'];let i1 = index">
-                        <select [disabled]="item.selected ==false" class="form-control col-md-4" [(ngModel)]="subItem.from">
+                        <select [disabled]="item.selected ==false ||isView" class="form-control col-md-4" [(ngModel)]="subItem.from">
                             <option *ngFor="let item of dayHoursList" [value]='item.id'>{{item.name}}</option>
                         </select>
                         <span class="col-md-1">
                             <i class="fa fa-minus"></i>
                         </span>
-                        <select [disabled]="item.selected ==false" class="form-control col-md-4" [(ngModel)]="subItem.to">
+                        <select [disabled]="item.selected ==false ||isView" class="form-control col-md-4" [(ngModel)]="subItem.to">
                             <option *ngFor="let item of dayHoursList" [value]='item.id'>{{item.name}}</option>
                         </select>
-                        <button [disabled]="item.selected ==false" *ngIf="i1==item['data'].length-1" type="button" (click)="addNewHours(item['data'])"
+                        <button [disabled]="item.selected ==false ||isView" *ngIf="i1==item['data'].length-1" type="button" (click)="addNewHours(item['data'])"
                             class="btn btn-outline-dark col-md-1">
                             <i class="fa fa-plus"></i>
                         </button>
-                        <button [disabled]="item.selected ==false" type="button" *ngIf="item['data'].length>1" (click)="removeHoursItem(i1,item['data'])"
+                        <button [disabled]="item.selected ==false ||isView" type="button" *ngIf="item['data'].length>1" (click)="removeHoursItem(i1,item['data'])"
                             class="btn btn-outline-dark col-md-1">
                             <i class="fa fa-times"></i>
                         </button>
@@ -108,6 +108,6 @@
 
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-outline-primary" [disabled]="generalForm.invalid" (click)="applyData()">OK</button>
+    <button type="button" *ngIf="!isView" class="btn btn-outline-primary" [disabled]="generalForm.invalid" (click)="applyData()">OK</button>
     <button type="button" class="btn btn-outline-dark" (click)="closeX()">Close</button>
 </div>

@@ -29,6 +29,7 @@ export class PickupOptionsModalComponent implements OnInit, OnDestroy {
     }
     @Input() dayHoursList;
     @Input() pickupList;
+    @Input() isView;
     hotkeyCtrlLeft: Hotkey | Hotkey[];
     hotkeyCtrlRight: Hotkey | Hotkey[];
     ranges: any = [];
@@ -79,7 +80,12 @@ export class PickupOptionsModalComponent implements OnInit, OnDestroy {
             }
 
         }
-
+        if(this.isView){
+            this.generalForm.disable();
+        }
+        else{
+            this.isView = false;
+        }
 
     }
 

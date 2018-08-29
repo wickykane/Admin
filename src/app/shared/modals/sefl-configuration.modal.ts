@@ -23,6 +23,7 @@ export class SEFLConfigurationModalComponent implements OnInit, OnDestroy {
     @Input() typeFreeList;
     @Input() upsList;
     @Input() seflModalList;
+    @Input() isView;
     hotkeyCtrlLeft: Hotkey | Hotkey[];
     hotkeyCtrlRight: Hotkey | Hotkey[];
     ranges: any = [];
@@ -58,6 +59,12 @@ export class SEFLConfigurationModalComponent implements OnInit, OnDestroy {
         this.typeList = this.typeFreeList.slice(0);
         if (this.seflModalList) {
             this.generalForm.patchValue(this.seflModalList);
+        }
+        if(this.isView){
+            this.generalForm.disable();
+        }
+        else{
+            this.isView = false;
         }
     }
 

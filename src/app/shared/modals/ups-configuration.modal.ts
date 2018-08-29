@@ -23,13 +23,14 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
     @Input() typeFreeList;
     @Input() upsList;
     @Input() pickupModalList;
+    @Input() isView;
     @Input() customer_classificationList;
     hotkeyCtrlLeft: Hotkey | Hotkey[];
     hotkeyCtrlRight: Hotkey | Hotkey[];
     ranges: any = [];
     isSave = false;
     typeList: any = [];
-    tempCustomer_classificationList:any;
+    tempCustomer_classificationList: any;
     constructor(public fb: FormBuilder,
         public router: Router,
         public toastr: ToastrService,
@@ -67,9 +68,14 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
             if (this.pickupModalList.ship_options) {
                 this.checkUPSbyForm();
             }
-            else{
+            else {
                 this.checkAllUPS(true);
             }
+        }
+        if (this.isView) {
+            this.generalForm.disable();
+        } else {
+            this.isView = false;
         }
 
     }
@@ -153,7 +159,7 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
             this.generalForm.controls.account_number.setErrors(Validators.required);
             this.generalForm.controls.ups_customer.setErrors(Validators.required);
         }
-        else{
+        else {
             this.generalForm.controls.account_number.setErrors(null);
             this.generalForm.controls.ups_customer.setErrors(null);
         }
@@ -191,8 +197,8 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
         console.log(ship_options);
         for (var i = 0; i < this.upsList.length; i++) {
             for (var j = 0; j < ship_options.length; j++) {
-                if (this.upsList[i].id ==ship_options[j]) {
-                    this.upsList[i].selected =true;
+                if (this.upsList[i].id == ship_options[j]) {
+                    this.upsList[i].selected = true;
                 }
             }
 

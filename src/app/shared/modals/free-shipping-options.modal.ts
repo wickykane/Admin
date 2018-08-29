@@ -22,6 +22,7 @@ export class FreeShippingOptionsModalComponent implements OnInit, OnDestroy {
     @Input() condition;
     @Input() id;
     @Input() shippingList;
+    @Input() isView;
     hotkeyCtrlLeft: Hotkey | Hotkey[];
     hotkeyCtrlRight: Hotkey | Hotkey[];
 
@@ -39,11 +40,11 @@ export class FreeShippingOptionsModalComponent implements OnInit, OnDestroy {
             'free_shipping_item': [0],
             'limit_order_over': [0],
             'condition': [''],
-            'limit_total_weight':[0],
-            'id':[1],
-            'price':[],
-            'lbs_from':[],
-            'lbs_to':[null]
+            'limit_total_weight': [0],
+            'id': [1],
+            'price': [],
+            'lbs_from': [],
+            'lbs_to': [null]
         });
 
 
@@ -51,8 +52,13 @@ export class FreeShippingOptionsModalComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        if(this.shippingList){
+        if (this.shippingList) {
             this.generalForm.patchValue(this.shippingList);
+        }
+        if (this.isView) {
+            this.generalForm.disable();
+        }else{
+            this.isView = false;
         }
     }
 
@@ -71,20 +77,23 @@ export class FreeShippingOptionsModalComponent implements OnInit, OnDestroy {
         const data = {};
         this.activeModal.close(data);
     }
-    applyData(){
+    applyData() {
         console.log(this.generalForm.value);
         this.itemService.checkCondition(this.generalForm.value).subscribe(res => {
             console.log(res);
-            this.activeModal.close({id:'1',data:this.generalForm.value});
+            this.activeModal.close({ id: '1', data: this.generalForm.value });
         });
     }
 
-    checkCondition(){
-        if(this.generalForm.value.condition!=''){
-            this.generalForm.patchValue({'limit_total_weight':true})
+    checkCondition() {
+        if (this.generalForm.value.condition != '') {
+            this.generalForm.patchValue({ 'limit_total_weight': true })
         }
     }
-    upToValue(){
-        this.generalForm.patchValue({'lbs_to':''});
+    upToValue() {
+        if(!this.isView){
+            this.generalForm.patchValue({ 'lbs_to': '' });
+        }
+
     }
 }

@@ -22,6 +22,7 @@ export class FlatRateOptionsModalComponent implements OnInit, OnDestroy {
     @Input() typeList;
     @Input() typeFreeList;
     @Input() flatRateList;
+    @Input() isView;
     hotkeyCtrlLeft: Hotkey | Hotkey[];
     hotkeyCtrlRight: Hotkey | Hotkey[];
     constructor(public fb: FormBuilder,
@@ -50,6 +51,9 @@ export class FlatRateOptionsModalComponent implements OnInit, OnDestroy {
     ngOnInit() {
         if(this.flatRateList){
             this.generalForm.patchValue(this.flatRateList);
+        }
+        if(this.isView){
+            this.generalForm.disable();
         }
     }
 

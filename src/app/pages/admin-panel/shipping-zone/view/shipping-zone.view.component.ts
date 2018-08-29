@@ -286,6 +286,7 @@ export class ShippingZoneViewComponent implements OnInit {
             modalRef = this.modalService.open(FreeShippingOptionsModalComponent);
             modalRef.componentInstance.condition = this.listMasterData['condition'];
             modalRef.componentInstance.id = id;
+            modalRef.componentInstance.isView = true;
             modalRef.componentInstance.shippingList = this.freeShippingList;
         }
         if (id == "2") {
@@ -293,6 +294,7 @@ export class ShippingZoneViewComponent implements OnInit {
             modalRef.componentInstance.typeList = this.listMasterData['type'];
             modalRef.componentInstance.typeFreeList = this.listMasterData['type_free'];
             modalRef.componentInstance.id = id;
+            modalRef.componentInstance.isView = true;
             modalRef.componentInstance.flatRateList = this.flatRateList;
         }
         if (id == "3") {
@@ -300,6 +302,7 @@ export class ShippingZoneViewComponent implements OnInit {
             modalRef.componentInstance.typeList = this.listMasterData['type'];
             modalRef.componentInstance.typeFreeList = this.listMasterData['type_free'];
             modalRef.componentInstance.id = id;
+            modalRef.componentInstance.isView = true;
             modalRef.componentInstance.customRateList = this.customRateList;
         }
         if (id == "4") {
@@ -308,6 +311,7 @@ export class ShippingZoneViewComponent implements OnInit {
             modalRef.componentInstance.weekDaysList = this.listMasterData['day_of_week'];
             modalRef.componentInstance.dayHoursList = this.listMasterData['hours_of_day'];
             modalRef.componentInstance.id = id;
+            modalRef.componentInstance.isView = true;
             modalRef.componentInstance.pickupList = this.pickupList;
         }
         if (id == "5") {
@@ -316,6 +320,7 @@ export class ShippingZoneViewComponent implements OnInit {
             // modalRef.componentInstance.weekDaysList = this.listMasterData['day_of_week'];
             // modalRef.componentInstance.dayHoursList = this.listMasterData['hours_of_day'];
             modalRef.componentInstance.id = id;
+            modalRef.componentInstance.isView = true;
             modalRef.componentInstance.pickupModalList = this.upsList;
             modalRef.componentInstance.typeFreeList = this.listMasterData['type_free'];
             modalRef.componentInstance.upsList = this.listMasterData['ups'];
@@ -328,6 +333,7 @@ export class ShippingZoneViewComponent implements OnInit {
             // modalRef.componentInstance.weekDaysList = this.listMasterData['day_of_week'];
             // modalRef.componentInstance.dayHoursList = this.listMasterData['hours_of_day'];
             modalRef.componentInstance.id = id;
+            modalRef.componentInstance.isView = true;
             modalRef.componentInstance.seflModalList = this.seflList;
             modalRef.componentInstance.typeFreeList = this.listMasterData['type_free'];
             modalRef.componentInstance.upsList = this.listMasterData['ups'];
