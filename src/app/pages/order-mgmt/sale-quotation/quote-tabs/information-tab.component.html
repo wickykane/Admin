@@ -7,7 +7,7 @@
         <button *ngIf="detail['sale_quote_status_id'] == 2" class="btn btn-outline-success" (click)="confirmModal(_orderId,'AM')"><i class="fa fa-check-square"></i> Approve</button>
         <button *ngIf="detail['sale_quote_status_id'] == 2" class="btn btn-outline-danger" (click)="confirmModal(_orderId,'RM')"><i class="fa fa-ban" aria-hidden="true"></i> Reject</button>
         <button class="btn btn-outline-info" (click)="confirmModal(_orderId,'CLONE')"><i class="fa fa-clone"></i> Copy</button>
-        <button *ngIf="detail['sale_quote_status_id'] == 4" class="btn btn-outline-dark" (click)="confirmModal(item.id, 'SC')"><i class="fa fa-exchange" aria-hidden="true"></i> Convert to SO</button>
+        <button *ngIf="detail['sale_quote_status_id'] == 4" class="btn btn-outline-dark" (click)="confirmModal(_orderId, 'SC')"><i class="fa fa-exchange" aria-hidden="true"></i> Convert to SO</button>
 
     </div>
     <section class="rma-page block main-container block-order">
@@ -362,7 +362,7 @@
                     <div class="card-header">
                         <strong>Order Summary</strong>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body order-summary-body">
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-group row">
@@ -417,16 +417,16 @@
                                     </div>
                                 </div>
                                 <div *ngFor="let item of order_info['taxs']" class="form-group row">
-                                    <label class='col-5 control-label'>+ TAX ({{item.value}}%):</label>
-                                    <div class='col-6 padding-lr-10'>
+                                    <label class='col-6 control-label'>+ TAX ({{item.value}}%):</label>
+                                    <div class='col-5 padding-lr-10'>
                                         <input class="form-control" readonly="true" [(ngModel)]="item.amount" class="form-control" value="0" type="number">
                                     </div>
                                 </div>
                                 <div class="form-group row margin-lr-0 text-light bg-danger">
-                                    <label class="col-5 control-label padding-lr-5">
+                                    <label class="col-6 control-label padding-lr-5">
                                         <strong>Grand Total:</strong>
                                     </label>
-                                    <div class="col-6 offset-md-1 padding-lr-5">
+                                    <div class="col-6 padding-lr-10">
                                         <strong>{{detail['total_price'] |currency}}</strong>
                                     </div>
                                 </div>

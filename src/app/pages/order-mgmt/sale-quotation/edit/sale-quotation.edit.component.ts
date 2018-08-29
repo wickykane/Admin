@@ -199,6 +199,7 @@ export class SaleQuotationEditComponent implements OnInit {
                     shipping_id: (data.shipping_id || {}).id,
                     billing_id: (data.billing_id || {}).id,
                     ship_rate: +data.ship_method_rate,
+                    ship_method_option: +data.ship_method_option,
                     sale_quote_no: data.cd
                 });
 
@@ -425,16 +426,18 @@ export class SaleQuotationEditComponent implements OnInit {
 
         let default_option = null;
         let default_ship_rate = null;
+        let enable = false;
         if (+this.generalForm.value.carrier_id === 3 || this.generalForm.value.carrier_id !== 999 && !carrier.own_carrirer) {
             default_option = 888;
             default_ship_rate = 8;
+            enable = [2, 3].indexOf(+this.generalForm.value.carrier_id) > -1;
         }
 
         if (+this.generalForm.value.carrier_id === 999) {
             default_ship_rate = 8;
+            this.data['is_pickup'] = 1;
+            this.generalForm.get('shipping_id').setValidators(null);
             this.generalForm.patchValue({ shipping_id: null });
-            this.generalForm.get('shipping_id').clearValidators();
-            this.generalForm.updateValueAndValidity();
 
             this.addr_select.shipping = {
                 'address_name': '',
@@ -446,6 +449,7 @@ export class SaleQuotationEditComponent implements OnInit {
             };
         } else {
             this.generalForm.get('shipping_id').setValidators([Validators.required]);
+            this.data['is_pickup'] = 0;
         }
 
         if (carrier.own_carrirer) {
@@ -453,10 +457,16 @@ export class SaleQuotationEditComponent implements OnInit {
             default_ship_rate = 7;
         }
 
+        // Check disable method options
+        if (!enable) {
+            this.generalForm.controls['ship_method_option'].disable();
+        } else {
+            this.generalForm.controls['ship_method_option'].enable();
+        }
+
         this.generalForm.patchValue({ ship_method_option: default_option, ship_rate: default_ship_rate });
         this.generalForm.updateValueAndValidity();
     }
-
     //  Show order history
     showViewOrderHistory() {
         if (this.generalForm.value.company_id !== null) {
@@ -489,18 +499,21 @@ export class SaleQuotationEditComponent implements OnInit {
 
 
     calculateShipping() {
+        if (!this.generalForm.value.shipping_id) {
+            return;
+        }
         const params = {
             'customer': this.generalForm.value.company_id,
             'address': this.generalForm.value.shipping_id,
             'ship_via': this.generalForm.value.carrier_id,
-            'option': this.generalForm.value.ship_method_option,
+            'option': this.generalForm.getRawValue().ship_method_option,
             'ship_rate': this.generalForm.value.ship_rate,
             'items': this.list.items.filter(item => !item.misc_id)
         };
         this.orderService.getTaxShipping(params).subscribe(res => {
             const old_misc = this.list.items.filter(item => item.misc_id && +item.source_id !== 3);
             const items = res.data.items;
-            const misc = res.data.mics.map(item => {
+            const misc = (res.data.mics || []).map(item => {
                 item.is_misc = 1;
                 item.misc_id = item.id;
                 return item;
@@ -556,11 +569,12 @@ export class SaleQuotationEditComponent implements OnInit {
         });
 
         const params = {
-            ...this.generalForm.value,
+            ...this.generalForm.getRawValue(),
             status_id: type,
             original_ship_cost: this.order_info['original_ship_cost'],
             items,
             is_draft_sq: is_draft_sq || 0,
+            is_pickup: this.data['is_pickup'] || 0,
         };
 
         this.orderService.updateQuoteOrder(this.data['id'], params).subscribe(res => {
