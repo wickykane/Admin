@@ -196,8 +196,8 @@ export class SaleQuotationEditComponent implements OnInit {
                     sales_person: data.sale_person_id,
                     quote_date: data.qt_dt,
                     expiry_date: data.expire_dt,
-                    shipping_id: data.shipping_id.id,
-                    billing_id: data.billing_id.id,
+                    shipping_id: (data.shipping_id || {}).id,
+                    billing_id: (data.billing_id || {}).id,
                     ship_rate: +data.ship_method_rate,
                     sale_quote_no: data.cd
                 });
@@ -224,7 +224,7 @@ export class SaleQuotationEditComponent implements OnInit {
                 this.orderService.getAllCustomer(params).subscribe(result => {
                     const idList = result.data.rows.map(item => item.id);
                     this.listMaster['customer'] = result.data.rows;
-                    if (idList.indexOf(res.data.buyer_id) === -1) {
+                    if (res.data.buyer_id && idList.indexOf(res.data.buyer_id) === -1) {
                         this.listMaster['customer'].push({ id: res.data.buyer_id, company_name: res.data.buyer_info.buyer_name });
                     }
                     this.data['total_page'] = result.data.total_page;
@@ -332,8 +332,9 @@ export class SaleQuotationEditComponent implements OnInit {
         const items = this.list.items.filter(i => !i.misc_id);
         this.groupTax(this.list.items);
         this.order_info.order_summary = {};
-        this.order_info.order_summary['total_item'] = items.length;
+        // this.order_info.order_summary['total_item'] = items.length;
         items.forEach(item => {
+            this.order_info.order_summary['total_item'] = (this.order_info.order_summary['total_item'] || 0) + (+item.quantity);
             this.order_info.order_summary['total_cogs'] = (this.order_info.order_summary['total_cogs'] || 0) + (+item.cost_price || 0) * (item.quantity || 0);
             this.order_info.order_summary['total_vol'] = (this.order_info.order_summary['total_vol'] || 0) + (+item.vol || 0) * (item.quantity || 0);
             this.order_info.order_summary['total_weight'] = (this.order_info.order_summary['total_weight'] || 0) + (+item.wt || 0) * (item.quantity || 0);
@@ -432,7 +433,7 @@ export class SaleQuotationEditComponent implements OnInit {
         if (+this.generalForm.value.carrier_id === 999) {
             default_ship_rate = 8;
             this.generalForm.patchValue({ shipping_id: null });
-            this.generalForm.get('shipping_id').setValidators(null);
+            this.generalForm.get('shipping_id').clearValidators();
             this.addr_select.shipping = {
                 'address_name': '',
                 'address_line': '',

@@ -19,14 +19,21 @@ import { CommonService } from '../../services/common.service';
 export class PickupOptionsModalComponent implements OnInit, OnDestroy {
 
     generalForm: FormGroup;
-    @Input() wareHouseList;
-    @Input() weekDaysList;
+    private _weekDaysList: any;
+    public _wareHouseList: any;
+    @Input('wareHouseList') set wareHouseList(value: any) {
+        this._wareHouseList = value;
+    }
+    @Input('weekDaysList') set weekDaysList(value: any) {
+        this._weekDaysList = value;
+    }
     @Input() dayHoursList;
     @Input() pickupList;
     hotkeyCtrlLeft: Hotkey | Hotkey[];
     hotkeyCtrlRight: Hotkey | Hotkey[];
     ranges: any = [];
-    isSave =false;
+    isSave = false;
+    timeList: any;
     constructor(public fb: FormBuilder,
         public router: Router,
         public toastr: ToastrService,
@@ -36,10 +43,9 @@ export class PickupOptionsModalComponent implements OnInit, OnDestroy {
         private hotkeysService: HotkeysService,
         private commonService: CommonService,
         public activeModal: NgbActiveModal) {
-
         this.generalForm = fb.group({
             "name": ['', Validators.required],
-            "pickup": [''],
+            "warehouse": [''],
             "handling_fee": [''],
             "id": "4",
             // 'ranges':[this.fb.array([])]
@@ -52,17 +58,28 @@ export class PickupOptionsModalComponent implements OnInit, OnDestroy {
     ngOnInit() {
         if (this.pickupList) {
             this.generalForm.patchValue(this.pickupList);
-            this.ranges = this.pickupList.ranges;
-            if(this.pickupList['bussiness_hours']){
-                this.weekDaysList = this.pickupList['bussiness_hours'];
+            this._weekDaysList.map(item => {
+                item['data'] = [{ from: '', to: '' }];
+                item['selected'] = false;
+            });
+
+
+            var weekDaysList = Object.assign([], this._weekDaysList);
+            this._wareHouseList.map(item => {
+                item['bussiness_hours'] = JSON.parse(JSON.stringify(weekDaysList));
+            });
+            if (Array.isArray(this.pickupList['warehouse'])) {
+                this.patchHours();
+                this.setWareHouseTimer(this.pickupList.warehouse[0].id);
+                this.generalForm.controls.warehouse.patchValue(this.pickupList.warehouse[0].id);
+            
             }
-            else{
-                this.weekDaysList.forEach(item=>{
-                    item['data']=[{from:'',to:''}];
-                    item['selected']= false;
-                })
+            else {
+                this.setWareHouseTimer(this.generalForm.value.warehouse);
             }
+
         }
+
 
     }
 
@@ -70,8 +87,8 @@ export class PickupOptionsModalComponent implements OnInit, OnDestroy {
         this.hotkeysService.remove(this.hotkeyCtrlLeft);
         this.hotkeysService.remove(this.hotkeyCtrlRight);
     }
-    addNewHours(item){
-        item.push({from:'',to:''});
+    addNewHours(item) {
+        item.push({ from: '', to: '' });
     }
 
 
@@ -85,25 +102,71 @@ export class PickupOptionsModalComponent implements OnInit, OnDestroy {
         this.activeModal.close(data);
     }
     applyData() {
-        console.log(this.generalForm.value);
-        console.log(this.weekDaysList);
-        var params = Object.assign({},this.generalForm.value);
-        var weekDaysList1 = this.weekDaysList.slice(0);
-        console.log(weekDaysList1);
-        weekDaysList1.forEach((item,index,object)=>{
-            console.log(item);
-            if(item.selected == false){
-                object.splice(index,1);
-            }
-        });
-        params['bussiness_hours']=weekDaysList1;
+        var params = Object.assign({}, this.generalForm.value);
+        // var weekDaysList1 = this._wareHouseList.slice(0);
+        // console.log(weekDaysList1);
+        // weekDaysList1.forEach((item,index,object)=>{
+        //     console.log(item);
+        //     if(item.selected == false){
+        //         object.splice(index,1);
+        //     }
+        // });
+        // params['bussiness_hours']=weekDaysList1;
+
+        params['warehouse'] = this.removeItem();
         this.itemService.checkCondition(params).subscribe(res => {
-            console.log(res);
             this.activeModal.close({ id: '4', data: params });
         });
-        }
+    }
 
-    removeHoursItem(index,item) {
+    removeHoursItem(index, item) {
         item.splice(index, 1);
+    }
+    setWareHouseTimer(id) {
+        this._wareHouseList.forEach(item => {
+            if (item.id == id) {
+                this.timeList = item;
+            }
+        });
+        // this.timeList = item.data;
+    }
+    checkValue(isCheck, item) {
+        return item.selected = isCheck;
+    }
+    trackByFn(index, item) {
+        return index; // or item.id
+    }
+    removeItem() {
+        var warehouse = JSON.parse(JSON.stringify(this._wareHouseList));
+        var tempWarehouse = JSON.parse(JSON.stringify(warehouse));
+        for (var i = 0; i < warehouse.length; i++) {
+            tempWarehouse[i].bussiness_hours = [];
+            for (var j = 0; j < warehouse[i].bussiness_hours.length; j++) {
+                var bussiness_hours = warehouse[i].bussiness_hours[j];
+                if (bussiness_hours.selected == true) {
+                    tempWarehouse[i].bussiness_hours.push(bussiness_hours);
+                }
+            }
+            if(tempWarehouse[i].bussiness_hours.length==0){
+                delete tempWarehouse[i].bussiness_hours;
+            }
+        }
+        return tempWarehouse;
+    }
+    patchHours() { 
+        var warehouse = JSON.parse(JSON.stringify(this._wareHouseList));
+        var tempWarehouse = JSON.parse(JSON.stringify(warehouse));
+        for (var n = 0; n < this.pickupList.warehouse.length; n++) {
+            for (var k = 0; k < this.pickupList.warehouse[n].bussiness_hours.length; k++) {
+                for (var i = 0; i < this._wareHouseList.length; i++) {
+                    for (var j = 0; j < this._wareHouseList[i].bussiness_hours.length; j++) {
+                        if(this.pickupList.warehouse[n].bussiness_hours[k].id== this._wareHouseList[i].bussiness_hours[j].id){
+                            this._wareHouseList[i].bussiness_hours[j]=JSON.parse(JSON.stringify(this.pickupList.warehouse[n].bussiness_hours[k]));
+                        }
+                    }
+                }
+            }
+        }
+        return tempWarehouse;
     }
 }

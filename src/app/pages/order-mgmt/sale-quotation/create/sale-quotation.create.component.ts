@@ -350,8 +350,9 @@ export class SaleQuotationCreateComponent implements OnInit {
         const items = this.list.items.filter(i => !i.misc_id);
         this.groupTax(this.list.items);
         this.order_info.order_summary = {};
-        this.order_info.order_summary['total_item'] = items.length;
+        // this.order_info.order_summary['total_item'] = items.length;
         items.forEach(item => {
+            this.order_info.order_summary['total_item'] = (this.order_info.order_summary['total_item'] || 0 ) + (+item.quantity);
             this.order_info.order_summary['total_cogs'] = (this.order_info.order_summary['total_cogs'] || 0) + (+item.cost_price || 0) * (item.quantity || 0);
             this.order_info.order_summary['total_vol'] = (this.order_info.order_summary['total_vol'] || 0) + (+item.vol || 0) * (item.quantity || 0);
             this.order_info.order_summary['total_weight'] = (this.order_info.order_summary['total_weight'] || 0) + (+item.wt || 0) * (item.quantity || 0);
@@ -450,7 +451,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         if (+this.generalForm.value.carrier_id === 999) {
             default_ship_rate = 8;
             this.generalForm.patchValue({ shipping_id: null });
-            this.generalForm.get('shipping_id').setValidators(null);
+            this.generalForm.get('shipping_id').clearValidators();
             this.addr_select.shipping = {
                 'address_name': '',
                 'address_line': '',

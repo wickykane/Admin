@@ -119,7 +119,7 @@
                                  </div>
                               </div>
                               <div class="form-group row">
-                                 <label class='col-6'>Priority</label>
+                                 <label class='col-6'>Priority <span class="text-danger">(*)</span></label>
                                  <div class='col-6 text-danger'>
                                     <select required class="form-control" id="priority" name="priority" formControlName="prio_level">
                                     <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
@@ -394,7 +394,7 @@
             </div>
             <div class="card-body no-padding">
                <div class="table-responsive">
-                  <table class="table table-bordered table-order" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
+                  <table class="table table-bordered table-order">
                   <thead>
                      <tr>
                         <th style="width:70px" translate>Action</th>
@@ -577,10 +577,10 @@
    </div>
    <div class="row">
       <div class="col-md-12 mg-top-15 text-right">
-         <button type="button" class="btn btn-outline-info" (click)="createOrder('quote')" [disabled]="!generalForm.valid" translate>Save As Quote</button>
-         <button type="button" class="btn btn-outline-warning" (click)="createOrder('draft')" [disabled]="!generalForm.valid" translate>Save As Draft</button>
-         <button type="button" class="btn btn-outline-primary" (click)="createOrder('create')" [disabled]="!generalForm.valid" translate>Save & Submit</button>
-         <button type="button" class="btn btn-default" [routerLink]="['/order-management/sale-order']" translate>Cancel</button>
+        <button type="button" class="btn btn-outline-warning" (click)="confirmCreateOrder('draft')" [disabled]="!generalForm.valid" translate>Save As Draft</button>
+         <button type="button" class="btn btn-outline-info" (click)="confirmCreateOrder('quote')" [disabled]="!generalForm.valid" translate>Save & Validate</button>
+         <button type="button" class="btn btn-outline-primary" (click)="confirmCreateOrder('create')" [disabled]="!generalForm.valid" translate>Save & Submit</button>
+         <button type="button" class="btn btn-default" (click)="back()" translate>Back to list</button>
       </div>
    </div>
 </section>

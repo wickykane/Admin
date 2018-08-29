@@ -19,14 +19,17 @@ import { CommonService } from '../../services/common.service';
 export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
 
     generalForm: FormGroup;
-    @Input() wareHouseList;
-    @Input() weekDaysList;
-    @Input() dayHoursList;
     @Input() pickupList;
+    @Input() typeFreeList;
+    @Input() upsList;
+    @Input() pickupModalList;
+    @Input() customer_classificationList;
     hotkeyCtrlLeft: Hotkey | Hotkey[];
     hotkeyCtrlRight: Hotkey | Hotkey[];
     ranges: any = [];
-    isSave =false;
+    isSave = false;
+    typeList: any = [];
+    tempCustomer_classificationList:any;
     constructor(public fb: FormBuilder,
         public router: Router,
         public toastr: ToastrService,
@@ -38,13 +41,17 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
         public activeModal: NgbActiveModal) {
 
         this.generalForm = fb.group({
-            "name": ['', Validators.required],
-            "type": [''],
-            "shipping_fee": [''],
+            "access_key": ['', Validators.required],
+            "user_id": ['', Validators.required],
+            "password": ['', Validators.required],
+            "rates": [false],
+            "account_number": [''],
+            "ups_customer": [''],
             "fee_type": [''],
             "handling_fee": [''],
-            "id": "4",
-            "charge_shipping": "",
+            "markup_type": [''],
+            "markup_type_value": [''],
+            "id": "5"
             // 'ranges':[this.fb.array([])]
         });
 
@@ -53,21 +60,27 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        if (this.pickupList) {
-            this.generalForm.patchValue(this.pickupList);
-            this.ranges = this.pickupList.ranges;
+        this.typeList = this.typeFreeList.slice(0);
+        this.tempCustomer_classificationList = JSON.parse(JSON.stringify(this.customer_classificationList));
+        if (this.pickupModalList) {
+            this.generalForm.patchValue(this.pickupModalList);
+            console.log(this.pickupModalList.ship_options);
+            if (this.pickupModalList.ship_options) {
+                this.checkUPSbyForm();
+            }
+            else{
+                this.checkAllUPS(true);
+            }
         }
-        this.weekDaysList.forEach(item=>{
-            item['data']=[{from:'',to:''}];
-        })
+
     }
 
     ngOnDestroy() {
         this.hotkeysService.remove(this.hotkeyCtrlLeft);
         this.hotkeysService.remove(this.hotkeyCtrlRight);
     }
-    addNewHours(item){
-        item.push({from:'',to:''});
+    addNewHours(item) {
+        item.push({ from: '', to: '' });
     }
 
 
@@ -82,16 +95,17 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
     }
     applyData() {
         console.log(this.generalForm.value);
-        console.log(this.weekDaysList);
         // this.checkRanges();
         // console.log(this.isSave);
         // if(this.isSave==true){
-        // var params = Object.assign({},this.generalForm.value);
+        var params = Object.assign({}, this.generalForm.value);
         // params['ranges']=this.ranges;
-        // this.itemService.checkCondition(params).subscribe(res => {
-        //     console.log(res);
-        //     this.activeModal.close({ id: '3', data: params });
-        // });
+        params['ship_options'] = this.getShipOptions();
+        console.log(params)
+        this.itemService.checkCondition(params).subscribe(res => {
+            console.log(res);
+            this.activeModal.close({ id: '5', data: params });
+        });
         // }
         // else{
         //     return;
@@ -99,7 +113,7 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
 
     }
 
-    removeHoursItem(index,item) {
+    removeHoursItem(index, item) {
         item.splice(index, 1);
     }
     checkRanges() {
@@ -110,12 +124,81 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
         //     });
         for (var i = 0; i < this.ranges.length; i++) {
             if (this.ranges[i].lbs_to < this.ranges[i].lbs_from) {
-                this.isSave =false;
+                this.isSave = false;
                 break;
-                
+
             }
-            else{
-                this.isSave =true;
+            else {
+                this.isSave = true;
+            }
+
+        }
+    }
+    testConnection() {
+        var params = {
+            "access_key": this.generalForm.value.access_key,
+            "user_id": this.generalForm.value.user_id,
+            "password": this.generalForm.value.password,
+        };
+        if (this.generalForm.invalid) {
+            for (let inner in this.generalForm.controls) {
+                this.generalForm.get(inner).markAsTouched();
+                // this.generalForm.get(inner).updateValueAndValidity();
+            }
+            console.log(this.generalForm);
+            return false;
+        }
+        this.itemService.checkConnection(params).subscribe(res => {
+            console.log(res);
+            this.toastr.success(res.message);
+        }, error => {
+            console.log(error);
+        });
+    }
+    checkRates() {
+        if (this.generalForm.value.rates) {
+            this.generalForm.controls.account_number.setErrors(Validators.required);
+            this.generalForm.controls.ups_customer.setErrors(Validators.required);
+        }
+        else{
+            this.generalForm.controls.account_number.setErrors(null);
+            this.generalForm.controls.ups_customer.setErrors(null);
+        }
+    }
+    calculateUPSLength() {
+        var count = 0;
+        this.upsList.forEach(res => {
+            if (res.selected) {
+                count++;
+            }
+        });
+        return count;
+    }
+    checkUPS(item, event) {
+        return item.selected = event.target.checked;
+    }
+    checkAllUPS(isTrue) {
+        this.upsList.forEach(item => {
+            item.selected = isTrue;
+        })
+    }
+    getShipOptions() {
+        var ship_options = JSON.parse(JSON.stringify(this.upsList));
+        var tempShip_options = [];
+        for (var i = 0; i < ship_options.length; i++) {
+            if (ship_options[i].selected) {
+                tempShip_options.push(ship_options[i].id);
+            }
+        }
+        return tempShip_options;
+    }
+    checkUPSbyForm() {
+        var ship_options = JSON.parse(JSON.stringify(this.pickupModalList.ship_options));
+        for (var i = 0; i < this.upsList.length; i++) {
+            for (var j = 0; j < ship_options.length; j++) {
+                if (this.upsList[i].id ==ship_options[j]) {
+                    this.upsList[i].selected;
+                }
             }
 
         }

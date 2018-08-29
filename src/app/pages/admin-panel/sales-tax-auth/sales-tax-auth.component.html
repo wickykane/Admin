@@ -72,13 +72,13 @@
                 <fieldset class="custom-border">
                     <legend class="custom-border block-title">GENERAL INFORMATION</legend>
                     <form [formGroup]="stateGeneralForm">
-                        <div class="row create-section-info">
+                        <div class="row create-section-info" *ngIf="isCreateNew">
                             <label>
                                 <b>Select State (*)</b>
                             </label>
-                            <select class="form-control" formControlName="state_id" [attr.disabled]="true" *ngIf="selectedStateTax.id">
+                            <!-- <select class="form-control" formControlName="state_id" [attr.disabled]="true" *ngIf="selectedStateTax.id">
                                 <option *ngFor="let state of listMaster.states" [value]="state.id">{{state.name}}</option>
-                            </select>
+                            </select> -->
                             <ng-select class="form-control" formControlName="state_id" (change)="onSelectStateDropdown($event)"
                                 [items]="listMaster['states']" bindLabel="name" bindValue="id" *ngIf="!selectedStateTax.id">
                             </ng-select>
@@ -142,7 +142,7 @@
                                 (!): This field cannot be blank.
                             </span>
                         </div>
-                        <div class="row create-section-info">
+                        <div class="row create-section-info" *ngIf="!isCreateNew">
                             <label>
                                 <b>Status (*)</b>
                             </label>
@@ -175,7 +175,7 @@
                         </div>
                         <div class="row create-section-info" *ngIf="!isCreateNew">
                             <label>
-                                <b>New Rate (*)</b>
+                                <b>New Rate</b>
                             </label>
                             <input type="text" OnlyNumber="true" maxlength="50" class="form-control" [(ngModel)]="newRate"
                             [ngModelOptions]="{standalone: true}" (blur)="onCheckNewRate()">
@@ -206,7 +206,7 @@
                         </div>
                         <div class="row create-section-info" *ngIf="!isCreateNew">
                             <label>
-                                <b>Old Rate (*)</b>
+                                <b>Old Rate</b>
                             </label>
                             <span>{{oldRate ? oldRate + '%' : '' }}</span>
                         </div>
@@ -247,7 +247,9 @@
     </div>
     <div class="row">
         <div class="col-md-12 mg-top-15 text-center">
-            <button *ngIf="currentForm" class="btn btn-default" type="button" (click)="onClickReset()">RESET</button>
+            <button *ngIf="currentForm" class="btn btn-default" type="button" (click)="onClickReset()">
+                {{ selectedStateTax.id ? 'CANCEL' : 'RESET'}}
+            </button>
             <button *ngIf="currentForm" class="btn btn-primary" type="button" (click)="onSaveTaxAuthority()">{{ isCreateNew ? 'CREATE' : 'SAVE' }}</button>
         </div>
     </div>
