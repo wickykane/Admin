@@ -1,203 +1,181 @@
 <div [@routerTransition]>
-    <app-page-header [heading]="'LIST OF Credit MEMO'" [icon]="'fa-th-list'"></app-page-header>
-    <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
-    <div class="block anchor-scroll">
+    <app-page-header [heading]="'LIST OF CREDIT MEMO'" [icon]="'fa-th-list'"></app-page-header>
+    <app-shortcut [listShortcut]='creditMemoListKeyService.getKeys()'></app-shortcut>
+    <div class="block anchor-scroll block-order">
         <section id="statusIndicator" class="status-indicator-section">
             <ul class="status-ctn dashboard-content">
-                <li class="status-item dashboard-stat blue">
-                    <div class="status-count">{{totalSummary['numberOfNew']}}</div>
-                    <div class="status-lbl">NEW</div>
-                </li>
-                <li class="status-item dashboard-stat texas-rose">
-                    <div class="status-count">{{totalSummary['numberOfSubmit']}}</div>
-                    <div class="status-lbl">SUBMITTED</div>
-                </li>
-                <li class="status-item dashboard-stat strong-green">
-                    <div class="status-count">{{totalSummary['numberOfApproved']}}</div>
-                    <div class="status-lbl">APPROVED</div>
-                </li>
-                <li class="status-item dashboard-stat magenta">
-                    <div class="status-count">{{totalSummary['numberOfRejected']}}</div>
-                    <div class="status-lbl">REJECTED</div>
-                </li>
-                <li class="status-item dashboard-stat lemon">
-                    <div class="status-count">{{totalSummary['numberOfPartiallyPaid']}}</div>
-                    <div class="status-lbl">REFUND DUE</div>
-                </li>
-                <li class="status-item dashboard-stat bright-grey">
-                    <div class="status-count">{{totalSummary['numberOfFullyPaid']}}</div>
-                    <div class="status-lbl">REFUNDED</div>
-                </li>
-                <!-- <li class="status-item dashboard-stat darkblue">
-                    <div class="status-count">{{totalSummary['numberOfOverdue']}}</div>
-                    <div class="status-lbl">OVERDUE</div>
-                </li> -->
-                <li class="status-item dashboard-stat red">
-                    <div class="status-count">{{totalSummary['numberOfCanceled']}}</div>
-                    <div class="status-lbl">CANCELED</div>
+                <li style="cursor: pointer;" (click)="filter(item.status)" *ngFor="let item of listMaster['count-status']" class="status-item dashboard-stat {{item.color}}">
+                    <img *ngIf="item.img" [src]="item.img" alt="">
+                    <div class="status-count">{{ item.count || 0 }}</div>
+                    <div class="status-lbl text-uppercase">{{ item.name }}</div>
                 </li>
             </ul>
         </section>
-    </div>
-    <div class="block-content pd-bottom bg-gray-light">
-        <div class="row">
-            <div class="col-12">
-                <form class="row form-horizontal form-search filter-order-group"
-                    role="form" [formGroup]="searchForm" (ngSubmit)="tableService.searchAction()">
-                    <div class="col-md-2">
-                        <label class="control-label">Credit Memo No</label>
-                        <input #drNo autofocus="true" type="text" class="form-control" formControlName="dr_no">
+        <div class="block-content pd-bottom bg-gray-light short-width">
+            <div class="row">
+                <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
+                    <div class="block-search">
+                        <label for="buyer_name" class="control-label">Credit Memo No</label>
+                        <input type="text" name="buyer_name" formControlName="buyer_name" class="form-control" id="buyer_name" placeholder="">
                     </div>
-                    <div class="col-md-2">
-                        <label class="control-label" translate>Customer Name</label>
-                        <input type="text" class="form-control" formControlName="customer">
+                    <div class="block-search">
+                        <label for="email" class="control-label">Customer Name</label>
+                        <input type="text" name="email" formControlName="email" class="form-control" id="email" placeholder="" capitalize>
                     </div>
-                    <div class="col-md-2">
-                        <label class="control-label">Status</label>
-                        <ng-select [multiple]="false" [items]="listMaster['status']"
-                            bindLabel="name" bindValue="id" formControlName="status">
+                    <div class="block-search">
+                        <label for="buyer_type" class="control-label">Status</label>
+                        <ng-select [multiple]="true" [items]="listMaster['listStatus']" bindLabel="name" bindValue="id" formControlName="sts">
                         </ng-select>
                     </div>
-                    <div class="col-md-2">
+                    <div class="block-search">
                         <label for="type" class="control-label" translate>Date Type</label>
                         <select class="form-control" formControlName="date_type">
+                            <option value="null" selected="true">--Select--</option>
                             <option *ngFor="let item of listMaster['dateType']" [ngValue]="item.id">{{item.name}}</option>
                         </select>
                     </div>
-                    <div class="col-md-2">
+                    <div class="block-search">
                         <label for="" class="control-label" translate>From</label>
-                        <div clickOutside (clickOutside)="d1.close()" class="input-group">
-                            <input class="form-control" placeholder="yyyy-mm-dd" (keydown)="$event.preventDefault()" name="dp" ngbDatepicker #d1="ngbDatepicker"
-                                (click)="d1.toggle()" formControlName="date_from">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
-                                    <i class="fa fa-calendar" aria-hidden="true"></i>
-                                </button>
+                        <div class="date-group">
+                            <div clickOutside (clickOutside)="d1.close()" class="input-group">
+                                <input [maxDate]="searchForm.value.date_to | dateObj" class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="date_from"
+                                    ngbDatepicker #d1="ngbDatepicker">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="block-search">
                         <label for="" class="control-label" translate>To</label>
-                        <div clickOutside (clickOutside)="d2.close()" class="input-group">
-                            <input class="form-control" placeholder="yyyy-mm-dd" (keydown)="$event.preventDefault()" name="dp" ngbDatepicker #d2="ngbDatepicker"
-                                (click)="d2.toggle()" formControlName="date_to">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" (click)="d2.toggle()" type="button">
-                                    <i class="fa fa-calendar" aria-hidden="true"></i>
-                                </button>
+                        <div class="date-group">
+                            <div clickOutside (clickOutside)="dt2.close()" class="input-group">
+                                <input [minDate]="searchForm.value.date_from | dateObj" class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="date_to"
+                                    ngbDatepicker #dt2="ngbDatepicker">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" (click)="dt2.toggle()" type="button">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </form>
-            </div>
-            <div class="col-3">
                 <div class="block-btn-search">
                     <label class="control-label">&nbsp;</label>
                     <div class="group-btn-search">
-                        <button type="submit" class="btn btn-primary">Search</button>
+                        <button type="button" class="btn btn-primary" (click)="tableService.searchAction()">Search</button>
                         <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchForm)">Reset</button>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="block-content list-order-table">
-        <button [routerLink]="['create']" style="margin: 10px 0;" class="btn btn-primary" (click)="addNewDebitMemo()">Add New</button>
-        <div class="table-responsive">
-            <table class="table table-striped table-vcenter custom-table">
-                <thead class="bg-white">
-                    <tr>
-                        <th></th>
-                        <th>Credit Memo No</th>
-                        <th>Issue Date</th>
-                        <th>Customer Name</th>
-                        <th>Related Document</th>
-                        <th>Total Amount</th>
-                        <th>Balance Amount</th>
-                        <th>Status</th>
-                        <th>Age</th>
-                        <th>Last Updated Date</th>
-                        <th>Last Updated By</th>
-                        <th class="text-center">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td colspan="100%" class="text-center">No data.</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label class="css-input css-checkbox css-checkbox-default">
-                                <input class="cb-element" type="checkbox">
-                                <span></span>
-                            </label>
-                        </td>
-                        <td>DR-0101-0001</td>
-                        <td>01/01/2018</td>
-                        <td>Khiet Pham</td>
-                        <td>INV-0101-0001</td>
-                        <td>$ 1500.00</td>
-                        <td>$ 150.00</td>
-                        <td>New</td>
-                        <td>0</td>
-                        <td>01/01/2018</td>
-                        <td>Khiet Pham</td>
-                        <td class="text-center">
-                            <a class="btn btn-default " title="Edit" (click)="onEditDebitMemo()">
-                                <i class="fa fa-pencil-square-o text-primary" aria-hidden="true"></i>
-                            </a>
-                            <a class="btn btn-default " title="Submit" (click)="onSubmitDebitMemo()">
-                                <i class="fa fa-share-square text-primary" aria-hidden="true"></i>
-                            </a>
-                            <a class="btn btn-default " title="Approve" (click)="onApproveDebitMemo()">
-                                <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
-                            </a>
-                            <a class="btn btn-default " title="Reject" (click)="onRejectDebitMemo()">
-                                <i class="fa fa-minus-circle text-danger" aria-hidden="true"></i>
-                            </a>
-                            <a class="btn btn-default " title="View" (click)="onViewDebitMemo()">
-                                <i class="fa fa-eye text-primary" aria-hidden="true"></i>
-                            </a>
-                            <a class="btn btn-default" title="Print" (click)="onPrintDebitMemo()">
-                                <i class="fa fa-print text-primary" aria-hidden="true"></i>
-                            </a>
-                            <a class="btn btn-default" title="Cancel" (click)="onCancelDebitMemo()">
-                                <i class="fa fa-ban text-primary" aria-hidden="true"></i>
-                            </a>
-                            <a class="btn btn-default" title="Reopen" (click)="onReopenDebitMemo()">
-                                <i class="fa fa-external-link text-primary" aria-hidden="true"></i>
-                            </a>
-                            <a class="btn btn-default" title="Receive Payment" (click)="onReceivePaymentDebitMemo()">
-                                <i class="fa fa-credit-card text-primary" aria-hidden="true"></i>
-                            </a>
-                            <a class="btn btn-default" title="Send Mail" (click)="onSendMail()">
-                                <i class="fa fa-envelope text-primary" aria-hidden="true"></i>
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">Total</td>
-                        <td colspan="4"></td>
-                        <td >$ 12,000.00</td>
-                        <td colspan="6" class="text-left">$ 12,000.00</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="row mg-top-10">
+            <div class="col-12">
+                <div class="card no-border">
+                    <div class="card-header">
+                        <strong>Line Items</strong>
+                        <button [routerLink]="['create']" style="margin:0; float:right" class="btn btn-link"> <i class="fa fa-plus text-success"></i>
+                            Create Credit Memo</button>
+                    </div>
+                    <div class="card-body no-padding">
+                        <div class="table-responsive list">
+                            <table class="table table-bordered table-order" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex"
+                                (onEnter)="selectData($event)">
+                                <thead class="bg-white">
+                                    <tr>
+                                        <th translate style="width:8%">Credit Memo No</th>
+                                        <th translate translate style="width:8%">Issue Date</th>
+                                        <th translate>Customer</th>
+                                        <th translate translate style="width:8%">Related Document</th>
+                                        <th translate translate style="width:8%">Total Amount</th>
+                                        <th translate translate style="width:8%">Balance Amount</th>
+                                        <th class="text-center" translate style="width:8%">Status</th>
+                                        <th class="text-center" translate style="width:4%">Age</th>
+                                        <th class="text-center" translate style="width:8%">Last Updated Date</th>
+                                        <th class="text-center" translate style="width:7%">Last Updated By</th>
+                                        <th translate>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
+                                    <tr>
+                                        <td>
+                                            <a class="text-primary" [routerLink]="['detail', item.id]">{{item.quote_no}}</a>
+                                        </td>
+                                        <td class="text-center">{{item.quote_date | date:'MM/dd/yyyy' }}</td>
+                                        <td>{{item.buyer_name}}</td>
+                                        <td class="text-center">{{item.sale_person_name}}</td>
+                                        <td class="text-center">
+                                            {{item.total_price | currency}}
+                                        </td>
+                                        <td class="text-center">
+                                            {{item.total_price | currency}}
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="badge badge-info bg-blue" *ngIf="item.sts_code == 'NW'">{{item.sts}}</span>
+                                            <span class="badge badge-warning bg-texas-rose" *ngIf="item.sts_code == 'SM'">{{item.sts}}</span>
+                                            <span class="badge badge-danger bg-magenta" *ngIf="item.sts_code == 'RM'">{{item.sts}}</span>
+                                            <span class="badge badge-success bg-strong-green" *ngIf="item.sts_code == 'AM'">{{item.sts}}</span>
+                                            <span class="badge badge-danger bg-red" *ngIf="item.sts_code == 'CC'">{{item.sts}}</span>
+                                            <span class="badge badge-primary bg-lemon" *ngIf="item.sts_code == 'SC'">{{item.sts}}</span>
+                                            <span class="badge badge-primary" *ngIf="item.sts_code == 'RO'">{{item.sts}}</span>
+                                            <span class="badge badge-primary bg-darkblue" *ngIf="item.sts_code == 'IU'">{{item.sts}}</span>
+                                            <span class="badge badge-primary bg-bright-grey" *ngIf="item.sts_code == 'EX'">{{item.sts}}</span>
+                                        </td>
+                                        <td class="text-center">{{item.quote_date | date:'MM/dd/yyyy' }}</td>
+                                        <td class="text-center">{{item.quote_date | date:'MM/dd/yyyy' }}</td>
+                                        <td class="text-center">{{item.quote_date | date:'MM/dd/yyyy' }}</td>                                       
+                                        <td class="text-center">
+                                            <button ngbTooltip="Edit" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" [routerLink]="['/order-management/sale-quotation/edit', item.id]"><i
+                                                    class="fa fa-pencil-square" aria-hidden="true"></i></button>
+                                            <button ngbTooltip="Submit" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" (click)="confirmModal(item.id, 'SM')"><i
+                                                    class="fa fa-caret-square-o-right" aria-hidden="true"></i></button>
+                                            <button ngbTooltip="Cancel" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" (click)="confirmModal(item.id, 'CC')"><i
+                                                    class="fa fa-times-circle" aria-hidden="true"></i></button>
+                                            <button ngbTooltip="Approve" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="confirmModal(item.id, 'AM')"><i
+                                                    class="fa fa-check-square"></i></button>
+                                            <button ngbTooltip="Reject" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="confirmModal(item.id, 'RM')"><i
+                                                    class="fa fa-ban" aria-hidden="true"></i></button>
+                                            <button ngbTooltip="Copy" class="btn btn-default" (click)="confirmModal(item.id, 'CLONE')"><i
+                                                    class="fa fa-clone"></i></button>
+                                            <button ngbTooltip="View" *ngIf="item['sts_code'] == 'AM' || item['sts_code'] == 'EM'" class="btn btn-default" [routerLink]="['/order-management/sale-quotation/detail', item.id]"><i
+                                                    class="fa fa-eye" aria-hidden="true"></i></button>
+                                            <button ngbTooltip="Convert to SO" *ngIf="item['sts_code'] == 'AM'" class="btn btn-default" (click)="confirmModal(item.id, 'SC')"><i
+                                                    class="fa fa-exchange" aria-hidden="true"></i></button>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                                <tbody *ngIf="list.items.length == 0">
+                                    <tr>
+                                        <td colspan="100%" class="text-center" translate>No data.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-12 no-padding">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="row normal-pagination">
-            <div class="col-md-6">
+        <div class="row normal-pagination mg-top-10" *ngIf="list.items.length > 0">
+            <div class="col-md-6 padding-lr-0">
                 <div class="text-left">
                     <div class="col-md-6" style="padding-left: 0px;">
-                        <span style="float: left; padding-right: 10px;">0 items</span>
-                        <select style="width: 50px; float: left;" class="form-control"
-                            [(ngModel)]="tableService.pagination.length" (change)="tableService.changeLength()">
+                        <span style="float: left; padding-right: 10px;">{{list.items.length}}/{{tableService.pagination.total_record}}
+                            items </span>
+                        <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length" (change)="tableService.changeLength()">
                             <option *ngFor="let option of tableService.itemPerPageOptions" [ngValue]="option">{{option}}</option>
                         </select>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 padding-lr-0">
                 <div class="text-right">
                     <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length"
                         [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page"
@@ -206,6 +184,5 @@
             </div>
         </div>
 
-        <button style="margin: 10px 0;" class="btn btn-primary" (click)="addNewDebitMemo()">Add New</button>
     </div>
 </div>
