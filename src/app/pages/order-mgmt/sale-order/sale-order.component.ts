@@ -33,7 +33,7 @@ export class SaleOrderComponent implements OnInit {
     };
     public listMaster = {};
     public selectedIndex = 0;
-    public countStatus = {};
+    public countStatus = [];
     public list = {
         items: []
     };
@@ -79,6 +79,7 @@ export class SaleOrderComponent implements OnInit {
         //  this.countOrderStatus();
         this.getList();
         this.getListStatus();
+        this.countOrderStatus();
     }
     /**
      * Table Event
@@ -91,8 +92,8 @@ export class SaleOrderComponent implements OnInit {
      */
 
     countOrderStatus() {
-        this.orderService.countOrderStatus().subscribe(res => {
-            this.countStatus = res.results[0];
+        this.orderService.countStatus().subscribe(res => {
+            this.countStatus = res.data;
         });
     }
 
