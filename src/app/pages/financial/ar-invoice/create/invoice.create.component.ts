@@ -111,7 +111,7 @@ export class InvoiceCreateComponent implements OnInit {
             'warehouse_id': [null],
             'contact_user_id': [null],
 
-            'sales_person': [null, Validators.required],
+            'sales_person': [null],
             'payment_method_id': [null, Validators.required],
             'payment_term_id': [null, Validators.required],
             'billing_id': [null],
@@ -369,8 +369,8 @@ export class InvoiceCreateComponent implements OnInit {
         this.order_info.total = +this.order_info['total_tax'] + +this.order_info.sub_total;
         if (this.order_info.incentive_percent) {
             this.order_info.incentive = +this.order_info.incentive_percent * +this.order_info.total / 100;
-            this.order_info.grand_total = +this.order_info.total - +this.order_info.incentive;
         }
+        this.order_info.grand_total = +this.order_info.total - +this.order_info.incentive;
     }
 
     deleteAction(id, item_condition) {
