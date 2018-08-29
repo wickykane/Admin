@@ -49,6 +49,11 @@ export class FinancialService {
         return this.API.get(url);
     }
 
+    getInvoiceStatus() {
+        const url = 'ar-invoice/count-status';
+        return this.API.get(url);
+    }
+
     createInvoice(params) {
         const url = 'ar-invoice/createInvoice';
         return this.API.post(url, params);
