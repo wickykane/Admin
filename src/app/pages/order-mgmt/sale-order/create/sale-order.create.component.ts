@@ -39,6 +39,8 @@ export class SaleOrderCreateComponent implements OnInit {
     public selectedIndex = 0;
     public data = {};
     public customer = {
+        'payment_method_id': '',
+        'payment_term_id': '',
         'last_sales_order': '',
         'current_dept': '',
         'discount_level': '',
@@ -201,6 +203,16 @@ export class SaleOrderCreateComponent implements OnInit {
                     this.addr_select.contact = res.data.contact[0];
                     this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
                 }
+
+                const default_billing = (this.customer.billing || []).find(item => item.set_default) || {};
+                const default_shipping = (this.customer.shipping || []).find(item => item.set_default) || {};
+                this.generalForm.patchValue({
+                    billing_id: default_billing.address_id || null,
+                    shipping_id: default_shipping.address_id || null,
+                    payment_method_id: this.customer.payment_method_id || null,
+                    payment_term_id: this.customer.payment_term_id || null,
+                });
+
             } catch (e) {
                 console.log(e);
             }
@@ -465,8 +477,8 @@ export class SaleOrderCreateComponent implements OnInit {
                     if (listAdded.indexOf(item.sku + item.item_condition_id) < 0) {
                         return listAdded.indexOf(item.sku + item.item_condition_id) < 0;
                     } else {
-                      this.toastr.error('The item ' + item.no + ' already added in the order');
-                      return -1;
+                        this.toastr.error('The item ' + item.no + ' already added in the order');
+                        return -1;
                     }
                 }));
 
@@ -505,8 +517,8 @@ export class SaleOrderCreateComponent implements OnInit {
                     if (listAdded.indexOf(item.sku + (item.item_condition_id || 'misc')) < 0) {
                         return listAdded.indexOf(item.sku + (item.item_condition_id || 'misc')) < 0;
                     } else {
-                      this.toastr.error('The item ' + item.no + ' already added in the order');
-                      return -1;
+                        this.toastr.error('The item ' + item.no + ' already added in the order');
+                        return -1;
                     }
 
                 }));
