@@ -518,21 +518,21 @@ export class SaleQuotationCreateComponent implements OnInit {
 
 
     calculateShipping() {
-        if(!this.generalForm.value.shipping_id) {
+        if (!this.generalForm.value.shipping_id) {
             return;
         }
         const params = {
             'customer': this.generalForm.value.company_id,
             'address': this.generalForm.value.shipping_id,
             'ship_via': this.generalForm.value.carrier_id,
-            'option': this.generalForm.value.ship_method_option,
+            'option': this.generalForm.getRawValue().ship_method_option,
             'ship_rate': this.generalForm.value.ship_rate,
             'items': this.list.items.filter(item => !item.misc_id)
         };
         this.orderService.getTaxShipping(params).subscribe(res => {
             const old_misc = this.list.items.filter(item => item.misc_id && +item.source_id !== 3);
             const items = res.data.items;
-            const misc = res.data.mics.map(item => {
+            const misc = (res.data.mics || []).map(item => {
                 item.is_misc = 1;
                 item.misc_id = item.id;
                 return item;
@@ -571,7 +571,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         });
 
         const params = {
-            ...this.generalForm.value,
+            ...this.generalForm.getRawValue(),
             status_id: type,
             original_ship_cost: this.order_info['original_ship_cost'],
             items,

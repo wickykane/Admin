@@ -365,8 +365,11 @@ export class InvoiceCreateComponent implements OnInit {
             item.amount = (+item.qty_inv * (+item.price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
             this.order_info.sub_total += item.amount;
         });
-
         this.order_info.total = +this.order_info['total_tax'] + +this.order_info.sub_total;
+        if (this.order_info.incentive_percent) {
+            this.order_info.incentive = this.order_info.incentive_percent * this.order_info.total;
+            this.order_info.grand_total = this.order_info.total - this.order_info.incentive;
+        }
     }
 
     deleteAction(id, item_condition) {
