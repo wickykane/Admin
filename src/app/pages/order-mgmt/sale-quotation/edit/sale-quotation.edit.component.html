@@ -446,10 +446,10 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                <input [isDecimal]="true" numberDirective [min]="0" class="form-control input-sm" type="number" [(ngModel)]="item.discount" (change)="updateTotal();changeFromSource(item)">
+                                                <input [isDecimal]="true" numberDirective [min]="0" [max]="100" class="form-control input-sm" type="number" [(ngModel)]="item.discount" (change)="updateTotal();changeFromSource(item)">
                                             </td>
                                             <td>
-                                                <input [isDecimal]="true" numberDirective [min]="0" class="form-control input-sm" type="number" [(ngModel)]="item.tax_percent" (change)="updateTotal();changeFromSource(item)">
+                                                <input [isDecimal]="true" numberDirective [min]="0" [max]="100" class="form-control input-sm" type="number" [(ngModel)]="item.tax_percent" (change)="updateTotal();changeFromSource(item)">
                                             </td>
                                             <td class="text-center">
                                                 <span>{{item.amount | currency}}</span>
@@ -503,7 +503,7 @@
                     <div class="card-header">
                         <strong>Order Summary</strong>
                     </div>
-                    <div class="card-body p-17">
+                    <div class="card-body p-17 order-summary-body">
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-group row">
