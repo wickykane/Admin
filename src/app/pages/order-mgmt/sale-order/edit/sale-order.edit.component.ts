@@ -149,7 +149,7 @@ export class SaleOrderEditComponent implements OnInit {
             this.listMaster = { ...this.listMaster, ...res.data };
         });
         //  Item
-        this.list.items = [];
+        // this.list.items = [];
         const currentDt = new Date();
         this.updateTotal();
         this.copy_addr = { ...this.copy_addr, ...this.addr_select };

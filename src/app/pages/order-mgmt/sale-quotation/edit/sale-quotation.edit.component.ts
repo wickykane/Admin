@@ -270,7 +270,7 @@ export class SaleQuotationEditComponent implements OnInit {
             this.getDetailCustomerById(company_id, flag);
         }
         if (!flag) {
-            this.list.items = [];
+            // this.list.items = [];
             this.updateTotal();
         }
     }
