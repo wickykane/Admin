@@ -111,7 +111,7 @@ export class InvoiceCreateComponent implements OnInit {
             'warehouse_id': [null],
             'contact_user_id': [null],
 
-            'sales_person': [null, Validators.required],
+            'sales_person': [null],
             'payment_method_id': [null, Validators.required],
             'payment_term_id': [null, Validators.required],
             'billing_id': [null],
@@ -214,10 +214,11 @@ export class InvoiceCreateComponent implements OnInit {
     getEarlyPaymentValue() {
         const issue_dt = this.generalForm.get('inv_dt').value;
         const payment_term_id = this.generalForm.get('payment_term_id').value;
-        const total_due = this.order_info['sub_total'];
+        const total_due = this.order_info['total'];
         if (issue_dt && payment_term_id && total_due) {
             this.financialService.getEarlyPaymentValue(issue_dt, payment_term_id, total_due).subscribe(res => {
                 if (res.data) {
+                    this.data['is_fixed_early'] = res.data.is_fixed;
                     this.order_info.incentive_percent = res.data.percent;
                     this.order_info.incentive = res.data.value;
                     this.order_info.expires_dt = res.data.expires_dt;
@@ -367,9 +368,9 @@ export class InvoiceCreateComponent implements OnInit {
         });
         this.order_info.total = +this.order_info['total_tax'] + +this.order_info.sub_total;
         if (this.order_info.incentive_percent) {
-            this.order_info.incentive = this.order_info.incentive_percent * this.order_info.total;
-            this.order_info.grand_total = this.order_info.total - this.order_info.incentive;
+            this.order_info.incentive = +this.order_info.incentive_percent * +this.order_info.total / 100;
         }
+        this.order_info.grand_total = +this.order_info.total - +this.order_info.incentive;
     }
 
     deleteAction(id, item_condition) {
@@ -396,29 +397,74 @@ export class InvoiceCreateComponent implements OnInit {
         });
     }
 
-    createOrder(type, is_draft_sq?) {
+    resetInvoice() {
+        this.listMaster = {};
+        this.data = {};
+        this.customer = {
+            'last_sales_order': '',
+            'current_dept': '',
+            'discount_level': '',
+            'items_in_quote': '',
+            'buyer_type': '',
+            primary: [],
+            billing: [],
+            shipping: [],
+            contact: []
+        };
+
+        this.addr_select = {
+            shipping: {},
+            billing: {},
+            contact: {}
+        };
+
+        this.order_info = {
+            total: 0,
+            order_summary: {},
+            sub_total: 0,
+            order_date: '',
+            customer_po: '',
+            total_discount: 0,
+            company_id: null,
+            selected_programs: [],
+            discount_percent: 0,
+            vat_percent: 0,
+            shipping_cost: 0
+        };
+
+        this.list = {
+            items: [],
+            backItems: []
+        };
+        this.ngOnInit();
+    }
+
+    createInvoice(type, is_draft?) {
         const items = this.list.items.map(item => {
-            item.discount_percent = item.discount;
             item.is_item = (item.misc_id) ? 0 : 1;
             return item;
         });
 
         const params = {
             ...this.generalForm.value,
-            status_id: type,
-            original_ship_cost: this.order_info['original_ship_cost'],
-            items,
-            is_draft_sq: is_draft_sq || 0,
+            inv_status: type,
+            sub_total: this.order_info.sub_total,
+            total_due: this.order_info.total,
+            ear_payment_incentive: this.order_info['incentive'],           
+            aprvr_id: this.generalForm.value.approver_id,
+            sale_person_id: this.generalForm.value.sales_person,
+            inv_detail: items,
+            is_draft: is_draft || 0,
             is_copy: this.data['is_copy'] || 0
         };
 
-        this.orderService.createQuoteOrder(params).subscribe(res => {
+        this.financialService.createInvoice(params).subscribe(res => {
             try {
                 if (res.status) {
                     this.toastr.success(res.message);
-                    this.data['quote_id'] = res.data;
+                    this.data['invoice_id'] = res.data;
                     setTimeout(() => {
-                        this.router.navigate(['/order-management/sale-quotation/detail/' + this.data['quote_id']]);
+                        this.router.navigate(['/financial/invoice/view/' + this.data['invoice_id']]);
                     }, 500);
 
                 } else {
@@ -427,10 +473,7 @@ export class InvoiceCreateComponent implements OnInit {
             } catch (e) {
                 console.log(e);
             }
-        },
-            err => {
-                this.toastr.error(err.message);
-            });
+        });
     }
 
     confirmModal(type, is_draft_sq?) {
@@ -438,9 +481,9 @@ export class InvoiceCreateComponent implements OnInit {
         modalRef.result.then(res => {
             if (res) {
                 if (type) {
-                    this.createOrder(type, is_draft_sq);
+                    this.createInvoice(type, is_draft_sq);
                 } else {
-                    this.router.navigate(['/order-management/sale-quotation']);
+                    this.router.navigate(['/financial/invoice']);
                 }
             }
         }, dismiss => { });
