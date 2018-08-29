@@ -225,7 +225,7 @@ export class SaleQuotationEditComponent implements OnInit {
                     const idList = result.data.rows.map(item => item.id);
                     this.listMaster['customer'] = result.data.rows;
                     if (res.data.buyer_id && idList.indexOf(res.data.buyer_id) === -1) {
-                        this.listMaster['customer'].push({ id: res.data.buyer_id, company_name: res.data.buyer_info.buyer_name });
+                        this.listMaster['customer'].push({ id: res.data.buyer_id, company_name: res.data.buyer_name });
                     }
                     this.data['total_page'] = result.data.total_page;
                 });
@@ -414,7 +414,7 @@ export class SaleQuotationEditComponent implements OnInit {
     }
 
     changeShip(flag?) {
-        const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id);
+        const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id) || {};
         this.listMaster['options'] = carrier.options || [];
         this.listMaster['ship_rates'] = carrier.ship_rate || [];
 
@@ -434,6 +434,8 @@ export class SaleQuotationEditComponent implements OnInit {
             default_ship_rate = 8;
             this.generalForm.patchValue({ shipping_id: null });
             this.generalForm.get('shipping_id').clearValidators();
+            this.generalForm.updateValueAndValidity();
+
             this.addr_select.shipping = {
                 'address_name': '',
                 'address_line': '',
