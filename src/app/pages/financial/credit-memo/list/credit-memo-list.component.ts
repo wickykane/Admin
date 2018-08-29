@@ -16,7 +16,7 @@ import { SendMailDebitModalContent } from '../modals/send-email/send-mail.modal'
 @Component({
     selector: 'app-credit-memo-list',
     templateUrl: './credit-memo-list.component.html',
-    styleUrls: ['./credit-memo-list.component.scss'],
+    styleUrls: ['../credit-memo.component.scss'],
     animations: [routerTransition()],
     providers: [CreditMemoListKeyService]
 })
