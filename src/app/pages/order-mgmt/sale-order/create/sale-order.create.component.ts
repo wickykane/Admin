@@ -450,6 +450,7 @@ export class SaleOrderCreateComponent implements OnInit {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
                     listAdded.push(item.item_id + item.item_condition_id);
+                    console.log(listAdded);
                 });
                 res.forEach((item) => {
                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
@@ -546,6 +547,7 @@ export class SaleOrderCreateComponent implements OnInit {
                     'is_draft_order': 1,
                     'type': 'SAQ',
                     'sale_quote_status_id': 1,
+                    'order_sts_id': 5
                 };
                 break;
             case 'draft':
