@@ -350,9 +350,9 @@ export class SaleQuotationEditComponent implements OnInit {
         this.order_info.total = +this.order_info['total_tax'] + +this.order_info.sub_total;
     }
 
-    deleteAction(id, item_condition) {
+    deleteAction(sku, item_condition) {
         this.list.items = this.list.items.filter((item) => {
-            return (item.item_id + (item.item_condition_id || 'mis') !== (id + (item.item_condition_id || 'mis')));
+            return (item.sku + (item.item_condition_id || 'mis') !== (sku + (item_condition || 'mis')));
         });
         this.updateTotal();
     }
@@ -364,7 +364,7 @@ export class SaleQuotationEditComponent implements OnInit {
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
-                    listAdded.push(item.item_id + item.item_condition_id);
+                    listAdded.push(item.sku + item.item_condition_id);
                 });
                 res.forEach((item) => {
                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
@@ -377,7 +377,12 @@ export class SaleQuotationEditComponent implements OnInit {
                     item.source_name = 'From Master';
                 });
                 this.list.items = this.list.items.concat(res.filter((item) => {
-                    return listAdded.indexOf(item.item_id + item.item_condition_id) < 0;
+                    if (listAdded.indexOf(item.sku + item.item_condition_id) < 0) {
+                        return listAdded.indexOf(item.sku + item.item_condition_id) < 0;
+                    } else {
+                      this.toastr.error('The item ' + item.no + ' already added in the order');
+                      return -1;
+                    }
                 }));
 
                 this.updateTotal();
@@ -391,7 +396,7 @@ export class SaleQuotationEditComponent implements OnInit {
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
-                    listAdded.push(item.id + (item.item_condition_id || 'misc'));
+                    listAdded.push(item.sku + (item.item_condition_id || 'misc'));
                 });
 
                 res.forEach((item) => {
@@ -406,7 +411,13 @@ export class SaleQuotationEditComponent implements OnInit {
                 });
 
                 this.list.items = this.list.items.concat(res.filter((item) => {
-                    return listAdded.indexOf(item.id + (item.item_condition_id || 'misc')) < 0;
+                    if (listAdded.indexOf(item.sku + (item.item_condition_id || 'misc')) < 0) {
+                        return listAdded.indexOf(item.sku + (item.item_condition_id || 'misc')) < 0;
+                    } else {
+                      this.toastr.error('The item ' + item.no + ' already added in the order');
+                      return -1;
+                    }
+
                 }));
 
                 this.updateTotal();
