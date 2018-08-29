@@ -38,7 +38,12 @@ export class OrderService {
     }
 
     getListStatus() {
-        const url = 'order/list-status';
+        const url = 'order/getListStatusOrder';
+        return this.API.get(url);
+    }
+
+    countStatus() {
+        const url = 'order/getListStatusOrder?count=1';
         return this.API.get(url);
     }
 
