@@ -31,6 +31,21 @@ export class SaleOrderComponent implements OnInit {
         'RJ': 'Are you sure that you want to reject current order?',
         'RO': 'Are you sure that you want to re-open current order?',
     };
+
+    public statusConfig = {
+        'NW': { color: 'blue', name: 'New', img: './assets/images/icon/new.png' },
+        'SM': { color: 'texas-rose', name: 'Submited' },
+        'AP': { color: 'strong-green', name: 'Approved', img: './assets/images/icon/approved.png' },
+        'IP': { color: 'rock-blue', name: 'Allocated' },
+        'PP': { color: 'green', name: 'Preparing' },
+        'RS': { color: 'darkblue', name: 'Ready To Ship' },
+        'DL': { color: 'pink', name: 'Delivering' },
+        'PD': { color: 'bright-grey', name: 'Partial Delivery' },
+        'CP': { color: 'lemon', name: 'Completed', img: './assets/images/icon/full_delivered.png' },
+        'RJ': { color: 'magenta', name: 'Rejected' },
+        'CC': { color: 'red', name: 'Canceled', img: './assets/images/icon/cancel.png' },
+    };
+
     public listMaster = {};
     public selectedIndex = 0;
     public countStatus = [];
@@ -93,7 +108,16 @@ export class SaleOrderComponent implements OnInit {
 
     countOrderStatus() {
         this.orderService.countStatus().subscribe(res => {
-            this.countStatus = res.data;
+            res.data.map(item => {
+                if (this.statusConfig[item.short_name]) {
+                    this.statusConfig[item.short_name].count = item.count;
+                    this.statusConfig[item.short_name].status = item.id;
+                    this.statusConfig[item.short_name].name = item.name;
+                }
+            });
+            this.countStatus = Object.keys(this.statusConfig).map(key => {
+                return this.statusConfig[key];
+            });
         });
     }
 

@@ -114,17 +114,27 @@
 }
 
 .dashboard-content .dashboard-stat.rock-blue {
-    background-color: #949FB1;
+    background-color: #0D8BD2;
 }
 
 .dashboard-content .dashboard-stat.texas-rose {
     background-color: #FDB45C;
 }
 
+.dashboard-content .dashboard-stat.pink {
+    background-color: #E491A3;
+}
+
 .dashboard-content .dashboard-stat {
     display: block;
     margin-bottom: 0;
     overflow: hidden;
+    img {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        opacity: 0.2;
+    }
 }
 
 .dashboard-content .dashboard-stat.dashboard-stat-v2 .visual {
