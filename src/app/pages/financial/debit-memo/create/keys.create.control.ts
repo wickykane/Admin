@@ -45,7 +45,7 @@ export class DebitMemoCreateKeyService implements OnDestroy {
         }, undefined, 'Save & Submit'));
         this._hotkeysService.add(new Hotkey('f3', (event: KeyboardEvent): any => {
             event.preventDefault();
-            this.context.onClickSave('new');
+            this.context.onClickSave('create');
             return event;
         }, undefined, 'Save & Create New'));
         this._hotkeysService.add(new Hotkey('f6', (event: KeyboardEvent): any => {
@@ -54,6 +54,7 @@ export class DebitMemoCreateKeyService implements OnDestroy {
         }, undefined, 'Cancel'));
         this._hotkeysService.add(new Hotkey('f7', (event: KeyboardEvent): any => {
             event.preventDefault();
+            this.context.onAddNote();
             return event;
         }, undefined, 'Add Note'));
     }

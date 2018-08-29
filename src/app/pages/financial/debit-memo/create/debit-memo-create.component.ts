@@ -29,6 +29,8 @@ import * as moment from 'moment';
 export class DebitMemoCreateComponent implements OnInit {
 
     //#region initialize variables
+    @ViewChild('fieldNote') noteText: ElementRef;
+
     public listMaster = {
         customers : [],
         contacts: [],
@@ -346,6 +348,10 @@ export class DebitMemoCreateComponent implements OnInit {
         item['discount'] = (item['base_price'] / 100 * item['discount_percent']) || 0;
         item['total_price'] = (item['base_price'] - item['discount']) || 0;
         item['tax'] = (item['total_price'] / 100 * item['tax_percent']) || 0;
+    }
+
+    onAddNote() {
+        this.renderer.invokeElementMethod(this.noteText.nativeElement, 'focus');
     }
 
     openModalAddItemsOrder() {

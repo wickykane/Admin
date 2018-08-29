@@ -24,6 +24,7 @@ import { PaymentComponent } from './payment/payment.component';
 
 import { DebitMemoCreateComponent } from './debit-memo/create/debit-memo-create.component';
 import { DebitMemoService } from './debit-memo/debit-memo.service';
+import { DebitMemoEditComponent } from './debit-memo/edit/debit-memo-edit.component';
 import { DebitMemoListComponent } from './debit-memo/list/debit-memo-list.component';
 import { ItemsOrderDebitModalContent } from './debit-memo/modals/items-order/items-order.modal';
 import { MiscItemsDebitModalContent } from './debit-memo/modals/misc-items/misc-items.modal';
@@ -66,6 +67,7 @@ import { ItemModalModule } from '../../shared/modals/item.module';
         SendMailDebitModalContent,
         ItemsOrderDebitModalContent,
         MiscItemsDebitModalContent,
+        DebitMemoEditComponent,
         DebitMemoViewComponent,
         DebitInformationTabComponent
     ],
