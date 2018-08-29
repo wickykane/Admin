@@ -16,7 +16,9 @@ import { MiscItemsDebitModalContent } from '../modals/misc-items/misc-items.moda
 
 import { DebitMemoService } from '../debit-memo.service';
 
+import * as  _ from 'lodash';
 import * as moment from 'moment';
+
 @Component({
     selector: 'app-debit-memo-create',
     templateUrl: './debit-memo-create.component.html',
@@ -45,8 +47,13 @@ export class DebitMemoCreateComponent implements OnInit {
         shipping_method: {}
     };
     public listLineItems = [];
+    public listDeletedLineItem = [];
+    public listTaxs = [];
     public todayDate = moment().format('YYYY-MM-DD');
     public payment_term_date = 0;
+
+    public isClickedSave = false;
+    public isSaveDraft = false;
 
     public debitMemoForm: FormGroup;
     //#endregion initialize variables
@@ -63,22 +70,27 @@ export class DebitMemoCreateComponent implements OnInit {
         private renderer: Renderer) {
 
         this.debitMemoForm = fb.group({
-            customer_id: [null, Validators.required],
-            contact: [null],
+            company_id: [null, Validators.required],
+            contact_id: [null, Validators.required],
 
             debt_no: [null, Validators.required],
             issue_date: [null, Validators.required],
-            doc_type: [null, Validators.required],
+            doc_type: [1, Validators.required],
             order_id: [null, Validators.required],
-            sts: [1],
 
             payment_method_id: [null, Validators.required],
             payment_term_id: [null, Validators.required],
             due_date: [null, Validators.required],
             sale_person_id: [null, Validators.required],
             approver_id: [null, Validators.required],
+            sts: [1],
 
             billing_id: [null, Validators.required],
+            shipping_id: [null, Validators.required],
+            carrier_id: [null, Validators.required],
+
+            sub_total_price: [0, Validators.required],
+            total_price: [0, Validators.required],
 
             note: [null]
         });
@@ -226,10 +238,14 @@ export class DebitMemoCreateComponent implements OnInit {
                 try {
                     this.orderInformation.bill_info = res.data.bill_addr;
                     this.orderInformation.ship_info = res.data.ship_addr;
-                    this.orderInformation.shipping_method = res.data.shipping_method;
+                    this.orderInformation.shipping_method = res.data.carrier;
 
-                    this.debitMemoForm.controls.sale_person.setValue(res.data.sale_person_id);
-                    this.debitMemoForm.controls.approver.setValue(res.data.approver_id);
+                    this.debitMemoForm.controls.sale_person_id.setValue(res.data.sale_person_id);
+                    this.debitMemoForm.controls.approver_id.setValue(res.data.approver_id);
+
+                    this.debitMemoForm.controls.billing_id.setValue(res.data.bill_addr.id);
+                    this.debitMemoForm.controls.shipping_id.setValue(res.data.ship_addr.id);
+                    this.debitMemoForm.controls.carrier_id.setValue(res.data.carrier.id);
                 } catch (err) {
                     console.log(err);
                 }
@@ -243,7 +259,7 @@ export class DebitMemoCreateComponent implements OnInit {
         this.debitService.getListBillOfCustomer(customerId).subscribe(
             res => {
                 try {
-                    console.log(res);
+                    this.listMaster['bill_labels'] = res.data;
                 } catch (err) {
                     console.log(err);
                 }
@@ -257,7 +273,9 @@ export class DebitMemoCreateComponent implements OnInit {
         this.debitService.getListLineItems(orderId).subscribe(
             res => {
                 try {
-                    this.listLineItems = res.data.items;
+                    this.listLineItems =  [ ...res.data.items, ...res.data.misc];
+                    this.listLineItems.forEach( item => this.onCalculateAmount(item));
+                    this.getUniqueTaxItemLine();
                 } catch (err) {
                     console.log(err);
                 }
@@ -270,10 +288,15 @@ export class DebitMemoCreateComponent implements OnInit {
 
     //#region handle onSelect/ onClick
     onSelectCustomer() {
-        if (this.debitMemoForm.value.customer_id) {
-            this.getCustomerContacts(this.debitMemoForm.value.customer_id);
-            this.getListOrder(this.debitMemoForm.value.customer_id);
-            this.getListBillOfCustomer(this.debitMemoForm.value.customer_id);
+        if (this.debitMemoForm.value.company_id) {
+            this.listLineItems = [];
+            this.listDeletedLineItem = [];
+            this.listTaxs = [];
+            this.debitMemoForm.controls.order_id.reset();
+            this.getUniqueTaxItemLine();
+            this.getCustomerContacts(this.debitMemoForm.value.company_id);
+            this.getListOrder(this.debitMemoForm.value.company_id);
+            this.getListBillOfCustomer(this.debitMemoForm.value.company_id);
         }
     }
 
@@ -282,6 +305,10 @@ export class DebitMemoCreateComponent implements OnInit {
     }
 
     onSelectOrder(orderId) {
+        this.listLineItems = [];
+        this.listDeletedLineItem = [];
+        this.listTaxs = [];
+        this.getUniqueTaxItemLine();
         this.getOrderInformation(orderId);
         this.getListLineItems(orderId);
     }
@@ -291,6 +318,34 @@ export class DebitMemoCreateComponent implements OnInit {
         this.debitMemoForm.controls.due_date.setValue(
             moment(this.debitMemoForm.value.issue_date).add(termDays, 'days').format('YYYY-MM-DD')
         );
+    }
+
+    onChangeBillTo(billId) {
+        this.orderInformation.bill_info = this.listMaster['bill_labels'].find(bill => bill.id.toString() === billId) || {};
+    }
+
+    onDeleteLineItem(deletedItem, index) {
+        deletedItem.deleted = true;
+        this.listDeletedLineItem = this.listLineItems.filter( item => item.deleted);
+        this.listLineItems.splice(index, 1);
+
+        this.getUniqueTaxItemLine();
+    }
+
+    onCalculateAmount(item) {
+        item['qty'] = parseFloat(item['qty']) || 0;
+        item['price'] = parseFloat(item['price']) || 0;
+        item['discount_percent'] = parseFloat(item['discount_percent']) || 0;
+        item['tax_percent'] = parseFloat(item['tax_percent']) || 0;
+
+        item['discount_percent'] = item['discount_percent'] < 100 ? item['discount_percent'] : 100;
+        item['tax_percent'] = item['tax_percent'] < 100 ? item['tax_percent'] : 100;
+
+        item['base_price'] = (item['qty'] * item['price']) || 0;
+
+        item['discount'] = (item['base_price'] / 100 * item['discount_percent']) || 0;
+        item['total_price'] = (item['base_price'] - item['discount']) || 0;
+        item['tax'] = (item['total_price'] / 100 * item['tax_percent']) || 0;
     }
 
     openModalAddItemsOrder() {
@@ -309,38 +364,124 @@ export class DebitMemoCreateComponent implements OnInit {
         }, dismiss => {});
     }
 
-    onClickSave(type) {
-        switch (type) {
-            case 'draft': {
-                console.log('draft', this.debitMemoForm.value);
+    onClickSave(saveMethod) {
+        let modalMessage = '';
+        let status = 1;
+        this.isClickedSave = true;
+        switch (saveMethod) {
+            case 'draft': {// Save as Draft
+                this.isSaveDraft = true;
+                this.onSaveDebitMemo(status);
                 break;
             }
-            case 'submit': {
-                console.log('submit', this.debitMemoForm.value);
+            case 'create': {// Create New
+                this.isSaveDraft = false;
+                if (this.validateData()) { this.onSaveDebitMemo(status); }
                 break;
             }
-            case 'validate': {
-                console.log('validate', this.debitMemoForm.value);
+            case 'submit': {// Save & Submit
+                this.isSaveDraft = false;
+                status = 2;
+                modalMessage = 'Are you sure that you want to save & submit the debit memo to approver?';
                 break;
             }
-            case 'create': {
-                console.log('create', this.debitMemoForm.value);
+            case 'validate': {// Save & Validate
+                this.isSaveDraft = false;
+                status = 3;
+                modalMessage = 'Are you sure that you want to Save & Validate the credit memo?';
                 break;
             }
+        }
+        if ( status !== 1) {
+            const modalRef = this.modalService.open(ConfirmModalContent);
+            modalRef.componentInstance.message = modalMessage;
+            modalRef.componentInstance.yesButtonText = 'YES';
+            modalRef.componentInstance.noButtonText = 'NO';
+            modalRef.result.then(yes => {
+                if (yes && this.validateData()) {
+                     this.onSaveDebitMemo(status);
+                }
+            }, dismiss => { });
         }
     }
 
     onClickBack() {
-        window.history.back();
+        const modalRef = this.modalService.open(ConfirmModalContent);
+        modalRef.componentInstance.message = 'The data you have entered may not be saved, are you sure that you want to leave?';
+        modalRef.componentInstance.yesButtonText = 'YES';
+        modalRef.componentInstance.noButtonText = 'NO';
+        modalRef.result.then(yes => {
+            if (yes) {
+                window.history.back();
+            }
+        }, dismiss => { });
     }
     //#endregion handle onSelect/ onClick
 
     //#region call api submit
+    onSaveDebitMemo(status) {
+        const params = { ...this.debitMemoForm.value};
+        params['sts'] = status;
+        params['line_items'] = this.listLineItems;
+
+        params['approver_id'] = parseInt(params['approver_id'], null);
+        params['billing_id'] = parseInt(params['billing_id'], null);
+        params['contact_id'] = parseInt(params['contact_id'], null);
+        params['doc_type'] = parseInt(params['doc_type'], null);
+        params['order_id'] = parseInt(params['order_id'], null);
+        params['payment_method_id'] = parseInt(params['payment_method_id'], null);
+        params['payment_term_id'] = parseInt(params['payment_term_id'], null);
+
+        this.debitService.saveDebitMemo(params).subscribe(
+            res => {
+                try {
+                    this.toastr.success(res.message);
+                    this.handleSaveSuccessfully(status, res.data['id']);
+                } catch (err) {
+                    console.log(err);
+                }
+            }, err => {
+                console.log(err);
+            }
+        );
+    }
     //#endregion call api submit
 
     //#region utility functions
+    getUniqueTaxItemLine() {
+        if (this.listLineItems.length) {
+            this.listTaxs = _.uniq(this.listLineItems.map(item => parseFloat(item.tax_percent)))
+                .map( item => {
+                    return {tax_percent: item, amount: 0};
+            });
+
+            let total_tax = 0;
+            this.listTaxs.forEach(taxItem => {
+                let sub_price = 0;
+                this.listLineItems.forEach(item => {
+                    taxItem.amount += (parseFloat(item.tax_percent) === taxItem.tax_percent) ? item.tax : 0;
+                    sub_price += item.total_price;
+                });
+                total_tax += taxItem.amount;
+                this.debitMemoForm.controls.sub_total_price.setValue(sub_price);
+            });
+            this.debitMemoForm.controls.total_price.setValue(this.debitMemoForm.value.sub_total_price + total_tax);
+        } else {
+            this.debitMemoForm.controls.sub_total_price.setValue(0);
+            this.debitMemoForm.controls.total_price.setValue(0);
+        }
+    }
+
+    handleSaveSuccessfully(status, debitId) {
+        if (status === 1 && !this.isSaveDraft) {
+            window.location.reload();
+        } else if (status !== 1) {
+            this.router.navigate(['/financial/debit-memo/view', debitId]);
+        }
+    }
+
     validateData() {
-        return this.debitMemoForm.invalid;
+        return this.debitMemoForm.valid;
     }
     //#endregion utility functions
 }

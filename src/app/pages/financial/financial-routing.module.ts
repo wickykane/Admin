@@ -31,7 +31,7 @@ const routes: Routes = [
         children: [
             { path: '', component: DebitMemoListComponent },
             { path: 'create', component: DebitMemoCreateComponent },
-            { path: 'view', component: DebitMemoViewComponent }
+            { path: 'view/:id', component: DebitMemoViewComponent }
         ]
     }
 ];

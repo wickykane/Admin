@@ -62,12 +62,27 @@ export class DebitMemoService {
     }
 
     getListBillOfCustomer(customerId) {
-        const url = 'debit/buyer/' + customerId + '/billing-addresses';
+        const url = 'debit/buyers/' + customerId + '/billing-addresses';
         return this.API.get(url);
     }
 
     getListLineItems(orderId) {
         const url = 'debit/orders/' + orderId + '/items';
+        return this.API.get(url);
+    }
+
+    saveDebitMemo(params) {
+        const url = 'debit';
+        return this.API.post(url, params);
+    }
+
+    updateDebitMemo(debitId, params) {
+        const url = 'debit/' + debitId;
+        return this.API.put(url, params);
+    }
+
+    getDebitMemoDetail(debitId) {
+        const url = 'debit/' + debitId;
         return this.API.get(url);
     }
 }
