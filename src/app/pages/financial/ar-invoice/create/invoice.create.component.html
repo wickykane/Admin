@@ -488,11 +488,16 @@
                                 <div class="form-group row">
                                     <label class='col-6 control-label'>
                                         - Early Payment Incentive
-                                        <input (change)="updateTotal()"  [isDecimal]="true" numberDirective [min]="0" [max]="100" style="width: 50px; margin-left: 10px;" class="form-control" [(ngModel)]="order_info['incentive_percent']" class="form-control" value="0" type="number">
-                                        <span> %</span>
+                                        <input *ngIf="!data['is_fixed_early']" (change)="updateTotal()"  [isDecimal]="true" numberDirective [min]="0" [max]="100" style="width: 50px; margin-left: 10px;" class="form-control" [(ngModel)]="order_info['incentive_percent']" class="form-control" value="0" type="number">
+                                        <span *ngIf="!data['is_fixed_early']"> %</span>
                                     </label>
                                     <div class='col-5 padding-lr-10'>
-                                        <input class="form-control" [(ngModel)]="order_info['incentive']" class="form-control" value="0" type="number">
+                                        <div *ngIf="!data['is_fixed_early']">
+                                            <strong>
+                                                {{ (order_info['incentive'] || 0) | currency}}
+                                            </strong>
+                                        </div>
+                                        <input (change)="updateTotal()" [ngClass]="{'border border-danger': order_info.grand_total < 0 }" *ngIf="data['is_fixed_early']" class="form-control" [(ngModel)]="order_info['incentive']" class="form-control" value="0" type="number">
                                         <div *ngIf="order_info['expires_dt']" class="p-2 text-danger">Expires {{ order_info['expires_dt']}}</div>
                                     </div>
                                 </div>
@@ -512,9 +517,10 @@
         </div>
         <div class="row">
             <div class="col-md-12 mg-top-15 text-right">
-                <button type="button" class="btn btn-outline-info" (click)="createOrder(1, 1)" translate>Save As Draft</button>
+                <button type="button" class="btn btn-outline-info" (click)="createInvoice(1, 1)" translate>Save As Draft</button>
                 <button type="button" class="btn btn-outline-success" (click)="confirmModal(4)" [disabled]="!generalForm.valid" translate>Save & Validate</button>
                 <button type="button" class="btn btn-outline-danger" (click)="confirmModal(2)" [disabled]="!generalForm.valid" translate>Save & Submit For Approval</button>
+                <button type="button" class="btn btn-outline-dark" (click)="createInvoice(1, 1); resetInvoice();" translate>Save & Create New Invoice</button>
                 <button type="button" class="btn btn-default" (click)="confirmModal(0)" translate>Cancel</button>
             </div>
         </div>

@@ -264,6 +264,16 @@ export class SaleQuotationCreateComponent implements OnInit {
                     this.addr_select.contact = res.data.contact[0];
                     this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
                 }
+
+                const default_billing = (this.customer.billing || []).find(item => item.set_default) || {};
+                const default_shipping = (this.customer.shipping || []).find(item => item.set_default) || {};
+                this.generalForm.patchValue({
+                    billing_id: default_billing.address_id || null,
+                    shipping_id: default_shipping.address_id || null,
+                    payment_method_id: this.customer.payment_method_id || null,
+                    payment_term_id: this.customer.payment_term_id || null,
+                });
+
                 if (flag) {
                     this.selectAddress('billing', flag);
                     this.selectAddress('shipping', flag);

@@ -12,19 +12,20 @@ import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 import { OrderService } from '../../order-mgmt/order-mgmt.service';
-import { SaleQuoteKeyService } from '../../order-mgmt/sale-quotation/keys.list.control';
 import { InvoiceKeyService } from './keys.list.control';
+
 
 @Component({
     selector: 'app-invoice',
     templateUrl: './invoice.component.html',
     styleUrls: ['./invoice.component.scss'],
     animations: [routerTransition()],
-    providers: [InvoiceKeyService, OrderService, HotkeysService, SaleQuoteKeyService]
+    providers: [InvoiceKeyService, HotkeysService]
 })
 export class InvoiceComponent implements OnInit {
 
     public listMaster = {};
+    public listInvoiceItemsRef = [];
     public selectedIndex = 0;
     public list = {
         items: []
@@ -43,53 +44,71 @@ export class InvoiceComponent implements OnInit {
         'SC': 'Are you sure that you want to convert this quotation to SO?',
     };
 
+
     public statusConfig = {
-        'NW': { color: 'blue', name: 'New', img: './assets/images/icon/new.png' },
-        'SM': { color: 'texas-rose', name: 'Submited' },
-        'RM': { color: 'magenta', name: 'Rejected' },
-        'AM': { color: 'strong-green', name: 'Approved', img: './assets/images/icon/approved.png' },
-        // 'RB': { color: 'magenta', name: 'Rejected By Buyer' },
-        // 'AB': { color: 'strong-green', name: 'Approved By Buyer', img: './assets/images/icon/approved.png' },
-        'CC': { color: 'red', name: 'Canceled', img: './assets/images/icon/cancel.png' },
-        'SC': { color: 'lemon', name: 'Completed', img: './assets/images/icon/full_delivered.png' },
+        'New': { color: 'blue', name: 'New', id: 1, img: './assets/images/icon/new.png' },
+        'Submitted': { color: 'texas-rose', name: 'Submited', id: 2 },
+        'Rejected': { color: 'magenta', name: 'Rejected', id: 3 },
+        'Approved': { color: 'strong-green', name: 'Approved', id: 4, img: './assets/images/icon/approved.png' },
+        'Partially Paid': { color: 'darkblue', name: 'Partially Paid', id: 5, img: './assets/images/icon/partial_delivered.png'},
+        'Fully Paid': { color: 'lemon', name: 'Fully Paid', id: 6, img: './assets/images/icon/full_delivered.png' },
         // 'RO': { color: 'darkblue', name: 'Reopen' },
-        // 'IU': { color: 'darkblue', name: 'In use' },
-        'EX': { color: 'bright-grey', name: 'Expired' },
+        'Canceled': { color: 'red', name: 'Canceled', id: 7, img: './assets/images/icon/cancel.png' },
+        'Overdue': { color: 'bright-grey', name: 'Overdue', id: 8 },
     };
 
     constructor(public router: Router,
         public fb: FormBuilder,
         public toastr: ToastrService,
         public tableService: TableService,
-        private orderService: OrderService,
+        private financialService: FinancialService,
         private modalService: NgbModal,
         private _hotkeysService: HotkeysService,
-        public saleQuoteKeyService: SaleQuoteKeyService,
+        public invoiceKeyService: InvoiceKeyService,
         private renderer: Renderer) {
 
         this.searchForm = fb.group({
-            'quote_no': [null],
-            'buyer_name': [null],
-            'sts': [null],
-            'date_type': [null],
-            'date_from': [null],
-            'date_to': [null]
+            'inv_num': [null],
+            'cus_name': [null],
+            'order_num': [null],
+            'sku': [null],
+            'status': [null],
+            'inv_type': [null],
+            'inv_dt_from': [null],
+            'inv_dt_to': [null],
+            'inv_due_dt_from': [null],
+            'inv_due_dt_to': [null],
         });
 
         //  Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
         //  Init Key
-        this.saleQuoteKeyService.watchContext.next({ context: this, service: this._hotkeysService });
+        this.invoiceKeyService.watchContext.next({ context: this, service: this._hotkeysService });
 
     }
 
     ngOnInit() {
         //  Init Fn
         this.listMaster['listFilter'] = [{ value: false, name: 'Date Filter' }];
-        this.listMaster['dateType'] = [{ id: 'quote_date', name: 'Quote Date' }, { id: 'expiry_dt', name: 'Expiry Date' }, { id: 'delivery_dt', name: 'Delivery Date' }];
+        this.listMaster['dateType'] = [{ id: 0, name: 'Issue Date' }, { id: 1, name: 'Due Date' }];
+        this.listMaster['status'] = [
+            { id: 1, name: 'New' },
+            { id: 2, name: 'Submitted' },
+            { id: 3, name: 'Rejected' },
+            { id: 4, name: 'Approved' },
+            { id: 5, name: 'Partially Paid' },
+            { id: 6, name: 'Fully Paid' },
+            { id: 7, name: 'Canceled' },
+            { id: 8, name: 'Overdue' }
+        ];
+        this.listMaster['inv_type'] = [
+            { id: 1, name: 'Sales Order' }
+        ];
+        // this.getListInvoiceItemsRef();
+
         this.getList();
-        this.getListStatus();
+        this.getCountStatus();
         this.user = JSON.parse(localStorage.getItem('currentUser'));
     }
     /**
@@ -101,23 +120,9 @@ export class InvoiceComponent implements OnInit {
     /**
      * Internal Function
      */
-    getListStatus() {
-        this.orderService.getListSaleQuotationStatus().subscribe(res => {
-            try {
-                this.listMaster['listStatus'] = res.data;
-            } catch (e) {
-                console.log(e);
-            }
-        });
-    }
-
-    moreFilter() {
-        this.onoffFilter = !this.onoffFilter;
-    }
-
     filter(status) {
-        const params = { sts: status };
-        this.orderService.getListSalesQuotation(params).subscribe(res => {
+        const params = { status };
+        this.financialService.getListInvoice(params).subscribe(res => {
             try {
                 this.list.items = res.data.rows;
                 this.tableService.matchPagingOption(res.data);
@@ -128,12 +133,11 @@ export class InvoiceComponent implements OnInit {
     }
 
     getCountStatus() {
-        this.orderService.getQuoteCountStatus().subscribe(res => {
+        this.financialService.countInvoiceStatus().subscribe(res => {
             res.data.map(item => {
-                if (this.statusConfig[item.cd]) {
-                    this.statusConfig[item.cd].count = item.count;
-                    this.statusConfig[item.cd].status = item.id;
-                    this.statusConfig[item.cd].name = item.name;
+                if (this.statusConfig[item.name]) {
+                    this.statusConfig[item.name].count = item.count;
+                    this.statusConfig[item.name].status = this.statusConfig[item.name].id;
                 }
             });
             this.listMaster['count-status'] = Object.keys(this.statusConfig).map(key => {
@@ -142,32 +146,9 @@ export class InvoiceComponent implements OnInit {
         });
     }
 
-    getList() {
-        this.getCountStatus();
-        const params = { ...this.tableService.getParams(), ...this.searchForm.value };
-
-        Object.keys(params).forEach((key) => {
-            if (params[key] instanceof Array) {
-                params[key] = params[key].join(',');
-            }
-            // tslint:disable-next-line:no-unused-expression
-            (params[key] === null || params[key] === '') && delete params[key];
-        });
-        Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
-
-        this.orderService.getListSalesQuotation(params).subscribe(res => {
-            try {
-                this.list.items = res.data.rows;
-                this.tableService.matchPagingOption(res.data);
-            } catch (e) {
-                console.log(e);
-            }
-        });
-    }
-
     updateStatus(id, status) {
         const params = { status };
-        this.orderService.updateSaleQuoteStatus(id, params).subscribe(res => {
+        this.financialService.updateInvoiceStatus(id, params).subscribe(res => {
             try {
                 this.toastr.success(res.message);
                 this.getList();
@@ -195,6 +176,149 @@ export class InvoiceComponent implements OnInit {
         modalRef.componentInstance.message = this.messageConfig[status];
         modalRef.componentInstance.yesButtonText = 'Yes';
         modalRef.componentInstance.noButtonText = 'No';
+    }
+
+
+    moreFilter() {
+        this.onoffFilter = !this.onoffFilter;
+    }
+
+    onFilterChanged(value) {
+        if (!value) {
+            this.searchForm.patchValue({
+                'inv_dt_from': null,
+                'inv_dt_to': null,
+                'inv_due_dt_from': null,
+                'inv_due_dt_to': null
+            });
+        }
+    }
+
+    onDateTypeChanged() {
+        this.searchForm.patchValue({
+            'inv_dt_from': null,
+            'inv_dt_to': null,
+            'inv_due_dt_from': null,
+            'inv_due_dt_to': null
+        });
+    }
+
+    getList() {
+        const params = { ...this.tableService.getParams(), ...this.searchForm.value };
+        Object.keys(params).forEach((key) => {
+            if (params[key] instanceof Array) {
+                params[key] = params[key].join(',');
+            }
+            // tslint:disable-next-line:no-unused-expression
+            (params[key] === null || params[key] === '') && delete params[key];
+        });
+
+        params.order = 'id';
+        params.sort = 'desc';
+
+        this.financialService.getListInvoice(params).subscribe(res => {
+            try {
+                this.list.items = res.data.rows;
+                this.appendItemsToInvoice();
+                this.tableService.matchPagingOption(res.data);
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
+
+    createInvoice() {
+        this.router.navigate(['/financial/invoice/create']);
+    }
+
+    viewInvoice(id?) {
+        if (id) {
+            this.router.navigate(['/financial/invoice/view', id]);
+        } else {
+            const selectedInvoiceId = this.list.items[this.selectedIndex].id;
+            if (selectedInvoiceId) {
+                this.router.navigate(['/financial/invoice/view', selectedInvoiceId]);
+            }
+        }
+    }
+
+    editInvoice(id?) {
+        if (id) {
+            this.router.navigate(['/financial/invoice/edit', id]);
+        } else {
+            const selectedInvoiceId = this.list.items[this.selectedIndex].id;
+            const selectedInvoiceStatus = this.list.items[this.selectedIndex].invoice_status_id;
+            if (selectedInvoiceId && selectedInvoiceStatus === 1) {
+                this.router.navigate(['/financial/invoice/edit', selectedInvoiceId]);
+            }
+        }
+    }
+
+    getListInvoiceItemsRef() {
+        this.financialService.getListInvoiceItemsRef().subscribe(res => {
+            try {
+                this.listInvoiceItemsRef = res.data;
+                this.getList();
+            } catch (e) {
+                console.log(e);
+            }
+        }, err => {
+            this.getList();
+        });
+    }
+
+    appendItemsToInvoice() {
+        const listItems = this.list.items;
+        const listItemsRef = this.listInvoiceItemsRef;
+        for (const unit of listItems) {
+            if (unit['id']) {
+                unit['items_details'] = listItemsRef[unit['id']];
+            }
+        }
+    }
+
+    convertStatus(id, key) {
+        const stt = this.listMaster[key].find(item => item.id === id);
+        return stt.name;
+    }
+
+    printPDF(id) {
+        const path = 'ar-invoice/export-invoice/';
+        const url = `${environment.api_url}${path}${id}`;
+        window.open(url, '_blank');
+        window.close();
+    }
+
+    cancelInvoice(item?) {
+        const selectedInvoiceId = item.id;
+        const selectedInvoiceStatus = item.invoice_status_id;
+        if (selectedInvoiceId && selectedInvoiceStatus === 1) {
+            const modalRef = this.modalService.open(ConfirmModalContent);
+            modalRef.componentInstance.message = 'Are you sure you want to cancel this invoice?';
+            modalRef.componentInstance.yesButtonText = 'YES';
+            modalRef.componentInstance.noButtonText = 'NO';
+            modalRef.result.then(result => {
+                if (result) {
+                    const params = {
+                        status_code: 'CC'
+                    };
+                    this.financialService.updateInvoiceStatus(selectedInvoiceId, params).subscribe(res => {
+                        try {
+                            if (res.status) {
+                                this.toastr.success(res.message);
+                                this.getList();
+                            } else {
+                                this.toastr.error(res.message, null, { enableHtml: true });
+                            }
+                        } catch (e) {
+                            console.log(e);
+                        }
+                    }, err => {
+                        this.toastr.error(err.message);
+                    });
+                }
+            }, dismiss => { });
+        }
     }
 
 }
