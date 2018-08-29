@@ -24,7 +24,7 @@
                     </label>
                     <select name="condition" (change)="checkCondition()" formControlName="condition" class="col-2 form-control">
                         <option *ngFor="let item of condition" [value]='item.id'>{{item.name}}</option>
-                        <option value="">Blank</option>
+                        <option value="null">Blank</option>
                     </select>
                 </div>
                 <div class="w-100"></div>

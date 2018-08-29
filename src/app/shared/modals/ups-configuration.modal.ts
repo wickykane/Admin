@@ -64,7 +64,6 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
         this.tempCustomer_classificationList = JSON.parse(JSON.stringify(this.customer_classificationList));
         if (this.pickupModalList) {
             this.generalForm.patchValue(this.pickupModalList);
-            console.log(this.pickupModalList.ship_options);
             if (this.pickupModalList.ship_options) {
                 this.checkUPSbyForm();
             }
@@ -94,16 +93,12 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
         this.activeModal.close(data);
     }
     applyData() {
-        console.log(this.generalForm.value);
         // this.checkRanges();
-        // console.log(this.isSave);
         // if(this.isSave==true){
         var params = Object.assign({}, this.generalForm.value);
         // params['ranges']=this.ranges;
         params['ship_options'] = this.getShipOptions();
-        console.log(params)
         this.itemService.checkCondition(params).subscribe(res => {
-            console.log(res);
             this.activeModal.close({ id: '5', data: params });
         });
         // }
@@ -145,11 +140,9 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
                 this.generalForm.get(inner).markAsTouched();
                 // this.generalForm.get(inner).updateValueAndValidity();
             }
-            console.log(this.generalForm);
             return false;
         }
         this.itemService.checkConnection(params).subscribe(res => {
-            console.log(res);
             this.toastr.success(res.message);
         }, error => {
             console.log(error);
@@ -193,11 +186,13 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
         return tempShip_options;
     }
     checkUPSbyForm() {
+        console.log(this.upsList);
         var ship_options = JSON.parse(JSON.stringify(this.pickupModalList.ship_options));
+        console.log(ship_options);
         for (var i = 0; i < this.upsList.length; i++) {
             for (var j = 0; j < ship_options.length; j++) {
                 if (this.upsList[i].id ==ship_options[j]) {
-                    this.upsList[i].selected;
+                    this.upsList[i].selected =true;
                 }
             }
 
