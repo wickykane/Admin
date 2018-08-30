@@ -31,7 +31,7 @@ export class ShippingZoneComponent implements OnInit {
 
     public user: any;
     public listMoreFilter: any = [];
-
+    public countryList:any;
     searchForm: FormGroup;
 
     constructor(public router: Router,
@@ -62,7 +62,7 @@ export class ShippingZoneComponent implements OnInit {
         this.listMoreFilter = { value1: false, value2: false };
         this.getList();
         this.getListMaster();
-
+        this.getListCountry();
         this.user = JSON.parse(localStorage.getItem('currentUser'));
     }
 
@@ -79,7 +79,16 @@ export class ShippingZoneComponent implements OnInit {
             this.listMaster['status'] = data.rma_status;
         });
     }
-
+    getListCountry() {
+        this.commonService.getCountryList().subscribe(res => {
+            this.countryList = res.data;
+        });
+    }
+    changeStatus(id) {
+        this.commonService.changeStatus(id).subscribe(res => {
+            this.getList();
+        });
+    }
     getList() {
         const params = { ...this.tableService.getParams(), ...this.searchForm.value };
         Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
@@ -100,5 +109,10 @@ export class ShippingZoneComponent implements OnInit {
         this.router.navigate(['/admin-panel/shipping-zone/create']);
         // },500);
     }
-
+    openPage(id){
+        this.router.navigate(['/admin-panel/shipping-zone/edit/'+id]);
+    }
+    openViewPage(id){
+        this.router.navigate(['/admin-panel/shipping-zone/view/'+id]);
+    }
 }

@@ -13,7 +13,11 @@
                     </div>
                     <div class="block-search">
                         <label for="so_no" class="control-label">Country</label>
-                        <input type="text" name="so_no" formControlName="country_code" class="form-control" id="so_no" placeholder="" capitalize>
+                        <!-- <input type="text" name="country_code" formControlName="country_code" class="form-control" id="so_no" placeholder="" capitalize> -->
+                        <select class="form-control" formControlName="country_code">
+                            <option value="null" selected="true">--Select--</option>
+                            <option [value]="item.country_id" selected="true" *ngFor="let item of countryList">{{item.name}}</option>
+                        </select>
                     </div>
                     <div class="block-search">
                         <label for="part" class="control-label">Status</label>
@@ -21,7 +25,7 @@
                             <select class="form-control" formControlName="status">
                                 <option value="null" selected="true">--Select--</option>
                                 <option value="1">Active</option>
-                                <option value="0" >InActive</option>
+                                <option value="0">InActive</option>
                             </select>
                         </div>
                     </div>
@@ -49,7 +53,6 @@
                             <th>Countries/Regions</th>
                             <th>Shipping Methods</th>
                             <th>Status</th>
-                            <th>Used</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -61,12 +64,18 @@
                             <td>{{item.shipping_zone_quotes}}</td>
                             <td>
                                 <label class="switch">
-                                    <input type="checkbox" disabled="true" [(ngModel)]="item.sts">
+                                    <input type="checkbox" (change)="changeStatus(item.id)" [(ngModel)]="item.sts">
                                     <span class="slider round"></span>
                                 </label>
                             </td>
-                            <td>{{item.used}}</td>
-                            <td></td>
+                            <td>
+                                <a class="btn btn-default icon-blue" title="View" (click)="openViewPage(item.id)">
+                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                </a>
+                                <a class="btn btn-default icon-blue" title="Edit" (click)="openPage(item.id)">
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                </a>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

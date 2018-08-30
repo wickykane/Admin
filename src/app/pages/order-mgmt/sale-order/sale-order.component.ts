@@ -152,18 +152,6 @@ export class SaleOrderComponent implements OnInit {
         });
     }
 
-    cloneOrder = function(order_id) {
-        this.orderService.cloneOrder(order_id).subscribe(res => {
-            this.toastr.success(res.message);
-            setTimeout(() => {
-                this.getList();
-            }, 500);
-        },
-            err => {
-                this.toastr.error(err.message);
-            }
-        );
-    };
 
     confirmModal(id, status) {
         const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
@@ -186,7 +174,7 @@ export class SaleOrderComponent implements OnInit {
                         this.updateStatusOrder(id, 1);
                         break;
                     case 'CLONE':
-                        console.log('code');
+                        this.cloneNewOrder(id);
                         break;
                 }
             }
@@ -194,6 +182,19 @@ export class SaleOrderComponent implements OnInit {
         modalRef.componentInstance.message = this.messageConfig[status];
         modalRef.componentInstance.yesButtonText = 'Yes';
         modalRef.componentInstance.noButtonText = 'No';
+    }
+
+    cloneNewOrder(id) {
+      this.orderService.cloneOrder(id).subscribe(res => {
+          this.toastr.success(res.message);
+          setTimeout(() => {
+              this.router.navigate(['/order-management/sale-order/edit', res.data.id]);
+          }, 1000);
+      },
+          err => {
+              this.toastr.error(err.message);
+          }
+      );
     }
 
     putApproveOrder(order_id) {
