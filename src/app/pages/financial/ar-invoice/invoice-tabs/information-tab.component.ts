@@ -6,7 +6,9 @@ import { TableService } from './../../../../services/table.service';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+import { environment } from '../../../../../environments/environment';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
+import { MailModalComponent } from '../modals/mail.modal';
 
 @Component({
     selector: 'app-invoice-info-tab',
@@ -26,20 +28,15 @@ export class InvoiceInformationTabComponent implements OnInit {
             this._invoiceId = id;
         }
     }
-    public totalQTY;
-    public totalInvoiceQTY;
     data = {};
 
     public messageConfig = {
-        'SM': 'Are you sure that you want to Submit this quotation to approver?',
-        'CC': 'Are you sure that you want to cancel this quotation?',
-        'CLONE': 'Are you sure that you want to copy this quote?',
-        'AM': 'Are you sure that you want to approve this quotation?',
-        'RM': 'Are you sure that you want to reject this quotation?',
-        'SC': 'Are you sure that you want to convert this quotation to SO?',
+        2: 'Are you sure that you want to submit the invoice to approver?',
+        7: 'Are you sure that you want to cancel current invoice?',
+        4: 'Are you sure that you want to approve the current invoice?',
+        3: 'Are you sure that you want to reject the current invoice?',
     };
-    public _orderId;
-    public _orderDetail;
+
     public invoice_info: any = {};
 
     public detail: any = {
@@ -68,6 +65,18 @@ export class InvoiceInformationTabComponent implements OnInit {
     /**
      * Internal Function
      */
+    printPDF(id) {
+        const path = 'ar-invoice/print-pdf/';
+        const url = `${environment.api_url}${path}${id}`;
+        const new_window = window.open(url, '_blank');
+    }
+
+    sendMail(id) {
+        const modalRef = this.modalService.open(MailModalComponent, { size: 'lg', windowClass: 'modal-md' });
+        modalRef.result.then(res => {
+        }, dismiss => { });
+        modalRef.componentInstance.invoiceId = id;
+    }
 
     getList() {
         this.financialService.getDetailInvoice(this._invoiceId).subscribe(res => {
@@ -92,7 +101,7 @@ export class InvoiceInformationTabComponent implements OnInit {
         unique.forEach((tax, index) => {
             let taxAmount = 0;
             items.filter(item => item.tax_percent === tax).map(i => {
-                taxAmount += (+i.tax_percent * +i.qty * (+i.price || 0) / 100);
+                taxAmount += (+i.tax_percent * +i.qty_inv * ((+i.price || 0) * (100 - (+i.discount_percent || 0)) / 100) / 100);                
             });
             this.invoice_info['total_tax'] = this.invoice_info['total_tax'] + taxAmount.toFixed(2);
             this.invoice_info['taxs'].push({
@@ -105,12 +114,12 @@ export class InvoiceInformationTabComponent implements OnInit {
         const issue_dt = this.detail['inv_dt'];
         const payment_term_id = this.detail['payment_term_id'];
         const total_due = this.invoice_info['total'];
-        if (issue_dt && payment_term_id && total_due) {
+        if (issue_dt && payment_term_id) {
             this.financialService.getEarlyPaymentValue(issue_dt, payment_term_id, total_due).subscribe(res => {
                 if (res.data) {
                     this.data['is_fixed_early'] = res.data.is_fixed;
-                    this.invoice_info.incentive_percent = res.data.percent;
-                    this.invoice_info.incentive = res.data.value;
+                    this.invoice_info.incentive_percent = (!this.data['is_fixed_early']) ? this.detail['early_percent'] : res.data.percent;
+                    this.invoice_info.incentive = (this.data['is_fixed_early']) ? this.detail['policy_amt'] : res.data.value;
                     this.invoice_info.expires_dt = res.data.expires_dt;
                     this.invoice_info.grand_total = this.invoice_info.total - this.invoice_info.incentive;
                 }
@@ -151,10 +160,6 @@ export class InvoiceInformationTabComponent implements OnInit {
         const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
         modalRef.result.then(res => {
             if (res) {
-                if (status === 'CLONE') {
-                    this.cloneQuote(id);
-                    return;
-                }
                 this.updateStatus(id, status);
             }
         }, dismiss => { });
@@ -162,10 +167,5 @@ export class InvoiceInformationTabComponent implements OnInit {
         modalRef.componentInstance.yesButtonText = 'Yes';
         modalRef.componentInstance.noButtonText = 'No';
     }
-
-    cloneQuote(id) {
-        this.router.navigate(['/order-management/sale-quotation/create'], { queryParams: { is_copy: 1, quote_id: id } });
-    }
-
 
 }

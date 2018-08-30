@@ -2,7 +2,7 @@
     <app-page-header [heading]="'DETAIL INVOICE'" [icon]="'fa-th-list'"></app-page-header>
     <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
     <section class="main-container block-order-detail">
-        <ngb-tabset>
+        <ngb-tabset class="tabs-order full-width">
             <ngb-tab title="Information">
                 <ng-template ngbTabContent>
                     <app-invoice-info-tab [invoiceId]="invoiceId"></app-invoice-info-tab>
