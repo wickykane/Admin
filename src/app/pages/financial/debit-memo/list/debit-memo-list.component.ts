@@ -148,57 +148,62 @@ export class DebitMemoListComponent implements OnInit {
         this.router.navigate(['/financial/debit-memo/create']);
     }
 
-    onSubmitDebitMemo() {
+    onSubmitDebitMemo(debitId) {
         const modalRef = this.modalService.open(ConfirmModalContent);
             modalRef.componentInstance.message = 'Are you sure that you want to submit the debit memo to approver?';
             modalRef.componentInstance.yesButtonText = 'YES';
             modalRef.componentInstance.noButtonText = 'NO';
             modalRef.result.then(yes => {
                 if (yes) {
+                    this.updateDebitStatus(debitId, 2);
                 }
             }, no => { });
     }
 
-    onApproveDebitMemo() {
+    onApproveDebitMemo(debitId) {
         const modalRef = this.modalService.open(ConfirmModalContent);
             modalRef.componentInstance.message = 'Are you sure that you want to approve the debit memo?';
             modalRef.componentInstance.yesButtonText = 'YES';
             modalRef.componentInstance.noButtonText = 'NO';
             modalRef.result.then(yes => {
                 if (yes) {
+                    this.updateDebitStatus(debitId, 3);
                 }
             }, no => { });
     }
 
-    onCancelDebitMemo() {
+    onCancelDebitMemo(debitId) {
         const modalRef = this.modalService.open(ConfirmModalContent);
             modalRef.componentInstance.message = 'Are you sure that you want to cancel the debit memo?';
             modalRef.componentInstance.yesButtonText = 'YES';
             modalRef.componentInstance.noButtonText = 'NO';
             modalRef.result.then(yes => {
                 if (yes) {
+                    this.updateDebitStatus(debitId, 5);
                 }
             }, no => { });
     }
 
-    onRejectDebitMemo() {
+    onRejectDebitMemo(debitId) {
         const modalRef = this.modalService.open(ConfirmModalContent);
             modalRef.componentInstance.message = 'Are you sure that you want to reject the debit memo?';
             modalRef.componentInstance.yesButtonText = 'YES';
             modalRef.componentInstance.noButtonText = 'NO';
             modalRef.result.then(yes => {
                 if (yes) {
+                    this.updateDebitStatus(debitId, 4);
                 }
             }, no => { });
     }
 
-    onReopenDebitMemo() {
+    onReopenDebitMemo(debitId) {
         const modalRef = this.modalService.open(ConfirmModalContent);
             modalRef.componentInstance.message = 'Are you sure that you want to re-open the debit memo?';
             modalRef.componentInstance.yesButtonText = 'YES';
             modalRef.componentInstance.noButtonText = 'NO';
             modalRef.result.then(yes => {
                 if (yes) {
+                    this.updateDebitStatus(debitId, 1);
                 }
             }, no => { });
     }
@@ -221,5 +226,19 @@ export class DebitMemoListComponent implements OnInit {
         });
         modalRef.result.then(res => {
         }, dismiss => {});
+    }
+
+    updateDebitStatus(debitId, newStatus) {
+        this.debitMemoService.updateDebitMemoStatus(debitId, newStatus).subscribe(
+            res => {
+                try {
+                    this.toastr.success(res.message);
+                } catch (err) {
+                    console.log(err);
+                }
+            }, err => {
+                console.log(err);
+            }
+        );
     }
 }

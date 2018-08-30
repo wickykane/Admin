@@ -100,4 +100,9 @@ export class DebitMemoService {
         const url = 'debit/' + debitId;
         return this.API.get(url);
     }
+
+    updateDebitMemoStatus(debitId, status) {
+        const url = 'debit/' + debitId + '/status/' + status;
+        return this.API.put(url);
+    }
 }

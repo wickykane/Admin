@@ -263,8 +263,28 @@ export class DebitMemoEditComponent implements OnInit {
         this.debitService.getListLineItems(orderId).subscribe(
             res => {
                 try {
-                    this.listLineItems =  [ ...res.data.items, ...res.data.misc];
-                    this.listLineItems.forEach( item => this.onCalculateAmount(item));
+                    if (!this.listLineItems.length) {
+                        this.listLineItems =  [ ...res.data.items, ...res.data.misc];
+                        this.listLineItems.forEach( item => this.onCalculateAmount(item));
+                    } else {
+                        res.data.items.forEach( item => {
+                            if ( this.listLineItems.findIndex(lineItem => lineItem.item_id === item.item_id) >= 0 ) {
+                                item.deleted = false;
+                            } else {
+                                item.deleted = true;
+                                this.listDeletedLineItem.push(item);
+                            }
+                        });
+
+                        res.data.misc.forEach( item => {
+                            if ( this.listLineItems.findIndex(lineItem => lineItem.misc_id === item.misc_id) >= 0 ) {
+                                item.deleted = false;
+                            } else {
+                                item.deleted = true;
+                                this.listDeletedLineItem.push(item);
+                            }
+                        });
+                    }
                     this.getUniqueTaxItemLine();
                 } catch (err) {
                     console.log(err);
@@ -293,6 +313,7 @@ export class DebitMemoEditComponent implements OnInit {
                     if (this.debitMemoForm.value.order_id !== null && this.debitMemoForm.value.order_id !== undefined) {
                         this.getOrderInformation(this.debitMemoForm.value.order_id);
                         this.getListLineItems(this.debitMemoForm.value.order_id);
+                        this.listLineItems = this.debitDetail['line_items'];
                     }
                 } catch (err) {
                     console.log(err);
