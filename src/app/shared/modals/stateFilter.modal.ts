@@ -69,7 +69,7 @@ export class StateFilterModalComponent implements OnInit {
     }
 
     filterState(key) {
-        this._listSelectCountry.state = this.filterbyfieldName(this.templistSelectCountry, 'name', key);
+        this._listSelectCountry.state = this.filterbyfieldName(this.templistSelectCountry['state'], 'name', key);
       }
     filterbyfieldName(arr:any[], fieldname:string , value:any):any[]{
         var isSearch = (data:any): boolean => {
