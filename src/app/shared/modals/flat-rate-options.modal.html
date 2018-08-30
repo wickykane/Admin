@@ -12,7 +12,7 @@
                 <div class="form-group row">
                     <div class="col-md-6">
                         <label class='col-12'> Display name
-                            <span class="text-danger">(*)</span>
+                            <span class="text-danger" *ngIf="!isView">(*)</span>
                         </label>
                         <div class="col-sm-12">
                             <input type="text" formControlName="name" id="name" class="form-control">
@@ -27,7 +27,7 @@
                     <div class="col-md-6">
                         <label class='col-6'>
                             Type
-                            <span class="text-danger">(*)</span>
+                            <span class="text-danger" *ngIf="!isView">(*)</span>
                         </label>
                         <div class="col-sm-12">
                             <select name="type" formControlName="type" class="form-control">
@@ -37,7 +37,7 @@
                     </div>
                     <div class="col-md-6">
                         <label class='col-12'> Shipping Fee
-                            <span class="text-danger">(*)</span>
+                            <span class="text-danger" *ngIf="!isView">(*)</span>
                         </label>
                         <div class="col-sm-12 row">
                             <input style="text-align:center" *ngIf="generalForm.value.type==1||generalForm.value.type==2" type="text" value="$" disabled class="form-control col-sm-2">
@@ -91,6 +91,6 @@
 
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-outline-primary" [disabled]="generalForm.invalid" (click)="applyData()">OK</button>
+    <button *ngIf="!isView" type="button" class="btn btn-outline-primary" [disabled]="generalForm.invalid" (click)="applyData()">OK</button>
     <button type="button" class="btn btn-outline-dark" (click)="closeX()">Close</button>
 </div>
