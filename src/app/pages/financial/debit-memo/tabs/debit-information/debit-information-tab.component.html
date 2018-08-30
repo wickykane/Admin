@@ -1,14 +1,14 @@
 <div class='address-tab'>
     <div class="bd-example text-right">
-        <button class="btn btn-outline-secondary"><i class="fa fa-share-square"></i> Back</button>
-        <button class="btn btn-outline-primary"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit</button>
-        <button class="btn btn-outline-warning"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i> Submit</button>
-        <button class="btn btn-outline-danger"><i class="fa fa-times-circle" aria-hidden="true"></i> Cancel</button>
-        <button class="btn btn-outline-success"><i class="fa fa-check-square"></i> Approve</button>
-        <button class="btn btn-outline-danger"><i class="fa fa-ban" aria-hidden="true"></i> Reject</button>
-        <button class="btn btn-outline-info"><i class="fa fa-clone"></i> Pay</button>
-        <button class="btn btn-outline-dark"><i class="fa fa-exchange" aria-hidden="true"></i> Re-open</button>
-        <button class="btn btn-outline-basic"><i class="fa fa-print" aria-hidden="true"></i> Print</button>
+        <button class="btn btn-outline-secondary" (click)="onClickBack()"><i class="fa fa-share-square"></i> Back</button>
+        <button class="btn btn-outline-primary" (click)="onClickEdit()"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit</button>
+        <button class="btn btn-outline-warning" (click)="onUpdateDebit()"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i> Submit</button>
+        <button class="btn btn-outline-danger" (click)="onUpdateDebit()"><i class="fa fa-times-circle" aria-hidden="true"></i> Cancel</button>
+        <button class="btn btn-outline-success" (click)="onUpdateDebit()"><i class="fa fa-check-square"></i> Approve</button>
+        <button class="btn btn-outline-danger" (click)="onUpdateDebit()"><i class="fa fa-ban" aria-hidden="true"></i> Reject</button>
+        <!-- <button class="btn btn-outline-info" (click)="onUpdateDebit()"><i class="fa fa-clone"></i> Pay</button> -->
+        <button class="btn btn-outline-dark" (click)="onUpdateDebit()"><i class="fa fa-exchange" aria-hidden="true"></i> Re-open</button>
+        <!-- <button class="btn btn-outline-basic" (click)="()"><i class="fa fa-print" aria-hidden="true"></i> Print</button> -->
     </div>
     <section class="rma-page block main-container block-order">
         <div class="row">
@@ -24,45 +24,45 @@
                                     <div class="col-md-6 padding-lr-5 ">
                                         <div class="form-group row">
                                             <label class='col-6 control-label'>Debit Memo No</label>
-                                            <div class='col-6'></div>
+                                            <div class='col-6'>{{debitData['no']}}</div>
                                         </div>
                                         <div class="form-group row">
                                             <label class='col-6 control-label'>Document Type</label>
-                                            <div class='col-6'></div>
+                                            <div class='col-6'>{{debitData['doc_type_name']}}</div>
                                         </div>
                                         <div class="form-group row">
                                             <label class='col-6 control-label'>Document No</label>
-                                            <div class='col-6'></div>
+                                            <div class='col-6'>{{debitData['order_code']}}</div>
                                         </div>
                                         <div class="form-group row">
                                             <label class='col-6 control-label'>Issue Date</label>
-                                            <div class='col-6'></div>
+                                            <div class='col-6'>{{debitData['issue_date']}}</div>
                                         </div>
                                         <div class="form-group row">
                                             <label class='col-6 control-label'>Status</label>
-                                            <div class='col-6'></div>
+                                            <div class='col-6'>{{debitData['sts_name']}}</div>
                                         </div>
                                     </div>
                                     <div class="col-md-6 bolder padding-lr-5">
                                         <div class="form-group row">
                                             <label class='col-6 control-label'>Payment Method</label>
-                                            <div class='col-6'></div>
+                                            <div class='col-6'>{{debitData['payment_method_name']}}</div>
                                         </div>
                                         <div class="form-group row">
                                             <label class='col-6 control-label'>Payment Terms</label>
-                                            <div class='col-6'></div>
+                                            <div class='col-6'>{{debitData['payment_term_des']}}</div>
                                         </div>
                                         <div class="form-group row">
                                             <label class='col-6 control-label'>Due Date</label>
-                                            <div class='col-6'></div>
+                                            <div class='col-6'>{{debitData['due_date']}}</div>
                                         </div>
                                         <div class="form-group row">
                                             <label class='col-6 control-label'>Saleperson</label>
-                                            <div class='col-6'></div>
+                                            <div class='col-6'>{{debitData['sale_person_name']}}</div>
                                         </div>
                                         <div class="form-group row">
                                             <label class='col-6 control-label'>Approver</label>
-                                            <div class='col-6'></div>
+                                            <div class='col-6'>{{debitData['approver_name']}}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -81,21 +81,21 @@
                             <div class="col-12">
                                 <div class="form-group row">
                                     <label class="control-label col-6" translate>Customer Name</label>
-                                    <div class="col-6"></div>
+                                    <div class="col-6">{{debitData['company_name']}}</div>
                                 </div>
                                 <div class="form-group row">
                                     <label class=" control-label col-6" translate>Contact Name</label>
-                                    <div class="col-6"></div>
+                                    <div class="col-6">{{debitData['contact_name']}}</div>
                                 </div>
 
                                 <div class="form-group row">
                                     <label class="control-label col-6" translate>Phone</label>
-                                    <div class="col-6"></div>
+                                    <div class="col-6">{{debitData['contact_phone']}}</div>
                                 </div>
 
                                 <div class="form-group row">
                                     <label class="control-label col-6" translate>Email</label>
-                                    <div class="col-6"></div>
+                                    <div class="col-6">{{debitData['contact_email']}}</div>
                                 </div>
                             </div>
                         </div>
@@ -112,25 +112,25 @@
                             <div class="col-12">
                                 <div class="form-group row">
                                     <label class="control-label col-6" translate>Label</label>
-                                    <div class="col-6"></div>
+                                    <div class="col-6">{{debitData['bill_addr']['label']}}</div>
                                 </div>
                                 <div class="form-group row">
                                     <label class=" control-label col-6" translate>Address</label>
-                                    <div class="col-6"></div>
+                                    <div class="col-6">{{debitData['bill_addr']['address_line']}}</div>
                                 </div>
 
                                 <div class="form-group row">
                                     <label class="control-label col-6" translate>City/State</label>
-                                    <div class="col-6"></div>
+                                    <div class="col-6">{{debitData['bill_addr']['city_name']}}/{{debitData['bill_addr']['state_name']}}</div>
                                 </div>
 
                                 <div class="form-group row">
                                     <label class="control-label col-6" translate>Zip</label>
-                                    <div class="col-6"></div>
+                                    <div class="col-6">{{debitData['bill_addr']['zip_code']}}</div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="control-label col-6" translate>Country</label>
-                                    <div class="col-6"></div>
+                                    <div class="col-6">{{debitData['bill_addr']['country_name']}}</div>
                                 </div>
                             </div>
                         </div>
@@ -147,25 +147,25 @@
                             <div class="col-12">
                                 <div class="form-group row">
                                     <label class="control-label col-6" translate>Label</label>
-                                    <div class="col-6"></div>
+                                    <div class="col-6">{{debitData['ship_addr']['label']}}</div>
                                 </div>
                                 <div class="form-group row">
                                     <label class=" control-label col-6" translate>Address</label>
-                                    <div class="col-6"></div>
+                                    <div class="col-6">{{debitData['ship_addr']['address_line']}}</div>
                                 </div>
 
                                 <div class="form-group row">
                                     <label class="control-label col-6" translate>City/State</label>
-                                    <div class="col-6"></div>
+                                    <div class="col-6">{{debitData['ship_addr']['city_name']}}/{{debitData['ship_addr']['state_name']}}</div>
                                 </div>
 
                                 <div class="form-group row">
                                     <label class="control-label col-6" translate>Zip</label>
-                                    <div class="col-6"></div>
+                                    <div class="col-6">{{debitData['ship_addr']['zip_code']}}</div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="control-label col-6" translate>Country</label>
-                                    <div class="col-6"></div>
+                                    <div class="col-6">{{debitData['ship_addr']['country_name']}}</div>
                                 </div>
                             </div>
                         </div>
@@ -182,23 +182,23 @@
                             <div class="col-12">
                                 <div class="form-group row">
                                     <label class="control-label col-6" translate>Warehouse</label>
-                                    <div class="col-6"></div>
+                                    <div class="col-6">{{debitData['carrier']['warehouse']}}</div>
                                 </div>
                                 <div class="form-group row">
                                     <label class=" control-label col-6" translate>Ship Via</label>
-                                    <div class="col-6"></div>
+                                    <div class="col-6">{{debitData['carrier']['ship_via']}}</div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="control-label col-6" translate>Option</label>
-                                    <div class="col-6"></div>
+                                    <div class="col-6">{{debitData['carrier']['ship_method_option']}}</div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="control-label col-6" translate>Ship rate</label>
-                                    <div class="col-6"></div>
+                                    <div class="col-6">{{debitData['carrier']['ship_method_rate']}}</div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="control-label col-6" translate>Exp. Delivery Date</label>
-                                    <div class="col-6"></div>
+                                    <label class="control-label col-6" translate>POD Sign Off Date</label>
+                                    <div class="col-6">{{debitData['carrier']['date']}}</div>
                                 </div>
                             </div>
                         </div>
@@ -233,35 +233,22 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td class="text-center"></td>
-                                        <td></td>
+                                    <tr *ngIf="debitData['line_items'] && !debitData['line_items'].length">No Data</tr>
+                                    <tr *ngFor="let item of debitData['line_items']">
+                                        <td>{{item.no}}</td>
+                                        <td>{{item.des}}</td>
+                                        <td class="text-center">{{item.item_condition_name}}</td>
+                                        <td>{{item.uom}}</td>
                                         <td class="text-center">
                                             <i class="text-success fa fa-check"></i>
                                         </td>
-                                        <td class="text-right"></td>
-                                        <td class="text-right">
-                                            <div>
-                                                <span>$</span>
-                                                <div style="display:inline-block;width:80%">
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-right">
-                                        </td>
-                                        <td class="text-right">
-                                        </td>
-                                        <td class="text-right">
-                                            <span></span>
-                                        </td>
-                                        <td class="text-center">
-                                        </td>
-                                        <td class="text-center">
-                                            <span>
-                                            </span>
-                                        </td>
+                                        <td class="text-center">{{item.qty}}</td>
+                                        <td class="text-center">${{item.price}}</td>
+                                        <td class="text-center">{{item.discount_percent || 0}}%</td>
+                                        <td class="text-center">{{item.tax_percent || 0}}%</td>
+                                        <td class="text-center">${{item.total_price}}</td>
+                                        <td class="text-center">{{item.income_account_name}}</td>
+                                        <td class="text-center">{{item.price_source}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -277,6 +264,7 @@
                         <strong>Note</strong>
                     </div>
                     <div class="card-body">
+                        {{debitData['note']}}
                     </div>
                 </div>
             </div>
@@ -289,33 +277,33 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-group row">
-                                    <label class='col-8 control-label'>Sub Items</label>
+                                    <label class='col-8 control-label'>Sub Total</label>
                                     <div class='col-4'>
-                                        <span class="text-success"></span>
+                                        <span class="text-success">${{debitData['sub_total_price']}}</span>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label class='col-8 control-label'>+ Tax (8.255)</label>
+                                <div class="form-group row" *ngFor="let tax of listTaxs">
+                                    <label class='col-8 control-label'> + Tax {{tax.tax_percent}}%</label>
                                     <div class='col-4'>
-                                        <span class="text-success"></span>
+                                        <span class="text-primary">$ {{tax.amount}}</span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class='col-8 control-label'>Total Due</label>
                                     <div class='col-4'>
-                                        <span class="text-success"></span>
+                                        <span class="text-success">${{debitData['total_price']}}</span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class='col-8 control-label'>Paid Amount</label>
                                     <div class='col-4'>
-                                        <span class="text-success"></span>
+                                        <span class="text-success">$0</span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class='col-8 control-label'>Balance Amount</label>
                                     <div class='col-4'>
-                                        <span class="text-success"></span>
+                                        <span class="text-danger">${{debitData['total_price']}}</span>
                                     </div>
                                 </div>
                             </div>

@@ -21,7 +21,13 @@ import { DebitMemoService } from '../debit-memo.service';
 export class DebitMemoViewComponent implements OnInit {
 
     public debitId = null;
-    public debitDetail = {};
+    public debitDetail = {
+        bill_addr: {},
+        ship_addr: {},
+        carrier: {},
+        sts_name: '',
+        line_items: []
+    };
 
     constructor(public router: Router,
         private route: ActivatedRoute,

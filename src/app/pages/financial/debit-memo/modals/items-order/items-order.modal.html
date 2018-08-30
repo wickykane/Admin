@@ -7,20 +7,20 @@
     <div class="modal-body">
         <div class="search-block block-content pd-bottom tab-content bg-gray-light">
             <div class="row">
-                <form class="form-horizontal form-search">
+                <form class="form-horizontal form-search" [formGroup]="searchForm" (ngSubmit)="getListItems()">
                     <div class="block-search">
                         <label for="so" class="control-label">Item No</label>
-                        <input type="text" name="so" class="form-control">
+                        <input type="text" name="so" formControlName="no" class="form-control">
                     </div>
                     <div class="block-search">
                         <label for="so" class="control-label">Description</label>
-                        <input type="text" name="so" class="form-control">
+                        <input type="text" name="so" formControlName="des" class="form-control">
                     </div>
                     <div class="block-btn-search">
                         <label class="control-label">&nbsp;</label>
                         <div>
-                            <button type="button" class="btn btn-primary" (click)="tableService.searchAction()">Search</button>
-                            <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchForm)">Reset</button>
+                            <button type="submit" class="btn btn-primary">Search</button>
+                            <button type="button" class="btn btn-default" (click)="searchForm.reset(); getListItems()">Reset</button>
                         </div>
                     </div>
                 </form>
@@ -33,7 +33,7 @@
                         <tr>
                             <th>
                                 <label class="css-input css-checkbox css-checkbox-default">
-                                    <input class="cb-all" type="checkbox">
+                                    <input class="cb-all" type="checkbox" [(ngModel)]="isCheckedAll" (change)="checkAll($event)">
                                     <span></span>
                                 </label>
                             </th>
@@ -45,46 +45,25 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        <tr *ngFor="let item of listItems">
                             <td>
                                 <label class="css-input css-checkbox css-checkbox-default">
-                                    <input class="cb-element" type="checkbox" >
+                                    <input class="cb-element" type="checkbox" [(ngModel)]="item.is_checked" (change)="isAllChecked()">
                                     <span></span>
                                 </label>
                             </td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td>{{item.no}}</td>
+                            <td>{{item.des}}</td>
+                            <td>{{item.item_condition_name}}</td>
+                            <td>{{item.income_account_name}}</td>
+                            <td>{{item.uom}}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <!-- <div class="row normal-pagination">
-                <div class="col-md-6">
-                    <div class="text-left">
-                        <div class="col-md-6" style="padding-left: 0px;">
-                            <span style="float: left; padding-right: 10px;">0 items </span>
-                            <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length" (change)="tableService.changeLength()">
-                                <option *ngFor="let option of tableService.itemPerPageOptions" [ngValue]="option">{{option}}</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="text-right">
-                        <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length" [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page" [maxSize]="tableService.maxSize"
-                            [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
-                    </div>
-                </div>
-            </div> -->
-
         </div>
-
-
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-outline-primary" (click)="activeModal.close()">Add</button>
+        <button type="button" class="btn btn-outline-primary" (click)="onAddItem()">Add</button>
         <button type="button" class="btn btn-outline-dark" (click)="activeModal.close()">Close</button>
     </div>

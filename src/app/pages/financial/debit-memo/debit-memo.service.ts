@@ -71,6 +71,16 @@ export class DebitMemoService {
         return this.API.get(url);
     }
 
+    getListItemsFromOrder(params) {
+        const url = 'debit/orders/1/items';
+        return this.API.get(url, params);
+    }
+
+    getListItemsFromMisc(params) {
+        const url = 'debit/orders/1/items';
+        return this.API.get(url, params);
+    }
+
     saveDebitMemo(params) {
         const url = 'debit';
         return this.API.post(url, params);
