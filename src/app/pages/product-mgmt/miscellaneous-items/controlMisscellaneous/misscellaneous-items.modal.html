@@ -51,9 +51,14 @@
                         </label>
                     </div>
                     <div class="col-md-8">
-                        <select name="type" formControlName="account_id"  class="form-control">
+                        <!-- <select name="type" formControlName="account_id"  class="form-control">
                             <option *ngFor="let item of accountList"[value]='item.id'>{{item.name}}</option>
-                        </select>
+                        </select> -->
+                        <ng-select [items]="accountList" formControlName="account_id" bindLabel="des" bindValue="id">
+                            <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                <span [ngClass]="{'pl-3': item.level == 1, 'pl-5': item.level == 2}">{{ item.name?item.name:item.des }}</span>
+                            </ng-template>
+                        </ng-select>
                     </div>
                 </div>
                 <div class="row mb-2">

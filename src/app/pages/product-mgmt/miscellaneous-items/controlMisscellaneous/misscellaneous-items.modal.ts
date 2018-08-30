@@ -50,7 +50,13 @@ export class MiscellaneousItemsModalComponent implements OnInit, OnDestroy {
     }
     getAccountList() {
         this.productService.getAccountList().subscribe(res => {
-            this.accountList = res['data']['children'];
+            // this.accountList = res['data']['children'];
+            var accountList= res['data']['children'];
+            var tempAccountList =[];
+            accountList.forEach(item => {
+                tempAccountList.push({'name':item.name,'level':1,'disabled':true},...item.children)
+            });
+            this.accountList = tempAccountList;
         });
     }
     ngOnInit() {
@@ -66,10 +72,10 @@ export class MiscellaneousItemsModalComponent implements OnInit, OnDestroy {
             } if(!this.isView) {
                 this.title = "Edit";
             }
-            if(this.miscItems.is_sys==1){
+            if(this.miscItems.is_sys==1 || this.miscItems.used!=0){
                 this.editSystemForm();
             }
-            if(this.miscItems.is_sys==0){
+            if(this.miscItems.is_sys==0 && this.miscItems.used==0){
                 this.editForm();
             }
         }
@@ -110,7 +116,7 @@ export class MiscellaneousItemsModalComponent implements OnInit, OnDestroy {
             'des': [''],
             'account_id': ['1'],
             "uom": "Each",
-            "sts": [''],
+            "sts": [false],
             "no": ['']
         });
     }
