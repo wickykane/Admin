@@ -56,32 +56,32 @@ export class DebitMemoListKeyService implements OnDestroy {
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset Search'));
         this._hotkeysService.add(new Hotkey('f5', (event: KeyboardEvent): any => {
             event.preventDefault();
-            this.context.onSubmitDebitMemo();
+            // this.context.onSubmitDebitMemo();
             return event;
         }, undefined, 'Submit'));
         this._hotkeysService.add(new Hotkey('f6', (event: KeyboardEvent): any => {
             event.preventDefault();
-            this.context.onApproveDebitMemo();
+            // this.context.onApproveDebitMemo();
             return event;
         }, undefined, 'Approve'));
         this._hotkeysService.add(new Hotkey('f7', (event: KeyboardEvent): any => {
             event.preventDefault();
-            this.context.onCancelDebitMemo();
+            // this.context.onCancelDebitMemo();
             return event;
         }, undefined, 'Cancel'));
         this._hotkeysService.add(new Hotkey('f8', (event: KeyboardEvent): any => {
             event.preventDefault();
-            this.context.onRejectDebitMemo();
+            // this.context.onRejectDebitMemo();
             return event;
         }, undefined, 'Reject'));
         this._hotkeysService.add(new Hotkey('f9', (event: KeyboardEvent): any => {
             event.preventDefault();
-            this.context.onReopenDebitMemo();
+            // this.context.onReopenDebitMemo();
             return event;
         }, undefined, 'Re-open'));
         this._hotkeysService.add(new Hotkey('f10', (event: KeyboardEvent): any => {
             event.preventDefault();
-            this.context.onViewDebitMemo();
+            // this.context.onViewDebitMemo();
             return event;
         }, undefined, 'View'));
     }

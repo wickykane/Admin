@@ -285,12 +285,15 @@ export class DebitMemoEditComponent implements OnInit {
                     this.debitMemoForm.patchValue(this.debitDetail);
                     this.getUniqueTaxItemLine();
 
-                    this.getCustomerContacts(this.debitMemoForm.value.company_id);
-                    this.getListOrder(this.debitMemoForm.value.company_id);
-                    this.getListBillOfCustomer(this.debitMemoForm.value.company_id);
-
-                    this.getOrderInformation(this.debitMemoForm.value.order_id);
-                    this.getListLineItems(this.debitMemoForm.value.order_id);
+                    if (this.debitMemoForm.value.company_id !== null && this.debitMemoForm.value.company_id !== undefined) {
+                        this.getCustomerContacts(this.debitMemoForm.value.company_id);
+                        this.getListOrder(this.debitMemoForm.value.company_id);
+                        this.getListBillOfCustomer(this.debitMemoForm.value.company_id);
+                    }
+                    if (this.debitMemoForm.value.order_id !== null && this.debitMemoForm.value.order_id !== undefined) {
+                        this.getOrderInformation(this.debitMemoForm.value.order_id);
+                        this.getListLineItems(this.debitMemoForm.value.order_id);
+                    }
                 } catch (err) {
                     console.log(err);
                 }

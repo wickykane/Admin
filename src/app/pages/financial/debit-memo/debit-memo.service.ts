@@ -11,6 +11,11 @@ export class DebitMemoService {
         return this.API.get(url);
     }
 
+    getListDebitMemo(params) {
+        const url = 'debit';
+        return this.API.get(url, params);
+    }
+
     getDebitStatusList() {
         const url = 'debit/status';
         return this.API.get(url);

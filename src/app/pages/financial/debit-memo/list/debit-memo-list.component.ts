@@ -45,9 +45,9 @@ export class DebitMemoListComponent implements OnInit {
         private renderer: Renderer) {
 
         this.searchForm = fb.group({
-            dr_no: [null],
-            customer: [null],
-            status: [null],
+            no: [null],
+            company_name: [null],
+            sts: [null],
             date_type: [null],
             date_from: [null],
             date_to: [null]
@@ -74,17 +74,7 @@ export class DebitMemoListComponent implements OnInit {
         this.debitMemoService.getDebitStatusList().subscribe(
             res => {
                 try {
-                    console.log(res);
-                    this.listMaster['status'] = [
-                        { id: 1, name: 'New' },
-                        { id: 2, name: 'Submitted' },
-                        { id: 3, name: 'Rejected' },
-                        { id: 4, name: 'Approved' },
-                        { id: 5, name: 'Partially Paid' },
-                        { id: 6, name: 'Fully Paid' },
-                        { id: 7, name: 'Canceled' },
-                        { id: 8, name: 'Overdue' }
-                    ];
+                    this.listMaster['status'] = res.data;
                 } catch (err) {
                     console.log(err);
                 }
@@ -98,16 +88,15 @@ export class DebitMemoListComponent implements OnInit {
         this.debitMemoService.getDebitReportTotal().subscribe(
             res => {
                 try {
-                    console.log(res);
                     this.totalSummary = {
-                        numberOfNew: '7',
-                        numberOfSubmit: '15',
-                        numberOfApproved: '4',
-                        numberOfRejected: '8',
-                        numberOfPartiallyPaid: '0',
-                        numberOfFullyPaid: '0',
-                        numberOfOverdue: '19',
-                        numberOfCanceled: '15',
+                        numberOfNew: res.data[0] && (res.data[0]['total'] || 0),
+                        numberOfSubmit: res.data[1] && (res.data[1]['total'] || 0),
+                        numberOfApproved: res.data[2] && (res.data[2]['total'] || 0),
+                        numberOfRejected: res.data[3] && (res.data[3]['total'] || 0),
+                        numberOfPartiallyPaid: res.data[4] && (res.data[4]['total'] || 0),
+                        numberOfFullyPaid: res.data[5] && (res.data[5]['total'] || 0),
+                        numberOfOverdue: res.data[6] && (res.data[6]['total'] || 0),
+                        numberOfCanceled: res.data[7] && (res.data[7]['total'] || 0)
                     };
                 } catch (err) {
                     console.log(err);
@@ -120,7 +109,35 @@ export class DebitMemoListComponent implements OnInit {
 
     getListDebitMemo() {
         const params = { ...this.tableService.getParams(), ...this.searchForm.value };
+
+        switch (params['date_type']) {
+            case 0: {
+                params['issue_date_from'] = params['date_from'];
+                params['issue_date_to'] = params['date_to'];
+                break;
+            }
+            case 1: {
+                params['due_date_from'] = params['date_from'];
+                params['due_date_to'] = params['date_to'];
+                break;
+            }
+        }
+        delete params['date_type'];
+        delete params['date_from'];
+        delete params['date_to'];
         Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
+        this.debitMemoService.getListDebitMemo(params).subscribe(
+            res => {
+                try {
+                    this.listDebitMemo = res.data.rows;
+                    this.tableService.matchPagingOption(res.data);
+                } catch (err) {
+                    console.log(err);
+                }
+            }, err => {
+                console.log(err);
+            }
+        );
     }
 
     onStartSearch() {
@@ -186,11 +203,13 @@ export class DebitMemoListComponent implements OnInit {
             }, no => { });
     }
 
-    onViewDebitMemo() {
-        this.router.navigate(['/financial/debit-memo/view']);
+    onViewDebitMemo(debitId) {
+        this.router.navigate(['/financial/debit-memo/view', debitId]);
     }
 
-    onEditDebitMemo() {}
+    onEditDebitMemo(debitId) {
+        this.router.navigate(['/financial/debit-memo/edit', debitId]);
+    }
 
     onPrintDebitMemo() {}
 

@@ -42,20 +42,18 @@
     <div class="block-content pd-bottom bg-gray-light">
         <div class="row">
             <div class="col-6">
-                <form class="row form-horizontal form-search filter-order-group"
-                    role="form" [formGroup]="searchForm" (ngSubmit)="tableService.searchAction()">
+                <form class="row form-horizontal form-search filter-order-group" role="form" [formGroup]="searchForm">
                     <div class="col-md-4">
                         <label class="control-label">DR No</label>
-                        <input #drNo autofocus="true" type="text" class="form-control" formControlName="dr_no">
+                        <input #drNo autofocus="true" type="text" class="form-control" formControlName="no">
                     </div>
                     <div class="col-md-4">
                         <label class="control-label" translate>Customer Name</label>
-                        <input type="text" class="form-control" formControlName="customer">
+                        <input type="text" class="form-control" formControlName="company_name">
                     </div>
                     <div class="col-md-4">
                         <label class="control-label">Status</label>
-                        <ng-select [multiple]="false" [items]="listMaster['status']"
-                            bindLabel="name" bindValue="id" formControlName="status">
+                        <ng-select [multiple]="false" [items]="listMaster['status']" bindLabel="name" bindValue="id" formControlName="sts">
                         </ng-select>
                     </div>
                     <div class="col-md-4">
@@ -67,7 +65,8 @@
                     <div class="col-md-4">
                         <label for="" class="control-label" translate>From</label>
                         <div clickOutside (clickOutside)="d1.close()" class="input-group">
-                            <input class="form-control" placeholder="yyyy-mm-dd" (keydown)="$event.preventDefault()" name="dp" ngbDatepicker #d1="ngbDatepicker"
+                            <input class="form-control" placeholder="yyyy-mm-dd" (keydown)="$event.preventDefault()"
+                                name="dp" ngbDatepicker #d1="ngbDatepicker"
                                 (click)="d1.toggle()" formControlName="date_from">
                             <div class="input-group-append">
                                 <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
@@ -79,7 +78,8 @@
                     <div class="col-md-4">
                         <label for="" class="control-label" translate>To</label>
                         <div clickOutside (clickOutside)="d2.close()" class="input-group">
-                            <input class="form-control" placeholder="yyyy-mm-dd" (keydown)="$event.preventDefault()" name="dp" ngbDatepicker #d2="ngbDatepicker"
+                            <input class="form-control" placeholder="yyyy-mm-dd" (keydown)="$event.preventDefault()"
+                                name="dp" ngbDatepicker #d2="ngbDatepicker"
                                 (click)="d2.toggle()" formControlName="date_to">
                             <div class="input-group-append">
                                 <button class="btn btn-outline-secondary" (click)="d2.toggle()" type="button">
@@ -94,7 +94,7 @@
                 <div class="block-btn-search">
                     <label class="control-label">&nbsp;</label>
                     <div class="group-btn-search">
-                        <button type="submit" class="btn btn-primary">Search</button>
+                        <button type="button" class="btn btn-primary" (click)="tableService.searchAction()">Search</button>
                         <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchForm)">Reset</button>
                     </div>
                 </div>
@@ -113,7 +113,7 @@
                         <th>Customer Name</th>
                         <th>Related Document</th>
                         <th>Due Date</th>
-                        <th>Total Date</th>
+                        <th>Total Price</th>
                         <th>Balance Due</th>
                         <th>Status</th>
                         <th>Aged Overdue</th>
@@ -124,28 +124,28 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td colspan="100%" class="text-center">No data.</td>
+                        <td colspan="100%" class="text-center" *ngIf="!listDebitMemo.length">No data.</td>
                     </tr>
-                    <tr>
+                    <tr *ngFor="let debit of listDebitMemo; let i = index">
                         <td>
                             <label class="css-input css-checkbox css-checkbox-default">
                                 <input class="cb-element" type="checkbox">
                                 <span></span>
                             </label>
                         </td>
-                        <td>DR-0101-0001</td>
-                        <td>01/01/2018</td>
-                        <td>Khiet Pham</td>
-                        <td>INV-0101-0001</td>
-                        <td>01/01/2018</td>
-                        <td>$ 1500.00</td>
-                        <td>$ 150.00</td>
-                        <td>New</td>
-                        <td>0</td>
-                        <td>01/01/2018</td>
-                        <td>Khiet Pham</td>
+                        <td>{{debit.no}}</td>
+                        <td>{{debit.issue_date}}</td>
+                        <td>{{debit.company_name}}</td>
+                        <td>{{debit.related_doc}}</td>
+                        <td>{{debit.due_date}}</td>
+                        <td>{{debit.total_price}}</td>
+                        <td>{{debit.balance_due}}</td>
+                        <td>{{debit.sts_name}}</td>
+                        <td>{{debit.aged}}</td>
+                        <td>{{debit.updated_at}}</td>
+                        <td>{{debit.updated_by}}</td>
                         <td class="text-center">
-                            <a class="btn btn-default " title="Edit" (click)="onEditDebitMemo()">
+                            <a class="btn btn-default " title="Edit" (click)="onEditDebitMemo(debit.id)">
                                 <i class="fa fa-pencil-square-o text-primary" aria-hidden="true"></i>
                             </a>
                             <a class="btn btn-default " title="Submit" (click)="onSubmitDebitMemo()">
@@ -157,7 +157,7 @@
                             <a class="btn btn-default " title="Reject" (click)="onRejectDebitMemo()">
                                 <i class="fa fa-minus-circle text-danger" aria-hidden="true"></i>
                             </a>
-                            <a class="btn btn-default " title="View" (click)="onViewDebitMemo()">
+                            <a class="btn btn-default " title="View" (click)="onViewDebitMemo(debit.id)">
                                 <i class="fa fa-eye text-primary" aria-hidden="true"></i>
                             </a>
                             <a class="btn btn-default" title="Print" (click)="onPrintDebitMemo()">
@@ -177,23 +177,22 @@
                             </a>
                         </td>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                         <td colspan="2">Total</td>
                         <td colspan="4"></td>
                         <td >$ 12,000.00</td>
                         <td colspan="6" class="text-left">$ 12,000.00</td>
-                    </tr>
+                    </tr> -->
                 </tbody>
             </table>
         </div>
 
-        <div class="row normal-pagination">
+        <div class="row normal-pagination" *ngIf="listDebitMemo.length > 0">
             <div class="col-md-6">
                 <div class="text-left">
                     <div class="col-md-6" style="padding-left: 0px;">
-                        <span style="float: left; padding-right: 10px;">0 items</span>
-                        <select style="width: 50px; float: left;" class="form-control"
-                            [(ngModel)]="tableService.pagination.length" (change)="tableService.changeLength()">
+                        <span style="float: left; padding-right: 10px;">{{listDebitMemo.length}}/{{tableService.pagination.total_record}} items</span>
+                        <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length" (change)="tableService.changeLength()">
                             <option *ngFor="let option of tableService.itemPerPageOptions" [ngValue]="option">{{option}}</option>
                         </select>
                     </div>
