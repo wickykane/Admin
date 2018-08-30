@@ -1,0 +1,33 @@
+<div [@routerTransition]>
+    <app-page-header [heading]="'DETAIL INVOICE'" [icon]="'fa-th-list'"></app-page-header>
+    <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
+    <section class="main-container block-order-detail">
+        <ngb-tabset>
+            <ngb-tab title="Information">
+                <ng-template ngbTabContent>
+                    <app-invoice-info-tab [invoiceId]="invoiceId"></app-invoice-info-tab>
+                </ng-template>
+            </ngb-tab>
+            <ngb-tab title="Credit Memo">
+                <ng-template ngbTabContent>
+                    <app-invoice-credit-memo-tab></app-invoice-credit-memo-tab>
+                </ng-template>
+            </ngb-tab>
+            <ngb-tab title="Debit Memo">
+                <ng-template ngbTabContent>
+                    <app-invoice-debit-memo-tab></app-invoice-debit-memo-tab>
+                </ng-template>
+            </ngb-tab>
+            <ngb-tab title="Payment">
+                <ng-template ngbTabContent>
+                    <app-invoice-payment-tab></app-invoice-payment-tab>
+                </ng-template>
+            </ngb-tab>
+            <ngb-tab title="Document">
+                <ng-template ngbTabContent>
+                    <app-invoice-document-tab></app-invoice-document-tab>
+                </ng-template>
+            </ngb-tab>
+        </ngb-tabset>
+    </section>
+</div>
