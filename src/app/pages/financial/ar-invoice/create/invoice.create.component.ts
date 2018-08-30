@@ -439,7 +439,7 @@ export class InvoiceCreateComponent implements OnInit {
         this.ngOnInit();
     }
 
-    createInvoice(type, is_draft?) {
+    createInvoice(type, is_draft?, is_continue?) {
         const items = this.list.items.map(item => {
             item.is_item = (item.misc_id) ? 0 : 1;
             return item;
@@ -450,7 +450,7 @@ export class InvoiceCreateComponent implements OnInit {
             inv_status: type,
             sub_total: this.order_info.sub_total,
             total_due: this.order_info.total,
-            ear_payment_incentive: this.order_info['incentive'],           
+            ear_payment_incentive: this.order_info['incentive'],
             aprvr_id: this.generalForm.value.approver_id,
             sale_person_id: this.generalForm.value.sales_person,
             inv_detail: items,
@@ -463,10 +463,11 @@ export class InvoiceCreateComponent implements OnInit {
                 if (res.status) {
                     this.toastr.success(res.message);
                     this.data['invoice_id'] = res.data;
-                    setTimeout(() => {
-                        this.router.navigate(['/financial/invoice/view/' + this.data['invoice_id']]);
-                    }, 500);
-
+                    if (!is_continue) {
+                        setTimeout(() => {
+                            this.router.navigate(['/financial/invoice/view/' + this.data['invoice_id']]);
+                        }, 500);
+                    }
                 } else {
                     this.toastr.error(res.message);
                 }

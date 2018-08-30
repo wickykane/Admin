@@ -24,6 +24,7 @@ import { PaymentComponent } from './payment/payment.component';
 
 //  Modal
 import { ItemModalModule } from '../../shared/modals/item.module';
+import { MailModalComponent } from './ar-invoice/modals/mail.modal';
 
 @NgModule({
     imports: [
@@ -46,10 +47,12 @@ import { ItemModalModule } from '../../shared/modals/item.module';
         InvoiceDebitMemoTabComponent,
         InvoicePaymentTabComponent,
         InvoiceDocumentTabComponent,
-        PaymentComponent
-
+        PaymentComponent,
+        MailModalComponent
     ],
     providers: [FinancialService, TableService, DatePipe, Helper],
-    entryComponents: []
+    entryComponents: [
+        MailModalComponent,
+    ]
 })
 export class FinancialModule { }
