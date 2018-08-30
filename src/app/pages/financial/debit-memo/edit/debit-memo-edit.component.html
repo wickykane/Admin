@@ -1,0 +1,432 @@
+<div [@routerTransition]>
+    <app-page-header [heading]="'EDIT DEBIT MEMO'"></app-page-header>
+    <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
+    <section class="rma-page block main-container block-order">
+        <div class="row block-info">
+            <div class="col-md-6 p-l-5 p-r-2">
+                <div class="card height-100">
+                    <div class="card-header">
+                        <strong>GENERAL INFORMATION</strong>
+                    </div>
+                    <div class="card-body">
+                        <div class="row information height-100">
+                            <form class="form-search full-width form-inline border-bottom" [formGroup]="debitMemoForm">
+                                <div class="col-md-12 p-l-5 p-r-5">
+                                    <div class="form-group">
+                                        <label for="code" class="control-label" translate><strong>Customer Name</strong>
+                                        </label>
+                                        <span class="text-danger">(*)</span>
+                                        <div>
+                                            <ng-select style="width: 110px; margin-left: 2px;" [items]="listMaster['customers']"
+                                                [ngClass]="{'error-field': debitMemoForm.controls.company_id.invalid && isClickedSave && !isSaveDraft}"
+                                                bindLabel="name" bindValue="id" formControlName='company_id' (change)="onSelectCustomer()">
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="col-md-12 fix-padding">
+                                <form [formGroup]="debitMemoForm">
+                                    <div class="row">
+                                        <div class="col-md-4 bolder">
+                                            <div class="form-group row">
+                                                <label class='col-6 control-label'>Contact
+                                                    <span class="text-danger">(*)</span>
+                                                </label>
+                                                <div class='col-6 text-primary'>
+                                                    <form [formGroup]="debitMemoForm">
+                                                        <select class="form-control" formControlName="contact_id" (change)="onSelectContact($event.target.value)"
+                                                            [ngClass]="{'error-field': debitMemoForm.controls.contact_id.invalid && isClickedSave && !isSaveDraft}">
+                                                            <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
+                                                            <option *ngFor="let contact of listMaster['contacts']" [value]="contact.id">{{contact['full_name']}}</option>
+                                                        </select>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class='col-6'>Phone</label>
+                                                <div class='col-6 '>{{contactDetail['phone']}}</div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class='col-6'>Email</label>
+                                                <div class='col-6'>{{contactDetail['email']}}</div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class='col-6'>Discount Level</label>
+                                                <div class='col-6 text-success'>{{contactDetail['disc_level']}}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group row">
+                                                <label class='col-6'>Debit Memo No<span class="text-danger">(*)</span>
+                                                </label>
+                                                <div class='col-6 text-primary'>{{debitMemoForm.value.no}}</div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class='col-6'>Issue Date
+                                                    <span class="text-danger">(*)</span>
+                                                </label>
+                                                <div class='col-6 text-danger'>
+                                                    <div clickOutside (clickOutside)="d.close()" class="input-group">
+                                                        <input class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="issue_date"
+                                                            ngbDatepicker #d="ngbDatepicker" (keydown)="$event.preventDefault()"
+                                                            [ngClass]="{'error-field': debitMemoForm.controls.issue_date.invalid && isClickedSave && !isSaveDraft}">
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                                                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class='col-6'>Document Type
+                                                    <span class="text-danger">(*)</span>
+                                                </label>
+                                                <div class='col-6 text-primary'>
+                                                    <select required class="form-control" id="order_type" (change)="onSelect" formControlName="doc_type"
+                                                        [ngClass]="{'error-field': debitMemoForm.controls.doc_type.invalid && isClickedSave && !isSaveDraft}">
+                                                        <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
+                                                        <option *ngFor="let type of listMaster['document_types']" [value]="type.id">{{type.name}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class='col-6'>Document No
+                                                    <span class="text-danger">(*)</span>
+                                                </label>
+                                                <div class='col-6 text-primary'>
+                                                    <select required class="form-control" id="order_type" (change)="onSelectOrder($event.target.value)" formControlName="order_id"
+                                                        [ngClass]="{'error-field': debitMemoForm.controls.order_id.invalid && isClickedSave && !isSaveDraft}">
+                                                        <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
+                                                        <option *ngFor="let type of listMaster['sale_orders']" [value]="type.id">{{type.code}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class='col-6'>Status
+                                                    <span class="text-danger">(*)</span>
+                                                </label>
+                                                <div class='col-6 text-primary'>
+                                                    1 - New
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 bolder">
+                                            <div class="form-group row">
+                                                <label class='col-6'>Payment Method<span class="text-danger">(*)</span></label>
+                                                <div class='col-6 text-primary'>
+                                                    <select class="form-control" name="payment_method_id" formControlName="payment_method_id"
+                                                        [ngClass]="{'error-field': debitMemoForm.controls.payment_method_id.invalid && isClickedSave && !isSaveDraft}">
+                                                        <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
+                                                        <option *ngFor="let method of listMaster['payment_methods']" [value]="method.id">{{method.name}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class='col-6'>Payment Terms<span class="text-danger">(*)</span>
+                                                </label>
+                                                <div class='col-6 text-danger'>
+                                                    <select class="form-control" name="payment_term_id" formControlName="payment_term_id" (change)="onUpdateDueDate($event.target.value)"
+                                                        [ngClass]="{'error-field': debitMemoForm.controls.payment_term_id.invalid && isClickedSave && !isSaveDraft}">
+                                                        <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
+                                                        <option *ngFor="let term of listMaster['payment_terms']" [value]="term.id">{{term.des}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class='col-6'>Due Date<span class="text-danger">(*)</span>
+                                                </label>
+                                                <div class='col-6 text-primary'>{{debitMemoForm.value.due_date}}</div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class='col-6'>Salesperson<span class="text-danger">(*)</span></label>
+                                                <div class='col-6 text-primary'>
+                                                    <select class="form-control" name="sale_person_id" formControlName="sale_person_id"
+                                                        [ngClass]="{'error-field': debitMemoForm.controls.sale_person_id.invalid && isClickedSave && !isSaveDraft}">
+                                                        <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
+                                                        <option *ngFor="let item of listMaster['sales_person']" [value]="item.id">{{item.full_name}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class='col-6'>Approver<span class="text-danger">(*)</span>
+                                                </label>
+                                                <div class='col-6'>
+                                                    <select class="form-control" name="approver_id" formControlName="approver_id"
+                                                        [ngClass]="{'error-field': debitMemoForm.controls.approver_id.invalid && isClickedSave && !isSaveDraft}">
+                                                        <option [hidden]="true" [disabled]="false" [ngValue]="null">--Select--</option>
+                                                        <option *ngFor="let item of listMaster['approvers']" [value]="item.id">{{item.full_name}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6" style="padding-right: 18px;">
+                <div class="row  height-100">
+                    <div class="col-4 p-l-0 p-r-2">
+                        <div class="card height-100">
+                            <div class="card-header">
+                                <strong>Bill To</strong>
+                            </div>
+                            <div class="card-body p-25">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <form [formGroup]="debitMemoForm">
+                                            <div class="form-group row">
+                                                <label class="control-label col-5" translate> Label
+                                                    <span class="text-danger">(*)</span>
+                                                </label>
+                                                <div class="col-7">
+                                                    <select required class="form-control" id="billing_to" name="search_type"
+                                                        formControlName="billing_id" (change)="onChangeBillTo($event.target.value)"
+                                                        [ngClass]="{'error-field': debitMemoForm.controls.billing_id.invalid && isClickedSave && !isSaveDraft}">
+                                                        <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
+                                                        <option *ngFor="let label of listMaster['bill_labels']" [value]="label.id">{{label.label}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group row">
+                                            <label class="control-label col-5" translate>Address</label>
+                                            <div class="col-7">{{orderInformation.bill_info['address_line']}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group row">
+                                            <label class=" control-label col-5" translate>City / State</label>
+                                            <div class="col-7">{{orderInformation.bill_info['city_name']}} / {{orderInformation.bill_info['state_name']}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group row">
+                                            <label class="control-label col-5" translate>Zip</label>
+                                            <div class="col-7">{{orderInformation.bill_info['zip_code']}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group row">
+                                            <label class="control-label col-5" translate>Country</label>
+                                            <div class="col-7">{{orderInformation.bill_info['country_name']}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4 p-l-0 p-r-2">
+                        <div class="card height-100">
+                            <div class="card-header">
+                                <strong>Ship To</strong>
+                            </div>
+                            <div class="card-body p-25">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-group row">
+                                            <label class=" control-label col-5" translate>Label</label>
+                                            <div class="col-7">{{orderInformation.ship_info['label']}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group row">
+                                            <label class=" control-label col-5" translate>Address</label>
+                                            <div class="col-7">{{orderInformation.ship_info['address_line']}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group row">
+                                            <label class=" control-label col-5" translate>City / State</label>
+                                            <div class="col-7">{{orderInformation.ship_info['city_name']}} / {{orderInformation.ship_info['state_name']}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group row">
+                                            <label class=" control-label col-5" translate>Zip</label>
+                                            <div class="col-7">{{orderInformation.ship_info['zip_code']}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group row">
+                                            <label class="control-label col-5" translate>Country</label>
+                                            <div class="col-7">{{orderInformation.ship_info['country_name']}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4 p-l-0 p-r-2">
+                        <div class="card height-100">
+                            <div class="card-header">
+                                <strong>Shipping Method</strong>
+                            </div>
+                            <div class="card-body p-25">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-group row">
+                                            <label class='col-6'>Warehouse
+                                                <span class="text-danger">(*)</span>
+                                            </label>
+                                            <div class="col-6">{{orderInformation.shipping_method['warehouse']}}</div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-6'>Ship Via
+                                                <span class="text-danger">(*)</span>
+                                            </label>
+                                            <div class="col-6">{{orderInformation.shipping_method['ship_via']}}</div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-6'>Option
+                                                <span class="text-danger">(*)</span>
+                                            </label>
+                                            <div class='col-6'>{{orderInformation.shipping_method['ship_method_option']}}</div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-6'>Ship Rate
+                                                <span class="text-danger">(*)</span>
+                                            </label>
+                                            <div class='col-6'>{{orderInformation.shipping_method['ship_method_rate']}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mg-top-10">
+            <div class="col-12 padding-lr-5">
+                <div class="card no-border">
+                    <div class="card-header">
+                        <strong>Line Items</strong>
+                    </div>
+                    <div class="card-body no-padding">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-order">
+                                <thead>
+                                    <tr>
+                                        <th style="width:70px" translate><b>Action</b></th>
+                                        <th><b>Item No</b></th>
+                                        <th><b>Description</b></th>
+                                        <th><b>Condition</b></th>
+                                        <th><b>UOM</b></th>
+                                        <th><b>QTY</b></th>
+                                        <th><b>Unit Price</b></th>
+                                        <th><b>Disc %</b></th>
+                                        <th><b>Tax %</b></th>
+                                        <th><b>Amount</b></th>
+                                        <th><b>G/L Account</b></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngIf="!listLineItems.length">
+                                        <td colspan="100%" class="text-center" translate>No data.</td>
+                                    </tr>
+                                    <tr *ngFor="let item of listLineItems; let i = index" [hidden]="item.deleted">
+                                        <td class="text-center">
+                                            <button class="btn btn-xs" type="button" (click)="onDeleteLineItem(item, i)">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </td>
+                                        <td>{{item.no}}</td>
+                                        <td>{{item.des}}</td>
+                                        <td class="text-center">{{item.item_condition_name}}</td>
+                                        <td class="text-center">{{item.uom}}</td>
+                                        <td class="input-field text-center">
+                                            <input OnlyNumber="true" [(ngModel)]="item.qty" (blur)="onCalculateAmount(item); getUniqueTaxItemLine();">
+                                        </td>
+                                        <td class="input-field text-center">
+                                            <span>$</span>
+                                            <input OnlyNumber="true" [(ngModel)]="item.price" (blur)="onCalculateAmount(item); getUniqueTaxItemLine();">
+                                        </td>
+                                        <td class="input-field text-center">
+                                            <input OnlyNumber="true" [(ngModel)]="item.discount_percent" (blur)="onCalculateAmount(item); getUniqueTaxItemLine();">
+                                        </td>
+                                        <td class="input-field text-center">
+                                            <input OnlyNumber="true" [(ngModel)]="item.tax_percent" (blur)="onCalculateAmount(item); getUniqueTaxItemLine();">
+                                        </td>
+                                        <td class="text-center">${{item.total_price}}</td>
+                                        <td class="text-center">{{item.income_account_name}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-12 no-padding">
+                            <button class="btn btn-link" (click)="openModalAddItemsOrder()" translate>
+                                <i class="fa fa-plus"></i> Item From Order
+                            </button>
+                            <button class="btn btn-link" (click)="openModalAddMiscItems()" translate>
+                                <i class="fa fa-plus"></i> Misc Item
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mg-top-10 padding-child-5 justify-content-end">
+            <div class="col-md-5">
+                <div class="card height-100">
+                    <div class="card-header">
+                        <strong>Note</strong>
+                    </div>
+                    <div class="card-body no-padding">
+                        <form [formGroup]="debitMemoForm">
+                            <div>
+                                <textarea class="form-control border-0" rows="11" formControlName="note" style="resize:none"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card height-100">
+                    <div class="card-header">
+                        <strong>Debit Memo Total</strong>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group row">
+                                    <label class='col-3 control-label'>Sub Total</label>
+                                    <div class='col-9'>
+                                        <span class="text-success">${{debitMemoForm.value.sub_total_price}}</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row" *ngFor="let tax of listTaxs">
+                                    <label class='col-3 control-label'> + Tax {{tax.tax_percent}}%</label>
+                                    <div class='col-9'>
+                                        <span class="text-primary">$ {{tax.amount}}</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class='col-3 control-label'>Total Due</label>
+                                    <div class='col-9'>
+                                        <span class="text-success">${{debitMemoForm.value.total_price}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 mg-top-15 text-center">
+                <button type="button" class="btn btn-secondary" (click)="onClickBack()" translate>BACK TO LIST</button>
+                <button type="button" class="btn btn-primary" (click)="onClickSave('draft')" translate>SAVE AS DRAFT</button>
+                <button type="button" class="btn btn-success" (click)="onClickSave('create')" translate>SAVE & CREATE NEW DEBIT</button>
+                <button type="button" class="btn btn-danger" (click)="onClickSave('submit')" translate>SAVE & SUBMIT</button>
+                <button type="button" class="btn btn-default" (click)="onClickSave('validate')" translate>SAVE & VALIDATE</button>
+            </div>
+        </div>
+    </section>
+</div>

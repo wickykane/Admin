@@ -24,6 +24,20 @@ import { FinancialRoutingModule } from './financial-routing.module';
 import { FinancialService } from './financial.service';
 import { PaymentComponent } from './payment/payment.component';
 
+import { DebitMemoCreateComponent } from './debit-memo/create/debit-memo-create.component';
+import { DebitMemoService } from './debit-memo/debit-memo.service';
+import { DebitMemoEditComponent } from './debit-memo/edit/debit-memo-edit.component';
+import { DebitMemoListComponent } from './debit-memo/list/debit-memo-list.component';
+import { ItemsOrderDebitModalContent } from './debit-memo/modals/items-order/items-order.modal';
+import { MiscItemsDebitModalContent } from './debit-memo/modals/misc-items/misc-items.modal';
+import { SendMailDebitModalContent } from './debit-memo/modals/send-email/send-mail.modal';
+import { DebitMemoViewComponent } from './debit-memo/view/debit-memo-view.component';
+
+import { DebitInformationTabComponent } from './debit-memo/tabs/debit-information/debit-information-tab.component';
+
+
+import { CKEditorModule } from 'ng2-ckeditor';
+
 //  Modal
 import { ItemModalModule } from '../../shared/modals/item.module';
 import { MailModalComponent } from './ar-invoice/modals/mail.modal';
@@ -38,7 +52,8 @@ import { MailModalComponent } from './ar-invoice/modals/mail.modal';
         FormsModule,
         ReactiveFormsModule,
         ChartsModule,
-        ItemModalModule
+        ItemModalModule,
+        CKEditorModule
     ],
     declarations: [
         InvoiceComponent,
@@ -53,10 +68,23 @@ import { MailModalComponent } from './ar-invoice/modals/mail.modal';
         MailModalComponent,
         CreditMemoListComponent,
         CreditMemoCreateComponent,
+        DebitMemoListComponent,
+        DebitMemoCreateComponent,
+        SendMailDebitModalContent,
+        ItemsOrderDebitModalContent,
+        MiscItemsDebitModalContent,
+        DebitMemoEditComponent,
+        DebitMemoViewComponent,
+        DebitInformationTabComponent,
+        MailModalComponent
     ],
-    providers: [FinancialService, CreditMemoService, TableService, DatePipe, Helper],
+    providers: [FinancialService, DebitMemoService, CreditMemoService, TableService, DatePipe, Helper],
     entryComponents: [
-        MailModalComponent,
+        SendMailDebitModalContent,
+        ItemsOrderDebitModalContent,
+        MiscItemsDebitModalContent,
+        DebitInformationTabComponent,
+        MailModalComponent
     ]
 })
 export class FinancialModule { }

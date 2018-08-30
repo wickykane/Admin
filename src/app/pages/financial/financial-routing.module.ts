@@ -4,9 +4,15 @@ import { RouterModule, Routes } from '@angular/router';
 import { InvoiceCreateComponent } from './ar-invoice/create/invoice.create.component';
 import { InvoiceComponent } from './ar-invoice/invoice.component';
 import { InvoiceDetailComponent } from './ar-invoice/view/invoice.view.component';
-import { PaymentComponent } from './payment/payment.component';
-import { CreditMemoListComponent } from './credit-memo//list/credit-memo-list.component';
 import { CreditMemoCreateComponent } from './credit-memo//create/credit-memo-create.component';
+import { CreditMemoListComponent } from './credit-memo//list/credit-memo-list.component';
+import { PaymentComponent } from './payment/payment.component';
+
+import { DebitMemoCreateComponent } from './debit-memo/create/debit-memo-create.component';
+import { DebitMemoEditComponent } from './debit-memo/edit/debit-memo-edit.component';
+import { DebitMemoListComponent } from './debit-memo/list/debit-memo-list.component';
+import { DebitMemoViewComponent } from './debit-memo/view/debit-memo-view.component';
+
 const routes: Routes = [
     {
         path: 'invoice',
@@ -28,6 +34,15 @@ const routes: Routes = [
         children: [
             { path: '', component: CreditMemoListComponent },
             { path: 'create', component: CreditMemoCreateComponent },
+        ]
+    },
+    {
+        path: 'debit-memo',
+        children: [
+            { path: '', component: DebitMemoListComponent },
+            { path: 'create', component: DebitMemoCreateComponent },
+            { path: 'edit/:id', component: DebitMemoEditComponent },
+            { path: 'view/:id', component: DebitMemoViewComponent }
         ]
     }
 ];
