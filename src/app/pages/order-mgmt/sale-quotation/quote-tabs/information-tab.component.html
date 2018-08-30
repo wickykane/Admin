@@ -189,7 +189,12 @@
                         <strong>Ship To</strong>
                     </div>
                     <div class="card-body">
-                        <div class="row">
+                        <div class="row" *ngIf="detail.carrier_id == 999">
+                            <div class="col-md-12 ">
+                                <p>Customer will pickup goods in stores.</p>
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="detail.carrier_id != 999">
                             <div class="col-12">
                                 <div class="form-group row">
                                     <label class="control-label col-6" translate>Label</label>
@@ -297,7 +302,7 @@
                                         <th class="text-center" translate>Tax %</th>
                                         <th class="text-center" translate>Amount</th>
                                         <th class="text-center" translate>G/L Account</th>
-                                        <th class="text-center" translate>Price Source</th>
+                                        <!-- <th class="text-center" translate>Price Source</th> -->
                                     </tr>
                                 </thead>
                                 <tr *ngIf="detail.items.length === 0">
@@ -333,11 +338,11 @@
                                         <td class="text-center">
                                             {{ item.income_account_name }}
                                         </td>
-                                        <td class="text-center">
+                                        <!-- <td class="text-center">
                                             <span>
                                                 {{item.source_name}}
                                             </span>
-                                        </td>
+                                        </td> -->
                                     </tr>
                                 </tbody>
                             </table>

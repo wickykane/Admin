@@ -134,7 +134,7 @@ export class SaleQuotationCreateComponent implements OnInit {
             'quote_date': [null, Validators.required],
             'expiry_date': [null, Validators.required],
             'company_id': [null, Validators.required],
-            'carrier_id': [2], // Default Ups
+            'carrier_id': [1], // Default Ups
             'ship_rate': [null],
             'ship_method_option': [null],
             'warehouse_id': [1, Validators.required],
@@ -214,8 +214,8 @@ export class SaleQuotationCreateComponent implements OnInit {
                     sales_person: data.sale_person_id,
                     quote_date: data.qt_dt,
                     expiry_date: data.expire_dt,
-                    shipping_id: data.shipping_id.id,
-                    billing_id: data.billing_id.id,
+                    shipping_id: (data.shipping_id || {}).id,
+                    billing_id: (data.billing_id || {}).id,
                     ship_rate: +data.ship_method_rate,
                     ship_method_option: +data.ship_method_option,
                 });
@@ -233,6 +233,7 @@ export class SaleQuotationCreateComponent implements OnInit {
                 });
 
                 this.order_info['original_ship_cost'] = data.original_ship_cost;
+                this.selectAddress('shipping', 1);
                 this.updateTotal();
 
                 this.changeCustomer(1);
@@ -260,19 +261,22 @@ export class SaleQuotationCreateComponent implements OnInit {
         this.orderService.getDetailCompany(company_id).subscribe(res => {
             try {
                 this.customer = res.data;
+                this.data['default_shipping_id'] = this.customer.shipping[0].address_id;
                 if (res.data.buyer_type === 'PS') {
                     this.addr_select.contact = res.data.contact[0];
                     this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
                 }
 
-                const default_billing = (this.customer.billing || []).find(item => item.set_default) || {};
-                const default_shipping = (this.customer.shipping || []).find(item => item.set_default) || {};
-                this.generalForm.patchValue({
-                    billing_id: default_billing.address_id || null,
-                    shipping_id: default_shipping.address_id || null,
-                    payment_method_id: this.customer.payment_method_id || null,
-                    payment_term_id: this.customer.payment_term_id || null,
-                });
+                if (!flag) {
+                    const default_billing = (this.customer.billing || []).find(item => item.set_default) || {};
+                    const default_shipping = (this.customer.shipping || []).find(item => item.set_default) || {};
+                    this.generalForm.patchValue({
+                        billing_id: default_billing.address_id || null,
+                        shipping_id: default_shipping.address_id || null,
+                        payment_method_id: this.customer.payment_method_id || null,
+                        payment_term_id: this.customer.payment_term_id || null,
+                    });
+                }
 
                 if (flag) {
                     this.selectAddress('billing', flag);
@@ -308,7 +312,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         try {
             switch (type) {
                 case 'shipping':
-                    const ship_id = this.generalForm.value.shipping_id;
+                    const ship_id = this.generalForm.value.shipping_id || this.data['default_shipping_id'];
                     if (ship_id) {
                         this.addr_select.shipping = this.findDataById(ship_id, this.customer.shipping);
                         this.getShippingReference(ship_id, flag);
@@ -378,9 +382,9 @@ export class SaleQuotationCreateComponent implements OnInit {
         this.order_info.total = +this.order_info['total_tax'] + +this.order_info.sub_total;
     }
 
-    deleteAction(sku, item_condition) {
+    deleteAction(id, item_condition) {
         this.list.items = this.list.items.filter((item) => {
-            return (item.sku + (item.item_condition_id || 'mis') !== (sku + (item_condition || 'mis')));
+            return ((item.item_id || item.misc_id) + (item.item_condition_id || 'mis') !== (id + (item_condition || 'mis')));
         });
         this.updateTotal();
     }
@@ -408,8 +412,8 @@ export class SaleQuotationCreateComponent implements OnInit {
                     if (listAdded.indexOf(item.sku + item.item_condition_id) < 0) {
                         return listAdded.indexOf(item.sku + item.item_condition_id) < 0;
                     } else {
-                      this.toastr.error('The item ' + item.no + ' already added in the order');
-                      return -1;
+                        this.toastr.error('The item ' + item.no + ' already added in the order');
+                        return -1;
                     }
                 }));
 
@@ -442,8 +446,8 @@ export class SaleQuotationCreateComponent implements OnInit {
                     if (listAdded.indexOf(item.sku + (item.item_condition_id || 'misc')) < 0) {
                         return listAdded.indexOf(item.sku + (item.item_condition_id || 'misc')) < 0;
                     } else {
-                      this.toastr.error('The item ' + item.no + ' already added in the order');
-                      return -1;
+                        this.toastr.error('The item ' + item.no + ' already added in the order');
+                        return -1;
                     }
 
                 }));
@@ -458,23 +462,19 @@ export class SaleQuotationCreateComponent implements OnInit {
         this.listMaster['options'] = carrier.options || [];
         this.listMaster['ship_rates'] = carrier.ship_rate || [];
 
-        // Edit first time not init data
-        if (flag) {
-            return;
-        }
-
         let default_option = null;
         let default_ship_rate = null;
         let enable = false;
-        if (+this.generalForm.value.carrier_id === 3 || this.generalForm.value.carrier_id !== 999 && !carrier.own_carrirer) {
+        if (+this.generalForm.value.carrier_id === 2 || this.generalForm.value.carrier_id !== 999 && !carrier.own_carrirer) {
             default_option = 888;
             default_ship_rate = 8;
-            enable = [2, 3].indexOf(+this.generalForm.value.carrier_id) > -1;
+            enable = [1, 2].indexOf(+this.generalForm.value.carrier_id) > -1;
         }
 
         if (+this.generalForm.value.carrier_id === 999) {
-            default_ship_rate = 8;
+            default_ship_rate = 7;
             this.generalForm.get('shipping_id').setValidators(null);
+            this.addr_select.shipping = {};
             this.generalForm.patchValue({ shipping_id: null });
             this.data['is_pickup'] = 1;
             this.addr_select.shipping = {
@@ -502,7 +502,10 @@ export class SaleQuotationCreateComponent implements OnInit {
             this.generalForm.controls['ship_method_option'].enable();
         }
 
-        this.generalForm.patchValue({ ship_method_option: default_option, ship_rate: default_ship_rate });
+        // Edit first time not init data
+        if (!flag) {
+            this.generalForm.patchValue({ ship_method_option: default_option, ship_rate: default_ship_rate });
+        }
         this.generalForm.updateValueAndValidity();
     }
 
