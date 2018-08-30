@@ -284,7 +284,7 @@ export class MenuComponent implements OnInit {
                         name: 'Payment'
                     },
                     {
-                        link: '/financial/creditMemo',
+                        link: '/financial/credit-memo',
                         name: 'Credit Memo'
                     },
                     {

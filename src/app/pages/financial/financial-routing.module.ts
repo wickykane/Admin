@@ -30,7 +30,7 @@ const routes: Routes = [
         ]
     },
     {
-        path: 'creditMemo',
+        path: 'credit-memo',
         children: [
             { path: '', component: CreditMemoListComponent },
             { path: 'create', component: CreditMemoCreateComponent },
