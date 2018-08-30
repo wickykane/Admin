@@ -21,7 +21,7 @@ import { HotkeysService } from 'angular2-hotkeys';
 import * as _ from 'lodash';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { OrderService } from '../../../order-mgmt/order-mgmt.service';
-import { FinancialService } from './../../financial.service';
+import { CreditMemoService } from './../credit-memo.service';
 
 
 @Component({
@@ -100,7 +100,7 @@ export class CreditMemoCreateComponent implements OnInit {
         private orderService: OrderService,
         private _hotkeysService: HotkeysService,
         public keyService: CreditMemoCreateKeyService,
-        private financialService: FinancialService,
+        private creditMemoService: CreditMemoService,
         private dt: DatePipe) {
         this.generalForm = fb.group({
             'approver_id': [null, Validators.required],
@@ -110,7 +110,6 @@ export class CreditMemoCreateComponent implements OnInit {
             'ship_method_option': [null],
             'warehouse_id': [null],
             'contact_user_id': [null],
-
             'sales_person': [null, Validators.required],
             'payment_method_id': [null, Validators.required],
             'payment_term_id': [null, Validators.required],
@@ -140,6 +139,7 @@ export class CreditMemoCreateComponent implements OnInit {
         this.orderService.getOrderReference().subscribe(res => { Object.assign(this.listMaster, res.data); });
         await this.getListPaymentMethod();
         await this.getListPaymentTerm();
+        await this.getListAccountGL();
         this.getGenerateCode();
         this.listMaster['yes_no_options'] = [{ value: 0, label: 'No' }, { value: 1, label: 'Yes' }];
 
@@ -176,7 +176,7 @@ export class CreditMemoCreateComponent implements OnInit {
      */
     getListPaymentMethod() {
         return new Promise(resolve => {
-            this.financialService.getPaymentMethod().subscribe(res => {
+            this.creditMemoService.getPaymentMethod().subscribe(res => {
                 this.listMaster['payment_method'] = res.data;
                 resolve(true);
             });
@@ -185,8 +185,17 @@ export class CreditMemoCreateComponent implements OnInit {
 
     getListPaymentTerm() {
         return new Promise(resolve => {
-            this.financialService.getListPaymentTerm().subscribe(res => {
+            this.creditMemoService.getListPaymentTerm().subscribe(res => {
                 this.listMaster['payment_term'] = res.data;
+                resolve(true);
+            });
+        });
+    }
+
+    getListAccountGL() {
+        return new Promise(resolve => {
+            this.creditMemoService.getListAccountGL().subscribe(res => {
+                this.listMaster['accountGL'] = res.data;
                 resolve(true);
             });
         });
@@ -196,7 +205,7 @@ export class CreditMemoCreateComponent implements OnInit {
         const params = {
             cus_id: company_id
         };
-        this.financialService.getOrderByCustomerId(params).subscribe(res => {
+        this.creditMemoService.getOrderByCustomerId(params).subscribe(res => {
             try {
                 this.listMaster['sales_order'] = res.data;
             } catch (e) {
@@ -206,7 +215,7 @@ export class CreditMemoCreateComponent implements OnInit {
     }
 
     getGenerateCode() {
-        this.financialService.getGenerateCode().subscribe(res => {
+        this.creditMemoService.getGenerateCode().subscribe(res => {
             this.generalForm.get('inv_num').patchValue(res.data.code);
         });
     }
@@ -216,7 +225,7 @@ export class CreditMemoCreateComponent implements OnInit {
         const payment_term_id = this.generalForm.get('payment_term_id').value;
         const total_due = this.order_info['total'];
         if (issue_dt && payment_term_id && total_due) {
-            this.financialService.getEarlyPaymentValue(issue_dt, payment_term_id, total_due).subscribe(res => {
+            this.creditMemoService.getEarlyPaymentValue(issue_dt, payment_term_id, total_due).subscribe(res => {
                 if (res.data) {
                     this.data['is_fixed_early'] = res.data.is_fixed;
                     this.order_info.incentive_percent = res.data.percent;
@@ -248,7 +257,7 @@ export class CreditMemoCreateComponent implements OnInit {
             issue_dt: this.generalForm.value['inv_dt'],
             payment_term_dt: paymentTermDayLimit
         };
-        this.financialService.getInvoiceDueDate(params).subscribe(res => {
+        this.creditMemoService.getInvoiceDueDate(params).subscribe(res => {
             try {
                 if (params['payment_term_dt'] && res.data.due_dt) {
                     this.generalForm.controls['due_dt'].setValue(this.dt.transform(new Date(res.data.due_dt), 'MM/dd/yyyy'));
@@ -455,7 +464,7 @@ export class CreditMemoCreateComponent implements OnInit {
             is_copy: this.data['is_copy'] || 0
         };
 
-        this.financialService.createInvoice(params).subscribe(res => {
+        this.creditMemoService.createInvoice(params).subscribe(res => {
             try {
                 if (res.status) {
                     this.toastr.success(res.message);
