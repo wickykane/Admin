@@ -176,5 +176,13 @@ export class ProductService {
         const url = 'misc/'+id;
         return this.apiService.delete(url);
     }
+    activeStatus(id){
+        const url = 'misc/'+id+'/active';
+        return this.apiService.put(url);
+    }
+    inActiveStatus(id){
+        const url = 'misc/'+id+'/in-active';
+        return this.apiService.put(url);
+    }
     
 }

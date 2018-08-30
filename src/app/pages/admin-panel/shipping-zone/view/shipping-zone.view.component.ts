@@ -40,6 +40,7 @@ export class ShippingZoneViewComponent implements OnInit {
     public countryFilter = '';
     public listSelectCountry = [];
     public id: any;
+    public cd:any;
     public freeShippingList = {
         'free_shipping_item': 0,
         'limit_order_over': 0,
@@ -146,6 +147,7 @@ export class ShippingZoneViewComponent implements OnInit {
     getFormById(id) {
         this.shippingZoneService.getShippingZoneById(id).subscribe(res => {
             this.generalForm.patchValue(res.data);
+            this.cd = res.data.cd;
             this.checkListCountry(res.data.shipping_country);
             this.checkListShipping(res.data.shipping_zone_quotes);
         })
@@ -155,7 +157,6 @@ export class ShippingZoneViewComponent implements OnInit {
             for (var j = 0; j < countryList.length; j++) {
                 if (this.listCountry[i].country_code == countryList[j].ctr_cd) {
                     this.listCountry[i].selected = true;
-                    console.log('checked');
                     this.selectCountry(true, this.listCountry[i], countryList[j]);
                 }
             }
@@ -255,7 +256,7 @@ export class ShippingZoneViewComponent implements OnInit {
             modalRef.componentInstance.stateList = this.listMasterData['state'][code];
             // modalRef.componentInstance.listSelectCountry = this.listMasterData['state'][code];
             this.listSelectCountry.forEach(item => {
-                if (item.code = code) {
+                if (item.country_code == code) {
                     modalRef.componentInstance.listSelectCountry = item;
                 }
             })

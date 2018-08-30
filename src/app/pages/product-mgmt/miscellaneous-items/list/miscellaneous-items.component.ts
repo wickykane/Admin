@@ -15,7 +15,7 @@ import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
     selector: 'app-miscellaneous',
     templateUrl: './miscellaneous-items.component.html',
     animations: [routerTransition()],
-    providers: [MiscellaneousItemsKeyService, CommonService,ProductService]
+    providers: [MiscellaneousItemsKeyService, CommonService, ProductService]
 })
 export class MiscellaneousItemsComponent implements OnInit {
 
@@ -33,7 +33,7 @@ export class MiscellaneousItemsComponent implements OnInit {
     public user: any;
 
     searchForm: FormGroup;
-    miscTypeList:any;
+    miscTypeList: any;
     constructor(public router: Router,
         public fb: FormBuilder,
         public toastr: ToastrService,
@@ -41,7 +41,7 @@ export class MiscellaneousItemsComponent implements OnInit {
         public tableService: TableService,
         public keyService: MiscellaneousItemsKeyService,
         private commonService: CommonService,
-        private productService:ProductService,
+        private productService: ProductService,
         private modalService: NgbModal
     ) {
 
@@ -101,33 +101,57 @@ export class MiscellaneousItemsComponent implements OnInit {
             }
         });
     }
-    openModal(isNew,isView,item ={}){
-       const modalRef = this.modalService.open(MiscellaneousItemsModalComponent);
-       modalRef.componentInstance.Action= isNew;
-       modalRef.componentInstance.isView= isView;
-       modalRef.componentInstance.miscItems= item;
-       modalRef.result.then(res => {
-           if(res){
-            this.getList();
-           }
+    openModal(isNew, isView, item = {}) {
+        const modalRef = this.modalService.open(MiscellaneousItemsModalComponent);
+        modalRef.componentInstance.Action = isNew;
+        modalRef.componentInstance.isView = isView;
+        modalRef.componentInstance.miscItems = item;
+        modalRef.result.then(res => {
+            if (res) {
+                this.getList();
+            }
 
 
-    });
+        });
 
     }
-      delete(id){
+    delete(id) {
         const modalRef = this.modalService.open(ConfirmModalContent);
         modalRef.result.then(result => {
-          if (result) {
-            this.productService.deleteMisc(id).subscribe(res => {
-              try {
-                this.toastr.success(res.message);
-                this.getList();
-              } catch (e) {
-                console.log(e);
-              }
-            });
-          }
-        }); 
+            if (result) {
+                this.productService.deleteMisc(id).subscribe(res => {
+                    try {
+                        this.toastr.success(res.message);
+                        this.getList();
+                    } catch (e) {
+                        console.log(e);
+                    }
+                });
+            }
+        });
+    }
+    updateStatus(checked, item) {
+        if (item.is_sys == 0 || item.used == 0) {
+            if (checked) {
+                this.productService.activeStatus(item.id).subscribe(res => {
+                    try {
+                        this.toastr.success(res.message);
+                        this.getList();
+                    } catch (e) {
+                        console.log(e);
+                    }
+                });
+            }
+            else {
+                this.productService.inActiveStatus(item.id).subscribe(res => {
+                    try {
+                        this.toastr.success(res.message);
+                        this.getList();
+                    } catch (e) {
+                        console.log(e);
+                    }
+                });
+            }
+        }
     }
 }

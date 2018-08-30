@@ -40,6 +40,7 @@ export class ShippingZoneEditComponent implements OnInit {
     public countryFilter = '';
     public listSelectCountry = [];
     public id: any;
+    public cd: any;
     public freeShippingList = {
         'free_shipping_item': 0,
         'limit_order_over': 0,
@@ -143,9 +144,32 @@ export class ShippingZoneEditComponent implements OnInit {
             this.getFormById(this.id);
         })
     }
+    selectOldCountry(isSelect, item) {
+        item.state = this.listMasterData['state'][item.country_code];
+        if (item.state) {
+            item.state.forEach(res => {
+                return res.selected = true;
+            })
+        }
+        else {
+            item.state = [];
+        }
+        if (isSelect) {
+            this.listSelectCountry.push(item);
+        }
+        else {
+            this.listSelectCountry.forEach((res, index) => {
+
+                if (res.country_id == item.country_id) {
+                    this.listSelectCountry.splice(index, 1);
+                }
+            });
+        }
+    }
     getFormById(id) {
         this.shippingZoneService.getShippingZoneById(id).subscribe(res => {
             this.generalForm.patchValue(res.data);
+            this.cd = res.data.cd;
             this.checkListCountry(res.data.shipping_country);
             this.checkListShipping(res.data.shipping_zone_quotes);
         })
@@ -171,27 +195,27 @@ export class ShippingZoneEditComponent implements OnInit {
                         var id = this.listShipping[i].data[j].id;
                         this.listShipping[i].data[j].checked = true;
                         if (id == 1) {
-                            this.freeShippingList = { ...shippingZoneQuotesList[k].data,id};
+                            this.freeShippingList = { ...shippingZoneQuotesList[k].data, id };
                             console.log(this.freeShippingList);
                         }
                         if (id == 2) {
-                            this.flatRateList = { ...shippingZoneQuotesList[k].data,id};
+                            this.flatRateList = { ...shippingZoneQuotesList[k].data, id };
                             console.log(this.flatRateList);
                         }
                         if (id == 3) {
-                            this.customRateList = { ...shippingZoneQuotesList[k].data,id};
+                            this.customRateList = { ...shippingZoneQuotesList[k].data, id };
                             console.log(this.customRateList);
                         }
                         if (id == 4) {
-                            this.pickupList = { ...shippingZoneQuotesList[k].data,id};
+                            this.pickupList = { ...shippingZoneQuotesList[k].data, id };
                             console.log(this.pickupList);
                         }
                         if (id == 5) {
-                            this.upsList = { ...shippingZoneQuotesList[k].data,id};
+                            this.upsList = { ...shippingZoneQuotesList[k].data, id };
                             console.log(this.upsList);
                         }
                         if (id == 6) {
-                            this.seflList = { ...shippingZoneQuotesList[k].data,id};
+                            this.seflList = { ...shippingZoneQuotesList[k].data, id };
                             console.log(this.seflList);
                         }
                     }
@@ -255,7 +279,7 @@ export class ShippingZoneEditComponent implements OnInit {
             modalRef.componentInstance.stateList = this.listMasterData['state'][code];
             // modalRef.componentInstance.listSelectCountry = this.listMasterData['state'][code];
             this.listSelectCountry.forEach(item => {
-                if (item.code = code) {
+                if (item.country_code == code) {
                     modalRef.componentInstance.listSelectCountry = item;
                 }
             })

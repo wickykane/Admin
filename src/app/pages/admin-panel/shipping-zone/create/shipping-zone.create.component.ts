@@ -190,7 +190,6 @@ export class ShippingZoneCreateComponent implements OnInit {
         });
     }
     openState(code) {
-
         if (this.listMasterData['state'][code]) {
             const modalRef = this.modalService.open(StateFilterModalComponent);
 
@@ -198,8 +197,8 @@ export class ShippingZoneCreateComponent implements OnInit {
             modalRef.componentInstance.stateList = this.listMasterData['state'][code];
             // modalRef.componentInstance.listSelectCountry = this.listMasterData['state'][code];
             this.listSelectCountry.forEach(item => {
-                if (item.code = code) {
-                    modalRef.componentInstance.listSelectCountry = item;
+                if (item.country_code == code) {
+                    modalRef.componentInstance.listSelectCountry = JSON.parse(JSON.stringify(item));
                 }
             })
             modalRef.componentInstance.code = code;

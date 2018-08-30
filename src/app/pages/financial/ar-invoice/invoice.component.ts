@@ -13,6 +13,7 @@ import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 import { OrderService } from '../../order-mgmt/order-mgmt.service';
 import { InvoiceKeyService } from './keys.list.control';
+import { MailModalComponent } from './modals/mail.modal';
 
 
 @Component({
@@ -36,12 +37,10 @@ export class InvoiceComponent implements OnInit {
     searchForm: FormGroup;
 
     public messageConfig = {
-        'SM': 'Are you sure that you want to Submit this quotation to approver?',
-        'CC': 'Are you sure that you want to cancel this quotation?',
-        'CLONE': 'Are you sure that you want to copy this quote?',
-        'AM': 'Are you sure that you want to approve this quotation?',
-        'RM': 'Are you sure that you want to reject this quotation?',
-        'SC': 'Are you sure that you want to convert this quotation to SO?',
+        2: 'Are you sure that you want to submit the invoice to approver?',
+        7: 'Are you sure that you want to cancel current invoice?',
+        4: 'Are you sure that you want to approve the current invoice?',
+        3: 'Are you sure that you want to reject the current invoice?',
     };
 
 
@@ -50,9 +49,8 @@ export class InvoiceComponent implements OnInit {
         'Submitted': { color: 'texas-rose', name: 'Submited', id: 2 },
         'Rejected': { color: 'magenta', name: 'Rejected', id: 3 },
         'Approved': { color: 'strong-green', name: 'Approved', id: 4, img: './assets/images/icon/approved.png' },
-        'Partially Paid': { color: 'darkblue', name: 'Partially Paid', id: 5, img: './assets/images/icon/partial_delivered.png'},
+        'Partially Paid': { color: 'darkblue', name: 'Partially Paid', id: 5, img: './assets/images/icon/partial_delivered.png' },
         'Fully Paid': { color: 'lemon', name: 'Fully Paid', id: 6, img: './assets/images/icon/full_delivered.png' },
-        // 'RO': { color: 'darkblue', name: 'Reopen' },
         'Canceled': { color: 'red', name: 'Canceled', id: 7, img: './assets/images/icon/cancel.png' },
         'Overdue': { color: 'bright-grey', name: 'Overdue', id: 8 },
     };
@@ -109,6 +107,7 @@ export class InvoiceComponent implements OnInit {
 
         this.getList();
         this.getCountStatus();
+        this.getListStatus();
         this.user = JSON.parse(localStorage.getItem('currentUser'));
     }
     /**
@@ -129,6 +128,12 @@ export class InvoiceComponent implements OnInit {
             } catch (e) {
                 console.log(e);
             }
+        });
+    }
+
+    getListStatus() {
+        this.financialService.getInvoiceStatus().subscribe(res => {
+            this.listMaster['status'] = res.data.status;
         });
     }
 
@@ -158,18 +163,10 @@ export class InvoiceComponent implements OnInit {
         });
     }
 
-    cloneQuote(id) {
-        this.router.navigate(['/order-management/sale-quotation/create'], { queryParams: { is_copy: 1, quote_id: id } });
-    }
-
     confirmModal(id, status) {
         const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
         modalRef.result.then(res => {
             if (res) {
-                if (status === 'CLONE') {
-                    this.cloneQuote(id);
-                    return;
-                }
                 this.updateStatus(id, status);
             }
         }, dismiss => { });
@@ -178,6 +175,12 @@ export class InvoiceComponent implements OnInit {
         modalRef.componentInstance.noButtonText = 'No';
     }
 
+    sendMail(id) {
+        const modalRef = this.modalService.open(MailModalComponent, { size: 'lg', windowClass: 'modal-md' });
+        modalRef.result.then(res => {
+        }, dismiss => { });
+        modalRef.componentInstance.invoiceId = id;
+    }
 
     moreFilter() {
         this.onoffFilter = !this.onoffFilter;
@@ -283,10 +286,9 @@ export class InvoiceComponent implements OnInit {
     }
 
     printPDF(id) {
-        const path = 'ar-invoice/export-invoice/';
+        const path = 'ar-invoice/print-pdf/';
         const url = `${environment.api_url}${path}${id}`;
-        window.open(url, '_blank');
-        window.close();
+        const new_window = window.open(url, '_blank');
     }
 
     cancelInvoice(item?) {
