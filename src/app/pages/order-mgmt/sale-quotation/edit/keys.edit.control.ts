@@ -49,10 +49,10 @@ export class SaleQuoteEditKeyService {
     }
 
     initKey() {
-        this._hotkeysService.add(new Hotkey('alt+n', (event: KeyboardEvent): boolean => {
-            event.preventDefault();
-            this.context.createOrder();
-            return;
-        }, undefined, 'Create Quotation'));
+        // this._hotkeysService.add(new Hotkey('alt+n', (event: KeyboardEvent): boolean => {
+        //     event.preventDefault();
+        //     this.context.createOrder();
+        //     return;
+        // }, undefined, 'Create Quotation'));
     }
 }

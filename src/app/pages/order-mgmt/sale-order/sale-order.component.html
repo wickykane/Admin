@@ -3,40 +3,13 @@
     <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
     <div class="block anchor-scroll block-order">
         <section id="statusIndicator" class="status-indicator-section">
-            <ul class="status-ctn dashboard-content">
-                <li class="status-item dashboard-stat blue">
-                    <div class="status-count">1</div>
-                    <div class="status-lbl">NEW</div>
-                </li>
-                <li class="status-item dashboard-stat texas-rose">
-                    <div class="status-count">1</div>
-                    <div class="status-lbl">SUBMITTED</div>
-                </li>
-                <li class="status-item dashboard-stat strong-green">
-                    <div class="status-count">2</div>
-                    <div class="status-lbl">APPROVED</div>
-                </li>
-                <li class="status-item dashboard-stat magenta">
-                    <div class="status-count">1</div>
-                    <div class="status-lbl">REJECTED</div>
-                </li>
-                <li class="status-item dashboard-stat lemon">
-                    <div class="status-count">1</div>
-                    <div class="status-lbl">PARTIALLY PAID</div>
-                </li>
-                <li class="status-item dashboard-stat bright-grey">
-                    <div class="status-count">2</div>
-                    <div class="status-lbl">FULLY PAID</div>
-                </li>
-                <li class="status-item dashboard-stat darkblue">
-                    <div class="status-count">1</div>
-                    <div class="status-lbl">OVERDUE</div>
-                </li>
-                <li class="status-item dashboard-stat red">
-                    <div class="status-count">2</div>
-                    <div class="status-lbl">CANCELED</div>
-                </li>
-            </ul>
+          <ul class="status-ctn dashboard-content">
+              <li style="cursor: pointer;" (click)="filter(item.status)" *ngFor="let item of countStatus" class="status-item dashboard-stat {{item.color}}">
+                  <img *ngIf="item.img" [src]="item.img" alt="">
+                  <div class="status-count">{{ item.count || 0 }}</div>
+                  <div class="status-lbl text-uppercase">{{ item.name }}</div>
+              </li>
+          </ul>
         </section>
         <div class="block-content pd-bottom padding-lr-0">
             <div class="row">
