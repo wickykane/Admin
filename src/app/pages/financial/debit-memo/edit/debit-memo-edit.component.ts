@@ -264,8 +264,8 @@ export class DebitMemoEditComponent implements OnInit {
             res => {
                 try {
                     if (!this.listLineItems.length) {
-                        this.listLineItems =  [ ...res.data.items, ...res.data.misc];
-                        this.listLineItems.forEach( item => this.onCalculateAmount(item));
+                        this.listDeletedLineItem =  [ ...res.data.items, ...res.data.misc];
+                        // this.listLineItems.forEach( item => this.onCalculateAmount(item));
                     } else {
                         res.data.items.forEach( item => {
                             if ( this.listLineItems.findIndex(lineItem => lineItem.item_id === item.item_id) >= 0 ) {
@@ -367,7 +367,6 @@ export class DebitMemoEditComponent implements OnInit {
         deletedItem.deleted = true;
         this.listDeletedLineItem = this.listLineItems.filter( item => item.deleted);
         this.listLineItems.splice(index, 1);
-
         this.getUniqueTaxItemLine();
     }
 
@@ -395,7 +394,19 @@ export class DebitMemoEditComponent implements OnInit {
         const modalRef = this.modalService.open(ItemsOrderDebitModalContent, {
             size: 'lg'
         });
+        modalRef.componentInstance.setIgnoredItems = this.listDeletedLineItem.
+            filter(item => item.item_id !== undefined && item.item_id !== null).map(item => item.item_id);
         modalRef.result.then(res => {
+            if (res) {
+                res.forEach(selectedItem => {
+                    const itemIndex = this.listDeletedLineItem.findIndex( item => item.item_id === selectedItem.item_id);
+                    if (itemIndex >= 0) {
+                        this.listDeletedLineItem.splice(itemIndex, 1);
+                    }
+                    this.listLineItems.push(selectedItem);
+                });
+                this.getUniqueTaxItemLine();
+            }
         }, dismiss => {});
     }
 
@@ -403,7 +414,19 @@ export class DebitMemoEditComponent implements OnInit {
         const modalRef = this.modalService.open(MiscItemsDebitModalContent, {
             size: 'lg'
         });
+        modalRef.componentInstance.setIgnoredItems = this.listDeletedLineItem.
+            filter(item => item.misc_id !== undefined && item.misc_id !== null).map(item => item.misc_id);
         modalRef.result.then(res => {
+            if (res) {
+                res.forEach(selectedItem => {
+                    const itemIndex = this.listDeletedLineItem.findIndex( item => item.misc_id === selectedItem.misc_id);
+                    if (itemIndex >= 0) {
+                        this.listDeletedLineItem.splice(itemIndex, 1);
+                    }
+                    this.listLineItems.push(selectedItem);
+                });
+                this.getUniqueTaxItemLine();
+            }
         }, dismiss => {});
     }
 
