@@ -151,15 +151,15 @@
                                 <i class="fa fa-pencil-square-o text-primary" aria-hidden="true"></i>
                             </a>
                             <a class="btn btn-default " *ngIf="debit.sts === 1"
-                                title="Submit" (click)="onSubmitDebitMemo(debit.id)">
+                                title="Submit" (click)="onChangeDebitStatus(debit.id, 2)">
                                 <i class="fa fa-share-square text-primary" aria-hidden="true"></i>
                             </a>
                             <a class="btn btn-default " *ngIf="debit.sts === 2"
-                                title="Approve" (click)="onApproveDebitMemo(debit.id)">
+                                title="Approve" (click)="onChangeDebitStatus(debit.id, 3)">
                                 <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
                             </a>
                             <a class="btn btn-default " *ngIf="debit.sts === 2"
-                                title="Reject" (click)="onRejectDebitMemo(debit.id)">
+                                title="Reject" (click)="onChangeDebitStatus(debit.id, 4)">
                                 <i class="fa fa-minus-circle text-danger" aria-hidden="true"></i>
                             </a>
                             <a class="btn btn-default "
@@ -171,11 +171,11 @@
                                 <i class="fa fa-print text-primary" aria-hidden="true"></i>
                             </a>
                             <a class="btn btn-default" *ngIf="debit.sts === 1"
-                                title="Cancel" (click)="onCancelDebitMemo(debit.id)">
+                                title="Cancel" (click)="onChangeDebitStatus(debit.id, 5)">
                                 <i class="fa fa-ban text-primary" aria-hidden="true"></i>
                             </a>
                             <a class="btn btn-default" *ngIf="debit.sts === 4"
-                                title="Reopen" (click)="onReopenDebitMemo(debit.id)">
+                                title="Reopen" (click)="onChangeDebitStatus(debit.id, 1)">
                                 <i class="fa fa-external-link text-primary" aria-hidden="true"></i>
                             </a>
                             <a class="btn btn-default" *ngIf="debit.sts === 3 || debit.sts === 7"

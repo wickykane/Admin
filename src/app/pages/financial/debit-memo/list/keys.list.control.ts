@@ -57,35 +57,35 @@ export class DebitMemoListKeyService implements OnDestroy {
         this._hotkeysService.add(new Hotkey('f5', (event: KeyboardEvent): any => {
             event.preventDefault();
             if (this.context.listDebitMemo.length) {
-                this.context.onSubmitDebitMemo(this.context.listDebitMemo[this.context.selectedIndex]['id']);
+                this.context.onChangeDebitStatus(this.context.listDebitMemo[this.context.selectedIndex]['id'], 2);
             }
             return event;
         }, undefined, 'Submit'));
         this._hotkeysService.add(new Hotkey('f6', (event: KeyboardEvent): any => {
             event.preventDefault();
             if (this.context.listDebitMemo.length) {
-                this.context.onApproveDebitMemo(this.context.listDebitMemo[this.context.selectedIndex]['id']);
+                this.context.onChangeDebitStatus(this.context.listDebitMemo[this.context.selectedIndex]['id'], 3);
             }
             return event;
         }, undefined, 'Approve'));
         this._hotkeysService.add(new Hotkey('f7', (event: KeyboardEvent): any => {
             event.preventDefault();
             if (this.context.listDebitMemo.length) {
-                this.context.onCancelDebitMemo(this.context.listDebitMemo[this.context.selectedIndex]['id']);
+                this.context.onChangeDebitStatus(this.context.listDebitMemo[this.context.selectedIndex]['id'], 5);
             }
             return event;
         }, undefined, 'Cancel'));
         this._hotkeysService.add(new Hotkey('f8', (event: KeyboardEvent): any => {
             event.preventDefault();
             if (this.context.listDebitMemo.length) {
-                this.context.onRejectDebitMemo(this.context.listDebitMemo[this.context.selectedIndex]['id']);
+                this.context.onChangeDebitStatus(this.context.listDebitMemo[this.context.selectedIndex]['id'], 4);
             }
             return event;
         }, undefined, 'Reject'));
         this._hotkeysService.add(new Hotkey('f9', (event: KeyboardEvent): any => {
             event.preventDefault();
             if (this.context.listDebitMemo.length) {
-                this.context.onReopenDebitMemo(this.context.listDebitMemo[this.context.selectedIndex]['id']);
+                this.context.onChangeDebitStatus(this.context.listDebitMemo[this.context.selectedIndex]['id'], 1);
             }
             return event;
         }, undefined, 'Re-open'));
