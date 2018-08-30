@@ -37,10 +37,10 @@ export class InvoiceComponent implements OnInit {
     searchForm: FormGroup;
 
     public messageConfig = {
-        2 : 'Are you sure that you want to submit the invoice to approver?',
-        7 : 'Are you sure that you want to cancel current invoice?',
+        2: 'Are you sure that you want to submit the invoice to approver?',
+        7: 'Are you sure that you want to cancel current invoice?',
         4: 'Are you sure that you want to approve the current invoice?',
-        3 : 'Are you sure that you want to reject the current invoice?',
+        3: 'Are you sure that you want to reject the current invoice?',
     };
 
 
@@ -49,7 +49,7 @@ export class InvoiceComponent implements OnInit {
         'Submitted': { color: 'texas-rose', name: 'Submited', id: 2 },
         'Rejected': { color: 'magenta', name: 'Rejected', id: 3 },
         'Approved': { color: 'strong-green', name: 'Approved', id: 4, img: './assets/images/icon/approved.png' },
-        'Partially Paid': { color: 'darkblue', name: 'Partially Paid', id: 5, img: './assets/images/icon/partial_delivered.png'},
+        'Partially Paid': { color: 'darkblue', name: 'Partially Paid', id: 5, img: './assets/images/icon/partial_delivered.png' },
         'Fully Paid': { color: 'lemon', name: 'Fully Paid', id: 6, img: './assets/images/icon/full_delivered.png' },
         'Canceled': { color: 'red', name: 'Canceled', id: 7, img: './assets/images/icon/cancel.png' },
         'Overdue': { color: 'bright-grey', name: 'Overdue', id: 8 },
@@ -107,6 +107,7 @@ export class InvoiceComponent implements OnInit {
 
         this.getList();
         this.getCountStatus();
+        this.getListStatus();
         this.user = JSON.parse(localStorage.getItem('currentUser'));
     }
     /**
@@ -127,6 +128,12 @@ export class InvoiceComponent implements OnInit {
             } catch (e) {
                 console.log(e);
             }
+        });
+    }
+
+    getListStatus() {
+        this.financialService.getInvoiceStatus().subscribe(res => {
+            this.listMaster['status'] = res.data.status;
         });
     }
 
@@ -281,8 +288,7 @@ export class InvoiceComponent implements OnInit {
     printPDF(id) {
         const path = 'ar-invoice/print-pdf/';
         const url = `${environment.api_url}${path}${id}`;
-        window.open(url, '_blank');
-        // window.close();
+        const new_window = window.open(url, '_blank');
     }
 
     cancelInvoice(item?) {
