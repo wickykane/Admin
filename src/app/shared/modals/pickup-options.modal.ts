@@ -80,10 +80,10 @@ export class PickupOptionsModalComponent implements OnInit, OnDestroy {
             }
 
         }
-        if(this.isView){
+        if (this.isView) {
             this.generalForm.disable();
         }
-        else{
+        else {
             this.isView = false;
         }
 
@@ -109,15 +109,6 @@ export class PickupOptionsModalComponent implements OnInit, OnDestroy {
     }
     applyData() {
         var params = Object.assign({}, this.generalForm.value);
-        // var weekDaysList1 = this._wareHouseList.slice(0);
-        // console.log(weekDaysList1);
-        // weekDaysList1.forEach((item,index,object)=>{
-        //     console.log(item);
-        //     if(item.selected == false){
-        //         object.splice(index,1);
-        //     }
-        // });
-        // params['bussiness_hours']=weekDaysList1;
 
         params['warehouse'] = this.removeItem();
         this.itemService.checkCondition(params).subscribe(res => {
@@ -129,7 +120,6 @@ export class PickupOptionsModalComponent implements OnInit, OnDestroy {
         item.splice(index, 1);
     }
     setWareHouseTimer(id) {
-        console.log(this._wareHouseList);
         this._wareHouseList.forEach(item => {
             if (item.id == id) {
                 this.timeList = item;
@@ -168,19 +158,20 @@ export class PickupOptionsModalComponent implements OnInit, OnDestroy {
                 for (var k = 0; k < this.pickupList.warehouse[n].bussiness_hours.length; k++) {
                     for (var i = 0; i < this._wareHouseList.length; i++) {
                         for (var j = 0; j < this._wareHouseList[i].bussiness_hours.length; j++) {
-                            if (this.pickupList.warehouse[n].bussiness_hours[k].id == this._wareHouseList[i].bussiness_hours[j].id) {
-                                this._wareHouseList[i].bussiness_hours[j] = JSON.parse(JSON.stringify(this.pickupList.warehouse[n].bussiness_hours[k]));
+                            if (this.pickupList.warehouse[n].id == this._wareHouseList[i].id) {
+                                if (this.pickupList.warehouse[n].bussiness_hours[k].id == this._wareHouseList[i].bussiness_hours[j].id) {
+                                    this._wareHouseList[i].bussiness_hours[j] = JSON.parse(JSON.stringify(this.pickupList.warehouse[n].bussiness_hours[k]));
+                                }
+
                             }
                         }
                     }
                 }
             }
-            else{
-                this.pickupList.warehouse[n].bussiness_hours=JSON.parse(JSON.stringify(this._weekDaysList));
-            console.log(this.pickupList.warehouse[n]);
+            else {
+                this.pickupList.warehouse[n].bussiness_hours = JSON.parse(JSON.stringify(this._weekDaysList));
             }
         }
-        console.log(this.pickupList.warehouse);
         return tempWarehouse;
     }
 }
