@@ -8,44 +8,61 @@ import { environment } from '../../../../environments/environment';
 import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
+import { OrderService } from '../../order-mgmt/order-mgmt.service';
 import { InvoiceKeyService } from './keys.list.control';
+import { MailModalComponent } from './modals/mail.modal';
+
 
 @Component({
     selector: 'app-invoice',
     templateUrl: './invoice.component.html',
     styleUrls: ['./invoice.component.scss'],
     animations: [routerTransition()],
-    providers: [InvoiceKeyService]
+    providers: [InvoiceKeyService, HotkeysService]
 })
 export class InvoiceComponent implements OnInit {
 
-    /**
-     * letiable Declaration
-     */
-    @ViewChild('inp') inp: ElementRef;
-
     public listMaster = {};
+    public listInvoiceItemsRef = [];
     public selectedIndex = 0;
-    public countStatus = [];
     public list = {
         items: []
     };
-    public listInvoiceItemsRef = {};
+    public user: any;
     public onoffFilter: any;
-    public listMoreFilter: any = [];
+
     searchForm: FormGroup;
-    public dateType = 0;
+
+    public messageConfig = {
+        2: 'Are you sure that you want to submit the invoice to approver?',
+        7: 'Are you sure that you want to cancel current invoice?',
+        4: 'Are you sure that you want to approve the current invoice?',
+        3: 'Are you sure that you want to reject the current invoice?',
+    };
+
+
+    public statusConfig = {
+        'New': { color: 'blue', name: 'New', id: 1, img: './assets/images/icon/new.png' },
+        'Submitted': { color: 'texas-rose', name: 'Submited', id: 2 },
+        'Rejected': { color: 'magenta', name: 'Rejected', id: 3 },
+        'Approved': { color: 'strong-green', name: 'Approved', id: 4, img: './assets/images/icon/approved.png' },
+        'Partially Paid': { color: 'darkblue', name: 'Partially Paid', id: 5, img: './assets/images/icon/partial_delivered.png' },
+        'Fully Paid': { color: 'lemon', name: 'Fully Paid', id: 6, img: './assets/images/icon/full_delivered.png' },
+        'Canceled': { color: 'red', name: 'Canceled', id: 7, img: './assets/images/icon/cancel.png' },
+        'Overdue': { color: 'bright-grey', name: 'Overdue', id: 8 },
+    };
 
     constructor(public router: Router,
         public fb: FormBuilder,
         public toastr: ToastrService,
-        private vRef: ViewContainerRef,
-        public keyService: InvoiceKeyService,
-        private modalService: NgbModal,
         public tableService: TableService,
         private financialService: FinancialService,
+        private modalService: NgbModal,
+        private _hotkeysService: HotkeysService,
+        public invoiceKeyService: InvoiceKeyService,
         private renderer: Renderer) {
 
         this.searchForm = fb.group({
@@ -64,12 +81,13 @@ export class InvoiceComponent implements OnInit {
         //  Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
-        this.keyService.watchContext.next(this);
+        //  Init Key
+        this.invoiceKeyService.watchContext.next({ context: this, service: this._hotkeysService });
+
     }
 
     ngOnInit() {
         //  Init Fn
-        // this.listMoreFilter = [{ value: false, name: 'Date Filter' }];
         this.listMaster['listFilter'] = [{ value: false, name: 'Date Filter' }];
         this.listMaster['dateType'] = [{ id: 0, name: 'Issue Date' }, { id: 1, name: 'Due Date' }];
         this.listMaster['status'] = [
@@ -85,8 +103,12 @@ export class InvoiceComponent implements OnInit {
         this.listMaster['inv_type'] = [
             { id: 1, name: 'Sales Order' }
         ];
-        this.getListInvoiceItemsRef();
-        this.countInvoiceStatus();
+        // this.getListInvoiceItemsRef();
+
+        this.getList();
+        this.getCountStatus();
+        this.getListStatus();
+        this.user = JSON.parse(localStorage.getItem('currentUser'));
     }
     /**
      * Table Event
@@ -97,12 +119,71 @@ export class InvoiceComponent implements OnInit {
     /**
      * Internal Function
      */
+    filter(status) {
+        const params = { status };
+        this.financialService.getListInvoice(params).subscribe(res => {
+            try {
+                this.list.items = res.data.rows;
+                this.tableService.matchPagingOption(res.data);
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
+
+    getListStatus() {
+        this.financialService.getInvoiceStatus().subscribe(res => {
+            this.listMaster['status'] = res.data.status;
+        });
+    }
+
+    getCountStatus() {
+        this.financialService.countInvoiceStatus().subscribe(res => {
+            res.data.map(item => {
+                if (this.statusConfig[item.name]) {
+                    this.statusConfig[item.name].count = item.count;
+                    this.statusConfig[item.name].status = this.statusConfig[item.name].id;
+                }
+            });
+            this.listMaster['count-status'] = Object.keys(this.statusConfig).map(key => {
+                return this.statusConfig[key];
+            });
+        });
+    }
+
+    updateStatus(id, status) {
+        const params = { status };
+        this.financialService.updateInvoiceStatus(id, params).subscribe(res => {
+            try {
+                this.toastr.success(res.message);
+                this.getList();
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
+
+    confirmModal(id, status) {
+        const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
+        modalRef.result.then(res => {
+            if (res) {
+                this.updateStatus(id, status);
+            }
+        }, dismiss => { });
+        modalRef.componentInstance.message = this.messageConfig[status];
+        modalRef.componentInstance.yesButtonText = 'Yes';
+        modalRef.componentInstance.noButtonText = 'No';
+    }
+
+    sendMail(id) {
+        const modalRef = this.modalService.open(MailModalComponent, { size: 'lg', windowClass: 'modal-md' });
+        modalRef.result.then(res => {
+        }, dismiss => { });
+        modalRef.componentInstance.invoiceId = id;
+    }
 
     moreFilter() {
         this.onoffFilter = !this.onoffFilter;
-        setTimeout(() => {
-            this.renderer.invokeElementMethod(this.inp.nativeElement, 'focus');
-        }, 300);
     }
 
     onFilterChanged(value) {
@@ -123,17 +204,6 @@ export class InvoiceComponent implements OnInit {
             'inv_due_dt_from': null,
             'inv_due_dt_to': null
         });
-    }
-
-    countInvoiceStatus() {
-        this.financialService.countInvoiceStatus().subscribe(res => {
-            this.countStatus = res.data;
-        });
-    }
-
-    getCountFromStatusName(name) {
-        const stt = this.countStatus.find(item => item.name === name);
-        return (stt && stt.count) ? stt.count : 0;
     }
 
     getList() {
@@ -214,11 +284,11 @@ export class InvoiceComponent implements OnInit {
         const stt = this.listMaster[key].find(item => item.id === id);
         return stt.name;
     }
+
     printPDF(id) {
-        const path = 'ar-invoice/export-invoice/';
+        const path = 'ar-invoice/print-pdf/';
         const url = `${environment.api_url}${path}${id}`;
-        window.open(url, '_blank');
-        window.close();
+        const new_window = window.open(url, '_blank');
     }
 
     cancelInvoice(item?) {

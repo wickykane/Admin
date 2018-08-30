@@ -5,9 +5,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ChartsModule } from 'ng2-charts';
 
 
+import { InvoiceCreateComponent } from './ar-invoice/create/invoice.create.component';
 import { InvoiceComponent } from './ar-invoice/invoice.component';
-import { InvoiceCreateComponent } from './ar-invoice/invoice.create.component';
-import { InvoiceDetailComponent } from './ar-invoice/invoice.view.component';
+import { InvoiceDetailComponent } from './ar-invoice/view/invoice.view.component';
 
 //  Saleorder Tab
 import { InvoiceCreditMemoTabComponent } from './ar-invoice/invoice-tabs/credit-memo-tab.component';
@@ -38,6 +38,7 @@ import { CKEditorModule } from 'ng2-ckeditor';
 
 //  Modal
 import { ItemModalModule } from '../../shared/modals/item.module';
+import { MailModalComponent } from './ar-invoice/modals/mail.modal';
 
 @NgModule({
     imports: [
@@ -69,14 +70,16 @@ import { ItemModalModule } from '../../shared/modals/item.module';
         MiscItemsDebitModalContent,
         DebitMemoEditComponent,
         DebitMemoViewComponent,
-        DebitInformationTabComponent
+        DebitInformationTabComponent,
+        MailModalComponent
     ],
     providers: [FinancialService, DebitMemoService, TableService, DatePipe, Helper],
     entryComponents: [
         SendMailDebitModalContent,
         ItemsOrderDebitModalContent,
         MiscItemsDebitModalContent,
-        DebitInformationTabComponent
+        DebitInformationTabComponent,
+        MailModalComponent
     ]
 })
 export class FinancialModule { }

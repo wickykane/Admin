@@ -8,6 +8,7 @@ import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/n
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 import { NgbDateCustomParserFormatter } from '../../../shared/helper/dateformat';
+import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
 import { SaleOrderKeyService } from './keys.control';
 
 @Component({
@@ -22,9 +23,32 @@ export class SaleOrderComponent implements OnInit {
     /**
      * letiable Declaration
      */
+    public messageConfig = {
+        'SM': 'Are you sure that you want to submit current order ?',
+        'CC': 'Are you sure that you want to cancel current order?',
+        'CLONE': 'Are you sure that you want to copy current order?',
+        'AP': 'Are you sure that you want to approve current order?',
+        'RJ': 'Are you sure that you want to reject current order?',
+        'RO': 'Are you sure that you want to re-open current order?',
+    };
+
+    public statusConfig = {
+        'NW': { color: 'blue', name: 'New', img: './assets/images/icon/new.png' },
+        'SM': { color: 'texas-rose', name: 'Submited' },
+        'AP': { color: 'strong-green', name: 'Approved', img: './assets/images/icon/approved.png' },
+        'IP': { color: 'rock-blue', name: 'Allocated' },
+        'PP': { color: 'green', name: 'Preparing' },
+        'RS': { color: 'darkblue', name: 'Ready To Ship' },
+        'DL': { color: 'pink', name: 'Delivering' },
+        'PD': { color: 'bright-grey', name: 'Partial Delivery' },
+        'CP': { color: 'lemon', name: 'Completed', img: './assets/images/icon/full_delivered.png' },
+        'RJ': { color: 'magenta', name: 'Rejected' },
+        'CC': { color: 'red', name: 'Canceled', img: './assets/images/icon/cancel.png' },
+    };
+
     public listMaster = {};
     public selectedIndex = 0;
-    public countStatus = {};
+    public countStatus = [];
     public list = {
         items: []
     };
@@ -39,6 +63,7 @@ export class SaleOrderComponent implements OnInit {
         public toastr: ToastrService,
         private vRef: ViewContainerRef,
         public keyService: SaleOrderKeyService,
+        private modalService: NgbModal,
         public tableService: TableService,
         private orderService: OrderService) {
 
@@ -69,6 +94,7 @@ export class SaleOrderComponent implements OnInit {
         //  this.countOrderStatus();
         this.getList();
         this.getListStatus();
+        this.countOrderStatus();
     }
     /**
      * Table Event
@@ -81,8 +107,17 @@ export class SaleOrderComponent implements OnInit {
      */
 
     countOrderStatus() {
-        this.orderService.countOrderStatus().subscribe(res => {
-            this.countStatus = res.results[0];
+        this.orderService.countStatus().subscribe(res => {
+            res.data.map(item => {
+                if (this.statusConfig[item.short_name]) {
+                    this.statusConfig[item.short_name].count = item.count;
+                    this.statusConfig[item.short_name].status = item.id;
+                    this.statusConfig[item.short_name].name = item.name;
+                }
+            });
+            this.countStatus = Object.keys(this.statusConfig).map(key => {
+                return this.statusConfig[key];
+            });
         });
     }
 
@@ -117,18 +152,50 @@ export class SaleOrderComponent implements OnInit {
         });
     }
 
-    cloneOrder = function(order_id) {
-        this.orderService.cloneOrder(order_id).subscribe(res => {
-            this.toastr.success(res.message);
-            setTimeout(() => {
-                this.getList();
-            }, 500);
-        },
-            err => {
-                this.toastr.error(err.message);
+
+    confirmModal(id, status) {
+        const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
+        modalRef.result.then(res => {
+            if (res) {
+                switch (status) {
+                    case 'SM':
+                        this.updateStatusOrder(id, 6);
+                        break;
+                    case 'AP':
+                        this.putApproveOrder(id);
+                        break;
+                    case 'RJ':
+                        this.updateStatusOrder(id, 11);
+                        break;
+                    case 'CC':
+                        this.updateStatusOrder(id, 7);
+                        break;
+                    case 'RO':
+                        this.updateStatusOrder(id, 1);
+                        break;
+                    case 'CLONE':
+                        this.cloneNewOrder(id);
+                        break;
+                }
             }
-        );
-    };
+        }, dismiss => { });
+        modalRef.componentInstance.message = this.messageConfig[status];
+        modalRef.componentInstance.yesButtonText = 'Yes';
+        modalRef.componentInstance.noButtonText = 'No';
+    }
+
+    cloneNewOrder(id) {
+      this.orderService.cloneOrder(id).subscribe(res => {
+          this.toastr.success(res.message);
+          setTimeout(() => {
+              this.router.navigate(['/order-management/sale-order/edit', res.data.id]);
+          }, 1000);
+      },
+          err => {
+              this.toastr.error(err.message);
+          }
+      );
+    }
 
     putApproveOrder(order_id) {
         // const params = {'status_code': 'AP'};

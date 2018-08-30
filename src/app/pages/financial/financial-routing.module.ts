@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { InvoiceCreateComponent } from './ar-invoice/create/invoice.create.component';
 import { InvoiceComponent } from './ar-invoice/invoice.component';
-import { InvoiceCreateComponent } from './ar-invoice/invoice.create.component';
-import { InvoiceDetailComponent } from './ar-invoice/invoice.view.component';
+import { InvoiceDetailComponent } from './ar-invoice/view/invoice.view.component';
 import { PaymentComponent } from './payment/payment.component';
 
 import { DebitMemoCreateComponent } from './debit-memo/create/debit-memo-create.component';
