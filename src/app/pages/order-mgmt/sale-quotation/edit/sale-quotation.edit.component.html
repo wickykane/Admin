@@ -420,7 +420,7 @@
                                     <tbody *ngFor="let item of list['items']; let $index = index;">
                                         <tr>
                                             <td>
-                                                <button class="btn btn-danger btn-xs" type="button" (click)="deleteAction(item.sku, item.item_condition_id)">
+                                                <button class="btn btn-danger btn-xs" type="button" (click)="deleteAction(item.item_id || item.misc_id, item.item_condition_id)">
                                                         <i class="fa fa-trash"></i>
                                                     </button>
                                                 <button *ngIf="generalForm.value.is_multi_shp_addr == 1" class="btn btn-primary btn-xs" type="button" (click)="cloneRecord(item, list.items)" [disabled]="!checkCloneRecord(item, list.items[$index])" title="Add new shipping address">

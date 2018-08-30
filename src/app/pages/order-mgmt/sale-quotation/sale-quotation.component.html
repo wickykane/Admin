@@ -137,15 +137,15 @@
                                             <span class="badge badge-primary bg-darkblue" *ngIf="item.sts_code == 'IU'">{{item.sts}}</span>
                                             <span class="badge badge-primary bg-bright-grey" *ngIf="item.sts_code == 'EX'">{{item.sts}}</span>
                                         </td>
-                                        <td class="text-center">
-                                            <button ngbTooltip="Edit" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" [routerLink]="['/order-management/sale-quotation/edit', item.id]"><i class="fa fa-pencil-square" aria-hidden="true"></i></button>
-                                            <button ngbTooltip="Submit" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" (click)="confirmModal(item.id, 'SM')"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></button>
-                                            <button ngbTooltip="Cancel" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" (click)="confirmModal(item.id, 'CC')"><i class="fa fa-times-circle" aria-hidden="true"></i></button>
-                                            <button ngbTooltip="Approve" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="confirmModal(item.id, 'AM')"><i class="fa fa-check-square"></i></button>
-                                            <button ngbTooltip="Reject" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="confirmModal(item.id, 'RM')"><i class="fa fa-ban" aria-hidden="true"></i></button>
-                                            <button ngbTooltip="Copy" class="btn btn-default" (click)="confirmModal(item.id, 'CLONE')"><i class="fa fa-clone"></i></button>
-                                            <button ngbTooltip="View" *ngIf="item['sts_code'] == 'AM' || item['sts_code'] == 'EM'" class="btn btn-default" [routerLink]="['/order-management/sale-quotation/detail', item.id]"><i class="fa fa-eye" aria-hidden="true"></i></button>
-                                            <button ngbTooltip="Convert to SO" *ngIf="item['sts_code'] == 'AM'" class="btn btn-default" (click)="confirmModal(item.id, 'SC')"><i class="fa fa-exchange" aria-hidden="true"></i></button>
+                                        <td>
+                                            <a ngbTooltip="Edit" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" [routerLink]="['/order-management/sale-quotation/edit', item.id]"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                            <a ngbTooltip="Submit" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" (click)="confirmModal(item.id, 'SM')"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></a>
+                                            <a ngbTooltip="Cancel" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" (click)="confirmModal(item.id, 'CC')"><i class="fa fa-times-circle" aria-hidden="true"></i></a>
+                                            <a ngbTooltip="Approve" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="confirmModal(item.id, 'AM')"><i class="fa fa-check"></i></a>
+                                            <a ngbTooltip="Reject" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="confirmModal(item.id, 'RM')"><i class="fa fa-ban" aria-hidden="true"></i></a>
+                                            <a ngbTooltip="Copy" class="btn btn-default" (click)="confirmModal(item.id, 'CLONE')"><i class="fa fa-clone"></i></a>
+                                            <a ngbTooltip="View" *ngIf="item['sts_code'] == 'AM' || item['sts_code'] == 'EM'" class="btn btn-default" [routerLink]="['/order-management/sale-quotation/detail', item.id]"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                            <a ngbTooltip="Convert to SO" *ngIf="item['sts_code'] == 'AM'" class="btn btn-default" (click)="confirmModal(item.id, 'SC')"><i class="fa fa-exchange" aria-hidden="true"></i></a>
                                         </td>
                                     </tr>
 
