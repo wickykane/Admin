@@ -109,15 +109,6 @@ export class PickupOptionsModalComponent implements OnInit, OnDestroy {
     }
     applyData() {
         var params = Object.assign({}, this.generalForm.value);
-        // var weekDaysList1 = this._wareHouseList.slice(0);
-        // console.log(weekDaysList1);
-        // weekDaysList1.forEach((item,index,object)=>{
-        //     console.log(item);
-        //     if(item.selected == false){
-        //         object.splice(index,1);
-        //     }
-        // });
-        // params['bussiness_hours']=weekDaysList1;
 
         params['warehouse'] = this.removeItem();
         this.itemService.checkCondition(params).subscribe(res => {
@@ -129,7 +120,6 @@ export class PickupOptionsModalComponent implements OnInit, OnDestroy {
         item.splice(index, 1);
     }
     setWareHouseTimer(id) {
-        console.log(this._wareHouseList);
         this._wareHouseList.forEach(item => {
             if (item.id == id) {
                 this.timeList = item;
@@ -144,7 +134,6 @@ export class PickupOptionsModalComponent implements OnInit, OnDestroy {
         return index; // or item.id
     }
     removeItem() {
-        console.log(this._wareHouseList);
         var warehouse = JSON.parse(JSON.stringify(this._wareHouseList));
         var tempWarehouse = JSON.parse(JSON.stringify(warehouse));
         for (var i = 0; i < warehouse.length; i++) {
@@ -170,7 +159,6 @@ export class PickupOptionsModalComponent implements OnInit, OnDestroy {
                     for (var i = 0; i < this._wareHouseList.length; i++) {
                         for (var j = 0; j < this._wareHouseList[i].bussiness_hours.length; j++) {
                             if (this.pickupList.warehouse[n].id == this._wareHouseList[i].id) {
-                                // console.log(pickupList.warehouse[n].id);
                                 if (this.pickupList.warehouse[n].bussiness_hours[k].id == this._wareHouseList[i].bussiness_hours[j].id) {
                                     this._wareHouseList[i].bussiness_hours[j] = JSON.parse(JSON.stringify(this.pickupList.warehouse[n].bussiness_hours[k]));
                                 }
@@ -182,10 +170,8 @@ export class PickupOptionsModalComponent implements OnInit, OnDestroy {
             }
             else {
                 this.pickupList.warehouse[n].bussiness_hours = JSON.parse(JSON.stringify(this._weekDaysList));
-                console.log(this.pickupList.warehouse[n]);
             }
         }
-        console.log(this.pickupList.warehouse);
         return tempWarehouse;
     }
 }
