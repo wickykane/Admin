@@ -244,10 +244,10 @@ export class SaleQuotationEditComponent implements OnInit {
             try {
                 this.customer = res.data;
                 this.data['default_shipping_id'] = this.customer.shipping[0].address_id;
-                if (res.data.buyer_type === 'PS') {
+                // if (res.data.buyer_type === 'PS') {
                     this.addr_select.contact = res.data.contact[0];
                     this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
-                }
+                // }
                 if (flag) {
                     this.selectAddress('billing', flag);
                     this.selectAddress('shipping', flag);

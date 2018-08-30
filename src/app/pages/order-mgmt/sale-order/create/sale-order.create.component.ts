@@ -138,7 +138,7 @@ export class SaleOrderCreateComponent implements OnInit {
             'description': [null],
             'payment_term_id': [null, Validators.required],
             'approver_id': [null, Validators.required],
-            'carrier_id': [1],
+            'carrier_id': [2],
             'ship_method_rate': [null, Validators.required],
             'ship_method_option': [null]
         });
@@ -199,10 +199,10 @@ export class SaleOrderCreateComponent implements OnInit {
         this.orderService.getDetailCompany(buyer_id).subscribe(res => {
             try {
                 this.customer = res.data;
-                if (res.data.buyer_type === 'PS') {
+                // if (res.data.buyer_type === 'PS') {
                     this.addr_select.contact = res.data.contact[0];
                     this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
-                }
+                // }
 
                 const default_billing = (this.customer.billing || []).find(item => item.set_default) || {};
                 const default_shipping = (this.customer.shipping || []).find(item => item.set_default) || {};
@@ -278,9 +278,11 @@ export class SaleOrderCreateComponent implements OnInit {
     }
 
     changeShipVia() {
+
         const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id);
         this.listMaster['options'] = carrier.options || [];
         this.listMaster['ship_rates'] = carrier.ship_rate || [];
+
         let default_option = null;
         let default_ship_rate = null;
         let enable = false;
@@ -288,8 +290,13 @@ export class SaleOrderCreateComponent implements OnInit {
         if (+this.generalForm.value.carrier_id === 2 || this.generalForm.value.carrier_id !== 999 && !carrier.own_carrirer) {
             default_option = 888;
             default_ship_rate = 8;
+
+            if (+this.generalForm.value.carrier_id === 1) {
+              default_option = '01';
+              default_ship_rate = 9;
+            }
             enable = [1, 2].indexOf(+this.generalForm.value.carrier_id) > -1;
-            console.log(default_option);
+
         }
 
         if (+this.generalForm.value.carrier_id === 999) {
@@ -305,16 +312,13 @@ export class SaleOrderCreateComponent implements OnInit {
                 'state_name': '',
                 'zip_code': ''
             };
-            console.log(default_option);
         } else {
             this.generalForm.get('shipping_id').setValidators([Validators.required]);
-            console.log(default_option);
         }
 
         if (carrier.own_carrirer) {
             default_option = null;
             default_ship_rate = 7;
-            console.log(default_option);
         }
 
         // Check disable method options
@@ -324,8 +328,8 @@ export class SaleOrderCreateComponent implements OnInit {
             this.generalForm.controls['ship_method_option'].enable();
         }
 
+
         this.generalForm.patchValue({ ship_method_option: default_option, ship_method_rate: default_ship_rate });
-        console.log(this.generalForm.value);
         this.generalForm.updateValueAndValidity();
     }
 
@@ -389,7 +393,8 @@ export class SaleOrderCreateComponent implements OnInit {
         unique.forEach((tax, index) => {
             let taxAmount = 0;
             items.filter(item => item.tax_percent === tax).map(i => {
-                taxAmount += (+i.tax_percent * +i.quantity * (+i.sale_price || 0) / 100);
+                // taxAmount += (+i.tax_percent * +i.quantity * (+i.sale_price || 0) / 100);
+                taxAmount += (+i.tax_percent * +i.quantity * ((+i.sale_price || 0) * (100 - (+i.discount_percent || 0)) / 100) / 100);
             });
             this.order_info['total_tax'] = this.order_info['total_tax'] + taxAmount.toFixed(2);
             this.order_info['taxs'].push({
@@ -435,7 +440,9 @@ export class SaleOrderCreateComponent implements OnInit {
     }
 
     calcTaxShipping() {
-      console.log(this.generalForm.value);
+      if (!this.generalForm.value.shipping_id) {
+          return;
+      }
         const params = {
             'customer': this.generalForm.value.buyer_id,
             'address': this.generalForm.value.shipping_id,
