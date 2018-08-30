@@ -157,7 +157,6 @@ export class ShippingZoneViewComponent implements OnInit {
             for (var j = 0; j < countryList.length; j++) {
                 if (this.listCountry[i].country_code == countryList[j].ctr_cd) {
                     this.listCountry[i].selected = true;
-                    console.log('checked');
                     this.selectCountry(true, this.listCountry[i], countryList[j]);
                 }
             }
@@ -257,7 +256,7 @@ export class ShippingZoneViewComponent implements OnInit {
             modalRef.componentInstance.stateList = this.listMasterData['state'][code];
             // modalRef.componentInstance.listSelectCountry = this.listMasterData['state'][code];
             this.listSelectCountry.forEach(item => {
-                if (item.code = code) {
+                if (item.country_code == code) {
                     modalRef.componentInstance.listSelectCountry = item;
                 }
             })
