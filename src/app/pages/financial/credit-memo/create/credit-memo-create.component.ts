@@ -116,13 +116,13 @@ export class CreditMemoCreateComponent implements OnInit {
             'billing_id': [null],
             'shipping_id': [null],
             'note': [null],
-            'apply_late_fee': [null],
+            'document_type': [null],
             'due_dt': [null, Validators.required],
             'payment_term_range': [null],
 
             // Invoice
             'inv_dt': [null, Validators.required],
-            'inv_num': [null, Validators.required],
+            'credit_num': [null, Validators.required],
             'order_id': [null, Validators.required],
         });
         //  Init Key
@@ -141,7 +141,6 @@ export class CreditMemoCreateComponent implements OnInit {
         await this.getListPaymentTerm();
         await this.getListAccountGL();
         this.getGenerateCode();
-        this.listMaster['yes_no_options'] = [{ value: 0, label: 'No' }, { value: 1, label: 'Yes' }];
 
         //  Item
         this.list.items = [];
@@ -149,14 +148,6 @@ export class CreditMemoCreateComponent implements OnInit {
 
         // Init Date
         this.generalForm.controls['inv_dt'].patchValue(currentDt.toISOString().slice(0, 10));
-
-        // Invoice
-        this.generalForm.controls['inv_dt'].valueChanges.debounceTime(300).subscribe(data => {
-            if (!this.generalForm.value['payment_term_id']) { return; }
-            this.generalForm.controls['payment_term_range'].setValue(this.getPaymentTermRange(this.generalForm.value['payment_term_id']));
-            this.getInvoiceDueDate(this.generalForm.value['payment_term_range']);
-            this.getEarlyPaymentValue();
-        });
 
         // Lazy Load filter
         this.data['page'] = 1;
@@ -216,55 +207,8 @@ export class CreditMemoCreateComponent implements OnInit {
 
     getGenerateCode() {
         this.creditMemoService.getGenerateCode().subscribe(res => {
-            this.generalForm.get('inv_num').patchValue(res.data.code);
-        });
-    }
-
-    getEarlyPaymentValue() {
-        const issue_dt = this.generalForm.get('inv_dt').value;
-        const payment_term_id = this.generalForm.get('payment_term_id').value;
-        const total_due = this.order_info['total'];
-        if (issue_dt && payment_term_id && total_due) {
-            this.creditMemoService.getEarlyPaymentValue(issue_dt, payment_term_id, total_due).subscribe(res => {
-                if (res.data) {
-                    this.data['is_fixed_early'] = res.data.is_fixed;
-                    this.order_info.incentive_percent = res.data.percent;
-                    this.order_info.incentive = res.data.value;
-                    this.order_info.expires_dt = res.data.expires_dt;
-                    this.order_info.grand_total = this.order_info.total - this.order_info.incentive;
-                }
-            });
-        }
-    }
-
-    getPaymentTermRange(id) {
-        const paymentTerm = (this.listMaster['payment_term'] || []).find(item => item.id === id);
-        return paymentTerm.term_day;
-    }
-
-    changePaymentTerms() {
-        const listPaymentTerms = this.listMaster['payment_terms'];
-        for (const unit of listPaymentTerms) {
-            if (unit.id === this.generalForm.value['payment_term_id']) {
-                this.generalForm.controls['payment_term_range'].setValue(unit.term_day);
-                this.getInvoiceDueDate(this.generalForm.value['payment_term_range']);
-            }
-        }
-    }
-
-    getInvoiceDueDate(paymentTermDayLimit) {
-        const params = {
-            issue_dt: this.generalForm.value['inv_dt'],
-            payment_term_dt: paymentTermDayLimit
-        };
-        this.creditMemoService.getInvoiceDueDate(params).subscribe(res => {
-            try {
-                if (params['payment_term_dt'] && res.data.due_dt) {
-                    this.generalForm.controls['due_dt'].setValue(this.dt.transform(new Date(res.data.due_dt), 'MM/dd/yyyy'));
-                }
-            } catch (e) {
-                console.log(e);
-            }
+            this.generalForm.get('credit_num').patchValue(res.data.cd);
+            this.listMaster['documentType'] = res.data.document_type;
         });
     }
 
@@ -283,6 +227,10 @@ export class CreditMemoCreateComponent implements OnInit {
             } catch (e) {
                 console.log(e);
             }
+        });
+        this.creditMemoService.getAllSaleOrderByCus(company_id).subscribe(res => {
+            console.log(res);
+            this.listMaster['sale-order'] = res.results;
         });
     }
 
@@ -464,7 +412,7 @@ export class CreditMemoCreateComponent implements OnInit {
             is_copy: this.data['is_copy'] || 0
         };
 
-        this.creditMemoService.createInvoice(params).subscribe(res => {
+        this.creditMemoService.createCreditMemo(params).subscribe(res => {
             try {
                 if (res.status) {
                     this.toastr.success(res.message);

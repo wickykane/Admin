@@ -6,10 +6,8 @@ export class CreditMemoService {
 
     constructor(private API: ApiService) { }
 
-    getListInvoice(params) {
-        // const url = 'ar-invoice';
-        // return this.API.get(url, params);
-        const url = 'ar-invoice/get-list';
+    getListCreditMemo(params) {
+        const url = 'credit-memo/list';
         return this.API.get(url, params);
     }
 
@@ -28,8 +26,14 @@ export class CreditMemoService {
         return this.API.get(url);
     }
 
+    getAllSaleOrderByCus(id) {
+        const params = {'cus_id': id};
+        const url = 'ar-invoice/get-list';
+        return this.API.get(url, params);
+    }
+
     getGenerateCode() {
-        const url = 'ar-invoice/general-code';
+        const url = 'credit-memo/master-data';
         return this.API.get(url);
     }
 
@@ -38,14 +42,13 @@ export class CreditMemoService {
         return this.API.get(url);
     }
 
-    countInvoiceStatus() {
-        // const url = 'ar-invoice/count-by-status';
-        const url = 'ar-invoice/count-status';
+    countCountStatus() {
+        const url = 'credit-memo/status-list';
         return this.API.get(url);
     }
 
-    createInvoice(params) {
-        const url = 'ar-invoice/createInvoice';
+    createCreditMemo(params) {
+        const url = 'credit-memo/create';
         return this.API.post(url, params);
     }
 
@@ -72,12 +75,12 @@ export class CreditMemoService {
     getOrderByCustomerId(params) {
         const url = 'ar-invoice/get-order';
         return this.API.get(url, params);
-    }    
+    }
 
     getListApprover() {
         const url = 'ar-invoice/get-list-user';
         return this.API.get(url);
-    }    
+    }
     printPDF(id) {
         const url = 'ar-invoice/export-invoice/' + id;
         return url;

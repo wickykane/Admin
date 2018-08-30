@@ -86,7 +86,7 @@
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6 text-primary'>
-                                                    <input readonly type="text" class="form-control" formControlName="inv_num">
+                                                    <input readonly type="text" class="form-control" formControlName="credit_num">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -107,9 +107,9 @@
                                             <div class="form-group row">
                                                 <label class='col-6'>Document Type <span class="text-danger">(*)</span></label>
                                                 <div class='col-6'>
-                                                    <select class="form-control" formControlName="apply_late_fee">
+                                                    <select class="form-control" formControlName="document_type">
                                                         <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
-                                                        <option *ngFor="let item of listMaster['yes_no_options']" [ngValue]="item.value">{{item.label}}</option>
+                                                        <option *ngFor="let item of listMaster['documentType']" [ngValue]="item.id">{{item.name}}</option>
                                                     </select>
                                                 </div>
                                             </div>

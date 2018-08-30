@@ -102,16 +102,16 @@
                                 <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                                     <tr>
                                         <td>
-                                            <a class="text-primary" [routerLink]="['detail', item.id]">{{item.quote_no}}</a>
+                                            <a class="text-primary" [routerLink]="['detail', item.id]">{{item.cd}}</a>
                                         </td>
-                                        <td class="text-center">{{item.quote_date | date:'MM/dd/yyyy' }}</td>
-                                        <td>{{item.buyer_name}}</td>
-                                        <td class="text-center">{{item.sale_person_name}}</td>
+                                        <td class="text-center">{{item.issue_date | date:'MM/dd/yyyy' }}</td>
+                                        <td>{{item.customer_name}}</td>
+                                        <td class="text-center">{{item.inv_num}}</td>
                                         <td class="text-center">
                                             {{item.total_price | currency}}
                                         </td>
                                         <td class="text-center">
-                                            {{item.total_price | currency}}
+                                            {{item.balance_price | currency}}
                                         </td>
                                         <td class="text-center">
                                             <span class="badge badge-info bg-blue" *ngIf="item.sts_code == 'NW'">{{item.sts}}</span>
@@ -124,9 +124,9 @@
                                             <span class="badge badge-primary bg-darkblue" *ngIf="item.sts_code == 'IU'">{{item.sts}}</span>
                                             <span class="badge badge-primary bg-bright-grey" *ngIf="item.sts_code == 'EX'">{{item.sts}}</span>
                                         </td>
-                                        <td class="text-center">{{item.quote_date | date:'MM/dd/yyyy' }}</td>
-                                        <td class="text-center">{{item.quote_date | date:'MM/dd/yyyy' }}</td>
-                                        <td class="text-center">{{item.quote_date | date:'MM/dd/yyyy' }}</td>                                       
+                                        <td class="text-center">{{item.age }}</td>
+                                        <td class="text-center">{{item.updated_at | date:'MM/dd/yyyy' }}</td>
+                                        <td class="text-center">{{item.updated_by}}</td>                                       
                                         <td class="text-center">
                                             <button ngbTooltip="Edit" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" [routerLink]="['/order-management/sale-quotation/edit', item.id]"><i
                                                     class="fa fa-pencil-square" aria-hidden="true"></i></button>

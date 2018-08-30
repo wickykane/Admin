@@ -49,20 +49,17 @@ export class CreditMemoListComponent implements OnInit {
         'SM': { color: 'texas-rose', name: 'Submited' },
         'RM': { color: 'magenta', name: 'Rejected' },
         'AM': { color: 'strong-green', name: 'Approved', img: './assets/images/icon/approved.png' },
-        // 'RB': { color: 'magenta', name: 'Rejected By Buyer' },
-        // 'AB': { color: 'strong-green', name: 'Approved By Buyer', img: './assets/images/icon/approved.png' },
         'CC': { color: 'red', name: 'Canceled', img: './assets/images/icon/cancel.png' },
         'SC': { color: 'lemon', name: 'Completed', img: './assets/images/icon/full_delivered.png' },
-        // 'RO': { color: 'darkblue', name: 'Reopen' },
-        // 'IU': { color: 'darkblue', name: 'In use' },
-        'EX': { color: 'bright-grey', name: 'Expired' },
+        'RD': { color: 'bright-grey', name: 'Refund Due' },
+        'RF': { color: 'bright-grey', name: 'Refunded' },
     };
 
     constructor(public router: Router,
         public fb: FormBuilder,
         public toastr: ToastrService,
         public tableService: TableService,
-        private orderService: CreditMemoService,
+        private creditMemoService: CreditMemoService,
         private modalService: NgbModal,
         private _hotkeysService: HotkeysService,
         public creditMemoListKeyService: CreditMemoListKeyService,
@@ -90,7 +87,7 @@ export class CreditMemoListComponent implements OnInit {
         this.listMaster['listFilter'] = [{ value: false, name: 'Date Filter' }];
         this.listMaster['dateType'] = [{ id: 'quote_dt', name: 'Quote Date' }, { id: 'expiry_dt', name: 'Expiry Date' }, { id: 'delivery_dt', name: 'Delivery Date' }];
         this.getList();
-        this.getListStatus();
+        // this.getListStatus();
         this.user = JSON.parse(localStorage.getItem('currentUser'));
     }
     /**
@@ -102,34 +99,34 @@ export class CreditMemoListComponent implements OnInit {
     /**
      * Internal Function
      */
-    getListStatus() {
-        this.orderService.getListSaleQuotationStatus().subscribe(res => {
-            try {
-                this.listMaster['listStatus'] = res.data;
-            } catch (e) {
-                console.log(e);
-            }
-        });
-    }
+    // getListStatus() {
+    //     this.creditMemoService.getListSaleQuotationStatus().subscribe(res => {
+    //         try {
+    //             this.listMaster['listStatus'] = res.data;
+    //         } catch (e) {
+    //             console.log(e);
+    //         }
+    //     });
+    // }
 
     moreFilter() {
         this.onoffFilter = !this.onoffFilter;
     }
 
     filter(status) {
-        const params = { sts: status };
-        this.orderService.getListSalesQuotation(params).subscribe(res => {
-            try {
-                this.list.items = res.data.rows;
-                this.tableService.matchPagingOption(res.data);
-            } catch (e) {
-                console.log(e);
-            }
-        });
+        // const params = { sts: status };
+        // this.creditMemoService.getListSalesQuotation(params).subscribe(res => {
+        //     try {
+        //         this.list.items = res.data.rows;
+        //         this.tableService.matchPagingOption(res.data);
+        //     } catch (e) {
+        //         console.log(e);
+        //     }
+        // });
     }
 
     getCountStatus() {
-        this.orderService.getQuoteCountStatus().subscribe(res => {
+        this.creditMemoService.countCountStatus().subscribe(res => {
             res.data.map(item => {
                 if (this.statusConfig[item.cd]) {
                     this.statusConfig[item.cd].count = item.count;
@@ -156,7 +153,7 @@ export class CreditMemoListComponent implements OnInit {
         });
         Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
 
-        this.orderService.getListSalesQuotation(params).subscribe(res => {
+        this.creditMemoService.getListCreditMemo(params).subscribe(res => {
             try {
                 this.list.items = res.data.rows;
                 this.tableService.matchPagingOption(res.data);
@@ -167,15 +164,15 @@ export class CreditMemoListComponent implements OnInit {
     }
 
     updateStatus(id, status) {
-        const params = { status };
-        this.orderService.updateSaleQuoteStatus(id, params).subscribe(res => {
-            try {
-                this.toastr.success(res.message);
-                this.getList();
-            } catch (e) {
-                console.log(e);
-            }
-        });
+        // const params = { status };
+        // this.creditMemoService.updateSaleQuoteStatus(id, params).subscribe(res => {
+        //     try {
+        //         this.toastr.success(res.message);
+        //         this.getList();
+        //     } catch (e) {
+        //         console.log(e);
+        //     }
+        // });
     }
 
     cloneQuote(id) {
