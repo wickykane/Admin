@@ -1,14 +1,39 @@
 <div class='address-tab'>
     <div class="bd-example text-right">
-        <button class="btn btn-outline-secondary" (click)="onClickBack()"><i class="fa fa-share-square"></i> Back</button>
-        <button class="btn btn-outline-primary" (click)="onClickEdit()"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit</button>
-        <button class="btn btn-outline-warning" (click)="onUpdateDebit()"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i> Submit</button>
-        <button class="btn btn-outline-danger" (click)="onUpdateDebit()"><i class="fa fa-times-circle" aria-hidden="true"></i> Cancel</button>
-        <button class="btn btn-outline-success" (click)="onUpdateDebit()"><i class="fa fa-check-square"></i> Approve</button>
-        <button class="btn btn-outline-danger" (click)="onUpdateDebit()"><i class="fa fa-ban" aria-hidden="true"></i> Reject</button>
-        <!-- <button class="btn btn-outline-info" (click)="onUpdateDebit()"><i class="fa fa-clone"></i> Pay</button> -->
-        <button class="btn btn-outline-dark" (click)="onUpdateDebit()"><i class="fa fa-exchange" aria-hidden="true"></i> Re-open</button>
-        <!-- <button class="btn btn-outline-basic" (click)="()"><i class="fa fa-print" aria-hidden="true"></i> Print</button> -->
+        <button class="btn btn-outline-secondary" (click)="onClickBack()">
+            <i class="fa fa-share-square" aria-hidden="true"></i> Back
+        </button>
+        <button class="btn btn-outline-primary"
+            *ngIf="debitData['sts'] === 1 || debitData['sts'] === 2" (click)="onClickEdit()">
+            <i class="fa fa-pencil-square" aria-hidden="true"></i> Edit
+        </button>
+        <button class="btn btn-outline-warning"
+            *ngIf="debitData['sts'] === 1" (click)="onChangeDebitStatus(2)">
+            <i class="fa fa-caret-square-o-right" aria-hidden="true"></i> Submit
+        </button>
+        <button class="btn btn-outline-danger"
+            *ngIf="debitData['sts'] === 1" (click)="onChangeDebitStatus(5)">
+            <i class="fa fa-times-circle" aria-hidden="true"></i> Cancel
+        </button>
+        <button class="btn btn-outline-success"
+            *ngIf="debitData['sts'] === 2" (click)="onChangeDebitStatus(3)">
+            <i class="fa fa-check-square" aria-hidden="true"></i> Approve
+        </button>
+        <button class="btn btn-outline-danger"
+            *ngIf="debitData['sts'] === 2" (click)="onChangeDebitStatus(4)">
+            <i class="fa fa-ban" aria-hidden="true"></i> Reject
+        </button>
+        <button class="btn btn-outline-info"
+            *ngIf="debitData['sts'] === 3 || debitData['sts'] === 7">
+            <i class="fa fa-clone" aria-hidden="true"></i> Pay
+        </button>
+        <button class="btn btn-outline-dark"
+            *ngIf="debitData['sts'] === 4" (click)="onChangeDebitStatus(1)">
+            <i class="fa fa-exchange" aria-hidden="true"></i> Re-open
+        </button>
+        <button class="btn btn-outline-basic">
+            <i class="fa fa-print" aria-hidden="true"></i> Print
+        </button>
     </div>
     <section class="rma-page block main-container block-order">
         <div class="row">
