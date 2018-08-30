@@ -15,7 +15,7 @@
                             <div class="form-group row">
                                 <div class="col-md-12">
                                     <label class='col-12'> Access Key
-                                        <span class="text-danger">(*)</span>
+                                        <span class="text-danger" *ngIf="!isView">(*)</span>
 
                                     </label>
 
@@ -32,7 +32,7 @@
                             <div class="form-group row">
                                 <div class="col-md-6">
                                     <label class='col-12'> User ID
-                                        <span class="text-danger">(*)</span>
+                                        <span class="text-danger" *ngIf="!isView">(*)</span>
                                         <span class="show-tooltip icon-blue" ngbTooltip="This name will be shown on the store front site.">
                                             <i class="fa fa-question-circle"></i>
                                         </span>
@@ -47,7 +47,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class='col-12'> Password
-                                        <span class="text-danger">(*)</span>
+                                        <span class="text-danger" *ngIf="!isView">(*)</span>
                                         <span class="show-tooltip icon-blue" ngbTooltip="This name will be shown on the store front site.">
                                             <i class="fa fa-question-circle"></i>
                                         </span>
@@ -74,7 +74,7 @@
                             <div class="form-group row" *ngIf="generalForm.value.rates == true">
                                 <div class="col-md-6">
                                     <label class='col-12'> The Shipper UPS's account number
-                                        <span class="text-danger">(*)</span>
+                                        <span class="text-danger" *ngIf="!isView">(*)</span>
                                     </label>
 
                                     <div class="col-sm-12">
@@ -86,7 +86,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class='col-12'> UPS Customer Classfication
-                                        <span class="text-danger">(*)</span>
+                                        <span class="text-danger" *ngIf="!isView">(*)</span>
                                     </label>
 
                                     <div class="col-sm-12">
@@ -100,7 +100,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <button type="button" class="btn btn-outline-primary" (click)="testConnection()">Test Connection</button>
+                                <button type="button" class="btn btn-outline-primary" *ngIf="!isView" (click)="testConnection()">Test Connection</button>
                             </div>
                         </div>
                     </div>
@@ -150,8 +150,8 @@
                             </div>
                             <div class="form-group row">
                                 <div class="col-md-12">
-                                    <button type="button" class="btn btn-outline-primary" (click)="checkAllUPS(true)">Enable All</button>
-                                    <button type="button" class="btn btn-outline-primary" (click)="checkAllUPS(false)">Disabled All</button>
+                                    <button type="button" [disabled]="isView" class="btn btn-outline-primary" (click)="checkAllUPS(true)">Enable All</button>
+                                    <button type="button"  [disabled]="isView" class="btn btn-outline-primary" (click)="checkAllUPS(false)">Disabled All</button>
                                     <span class="text-danger" *ngIf="calculateUPSLength()==0">(!) At least one shipping method is active.</span>
                                 </div>
                             </div>
@@ -164,7 +164,7 @@
                                     </div>
                                     <div class="col-md-4" style="display: flex">
                                         <label class="switch checkbox-blue">
-                                            <input type="checkbox" (change)="checkUPS(item,$event)" [checked]="item.selected" value="true">
+                                            <input type="checkbox"  [disabled]="isView" (change)="checkUPS(item,$event)" [checked]="item.selected" value="true">
                                             <span class="slider round"></span>
                                         </label>
                                         <span *ngIf="item.selected" style="margin-left:5px;color: #28a745;font-weight: bold">Enabled</span>
@@ -218,6 +218,8 @@
 
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="closeX()">Cancel</button>
-    <button type="button" class="btn btn-outline-primary" (click)="applyData()">Submit</button>
+    <button type="button" *ngIf="!isView" class="btn btn-outline-dark" (click)="closeX()">Cancel</button>
+    <button type="button" *ngIf="!isView" class="btn btn-outline-primary" (click)="applyData()">Submit</button>
+    <button type="button" *ngIf="isView" class="btn btn-outline-dark" (click)="closeX()">Close</button>
+
 </div>
