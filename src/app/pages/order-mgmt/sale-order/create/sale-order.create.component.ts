@@ -133,12 +133,12 @@ export class SaleOrderCreateComponent implements OnInit {
             'sale_person_id': [null, Validators.required],
             'warehouse_id': [1, Validators.required],
             'payment_method_id': [null, Validators.required],
-            'billing_id': [null],
-            'shipping_id': [null],
+            'billing_id': [null, Validators.required],
+            'shipping_id': [null, Validators.required],
             'description': [null],
             'payment_term_id': [null, Validators.required],
             'approver_id': [null, Validators.required],
-            'carrier_id': [2],
+            'carrier_id': [1],
             'ship_method_rate': [null, Validators.required],
             'ship_method_option': [null]
         });
@@ -283,13 +283,17 @@ export class SaleOrderCreateComponent implements OnInit {
         this.listMaster['ship_rates'] = carrier.ship_rate || [];
         let default_option = null;
         let default_ship_rate = null;
-        if (+this.generalForm.value.carrier_id === 3 || this.generalForm.value.carrier_id !== 999 && !carrier.own_carrirer) {
+        let enable = false;
+
+        if (+this.generalForm.value.carrier_id === 2 || this.generalForm.value.carrier_id !== 999 && !carrier.own_carrirer) {
             default_option = 888;
             default_ship_rate = 8;
+            enable = [1, 2].indexOf(+this.generalForm.value.carrier_id) > -1;
+            console.log(default_option);
         }
 
         if (+this.generalForm.value.carrier_id === 999) {
-            default_ship_rate = 8;
+            default_ship_rate = 7;
             this.generalForm.patchValue({ shipping_id: null });
             this.generalForm.get('shipping_id').clearValidators();
             this.generalForm.get('shipping_id').updateValueAndValidity();
@@ -301,18 +305,27 @@ export class SaleOrderCreateComponent implements OnInit {
                 'state_name': '',
                 'zip_code': ''
             };
-            console.log(this.generalForm.get('shipping_id'));
+            console.log(default_option);
         } else {
             this.generalForm.get('shipping_id').setValidators([Validators.required]);
-            console.log(this.generalForm.get('shipping_id'));
+            console.log(default_option);
         }
 
         if (carrier.own_carrirer) {
             default_option = null;
             default_ship_rate = 7;
+            console.log(default_option);
+        }
+
+        // Check disable method options
+        if (!enable) {
+            this.generalForm.controls['ship_method_option'].disable();
+        } else {
+            this.generalForm.controls['ship_method_option'].enable();
         }
 
         this.generalForm.patchValue({ ship_method_option: default_option, ship_method_rate: default_ship_rate });
+        console.log(this.generalForm.value);
         this.generalForm.updateValueAndValidity();
     }
 
@@ -422,6 +435,7 @@ export class SaleOrderCreateComponent implements OnInit {
     }
 
     calcTaxShipping() {
+      console.log(this.generalForm.value);
         const params = {
             'customer': this.generalForm.value.buyer_id,
             'address': this.generalForm.value.shipping_id,

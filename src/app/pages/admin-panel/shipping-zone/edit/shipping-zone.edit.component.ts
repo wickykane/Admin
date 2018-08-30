@@ -279,7 +279,7 @@ export class ShippingZoneEditComponent implements OnInit {
             modalRef.componentInstance.stateList = this.listMasterData['state'][code];
             // modalRef.componentInstance.listSelectCountry = this.listMasterData['state'][code];
             this.listSelectCountry.forEach(item => {
-                if (item.code = code) {
+                if (item.country_code == code) {
                     modalRef.componentInstance.listSelectCountry = item;
                 }
             })

@@ -50,7 +50,7 @@ export class FinancialService {
     }
 
     getInvoiceStatus() {
-        const url = 'ar-invoice/count-status';
+        const url = 'ar-invoice/reference-list';
         return this.API.get(url);
     }
 

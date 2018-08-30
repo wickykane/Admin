@@ -7,7 +7,7 @@ import { ChartsModule } from 'ng2-charts';
 
 import { InvoiceCreateComponent } from './ar-invoice/create/invoice.create.component';
 import { InvoiceComponent } from './ar-invoice/invoice.component';
-import { InvoiceDetailComponent } from './ar-invoice/invoice.view.component';
+import { InvoiceDetailComponent } from './ar-invoice/view/invoice.view.component';
 
 //  Saleorder Tab
 import { InvoiceCreditMemoTabComponent } from './ar-invoice/invoice-tabs/credit-memo-tab.component';
