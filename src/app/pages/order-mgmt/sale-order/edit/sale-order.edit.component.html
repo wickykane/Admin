@@ -410,7 +410,7 @@
                                         <th style="width:100px" translate>Tax %</th>
                                         <th translate style="width:100px">Amount</th>
                                         <th translate style="width:100px">G/L Account</th>
-                                        <th translate style="width:100px">Price Source</th>
+                                        <!-- <th translate style="width:100px">Price Source</th> -->
                                     </tr>
                                 </thead>
                                 <tr *ngIf="list['items'].length === 0">
@@ -454,9 +454,9 @@
                                         <td>
                                             {{ item.income_account_name }}
                                         </td>
-                                        <td class="text-center">
+                                        <!-- <td class="text-center">
                                             {{item.source_name}}
-                                        </td>
+                                        </td> -->
                                     </tr>
                                 </tbody>
                             </table>
