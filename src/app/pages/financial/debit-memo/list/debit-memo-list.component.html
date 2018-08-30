@@ -104,7 +104,8 @@
     <div class="block-content list-order-table">
         <button style="margin: 10px 0;" class="btn btn-primary" (click)="addNewDebitMemo()">Add New</button>
         <div class="table-responsive">
-            <table class="table table-striped table-vcenter custom-table">
+            <table class="table table-striped table-vcenter custom-table" cdArrowTable [collection]="listDebitMemo"
+                [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                 <thead class="bg-white">
                     <tr>
                         <th></th>
@@ -126,7 +127,7 @@
                     <tr>
                         <td colspan="100%" class="text-center" *ngIf="!listDebitMemo.length">No data.</td>
                     </tr>
-                    <tr *ngFor="let debit of listDebitMemo; let i = index">
+                    <tr *ngFor="let debit of listDebitMemo; let i = index" [ngClass]="{'row-selected': i == selectedIndex}">
                         <td>
                             <label class="css-input css-checkbox css-checkbox-default">
                                 <input class="cb-element" type="checkbox">

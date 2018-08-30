@@ -56,32 +56,44 @@ export class DebitMemoListKeyService implements OnDestroy {
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset Search'));
         this._hotkeysService.add(new Hotkey('f5', (event: KeyboardEvent): any => {
             event.preventDefault();
-            // this.context.onSubmitDebitMemo();
+            if (this.context.listDebitMemo.length) {
+                this.context.onSubmitDebitMemo(this.context.listDebitMemo[this.context.selectedIndex]['id']);
+            }
             return event;
         }, undefined, 'Submit'));
         this._hotkeysService.add(new Hotkey('f6', (event: KeyboardEvent): any => {
             event.preventDefault();
-            // this.context.onApproveDebitMemo();
+            if (this.context.listDebitMemo.length) {
+                this.context.onApproveDebitMemo(this.context.listDebitMemo[this.context.selectedIndex]['id']);
+            }
             return event;
         }, undefined, 'Approve'));
         this._hotkeysService.add(new Hotkey('f7', (event: KeyboardEvent): any => {
             event.preventDefault();
-            // this.context.onCancelDebitMemo();
+            if (this.context.listDebitMemo.length) {
+                this.context.onCancelDebitMemo(this.context.listDebitMemo[this.context.selectedIndex]['id']);
+            }
             return event;
         }, undefined, 'Cancel'));
         this._hotkeysService.add(new Hotkey('f8', (event: KeyboardEvent): any => {
             event.preventDefault();
-            // this.context.onRejectDebitMemo();
+            if (this.context.listDebitMemo.length) {
+                this.context.onRejectDebitMemo(this.context.listDebitMemo[this.context.selectedIndex]['id']);
+            }
             return event;
         }, undefined, 'Reject'));
         this._hotkeysService.add(new Hotkey('f9', (event: KeyboardEvent): any => {
             event.preventDefault();
-            // this.context.onReopenDebitMemo();
+            if (this.context.listDebitMemo.length) {
+                this.context.onReopenDebitMemo(this.context.listDebitMemo[this.context.selectedIndex]['id']);
+            }
             return event;
         }, undefined, 'Re-open'));
         this._hotkeysService.add(new Hotkey('f10', (event: KeyboardEvent): any => {
             event.preventDefault();
-            // this.context.onViewDebitMemo();
+            if (this.context.listDebitMemo.length) {
+                this.context.onViewDebitMemo(this.context.listDebitMemo[this.context.selectedIndex]['id']);
+            }
             return event;
         }, undefined, 'View'));
     }

@@ -34,6 +34,8 @@ export class DebitMemoListComponent implements OnInit {
 
     public totalSummary = {};
 
+    public selectedIndex = 0;
+
     constructor(public router: Router,
         public fb: FormBuilder,
         public toastr: ToastrService,
@@ -130,6 +132,7 @@ export class DebitMemoListComponent implements OnInit {
             res => {
                 try {
                     this.listDebitMemo = res.data.rows;
+                    this.selectedIndex = 0;
                     this.tableService.matchPagingOption(res.data);
                 } catch (err) {
                     console.log(err);
