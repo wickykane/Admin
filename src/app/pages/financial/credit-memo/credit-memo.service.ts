@@ -72,21 +72,12 @@ export class CreditMemoService {
     getOrderByCustomerId(params) {
         const url = 'ar-invoice/get-order';
         return this.API.get(url, params);
-    }
-
-    getInvoiceDueDate(params) {
-        const url = 'ar-invoice/set-due-date';
-        return this.API.get(url, params);
-    }
+    }    
 
     getListApprover() {
         const url = 'ar-invoice/get-list-user';
         return this.API.get(url);
-    }
-    getEarlyPaymentValue(issue_dt, payment_term_id, total_due) {
-        const url = `ar-invoice/set-early-payment-value?issue_dt=${issue_dt}&payment_term_id=${payment_term_id}&total_due=${total_due}`;
-        return this.API.get(url);
-    }
+    }    
     printPDF(id) {
         const url = 'ar-invoice/export-invoice/' + id;
         return url;

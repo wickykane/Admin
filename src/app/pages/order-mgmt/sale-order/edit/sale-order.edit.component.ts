@@ -38,6 +38,8 @@ export class SaleOrderEditComponent implements OnInit {
     public selectedIndex = 0;
     public data = {};
     public customer = {
+        'payment_method_id': '',
+        'payment_term_id': '',
         'last_sales_order': '',
         'current_dept': '',
         'discount_level': '',
@@ -79,12 +81,12 @@ export class SaleOrderEditComponent implements OnInit {
     };
 
     public order_info = {
-      total: 0,
-      sub_total: 0,
-      order_date: '',
-      customer_po: '',
-      buyer_id: null,
-      order_summary: {}
+        total: 0,
+        sub_total: 0,
+        order_date: '',
+        customer_po: '',
+        buyer_id: null,
+        order_summary: {}
     };
 
     public list = {
@@ -149,7 +151,7 @@ export class SaleOrderEditComponent implements OnInit {
             this.listMaster = { ...this.listMaster, ...res.data };
         });
         //  Item
-        this.list.items = [];
+        // this.list.items = [];
         const currentDt = new Date();
         this.updateTotal();
         this.copy_addr = { ...this.copy_addr, ...this.addr_select };
@@ -226,8 +228,11 @@ export class SaleOrderEditComponent implements OnInit {
                     this.addr_select.contact = res.data.contact[0];
                     this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
                 }
-                this.selectAddress('billing', flag);
-                this.selectAddress('shipping', flag);
+
+                if (flag) {
+                    this.selectAddress('billing', flag);
+                    this.selectAddress('shipping', flag);
+                }
             } catch (e) {
                 console.log(e);
             }
@@ -282,50 +287,50 @@ export class SaleOrderEditComponent implements OnInit {
     }
 
     changeShipVia(flag?) {
-      const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id);
-      console.log(carrier);
-      this.listMaster['options'] = carrier.options || [];
-      this.listMaster['ship_rates'] = carrier.ship_rate || [];
+        const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id);
+        console.log(carrier);
+        this.listMaster['options'] = carrier.options || [];
+        this.listMaster['ship_rates'] = carrier.ship_rate || [];
 
-      // Edit first time not init data
-      if (flag) {
-          return;
-      }
+        // Edit first time not init data
+        if (flag) {
+            return;
+        }
 
-      let default_option = null;
-      let default_ship_rate = null;
-      if (+this.generalForm.value.carrier_id === 3 || this.generalForm.value.carrier_id !== 999 && !carrier.own_carrirer) {
-          default_option = 888;
-          default_ship_rate = 8;
-      }
+        let default_option = null;
+        let default_ship_rate = null;
+        if (+this.generalForm.value.carrier_id === 3 || this.generalForm.value.carrier_id !== 999 && !carrier.own_carrirer) {
+            default_option = 888;
+            default_ship_rate = 8;
+        }
 
-      if (+this.generalForm.value.carrier_id === 999) {
-          default_ship_rate = 8;
-          this.generalForm.patchValue({ shipping_id: null });
-          this.generalForm.get('shipping_id').clearValidators();
-          this.generalForm.get('shipping_id').updateValueAndValidity();
-          this.addr_select.shipping = {
-              'address_name': '',
-              'address_line': '',
-              'country_name': '',
-              'city_name': '',
-              'state_name': '',
-              'zip_code': ''
-          };
-      } else {
-          this.generalForm.get('shipping_id').setValidators([Validators.required]);
-      }
+        if (+this.generalForm.value.carrier_id === 999) {
+            default_ship_rate = 8;
+            this.generalForm.patchValue({ shipping_id: null });
+            this.generalForm.get('shipping_id').clearValidators();
+            this.generalForm.get('shipping_id').updateValueAndValidity();
+            this.addr_select.shipping = {
+                'address_name': '',
+                'address_line': '',
+                'country_name': '',
+                'city_name': '',
+                'state_name': '',
+                'zip_code': ''
+            };
+        } else {
+            this.generalForm.get('shipping_id').setValidators([Validators.required]);
+        }
 
-      if (carrier.own_carrirer) {
-          default_option = null;
-          default_ship_rate = 7;
-      }
+        if (carrier.own_carrirer) {
+            default_option = null;
+            default_ship_rate = 7;
+        }
 
-      console.log(default_ship_rate);
-      console.log(default_option);
+        console.log(default_ship_rate);
+        console.log(default_option);
 
-      this.generalForm.patchValue({ ship_method_option: default_option, ship_method_rate: default_ship_rate });
-      this.generalForm.updateValueAndValidity();
+        this.generalForm.patchValue({ ship_method_option: default_option, ship_method_rate: default_ship_rate });
+        this.generalForm.updateValueAndValidity();
     }
 
     findDataById(id, arr) {
@@ -449,7 +454,7 @@ export class SaleOrderEditComponent implements OnInit {
         this.groupTax(this.list.items);
         this.order_info.order_summary = {};
         items.forEach(item => {
-            this.order_info.order_summary['total_item'] = (this.order_info.order_summary['total_item'] || 0 ) + (+item.quantity);
+            this.order_info.order_summary['total_item'] = (this.order_info.order_summary['total_item'] || 0) + (+item.quantity);
             this.order_info.order_summary['total_cogs'] = (this.order_info.order_summary['total_cogs'] || 0) + (+item.cost_price || 0) * (item.quantity || 0);
             this.order_info.order_summary['total_vol'] = (this.order_info.order_summary['total_vol'] || 0) + (+item.vol || 0);
             this.order_info.order_summary['total_weight'] = (this.order_info.order_summary['total_weight'] || 0) + (+item.wt || 0);
@@ -464,9 +469,9 @@ export class SaleOrderEditComponent implements OnInit {
         this.order_info.total = +this.order_info['total_tax'] + +this.order_info.sub_total;
     }
 
-    deleteAction(id) {
+    deleteAction(sku, item_condition) {
         this.list.items = this.list.items.filter((item) => {
-            return (item.item_id + (item.item_condition_id || 'mis') !== (id + (item.item_condition_id || 'mis')));
+            return (item.sku + (item.item_condition_id || 'mis') !== (sku + (item_condition || 'mis')));
         });
         this.updateTotal();
     }
@@ -536,7 +541,7 @@ export class SaleOrderEditComponent implements OnInit {
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
-                    listAdded.push(item.item_id + item.item_condition_id);
+                    listAdded.push(item.sku + item.item_condition_id);
                 });
                 res.forEach((item) => {
                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
@@ -546,10 +551,15 @@ export class SaleOrderEditComponent implements OnInit {
                     item.discount_percent = 0;
                     item.source_id = 0;
                     item.source_name = 'From Master';
-                    item.is_shipping_free  = item.free_ship;
+                    item.is_shipping_free = item.free_ship;
                 });
                 this.list.items = this.list.items.concat(res.filter((item) => {
-                    return listAdded.indexOf(item.item_id + item.item_condition_id) < 0;
+                    if (listAdded.indexOf(item.sku + item.item_condition_id) < 0) {
+                        return listAdded.indexOf(item.sku + item.item_condition_id) < 0;
+                    } else {
+                        this.toastr.error('The item ' + item.no + ' already added in the order');
+                        return -1;
+                    }
                 }));
 
                 this.updateTotal();
@@ -563,7 +573,7 @@ export class SaleOrderEditComponent implements OnInit {
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
-                    listAdded.push(item.id + (item.item_condition_id || 'misc'));
+                    listAdded.push(item.sku + (item.item_condition_id || 'misc'));
                 });
 
                 res.forEach((item) => {
@@ -583,7 +593,13 @@ export class SaleOrderEditComponent implements OnInit {
                 });
 
                 this.list.items = this.list.items.concat(res.filter((item) => {
-                    return listAdded.indexOf(item.id + (item.item_condition_id || 'misc')) < 0;
+                    if (listAdded.indexOf(item.sku + (item.item_condition_id || 'misc')) < 0) {
+                        return listAdded.indexOf(item.sku + (item.item_condition_id || 'misc')) < 0;
+                    } else {
+                        this.toastr.error('The item ' + item.no + ' already added in the order');
+                        return -1;
+                    }
+
                 }));
 
                 this.updateTotal();
@@ -622,12 +638,12 @@ export class SaleOrderEditComponent implements OnInit {
 
     createOrder(type) {
         const products = this.list.items.map(item => {
-          item.is_item = (item.misc_id) ? 0 : 1;
-          item.misc_id = (item.misc_id) ? item.misc_id : null;
-          item.item_id = (item.item_id) ? (item.item_id) : null;
-          item.is_shipping_free = (item.is_item) ? (item.is_shipping_free) : 0;
-          item.item_condition_id = (item.is_item) ? (item.item_condition_id) : null;
-          return item;
+            item.is_item = (item.misc_id) ? 0 : 1;
+            item.misc_id = (item.misc_id) ? item.misc_id : null;
+            item.item_id = (item.item_id) ? (item.item_id) : null;
+            item.is_shipping_free = (item.is_item) ? (item.is_shipping_free) : 0;
+            item.item_condition_id = (item.is_item) ? (item.item_condition_id) : null;
+            return item;
         });
 
         let params = {};

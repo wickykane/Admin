@@ -1,6 +1,6 @@
 <div [@routerTransition]>
-    <app-page-header [heading]="'LIST OF SALES QUOTATION'" [icon]="'fa-th-list'"></app-page-header>
-    <app-shortcut [listShortcut]='saleQuoteKeyService.getKeys()'></app-shortcut>
+    <app-page-header [heading]="'LIST OF AR INVOICES'" [icon]="'fa-th-list'"></app-page-header>
+    <app-shortcut [listShortcut]='invoiceKeyService.getKeys()'></app-shortcut>
     <div class="block anchor-scroll block-order">
         <section id="statusIndicator" class="status-indicator-section">
             <ul class="status-ctn dashboard-content">
@@ -11,60 +11,85 @@
                 </li>
             </ul>
         </section>
-
         <div class="block-content pd-bottom padding-lr-0 mt-2">
             <div class="row">
                 <div class="col-6">
                     <form class="row form-horizontal form-search filter-order-group" role="form" [formGroup]="searchForm">
                         <div class="col-md-4">
-                            <label for="sale_quote_num" class="control-label">Sales Quote #</label>
-                            <input autofocus="true" type="text" name="sale_quote_num" formControlName="quote_no" class="form-control" placeholder="">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="sts" class="control-label">Status</label>
-                            <ng-select [multiple]="true" [items]="listMaster['listStatus']" bindLabel="name" bindValue="id" formControlName="sts">
-                            </ng-select>
+                            <label for="sale_quote_num" class="control-label">Invoice #</label>
+                            <input autofocus="true" type="text" name="inv_num" formControlName="inv_num" class="form-control" placeholder="">
                         </div>
                         <div class="col-md-4">
                             <label for="buyer_name" class="control-label" translate>Customer</label>
-                            <input type="text" name="buyer_name" formControlName="buyer_name" class="form-control" placeholder="">
+                            <input type="text" name="cus_name" formControlName="cus_name" class="form-control" placeholder="">
                         </div>
-
+                        <div class="col-md-4">
+                            <label for="sts" class="control-label">Status</label>
+                            <ng-select [multiple]="true" [items]="listMaster['status']" bindLabel="name" bindValue="id" formControlName="status">
+                            </ng-select>
+                        </div>
                         <ng-container *ngIf="listMaster['listFilter'][0].value">
                             <div class="col-md-4">
                                 <label for="type" class="control-label" translate>Date Type</label>
-                                <select class="form-control" formControlName="date_type">
-                                    <option value="null" selected="true">--Select--</option>
+                                <select class="form-control" [(ngModel)]="dateType" [ngModelOptions]="{standalone: true}" (ngModelChange)="onDateTypeChanged()">
                                     <option *ngFor="let item of listMaster['dateType']" [ngValue]="item.id">{{item.name}}</option>
                                 </select>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-4" *ngIf="dateType == 0">
                                 <label for="" class="control-label" translate>From</label>
                                 <div class="date-group">
                                     <div clickOutside (clickOutside)="d1.close()" class="input-group">
-                                        <input [maxDate]="searchForm.value.date_to | dateObj" class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="date_from" ngbDatepicker #d1="ngbDatepicker">
+                                        <input [maxDate]="searchForm.value.inv_dt_to | dateObj" class="form-control" formControlName="inv_dt_from" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d1="ngbDatepicker">
                                         <div class="input-group-append">
                                             <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
-                                                        <i class="fa fa-calendar" aria-hidden="true"></i>
-                                                    </button>
+                                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-4" *ngIf="dateType == 1">
+                                <label for="" class="control-label" translate>From</label>
+                                <div class="date-group">
+                                    <div clickOutside (clickOutside)="d1.close()" class="input-group">
+                                        <input [maxDate]="searchForm.value.inv_due_dt_to | dateObj" class="form-control" formControlName="inv_due_dt_from" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d1="ngbDatepicker">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
+                                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4" *ngIf="dateType == 0">
                                 <label for="" class="control-label" translate>To</label>
                                 <div class="date-group">
                                     <div clickOutside (clickOutside)="dt2.close()" class="input-group">
-                                        <input [minDate]="searchForm.value.date_from | dateObj" class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="date_to" ngbDatepicker #dt2="ngbDatepicker">
+                                        <input [minDate]="searchForm.value.inv_dt_from | dateObj" class="form-control" formControlName="inv_dt_to" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dt2="ngbDatepicker">
                                         <div class="input-group-append">
                                             <button class="btn btn-outline-secondary" (click)="dt2.toggle()" type="button">
-                                                    <i class="fa fa-calendar" aria-hidden="true"></i>
-                                                </button>
+                                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-4" *ngIf="dateType == 1">
+                                <label for="" class="control-label" translate>To</label>
+                                <div class="date-group">
+                                    <div clickOutside (clickOutside)="dt2.close()" class="input-group">
+                                        <input [minDate]="searchForm.value.inv_due_dt_from | dateObj" class="form-control" formControlName="inv_due_dt_to" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dt2="ngbDatepicker">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" (click)="dt2.toggle()" type="button">
+                                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </ng-container>
+
                     </form>
                 </div>
                 <div class="col-3">
@@ -93,59 +118,68 @@
                 <div class="card no-border">
                     <div class="card-header">
                         <strong>Line Items</strong>
-                        <button [routerLink]="['create']" style="margin:0; float:right" class="btn btn-link"> <i class="fa fa-plus text-success"></i> Create Sales Quote</button>
+                        <button [routerLink]="['create']" style="margin:0; float:right" class="btn btn-link"> <i class="fa fa-plus text-success"></i> Create AR Invoice</button>
                     </div>
                     <div class="card-body no-padding">
                         <div class="table-responsive list">
                             <table class="table table-bordered table-order" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                                 <thead class="bg-white">
                                     <tr>
-                                        <th translate style="width:8%">Sales Quote #</th>
-                                        <th translate>Customer</th>
-                                        <th translate>Salesperson</th>
-                                        <th translate>Approver</th>
-                                        <th class="text-center" translate style="width:8%">Quote date</th>
-                                        <th class="text-center" translate style="width:8%">Expiry date</th>
-                                        <th class="text-center" translate style="width:8%">Total</th>
-                                        <th class="text-center" translate style="width:7%">Status</th>
-                                        <th translate>Action</th>
+                                        <th>Invoice #</th>
+                                        <th>Issue Date</th>
+                                        <th>SO #</th>
+                                        <th>Customer</th>
+                                        <th>Due Date</th>
+                                        <th>Total Amount</th>
+                                        <th>Incentive</th>
+                                        <th>Penalty</th>
+                                        <th>Balance Amount</th>
+                                        <th>Status</th>
+                                        <th>Aged Overdue</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                                     <tr>
+                                        <td>{{item.inv_num}}</td>
+                                        <td>{{item.inv_dt}}</td>
+                                        <td>{{item.order_num}}</td>
+                                        <td>{{item.name}}</td>
+                                        <td>{{item.due_dt}}</td>
+                                        <td>{{item.total_amount|currency}}</td>
+                                        <td>{{item.incentive|currency}}</td>
+                                        <td>{{item.penalty|currency}}</td>
+                                        <td>{{item.balance_amount|currency}}</td>
                                         <td>
-                                            <a class="text-primary" [routerLink]="['detail', item.id]">{{item.quote_no}}</a>
+                                            <span class="badge badge-info bg-blue" *ngIf="item.invoice_status_id == 1">{{convertStatus(item.invoice_status_id, 'status')}}</span>
+                                            <span class="badge badge-warning bg-texas-rose" *ngIf="item.invoice_status_id == 2">{{convertStatus(item.invoice_status_id, 'status')}}</span>
+                                            <span class="badge badge-danger bg-magenta" *ngIf="item.invoice_status_id == 3">{{convertStatus(item.invoice_status_id, 'status')}}</span>
+                                            <span class="badge badge-success bg-strong-green" *ngIf="item.invoice_status_id == 4">{{convertStatus(item.invoice_status_id, 'status')}}</span>
+                                            <span class="badge badge-primary bg-darkblue" *ngIf="item.invoice_status_id == 5">{{convertStatus(item.invoice_status_id, 'status')}}</span>
+                                            <span class="badge badge-primary bg-lemon" *ngIf="item.invoice_status_id == 6">{{convertStatus(item.invoice_status_id, 'status')}}</span>
+                                            <span class="badge badge-danger bg-red" *ngIf="item.invoice_status_id == 7">{{convertStatus(item.invoice_status_id, 'status')}}</span>
+                                            <span class="badge badge-primary bg-bright-grey" *ngIf="item.invoice_status_id == 8">{{convertStatus(item.invoice_status_id, 'status')}}</span>
                                         </td>
-                                        <td>{{item.buyer_name}}</td>
-                                        <td class="text-center">{{item.sale_person_name}}</td>
-                                        <td class="text-center">{{item.approver_name}}</td>
-                                        <td class="text-center">{{item.quote_date | date:'MM/dd/yyyy' }}</td>
-                                        <td class="text-center">
-                                            <span ng-if="item.expiry_date!=null">{{item.expire_dt | date:'MM/dd/yyyy' }}</span>
-                                        </td>
-                                        <td class="text-center">
-                                            {{item.total_price | currency}}
-                                        </td>
-                                        <td class="text-center">
-                                            <span class="badge badge-info bg-blue" *ngIf="item.sts_code == 'NW'">{{item.sts}}</span>
-                                            <span class="badge badge-warning bg-texas-rose" *ngIf="item.sts_code == 'SM'">{{item.sts}}</span>
-                                            <span class="badge badge-danger bg-magenta" *ngIf="item.sts_code == 'RM'">{{item.sts}}</span>
-                                            <span class="badge badge-success bg-strong-green" *ngIf="item.sts_code == 'AM'">{{item.sts}}</span>
-                                            <span class="badge badge-danger bg-red" *ngIf="item.sts_code == 'CC'">{{item.sts}}</span>
-                                            <span class="badge badge-primary bg-lemon" *ngIf="item.sts_code == 'SC'">{{item.sts}}</span>
-                                            <span class="badge badge-primary" *ngIf="item.sts_code == 'RO'">{{item.sts}}</span>
-                                            <span class="badge badge-primary bg-darkblue" *ngIf="item.sts_code == 'IU'">{{item.sts}}</span>
-                                            <span class="badge badge-primary bg-bright-grey" *ngIf="item.sts_code == 'EX'">{{item.sts}}</span>
-                                        </td>
-                                        <td class="text-center">
-                                            <button ngbTooltip="Edit" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" [routerLink]="['/order-management/sale-quotation/edit', item.id]"><i class="fa fa-pencil-square" aria-hidden="true"></i></button>
-                                            <button ngbTooltip="Submit" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" (click)="confirmModal(item.id, 'SM')"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></button>
-                                            <button ngbTooltip="Cancel" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" (click)="confirmModal(item.id, 'CC')"><i class="fa fa-times-circle" aria-hidden="true"></i></button>
-                                            <button ngbTooltip="Approve" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="confirmModal(item.id, 'AM')"><i class="fa fa-check-square"></i></button>
-                                            <button ngbTooltip="Reject" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="confirmModal(item.id, 'RM')"><i class="fa fa-ban" aria-hidden="true"></i></button>
-                                            <button ngbTooltip="Copy" class="btn btn-default" (click)="confirmModal(item.id, 'CLONE')"><i class="fa fa-clone"></i></button>
-                                            <button ngbTooltip="View" *ngIf="item['sts_code'] == 'AM' || item['sts_code'] == 'EM'" class="btn btn-default" [routerLink]="['/order-management/sale-quotation/detail', item.id]"><i class="fa fa-eye" aria-hidden="true"></i></button>
-                                            <button ngbTooltip="Convert to SO" *ngIf="item['sts_code'] == 'AM'" class="btn btn-default" (click)="confirmModal(item.id, 'SC')"><i class="fa fa-exchange" aria-hidden="true"></i></button>
+                                        <td>{{item.aging_overdue}}</td>
+                                        <!-- <td>{{item.paid_amount|currency}}</td> -->
+                                        <td>
+                                            <a class="btn btn-default " *ngIf="item.invoice_status_id == 1" ngbTooltip="View" (click)="viewInvoice(item.id)">
+                                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                            </a>
+                                            <a class="btn btn-default " ngbTooltip="Edit" (click)="editInvoice(item.id)" *ngIf="item.invoice_status_id == 1">
+                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                            </a>
+                                            <a ngbTooltip="Submit" *ngIf="item.invoice_status_id == 1" class="btn btn-default" (click)="confirmModal(item.id, 2)"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></a>
+                                            <a class="btn btn-default" ngbTooltip="Cancel" (click)="confirmModal(item.id, 7)" *ngIf="item.invoice_status_id == 1">
+                                                <i class="fa fa-ban" aria-hidden="true"></i>
+                                            </a>
+                                            <a ngbTooltip="Approve" *ngIf="item['invoice_status_id'] == 2" class="btn btn-default" (click)="confirmModal(item.id, 4)"><i class="fa fa-check"></i></a>
+                                            <a ngbTooltip="Reject" *ngIf="item['invoice_status_id'] == 2" class="btn btn-default" (click)="confirmModal(item.id, 3)"><i class="fa fa-ban" aria-hidden="true"></i></a>
+                                            <a ngbTooltip="Pay" *ngIf="[4,8].indexOf(item['invoice_status_id']) != -1" class="btn btn-default"><i class="fa fa-money" aria-hidden="true"></i></a>
+                                            <a class="btn btn-default" ngbTooltip="Print" (click)="printPDF(item.id)">
+                                                <i class="fa fa-download" aria-hidden="true"></i>
+                                            </a>
+                                            <a ngbTooltip="Send Mail" *ngIf="[3,4,6,7,8].indexOf(item['invoice_status_id']) != -1" class="btn btn-default" (click)="sendMail(item.id)"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
                                         </td>
                                     </tr>
 

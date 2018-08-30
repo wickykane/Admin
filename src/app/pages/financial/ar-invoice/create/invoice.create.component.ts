@@ -111,7 +111,7 @@ export class InvoiceCreateComponent implements OnInit {
             'warehouse_id': [null],
             'contact_user_id': [null],
 
-            'sales_person': [null, Validators.required],
+            'sales_person': [null],
             'payment_method_id': [null, Validators.required],
             'payment_term_id': [null, Validators.required],
             'billing_id': [null],
@@ -369,8 +369,8 @@ export class InvoiceCreateComponent implements OnInit {
         this.order_info.total = +this.order_info['total_tax'] + +this.order_info.sub_total;
         if (this.order_info.incentive_percent) {
             this.order_info.incentive = +this.order_info.incentive_percent * +this.order_info.total / 100;
-            this.order_info.grand_total = +this.order_info.total - +this.order_info.incentive;
         }
+        this.order_info.grand_total = +this.order_info.total - +this.order_info.incentive;
     }
 
     deleteAction(id, item_condition) {
@@ -439,19 +439,22 @@ export class InvoiceCreateComponent implements OnInit {
         this.ngOnInit();
     }
 
-    createInvoice(type, is_draft_sq?) {
+    createInvoice(type, is_draft?, is_continue?) {
         const items = this.list.items.map(item => {
-            item.discount_percent = item.discount;
             item.is_item = (item.misc_id) ? 0 : 1;
             return item;
         });
 
         const params = {
             ...this.generalForm.value,
-            status_id: type,
-            original_ship_cost: this.order_info['original_ship_cost'],
-            items,
-            is_draft_sq: is_draft_sq || 0,
+            inv_status: type,
+            sub_total: this.order_info.sub_total,
+            total_due: this.order_info.total,
+            ear_payment_incentive: this.order_info['incentive'],
+            aprvr_id: this.generalForm.value.approver_id,
+            sale_person_id: this.generalForm.value.sales_person,
+            inv_detail: items,
+            is_draft: is_draft || 0,
             is_copy: this.data['is_copy'] || 0
         };
 
@@ -460,10 +463,11 @@ export class InvoiceCreateComponent implements OnInit {
                 if (res.status) {
                     this.toastr.success(res.message);
                     this.data['invoice_id'] = res.data;
-                    setTimeout(() => {
-                        this.router.navigate(['/financial/invoice/detail/' + this.data['invoice_id']]);
-                    }, 500);
-
+                    if (!is_continue) {
+                        setTimeout(() => {
+                            this.router.navigate(['/financial/invoice/view/' + this.data['invoice_id']]);
+                        }, 500);
+                    }
                 } else {
                     this.toastr.error(res.message);
                 }

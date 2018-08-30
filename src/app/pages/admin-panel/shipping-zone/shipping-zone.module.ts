@@ -14,7 +14,8 @@ import { CustomerService } from '../../customer-mgmt/customer.service';
 import { PurchaseService } from '../../purchase-mgmt/purchase.service';
 import { ShippingZoneCreateComponent } from './create/shipping-zone.create.component';
 import { ShippingZoneService } from './shipping-zone.service';
-
+import { ShippingZoneEditComponent } from './edit/shipping-zone.edit.component';
+import { ShippingZoneViewComponent } from './view/shipping-zone.view.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -25,7 +26,7 @@ import { ShippingZoneService } from './shipping-zone.service';
     CommonShareModule,
     ShippingZoneRoutingModule
   ],
-  declarations: [ShippingZoneComponent, ShippingZoneCreateComponent],
+  declarations: [ShippingZoneComponent, ShippingZoneCreateComponent,ShippingZoneEditComponent,ShippingZoneViewComponent],
   providers: [ShippingZoneService, TableService, PurchaseService, CustomerService]
 })
 export class ShippingZoneModule { }

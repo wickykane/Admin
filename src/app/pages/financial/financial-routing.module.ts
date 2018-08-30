@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { InvoiceCreateComponent } from './ar-invoice/create/invoice.create.component';
 import { InvoiceComponent } from './ar-invoice/invoice.component';
-import { InvoiceDetailComponent } from './ar-invoice/invoice.view.component';
+import { InvoiceDetailComponent } from './ar-invoice/view/invoice.view.component';
 import { PaymentComponent } from './payment/payment.component';
 import { CreditMemoListComponent } from './credit-memo//list/credit-memo-list.component';
 import { CreditMemoCreateComponent } from './credit-memo//create/credit-memo-create.component';

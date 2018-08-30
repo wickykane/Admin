@@ -2,10 +2,9 @@ import { Injectable } from '@angular/core';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 // tslint:disable-next-line:import-blacklist
 import { Subject } from 'rxjs/Rx';
-import { Helper } from '../../../shared/index';
 
 @Injectable()
-export class InvoiceKeyService {
+export class InvoiceDetailKeyService {
     public context: any;
     public _hotkeysService;
     public watchContext = new Subject<any>();

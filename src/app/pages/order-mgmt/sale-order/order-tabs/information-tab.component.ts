@@ -169,7 +169,7 @@ export class SaleOrderInformationTabComponent implements OnInit {
                         this.updateStatusOrder(id, 1);
                         break;
                     case 'CLONE':
-                        console.log('code');
+                        this.cloneNewOrder(id);
                         break;
                 }
             }
@@ -177,6 +177,19 @@ export class SaleOrderInformationTabComponent implements OnInit {
         modalRef.componentInstance.message = this.messageConfig[status];
         modalRef.componentInstance.yesButtonText = 'Yes';
         modalRef.componentInstance.noButtonText = 'No';
+    }
+
+    cloneNewOrder(id) {
+      this.orderService.cloneOrder(id).subscribe(res => {
+          this.toastr.success(res.message);
+          setTimeout(() => {
+              this.router.navigate(['/order-management/sale-order/edit', res.data.id]);
+          }, 1000);
+      },
+          err => {
+              this.toastr.error(err.message);
+          }
+      );
     }
 
     putApproveOrder(order_id) {

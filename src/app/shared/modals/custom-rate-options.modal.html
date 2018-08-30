@@ -12,7 +12,7 @@
                 <div class="form-group row">
                     <div class="col-md-3">
                         <label class='col-12'> Display name
-                            <span class="text-danger">(*)</span>
+                            <span class="text-danger" *ngIf="!isView">(*)</span>
                             <span class="show-tooltip icon-blue" ngbTooltip="This name will be shown on the store front site.">
                                 <i class="fa fa-question-circle"></i>
                             </span>
@@ -31,7 +31,7 @@
                     <div class="col-md-3">
                         <label class='col-12'>
                             Charge Shipping
-                            <span class="text-danger">(*)</span>
+                            <span class="text-danger" *ngIf="!isView">(*)</span>
                             <span class="show-tooltip icon-blue" ngbTooltip="">
                                 <i class="fa fa-question-circle"></i>
                             </span>
@@ -90,7 +90,7 @@
                     </label>
                     <div class="row input-append">
                         <div class="col-sm-10">
-                            <input type="number" [(ngModel)]="item.lbs_from" class="form-control">
+                            <input type="number" [disabled]="isView" [(ngModel)]="item.lbs_from" class="form-control">
                         </div>
                         <div class="col-sm-2">
                             <input type="text" value="lbs" disabled="true" class="form-control">
@@ -102,7 +102,7 @@
                     </label>
                     <div class="row input-append">
                         <div class="col-sm-10">
-                            <input type="number" [(ngModel)]="item.lbs_to" class="form-control">
+                            <input type="number" [disabled]="isView" [(ngModel)]="item.lbs_to" class="form-control">
                         </div>
                         <div class="col-sm-2">
                             <input type="text" value="lbs" disabled="true" class="form-control">
@@ -121,17 +121,17 @@
                             <input type="text" value="$" disabled="true" class="form-control">
                         </div>
                         <div class="col-sm-10">
-                            <input type="number" [(ngModel)]="item.shipping_fee" class="form-control">
+                            <input type="number" [disabled]="isView" [(ngModel)]="item.shipping_fee" class="form-control">
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <label>&nbsp;</label>
                     <div class="col-sm-12">
-                        <button *ngIf="i==ranges.length-1" type="button" (click)="addNewRange()" class="btn btn-outline-dark">
+                        <button *ngIf="i==ranges.length-1" [disabled]="isView" type="button" (click)="addNewRange()" class="btn btn-outline-dark">
                             <i class="fa fa-plus"></i>
                         </button>
-                        <button type="button" *ngIf="ranges.length>1" (click)="removeRangeItem(i)" class="btn btn-outline-dark">
+                        <button type="button" *ngIf="ranges.length>1" [disabled]="isView" (click)="removeRangeItem(i)" class="btn btn-outline-dark">
                             <i class="fa fa-times"></i>
                         </button>
                     </div>
@@ -148,6 +148,6 @@
 
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-outline-primary" [disabled]="generalForm.invalid" (click)="applyData()">OK</button>
+    <button type="button" *ngIf="!isView" class="btn btn-outline-primary" [disabled]="generalForm.invalid" (click)="applyData()">OK</button>
     <button type="button" class="btn btn-outline-dark" (click)="closeX()">Close</button>
 </div>

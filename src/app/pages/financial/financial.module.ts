@@ -7,26 +7,26 @@ import { ChartsModule } from 'ng2-charts';
 
 import { InvoiceCreateComponent } from './ar-invoice/create/invoice.create.component';
 import { InvoiceComponent } from './ar-invoice/invoice.component';
-import { InvoiceDetailComponent } from './ar-invoice/invoice.view.component';
+import { InvoiceDetailComponent } from './ar-invoice/view/invoice.view.component';
 
 //  Saleorder Tab
+import { TableService } from '../../services/index';
+import { CommonShareModule, Helper, PageHeaderModule } from '../../shared/index';
 import { InvoiceCreditMemoTabComponent } from './ar-invoice/invoice-tabs/credit-memo-tab.component';
 import { InvoiceDebitMemoTabComponent } from './ar-invoice/invoice-tabs/debit-memo-tab.component';
 import { InvoiceDocumentTabComponent } from './ar-invoice/invoice-tabs/document-tab.component';
 import { InvoiceInformationTabComponent } from './ar-invoice/invoice-tabs/information-tab.component';
 import { InvoicePaymentTabComponent } from './ar-invoice/invoice-tabs/payment-tab.component';
-import { CreditMemoListComponent } from './credit-memo//list/credit-memo-list.component';
 import { CreditMemoCreateComponent } from './credit-memo//create/credit-memo-create.component';
-import { CreditMemoService } from './credit-memo/credit-memo.service'
-import { TableService } from '../../services/index';
-import { CommonShareModule, Helper, PageHeaderModule } from '../../shared/index';
+import { CreditMemoListComponent } from './credit-memo//list/credit-memo-list.component';
+import { CreditMemoService } from './credit-memo/credit-memo.service';
 import { FinancialRoutingModule } from './financial-routing.module';
 import { FinancialService } from './financial.service';
 import { PaymentComponent } from './payment/payment.component';
-import { OrderService } from '../order-mgmt/order-mgmt.service';
 
 //  Modal
 import { ItemModalModule } from '../../shared/modals/item.module';
+import { MailModalComponent } from './ar-invoice/modals/mail.modal';
 
 @NgModule({
     imports: [
@@ -50,10 +50,13 @@ import { ItemModalModule } from '../../shared/modals/item.module';
         InvoicePaymentTabComponent,
         InvoiceDocumentTabComponent,
         PaymentComponent,
+        MailModalComponent,
         CreditMemoListComponent,
-        CreditMemoCreateComponent
+        CreditMemoCreateComponent,
     ],
-    providers: [FinancialService, TableService, DatePipe, Helper,CreditMemoService,OrderService],
-    entryComponents: []
+    providers: [FinancialService, CreditMemoService, TableService, DatePipe, Helper],
+    entryComponents: [
+        MailModalComponent,
+    ]
 })
 export class FinancialModule { }

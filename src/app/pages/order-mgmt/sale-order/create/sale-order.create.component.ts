@@ -39,6 +39,8 @@ export class SaleOrderCreateComponent implements OnInit {
     public selectedIndex = 0;
     public data = {};
     public customer = {
+        'payment_method_id': '',
+        'payment_term_id': '',
         'last_sales_order': '',
         'current_dept': '',
         'discount_level': '',
@@ -201,6 +203,16 @@ export class SaleOrderCreateComponent implements OnInit {
                     this.addr_select.contact = res.data.contact[0];
                     this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
                 }
+
+                const default_billing = (this.customer.billing || []).find(item => item.set_default) || {};
+                const default_shipping = (this.customer.shipping || []).find(item => item.set_default) || {};
+                this.generalForm.patchValue({
+                    billing_id: default_billing.address_id || null,
+                    shipping_id: default_shipping.address_id || null,
+                    payment_method_id: this.customer.payment_method_id || null,
+                    payment_term_id: this.customer.payment_term_id || null,
+                });
+
             } catch (e) {
                 console.log(e);
             }
@@ -231,7 +243,7 @@ export class SaleOrderCreateComponent implements OnInit {
         if (buyer_id) {
             this.getDetailCustomerById(buyer_id);
         }
-        this.list.items = [];
+        // this.list.items = [];
         this.generalForm.controls['description'].patchValue('');
         this.updateTotal();
     }
@@ -396,13 +408,6 @@ export class SaleOrderCreateComponent implements OnInit {
         this.order_info.total = +this.order_info['total_tax'] + +this.order_info.sub_total;
     }
 
-    deleteAction(id, item_condition) {
-        this.list.items = this.list.items.filter((item) => {
-            return (item.item_id + (item.item_condition_id || 'mis') !== (id + (item.item_condition_id || 'mis')));
-        });
-        this.updateTotal();
-    }
-
 
     getQtyAvail() {
         if (this.list.items && this.list.items.length > 0) {
@@ -443,14 +448,20 @@ export class SaleOrderCreateComponent implements OnInit {
         });
     }
 
+    deleteAction(sku, item_condition) {
+        this.list.items = this.list.items.filter((item) => {
+            return (item.sku + (item.item_condition_id || 'mis') !== (sku + (item_condition || 'mis')));
+        });
+        this.updateTotal();
+    }
+
     addNewItem() {
         const modalRef = this.modalService.open(ItemModalContent, { size: 'lg' });
         modalRef.result.then(res => {
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
-                    listAdded.push(item.item_id + item.item_condition_id);
-                    console.log(listAdded);
+                    listAdded.push(item.sku + item.item_condition_id);
                 });
                 res.forEach((item) => {
                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
@@ -463,12 +474,18 @@ export class SaleOrderCreateComponent implements OnInit {
                     item.is_shipping_free = item.free_ship;
                 });
                 this.list.items = this.list.items.concat(res.filter((item) => {
-                    return listAdded.indexOf(item.item_id + item.item_condition_id) < 0;
+                    if (listAdded.indexOf(item.sku + item.item_condition_id) < 0) {
+                        return listAdded.indexOf(item.sku + item.item_condition_id) < 0;
+                    } else {
+                        this.toastr.error('The item ' + item.no + ' already added in the order');
+                        return -1;
+                    }
                 }));
 
                 this.updateTotal();
             }
         }, dismiss => { });
+
     }
 
     addNewMiscItem() {
@@ -477,7 +494,7 @@ export class SaleOrderCreateComponent implements OnInit {
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
-                    listAdded.push(item.id + (item.item_condition_id || 'misc'));
+                    listAdded.push(item.sku + (item.item_condition_id || 'misc'));
                 });
 
                 res.forEach((item) => {
@@ -497,7 +514,13 @@ export class SaleOrderCreateComponent implements OnInit {
                 });
 
                 this.list.items = this.list.items.concat(res.filter((item) => {
-                    return listAdded.indexOf(item.id + (item.item_condition_id || 'misc')) < 0;
+                    if (listAdded.indexOf(item.sku + (item.item_condition_id || 'misc')) < 0) {
+                        return listAdded.indexOf(item.sku + (item.item_condition_id || 'misc')) < 0;
+                    } else {
+                        this.toastr.error('The item ' + item.no + ' already added in the order');
+                        return -1;
+                    }
+
                 }));
 
                 this.updateTotal();
@@ -510,14 +533,14 @@ export class SaleOrderCreateComponent implements OnInit {
             const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
             modalRef.result.then(res => {
                 if (res) {
-                  this.createOrder(type);
+                    this.createOrder(type);
                 }
             }, dismiss => { });
             modalRef.componentInstance.message = this.messageConfig[type];
             modalRef.componentInstance.yesButtonText = 'Yes';
             modalRef.componentInstance.noButtonText = 'No';
         } else {
-          this.createOrder(type);
+            this.createOrder(type);
         }
 
     }

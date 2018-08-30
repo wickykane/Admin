@@ -408,7 +408,7 @@
                                         <th style="width:100px" translate>Tax %</th>
                                         <th translate style="width:100px">Amount</th>
                                         <th translate style="width:100px">G/L Account</th>
-                                        <th translate style="width:100px">Price Source</th>
+                                        <!-- <th translate style="width:100px">Price Source</th> -->
                                     </tr>
                                 </thead>
                                 <tbody *ngIf="list['items'].length === 0">
@@ -420,7 +420,7 @@
                                     <tbody *ngFor="let item of list['items']; let $index = index;">
                                         <tr>
                                             <td>
-                                                <button class="btn btn-danger btn-xs" type="button" (click)="deleteAction(item.item_id, item.item_condition_id)">
+                                                <button class="btn btn-danger btn-xs" type="button" (click)="deleteAction(item.item_id || item.misc_id, item.item_condition_id)">
                                                     <i class="fa fa-trash"></i>
                                                 </button>
                                                 <button *ngIf="generalForm.value.is_multi_shp_addr == 1" class="btn btn-primary btn-xs" type="button" (click)="cloneRecord(item, list.items)" [disabled]="!checkCloneRecord(item, list.items[$index])" title="Add new shipping address">
@@ -457,11 +457,11 @@
                                             <td>
                                                 {{ item.income_account_name }}
                                             </td>
-                                            <td class="text-center">
+                                            <!-- <td class="text-center">
                                                 <span>
                                                     {{item.source_name}}
                                                 </span>
-                                            </td>
+                                            </td> -->
                                         </tr>
                                     </tbody>
                                 </ng-container>

@@ -223,7 +223,7 @@ export class OrderService {
         return this.API.post(url, params);
     }
     cloneOrder(order_id) {
-        const url = 'order/clone-order/' + order_id;
+        const url = 'order/clone/' + order_id;
         return this.API.post(url);
     }
 

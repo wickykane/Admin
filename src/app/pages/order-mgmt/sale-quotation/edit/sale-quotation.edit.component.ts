@@ -132,7 +132,7 @@ export class SaleQuotationEditComponent implements OnInit {
             'quote_date': [null, Validators.required],
             'expiry_date': [null, Validators.required],
             'company_id': [null, Validators.required],
-            'carrier_id': [2], // Default Ups
+            'carrier_id': [1], // Default Ups
             'ship_rate': [null],
             'ship_method_option': [null],
             'warehouse_id': [1, Validators.required],
@@ -243,6 +243,7 @@ export class SaleQuotationEditComponent implements OnInit {
         this.orderService.getDetailCompany(company_id).subscribe(res => {
             try {
                 this.customer = res.data;
+                this.data['default_shipping_id'] = this.customer.shipping[0].address_id;
                 if (res.data.buyer_type === 'PS') {
                     this.addr_select.contact = res.data.contact[0];
                     this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
@@ -271,7 +272,7 @@ export class SaleQuotationEditComponent implements OnInit {
             this.getDetailCustomerById(company_id, flag);
         }
         if (!flag) {
-            this.list.items = [];
+            // this.list.items = [];
             this.updateTotal();
         }
     }
@@ -280,7 +281,7 @@ export class SaleQuotationEditComponent implements OnInit {
         try {
             switch (type) {
                 case 'shipping':
-                    const ship_id = this.generalForm.value.shipping_id;
+                    const ship_id = this.generalForm.value.shipping_id || this.data['default_shipping_id'];
                     if (ship_id) {
                         this.addr_select.shipping = this.findDataById(ship_id, this.customer.shipping);
                         this.getShippingReference(ship_id, flag);
@@ -352,7 +353,7 @@ export class SaleQuotationEditComponent implements OnInit {
 
     deleteAction(id, item_condition) {
         this.list.items = this.list.items.filter((item) => {
-            return (item.item_id + (item.item_condition_id || 'mis') !== (id + (item.item_condition_id || 'mis')));
+            return ((item.item_id || item.misc_id) + (item.item_condition_id || 'mis') !== (id + (item_condition || 'mis')));
         });
         this.updateTotal();
     }
@@ -364,7 +365,7 @@ export class SaleQuotationEditComponent implements OnInit {
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
-                    listAdded.push(item.item_id + item.item_condition_id);
+                    listAdded.push(item.sku + item.item_condition_id);
                 });
                 res.forEach((item) => {
                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
@@ -377,7 +378,12 @@ export class SaleQuotationEditComponent implements OnInit {
                     item.source_name = 'From Master';
                 });
                 this.list.items = this.list.items.concat(res.filter((item) => {
-                    return listAdded.indexOf(item.item_id + item.item_condition_id) < 0;
+                    if (listAdded.indexOf(item.sku + item.item_condition_id) < 0) {
+                        return listAdded.indexOf(item.sku + item.item_condition_id) < 0;
+                    } else {
+                        this.toastr.error('The item ' + item.no + ' already added in the order');
+                        return -1;
+                    }
                 }));
 
                 this.updateTotal();
@@ -391,7 +397,7 @@ export class SaleQuotationEditComponent implements OnInit {
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
-                    listAdded.push(item.id + (item.item_condition_id || 'misc'));
+                    listAdded.push(item.sku + (item.item_condition_id || 'misc'));
                 });
 
                 res.forEach((item) => {
@@ -406,7 +412,13 @@ export class SaleQuotationEditComponent implements OnInit {
                 });
 
                 this.list.items = this.list.items.concat(res.filter((item) => {
-                    return listAdded.indexOf(item.id + (item.item_condition_id || 'misc')) < 0;
+                    if (listAdded.indexOf(item.sku + (item.item_condition_id || 'misc')) < 0) {
+                        return listAdded.indexOf(item.sku + (item.item_condition_id || 'misc')) < 0;
+                    } else {
+                        this.toastr.error('The item ' + item.no + ' already added in the order');
+                        return -1;
+                    }
+
                 }));
 
                 this.updateTotal();
@@ -419,25 +431,21 @@ export class SaleQuotationEditComponent implements OnInit {
         this.listMaster['options'] = carrier.options || [];
         this.listMaster['ship_rates'] = carrier.ship_rate || [];
 
-        // Edit first time not init data
-        if (flag) {
-            return;
-        }
-
         let default_option = null;
         let default_ship_rate = null;
         let enable = false;
-        if (+this.generalForm.value.carrier_id === 3 || this.generalForm.value.carrier_id !== 999 && !carrier.own_carrirer) {
+        if (+this.generalForm.value.carrier_id === 2 || this.generalForm.value.carrier_id !== 999 && !carrier.own_carrirer) {
             default_option = 888;
             default_ship_rate = 8;
-            enable = [2, 3].indexOf(+this.generalForm.value.carrier_id) > -1;
+            enable = [2, 1].indexOf(+this.generalForm.value.carrier_id) > -1;
         }
 
         if (+this.generalForm.value.carrier_id === 999) {
-            default_ship_rate = 8;
+            default_ship_rate = 7;
             this.data['is_pickup'] = 1;
             this.generalForm.get('shipping_id').setValidators(null);
             this.generalForm.patchValue({ shipping_id: null });
+            this.addr_select.shipping = {};
 
             this.addr_select.shipping = {
                 'address_name': '',
@@ -463,8 +471,10 @@ export class SaleQuotationEditComponent implements OnInit {
         } else {
             this.generalForm.controls['ship_method_option'].enable();
         }
-
-        this.generalForm.patchValue({ ship_method_option: default_option, ship_rate: default_ship_rate });
+        // Edit first time not init data
+        if (!flag) {
+            this.generalForm.patchValue({ ship_method_option: default_option, ship_rate: default_ship_rate });
+        }
         this.generalForm.updateValueAndValidity();
     }
     //  Show order history
