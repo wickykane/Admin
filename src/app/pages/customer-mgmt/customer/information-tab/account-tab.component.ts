@@ -23,10 +23,28 @@ export class CustomerAccountTabComponent implements OnInit {
         accounts: [],
         cards: [],
     };
-
+    public listCreditCard=[];
     constructor(private customerService: CustomerService) {
 
     }
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.getListCreditCard();
+    }
+    getListCreditCard() {
+        this.customerService.getCreditCard().subscribe(res => {
+            this.listCreditCard = res.data;
+            console.log(this.getListCreditCard);
+            // this.credit_cards.forEach(card => { card.listCard = res.data });
+        })
+    }
+    getCardType(id){
+        var name =''
+        this.listCreditCard.forEach(item => {
+            if(item.id == id){
+                 name= item.name;
+            }
+        });
+        return name;
+    }
 }
