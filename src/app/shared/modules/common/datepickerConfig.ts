@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { NgbDateAdapter, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import * as moment from 'moment';
+
 @Injectable()
 
 export class NgbUTCStringAdapter extends NgbDateAdapter<string> {
 
     fromModel(date: string): NgbDateStruct {
-        if (date) { date = date.toString(); }
+        if (date) { date = moment(new Date(date)).format('YYYY-MM-DD'); }
         return (date && Number(date.substring(0, 4)) && Number(date.substring(5, 7) + 1) && Number(date.substring(8, 10))) ?
             {
                 year: Number(date.substring(0, 4)),

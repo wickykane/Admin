@@ -12,6 +12,7 @@ import { InvoiceDetailComponent } from './ar-invoice/view/invoice.view.component
 //  Saleorder Tab
 import { TableService } from '../../services/index';
 import { CommonShareModule, Helper, PageHeaderModule } from '../../shared/index';
+import { InvoiceEditComponent } from './ar-invoice/edit/invoice.edit.component';
 import { InvoiceCreditMemoTabComponent } from './ar-invoice/invoice-tabs/credit-memo-tab.component';
 import { InvoiceDebitMemoTabComponent } from './ar-invoice/invoice-tabs/debit-memo-tab.component';
 import { InvoiceDocumentTabComponent } from './ar-invoice/invoice-tabs/document-tab.component';
@@ -76,7 +77,8 @@ import { MailModalComponent } from './ar-invoice/modals/mail.modal';
         DebitMemoEditComponent,
         DebitMemoViewComponent,
         DebitInformationTabComponent,
-        MailModalComponent
+        MailModalComponent,
+        InvoiceEditComponent,
     ],
     providers: [FinancialService, DebitMemoService, CreditMemoService, TableService, DatePipe, Helper],
     entryComponents: [
