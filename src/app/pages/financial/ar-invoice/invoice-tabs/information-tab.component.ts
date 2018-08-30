@@ -24,15 +24,8 @@ export class InvoiceInformationTabComponent implements OnInit {
     public totalQTY;
     public totalInvoiceQTY;
     public detail;
-    @Input() set orderDetail(detail) {
-        if (detail) {
-            this.detail = detail;
-            this.totalQTY = 0;
-            this.totalInvoiceQTY = 0;
-            this.calculateQTY();
-        }
-    }
     data = {};
+
     constructor(
         public fb: FormBuilder,
         private vRef: ViewContainerRef,
@@ -46,11 +39,5 @@ export class InvoiceInformationTabComponent implements OnInit {
      * Internal Function
      */
 
-    calculateQTY() {
-        this.detail['items'].forEach((item) => {
-            this.totalQTY += item.order_detail_total_qty;
-            this.totalInvoiceQTY += item.invoice_qty;
-        });
-    }
 
 }
