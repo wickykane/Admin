@@ -33,6 +33,10 @@ export class CommonService {
         const url = 'rma/get-master-data';
         return this.apiService.get(url);
     }
+    getCountryList() {
+        const url = 'country/get-dropdown-list';
+        return this.apiService.get(url);
+    }
 
     getListCarrier(params = {}) {
         const url = 'carrier';
@@ -50,6 +54,10 @@ export class CommonService {
 
     getOrderReference() {
         const url = 'order/reference-data';
+        return this.apiService.get(url);
+    }
+    changeStatus(id){
+        const url = 'shipping-zone/change-status/'+id;
         return this.apiService.get(url);
     }
 }

@@ -22,6 +22,7 @@ export class CustomRateOptionsModalComponent implements OnInit, OnDestroy {
     @Input() typeList;
     @Input() typeFreeList;
     @Input() customRateList;
+    @Input() isView;
     hotkeyCtrlLeft: Hotkey | Hotkey[];
     hotkeyCtrlRight: Hotkey | Hotkey[];
     ranges: any = [];
@@ -55,6 +56,12 @@ export class CustomRateOptionsModalComponent implements OnInit, OnDestroy {
         if (this.customRateList) {
             this.generalForm.patchValue(this.customRateList);
             this.ranges = this.customRateList.ranges;
+        }
+        if(this.isView){
+            this.generalForm.disable();
+        }
+        else{
+            this.isView =false;
         }
     }
 
