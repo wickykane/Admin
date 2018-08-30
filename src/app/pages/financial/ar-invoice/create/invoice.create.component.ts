@@ -442,6 +442,7 @@ export class InvoiceCreateComponent implements OnInit {
     createInvoice(type, is_draft?, is_continue?) {
         const items = this.list.items.map(item => {
             item.is_item = (item.misc_id) ? 0 : 1;
+            item.order_detail_id = item.id;
             return item;
         });
 
