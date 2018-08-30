@@ -1,0 +1,149 @@
+<div class="modal-header">
+    <span class="modal-title">SEFL Configuration</span>
+    <button type="button" class="close" aria-label="Close" (click)="closeX()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <ngb-tabset #tabSet>
+        <ngb-tab title="Connection">
+            <ng-template ngbTabContent>
+
+                <form [formGroup]="generalForm" class="form-search full-width form-horizontal">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group row">
+                                <div class="col-md-12">
+                                    <label class='col-12'> Customer Account
+                                        <span class="text-danger" *ngIf="!isView">(*)</span>
+
+                                    </label>
+
+                                    <div class="col-sm-12">
+                                        <input type="text" formControlName="account" id="account" name="account" class="form-control">
+                                    </div>
+                                    <span class="col-md-12" style="color: red" *ngIf="generalForm.controls.account.touched&&generalForm.controls.account.errors?.required">
+                                        (!) This field cannot be blank.
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                                    <label class='col-12'> Username
+                                        <span class="text-danger" *ngIf="!isView">(*)</span>
+                                        <span class="show-tooltip icon-blue" ngbTooltip="This name will be shown on the store front site.">
+                                            <i class="fa fa-question-circle"></i>
+                                        </span>
+                                    </label>
+
+                                    <div class="col-sm-12">
+                                        <input type="text" formControlName="username" id="username" class="form-control">
+                                    </div>
+                                    <span class="col-md-12" style="color: red" *ngIf="generalForm.controls.username.touched&&generalForm.controls.username.errors?.required">
+                                        (!) This field cannot be blank.
+                                    </span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class='col-12'> Password
+                                        <span class="text-danger" *ngIf="!isView">(*)</span>
+                                        <span class="show-tooltip icon-blue" ngbTooltip="This name will be shown on the store front site.">
+                                            <i class="fa fa-question-circle"></i>
+                                        </span>
+                                    </label>
+
+                                    <div class="col-sm-12">
+                                        <input type="password" formControlName="password" id="password" class="form-control">
+                                    </div>
+                                    <span class="col-md-12" style="color: red" *ngIf="generalForm.controls.password.touched&&generalForm.controls.password.errors?.required">
+                                        (!) This field cannot be blank.
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="form-group">
+                                <button type="button" *ngIf="!isView" class="btn btn-outline-primary" (click)="testConnection()">Test Connection</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </ng-template>
+        </ngb-tab>
+        <ngb-tab title="Options">
+            <ng-template ngbTabContent>
+                <form [formGroup]="generalForm" class="form-search full-width form-horizontal">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                                    <label class='col-12'>
+                                        Handling Fee Type
+                                    </label>
+                                    <div class="col-sm-12">
+                                        <select name="fee_type" (change)="checkTooltip($event.target.value)" formControlName="fee_type" class="form-control">
+                                            <option *ngFor="let item of typeList" [value]='item.id'>{{item.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class='col-12'>Handling Fee
+                                            <span *ngIf="generalForm.value.fee_type==1" class="show-tooltip icon-blue" ngbTooltip="A flat handling fee of $x will be charged in the order.">
+                                                    <i class="fa fa-question-circle"></i>
+                                                </span>
+                                                <span *ngIf="generalForm.value.fee_type==2" class="show-tooltip icon-blue" ngbTooltip="Percentage of the total shipping fee of the order.">
+                                                        <i class="fa fa-question-circle"></i>
+                                                    </span>
+                                    </label>
+                                    <div class="col-sm-12 row">
+                                            <input *ngIf="generalForm.value.fee_type ==2" style="text-align:center" type="text" value="%" disabled class="form-control col-sm-2">
+                                            <input *ngIf="generalForm.value.fee_type ==1" style="text-align:center" type="text" value="$" disabled class="form-control col-sm-2">
+                                        <input type="number" name="handling_fee" formControlName="handling_fee" class="form-control col-sm-10">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-12">
+                                    <h5 style="font-weight:600;margin-left: 10px">Shipping Markup</h5>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class='col-12'>
+                                        Markup Type
+                                    </label>
+                                    <div class="col-sm-12">
+                                        <select name="fee_type" (change)="checkTooltip($event.target.value)" formControlName="markup_type" class="form-control">
+                                            <option *ngFor="let item of typeList" [value]='item.id'>{{item.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class='col-12'>Value
+                                        <span class="show-tooltip icon-blue" [ngbTooltip]="handlingFeeTooltipText">
+                                            <i class="fa fa-question-circle"></i>
+                                        </span>
+                                    </label>
+                                    <div class="col-sm-12 row">
+                                            <input *ngIf="generalForm.value.markup_type ==2" style="text-align:center" type="text" value="%" disabled class="form-control col-sm-2">
+                                            <input *ngIf="generalForm.value.markup_type ==1" style="text-align:center" type="text" value="$" disabled class="form-control col-sm-2">
+                                            <input type="number" name="markup_type_value" formControlName="markup_type_value" class="form-control col-sm-10">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </ng-template>
+        </ngb-tab>
+    </ngb-tabset>
+
+
+
+
+
+
+</div>
+<div class="modal-footer">
+    <button type="button" *ngIf="!isView" class="btn btn-outline-dark" (click)="closeX()">Cancel</button>
+    <button type="button" *ngIf="!isView" class="btn btn-outline-primary" (click)="applyData()">Submit</button>
+    <button type="button" *ngIf="isView" class="btn btn-outline-dark" (click)="closeX()">Close</button>
+</div>

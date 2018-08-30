@@ -20,6 +20,7 @@ export class ShippingZoneKeyService implements OnDestroy {
 
     resetKeys() {
         const keys = this.getKeys();
+        console.log(keys);
         for (const key of keys) {
             this._hotkeysService.remove(key);
         }
@@ -33,7 +34,6 @@ export class ShippingZoneKeyService implements OnDestroy {
         this.resetKeys();
         this._hotkeysService.add(new Hotkey('f1', (event: KeyboardEvent): any => {
             event.preventDefault();
-            console.log('f1');
             this.context.createShippingZone();
             return ;
         }, undefined, 'Add New Zone'));

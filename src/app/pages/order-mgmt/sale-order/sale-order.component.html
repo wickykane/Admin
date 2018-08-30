@@ -2,42 +2,15 @@
     <app-page-header [heading]="'LIST OF ORDERS'" [icon]="'fa-th-list'"></app-page-header>
     <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
     <div class="block anchor-scroll block-order">
-      <section id="statusIndicator" class="status-indicator-section">
+        <section id="statusIndicator" class="status-indicator-section">
           <ul class="status-ctn dashboard-content">
-              <li class="status-item dashboard-stat blue">
-                  <div class="status-count">1</div>
-                  <div class="status-lbl">NEW</div>
-              </li>
-              <li class="status-item dashboard-stat texas-rose">
-                  <div class="status-count">1</div>
-                  <div class="status-lbl">SUBMITTED</div>
-              </li>
-              <li class="status-item dashboard-stat strong-green">
-                  <div class="status-count">2</div>
-                  <div class="status-lbl">APPROVED</div>
-              </li>
-              <li class="status-item dashboard-stat magenta">
-                  <div class="status-count">1</div>
-                  <div class="status-lbl">REJECTED</div>
-              </li>
-              <li class="status-item dashboard-stat lemon">
-                  <div class="status-count">1</div>
-                  <div class="status-lbl">PARTIALLY PAID</div>
-              </li>
-              <li class="status-item dashboard-stat bright-grey">
-                  <div class="status-count">2</div>
-                  <div class="status-lbl">FULLY PAID</div>
-              </li>
-              <li class="status-item dashboard-stat darkblue">
-                  <div class="status-count">1</div>
-                  <div class="status-lbl">OVERDUE</div>
-              </li>
-              <li class="status-item dashboard-stat red">
-                  <div class="status-count">2</div>
-                  <div class="status-lbl">CANCELED</div>
+              <li style="cursor: pointer;" (click)="filter(item.status)" *ngFor="let item of countStatus" class="status-item dashboard-stat {{item.color}}">
+                  <img *ngIf="item.img" [src]="item.img" alt="">
+                  <div class="status-count">{{ item.count || 0 }}</div>
+                  <div class="status-lbl text-uppercase">{{ item.name }}</div>
               </li>
           </ul>
-      </section>
+        </section>
         <div class="block-content pd-bottom padding-lr-0">
             <div class="row">
                 <div class="col-9">
@@ -140,88 +113,91 @@
         </div>
 
         <div class="row mg-top-10">
-           <div class="col-12">
-              <div class="card no-border">
-                 <div class="card-header">
-                    <strong>Line Items</strong>
-                    <button [routerLink]="['create']" style="margin:0; float:right" class="btn btn-link"> <i class="fa fa-plus text-success"></i> Create Order</button>
-                 </div>
-                 <div class="card-body no-padding">
-                   <div class="table-responsive list">
-                       <table class="table table-bordered table-order" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
-                           <thead class="bg-white">
-                               <tr>
-                                   <th style="width:50px"></th>
-                                   <th translate>SO #</th>
-                                   <th translate>Cust PO #</th>
-                                   <th translate>Sales Quote #</th>
-                                   <th translate>Customer</th>
-                                   <th translate>Salesperson</th>
-                                   <th class="text-center " translate>Type</th>
-                                   <th class="text-center" translate>Order date</th>
-                                   <th class="text-center" translate>Delivery date</th>
-                                   <th class="text-center" translate>Total</th>
-                                   <th translate>Status</th>
-                                   <th translate>Action</th>
-                               </tr>
-                           </thead>
-                           <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
-                               <tr>
-                                   <td>
-                                       <img *ngIf="item.sts_code!='CP'" src="assets/img/qbicon-gray.png" width="20px" height="20px">
-                                       <a *ngIf="item.sts_code=='CP'" href="https://sandbox.qbo.intuit.com/app/sales" target="_blank">
+            <div class="col-12">
+                <div class="card no-border">
+                    <div class="card-header">
+                        <strong>Line Items</strong>
+                        <button [routerLink]="['create']" style="margin:0; float:right" class="btn btn-link"> <i class="fa fa-plus text-success"></i> Create Order</button>
+                    </div>
+                    <div class="card-body no-padding">
+                        <div class="table-responsive list">
+                            <table class="table table-bordered table-order" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
+                                <thead class="bg-white">
+                                    <tr>
+                                        <th style="width:50px"></th>
+                                        <th translate>SO #</th>
+                                        <th translate>Cust PO #</th>
+                                        <th translate>Sales Quote #</th>
+                                        <th translate>Customer</th>
+                                        <th translate>Salesperson</th>
+                                        <th class="text-center " translate>Type</th>
+                                        <th class="text-center" translate>Order date</th>
+                                        <th class="text-center" translate>Delivery date</th>
+                                        <th class="text-center" translate>Total</th>
+                                        <th translate>Status</th>
+                                        <th translate>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
+                                    <tr>
+                                        <td>
+                                            <img *ngIf="item.sts_code!='CP'" src="assets/img/qbicon-gray.png" width="20px" height="20px">
+                                            <a *ngIf="item.sts_code=='CP'" href="https://sandbox.qbo.intuit.com/app/sales" target="_blank">
                                            <img placement="top" ngbTooltip="Sent Invoice To QuickBooks {{item.updated_at}}" src="../../assets/img/qbicons.png"
                                                width="20px" height="20px">
                                        </a>
-                                   </td>
-                                   <td><a [routerLink]="['detail', item.id]">{{item.code}}</a></td>
-                                   <td>{{item.cus_po}}</td>
-                                   <td>{{item.quote_no}}</td>
-                                   <td>{{item.buyer_name}}</td>
-                                   <td>{{item.sale_person_name}}</td>
-                                   <td class="text-center">
-                                       <span *ngIf="item.type == 'PKU'">Pickup</span>
-                                       <span *ngIf="item.type == 'ONL'">Ecommerce</span>
-                                       <span *ngIf="item.type == 'NO'">Regular Order</span>
-                                       <span *ngIf="item.type == 'XD'">X-Docks</span>
-                                   </td>
-                                   <td class="text-center">{{item.order_date | date:'MM/dd/yyy'}}</td>
-                                   <td class="text-center">{{item.delivery_date | date:'MM/dd/yyyy'}}</td>
-                                   <td class="text-center">{{item.total_price | currency}}</td>
-                                   <td>
-                                       <span class="label label-draft" *ngIf="item.sts_code == 'NW'">{{item.sts}}</span>
-                                       <span class="label label-warning" *ngIf="item.sts_code == 'SM'">{{item.sts}}</span>
-                                       <span class="label label-draft" *ngIf="item.sts_code == 'PP'">{{item.sts}}</span>
-                                       <span class="label  label-success" *ngIf="item.sts_code == 'CP'">{{item.sts}}</span>
-                                       <span class="label  label-success" *ngIf="item.sts_code == 'AP'">{{item.sts}}</span>
-                                       <span class="label label-draft" *ngIf="item.sts_code == 'RS'">{{item.sts}}</span>
-                                       <span class="label  label-draft" *ngIf="item.sts_code == 'DL'">{{item.sts}}</span>
-                                       <span class="label label-danger" *ngIf="item.sts_code == 'RJ'">{{item.sts}}</span>
-                                       <span class="label  label-draft" *ngIf="item.sts_code == 'Draft'">{{item.sts}}</span>
-                                   </td>
-                                   <td class="text-nowrap">
-                                       <button placement="top" ngbTooltip="Submited" *ngIf="item.sts_code == 'NW'" type="button" class="btn btn-default" (click)="updateStatusOrder(item.id, 6)"><i class="fa fa-check-circle"></i></button>
-                                       <button placement="top" ngbTooltip="Approve" *ngIf="item.sts_code == 'SM'" type="button" class="btn btn-default" (click)="putApproveOrder(item.id)"><i class="fa fa-check-square"></i></button>
-                                       <button ngbTooltip="Click to Reject" data-toggle="tooltip" *ngIf="item.sts_code=='SM'" type="button" class="btn btn-default" (click)="updateStatusOrder(item.id, 7)">
-                                           <i class="fa fa-ban"></i>
-                                       </button>
-                                       <a *ngIf="item.sts_code == 'NW'" class="btn btn-default" [routerLink]="['edit', item.id]"> <i class="fa fa-pencil"></i> </a>
-                                   </td>
-                               </tr>
-                           </tbody>
-                           <tbody *ngIf="list.items.length == 0">
-                               <tr>
-                                   <td colspan="100%" class="text-center" translate>No data.</td>
-                               </tr>
-                           </tbody>
-                       </table>
-                   </div>
-                    <div class="col-12 no-padding">
+                                        </td>
+                                        <td>{{item.code}}</td>
+                                        <td>{{item.cus_po}}</td>
+                                        <td>{{item.quote_no}}</td>
+                                        <td>{{item.buyer_name}}</td>
+                                        <td>{{item.sale_person_name}}</td>
+                                        <td class="text-center">
+                                            <span *ngIf="item.type == 'PKU'">Pickup</span>
+                                            <span *ngIf="item.type == 'ONL'">Ecommerce</span>
+                                            <span *ngIf="item.type == 'NO'">Regular Order</span>
+                                            <span *ngIf="item.type == 'XD'">X-Docks</span>
+                                        </td>
+                                        <td class="text-center">{{item.order_date | date:'MM/dd/yyy'}}</td>
+                                        <td class="text-center">{{item.delivery_date | date:'MM/dd/yyyy'}}</td>
+                                        <td class="text-center">{{item.total_price | currency}}</td>
+                                        <td>
+                                            <span class="label label-draft" *ngIf="item.sts_code == 'NW'">{{item.sts}}</span>
+                                            <span class="label label-warning" *ngIf="item.sts_code == 'SM'">{{item.sts}}</span>
+                                            <span class="label label-draft" *ngIf="item.sts_code == 'PP'">{{item.sts}}</span>
+                                            <span class="label  label-success" *ngIf="item.sts_code == 'CP'">{{item.sts}}</span>
+                                            <span class="label  label-success" *ngIf="item.sts_code == 'AP'">{{item.sts}}</span>
+                                            <span class="label label-draft" *ngIf="item.sts_code == 'RS'">{{item.sts}}</span>
+                                            <span class="label  label-draft" *ngIf="item.sts_code == 'DL'">{{item.sts}}</span>
+                                            <span class="label label-danger" *ngIf="item.sts_code == 'RJ'">{{item.sts}}</span>
+                                            <span class="label  label-draft" *ngIf="item.sts_code == 'Draft'">{{item.sts}}</span>
+                                        </td>
+                                        <td class="text-nowrap">
+                                            <button ngbTooltip="Submit" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" (click)="confirmModal(item.id, 'SM')"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></button>
+                                            <button ngbTooltip="Approve" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="confirmModal(item.id, 'AP')"><i class="fa fa-check-square" aria-hidden="true"></i></button>
+                                            <button ngbTooltip="Reject" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="confirmModal(item.id, 'RJ')"><i class="fa fa-ban"></i></button>
+                                            <button ngbTooltip="Cancel" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" (click)="confirmModal(item.id, 'CC')"><i class="fa fa-times-circle"></i></button>
+                                            <button ngbTooltip="Re Open" *ngIf="item['sts_code'] == 'RJ'" class="btn btn-default" (click)="confirmModal(item.id, 'RO')"><i class="fa fa-clone"></i></button>
+                                            <button ngbTooltip="Copy" class="btn btn-default" (click)="confirmModal(item.id, 'CLONE')"><i class="fa fa-clone"></i></button>
 
+                                            <button ngbTooltip="Edit" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" [routerLink]="['/order-management/sale-order/edit', item.id]"><i class="fa fa-pencil-square"></i></button>
+                                            <button ngbTooltip="View" class="btn btn-default" [routerLink]="['/order-management/sale-order/detail', item.id]"><i class="fa fa-eye"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tbody *ngIf="list.items.length == 0">
+                                    <tr>
+                                        <td colspan="100%" class="text-center" translate>No data.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-12 no-padding">
+
+                        </div>
                     </div>
-                 </div>
-              </div>
-           </div>
+                </div>
+            </div>
         </div>
 
         <div class="row normal-pagination mg-top-10" *ngIf="list.items.length > 0">

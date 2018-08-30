@@ -22,9 +22,9 @@ export class FlatRateOptionsModalComponent implements OnInit, OnDestroy {
     @Input() typeList;
     @Input() typeFreeList;
     @Input() flatRateList;
+    @Input() isView;
     hotkeyCtrlLeft: Hotkey | Hotkey[];
     hotkeyCtrlRight: Hotkey | Hotkey[];
-    handlingFeeTooltipText=''; 
     constructor(public fb: FormBuilder,
         public router: Router,
         public toastr: ToastrService,
@@ -38,7 +38,7 @@ export class FlatRateOptionsModalComponent implements OnInit, OnDestroy {
         this.generalForm = fb.group({
             "name": ['',Validators.required],
             "type": [''],
-            "shipping_fee": [''],
+            "shipping_fee": ['',Validators.required],
             "fee_type": [''],
             "handling_fee": [''],
             "id": "2"
@@ -51,6 +51,9 @@ export class FlatRateOptionsModalComponent implements OnInit, OnDestroy {
     ngOnInit() {
         if(this.flatRateList){
             this.generalForm.patchValue(this.flatRateList);
+        }
+        if(this.isView){
+            this.generalForm.disable();
         }
     }
 
@@ -75,20 +78,6 @@ export class FlatRateOptionsModalComponent implements OnInit, OnDestroy {
             console.log(res);
             this.activeModal.close({ id: '2', data: this.generalForm.value });
         });
-    }
-    checkTooltip(id){
-        console.log(id);
-        console.log(this.generalForm.value.fee_Type);
-                // if(this.generalForm.value.fee_Type){
-            
-        // }
-        if(id==1){
-            this.handlingFeeTooltipText = "A flat handling fee of $x will be charged in the order";
-        }
-        else{
-            this.handlingFeeTooltipText = "Percentage of the total shipping fee of the order.";
-        }
-
     }
 
 

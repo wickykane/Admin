@@ -5,8 +5,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ChartsModule } from 'ng2-charts';
 
 
+import { InvoiceCreateComponent } from './ar-invoice/create/invoice.create.component';
 import { InvoiceComponent } from './ar-invoice/invoice.component';
-import { InvoiceCreateComponent } from './ar-invoice/invoice.create.component';
 import { InvoiceDetailComponent } from './ar-invoice/invoice.view.component';
 
 //  Saleorder Tab
@@ -24,6 +24,7 @@ import { PaymentComponent } from './payment/payment.component';
 
 //  Modal
 import { ItemModalModule } from '../../shared/modals/item.module';
+import { MailModalComponent } from './ar-invoice/modals/mail.modal';
 
 @NgModule({
     imports: [
@@ -46,10 +47,12 @@ import { ItemModalModule } from '../../shared/modals/item.module';
         InvoiceDebitMemoTabComponent,
         InvoicePaymentTabComponent,
         InvoiceDocumentTabComponent,
-        PaymentComponent
-
+        PaymentComponent,
+        MailModalComponent
     ],
     providers: [FinancialService, TableService, DatePipe, Helper],
-    entryComponents: []
+    entryComponents: [
+        MailModalComponent,
+    ]
 })
 export class FinancialModule { }

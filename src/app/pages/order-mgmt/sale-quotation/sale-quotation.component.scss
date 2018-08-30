@@ -523,3 +523,9 @@
         }
     }
 }
+
+.order-summary-body {
+    .control-label + div {
+        padding: 0 !important;
+    }
+}
