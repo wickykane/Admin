@@ -17,7 +17,7 @@
                                         </label>
 
                                         <div class="col-7">
-                                            {{listMasterData['cd']}}
+                                            {{cd}}
                                         </div>
                                     </div>
                                 </div>
@@ -75,7 +75,7 @@
                                 <div class="col-11 body" style="height: 200px;overflow: scroll;">
                                     <div class="form-group row" *ngFor="let country of listCountry;let i = index">
                                         <label class='col-5'>
-                                            <input type="checkbox" [(ngModel)]="country.selected" (change)="selectCountry($event.target.checked,country)"> {{country.name}}
+                                            <input type="checkbox" [(ngModel)]="country.selected" (change)="selectOldCountry($event.target.checked,country)"> {{country.name}}
                                         </label>
                                     </div>
                                 </div>

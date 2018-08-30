@@ -40,6 +40,7 @@ export class ShippingZoneViewComponent implements OnInit {
     public countryFilter = '';
     public listSelectCountry = [];
     public id: any;
+    public cd:any;
     public freeShippingList = {
         'free_shipping_item': 0,
         'limit_order_over': 0,
@@ -146,6 +147,7 @@ export class ShippingZoneViewComponent implements OnInit {
     getFormById(id) {
         this.shippingZoneService.getShippingZoneById(id).subscribe(res => {
             this.generalForm.patchValue(res.data);
+            this.cd = res.data.cd;
             this.checkListCountry(res.data.shipping_country);
             this.checkListShipping(res.data.shipping_zone_quotes);
         })
