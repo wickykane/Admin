@@ -58,7 +58,7 @@ export class NumberDirective implements OnInit {
     }
     ngOnInit() {
         this.regexStr = (this.isDecimal) ? '^[0-9]+[.]?[0-9]*$' : this.regexStr;
-        this.max = this.max || Number.POSITIVE_INFINITY;
+        this.max = (this.max >= 0) ? this.max : Number.POSITIVE_INFINITY;
         this.min = this.min || 0;
     }
 }
