@@ -329,7 +329,9 @@ export class SaleOrderCreateComponent implements OnInit {
         }
 
 
+        console.log(default_option);
         this.generalForm.patchValue({ ship_method_option: default_option, ship_method_rate: default_ship_rate });
+        console.log(this.generalForm.value);
         this.generalForm.updateValueAndValidity();
     }
 
@@ -447,7 +449,7 @@ export class SaleOrderCreateComponent implements OnInit {
             'customer': this.generalForm.value.buyer_id,
             'address': this.generalForm.value.shipping_id,
             'ship_via': this.generalForm.value.carrier_id,
-            'option': this.generalForm.value.ship_method_option,
+            'option': this.generalForm.getRawValue().ship_method_option,
             'ship_rate': this.generalForm.value.ship_method_rate,
             'items': this.list.items.filter(item => !item.misc_id)
         };
@@ -602,7 +604,7 @@ export class SaleOrderCreateComponent implements OnInit {
                 };
                 break;
         }
-        params = { ...this.generalForm.value, ...params };
+        params = { ...this.generalForm.getRawValue(), ...params };
         this.orderService.createOrder(params).subscribe(res => {
             try {
                 if (res.status) {
