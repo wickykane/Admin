@@ -117,7 +117,7 @@ export class InvoiceCreateComponent implements OnInit {
             'billing_id': [null],
             'shipping_id': [null],
             'note': [null],
-            'apply_late_fee': [null],
+            'apply_late_fee': [0],
             'due_dt': [null, Validators.required],
             'payment_term_range': [null],
 
@@ -453,7 +453,7 @@ export class InvoiceCreateComponent implements OnInit {
             sub_total: this.order_info.sub_total,
             total_due: this.order_info.total,
             is_early: this.data['is_fixed_early'] || 0,
-            early_percent: (!this.data['is_fixed_early']) ? null : (this.order_info['incentive_percent'] || 0),
+            early_percent: (this.data['is_fixed_early']) ? null : (this.order_info['incentive_percent'] || 0),
             policy_amt: (this.data['is_fixed_early']) ? (this.order_info['incentive'] || 0) : null,
             aprvr_id: this.generalForm.value.approver_id,
             sale_person_id: this.generalForm.value.sales_person,
