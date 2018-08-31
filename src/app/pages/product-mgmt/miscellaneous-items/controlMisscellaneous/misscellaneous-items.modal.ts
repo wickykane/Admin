@@ -51,10 +51,10 @@ export class MiscellaneousItemsModalComponent implements OnInit, OnDestroy {
     getAccountList() {
         this.productService.getAccountList().subscribe(res => {
             // this.accountList = res['data']['children'];
-            var accountList= res['data']['children'];
+            var accountList= res['data'];
             var tempAccountList =[];
             accountList.forEach(item => {
-                tempAccountList.push({'name':item.name,'level':1,'disabled':true},...item.children)
+                tempAccountList.push({'name':item.name,'level':item.level,'disabled':true},...item.children)
             });
             this.accountList = tempAccountList;
         });
