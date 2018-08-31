@@ -72,10 +72,10 @@ export class CreditMemoService {
         return this.API.get(url);
     }
 
-    getOrderByCustomerId(params) {
-        const url = 'ar-invoice/get-order';
-        return this.API.get(url, params);
-    }
+    // getOrderByCustomerId(params) {
+    //     const url = 'ar-invoice/get-order';
+    //     return this.API.get(url, params);
+    // }
 
     getListApprover() {
         const url = 'ar-invoice/get-list-user';

@@ -95,7 +95,7 @@
                                                 </label>
                                                 <div class='col-6 text-primary'>
                                                     <div clickOutside (clickOutside)="invoicedate.close()" class="input-group">
-                                                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="inv_dt" ngbDatepicker #invoicedate="ngbDatepicker">
+                                                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="issue_date" ngbDatepicker #invoicedate="ngbDatepicker">
                                                         <div class="input-group-append">
                                                             <button class="btn btn-outline-secondary" (click)="invoicedate.toggle()" type="button">
                                                                 <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -118,8 +118,7 @@
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
-                                                    <ng-select (change)="changeSalesOrder($event)" [items]="listMaster['sales_order']" bindLabel="order.code" bindValue="order.id"
-                                                        formControlName="order_id">
+                                                    <ng-select (change)="changeInvoice($event)" [items]="listMaster['invoice-list']" bindLabel="inv_num" bindValue="id" formControlName="document_id">
                                                     </ng-select>
                                                 </div>
                                             </div>
@@ -158,19 +157,25 @@
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6 text-danger'>
-                                                    <select class="form-control" id="payment_term_id" name="payment_term_id" formControlName="payment_term_id">
+                                                    <ng-select [items]="accountList" formControlName="gl_account" bindLabel="name" bindValue="id">
+                                                        <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                                            <span [ngClass]="{'pl-3': item.level != undefined}">{{ item.name}}
+                                                            </span>
+                                                        </ng-template>
+                                                    </ng-select>
+                                                    <!-- <select class="form-control" id="payment_term_id" name="payment_term_id" formControlName="payment_term_id">
                                                         <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let item of listMaster['accountGL']" [ngValue]="item.id">{{item.des}}</option>
-                                                    </select>
+                                                    </select> -->
                                                 </div>
                                             </div>
-                                          
+
                                             <div class="form-group row">
                                                 <label class='col-6'>Salesperson<span class="text-danger">(*)</span></label>
                                                 <div class='col-6 text-danger'>
-                                                    <select class="form-control" id="payment_term_id" name="payment_term_id" formControlName="payment_term_id">
+                                                    <select class="form-control" id="sale_person_id" name="sale_person_id" formControlName="sale_person_id">
                                                         <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
-                                                        <option *ngFor="let item of listMaster['payment_term']" [ngValue]="item.id">{{item.des}}</option>
+                                                        <option *ngFor="let item of listMaster['sale_mans']" [ngValue]="item.id">{{item.full_name}}</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -376,19 +381,16 @@
                                 (onEnter)="selectData($event)">
                                 <thead>
                                     <tr>
-                                        <th translate>No</th>
+                                        <th translate>Action</th>
                                         <th style="width:150px" translate>Item No</th>
                                         <th translate>Description</th>
                                         <th translate>Condition</th>
                                         <th translate>UOM</th>
-                                        <th translate>Free Ship</th>
-                                        <th class="text-nowrap" style="width:100px" translate>Order QTY</th>
-                                        <th class="text-nowrap" style="width:100px" translate>Invoice QTY</th>
+                                        <th class="text-nowrap" style="width:100px" translate> QTY</th>
                                         <th class="text-center" style="width:100px" translate>Unit Price</th>
                                         <th style="width:100px" translate>Disc %</th>
                                         <th style="width:100px" translate>Tax %</th>
                                         <th translate style="width:100px">Amount</th>
-                                        <th translate style="width:100px">G/L Account</th>
                                     </tr>
                                 </thead>
                                 <tbody *ngIf="list['items'].length === 0">
@@ -399,24 +401,30 @@
                                 <ng-container *ngIf="list['items'].length > 0">
                                     <tbody *ngFor="let item of list['items']; let $index = index;">
                                         <tr>
+
                                             <td>
-                                                {{$index + 1}}
+                                                <button class="btn btn-danger btn-xs" type="button" (click)="deleteAction(item.item_id || item.misc_id, item.item_condition_id)">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+
                                             </td>
-                                            <td>{{item.sku || item.misc_num}}</td>
+                                            <td>{{item.sku || item.misc_no}}</td>
                                             <td>{{item.des || item.misc_name}}</td>
                                             <td class="text-center">{{item.condition_name}}</td>
                                             <td>{{item.uom_name || item.uom || 'Each'}}</td>
-                                            <td class="text-center">
-                                                <i *ngIf="item.is_shipping_free" class="text-success fa fa-check"></i>
-                                            </td>
-                                            <td> {{ item.qty }}</td>
+
                                             <td>
-                                                <input [disabled]="item.misc_id" [isDecimal]="true" numberDirective [max]="item.qty" [min]="0" [disabled]="item.misc_id"
-                                                    style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.qty_inv"
-                                                    (change)="updateTotal()">
+                                                <input [disabled]="item.misc_id" [isDecimal]="true" numberDirective [min]="0" [disabled]="item.misc_id" style="width: 60px;"
+                                                    class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (change)="updateTotal()">
                                             </td>
                                             <td>
-                                                {{ item.price | currency }}
+                                                <div>
+
+                                                    <div style="display:inline-block;width:80%">
+                                                        <input [isDecimal]="true" numberDirective [min]="0" class="form-control input-sm" type="number" [(ngModel)]="item.price"
+                                                            (change)="updateTotal();changeFromSource(item)">
+                                                    </div>
+                                                </div>
                                             </td>
                                             <td>
                                                 <input [isDecimal]="true" numberDirective [min]="0" [max]="100" class="form-control input-sm" type="number" [(ngModel)]="item.discount_percent"
@@ -429,9 +437,6 @@
                                             <td class="text-center">
                                                 <span>{{item.amount | currency}}</span>
                                             </td>
-                                            <td>
-                                                {{ item.income_account_name }}
-                                            </td>
                                         </tr>
                                     </tbody>
                                 </ng-container>
@@ -439,6 +444,12 @@
                             </table>
                         </div>
                         <div class="col-12 no-padding">
+                            <button (click)="addNewItem()" class="btn btn-link" translate>
+                                <i class="fa fa-plus"></i>New Item
+                            </button>
+                            <button (click)="addNewMiscItem()" class="btn btn-link">
+                                <i class="fa fa-plus"></i>Misc Item
+                            </button>
                             <button (click)="getEarlyPaymentValue()" class="btn btn-link" translate>
                                 <i class="fa fa-plus"></i>Calc Early Payment
                             </button>
@@ -456,7 +467,7 @@
                     <div class="card-body no-padding">
                         <form [formGroup]="generalForm">
                             <div>
-                                <textarea class="form-control border-0" formControlName="note" rows="7" style="resize:none"></textarea>
+                                <textarea class="form-control border-0" formControlName="description" rows="7" style="resize:none"></textarea>
                             </div>
                         </form>
                     </div>
@@ -465,7 +476,7 @@
             <div class="col-md-4">
                 <div class="card height-100">
                     <div class="card-header">
-                        <strong>Invoice Total</strong>
+                        <strong>Credit Memo Total</strong>
                     </div>
                     <div class="card-body p-17">
                         <div class="row">
@@ -478,54 +489,18 @@
                                         <strong>{{order_info.sub_total | currency}}</strong>
                                     </div>
                                 </div>
-                                <!-- <div class="form-group row">
-                                    <label class='col-5 control-label'>- Discount (%)</label>
-                                    <div class='col-2 no-padding'>
-                                        <input OnlyNumber class="form-control" [(ngModel)]="order_info.discount_percent" class="form-control" type="text" (change)="updateTotal()">
-                                    </div>
-                                    <div class='col-5 padding-lr-10'>
-                                        <input class="form-control" readonly="true" [(ngModel)]="order_info.total_discount" class="form-control" value="0" type="number">
-                                    </div>
-                                </div> -->
                                 <div *ngFor="let item of order_info['taxs']" class="form-group row">
                                     <label class='col-6 control-label'>+ TAX ({{item.value}}%):</label>
                                     <div class='col-5 padding-lr-10'>
                                         <input class="form-control" readonly="true" [(ngModel)]="item.amount" class="form-control" value="0" type="number">
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label class='col-5 control-label'>
-                                        <strong class="text-warning">Total Due</strong>
-                                    </label>
-                                    <div class='col-6 offset-md-1 padding-lr-10'>
-                                        <strong class="text-primary">{{order_info.total | currency}}</strong>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class='col-6 control-label'>
-                                        - Early Payment Incentive
-                                        <input (change)="updateTotal()" [isDecimal]="true" numberDirective [min]="0" [max]="100" style="width: 50px; margin-left: 10px;"
-                                            class="form-control" [(ngModel)]="order_info['incentive_percent']" class="form-control"
-                                            value="0" type="number">
-                                        <span> %</span>
-                                    </label>
-                                    <div class='col-5 padding-lr-10'>
-                                        <div *ngIf="!data['is_fixed_early']">
-                                            <strong>
-                                                {{ (order_info['incentive'] || 0) | currency}}
-                                            </strong>
-                                        </div>
-                                        <input [ngClass]="{'border border-danger': order_info.grand_total < 0 }" *ngIf="data['is_fixed_early']" class="form-control"
-                                            [(ngModel)]="order_info['incentive']" class="form-control" value="0" type="number">
-                                        <div *ngIf="order_info['expires_dt']" class="p-2 text-danger">Expires {{ order_info['expires_dt']}}</div>
-                                    </div>
-                                </div>
                                 <div class="form-group row margin-lr-0 text-light bg-danger">
                                     <label class="col-6 control-label ">
-                                        <strong>Adjusted Total Due:</strong>
+                                        <strong>Total Amount:</strong>
                                     </label>
                                     <div class="col-6 padding-lr-10">
-                                        <strong>{{(order_info.grand_total || 0) | currency}}</strong>
+                                        <strong>{{(order_info.total || 0) | currency}}</strong>
                                     </div>
                                 </div>
                             </div>
@@ -536,14 +511,14 @@
         </div>
         <div class="row">
             <div class="col-md-12 mg-top-15 text-right">
-                <button type="button" class="btn btn-outline-info" (click)="createInvoice(1, 1)" translate>Save As Draft</button>
+                <button type="button" class="btn btn-default" (click)="confirmModal(0)" translate>Back To List</button>
+                <button type="button" class="btn btn-outline-info" (click)="createMemo(1, 1)" translate>Save As Draft</button>
                 <button type="button" class="btn btn-outline-success" (click)="confirmModal(4)" [disabled]="!generalForm.valid" translate>Save
                     & Validate</button>
                 <button type="button" class="btn btn-outline-danger" (click)="confirmModal(2)" [disabled]="!generalForm.valid" translate>Save
-                    & Submit For Approval</button>
-                <button type="button" class="btn btn-outline-dark" (click)="createInvoice(1, 1); resetInvoice();" translate>Save
-                    & Create New Invoice</button>
-                <button type="button" class="btn btn-default" (click)="confirmModal(0)" translate>Cancel</button>
+                    & Submit</button>
+                <button type="button" class="btn btn-outline-dark" (click)="createMemo(1, 1); resetInvoice();" translate>Save
+                    & Create New Credit</button>
             </div>
         </div>
     </section>

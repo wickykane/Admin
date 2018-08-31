@@ -84,6 +84,7 @@ export class CreditMemoCreateComponent implements OnInit {
         items: [],
         backItems: []
     };
+    accountList: any;
 
     public searchKey = new Subject<any>(); // Lazy load filter
 
@@ -110,20 +111,17 @@ export class CreditMemoCreateComponent implements OnInit {
             'ship_method_option': [null],
             'warehouse_id': [null],
             'contact_user_id': [null],
-            'sales_person': [null, Validators.required],
+            'sale_person_id': [null, Validators.required],
             'payment_method_id': [null, Validators.required],
             'payment_term_id': [null, Validators.required],
             'billing_id': [null],
             'shipping_id': [null],
-            'note': [null],
+            'description': [null],
             'document_type': [null],
-            'due_dt': [null, Validators.required],
-            'payment_term_range': [null],
-
-            // Invoice
-            'inv_dt': [null, Validators.required],
+            'gl_account': [null, Validators.required],
+            'issue_date': [null, Validators.required],
             'credit_num': [null, Validators.required],
-            'order_id': [null, Validators.required],
+            'document_id': [null, Validators.required],
         });
         //  Init Key
         this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
@@ -147,7 +145,7 @@ export class CreditMemoCreateComponent implements OnInit {
         const currentDt = new Date();
 
         // Init Date
-        this.generalForm.controls['inv_dt'].patchValue(currentDt.toISOString().slice(0, 10));
+        this.generalForm.controls['issue_date'].patchValue(currentDt.toISOString().slice(0, 10));
 
         // Lazy Load filter
         this.data['page'] = 1;
@@ -186,24 +184,31 @@ export class CreditMemoCreateComponent implements OnInit {
     getListAccountGL() {
         return new Promise(resolve => {
             this.creditMemoService.getListAccountGL().subscribe(res => {
-                this.listMaster['accountGL'] = res.data;
+                const accountList = res['data'];
+                const tempAccountList = [];
+                accountList.forEach(item => {
+                    tempAccountList.push({ 'name': item.name, 'level': item.level, 'disabled': true }, ...item.children);
+                });
+                this.accountList = tempAccountList;
+                console.log(this.accountList);
+                // this.listMaster['accountGL'] = res.data;
                 resolve(true);
             });
         });
     }
 
-    getOrderByCustomerId(company_id) {
-        const params = {
-            cus_id: company_id
-        };
-        this.creditMemoService.getOrderByCustomerId(params).subscribe(res => {
-            try {
-                this.listMaster['sales_order'] = res.data;
-            } catch (e) {
-                console.log(e);
-            }
-        });
-    }
+    // getOrderByCustomerId(company_id) {
+    //     const params = {
+    //         cus_id: company_id
+    //     };
+    //     this.creditMemoService.getOrderByCustomerId(params).subscribe(res => {
+    //         try {
+    //             this.listMaster['sales_order'] = res.data;
+    //         } catch (e) {
+    //             console.log(e);
+    //         }
+    //     });
+    // }
 
     getGenerateCode() {
         this.creditMemoService.getGenerateCode().subscribe(res => {
@@ -230,7 +235,7 @@ export class CreditMemoCreateComponent implements OnInit {
         });
         this.creditMemoService.getAllSaleOrderByCus(company_id).subscribe(res => {
             console.log(res);
-            this.listMaster['sale-order'] = res.results;
+            this.listMaster['invoice-list'] = res.data;
         });
     }
 
@@ -239,28 +244,30 @@ export class CreditMemoCreateComponent implements OnInit {
      */
     selectData(data) { }
 
-    changeSalesOrder(event) {
-        this.list.items = event.detail.map(item => {
-            item.qty_inv = item.qty;
+    changeInvoice(event) {
+        this.creditMemoService.getDetailInvoice(this.generalForm.value.document_id).subscribe(res => {
+            this.list.items = res.data.inv_detail.map(item => {
+            item.quantity = item.qty_inv;
             return item;
         });
 
-        this.data['order_detail'] = { ...event.order, sale_person_name: event.sale_person_name };
-        this.data['shipping_address'] = event.shipping_address;
-        this.data['shipping_method'] = event.shipping_method;
+        this.data['order_detail'] = res.data ;
+        this.data['shipping_address'] = res.data.shipping_address;
+        this.data['shipping_method'] = res.data.shipping_method;
 
         this.generalForm.patchValue({
-            ...this.data['order_detail'], inv_dt: this.generalForm.value.inv_dt,
+            ...this.data['order_detail'], approver_id: res.data.aprvr_id
         });
         this.selectAddress('billing');
         this.updateTotal();
+        });
     }
 
     changeCustomer(flag?) {
         const company_id = this.generalForm.value.company_id;
         if (company_id) {
             this.getDetailCustomerById(company_id, flag);
-            this.getOrderByCustomerId(company_id);
+            // this.getOrderByCustomerId(company_id);
         }
 
         if (!flag) {
@@ -320,19 +327,15 @@ export class CreditMemoCreateComponent implements OnInit {
 
 
         this.list.items.forEach(item => {
-            item.amount = (+item.qty_inv * (+item.price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
+            item.amount = (+item.quantity * (+item.price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
             this.order_info.sub_total += item.amount;
         });
         this.order_info.total = +this.order_info['total_tax'] + +this.order_info.sub_total;
-        if (this.order_info.incentive_percent) {
-            this.order_info.incentive = +this.order_info.incentive_percent * +this.order_info.total / 100;
-            this.order_info.grand_total = +this.order_info.total - +this.order_info.incentive;
-        }
     }
 
     deleteAction(id, item_condition) {
         this.list.items = this.list.items.filter((item) => {
-            return (item.item_id + (item.item_condition_id || 'mis') !== (id + (item.item_condition_id || 'mis')));
+            return ((item.item_id || item.misc_id) + (item.item_condition_id || 'mis') !== (id + (item_condition || 'mis')));
         });
         this.updateTotal();
     }
@@ -345,13 +348,79 @@ export class CreditMemoCreateComponent implements OnInit {
         unique.forEach((tax, index) => {
             let taxAmount = 0;
             items.filter(item => item.tax_percent === tax).map(i => {
-                taxAmount += (+i.tax_percent * +i.qty_inv * (+i.price || 0) / 100);
+                taxAmount += (+i.tax_percent * +i.quantity * (+i.price || 0) / 100);
             });
             this.order_info['total_tax'] = this.order_info['total_tax'] + +(taxAmount.toFixed(2));
             this.order_info['taxs'].push({
                 value: tax, amount: taxAmount.toFixed(2)
             });
         });
+    }
+    addNewItem() {
+        const modalRef = this.modalService.open(ItemModalContent, { size: 'lg' });
+        modalRef.result.then(res => {
+            if (res instanceof Array && res.length > 0) {
+                const listAdded = [];
+                (this.list.items).forEach((item) => {
+                    listAdded.push(item.sku + item.item_condition_id);
+                });
+                res.forEach((item) => {
+                    if (item.sale_price) { item.sale_price = Number(item.sale_price); }
+                    item['products'] = [];
+                    item.quantity = 1;
+                    item.is_shipping_free = item.is_shipping_free || item.free_ship;
+                    item['order_detail_id'] = null;
+                    item.totalItem = item.sale_price;
+                    item.source_id = 0;
+                    item.source_name = 'From Master';
+                });
+                this.list.items = this.list.items.concat(res.filter((item) => {
+                    if (listAdded.indexOf(item.sku + item.item_condition_id) < 0) {
+                        return listAdded.indexOf(item.sku + item.item_condition_id) < 0;
+                    } else {
+                        this.toastr.error('The item ' + item.no + ' already added in the order');
+                        return -1;
+                    }
+                }));
+
+                this.updateTotal();
+            }
+        }, dismiss => { });
+    }
+
+    addNewMiscItem() {
+        const modalRef = this.modalService.open(ItemMiscModalContent, { size: 'lg' });
+        modalRef.result.then(res => {
+            if (res instanceof Array && res.length > 0) {
+                const listAdded = [];
+                (this.list.items).forEach((item) => {
+                    listAdded.push(item.sku + (item.item_condition_id || 'misc'));
+                });
+
+                res.forEach((item) => {
+                    if (item.sale_price) { item.sale_price = Number(item.sale_price); }
+                    item.source_id = 2;
+                    item.source_name = 'Manual';
+                    item.quantity = 1;
+                    item.is_misc = 1;
+                    item.uom_name = item.uom;
+                    item.misc_id = item.id;
+                    item.sku = item.no;
+                });
+
+                this.list.items = this.list.items.concat(res.filter((item) => {
+                    if (listAdded.indexOf(item.sku + (item.item_condition_id || 'misc')) < 0) {
+                        return listAdded.indexOf(item.sku + (item.item_condition_id || 'misc')) < 0;
+                    } else {
+                        this.toastr.error('The item ' + item.no + ' already added in the order');
+                        return -1;
+                    }
+
+                }));
+
+                this.updateTotal();
+            }
+        }, dismiss => { });
     }
 
     resetInvoice() {
@@ -396,7 +465,7 @@ export class CreditMemoCreateComponent implements OnInit {
         this.ngOnInit();
     }
 
-    createInvoice(type, is_draft_sq?) {
+    createMemo(type, is_draft_sq?) {
         const items = this.list.items.map(item => {
             item.discount_percent = item.discount;
             item.is_item = (item.misc_id) ? 0 : 1;
@@ -411,7 +480,6 @@ export class CreditMemoCreateComponent implements OnInit {
             is_draft_sq: is_draft_sq || 0,
             is_copy: this.data['is_copy'] || 0
         };
-
         this.creditMemoService.createCreditMemo(params).subscribe(res => {
             try {
                 if (res.status) {
@@ -435,7 +503,7 @@ export class CreditMemoCreateComponent implements OnInit {
         modalRef.result.then(res => {
             if (res) {
                 if (type) {
-                    this.createInvoice(type, is_draft_sq);
+                    this.createMemo(type, is_draft_sq);
                 } else {
                     this.router.navigate(['/financial/invoice']);
                 }
