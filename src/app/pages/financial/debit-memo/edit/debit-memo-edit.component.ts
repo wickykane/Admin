@@ -311,9 +311,9 @@ export class DebitMemoEditComponent implements OnInit {
                         this.getListBillOfCustomer(this.debitMemoForm.value.company_id);
                     }
                     if (this.debitMemoForm.value.order_id !== null && this.debitMemoForm.value.order_id !== undefined) {
+                        this.listLineItems = this.debitDetail['line_items'];
                         this.getOrderInformation(this.debitMemoForm.value.order_id);
                         this.getListLineItems(this.debitMemoForm.value.order_id);
-                        this.listLineItems = this.debitDetail['line_items'];
                     }
                 } catch (err) {
                     console.log(err);
@@ -365,7 +365,7 @@ export class DebitMemoEditComponent implements OnInit {
 
     onDeleteLineItem(deletedItem, index) {
         deletedItem.deleted = true;
-        this.listDeletedLineItem = this.listLineItems.filter( item => item.deleted);
+        this.listDeletedLineItem.push(deletedItem);
         this.listLineItems.splice(index, 1);
         this.getUniqueTaxItemLine();
     }
