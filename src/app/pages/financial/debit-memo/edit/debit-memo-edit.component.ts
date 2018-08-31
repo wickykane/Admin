@@ -52,7 +52,7 @@ export class DebitMemoEditComponent implements OnInit {
     public listLineItems = [];
     public listDeletedLineItem = [];
     public listTaxs = [];
-    public todayDate = moment().format('MM-DD-YYYY');
+    public todayDate = moment().format('YYYY-MM-DD');
     public payment_term_date = 0;
 
     public isClickedSave = false;
@@ -93,7 +93,7 @@ export class DebitMemoEditComponent implements OnInit {
 
             billing_id: [null, Validators.required],
             shipping_id: [null, Validators.required],
-            carrier_id: [null, Validators.required],
+            // carrier_id: [null, Validators.required],
 
             sub_total_price: [0, Validators.required],
             total_price: [0, Validators.required],
@@ -107,8 +107,6 @@ export class DebitMemoEditComponent implements OnInit {
                 name: 'Sales Order'
             }
         ];
-        //  Init hot keys
-        this.keyService.watchContext.next(this);
     }
     //#endregion constructor
 
@@ -121,6 +119,8 @@ export class DebitMemoEditComponent implements OnInit {
         this.getListPaymentTerms();
         this.getListSalePerson();
         this.getListApprover();
+        //  Init hot keys
+        this.keyService.watchContext.next(this);
     }
     //#endregion lifecycle hook
 
@@ -236,7 +236,7 @@ export class DebitMemoEditComponent implements OnInit {
 
                     this.debitMemoForm.controls.billing_id.setValue(res.data.bill_addr.id);
                     this.debitMemoForm.controls.shipping_id.setValue(res.data.ship_addr.id);
-                    this.debitMemoForm.controls.carrier_id.setValue(res.data.carrier.id);
+                    // this.debitMemoForm.controls.carrier_id.setValue(res.data.carrier.id);
                 } catch (err) {
                     console.log(err);
                 }
@@ -356,7 +356,7 @@ export class DebitMemoEditComponent implements OnInit {
     onUpdateDueDate(termId) {
         const termDays = this.listMaster['payment_terms'].find(term => term.id.toString() === termId)['term_day'] || 0;
         this.debitMemoForm.controls.due_date.setValue(
-            moment(this.debitMemoForm.value.issue_date).add(termDays, 'days').format('MM-DD-YYYY')
+            moment(this.debitMemoForm.value.issue_date).add(termDays, 'days').format('YYYY-MM-DD')
         );
     }
 
@@ -499,11 +499,11 @@ export class DebitMemoEditComponent implements OnInit {
         params['payment_method_id'] = parseInt(params['payment_method_id'], null);
         params['payment_term_id'] = parseInt(params['payment_term_id'], null);
 
-        this.debitService.saveDebitMemo(params).subscribe(
+        this.debitService.updateDebitMemo(this.debitId, params).subscribe(
             res => {
                 try {
                     this.toastr.success(res.message);
-                    this.handleSaveSuccessfully(status, res.data['id']);
+                    this.handleSaveSuccessfully(status, this.debitId);
                 } catch (err) {
                     console.log(err);
                 }

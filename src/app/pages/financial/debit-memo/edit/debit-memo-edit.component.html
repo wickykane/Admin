@@ -108,7 +108,7 @@
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6 text-primary'>
-                                                    1 - New
+                                                    {{debitDetail['sts_name']}}
                                                 </div>
                                             </div>
                                         </div>
@@ -381,7 +381,7 @@
                     <div class="card-body no-padding">
                         <form [formGroup]="debitMemoForm">
                             <div>
-                                <textarea class="form-control border-0" rows="11" formControlName="note" style="resize:none"></textarea>
+                                <textarea #fieldNote class="form-control border-0" rows="11" formControlName="note" style="resize:none"></textarea>
                             </div>
                         </form>
                     </div>
@@ -423,7 +423,7 @@
             <div class="col-md-12 mg-top-15 text-center">
                 <button type="button" class="btn btn-secondary" (click)="onClickBack()" translate>BACK TO LIST</button>
                 <button type="button" class="btn btn-primary" (click)="onClickSave('draft')" translate>SAVE AS DRAFT</button>
-                <button type="button" class="btn btn-success" (click)="onClickSave('create')" translate>SAVE & CREATE NEW DEBIT</button>
+                <!-- <button type="button" class="btn btn-success" (click)="onClickSave('create')" translate>SAVE & CREATE NEW DEBIT</button> -->
                 <button type="button" class="btn btn-danger" (click)="onClickSave('submit')" translate>SAVE & SUBMIT</button>
                 <button type="button" class="btn btn-default" (click)="onClickSave('validate')" translate>SAVE & VALIDATE</button>
             </div>

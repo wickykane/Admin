@@ -145,8 +145,8 @@
                         <td>{{debit.aged}}</td>
                         <td>{{debit.updated_at}}</td>
                         <td>{{debit.updated_by}}</td>
-                        <td class="text-center">
-                            <a class="btn btn-default " *ngIf="debit.sts === 1 || debit.sts === 2"
+                        <td class="text-left">
+                            <a class="btn btn-default " *ngIf="debit.sts === 1"
                                 title="Edit" (click)="onEditDebitMemo(debit.id)">
                                 <i class="fa fa-pencil-square-o text-primary" aria-hidden="true"></i>
                             </a>
@@ -183,7 +183,7 @@
                                 <i class="fa fa-credit-card text-primary" aria-hidden="true"></i>
                             </a>
                             <a class="btn btn-default"
-                                title="Send Mail" (click)="onSendMail()">
+                                title="Send Mail">
                                 <i class="fa fa-envelope text-primary" aria-hidden="true"></i>
                             </a>
                         </td>

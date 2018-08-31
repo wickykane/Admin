@@ -212,6 +212,8 @@ export class DebitMemoListComponent implements OnInit {
             res => {
                 try {
                     this.toastr.success(res.message);
+                    this.getListDebitMemo();
+                    this.getTotalSummary();
                 } catch (err) {
                     console.log(err);
                 }
