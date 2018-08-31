@@ -37,6 +37,8 @@ export class DebitMemoListComponent implements OnInit {
 
     public selectedIndex = 0;
 
+    public currentuser = {};
+
     constructor(public router: Router,
         public fb: FormBuilder,
         public toastr: ToastrService,
@@ -63,6 +65,7 @@ export class DebitMemoListComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.currentuser = JSON.parse(localStorage.getItem('currentUser'));
         this.listMaster['dateType'] = [
             { id: 0, name: 'Issue Date' },
             { id: 1, name: 'Due Date' }
