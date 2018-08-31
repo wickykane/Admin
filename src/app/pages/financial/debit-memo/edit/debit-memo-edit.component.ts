@@ -5,9 +5,10 @@ import { TableService } from './../../../../services/table.service';
 
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateParserFormatter, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
+import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
 
 import { DebitMemoCreateKeyService } from '../create/keys.create.control';
 
@@ -24,7 +25,7 @@ import * as moment from 'moment';
     templateUrl: './debit-memo-edit.component.html',
     styleUrls: ['./debit-memo-edit.component.scss'],
     animations: [routerTransition()],
-    providers: [DebitMemoCreateKeyService]
+    providers: [DebitMemoCreateKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }]
 })
 export class DebitMemoEditComponent implements OnInit {
 
@@ -51,7 +52,7 @@ export class DebitMemoEditComponent implements OnInit {
     public listLineItems = [];
     public listDeletedLineItem = [];
     public listTaxs = [];
-    public todayDate = moment().format('YYYY-MM-DD');
+    public todayDate = moment().format('MM-DD-YYYY');
     public payment_term_date = 0;
 
     public isClickedSave = false;
@@ -355,7 +356,7 @@ export class DebitMemoEditComponent implements OnInit {
     onUpdateDueDate(termId) {
         const termDays = this.listMaster['payment_terms'].find(term => term.id.toString() === termId)['term_day'] || 0;
         this.debitMemoForm.controls.due_date.setValue(
-            moment(this.debitMemoForm.value.issue_date).add(termDays, 'days').format('YYYY-MM-DD')
+            moment(this.debitMemoForm.value.issue_date).add(termDays, 'days').format('MM-DD-YYYY')
         );
     }
 

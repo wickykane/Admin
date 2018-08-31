@@ -5,9 +5,10 @@ import { TableService } from './../../../../services/table.service';
 
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateParserFormatter, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
+import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
 
 import { DebitMemoListKeyService } from './keys.list.control';
 
@@ -20,7 +21,7 @@ import { SendMailDebitModalContent } from '../modals/send-email/send-mail.modal'
     templateUrl: './debit-memo-list.component.html',
     styleUrls: ['./debit-memo-list.component.scss'],
     animations: [routerTransition()],
-    providers: [DebitMemoListKeyService]
+    providers: [DebitMemoListKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }]
 })
 export class DebitMemoListComponent implements OnInit {
 

@@ -65,7 +65,7 @@
                     <div class="col-md-4">
                         <label for="" class="control-label" translate>From</label>
                         <div clickOutside (clickOutside)="d1.close()" class="input-group">
-                            <input class="form-control" placeholder="yyyy-mm-dd" (keydown)="$event.preventDefault()"
+                            <input class="form-control" placeholder="mm/dd/yyyy" (keydown)="$event.preventDefault()"
                                 name="dp" ngbDatepicker #d1="ngbDatepicker"
                                 (click)="d1.toggle()" formControlName="date_from">
                             <div class="input-group-append">
@@ -78,7 +78,7 @@
                     <div class="col-md-4">
                         <label for="" class="control-label" translate>To</label>
                         <div clickOutside (clickOutside)="d2.close()" class="input-group">
-                            <input class="form-control" placeholder="yyyy-mm-dd" (keydown)="$event.preventDefault()"
+                            <input class="form-control" placeholder="mm/dd/yyyy" (keydown)="$event.preventDefault()"
                                 name="dp" ngbDatepicker #d2="ngbDatepicker"
                                 (click)="d2.toggle()" formControlName="date_to">
                             <div class="input-group-append">
