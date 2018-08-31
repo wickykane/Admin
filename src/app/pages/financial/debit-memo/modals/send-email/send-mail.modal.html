@@ -11,7 +11,7 @@
                 <b>Send To</b>
             </label>
             <div class="content subject">
-                <input type="text" #sendToEditor>
+                <input type="text" #sendToEditor [(ngModel)]="emailInfor.send_to">
             </div>
         </div>
     </div>
@@ -22,7 +22,7 @@
                 <b>Subject</b>
             </label>
             <div class="content subject">
-                <input type="text" #subjectEditor>
+                <input type="text" #subjectEditor [(ngModel)]="emailInfor.subject">
             </div>
         </div>
     </div>
@@ -33,12 +33,12 @@
                 <b>Body</b>
             </label>
             <div class="content">
-                <ckeditor debounce="500" #bodyEditor></ckeditor>
+                <ckeditor debounce="500" #bodyEditor [(ngModel)]="emailInfor.content"></ckeditor>
             </div>
         </div>
     </div>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-primary">SEND</button>
+    <button type="button" class="btn btn-primary" (click)="sendEmail()">SEND</button>
     <button type="button" class="btn btn-default" (click)="activeModal.dismiss()">CANCEL</button>
 </div>

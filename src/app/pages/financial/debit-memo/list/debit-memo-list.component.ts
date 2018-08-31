@@ -202,10 +202,11 @@ export class DebitMemoListComponent implements OnInit {
 
     onReceivePayment() {}
 
-    onSendMail() {
+    onSendMail(debitId) {
         const modalRef = this.modalService.open(SendMailDebitModalContent, {
             size: 'lg'
         });
+        modalRef.componentInstance.debitId = debitId;
         modalRef.result.then(res => {
         }, dismiss => {});
     }

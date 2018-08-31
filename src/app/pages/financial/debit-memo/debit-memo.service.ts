@@ -105,4 +105,9 @@ export class DebitMemoService {
         const url = 'debit/' + debitId + '/status/' + status;
         return this.API.put(url);
     }
+
+    sendMail(debitId, params) {
+        const url = 'debit/' + debitId + '/send';
+        return this.API.post(url, params);
+    }
 }
