@@ -101,9 +101,9 @@ export class InvoiceInformationTabComponent implements OnInit {
         unique.forEach((tax, index) => {
             let taxAmount = 0;
             items.filter(item => item.tax_percent === tax).map(i => {
-                taxAmount += (+i.tax_percent * +i.qty_inv * ((+i.price || 0) * (100 - (+i.discount_percent || 0)) / 100) / 100);                
+                taxAmount += (+i.tax_percent * +i.qty_inv * ((+i.price || 0) * (100 - (+i.discount_percent || 0)) / 100) / 100);
             });
-            this.invoice_info['total_tax'] = this.invoice_info['total_tax'] + taxAmount.toFixed(2);
+            this.invoice_info['total_tax'] = this.invoice_info['total_tax'] + +taxAmount.toFixed(2);
             this.invoice_info['taxs'].push({
                 value: tax, amount: taxAmount.toFixed(2)
             });
@@ -122,6 +122,7 @@ export class InvoiceInformationTabComponent implements OnInit {
                     this.invoice_info.incentive = (this.data['is_fixed_early']) ? this.detail['policy_amt'] : res.data.value;
                     this.invoice_info.expires_dt = res.data.expires_dt;
                     this.invoice_info.grand_total = this.invoice_info.total - this.invoice_info.incentive;
+                    this.updateTotal();
                 }
             });
         }
@@ -136,7 +137,7 @@ export class InvoiceInformationTabComponent implements OnInit {
             const amount = (+item.qty_inv * (+item.price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
             this.invoice_info.sub_total += amount;
         });
-        this.invoice_info.total = +this.invoice_info['total_tax'] + +this.invoice_info.sub_total;
+        this.invoice_info.total = (+this.invoice_info['total_tax'] || 0)  + +this.invoice_info.sub_total;
         if (this.invoice_info.incentive_percent) {
             this.invoice_info.incentive = +this.invoice_info.incentive_percent * +this.invoice_info.total / 100;
         }

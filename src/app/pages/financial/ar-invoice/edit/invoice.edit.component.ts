@@ -180,6 +180,7 @@ export class InvoiceEditComponent implements OnInit {
                 this.data['invoice'] = data;
                 this.generalForm.patchValue(data);
                 this.list.items = data.inv_detail;
+                this.updateTotal();
                 this.changeCustomer(1);
 
                 // Lazy Load filter
@@ -328,9 +329,17 @@ export class InvoiceEditComponent implements OnInit {
         this.data['shipping_address'] = event.shipping_address;
         this.data['shipping_method'] = event.shipping_method;
 
-        this.generalForm.patchValue({
-            ...this.data['order_detail'], inv_dt: this.generalForm.value.inv_dt,
-        });
+        if (!flag) {
+            this.generalForm.patchValue({
+                ...this.data['order_detail'], inv_dt: this.generalForm.value.inv_dt,
+            });
+        } else {
+            this.generalForm.patchValue({
+                approver_id: event.order.aprvr_id,
+                sales_person: event.order.sale_person_id,
+            });
+        }
+
         this.selectAddress('billing');
         this.updateTotal();
     }
@@ -489,7 +498,7 @@ export class InvoiceEditComponent implements OnInit {
             sub_total: this.order_info.sub_total,
             total_due: this.order_info.total,
             is_early: this.data['is_fixed_early'] || 0,
-            early_percent: (!this.data['is_fixed_early']) ? null : (this.order_info['incentive_percent'] || 0),
+            early_percent: (this.data['is_fixed_early']) ? null : (this.order_info['incentive_percent'] || 0),
             policy_amt: (this.data['is_fixed_early']) ? (this.order_info['incentive'] || 0) : null,
             aprvr_id: this.generalForm.value.approver_id,
             sale_person_id: this.generalForm.value.sales_person,
@@ -501,10 +510,9 @@ export class InvoiceEditComponent implements OnInit {
             try {
                 if (res.status) {
                     this.toastr.success(res.message);
-                    this.data['invoice_id'] = res.data;
                     if (!is_continue) {
                         setTimeout(() => {
-                            this.router.navigate(['/financial/invoice/view/' + this.data['invoice_id']]);
+                            this.router.navigate(['/financial/invoice/view/' + this.data['id']]);
                         }, 500);
                     }
                 } else {
