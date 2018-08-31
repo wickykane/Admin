@@ -169,7 +169,7 @@ export class ProductService {
         return this.apiService.get(url);
     }
     getAccountList(){
-        const url = 'account/getTree';
+         const url = ['account', 'getAccountTree'].join('/');
         return this.apiService.get(url);
     }
     deleteMisc(id){
@@ -184,5 +184,5 @@ export class ProductService {
         const url = 'misc/'+id+'/in-active';
         return this.apiService.put(url);
     }
-    
+
 }
