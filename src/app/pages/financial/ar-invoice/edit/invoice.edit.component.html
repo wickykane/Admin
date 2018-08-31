@@ -1,5 +1,5 @@
 <div [@routerTransition]>
-    <app-page-header [heading]="'CREATE NEW INVOICE'"></app-page-header>
+    <app-page-header [heading]="'EDIT INVOICE'"></app-page-header>
     <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
     <section class="rma-page block main-container block-order">
         <div class="row block-info">
@@ -92,7 +92,7 @@
                                                 </label>
                                                 <div class='col-6 text-primary'>
                                                     <div clickOutside (clickOutside)="invoicedate.close()" class="input-group">
-                                                        <input class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="inv_dt" ngbDatepicker #invoicedate="ngbDatepicker">
+                                                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="inv_dt" ngbDatepicker #invoicedate="ngbDatepicker">
                                                         <div class="input-group-append">
                                                             <button class="btn btn-outline-secondary" (click)="invoicedate.toggle()" type="button">
                                                                 <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -143,7 +143,7 @@
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6 text-danger'>
-                                                    <select (change)="getEarlyPaymentValue()" class="form-control" id="payment_term_id" name="payment_term_id" formControlName="payment_term_id">
+                                                    <select (change)="getEarlyPaymentValue()"  class="form-control" id="payment_term_id" name="payment_term_id" formControlName="payment_term_id">
                                                         <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let item of listMaster['payment_term']" [ngValue]="item.id">{{item.des}}</option>
                                                     </select>
@@ -399,7 +399,7 @@
                                             </td>
                                             <td> {{ item.qty }}</td>
                                             <td>
-                                                <input [disabled]="item.misc_id" [isDecimal]="true" numberDirective [max]="item.qty || 0 " [min]="0" [disabled]="item.misc_id" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.qty_inv" (change)="updateTotal()">
+                                                <input [disabled]="item.misc_id" [isDecimal]="true" numberDirective [max]="item.qty || 0 "  [min]="0" [disabled]="item.misc_id" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.qty_inv" (change)="updateTotal()">
                                             </td>
                                             <td>
                                                 {{ item.price | currency }}
@@ -520,7 +520,7 @@
                 <button type="button" class="btn btn-outline-info" (click)="createInvoice(1, 1)" translate>Save As Draft</button>
                 <button type="button" class="btn btn-outline-success" (click)="confirmModal(4)" [disabled]="!generalForm.valid" translate>Save & Validate</button>
                 <button type="button" class="btn btn-outline-danger" (click)="confirmModal(2)" [disabled]="!generalForm.valid" translate>Save & Submit For Approval</button>
-                <button type="button" class="btn btn-outline-dark" (click)="createInvoice(1, 1, 1); resetInvoice();" translate>Save & Create New Invoice</button>
+                <!-- <button type="button" class="btn btn-outline-dark" (click)="createInvoice(1, 1, 1); resetInvoice();" translate>Save & Create New Invoice</button> -->
                 <button type="button" class="btn btn-default" (click)="confirmModal(0)" translate>Cancel</button>
             </div>
         </div>

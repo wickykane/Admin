@@ -15,7 +15,7 @@ import { ItemModalContent } from '../../../../shared/modals/item.modal';
 import { OrderHistoryModalContent } from '../../../../shared/modals/order-history.modal';
 import { PromotionModalContent } from '../../../../shared/modals/promotion.modal';
 import { ItemMiscModalContent } from './../../../../shared/modals/item-misc.modal';
-import { InvoiceCreateKeyService } from './keys.create.control';
+import { InvoiceEditKeyService } from './keys.edit.control';
 
 import { HotkeysService } from 'angular2-hotkeys';
 import * as _ from 'lodash';
@@ -25,14 +25,14 @@ import { FinancialService } from './../../financial.service';
 
 
 @Component({
-    selector: 'app-create-invoice',
-    templateUrl: './invoice.create.component.html',
+    selector: 'app-edit-invoice',
+    templateUrl: './invoice.edit.component.html',
     styleUrls: ['../invoice.component.scss'],
-    providers: [OrderService, HotkeysService, InvoiceCreateKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }],
+    providers: [OrderService, HotkeysService, InvoiceEditKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }],
     animations: [routerTransition()]
 })
 
-export class InvoiceCreateComponent implements OnInit {
+export class InvoiceEditComponent implements OnInit {
     /**
      * Variable Declaration
      */
@@ -99,7 +99,7 @@ export class InvoiceCreateComponent implements OnInit {
         private modalService: NgbModal,
         private orderService: OrderService,
         private _hotkeysService: HotkeysService,
-        public keyService: InvoiceCreateKeyService,
+        public keyService: InvoiceEditKeyService,
         private financialService: FinancialService,
         private dt: DatePipe) {
         this.generalForm = fb.group({
@@ -117,7 +117,7 @@ export class InvoiceCreateComponent implements OnInit {
             'billing_id': [null],
             'shipping_id': [null],
             'note': [null],
-            'apply_late_fee': [0],
+            'apply_late_fee': [null],
             'due_dt': [null, Validators.required],
             'payment_term_range': [null],
 
@@ -131,16 +131,13 @@ export class InvoiceCreateComponent implements OnInit {
     }
 
     async ngOnInit() {
-        this.data['id'] = this.route.snapshot.queryParams['quote_id'];
-        this.data['is_copy'] = this.route.snapshot.queryParams['is_copy'] || 0;
-
+        this.data['id'] = this.route.snapshot.paramMap.get('id');
         const user = JSON.parse(localStorage.getItem('currentUser'));
-
         // List Master
         this.orderService.getOrderReference().subscribe(res => { Object.assign(this.listMaster, res.data); });
         await this.getListPaymentMethod();
         await this.getListPaymentTerm();
-        this.getGenerateCode();
+
         this.listMaster['yes_no_options'] = [{ value: 0, label: 'No' }, { value: 1, label: 'Yes' }];
 
         //  Item
@@ -169,11 +166,39 @@ export class InvoiceCreateComponent implements OnInit {
             this.data['page'] = 1;
             this.searchCustomer(key);
         });
+
+        this.getDetailInvoice();
     }
 
     /**
      * Mater Data
      */
+    getDetailInvoice() {
+        this.financialService.getDetailInvoice(this.data['id']).subscribe(res => {
+            try {
+                const data = res.data;
+                this.data['invoice'] = data;
+                this.generalForm.patchValue(data);
+                this.list.items = data.inv_detail;
+                this.updateTotal();
+                this.changeCustomer(1);
+
+                // Lazy Load filter
+                const params = { page: this.data['page'], length: 15 };
+                this.orderService.getAllCustomer(params).subscribe(result => {
+                    const idList = result.data.rows.map(item => item.id);
+                    this.listMaster['customer'] = result.data.rows;
+                    if (res.data.buyer_id && idList.indexOf(res.data.buyer_id) === -1) {
+                        this.listMaster['customer'].push({ id: res.data.buyer_id, company_name: res.data.buyer_name });
+                    }
+                    this.data['total_page'] = result.data.total_page;
+                });
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
+
     getListPaymentMethod() {
         return new Promise(resolve => {
             this.financialService.getPaymentMethod().subscribe(res => {
@@ -192,13 +217,19 @@ export class InvoiceCreateComponent implements OnInit {
         });
     }
 
-    getOrderByCustomerId(company_id) {
+    getOrderByCustomerId(company_id, flag?) {
         const params = {
             cus_id: company_id
         };
         this.financialService.getOrderByCustomerId(params).subscribe(res => {
             try {
                 this.listMaster['sales_order'] = res.data;
+                if (flag) {
+                    const order = this.listMaster['sales_order'].find(item => +item.order.id === this.generalForm.value.order_id);
+                    if (order) {
+                        this.changeSalesOrder(order, flag);
+                    }
+                }
             } catch (e) {
                 console.log(e);
             }
@@ -219,10 +250,14 @@ export class InvoiceCreateComponent implements OnInit {
             this.financialService.getEarlyPaymentValue(issue_dt, payment_term_id, total_due).subscribe(res => {
                 if (res.data) {
                     this.data['is_fixed_early'] = res.data.is_fixed;
-                    this.order_info.incentive_percent = res.data.percent;
-                    this.order_info.incentive = res.data.value;
+                    this.order_info.incentive_percent = (!this.data['inited'] && !this.data['is_fixed_early']) ? this.data['invoice'].early_percent : res.data.percent;
+                    this.order_info.incentive = (!this.data['inited'] && this.data['is_fixed_early']) ? this.data['invoice'].policy_amt : res.data.value;
                     this.order_info.expires_dt = res.data.expires_dt;
                     this.order_info.grand_total = this.order_info.total - this.order_info.incentive;
+                    if (!this.data['inited']) {
+                        this.updateTotal();
+                    }
+                    this.data['inited'] = true;
                 }
             });
         }
@@ -282,19 +317,29 @@ export class InvoiceCreateComponent implements OnInit {
      */
     selectData(data) { }
 
-    changeSalesOrder(event) {
-        this.list.items = event.detail.map(item => {
-            item.qty_inv = item.qty;
-            return item;
-        });
+    changeSalesOrder(event, flag?) {
+        if (!flag) {
+            this.list.items = event.detail.map(item => {
+                item.qty_inv = item.qty;
+                return item;
+            });
+        }
 
         this.data['order_detail'] = { ...event.order, sales_person: event.order.sale_person_id, sale_person_name: event.sale_person_name };
         this.data['shipping_address'] = event.shipping_address;
         this.data['shipping_method'] = event.shipping_method;
 
-        this.generalForm.patchValue({
-            ...this.data['order_detail'], inv_dt: this.generalForm.value.inv_dt,
-        });
+        if (!flag) {
+            this.generalForm.patchValue({
+                ...this.data['order_detail'], inv_dt: this.generalForm.value.inv_dt,
+            });
+        } else {
+            this.generalForm.patchValue({
+                approver_id: event.order.aprvr_id,
+                sales_person: event.order.sale_person_id,
+            });
+        }
+
         this.selectAddress('billing');
         this.updateTotal();
     }
@@ -303,7 +348,7 @@ export class InvoiceCreateComponent implements OnInit {
         const company_id = this.generalForm.value.company_id;
         if (company_id) {
             this.getDetailCustomerById(company_id, flag);
-            this.getOrderByCustomerId(company_id);
+            this.getOrderByCustomerId(company_id, flag);
         }
 
         if (!flag) {
@@ -461,14 +506,13 @@ export class InvoiceCreateComponent implements OnInit {
             is_draft: is_draft || 0,
         };
 
-        this.financialService.createInvoice(params).subscribe(res => {
+        this.financialService.updateInvoice(this.data['id'], params).subscribe(res => {
             try {
                 if (res.status) {
                     this.toastr.success(res.message);
-                    this.data['invoice_id'] = res.data;
                     if (!is_continue) {
                         setTimeout(() => {
-                            this.router.navigate(['/financial/invoice/view/' + this.data['invoice_id']]);
+                            this.router.navigate(['/financial/invoice/view/' + this.data['id']]);
                         }, 500);
                     }
                 } else {

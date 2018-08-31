@@ -224,10 +224,10 @@ export class SaleOrderEditComponent implements OnInit {
         this.orderService.getDetailCompany(buyer_id).subscribe(res => {
             try {
                 this.customer = res.data;
-                if (res.data.buyer_type === 'PS') {
+                // if (res.data.buyer_type === 'PS') {
                     this.addr_select.contact = res.data.contact[0];
                     this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
-                }
+                // }
 
                 if (flag) {
                     this.selectAddress('billing', flag);
@@ -288,7 +288,6 @@ export class SaleOrderEditComponent implements OnInit {
 
     changeShipVia(flag?) {
         const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id);
-        console.log(carrier);
         this.listMaster['options'] = carrier.options || [];
         this.listMaster['ship_rates'] = carrier.ship_rate || [];
 
@@ -299,13 +298,22 @@ export class SaleOrderEditComponent implements OnInit {
 
         let default_option = null;
         let default_ship_rate = null;
-        if (+this.generalForm.value.carrier_id === 3 || this.generalForm.value.carrier_id !== 999 && !carrier.own_carrirer) {
+        let enable = false;
+
+        if (+this.generalForm.value.carrier_id === 2 || this.generalForm.value.carrier_id !== 999 && !carrier.own_carrirer) {
             default_option = 888;
             default_ship_rate = 8;
+
+            if (+this.generalForm.value.carrier_id === 1) {
+                default_option = '01';
+                default_ship_rate = 9;
+            }
+            enable = [1, 2].indexOf(+this.generalForm.value.carrier_id) > -1;
+
         }
 
         if (+this.generalForm.value.carrier_id === 999) {
-            default_ship_rate = 8;
+            default_ship_rate = 7;
             this.generalForm.patchValue({ shipping_id: null });
             this.generalForm.get('shipping_id').clearValidators();
             this.generalForm.get('shipping_id').updateValueAndValidity();
@@ -326,8 +334,13 @@ export class SaleOrderEditComponent implements OnInit {
             default_ship_rate = 7;
         }
 
-        console.log(default_ship_rate);
-        console.log(default_option);
+        // Check disable method options
+        if (!enable) {
+            this.generalForm.controls['ship_method_option'].disable();
+        } else {
+            this.generalForm.controls['ship_method_option'].enable();
+        }
+
 
         this.generalForm.patchValue({ ship_method_option: default_option, ship_method_rate: default_ship_rate });
         this.generalForm.updateValueAndValidity();
@@ -436,7 +449,8 @@ export class SaleOrderEditComponent implements OnInit {
         unique.forEach((tax, index) => {
             let taxAmount = 0;
             items.filter(item => item.tax_percent === tax).map(i => {
-                taxAmount += (+i.tax_percent * +i.quantity * (+i.sale_price || 0) / 100);
+                // taxAmount += (+i.tax_percent * +i.quantity * (+i.sale_price || 0) / 100);
+                taxAmount += (+i.tax_percent * +i.quantity * ((+i.sale_price || 0) * (100 - (+i.discount_percent || 0)) / 100) / 100);
             });
 
             this.order_info['total_tax'] = this.order_info['total_tax'] + +(taxAmount.toFixed(2));
@@ -510,11 +524,14 @@ export class SaleOrderEditComponent implements OnInit {
     }
 
     calcTaxShipping() {
+        if (!this.generalForm.value.shipping_id) {
+            return;
+        }
         const params = {
             'customer': this.generalForm.value.buyer_id,
             'address': this.generalForm.value.shipping_id,
             'ship_via': this.generalForm.value.carrier_id,
-            'option': this.generalForm.value.ship_method_option,
+            'option': this.generalForm.getRawValue().ship_method_option,
             'ship_rate': this.generalForm.value.ship_method_rate,
             'items': this.list.items.filter(item => !item.misc_id)
         };
@@ -671,7 +688,7 @@ export class SaleOrderEditComponent implements OnInit {
                 };
                 break;
         }
-        params = { ...this.generalForm.value, ...params };
+        params = { ...this.generalForm.getRawValue(), ...params };
         this.orderService.updateOrder(params, this.route.snapshot.paramMap.get('id')).subscribe(res => {
             try {
                 if (res.status) {
