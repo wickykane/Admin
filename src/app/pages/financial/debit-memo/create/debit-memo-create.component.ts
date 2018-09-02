@@ -5,9 +5,10 @@ import { TableService } from './../../../../services/table.service';
 
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateParserFormatter, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
+import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
 
 import { DebitMemoCreateKeyService } from './keys.create.control';
 
@@ -24,7 +25,7 @@ import * as moment from 'moment';
     templateUrl: './debit-memo-create.component.html',
     styleUrls: ['./debit-memo-create.component.scss'],
     animations: [routerTransition()],
-    providers: [DebitMemoCreateKeyService]
+    providers: [DebitMemoCreateKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }]
 })
 export class DebitMemoCreateComponent implements OnInit {
 
@@ -89,7 +90,7 @@ export class DebitMemoCreateComponent implements OnInit {
 
             billing_id: [null, Validators.required],
             shipping_id: [null, Validators.required],
-            carrier_id: [null, Validators.required],
+            // carrier_id: [null, Validators.required],
 
             sub_total_price: [0, Validators.required],
             total_price: [0, Validators.required],
@@ -247,7 +248,7 @@ export class DebitMemoCreateComponent implements OnInit {
 
                     this.debitMemoForm.controls.billing_id.setValue(res.data.bill_addr.id);
                     this.debitMemoForm.controls.shipping_id.setValue(res.data.ship_addr.id);
-                    this.debitMemoForm.controls.carrier_id.setValue(res.data.carrier.id);
+                    // this.debitMemoForm.controls.carrier_id.setValue(res.data.carrier.id);
                 } catch (err) {
                     console.log(err);
                 }

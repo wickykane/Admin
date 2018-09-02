@@ -65,7 +65,7 @@
                     <div class="col-md-4">
                         <label for="" class="control-label" translate>From</label>
                         <div clickOutside (clickOutside)="d1.close()" class="input-group">
-                            <input class="form-control" placeholder="yyyy-mm-dd" (keydown)="$event.preventDefault()"
+                            <input class="form-control" placeholder="mm/dd/yyyy" (keydown)="$event.preventDefault()"
                                 name="dp" ngbDatepicker #d1="ngbDatepicker"
                                 (click)="d1.toggle()" formControlName="date_from">
                             <div class="input-group-append">
@@ -78,7 +78,7 @@
                     <div class="col-md-4">
                         <label for="" class="control-label" translate>To</label>
                         <div clickOutside (clickOutside)="d2.close()" class="input-group">
-                            <input class="form-control" placeholder="yyyy-mm-dd" (keydown)="$event.preventDefault()"
+                            <input class="form-control" placeholder="mm/dd/yyyy" (keydown)="$event.preventDefault()"
                                 name="dp" ngbDatepicker #d2="ngbDatepicker"
                                 (click)="d2.toggle()" formControlName="date_to">
                             <div class="input-group-append">
@@ -105,7 +105,7 @@
         <button style="margin: 10px 0;" class="btn btn-primary" (click)="addNewDebitMemo()">Add New</button>
         <div class="table-responsive">
             <table class="table table-striped table-vcenter custom-table" cdArrowTable [collection]="listDebitMemo"
-                [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
+                [(selectedIndex)]="selectedIndex">
                 <thead class="bg-white">
                     <tr>
                         <th></th>
@@ -145,8 +145,8 @@
                         <td>{{debit.aged}}</td>
                         <td>{{debit.updated_at}}</td>
                         <td>{{debit.updated_by}}</td>
-                        <td class="text-center">
-                            <a class="btn btn-default " *ngIf="debit.sts === 1 || debit.sts === 2"
+                        <td class="text-left">
+                            <a class="btn btn-default " *ngIf="debit.sts === 1"
                                 title="Edit" (click)="onEditDebitMemo(debit.id)">
                                 <i class="fa fa-pencil-square-o text-primary" aria-hidden="true"></i>
                             </a>
@@ -154,11 +154,11 @@
                                 title="Submit" (click)="onChangeDebitStatus(debit.id, 2)">
                                 <i class="fa fa-share-square text-primary" aria-hidden="true"></i>
                             </a>
-                            <a class="btn btn-default " *ngIf="debit.sts === 2"
+                            <a class="btn btn-default " *ngIf="debit.sts === 2 && (currentuser['user_id'] == debit.approver_id)"
                                 title="Approve" (click)="onChangeDebitStatus(debit.id, 3)">
                                 <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
                             </a>
-                            <a class="btn btn-default " *ngIf="debit.sts === 2"
+                            <a class="btn btn-default " *ngIf="debit.sts === 2 && (currentuser['user_id'] == debit.approver_id)"
                                 title="Reject" (click)="onChangeDebitStatus(debit.id, 4)">
                                 <i class="fa fa-minus-circle text-danger" aria-hidden="true"></i>
                             </a>
@@ -183,7 +183,7 @@
                                 <i class="fa fa-credit-card text-primary" aria-hidden="true"></i>
                             </a>
                             <a class="btn btn-default"
-                                title="Send Mail" (click)="onSendMail()">
+                                title="Send Mail">
                                 <i class="fa fa-envelope text-primary" aria-hidden="true"></i>
                             </a>
                         </td>

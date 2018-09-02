@@ -5,9 +5,10 @@ import { TableService } from './../../../../services/table.service';
 
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateParserFormatter, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
+import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
 
 import { DebitMemoCreateKeyService } from '../create/keys.create.control';
 
@@ -24,7 +25,7 @@ import * as moment from 'moment';
     templateUrl: './debit-memo-edit.component.html',
     styleUrls: ['./debit-memo-edit.component.scss'],
     animations: [routerTransition()],
-    providers: [DebitMemoCreateKeyService]
+    providers: [DebitMemoCreateKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }]
 })
 export class DebitMemoEditComponent implements OnInit {
 
@@ -92,7 +93,7 @@ export class DebitMemoEditComponent implements OnInit {
 
             billing_id: [null, Validators.required],
             shipping_id: [null, Validators.required],
-            carrier_id: [null, Validators.required],
+            // carrier_id: [null, Validators.required],
 
             sub_total_price: [0, Validators.required],
             total_price: [0, Validators.required],
@@ -106,8 +107,6 @@ export class DebitMemoEditComponent implements OnInit {
                 name: 'Sales Order'
             }
         ];
-        //  Init hot keys
-        this.keyService.watchContext.next(this);
     }
     //#endregion constructor
 
@@ -120,6 +119,8 @@ export class DebitMemoEditComponent implements OnInit {
         this.getListPaymentTerms();
         this.getListSalePerson();
         this.getListApprover();
+        //  Init hot keys
+        this.keyService.watchContext.next(this);
     }
     //#endregion lifecycle hook
 
@@ -235,7 +236,7 @@ export class DebitMemoEditComponent implements OnInit {
 
                     this.debitMemoForm.controls.billing_id.setValue(res.data.bill_addr.id);
                     this.debitMemoForm.controls.shipping_id.setValue(res.data.ship_addr.id);
-                    this.debitMemoForm.controls.carrier_id.setValue(res.data.carrier.id);
+                    // this.debitMemoForm.controls.carrier_id.setValue(res.data.carrier.id);
                 } catch (err) {
                     console.log(err);
                 }
@@ -311,9 +312,9 @@ export class DebitMemoEditComponent implements OnInit {
                         this.getListBillOfCustomer(this.debitMemoForm.value.company_id);
                     }
                     if (this.debitMemoForm.value.order_id !== null && this.debitMemoForm.value.order_id !== undefined) {
+                        this.listLineItems = this.debitDetail['line_items'];
                         this.getOrderInformation(this.debitMemoForm.value.order_id);
                         this.getListLineItems(this.debitMemoForm.value.order_id);
-                        this.listLineItems = this.debitDetail['line_items'];
                     }
                 } catch (err) {
                     console.log(err);
@@ -365,7 +366,7 @@ export class DebitMemoEditComponent implements OnInit {
 
     onDeleteLineItem(deletedItem, index) {
         deletedItem.deleted = true;
-        this.listDeletedLineItem = this.listLineItems.filter( item => item.deleted);
+        this.listDeletedLineItem.push(deletedItem);
         this.listLineItems.splice(index, 1);
         this.getUniqueTaxItemLine();
     }
@@ -498,11 +499,11 @@ export class DebitMemoEditComponent implements OnInit {
         params['payment_method_id'] = parseInt(params['payment_method_id'], null);
         params['payment_term_id'] = parseInt(params['payment_term_id'], null);
 
-        this.debitService.saveDebitMemo(params).subscribe(
+        this.debitService.updateDebitMemo(this.debitId, params).subscribe(
             res => {
                 try {
                     this.toastr.success(res.message);
-                    this.handleSaveSuccessfully(status, res.data['id']);
+                    this.handleSaveSuccessfully(status, this.debitId);
                 } catch (err) {
                     console.log(err);
                 }

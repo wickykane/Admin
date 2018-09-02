@@ -5,9 +5,10 @@ import { TableService } from './../../../../services/table.service';
 
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateParserFormatter, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
+import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
 
 import { DebitMemoListKeyService } from './keys.list.control';
 
@@ -20,7 +21,7 @@ import { SendMailDebitModalContent } from '../modals/send-email/send-mail.modal'
     templateUrl: './debit-memo-list.component.html',
     styleUrls: ['./debit-memo-list.component.scss'],
     animations: [routerTransition()],
-    providers: [DebitMemoListKeyService]
+    providers: [DebitMemoListKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }]
 })
 export class DebitMemoListComponent implements OnInit {
 
@@ -35,6 +36,8 @@ export class DebitMemoListComponent implements OnInit {
     public totalSummary = {};
 
     public selectedIndex = 0;
+
+    public currentuser = {};
 
     constructor(public router: Router,
         public fb: FormBuilder,
@@ -62,6 +65,7 @@ export class DebitMemoListComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.currentuser = JSON.parse(localStorage.getItem('currentUser'));
         this.listMaster['dateType'] = [
             { id: 0, name: 'Issue Date' },
             { id: 1, name: 'Due Date' }
@@ -198,10 +202,11 @@ export class DebitMemoListComponent implements OnInit {
 
     onReceivePayment() {}
 
-    onSendMail() {
+    onSendMail(debitId) {
         const modalRef = this.modalService.open(SendMailDebitModalContent, {
             size: 'lg'
         });
+        modalRef.componentInstance.debitId = debitId;
         modalRef.result.then(res => {
         }, dismiss => {});
     }
@@ -211,6 +216,8 @@ export class DebitMemoListComponent implements OnInit {
             res => {
                 try {
                     this.toastr.success(res.message);
+                    this.getListDebitMemo();
+                    this.getTotalSummary();
                 } catch (err) {
                     console.log(err);
                 }
