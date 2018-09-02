@@ -10,7 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { CreditMemoService } from '../credit-memo.service';
-import { SendMailDebitModalContent } from '../modals/send-email/send-mail.modal';
+import { MailModalComponent } from '../modals/send-email/mail.modal';
 
 
 @Component({
@@ -66,8 +66,8 @@ export class CreditMemoListComponent implements OnInit {
         private renderer: Renderer) {
 
         this.searchForm = fb.group({
-            'quote_no': [null],
-            'buyer_name': [null],
+            'cd': [null],
+            'customer_name': [null],
             'sts': [null],
             'date_type': [null],
             'date_from': [null],

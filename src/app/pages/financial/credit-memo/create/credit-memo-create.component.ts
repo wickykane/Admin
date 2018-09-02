@@ -11,10 +11,9 @@ import { routerTransition } from '../../../../router.animations';
 
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
-import { ItemModalContent } from '../../../../shared/modals/item.modal';
 import { OrderHistoryModalContent } from '../../../../shared/modals/order-history.modal';
-import { PromotionModalContent } from '../../../../shared/modals/promotion.modal';
-import { ItemMiscModalContent } from './../../../../shared/modals/item-misc.modal';
+import { CreditItemMiscModalContent } from '../modals/item-misc/item-misc.modal';
+import {CreditItemModalContent} from '../modals/item/item.modal';
 import { CreditMemoCreateKeyService } from './keys.create.control';
 
 import { HotkeysService } from 'angular2-hotkeys';
@@ -197,19 +196,6 @@ export class CreditMemoCreateComponent implements OnInit {
         });
     }
 
-    // getOrderByCustomerId(company_id) {
-    //     const params = {
-    //         cus_id: company_id
-    //     };
-    //     this.creditMemoService.getOrderByCustomerId(params).subscribe(res => {
-    //         try {
-    //             this.listMaster['sales_order'] = res.data;
-    //         } catch (e) {
-    //             console.log(e);
-    //         }
-    //     });
-    // }
-
     getGenerateCode() {
         this.creditMemoService.getGenerateCode().subscribe(res => {
             this.generalForm.get('credit_num').patchValue(res.data.cd);
@@ -267,7 +253,6 @@ export class CreditMemoCreateComponent implements OnInit {
         const company_id = this.generalForm.value.company_id;
         if (company_id) {
             this.getDetailCustomerById(company_id, flag);
-            // this.getOrderByCustomerId(company_id);
         }
 
         if (!flag) {
@@ -357,7 +342,7 @@ export class CreditMemoCreateComponent implements OnInit {
         });
     }
     addNewItem() {
-        const modalRef = this.modalService.open(ItemModalContent, { size: 'lg' });
+        const modalRef = this.modalService.open(CreditItemModalContent, { size: 'lg' });
         modalRef.result.then(res => {
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
@@ -389,7 +374,7 @@ export class CreditMemoCreateComponent implements OnInit {
     }
 
     addNewMiscItem() {
-        const modalRef = this.modalService.open(ItemMiscModalContent, { size: 'lg' });
+        const modalRef = this.modalService.open(CreditItemMiscModalContent, { size: 'lg' });
         modalRef.result.then(res => {
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];

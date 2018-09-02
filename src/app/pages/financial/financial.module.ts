@@ -18,12 +18,18 @@ import { InvoiceDebitMemoTabComponent } from './ar-invoice/invoice-tabs/debit-me
 import { InvoiceDocumentTabComponent } from './ar-invoice/invoice-tabs/document-tab.component';
 import { InvoiceInformationTabComponent } from './ar-invoice/invoice-tabs/information-tab.component';
 import { InvoicePaymentTabComponent } from './ar-invoice/invoice-tabs/payment-tab.component';
-import { CreditMemoCreateComponent } from './credit-memo//create/credit-memo-create.component';
-import { CreditMemoListComponent } from './credit-memo//list/credit-memo-list.component';
-import { CreditMemoService } from './credit-memo/credit-memo.service';
 import { FinancialRoutingModule } from './financial-routing.module';
 import { FinancialService } from './financial.service';
 import { PaymentComponent } from './payment/payment.component';
+
+import { CreditMemoCreateComponent } from './credit-memo//create/credit-memo-create.component';
+import { CreditMemoListComponent } from './credit-memo//list/credit-memo-list.component';
+import { CreditMemoService } from './credit-memo/credit-memo.service';
+import { CreditInformationTabComponent } from './credit-memo/credit-tabs/information-tab.component';
+import { CreditPaymentTabComponent} from './credit-memo/credit-tabs/payment-tab.component';
+import { CreditItemMiscModalContent } from './credit-memo/modals/item-misc/item-misc.modal';
+import { CreditItemModalContent } from './credit-memo/modals/item/item.modal';
+import { CreditMemoDetailComponent} from './credit-memo/view/credit-memo-view.component';
 
 import { DebitMemoCreateComponent } from './debit-memo/create/debit-memo-create.component';
 import { DebitMemoService } from './debit-memo/debit-memo.service';
@@ -67,8 +73,6 @@ import { MailModalComponent } from './ar-invoice/modals/mail.modal';
         InvoiceDocumentTabComponent,
         PaymentComponent,
         MailModalComponent,
-        CreditMemoListComponent,
-        CreditMemoCreateComponent,
         DebitMemoListComponent,
         DebitMemoCreateComponent,
         SendMailDebitModalContent,
@@ -79,6 +83,13 @@ import { MailModalComponent } from './ar-invoice/modals/mail.modal';
         DebitInformationTabComponent,
         MailModalComponent,
         InvoiceEditComponent,
+        CreditMemoListComponent,
+        CreditMemoCreateComponent,
+        CreditInformationTabComponent,
+        CreditMemoDetailComponent,
+        CreditPaymentTabComponent,
+        CreditItemModalContent,
+        CreditItemMiscModalContent
     ],
     providers: [FinancialService, DebitMemoService, CreditMemoService, TableService, DatePipe, Helper],
     entryComponents: [
@@ -86,7 +97,9 @@ import { MailModalComponent } from './ar-invoice/modals/mail.modal';
         ItemsOrderDebitModalContent,
         MiscItemsDebitModalContent,
         DebitInformationTabComponent,
-        MailModalComponent
+        MailModalComponent,
+        CreditItemModalContent,
+        CreditItemMiscModalContent
     ]
 })
 export class FinancialModule { }

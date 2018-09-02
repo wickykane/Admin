@@ -93,4 +93,8 @@ export class CreditMemoService {
         const url = ['account', 'getAccountTree'].join('/');
         return this.API.get(url);
     }
+    sendMail(id, params) {
+        const url = 'ar-invoice/send-email/' + id;
+        return this.API.post(url, params);
+    }
 }
