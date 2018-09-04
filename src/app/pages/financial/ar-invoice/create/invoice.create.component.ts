@@ -327,7 +327,7 @@ export class InvoiceCreateComponent implements OnInit {
             return item;
         });
 
-        this.data['order_detail'] = { ...event.order, sales_person: event.order.sale_person_id, sale_person_name: event.sale_person_name };
+        this.data['order_detail'] = { ...event.order, sales_person: event.order.sale_person_id, sale_person_name: event.sale_person_name, ship_rate: event.order.ship_method_rate };
         this.data['shipping_address'] = event.shipping_address;
         this.data['shipping_method'] = event.shipping_method;
 
