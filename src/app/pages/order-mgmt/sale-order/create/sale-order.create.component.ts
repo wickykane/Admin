@@ -329,9 +329,7 @@ export class SaleOrderCreateComponent implements OnInit {
         }
 
 
-        console.log(default_option);
         this.generalForm.patchValue({ ship_method_option: default_option, ship_method_rate: default_ship_rate });
-        console.log(this.generalForm.value);
         this.generalForm.updateValueAndValidity();
     }
 
@@ -500,8 +498,7 @@ export class SaleOrderCreateComponent implements OnInit {
                     if (listAdded.indexOf(item.sku + item.item_condition_id) < 0) {
                         return listAdded.indexOf(item.sku + item.item_condition_id) < 0;
                     } else {
-                        this.toastr.error('The item ' + item.no + ' already added in the order');
-                        return -1;
+                        this.toastr.error('The item ' + item.sku + ' already added in the order');
                     }
                 }));
 
@@ -541,7 +538,6 @@ export class SaleOrderCreateComponent implements OnInit {
                         return listAdded.indexOf(item.sku + (item.item_condition_id || 'misc')) < 0;
                     } else {
                         this.toastr.error('The item ' + item.no + ' already added in the order');
-                        return -1;
                     }
 
                 }));
@@ -607,14 +603,14 @@ export class SaleOrderCreateComponent implements OnInit {
         params = { ...this.generalForm.getRawValue(), ...params };
         this.orderService.createOrder(params).subscribe(res => {
             try {
-                if (res.status) {
+                // if (res.status) {
                     this.toastr.success(res.message);
                     setTimeout(() => {
                         this.router.navigate(['/order-management/sale-order']);
                     }, 500);
-                } else {
-                    this.toastr.error(res.message);
-                }
+                // } else {
+                //     this.toastr.error(res.message);
+                // }
             } catch (e) {
                 console.log(e);
             }
