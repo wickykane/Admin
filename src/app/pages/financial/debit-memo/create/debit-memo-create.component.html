@@ -17,9 +17,10 @@
                                         </label>
                                         <span class="text-danger">(*)</span>
                                         <div>
-                                            <ng-select style="width: 110px; margin-left: 2px;" [items]="listMaster['customers']"
-                                                [ngClass]="{'error-field': debitMemoForm.controls.company_id.invalid && isClickedSave && !isSaveDraft}"
-                                                bindLabel="name" bindValue="id" formControlName='company_id' (change)="onSelectCustomer()">
+                                            <ng-select appKeyNavigate="company_id" [typeahead]="searchKey"
+                                                    (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 110px; margin-left: 2px;"
+                                                    (change)="onSelectCustomer()" [items]="listMaster['customers']"
+                                                    bindLabel="company_name" bindValue="id" formControlName="company_id">
                                             </ng-select>
                                         </div>
                                     </div>
@@ -107,8 +108,8 @@
                                                 <label class='col-6'>Status
                                                     <span class="text-danger">(*)</span>
                                                 </label>
-                                                <div class='col-6 text-primary'>
-                                                    1 - New
+                                                <div class='col-6 text-success'>
+                                                    <strong>1-NEW</strong>
                                                 </div>
                                             </div>
                                         </div>
@@ -342,17 +343,21 @@
                                         <td class="text-center">{{item.item_condition_name}}</td>
                                         <td class="text-center">{{item.uom}}</td>
                                         <td class="input-field text-center">
-                                            <input OnlyNumber="true" [(ngModel)]="item.qty" (blur)="onCalculateAmount(item); getUniqueTaxItemLine();">
+                                            <input style="width: 60px;" class="form-control input-sm" [isDecimal]="false" numberDirective [min]="0"
+                                                OnlyNumber="true" [(ngModel)]="item.qty" (blur)="onCalculateAmount(item); getUniqueTaxItemLine();">
                                         </td>
                                         <td class="input-field text-center">
                                             <span>$</span>
-                                            <input OnlyNumber="true" [(ngModel)]="item.price" (blur)="onCalculateAmount(item); getUniqueTaxItemLine();">
+                                            <input style="width: 60px;" class="form-control input-sm" [isDecimal]="true" numberDirective [min]="0"
+                                                OnlyNumber="true" [(ngModel)]="item.price" (blur)="onCalculateAmount(item); getUniqueTaxItemLine();">
                                         </td>
                                         <td class="input-field text-center">
-                                            <input OnlyNumber="true" [(ngModel)]="item.discount_percent" (blur)="onCalculateAmount(item); getUniqueTaxItemLine();">
+                                            <input style="width: 60px;" class="form-control input-sm" [isDecimal]="true" numberDirective [min]="0" [max]="100"
+                                                OnlyNumber="true" [(ngModel)]="item.discount_percent" (blur)="onCalculateAmount(item); getUniqueTaxItemLine();">
                                         </td>
                                         <td class="input-field text-center">
-                                            <input OnlyNumber="true" [(ngModel)]="item.tax_percent" (blur)="onCalculateAmount(item); getUniqueTaxItemLine();">
+                                            <input style="width: 60px;" class="form-control input-sm" [isDecimal]="true" numberDirective [min]="0" [max]="100"
+                                                OnlyNumber="true" [(ngModel)]="item.tax_percent" (blur)="onCalculateAmount(item); getUniqueTaxItemLine();">
                                         </td>
                                         <td class="text-center">${{item.total_price}}</td>
                                         <td class="text-center">{{item.income_account_name}}</td>
@@ -373,7 +378,7 @@
             </div>
         </div>
         <div class="row mg-top-10 padding-child-5 justify-content-end">
-            <div class="col-md-5">
+            <div class="col-md-3">
                 <div class="card height-100">
                     <div class="card-header">
                         <strong>Note</strong>
@@ -396,21 +401,21 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-group row">
-                                    <label class='col-3 control-label'>Sub Total</label>
+                                    <label class='col-3 control-label text-warning'>Sub Total</label>
                                     <div class='col-9'>
-                                        <span class="text-success">${{debitMemoForm.value.sub_total_price}}</span>
+                                        <span class="">${{debitMemoForm.value.sub_total_price}}</span>
                                     </div>
                                 </div>
                                 <div class="form-group row" *ngFor="let tax of listTaxs">
                                     <label class='col-3 control-label'> + Tax {{tax.tax_percent}}%</label>
                                     <div class='col-9'>
-                                        <span class="text-primary">$ {{tax.amount}}</span>
+                                        <span class="text-success">$ {{tax.amount}}</span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class='col-3 control-label'>Total Due</label>
+                                    <label class='col-3 control-label text-warning'>Total Due</label>
                                     <div class='col-9'>
-                                        <span class="text-success">${{debitMemoForm.value.total_price}}</span>
+                                        <span class="text-primary">${{debitMemoForm.value.total_price}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -420,12 +425,12 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12 mg-top-15 text-center">
-                <button type="button" class="btn btn-secondary" (click)="onClickBack()" translate>BACK TO LIST</button>
-                <button type="button" class="btn btn-primary" (click)="onClickSave('draft')" translate>SAVE AS DRAFT</button>
-                <button type="button" class="btn btn-success" (click)="onClickSave('create')" translate>SAVE & CREATE NEW DEBIT</button>
-                <button type="button" class="btn btn-danger" (click)="onClickSave('submit')" translate>SAVE & SUBMIT</button>
-                <button type="button" class="btn btn-default" (click)="onClickSave('validate')" translate>SAVE & VALIDATE</button>
+            <div class="col-md-12 mg-top-15 text-right">
+                <button type="button" class="btn btn-default" (click)="onClickBack()" translate>BACK TO LIST</button>
+                <button type="button" class="btn btn-outline-info" (click)="onClickSave('draft')" translate>SAVE AS DRAFT</button>
+                <button type="button" class="btn btn-outline-dark" (click)="onClickSave('create')" translate>SAVE & CREATE NEW DEBIT</button>
+                <button type="button" class="btn btn-outline-danger" (click)="onClickSave('submit')" translate>SAVE & SUBMIT</button>
+                <button type="button" class="btn btn-outline-success" (click)="onClickSave('validate')" translate>SAVE & VALIDATE</button>
             </div>
         </div>
     </section>
