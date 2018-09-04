@@ -6,6 +6,7 @@ import { TableService } from './../../../../services/table.service';
 import { environment } from '../../../../../environments/environment';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NgbDateParserFormatter, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
@@ -58,6 +59,7 @@ export class DebitMemoListComponent implements OnInit {
         public keyService: DebitMemoListKeyService,
         public tableService: TableService,
         public debitMemoService: DebitMemoService,
+        private http: HttpClient,
         private renderer: Renderer) {
 
         this.searchForm = fb.group({
@@ -217,9 +219,19 @@ export class DebitMemoListComponent implements OnInit {
     }
 
     onPrintDebitMemo(debitId) {
-        // const path = 'ar-inv/print-pdf/';
-        // const url = `${environment.api_url}${path}${debitId}`;
-        // const new_window = window.open(url, '_blank');
+        const path = `debit/${debitId}/print`;
+        const url = `${environment.api_url}${path}`;
+        const headers: HttpHeaders = new HttpHeaders();
+        this.http.get(url, {
+            headers,
+            responseType: 'blob',
+        }).subscribe(res => {
+                const file = new Blob([res], { type: 'application/pdf' });
+                const fileURL = URL.createObjectURL(file);
+                const newWindow = window.open(fileURL);
+                newWindow.focus();
+                newWindow.print();
+        });
     }
 
     onReceivePayment() {}

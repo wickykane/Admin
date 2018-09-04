@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ConfirmModalContent } from '../../../../../shared/modals/confirm.modal';
 import { TableService } from './../../../../../services/table.service';
 
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../../../../environments/environment';
 import { DebitMemoService } from '../../debit-memo.service';
 
@@ -37,7 +38,8 @@ export class DebitInformationTabComponent implements OnInit {
         private router: Router,
         private modalService: NgbModal,
         public tableService: TableService,
-        public debitService: DebitMemoService) {
+        public debitService: DebitMemoService,
+        private http: HttpClient) {
     }
 
     ngOnInit() {
@@ -116,9 +118,19 @@ export class DebitInformationTabComponent implements OnInit {
     }
 
     onPrintDebitMemo() {
-        // const path = 'ar-inv/print-pdf/';
-        // const url = `${environment.api_url}${path}${this.debitData['id']}`;
-        // const new_window = window.open(url, '_blank');
+        const path = `debit/${this.debitData['id']}/print`;
+        const url = `${environment.api_url}${path}`;
+        const headers: HttpHeaders = new HttpHeaders();
+        this.http.get(url, {
+            headers,
+            responseType: 'blob',
+        }).subscribe(res => {
+                const file = new Blob([res], { type: 'application/pdf' });
+                const fileURL = URL.createObjectURL(file);
+                const newWindow = window.open(fileURL);
+                newWindow.focus();
+                newWindow.print();
+        });
     }
 
     onClickBack() {
