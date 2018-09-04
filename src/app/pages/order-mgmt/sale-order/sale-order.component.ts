@@ -190,10 +190,7 @@ export class SaleOrderComponent implements OnInit {
           setTimeout(() => {
               this.router.navigate(['/order-management/sale-order/edit', res.data.id]);
           }, 1000);
-      },
-          err => {
-              this.toastr.error(err.message);
-          }
+      }
       );
     }
 
@@ -208,10 +205,7 @@ export class SaleOrderComponent implements OnInit {
             // } else {
             //     this.toastr.error(res.message);
             // }
-        },
-            err => {
-                this.toastr.error(err.message);
-            }
+        }
         );
     }
 
@@ -225,10 +219,7 @@ export class SaleOrderComponent implements OnInit {
             // } else {
             //     this.toastr.error(res.message);
             // }
-        },
-            err => {
-                this.toastr.error(err.message);
-            }
+        }
         );
     }
 

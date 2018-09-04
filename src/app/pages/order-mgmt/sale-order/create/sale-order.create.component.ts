@@ -614,10 +614,7 @@ export class SaleOrderCreateComponent implements OnInit {
             } catch (e) {
                 console.log(e);
             }
-        },
-            err => {
-                this.toastr.error(err.message);
-            });
+        });
     }
 
     fetchMoreCustomer(data?) {
