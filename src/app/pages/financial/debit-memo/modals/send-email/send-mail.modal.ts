@@ -37,8 +37,14 @@ export class SendMailDebitModalContent implements OnInit {
     ok() {
         const params = this.mailForm.value;
         this.debitService.sendMail(this.debitId, params).subscribe(res => {
-            this.toastr.success(res.message);
-            this.activeModal.close(this.mailForm.value);
+            try {
+                this.toastr.success(res.message);
+                this.activeModal.close(this.mailForm.value);
+            } catch (err) {
+                console.log(err);
+            }
+        }, err => {
+            console.log(err);
         });
     }
 
