@@ -530,6 +530,9 @@ export class DebitMemoCreateComponent implements OnInit {
     }
 
     handleSaveSuccessfully(status, debitId) {
+        if (this.isSaveDraft) {
+            this.getDebitMemoNo();
+        }
         if (status === 1 && !this.isSaveDraft) {
             window.location.reload();
         } else if (status !== 1) {

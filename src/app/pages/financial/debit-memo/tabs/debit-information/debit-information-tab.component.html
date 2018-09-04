@@ -23,16 +23,16 @@
             *ngIf="debitData['sts'] === 2" (click)="onChangeDebitStatus(4)">
             <i class="fa fa-ban" aria-hidden="true"></i> Reject
         </button>
-        <button class="btn btn-outline-info"
+        <button class="btn btn-outline-dark"
             *ngIf="debitData['sts'] === 3 || debitData['sts'] === 7">
-            <i class="fa fa-clone" aria-hidden="true"></i> Pay
+            <i class="fa fa-money" aria-hidden="true"></i> Pay
         </button>
         <button class="btn btn-outline-dark"
             *ngIf="debitData['sts'] === 4" (click)="onChangeDebitStatus(1)">
-            <i class="fa fa-exchange" aria-hidden="true"></i> Re-open
+            <i class="fa fa-clone" aria-hidden="true"></i> Re-open
         </button>
-        <button class="btn btn-outline-basic" (click)="onPrintDebitMemo()">
-            <i class="fa fa-print" aria-hidden="true"></i> Print
+        <button class="btn btn-outline-dark" (click)="onPrintDebitMemo()">
+            <i class="fa fa-donwload" aria-hidden="true"></i> Print
         </button>
     </div>
     <section class="rma-page block main-container block-order">
@@ -291,7 +291,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-2 padding-lr-5">
+            <div class="col-md-4 padding-lr-5">
                 <div class="card height-100">
                     <div class="card-header">
                         <strong>Debit Memo Total</strong>
@@ -300,33 +300,39 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-group row">
-                                    <label class='col-8 control-label'>Sub Total</label>
-                                    <div class='col-4'>
-                                        <span class="text-success">${{debitData['sub_total_price']}}</span>
+                                    <label class='col-4 control-label'>
+                                        <strong class="text-warning">Sub Total</strong>
+                                    </label>
+                                    <div class='col-6'>
+                                        <span class="">${{debitData['sub_total_price']}}</span>
                                     </div>
                                 </div>
                                 <div class="form-group row" *ngFor="let tax of listTaxs">
-                                    <label class='col-8 control-label'> + Tax {{tax.tax_percent}}%</label>
-                                    <div class='col-4'>
-                                        <span class="text-primary">$ {{tax.amount}}</span>
+                                    <label class='col-4 control-label'> + Tax {{tax.tax_percent}}%</label>
+                                    <div class='col-6'>
+                                        <span class="text-success">$ {{tax.amount}}</span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class='col-8 control-label'>Total Due</label>
-                                    <div class='col-4'>
-                                        <span class="text-success">${{debitData['total_price']}}</span>
+                                    <label class='col-4 control-label'>
+                                        <strong class="text-warning">Total Due</strong>
+                                    </label>
+                                    <div class='col-6'>
+                                        <span class="text-primary">${{debitData['total_price']}}</span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class='col-8 control-label'>Paid Amount</label>
-                                    <div class='col-4'>
+                                    <label class='col-4 control-label'>Paid Amount</label>
+                                    <div class='col-6'>
                                         <span class="text-success">$0</span>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label class='col-8 control-label'>Balance Amount</label>
-                                    <div class='col-4'>
-                                        <span class="text-danger">${{debitData['total_price']}}</span>
+                                <div class="form-group row margin-lr-0 text-light bg-danger">
+                                    <label class="col-4 control-label ">
+                                            <strong>Balance Amount</strong>
+                                        </label>
+                                    <div class="col-6 padding-lr-10">
+                                        <strong>${{debitData['total_price']}}</strong>
                                     </div>
                                 </div>
                             </div>

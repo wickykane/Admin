@@ -26,6 +26,7 @@ export class DebitInformationTabComponent implements OnInit {
             this.getUniqueTaxItemLine();
         }
     }
+    @Output() changeStatusSuccessfully = new EventEmitter();
 
     public listTaxs = [];
 
@@ -104,6 +105,7 @@ export class DebitInformationTabComponent implements OnInit {
             res => {
                 try {
                     this.toastr.success(res.message);
+                    this.changeStatusSuccessfully.emit();
                 } catch (err) {
                     console.log(err);
                 }
