@@ -412,8 +412,7 @@ export class SaleQuotationCreateComponent implements OnInit {
                     if (listAdded.indexOf(item.sku + item.item_condition_id) < 0) {
                         return listAdded.indexOf(item.sku + item.item_condition_id) < 0;
                     } else {
-                        this.toastr.error('The item ' + item.no + ' already added in the order');
-                        return -1;
+                        this.toastr.error('The item ' + item.sku + ' already added in the order');
                     }
                 }));
 
@@ -447,7 +446,6 @@ export class SaleQuotationCreateComponent implements OnInit {
                         return listAdded.indexOf(item.sku + (item.item_condition_id || 'misc')) < 0;
                     } else {
                         this.toastr.error('The item ' + item.no + ' already added in the order');
-                        return -1;
                     }
 
                 }));
