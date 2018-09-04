@@ -319,9 +319,11 @@ export class DebitMemoCreateComponent implements OnInit {
 
     onSelectCustomer() {
         if (this.debitMemoForm.value.company_id) {
+            this.contactDetail = {};
             this.listLineItems = [];
             this.listDeletedLineItem = [];
             this.listTaxs = [];
+            this.debitMemoForm.controls.contact_id.reset();
             this.debitMemoForm.controls.order_id.reset();
             this.getUniqueTaxItemLine();
             this.getCustomerContacts(this.debitMemoForm.value.company_id);
