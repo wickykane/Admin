@@ -257,7 +257,9 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngIf="debitData['line_items'] && !debitData['line_items'].length">No Data</tr>
+                                    <tr *ngIf="debitData['line_items'] && !debitData['line_items'].length">
+                                            <td colspan="100%" class="text-center" translate>No data.</td>
+                                    </tr>
                                     <tr *ngFor="let item of debitData['line_items']">
                                         <td>{{item.no}}</td>
                                         <td>{{item.des}}</td>
