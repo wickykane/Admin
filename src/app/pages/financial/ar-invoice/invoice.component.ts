@@ -7,6 +7,7 @@ import { TableService } from './../../../services/table.service';
 import { environment } from '../../../../environments/environment';
 import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
 
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
@@ -63,6 +64,7 @@ export class InvoiceComponent implements OnInit {
         private modalService: NgbModal,
         private _hotkeysService: HotkeysService,
         public invoiceKeyService: InvoiceKeyService,
+        private http: HttpClient,
         private renderer: Renderer) {
 
         this.searchForm = fb.group({
@@ -286,10 +288,20 @@ export class InvoiceComponent implements OnInit {
         return stt.name;
     }
 
-    printPDF(id) {
+    printPDF(id, inv_num) {
         const path = 'ar-invoice/print-pdf/';
         const url = `${environment.api_url}${path}${id}`;
-        const new_window = window.open(url, '_blank');
+        const headers: HttpHeaders = new HttpHeaders();
+        this.http.get(url, {
+            headers,
+            responseType: 'blob',
+        }).subscribe(res => {
+                const file = new Blob([res], { type: 'application/pdf' });
+                const fileURL = URL.createObjectURL(file);
+                const newWindow = window.open(fileURL);
+                newWindow.focus();
+                newWindow.print();
+            });
     }
 
     cancelInvoice(item?) {
