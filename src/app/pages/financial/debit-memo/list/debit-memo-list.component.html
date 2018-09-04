@@ -5,35 +5,35 @@
         <section id="statusIndicator" class="status-indicator-section">
             <ul class="status-ctn dashboard-content">
                 <li class="status-item dashboard-stat blue">
-                    <div class="status-count">{{totalSummary['numberOfNew']}}</div>
+                    <div class="status-count">{{totalSummary['New'] || 0}}</div>
                     <div class="status-lbl">NEW</div>
                 </li>
                 <li class="status-item dashboard-stat texas-rose">
-                    <div class="status-count">{{totalSummary['numberOfSubmit']}}</div>
+                    <div class="status-count">{{totalSummary['Submitted'] || 0}}</div>
                     <div class="status-lbl">SUBMITTED</div>
                 </li>
                 <li class="status-item dashboard-stat strong-green">
-                    <div class="status-count">{{totalSummary['numberOfApproved']}}</div>
+                    <div class="status-count">{{totalSummary['Approved'] || 0}}</div>
                     <div class="status-lbl">APPROVED</div>
                 </li>
                 <li class="status-item dashboard-stat magenta">
-                    <div class="status-count">{{totalSummary['numberOfRejected']}}</div>
+                    <div class="status-count">{{totalSummary['Rejected'] || 0}}</div>
                     <div class="status-lbl">REJECTED</div>
                 </li>
                 <li class="status-item dashboard-stat lemon">
-                    <div class="status-count">{{totalSummary['numberOfPartiallyPaid']}}</div>
+                    <div class="status-count">{{totalSummary['Partially Paid'] || 0}}</div>
                     <div class="status-lbl">PARTIALLY PAID</div>
                 </li>
                 <li class="status-item dashboard-stat bright-grey">
-                    <div class="status-count">{{totalSummary['numberOfFullyPaid']}}</div>
+                    <div class="status-count">{{totalSummary['Fully Paid'] || 0}}</div>
                     <div class="status-lbl">FULLY PAID</div>
                 </li>
                 <li class="status-item dashboard-stat darkblue">
-                    <div class="status-count">{{totalSummary['numberOfOverdue']}}</div>
+                    <div class="status-count">{{totalSummary['Overdue'] || 0}}</div>
                     <div class="status-lbl">OVERDUE</div>
                 </li>
                 <li class="status-item dashboard-stat red">
-                    <div class="status-count">{{totalSummary['numberOfCanceled']}}</div>
+                    <div class="status-count">{{totalSummary['Cancelled'] || 0}}</div>
                     <div class="status-lbl">CANCELED</div>
                 </li>
             </ul>

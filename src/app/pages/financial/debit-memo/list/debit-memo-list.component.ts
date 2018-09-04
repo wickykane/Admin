@@ -95,16 +95,7 @@ export class DebitMemoListComponent implements OnInit {
         this.debitMemoService.getDebitReportTotal().subscribe(
             res => {
                 try {
-                    this.totalSummary = {
-                        numberOfNew: res.data[0] && (res.data[0]['total'] || 0),
-                        numberOfSubmit: res.data[1] && (res.data[1]['total'] || 0),
-                        numberOfApproved: res.data[2] && (res.data[2]['total'] || 0),
-                        numberOfRejected: res.data[3] && (res.data[3]['total'] || 0),
-                        numberOfPartiallyPaid: res.data[4] && (res.data[4]['total'] || 0),
-                        numberOfFullyPaid: res.data[5] && (res.data[5]['total'] || 0),
-                        numberOfOverdue: res.data[6] && (res.data[6]['total'] || 0),
-                        numberOfCanceled: res.data[7] && (res.data[7]['total'] || 0)
-                    };
+                    this.totalSummary = res.data;
                 } catch (err) {
                     console.log(err);
                 }
