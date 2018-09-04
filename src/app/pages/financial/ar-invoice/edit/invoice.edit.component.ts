@@ -117,7 +117,7 @@ export class InvoiceEditComponent implements OnInit {
             'billing_id': [null],
             'shipping_id': [null],
             'note': [null],
-            'apply_late_fee': [null],
+            'apply_late_fee': [1],
             'due_dt': [null, Validators.required],
             'payment_term_range': [null],
 
@@ -173,6 +173,19 @@ export class InvoiceEditComponent implements OnInit {
     /**
      * Mater Data
      */
+    getDefaultNote() {
+        if (!this.generalForm.value.apply_late_fee || !this.generalForm.value.due_dt || !this.generalForm.value.company_id) {
+            return;
+        }
+        const params = {
+            due_dt: this.generalForm.value.due_dt,
+            company_id: this.generalForm.value.company_id
+        };
+        this.financialService.getNote(params).subscribe(res => {
+            this.generalForm.patchValue({ note: res.data.message });
+        });
+    }
+
     getDetailInvoice() {
         this.financialService.getDetailInvoice(this.data['id']).subscribe(res => {
             try {
@@ -288,6 +301,7 @@ export class InvoiceEditComponent implements OnInit {
                 if (params['payment_term_dt'] && res.data.due_dt) {
                     this.generalForm.controls['due_dt'].setValue(this.dt.transform(new Date(res.data.due_dt), 'MM/dd/yyyy'));
                 }
+                this.getDefaultNote();
             } catch (e) {
                 console.log(e);
             }
