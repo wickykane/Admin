@@ -17,7 +17,7 @@
                                             <label for="code" class="control-label" translate> <strong>Customer Name</strong> </label>
                                             <span class="text-danger">(*)</span>
                                             <div>
-                                                <ng-select [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="company_id" [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 110px; margin-left: 2px;" (change)="changeCustomer()" [items]="listMaster['customer']"
+                                                <ng-select [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="company_id" [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 110px; margin-left: 2px;" (change)="changeCustomer(); getDefaultNote();" [items]="listMaster['customer']"
                                                     bindLabel="company_name" bindValue="id" formControlName="company_id">
                                                 </ng-select>
                                             </div>
