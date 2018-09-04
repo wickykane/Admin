@@ -3,6 +3,7 @@ import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from './../../../../services/table.service';
 
+import { environment } from '../../../../../environments/environment';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 
 import { NgbDateParserFormatter, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -198,7 +199,11 @@ export class DebitMemoListComponent implements OnInit {
         this.router.navigate(['/financial/debit-memo/edit', debitId]);
     }
 
-    onPrintDebitMemo() {}
+    onPrintDebitMemo(debitId) {
+        // const path = 'ar-inv/print-pdf/';
+        // const url = `${environment.api_url}${path}${debitId}`;
+        // const new_window = window.open(url, '_blank');
+    }
 
     onReceivePayment() {}
 

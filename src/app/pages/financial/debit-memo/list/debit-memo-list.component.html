@@ -137,7 +137,7 @@
                         <td>{{debit.no}}</td>
                         <td>{{debit.issue_date}}</td>
                         <td>{{debit.company_name}}</td>
-                        <td>{{debit.related_doc}}</td>
+                        <td>{{debit.doc_type}}</td>
                         <td>{{debit.due_date}}</td>
                         <td>{{debit.total_price}}</td>
                         <td>{{debit.balance_due}}</td>
@@ -167,7 +167,7 @@
                                 <i class="fa fa-eye text-primary" aria-hidden="true"></i>
                             </a>
                             <a class="btn btn-default"
-                                title="Print" (click)="onPrintDebitMemo()">
+                                title="Print" (click)="onPrintDebitMemo(debit.id)">
                                 <i class="fa fa-print text-primary" aria-hidden="true"></i>
                             </a>
                             <a class="btn btn-default" *ngIf="debit.sts === 1"

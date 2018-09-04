@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ConfirmModalContent } from '../../../../../shared/modals/confirm.modal';
 import { TableService } from './../../../../../services/table.service';
 
+import { environment } from '../../../../../../environments/environment';
 import { DebitMemoService } from '../../debit-memo.service';
 
 @Component({
@@ -110,6 +111,12 @@ export class DebitInformationTabComponent implements OnInit {
                 console.log(err);
             }
         );
+    }
+
+    onPrintDebitMemo() {
+        // const path = 'ar-inv/print-pdf/';
+        // const url = `${environment.api_url}${path}${this.debitData['id']}`;
+        // const new_window = window.open(url, '_blank');
     }
 
     onClickBack() {

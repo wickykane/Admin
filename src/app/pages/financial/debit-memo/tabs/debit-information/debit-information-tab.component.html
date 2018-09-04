@@ -31,7 +31,7 @@
             *ngIf="debitData['sts'] === 4" (click)="onChangeDebitStatus(1)">
             <i class="fa fa-exchange" aria-hidden="true"></i> Re-open
         </button>
-        <button class="btn btn-outline-basic">
+        <button class="btn btn-outline-basic" (click)="onPrintDebitMemo()">
             <i class="fa fa-print" aria-hidden="true"></i> Print
         </button>
     </div>
@@ -254,7 +254,6 @@
                                         <th class="text-center" translate>Tax %</th>
                                         <th class="text-center" translate>Amount</th>
                                         <th class="text-center" translate>G/L Account</th>
-                                        <th class="text-center" translate>Price Source</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -273,7 +272,6 @@
                                         <td class="text-center">{{item.tax_percent || 0}}%</td>
                                         <td class="text-center">${{item.total_price}}</td>
                                         <td class="text-center">{{item.income_account_name}}</td>
-                                        <td class="text-center">{{item.price_source}}</td>
                                     </tr>
                                 </tbody>
                             </table>
