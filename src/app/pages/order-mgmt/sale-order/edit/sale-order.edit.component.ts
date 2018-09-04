@@ -252,7 +252,7 @@ export class SaleOrderEditComponent implements OnInit {
             this.getDetailCustomerById(buyer_id, flag);
         }
         if (!flag) {
-            this.list.items = [];
+            // this.list.items = [];
             this.updateTotal();
         }
     }
@@ -574,8 +574,7 @@ export class SaleOrderEditComponent implements OnInit {
                     if (listAdded.indexOf(item.sku + item.item_condition_id) < 0) {
                         return listAdded.indexOf(item.sku + item.item_condition_id) < 0;
                     } else {
-                        this.toastr.error('The item ' + item.no + ' already added in the order');
-                        return -1;
+                        this.toastr.error('The item ' + item.sku + ' already added in the order');
                     }
                 }));
 
@@ -614,7 +613,6 @@ export class SaleOrderEditComponent implements OnInit {
                         return listAdded.indexOf(item.sku + (item.item_condition_id || 'misc')) < 0;
                     } else {
                         this.toastr.error('The item ' + item.no + ' already added in the order');
-                        return -1;
                     }
 
                 }));
@@ -691,14 +689,14 @@ export class SaleOrderEditComponent implements OnInit {
         params = { ...this.generalForm.getRawValue(), ...params };
         this.orderService.updateOrder(params, this.route.snapshot.paramMap.get('id')).subscribe(res => {
             try {
-                if (res.status) {
+                // if (res.status) {
                     this.toastr.success(res.message);
                     setTimeout(() => {
                         this.router.navigate(['/order-management/sale-order']);
                     }, 500);
-                } else {
-                    this.toastr.error(res.message);
-                }
+                // } else {
+                //     this.toastr.error(res.message);
+                // }
             } catch (e) {
                 console.log(e);
             }
