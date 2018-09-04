@@ -5,7 +5,7 @@
         <ngb-tabset class="tabs-order">
             <ngb-tab title="Information">
                 <ng-template ngbTabContent>
-                    <app-debit-info-tab [debitInfo]="debitDetail"></app-debit-info-tab>
+                    <app-debit-info-tab [debitInfo]="debitDetail" (changeStatusSuccessfully)="getDebitDetail()"></app-debit-info-tab>
                 </ng-template>
             </ngb-tab>
             <ngb-tab title="Payment">
