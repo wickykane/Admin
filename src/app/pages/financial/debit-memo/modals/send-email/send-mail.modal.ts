@@ -18,33 +18,31 @@ export class SendMailDebitModalContent implements OnInit {
 
     @Input() debitId = null;
 
-    public emailInfor = {
-        send_to: '',
-        subject: '',
-        content: ''
-    };
+    public mailForm: FormGroup;
 
     constructor(
-        public activeModal: NgbActiveModal,
+        private fb: FormBuilder,
         private toastr: ToastrService,
-        public debitService: DebitMemoService) {}
+        public activeModal: NgbActiveModal,
+        public debitService: DebitMemoService) {
+            this.mailForm = fb.group({
+                'send_to': [null, Validators.required],
+                'subject': [null],
+                'content': [null],
+            });
+    }
 
     ngOnInit() {}
 
-    sendEmail() {
-        console.log('Debit Id: ', this.debitId);
-        console.log('Email: ', this.emailInfor);
-        // this.debitService.sendMail(this.debitId, this.sendEmail).subscribe(
-        //     res => {
-        //         try {
-        //             this.toastr.success(res.message);
-        //             this.activeModal.close();
-        //         } catch (err) {
-        //             console.log(err);
-        //         }
-        //     }, err => {
-        //         console.log(err);
-        //     }
-        // );
+    ok() {
+        const params = this.mailForm.value;
+        this.debitService.sendMail(this.debitId, params).subscribe(res => {
+            this.toastr.success(res.message);
+            this.activeModal.close(this.mailForm.value);
+        });
+    }
+
+    cancel() {
+        this.activeModal.dismiss();
     }
 }

@@ -28,17 +28,27 @@ export class DebitMemoListComponent implements OnInit {
 
     @ViewChild('drNo') drNoInput: ElementRef;
 
-    public listMaster = {};
+    public listMaster = {
+        'count-status': []
+    };
 
     public searchForm: FormGroup;
-
+    public onoffFilter: any;
     public listDebitMemo = [];
-
     public totalSummary = {};
-
     public selectedIndex = 0;
-
     public currentuser = {};
+
+    public statusConfig = {
+        'New': { color: 'blue', name: 'New', id: 1, img: './assets/images/icon/new.png' },
+        'Submitted': { color: 'texas-rose', name: 'Submited', id: 2 },
+        'Approved': { color: 'strong-green', name: 'Approved', id: 3, img: './assets/images/icon/approved.png' },
+        'Rejected': { color: 'magenta', name: 'Rejected', id: 4 },
+        'Cancelled': { color: 'red', name: 'Cancelled', id: 5, img: './assets/images/icon/cancel.png' },
+        'Partially Paid': { color: 'darkblue', name: 'Partially Paid', id: 6, img: './assets/images/icon/partial_delivered.png' },
+        'Fully Paid': { color: 'lemon', name: 'Fully Paid', id: 7, img: './assets/images/icon/full_delivered.png' },
+        'Overdue': { color: 'bright-grey', name: 'Overdue', id: 8 },
+    };
 
     constructor(public router: Router,
         public fb: FormBuilder,
@@ -55,8 +65,10 @@ export class DebitMemoListComponent implements OnInit {
             company_name: [null],
             sts: [null],
             date_type: [null],
-            date_from: [null],
-            date_to: [null]
+            issue_date_from: [null],
+            issue_date_to: [null],
+            due_date_from: [null],
+            due_date_to: [null]
         });
         //  Init hot keys
         this.keyService.watchContext.next(this);
@@ -67,14 +79,15 @@ export class DebitMemoListComponent implements OnInit {
 
     ngOnInit() {
         this.currentuser = JSON.parse(localStorage.getItem('currentUser'));
+        this.listMaster['listFilter'] = [{ value: false, name: 'Date Filter' }];
         this.listMaster['dateType'] = [
             { id: 0, name: 'Issue Date' },
             { id: 1, name: 'Due Date' }
         ];
 
         this.getDebitStatusList();
-        this.getTotalSummary();
         this.getListDebitMemo();
+        this.getCountStatus();
     }
 
     getDebitStatusList() {
@@ -91,39 +104,29 @@ export class DebitMemoListComponent implements OnInit {
         );
     }
 
-    getTotalSummary() {
-        this.debitMemoService.getDebitReportTotal().subscribe(
-            res => {
-                try {
-                    this.totalSummary = res.data;
-                } catch (err) {
-                    console.log(err);
+    getCountStatus() {
+        this.debitMemoService.getDebitReportTotal().subscribe(res => {
+            res.data.map(item => {
+                if (this.statusConfig[item.name]) {
+                    this.statusConfig[item.name].count = item.count;
+                    this.statusConfig[item.name].status = this.statusConfig[item.name].id;
                 }
-            }, err => {
-                console.log(err);
-            }
-        );
+            });
+            this.listMaster['count-status'] = Object.keys(this.statusConfig).map(key => {
+                return this.statusConfig[key];
+            });
+        });
     }
 
     getListDebitMemo() {
         const params = { ...this.tableService.getParams(), ...this.searchForm.value };
-
-        switch (params['date_type']) {
-            case 0: {
-                params['issue_date_from'] = params['date_from'];
-                params['issue_date_to'] = params['date_to'];
-                break;
+        Object.keys(params).forEach((key) => {
+            if (params[key] instanceof Array) {
+                params[key] = params[key].join(',');
             }
-            case 1: {
-                params['due_date_from'] = params['date_from'];
-                params['due_date_to'] = params['date_to'];
-                break;
-            }
-        }
-        delete params['date_type'];
-        delete params['date_from'];
-        delete params['date_to'];
-        Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
+            // tslint:disable-next-line:no-unused-expression
+            (params[key] === null || params[key] === '') && delete params[key];
+        });
         this.debitMemoService.getListDebitMemo(params).subscribe(
             res => {
                 try {
@@ -139,12 +142,35 @@ export class DebitMemoListComponent implements OnInit {
         );
     }
 
-    onStartSearch() {
-        this.renderer.invokeElementMethod(this.drNoInput.nativeElement, 'focus');
+    filter(status) {
+        console.log(status);
+        const params = { sts: status };
+        this.debitMemoService.getListDebitMemo(params).subscribe(res => {
+            try {
+                this.listDebitMemo = res.data.rows;
+                this.selectedIndex = 0;
+                this.tableService.matchPagingOption(res.data);
+            } catch (e) {
+                console.log(e);
+            }
+        });
     }
 
-    addNewDebitMemo() {
-        this.router.navigate(['/financial/debit-memo/create']);
+    moreFilter() {
+        this.onoffFilter = !this.onoffFilter;
+    }
+
+    onDateTypeChanged() {
+        this.searchForm.patchValue({
+            'issue_date_from': null,
+            'issue_date_to': null,
+            'due_date_from': null,
+            'due_date_to': null
+        });
+    }
+
+    onStartSearch() {
+        this.renderer.invokeElementMethod(this.drNoInput.nativeElement, 'focus');
     }
 
     onChangeDebitStatus(debitId, newStatus) {
@@ -199,9 +225,7 @@ export class DebitMemoListComponent implements OnInit {
     onReceivePayment() {}
 
     onSendMail(debitId) {
-        const modalRef = this.modalService.open(SendMailDebitModalContent, {
-            size: 'lg'
-        });
+        const modalRef = this.modalService.open(SendMailDebitModalContent, { size: 'lg', windowClass: 'modal-md' });
         modalRef.componentInstance.debitId = debitId;
         modalRef.result.then(res => {
         }, dismiss => {});
@@ -213,7 +237,7 @@ export class DebitMemoListComponent implements OnInit {
                 try {
                     this.toastr.success(res.message);
                     this.getListDebitMemo();
-                    this.getTotalSummary();
+                    this.getCountStatus();
                 } catch (err) {
                     console.log(err);
                 }
