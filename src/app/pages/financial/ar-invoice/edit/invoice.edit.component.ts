@@ -173,6 +173,30 @@ export class InvoiceEditComponent implements OnInit {
     /**
      * Mater Data
      */
+    resetChangeData() {
+        this.list.items = [];
+        const oldForm = this.generalForm.value;
+        this.generalForm.reset();
+        this.generalForm.patchValue({
+            inv_dt: oldForm.inv_dt,
+            inv_num: oldForm.inv_num,
+            company_id: oldForm.company_id,
+            apply_late_fee: 1,
+        });
+
+        this.addr_select = {
+            shipping: {},
+            billing: {},
+            contact: {}
+        };
+        this.data['order_detail'] = {};
+        this.data['shipping_method'] = {};
+        this.data['shipping_address'] = {};
+        this.data['is_fixed_early'] = null;
+        this.order_info = {};
+        this.updateTotal();
+    }
+
     getDefaultNote() {
         if (!this.generalForm.value.apply_late_fee || !this.generalForm.value.due_dt || !this.generalForm.value.company_id) {
             return;
@@ -363,6 +387,7 @@ export class InvoiceEditComponent implements OnInit {
         if (company_id) {
             this.getDetailCustomerById(company_id, flag);
             this.getOrderByCustomerId(company_id, flag);
+            this.resetChangeData();
         }
 
         if (!flag) {
@@ -513,7 +538,7 @@ export class InvoiceEditComponent implements OnInit {
             total_due: this.order_info.total,
             is_early: this.data['is_fixed_early'] || 0,
             early_percent: (this.data['is_fixed_early']) ? null : (this.order_info['incentive_percent'] || 0),
-            policy_amt: (this.data['is_fixed_early']) ? (this.order_info['incentive'] || 0) : null,
+            policy_amt: (this.order_info['incentive'] || 0),
             aprvr_id: this.generalForm.value.approver_id,
             sale_person_id: this.generalForm.value.sales_person,
             inv_detail: items,

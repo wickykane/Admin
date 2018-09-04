@@ -22,7 +22,7 @@ import { MailModalComponent } from './modals/mail.modal';
     templateUrl: './invoice.component.html',
     styleUrls: ['./invoice.component.scss'],
     animations: [routerTransition()],
-    providers: [InvoiceKeyService, HotkeysService]
+    providers: [InvoiceKeyService, HotkeysService, TableService]
 })
 export class InvoiceComponent implements OnInit {
 
