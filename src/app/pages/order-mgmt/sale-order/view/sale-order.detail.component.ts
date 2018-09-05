@@ -73,10 +73,7 @@ export class SaleOrderDetailComponent implements OnInit {
           // } else {
           //     this.toastr.error(res.message);
           // }
-      },
-          err => {
-              this.toastr.error(err.message);
-          }
+      }
       );
   }
 
@@ -90,10 +87,7 @@ export class SaleOrderDetailComponent implements OnInit {
           // } else {
           //     this.toastr.error(res.message);
           // }
-      },
-          err => {
-              this.toastr.error(err.message);
-          }
+      }
       );
   }
 

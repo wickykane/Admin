@@ -3,6 +3,7 @@ import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FinancialService } from '../../financial.service';
 import { TableService } from './../../../../services/table.service';
 
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -52,6 +53,7 @@ export class InvoiceInformationTabComponent implements OnInit {
         public fb: FormBuilder,
         private vRef: ViewContainerRef,
         private router: Router,
+        private http: HttpClient,
         private modalService: NgbModal,
         private financialService: FinancialService,
         public tableService: TableService) {
@@ -68,7 +70,17 @@ export class InvoiceInformationTabComponent implements OnInit {
     printPDF(id) {
         const path = 'ar-invoice/print-pdf/';
         const url = `${environment.api_url}${path}${id}`;
-        const new_window = window.open(url, '_blank');
+        const headers: HttpHeaders = new HttpHeaders();
+        this.http.get(url, {
+            headers,
+            responseType: 'blob',
+        }).subscribe(res => {
+            const file = new Blob([res], { type: 'application/pdf' });
+            const fileURL = URL.createObjectURL(file);
+            const newWindow = window.open(fileURL);
+            newWindow.focus();
+            newWindow.print();
+        });
     }
 
     sendMail(id) {
@@ -137,7 +149,7 @@ export class InvoiceInformationTabComponent implements OnInit {
             const amount = (+item.qty_inv * (+item.price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
             this.invoice_info.sub_total += amount;
         });
-        this.invoice_info.total = (+this.invoice_info['total_tax'] || 0)  + +this.invoice_info.sub_total;
+        this.invoice_info.total = (+this.invoice_info['total_tax'] || 0) + +this.invoice_info.sub_total;
         if (this.invoice_info.incentive_percent) {
             this.invoice_info.incentive = +this.invoice_info.incentive_percent * +this.invoice_info.total / 100;
         }
