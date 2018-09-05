@@ -156,4 +156,12 @@ export class CustomerService {
         const url = 'buyer/list-route-gate-time';
         return this.API.get(url);
     }
+    getListPaymentTerm(){
+        const url = 'buyer/payment-terms';
+        return this.API.get(url);
+    }
+    getListPaymentMethod(){
+        const url = 'buyer/payment-methods';
+        return this.API.get(url);
+    }
 }
