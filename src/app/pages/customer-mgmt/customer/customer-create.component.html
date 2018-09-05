@@ -211,7 +211,6 @@
                                     <th> State <span class="text-danger"> (*)</span></th>
                                     <th> Zip Code <span class="text-danger"> (*)</span></th>
                                     <th>Default</th>
-                                    <th> Route  <span class="text-danger">(*)</span></th>
                                     <th> Action </th>
                                 </tr>
                             </thead>
@@ -253,12 +252,6 @@
                                     </td>
                                     <td>
                                         <input type="checkbox" name="is_default" (change)="checkIsDefault($event, i)" [(ngModel)]="item.is_default" [disabled]="item.type==3 || item.type==4">
-                                    </td>
-                                    <td>
-                                        <select [(ngModel)]="item.route_id" class="form-control" name="route_id" *ngIf="item.type == 2">
-                                            <option value="null" selected="true">Select Route</option>
-                                            <option *ngFor="let item of routeList" value="{{item.id}}">{{item.route_gatetime}}</option>
-                                        </select>
                                     </td>
                                     <td>
                                         <button [disabled]="item.type==3 || item.type==4" type="button" class="btn btn-default" (click)="removeAddress(i)">
