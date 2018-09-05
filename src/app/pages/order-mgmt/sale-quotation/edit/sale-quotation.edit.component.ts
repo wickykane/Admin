@@ -245,13 +245,33 @@ export class SaleQuotationEditComponent implements OnInit {
                 this.customer = res.data;
                 this.data['default_shipping_id'] = this.customer.shipping[0].address_id;
                 // if (res.data.buyer_type === 'PS') {
-                    this.addr_select.contact = res.data.contact[0];
-                    this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
+                this.addr_select.contact = res.data.contact[0];
+                this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
                 // }
+                if (!flag) {
+                    const default_billing = (this.customer.billing || []).find(item => item.set_default) || {};
+                    const default_shipping = (this.customer.shipping || []).find(item => item.set_default) || {};
+                    this.generalForm.patchValue({
+                        billing_id: default_billing.address_id || null,
+                        shipping_id: default_shipping.address_id || null,
+                        payment_method_id: this.customer.payment_method_id || null,
+                        payment_term_id: this.customer.payment_term_id || null,
+                    });
+
+                    if (default_billing) {
+                        this.selectAddress('billing', flag);
+                    }
+
+                    if (default_shipping) {
+                        this.selectAddress('shipping', flag);
+                    }
+                }
+
                 if (flag) {
                     this.selectAddress('billing', flag);
                     this.selectAddress('shipping', flag);
                 }
+
             } catch (e) {
                 console.log(e);
             }
@@ -501,7 +521,7 @@ export class SaleQuotationEditComponent implements OnInit {
         this.generalForm.controls['description'].patchValue(stringNote);
     }
 
-    remove = function (index) {
+    remove = function(index) {
         this.data['programs'].splice(index, 1);
     };
 

@@ -928,3 +928,10 @@ ngu-carousel {
 .cke_contents.cke_reset {
   height: 60px !important;
 }
+
+.sub-category.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value.ng-value-disabled .ng-value-icon {
+  display: none;
+}
+.sub-category.ng-select .ng-clear-wrapper {
+  display: none;
+}

@@ -200,8 +200,8 @@ export class SaleOrderCreateComponent implements OnInit {
             try {
                 this.customer = res.data;
                 // if (res.data.buyer_type === 'PS') {
-                    this.addr_select.contact = res.data.contact[0];
-                    this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
+                this.addr_select.contact = res.data.contact[0];
+                this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
                 // }
 
                 const default_billing = (this.customer.billing || []).find(item => item.set_default) || {};
@@ -212,6 +212,14 @@ export class SaleOrderCreateComponent implements OnInit {
                     payment_method_id: this.customer.payment_method_id || null,
                     payment_term_id: this.customer.payment_term_id || null,
                 });
+
+                if (default_billing) {
+                    this.selectAddress('billing');
+                }
+
+                if (default_shipping) {
+                    this.selectAddress('shipping');
+                }
 
             } catch (e) {
                 console.log(e);
@@ -292,8 +300,8 @@ export class SaleOrderCreateComponent implements OnInit {
             default_ship_rate = 8;
 
             if (+this.generalForm.value.carrier_id === 1) {
-              default_option = '01';
-              default_ship_rate = 9;
+                default_option = '01';
+                default_ship_rate = 9;
             }
             enable = [1, 2].indexOf(+this.generalForm.value.carrier_id) > -1;
 
@@ -444,9 +452,9 @@ export class SaleOrderCreateComponent implements OnInit {
     }
 
     calcTaxShipping() {
-      if (!this.generalForm.value.shipping_id) {
-          return;
-      }
+        if (!this.generalForm.value.shipping_id) {
+            return;
+        }
         const params = {
             'customer': this.generalForm.value.buyer_id,
             'address': this.generalForm.value.shipping_id,
@@ -608,10 +616,10 @@ export class SaleOrderCreateComponent implements OnInit {
         this.orderService.createOrder(params).subscribe(res => {
             try {
                 // if (res.status) {
-                    this.toastr.success(res.message);
-                    setTimeout(() => {
-                        this.router.navigate(['/order-management/sale-order']);
-                    }, 500);
+                this.toastr.success(res.message);
+                setTimeout(() => {
+                    this.router.navigate(['/order-management/sale-order']);
+                }, 500);
                 // } else {
                 //     this.toastr.error(res.message);
                 // }
