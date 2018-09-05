@@ -263,8 +263,8 @@ export class SaleQuotationCreateComponent implements OnInit {
                 this.customer = res.data;
                 this.data['default_shipping_id'] = this.customer.shipping[0].address_id;
                 // if (res.data.buyer_type === 'PS') {
-                    this.addr_select.contact = res.data.contact[0];
-                    this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
+                this.addr_select.contact = res.data.contact[0];
+                this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
                 // }
 
                 if (!flag) {
@@ -276,6 +276,14 @@ export class SaleQuotationCreateComponent implements OnInit {
                         payment_method_id: this.customer.payment_method_id || null,
                         payment_term_id: this.customer.payment_term_id || null,
                     });
+
+                    if (default_billing) {
+                        this.selectAddress('billing');
+                    }
+
+                    if (default_shipping) {
+                        this.selectAddress('shipping');
+                    }
                 }
 
                 if (flag) {
@@ -534,7 +542,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         this.generalForm.controls['description'].patchValue(stringNote);
     }
 
-    remove = function (index) {
+    remove = function(index) {
         this.data['programs'].splice(index, 1);
     };
 
