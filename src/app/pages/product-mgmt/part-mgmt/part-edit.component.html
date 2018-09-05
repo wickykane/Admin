@@ -385,7 +385,7 @@
     </div>
     <div class="row text-center">
         <div class="col-md-12 mg-top-15">
-            <button class="btn btn-primary text-white" [disabled]="!detail.short_des || !detail.full_des || generalForm.invalid" (click)="updateItem()" translate>Save</button>
+            <button class="btn btn-primary text-white" [disabled]="generalForm.invalid" (click)="updateItem()" translate>Save</button>
             <button class="btn btn-default" routerLink="/product-management/part-list/">Cancel</button>
         </div>
     </div>

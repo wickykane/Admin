@@ -17,7 +17,7 @@
                                             <label for="code" class="control-label" translate> <strong>Customer Name</strong> </label>
                                             <span class="text-danger">(*)</span>
                                             <div>
-                                                <ng-select [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="company_id" [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 110px; margin-left: 2px;" (change)="changeCustomer()" [items]="listMaster['customer']"
+                                                <ng-select [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="company_id" [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 110px; margin-left: 2px;" (change)="changeCustomer(); getDefaultNote();" [items]="listMaster['customer']"
                                                     bindLabel="company_name" bindValue="id" formControlName="company_id">
                                                 </ng-select>
                                             </div>
@@ -92,7 +92,7 @@
                                                 </label>
                                                 <div class='col-6 text-primary'>
                                                     <div clickOutside (clickOutside)="invoicedate.close()" class="input-group">
-                                                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="inv_dt" ngbDatepicker #invoicedate="ngbDatepicker">
+                                                        <input class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="inv_dt" ngbDatepicker #invoicedate="ngbDatepicker">
                                                         <div class="input-group-append">
                                                             <button class="btn btn-outline-secondary" (click)="invoicedate.toggle()" type="button">
                                                                 <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -143,7 +143,7 @@
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6 text-danger'>
-                                                    <select class="form-control" id="payment_term_id" name="payment_term_id" formControlName="payment_term_id">
+                                                    <select (change)="getEarlyPaymentValue()" class="form-control" id="payment_term_id" name="payment_term_id" formControlName="payment_term_id">
                                                         <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let item of listMaster['payment_term']" [ngValue]="item.id">{{item.des}}</option>
                                                     </select>
@@ -399,7 +399,7 @@
                                             </td>
                                             <td> {{ item.qty }}</td>
                                             <td>
-                                                <input [disabled]="item.misc_id" [isDecimal]="true" numberDirective [max]="item.qty" [min]="0" [disabled]="item.misc_id" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.qty_inv" (change)="updateTotal()">
+                                                <input [disabled]="item.misc_id" [isDecimal]="true" numberDirective [max]="item.qty || 0 " [min]="0" [disabled]="item.misc_id" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.qty_inv" (change)="updateTotal()">
                                             </td>
                                             <td>
                                                 {{ item.price | currency }}

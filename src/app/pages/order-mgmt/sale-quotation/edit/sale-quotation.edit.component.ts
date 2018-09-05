@@ -244,14 +244,34 @@ export class SaleQuotationEditComponent implements OnInit {
             try {
                 this.customer = res.data;
                 this.data['default_shipping_id'] = this.customer.shipping[0].address_id;
-                if (res.data.buyer_type === 'PS') {
-                    this.addr_select.contact = res.data.contact[0];
-                    this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
+                // if (res.data.buyer_type === 'PS') {
+                this.addr_select.contact = res.data.contact[0];
+                this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
+                // }
+                if (!flag) {
+                    const default_billing = (this.customer.billing || []).find(item => item.set_default) || {};
+                    const default_shipping = (this.customer.shipping || []).find(item => item.set_default) || {};
+                    this.generalForm.patchValue({
+                        billing_id: default_billing.address_id || null,
+                        shipping_id: default_shipping.address_id || null,
+                        payment_method_id: this.customer.payment_method_id || null,
+                        payment_term_id: this.customer.payment_term_id || null,
+                    });
+
+                    if (default_billing) {
+                        this.selectAddress('billing', flag);
+                    }
+
+                    if (default_shipping) {
+                        this.selectAddress('shipping', flag);
+                    }
                 }
+
                 if (flag) {
                     this.selectAddress('billing', flag);
                     this.selectAddress('shipping', flag);
                 }
+
             } catch (e) {
                 console.log(e);
             }
@@ -381,8 +401,7 @@ export class SaleQuotationEditComponent implements OnInit {
                     if (listAdded.indexOf(item.sku + item.item_condition_id) < 0) {
                         return listAdded.indexOf(item.sku + item.item_condition_id) < 0;
                     } else {
-                        this.toastr.error('The item ' + item.no + ' already added in the order');
-                        return -1;
+                        this.toastr.error('The item ' + item.sku + ' already added in the order');
                     }
                 }));
 
@@ -416,7 +435,6 @@ export class SaleQuotationEditComponent implements OnInit {
                         return listAdded.indexOf(item.sku + (item.item_condition_id || 'misc')) < 0;
                     } else {
                         this.toastr.error('The item ' + item.no + ' already added in the order');
-                        return -1;
                     }
 
                 }));
@@ -503,7 +521,7 @@ export class SaleQuotationEditComponent implements OnInit {
         this.generalForm.controls['description'].patchValue(stringNote);
     }
 
-    remove = function (index) {
+    remove = function(index) {
         this.data['programs'].splice(index, 1);
     };
 
@@ -545,7 +563,7 @@ export class SaleQuotationEditComponent implements OnInit {
         unique.forEach((tax, index) => {
             let taxAmount = 0;
             items.filter(item => item.tax_percent === tax).map(i => {
-                taxAmount += (+i.tax_percent * +i.quantity * (+i.sale_price || 0) / 100);
+                taxAmount += (+i.tax_percent * +i.quantity * ((+i.sale_price || 0) * (100 - (+i.discount || 0)) / 100) / 100);
             });
             this.order_info['total_tax'] = this.order_info['total_tax'] + +(taxAmount.toFixed(2));
             this.order_info['taxs'].push({

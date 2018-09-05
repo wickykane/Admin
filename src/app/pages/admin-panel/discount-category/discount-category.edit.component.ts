@@ -54,7 +54,7 @@ export class DiscountCategoryEditComponent implements OnInit {
         this.getListReference();
         this.route.params.subscribe(params =>
             setTimeout(() => {
-              this.id = params.id;
+                this.id = params.id;
                 this.getDetailDiscountCategory(params.id);
             }, 1000)
         );
@@ -70,7 +70,7 @@ export class DiscountCategoryEditComponent implements OnInit {
                 this.data['products'].length > 0 ? this.flagAddress = true : this.flagAddress = false;
                 this.data['products'].forEach(e => {
                     (async () => {
-                        await new Promise((calback) => { this.changeCategory(e.category_id, e); });
+                        await new Promise((calback) => { this.changeCategory(e.category_id, e, true); });
                     })();
                 });
             },
@@ -107,10 +107,12 @@ export class DiscountCategoryEditComponent implements OnInit {
             if (id === obj.category_id) {
                 item.listSubCategory = obj['sub_categories'];
                 this.initDisabledType(item.listSubCategory);
-                item.listType = [{ id: 1, value: 'All', disabled: false }, { id: 2, value: 'Specific', disabled: false }];
+                item.listType = [];
+                item.listType = [...item.listType, { id: 1, value: 'All', disabled: false }, { id: 2, value: 'Specific', disabled: false }];
 
             }
         });
+        console.log(item);
     }
 
 
@@ -151,19 +153,28 @@ export class DiscountCategoryEditComponent implements OnInit {
             });
         });
 
+        this.data['products'].map(obj => {
+            if (item.category_id === obj.category_id) {
+                item.listSubCategory = [...obj.listSubCategory];
+                obj.listSubCategory = [...item.listSubCategory];
+            }
+        });
+
     }
 
-    changeCategory(id, item) {
+    changeCategory(id, item, flag) {
         if (id) {
             if (this.listCheckSubCat.indexOf(id) !== -1) {
                 this.data['products'].map(obj => {
                     if (id === obj.category_id) {
-                        item.listSubCategory = obj.listSubCategory;
+                        item.listSubCategory = [...obj.listSubCategory];
+                        obj.listSubCategory = [...item.listSubCategory];
                     }
                 });
                 this.listCheckType.map(obj => {
                     if (id === obj.category_id) {
-                        item.listType = obj.listType;
+                        item.listType = [...obj.listType];
+                        obj.listType = [...item.listType];
                     }
                 });
 
@@ -172,6 +183,12 @@ export class DiscountCategoryEditComponent implements OnInit {
                 this.getListSubCate(id, item);
                 this.listCheckType.push(item);
             }
+        }
+
+        if (flag) {
+            item['sub_category_id'].forEach(e => {
+                this.changeToGetSubCategory(e, item);
+            });
         }
     }
 

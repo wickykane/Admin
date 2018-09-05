@@ -73,7 +73,13 @@ export class FinancialService {
         const url = 'ar-invoice/' + id;
         return this.API.delete(url);
     }
-
+    getNote(params) {
+        const url = 'ar-invoice/set-note-message';
+        return this.API.get(url, params);
+    }
+    getPdfPrint(url) {
+        return this.API.get(url);
+    }
     getListPaymentTerm() {
         const url = ['payment-term?app=inv'];
         return this.API.get(url);

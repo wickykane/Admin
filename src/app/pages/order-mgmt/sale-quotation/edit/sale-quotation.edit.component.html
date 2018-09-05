@@ -35,7 +35,7 @@
                             <div class="col-md-12 fix-padding">
                                 <div class="row">
                                     <div class="col-md-4 bolder ">
-                                        <div class="form-group row" *ngIf="customer.buyer_type =='CP'">
+                                        <div class="form-group row">
                                             <label class='col-6 control-label'>Contact</label>
                                             <div class='col-6 text-primary'>
                                                 <form [formGroup]="generalForm">
@@ -46,33 +46,15 @@
                                                 </form>
                                             </div>
                                         </div>
-                                        <div class="form-group row" *ngIf="customer.buyer_type =='CP'">
+                                        <div class="form-group row">
                                             <label class='col-6'>Phone</label>
                                             <div class='col-6 '>
                                                 {{addr_select.contact.phone}}
                                             </div>
                                         </div>
-                                        <div class="form-group row" *ngIf="customer.buyer_type =='CP'">
+                                        <div class="form-group row">
                                             <label class='col-6'>Email</label>
                                             <div class='col-6 '>
-                                                {{addr_select.contact.email}}
-                                            </div>
-                                        </div>
-                                        <div class="form-group row" *ngIf="customer.buyer_type !='CP'">
-                                            <label class='col-6 control-label'>Contact</label>
-                                            <div class='col-6 text-primary'>
-                                                {{addr_select.contact.full_name}}
-                                            </div>
-                                        </div>
-                                        <div class="form-group row" *ngIf="customer.buyer_type !='CP'">
-                                            <label class='col-6'>Phone</label>
-                                            <div class='col-6'>
-                                                {{addr_select.contact.phone}}
-                                            </div>
-                                        </div>
-                                        <div class="form-group row" *ngIf="customer.buyer_type !='CP'">
-                                            <label class='col-6'>Email</label>
-                                            <div class='col-6'>
                                                 {{addr_select.contact.email}}
                                             </div>
                                         </div>
@@ -408,7 +390,7 @@
                                         <th style="width:100px" translate>Tax %</th>
                                         <th translate style="width:100px">Amount</th>
                                         <th translate style="width:100px">G/L Account</th>
-                                        <!-- <th translate style="width:100px">Price Source</th> -->
+                                        <th translate style="width:100px">Price Source</th>
                                     </tr>
                                 </thead>
                                 <tbody *ngIf="list['items'].length === 0">
@@ -457,11 +439,11 @@
                                             <td>
                                                 {{ item.income_account_name }}
                                             </td>
-                                            <!-- <td class="text-center">
+                                            <td class="text-center">
                                                 <span>
                                                         {{item.source_name}}
                                                     </span>
-                                            </td> -->
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </ng-container>

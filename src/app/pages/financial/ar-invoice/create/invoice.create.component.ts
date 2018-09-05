@@ -43,8 +43,8 @@ export class InvoiceCreateComponent implements OnInit {
     public data = {};
 
     public messageConfig = {
-        '2': 'Are you sure that you want to save & submit this quotation to approver?',
-        '4': 'Are you sure that you want to validate this quotation?',
+        '2': 'Are you sure that you want to save & submit this invoice to approver? ',
+        '4': 'Are you sure that you want to validate this invoice?',
         'default': 'The data you have entered may not be saved, are you sure that you want to leave?',
     };
 
@@ -117,7 +117,7 @@ export class InvoiceCreateComponent implements OnInit {
             'billing_id': [null],
             'shipping_id': [null],
             'note': [null],
-            'apply_late_fee': [null],
+            'apply_late_fee': [1],
             'due_dt': [null, Validators.required],
             'payment_term_range': [null],
 
@@ -174,6 +174,44 @@ export class InvoiceCreateComponent implements OnInit {
     /**
      * Mater Data
      */
+
+    resetChangeData() {
+        this.list.items = [];
+        const oldForm = this.generalForm.value;
+        this.generalForm.reset();
+        this.generalForm.patchValue({
+            inv_dt: oldForm.inv_dt,
+            inv_num: oldForm.inv_num,
+            company_id: oldForm.company_id,
+            apply_late_fee: 1,
+        });
+
+        this.addr_select = {
+            shipping: {},
+            billing: {},
+            contact: {}
+        };
+        this.data['order_detail'] = {};
+        this.data['shipping_method'] = {};
+        this.data['shipping_address'] = {};
+        this.data['is_fixed_early'] = null;
+        this.order_info = {};
+        this.updateTotal();
+    }
+
+    getDefaultNote() {
+        if (!this.generalForm.value.apply_late_fee || !this.generalForm.value.due_dt || !this.generalForm.value.company_id) {
+            return;
+        }
+        const params = {
+            due_dt: this.generalForm.value.due_dt,
+            company_id: this.generalForm.value.company_id
+        };
+        this.financialService.getNote(params).subscribe(res => {
+            this.generalForm.patchValue({ note: res.data.message });
+        });
+    }
+
     getListPaymentMethod() {
         return new Promise(resolve => {
             this.financialService.getPaymentMethod().subscribe(res => {
@@ -253,6 +291,7 @@ export class InvoiceCreateComponent implements OnInit {
                 if (params['payment_term_dt'] && res.data.due_dt) {
                     this.generalForm.controls['due_dt'].setValue(this.dt.transform(new Date(res.data.due_dt), 'MM/dd/yyyy'));
                 }
+                this.getDefaultNote();
             } catch (e) {
                 console.log(e);
             }
@@ -288,7 +327,7 @@ export class InvoiceCreateComponent implements OnInit {
             return item;
         });
 
-        this.data['order_detail'] = { ...event.order, sale_person_name: event.sale_person_name };
+        this.data['order_detail'] = { ...event.order, sales_person: event.order.sale_person_id, sale_person_name: event.sale_person_name, ship_rate: event.order.ship_method_rate };
         this.data['shipping_address'] = event.shipping_address;
         this.data['shipping_method'] = event.shipping_method;
 
@@ -304,6 +343,7 @@ export class InvoiceCreateComponent implements OnInit {
         if (company_id) {
             this.getDetailCustomerById(company_id, flag);
             this.getOrderByCustomerId(company_id);
+            this.resetChangeData();
         }
 
         if (!flag) {
@@ -388,7 +428,7 @@ export class InvoiceCreateComponent implements OnInit {
         unique.forEach((tax, index) => {
             let taxAmount = 0;
             items.filter(item => item.tax_percent === tax).map(i => {
-                taxAmount += (+i.tax_percent * +i.qty_inv * (+i.price || 0) / 100);
+                taxAmount += (+i.tax_percent * +i.qty_inv * ((+i.price || 0) * (100 - (+i.discount_percent || 0)) / 100) / 100);
             });
             this.order_info['total_tax'] = this.order_info['total_tax'] + +(taxAmount.toFixed(2));
             this.order_info['taxs'].push({
@@ -436,12 +476,14 @@ export class InvoiceCreateComponent implements OnInit {
             items: [],
             backItems: []
         };
+        this.generalForm.reset();
         this.ngOnInit();
     }
 
     createInvoice(type, is_draft?, is_continue?) {
         const items = this.list.items.map(item => {
             item.is_item = (item.misc_id) ? 0 : 1;
+            item.order_detail_id = item.id;
             return item;
         });
 
@@ -450,12 +492,13 @@ export class InvoiceCreateComponent implements OnInit {
             inv_status: type,
             sub_total: this.order_info.sub_total,
             total_due: this.order_info.total,
-            ear_payment_incentive: this.order_info['incentive'],
+            is_early: this.data['is_fixed_early'] || 0,
+            early_percent: (this.data['is_fixed_early']) ? null : (this.order_info['incentive_percent'] || 0),
+            policy_amt:  (this.order_info['incentive'] || 0),
             aprvr_id: this.generalForm.value.approver_id,
             sale_person_id: this.generalForm.value.sales_person,
             inv_detail: items,
             is_draft: is_draft || 0,
-            is_copy: this.data['is_copy'] || 0
         };
 
         this.financialService.createInvoice(params).subscribe(res => {

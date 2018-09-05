@@ -171,6 +171,7 @@ export class SaleQuotationComponent implements OnInit {
             try {
                 this.toastr.success(res.message);
                 this.getList();
+                this.getCountStatus();
             } catch (e) {
                 console.log(e);
             }

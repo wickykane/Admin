@@ -34,7 +34,7 @@
                             <div class="col-md-12 fix-padding">
                                 <div class="row">
                                     <div class="col-md-4 bolder">
-                                        <div class="form-group row" *ngIf="customer.buyer_type =='CP'">
+                                        <div class="form-group row">
                                             <label class='col-6 control-label'>Contact</label>
                                             <div class='col-6 text-primary'>
                                                 <form [formGroup]="generalForm">
@@ -45,34 +45,16 @@
                                                 </form>
                                             </div>
                                         </div>
-                                        <div class="form-group row" *ngIf="customer.buyer_type =='CP'">
+                                        <div class="form-group row">
                                             <label class='col-6'>Phone</label>
                                             <div class='col-6 '>
-                                                {{addr_select.contact.phone}}
+                                                {{addr_select.contact['phone']}}
                                             </div>
                                         </div>
-                                        <div class="form-group row" *ngIf="customer.buyer_type =='CP'">
+                                        <div class="form-group row">
                                             <label class='col-6'>Email</label>
                                             <div class='col-6 '>
-                                                {{addr_select.contact.email}}
-                                            </div>
-                                        </div>
-                                        <div class="form-group row" *ngIf="customer.buyer_type !='CP'">
-                                            <label class='col-6 control-label'>Contact</label>
-                                            <div class='col-6 text-primary'>
-                                                {{addr_select.contact.full_name}}
-                                            </div>
-                                        </div>
-                                        <div class="form-group row" *ngIf="customer.buyer_type !='CP'">
-                                            <label class='col-6'>Phone</label>
-                                            <div class='col-6'>
-                                                {{addr_select.contact.phone}}
-                                            </div>
-                                        </div>
-                                        <div class="form-group row" *ngIf="customer.buyer_type !='CP'">
-                                            <label class='col-6'>Email</label>
-                                            <div class='col-6'>
-                                                {{addr_select.contact.email}}
+                                                {{addr_select.contact['email']}}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -410,7 +392,7 @@
                                         <th style="width:100px" translate>Tax %</th>
                                         <th translate style="width:100px">Amount</th>
                                         <th translate style="width:100px">G/L Account</th>
-                                        <!-- <th translate style="width:100px">Price Source</th> -->
+                                        <th translate style="width:100px">Price Source</th>
                                     </tr>
                                 </thead>
                                 <tr *ngIf="list['items'].length === 0">
@@ -432,21 +414,21 @@
                                         </td>
                                         <td>{{item.qty_available}}</td>
                                         <td>
-                                            <input [disabled]="item.is_misc" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (change)="updateTotal()" (keypress)="_keyPress($event)">
+                                            <input [isDecimal]="true" numberDirective [min]="0" [disabled]="item.misc_id" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (change)="updateTotal()">
                                         </td>
                                         <td>
                                             <div>
                                                 <span>$</span>
                                                 <div style="display:inline-block;width:80%">
-                                                    <input [textMask]="{mask: numberMaskObject()}" class="form-control input-sm" type="number" [(ngModel)]="item.sale_price" (change)="updateTotal();changeFromSource(item)">
+                                                    <input [isDecimal]="true" numberDirective [min]="0"  class="form-control input-sm" type="number" [(ngModel)]="item.sale_price" (change)="updateTotal();changeFromSource(item)">
                                                 </div>
                                             </div>
                                         </td>
                                         <td>
-                                            <input [textMask]="{mask: numberMaskObject()}" class="form-control input-sm" type="number" [(ngModel)]="item.discount_percent" (change)="updateTotal();changeFromSource(item)">
+                                            <input [isDecimal]="true" numberDirective [min]="0" [max]="100" class="form-control input-sm" type="number" [(ngModel)]="item.discount_percent" (change)="updateTotal();changeFromSource(item)">
                                         </td>
                                         <td>
-                                            <input [textMask]="{mask: numberMaskObject()}" [disabled]="true" class="form-control input-sm" type="number" [(ngModel)]="item.tax_percent" (change)="updateTotal();changeFromSource(item)">
+                                            <input [isDecimal]="true" numberDirective [min]="0" [max]="100" class="form-control input-sm" type="number" [(ngModel)]="item.tax_percent" (change)="updateTotal();changeFromSource(item)">
                                         </td>
                                         <td class="text-center">
                                             <span>{{item.amount | currency}}</span>
@@ -454,9 +436,9 @@
                                         <td>
                                             {{ item.income_account_name }}
                                         </td>
-                                        <!-- <td class="text-center">
+                                        <td class="text-center">
                                             {{item.source_name}}
-                                        </td> -->
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>

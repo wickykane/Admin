@@ -220,19 +220,58 @@ export class SaleOrderEditComponent implements OnInit {
         });
     }
 
+    // getDetailCustomerById(buyer_id, flag?) {
+    //     this.orderService.getDetailCompany(buyer_id).subscribe(res => {
+    //         try {
+    //             this.customer = res.data;
+    //             // if (res.data.buyer_type === 'PS') {
+    //                 this.addr_select.contact = res.data.contact[0];
+    //                 this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
+    //             // }
+    //
+    //             if (flag) {
+    //                 this.selectAddress('billing', flag);
+    //                 this.selectAddress('shipping', flag);
+    //             }
+    //         } catch (e) {
+    //             console.log(e);
+    //         }
+    //     });
+    // }
+
     getDetailCustomerById(buyer_id, flag?) {
         this.orderService.getDetailCompany(buyer_id).subscribe(res => {
             try {
                 this.customer = res.data;
-                if (res.data.buyer_type === 'PS') {
-                    this.addr_select.contact = res.data.contact[0];
-                    this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
+                // if (res.data.buyer_type === 'PS') {
+                this.addr_select.contact = res.data.contact[0];
+                this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
+                // }
+                if (!flag) {
+                    const default_billing = (this.customer.billing || []).find(item => item.set_default) || {};
+                    const default_shipping = (this.customer.shipping || []).find(item => item.set_default) || {};
+                    this.generalForm.patchValue({
+                        billing_id: default_billing.address_id || null,
+                        shipping_id: default_shipping.address_id || null,
+                        payment_method_id: this.customer.payment_method_id || null,
+                        payment_term_id: this.customer.payment_term_id || null,
+                    });
+
+                    if (default_billing) {
+                        this.selectAddress('billing', flag);
+                    }
+
+                    if (default_shipping) {
+                        this.selectAddress('shipping', flag);
+                    }
                 }
 
                 if (flag) {
                     this.selectAddress('billing', flag);
                     this.selectAddress('shipping', flag);
                 }
+
+
             } catch (e) {
                 console.log(e);
             }
@@ -252,7 +291,7 @@ export class SaleOrderEditComponent implements OnInit {
             this.getDetailCustomerById(buyer_id, flag);
         }
         if (!flag) {
-            this.list.items = [];
+            // this.list.items = [];
             this.updateTotal();
         }
     }
@@ -288,7 +327,6 @@ export class SaleOrderEditComponent implements OnInit {
 
     changeShipVia(flag?) {
         const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id);
-        console.log(carrier);
         this.listMaster['options'] = carrier.options || [];
         this.listMaster['ship_rates'] = carrier.ship_rate || [];
 
@@ -299,13 +337,22 @@ export class SaleOrderEditComponent implements OnInit {
 
         let default_option = null;
         let default_ship_rate = null;
-        if (+this.generalForm.value.carrier_id === 3 || this.generalForm.value.carrier_id !== 999 && !carrier.own_carrirer) {
+        let enable = false;
+
+        if (+this.generalForm.value.carrier_id === 2 || this.generalForm.value.carrier_id !== 999 && !carrier.own_carrirer) {
             default_option = 888;
             default_ship_rate = 8;
+
+            if (+this.generalForm.value.carrier_id === 1) {
+                default_option = '01';
+                default_ship_rate = 9;
+            }
+            enable = [1, 2].indexOf(+this.generalForm.value.carrier_id) > -1;
+
         }
 
         if (+this.generalForm.value.carrier_id === 999) {
-            default_ship_rate = 8;
+            default_ship_rate = 7;
             this.generalForm.patchValue({ shipping_id: null });
             this.generalForm.get('shipping_id').clearValidators();
             this.generalForm.get('shipping_id').updateValueAndValidity();
@@ -326,8 +373,13 @@ export class SaleOrderEditComponent implements OnInit {
             default_ship_rate = 7;
         }
 
-        console.log(default_ship_rate);
-        console.log(default_option);
+        // Check disable method options
+        if (!enable) {
+            this.generalForm.controls['ship_method_option'].disable();
+        } else {
+            this.generalForm.controls['ship_method_option'].enable();
+        }
+
 
         this.generalForm.patchValue({ ship_method_option: default_option, ship_method_rate: default_ship_rate });
         this.generalForm.updateValueAndValidity();
@@ -397,6 +449,9 @@ export class SaleOrderEditComponent implements OnInit {
     }
 
     changeFromSource(item) {
+        if (+item.source_id === 3) {
+            return;
+        }
         item.source_id = 2;
         item.source_name = 'Manual';
     }
@@ -436,7 +491,8 @@ export class SaleOrderEditComponent implements OnInit {
         unique.forEach((tax, index) => {
             let taxAmount = 0;
             items.filter(item => item.tax_percent === tax).map(i => {
-                taxAmount += (+i.tax_percent * +i.quantity * (+i.sale_price || 0) / 100);
+                // taxAmount += (+i.tax_percent * +i.quantity * (+i.sale_price || 0) / 100);
+                taxAmount += (+i.tax_percent * +i.quantity * ((+i.sale_price || 0) * (100 - (+i.discount_percent || 0)) / 100) / 100);
             });
 
             this.order_info['total_tax'] = this.order_info['total_tax'] + +(taxAmount.toFixed(2));
@@ -510,22 +566,28 @@ export class SaleOrderEditComponent implements OnInit {
     }
 
     calcTaxShipping() {
+        if (!this.generalForm.value.shipping_id) {
+            return;
+        }
         const params = {
             'customer': this.generalForm.value.buyer_id,
             'address': this.generalForm.value.shipping_id,
             'ship_via': this.generalForm.value.carrier_id,
-            'option': this.generalForm.value.ship_method_option,
+            'option': this.generalForm.getRawValue().ship_method_option,
             'ship_rate': this.generalForm.value.ship_method_rate,
             'items': this.list.items.filter(item => !item.misc_id)
         };
         this.orderService.getTaxShipping(params).subscribe(res => {
+            console.log(this.list.items);
             const old_misc = this.list.items.filter(item => item.misc_id && +item.source_id !== 3);
+            console.log(old_misc);
             const items = res.data.items;
             const misc = res.data.mics.map(item => {
                 item.is_misc = 1;
                 item.misc_id = item.id;
                 return item;
             });
+            console.log(misc);
             this.list.items = items.concat(misc, old_misc);
 
             // Assign tax to all item
@@ -557,8 +619,7 @@ export class SaleOrderEditComponent implements OnInit {
                     if (listAdded.indexOf(item.sku + item.item_condition_id) < 0) {
                         return listAdded.indexOf(item.sku + item.item_condition_id) < 0;
                     } else {
-                        this.toastr.error('The item ' + item.no + ' already added in the order');
-                        return -1;
+                        this.toastr.error('The item ' + item.sku + ' already added in the order');
                     }
                 }));
 
@@ -597,7 +658,6 @@ export class SaleOrderEditComponent implements OnInit {
                         return listAdded.indexOf(item.sku + (item.item_condition_id || 'misc')) < 0;
                     } else {
                         this.toastr.error('The item ' + item.no + ' already added in the order');
-                        return -1;
                     }
 
                 }));
@@ -671,24 +731,21 @@ export class SaleOrderEditComponent implements OnInit {
                 };
                 break;
         }
-        params = { ...this.generalForm.value, ...params };
+        params = { ...this.generalForm.getRawValue(), ...params };
         this.orderService.updateOrder(params, this.route.snapshot.paramMap.get('id')).subscribe(res => {
             try {
-                if (res.status) {
-                    this.toastr.success(res.message);
-                    setTimeout(() => {
-                        this.router.navigate(['/order-management/sale-order']);
-                    }, 500);
-                } else {
-                    this.toastr.error(res.message);
-                }
+                // if (res.status) {
+                this.toastr.success(res.message);
+                setTimeout(() => {
+                    this.router.navigate(['/order-management/sale-order']);
+                }, 500);
+                // } else {
+                //     this.toastr.error(res.message);
+                // }
             } catch (e) {
                 console.log(e);
             }
-        },
-            err => {
-                this.toastr.error(err.message);
-            });
+        });
     }
 
     fetchMoreCustomer(data?) {
