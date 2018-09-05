@@ -243,7 +243,11 @@ export class SaleQuotationEditComponent implements OnInit {
         this.orderService.getDetailCompany(company_id).subscribe(res => {
             try {
                 this.customer = res.data;
-                this.data['default_shipping_id'] = this.customer.shipping[0].address_id;
+                if (+this.generalForm.value.carrier_id === 999) {
+                    // Default Shipping Id to get List when choose Pick up In store
+                    this.data['default_shipping_id'] = this.customer.shipping[0].address_id;
+                    this.generalForm.patchValue({ship_method_option : null});
+                }
                 // if (res.data.buyer_type === 'PS') {
                 this.addr_select.contact = res.data.contact[0];
                 this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
@@ -446,7 +450,10 @@ export class SaleQuotationEditComponent implements OnInit {
 
     changeShip(flag?) {
         const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id) || {};
-        this.listMaster['options'] = carrier.options || [];
+        this.listMaster['options'] = (carrier.options || []).map(item => {
+            item.cd = + item.cd;
+            return item;
+        });
         this.listMaster['ship_rates'] = carrier.ship_rate || [];
 
         let default_option = null;
@@ -456,6 +463,10 @@ export class SaleQuotationEditComponent implements OnInit {
             default_option = 888;
             default_ship_rate = 8;
             enable = [2, 1].indexOf(+this.generalForm.value.carrier_id) > -1;
+            if (+this.generalForm.value.carrier_id === 1) {
+                default_option = null;
+                default_ship_rate = 9;
+            }
         }
 
         if (+this.generalForm.value.carrier_id === 999) {
@@ -521,7 +532,7 @@ export class SaleQuotationEditComponent implements OnInit {
         this.generalForm.controls['description'].patchValue(stringNote);
     }
 
-    remove = function(index) {
+    remove = function (index) {
         this.data['programs'].splice(index, 1);
     };
 
@@ -539,7 +550,7 @@ export class SaleQuotationEditComponent implements OnInit {
             'items': this.list.items.filter(item => !item.misc_id)
         };
         this.orderService.getTaxShipping(params).subscribe(res => {
-            const old_misc = this.list.items.filter(item => item.misc_id && +item.source_id !== 3);
+            const old_misc = this.list.items.filter(item => item.misc_id && [1, 2].indexOf(item.misc_id) === -1 && +item.source_id !== 3);
             const items = res.data.items;
             const misc = (res.data.mics || []).map(item => {
                 item.is_misc = 1;
@@ -607,21 +618,14 @@ export class SaleQuotationEditComponent implements OnInit {
 
         this.orderService.updateQuoteOrder(this.data['id'], params).subscribe(res => {
             try {
-                if (res.status) {
-                    this.toastr.success(res.message);
-                    setTimeout(() => {
-                        this.router.navigate(['/order-management/sale-quotation']);
-                    }, 500);
-                } else {
-                    this.toastr.error(res.message);
-                }
+                this.toastr.success(res.message);
+                setTimeout(() => {
+                    this.router.navigate(['/order-management/sale-quotation']);
+                }, 500);
             } catch (e) {
                 console.log(e);
             }
-        },
-            err => {
-                this.toastr.error(err.message);
-            });
+        });
     }
 
     fetchMoreCustomer(data?) {

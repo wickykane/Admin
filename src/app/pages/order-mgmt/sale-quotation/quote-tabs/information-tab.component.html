@@ -320,9 +320,8 @@
                                         <td class="text-right">{{item.qty}}</td>
                                         <td class="text-right">
                                             <div>
-                                                <span>$</span>
                                                 <div style="display:inline-block;width:80%">
-                                                    {{ item.price }}
+                                                    {{ item.price | currency }}
                                                 </div>
                                             </div>
                                         </td>
