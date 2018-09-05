@@ -440,7 +440,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                 const modalRef = this.modalService.open(SiteModalComponent, { size: 'lg' });
                 modalRef.componentInstance.item = item;
                 modalRef.componentInstance.index = index;
-                modalRef.componentInstance.paddr = this.addresses;
+                modalRef.componentInstance.paddr = JSON.parse(JSON.stringify(this.addresses));
                 modalRef.componentInstance.isEdit = true;
                 modalRef.result.then(res => {
                     if( res['index']!=undefined){

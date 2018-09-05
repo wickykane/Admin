@@ -48,7 +48,8 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
 
     hotkeyCtrlLeft: Hotkey | Hotkey[];
     hotkeyCtrlRight: Hotkey | Hotkey[];
-
+    public paymentMethodList: any = [];
+    public paymentTermList: any = [];
     constructor(public fb: FormBuilder,
         public router: Router,
         public toastr: ToastrService,
@@ -83,7 +84,10 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
             // 'credit_used': [null],
             // 'credit_balance': [null],
             'is_parent': [null],
-            'sites': [null]
+            'sites': [null],
+            'taxable':[null],
+            'payment_method_id':[null],
+            'payment_term_id':[null]
         });
 
         this.hotkeyCtrlRight = hotkeysService.add(new Hotkey('alt+r', (event: KeyboardEvent): boolean => {
@@ -102,6 +106,8 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         this.getListCountryAdmin();
         this.getListBank();
         this.getListCreditCard();
+        this.getListPaymentTerm();
+        this.getListPaymentMethod();
         this.customerService.getRoute().subscribe(res => { this.routeList = res.data; });
 
     }
@@ -111,7 +117,16 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
             this.credit_cards.forEach(card => { card.listCard = res.data });
         })
     }
-
+    getListPaymentTerm() {
+        this.customerService.getListPaymentTerm().subscribe(res => {
+            this.paymentTermList = res.data;
+        })
+    }
+    getListPaymentMethod() {
+        this.customerService.getListPaymentMethod().subscribe(res => {
+            this.paymentMethodList = res.data;
+        })
+    }
     ngOnDestroy() {
         this.hotkeysService.remove(this.hotkeyCtrlLeft);
         this.hotkeysService.remove(this.hotkeyCtrlRight);
@@ -345,7 +360,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     }
     //  add new Site
 
-    addNewSite(item?,index?) {
+    addNewSite(item?, index?) {
         var k = ['name', 'country_code', 'address_1', 'city', 'state_id', 'zip_code'];
         for (let i = 0; i < this.addresses.length; i++) {
             for (let j = 0; j < k.length; j++) {
@@ -363,13 +378,13 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
                 const modalRef = this.modalService.open(SiteModalComponent, { size: 'lg' });
                 modalRef.componentInstance.item = item;
                 modalRef.componentInstance.index = index;
-                modalRef.componentInstance.paddr = this.addresses;
+                modalRef.componentInstance.paddr = JSON.parse(JSON.stringify(this.addresses));
                 modalRef.componentInstance.isEdit = false;
                 modalRef.result.then(res => {
-                    if( res['index']!=undefined){
-                        this.sites[res.index]= res.params;
+                    if (res['index'] != undefined) {
+                        this.sites[res.index] = res.params;
                     }
-                    else{
+                    else {
                         if (!this.helper.isEmptyObject(res)) {
                             if (!this.helper.isEmptyObject(res)) {
                                 this.sites.push(res);
@@ -382,7 +397,10 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
                 modalRef.componentInstance.info = {
                     parent_company_name: this.generalForm.value.company_name,
                     code: countCode,
-                    textCode: textCode
+                    textCode: textCode,
+                    payment_method_id:this.generalForm.value.payment_method_id,
+                    payment_term_id:this.generalForm.value.payment_term_id,
+                    taxable:this.generalForm.value.taxable
                 };
             } catch (e) {
 
