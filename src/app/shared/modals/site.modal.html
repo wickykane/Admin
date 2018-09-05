@@ -88,15 +88,6 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group row">
-                        <label for="payment_method_id" class="col-sm-4 col-form-label" style="padding: 0">Default Payment Methods</label>
-                        <div class="col-sm-8">
-                            <select class="form-control" name="payment_method_id" formControlName="payment_method_id">
-                                <option value="null" selected="true">--Select--</option>
-                                <option *ngFor="let item of paymentMethodList" [ngValue]="item.id">{{item.name}}</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row">
                         <label for="payment_term_id" class="col-sm-4 col-form-label" style="padding: 0">Default Payment Terms </label>
                         <div class="col-sm-8">
                             <select class="form-control" name="payment_term_id" formControlName="payment_term_id">
@@ -105,6 +96,16 @@
                             </select>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label for="payment_method_id" class="col-sm-4 col-form-label" style="padding: 0">Default Payment Methods</label>
+                        <div class="col-sm-8">
+                            <select class="form-control" name="payment_method_id" formControlName="payment_method_id">
+                                <option value="null" selected="true">--Select--</option>
+                                <option *ngFor="let item of paymentMethodList" [ngValue]="item.id">{{item.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+
                     <div class="w-100"></div>
                     <div class="form-group row">
                         <label for="credit_limit" class="col-sm-4 col-form-label" style="padding: 0">Taxable</label>

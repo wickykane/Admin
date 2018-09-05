@@ -63,7 +63,8 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
 
     hotkeyCtrlLeft: Hotkey | Hotkey[];
     hotkeyCtrlRight: Hotkey | Hotkey[];
-
+    public paymentMethodList: any = [];
+    public paymentTermList: any = [];
     constructor(public fb: FormBuilder,
         public router: Router,
         public toastr: ToastrService,
@@ -98,7 +99,10 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             // 'credit_used': [null],
             // 'credit_balance': [null],
             'is_parent': [null],
-            'sites': [null]
+            'sites': [null],
+            'taxable':[null],
+            'payment_method_id':[null],
+            'payment_term_id':[null]
 
         });
 
@@ -150,6 +154,8 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                 this.changeCustomerType();
                 this.getListBank();
                 this.getListCreditCard();
+                this.getListPaymentTerm();
+                this.getListPaymentMethod();
                 //  this.changeCountry(res.data['primary'][0]['country_code'], 'states_primary');
                 //  this.addressList = this.mergeAddressList(res.data);
             } catch (e) {
@@ -183,7 +189,16 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             //  this.generalForm.patchValue({primary: this})
         }
     }
-
+    getListPaymentTerm() {
+        this.customerService.getListPaymentTerm().subscribe(res => {
+            this.paymentTermList = res.data;
+        })
+    }
+    getListPaymentMethod() {
+        this.customerService.getListPaymentMethod().subscribe(res => {
+            this.paymentMethodList = res.data;
+        })
+    }
     getListSalePerson() {
         this.commonService.getOrderReference().subscribe(res => {
             try {
