@@ -1,11 +1,12 @@
 import { Component, Input, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TableService} from './../../../../../services/table.service';
+import { TableService } from './../../../../../services/table.service';
 
-import {ItemService} from './../../../../../shared/modals/item.service';
+import { ItemService } from './../../../../../shared/modals/item.service';
 
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import * as _losdah from 'lodash';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -17,6 +18,8 @@ import { ToastrService } from 'ngx-toastr';
 export class CreditItemModalContent implements OnInit {
     @Input() id;
     @Input() flagBundle;
+    @Input() clone_items;
+    @Input() items_removed;
 
     /**
      * Variable Declaration
@@ -33,7 +36,6 @@ export class CreditItemModalContent implements OnInit {
 
 
     public searchForm: FormGroup;
-    public filterForm: FormGroup;
 
     constructor(public activeModal: NgbActiveModal,
         public itemService: ItemService,
@@ -41,32 +43,13 @@ export class CreditItemModalContent implements OnInit {
         public toastr: ToastrService,
         public tableService: TableService) {
 
-
         this.searchForm = fb.group({
-            'cd': [null],
-            'name': [null],
-            'sts': [null],
-            'vin': [null],
-            'year_from': [null],
-            'year_to': [null],
-            'manufacturer_id': [null],
-            'model_id': [null],
-            'oem': [null],
-            'partlinks_no': [null],
-            'part_no': [null],
-            'certification': [null],
+            'no': [null],
+            'des': [null],
+            'type': [null],
+            'tax': 1,
+            'sts': 1
         });
-
-        this.filterForm = fb.group({
-            'brand_id_filter': [null],
-            'category_id_filter': [null],
-            'sub_category_id': [null],
-            'certification_filter': [null],
-            'oem_filter': [null],
-            'partlinks_no_filter': [null],
-            'part_no_filter': [null]
-        });
-
         //  Assign get list function name, override variable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
@@ -74,22 +57,9 @@ export class CreditItemModalContent implements OnInit {
     }
 
     ngOnInit() {
-        //  Init Fn
-        this.listMaster['certification_partNumber'] = [{ code: 'Y', value: 'Yes' }, { code: 'N', value: 'No' }];
-        this.getListReference();
+        this.getList();
     }
 
-    getListReference() {
-        this.itemService.getReferenceList().subscribe(res => {
-            try {
-                this.listMaster['models'] = res.data.models;
-                this.listMaster['years'] = res.data.years.map((e) => ({ id: e, name: e }));
-                this.listMaster['make'] = res.data.manufacturers;
-            } catch (e) {
-                console.log(e.message);
-            }
-        });
-    }
 
     // Table event
     selectData(index) {
@@ -111,58 +81,24 @@ export class CreditItemModalContent implements OnInit {
      */
     resetTab() {
         this.searchForm.reset();
-        this.filterForm.reset();
         this.list.items = [];
     }
-
-    changeToGetSubModel() {
-        const id = this.searchForm.value.model_id;
-        const arr = this.listMaster['models'];
-        for ( const item of arr) {
-           if (item['model_id'] === id) {
-               return this.listMaster['sub_models'] = arr['sub_models'];
-           }
-        }
-    }
-
-    changeToGetSubCategory() {
-        const id = this.filterForm.value.category_id_filter;
-        const arr = this.listMaster['categories'];
-        this.listMaster['sub_cat'] = [];
-        for (const item of id ) {
-            for (const temp of arr) {
-               if (temp['category_id'] === item) {
-                this.listMaster['sub_cat'] = this.listMaster['sub_cat'].concat(temp['sub_categories']);
-               }
-            }
-        }
-    }
-    // getNameWarehouse(arr, id) {
-    //     if (arr) {
-    //         return 'WH' + arr.find(item => item.warehouse_id === id)['name'];
-    //     }
-    // }
-
     getList() {
-        const params = {...this.tableService.getParams(), ...this.searchForm.value, ...this.filterForm.value};
-        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
-
-        this.itemService.getMasterItems(params).subscribe(res => {
-            try {
-                if (!res.data.rows) {
-                    this.list.items = [];
-                    return;
-                }
-                this.list.items = res.data.rows;
-                this.listMaster['brands'] = res.data.meta_filters.brands;
-                this.listMaster['categories'] = res.data.meta_filters.categories;
-                this.listMaster['certification'] = res.data.meta_filters.certification;
-                this.listMaster['countries'] = res.data.meta_filters.countries;
-                this.listMaster['warehouses'] = res.data.warehouses;
-                this.tableService.matchPagingOption(res.data);
-            } catch (e) {
-                console.log(e);
+        console.log(this.clone_items);
+        console.log(this.items_removed);
+        // this.items_removed.
+        // this.clone_items.forEach(item => {
+        //     if (item.item_type === 1) {
+        //         this.items_removed.
+        //     }
+        // });
+        // const tempArr = _losdah.intersectionBy(this.clone_items, this.items_removed, 'item_id');
+        // console.log(tempArr);
+        this.clone_items.forEach( item => {
+            if (item.is_item === 1 && _losdah.find(this.items_removed, {item_id: item.item_id})) {
+                this.list.items.push(item);
             }
         });
+        // this.list.items = tempArr;
     }
 }

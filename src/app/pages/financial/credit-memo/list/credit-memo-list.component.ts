@@ -109,21 +109,6 @@ export class CreditMemoListComponent implements OnInit {
     //     });
     // }
 
-    moreFilter() {
-        this.onoffFilter = !this.onoffFilter;
-    }
-
-    filter(status) {
-        // const params = { sts: status };
-        // this.creditMemoService.getListSalesQuotation(params).subscribe(res => {
-        //     try {
-        //         this.list.items = res.data.rows;
-        //         this.tableService.matchPagingOption(res.data);
-        //     } catch (e) {
-        //         console.log(e);
-        //     }
-        // });
-    }
 
     getCountStatus() {
         this.creditMemoService.countCountStatus().subscribe(res => {
@@ -193,6 +178,28 @@ export class CreditMemoListComponent implements OnInit {
         modalRef.componentInstance.message = this.messageConfig[status];
         modalRef.componentInstance.yesButtonText = 'Yes';
         modalRef.componentInstance.noButtonText = 'No';
+    }
+    viewCredit(id?) {
+        if (id) {
+            this.router.navigate(['/financial/credit-memo/view', id]);
+        } else {
+            const selectedInvoiceId = this.list.items[this.selectedIndex].id;
+            if (selectedInvoiceId) {
+                this.router.navigate(['/financial/credit-memo/view', selectedInvoiceId]);
+            }
+        }
+    }
+
+    editCredit(id?) {
+        if (id) {
+            this.router.navigate(['/financial/credit-memo/edit', id]);
+        } else {
+            const selectedInvoiceId = this.list.items[this.selectedIndex].id;
+            const selectedInvoiceStatus = this.list.items[this.selectedIndex].invoice_status_id;
+            if (selectedInvoiceId && selectedInvoiceStatus === 1) {
+                this.router.navigate(['/financial/credit-memo/edit', selectedInvoiceId]);
+            }
+        }
     }
 }
 

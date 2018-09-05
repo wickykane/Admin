@@ -163,10 +163,6 @@
                                                             </span>
                                                         </ng-template>
                                                     </ng-select>
-                                                    <!-- <select class="form-control" id="payment_term_id" name="payment_term_id" formControlName="payment_term_id">
-                                                        <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
-                                                        <option *ngFor="let item of listMaster['accountGL']" [ngValue]="item.id">{{item.des}}</option>
-                                                    </select> -->
                                                 </div>
                                             </div>
 
@@ -381,7 +377,7 @@
                                 (onEnter)="selectData($event)">
                                 <thead>
                                     <tr>
-                                        <th translate>Action</th>
+                                        <th translate style="width: 100px;">Action</th>
                                         <th style="width:150px" translate>Item No</th>
                                         <th translate>Description</th>
                                         <th translate>Condition</th>
@@ -401,18 +397,15 @@
                                 <ng-container *ngIf="list['items'].length > 0">
                                     <tbody *ngFor="let item of list['items']; let $index = index;">
                                         <tr>
-
                                             <td>
                                                 <button class="btn btn-danger btn-xs" type="button" (click)="deleteAction(item.item_id || item.misc_id, item.item_condition_id)">
                                                     <i class="fa fa-trash"></i>
                                                 </button>
-
                                             </td>
                                             <td>{{item.sku || item.misc_no}}</td>
                                             <td>{{item.des || item.misc_name}}</td>
                                             <td class="text-center">{{item.condition_name}}</td>
                                             <td>{{item.uom_name || item.uom || 'Each'}}</td>
-
                                             <td>
                                                 <input [disabled]="item.misc_id" [isDecimal]="true" numberDirective [min]="0" [disabled]="item.misc_id" style="width: 60px;"
                                                     class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (change)="updateTotal()">
@@ -445,13 +438,10 @@
                         </div>
                         <div class="col-12 no-padding">
                             <button (click)="addNewItem()" class="btn btn-link" translate>
-                                <i class="fa fa-plus"></i>New Item
+                                <i class="fa fa-plus"></i>Item
                             </button>
                             <button (click)="addNewMiscItem()" class="btn btn-link">
                                 <i class="fa fa-plus"></i>Misc Item
-                            </button>
-                            <button (click)="getEarlyPaymentValue()" class="btn btn-link" translate>
-                                <i class="fa fa-plus"></i>Calc Early Payment
                             </button>
                         </div>
                     </div>

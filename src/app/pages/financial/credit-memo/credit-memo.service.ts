@@ -41,6 +41,10 @@ export class CreditMemoService {
         const url = 'ar-invoice/' + id;
         return this.API.get(url);
     }
+    getDetailCreditMemo(id) {
+        const url = ['credit-memo', 'view', id].join('/');
+        return this.API.get(url);
+    }
 
     countCountStatus() {
         const url = 'credit-memo/status-list';

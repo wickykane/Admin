@@ -13,7 +13,7 @@ import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
 import { OrderHistoryModalContent } from '../../../../shared/modals/order-history.modal';
 import { CreditItemMiscModalContent } from '../modals/item-misc/item-misc.modal';
-import {CreditItemModalContent} from '../modals/item/item.modal';
+import { CreditItemModalContent } from '../modals/item/item.modal';
 import { CreditMemoCreateKeyService } from './keys.create.control';
 
 import { HotkeysService } from 'angular2-hotkeys';
@@ -40,6 +40,8 @@ export class CreditMemoCreateComponent implements OnInit {
     public listMaster = {};
     public selectedIndex = 0;
     public data = {};
+    public clone_items = [];
+    public items_removed = [];
 
     public messageConfig = {
         '2': 'Are you sure that you want to save & submit this quotation to approver?',
@@ -108,7 +110,6 @@ export class CreditMemoCreateComponent implements OnInit {
             'carrier_id': [null], // Default Ups
             'ship_rate': [null],
             'ship_method_option': [null],
-            'warehouse_id': [null],
             'contact_user_id': [null],
             'sale_person_id': [null, Validators.required],
             'payment_method_id': [null, Validators.required],
@@ -116,7 +117,7 @@ export class CreditMemoCreateComponent implements OnInit {
             'billing_id': [null],
             'shipping_id': [null],
             'description': [null],
-            'document_type': [null],
+            'document_type': [1, Validators.required],
             'gl_account': [null, Validators.required],
             'issue_date': [null, Validators.required],
             'credit_num': [null, Validators.required],
@@ -127,8 +128,8 @@ export class CreditMemoCreateComponent implements OnInit {
     }
 
     async ngOnInit() {
-        this.data['id'] = this.route.snapshot.queryParams['quote_id'];
-        this.data['is_copy'] = this.route.snapshot.queryParams['is_copy'] || 0;
+        // this.data['id'] = this.route.snapshot.queryParams['quote_id'];
+        // this.data['is_copy'] = this.route.snapshot.queryParams['is_copy'] || 0;
 
         const user = JSON.parse(localStorage.getItem('currentUser'));
 
@@ -137,7 +138,7 @@ export class CreditMemoCreateComponent implements OnInit {
         await this.getListPaymentMethod();
         await this.getListPaymentTerm();
         await this.getListAccountGL();
-        this.getGenerateCode();
+        await this.getGenerateCode();
 
         //  Item
         this.list.items = [];
@@ -189,8 +190,6 @@ export class CreditMemoCreateComponent implements OnInit {
                     tempAccountList.push({ 'name': item.name, 'level': item.level, 'disabled': true }, ...item.children);
                 });
                 this.accountList = tempAccountList;
-                console.log(this.accountList);
-                // this.listMaster['accountGL'] = res.data;
                 resolve(true);
             });
         });
@@ -220,7 +219,6 @@ export class CreditMemoCreateComponent implements OnInit {
             }
         });
         this.creditMemoService.getAllSaleOrderByCus(company_id).subscribe(res => {
-            console.log(res);
             this.listMaster['invoice-list'] = res.data;
         });
     }
@@ -233,19 +231,21 @@ export class CreditMemoCreateComponent implements OnInit {
     changeInvoice(event) {
         this.creditMemoService.getDetailInvoice(this.generalForm.value.document_id).subscribe(res => {
             this.list.items = res.data.inv_detail.map(item => {
-            item.quantity = item.qty_inv;
-            return item;
-        });
+                item.quantity = item.qty_inv;
+                return item;
+            });
+            this.clone_items = _.cloneDeep(this.list.items);
+            console.log(this.clone_items);
 
-        this.data['order_detail'] = res.data ;
-        this.data['shipping_address'] = res.data.shipping_address;
-        this.data['shipping_method'] = res.data.shipping_method;
+            this.data['order_detail'] = res.data;
+            this.data['shipping_address'] = res.data.shipping_address;
+            this.data['shipping_method'] = res.data.shipping_method;
 
-        this.generalForm.patchValue({
-            ...this.data['order_detail'], approver_id: res.data.aprvr_id
-        });
-        this.selectAddress('billing');
-        this.updateTotal();
+            this.generalForm.patchValue({
+                ...this.data['order_detail'], approver_id: res.data.aprvr_id
+            });
+            this.selectAddress('billing');
+            this.updateTotal();
         });
     }
 
@@ -319,7 +319,11 @@ export class CreditMemoCreateComponent implements OnInit {
     }
 
     deleteAction(id, item_condition) {
+        this.items_removed = [];
         this.list.items = this.list.items.filter((item) => {
+            if (item.item_id === id && item.is_item === 1) {
+                this.items_removed.push(item);
+            }
             return ((item.item_id || item.misc_id) + (item.item_condition_id || 'mis') !== (id + (item_condition || 'mis')));
         });
         this.updateTotal();
@@ -371,6 +375,8 @@ export class CreditMemoCreateComponent implements OnInit {
                 this.updateTotal();
             }
         }, dismiss => { });
+        modalRef.componentInstance.clone_items = this.clone_items;
+        modalRef.componentInstance.items_removed = this.items_removed;
     }
 
     addNewMiscItem() {
@@ -490,7 +496,7 @@ export class CreditMemoCreateComponent implements OnInit {
                 if (type) {
                     this.createMemo(type, is_draft_sq);
                 } else {
-                    this.router.navigate(['/financial/invoice']);
+                    this.router.navigate(['/financial/credit-memo']);
                 }
             }
         }, dismiss => { });

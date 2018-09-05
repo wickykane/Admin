@@ -79,14 +79,13 @@ export class CreditInformationTabComponent implements OnInit {
     }
 
     getList() {
-        this.creditMemoService.getDetailInvoice(this._invoiceId).subscribe(res => {
+        this.creditMemoService.getDetailCreditMemo(this._invoiceId).subscribe(res => {
             try {
                 this.detail = res.data;
                 this.detail.contact_user = res.data.contact_user || [];
-                this.detail.shipping_address = res.data.shipping_address || [];
-                this.detail.billing = res.data.billing_address || [];
+                this.detail.shipping_address = res.data.shipping || [];
+                this.detail.billing = res.data.billing || [];
                 this.updateTotal();
-                this.getEarlyPaymentValue();
             } catch (e) {
                 console.log(e);
             }
@@ -108,24 +107,6 @@ export class CreditInformationTabComponent implements OnInit {
                 value: tax, amount: taxAmount.toFixed(2)
             });
         });
-    }
-
-    getEarlyPaymentValue() {
-        // const issue_dt = this.detail['inv_dt'];
-        // const payment_term_id = this.detail['payment_term_id'];
-        // const total_due = this.invoice_info['total'];
-        // if (issue_dt && payment_term_id) {
-        //     this.creditMemoService.getEarlyPaymentValue(issue_dt, payment_term_id, total_due).subscribe(res => {
-        //         if (res.data) {
-        //             this.data['is_fixed_early'] = res.data.is_fixed;
-        //             this.invoice_info.incentive_percent = (!this.data['is_fixed_early']) ? this.detail['early_percent'] : res.data.percent;
-        //             this.invoice_info.incentive = (this.data['is_fixed_early']) ? this.detail['policy_amt'] : res.data.value;
-        //             this.invoice_info.expires_dt = res.data.expires_dt;
-        //             this.invoice_info.grand_total = this.invoice_info.total - this.invoice_info.incentive;
-        //             this.updateTotal();
-        //         }
-        //     });
-        // }
     }
 
     updateTotal() {

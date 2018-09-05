@@ -27,6 +27,7 @@ import { CreditMemoListComponent } from './credit-memo//list/credit-memo-list.co
 import { CreditMemoService } from './credit-memo/credit-memo.service';
 import { CreditInformationTabComponent } from './credit-memo/credit-tabs/information-tab.component';
 import { CreditPaymentTabComponent} from './credit-memo/credit-tabs/payment-tab.component';
+import { CreditMemoEditComponent} from './credit-memo/edit/credit-memo-edit.component';
 import { CreditItemMiscModalContent } from './credit-memo/modals/item-misc/item-misc.modal';
 import { CreditItemModalContent } from './credit-memo/modals/item/item.modal';
 import { CreditMemoDetailComponent} from './credit-memo/view/credit-memo-view.component';
@@ -89,7 +90,8 @@ import { MailModalComponent } from './ar-invoice/modals/mail.modal';
         CreditMemoDetailComponent,
         CreditPaymentTabComponent,
         CreditItemModalContent,
-        CreditItemMiscModalContent
+        CreditItemMiscModalContent,
+        CreditMemoEditComponent
     ],
     providers: [FinancialService, DebitMemoService, CreditMemoService, TableService, DatePipe, Helper],
     entryComponents: [

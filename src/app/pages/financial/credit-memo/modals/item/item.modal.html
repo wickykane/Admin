@@ -7,152 +7,27 @@
 <div class="modal-body">
     <div class="search-block block-content pd-bottom tab-content bg-gray-light">
         <div class="row">
-            <ngb-tabset class="tab-header" activeId="vehicle" type="pills" (tabChange)="resetTab()">
-                <ngb-tab id="search" title="Search By:" [disabled]="true">
-                    <ng-template ngbTabContent>
-
-                    </ng-template>
-                </ngb-tab>
-                <ngb-tab id="vehicle" title="VEHICLE">
-                    <ng-template ngbTabContent>
-                        <form class="form-horizontal form-search" [formGroup]="searchForm">
-                            <div class="block-search">
-                                <label for="type" class="control-label" translate>Year From </label>
-                                <select formControlName="year_from" class="form-control">
-                                    <option value="null" selected="true" translate>--Select--</option>
-                                    <option *ngFor="let de of listMaster['years']" [ngValue]="de.id">{{de.name}}</option>
-                                </select>
-                            </div>
-                            <div class="block-search">
-                                <label for="type" class="control-label" translate>Year To</label>
-                                <select formControlName="year_to" class="form-control">
-                                    <option value="null" selected="true" translate>--Select--</option>
-                                    <option *ngFor="let de of listMaster['years']" [ngValue]="de.id">{{de.name}}</option>
-                                </select>
-                            </div>
-                            <div class="block-search">
-                                <label for="type" class="control-label" translate>Make</label>
-                                <select formControlName="manufacturer_id" class="form-control">
-                                    <option value="null" selected="true" translate>--Select--</option>
-                                    <option *ngFor="let de of listMaster['make']" [ngValue]="de.manufacturer_id">{{de.name}}</option>
-                                </select>
-                            </div>
-                            <div class="block-search">
-                                <label for="type" class="control-label" translate>Model</label>
-                                <select (change)="changeToGetSubModel()" formControlName="model_id" class="form-control">
-                                    <option value="null" selected="true" translate>--Select--</option>
-                                    <option *ngFor="let de of listMaster['models']" [ngValue]="de.model_id">{{de.name}}</option>
-                                </select>
-                            </div>
-                            <div class="block-btn-search">
-                                <label class="control-label">&nbsp;</label>
-                                <div>
-                                    <button type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Search</button>
-                                    <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchForm)" translate>Reset</button>
-                                </div>
-                            </div>
-                        </form>
-                    </ng-template>
-                </ngb-tab>
-                <ngb-tab id="part_number" title="PART NUMBER">
-                    <ng-template ngbTabContent>
-                        <form class="form-horizontal form-search" [formGroup]="searchForm">
-                            <div class="block-search">
-                                <label for="so" class="control-label" translate>OEM #</label>
-                                <input type="text" name="so" formControlName="oem" class="form-control">
-                            </div>
-                            <div class="block-search">
-                                <label for="so" class="control-label" translate>Partlinks #</label>
-                                <input type="text" name="so" formControlName="partlinks_no" class="form-control">
-                            </div>
-                            <div class="block-search">
-                                <label for="so" class="control-label" translate>Part #</label>
-                                <input type="text" name="so" formControlName="part_no" class="form-control">
-                            </div>
-                            <div class="block-search">
-                                <label for="type" class="control-label" translate>Cert</label>
-                                <select formControlName="certification" class="form-control">
-                                    <option value="null" selected="true" translate>--Select--</option>
-                                    <option *ngFor="let de of listMaster['certification_partNumber']" [ngValue]="de.code">{{de.value}}</option>
-                                </select>
-                            </div>
-                            <div class="block-btn-search">
-                                <label class="control-label">&nbsp;</label>
-                                <div>
-                                    <button type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Search</button>
-                                    <button type="button" class="btn btn-default" (click)="tableService.resetAction(searchForm); tableService.resetAction(filterForm)"
-                                        translate>Reset</button>
-                                </div>
-                            </div>
-                        </form>
-                    </ng-template>
-                </ngb-tab>
-                <ngb-tab id="vin" title="VIN">
-                    <ng-template ngbTabContent>
-                        <form class="form-horizontal form-search" [formGroup]="searchForm">
-                            <div class="block-search">
-                                <label for="so" class="control-label" translate>Number</label>
-                                <input type="text" name="so" formControlName="vin" class="form-control">
-                            </div>
-                            <div class="block-btn-search">
-                                <label class="control-label">&nbsp;</label>
-                                <div>
-                                    <button type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Search</button>
-                                    <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchForm)" translate>Reset</button>
-                                </div>
-                            </div>
-                        </form>
-                    </ng-template>
-                </ngb-tab>
-            </ngb-tabset>
-
-        </div>
-    </div>
-    <div class="block-content mt-1" *ngIf="list.items.length > 0">
-        <h5 class="title-form">Filter</h5>
-
-        <div class="row">
-            <form class="row col-12 form-horizontal form-search" [formGroup]="filterForm">
-                <div class="block-search col-2">
-                    <label for="type" class="control-label" translate>Brand</label>
-                    <ng-select [multiple]="true" [items]="listMaster['brands']" bindLabel="name" bindValue="brand_id" formControlName="brand_id_filter">
-                    </ng-select>
+            <form class="form-horizontal form-search" [formGroup]="searchForm">
+                <div class="block-search">
+                    <label for="so" class="control-label">Item No</label>
+                    <input type="text" name="so" formControlName="no" class="form-control">
                 </div>
-                <div class="block-search col-2">
-                    <label for="type" class="control-label" translate>Category</label>
-                    <ng-select (change)="changeToGetSubCategory()" [multiple]="true" [items]="listMaster['categories']" bindLabel="name" bindValue="category_id"
-                        formControlName="category_id_filter">
-                    </ng-select>
+                <div class="block-search">
+                    <label for="so" class="control-label">Description</label>
+                    <input type="text" name="so" formControlName="des" class="form-control">
                 </div>
-                <div class="block-search col-2">
-                    <label for="type" class="control-label" translate>Sub-Category</label>
-                    <ng-select [multiple]="true" [items]="listMaster['sub_cat']" bindLabel="name" bindValue="category_id" formControlName="sub_category_id">
-                    </ng-select>
-                </div>
-                <div class="block-search col-2">
-                    <label for="type" class="control-label" translate>Cert</label>
-                    <select formControlName="certification_filter" class="form-control">
-                        <option value="null" selected="true" translate>--Select--</option>
-                        <option *ngFor="let de of listMaster['certification']" [ngValue]="de.code">{{de.value}}</option>
+                <div class="block-search">
+                    <label for="so" class="control-label">Item Type</label>
+                    <select formControlName="type" class="form-control">
+                        <option [hidden]="true" [disabled]="true" [ngValue]="null" selected="true" translate>--Select--</option>
+                        <option *ngFor="let de of listMaster['type']" [ngValue]="de.id">{{de.name}}</option>
                     </select>
                 </div>
-                <div class="block-search col-2">
-                    <label for="so" class="control-label" translate>OEM #</label>
-                    <input type="text" name="so" formControlName="oem_filter" class="form-control">
-                </div>
-                <div class="block-search col-2">
-                    <label for="so" class="control-label" translate>Partlinks #</label>
-                    <input type="text" name="so" formControlName="partlinks_no_filter" class="form-control">
-                </div>
-                <div class="block-search col-2">
-                    <label for="so" class="control-label" translate>Part #</label>
-                    <input type="text" name="so" formControlName="part_no_filter" class="form-control">
-                </div>
-                <div class="block-btn-search col-2">
+                <div class="block-btn-search">
                     <label class="control-label">&nbsp;</label>
                     <div>
-                        <button type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Search</button>
-                        <button type="button" class="btn btn-default" (click)="tableService.resetAction(filterForm)" translate>Reset</button>
+                        <button type="button" class="btn btn-primary" (click)="tableService.searchAction()">Search</button>
+                        <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchForm)">Reset</button>
                     </div>
                 </div>
             </form>
@@ -221,7 +96,8 @@
             <div class="col-md-6">
                 <div class="text-left">
                     <div class="col-md-6" style="padding-left: 0px;">
-                        <span style="float: left; padding-right: 10px;">{{list.items.length}}/{{tableService.pagination.total_record}} items </span>
+                        <span style="float: left; padding-right: 10px;">{{list.items.length}}/{{tableService.pagination.total_record}}
+                            items </span>
                         <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length" (change)="tableService.changeLength()">
                             <option *ngFor="let option of tableService.itemPerPageOptions" [ngValue]="option">{{option}}</option>
                         </select>

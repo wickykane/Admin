@@ -23,42 +23,43 @@
                                 <div class="row">
                                     <div class="col-md-6 padding-lr-5 ">
                                         <div class="form-group row">
-                                            <label class='col-6 control-label'>Invoice No</label>
+                                            <label class='col-6 control-label'>Credit Memo No</label>
                                             <div class='col-6'>
-                                                {{detail['inv_num']}}
+                                                {{detail['cd']}}
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class='col-6 control-label'>Sales Order No</label>
+                                            <label class='col-6 control-label'>Document Type</label>
                                             <div class='col-6'>
-                                                {{ detail['order_num']}}
+                                                {{ detail['document_type_name']}}
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class='col-6 control-label'>Invoice Date</label>
+                                            <label class='col-6 control-label'>Document No</label>
                                             <div class='col-6'>
-                                                {{detail['inv_dt']}}
+                                                {{detail['document_no_name']}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-6 control-label'>Issue Date</label>
+                                            <div class='col-6'>
+                                                {{detail['issue_date']}}
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class='col-6 control-label'>Invoice Status</label>
                                             <div class='col-6'>
-                                                <span class="badge badge-info bg-blue" *ngIf="detail['invoice_status_id'] == 1">{{detail['invoice_status_name']}}</span>
-                                                <span class="badge badge-warning bg-texas-rose" *ngIf="detail['invoice_status_id'] == 2">{{detail['invoice_status_name']}}</span>
-                                                <span class="badge badge-danger bg-magenta" *ngIf="detail['invoice_status_id'] == 3">{{detail['invoice_status_name']}}</span>
-                                                <span class="badge badge-success bg-strong-green" *ngIf="detail['invoice_status_id'] == 4">{{detail['invoice_status_name']}}</span>
-                                                <span class="badge badge-primary bg-darkblue" *ngIf="detail['invoice_status_id'] == 5">{{detail['invoice_status_name']}}</span>
-                                                <span class="badge badge-primary bg-lemon" *ngIf="detail['invoice_status_id'] == 6">{{detail['invoice_status_name']}}</span>
-                                                <span class="badge badge-danger bg-red" *ngIf="detail['invoice_status_id'] == 7">{{detail['invoice_status_name']}}</span>
-                                                <span class="badge badge-primary bg-bright-grey" *ngIf="detail['invoice_status_id'] == 8">{{detail['invoice_status_name']}}</span>
+                                                <span class="badge badge-info bg-blue" *ngIf="detail['sts_code'] == 1">{{detail['sts_name']}}</span>
+                                                <span class="badge badge-warning bg-texas-rose" *ngIf="detail['sts_code'] == 2">{{detail['sts_name']}}</span>
+                                                <span class="badge badge-danger bg-magenta" *ngIf="detail['sts_code'] == 3">{{detail['sts_name']}}</span>
+                                                <span class="badge badge-success bg-strong-green" *ngIf="detail['sts_code'] == 4">{{detail['sts_name']}}</span>
+                                                <span class="badge badge-primary bg-darkblue" *ngIf="detail['sts_code'] == 5">{{detail['sts_name']}}</span>
+                                                <span class="badge badge-primary bg-lemon" *ngIf="detail['sts_code'] == 6">{{detail['sts_name']}}</span>
+                                                <span class="badge badge-danger bg-red" *ngIf="detail['sts_code'] == 7">{{detail['sts_name']}}</span>
+                                                <span class="badge badge-primary bg-bright-grey" *ngIf="detail['sts_code'] == 8">{{detail['sts_name']}}</span>
                                             </div>
                                         </div>
-                                        <div class="form-group row">
-                                            <label class='col-6 control-label'>Apply Late Fee</label>
-                                            <div class='col-6'>
-                                                {{detail['apply_late_fee']? 'Yes': 'No'}}
-                                            </div>
-                                        </div>
+                                       
                                     </div>
                                     <div class="col-md-6 customer-infomation bolder padding-lr-5">
 
@@ -75,21 +76,21 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class='col-6 control-label'>Due Date</label>
+                                            <label class='col-6 control-label'>G/L Account</label>
                                             <div class='col-6'>
-                                                {{detail['due_dt']}}
+                                                {{detail['gl_account_name']}}
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class='col-6 control-label'>Salesperson</label>
                                             <div class='col-6'>
-                                                {{detail['sale_person_name']}}
+                                                {{detail['sale_person']}}
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class='col-6 control-label'>Approver</label>
                                             <div class='col-6'>
-                                                {{ detail['aprvr_name']}}
+                                                {{ detail['approver']}}
                                             </div>
                                         </div>
                                     </div>
@@ -110,7 +111,7 @@
                                 <div class="form-group row">
                                     <label class="control-label col-6" translate>Customer Name</label>
                                     <div class="col-6">
-                                        {{detail['company_name']}}
+                                        {{detail['company_id']}}
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -233,7 +234,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-2 padding-lr-5">
+            <!-- <div class="col-md-2 padding-lr-5">
                 <div class="card height-100">
                     <div class="card-header">
                         <strong>Shipping Method</strong>
@@ -277,7 +278,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
 
         <div class="row mg-top-10">
@@ -296,20 +297,18 @@
                                         <th class="text-center" translate>Condition</th>
                                         <th class="text-center" translate>UOM</th>
                                         <th class="text-center" translate>Free Ship</th>
-                                        <th class="text-nowrap text-center" translate>Order QTY</th>
-                                        <th class="text-nowrap text-center" translate>Invoice QTY</th>
+                                        <th class="text-nowrap text-center" translate>QTY</th>                                        
                                         <th class="text-center" translate>Unit Price</th>
                                         <th class="text-center" translate>Disc %</th>
                                         <th class="text-center" translate>Tax %</th>
                                         <th class="text-center" translate>Amount</th>
-                                        <th class="text-center" translate>G/L Account</th>
-                                        <!-- <th class="text-center" translate>Price Source</th> -->
+                                        
                                     </tr>
                                 </thead>
-                                <tr *ngIf="detail?.inv_detail?.length === 0">
+                                <tr *ngIf="detail?.items?.length === 0">
                                     <td colspan="100%" class="text-center" translate>No data.</td>
                                 </tr>
-                                <tbody *ngFor="let item of detail.inv_detail; let $index = index;">
+                                <tbody *ngFor="let item of detail.items; let $index = index;">
                                     <tr>
                                         <td>{{item.sku || item.misc_no}}</td>
                                         <td>{{item.des || item.misc_name}}</td>
@@ -318,8 +317,7 @@
                                         <td class="text-center">
                                             <i *ngIf="item.is_shipping_free" class="text-success fa fa-check"></i>
                                         </td>
-                                        <td class="text-right">{{item.qty}}</td>
-                                        <td class="text-right">{{item.qty_inv}}</td>
+                                        <td class="text-right">{{item.quantity}}</td>                                       
                                         <td class="text-right">
                                             <div>
                                                 {{ item.price | currency }}
@@ -334,14 +332,6 @@
                                         <td class="text-right">
                                             <span>{{item.total_price | currency}}</span>
                                         </td>
-                                        <td class="text-center">
-                                            {{ item.income_account_name }}
-                                        </td>
-                                        <!-- <td class="text-center">
-                                                <span>
-                                                    {{item.source_name}}
-                                                </span>
-                                            </td> -->
                                     </tr>
                                 </tbody>
                             </table>

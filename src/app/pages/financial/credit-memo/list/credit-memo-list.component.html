@@ -128,20 +128,20 @@
                                         <td class="text-center">{{item.updated_at | date:'MM/dd/yyyy' }}</td>
                                         <td class="text-center">{{item.updated_by}}</td>
                                         <td class="text-center">
-                                            <a class="btn btn-default " *ngIf="item.invoice_status_id == 1" ngbTooltip="View" (click)="viewInvoice(item.id)">
+                                            <a class="btn btn-default " *ngIf="item.sts_code == 'NW'" ngbTooltip="View" (click)="viewCredit(item.id)">
                                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default " ngbTooltip="Edit" (click)="editInvoice(item.id)" *ngIf="item.invoice_status_id == 1">
+                                            <a class="btn btn-default " ngbTooltip="Edit" (click)="editCredit(item.id)" *ngIf="item.sts_code == 'NW'">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
-                                            <a ngbTooltip="Submit" *ngIf="item.invoice_status_id == 1" class="btn btn-default" (click)="confirmModal(item.id, 2)"><i
+                                            <a ngbTooltip="Submit" *ngIf="item.sts_code == 'NW'" class="btn btn-default" (click)="confirmModal(item.id, 2)"><i
                                                     class="fa fa-caret-square-o-right" aria-hidden="true"></i></a>
-                                            <a class="btn btn-default" ngbTooltip="Cancel" (click)="confirmModal(item.id, 7)" *ngIf="item.invoice_status_id == 1">
+                                            <a class="btn btn-default" ngbTooltip="Cancel" (click)="confirmModal(item.id, 7)" *ngIf="item.sts_code == 'NW'">
                                                 <i class="fa fa-ban" aria-hidden="true"></i>
                                             </a>
-                                            <a ngbTooltip="Approve" *ngIf="item['invoice_status_id'] == 2" class="btn btn-default" (click)="confirmModal(item.id, 4)"><i
+                                            <a ngbTooltip="Approve" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="confirmModal(item.id, 4)"><i
                                                     class="fa fa-check"></i></a>
-                                            <a ngbTooltip="Reject" *ngIf="item['invoice_status_id'] == 2" class="btn btn-default" (click)="confirmModal(item.id, 3)"><i
+                                            <a ngbTooltip="Reject" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="confirmModal(item.id, 3)"><i
                                                     class="fa fa-ban" aria-hidden="true"></i></a>
                                             <a ngbTooltip="Pay" *ngIf="[4,8].indexOf(item['invoice_status_id']) != -1" class="btn btn-default"><i
                                                     class="fa fa-money" aria-hidden="true"></i></a>
