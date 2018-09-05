@@ -47,7 +47,8 @@ export class SiteModalComponent implements OnInit, OnDestroy {
 
     hotkeyCtrlLeft: Hotkey | Hotkey[];
     hotkeyCtrlRight: Hotkey | Hotkey[];
-
+    public paymentMethodList: any = [];
+    public paymentTermList: any = [];
     constructor(public fb: FormBuilder,
         public router: Router,
         public toastr: ToastrService,
@@ -68,15 +69,19 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             'credit_limit': [null],
             'credit_sts': 2,
             'sale_person_id': [null],
-            'payment_make': [null, Validators.required],
-            'site_id':[null]
+            'payment_make': [1, Validators.required],
+            'site_id':[null],
+            'taxable':[null],
+            'payment_method_id':[null],
+            'payment_term_id':[null]
         });
 
         this.hotkeyCtrlRight = hotkeysService.add(new Hotkey('alt+r', (event: KeyboardEvent): boolean => {
             this.flagAddress = true;
             return false; //  Prevent bubbling
         }));
-
+        this.getListPaymentTerm();
+        this.getListPaymentMethod();
 
     }
 
@@ -88,6 +93,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             await this.commonService.getAllListBank().subscribe(res => this.listBank = res.data);
             await this.customerService.getRoute().subscribe(res => { this.routeList = res.data; });
             await this.customerService.getCreditCard().subscribe(res => { this.getListCreditCard = res.data; this.credit_cards.forEach(card => { card.listCard = res.data }); });
+
             this.setData();
         })();
     }
@@ -117,10 +123,23 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             this.isEdit = false;
             this.generalForm.patchValue({ parent_company_name: this.info.parent_company_name });
             this.generalForm.patchValue({ site_code: String(this.info.textCode + '0000' + code) });
+            this.generalForm.patchValue({ payment_method_id: this.info.payment_method_id });
+            this.generalForm.patchValue({ payment_term_id: this.info.payment_term_id });
+            this.generalForm.patchValue({ taxable: this.info.taxable });
+            this.changePayment({target:{value:this.generalForm.value.payment_make}});
         }
     }
 
-
+    getListPaymentTerm() {
+        this.customerService.getListPaymentTerm().subscribe(res => {
+            this.paymentTermList = res.data;
+        })
+    }
+    getListPaymentMethod() {
+        this.customerService.getListPaymentMethod().subscribe(res => {
+            this.paymentMethodList = res.data;
+        })
+    }
     private orderAddress(address) {
         var tmp = [];
         var arr = [4, 3, 1, 2];
@@ -334,6 +353,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             //     await this.checkValidField(params);
             //     await this.closeModal(params);
             // })();
+            console.log(params);
             if(this.isEdit==false){
                 delete params.site_id;
             }
@@ -464,16 +484,18 @@ export class SiteModalComponent implements OnInit, OnDestroy {
         let flag = !1;
         if (val * 1 == 1) {
             for (let i = 0; i < this.addresses.length; i++) {
+                console.log(this.addresses[i]);
                 if (this.addresses[i].type == 1) {
                     for (let j = 0; j < this.paddr.length; j++) {
                         if (this.paddr[j].type == 1 && this.paddr[j].is_default) {
+                            var id = this.addresses[i].address_id;
                                 if(this.addresses[i].address_id){
                                     this.paddr[j].address_id= this.addresses[i].address_id;
                                 }
                                 else{
                                     delete this.paddr[j].address_id;
                                 }
-                            this.addresses[i] = JSON.parse(JSON.stringify(this.paddr[j]));
+                            this.addresses[i] = JSON.parse(JSON.stringify({...this.paddr[j],id}));
                             flag = !0;
                         }
                     }
