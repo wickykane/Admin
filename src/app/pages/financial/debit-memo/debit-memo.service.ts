@@ -21,6 +21,11 @@ export class DebitMemoService {
         return this.API.get(url);
     }
 
+    getAllCustomer(params?) {
+        const url = 'buyer/get-all';
+        return this.API.get(url, params);
+    }
+
     getListCustomer(name) {
         const url = 'debit/buyers?name=' + name;
         return this.API.get(url);

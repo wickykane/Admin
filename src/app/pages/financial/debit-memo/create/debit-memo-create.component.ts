@@ -3,6 +3,7 @@ import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from './../../../../services/table.service';
 
+import { Subject } from 'rxjs/Subject';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 
 import { NgbDateParserFormatter, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -57,6 +58,9 @@ export class DebitMemoCreateComponent implements OnInit {
 
     public isClickedSave = false;
     public isSaveDraft = false;
+    public data = {};
+
+    public searchKey = new Subject<any>(); // Lazy load filter
 
     public debitMemoForm: FormGroup;
     //#endregion initialize variables
@@ -111,7 +115,17 @@ export class DebitMemoCreateComponent implements OnInit {
 
     //#region lifecycle hook
     ngOnInit() {
-        this.getListCustomer('');
+        // Lazy Load filter
+        this.data['page'] = 1;
+        const params = { page: this.data['page'], length: 15 };
+        this.debitService.getAllCustomer(params).subscribe(res => {
+            this.listMaster['customers'] = res.data.rows;
+            this.data['total_page'] = res.data.total_page;
+        });
+        this.searchKey.subscribe(key => {
+            this.data['page'] = 1;
+            this.searchCustomer(key);
+        });
         this.getDebitMemoNo();
         this.getListPaymentMethod();
         this.getListPaymentTerms();
@@ -123,20 +137,6 @@ export class DebitMemoCreateComponent implements OnInit {
     //#endregion lifecycle hook
 
     //#region load master data
-    getListCustomer(keySearch) {
-        this.debitService.getListCustomer(keySearch).subscribe(
-            res => {
-                try {
-                    this.listMaster['customers'] = res.data;
-                } catch (err) {
-                    console.log(err);
-                }
-            }, err => {
-                console.log(err);
-            }
-        );
-    }
-
     getDebitMemoNo() {
         this.debitService.getDebitMemoNoAuto().subscribe(
             res => {
@@ -290,11 +290,40 @@ export class DebitMemoCreateComponent implements OnInit {
     //#endregion load master data
 
     //#region handle onSelect/ onClick
+    fetchMoreCustomer(data?) {
+        this.data['page']++;
+        if (this.data['page'] > this.data['total_page']) {
+            return;
+        }
+        const params = { page: this.data['page'], length: 15 };
+        if (this.data['searchKey']) {
+            params['company_name'] = this.data['searchKey'];
+        }
+        this.debitService.getAllCustomer(params).subscribe(res => {
+            this.listMaster['customers'] = this.listMaster['customers'].concat(res.data.rows);
+            this.data['total_page'] = res.data.total_page;
+        });
+    }
+
+    searchCustomer(key) {
+        this.data['searchKey'] = key;
+        const params = { page: this.data['page'], length: 15 };
+        if (key) {
+            params['company_name'] = key;
+        }
+        this.debitService.getAllCustomer(params).subscribe(res => {
+            this.listMaster['customers'] = res.data.rows;
+            this.data['total_page'] = res.data.total_page;
+        });
+    }
+
     onSelectCustomer() {
         if (this.debitMemoForm.value.company_id) {
+            this.contactDetail = {};
             this.listLineItems = [];
             this.listDeletedLineItem = [];
             this.listTaxs = [];
+            this.debitMemoForm.controls.contact_id.reset();
             this.debitMemoForm.controls.order_id.reset();
             this.getUniqueTaxItemLine();
             this.getCustomerContacts(this.debitMemoForm.value.company_id);
@@ -503,6 +532,9 @@ export class DebitMemoCreateComponent implements OnInit {
     }
 
     handleSaveSuccessfully(status, debitId) {
+        if (this.isSaveDraft) {
+            this.getDebitMemoNo();
+        }
         if (status === 1 && !this.isSaveDraft) {
             window.location.reload();
         } else if (status !== 1) {

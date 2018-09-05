@@ -12,119 +12,87 @@
     </div>
     <section class="rma-page block main-container block-order">
        <div class="row block-info">
-          <div class="col-md-6 p-l-5 p-r-2">
+          <div class="col-md-4 p-l-5 p-r-2">
              <div class="card height-100">
                 <div class="card-header">
                    <strong>Information</strong>
                 </div>
                 <div class="card-body">
                    <div class="row information height-100">
-                      <div class="col-md-12 p-l-5 p-r-5">
-
-                            <div class="col-md-4">
-                               <div class="form-group">
-                                  <label for="code" class="control-label" translate> <strong>Customer Name : {{detail['buyer_name']}}</strong> </label>
-                                  <!-- <span class="text-danger">(*)</span>
-                                  <div>
-                                     {{detail['buyer_name']}}
-                                  </div> -->
-                               </div>
-                            </div>
-
-                      </div>
                       <div class="col-md-12 fix-padding">
                          <div class="row">
-                            <div class="col-md-4 bolder">
-                               <div class="form-group row">
-                                  <label class='col-6 control-label'>Contact</label>
-                                  <div class='col-6 text-primary'>
-                                     {{detail['contact_user_name']}}
-                                  </div>
-                               </div>
-                               <div class="form-group row">
-                                  <label class='col-6'>Phone</label>
-                                  <div class='col-6 '>
-                                      {{detail['contact_user_phone']}}
-                                  </div>
-                               </div>
-                               <div class="form-group row">
-                                  <label class='col-6'>Email</label>
-                                  <div class='col-6 '>
-                                      {{detail['contact_user_email']}}
-                                  </div>
-                               </div>
-                               <div class="form-group row">
-                                  <label class='col-6'>Discount Level</label>
-                                  <div class='col-6 text-success'>
-                                     {{detail['discount_level']}}
-                                  </div>
-                               </div>
-                            </div>
-                            <div class="col-md-4 customer-infomation">
+                            <div class="col-md-6 customer-infomation">
+                                  <div class="form-group row">
+                                     <label class='col-6'>Order No
 
+                                     </label>
+                                     <div class='col-6'>
+                                        {{detail['code']}}
+                                     </div>
+                                  </div>
                                   <div class="form-group row">
                                      <label class='col-6'>Customer PO
-                                     <span class="text-danger">(*)</span>
+
                                      </label>
-                                     <div class='col-6 text-primary'>
+                                     <div class='col-6'>
                                         {{detail['customer_po']}}
                                      </div>
                                   </div>
                                   <div class="form-group row">
-                                     <label class='col-6'>Order Type
-                                     <span class="text-danger">(*)</span>
+                                     <label class='col-6'>Quote No
+
                                      </label>
-                                     <div class='col-6 text-primary'>
-                                        {{detail['type_name']}}
+                                     <div class='col-6'>
+                                        {{detail['sale_quote_cd']}}
                                      </div>
                                   </div>
                                   <div class="form-group row">
                                      <label class='col-6'>Order Date
-                                     <span class="text-danger">(*)</span>
+
                                      </label>
-                                     <div class='col-6 text-danger'>
+                                     <div class='col-6'>
                                         {{detail['order_date']}}
                                      </div>
                                   </div>
                                   <div class="form-group row">
-                                     <label class='col-6'>Priority</label>
-                                     <div class='col-6 text-danger'>
-                                        {{detail['prio_level_label']}}
+                                     <label class='col-6'>Order Type
+
+                                     </label>
+                                     <div class='col-6'>
+                                        {{detail['type_name']}}
                                      </div>
                                   </div>
+                            </div>
+                            <div class="col-md-6 customer-infomation bolder">
                                   <div class="form-group row">
                                      <label class='col-6'>Order Status</label>
-                                     <div class='col-6 text-success'>
+                                     <div class='col-6'>
                                        {{detail['order_sts_name']}}
                                      </div>
                                   </div>
-
-                            </div>
-                            <div class="col-md-4 customer-infomation bolder">
-
                                   <div class="form-group row">
-                                     <label class='col-6'>Payment Method<span class="text-danger">(*)</span></label>
-                                     <div class='col-6 text-primary'>
+                                     <label class='col-6'>Payment Method</label>
+                                     <div class='col-6'>
                                         {{detail['payment_method_name']}}
                                      </div>
                                   </div>
                                   <div class="form-group row">
                                      <label class='col-6'>Payment Terms
-                                     <span class="text-danger">(*)</span>
+
                                      </label>
-                                     <div class='col-6 text-danger'>
+                                     <div class='col-'>
                                           {{detail['payment_term_name']}}
                                      </div>
                                   </div>
                                   <div class="form-group row">
-                                     <label class='col-6'>Salesperson<span class="text-danger">(*)</span></label>
-                                     <div class='col-6 text-primary'>
+                                     <label class='col-6'>Salesperson</label>
+                                     <div class='col-6'>
                                         {{detail['sale_person_name']}}
                                      </div>
                                   </div>
                                   <div class="form-group row">
                                      <label class='col-6'>Approver
-                                     <span class="text-danger">(*)</span>
+
                                      </label>
                                      <div class='col-6'>
                                         {{detail['approver_name']}}
@@ -138,6 +106,49 @@
                 </div>
              </div>
           </div>
+          <div class="col-md-2 2 padding-lr-5">
+            <div class="card height-100">
+               <div class="card-header">
+                  <strong>Customer Information</strong>
+               </div>
+               <div class="card-body p-25">
+                  <div class="row">
+                    <div class="col-12">
+                       <div class="form-group row">
+                          <label class="control-label col-5" translate>Customer Name</label>
+                          <div class="col-7">
+                             {{detail.billing['buyer_name']}}
+                          </div>
+                       </div>
+                    </div>
+                     <div class="col-12">
+                        <div class="form-group row">
+                           <label class="control-label col-5" translate>Contact</label>
+                           <div class="col-7">
+                              {{detail['contact_user_name']}}
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-12">
+                       <div class="form-group row">
+                          <label class='col-5'>Phone</label>
+                          <div class='col-7 '>
+                              {{detail['contact_user_phone']}}
+                          </div>
+                       </div>
+                     </div>
+                     <div class="col-12">
+                       <div class="form-group row">
+                          <label class='col-5'>Email</label>
+                          <div class='col-7 '>
+                              {{detail['contact_user_email']}}
+                          </div>
+                       </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+          </div>
           <div class="col-md-6" style="padding-right: 18px;">
              <div class="row  height-100">
               <div class="col-4 p-l-0 p-r-2">
@@ -147,6 +158,14 @@
                       </div>
                       <div class="card-body p-25">
                          <div class="row">
+                           <div class="col-12">
+                              <div class="form-group row">
+                                 <label class="control-label col-5" translate>Label</label>
+                                 <div class="col-7">
+                                    {{detail.billing['name']}}
+                                 </div>
+                              </div>
+                           </div>
                             <div class="col-12">
                                <div class="form-group row">
                                   <label class="control-label col-5" translate>Address</label>
@@ -190,6 +209,14 @@
                       </div>
                       <div class="card-body p-25">
                          <div class="row">
+                           <div class="col-12">
+                              <div class="form-group row">
+                                 <label class="control-label col-5" translate>Label</label>
+                                 <div class="col-7">
+                                    {{detail.shipping['name']}}
+                                 </div>
+                              </div>
+                           </div>
                             <div class="col-12">
                                <div class="form-group row">
                                   <label class="control-label col-5" translate>Address</label>
@@ -234,43 +261,38 @@
                       <div class="card-body p-25">
                          <div class="row">
                             <div class="col-12">
-
                                <div class="form-group row">
                                   <label class='col-6'>Warehouse
-                                  <span class="text-danger">(*)</span>
+
                                   </label>
                                   <div class='col-6'>
                                      {{detail['warehouse_name']}}
                                   </div>
                                </div>
-
                                <div class="form-group row">
                                   <label class='col-6'>Ship Via
-                                  <span class="text-danger">(*)</span>
+
                                   </label>
                                   <div class='col-6'>
                                      {{detail['carrier_name']}}
                                   </div>
                                </div>
-
                                <div class="form-group row">
                                   <label class='col-6'>Option
-                                  <span class="text-danger">(*)</span>
+
                                   </label>
                                   <div class='col-6'>
                                      {{detail['shipping_method_option_name']}}
                                   </div>
                                </div>
-
                                <div class="form-group row">
                                   <label class='col-6'>Ship Rate
-                                  <span class="text-danger">(*)</span>
+
                                   </label>
                                   <div class='col-6'>
                                      {{detail['shipping_method_rate_name']}}
                                   </div>
                                </div>
-
                                <div class="form-group row">
                                   <label class='col-6'>Delivery Date
                                   </label>
@@ -278,7 +300,12 @@
                                      {{detail['delivery_date']}}
                                   </div>
                                </div>
-
+                               <div class="form-group row">
+                                  <label class='col-6'>Priority</label>
+                                  <div class='col-6'>
+                                     {{detail['prio_level_label']}}
+                                  </div>
+                               </div>
                             </div>
                          </div>
                       </div>

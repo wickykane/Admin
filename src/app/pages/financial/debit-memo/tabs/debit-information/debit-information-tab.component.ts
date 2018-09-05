@@ -7,6 +7,8 @@ import { ToastrService } from 'ngx-toastr';
 import { ConfirmModalContent } from '../../../../../shared/modals/confirm.modal';
 import { TableService } from './../../../../../services/table.service';
 
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../../../../../environments/environment';
 import { DebitMemoService } from '../../debit-memo.service';
 
 @Component({
@@ -25,6 +27,7 @@ export class DebitInformationTabComponent implements OnInit {
             this.getUniqueTaxItemLine();
         }
     }
+    @Output() changeStatusSuccessfully = new EventEmitter();
 
     public listTaxs = [];
 
@@ -35,7 +38,8 @@ export class DebitInformationTabComponent implements OnInit {
         private router: Router,
         private modalService: NgbModal,
         public tableService: TableService,
-        public debitService: DebitMemoService) {
+        public debitService: DebitMemoService,
+        private http: HttpClient) {
     }
 
     ngOnInit() {
@@ -103,6 +107,7 @@ export class DebitInformationTabComponent implements OnInit {
             res => {
                 try {
                     this.toastr.success(res.message);
+                    this.changeStatusSuccessfully.emit();
                 } catch (err) {
                     console.log(err);
                 }
@@ -110,6 +115,22 @@ export class DebitInformationTabComponent implements OnInit {
                 console.log(err);
             }
         );
+    }
+
+    onPrintDebitMemo() {
+        const path = `debit/${this.debitData['id']}/print`;
+        const url = `${environment.api_url}${path}`;
+        const headers: HttpHeaders = new HttpHeaders();
+        this.http.get(url, {
+            headers,
+            responseType: 'blob',
+        }).subscribe(res => {
+                const file = new Blob([res], { type: 'application/pdf' });
+                const fileURL = URL.createObjectURL(file);
+                const newWindow = window.open(fileURL);
+                newWindow.focus();
+                newWindow.print();
+        });
     }
 
     onClickBack() {

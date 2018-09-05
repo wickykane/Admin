@@ -3,6 +3,7 @@ import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from './../../../../services/table.service';
 
+import { Subject } from 'rxjs/Subject';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 
 import { NgbDateParserFormatter, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -57,6 +58,9 @@ export class DebitMemoEditComponent implements OnInit {
 
     public isClickedSave = false;
     public isSaveDraft = false;
+    public data = {};
+
+    public searchKey = new Subject<any>(); // Lazy load filter
 
     public debitMemoForm: FormGroup;
     public debitId = null;
@@ -113,8 +117,13 @@ export class DebitMemoEditComponent implements OnInit {
     //#region lifecycle hook
     ngOnInit() {
         this.debitId = this.route.snapshot.paramMap.get('id');
+        // Lazy Load filter
+        this.data['page'] = 1;
+        this.searchKey.subscribe(key => {
+            this.data['page'] = 1;
+            this.searchCustomer(key);
+        });
         this.getDebitDetail();
-        this.getListCustomer('');
         this.getListPaymentMethod();
         this.getListPaymentTerms();
         this.getListSalePerson();
@@ -125,20 +134,6 @@ export class DebitMemoEditComponent implements OnInit {
     //#endregion lifecycle hook
 
     //#region load master data
-    getListCustomer(keySearch) {
-        this.debitService.getListCustomer(keySearch).subscribe(
-            res => {
-                try {
-                    this.listMaster['customers'] = res.data;
-                } catch (err) {
-                    console.log(err);
-                }
-            }, err => {
-                console.log(err);
-            }
-        );
-    }
-
     getCustomerContacts(customerId) {
         this.debitService.getCustomerContacts(customerId).subscribe(
             res => {
@@ -304,6 +299,18 @@ export class DebitMemoEditComponent implements OnInit {
                 try {
                     this.debitDetail = res.data;
                     this.debitMemoForm.patchValue(this.debitDetail);
+
+                    // Lazy Load filter
+                    const params = { page: this.data['page'], length: 15 };
+                    this.debitService.getAllCustomer(params).subscribe(result => {
+                        const idList = result.data.rows.map(item => item.id);
+                        this.listMaster['customers'] = result.data.rows;
+                        if (res.data.company_id && idList.indexOf(res.data.company_id) === -1) {
+                            this.listMaster['customers'].push({ id: res.data.company_id, company_name: res.data.company_name });
+                        }
+                        this.data['total_page'] = result.data.total_page;
+                    });
+
                     this.getUniqueTaxItemLine();
 
                     if (this.debitMemoForm.value.company_id !== null && this.debitMemoForm.value.company_id !== undefined) {
@@ -316,6 +323,14 @@ export class DebitMemoEditComponent implements OnInit {
                         this.getOrderInformation(this.debitMemoForm.value.order_id);
                         this.getListLineItems(this.debitMemoForm.value.order_id);
                     }
+
+                    if (this.debitDetail['contact_id'] !== null && this.debitDetail['contact_id'] !== undefined) {
+                        this.contactDetail = {
+                            phone: this.debitDetail['contact_phone'] || '',
+                            email: this.debitDetail['contact_email'] || '',
+                            disc_level: this.debitDetail['disc_level'] || '',
+                        };
+                    }
                 } catch (err) {
                     console.log(err);
                 }
@@ -327,11 +342,40 @@ export class DebitMemoEditComponent implements OnInit {
     //#endregion load Debit Detail
 
     //#region handle onSelect/ onClick
+    fetchMoreCustomer(data?) {
+        this.data['page']++;
+        if (this.data['page'] > this.data['total_page']) {
+            return;
+        }
+        const params = { page: this.data['page'], length: 15 };
+        if (this.data['searchKey']) {
+            params['company_name'] = this.data['searchKey'];
+        }
+        this.debitService.getAllCustomer(params).subscribe(res => {
+            this.listMaster['customers'] = this.listMaster['customers'].concat(res.data.rows);
+            this.data['total_page'] = res.data.total_page;
+        });
+    }
+
+    searchCustomer(key) {
+        this.data['searchKey'] = key;
+        const params = { page: this.data['page'], length: 15 };
+        if (key) {
+            params['company_name'] = key;
+        }
+        this.debitService.getAllCustomer(params).subscribe(res => {
+            this.listMaster['customers'] = res.data.rows;
+            this.data['total_page'] = res.data.total_page;
+        });
+    }
+
     onSelectCustomer() {
         if (this.debitMemoForm.value.company_id) {
+            this.contactDetail = {};
             this.listLineItems = [];
             this.listDeletedLineItem = [];
             this.listTaxs = [];
+            this.debitMemoForm.controls.contact_id.reset();
             this.debitMemoForm.controls.order_id.reset();
             this.getUniqueTaxItemLine();
             this.getCustomerContacts(this.debitMemoForm.value.company_id);
