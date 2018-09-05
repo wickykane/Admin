@@ -97,8 +97,9 @@ export class CustomRateOptionsModalComponent implements OnInit, OnDestroy {
         }
 
     }
-    addNewRange() {
-        this.ranges.push({ 'lbs_from': '0', 'lbs_to': '0', 'shipping_fee': '0' });
+    addNewRange(lbs_to) {
+        console.log(lbs_to);
+        this.ranges.push({ 'lbs_from': lbs_to, 'lbs_to': parseFloat(lbs_to)+40.00, 'shipping_fee': '8.00' });
     }
     removeRangeItem(index) {
         this.ranges.splice(index, 1);

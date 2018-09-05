@@ -130,7 +130,7 @@
                 <div class="col-md-3">
                     <label>&nbsp;</label>
                     <div class="col-sm-12">
-                        <button *ngIf="i==ranges.length-1" [disabled]="isView" type="button" (click)="addNewRange()" class="btn btn-outline-dark">
+                        <button *ngIf="i==ranges.length-1" [disabled]="isView" type="button" (click)="addNewRange(item.lbs_to)" class="btn btn-outline-dark">
                             <i class="fa fa-plus"></i>
                         </button>
                         <button type="button" *ngIf="ranges.length>1" [disabled]="isView" (click)="removeRangeItem(i)" class="btn btn-outline-dark">
