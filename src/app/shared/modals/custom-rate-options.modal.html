@@ -93,7 +93,8 @@
                             <input type="number" [disabled]="isView" [(ngModel)]="item.lbs_from" class="form-control">
                         </div>
                         <div class="col-sm-2">
-                            <input type="text" value="lbs" disabled="true" class="form-control">
+                                <input *ngIf="generalForm.value.charge_shipping == 1" type="text" value="lbs" disabled="true" class="form-control">
+                                <input *ngIf="generalForm.value.charge_shipping == 2" type="text" value="$" disabled="true" class="form-control">
                         </div>
                     </div>
                 </div>
@@ -105,7 +106,8 @@
                             <input type="number" [disabled]="isView" [(ngModel)]="item.lbs_to" class="form-control">
                         </div>
                         <div class="col-sm-2">
-                            <input type="text" value="lbs" disabled="true" class="form-control">
+                            <input *ngIf="generalForm.value.charge_shipping == 1" type="text" value="lbs" disabled="true" class="form-control">
+                            <input *ngIf="generalForm.value.charge_shipping == 2" type="text" value="$" disabled="true" class="form-control">
                         </div>
                         <span style="color: red" *ngIf="item.lbs_to<item.lbs_from">
                             (!): The up to value cannot be minor than the value in From.

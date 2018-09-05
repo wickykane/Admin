@@ -321,7 +321,7 @@ export class ShippingZoneEditComponent implements OnInit {
         }
         if (id == "3") {
             modalRef = this.modalService.open(CustomRateOptionsModalComponent, { size: 'lg' });
-            modalRef.componentInstance.typeList = this.listMasterData['type'];
+            modalRef.componentInstance.typeList = this.listMasterData['charge_shipping'];
             modalRef.componentInstance.typeFreeList = this.listMasterData['type_free'];
             modalRef.componentInstance.id = id;
             modalRef.componentInstance.customRateList = this.customRateList;
@@ -449,23 +449,53 @@ export class ShippingZoneEditComponent implements OnInit {
         });
     }
     checkValidate(items, subItem, event) {
-        if (subItem.id == 1 && !subItem.checked) {
-            items.forEach(item => {
-                if (item.id == 2 || item.id == 3) {
-                    return item.checked = false;
-                }
-            });
-
-        }
-        else if ((subItem.id == 2 && !subItem.checked) || (subItem.id == 3 && !subItem.checked)) {
-            if (items[0].id == 1 && items[0].checked) {
-                this.toastr.error('There is a conflict. You cannot active this Quote because Free Shipping is ON')
-                event.preventDefault();
+        if(this.isIE()){
+            if (subItem.id == 1 && !subItem.checked) {
+                items.forEach(item => {
+                    if (item.id == 2 || item.id == 3) {
+                        return item.checked = false;
+                    }
+                });
+    
             }
-
+            else if ((subItem.id == 2 && subItem.checked) || (subItem.id == 3 && subItem.checked)) {
+                if (items[0].id == 1 && items[0].checked) {
+                    this.toastr.error('There is a conflict. You cannot active this Quote because Free Shipping is ON')
+                    event.preventDefault();
+                }
+    
+            }
+        }
+        else{
+            if (subItem.id == 1 && !subItem.checked) {
+                items.forEach(item => {
+                    if (item.id == 2 || item.id == 3) {
+                        return item.checked = false;
+                    }
+                });
+    
+            }
+            else if ((subItem.id == 2 && !subItem.checked) || (subItem.id == 3 && !subItem.checked)) {
+                if (items[0].id == 1 && items[0].checked) {
+                    this.toastr.error('There is a conflict. You cannot active this Quote because Free Shipping is ON')
+                    event.preventDefault();
+                }
+    
+            }
         }
 
 
+
+    }
+    private isIE() {
+        const match = navigator.userAgent.search(/(?:Edge|MSIE|Trident\/.*; rv:)/);
+        let isIE = false;
+    
+        if (match !== -1) {
+            isIE = true;
+        }
+    
+        return isIE;
     }
     // checkDisabled(item,subItem){
     //     for(var i=0;i<item.length;i++){

@@ -72,7 +72,7 @@ export class ShippingZoneCreateComponent implements OnInit {
         "handling_fee": '0.00',
         "id": "3",
         "charge_shipping": "1",
-        "ranges": [{ 'lbs_from': '0', 'lbs_to': '0', 'shipping_fee': '0' }]
+        "ranges": [{ 'lbs_from': '0', 'lbs_to': '20.00', 'shipping_fee': '8.00' }]
     };
     public pickupList = {
         "name": '',
@@ -239,7 +239,7 @@ export class ShippingZoneCreateComponent implements OnInit {
         }
         if (id == "3") {
             modalRef = this.modalService.open(CustomRateOptionsModalComponent, { size: 'lg' });
-            modalRef.componentInstance.typeList = this.listMasterData['type'];
+            modalRef.componentInstance.typeList = this.listMasterData['charge_shipping'];
             modalRef.componentInstance.typeFreeList = this.listMasterData['type_free'];
             modalRef.componentInstance.id = id;
             modalRef.componentInstance.customRateList = this.customRateList;
