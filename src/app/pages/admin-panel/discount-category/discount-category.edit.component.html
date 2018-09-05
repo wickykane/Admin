@@ -110,11 +110,11 @@
                                 <tr *ngFor="let item of data['products']; let i = index">
                                     <!-- <td>{{i+1}}</td> -->
                                     <td>
-                                      <ng-select (change)="changeCategory(item.category_id, item)" [items]="listMaster['category']" [disabled]="true" bindLabel="name" bindValue="category_id" [(ngModel)]="item.category_id">
+                                      <ng-select (change)="changeCategory(item.category_id, item, false)" [items]="listMaster['category']" [disabled]="disabled" bindLabel="name" bindValue="category_id" [(ngModel)]="item.category_id">
                                       </ng-select>
                                     </td>
                                     <td>
-                                      <ng-select (change)="changeType(item.apply_for, item)" [items]="item.listType" [disabled]="true" bindLabel="value" bindValue="id" [(ngModel)]="item.apply_for">
+                                      <ng-select (change)="changeType(item.apply_for, item)" [items]="item.listType" [disabled]="disabled" bindLabel="value" bindValue="id" [(ngModel)]="item.apply_for">
                                       </ng-select>
                                         <!-- <select class="form-control" name="type" [(ngModel)]="item.apply_for" (click)="changeType(item.apply_for, item)" [disabled]="flagSub">
                                             <option value="null" selected="true">--Select--</option>
@@ -123,7 +123,7 @@
                                     </td>
                                     <td>
                                         <ng-container *ngIf="item.apply_for == 2">
-                                            <ng-select class="sub-category" (change)="changeToGetSubCategory(item.sub_category_id, item)" (remove)="removeSelected($event, item.sub_category_id, item)" [multiple]="true" [items]="item.listSubCategory" [disabled]="true" bindLabel="name" bindValue="category_id" [(ngModel)]="item.sub_category_id">
+                                            <ng-select class="sub-category" (change)="changeToGetSubCategory(item.sub_category_id, item)" (remove)="removeSelected($event, item.sub_category_id, item)" [multiple]="true" [items]="item.listSubCategory" [disabled]="disabled" bindLabel="name" bindValue="category_id" [(ngModel)]="item.sub_category_id">
                                             </ng-select>
                                         </ng-container>
                                         <ng-container *ngIf="item.apply_for == 1">All Sub Categories</ng-container>
@@ -135,8 +135,8 @@
                             </tbody>
                         </table>
                     </div>
-                    <!-- <button type="button" class="btn btn-outline-dark" (click)="addNewLine()">
-                        <i class="fa fa-plus" aria-hidden="true"></i> Add new</button> -->
+                    <button type="button" class="btn btn-outline-dark" (click)="addNewLine()">
+                        <i class="fa fa-plus" aria-hidden="true"></i> Add new</button>
                 </div>
             </div>
         </div>

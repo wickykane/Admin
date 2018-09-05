@@ -41,7 +41,6 @@ export class ItemMiscModalContent implements OnInit {
             'no': [null],
             'des': [null],
             'type': [null],
-            'tax': 1,
             'sts': 1
         });
 
