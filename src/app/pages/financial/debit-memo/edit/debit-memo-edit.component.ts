@@ -100,6 +100,7 @@ export class DebitMemoEditComponent implements OnInit {
             // carrier_id: [null, Validators.required],
 
             sub_total_price: [0, Validators.required],
+            tax: [0, Validators.required],
             total_price: [0, Validators.required],
 
             note: [null]
@@ -576,9 +577,11 @@ export class DebitMemoEditComponent implements OnInit {
                 total_tax += taxItem.amount;
                 this.debitMemoForm.controls.sub_total_price.setValue(sub_price);
             });
+            this.debitMemoForm.controls.tax.setValue(total_tax);
             this.debitMemoForm.controls.total_price.setValue(this.debitMemoForm.value.sub_total_price + total_tax);
         } else {
             this.debitMemoForm.controls.sub_total_price.setValue(0);
+            this.debitMemoForm.controls.tax.setValue(0);
             this.debitMemoForm.controls.total_price.setValue(0);
         }
     }
