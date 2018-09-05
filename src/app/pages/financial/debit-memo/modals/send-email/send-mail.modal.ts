@@ -35,6 +35,15 @@ export class SendMailDebitModalContent implements OnInit {
     ngOnInit() {}
 
     ok() {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (emailRegex.test(this.mailForm.value.send_to)) {
+            this.onSendMail();
+        } else {
+            this.mailForm.value.send_to ? this.toastr.error('Email is invalid!') : this.toastr.error('Email is empty!');
+        }
+    }
+
+    onSendMail() {
         const params = this.mailForm.value;
         this.debitService.sendMail(this.debitId, params).subscribe(res => {
             try {
