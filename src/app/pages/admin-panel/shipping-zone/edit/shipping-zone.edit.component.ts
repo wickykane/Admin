@@ -22,7 +22,7 @@ import { PickupOptionsModalComponent } from '../../../../shared/modals/pickup-op
 @Component({
     selector: 'app-edit-shipping-zone',
     templateUrl: './shipping-zone.edit.component.html',
-    styleUrls: ['../shipping-zone.component.scss'],
+    styleUrls: ['../shipping-zone.component.scss', '../create/shipping-zone.create.component.scss'],
     animations: [routerTransition()],
     providers: [DatePipe, CommonService]
 })
@@ -36,8 +36,10 @@ export class ShippingZoneEditComponent implements OnInit {
     public listShipping = [];
     public listCountry = [];
     public tempListCountry = [];
+    public tempListState = [];
     public listMasterData = {};
     public countryFilter = '';
+    public stateFilter = '';
     public listSelectCountry = [];
     public id: any;
     public cd: any;
@@ -104,6 +106,7 @@ export class ShippingZoneEditComponent implements OnInit {
         "handling_fee": '0.00',
         'id': '6'
     }
+    public selectedCountry = null;
 
     public pickupStoreList = [];
     constructor(
@@ -158,6 +161,11 @@ export class ShippingZoneEditComponent implements OnInit {
             this.listSelectCountry.push(item);
         }
         else {
+            if (this.selectedCountry != null) {
+                if (this.selectedCountry.country_id === item.country_id) {
+                    this.selectedCountry = null;
+                }
+            }
             this.listSelectCountry.forEach((res, index) => {
 
                 if (res.country_id == item.country_id) {
@@ -257,6 +265,11 @@ export class ShippingZoneEditComponent implements OnInit {
             this.listSelectCountry.push(item);
         }
         else {
+            if (this.selectedCountry != null) {
+                if (this.selectedCountry.country_id === item.country_id) {
+                    this.selectedCountry = null;
+                }
+            }
             this.listSelectCountry.forEach((res, index) => {
 
                 if (res.country_id == item.country_id) {
@@ -270,38 +283,41 @@ export class ShippingZoneEditComponent implements OnInit {
             return item.selected = false;
         });
     }
-    openState(code) {
 
-        if (this.listMasterData['state'][code]) {
-            const modalRef = this.modalService.open(StateFilterModalComponent);
+    filterState(key) {
+        this.selectedCountry.state = this.filterbyfieldName(this.tempListState, 'name', key);
+    }
 
-            modalRef.componentInstance.isEdit = false;
-            modalRef.componentInstance.stateList = this.listMasterData['state'][code];
-            // modalRef.componentInstance.listSelectCountry = this.listMasterData['state'][code];
-            this.listSelectCountry.forEach(item => {
-                if (item.country_code == code) {
-                    modalRef.componentInstance.listSelectCountry = item;
-                }
-            })
-            modalRef.componentInstance.code = code;
-            modalRef.result.then(res => {
-                if (res['code']) {
-                    this.listSelectCountry.forEach(item => {
-                        if (item.country_code == res.code) {
-                            item['state'] = res.state;
-                        }
-                    })
-                }
+    onCheckCountryState(country) {
+        this.selectedCountry = country;
+        this.tempListState = country.state;
+        // if (this.listMasterData['state'][code]) {
+        //     const modalRef = this.modalService.open(StateFilterModalComponent);
 
-
-            });
-        }
-        else {
-            return false;
-        }
-
+        //     modalRef.componentInstance.isEdit = false;
+        //     modalRef.componentInstance.stateList = this.listMasterData['state'][code];
+        //     // modalRef.componentInstance.listSelectCountry = this.listMasterData['state'][code];
+        //     this.listSelectCountry.forEach(item => {
+        //         if (item.country_code == code) {
+        //             modalRef.componentInstance.listSelectCountry = item;
+        //         }
+        //     })
+        //     modalRef.componentInstance.code = code;
+        //     modalRef.result.then(res => {
+        //         if (res['code']) {
+        //             this.listSelectCountry.forEach(item => {
+        //                 if (item.country_code == res.code) {
+        //                     item['state'] = res.state;
+        //                 }
+        //             })
+        //         }
 
 
+        //     });
+        // }
+        // else {
+        //     return false;
+        // }
     }
 
     openShippingModal(id) {
@@ -321,7 +337,7 @@ export class ShippingZoneEditComponent implements OnInit {
         }
         if (id == "3") {
             modalRef = this.modalService.open(CustomRateOptionsModalComponent, { size: 'lg' });
-            modalRef.componentInstance.typeList = this.listMasterData['type'];
+            modalRef.componentInstance.typeList = this.listMasterData['charge_shipping'];
             modalRef.componentInstance.typeFreeList = this.listMasterData['type_free'];
             modalRef.componentInstance.id = id;
             modalRef.componentInstance.customRateList = this.customRateList;
@@ -449,23 +465,53 @@ export class ShippingZoneEditComponent implements OnInit {
         });
     }
     checkValidate(items, subItem, event) {
-        if (subItem.id == 1 && !subItem.checked) {
-            items.forEach(item => {
-                if (item.id == 2 || item.id == 3) {
-                    return item.checked = false;
-                }
-            });
+        if (this.isIE()) {
+            if (subItem.id == 1 && !subItem.checked) {
+                items.forEach(item => {
+                    if (item.id == 2 || item.id == 3) {
+                        return item.checked = false;
+                    }
+                });
 
-        }
-        else if ((subItem.id == 2 && !subItem.checked) || (subItem.id == 3 && !subItem.checked)) {
-            if (items[0].id == 1 && items[0].checked) {
-                this.toastr.error('There is a conflict. You cannot active this Quote because Free Shipping is ON')
-                event.preventDefault();
             }
+            else if ((subItem.id == 2 && subItem.checked) || (subItem.id == 3 && subItem.checked)) {
+                if (items[0].id == 1 && items[0].checked) {
+                    this.toastr.error('There is a conflict. You cannot active this Quote because Free Shipping is ON')
+                    event.preventDefault();
+                }
 
+            }
+        }
+        else {
+            if (subItem.id == 1 && !subItem.checked) {
+                items.forEach(item => {
+                    if (item.id == 2 || item.id == 3) {
+                        return item.checked = false;
+                    }
+                });
+
+            }
+            else if ((subItem.id == 2 && !subItem.checked) || (subItem.id == 3 && !subItem.checked)) {
+                if (items[0].id == 1 && items[0].checked) {
+                    this.toastr.error('There is a conflict. You cannot active this Quote because Free Shipping is ON')
+                    event.preventDefault();
+                }
+
+            }
         }
 
 
+
+    }
+    private isIE() {
+        const match = navigator.userAgent.search(/(?:Edge|MSIE|Trident\/.*; rv:)/);
+        let isIE = false;
+
+        if (match !== -1) {
+            isIE = true;
+        }
+
+        return isIE;
     }
     // checkDisabled(item,subItem){
     //     for(var i=0;i<item.length;i++){
