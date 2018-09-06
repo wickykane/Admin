@@ -262,7 +262,7 @@ export class OrderService {
         const url = 'sale-quote/sq-references';
         return this.API.get(url);
     }
-    getShippingReference(id) {
+    getShippingReference(id?) {
         const url = 'shipping-zone/configuration-by-address/' + id;
         return this.API.get(url);
     }

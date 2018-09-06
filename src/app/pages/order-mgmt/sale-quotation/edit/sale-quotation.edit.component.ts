@@ -276,6 +276,10 @@ export class SaleQuotationEditComponent implements OnInit {
                     this.selectAddress('shipping', flag);
                 }
 
+                if (this.generalForm.value.shipping_id == null) {
+                    this.getShippingReference('');
+                }
+
             } catch (e) {
                 console.log(e);
             }
