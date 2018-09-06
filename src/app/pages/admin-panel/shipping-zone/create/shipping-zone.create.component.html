@@ -83,7 +83,7 @@
                         </div>
                         <div class="table-custom" [ngClass]="{'col-md-5': !selectedCountry, 'col-md-3': selectedCountry}">
                             <div class="header">
-                                <div class="col-12 title list-items" *ngFor="let item of listSelectCountry">
+                                <div class="col-12 title list-items" *ngFor="let item of listSelectCountry;trackBy: trackByFn">
                                     <div class="form-group row">
                                         <label class="control-label col-5" for="shipping_to" translate>
                                             <span class="text-danger"></span> {{item.name}}
