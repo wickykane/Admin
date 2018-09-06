@@ -20,8 +20,8 @@ export class MiscItemsDebitModalContent implements OnInit {
     @Input() set setIgnoredItems(items) {
         if (items && items.length) {
             this.listIgnoredItems = items;
-            this.getListItems();
         }
+        this.getListItems();
     }
     public listItems = [];
     public listItemSelected = [];
@@ -43,7 +43,7 @@ export class MiscItemsDebitModalContent implements OnInit {
 
     getListItems() {
         const params = { ...this.searchForm.value};
-        params['misc_ids'] = this.listIgnoredItems.join();
+        params['misc_ids_ignore'] = this.listIgnoredItems.join();
         Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
         this.debitService.getListItemsFromMisc(params).subscribe(
             res => {
