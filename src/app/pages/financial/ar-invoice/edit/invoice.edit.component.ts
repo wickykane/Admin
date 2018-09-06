@@ -117,7 +117,7 @@ export class InvoiceEditComponent implements OnInit {
             'billing_id': [null],
             'shipping_id': [null],
             'note': [null],
-            'apply_late_fee': [1],
+            'apply_late_fee': [null],
             'due_dt': [null, Validators.required],
             'payment_term_range': [null],
 
@@ -181,7 +181,6 @@ export class InvoiceEditComponent implements OnInit {
             inv_dt: oldForm.inv_dt,
             inv_num: oldForm.inv_num,
             company_id: oldForm.company_id,
-            apply_late_fee: 1,
         });
 
         this.addr_select = {
