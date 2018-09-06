@@ -61,7 +61,7 @@ export class PartDetailComponent implements OnInit {
     public detail = {
         short_des: '',
         full_des: '',
-        category_discounts: { discount: '' }
+        category_discounts: { discount: 0 }
     };
     public ckeConfig = {
         height: 90,
@@ -199,7 +199,7 @@ export class PartDetailComponent implements OnInit {
                     this.part = res.data.item ? res.data.item : this.part;
                     this.detail.short_des = res.data.item ?  res.data.item.short_des : null;
                     this.detail.full_des = res.data.item ? res.data.item.full_des : null;
-                    this.detail.category_discounts = res.data.category_discounts;
+                    this.detail.category_discounts = res.data.category_discounts || this.detail.category_discounts;
                     this.listMaster['freight_class'] = res.data.freight_class;
                     this.images = res.data.images;
                     this.item_condition = res.data.item_condition;

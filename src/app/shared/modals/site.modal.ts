@@ -314,7 +314,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
         if(this.generalForm.value.site_name==""){
             return this.toastr.error('Site Name is required');
         }
-        if(this.generalForm.value.payment_make=="" || this.generalForm.value.payment_make==null){
+        if(this.generalForm.value.payment_make==="" || this.generalForm.value.payment_make==null){
             return this.toastr.error('Payment Made By is required');
         }
         if (this.generalForm.valid) {
