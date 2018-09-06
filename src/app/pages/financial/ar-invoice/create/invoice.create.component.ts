@@ -117,7 +117,7 @@ export class InvoiceCreateComponent implements OnInit {
             'billing_id': [null],
             'shipping_id': [null],
             'note': [null],
-            'apply_late_fee': [1],
+            'apply_late_fee': [null],
             'due_dt': [null, Validators.required],
             'payment_term_range': [null],
 
@@ -183,7 +183,6 @@ export class InvoiceCreateComponent implements OnInit {
             inv_dt: oldForm.inv_dt,
             inv_num: oldForm.inv_num,
             company_id: oldForm.company_id,
-            apply_late_fee: 1,
         });
 
         this.addr_select = {
@@ -308,6 +307,7 @@ export class InvoiceCreateComponent implements OnInit {
         this.orderService.getDetailCompany(company_id).subscribe(res => {
             try {
                 this.customer = res.data;
+                this.generalForm.patchValue({ apply_late_fee: res.data.apply_late_fee || null });
                 if (res.data.buyer_type === 'PS') {
                     this.addr_select.contact = res.data.contact[0];
                     this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
