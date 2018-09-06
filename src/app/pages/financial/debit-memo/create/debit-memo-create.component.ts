@@ -60,6 +60,8 @@ export class DebitMemoCreateComponent implements OnInit {
     public isSaveDraft = false;
     public data = {};
 
+    public decimalAllowed = 2;
+
     public searchKey = new Subject<any>(); // Lazy load filter
 
     public debitMemoForm: FormGroup;
@@ -365,19 +367,19 @@ export class DebitMemoCreateComponent implements OnInit {
     }
 
     onCalculateAmount(item) {
-        item['qty'] = parseFloat(item['qty']) || 0;
-        item['price'] = parseFloat(item['price']) || 0;
-        item['discount_percent'] = parseFloat(item['discount_percent']) || 0;
-        item['tax_percent'] = parseFloat(item['tax_percent']) || 0;
+        item['qty'] = parseInt(item['qty'], 0);
+        item['price'] = parseFloat((item['price']).toFixed(this.decimalAllowed) || '0');
+        item['discount_percent'] = parseFloat((item['discount_percent']) || '0');
+        item['tax_percent'] = parseFloat((item['tax_percent']).toFixed(this.decimalAllowed) || '0)');
 
         item['discount_percent'] = item['discount_percent'] < 100 ? item['discount_percent'] : 100;
         item['tax_percent'] = item['tax_percent'] < 100 ? item['tax_percent'] : 100;
 
-        item['base_price'] = (item['qty'] * item['price']) || 0;
+        item['base_price'] = parseFloat((item['qty'] * item['price']).toFixed(this.decimalAllowed) || '0');
 
-        item['discount'] = (item['base_price'] / 100 * item['discount_percent']) || 0;
-        item['total_price'] = (item['base_price'] - item['discount']) || 0;
-        item['tax'] = (item['total_price'] / 100 * item['tax_percent']) || 0;
+        item['discount'] =  parseFloat((item['base_price'] / 100 * item['discount_percent']).toFixed(this.decimalAllowed) || '0');
+        item['total_price'] = parseFloat((item['base_price'] - item['discount']).toFixed(this.decimalAllowed) || '0');
+        item['tax'] = parseFloat((item['total_price'] / 100 * item['tax_percent']).toFixed(this.decimalAllowed) || '0');
     }
 
     onAddNote() {
@@ -523,10 +525,10 @@ export class DebitMemoCreateComponent implements OnInit {
                     sub_price += item.total_price;
                 });
                 total_tax += taxItem.amount;
-                this.debitMemoForm.controls.sub_total_price.setValue(sub_price);
+                this.debitMemoForm.controls.sub_total_price.setValue(parseFloat(sub_price.toFixed(this.decimalAllowed)));
             });
-            this.debitMemoForm.controls.tax.setValue(total_tax);
-            this.debitMemoForm.controls.total_price.setValue(this.debitMemoForm.value.sub_total_price + total_tax);
+            this.debitMemoForm.controls.tax.setValue(parseFloat(total_tax.toFixed(this.decimalAllowed)));
+            this.debitMemoForm.controls.total_price.setValue(parseFloat((this.debitMemoForm.value.sub_total_price + total_tax).toFixed(this.decimalAllowed)));
         } else {
             this.debitMemoForm.controls.sub_total_price.setValue(0);
             this.debitMemoForm.controls.tax.setValue(0);

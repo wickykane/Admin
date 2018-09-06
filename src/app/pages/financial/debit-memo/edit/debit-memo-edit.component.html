@@ -343,20 +343,20 @@
                                         <td class="text-center">{{item.item_condition_name}}</td>
                                         <td class="text-center">{{item.uom}}</td>
                                         <td class="input-field text-center">
-                                            <input style="width: 60px;" class="form-control input-sm" [isDecimal]="false" numberDirective [min]="0"
+                                            <input type="number" style="width: 60px;" class="form-control input-sm" [isDecimal]="false" numberDirective [min]="0"
                                                 OnlyNumber="true" [(ngModel)]="item.qty" (blur)="onCalculateAmount(item); getUniqueTaxItemLine();">
                                         </td>
                                         <td class="input-field text-center">
                                             <span>$</span>
-                                            <input style="width: 60px;" class="form-control input-sm" [isDecimal]="true" numberDirective [min]="0"
+                                            <input type="number" style="width: 60px;" class="form-control input-sm" [isDecimal]="true" numberDirective [min]="0"
                                                 OnlyNumber="true" [(ngModel)]="item.price" (blur)="onCalculateAmount(item); getUniqueTaxItemLine();">
                                         </td>
                                         <td class="input-field text-center">
-                                            <input style="width: 60px;" class="form-control input-sm" [isDecimal]="true" numberDirective [min]="0" [max]="100"
+                                            <input type="number" style="width: 60px;" class="form-control input-sm" [isDecimal]="true" numberDirective [min]="0" [max]="100"
                                                 OnlyNumber="true" [(ngModel)]="item.discount_percent" (blur)="onCalculateAmount(item); getUniqueTaxItemLine();">
                                         </td>
                                         <td class="input-field text-center">
-                                            <input style="width: 60px;" class="form-control input-sm" [isDecimal]="true" numberDirective [min]="0" [max]="100"
+                                            <input type="number" style="width: 60px;" class="form-control input-sm" [isDecimal]="true" numberDirective [min]="0" [max]="100"
                                                 OnlyNumber="true" [(ngModel)]="item.tax_percent" (blur)="onCalculateAmount(item); getUniqueTaxItemLine();">
                                         </td>
                                         <td class="text-center">${{item.total_price}}</td>
