@@ -208,7 +208,7 @@ export class CreditMemoEditComponent implements OnInit {
                 this.list.items = data.items;
                 // this.updateTotal();
                 this.changeCustomer(1);
-                this.changeInvoice(event);
+                // this.changeInvoice(event);
 
                 // Lazy Load filter
                 const params = { page: this.data['page'], length: 15 };
@@ -253,26 +253,26 @@ export class CreditMemoEditComponent implements OnInit {
     selectData(data) { }
 
     changeInvoice(event) {
-        this.creditMemoService.getDetailInvoice(this.generalForm.value.document_id).subscribe(res => {
-            if (this.firstChanged) {
-                this.list.items = res.data.inv_detail.map(item => {
-                    item.quantity = item.qty_inv;
-                    return item;
+        if (this.generalForm.value.document_id !== null) {
+            this.creditMemoService.getDetailInvoice(this.generalForm.value.document_id).subscribe(res => {
+                if (this.firstChanged) {
+                    this.list.items = res.data.inv_detail.map(item => {
+                        item.quantity = item.qty_inv;
+                        return item;
+                    });
+                    this.clone_items = _.cloneDeep(this.list.items);
+                }
+                this.firstChanged = true;
+                this.data['order_detail'] = res.data;
+                this.data['shipping_address'] = res.data.shipping_address;
+                this.data['shipping_method'] = res.data.shipping_method;
+                this.generalForm.patchValue({
+                    ...this.data['order_detail'], approver_id: res.data.aprvr_id
                 });
-                this.clone_items = _.cloneDeep(this.list.items);
-            }
-            this.firstChanged = true;
-
-            this.data['order_detail'] = res.data;
-            this.data['shipping_address'] = res.data.shipping_address;
-            this.data['shipping_method'] = res.data.shipping_method;
-
-            this.generalForm.patchValue({
-                ...this.data['order_detail'], approver_id: res.data.aprvr_id
+                this.selectAddress('billing');
+                this.updateTotal();
             });
-            this.selectAddress('billing');
-            this.updateTotal();
-        });
+        }
     }
 
     changeCustomer(flag?) {

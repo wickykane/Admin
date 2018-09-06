@@ -126,9 +126,6 @@ export class CreditMemoCreateComponent implements OnInit {
     }
 
     async ngOnInit() {
-        // this.data['id'] = this.route.snapshot.queryParams['quote_id'];
-        // this.data['is_copy'] = this.route.snapshot.queryParams['is_copy'] || 0;
-
         const user = JSON.parse(localStorage.getItem('currentUser'));
 
         // List Master
@@ -395,6 +392,9 @@ export class CreditMemoCreateComponent implements OnInit {
                     item.uom_name = item.uom;
                     item.misc_id = item.id;
                     item.sku = item.no;
+                    item.price = 0;
+                    item.discount_percent = 0;
+                    item.tax_percent = 0;
                 });
 
                 this.list.items = this.list.items.concat(res.filter((item) => {
@@ -412,7 +412,7 @@ export class CreditMemoCreateComponent implements OnInit {
         }, dismiss => { });
     }
 
-    resetInvoice() {
+    resetCredit() {
         this.listMaster = {};
         this.data = {};
         this.customer = {
@@ -451,11 +451,11 @@ export class CreditMemoCreateComponent implements OnInit {
             items: [],
             backItems: []
         };
+        this.generalForm.reset();
         this.ngOnInit();
     }
 
-    createMemo(type, is_draft_sq?) {
-        debugger;
+    createMemo(type, is_draft?, is_continue?) {
         const items = this.list.items.map(item => {
             item.discount_percent = item.discount;
             item.is_item = (item.misc_id) ? 0 : 1;
@@ -466,20 +466,18 @@ export class CreditMemoCreateComponent implements OnInit {
             ...this.generalForm.value,
             status_id: type,
             items,
-            is_draft_sq: is_draft_sq || 0,
-            is_copy: this.data['is_copy'] || 0
+            is_draft: is_draft || 0
         };
-        console.log(params);
         this.creditMemoService.createCreditMemo(params).subscribe(res => {
             try {
                 if (res.status) {
                     this.toastr.success(res.message);
                     this.data['id'] = res.data.id;
-                    console.log( this.data['id'] );
-                    setTimeout(() => {
-                        this.router.navigate(['/financial/credit-memo/view/' + this.data['id']]);
-                    }, 500);
-
+                    if (!is_continue) {
+                        setTimeout(() => {
+                            this.router.navigate(['/financial/credit-memo/view/' + this.data['id']]);
+                        }, 500);
+                    }
                 } else {
                     this.toastr.error(res.message);
                 }

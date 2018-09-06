@@ -260,12 +260,14 @@
                                 <strong>Ship To</strong>
                             </div>
                             <div class="card-body p-25">
-                                <div class="row" *ngIf="generalForm.value.carrier_id == 999">
+                                <div class="row" >
+                                        <!-- *ngIf="generalForm.value.carrier_id == 999" -->
                                     <div class="col-md-12 ">
                                         <p>Customer will pickup goods in stores.</p>
                                     </div>
                                 </div>
-                                <div class="row" *ngIf="generalForm.value.carrier_id != 999">
+                                <!-- *ngIf="generalForm.value.carrier_id != 999" -->
+                                <div class="row" >
                                     <div class="col-12 ">
                                         <div class="form-group row">
                                             <label class=" control-label col-5" for="shiping_to" translate>Label
@@ -320,7 +322,7 @@
                             <div class="card-body p-25">
                                 <div class="row">
                                     <div class="col-12 ">
-                                        <form [formGroup]="generalForm">
+                                        <form>
                                             <div class="form-group row">
                                                 <label class='col-6'>Warehouse
                                                     <span class="text-danger">(*)</span>

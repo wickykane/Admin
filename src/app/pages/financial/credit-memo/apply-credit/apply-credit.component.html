@@ -42,7 +42,7 @@
                                         <div class="form-group row">
                                             <label class='col-6 control-label'>Original Amount</label>
                                             <div class='col-6'>
-                                                {{main_info['balance_price'] |currency}}
+                                                {{main_info['original_amount'] |currency}}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -136,10 +136,10 @@
                                             <td class="text-center">{{item.issue_date}}</td>
                                             <td>{{item.payment_term_name}}</td>
                                             <td>{{item.status_name}}</td>
-                                            <td>{{item.balance | currency}}</td>
+                                            <td>{{item.original_amount | currency}}</td>
                                             <td>{{item.balance_due|currency}}</td>
                                             <td>
-                                                <input [isDecimal]="true" numberDirective [min]="0" [max]="item.balance" class="form-control input-sm" type="number"
+                                                <input [isDecimal]="true" numberDirective [min]="0" [max]="item.original_amount" class="form-control input-sm" type="number"
                                                     [(ngModel)]="item.amount" (change)="updateBalance()">
                                             </td>
                                         </tr>
