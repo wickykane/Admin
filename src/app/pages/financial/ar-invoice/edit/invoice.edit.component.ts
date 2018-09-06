@@ -117,7 +117,7 @@ export class InvoiceEditComponent implements OnInit {
             'billing_id': [null],
             'shipping_id': [null],
             'note': [null],
-            'apply_late_fee': [1],
+            'apply_late_fee': [null],
             'due_dt': [null, Validators.required],
             'payment_term_range': [null],
 
@@ -181,7 +181,6 @@ export class InvoiceEditComponent implements OnInit {
             inv_dt: oldForm.inv_dt,
             inv_num: oldForm.inv_num,
             company_id: oldForm.company_id,
-            apply_late_fee: 1,
         });
 
         this.addr_select = {
@@ -282,8 +281,10 @@ export class InvoiceEditComponent implements OnInit {
     getEarlyPaymentValue() {
         const issue_dt = this.generalForm.get('inv_dt').value;
         const payment_term_id = this.generalForm.get('payment_term_id').value;
+        const payment_term = this.listMaster['payment_term'].find(item => item.id === this.generalForm.get('payment_term_id').value) || {};
+        this.data['is_early'] = payment_term.early_pmt_incentive;
         const total_due = this.order_info['total'];
-        if (issue_dt && payment_term_id && total_due) {
+        if (issue_dt && payment_term_id && total_due && this.data['is_early']) {
             this.financialService.getEarlyPaymentValue(issue_dt, payment_term_id, total_due).subscribe(res => {
                 if (res.data) {
                     this.data['is_fixed_early'] = res.data.is_fixed;
@@ -297,6 +298,11 @@ export class InvoiceEditComponent implements OnInit {
                     this.data['inited'] = true;
                 }
             });
+        } else {
+            // Reset Early Payment data
+            this.order_info['incentive'] = null;
+            this.order_info['incentive_percent'] = null;
+            this.data['inited'] = true;
         }
     }
 
@@ -363,7 +369,7 @@ export class InvoiceEditComponent implements OnInit {
             });
         }
 
-        this.data['order_detail'] = { ...event.order, sales_person: event.order.sale_person_id, sale_person_name: event.sale_person_name,  ship_rate: event.order.ship_method_rate };
+        this.data['order_detail'] = { ...event.order, sales_person: event.order.sale_person_id, sale_person_name: event.sale_person_name, ship_rate: event.order.ship_method_rate };
         this.data['shipping_address'] = event.shipping_address;
         this.data['shipping_method'] = event.shipping_method;
 
@@ -387,10 +393,10 @@ export class InvoiceEditComponent implements OnInit {
         if (company_id) {
             this.getDetailCustomerById(company_id, flag);
             this.getOrderByCustomerId(company_id, flag);
-            this.resetChangeData();
         }
 
         if (!flag) {
+            this.resetChangeData();
             this.list.items = [];
             this.updateTotal();
         }
@@ -536,7 +542,7 @@ export class InvoiceEditComponent implements OnInit {
             inv_status: type,
             sub_total: this.order_info.sub_total,
             total_due: this.order_info.total,
-            is_early: this.data['is_fixed_early'] || 0,
+            is_early: this.data['is_early'] || 0,
             early_percent: (this.data['is_fixed_early']) ? null : (this.order_info['incentive_percent'] || 0),
             policy_amt: (this.order_info['incentive'] || 0),
             aprvr_id: this.generalForm.value.approver_id,
