@@ -252,8 +252,10 @@ export class InvoiceCreateComponent implements OnInit {
     getEarlyPaymentValue() {
         const issue_dt = this.generalForm.get('inv_dt').value;
         const payment_term_id = this.generalForm.get('payment_term_id').value;
+        const payment_term = this.listMaster['payment_term'].find(item => item.id === this.generalForm.get('payment_term_id').value) || {};
+        this.data['is_early'] = payment_term.early_pmt_incentive;
         const total_due = this.order_info['total'];
-        if (issue_dt && payment_term_id && total_due) {
+        if (issue_dt && payment_term_id && total_due && this.data['is_early']) {
             this.financialService.getEarlyPaymentValue(issue_dt, payment_term_id, total_due).subscribe(res => {
                 if (res.data) {
                     this.data['is_fixed_early'] = res.data.is_fixed;
@@ -263,6 +265,10 @@ export class InvoiceCreateComponent implements OnInit {
                     this.order_info.grand_total = this.order_info.total - this.order_info.incentive;
                 }
             });
+        } else {
+            // Reset Early Payment data
+            this.order_info['incentive'] = null;
+            this.order_info['incentive_percent'] = null;
         }
     }
 
@@ -492,9 +498,9 @@ export class InvoiceCreateComponent implements OnInit {
             inv_status: type,
             sub_total: this.order_info.sub_total,
             total_due: this.order_info.total,
-            is_early: this.data['is_fixed_early'] || 0,
+            is_early: this.data['is_early'] || 0,
             early_percent: (this.data['is_fixed_early']) ? null : (this.order_info['incentive_percent'] || 0),
-            policy_amt:  (this.order_info['incentive'] || 0),
+            policy_amt: (this.order_info['incentive'] || 0),
             aprvr_id: this.generalForm.value.approver_id,
             sale_person_id: this.generalForm.value.sales_person,
             inv_detail: items,
