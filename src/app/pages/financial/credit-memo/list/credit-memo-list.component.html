@@ -16,11 +16,12 @@
                 <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
                     <div class="block-search">
                         <label for="cd" class="control-label">Credit Memo No</label>
-                        <input type="text" name="cd" formControlName="cd" class="form-control" id="cd" placeholder="">
+                        <input type="text" name="cd" formControlName="credit_memo_num" class="form-control" id="cd" placeholder="">
                     </div>
                     <div class="block-search">
                         <label for="customer_name" class="control-label">Customer Name</label>
-                        <input type="text" name="customer_name" formControlName="customer_name" class="form-control" id="customer_name" placeholder="" capitalize>
+                        <input type="text" name="customer_name" formControlName="customer_name" class="form-control" id="customer_name" placeholder=""
+                            >
                     </div>
                     <div class="block-search">
                         <label for="buyer_type" class="control-label">Status</label>
@@ -115,12 +116,12 @@
                                         </td>
                                         <td class="text-center">
                                             <span class="badge badge-info bg-blue" *ngIf="item.sts_code == 'NW'">{{item.sts}}</span>
-                                            <span class="badge badge-warning bg-texas-rose" *ngIf="item.sts_code == 'SM'">{{item.sts}}</span>
-                                            <span class="badge badge-danger bg-magenta" *ngIf="item.sts_code == 'RM'">{{item.sts}}</span>
-                                            <span class="badge badge-success bg-strong-green" *ngIf="item.sts_code == 'AM'">{{item.sts}}</span>
+                                            <span class="badge badge-warning bg-texas-rose" *ngIf="item.sts_code == 'SB'">{{item.sts}}</span>
+                                            <span class="badge badge-danger bg-magenta" *ngIf="item.sts_code == 'RJ'">{{item.sts}}</span>
+                                            <span class="badge badge-success bg-strong-green" *ngIf="item.sts_code == 'AP'">{{item.sts}}</span>
                                             <span class="badge badge-danger bg-red" *ngIf="item.sts_code == 'CC'">{{item.sts}}</span>
-                                            <span class="badge badge-primary bg-lemon" *ngIf="item.sts_code == 'SC'">{{item.sts}}</span>
-                                            <span class="badge badge-primary" *ngIf="item.sts_code == 'RO'">{{item.sts}}</span>
+                                            <span class="badge badge-primary bg-lemon" *ngIf="item.sts_code == 'RD'">{{item.sts}}</span>
+                                            <span class="badge badge-primary" *ngIf="item.sts_code == 'RF'">{{item.sts}}</span>
                                             <span class="badge badge-primary bg-darkblue" *ngIf="item.sts_code == 'IU'">{{item.sts}}</span>
                                             <span class="badge badge-primary bg-bright-grey" *ngIf="item.sts_code == 'EX'">{{item.sts}}</span>
                                         </td>
@@ -128,7 +129,7 @@
                                         <td class="text-center">{{item.updated_at | date:'MM/dd/yyyy' }}</td>
                                         <td class="text-center">{{item.updated_by}}</td>
                                         <td class="text-center">
-                                            <a class="btn btn-default " *ngIf="item.sts_code == 'NW'" ngbTooltip="View" (click)="viewCredit(item.id)">
+                                            <a class="btn btn-default " ngbTooltip="View" (click)="viewCredit(item.id)">
                                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                             </a>
                                             <a class="btn btn-default " ngbTooltip="Edit" (click)="editCredit(item.id)" *ngIf="item.sts_code == 'NW'">
@@ -136,19 +137,24 @@
                                             </a>
                                             <a ngbTooltip="Submit" *ngIf="item.sts_code == 'NW'" class="btn btn-default" (click)="confirmModal(item.id, 2)"><i
                                                     class="fa fa-caret-square-o-right" aria-hidden="true"></i></a>
-                                            <a class="btn btn-default" ngbTooltip="Cancel" (click)="confirmModal(item.id, 7)" *ngIf="item.sts_code == 'NW'">
+                                            <a class="btn btn-default" ngbTooltip="Cancel" (click)="confirmModal(item.id, 5)" *ngIf="item.sts_code == 'NW'">
                                                 <i class="fa fa-ban" aria-hidden="true"></i>
                                             </a>
-                                            <a ngbTooltip="Approve" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="confirmModal(item.id, 4)"><i
+                                            <a ngbTooltip="Approve" *ngIf="item['sts_code'] == 'SB'" class="btn btn-default" (click)="confirmModal(item.id, 3)"><i
                                                     class="fa fa-check"></i></a>
-                                            <a ngbTooltip="Reject" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="confirmModal(item.id, 3)"><i
+                                            <a ngbTooltip="Reject" *ngIf="item['sts_code'] == 'SB'" class="btn btn-default" (click)="confirmModal(item.id, 4)"><i
                                                     class="fa fa-ban" aria-hidden="true"></i></a>
-                                            <a ngbTooltip="Pay" *ngIf="[4,8].indexOf(item['invoice_status_id']) != -1" class="btn btn-default"><i
-                                                    class="fa fa-money" aria-hidden="true"></i></a>
+                                            <!-- <a ngbTooltip="Pay" *ngIf="[4,8].indexOf(item['invoice_status_id']) != -1" class="btn btn-default"><i
+                                                    class="fa fa-money" aria-hidden="true"></i></a> -->
                                             <a class="btn btn-default" ngbTooltip="Print" (click)="printPDF(item.id)">
                                                 <i class="fa fa-download" aria-hidden="true"></i>
                                             </a>
-                                            <a ngbTooltip="Send Mail" *ngIf="[3,4,6,7,8].indexOf(item['invoice_status_id']) != -1" class="btn btn-default" (click)="sendMail(item.id)"><i
+                                            <a ngbTooltip="Re Open" *ngIf="item['sts_code'] == 'RJ'" class="btn btn-default" (click)="confirmModal(item.id, 'RE-OPEN')"><i
+                                                    class="fa fa-clone" aria-hidden="true"></i></a>
+                                            <a ngbTooltip="Send Mail" *ngIf="['SB','AP','RJ','CC','RD','RF'].indexOf(item['sts_code']) != -1" class="btn btn-default"
+                                                (click)="sendMail(item.id)"><i class="fa fa-envelope-o"
+                                                    aria-hidden="true"></i></a>
+                                            <a ngbTooltip="Apply to Invoice" *ngIf="['AP','RD'].indexOf(item['sts_code']) != -1" class="btn btn-default" [routerLink]="['apply-credit', item.id]"><i
                                                     class="fa fa-envelope-o" aria-hidden="true"></i></a>
                                         </td>
                                     </tr>

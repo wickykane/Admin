@@ -10,10 +10,10 @@ import { CreditMemoService } from './../../credit-memo.service';
     styleUrls: ['./modal.scss'],
     providers: [CreditMemoService]
 })
-export class MailModalComponent implements OnInit {
+export class CreditMailModalComponent implements OnInit {
     // Resolve Data
     public mailForm: FormGroup;
-    @Input() invoiceId;
+    @Input() creditId;
 
     constructor(public activeModal: NgbActiveModal, public toastr: ToastrService, private fb: FormBuilder, private creditMemoService: CreditMemoService) {
         this.mailForm = fb.group({
@@ -28,7 +28,7 @@ export class MailModalComponent implements OnInit {
 
     ok() {
         const params = this.mailForm.value;
-        this.creditMemoService.sendMail(this.invoiceId, params).subscribe(res => {
+        this.creditMemoService.sendMail(this.creditId, params).subscribe(res => {
             this.toastr.success(res.message);
             this.activeModal.close(this.mailForm.value);
         });

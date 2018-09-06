@@ -6,6 +6,7 @@ import { InvoiceEditComponent } from './ar-invoice/edit/invoice.edit.component';
 import { InvoiceComponent } from './ar-invoice/invoice.component';
 import { InvoiceDetailComponent } from './ar-invoice/view/invoice.view.component';
 
+import { CreditMemoApplyComponent } from './credit-memo/apply-credit/apply-credit.component';
 import { CreditMemoCreateComponent } from './credit-memo/create/credit-memo-create.component';
 import { CreditMemoEditComponent} from './credit-memo/edit/credit-memo-edit.component';
 import { CreditMemoListComponent } from './credit-memo/list/credit-memo-list.component';
@@ -41,7 +42,8 @@ const routes: Routes = [
             { path: '', component: CreditMemoListComponent },
             { path: 'create', component: CreditMemoCreateComponent },
             { path: 'edit/:id', component: CreditMemoEditComponent },
-            { path: 'view/:id', component: CreditMemoDetailComponent }
+            { path: 'view/:id', component: CreditMemoDetailComponent },
+            { path: 'apply-credit/:id', component: CreditMemoApplyComponent}
         ]
     },
     {

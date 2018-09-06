@@ -4,13 +4,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from '../../../../services/table.service';
 import { CreditMemoListKeyService } from './keys.list.control';
 
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
+import { environment } from '../../../../../environments/environment';
 import { routerTransition } from '../../../../router.animations';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { CreditMemoService } from '../credit-memo.service';
-import { MailModalComponent } from '../modals/send-email/mail.modal';
+import { CreditMailModalComponent } from '../modals/send-email/mail.modal';
 
 
 @Component({
@@ -36,19 +38,18 @@ export class CreditMemoListComponent implements OnInit {
     searchForm: FormGroup;
 
     public messageConfig = {
-        'SM': 'Are you sure that you want to Submit this quotation to approver?',
-        'CC': 'Are you sure that you want to cancel this quotation?',
-        'CLONE': 'Are you sure that you want to copy this quote?',
-        'AM': 'Are you sure that you want to approve this quotation?',
-        'RM': 'Are you sure that you want to reject this quotation?',
-        'SC': 'Are you sure that you want to convert this quotation to SO?',
+        '2': 'Are you sure that you want to submit this credit memo?',
+        '5': 'Are you sure that you want to cancel this credit memo?',
+        'RE-OPEN': 'Are you sure that you want to reopen the credit memo?',
+        '3': 'Are you sure that you want to approve the current credit memo?',
+        '4': 'Are you sure that you want to reject the current credit memo?'
     };
 
     public statusConfig = {
         'NW': { color: 'blue', name: 'New', img: './assets/images/icon/new.png' },
-        'SM': { color: 'texas-rose', name: 'Submited' },
-        'RM': { color: 'magenta', name: 'Rejected' },
-        'AM': { color: 'strong-green', name: 'Approved', img: './assets/images/icon/approved.png' },
+        'SB': { color: 'texas-rose', name: 'Submited' },
+        'RJ': { color: 'magenta', name: 'Rejected' },
+        'AP': { color: 'strong-green', name: 'Approved', img: './assets/images/icon/approved.png' },
         'CC': { color: 'red', name: 'Canceled', img: './assets/images/icon/cancel.png' },
         'SC': { color: 'lemon', name: 'Completed', img: './assets/images/icon/full_delivered.png' },
         'RD': { color: 'bright-grey', name: 'Refund Due' },
@@ -63,10 +64,11 @@ export class CreditMemoListComponent implements OnInit {
         private modalService: NgbModal,
         private _hotkeysService: HotkeysService,
         public creditMemoListKeyService: CreditMemoListKeyService,
+        private http: HttpClient,
         private renderer: Renderer) {
 
         this.searchForm = fb.group({
-            'cd': [null],
+            'credit_memo_num': [null],
             'customer_name': [null],
             'sts': [null],
             'date_type': [null],
@@ -84,10 +86,9 @@ export class CreditMemoListComponent implements OnInit {
 
     ngOnInit() {
         //  Init Fn
-        this.listMaster['listFilter'] = [{ value: false, name: 'Date Filter' }];
-        this.listMaster['dateType'] = [{ id: 'quote_dt', name: 'Quote Date' }, { id: 'expiry_dt', name: 'Expiry Date' }, { id: 'delivery_dt', name: 'Delivery Date' }];
+        this.listMaster['dateType'] = [{ id: 'issue_date', name: 'Issue Date' }, { id: 'updated_dt', name: 'Updated Date' }];
         this.getList();
-        // this.getListStatus();
+        this.getListStatus();
         this.user = JSON.parse(localStorage.getItem('currentUser'));
     }
     /**
@@ -99,17 +100,26 @@ export class CreditMemoListComponent implements OnInit {
     /**
      * Internal Function
      */
-    // getListStatus() {
-    //     this.creditMemoService.getListSaleQuotationStatus().subscribe(res => {
-    //         try {
-    //             this.listMaster['listStatus'] = res.data;
-    //         } catch (e) {
-    //             console.log(e);
-    //         }
-    //     });
-    // }
-
-
+    filter(sts) {
+        const params = { sts };
+        this.creditMemoService.getListCreditMemo(params).subscribe(res => {
+            try {
+                this.list.items = res.data.rows;
+                this.tableService.matchPagingOption(res.data);
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
+    getListStatus() {
+        this.creditMemoService.getListStatusCredit().subscribe(res => {
+            try {
+                this.listMaster['listStatus'] = res.data;
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
     getCountStatus() {
         this.creditMemoService.countCountStatus().subscribe(res => {
             res.data.map(item => {
@@ -147,29 +157,58 @@ export class CreditMemoListComponent implements OnInit {
             }
         });
     }
-
-    updateStatus(id, status) {
-        // const params = { status };
-        // this.creditMemoService.updateSaleQuoteStatus(id, params).subscribe(res => {
-        //     try {
-        //         this.toastr.success(res.message);
-        //         this.getList();
-        //     } catch (e) {
-        //         console.log(e);
-        //     }
-        // });
+    sendMail(id) {
+        const modalRef = this.modalService.open(CreditMailModalComponent, { size: 'lg', windowClass: 'modal-md' });
+        modalRef.result.then(res => {
+        }, dismiss => { });
+        modalRef.componentInstance.creditId = id;
+    }
+    printPDF(id, inv_num) {
+        const path = 'credit-memo/export-pdf/';
+        const url = `${environment.api_url}${path}${id}`;
+        const headers: HttpHeaders = new HttpHeaders();
+        this.http.get(url, {
+            headers,
+            responseType: 'blob',
+        }).subscribe(res => {
+                const file = new Blob([res], { type: 'application/pdf' });
+                const fileURL = URL.createObjectURL(file);
+                const newWindow = window.open(fileURL);
+                newWindow.focus();
+                newWindow.print();
+            });
     }
 
-    cloneQuote(id) {
-        this.router.navigate(['/order-management/sale-quotation/create'], { queryParams: { is_copy: 1, quote_id: id } });
+    updateStatus(id, status) {
+        const params = { credit_id: id, status };
+        this.creditMemoService.updateCreditStatus( params).subscribe(res => {
+            try {
+                this.toastr.success(res.message);
+                this.getList();
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
+
+    reopentCredit(id) {
+        this.creditMemoService.reopenCredit( id).subscribe(res => {
+            try {
+                this.toastr.success(res.message);
+                this.getList();
+            } catch (e) {
+                console.log(e);
+            }
+        });
     }
 
     confirmModal(id, status) {
+        console.log(status);
         const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
         modalRef.result.then(res => {
             if (res) {
-                if (status === 'CLONE') {
-                    this.cloneQuote(id);
+                if (status === 'RE-OPEN') {
+                    this.reopentCredit(id);
                     return;
                 }
                 this.updateStatus(id, status);
@@ -183,9 +222,9 @@ export class CreditMemoListComponent implements OnInit {
         if (id) {
             this.router.navigate(['/financial/credit-memo/view', id]);
         } else {
-            const selectedInvoiceId = this.list.items[this.selectedIndex].id;
-            if (selectedInvoiceId) {
-                this.router.navigate(['/financial/credit-memo/view', selectedInvoiceId]);
+            const selectedcreditId = this.list.items[this.selectedIndex].id;
+            if (selectedcreditId) {
+                this.router.navigate(['/financial/credit-memo/view', selectedcreditId]);
             }
         }
     }
@@ -194,10 +233,10 @@ export class CreditMemoListComponent implements OnInit {
         if (id) {
             this.router.navigate(['/financial/credit-memo/edit', id]);
         } else {
-            const selectedInvoiceId = this.list.items[this.selectedIndex].id;
+            const selectedcreditId = this.list.items[this.selectedIndex].id;
             const selectedInvoiceStatus = this.list.items[this.selectedIndex].invoice_status_id;
-            if (selectedInvoiceId && selectedInvoiceStatus === 1) {
-                this.router.navigate(['/financial/credit-memo/edit', selectedInvoiceId]);
+            if (selectedcreditId && selectedInvoiceStatus === 1) {
+                this.router.navigate(['/financial/credit-memo/edit', selectedcreditId]);
             }
         }
     }

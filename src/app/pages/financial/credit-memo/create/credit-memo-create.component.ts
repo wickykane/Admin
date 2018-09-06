@@ -9,9 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs/Subject';
 import { routerTransition } from '../../../../router.animations';
 
-import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
-import { OrderHistoryModalContent } from '../../../../shared/modals/order-history.modal';
 import { CreditItemMiscModalContent } from '../modals/item-misc/item-misc.modal';
 import { CreditItemModalContent } from '../modals/item/item.modal';
 import { CreditMemoCreateKeyService } from './keys.create.control';
@@ -457,6 +455,7 @@ export class CreditMemoCreateComponent implements OnInit {
     }
 
     createMemo(type, is_draft_sq?) {
+        debugger;
         const items = this.list.items.map(item => {
             item.discount_percent = item.discount;
             item.is_item = (item.misc_id) ? 0 : 1;
@@ -466,18 +465,19 @@ export class CreditMemoCreateComponent implements OnInit {
         const params = {
             ...this.generalForm.value,
             status_id: type,
-            original_ship_cost: this.order_info['original_ship_cost'],
             items,
             is_draft_sq: is_draft_sq || 0,
             is_copy: this.data['is_copy'] || 0
         };
+        console.log(params);
         this.creditMemoService.createCreditMemo(params).subscribe(res => {
             try {
                 if (res.status) {
                     this.toastr.success(res.message);
-                    this.data['invoice_id'] = res.data;
+                    this.data['id'] = res.data.id;
+                    console.log( this.data['id'] );
                     setTimeout(() => {
-                        this.router.navigate(['/financial/invoice/detail/' + this.data['invoice_id']]);
+                        this.router.navigate(['/financial/credit-memo/view/' + this.data['id']]);
                     }, 500);
 
                 } else {

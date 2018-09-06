@@ -10,6 +10,10 @@ export class CreditMemoService {
         const url = 'credit-memo/list';
         return this.API.get(url, params);
     }
+    getListStatusCredit() {
+        const url = ['credit-memo', 'status-list'].join('/');
+        return this.API.get(url);
+    }
 
     getListInvoiceItemsRef() {
         const url = 'ar-invoice/getItemInfo';
@@ -61,9 +65,9 @@ export class CreditMemoService {
         return this.API.put(url, params);
     }
 
-    updateInvoiceStatus(id, params) {
-        const url = 'ar-invoice/change-status/' + id;
-        return this.API.put(url, params);
+    updateCreditStatus(params) {
+        const url = 'credit-memo/change-status';
+        return this.API.post(url, params);
     }
 
     deleteInvoice(id) {
@@ -98,7 +102,25 @@ export class CreditMemoService {
         return this.API.get(url);
     }
     sendMail(id, params) {
-        const url = 'ar-invoice/send-email/' + id;
+        const url = 'credit-memo/send-email/' + id;
+        return this.API.post(url, params);
+    }
+    reopenCredit(id) {
+        const url = 'credit-memo/re-open/' + id;
+        return this.API.get(url);
+    }
+
+    // Apply Credit For Invoice
+    getDataForApplyById(credit_id) {
+        const url = ['credit-apply', 'credit-detail', credit_id].join('/');
+        return this.API.get(url);
+    }
+    getTableDataInvoiceById(customer_id, params) {
+        const url = ['credit-apply', 'get-data', customer_id].join('/');
+        return this.API.get(url, params);
+    }
+    applyCreditForInvoice(credit_id, params) {
+        const url = ['credit-apply', 'apply', credit_id].join('/');
         return this.API.post(url, params);
     }
 }

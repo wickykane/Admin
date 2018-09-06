@@ -27,7 +27,7 @@ export class CreditMemoDetailComponent implements OnInit {
      */
 
     public data = {};
-    public invoiceId;
+    public creditId;
 
 
     /**
@@ -48,7 +48,7 @@ export class CreditMemoDetailComponent implements OnInit {
 
     ngOnInit() {
         this.data['id'] = this.route.snapshot.paramMap.get('id');
-        this.invoiceId = this.data['id'];
+        this.creditId = this.data['id'];
     }
     /**
      * Mater Data

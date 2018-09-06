@@ -42,6 +42,7 @@ export class CreditMemoEditComponent implements OnInit {
     public data = {};
     public clone_items = [];
     public items_removed = [];
+    public firstChanged = false;
 
     public messageConfig = {
         '2': 'Are you sure that you want to save & submit this quotation to approver?',
@@ -137,6 +138,7 @@ export class CreditMemoEditComponent implements OnInit {
         await this.getListPaymentMethod();
         await this.getListPaymentTerm();
         await this.getListAccountGL();
+        this.getGenerateCode();
 
         //  Item
         this.list.items = [];
@@ -193,15 +195,20 @@ export class CreditMemoEditComponent implements OnInit {
             });
         });
     }
+    getGenerateCode() {
+        this.creditMemoService.getGenerateCode().subscribe(res => {
+            this.listMaster['documentType'] = res.data.document_type;
+        });
+    }
     getDetailCreditMemo() {
         this.creditMemoService.getDetailCreditMemo(this.data['id']).subscribe(res => {
             try {
                 const data = res.data;
-                // this.data['invoice'] = data;
                 this.generalForm.patchValue(data);
                 this.list.items = data.items;
                 // this.updateTotal();
                 this.changeCustomer(1);
+                this.changeInvoice(event);
 
                 // Lazy Load filter
                 const params = { page: this.data['page'], length: 15 };
@@ -247,12 +254,14 @@ export class CreditMemoEditComponent implements OnInit {
 
     changeInvoice(event) {
         this.creditMemoService.getDetailInvoice(this.generalForm.value.document_id).subscribe(res => {
-            this.list.items = res.data.inv_detail.map(item => {
-                item.quantity = item.qty_inv;
-                return item;
-            });
-            this.clone_items = _.cloneDeep(this.list.items);
-            console.log(this.clone_items);
+            if (this.firstChanged) {
+                this.list.items = res.data.inv_detail.map(item => {
+                    item.quantity = item.qty_inv;
+                    return item;
+                });
+                this.clone_items = _.cloneDeep(this.list.items);
+            }
+            this.firstChanged = true;
 
             this.data['order_detail'] = res.data;
             this.data['shipping_address'] = res.data.shipping_address;
