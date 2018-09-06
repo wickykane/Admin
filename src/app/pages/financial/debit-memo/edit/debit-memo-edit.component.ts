@@ -58,6 +58,8 @@ export class DebitMemoEditComponent implements OnInit {
 
     public isClickedSave = false;
     public isSaveDraft = false;
+    public isCreateNew = false;
+    public isReSelectOrder = false;
     public data = {};
 
     public decimalAllowed = 2;
@@ -232,6 +234,9 @@ export class DebitMemoEditComponent implements OnInit {
                     this.debitMemoForm.controls.sale_person_id.setValue(res.data.sale_person_id);
                     this.debitMemoForm.controls.approver_id.setValue(res.data.approver_id);
 
+                    this.debitMemoForm.controls.payment_method_id.setValue(res.data.payment_method_id);
+                    this.debitMemoForm.controls.payment_term_id.setValue(res.data.payment_term_id);
+
                     this.debitMemoForm.controls.billing_id.setValue(res.data.bill_addr.id);
                     this.debitMemoForm.controls.shipping_id.setValue(res.data.ship_addr.id);
                     // this.debitMemoForm.controls.carrier_id.setValue(res.data.carrier.id);
@@ -263,7 +268,11 @@ export class DebitMemoEditComponent implements OnInit {
             res => {
                 try {
                     if (!this.listLineItems.length) {
-                        this.listDeletedLineItem =  [ ...res.data.items, ...res.data.misc];
+                        if (this.isReSelectOrder) {
+                            this.listLineItems = [ ...res.data.items, ...res.data.misc];
+                        } else {
+                            this.listDeletedLineItem =  [ ...res.data.items, ...res.data.misc];
+                        }
                         // this.listLineItems.forEach( item => this.onCalculateAmount(item));
                     } else {
                         res.data.items.forEach( item => {
@@ -373,17 +382,36 @@ export class DebitMemoEditComponent implements OnInit {
     }
 
     onSelectCustomer() {
-        if (this.debitMemoForm.value.company_id) {
-            this.contactDetail = {};
-            this.listLineItems = [];
-            this.listDeletedLineItem = [];
-            this.listTaxs = [];
-            this.debitMemoForm.controls.contact_id.reset();
-            this.debitMemoForm.controls.order_id.reset();
-            this.getUniqueTaxItemLine();
+        this.contactDetail = {};
+        this.listLineItems = [];
+        this.listDeletedLineItem = [];
+        this.listTaxs = [];
+        this.debitMemoForm.patchValue({
+            contact_id: null,
+            order_id: null,
+
+            payment_method_id: null,
+            payment_term_id: null,
+            due_date: null,
+            sale_person_id: null,
+            approver_id: null,
+
+            billing_id: null,
+            shipping_id: null,
+
+            sub_total_price: 0,
+            tax: 0,
+            total_price: 0
+        });
+        this.getUniqueTaxItemLine();
+        if (this.debitMemoForm.value.company_id !== null && this.debitMemoForm.value.company_id !== undefined) {
             this.getCustomerContacts(this.debitMemoForm.value.company_id);
             this.getListOrder(this.debitMemoForm.value.company_id);
             this.getListBillOfCustomer(this.debitMemoForm.value.company_id);
+        } else {
+            this.listMaster['contacts'] = [];
+            this.listMaster['sale_orders'] = [];
+            this.listMaster['bill_labels'] = [];
         }
     }
 
@@ -392,6 +420,7 @@ export class DebitMemoEditComponent implements OnInit {
     }
 
     onSelectOrder(orderId) {
+        this.isReSelectOrder = true;
         this.listLineItems = [];
         this.listDeletedLineItem = [];
         this.listTaxs = [];
@@ -462,7 +491,7 @@ export class DebitMemoEditComponent implements OnInit {
         const modalRef = this.modalService.open(MiscItemsDebitModalContent, {
             size: 'lg'
         });
-        modalRef.componentInstance.setIgnoredItems = this.listDeletedLineItem.
+        modalRef.componentInstance.setIgnoredItems = this.listLineItems.
             filter(item => item.misc_id !== undefined && item.misc_id !== null).map(item => item.misc_id);
         modalRef.result.then(res => {
             if (res) {
@@ -485,22 +514,26 @@ export class DebitMemoEditComponent implements OnInit {
         switch (saveMethod) {
             case 'draft': {// Save as Draft
                 this.isSaveDraft = true;
+                this.isCreateNew = false;
                 this.onSaveDebitMemo(status);
                 break;
             }
             case 'create': {// Create New
                 this.isSaveDraft = false;
-                if (this.validateData()) { this.onSaveDebitMemo(status); }
+                this.isCreateNew = true;
+                this.onSaveDebitMemo(status);
                 break;
             }
             case 'submit': {// Save & Submit
                 this.isSaveDraft = false;
+                this.isCreateNew = false;
                 status = 2;
                 modalMessage = 'Are you sure that you want to save & submit the debit memo to approver?';
                 break;
             }
             case 'validate': {// Save & Validate
                 this.isSaveDraft = false;
+                this.isCreateNew = false;
                 status = 3;
                 modalMessage = 'Are you sure that you want to Save & Validate the credit memo?';
                 break;
@@ -512,8 +545,10 @@ export class DebitMemoEditComponent implements OnInit {
             modalRef.componentInstance.yesButtonText = 'YES';
             modalRef.componentInstance.noButtonText = 'NO';
             modalRef.result.then(yes => {
-                if (yes && this.validateData()) {
+                if (yes && this.validateData() && this.listLineItems.length) {
                      this.onSaveDebitMemo(status);
+                } else if (!this.listLineItems.length) {
+                    this.toastr.warning('Please select at least 1 item to continue.');
                 }
             }, dismiss => { });
         }
@@ -589,9 +624,9 @@ export class DebitMemoEditComponent implements OnInit {
     }
 
     handleSaveSuccessfully(status, debitId) {
-        if (status === 1 && !this.isSaveDraft) {
-            window.location.reload();
-        } else if (status !== 1) {
+        if (status === 1) {
+            this.isCreateNew ? window.location.reload() : this.router.navigate(['/financial/debit-memo/view', debitId]);
+        } else {
             this.router.navigate(['/financial/debit-memo/view', debitId]);
         }
     }
