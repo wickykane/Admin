@@ -162,15 +162,17 @@
                                         <td class="text-center">{{item.delivery_date | date:'MM/dd/yyyy'}}</td>
                                         <td class="text-center">{{item.total_price | currency}}</td>
                                         <td>
-                                            <span class="label label-draft" *ngIf="item.sts_code == 'NW'">{{item.sts}}</span>
-                                            <span class="label label-warning" *ngIf="item.sts_code == 'SM'">{{item.sts}}</span>
-                                            <span class="label label-draft" *ngIf="item.sts_code == 'PP'">{{item.sts}}</span>
-                                            <span class="label  label-success" *ngIf="item.sts_code == 'CP'">{{item.sts}}</span>
-                                            <span class="label  label-success" *ngIf="item.sts_code == 'AP'">{{item.sts}}</span>
-                                            <span class="label label-draft" *ngIf="item.sts_code == 'RS'">{{item.sts}}</span>
-                                            <span class="label  label-draft" *ngIf="item.sts_code == 'DL'">{{item.sts}}</span>
-                                            <span class="label label-danger" *ngIf="item.sts_code == 'RJ'">{{item.sts}}</span>
-                                            <span class="label  label-draft" *ngIf="item.sts_code == 'Draft'">{{item.sts}}</span>
+                                            <span class="label blue" *ngIf="item.sts_code == 'NW'">{{item.sts}}</span>
+                                            <span class="label texas-rose" *ngIf="item.sts_code == 'SM'">{{item.sts}}</span>
+                                            <span class="label strong-green" *ngIf="item.sts_code == 'AP'">{{item.sts}}</span>
+                                            <span class="label rock-blue" *ngIf="item.sts_code == 'IP'">{{item.sts}}</span>
+                                            <span class="label green" *ngIf="item.sts_code == 'PP'">{{item.sts}}</span>
+                                            <span class="label darkblue" *ngIf="item.sts_code == 'RS'">{{item.sts}}</span>
+                                            <span class="label pink" *ngIf="item.sts_code == 'DL'">{{item.sts}}</span>
+                                            <span class="label bright-grey" *ngIf="item.sts_code == 'PD'">{{item.sts}}</span>
+                                            <span class="label lemon" *ngIf="item.sts_code == 'CP'">{{item.sts}}</span>
+                                            <span class="label magenta" *ngIf="item.sts_code == 'RJ'">{{item.sts}}</span>
+                                            <span class="label red" *ngIf="item.sts_code == 'CC'">{{item.sts}}</span>
                                         </td>
                                         <td class="text-nowrap">
                                             <button ngbTooltip="Submit" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" (click)="confirmModal(item.id, 'SM')"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></button>
