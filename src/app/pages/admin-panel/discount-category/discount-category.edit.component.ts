@@ -1,11 +1,13 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, NgModule, OnInit, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 import { TableService } from './../../../services/table.service';
 
 // Services
-import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Form, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import * as _ from 'lodash';
 import { DiscountCategoryService } from './discount-category.service';
 
 
@@ -223,7 +225,14 @@ export class DiscountCategoryEditComponent implements OnInit {
 
     // Product Line
     addNewLine() {
-        this.data['products'].push({});
+        this.data['products'].push({
+            'category_id': '',
+            'sub_category_id': [],
+            'discount': 0,
+            'apply_for': '',
+            'listType': [],
+            'listSubCategory': []
+        });
     }
 
     isEmptyObject(obj) {
