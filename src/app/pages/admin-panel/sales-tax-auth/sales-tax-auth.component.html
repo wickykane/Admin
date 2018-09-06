@@ -191,7 +191,7 @@
                                 <b>Effective Date (*)</b>
                             </label>
                             <div class="input-group" clickOutside (clickOutside)="d&&d.close()">
-                                <input class="form-control" placeholder="yyyy-mm-dd" name="from_dt" [disabled]="newRate === null || newRate === ''"
+                                <input class="form-control" placeholder="mm/dd/yyyy" name="from_dt" [disabled]="newRate === null || newRate === ''"
                                     (click)="d.toggle()" (keydown)="$event.preventDefault()" (dateSelect)="checkEffectiveDate()"
                                     formControlName="effective_date" ngbDatepicker #d="ngbDatepicker">
                                 <div class="input-group-append">
