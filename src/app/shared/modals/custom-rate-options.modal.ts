@@ -97,8 +97,9 @@ export class CustomRateOptionsModalComponent implements OnInit, OnDestroy {
         }
 
     }
-    addNewRange() {
-        this.ranges.push({ 'lbs_from': '0', 'lbs_to': '0', 'shipping_fee': '0' });
+    addNewRange(lbs_to) {
+        console.log(lbs_to);
+        this.ranges.push({ 'lbs_from': lbs_to, 'lbs_to': parseFloat(lbs_to)+40.00, 'shipping_fee': '8.00' });
     }
     removeRangeItem(index) {
         this.ranges.splice(index, 1);
@@ -115,8 +116,15 @@ export class CustomRateOptionsModalComponent implements OnInit, OnDestroy {
                 break;
                 
             }
-            else{
+            if(this.ranges[i].lbs_to >= this.ranges[i].lbs_from){
                 this.isSave =true;
+            }
+            if((i>0 && i<this.ranges.length)&&this.ranges[i-1].lbs_to>this.ranges[i].lbs_from){
+                this.isSave =false;
+                break;
+            }
+            if((i>0 && i<this.ranges.length)&&this.ranges[i-1].lbs_to<this.ranges[i].lbs_from){
+            this.isSave = true;
             }
 
         }
