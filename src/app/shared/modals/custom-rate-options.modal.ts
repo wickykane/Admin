@@ -116,8 +116,15 @@ export class CustomRateOptionsModalComponent implements OnInit, OnDestroy {
                 break;
                 
             }
-            else{
+            if(this.ranges[i].lbs_to >= this.ranges[i].lbs_from){
                 this.isSave =true;
+            }
+            if((i>0 && i<this.ranges.length)&&this.ranges[i-1].lbs_to>this.ranges[i].lbs_from){
+                this.isSave =false;
+                break;
+            }
+            if((i>0 && i<this.ranges.length)&&this.ranges[i-1].lbs_to<this.ranges[i].lbs_from){
+            this.isSave = true;
             }
 
         }
