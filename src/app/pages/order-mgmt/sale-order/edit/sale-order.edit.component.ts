@@ -184,6 +184,7 @@ export class SaleOrderEditComponent implements OnInit {
                 this.generalForm.patchValue({
                     order_number: data.code,
                     ship_method_rate: +data.ship_method_rate,
+                    ship_method_option: +data.ship_method_option,
                 });
 
 
