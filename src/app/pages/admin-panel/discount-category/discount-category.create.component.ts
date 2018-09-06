@@ -93,10 +93,12 @@ export class DiscountCategoryCreateComponent implements OnInit {
             if (id === obj.category_id) {
                 item.listSubCategory = obj['sub_categories'];
                 this.initDisabledType(item.listSubCategory);
-                item.listType = [{ id: 1, value: 'All', disabled: false }, { id: 2, value: 'Specific', disabled: false }];
+                item.listType = [];
+                item.listType = [...item.listType, { id: 1, value: 'All', disabled: false }, { id: 2, value: 'Specific', disabled: false }];
 
             }
         });
+        console.log(item);
     }
 
 
@@ -136,7 +138,12 @@ export class DiscountCategoryCreateComponent implements OnInit {
                 }
             });
         });
-
+        this.data['products'].map(obj => {
+            if (item.category_id === obj.category_id) {
+                item.listSubCategory = [...obj.listSubCategory];
+                obj.listSubCategory = [...item.listSubCategory];
+            }
+        });
     }
 
     changeCategory(id, item) {
@@ -144,12 +151,14 @@ export class DiscountCategoryCreateComponent implements OnInit {
             if (this.listCheckSubCat.indexOf(id) !== -1) {
                 this.data['products'].map(obj => {
                     if (id === obj.category_id) {
-                        item.listSubCategory = obj.listSubCategory;
+                        item.listSubCategory = [...obj.listSubCategory];
+                        obj.listSubCategory = [...item.listSubCategory];
                     }
                 });
                 this.listCheckType.map(obj => {
                     if (id === obj.category_id) {
-                        item.listType = obj.listType;
+                        item.listType = [...obj.listType];
+                        obj.listType = [...item.listType];
                     }
                 });
 
@@ -178,12 +187,19 @@ export class DiscountCategoryCreateComponent implements OnInit {
     }
 
     removeSelected(value: any, sub_category_id, item) {
+        console.log(item);
         item.listSubCategory.map(obj => {
             if (value.value.category_id === obj['category_id']) {
                 obj['disabled'] = false;
             }
         });
-
+        console.log(this.data['products']);
+        this.data['products'].map(obj => {
+            if (item.category_id === obj.category_id) {
+                item.listSubCategory = [...obj.listSubCategory];
+                obj.listSubCategory = [...item.listSubCategory];
+            }
+        });
 
     }
 
@@ -237,10 +253,6 @@ export class DiscountCategoryCreateComponent implements OnInit {
             this.data['products'].splice(index, 1);
 
         }
-        console.log(this.data['products']);
-        console.log(item);
-        console.log(this.listCheckSubCat);
-        console.log(this.listCheckType);
 
     }
 

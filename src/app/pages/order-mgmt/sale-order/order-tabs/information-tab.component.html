@@ -43,7 +43,7 @@
 
                                      </label>
                                      <div class='col-6'>
-                                        {{detail['sale_quote_cd']}}
+                                          <button style="padding-left:0px" class="btn btn-link" [routerLink]="['/order-management/sale-quotation/detail', detail['sale_quote_id']]">{{detail['sale_quote_cd']}}</button>
                                      </div>
                                   </div>
                                   <div class="form-group row">
@@ -117,7 +117,7 @@
                        <div class="form-group row">
                           <label class="control-label col-5" translate>Customer Name</label>
                           <div class="col-7">
-                             {{detail.billing['buyer_name']}}
+                             {{detail['buyer_name']}}
                           </div>
                        </div>
                     </div>
@@ -326,19 +326,20 @@
                       <thead>
                          <tr>
                             <!-- <th style="width:100px" translate>Action</th> -->
-                            <th style="width:70px" translate>Item No</th>
+                            <th translate>Item No</th>
                             <th translate>Description</th>
                             <th translate>Condition</th>
                             <th translate>UOM</th>
                             <th translate>Free Ship</th>
-                            <th translate style="width:100px">Avail QTY</th>
                             <th class="text-nowrap" style="width:100px" translate>Order QTY</th>
+                            <th translate style="width:100px">Shipped QTY</th>
+                            <th translate style="width:100px">Return QTY</th>
                             <th class="text-center" style="width:100px" translate>Unit Price</th>
                             <th style="width:100px" translate>Disc %</th>
                             <th style="width:100px" translate>Tax %</th>
                             <th translate style="width:100px">Amount</th>
                             <th translate style="width:100px">G/L Account</th>
-                            <!-- <th translate style="width:100px">Price Source</th> -->
+                            <th translate style="width:100px">Price Source</th>
                          </tr>
                       </thead>
                       <tr *ngIf="detail['subs'].length === 0">
@@ -355,10 +356,11 @@
                             <td class="text-center">
                                 <i *ngIf="item.is_shipping_free" class="text-success fa fa-check"></i>
                             </td>
-                            <td>{{item.qty_available}}</td>
                             <td>
                                <input readonly [disabled]="item.is_misc" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (change)="updateTotal()" (keypress)="_keyPress($event)">
                             </td>
+                            <td>{{item.qty_shipped}}</td>
+                            <td>0</td>
                             <td>
                                <div>
                                   <span>$</span>
@@ -379,11 +381,11 @@
                             <td>
                                 {{ item.income_account_name }}
                             </td>
-                            <!-- <td class="text-center">
+                            <td class="text-center">
                                <span>
                                {{item.source_name}}
                                </span>
-                            </td> -->
+                            </td>
                          </tr>
                       </tbody>
                       </table>
@@ -407,42 +409,61 @@
                 </div>
              </div>
           </div>
-          <div class="col-md-2">
+
+          <div class="col-md-4 p-l-5 p-r-2">
              <div class="card height-100">
                 <div class="card-header">
                    <strong>Order Summary</strong>
                 </div>
                 <div class="card-body">
-                   <div class="row">
-                      <div class="col-12">
-                         <div class="form-group row">
-                            <label class='col-7 control-label'>Total Items</label>
-                            <div class='col-5'>
-                               <span class="text-success">{{ detail['total_item'] || 0}}</span>
+                   <div class="row information height-100">
+                      <div class="col-md-12 fix-padding">
+                         <div class="row">
+                            <div class="col-md-6 customer-infomation">
+                                  <div class="form-group row">
+                                     <label class='col-7'>Total Items</label>
+                                     <div class='col-5'>
+                                        {{ detail['total_item'] || 0}}
+                                     </div>
+                                  </div>
+                                  <div class="form-group row">
+                                     <label class='col-7'>Total Weight</label>
+                                     <div class='col-5'>
+                                       {{ (detail['total_weight'] || 0)}} lbs
+                                     </div>
+                                  </div>
+                                  <div class="form-group row">
+                                     <label class='col-7'>Original Shipping Cost </label>
+                                     <div class='col-5'>
+                                        {{ (detail['original_ship_cost'] || 0) | currency}}
+                                     </div>
+                                  </div>
+                                  <div class="form-group row">
+                                     <label class='col-7'>Total Returned Items</label>
+                                     <div class='col-5'>
+                                        0
+                                     </div>
+                                  </div>
                             </div>
-                         </div>
-                         <div class="form-group row">
-                            <label class='col-7 control-label'>Total COGS</label>
-                            <div class='col-5'>
-                               <span class="text-success">{{ (detail['total_cogs'] || 0) | currency}}</span>
-                            </div>
-                         </div>
-                         <div class="form-group row">
-                            <label class='col-7 control-label'>Total Weight</label>
-                            <div class='col-5'>
-                               <span class="text-success">{{ (detail['total_weight'] || 0)}} lbs</span>
-                            </div>
-                         </div>
-                         <div class="form-group row">
-                            <label class='col-7 control-label'>Total Volume</label>
-                            <div class='col-5'>
-                               <span class="text-success">{{ (detail['total_vol'] || 0)}} CBM</span>
-                            </div>
-                         </div>
-                         <div class="form-group row">
-                            <label class='col-7 control-label'>Original Shipping Cost</label>
-                            <div class='col-5'>
-                               <span class="text-success">{{ (detail['original_ship_cost'] || 0) | currency}}</span>
+                            <div class="col-md-6 customer-infomation bolder">
+                                  <div class="form-group row">
+                                     <label class='col-7'>Total COGS</label>
+                                     <div class='col-5'>
+                                        {{ (detail['total_cogs'] || 0) | currency}}
+                                     </div>
+                                  </div>
+                                  <div class="form-group row">
+                                     <label class='col-7'>Total Volume</label>
+                                     <div class='col-5'>
+                                        {{ (detail['total_vol'] || 0)}} CBM
+                                     </div>
+                                  </div>
+                                  <div class="form-group row">
+                                     <label class='col-7'>Total Shipped Items </label>
+                                     <div class='col-5'>
+                                          {{detail['qty_shipped']}}
+                                     </div>
+                                  </div>
                             </div>
                          </div>
                       </div>
@@ -479,6 +500,30 @@
                              <div class="col-6 offset-md-1 ">
                                  <strong>{{detail['total_price'] | currency}}</strong>
                              </div>
+                         </div>
+                         <div class="form-group row">
+                            <label class='col-5 control-label'>
+                            <strong>Total Paid</strong>
+                            </label>
+                            <div class='col-6 offset-md-1 padding-lr-10'>
+                               <strong>$0.00</strong>
+                            </div>
+                         </div>
+                         <div class="form-group row">
+                            <label class='col-5 control-label'>
+                            <strong>Total Refunded</strong>
+                            </label>
+                            <div class='col-6 offset-md-1 padding-lr-10'>
+                               <strong>$0.00</strong>
+                            </div>
+                         </div>
+                         <div class="form-group row">
+                            <label class='col-5 control-label'>
+                            <strong>Total Due</strong>
+                            </label>
+                            <div class='col-6 offset-md-1 padding-lr-10'>
+                               <strong>$0.00</strong>
+                            </div>
                          </div>
                       </div>
                    </div>

@@ -220,19 +220,58 @@ export class SaleOrderEditComponent implements OnInit {
         });
     }
 
+    // getDetailCustomerById(buyer_id, flag?) {
+    //     this.orderService.getDetailCompany(buyer_id).subscribe(res => {
+    //         try {
+    //             this.customer = res.data;
+    //             // if (res.data.buyer_type === 'PS') {
+    //                 this.addr_select.contact = res.data.contact[0];
+    //                 this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
+    //             // }
+    //
+    //             if (flag) {
+    //                 this.selectAddress('billing', flag);
+    //                 this.selectAddress('shipping', flag);
+    //             }
+    //         } catch (e) {
+    //             console.log(e);
+    //         }
+    //     });
+    // }
+
     getDetailCustomerById(buyer_id, flag?) {
         this.orderService.getDetailCompany(buyer_id).subscribe(res => {
             try {
                 this.customer = res.data;
                 // if (res.data.buyer_type === 'PS') {
-                    this.addr_select.contact = res.data.contact[0];
-                    this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
+                this.addr_select.contact = res.data.contact[0];
+                this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
                 // }
+                if (!flag) {
+                    const default_billing = (this.customer.billing || []).find(item => item.set_default) || {};
+                    const default_shipping = (this.customer.shipping || []).find(item => item.set_default) || {};
+                    this.generalForm.patchValue({
+                        billing_id: default_billing.address_id || null,
+                        shipping_id: default_shipping.address_id || null,
+                        payment_method_id: this.customer.payment_method_id || null,
+                        payment_term_id: this.customer.payment_term_id || null,
+                    });
+
+                    if (default_billing) {
+                        this.selectAddress('billing', flag);
+                    }
+
+                    if (default_shipping) {
+                        this.selectAddress('shipping', flag);
+                    }
+                }
 
                 if (flag) {
                     this.selectAddress('billing', flag);
                     this.selectAddress('shipping', flag);
                 }
+
+
             } catch (e) {
                 console.log(e);
             }
@@ -410,6 +449,9 @@ export class SaleOrderEditComponent implements OnInit {
     }
 
     changeFromSource(item) {
+        if (+item.source_id === 3) {
+            return;
+        }
         item.source_id = 2;
         item.source_name = 'Manual';
     }
@@ -536,13 +578,16 @@ export class SaleOrderEditComponent implements OnInit {
             'items': this.list.items.filter(item => !item.misc_id)
         };
         this.orderService.getTaxShipping(params).subscribe(res => {
+            console.log(this.list.items);
             const old_misc = this.list.items.filter(item => item.misc_id && +item.source_id !== 3);
+            console.log(old_misc);
             const items = res.data.items;
             const misc = res.data.mics.map(item => {
                 item.is_misc = 1;
                 item.misc_id = item.id;
                 return item;
             });
+            console.log(misc);
             this.list.items = items.concat(misc, old_misc);
 
             // Assign tax to all item
@@ -690,10 +735,10 @@ export class SaleOrderEditComponent implements OnInit {
         this.orderService.updateOrder(params, this.route.snapshot.paramMap.get('id')).subscribe(res => {
             try {
                 // if (res.status) {
-                    this.toastr.success(res.message);
-                    setTimeout(() => {
-                        this.router.navigate(['/order-management/sale-order']);
-                    }, 500);
+                this.toastr.success(res.message);
+                setTimeout(() => {
+                    this.router.navigate(['/order-management/sale-order']);
+                }, 500);
                 // } else {
                 //     this.toastr.error(res.message);
                 // }

@@ -23,7 +23,7 @@ import { PickupOptionsModalComponent } from '../../../../shared/modals/pickup-op
 @Component({
     selector: 'app-create-shipping-zone',
     templateUrl: './shipping-zone.create.component.html',
-    styleUrls: ['../shipping-zone.component.scss'],
+    styleUrls: ['../shipping-zone.component.scss', './shipping-zone.create.component.scss'],
     animations: [routerTransition()],
     providers: [DatePipe, RMACreateKeyService, CommonService]
 })
@@ -37,8 +37,10 @@ export class ShippingZoneCreateComponent implements OnInit {
     public listShipping = [];
     public listCountry = [];
     public tempListCountry = [];
+    public tempListState = [];
     public listMasterData = {};
     public countryFilter = '';
+    public stateFilter = '';
     public listSelectCountry = [];
     public freeShippingList = {
         'free_shipping_item': 0,
@@ -103,7 +105,8 @@ export class ShippingZoneCreateComponent implements OnInit {
         "handling_fee": '0.00',
         'id':'6'
     }
-    
+    public selectedCountry = null;
+
     public pickupStoreList = [];
     constructor(
         public keyService: RMACreateKeyService,
@@ -176,6 +179,9 @@ export class ShippingZoneCreateComponent implements OnInit {
             this.listSelectCountry.push(item);
         }
         else {
+            if (this.selectedCountry.country_id === item.country_id) {
+                this.selectedCountry = null;
+            }
             this.listSelectCountry.forEach((res, index) => {
 
                 if (res.country_id == item.country_id) {
@@ -189,37 +195,38 @@ export class ShippingZoneCreateComponent implements OnInit {
             return item.selected = false;
         });
     }
-    openState(code) {
-        if (this.listMasterData['state'][code]) {
-            const modalRef = this.modalService.open(StateFilterModalComponent);
 
-            modalRef.componentInstance.isEdit = false;
-            modalRef.componentInstance.stateList = this.listMasterData['state'][code];
-            // modalRef.componentInstance.listSelectCountry = this.listMasterData['state'][code];
-            this.listSelectCountry.forEach(item => {
-                if (item.country_code == code) {
-                    modalRef.componentInstance.listSelectCountry = JSON.parse(JSON.stringify(item));
-                }
-            })
-            modalRef.componentInstance.code = code;
-            modalRef.result.then(res => {
-                if (res['code']) {
-                    this.listSelectCountry.forEach(item => {
-                        if (item.country_code == res.code) {
-                            item['state'] = res.state;
-                        }
-                    })
-                }
-    
-    
-            });
-        }
-        else{
-            return false;
-        }
+    filterState(key) {
+        this.selectedCountry.state = this.filterbyfieldName(this.tempListState, "name", key);
+    }
 
+    onCheckCountryState(country) {
+        this.selectedCountry = country;
+        this.tempListState = country.state;
+        // if (this.listMasterData["state"][code]) {
+            // const modalRef = this.modalService.open(StateFilterModalComponent);
 
-
+            // modalRef.componentInstance.isEdit = false;
+            // modalRef.componentInstance.stateList = this.listMasterData["state"][code];
+            // // modalRef.componentInstance.listSelectCountry = this.listMasterData["state"][code];
+            // this.listSelectCountry.forEach(item => {
+            //     if (item.country_code === code) {
+            //         modalRef.componentInstance.listSelectCountry = JSON.parse(JSON.stringify(item));
+            //     }
+            // })
+            // modalRef.componentInstance.code = code;
+            // modalRef.result.then(res => {
+            //     if (res["code"]) {
+            //         this.listSelectCountry.forEach(item => {
+            //             if (item.country_code == res.code) {
+            //                 item["state"] = res.state;
+            //             }
+            //         });
+            //     }
+            // });
+        // } else {
+            // return false;
+        // }
     }
 
     openShippingModal(id) {
@@ -262,7 +269,7 @@ export class ShippingZoneCreateComponent implements OnInit {
             modalRef.componentInstance.typeFreeList = this.listMasterData['type_free'];
             modalRef.componentInstance.upsList = this.listMasterData['ups'];
             modalRef.componentInstance.customer_classificationList = this.listMasterData['customer_classification'];
-            
+
         }
         if (id == "6") {
             modalRef = this.modalService.open(SEFLConfigurationModalComponent);
