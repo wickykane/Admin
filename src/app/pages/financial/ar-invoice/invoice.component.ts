@@ -25,7 +25,6 @@ import { MailModalComponent } from './modals/mail.modal';
     providers: [InvoiceKeyService, HotkeysService, TableService]
 })
 export class InvoiceComponent implements OnInit {
-
     public listMaster = {};
     public listInvoiceItemsRef = [];
     public selectedIndex = 0;
@@ -38,6 +37,7 @@ export class InvoiceComponent implements OnInit {
     searchForm: FormGroup;
 
     public messageConfig = {
+        1: 'Are you sure that you want to reopen the current invoice?',
         2: 'Are you sure that you want to submit the invoice to approver?',
         7: 'Are you sure that you want to cancel current invoice?',
         4: 'Are you sure that you want to approve the current invoice?',
@@ -296,12 +296,15 @@ export class InvoiceComponent implements OnInit {
             headers,
             responseType: 'blob',
         }).subscribe(res => {
-                const file = new Blob([res], { type: 'application/pdf' });
-                const fileURL = URL.createObjectURL(file);
-                const newWindow = window.open(fileURL);
-                newWindow.focus();
+            const file = new Blob([res], { type: 'application/pdf' });
+            const fileUrl = URL.createObjectURL(file);
+            const newWindow = window.open(`/assets/pdfjs/web/viewer.html?openFile=false&fileName=${inv_num}.pdf&file=${encodeURIComponent(fileUrl)}`, '_blank');
+            newWindow.document.title = inv_num;
+            newWindow.focus();
+            setTimeout(() => {
                 newWindow.print();
-            });
+            }, 1000);
+        });
     }
 
     cancelInvoice(item?) {
