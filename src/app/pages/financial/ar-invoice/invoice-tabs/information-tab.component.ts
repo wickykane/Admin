@@ -32,6 +32,7 @@ export class InvoiceInformationTabComponent implements OnInit {
     data = {};
 
     public messageConfig = {
+        1: 'Are you sure that you want to reopen the current invoice?',
         2: 'Are you sure that you want to submit the invoice to approver?',
         7: 'Are you sure that you want to cancel current invoice?',
         4: 'Are you sure that you want to approve the current invoice?',
@@ -67,7 +68,7 @@ export class InvoiceInformationTabComponent implements OnInit {
     /**
      * Internal Function
      */
-    printPDF(id) {
+    printPDF(id, inv_num) {
         const path = 'ar-invoice/print-pdf/';
         const url = `${environment.api_url}${path}${id}`;
         const headers: HttpHeaders = new HttpHeaders();
@@ -76,10 +77,13 @@ export class InvoiceInformationTabComponent implements OnInit {
             responseType: 'blob',
         }).subscribe(res => {
             const file = new Blob([res], { type: 'application/pdf' });
-            const fileURL = URL.createObjectURL(file);
-            const newWindow = window.open(fileURL);
+            const fileUrl = URL.createObjectURL(file);
+            const newWindow = window.open(`/assets/pdfjs/web/viewer.html?openFile=false&fileName=${inv_num}.pdf&file=${encodeURIComponent(fileUrl)}`, '_blank');
+            newWindow.document.title = inv_num;
             newWindow.focus();
-            newWindow.print();
+            setTimeout(() => {
+                newWindow.print();
+            }, 1000);
         });
     }
 

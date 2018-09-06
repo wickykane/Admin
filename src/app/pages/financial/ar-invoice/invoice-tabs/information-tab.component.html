@@ -9,6 +9,7 @@
         <button *ngIf="[4,8].indexOf(detail['invoice_status_id']) != -1" class="btn btn-outline-dark"><i class="fa fa-money" aria-hidden="true"></i> Pay</button>
         <button class="btn btn-outline-dark" (click)="printPDF(_invoiceId)"><i class="fa fa-download" aria-hidden="true"></i> Print</button>
         <button *ngIf="[3,4,6,7,8].indexOf(detail['invoice_status_id']) != -1" class="btn btn-outline-dark" (click)="sendMail(_invoiceId)"><i class="fa fa-envelope-o" aria-hidden="true"></i> Send Mail</button>
+        <!-- <button *ngIf="detail['invoice_status_id'] == 3" class="btn btn-outline-dark" (click)="confirmModal(_invoiceId, 1)"><i class="fa fa-external-link-square" aria-hidden="true"></i> Reopen</button> -->
     </div>
     <section class="rma-page block main-container block-order">
         <div class="row">
@@ -391,7 +392,7 @@
                                         <strong class="text-primary">{{invoice_info.total | currency}}</strong>
                                     </div>
                                 </div>
-                                <div class="form-group row">
+                                <div *ngIf="detail['is_early']" class="form-group row">
                                     <label class='col-6 control-label'>
                                             - Early Payment Incentive
                                             <input readonly *ngIf="!data['is_fixed_early']" (change)="updateTotal()"  [isDecimal]="true" numberDirective [min]="0" [max]="100" style="width: 50px;" class="form-control" [(ngModel)]="invoice_info['incentive_percent']" class="form-control" value="0" type="number">
@@ -404,11 +405,12 @@
                                             </strong>
                                         </div>
                                         <span *ngIf="data['is_fixed_early']">$</span>
-                                        <input style="width: calc(100% - 10px);" readonly (change)="updateTotal()" [ngClass]="{'border border-danger': invoice_info.grand_total < 0 }" *ngIf="data['is_fixed_early']" class="form-control" [(ngModel)]="invoice_info['incentive']" class="form-control" value="0" type="number">
+                                        <input style="width: calc(100% - 10px);" readonly (change)="updateTotal()" [ngClass]="{'border border-danger': invoice_info.grand_total < 0 }" *ngIf="data['is_fixed_early']" class="form-control" [(ngModel)]="invoice_info['incentive']" class="form-control"
+                                            value="0" type="number">
                                         <div *ngIf="invoice_info['expires_dt']" class="p-2 text-danger">Expires {{ invoice_info['expires_dt']}}</div>
                                     </div>
                                 </div>
-                                <div class="form-group row margin-lr-0 text-light bg-danger">
+                                <div *ngIf="detail['is_early']" class="form-group row margin-lr-0 text-light bg-danger">
                                     <label class="col-6 control-label ">
                                             <strong>Adjusted Total Due:</strong>
                                         </label>
