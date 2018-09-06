@@ -3,9 +3,10 @@ import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from './../../../services/table.service';
 
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateParserFormatter, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
+import { NgbDateCustomParserFormatter } from '../../../shared/helper/dateformat';
 
 import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
 
@@ -17,7 +18,7 @@ import * as moment from 'moment';
     templateUrl: './sales-tax-auth.component.html',
     styleUrls: ['./sales-tax-auth.component.scss'],
     animations: [routerTransition()],
-    providers: [SalesTaxAuthService]
+    providers: [SalesTaxAuthService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }]
 })
 export class SalesTaxAuthComponent implements OnInit {
     /**
@@ -321,8 +322,10 @@ export class SalesTaxAuthComponent implements OnInit {
     }
 
     onSelectStateDropdown(selectedState) {
-        const state = this.listMaster.states.find(_ => _.id === selectedState.id );
-        this.stateGeneralForm.controls.state_code.setValue(state.code);
+        if (selectedState) {
+            const state = this.listMaster.states.find(_ => _.id === selectedState.id );
+            this.stateGeneralForm.controls.state_code.setValue(state.code);
+        }
     }
 
     checkEffectiveDate() {
@@ -473,7 +476,7 @@ export class SalesTaxAuthComponent implements OnInit {
         this.selectedStateTax = {};
         this.stateGeneralForm.reset();
         this.stateRateForm.reset();
-        this.stateRateForm.controls.effective_date.setValue(moment().format('YYYY-MM-DD'));
+        this.stateRateForm.controls.effective_date.setValue(this.todayDate);
     }
 
     validateCountryGeneralForm() {
