@@ -7,7 +7,6 @@ import { TableService } from '../../../../services/table.service';
 import { ShippingZoneService } from '../shipping-zone.service';
 import { ShippingZoneKeyService } from './keys.control';
 import { CommonService } from './../../../../services/common.service';
-import { ItemsControl } from '../../../../../../node_modules/@ngu/carousel/src/ngu-carousel/ngu-carousel.interface';
 @Component({
     selector: 'app-shipping-zone',
     templateUrl: './shipping-zone.component.html',
@@ -31,7 +30,7 @@ export class ShippingZoneComponent implements OnInit {
 
     public user: any;
     public listMoreFilter: any = [];
-    public countryList:any;
+    public countryList: any;
     searchForm: FormGroup;
 
     constructor(public router: Router,
@@ -46,8 +45,8 @@ export class ShippingZoneComponent implements OnInit {
 
         this.searchForm = fb.group({
             'zone_name': [null],
-            'country_code':[null],
-            'status':[null]
+            'country_code': [null],
+            'status': [null]
         });
 
         // Assign get list function name, override letiable here
@@ -103,16 +102,16 @@ export class ShippingZoneComponent implements OnInit {
             }
         });
     }
-    createShippingZone(){
+    createShippingZone() {
         console.log('open createShipping');
         // setTimeout(() => {
         this.router.navigate(['/admin-panel/shipping-zone/create']);
         // },500);
     }
-    openPage(id){
-        this.router.navigate(['/admin-panel/shipping-zone/edit/'+id]);
+    openPage(id) {
+        this.router.navigate(['/admin-panel/shipping-zone/edit/' + id]);
     }
-    openViewPage(id){
-        this.router.navigate(['/admin-panel/shipping-zone/view/'+id]);
+    openViewPage(id) {
+        this.router.navigate(['/admin-panel/shipping-zone/view/' + id]);
     }
 }

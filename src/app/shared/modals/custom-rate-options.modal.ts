@@ -26,7 +26,7 @@ export class CustomRateOptionsModalComponent implements OnInit, OnDestroy {
     hotkeyCtrlLeft: Hotkey | Hotkey[];
     hotkeyCtrlRight: Hotkey | Hotkey[];
     ranges: any = [];
-    isSave =false;
+    isSave = false;
     constructor(public fb: FormBuilder,
         public router: Router,
         public toastr: ToastrService,
@@ -38,13 +38,13 @@ export class CustomRateOptionsModalComponent implements OnInit, OnDestroy {
         public activeModal: NgbActiveModal) {
 
         this.generalForm = fb.group({
-            "name": ['', Validators.required],
-            "type": [''],
-            "shipping_fee": [''],
-            "fee_type": [''],
-            "handling_fee": [''],
-            "id": "3",
-            "charge_shipping": "",
+            'name': ['', Validators.required],
+            'type': [''],
+            'shipping_fee': [''],
+            'fee_type': [''],
+            'handling_fee': [''],
+            'id': '3',
+            'charge_shipping': '',
             // 'ranges':[this.fb.array([])]
         });
 
@@ -57,11 +57,10 @@ export class CustomRateOptionsModalComponent implements OnInit, OnDestroy {
             this.generalForm.patchValue(this.customRateList);
             this.ranges = this.customRateList.ranges;
         }
-        if(this.isView){
+        if (this.isView) {
             this.generalForm.disable();
-        }
-        else{
-            this.isView =false;
+        } else {
+            this.isView = false;
         }
     }
 
@@ -84,22 +83,21 @@ export class CustomRateOptionsModalComponent implements OnInit, OnDestroy {
         console.log(this.generalForm.value);
         this.checkRanges();
         console.log(this.isSave);
-        if(this.isSave==true){
-        var params = Object.assign({},this.generalForm.value);
-        params['ranges']=this.ranges;
-        this.itemService.checkCondition(params).subscribe(res => {
-            console.log(res);
-            this.activeModal.close({ id: '3', data: params });
-        });
-        }
-        else{
+        if (this.isSave === true) {
+            const params = Object.assign({}, ...this.generalForm.value);
+            params['ranges'] = this.ranges;
+            this.itemService.checkCondition(params).subscribe(res => {
+                console.log(res);
+                this.activeModal.close({ id: '3', data: params });
+            });
+        } else {
             return;
         }
 
     }
     addNewRange(lbs_to) {
         console.log(lbs_to);
-        this.ranges.push({ 'lbs_from': lbs_to, 'lbs_to': parseFloat(lbs_to)+40.00, 'shipping_fee': '8.00' });
+        this.ranges.push({ 'lbs_from': lbs_to, 'lbs_to': parseFloat(lbs_to) + 40.00, 'shipping_fee': '8.00' });
     }
     removeRangeItem(index) {
         this.ranges.splice(index, 1);
@@ -110,21 +108,21 @@ export class CustomRateOptionsModalComponent implements OnInit, OnDestroy {
         //             break;
         //         }
         //     });
-        for (var i = 0; i < this.ranges.length; i++) {
+        for (let i = 0; i < this.ranges.length; i++) {
             if (this.ranges[i].lbs_to < this.ranges[i].lbs_from) {
-                this.isSave =false;
+                this.isSave = false;
                 break;
-                
+
             }
-            if(this.ranges[i].lbs_to >= this.ranges[i].lbs_from){
-                this.isSave =true;
+            if (this.ranges[i].lbs_to >= this.ranges[i].lbs_from) {
+                this.isSave = true;
             }
-            if((i>0 && i<this.ranges.length)&&this.ranges[i-1].lbs_to>this.ranges[i].lbs_from){
-                this.isSave =false;
+            if ((i > 0 && i < this.ranges.length) && this.ranges[i - 1].lbs_to > this.ranges[i].lbs_from) {
+                this.isSave = false;
                 break;
             }
-            if((i>0 && i<this.ranges.length)&&this.ranges[i-1].lbs_to<this.ranges[i].lbs_from){
-            this.isSave = true;
+            if ((i > 0 && i < this.ranges.length) && this.ranges[i - 1].lbs_to < this.ranges[i].lbs_from) {
+                this.isSave = true;
             }
 
         }
