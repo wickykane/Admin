@@ -138,7 +138,7 @@ export class SaleOrderCreateComponent implements OnInit {
             'description': [null],
             'payment_term_id': [null, Validators.required],
             'approver_id': [null, Validators.required],
-            'carrier_id': [2],
+            'carrier_id': [1],
             'ship_method_rate': [null, Validators.required],
             'ship_method_option': [null]
         });

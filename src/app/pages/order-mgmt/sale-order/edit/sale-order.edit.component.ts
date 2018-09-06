@@ -184,6 +184,7 @@ export class SaleOrderEditComponent implements OnInit {
                 this.generalForm.patchValue({
                     order_number: data.code,
                     ship_method_rate: +data.ship_method_rate,
+                    ship_method_option: +data.ship_method_option,
                 });
 
 
@@ -269,6 +270,10 @@ export class SaleOrderEditComponent implements OnInit {
                 if (flag) {
                     this.selectAddress('billing', flag);
                     this.selectAddress('shipping', flag);
+                }
+
+                if (this.generalForm.value.shipping_id == null) {
+                    this.getShippingReference('');
                 }
 
 

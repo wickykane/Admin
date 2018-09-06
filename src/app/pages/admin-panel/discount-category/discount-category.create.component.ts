@@ -1,11 +1,13 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, NgModule, OnInit, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 import { TableService } from './../../../services/table.service';
 
 // Services
-import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Form, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import * as _ from 'lodash';
 import { DiscountCategoryService } from './discount-category.service';
 
 
@@ -24,7 +26,7 @@ export class DiscountCategoryCreateComponent implements OnInit {
     public generalForm: FormGroup;
     public listMaster = {};
     public data = {};
-    public flagAddress: boolean;
+    public flagAddress = true;
     public listCheckType = [];
     public masterTypeArr = [];
     // public flagSub = false;
@@ -51,6 +53,7 @@ export class DiscountCategoryCreateComponent implements OnInit {
         this.getListStatus();
         this.getListReference();
         this.generateCode();
+        this.addNewLine();
     }
     /**
      * Mater Data
@@ -98,7 +101,6 @@ export class DiscountCategoryCreateComponent implements OnInit {
 
             }
         });
-        console.log(item);
     }
 
 
@@ -178,6 +180,7 @@ export class DiscountCategoryCreateComponent implements OnInit {
                     obj['disabled'] = true;
                 }
             });
+            item['sub_category_id'] = [];
         }
     }
 
@@ -187,13 +190,12 @@ export class DiscountCategoryCreateComponent implements OnInit {
     }
 
     removeSelected(value: any, sub_category_id, item) {
-        console.log(item);
         item.listSubCategory.map(obj => {
             if (value.value.category_id === obj['category_id']) {
                 obj['disabled'] = false;
             }
         });
-        console.log(this.data['products']);
+
         this.data['products'].map(obj => {
             if (item.category_id === obj.category_id) {
                 item.listSubCategory = [...obj.listSubCategory];
@@ -206,7 +208,14 @@ export class DiscountCategoryCreateComponent implements OnInit {
 
     // Product Line
     addNewLine() {
-        this.data['products'].push({});
+        this.data['products'].push({
+            'category_id': '',
+            'sub_category_id': [],
+            'discount': 0,
+            'apply_for': '',
+            'listType': [],
+            'listSubCategory': []
+        });
     }
 
     isEmptyObject(obj) {
@@ -241,13 +250,13 @@ export class DiscountCategoryCreateComponent implements OnInit {
                 });
                 this.data['products'].splice(index, 1);
 
-              if (item.listSubCategory.every(this.isSameAnswer)) {
-                this.data['products'].splice(index, 1);
-                const i = this.listCheckSubCat.indexOf(item.category_id);
-                this.listCheckSubCat.splice(i, 1);
-                this.listCheckType.splice(index, 1);
-                item = {};
-              }
+                if (item.listSubCategory.every(this.isSameAnswer)) {
+                    this.data['products'].splice(index, 1);
+                    const i = this.listCheckSubCat.indexOf(item.category_id);
+                    this.listCheckSubCat.splice(i, 1);
+                    this.listCheckType.splice(index, 1);
+                    item = {};
+                }
             }
         } else {
             this.data['products'].splice(index, 1);
@@ -258,6 +267,7 @@ export class DiscountCategoryCreateComponent implements OnInit {
 
     // create new discount by category
     createDiscountCategory() {
+
         const params = this.generalForm.value;
         params.category_info = this.data['products'];
         this.discountCategoryService.createDiscountCategory(params).subscribe(res => {
