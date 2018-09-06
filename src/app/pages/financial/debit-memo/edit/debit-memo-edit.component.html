@@ -37,7 +37,7 @@
                                                 <div class='col-6 text-primary'>
                                                     <form [formGroup]="debitMemoForm">
                                                         <select class="form-control" formControlName="contact_id" (change)="onSelectContact($event.target.value)"
-                                                            [ngClass]="{'error-field': debitMemoForm.controls.contact_id.invalid && isClickedSave && !isSaveDraft}">
+                                                            [ngClass]="{'error-field': debitMemoForm.controls.contact_id.invalid && isClickedSave && !isSaveDraft && !isCreateNew}">
                                                             <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
                                                             <option *ngFor="let contact of listMaster['contacts']" [value]="contact.id">{{contact['full_name']}}</option>
                                                         </select>
@@ -71,7 +71,7 @@
                                                     <div clickOutside (clickOutside)="d.close()" class="input-group">
                                                         <input class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="issue_date"
                                                             ngbDatepicker #d="ngbDatepicker" (keydown)="$event.preventDefault()"
-                                                            [ngClass]="{'error-field': debitMemoForm.controls.issue_date.invalid && isClickedSave && !isSaveDraft}">
+                                                            [ngClass]="{'error-field': debitMemoForm.controls.issue_date.invalid && isClickedSave && !isSaveDraft && !isCreateNew}">
                                                         <div class="input-group-append">
                                                             <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
                                                                 <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -86,7 +86,7 @@
                                                 </label>
                                                 <div class='col-6 text-primary'>
                                                     <select required class="form-control" id="order_type" formControlName="doc_type"
-                                                        [ngClass]="{'error-field': debitMemoForm.controls.doc_type.invalid && isClickedSave && !isSaveDraft}">
+                                                        [ngClass]="{'error-field': debitMemoForm.controls.doc_type.invalid && isClickedSave && !isSaveDraft && !isCreateNew}">
                                                         <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let type of listMaster['document_types']" [value]="type.id">{{type.name}}</option>
                                                     </select>
@@ -98,7 +98,7 @@
                                                 </label>
                                                 <div class='col-6 text-primary'>
                                                     <select required class="form-control" id="order_type" (change)="onSelectOrder($event.target.value)" formControlName="order_id"
-                                                        [ngClass]="{'error-field': debitMemoForm.controls.order_id.invalid && isClickedSave && !isSaveDraft}">
+                                                        [ngClass]="{'error-field': debitMemoForm.controls.order_id.invalid && isClickedSave && !isSaveDraft && !isCreateNew}">
                                                         <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let type of listMaster['sale_orders']" [value]="type.id">{{type.code}}</option>
                                                     </select>
@@ -118,7 +118,7 @@
                                                 <label class='col-6'>Payment Method<span class="text-danger">(*)</span></label>
                                                 <div class='col-6 text-primary'>
                                                     <select class="form-control" name="payment_method_id" formControlName="payment_method_id"
-                                                        [ngClass]="{'error-field': debitMemoForm.controls.payment_method_id.invalid && isClickedSave && !isSaveDraft}">
+                                                        [ngClass]="{'error-field': debitMemoForm.controls.payment_method_id.invalid && isClickedSave && !isSaveDraft && !isCreateNew}">
                                                         <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let method of listMaster['payment_methods']" [value]="method.id">{{method.name}}</option>
                                                     </select>
@@ -129,7 +129,7 @@
                                                 </label>
                                                 <div class='col-6 text-danger'>
                                                     <select class="form-control" name="payment_term_id" formControlName="payment_term_id" (change)="onUpdateDueDate($event.target.value)"
-                                                        [ngClass]="{'error-field': debitMemoForm.controls.payment_term_id.invalid && isClickedSave && !isSaveDraft}">
+                                                        [ngClass]="{'error-field': debitMemoForm.controls.payment_term_id.invalid && isClickedSave && !isSaveDraft && !isCreateNew}">
                                                         <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let term of listMaster['payment_terms']" [value]="term.id">{{term.des}}</option>
                                                     </select>
@@ -144,7 +144,7 @@
                                                 <label class='col-6'>Salesperson<span class="text-danger">(*)</span></label>
                                                 <div class='col-6 text-primary'>
                                                     <select class="form-control" name="sale_person_id" formControlName="sale_person_id"
-                                                        [ngClass]="{'error-field': debitMemoForm.controls.sale_person_id.invalid && isClickedSave && !isSaveDraft}">
+                                                        [ngClass]="{'error-field': debitMemoForm.controls.sale_person_id.invalid && isClickedSave && !isSaveDraft && !isCreateNew}">
                                                         <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let item of listMaster['sales_person']" [value]="item.id">{{item.full_name}}</option>
                                                     </select>
@@ -155,7 +155,7 @@
                                                 </label>
                                                 <div class='col-6'>
                                                     <select class="form-control" name="approver_id" formControlName="approver_id"
-                                                        [ngClass]="{'error-field': debitMemoForm.controls.approver_id.invalid && isClickedSave && !isSaveDraft}">
+                                                        [ngClass]="{'error-field': debitMemoForm.controls.approver_id.invalid && isClickedSave && !isSaveDraft && !isCreateNew}">
                                                         <option [hidden]="true" [disabled]="false" [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let item of listMaster['approvers']" [value]="item.id">{{item.full_name}}</option>
                                                     </select>
@@ -187,7 +187,7 @@
                                                 <div class="col-7">
                                                     <select required class="form-control" id="billing_to" name="search_type"
                                                         formControlName="billing_id" (change)="onChangeBillTo($event.target.value)"
-                                                        [ngClass]="{'error-field': debitMemoForm.controls.billing_id.invalid && isClickedSave && !isSaveDraft}">
+                                                        [ngClass]="{'error-field': debitMemoForm.controls.billing_id.invalid && isClickedSave && !isSaveDraft && !isCreateNew}">
                                                         <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let label of listMaster['bill_labels']" [value]="label.id">{{label.label}}</option>
                                                     </select>
@@ -365,7 +365,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="col-12 no-padding">
+                        <div class="col-12 no-padding" *ngIf="debitMemoForm.controls.order_id.valid">
                             <button class="btn btn-link" (click)="openModalAddItemsOrder()" translate>
                                 <i class="fa fa-plus"></i> Item From Order
                             </button>
