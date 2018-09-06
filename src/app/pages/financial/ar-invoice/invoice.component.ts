@@ -298,7 +298,7 @@ export class InvoiceComponent implements OnInit {
         }).subscribe(res => {
             const file = new Blob([res], { type: 'application/pdf' });
             const fileUrl = URL.createObjectURL(file);
-            const newWindow = window.open(`/assets/pdfjs/web/viewer.html?openFile=false&fileName=${inv_num}.pdf&file=${encodeURIComponent(fileUrl)}`, '_blank');
+            const newWindow = window.open(`assets/pdfjs/web/viewer.html?openFile=false&fileName=${inv_num}.pdf&file=${encodeURIComponent(fileUrl)}`, '_blank');
             newWindow.document.title = inv_num;
             newWindow.focus();
             setTimeout(() => {
