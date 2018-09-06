@@ -93,8 +93,14 @@
                             <input type="number" [disabled]="isView" [(ngModel)]="item.lbs_from" class="form-control">
                         </div>
                         <div class="col-sm-2">
-                            <input type="text" value="lbs" disabled="true" class="form-control">
+                                <input *ngIf="generalForm.value.charge_shipping == 1" type="text" value="lbs" disabled="true" class="form-control">
+                                <input *ngIf="generalForm.value.charge_shipping == 2" type="text" value="$" disabled="true" class="form-control">
                         </div>
+                        <div >
+                        <span style="color: red" *ngIf="(i>0 && i<ranges.length)&&ranges[i-1].lbs_to>ranges[i].lbs_from">
+                            (!) The value in this field cannot be minor than the value of Up to in previous field.
+                        </span>
+                    </div>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -105,7 +111,8 @@
                             <input type="number" [disabled]="isView" [(ngModel)]="item.lbs_to" class="form-control">
                         </div>
                         <div class="col-sm-2">
-                            <input type="text" value="lbs" disabled="true" class="form-control">
+                            <input *ngIf="generalForm.value.charge_shipping == 1" type="text" value="lbs" disabled="true" class="form-control">
+                            <input *ngIf="generalForm.value.charge_shipping == 2" type="text" value="$" disabled="true" class="form-control">
                         </div>
                         <span style="color: red" *ngIf="item.lbs_to<item.lbs_from">
                             (!): The up to value cannot be minor than the value in From.
@@ -128,7 +135,7 @@
                 <div class="col-md-3">
                     <label>&nbsp;</label>
                     <div class="col-sm-12">
-                        <button *ngIf="i==ranges.length-1" [disabled]="isView" type="button" (click)="addNewRange()" class="btn btn-outline-dark">
+                        <button *ngIf="i==ranges.length-1" [disabled]="isView" type="button" (click)="addNewRange(item.lbs_to)" class="btn btn-outline-dark">
                             <i class="fa fa-plus"></i>
                         </button>
                         <button type="button" *ngIf="ranges.length>1" [disabled]="isView" (click)="removeRangeItem(i)" class="btn btn-outline-dark">
