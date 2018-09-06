@@ -83,7 +83,7 @@ export class InvoiceInformationTabComponent implements OnInit {
             newWindow.focus();
             setTimeout(() => {
                 newWindow.print();
-            }, 1000);
+            }, 3000);
         });
     }
 

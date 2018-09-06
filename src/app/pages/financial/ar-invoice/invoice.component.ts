@@ -303,7 +303,7 @@ export class InvoiceComponent implements OnInit {
             newWindow.focus();
             setTimeout(() => {
                 newWindow.print();
-            }, 1000);
+            }, 3000);
         });
     }
 
