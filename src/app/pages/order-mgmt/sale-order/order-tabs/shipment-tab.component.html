@@ -1,40 +1,43 @@
-<div class='address-tab'>        
-        <div class='scroll-container'>
-            <table class='table table-custom'>
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Tracking No</th>
-                        <th>Route</th>
-                        <th>Sales Order</th>
-                        <th>Carrier</th>
-                        <th>Pickup Date</th>
-                        <th>Ship To</th>
-                        <th>Address</th>
-                        <th>Status</th>
-                        <th>Delivered Date</th>
-                        <th>POD Sign-off Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let item of list.items">
-                        <td>{{ item.id }}</td>
-                        <td>{{ item.id }}</td>
-                        <td>{{ item.id }}</td>
-                        <td>{{ item.id }}</td>
-                        <td>{{ item.id }}</td>
-                        <td>{{ item.id }}</td>
-                        <td>{{ item.id }}</td>
-                        <td>{{ item.id }}</td>
-                        <td>{{ item.id }}</td>
-                        <td>{{ item.id }}</td>
-                        <td>{{ item.id }}</td>
-                    </tr>
-                    <tr *ngIf="list.items.length == 0">
-                        <td class="text-center" colspan="100%">No data.</td>
-                    </tr>
-                </tbody>
-            </table>
+<div class="address-tab">
+    <div class="scroll-container block-order">
+        <div class="card">
+            <div class="card-body">
+                <table class="table table-bordered table-order">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Tracking No</th>
+                            <th>Route</th>
+                            <th>Sales Order</th>
+                            <th>Carrier</th>
+                            <th>Pickup Date</th>
+                            <th>Ship To</th>
+                            <th>Address</th>
+                            <th>Status</th>
+                            <th>Delivered Date</th>
+                            <th>POD Sign-off Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of list.items">
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.id }}</td>
+                        </tr>
+                        <tr *ngIf="list.items.length == 0">
+                            <td class="text-center" colspan="100%">No data.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    
     </div>
+</div>
