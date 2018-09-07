@@ -297,11 +297,16 @@ export class SaleOrderCreateComponent implements OnInit {
 
         if (+this.generalForm.value.carrier_id === 2 || this.generalForm.value.carrier_id !== 999 && !carrier.own_carrirer) {
             default_option = 888;
-            default_ship_rate = 8;
+            default_ship_rate = 7;
 
             if (+this.generalForm.value.carrier_id === 1) {
                 default_option = '01';
                 default_ship_rate = 9;
+            }
+
+            if (+this.generalForm.value.carrier_id === 2) {
+                default_option = 888;
+                default_ship_rate = 8;
             }
             enable = [1, 2].indexOf(+this.generalForm.value.carrier_id) > -1;
 
@@ -464,16 +469,19 @@ export class SaleOrderCreateComponent implements OnInit {
             'items': this.list.items.filter(item => !item.misc_id)
         };
         this.orderService.getTaxShipping(params).subscribe(res => {
-            const old_misc = this.list.items.filter(item => item.misc_id && [1, 2].indexOf(item.misc_id) === -1 && +item.source_id !== 3);
-            const items = res.data.items;
-            const misc = res.data.mics.map(item => {
-                item.is_misc = 1;
-                item.misc_id = item.id;
-                item.discount_percent = 0;
-                return item;
-            });
 
-            this.list.items = items.concat(misc, old_misc);
+            if (res.data.mics) {
+                const old_misc = this.list.items.filter(item => item.misc_id && [1, 2].indexOf(item.misc_id) === -1 && +item.source_id !== 3);
+                const items = res.data.items;
+                const misc = res.data.mics.map(item => {
+                    item.is_misc = 1;
+                    item.misc_id = item.id;
+                    item.discount_percent = 0;
+                    return item;
+                });
+
+                this.list.items = items.concat(misc, old_misc);
+            }
 
             // Assign tax to all item
             this.list.items.forEach(item => item.tax_percent = res.data.tax_percent);
