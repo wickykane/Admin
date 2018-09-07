@@ -73,7 +73,7 @@ export class ShippingZoneComponent implements OnInit {
     getListMaster() {
         this.commonService.getMasterData().subscribe(res => {
             const data = res.data;
-            console.log(data);
+            
             this.listMaster['rma_type'] = data.rma_type;
             this.listMaster['status'] = data.rma_status;
         });
@@ -91,11 +91,11 @@ export class ShippingZoneComponent implements OnInit {
     getList() {
         const params = { ...this.tableService.getParams(), ...this.searchForm.value };
         Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
-        console.log(params);
+        
         this.shippingZoneService.getList(params).subscribe(res => {
             try {
                 this.list.items = res.data.rows;
-                console.log(this.list.items);
+                
                 this.tableService.matchPagingOption(res.data);
             } catch (e) {
                 console.log(e);
@@ -103,7 +103,7 @@ export class ShippingZoneComponent implements OnInit {
         });
     }
     createShippingZone() {
-        console.log('open createShipping');
+        
         // setTimeout(() => {
         this.router.navigate(['/admin-panel/shipping-zone/create']);
         // },500);
