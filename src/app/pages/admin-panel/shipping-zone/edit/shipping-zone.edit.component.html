@@ -58,7 +58,7 @@
                 <div class="block-border full-block">
                     <h5 class="title-border" translate>SHIPPING COUNTRIES & REGIONS</h5>
                     <div class="row countries-group">
-                        <div class="table-custom" [ngClass]="{'col-md-5': !selectedCountry, 'col-md-4': selectedCountry}">
+                            <div class="table-custom col-md-3">
                             <div class="header">
                                 <div class="col-12 title">
                                     <div class="form-group row">
@@ -72,7 +72,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-11 body" style="height: 200px;overflow: scroll;">
+                                <div class="col-11 body" style="height: 200px;overflow-y: scroll;">
                                     <div class="form-group row" *ngFor="let country of listCountry;let i = index">
                                         <label class='col-5'>
                                             <input type="checkbox" [(ngModel)]="country.selected" (change)="selectOldCountry($event.target.checked,country)"> {{country.name}}
@@ -81,8 +81,12 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="table-custom" [ngClass]="{'col-md-5': !selectedCountry, 'col-md-3': selectedCountry}">
-                            <div class="header">
+                        <div style="display: table;height: 269px" *ngIf="listSelectCountry.length>0">
+                                <span style="display: table-cell;vertical-align: middle"><i class="fa fa-angle-double-right" style="font-size:36px"></i></span>
+                            </div>
+                            <div class="table-custom col-md-3" style="text-align: center" *ngIf="listSelectCountry.length>0">
+                                    <span style="font-weight: bold">Selected Countries</span>
+                                    <div class="header" style="margin-top: 5px">
                                 <div class="col-12 title list-items" *ngFor="let item of listSelectCountry">
                                     <div class="form-group row">
                                         <label class="control-label col-5" for="shipping_to" translate>
@@ -98,21 +102,24 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4 table-custom" *ngIf="selectedCountry">
+                        <div style="display: table;height: 269px" *ngIf="selectedCountry">
+                                <span style="display: table-cell;vertical-align: middle"><i class="fa fa-angle-double-right" style="font-size:36px"></i></span>
+                            </div>
+                            <div class="col-md-3 table-custom" *ngIf="selectedCountry">
                             <div class="header">
                                 <div class="col-12 title">
                                     <div class="form-group row">
-                                        <label class="control-label col-5" for="shipping_to" translate> {{selectedCountry['name']}}
+                                            <label class="control-label col-12" for="shipping_to" style="text-align: center; font-weight: bold" translate>Select States for {{selectedCountry['name']}}
                                         </label>
-                                        <div class="col-7">
+                                        <div class="col-12">
                                             <input type="text" class="form-control" style="width: 100%" placeholder="Start searching for a state"
                                             (ngModelChange)="filterState($event)" [ngModel]="stateFilter">
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-11 body" style="height: 200px;overflow: scroll;">
+                                <div class="col-11 body" style="height: 169px;overflow-y: scroll;">
                                     <div class="form-group row" *ngFor="let state of selectedCountry['state'];let i = index">
-                                        <label class='col-5'>
+                                            <label class='col-11'>
                                             <input type="checkbox" [(ngModel)]="state.selected"> {{state.name}}
                                         </label>
                                     </div>

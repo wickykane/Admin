@@ -41,6 +41,8 @@ export class ShippingZoneViewComponent implements OnInit {
     public listSelectCountry = [];
     public id: any;
     public cd:any;
+    public selectedCountry = null;
+    public tempListState = [];
     public freeShippingList = {
         'free_shipping_item': 0,
         'limit_order_over': 0,
@@ -167,40 +169,38 @@ export class ShippingZoneViewComponent implements OnInit {
         for (var i = 0; i < this.listShipping.length; i++) {
             for (var j = 0; j < this.listShipping[i].data.length; j++) {
                 for (var k = 0; k < shippingZoneQuotesList.length; k++) {
-                    console.log(this.listShipping[i].data[j].id, shippingZoneQuotesList[k].shp_quotes_id);
                     if (this.listShipping[i].data[j].id == shippingZoneQuotesList[k].shp_quotes_id) {
                         var id = this.listShipping[i].data[j].id;
                         this.listShipping[i].data[j].checked = true;
                         if (id == 1) {
                             this.freeShippingList = { ...shippingZoneQuotesList[k].data,id};
-                            console.log(this.freeShippingList);
+                            
                         }
                         if (id == 2) {
                             this.flatRateList = { ...shippingZoneQuotesList[k].data,id};
-                            console.log(this.flatRateList);
+                            
                         }
                         if (id == 3) {
                             this.customRateList = { ...shippingZoneQuotesList[k].data,id};
-                            console.log(this.customRateList);
+                            
                         }
                         if (id == 4) {
                             this.pickupList = { ...shippingZoneQuotesList[k].data,id};
-                            console.log(this.pickupList);
+                            
                         }
                         if (id == 5) {
                             this.upsList = { ...shippingZoneQuotesList[k].data,id};
-                            console.log(this.upsList);
+                            
                         }
                         if (id == 6) {
                             this.seflList = { ...shippingZoneQuotesList[k].data,id};
-                            console.log(this.seflList);
+                            
                         }
                     }
                 }
             }
         }
     }
-
     filterCountry(key) {
         this.listCountry = this.filterbyfieldName(this.tempListCountry, 'name', key);
     }
@@ -221,7 +221,7 @@ export class ShippingZoneViewComponent implements OnInit {
         return arr.filter(isSearch);
     }
     selectCountry(isSelect, item, itemById) {
-        console.log(item, itemById);
+        
         item.state = this.listMasterData['state'][item.country_code];
         for (var i = 0; i < item.state.length; i++) {
             for (var j = 0; j < itemById.state.length; j++) {
@@ -234,6 +234,11 @@ export class ShippingZoneViewComponent implements OnInit {
             this.listSelectCountry.push(item);
         }
         else {
+            if (this.selectedCountry != null) {
+                if (this.selectedCountry.country_id === item.country_id) {
+                    this.selectedCountry = null;
+                }
+            }
             this.listSelectCountry.forEach((res, index) => {
 
                 if (res.country_id == item.country_id) {
@@ -246,6 +251,10 @@ export class ShippingZoneViewComponent implements OnInit {
         this.listCountry.forEach(item => {
             return item.selected = false;
         });
+    }
+    onCheckCountryState(country) {
+        this.selectedCountry = country;
+        this.tempListState = country.state;
     }
     openState(code) {
 
@@ -375,7 +384,7 @@ export class ShippingZoneViewComponent implements OnInit {
                 }
 
             }
-            console.log(listId);
+            
             listCountry[i].state = listId;
             delete listCountry[i].selected;
             delete listCountry[i].index;
