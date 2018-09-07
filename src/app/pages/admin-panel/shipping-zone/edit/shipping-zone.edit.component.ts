@@ -187,7 +187,7 @@ export class ShippingZoneEditComponent implements OnInit {
             for (var j = 0; j < countryList.length; j++) {
                 if (this.listCountry[i].country_code == countryList[j].ctr_cd) {
                     this.listCountry[i].selected = true;
-                    console.log('checked');
+                    
                     this.selectCountry(true, this.listCountry[i], countryList[j]);
                 }
             }
@@ -198,33 +198,33 @@ export class ShippingZoneEditComponent implements OnInit {
         for (var i = 0; i < this.listShipping.length; i++) {
             for (var j = 0; j < this.listShipping[i].data.length; j++) {
                 for (var k = 0; k < shippingZoneQuotesList.length; k++) {
-                    console.log(this.listShipping[i].data[j].id, shippingZoneQuotesList[k].shp_quotes_id);
+                    
                     if (this.listShipping[i].data[j].id == shippingZoneQuotesList[k].shp_quotes_id) {
                         var id = this.listShipping[i].data[j].id;
                         this.listShipping[i].data[j].checked = true;
                         if (id == 1) {
                             this.freeShippingList = { ...shippingZoneQuotesList[k].data, id };
-                            console.log(this.freeShippingList);
+                            
                         }
                         if (id == 2) {
                             this.flatRateList = { ...shippingZoneQuotesList[k].data, id };
-                            console.log(this.flatRateList);
+                            
                         }
                         if (id == 3) {
                             this.customRateList = { ...shippingZoneQuotesList[k].data, id };
-                            console.log(this.customRateList);
+                            
                         }
                         if (id == 4) {
                             this.pickupList = { ...shippingZoneQuotesList[k].data, id };
-                            console.log(this.pickupList);
+                            
                         }
                         if (id == 5) {
                             this.upsList = { ...shippingZoneQuotesList[k].data, id };
-                            console.log(this.upsList);
+                            
                         }
                         if (id == 6) {
                             this.seflList = { ...shippingZoneQuotesList[k].data, id };
-                            console.log(this.seflList);
+                            
                         }
                     }
                 }
@@ -252,7 +252,7 @@ export class ShippingZoneEditComponent implements OnInit {
         return arr.filter(isSearch);
     }
     selectCountry(isSelect, item, itemById) {
-        console.log(item, itemById);
+        
         item.state = this.listMasterData['state'][item.country_code];
         for (var i = 0; i < item.state.length; i++) {
             for (var j = 0; j < itemById.state.length; j++) {
@@ -408,7 +408,7 @@ export class ShippingZoneEditComponent implements OnInit {
                 }
 
             }
-            console.log(listId);
+            
             listCountry[i].state = listId;
             delete listCountry[i].selected;
             delete listCountry[i].index;
