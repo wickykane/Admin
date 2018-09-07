@@ -218,7 +218,7 @@ export class DebitMemoListComponent implements OnInit {
         this.router.navigate(['/financial/debit-memo/edit', debitId]);
     }
 
-    onPrintDebitMemo(debitId) {
+    onPrintDebitMemo(debitId, debitNo) {
         const path = `debit/${debitId}/print`;
         const url = `${environment.api_url}${path}`;
         const headers: HttpHeaders = new HttpHeaders();
@@ -226,11 +226,14 @@ export class DebitMemoListComponent implements OnInit {
             headers,
             responseType: 'blob',
         }).subscribe(res => {
-                const file = new Blob([res], { type: 'application/pdf' });
-                const fileURL = URL.createObjectURL(file);
-                const newWindow = window.open(fileURL);
-                newWindow.focus();
+            const file = new Blob([res], { type: 'application/pdf' });
+            const fileUrl = URL.createObjectURL(file);
+            const newWindow = window.open(`assets/pdfjs/web/viewer.html?openFile=false&fileName=${debitNo}.pdf&file=${encodeURIComponent(fileUrl)}`, '_blank');
+            newWindow.document.title = debitNo;
+            newWindow.focus();
+            setTimeout(() => {
                 newWindow.print();
+            }, 3000);
         });
     }
 

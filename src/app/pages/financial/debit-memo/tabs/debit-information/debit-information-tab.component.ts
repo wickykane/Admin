@@ -125,11 +125,14 @@ export class DebitInformationTabComponent implements OnInit {
             headers,
             responseType: 'blob',
         }).subscribe(res => {
-                const file = new Blob([res], { type: 'application/pdf' });
-                const fileURL = URL.createObjectURL(file);
-                const newWindow = window.open(fileURL);
-                newWindow.focus();
+            const file = new Blob([res], { type: 'application/pdf' });
+            const fileUrl = URL.createObjectURL(file);
+            const newWindow = window.open(`assets/pdfjs/web/viewer.html?openFile=false&fileName=${this.debitData['no']}.pdf&file=${encodeURIComponent(fileUrl)}`, '_blank');
+            newWindow.document.title = this.debitData['no'];
+            newWindow.focus();
+            setTimeout(() => {
                 newWindow.print();
+            }, 3000);
         });
     }
 
