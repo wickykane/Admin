@@ -117,7 +117,7 @@ export class InvoiceCreateComponent implements OnInit {
             'billing_id': [null],
             'shipping_id': [null],
             'note': [null],
-            'apply_late_fee': [1],
+            'apply_late_fee': [null],
             'due_dt': [null, Validators.required],
             'payment_term_range': [null],
 
@@ -183,7 +183,6 @@ export class InvoiceCreateComponent implements OnInit {
             inv_dt: oldForm.inv_dt,
             inv_num: oldForm.inv_num,
             company_id: oldForm.company_id,
-            apply_late_fee: 1,
         });
 
         this.addr_select = {
@@ -252,8 +251,10 @@ export class InvoiceCreateComponent implements OnInit {
     getEarlyPaymentValue() {
         const issue_dt = this.generalForm.get('inv_dt').value;
         const payment_term_id = this.generalForm.get('payment_term_id').value;
+        const payment_term = this.listMaster['payment_term'].find(item => item.id === this.generalForm.get('payment_term_id').value) || {};
+        this.data['is_early'] = payment_term.early_pmt_incentive;
         const total_due = this.order_info['total'];
-        if (issue_dt && payment_term_id && total_due) {
+        if (issue_dt && payment_term_id && total_due && this.data['is_early']) {
             this.financialService.getEarlyPaymentValue(issue_dt, payment_term_id, total_due).subscribe(res => {
                 if (res.data) {
                     this.data['is_fixed_early'] = res.data.is_fixed;
@@ -263,6 +264,10 @@ export class InvoiceCreateComponent implements OnInit {
                     this.order_info.grand_total = this.order_info.total - this.order_info.incentive;
                 }
             });
+        } else {
+            // Reset Early Payment data
+            this.order_info['incentive'] = null;
+            this.order_info['incentive_percent'] = null;
         }
     }
 
@@ -302,6 +307,7 @@ export class InvoiceCreateComponent implements OnInit {
         this.orderService.getDetailCompany(company_id).subscribe(res => {
             try {
                 this.customer = res.data;
+                this.generalForm.patchValue({ apply_late_fee: res.data.apply_late_fee || null });
                 if (res.data.buyer_type === 'PS') {
                     this.addr_select.contact = res.data.contact[0];
                     this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
@@ -320,7 +326,14 @@ export class InvoiceCreateComponent implements OnInit {
      * Internal Function
      */
     selectData(data) { }
-
+    changeLateFee() {
+        const late_fee = this.generalForm.value.apply_late_fee;
+        if (late_fee) {
+            this.getDefaultNote();
+        } else {
+            this.generalForm.patchValue({ note: null });
+        }
+    }
     changeSalesOrder(event) {
         this.list.items = event.detail.map(item => {
             item.qty_inv = item.qty;
@@ -492,9 +505,9 @@ export class InvoiceCreateComponent implements OnInit {
             inv_status: type,
             sub_total: this.order_info.sub_total,
             total_due: this.order_info.total,
-            is_early: this.data['is_fixed_early'] || 0,
+            is_early: this.data['is_early'] || 0,
             early_percent: (this.data['is_fixed_early']) ? null : (this.order_info['incentive_percent'] || 0),
-            policy_amt:  (this.order_info['incentive'] || 0),
+            policy_amt: (this.order_info['incentive'] || 0),
             aprvr_id: this.generalForm.value.approver_id,
             sale_person_id: this.generalForm.value.sales_person,
             inv_detail: items,

@@ -25,7 +25,7 @@
                         </div>
                         <div class="col-md-4">
                             <label for="sts" class="control-label">Status</label>
-                            <ng-select [multiple]="true" [items]="listMaster['status']" bindLabel="name" bindValue="id" formControlName="status">
+                            <ng-select class="ng-select-filter" [multiple]="true" [items]="listMaster['status']" bindLabel="name" bindValue="id" formControlName="status">
                             </ng-select>
                         </div>
                         <ng-container *ngIf="listMaster['listFilter'][0].value">
@@ -141,7 +141,9 @@
                                 </thead>
                                 <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                                     <tr>
-                                        <td>{{item.inv_num}}</td>
+                                        <td>
+                                            <a class="text-primary" [routerLink]="['view', item.id]">{{item.inv_num}}</a>
+                                        </td>
                                         <td>{{item.inv_dt}}</td>
                                         <td>{{item.order_num}}</td>
                                         <td>{{item.name}}</td>
@@ -163,7 +165,7 @@
                                         <td>{{item.aging_overdue}}</td>
                                         <!-- <td>{{item.paid_amount|currency}}</td> -->
                                         <td>
-                                            <a class="btn btn-default " *ngIf="item.invoice_status_id == 1" ngbTooltip="View" (click)="viewInvoice(item.id)">
+                                            <a class="btn btn-default" ngbTooltip="View" (click)="viewInvoice(item.id)">
                                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                             </a>
                                             <a class="btn btn-default " ngbTooltip="Edit" (click)="editInvoice(item.id)" *ngIf="item.invoice_status_id == 1">
@@ -171,7 +173,7 @@
                                             </a>
                                             <a ngbTooltip="Submit" *ngIf="item.invoice_status_id == 1" class="btn btn-default" (click)="confirmModal(item.id, 2)"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></a>
                                             <a class="btn btn-default" ngbTooltip="Cancel" (click)="confirmModal(item.id, 7)" *ngIf="item.invoice_status_id == 1">
-                                                <i class="fa fa-ban" aria-hidden="true"></i>
+                                                <i class="fa fa-times-circle" aria-hidden="true"></i>
                                             </a>
                                             <a ngbTooltip="Approve" *ngIf="item['invoice_status_id'] == 2" class="btn btn-default" (click)="confirmModal(item.id, 4)"><i class="fa fa-check"></i></a>
                                             <a ngbTooltip="Reject" *ngIf="item['invoice_status_id'] == 2" class="btn btn-default" (click)="confirmModal(item.id, 3)"><i class="fa fa-ban" aria-hidden="true"></i></a>
@@ -180,6 +182,7 @@
                                                 <i class="fa fa-download" aria-hidden="true"></i>
                                             </a>
                                             <a ngbTooltip="Send Mail" *ngIf="[3,4,6,7,8].indexOf(item['invoice_status_id']) != -1" class="btn btn-default" (click)="sendMail(item.id)"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
+                                            <!-- <a ngbTooltip="Reopen" *ngIf="item['invoice_status_id'] == 3" class="btn btn-default" (click)="confirmModal(item.id, 1)"><i class="fa fa-external-link-square"></i></a> -->
                                         </td>
                                     </tr>
 

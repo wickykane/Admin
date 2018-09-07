@@ -17,8 +17,8 @@
                                             <label for="code" class="control-label" translate> <strong>Customer Name</strong> </label>
                                             <span class="text-danger">(*)</span>
                                             <div>
-                                                <ng-select [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="company_id" [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 110px; margin-left: 2px;" (change)="changeCustomer(); getDefaultNote();" [items]="listMaster['customer']"
-                                                    bindLabel="company_name" bindValue="id" formControlName="company_id">
+                                                <ng-select [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="company_id" [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 110px; margin-left: 2px;" (change)="changeCustomer(); getDefaultNote();"
+                                                    [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="company_id">
                                                 </ng-select>
                                             </div>
                                         </div>
@@ -119,7 +119,7 @@
                                             <div class="form-group row">
                                                 <label class='col-6'>Apply Late Fee</label>
                                                 <div class='col-6'>
-                                                    <select class="form-control" formControlName="apply_late_fee">
+                                                    <select (change)="changeLateFee()" class="form-control" formControlName="apply_late_fee">
                                                         <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>                                                        
                                                         <option *ngFor="let item of listMaster['yes_no_options']" [ngValue]="item.value">{{item.label}}</option>
                                                     </select>
@@ -311,7 +311,6 @@
                                         <form [formGroup]="generalForm">
                                             <div class="form-group row">
                                                 <label class='col-6'>Warehouse
-                                                    <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
                                                     {{ data['order_detail']?.warehouse_name }}
@@ -320,7 +319,6 @@
 
                                             <div class="form-group row">
                                                 <label class='col-6'>Ship Via
-                                                    <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
                                                     {{ data['shipping_method']?.carrier_name }}
@@ -329,7 +327,6 @@
 
                                             <div class="form-group row">
                                                 <label class='col-6'>Option
-                                                    <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
                                                     {{ data['shipping_method']?.options_name }}
@@ -338,7 +335,6 @@
 
                                             <div class="form-group row">
                                                 <label class='col-6'>Ship Rate
-                                                    <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
                                                     {{ data['shipping_method']?.ship_rate_name }}
@@ -422,11 +418,6 @@
 
                             </table>
                         </div>
-                        <div class="col-12 no-padding">
-                            <button (click)="getEarlyPaymentValue()" class="btn btn-link" translate>
-                                <i class="fa fa-plus"></i>Calc Early Payment
-                            </button>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -485,7 +476,7 @@
                                         <strong class="text-primary">{{order_info.total | currency}}</strong>
                                     </div>
                                 </div>
-                                <div class="form-group row">
+                                <div *ngIf="data['is_early']" class="form-group row">
                                     <label class='col-6 control-label'>
                                         - Early Payment Incentive
                                         <input *ngIf="!data['is_fixed_early']" (change)="updateTotal()"  [isDecimal]="true" numberDirective [min]="0" [max]="100" style="width: 50px; margin-left: 10px;" class="form-control" [(ngModel)]="order_info['incentive_percent']" class="form-control" value="0" type="number">
@@ -501,7 +492,7 @@
                                         <div *ngIf="order_info['expires_dt']" class="p-2 text-danger">Expires {{ order_info['expires_dt']}}</div>
                                     </div>
                                 </div>
-                                <div class="form-group row margin-lr-0 text-light bg-danger">
+                                <div *ngIf="data['is_early']" class="form-group row margin-lr-0 text-light bg-danger">
                                     <label class="col-6 control-label ">
                                         <strong>Adjusted Total Due:</strong>
                                     </label>
@@ -516,12 +507,12 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12 mg-top-15 text-right">
+            <div class="col-md-12 mg-top-15 text-center">
                 <button type="button" class="btn btn-outline-info" (click)="createInvoice(1, 1)" translate>Save As Draft</button>
                 <button type="button" class="btn btn-outline-success" (click)="confirmModal(4)" [disabled]="!generalForm.valid" translate>Save & Validate</button>
                 <button type="button" class="btn btn-outline-danger" (click)="confirmModal(2)" [disabled]="!generalForm.valid" translate>Save & Submit For Approval</button>
                 <button type="button" class="btn btn-outline-dark" (click)="createInvoice(1, 1, 1); resetInvoice();" translate>Save & Create New Invoice</button>
-                <button type="button" class="btn btn-default" (click)="confirmModal(0)" translate>Cancel</button>
+                <button type="button" class="btn btn-default" (click)="confirmModal(0)" translate>Back To List</button>
             </div>
         </div>
     </section>
