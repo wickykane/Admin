@@ -454,9 +454,9 @@ export class SaleOrderEditComponent implements OnInit {
     }
 
     changeFromSource(item) {
-        if (+item.source_id === 3) {
-            return;
-        }
+        // if (+item.source_id === 3) {
+        //     return;
+        // }
         item.source_id = 2;
         item.source_name = 'Manual';
     }
@@ -583,17 +583,18 @@ export class SaleOrderEditComponent implements OnInit {
             'items': this.list.items.filter(item => !item.misc_id)
         };
         this.orderService.getTaxShipping(params).subscribe(res => {
-            console.log(this.list.items);
-            const old_misc = this.list.items.filter(item => item.misc_id && +item.source_id !== 3);
-            console.log(old_misc);
-            const items = res.data.items;
-            const misc = res.data.mics.map(item => {
-                item.is_misc = 1;
-                item.misc_id = item.id;
-                return item;
-            });
-            console.log(misc);
-            this.list.items = items.concat(misc, old_misc);
+          if (res.data.mics) {
+              const old_misc = this.list.items.filter(item => item.misc_id && [1, 2].indexOf(item.misc_id) === -1 && +item.source_id !== 3);
+              const items = res.data.items;
+              const misc = res.data.mics.map(item => {
+                  item.is_misc = 1;
+                  item.misc_id = item.id;
+                  item.discount_percent = 0;
+                  return item;
+              });
+
+              this.list.items = items.concat(misc, old_misc);
+          }
 
             // Assign tax to all item
             this.list.items.forEach(item => item.tax_percent = res.data.tax_percent);

@@ -425,10 +425,10 @@
                             </div>
                         </td>
                         <td>
-                            <input [isDecimal]="true" numberDirective [min]="0" [max]="100" class="form-control input-sm" type="number" [(ngModel)]="item.discount_percent" (change)="updateTotal();changeFromSource(item)">
+                            <input [isDecimal]="true" numberDirective [min]="0" [max]="100" class="form-control input-sm" type="number" [(ngModel)]="item.discount_percent" (change)="updateTotal();">
                         </td>
                         <td>
-                            <input [isDecimal]="true" numberDirective [min]="0" [max]="100" class="form-control input-sm" type="number" [(ngModel)]="item.tax_percent" (change)="updateTotal();changeFromSource(item)">
+                            <input [isDecimal]="true" numberDirective [min]="0" [max]="100" class="form-control input-sm" type="number" [(ngModel)]="item.tax_percent" (change)="updateTotal();">
                         </td>
                         <td class="text-center">
                            <span>{{item.amount | currency}}</span>
