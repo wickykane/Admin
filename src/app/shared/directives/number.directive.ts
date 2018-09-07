@@ -17,14 +17,22 @@ export class NumberDirective implements OnInit {
 
     }
 
-    @HostListener('ngModelChange', ['$event'])
-    onInputChange(event) {
-        if (event > this.max) {
-            this.ngModel.valueAccessor.writeValue(this.max);
-        }
-        if (event < this.min) {
-            this.ngModel.valueAccessor.writeValue(this.min);
-        }
+    // @HostListener('ngModelChange', ['$event'])
+    // onInputChange(event) {
+    //     if (event > this.max) {
+    //         this.ngModel.valueAccessor.writeValue(this.max);
+    //     }
+    //     if (event < this.min) {
+    //         this.ngModel.valueAccessor.writeValue(this.min);
+    //     }
+    // }
+
+    @HostListener('input', ['$event'])
+    onInputChange($event) {
+        const event = $event.target.value;
+        const value = (event > this.max) ? this.max : (event < this.min) ? this.min : event;
+        this.ngModel.valueAccessor.writeValue(value);
+        this.ngModel.viewToModelUpdate(value);
     }
 
     @HostListener('keydown', ['$event'])

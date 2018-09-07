@@ -326,7 +326,14 @@ export class InvoiceCreateComponent implements OnInit {
      * Internal Function
      */
     selectData(data) { }
-
+    changeLateFee() {
+        const late_fee = this.generalForm.value.apply_late_fee;
+        if (late_fee) {
+            this.getDefaultNote();
+        } else {
+            this.generalForm.patchValue({ note: null });
+        }
+    }
     changeSalesOrder(event) {
         this.list.items = event.detail.map(item => {
             item.qty_inv = item.qty;
