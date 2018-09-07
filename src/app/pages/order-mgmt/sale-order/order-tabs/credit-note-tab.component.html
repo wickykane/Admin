@@ -1,15 +1,17 @@
-<div class='address-tab'>
-    <div class='scroll-container'>
-        <table class='table table-custom'>
+<div class="address-tab">
+    <div class="scroll-container block-order">
+      <div class="card">
+        <div class="card-body">
+          <table class="table table-bordered table-order">
             <thead>
                 <tr>
                     <th>No</th>
                     <th>Credit Note No</th>
                     <th>Dute Date</th>
-                    <th>Related RMA</th>                    
+                    <th>Related RMA</th>
                     <th>Total Amount</th>
                     <th>Balance Amount</th>
-                    <th>Status</th>  
+                    <th>Status</th>
                     <th>Aged Overdue</th>                   
                 </tr>
             </thead>
@@ -21,13 +23,15 @@
                     <td>{{ item.id }}</td>
                     <td>{{ item.id }}</td>
                     <td>{{ item.id }}</td>
-                    <td>{{ item.id }}</td>  
-                    <td>{{ item.id }}</td>                  
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.id }}</td>
                 </tr>
                 <tr *ngIf="list.items.length == 0">
                     <td class="text-center" colspan="100%">No data.</td>
                 </tr>
             </tbody>
-        </table>
+          </table>
+        </div>
+      </div>
     </div>
 </div>
