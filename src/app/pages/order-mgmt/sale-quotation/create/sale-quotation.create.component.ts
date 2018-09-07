@@ -364,9 +364,9 @@ export class SaleQuotationCreateComponent implements OnInit {
     }
 
     changeFromSource(item) {
-        if (+item.source_id === 3) {
-            return;
-        }
+        // if (+item.source_id === 3) {
+        //     return;
+        // }
         item.source_id = 2;
         item.source_name = 'Manual';
     }
