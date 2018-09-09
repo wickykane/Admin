@@ -361,6 +361,15 @@ export class InvoiceEditComponent implements OnInit {
      */
     selectData(data) { }
 
+    changeLateFee() {
+        const late_fee = this.generalForm.value.apply_late_fee;
+        if (late_fee) {
+            this.getDefaultNote();
+        } else {
+            this.generalForm.patchValue({ note: null });
+        }
+    }
+
     changeSalesOrder(event, flag?) {
         if (!flag) {
             this.list.items = event.detail.map(item => {
