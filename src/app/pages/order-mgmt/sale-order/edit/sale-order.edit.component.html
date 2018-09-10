@@ -412,7 +412,9 @@
                                         <td class="text-center">
                                             <i *ngIf="item.is_shipping_free" class="text-success fa fa-check"></i>
                                         </td>
-                                        <td>{{item.qty_available}}</td>
+                                        <td [ngClass]="{'d-none': wh.warehouse_id != generalForm.value.warehouse_id}"  *ngFor="let wh of item['warehouse']">
+                                            {{wh.qty_available}}                      
+                                         </td>
                                         <td>
                                             <input [isDecimal]="true" numberDirective [min]="0" [disabled]="item.misc_id" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (change)="updateTotal()">
                                         </td>
