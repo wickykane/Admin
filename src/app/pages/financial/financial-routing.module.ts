@@ -5,6 +5,14 @@ import { InvoiceCreateComponent } from './ar-invoice/create/invoice.create.compo
 import { InvoiceEditComponent } from './ar-invoice/edit/invoice.edit.component';
 import { InvoiceComponent } from './ar-invoice/invoice.component';
 import { InvoiceDetailComponent } from './ar-invoice/view/invoice.view.component';
+
+import { CreditMemoApplyComponent } from './credit-memo/apply-credit/apply-credit.component';
+import { CreditMemoCreateComponent } from './credit-memo/create/credit-memo-create.component';
+import { CreditMemoEditComponent} from './credit-memo/edit/credit-memo-edit.component';
+import { CreditMemoListComponent } from './credit-memo/list/credit-memo-list.component';
+import { CreditMemoDetailComponent } from './credit-memo/view/credit-memo-view.component';
+
+
 import { PaymentComponent } from './payment/payment.component';
 
 import { DebitMemoCreateComponent } from './debit-memo/create/debit-memo-create.component';
@@ -26,6 +34,16 @@ const routes: Routes = [
         path: 'payment',
         children: [
             { path: '', component: InvoiceComponent }
+        ]
+    },
+    {
+        path: 'credit-memo',
+        children: [
+            { path: '', component: CreditMemoListComponent },
+            { path: 'create', component: CreditMemoCreateComponent },
+            { path: 'edit/:id', component: CreditMemoEditComponent },
+            { path: 'view/:id', component: CreditMemoDetailComponent },
+            { path: 'apply-credit/:id', component: CreditMemoApplyComponent}
         ]
     },
     {

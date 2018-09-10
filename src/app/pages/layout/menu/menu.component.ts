@@ -16,7 +16,7 @@ export class MenuComponent implements OnInit {
         private translate: TranslateService,
         public router: Router,
         private elRef: ElementRef
-    ) {}
+    ) { }
 
     ngOnInit() {
         this.MENU_CONSTANT = [
@@ -284,6 +284,10 @@ export class MenuComponent implements OnInit {
                         name: 'Payment'
                     },
                     {
+                        link: '/financial/credit-memo',
+                        name: 'Credit Memo'
+                    },
+                    {
                         link: '/financial/debit-memo',
                         name: 'Debit'
                     }
@@ -324,7 +328,7 @@ export class MenuComponent implements OnInit {
 
         for (let i = 0; i < el.length; i++) {
             el[i].classList.remove('open');
-          }
+        }
 
 
         // for (const i of el) {
