@@ -462,6 +462,7 @@ export class SaleOrderCreateComponent implements OnInit {
         }
         const params = {
             'customer': this.generalForm.value.buyer_id,
+            'warehouse': this.generalForm.value.warehouse_id,
             'address': this.generalForm.value.shipping_id,
             'ship_via': this.generalForm.value.carrier_id,
             'option': this.generalForm.getRawValue().ship_method_option,
