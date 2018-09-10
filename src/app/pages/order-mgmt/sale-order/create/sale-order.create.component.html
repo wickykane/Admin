@@ -412,7 +412,7 @@
                         <td class="text-center">
                             <i *ngIf="item.is_shipping_free" class="text-success fa fa-check"></i>
                         </td>
-                        <td [ngClass]="{'d-none': wh.warehouse_id != generalForm.value.warehouse_id}"  *ngFor="let wh of item['warehouse']">
+                        <td [ngClass]="{'d-none': (wh.warehouse_id  || wh.id) != generalForm.value.warehouse_id}"  *ngFor="let wh of item['warehouse']">
                            {{wh.qty_available}}                      
                         </td>
                         <td>

@@ -478,6 +478,7 @@ export class SaleOrderCreateComponent implements OnInit {
                     item.is_misc = 1;
                     item.misc_id = item.id;
                     item.discount_percent = 0;
+                    item.warehouse = this.listMaster['warehouses'];
                     return item;
                 });
 
@@ -554,6 +555,7 @@ export class SaleOrderCreateComponent implements OnInit {
                     item.is_shipping_free = 0;
                     item.income_account_name = item.account_name;
                     item.income_account_id = item.account_id;
+                    item.warehouse = this.listMaster['warehouses'];
                 });
 
                 this.list.items = this.list.items.concat(res.filter((item) => {
