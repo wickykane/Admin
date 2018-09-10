@@ -16,6 +16,7 @@ import { HotkeysService } from 'angular2-hotkeys';
 import * as lodash from 'lodash';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { OrderService } from '../../../order-mgmt/order-mgmt.service';
+import { TableService} from './../../../../services/table.service';
 import { CreditMemoService } from './../credit-memo.service';
 
 
@@ -69,6 +70,7 @@ export class CreditMemoApplyComponent implements OnInit {
         private _hotkeysService: HotkeysService,
         public keyService: CreditMemoCreateKeyService,
         private creditMemoService: CreditMemoService,
+        public tableService: TableService,
         private dt: DatePipe) {
         //  Init Key
         this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
@@ -82,6 +84,11 @@ export class CreditMemoApplyComponent implements OnInit {
         this.listMaster['docType'] = [{ id: 1, name: 'Invoice' }, { id: 2, name: 'Debit Memo' }];
         await this.getDataApplyByCreditId(this.data['id']);
     }
+      // Table event
+      selectData(index) {
+        console.log(index);
+    }
+
     getDataApplyByCreditId(id) {
         this.creditMemoService.getDataForApplyById(id).subscribe(res => {
             try {
