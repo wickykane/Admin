@@ -179,9 +179,10 @@ export class SaleQuotationCreateComponent implements OnInit {
 
         // Init Date
         this.generalForm.controls['quote_date'].patchValue(currentDt.toISOString().slice(0, 10));
+        this.generalForm.controls['delivery_date'].patchValue(currentDt.toISOString().slice(0, 10));
+
         currentDt.setDate(currentDt.getDate() + 30);
         this.generalForm.controls['expiry_date'].patchValue(currentDt.toISOString().slice(0, 10));
-        this.generalForm.controls['delivery_date'].patchValue(currentDt.toISOString().slice(0, 10));
 
         // Lazy Load filter
         this.data['page'] = 1;
@@ -264,7 +265,7 @@ export class SaleQuotationCreateComponent implements OnInit {
                 if (+this.generalForm.value.carrier_id === 999) {
                     // Default Shipping Id to get List when choose Pick up In store
                     this.data['default_shipping_id'] = this.customer.shipping[0].address_id;
-                    this.generalForm.patchValue({ship_method_option : null});
+                    this.generalForm.patchValue({ ship_method_option: null });
                 }
 
                 // if (res.data.buyer_type === 'PS') {

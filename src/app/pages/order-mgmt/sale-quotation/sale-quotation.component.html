@@ -42,7 +42,7 @@
                                 <label for="" class="control-label" translate>From</label>
                                 <div class="date-group">
                                     <div clickOutside (clickOutside)="d1.close()" class="input-group">
-                                        <input [maxDate]="searchForm.value.date_to | dateObj" class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="date_from" ngbDatepicker #d1="ngbDatepicker">
+                                        <input [maxDate]="searchForm.value.date_to | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="date_from" ngbDatepicker #d1="ngbDatepicker">
                                         <div class="input-group-append">
                                             <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
                                                         <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -55,7 +55,7 @@
                                 <label for="" class="control-label" translate>To</label>
                                 <div class="date-group">
                                     <div clickOutside (clickOutside)="dt2.close()" class="input-group">
-                                        <input [minDate]="searchForm.value.date_from | dateObj" class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="date_to" ngbDatepicker #dt2="ngbDatepicker">
+                                        <input [minDate]="searchForm.value.date_from | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="date_to" ngbDatepicker #dt2="ngbDatepicker">
                                         <div class="input-group-append">
                                             <button class="btn btn-outline-secondary" (click)="dt2.toggle()" type="button">
                                                     <i class="fa fa-calendar" aria-hidden="true"></i>
