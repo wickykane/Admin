@@ -515,6 +515,7 @@ export class SaleOrderCreateComponent implements OnInit {
                     item.source_id = 0;
                     item.source_name = 'From Master';
                     item.is_shipping_free = item.free_ship;
+                    console.log(item);
                 });
                 this.list.items = this.list.items.concat(res.filter((item) => {
                     if (listAdded.indexOf(item.sku + item.item_condition_id) < 0) {
