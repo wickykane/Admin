@@ -20,8 +20,7 @@
                     </div>
                     <div class="block-search">
                         <label for="customer_name" class="control-label">Customer Name</label>
-                        <input type="text" name="customer_name" formControlName="customer_name" class="form-control" id="customer_name" placeholder=""
-                            >
+                        <input type="text" name="customer_name" formControlName="customer_name" class="form-control" id="customer_name" placeholder="">
                     </div>
                     <div class="block-search">
                         <label for="buyer_type" class="control-label">Status</label>
@@ -39,7 +38,7 @@
                         <label for="" class="control-label" translate>From</label>
                         <div class="date-group">
                             <div clickOutside (clickOutside)="d1.close()" class="input-group">
-                                <input [maxDate]="searchForm.value.date_to | dateObj" class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="date_from"
+                                <input [maxDate]="searchForm.value.date_to | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="date_from"
                                     ngbDatepicker #d1="ngbDatepicker">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
@@ -53,7 +52,7 @@
                         <label for="" class="control-label" translate>To</label>
                         <div class="date-group">
                             <div clickOutside (clickOutside)="dt2.close()" class="input-group">
-                                <input [minDate]="searchForm.value.date_from | dateObj" class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="date_to"
+                                <input [minDate]="searchForm.value.date_from | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="date_to"
                                     ngbDatepicker #dt2="ngbDatepicker">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" (click)="dt2.toggle()" type="button">
@@ -155,7 +154,7 @@
                                                 (click)="sendMail(item.id)"><i class="fa fa-envelope-o"
                                                     aria-hidden="true"></i></a>
                                             <a ngbTooltip="Apply to Invoice" *ngIf="['AP','RD'].indexOf(item['sts_code']) != -1" class="btn btn-default" [routerLink]="['apply-credit', item.id]"><i
-                                                    class="fa fa-envelope-o" aria-hidden="true"></i></a>
+                                                    class="fa fa-clipboard" aria-hidden="true"></i></a>
                                         </td>
                                     </tr>
 

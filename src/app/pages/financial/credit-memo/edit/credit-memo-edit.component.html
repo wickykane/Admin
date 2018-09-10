@@ -260,14 +260,14 @@
                                 <strong>Ship To</strong>
                             </div>
                             <div class="card-body p-25">
-                                <div class="row" >
-                                        <!-- *ngIf="generalForm.value.carrier_id == 999" -->
-                                    <div class="col-md-12 ">
+                                <div class="row"  *ngIf="generalForm.value.carrier_id == 999" >
+                                        <!--  -->
+                                    <div class="col-md-12">
                                         <p>Customer will pickup goods in stores.</p>
                                     </div>
                                 </div>
-                                <!-- *ngIf="generalForm.value.carrier_id != 999" -->
-                                <div class="row" >
+                                <!--  -->
+                                <div class="row"  *ngIf="generalForm.value.carrier_id != 999">
                                     <div class="col-12 ">
                                         <div class="form-group row">
                                             <label class=" control-label col-5" for="shiping_to" translate>Label
@@ -503,14 +503,12 @@
         </div>
         <div class="row">
             <div class="col-md-12 mg-top-15 text-right">
-                <button type="button" class="btn btn-default" (click)="confirmModal(0)" translate>Back To List</button>
-                <button type="button" class="btn btn-outline-info" (click)="createMemo(1, 1)" translate>Save As Draft</button>
+                <button type="button" class="btn btn-default" (click)="confirmModal(0)" translate>Cancel</button>
+                <button type="button" class="btn btn-outline-info" (click)="createMemo(1, 2)" translate>Save</button>
                 <button type="button" class="btn btn-outline-success" (click)="confirmModal(4)" [disabled]="!generalForm.valid" translate>Save
                     & Validate</button>
                 <button type="button" class="btn btn-outline-danger" (click)="confirmModal(2)" [disabled]="!generalForm.valid" translate>Save
-                    & Submit</button>
-                <button type="button" class="btn btn-outline-dark" (click)="createMemo(1, 1); resetInvoice();" translate>Save
-                    & Create New Credit</button>
+                    & Submit</button>             
             </div>
         </div>
     </section>

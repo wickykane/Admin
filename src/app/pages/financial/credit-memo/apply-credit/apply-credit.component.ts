@@ -73,7 +73,6 @@ export class CreditMemoApplyComponent implements OnInit {
         //  Init Key
         this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
         this.searchForm = fb.group({
-            'doc_type': [null],
             'code': [null]
         });
     }
@@ -127,6 +126,13 @@ export class CreditMemoApplyComponent implements OnInit {
         this.checkAllItem = this.list.items.every(_ => _.is_checked);
         this.list.checklist = this.list.items.filter(_ => _.is_checked);
     }
+    clearPayment() {
+        if (this.list.items.length > 0) {
+            this.list.items.map(item => {item.amount = 0; item.is_checked = false; });
+        }
+       this.list.checklist = [];
+       this.updateBalance();
+    }
     updateBalance() {
         this.main_info.total_amount = this.main_info.total_balance_due = this.main_info.total_current_balance = 0;
         if (this.list.items.length > 0) {
@@ -147,8 +153,7 @@ export class CreditMemoApplyComponent implements OnInit {
         const items = this.list.checklist.map(item => {
             return item;
         });
-        const params = { ...this.main_info, ...{ apply_detail: items } };
-        console.log(params);
+        const params = { ...this.main_info, ...{ apply_detail: items }};
         this.creditMemoService.applyCreditForInvoice(this.data['id'], params).subscribe(res => {
             try {
                 if (res.status) {

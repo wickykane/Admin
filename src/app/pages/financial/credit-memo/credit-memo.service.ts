@@ -60,8 +60,8 @@ export class CreditMemoService {
         return this.API.post(url, params);
     }
 
-    updateInvoice(id, params) {
-        const url = 'ar-invoice/updateInvoice/' + id;
+    updateCredit(id, params) {
+        const url = 'credit-memo/update//' + id;
         return this.API.put(url, params);
     }
 
@@ -108,6 +108,10 @@ export class CreditMemoService {
     reopenCredit(id) {
         const url = 'credit-memo/re-open/' + id;
         return this.API.get(url);
+    }
+    getListItemRemoved(params) {
+        const url = ['credit-memo', 'detail-document'].join('/');
+        return this.API.post(url, params);
     }
 
     // Apply Credit For Invoice

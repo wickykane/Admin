@@ -51,8 +51,8 @@ export class CreditMemoListComponent implements OnInit {
         'RJ': { color: 'magenta', name: 'Rejected' },
         'AP': { color: 'strong-green', name: 'Approved', img: './assets/images/icon/approved.png' },
         'CC': { color: 'red', name: 'Canceled', img: './assets/images/icon/cancel.png' },
-        'SC': { color: 'lemon', name: 'Completed', img: './assets/images/icon/full_delivered.png' },
-        'RD': { color: 'bright-grey', name: 'Refund Due' },
+        // 'SC': { color: 'lemon', name: 'Completed', img: './assets/images/icon/full_delivered.png' },
+        'RD': { color: 'lemon', name: 'Refund Due' },
         'RF': { color: 'bright-grey', name: 'Refunded' },
     };
 

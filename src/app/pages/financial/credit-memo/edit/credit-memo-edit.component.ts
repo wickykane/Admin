@@ -205,10 +205,10 @@ export class CreditMemoEditComponent implements OnInit {
             try {
                 const data = res.data;
                 this.generalForm.patchValue(data);
-                this.list.items = data.items;
+                this.list.items = data.items || [];
                 // this.updateTotal();
                 this.changeCustomer(1);
-                // this.changeInvoice(event);
+                this.changeInvoice(event);
 
                 // Lazy Load filter
                 const params = { page: this.data['page'], length: 15 };
@@ -260,7 +260,6 @@ export class CreditMemoEditComponent implements OnInit {
                         item.quantity = item.qty_inv;
                         return item;
                     });
-                    this.clone_items = _.cloneDeep(this.list.items);
                 }
                 this.firstChanged = true;
                 this.data['order_detail'] = res.data;
@@ -272,6 +271,8 @@ export class CreditMemoEditComponent implements OnInit {
                 this.selectAddress('billing');
                 this.updateTotal();
             });
+        } else {
+            this.firstChanged = true;
         }
     }
 
@@ -327,7 +328,9 @@ export class CreditMemoEditComponent implements OnInit {
         this.order_info.sub_total = 0;
 
         const items = this.list.items.filter(i => !i.misc_id);
-        this.groupTax(this.list.items);
+        if (this.list.items.length > 0 ) {
+            this.groupTax(this.list.items);
+        }
         this.order_info.order_summary = {};
         this.order_info.order_summary['total_item'] = items.length;
         items.forEach(item => {
@@ -345,10 +348,9 @@ export class CreditMemoEditComponent implements OnInit {
     }
 
     deleteAction(id, item_condition) {
-        this.items_removed = [];
         this.list.items = this.list.items.filter((item) => {
             if (item.item_id === id && item.is_item === 1) {
-                this.items_removed.push(item);
+                this.items_removed.push(item.id);
             }
             return ((item.item_id || item.misc_id) + (item.item_condition_id || 'mis') !== (id + (item_condition || 'mis')));
         });
@@ -372,6 +374,9 @@ export class CreditMemoEditComponent implements OnInit {
         });
     }
     addNewItem() {
+        if (this.items_removed.length === 0) {
+            return;
+        }
         const modalRef = this.modalService.open(CreditItemModalContent, { size: 'lg' });
         modalRef.result.then(res => {
             if (res instanceof Array && res.length > 0) {
@@ -390,19 +395,20 @@ export class CreditMemoEditComponent implements OnInit {
                     item.source_name = 'From Master';
                 });
                 this.list.items = this.list.items.concat(res.filter((item) => {
+                    const idx = this.items_removed.indexOf(item.id);
+                    if (idx !== -1) { this.items_removed.splice(idx, 1); }
+                    console.log(this.items_removed);
                     if (listAdded.indexOf(item.sku + item.item_condition_id) < 0) {
                         return listAdded.indexOf(item.sku + item.item_condition_id) < 0;
                     } else {
                         this.toastr.error('The item ' + item.no + ' already added in the order');
-                        return -1;
                     }
                 }));
 
                 this.updateTotal();
             }
         }, dismiss => { });
-        modalRef.componentInstance.clone_items = this.clone_items;
-        modalRef.componentInstance.items_removed = this.items_removed;
+        modalRef.componentInstance.items_removed = { item_id: this.items_removed, document_type: this.generalForm.value.document_type, document_id: this.generalForm.value.document_id };
     }
 
     addNewMiscItem() {
@@ -430,7 +436,6 @@ export class CreditMemoEditComponent implements OnInit {
                         return listAdded.indexOf(item.sku + (item.item_condition_id || 'misc')) < 0;
                     } else {
                         this.toastr.error('The item ' + item.no + ' already added in the order');
-                        return -1;
                     }
 
                 }));
@@ -497,13 +502,13 @@ export class CreditMemoEditComponent implements OnInit {
             is_draft_sq: is_draft_sq || 0,
             is_copy: this.data['is_copy'] || 0
         };
-        this.creditMemoService.createCreditMemo(params).subscribe(res => {
+        this.creditMemoService.updateCredit(this.data['id'], params).subscribe(res => {
             try {
                 if (res.status) {
                     this.toastr.success(res.message);
-                    this.data['invoice_id'] = res.data;
+                    this.data['id'] = res.data.id;
                     setTimeout(() => {
-                        this.router.navigate(['/financial/invoice/detail/' + this.data['invoice_id']]);
+                        this.router.navigate(['/financial/credit-memo/view/' + this.data['id']]);
                     }, 500);
 
                 } else {

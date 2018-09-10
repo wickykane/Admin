@@ -70,7 +70,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
         <div class="row mg-top-10">
             <div class="col-12 p-l-5 p-r-5 ">
@@ -80,13 +79,13 @@
                     </div>
                     <div class="row">
                         <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
-                            <div class="block-search">
+                            <!-- <div class="block-search">
                                 <label for="type" class="control-label" translate>Doc Type</label>
                                 <select class="form-control" formControlName="doc_type">
                                     <option value="null" selected="true">--Select--</option>
                                     <option *ngFor="let item of listMaster['docType']" [ngValue]="item.id">{{item.name}}</option>
                                 </select>
-                            </div>
+                            </div> -->
                             <div class="block-search">
                                 <label for="code" class="control-label">Code</label>
                                 <input type="text" name="code" formControlName="code" class="form-control" id="code" placeholder="" capitalize>
@@ -106,15 +105,16 @@
                                 (onEnter)="selectData($event)" [ngClass]="{'row-selected': i == selectedIndex}">
                                 <thead>
                                     <tr>
-                                        <th translate style="width: 100px;"></th>
-                                        <th style="width:150px" translate>No</th>
-                                        <th translate>Document No</th>
-                                        <th translate>Issue Date</th>
-                                        <th translate>Payment Term</th>
+                                        <th translate style="width: 50px;"></th>
+                                        <th style="width:50px" translate>No</th>
+                                        <th  style="width:100px" translate>Document No</th>
+                                        <th style="width:150px" translate>Issue Date</th>
+                                        <th style="width:200px" translate>Payment Term</th>
                                         <th class="text-nowrap" style="width:100px" translate> Status</th>
-                                        <th class="text-center" style="width:100px" translate>Current Balance</th>
-                                        <th style="width:100px" translate>Balance Due</th>
-                                        <th translate style="width:100px">Amount Applied</th>
+                                        <th class="text-center" style="width:150px" translate>Current Balance</th>
+                                        <th style="width:150px" translate>Balance Due</th>
+                                        <th translate style="width:150px">Amount Applied</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody *ngIf="list['items'].length === 0">
@@ -142,26 +142,23 @@
                                                 <input [isDecimal]="true" numberDirective [min]="0" [max]="item.original_amount" class="form-control input-sm" type="number"
                                                     [(ngModel)]="item.amount" (change)="updateBalance()">
                                             </td>
+                                            <td></td>
                                         </tr>
                                     </tbody>
                                 </ng-container>
                                 <tbody *ngIf="list['items'].length != 0">
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                    <tr>                                        
+                                        <td colspan="6"></td>
                                         <td>{{main_info.total_current_balance | currency}}</td>
                                         <td>{{main_info.total_balance_due|currency}}</td>
                                         <td>{{main_info.total_amount|currency}}</td>
+                                        <td></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                         <div class="col-12 no-padding">
-                            <button (click)="addNewItem()" class="btn btn-link" translate>
+                            <button (click)="clearPayment()" class="btn btn-link" translate>
                                 <i class="fa fa-plus"></i>Clear Payment
                             </button>
                         </div>

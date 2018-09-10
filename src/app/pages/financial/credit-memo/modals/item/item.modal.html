@@ -16,13 +16,6 @@
                     <label for="so" class="control-label">Description</label>
                     <input type="text" name="so" formControlName="des" class="form-control">
                 </div>
-                <div class="block-search">
-                    <label for="so" class="control-label">Item Type</label>
-                    <select formControlName="type" class="form-control">
-                        <option [hidden]="true" [disabled]="true" [ngValue]="null" selected="true" translate>--Select--</option>
-                        <option *ngFor="let de of listMaster['type']" [ngValue]="de.id">{{de.name}}</option>
-                    </select>
-                </div>
                 <div class="block-btn-search">
                     <label class="control-label">&nbsp;</label>
                     <div>
@@ -92,7 +85,7 @@
         </div>
 
 
-        <div class="row normal-pagination" *ngIf="list.items.length > 0">
+        <!-- <div class="row normal-pagination" *ngIf="list.items.length > 0">
             <div class="col-md-6">
                 <div class="text-left">
                     <div class="col-md-6" style="padding-left: 0px;">
@@ -111,7 +104,7 @@
                         [maxSize]="tableService.maxSize" [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
                 </div>
             </div>
-        </div>
+        </div> -->
 
     </div>
 

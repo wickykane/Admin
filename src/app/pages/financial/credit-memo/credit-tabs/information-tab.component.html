@@ -7,8 +7,9 @@
         <button *ngIf="detail['sts_code'] =='AP'" class="btn btn-outline-success" (click)="confirmModal(_creditId, 4)"><i class="fa fa-check-square"></i> Approve</button>
         <button *ngIf="detail['sts_code'] == 'AP'" class="btn btn-outline-danger" (click)="confirmModal(_creditId, 3)"><i class="fa fa-ban" aria-hidden="true"></i> Reject</button>
         <button *ngIf="[4,8].indexOf(detail['sts_code']) != -1" class="btn btn-outline-dark"><i class="fa fa-money" aria-hidden="true"></i> Pay</button>
+        <button *ngIf="['AP','RD'].indexOf(detail['sts_code']) != -1" class="btn btn-outline-dark"  [routerLink]="['/financial/credit-memo/apply-credit',_creditId]"><i class="fa fa-clipboard" aria-hidden="true"></i> Apply to Invoice</button>        
         <button class="btn btn-outline-dark" (click)="printPDF(_creditId)"><i class="fa fa-download" aria-hidden="true"></i> Print</button>
-        <button *ngIf="[3,4,6,7,8].indexOf(detail['sts_code']) != -1" class="btn btn-outline-dark" (click)="sendMail(_creditId)"><i class="fa fa-envelope-o" aria-hidden="true"></i> Send Mail</button>
+        <button *ngIf="['SB','AP','RJ','CC','RD','RF'].indexOf(detail['sts_code']) != -1" class="btn btn-outline-dark" (click)="sendMail(_creditId)"><i class="fa fa-envelope-o" aria-hidden="true"></i> Send Mail</button>
     </div>
     <section class="rma-page block main-container block-order">
         <div class="row">
@@ -43,7 +44,7 @@
                                         <div class="form-group row">
                                             <label class='col-6 control-label'>Issue Date</label>
                                             <div class='col-6'>
-                                                {{detail['issue_date']}}
+                                                {{detail['issue_date']|date:'MM/dd/yyyy'}}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -109,7 +110,7 @@
                                 <div class="form-group row">
                                     <label class="control-label col-6" translate>Customer Name</label>
                                     <div class="col-6">
-                                        {{detail['company_id']}}
+                                        {{detail['company']['name']}}
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -381,27 +382,22 @@
                                 </div>
                                 <div class="form-group row">
                                     <label class='col-6 control-label'>
-                                            - Early Payment Incentive
-                                            <input readonly *ngIf="!data['is_fixed_early']" (change)="updateTotal()"  [isDecimal]="true" numberDirective [min]="0" [max]="100" style="width: 50px;" class="form-control" [(ngModel)]="detail['incentive_percent']" class="form-control" value="0" type="number">
-                                            <span *ngIf="!data['is_fixed_early']"> %</span>
+                                           Used/Refunded Amount                                           
                                         </label>
                                     <div class='col-5 padding-lr-10'>
                                         <div *ngIf="!data['is_fixed_early']">
                                             <strong>
-                                                {{ (detail['incentive'] || 0) | currency}}
+                                                {{ (detail['used_amount'] || 0) | currency}}
                                             </strong>
                                         </div>
-                                        <span *ngIf="data['is_fixed_early']">$</span>
-                                        <input style="width: calc(100% - 10px);" readonly (change)="updateTotal()" [ngClass]="{'border border-danger': detail.grand_total < 0 }" *ngIf="data['is_fixed_early']" class="form-control" [(ngModel)]="detail['incentive']" class="form-control" value="0" type="number">
-                                        <div *ngIf="detail['expires_dt']" class="p-2 text-danger">Expires {{ detail['expires_dt']}}</div>
                                     </div>
                                 </div>
                                 <div class="form-group row margin-lr-0 text-light bg-danger">
                                     <label class="col-6 control-label ">
-                                            <strong>Adjusted Total Due:</strong>
+                                            <strong>Balance Amount</strong>
                                         </label>
                                     <div class="col-6 padding-lr-10">
-                                        <strong>{{(detail.grand_total || 0) | currency}}</strong>
+                                        <strong>{{(detail['balance_amount'] || 0) | currency}}</strong>
                                     </div>
                                 </div>
                             </div>

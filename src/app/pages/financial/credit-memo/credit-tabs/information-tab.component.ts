@@ -45,6 +45,7 @@ export class CreditInformationTabComponent implements OnInit {
         'billing': {},
         'shipping_address': {},
         'items': [],
+        'company': {}
     };
 
 

@@ -7,8 +7,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
-import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
-import { InvoiceModalContent } from '../../../../shared/modals/invoice.modal';
 import { FinancialService } from '../../financial.service';
 import { InvoiceDetailKeyService } from './keys.view.control';
 

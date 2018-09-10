@@ -460,7 +460,6 @@ export class SaleQuotationCreateComponent implements OnInit {
                     } else {
                         this.toastr.error('The item ' + item.no + ' already added in the order');
                     }
-
                 }));
 
                 this.updateTotal();

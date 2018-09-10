@@ -40,6 +40,7 @@ export class CreditMemoCreateComponent implements OnInit {
     public data = {};
     public clone_items = [];
     public items_removed = [];
+    public currentDt;
 
     public messageConfig = {
         '2': 'Are you sure that you want to save & submit this quotation to approver?',
@@ -137,11 +138,10 @@ export class CreditMemoCreateComponent implements OnInit {
 
         //  Item
         this.list.items = [];
-        const currentDt = new Date();
+        this.currentDt = (new Date()).toISOString().slice(0, 10);
 
         // Init Date
-        this.generalForm.controls['issue_date'].patchValue(currentDt.toISOString().slice(0, 10));
-
+        this.generalForm.controls['issue_date'].patchValue(this.currentDt);
         // Lazy Load filter
         this.data['page'] = 1;
         const params = { page: this.data['page'], length: 15 };
@@ -227,11 +227,9 @@ export class CreditMemoCreateComponent implements OnInit {
         this.creditMemoService.getDetailInvoice(this.generalForm.value.document_id).subscribe(res => {
             this.list.items = res.data.inv_detail.map(item => {
                 item.quantity = item.qty_inv;
+                if (!item.is_item) { item.sku = item.misc_no; }
                 return item;
             });
-            this.clone_items = _.cloneDeep(this.list.items);
-            console.log(this.clone_items);
-
             this.data['order_detail'] = res.data;
             this.data['shipping_address'] = res.data.shipping_address;
             this.data['shipping_method'] = res.data.shipping_method;
@@ -314,10 +312,10 @@ export class CreditMemoCreateComponent implements OnInit {
     }
 
     deleteAction(id, item_condition) {
-        this.items_removed = [];
         this.list.items = this.list.items.filter((item) => {
             if (item.item_id === id && item.is_item === 1) {
-                this.items_removed.push(item);
+                this.items_removed.push(item.id);
+                console.log(this.items_removed);
             }
             return ((item.item_id || item.misc_id) + (item.item_condition_id || 'mis') !== (id + (item_condition || 'mis')));
         });
@@ -341,6 +339,9 @@ export class CreditMemoCreateComponent implements OnInit {
         });
     }
     addNewItem() {
+        if (this.items_removed.length === 0) {
+            return;
+        }
         const modalRef = this.modalService.open(CreditItemModalContent, { size: 'lg' });
         modalRef.result.then(res => {
             if (res instanceof Array && res.length > 0) {
@@ -359,19 +360,20 @@ export class CreditMemoCreateComponent implements OnInit {
                     item.source_name = 'From Master';
                 });
                 this.list.items = this.list.items.concat(res.filter((item) => {
+                    const idx = this.items_removed.indexOf(item.id);
+                    if (idx !== -1) { this.items_removed.splice(idx, 1); }
+                    console.log(this.items_removed);
                     if (listAdded.indexOf(item.sku + item.item_condition_id) < 0) {
                         return listAdded.indexOf(item.sku + item.item_condition_id) < 0;
                     } else {
                         this.toastr.error('The item ' + item.no + ' already added in the order');
-                        return -1;
                     }
                 }));
 
                 this.updateTotal();
             }
         }, dismiss => { });
-        modalRef.componentInstance.clone_items = this.clone_items;
-        modalRef.componentInstance.items_removed = this.items_removed;
+        modalRef.componentInstance.items_removed = { item_id: this.items_removed, document_type: this.generalForm.value.document_type, document_id: this.generalForm.value.document_id };
     }
 
     addNewMiscItem() {
@@ -402,7 +404,6 @@ export class CreditMemoCreateComponent implements OnInit {
                         return listAdded.indexOf(item.sku + (item.item_condition_id || 'misc')) < 0;
                     } else {
                         this.toastr.error('The item ' + item.no + ' already added in the order');
-                        return -1;
                     }
 
                 }));
