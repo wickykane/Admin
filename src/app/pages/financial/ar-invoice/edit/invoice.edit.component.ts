@@ -312,7 +312,7 @@ export class InvoiceEditComponent implements OnInit {
     }
 
     changePaymentTerms() {
-        const listPaymentTerms = this.listMaster['payment_terms'];
+        const listPaymentTerms = this.listMaster['payment_term'];
         for (const unit of listPaymentTerms) {
             if (unit.id === this.generalForm.value['payment_term_id']) {
                 this.generalForm.controls['payment_term_range'].setValue(unit.term_day);

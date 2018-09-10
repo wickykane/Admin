@@ -277,7 +277,7 @@ export class InvoiceCreateComponent implements OnInit {
     }
 
     changePaymentTerms() {
-        const listPaymentTerms = this.listMaster['payment_terms'];
+        const listPaymentTerms = this.listMaster['payment_term'];
         for (const unit of listPaymentTerms) {
             if (unit.id === this.generalForm.value['payment_term_id']) {
                 this.generalForm.controls['payment_term_range'].setValue(unit.term_day);
@@ -334,6 +334,7 @@ export class InvoiceCreateComponent implements OnInit {
             this.generalForm.patchValue({ note: null });
         }
     }
+
     changeSalesOrder(event) {
         this.list.items = event.detail.map(item => {
             item.qty_inv = item.qty;
