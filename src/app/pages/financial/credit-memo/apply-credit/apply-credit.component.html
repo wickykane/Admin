@@ -101,8 +101,7 @@
                     </div>
                     <div class="card-body no-padding">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-order" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex"
-                                (onEnter)="selectData($event)" [ngClass]="{'row-selected': i == selectedIndex}">
+                            <table *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                                 <thead>
                                     <tr>
                                         <th translate style="width: 50px;"></th>

@@ -74,7 +74,7 @@ export class CreditInformationTabComponent implements OnInit {
         }, dismiss => { });
         modalRef.componentInstance.creditId = id;
     }
-    printPDF(id, inv_num) {
+    printPDF(id) {
         const path = 'credit-memo/export-pdf/';
         const url = `${environment.api_url}${path}${id}`;
         const headers: HttpHeaders = new HttpHeaders();
