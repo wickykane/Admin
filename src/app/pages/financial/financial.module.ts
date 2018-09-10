@@ -10,18 +10,29 @@ import { InvoiceComponent } from './ar-invoice/invoice.component';
 import { InvoiceDetailComponent } from './ar-invoice/view/invoice.view.component';
 
 //  Saleorder Tab
+import { TableService } from '../../services/index';
+import { CommonShareModule, Helper, PageHeaderModule } from '../../shared/index';
 import { InvoiceEditComponent } from './ar-invoice/edit/invoice.edit.component';
 import { InvoiceCreditMemoTabComponent } from './ar-invoice/invoice-tabs/credit-memo-tab.component';
 import { InvoiceDebitMemoTabComponent } from './ar-invoice/invoice-tabs/debit-memo-tab.component';
 import { InvoiceDocumentTabComponent } from './ar-invoice/invoice-tabs/document-tab.component';
 import { InvoiceInformationTabComponent } from './ar-invoice/invoice-tabs/information-tab.component';
 import { InvoicePaymentTabComponent } from './ar-invoice/invoice-tabs/payment-tab.component';
-
-import { TableService } from '../../services/index';
-import { CommonShareModule, Helper, PageHeaderModule } from '../../shared/index';
 import { FinancialRoutingModule } from './financial-routing.module';
 import { FinancialService } from './financial.service';
 import { PaymentComponent } from './payment/payment.component';
+
+import { CreditMemoCreateComponent } from './credit-memo//create/credit-memo-create.component';
+import { CreditMemoListComponent } from './credit-memo//list/credit-memo-list.component';
+import { CreditMemoApplyComponent } from './credit-memo/apply-credit/apply-credit.component';
+import { CreditMemoService } from './credit-memo/credit-memo.service';
+import { CreditInformationTabComponent } from './credit-memo/credit-tabs/information-tab.component';
+import { CreditPaymentTabComponent } from './credit-memo/credit-tabs/payment-tab.component';
+import { CreditMemoEditComponent } from './credit-memo/edit/credit-memo-edit.component';
+import { CreditItemMiscModalContent } from './credit-memo/modals/item-misc/item-misc.modal';
+import { CreditItemModalContent } from './credit-memo/modals/item/item.modal';
+import { CreditMailModalComponent } from './credit-memo/modals/send-email/mail.modal';
+import { CreditMemoDetailComponent } from './credit-memo/view/credit-memo-view.component';
 
 import { DebitMemoCreateComponent } from './debit-memo/create/debit-memo-create.component';
 import { DebitMemoService } from './debit-memo/debit-memo.service';
@@ -64,6 +75,7 @@ import { MailModalComponent } from './ar-invoice/modals/mail.modal';
         InvoicePaymentTabComponent,
         InvoiceDocumentTabComponent,
         PaymentComponent,
+        MailModalComponent,
         DebitMemoListComponent,
         DebitMemoCreateComponent,
         SendMailDebitModalContent,
@@ -74,14 +86,27 @@ import { MailModalComponent } from './ar-invoice/modals/mail.modal';
         DebitInformationTabComponent,
         MailModalComponent,
         InvoiceEditComponent,
+        CreditMemoListComponent,
+        CreditMemoCreateComponent,
+        CreditInformationTabComponent,
+        CreditMemoDetailComponent,
+        CreditPaymentTabComponent,
+        CreditItemModalContent,
+        CreditItemMiscModalContent,
+        CreditMemoEditComponent,
+        CreditMailModalComponent,
+        CreditMemoApplyComponent
     ],
-    providers: [FinancialService, DebitMemoService, TableService, DatePipe, Helper],
+    providers: [FinancialService, DebitMemoService, CreditMemoService, TableService, DatePipe, Helper],
     entryComponents: [
         SendMailDebitModalContent,
         ItemsOrderDebitModalContent,
         MiscItemsDebitModalContent,
         DebitInformationTabComponent,
-        MailModalComponent
+        MailModalComponent,
+        CreditItemModalContent,
+        CreditItemMiscModalContent,
+        CreditMailModalComponent
     ]
 })
 export class FinancialModule { }

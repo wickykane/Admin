@@ -5,9 +5,9 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --sourcemap=false",
-    "build-dev": "ng build --prod --env=dev --base-href \"/sel2b/admin/\" --output-hashing=all && rimraf dist && mv dist-temp dist",
+    "build-dev": "node --max_old_space_size=8192 ./node_modules/@angular/cli/bin/ng build --prod --env=dev --base-href \"/sel2b/admin/\" --output-hashing=all && rimraf dist && mv dist-temp dist",
     "build-stag": "node --max_old_space_size=8192 ./node_modules/@angular/cli/bin/ng build --prod --env=stag --base-href \"/sel2b/admin/\" --output-hashing=all && rimraf dist && mv dist-temp dist",
-    "build-qc": " node --max_old_space_size=8192 ./node_modules/@angular/cli/bin/ng build --prod --env=qc --base-href \"/sel2b/admin/\" --output-hashing=all && rimraf dist && mv dist-temp dist",
+    "build-qc": "node --max_old_space_size=8192 ./node_modules/@angular/cli/bin/ng build --prod --env=qc --base-href \"/sel2b/admin/\" --output-hashing=all && rimraf dist && mv dist-temp dist",
     "build-pro": "ng build --prod --env=prod --base-href \"/sel2b/admin/\" --output-hashing=all && rimraf dist && mv dist-temp dist",
     "test": "ng test",
     "lint": "ng lint",

@@ -16,7 +16,7 @@ import { ConfirmModalContent } from './../../../shared/modals/confirm.modal';
     selector: 'app-sale-quotation',
     templateUrl: './sale-quotation.component.html',
     styleUrls: ['./sale-quotation.component.scss'],
-    providers: [SaleQuoteKeyService],
+    providers: [SaleQuoteKeyService, TableService],
     animations: [routerTransition()]
 })
 export class SaleQuotationComponent implements OnInit {
