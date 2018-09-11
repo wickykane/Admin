@@ -4,8 +4,8 @@
         <button *ngIf="detail['sts_code'] == 'NW'" class="btn btn-outline-primary" [routerLink]="['/financial/credit-memo/edit', _creditId]"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit</button>
         <button *ngIf="detail['sts_code'] == 'NW'" class="btn btn-outline-warning" (click)="confirmModal(_creditId, 2)"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i> Submit</button>
         <button *ngIf="detail['sts_code'] == 'NW'" class="btn btn-outline-danger" (click)="confirmModal(_creditId, 7)"><i class="fa fa-times-circle" aria-hidden="true"></i> Cancel</button>
-        <button *ngIf="detail['sts_code'] =='AP'" class="btn btn-outline-success" (click)="confirmModal(_creditId, 4)"><i class="fa fa-check-square"></i> Approve</button>
-        <button *ngIf="detail['sts_code'] == 'AP'" class="btn btn-outline-danger" (click)="confirmModal(_creditId, 3)"><i class="fa fa-ban" aria-hidden="true"></i> Reject</button>
+        <button *ngIf="detail['sts_code'] =='SB'" class="btn btn-outline-success" (click)="confirmModal(_creditId, 4)"><i class="fa fa-check-square"></i> Approve</button>
+        <button *ngIf="detail['sts_code'] == 'SB'" class="btn btn-outline-danger" (click)="confirmModal(_creditId, 3)"><i class="fa fa-ban" aria-hidden="true"></i> Reject</button>
         <button *ngIf="[4,8].indexOf(detail['sts_code']) != -1" class="btn btn-outline-dark"><i class="fa fa-money" aria-hidden="true"></i> Pay</button>
         <button *ngIf="['AP','RD'].indexOf(detail['sts_code']) != -1" class="btn btn-outline-dark"  [routerLink]="['/financial/credit-memo/apply-credit',_creditId]"><i class="fa fa-clipboard" aria-hidden="true"></i> Apply to Invoice</button>        
         <button class="btn btn-outline-dark" (click)="printPDF(_creditId)"><i class="fa fa-download" aria-hidden="true"></i> Print</button>

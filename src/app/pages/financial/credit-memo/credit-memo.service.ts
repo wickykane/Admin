@@ -61,7 +61,7 @@ export class CreditMemoService {
     }
 
     updateCredit(id, params) {
-        const url = 'credit-memo/update//' + id;
+        const url = 'credit-memo/update/' + id;
         return this.API.put(url, params);
     }
 

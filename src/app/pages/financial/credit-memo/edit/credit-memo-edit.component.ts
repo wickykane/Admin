@@ -122,7 +122,7 @@ export class CreditMemoEditComponent implements OnInit {
             'document_type': [1, Validators.required],
             'gl_account': [null, Validators.required],
             'issue_date': [null, Validators.required],
-            'credit_num': [null, Validators.required],
+            // 'credit_num': [null, Validators.required],
             'document_id': [null, Validators.required],
         });
         //  Init Key

@@ -222,7 +222,8 @@
                                                 </label>
                                                 <div class='col-6 '>
                                                     <div class="input-group">
-                                                        <input type="text" class="form-control" formControlName="sell_price">
+                                                            <input [isDecimal]="true" numberDirective [min]="0" class="form-control" type="number" formControlName="sell_price" >
+                                                        <!-- <input type="text" class="form-control" formControlName="sell_price"> -->
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">$</span>
                                                         </div>
