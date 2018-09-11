@@ -292,18 +292,14 @@ export class InvoiceComponent implements OnInit {
         const path = 'ar-invoice/print-pdf/';
         const url = `${environment.api_url}${path}${id}`;
         const headers: HttpHeaders = new HttpHeaders();
+        // Check if Pdf exist
         this.http.get(url, {
             headers,
             responseType: 'blob',
         }).subscribe(res => {
-            const file = new Blob([res], { type: 'application/pdf' });
-            const fileUrl = URL.createObjectURL(file);
-            const newWindow = window.open(`assets/pdfjs/web/viewer.html?openFile=false&fileName=${inv_num}.pdf&file=${encodeURIComponent(fileUrl)}`, '_blank');
+            const newWindow = window.open(`assets/pdfjs/web/viewer.html?openFile=false&encrypt=true&fileName=${inv_num}.pdf&file=${btoa(url)}`, '_blank');
             newWindow.document.title = inv_num;
             newWindow.focus();
-            setTimeout(() => {
-                newWindow.print();
-            }, 3000);
         });
     }
 
