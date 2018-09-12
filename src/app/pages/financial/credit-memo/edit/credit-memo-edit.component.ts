@@ -496,7 +496,7 @@ export class CreditMemoEditComponent implements OnInit {
 
         const params = {
             ...this.generalForm.value,
-            status_id: type,
+            status: type,
             original_ship_cost: this.order_info['original_ship_cost'],
             items,
             is_draft_sq: is_draft_sq || 0,

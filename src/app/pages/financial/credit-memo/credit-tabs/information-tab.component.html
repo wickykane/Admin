@@ -377,7 +377,7 @@
                                             <strong class="text-warning">Total Due</strong>
                                         </label>
                                     <div class='col-6 offset-md-1 padding-lr-10'>
-                                        <strong class="text-primary">{{detail.total | currency}}</strong>
+                                        <strong class="text-primary">{{detail.total_price | currency}}</strong>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -387,7 +387,7 @@
                                     <div class='col-5 padding-lr-10'>
                                         <div *ngIf="!data['is_fixed_early']">
                                             <strong>
-                                                {{ (detail['used_amount'] || 0) | currency}}
+                                                {{ (detail['used_price'] || 0) | currency}}
                                             </strong>
                                         </div>
                                     </div>
@@ -397,7 +397,7 @@
                                             <strong>Balance Amount</strong>
                                         </label>
                                     <div class="col-6 padding-lr-10">
-                                        <strong>{{(detail['balance_amount'] || 0) | currency}}</strong>
+                                        <strong>{{(detail['balance_price'] || 0) | currency}}</strong>
                                     </div>
                                 </div>
                             </div>
