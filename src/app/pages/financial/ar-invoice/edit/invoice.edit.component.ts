@@ -197,7 +197,7 @@ export class InvoiceEditComponent implements OnInit {
     }
 
     getDefaultNote() {
-        if (!this.generalForm.value.apply_late_fee || !this.generalForm.value.due_dt || !this.generalForm.value.company_id) {
+        if (!this.customer.apply_late_fee || !this.generalForm.value.apply_late_fee || !this.generalForm.value.due_dt || !this.generalForm.value.company_id) {
             return;
         }
         const params = {
@@ -217,16 +217,16 @@ export class InvoiceEditComponent implements OnInit {
                 this.generalForm.patchValue(data);
                 this.list.items = data.inv_detail;
                 this.updateTotal();
-                this.changeCustomer(1);
 
                 // Lazy Load filter
                 const params = { page: this.data['page'], length: 15 };
                 this.orderService.getAllCustomer(params).subscribe(result => {
                     const idList = result.data.rows.map(item => item.id);
                     this.listMaster['customer'] = result.data.rows;
-                    if (res.data.buyer_id && idList.indexOf(res.data.buyer_id) === -1) {
-                        this.listMaster['customer'].push({ id: res.data.buyer_id, company_name: res.data.buyer_name });
-                    }
+                    this.changeCustomer(1);
+                    // if (res.data.buyer_id && idList.indexOf(res.data.buyer_id) === -1) {
+                    //     this.listMaster['customer'].push({ id: res.data.buyer_id, company_name: res.data.buyer_name });
+                    // }
                     this.data['total_page'] = result.data.total_page;
                 });
             } catch (e) {
@@ -342,6 +342,11 @@ export class InvoiceEditComponent implements OnInit {
         this.orderService.getDetailCompany(company_id).subscribe(res => {
             try {
                 this.customer = res.data;
+                const idList = (this.listMaster['customer'] || []).map(item => item.id);
+                if (res.data.company_id && idList.indexOf(res.data.company_id) === -1) {
+                    this.listMaster['customer'].push({ id: res.data.company_id, company_name: res.data.company_name });
+                }
+
                 if (res.data.buyer_type === 'PS') {
                     this.addr_select.contact = res.data.contact[0];
                     this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });

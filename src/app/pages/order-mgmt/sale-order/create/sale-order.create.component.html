@@ -416,21 +416,21 @@
                            {{wh.qty_available}}                      
                         </td>
                         <td>
-                            <input [isDecimal]="true" numberDirective [min]="0" [disabled]="item.misc_id" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (change)="updateTotal()">
+                            <input [isDecimal]="true" numberDirective [min]="0" [disabled]="item.misc_id" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (changeValue)="updateTotal()">
                         </td>
                         <td>
                             <div>
                                 <span>$</span>
                                 <div style="display:inline-block;width:80%">
-                                    <input [isDecimal]="true" numberDirective [min]="0"  class="form-control input-sm" type="number" [(ngModel)]="item.sale_price" (change)="updateTotal();changeFromSource(item)">
+                                    <input [isDecimal]="true" numberDirective [min]="0"  class="form-control input-sm" type="number" [(ngModel)]="item.sale_price" (changeValue)="updateTotal();changeFromSource(item)">
                                 </div>
                             </div>
                         </td>
                         <td>
-                            <input [isDecimal]="true" numberDirective [min]="0" [max]="100" class="form-control input-sm" type="number" [(ngModel)]="item.discount_percent" (change)="updateTotal();">
+                            <input [isDecimal]="true" numberDirective [min]="0" [max]="100" class="form-control input-sm" type="number" [(ngModel)]="item.discount_percent" (changeValue)="updateTotal();">
                         </td>
                         <td>
-                            <input [isDecimal]="true" numberDirective [min]="0" [max]="100" class="form-control input-sm" type="number" [(ngModel)]="item.tax_percent" (change)="updateTotal();">
+                            <input [isDecimal]="true" numberDirective [min]="0" [max]="100" class="form-control input-sm" type="number" [(ngModel)]="item.tax_percent" (changeValue)="updateTotal();">
                         </td>
                         <td class="text-center">
                            <span>{{item.amount | currency}}</span>
