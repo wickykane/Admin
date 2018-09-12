@@ -1,5 +1,5 @@
 <div [@routerTransition]>
-    <app-page-header [heading]="'LIST OF AR INVOICES'" [icon]="'fa-th-list'"></app-page-header>
+    <app-page-header [heading]="'LIST OF RECEIPT VOUCHER'" [icon]="'fa-th-list'"></app-page-header>
     <app-shortcut [listShortcut]='invoiceKeyService.getKeys()'></app-shortcut>
     <div class="block anchor-scroll block-order">
         <section id="statusIndicator" class="status-indicator-section">
@@ -33,9 +33,11 @@
                             </ng-select>
                         </div>
                         <div class="col-md-4">
-                                <label for="buyer_name" class="control-label" translate>Payer</label>
-                                <input type="text" name="cus_name" formControlName="cus_name" class="form-control" placeholder="">
-                            </div>
+                            <label for="type" class="control-label" translate>Electronic</label>
+                            <select class="form-control" fromControlName="elect_type">
+                                <option *ngFor="let item of listMaster['electType']" [ngValue]="item.id">{{item.name}}</option>
+                            </select>
+                        </div>
                         <ng-container *ngIf="listMaster['listFilter'][0].value">
                             <div class="col-md-4">
                                 <label for="type" class="control-label" translate>Date Type</label>
@@ -43,7 +45,7 @@
                                     <option *ngFor="let item of listMaster['dateType']" [ngValue]="item.id">{{item.name}}</option>
                                 </select>
                             </div>
-                            <div class="col-md-4" *ngIf="dateType == 0">
+                            <div class="col-md-4" >
                                 <label for="" class="control-label" translate>From</label>
                                 <div class="date-group">
                                     <div clickOutside (clickOutside)="d1.close()" class="input-group">
@@ -56,20 +58,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4" *ngIf="dateType == 1">
-                                <label for="" class="control-label" translate>From</label>
-                                <div class="date-group">
-                                    <div clickOutside (clickOutside)="d1.close()" class="input-group">
-                                        <input [maxDate]="searchForm.value.inv_due_dt_to | dateObj" class="form-control" formControlName="inv_due_dt_from" placeholder="mm/dd/yyyy" name="dp" ngbDatepicker #d1="ngbDatepicker">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
-                                                <i class="fa fa-calendar" aria-hidden="true"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4" *ngIf="dateType == 0">
+                            
+                            <div class="col-md-4" >
                                 <label for="" class="control-label" translate>To</label>
                                 <div class="date-group">
                                     <div clickOutside (clickOutside)="dt2.close()" class="input-group">
@@ -81,21 +71,7 @@
                                         </div>
                                     </div>
                                 </div>
-
-                            </div>
-                            <div class="col-md-4" *ngIf="dateType == 1">
-                                <label for="" class="control-label" translate>To</label>
-                                <div class="date-group">
-                                    <div clickOutside (clickOutside)="dt2.close()" class="input-group">
-                                        <input [minDate]="searchForm.value.inv_due_dt_from | dateObj" class="form-control" formControlName="inv_due_dt_to" placeholder="mm/dd/yyyy" name="dp" ngbDatepicker #dt2="ngbDatepicker">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-outline-secondary" (click)="dt2.toggle()" type="button">
-                                                <i class="fa fa-calendar" aria-hidden="true"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            </div>                            
                         </ng-container>
 
                     </form>
@@ -126,24 +102,24 @@
                 <div class="card no-border">
                     <div class="card-header">
                         <strong>Line Items</strong>
-                        <button [routerLink]="['create']" style="margin:0; float:right" class="btn btn-link"> <i class="fa fa-plus text-success"></i> Create AR Invoice</button>
+                        <button [routerLink]="['create']" style="margin:0; float:right" class="btn btn-link"> <i class="fa fa-plus text-success"></i> Create Receipt Voucher</button>
                     </div>
                     <div class="card-body no-padding">
                         <div class="table-responsive list">
                             <table class="table table-bordered table-order" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                                 <thead class="bg-white">
                                     <tr>
-                                        <th>Invoice #</th>
-                                        <th>Issue Date</th>
-                                        <th>SO #</th>
-                                        <th>Customer</th>
-                                        <th>Due Date</th>
-                                        <th>Total Amount</th>
-                                        <th>Incentive</th>
-                                        <th>Penalty</th>
-                                        <th>Balance Amount</th>
+                                        <th>Voucher</th>
+                                        <th>Payer</th>
+                                        <th>Payment Date</th>
+                                        <th>Payment Method</th>
+                                        <th>Electric Payment</th>
+                                        <th>Received Amount</th>
                                         <th>Status</th>
-                                        <th>Aged Overdue</th>
+                                        <th>Created On</th>
+                                        <th>Created By</th>
+                                        <th>Last Updated On</th>
+                                        <th>Last Updated By</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>

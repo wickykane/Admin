@@ -13,7 +13,7 @@ import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 import { InvoiceKeyService } from './keys.list.control';
-import { MailModalComponent } from './modals/mail.modal';
+import { ReceiptMailModalComponent } from './modals/mail.modal';
 
 
 @Component({
@@ -75,6 +75,7 @@ export class ReceiptVoucherComponent implements OnInit {
             'inv_dt_to': [null],
             'inv_due_dt_from': [null],
             'inv_due_dt_to': [null],
+            'elect_type': [null],
         });
 
         //  Assign get list function name, override letiable here
@@ -88,7 +89,8 @@ export class ReceiptVoucherComponent implements OnInit {
     ngOnInit() {
         //  Init Fn
         this.listMaster['listFilter'] = [{ value: false, name: 'Date Filter' }];
-        this.listMaster['dateType'] = [{ id: 0, name: 'Issue Date' }, { id: 1, name: 'Due Date' }];
+        this.listMaster['dateType'] = [{ id: 0, name: 'Payment Date' }, { id: 1, name: 'Creadted On' }, { id: 2, name: 'Updated On' }];
+        this.listMaster['electType'] = [{ id: 0, name: 'No' }, { id: 1, name: 'Yes' }];
         this.listMaster['status'] = [
             { id: 1, name: 'New' },
             { id: 2, name: 'Submitted' },
@@ -176,7 +178,7 @@ export class ReceiptVoucherComponent implements OnInit {
     }
 
     sendMail(id) {
-        const modalRef = this.modalService.open(MailModalComponent, { size: 'lg', windowClass: 'modal-md' });
+        const modalRef = this.modalService.open(ReceiptMailModalComponent, { size: 'lg', windowClass: 'modal-md' });
         modalRef.result.then(res => {
         }, dismiss => { });
         modalRef.componentInstance.invoiceId = id;

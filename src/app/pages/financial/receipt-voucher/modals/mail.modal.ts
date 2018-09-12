@@ -10,7 +10,7 @@ import { FinancialService } from './../../financial.service';
     styleUrls: ['./modal.scss'],
     providers: [FinancialService]
 })
-export class MailModalComponent implements OnInit {
+export class ReceiptMailModalComponent implements OnInit {
     // Resolve Data
     public mailForm: FormGroup;
     @Input() invoiceId;
