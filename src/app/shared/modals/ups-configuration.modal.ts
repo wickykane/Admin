@@ -104,6 +104,10 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
         var params = Object.assign({}, this.generalForm.value);
         // params['ranges']=this.ranges;
         params['ship_options'] = this.getShipOptions();
+        console.log(this.upsList.length);
+        if(this.upsList.length==0){
+            return false;
+        }
         this.itemService.checkCondition(params).subscribe(res => {
             this.activeModal.close({ id: '5', data: params });
         });

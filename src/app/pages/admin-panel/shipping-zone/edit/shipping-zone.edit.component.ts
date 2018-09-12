@@ -31,6 +31,7 @@ export class ShippingZoneEditComponent implements OnInit {
     /**
      * Variable Declaration
      */
+    public selectAll = false;
     public generalForm: FormGroup;
     public listMaster = {};
     public listShipping = [];
@@ -177,6 +178,7 @@ export class ShippingZoneEditComponent implements OnInit {
     getFormById(id) {
         this.shippingZoneService.getShippingZoneById(id).subscribe(res => {
             this.generalForm.patchValue(res.data);
+            this.generalForm.controls.status.patchValue(res.data.sts);
             this.cd = res.data.cd;
             this.checkListCountry(res.data.shipping_country);
             this.checkListShipping(res.data.shipping_zone_quotes);
@@ -291,33 +293,7 @@ export class ShippingZoneEditComponent implements OnInit {
     onCheckCountryState(country) {
         this.selectedCountry = country;
         this.tempListState = country.state;
-        // if (this.listMasterData['state'][code]) {
-        //     const modalRef = this.modalService.open(StateFilterModalComponent);
-
-        //     modalRef.componentInstance.isEdit = false;
-        //     modalRef.componentInstance.stateList = this.listMasterData['state'][code];
-        //     // modalRef.componentInstance.listSelectCountry = this.listMasterData['state'][code];
-        //     this.listSelectCountry.forEach(item => {
-        //         if (item.country_code == code) {
-        //             modalRef.componentInstance.listSelectCountry = item;
-        //         }
-        //     })
-        //     modalRef.componentInstance.code = code;
-        //     modalRef.result.then(res => {
-        //         if (res['code']) {
-        //             this.listSelectCountry.forEach(item => {
-        //                 if (item.country_code == res.code) {
-        //                     item['state'] = res.state;
-        //                 }
-        //             })
-        //         }
-
-
-        //     });
-        // }
-        // else {
-        //     return false;
-        // }
+        this.checkState();
     }
 
     openShippingModal(id) {
@@ -532,6 +508,27 @@ export class ShippingZoneEditComponent implements OnInit {
             }
         });
         return count;
+    }
+    checkState() {
+        if (this.selectedCountry) {
+        for (var i = 0; i < this.selectedCountry.state.length; i++) {
+            if (this.selectedCountry.state[i].selected) {
+                if (i == this.selectedCountry.state.length - 1) {
+                    return this.selectAll = true;
+                }
+            }
+            else {
+                return this.selectAll = false;
+            }
+        }
+    }
+    }
+    selectState() {
+        if (this.selectedCountry) {
+            this.selectedCountry.state.forEach(item => {
+                return item.selected = this.selectAll;
+            });
+        }
     }
 }
 

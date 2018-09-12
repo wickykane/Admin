@@ -1,0 +1,11 @@
+.mail-form {
+    label {
+        margin-bottom: 0;
+        width: 55px;
+    }
+    input {
+        outline: none;
+        border: none;
+        width: calc(100% - 60px);
+    }
+}
