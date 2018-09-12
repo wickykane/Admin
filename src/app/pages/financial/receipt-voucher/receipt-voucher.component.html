@@ -1,0 +1,233 @@
+<div [@routerTransition]>
+    <app-page-header [heading]="'LIST OF AR INVOICES'" [icon]="'fa-th-list'"></app-page-header>
+    <app-shortcut [listShortcut]='invoiceKeyService.getKeys()'></app-shortcut>
+    <div class="block anchor-scroll block-order">
+        <section id="statusIndicator" class="status-indicator-section">
+            <ul class="status-ctn dashboard-content">
+                <li style="cursor: pointer;" (click)="filter(item.status)" *ngFor="let item of listMaster['count-status']" class="status-item dashboard-stat {{item.color}}">
+                    <img *ngIf="item.img" [src]="item.img" alt="">
+                    <div class="status-count">{{ item.count || 0 }}</div>
+                    <div class="status-lbl text-uppercase">{{ item.name }}</div>
+                </li>
+            </ul>
+        </section>
+        <div class="block-content pd-bottom padding-lr-0 mt-2">
+            <div class="row">
+                <div class="col-6">
+                    <form class="row form-horizontal form-search filter-order-group" role="form" [formGroup]="searchForm">
+                        <div class="col-md-4">
+                            <label for="sale_quote_num" class="control-label">Receipt No</label>
+                            <input autofocus="true" type="text" name="inv_num" formControlName="inv_num" class="form-control" placeholder="">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="buyer_name" class="control-label" translate>Payment Method</label>
+                            <input type="text" name="cus_name" formControlName="cus_name" class="form-control" placeholder="">
+                        </div>
+                        <div class="col-md-4">
+                                <label for="buyer_name" class="control-label" translate>Payer</label>
+                                <input type="text" name="cus_name" formControlName="cus_name" class="form-control" placeholder="">
+                            </div>
+                        <div class="col-md-4">
+                            <label for="sts" class="control-label">Status</label>
+                            <ng-select class="ng-select-filter" [multiple]="true" [items]="listMaster['status']" bindLabel="name" bindValue="id" formControlName="status">
+                            </ng-select>
+                        </div>
+                        <div class="col-md-4">
+                                <label for="buyer_name" class="control-label" translate>Payer</label>
+                                <input type="text" name="cus_name" formControlName="cus_name" class="form-control" placeholder="">
+                            </div>
+                        <ng-container *ngIf="listMaster['listFilter'][0].value">
+                            <div class="col-md-4">
+                                <label for="type" class="control-label" translate>Date Type</label>
+                                <select class="form-control" [(ngModel)]="dateType" [ngModelOptions]="{standalone: true}" (ngModelChange)="onDateTypeChanged()">
+                                    <option *ngFor="let item of listMaster['dateType']" [ngValue]="item.id">{{item.name}}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4" *ngIf="dateType == 0">
+                                <label for="" class="control-label" translate>From</label>
+                                <div class="date-group">
+                                    <div clickOutside (clickOutside)="d1.close()" class="input-group">
+                                        <input [maxDate]="searchForm.value.inv_dt_to | dateObj" class="form-control" formControlName="inv_dt_from" placeholder="mm/dd/yyyy" name="dp" ngbDatepicker #d1="ngbDatepicker">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
+                                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4" *ngIf="dateType == 1">
+                                <label for="" class="control-label" translate>From</label>
+                                <div class="date-group">
+                                    <div clickOutside (clickOutside)="d1.close()" class="input-group">
+                                        <input [maxDate]="searchForm.value.inv_due_dt_to | dateObj" class="form-control" formControlName="inv_due_dt_from" placeholder="mm/dd/yyyy" name="dp" ngbDatepicker #d1="ngbDatepicker">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
+                                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4" *ngIf="dateType == 0">
+                                <label for="" class="control-label" translate>To</label>
+                                <div class="date-group">
+                                    <div clickOutside (clickOutside)="dt2.close()" class="input-group">
+                                        <input [minDate]="searchForm.value.inv_dt_from | dateObj" class="form-control" formControlName="inv_dt_to" placeholder="mm/dd/yyyy" name="dp" ngbDatepicker #dt2="ngbDatepicker">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" (click)="dt2.toggle()" type="button">
+                                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-4" *ngIf="dateType == 1">
+                                <label for="" class="control-label" translate>To</label>
+                                <div class="date-group">
+                                    <div clickOutside (clickOutside)="dt2.close()" class="input-group">
+                                        <input [minDate]="searchForm.value.inv_due_dt_from | dateObj" class="form-control" formControlName="inv_due_dt_to" placeholder="mm/dd/yyyy" name="dp" ngbDatepicker #dt2="ngbDatepicker">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" (click)="dt2.toggle()" type="button">
+                                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+
+                    </form>
+                </div>
+                <div class="col-3">
+                    <div class="block-btn-search">
+                        <div class="mt-1 group-btn-search">
+                            <button type="button" class="btn-default-custom" (click)="moreFilter()">More Filter</button>
+                            <div class="show-more" [hidden]="!onoffFilter">
+                                <ul class="mt-2">
+                                    <li *ngFor="let item of listMaster['listFilter']; let i = index;">
+                                        <label for="{{i}}">
+                                            <input #inp type="checkbox" value="item.value" [(ngModel)]="item.value"> {{item.name}}
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                            <button type="button" class="btn-default-custom" (click)="tableService.searchAction()">Search</button>
+                            <button type="button" class="btn-default-custom" (click)="tableService.resetAction(this.searchForm)">Reset</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mg-top-10">
+            <div class="col-12">
+                <div class="card no-border">
+                    <div class="card-header">
+                        <strong>Line Items</strong>
+                        <button [routerLink]="['create']" style="margin:0; float:right" class="btn btn-link"> <i class="fa fa-plus text-success"></i> Create AR Invoice</button>
+                    </div>
+                    <div class="card-body no-padding">
+                        <div class="table-responsive list">
+                            <table class="table table-bordered table-order" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
+                                <thead class="bg-white">
+                                    <tr>
+                                        <th>Invoice #</th>
+                                        <th>Issue Date</th>
+                                        <th>SO #</th>
+                                        <th>Customer</th>
+                                        <th>Due Date</th>
+                                        <th>Total Amount</th>
+                                        <th>Incentive</th>
+                                        <th>Penalty</th>
+                                        <th>Balance Amount</th>
+                                        <th>Status</th>
+                                        <th>Aged Overdue</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
+                                    <tr>
+                                        <td>
+                                            <a class="text-primary" [routerLink]="['view', item.id]">{{item.inv_num}}</a>
+                                        </td>
+                                        <td>{{item.inv_dt}}</td>
+                                        <td>{{item.order_num}}</td>
+                                        <td>{{item.name}}</td>
+                                        <td>{{item.due_dt}}</td>
+                                        <td>{{item.total_amount|currency}}</td>
+                                        <td>{{item.incentive|currency}}</td>
+                                        <td>{{item.penalty|currency}}</td>
+                                        <td>{{item.balance_amount|currency}}</td>
+                                        <td>
+                                            <span class="badge badge-info bg-blue" *ngIf="item.invoice_status_id == 1">{{convertStatus(item.invoice_status_id, 'status')}}</span>
+                                            <span class="badge badge-warning bg-texas-rose" *ngIf="item.invoice_status_id == 2">{{convertStatus(item.invoice_status_id, 'status')}}</span>
+                                            <span class="badge badge-danger bg-magenta" *ngIf="item.invoice_status_id == 3">{{convertStatus(item.invoice_status_id, 'status')}}</span>
+                                            <span class="badge badge-success bg-strong-green" *ngIf="item.invoice_status_id == 4">{{convertStatus(item.invoice_status_id, 'status')}}</span>
+                                            <span class="badge badge-primary bg-darkblue" *ngIf="item.invoice_status_id == 5">{{convertStatus(item.invoice_status_id, 'status')}}</span>
+                                            <span class="badge badge-primary bg-lemon" *ngIf="item.invoice_status_id == 6">{{convertStatus(item.invoice_status_id, 'status')}}</span>
+                                            <span class="badge badge-danger bg-red" *ngIf="item.invoice_status_id == 7">{{convertStatus(item.invoice_status_id, 'status')}}</span>
+                                            <span class="badge badge-primary bg-bright-grey" *ngIf="item.invoice_status_id == 8">{{convertStatus(item.invoice_status_id, 'status')}}</span>
+                                        </td>
+                                        <td>{{item.aging_overdue}}</td>
+                                        <!-- <td>{{item.paid_amount|currency}}</td> -->
+                                        <td>
+                                            <a class="btn btn-default" ngbTooltip="View" (click)="viewInvoice(item.id)">
+                                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                            </a>
+                                            <a class="btn btn-default " ngbTooltip="Edit" (click)="editInvoice(item.id)" *ngIf="item.invoice_status_id == 1">
+                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                            </a>
+                                            <a ngbTooltip="Submit" *ngIf="item.invoice_status_id == 1" class="btn btn-default" (click)="confirmModal(item.id, 2)"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></a>
+                                            <a class="btn btn-default" ngbTooltip="Cancel" (click)="confirmModal(item.id, 7)" *ngIf="item.invoice_status_id == 1">
+                                                <i class="fa fa-times-circle" aria-hidden="true"></i>
+                                            </a>
+                                            <a ngbTooltip="Approve" *ngIf="item['invoice_status_id'] == 2" class="btn btn-default" (click)="confirmModal(item.id, 4)"><i class="fa fa-check"></i></a>
+                                            <a ngbTooltip="Reject" *ngIf="item['invoice_status_id'] == 2" class="btn btn-default" (click)="confirmModal(item.id, 3)"><i class="fa fa-ban" aria-hidden="true"></i></a>
+                                            <a ngbTooltip="Pay" *ngIf="[4,8].indexOf(item['invoice_status_id']) != -1" class="btn btn-default"><i class="fa fa-money" aria-hidden="true"></i></a>
+                                            <a class="btn btn-default" ngbTooltip="Print" (click)="printPDF(item.id, item.inv_num)">
+                                                <i class="fa fa-download" aria-hidden="true"></i>
+                                            </a>
+                                            <a ngbTooltip="Send Mail" *ngIf="[3,4,6,7,8].indexOf(item['invoice_status_id']) != -1" class="btn btn-default" (click)="sendMail(item.id)"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
+                                            <!-- <a ngbTooltip="Reopen" *ngIf="item['invoice_status_id'] == 3" class="btn btn-default" (click)="confirmModal(item.id, 1)"><i class="fa fa-external-link-square"></i></a> -->
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                                <tbody *ngIf="list.items.length == 0">
+                                    <tr>
+                                        <td colspan="100%" class="text-center" translate>No data.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-12 no-padding">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row normal-pagination mg-top-10" *ngIf="list.items.length > 0">
+            <div class="col-md-6 padding-lr-0">
+                <div class="text-left">
+                    <div class="col-md-6" style="padding-left: 0px;">
+                        <span style="float: left; padding-right: 10px;">{{list.items.length}}/{{tableService.pagination.total_record}} items </span>
+                        <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length" (change)="tableService.changeLength()">
+                             <option *ngFor="let option of tableService.itemPerPageOptions" [ngValue]="option">{{option}}</option>
+                         </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 padding-lr-0">
+                <div class="text-right">
+                    <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length" [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page" [maxSize]="tableService.maxSize"
+                        [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

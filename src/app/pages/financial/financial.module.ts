@@ -20,7 +20,6 @@ import { InvoiceInformationTabComponent } from './ar-invoice/invoice-tabs/inform
 import { InvoicePaymentTabComponent } from './ar-invoice/invoice-tabs/payment-tab.component';
 import { FinancialRoutingModule } from './financial-routing.module';
 import { FinancialService } from './financial.service';
-import { PaymentComponent } from './payment/payment.component';
 
 import { CreditMemoCreateComponent } from './credit-memo//create/credit-memo-create.component';
 import { CreditMemoListComponent } from './credit-memo//list/credit-memo-list.component';
@@ -41,9 +40,14 @@ import { DebitMemoListComponent } from './debit-memo/list/debit-memo-list.compon
 import { ItemsOrderDebitModalContent } from './debit-memo/modals/items-order/items-order.modal';
 import { MiscItemsDebitModalContent } from './debit-memo/modals/misc-items/misc-items.modal';
 import { SendMailDebitModalContent } from './debit-memo/modals/send-email/send-mail.modal';
+import { DebitInformationTabComponent } from './debit-memo/tabs/debit-information/debit-information-tab.component';
 import { DebitMemoViewComponent } from './debit-memo/view/debit-memo-view.component';
 
-import { DebitInformationTabComponent } from './debit-memo/tabs/debit-information/debit-information-tab.component';
+// Receipt Voucher
+ import {ReceiptVoucherCreateComponent} from './receipt-voucher/create/receipt-voucher.create.component';
+ import {ReceiptVoucherEditComponent} from './receipt-voucher/edit/receipt-voucher.edit.component';
+ import {ReceiptVoucherComponent} from './receipt-voucher/receipt-voucher.component';
+ import {ReceiptVoucherDetailComponent} from './receipt-voucher/view/receipt-voucher.view.component';
 
 
 import { CKEditorModule } from 'ng2-ckeditor';
@@ -74,7 +78,6 @@ import { MailModalComponent } from './ar-invoice/modals/mail.modal';
         InvoiceDebitMemoTabComponent,
         InvoicePaymentTabComponent,
         InvoiceDocumentTabComponent,
-        PaymentComponent,
         MailModalComponent,
         DebitMemoListComponent,
         DebitMemoCreateComponent,
@@ -95,7 +98,11 @@ import { MailModalComponent } from './ar-invoice/modals/mail.modal';
         CreditItemMiscModalContent,
         CreditMemoEditComponent,
         CreditMailModalComponent,
-        CreditMemoApplyComponent
+        CreditMemoApplyComponent,
+        ReceiptVoucherCreateComponent,
+        ReceiptVoucherEditComponent,
+        ReceiptVoucherComponent,
+        ReceiptVoucherDetailComponent
     ],
     providers: [FinancialService, DebitMemoService, CreditMemoService, TableService, DatePipe, Helper],
     entryComponents: [
