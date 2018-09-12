@@ -12,13 +12,16 @@ import { CreditMemoEditComponent} from './credit-memo/edit/credit-memo-edit.comp
 import { CreditMemoListComponent } from './credit-memo/list/credit-memo-list.component';
 import { CreditMemoDetailComponent } from './credit-memo/view/credit-memo-view.component';
 
-
-import { PaymentComponent } from './payment/payment.component';
-
 import { DebitMemoCreateComponent } from './debit-memo/create/debit-memo-create.component';
 import { DebitMemoEditComponent } from './debit-memo/edit/debit-memo-edit.component';
 import { DebitMemoListComponent } from './debit-memo/list/debit-memo-list.component';
 import { DebitMemoViewComponent } from './debit-memo/view/debit-memo-view.component';
+
+// Receipt Voucher
+import {ReceiptVoucherCreateComponent} from './receipt-voucher/create/receipt-voucher.create.component';
+import {ReceiptVoucherEditComponent} from './receipt-voucher/edit/receipt-voucher.edit.component';
+import {ReceiptVoucherComponent} from './receipt-voucher/receipt-voucher.component';
+import {ReceiptVoucherDetailComponent} from './receipt-voucher/view/receipt-voucher.view.component';
 
 const routes: Routes = [
     {
@@ -31,9 +34,12 @@ const routes: Routes = [
         ]
     },
     {
-        path: 'payment',
+        path: 'receipt-voucher',
         children: [
-            { path: '', component: InvoiceComponent }
+            { path: '', component: ReceiptVoucherComponent },
+            { path: 'create', component: ReceiptVoucherCreateComponent },
+            { path: 'view/:id', component: ReceiptVoucherDetailComponent },
+            { path: 'edit/:id', component: ReceiptVoucherEditComponent }
         ]
     },
     {
