@@ -32,6 +32,7 @@ export class ShippingZoneCreateComponent implements OnInit {
     /**
      * Variable Declaration
      */
+    public selectAll = false;
     public generalForm: FormGroup;
     public listMaster = {};
     public listShipping = [];
@@ -45,7 +46,7 @@ export class ShippingZoneCreateComponent implements OnInit {
     public freeShippingList = {
         'free_shipping_item': 0,
         'limit_order_over': 0,
-        'condition': 'null',
+        'condition': '',
         'limit_total_weight': 0,
         'id': 1,
         'price': ''
@@ -204,30 +205,6 @@ export class ShippingZoneCreateComponent implements OnInit {
     onCheckCountryState(country) {
         this.selectedCountry = country;
         this.tempListState = country.state;
-        // if (this.listMasterData["state"][code]) {
-        // const modalRef = this.modalService.open(StateFilterModalComponent);
-
-        // modalRef.componentInstance.isEdit = false;
-        // modalRef.componentInstance.stateList = this.listMasterData["state"][code];
-        // // modalRef.componentInstance.listSelectCountry = this.listMasterData["state"][code];
-        // this.listSelectCountry.forEach(item => {
-        //     if (item.country_code === code) {
-        //         modalRef.componentInstance.listSelectCountry = JSON.parse(JSON.stringify(item));
-        //     }
-        // })
-        // modalRef.componentInstance.code = code;
-        // modalRef.result.then(res => {
-        //     if (res["code"]) {
-        //         this.listSelectCountry.forEach(item => {
-        //             if (item.country_code == res.code) {
-        //                 item["state"] = res.state;
-        //             }
-        //         });
-        //     }
-        // });
-        // } else {
-        // return false;
-        // }
     }
 
     openShippingModal(id) {
@@ -443,5 +420,27 @@ export class ShippingZoneCreateComponent implements OnInit {
         });
         return count;
     }
+    checkState() {
+        if (this.selectedCountry) {
+        for (var i = 0; i < this.selectedCountry.state.length; i++) {
+            if (this.selectedCountry.state[i].selected) {
+                if (i == this.selectedCountry.state.length - 1) {
+                    return this.selectAll = true;
+                }
+            }
+            else {
+                return this.selectAll = false;
+            }
+        }
+    }
+    }
+    selectState() {
+        if (this.selectedCountry) {
+            this.selectedCountry.state.forEach(item => {
+                return item.selected = this.selectAll;
+            });
+        }
+    }
+
 }
 
