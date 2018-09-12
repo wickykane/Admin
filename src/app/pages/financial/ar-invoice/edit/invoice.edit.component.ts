@@ -344,7 +344,7 @@ export class InvoiceEditComponent implements OnInit {
                 this.customer = res.data;
                 const idList = (this.listMaster['customer'] || []).map(item => item.id);
                 if (res.data.company_id && idList.indexOf(res.data.company_id) === -1) {
-                    this.listMaster['customer'].push({ id: res.data.company_id, company_name: res.data.company_name });
+                    this.listMaster['customer'] = [...this.listMaster['customer'], { id: res.data.company_id, company_name: res.data.company_name }];
                 }
 
                 if (res.data.buyer_type === 'PS') {

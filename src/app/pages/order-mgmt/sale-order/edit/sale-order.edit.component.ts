@@ -124,7 +124,7 @@ export class SaleOrderEditComponent implements OnInit {
             'contact_user_id': [null],
             'prio_level': [null],
             'sale_person_id': [null, Validators.required],
-            'warehouse_id': [1, Validators.required],
+            'warehouse_id': [Validators.required],
             'payment_method_id': [null, Validators.required],
             'billing_id': [null],
             'shipping_id': [null],
@@ -184,7 +184,7 @@ export class SaleOrderEditComponent implements OnInit {
                 this.generalForm.patchValue({
                     order_number: data.code,
                     ship_method_rate: +data.ship_method_rate,
-                    ship_method_option: +data.ship_method_option,
+                    ship_method_option: data.ship_method_option,
                 });
 
 
