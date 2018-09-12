@@ -199,7 +199,7 @@ export class InvoiceCreateComponent implements OnInit {
     }
 
     getDefaultNote() {
-        if (!this.generalForm.value.apply_late_fee || !this.generalForm.value.due_dt || !this.generalForm.value.company_id) {
+        if (!this.customer.apply_late_fee || !this.generalForm.value.apply_late_fee || !this.generalForm.value.due_dt || !this.generalForm.value.company_id) {
             return;
         }
         const params = {

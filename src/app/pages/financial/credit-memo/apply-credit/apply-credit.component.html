@@ -139,7 +139,7 @@
                                             <td>{{item.balance_due|currency}}</td>
                                             <td>
                                                 <input [isDecimal]="true" numberDirective [min]="0" [max]="item.original_amount" class="form-control input-sm" type="number"
-                                                    [(ngModel)]="item.amount" (change)="updateBalance()">
+                                                    [(ngModel)]="item.amount" (changeValue)="updateBalance()">
                                             </td>
                                             <td></td>
                                         </tr>

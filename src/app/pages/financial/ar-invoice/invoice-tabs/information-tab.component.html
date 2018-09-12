@@ -395,7 +395,7 @@
                                 <div *ngIf="detail['is_early']" class="form-group row">
                                     <label class='col-6 control-label'>
                                             - Early Payment Incentive
-                                            <input readonly *ngIf="!data['is_fixed_early']" (change)="updateTotal()"  [isDecimal]="true" numberDirective [min]="0" [max]="100" style="width: 50px;" class="form-control" [(ngModel)]="invoice_info['incentive_percent']" class="form-control" value="0" type="number">
+                                            <input readonly *ngIf="!data['is_fixed_early']" (changeValue)="updateTotal()"  [isDecimal]="true" numberDirective [min]="0" [max]="100" style="width: 50px;" class="form-control" [(ngModel)]="invoice_info['incentive_percent']" class="form-control" value="0" type="number">
                                             <span *ngIf="!data['is_fixed_early']"> %</span>
                                         </label>
                                     <div class='col-5 padding-lr-10'>

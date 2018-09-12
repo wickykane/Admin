@@ -395,16 +395,16 @@
                                             </td>
                                             <td> {{ item.qty }}</td>
                                             <td>
-                                                <input [disabled]="item.misc_id" [isDecimal]="true" numberDirective [max]="item.qty || 0 " [min]="0" [disabled]="item.misc_id" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.qty_inv" (change)="updateTotal()">
+                                                <input [disabled]="item.misc_id" [isDecimal]="true" numberDirective [max]="item.qty || 0 " [min]="0" [disabled]="item.misc_id" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.qty_inv" (changeValue)="updateTotal()">
                                             </td>
                                             <td>
                                                 {{ item.price | currency }}
                                             </td>
                                             <td>
-                                                <input [isDecimal]="true" numberDirective [min]="0" [max]="100" class="form-control input-sm" type="number" [(ngModel)]="item.discount_percent" (change)="updateTotal()">
+                                                <input [isDecimal]="true" numberDirective [min]="0" [max]="100" class="form-control input-sm" type="number" [(ngModel)]="item.discount_percent" (changeValue)="updateTotal()">
                                             </td>
                                             <td>
-                                                <input [isDecimal]="true" numberDirective [min]="0" [max]="100" class="form-control input-sm" type="number" [(ngModel)]="item.tax_percent" (change)="updateTotal()">
+                                                <input [isDecimal]="true" numberDirective [min]="0" [max]="100" class="form-control input-sm" type="number" [(ngModel)]="item.tax_percent" (changeValue)="updateTotal()">
                                             </td>
                                             <td class="text-center">
                                                 <span>{{item.amount | currency}}</span>
@@ -479,7 +479,7 @@
                                 <div *ngIf="data['is_early']" class="form-group row">
                                     <label class='col-6 control-label'>
                                         - Early Payment Incentive
-                                        <input *ngIf="!data['is_fixed_early']" (change)="updateTotal()"  [isDecimal]="true" numberDirective [min]="0" [max]="100" style="width: 50px; margin-left: 10px;" class="form-control" [(ngModel)]="order_info['incentive_percent']" class="form-control" value="0" type="number">
+                                        <input readonly *ngIf="!data['is_fixed_early']" (changeValue)="updateTotal()"  [isDecimal]="true" numberDirective [min]="0" [max]="100" style="width: 50px; margin-left: 10px;" class="form-control" [(ngModel)]="order_info['incentive_percent']" class="form-control" value="0" type="number">
                                         <span *ngIf="!data['is_fixed_early']"> %</span>
                                     </label>
                                     <div class='col-5 padding-lr-10'>

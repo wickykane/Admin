@@ -1,5 +1,5 @@
 import { DecimalPipe } from '@angular/common';
-import { Directive, ElementRef, HostListener, Input, OnInit } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { NgModel } from '@angular/forms';
 
 @Directive({
@@ -12,27 +12,22 @@ export class NumberDirective implements OnInit {
     @Input() min;
     @Input() isDecimal;
     public regexStr = '^[0-9]*$';
+    @Output() changeValue = new EventEmitter();
 
     constructor(private number: DecimalPipe, private element: ElementRef, private ngModel: NgModel) {
 
     }
 
-    // @HostListener('ngModelChange', ['$event'])
-    // onInputChange(event) {
-    //     if (event > this.max) {
-    //         this.ngModel.valueAccessor.writeValue(this.max);
-    //     }
-    //     if (event < this.min) {
-    //         this.ngModel.valueAccessor.writeValue(this.min);
-    //     }
-    // }
 
     @HostListener('input', ['$event'])
     onInputChange($event) {
         const event = $event.target.value;
         const value = (event > this.max) ? this.max : (event < this.min) ? this.min : event;
-        this.ngModel.valueAccessor.writeValue(value);
-        this.ngModel.viewToModelUpdate(value);
+        if (event !== value) {
+            this.ngModel.viewToModelUpdate(value);
+            this.ngModel.valueAccessor.writeValue(value);
+        }
+        this.changeValue.emit(value);
     }
 
     @HostListener('keydown', ['$event'])
