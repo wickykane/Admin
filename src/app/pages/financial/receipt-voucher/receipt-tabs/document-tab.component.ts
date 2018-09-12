@@ -4,12 +4,12 @@ import { FinancialService } from '../../financial.service';
 import { TableService } from './../../../../services/table.service';
 
 @Component({
-    selector: 'app-invoice-document-tab',
+    selector: 'app-receipt-document-tab',
     templateUrl: './document-tab.component.html',
-    styleUrls: ['./invoice-tab.component.scss'],
+    styleUrls: ['./receipt-tab.component.scss'],
     providers: [FinancialService]
 })
-export class InvoiceDocumentTabComponent implements OnInit {
+export class ReceiptDocumentTabComponent implements OnInit {
 
     /**
      * letiable Declaration
