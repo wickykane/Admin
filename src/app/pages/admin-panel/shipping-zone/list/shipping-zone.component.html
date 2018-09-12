@@ -16,7 +16,7 @@
                         <!-- <input type="text" name="country_code" formControlName="country_code" class="form-control" id="so_no" placeholder="" capitalize> -->
                         <select class="form-control" formControlName="country_code">
                             <option value="null" selected="true">--Select--</option>
-                            <option [value]="item.country_id" selected="true" *ngFor="let item of countryList">{{item.name}}</option>
+                            <option [value]="item.country_code" selected="true" *ngFor="let item of countryList">{{item.name}}</option>
                         </select>
                     </div>
                     <div class="block-search">

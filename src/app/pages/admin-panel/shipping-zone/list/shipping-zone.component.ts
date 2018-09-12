@@ -60,7 +60,7 @@ export class ShippingZoneComponent implements OnInit {
         // Init Fn
         this.listMoreFilter = { value1: false, value2: false };
         this.getList();
-        this.getListMaster();
+        // this.getListMaster();
         this.getListCountry();
         this.user = JSON.parse(localStorage.getItem('currentUser'));
     }
@@ -70,14 +70,14 @@ export class ShippingZoneComponent implements OnInit {
 
 
 
-    getListMaster() {
-        this.commonService.getMasterData().subscribe(res => {
-            const data = res.data;
+    // getListMaster() {
+    //     this.commonService.getMasterData().subscribe(res => {
+    //         const data = res.data;
             
-            this.listMaster['rma_type'] = data.rma_type;
-            this.listMaster['status'] = data.rma_status;
-        });
-    }
+    //         this.listMaster['rma_type'] = data.rma_type;
+    //         this.listMaster['status'] = data.rma_status;
+    //     });
+    // }
     getListCountry() {
         this.commonService.getCountryList().subscribe(res => {
             this.countryList = res.data;

@@ -31,6 +31,7 @@ export class ShippingZoneViewComponent implements OnInit {
     /**
      * Variable Declaration
      */
+    public selectAll = false;
     public generalForm: FormGroup;
     public listMaster = {};
     public listShipping = [];
@@ -149,6 +150,7 @@ export class ShippingZoneViewComponent implements OnInit {
     getFormById(id) {
         this.shippingZoneService.getShippingZoneById(id).subscribe(res => {
             this.generalForm.patchValue(res.data);
+            this.generalForm.controls.status.patchValue(res.data.sts);
             this.cd = res.data.cd;
             this.checkListCountry(res.data.shipping_country);
             this.checkListShipping(res.data.shipping_zone_quotes);
@@ -255,6 +257,7 @@ export class ShippingZoneViewComponent implements OnInit {
     onCheckCountryState(country) {
         this.selectedCountry = country;
         this.tempListState = country.state;
+        this.checkState();
     }
     openState(code) {
 
@@ -478,6 +481,27 @@ export class ShippingZoneViewComponent implements OnInit {
             }
         });
         return count;
+    }
+    checkState() {
+        if (this.selectedCountry) {
+        for (var i = 0; i < this.selectedCountry.state.length; i++) {
+            if (this.selectedCountry.state[i].selected) {
+                if (i == this.selectedCountry.state.length - 1) {
+                    return this.selectAll = true;
+                }
+            }
+            else {
+                return this.selectAll = false;
+            }
+        }
+    }
+    }
+    selectState() {
+        if (this.selectedCountry) {
+            this.selectedCountry.state.forEach(item => {
+                return item.selected = this.selectAll;
+            });
+        }
     }
 }
 

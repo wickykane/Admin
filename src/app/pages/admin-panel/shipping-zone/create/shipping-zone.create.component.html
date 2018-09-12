@@ -66,8 +66,8 @@
                                         </label>
                                         <div class="col-7">
                                             <form [formGroup]="generalForm">
-                                                <input type="text" class="form-control" style="width: 100%" placeholder="Start searching for a country"
-                                                    (ngModelChange)="filterCountry($event)" [ngModel]="countryFilter" [ngModelOptions]="{standalone: true}">
+                                                <input type="text" class="form-control" style="width: 100%" placeholder="Start searching for a country" (ngModelChange)="filterCountry($event)"
+                                                    [ngModel]="countryFilter" [ngModelOptions]="{standalone: true}">
                                             </form>
                                         </div>
                                     </div>
@@ -82,7 +82,9 @@
                             </div>
                         </div>
                         <div style="display: table;height: 269px" *ngIf="listSelectCountry.length>0">
-                            <span style="display: table-cell;vertical-align: middle"><i class="fa fa-angle-double-right" style="font-size:36px"></i></span>
+                            <span style="display: table-cell;vertical-align: middle">
+                                <i class="fa fa-angle-double-right" style="font-size:36px"></i>
+                            </span>
                         </div>
                         <div class="table-custom col-md-3" style="text-align: center" *ngIf="listSelectCountry.length>0">
                             <span style="font-weight: bold">Selected Countries</span>
@@ -93,7 +95,10 @@
                                             <span class="text-danger"></span> {{item.name}}
                                         </label>
                                         <div class="col-7" style="text-align: right">
-                                            <label style="color: #007bff">{{calculateStateLength(item.state)}} of <span *ngIf="listMasterData['state'][item.country_code]">{{listMasterData['state'][item.country_code].length}} States</span><span *ngIf="listMasterData['state'][item.country_code] == undefined">0 States</span></label>
+                                            <label style="color: #007bff">{{calculateStateLength(item.state)}} of
+                                                <span *ngIf="listMasterData['state'][item.country_code]">{{listMasterData['state'][item.country_code].length}} States</span>
+                                                <span *ngIf="listMasterData['state'][item.country_code] == undefined">0 States</span>
+                                            </label>
                                             <a class="btn btn-default " title="Edit" (click)="onCheckCountryState(item)">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
@@ -103,7 +108,9 @@
                             </div>
                         </div>
                         <div style="display: table;height: 269px" *ngIf="selectedCountry">
-                            <span style="display: table-cell;vertical-align: middle"><i class="fa fa-angle-double-right" style="font-size:36px"></i></span>
+                            <span style="display: table-cell;vertical-align: middle">
+                                <i class="fa fa-angle-double-right" style="font-size:36px"></i>
+                            </span>
                         </div>
                         <div class="col-md-3 table-custom" *ngIf="selectedCountry">
                             <div class="header">
@@ -112,15 +119,20 @@
                                         <label class="control-label col-12" for="shipping_to" style="text-align: center; font-weight: bold" translate>Select States for {{selectedCountry['name']}}
                                         </label>
                                         <div class="col-12">
-                                            <input type="text" class="form-control" style="width: 100%" placeholder="Start searching for a state"
-                                            (ngModelChange)="filterState($event)" [ngModel]="stateFilter">
+                                            <input type="text" class="form-control" style="width: 100%" placeholder="Start searching for a state" (ngModelChange)="filterState($event)"
+                                                [ngModel]="stateFilter">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-11 body" style="height: 169px;overflow-y: scroll;">
+                                    <div class="form-group row">
+                                        <label class="col-11" style="padding: 10px 0 0 5px;">
+                                            <input (change)="selectState()" [(ngModel)]="selectAll" id='ck-first' type="checkbox" /> All States
+                                        </label>
+                                    </div>
                                     <div class="form-group row" *ngFor="let state of selectedCountry['state'];let i = index">
                                         <label class='col-11'>
-                                            <input type="checkbox" [(ngModel)]="state.selected"> {{state.name}}
+                                            <input type="checkbox" [(ngModel)]="state.selected" (change)="checkState()"> {{state.name}}
                                         </label>
                                     </div>
                                 </div>
@@ -154,7 +166,8 @@
                                             <div class="col-2">
                                                 <div class="switcher">
                                                     <label class="switch">
-                                                        <input type="checkbox" [(ngModel)]="subItem.checked"  checked="{{subItem.checked ? true:null}}" value="{{subItem.checked}}" (click)="checkValidate(item.data,subItem,$event)"  >
+                                                        <input type="checkbox" [(ngModel)]="subItem.checked" checked="{{subItem.checked ? true:null}}" value="{{subItem.checked}}"
+                                                            (click)="checkValidate(item.data,subItem,$event)">
                                                         <span class="slider round"></span>
                                                     </label>
                                                 </div>
