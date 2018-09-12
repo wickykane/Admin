@@ -13,6 +13,7 @@ import { ReturnReasonService } from './return-reason.service';
   selector: 'app-return-reason',
   providers: [ReturnReasonService, ReturnReasonKeyService],
   templateUrl: 'return-reason.component.html',
+  styleUrls: ['./reason.component.scss'],
   animations: [routerTransition()]
 })
 
