@@ -34,7 +34,7 @@ export class CommonService {
         return this.apiService.get(url);
     }
     getCountryList() {
-        const url = 'country/get-dropdown-list';
+        const url = 'shipping-zone/list-country';
         return this.apiService.get(url);
     }
 
