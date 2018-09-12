@@ -114,7 +114,6 @@ export class DiscountCategoryEditComponent implements OnInit {
 
             }
         });
-        console.log(item);
     }
 
 
@@ -188,9 +187,14 @@ export class DiscountCategoryEditComponent implements OnInit {
         }
 
         if (flag) {
+          if (item.apply_for === 2) {
             item['sub_category_id'].forEach(e => {
                 this.changeToGetSubCategory(e, item);
             });
+          } else {
+            this.mapArrayValue(item, true);
+          }
+
         }
     }
 
@@ -211,8 +215,6 @@ export class DiscountCategoryEditComponent implements OnInit {
     }
 
     removeSelected(value: any, sub_category_id, item) {
-        console.log(value);
-        console.log(item);
         item.listSubCategory.map(obj => {
             if (value.value.category_id === obj['category_id']) {
                 obj['disabled'] = false;
