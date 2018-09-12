@@ -9,15 +9,15 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../../../../environments/environment';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
-import { MailModalComponent } from '../modals/mail.modal';
+import { ReceiptMailModalComponent } from '../modals/mail.modal';
 
 @Component({
-    selector: 'app-invoice-info-tab',
+    selector: 'app-receipt-info-tab',
     templateUrl: './information-tab.component.html',
-    styleUrls: ['./invoice-tab.component.scss'],
+    styleUrls: ['./receipt-tab.component.scss'],
     providers: [FinancialService]
 })
-export class InvoiceInformationTabComponent implements OnInit {
+export class ReceiptInformationTabComponent implements OnInit {
 
     /**
      * letiable Declaration
@@ -84,7 +84,7 @@ export class InvoiceInformationTabComponent implements OnInit {
     }
 
     sendMail(id) {
-        const modalRef = this.modalService.open(MailModalComponent, { size: 'lg', windowClass: 'modal-md' });
+        const modalRef = this.modalService.open(ReceiptMailModalComponent, { size: 'lg', windowClass: 'modal-md' });
         modalRef.result.then(res => {
         }, dismiss => { });
         modalRef.componentInstance.invoiceId = id;

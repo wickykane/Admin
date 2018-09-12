@@ -46,6 +46,9 @@ import { DebitMemoViewComponent } from './debit-memo/view/debit-memo-view.compon
 // Receipt Voucher
  import {ReceiptVoucherCreateComponent} from './receipt-voucher/create/receipt-voucher.create.component';
  import {ReceiptVoucherEditComponent} from './receipt-voucher/edit/receipt-voucher.edit.component';
+ import { ReceiptMailModalComponent } from './receipt-voucher/modals/mail.modal';
+ import { ReceiptDocumentTabComponent } from './receipt-voucher/receipt-tabs/document-tab.component';
+ import { ReceiptInformationTabComponent } from './receipt-voucher/receipt-tabs/information-tab.component';
  import {ReceiptVoucherComponent} from './receipt-voucher/receipt-voucher.component';
  import {ReceiptVoucherDetailComponent} from './receipt-voucher/view/receipt-voucher.view.component';
 
@@ -102,7 +105,10 @@ import { MailModalComponent } from './ar-invoice/modals/mail.modal';
         ReceiptVoucherCreateComponent,
         ReceiptVoucherEditComponent,
         ReceiptVoucherComponent,
-        ReceiptVoucherDetailComponent
+        ReceiptVoucherDetailComponent,
+        ReceiptMailModalComponent,
+        ReceiptDocumentTabComponent,
+        ReceiptInformationTabComponent
     ],
     providers: [FinancialService, DebitMemoService, CreditMemoService, TableService, DatePipe, Helper],
     entryComponents: [
