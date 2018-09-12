@@ -101,7 +101,7 @@
                     </div>
                     <div class="card-body no-padding">
                         <div class="table-responsive">
-                            <table *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
+                            <table class="table table-bordered table-order">
                                 <thead>
                                     <tr>
                                         <th translate style="width: 50px;"></th>
@@ -122,7 +122,7 @@
                                     </tr>
                                 </tbody>
                                 <ng-container *ngIf="list['items'].length > 0">
-                                    <tbody *ngFor="let item of list['items']; let $index = index;">
+                                    <tbody *ngFor="let item of list['items']; let $index = index;" [ngClass]="{'row-selected': i == selectedIndex}" >
                                         <tr>
                                             <td>
                                                 <label class="css-input css-checkbox css-checkbox-default">
