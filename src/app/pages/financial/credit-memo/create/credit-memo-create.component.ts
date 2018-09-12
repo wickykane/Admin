@@ -465,7 +465,7 @@ export class CreditMemoCreateComponent implements OnInit {
 
         const params = {
             ...this.generalForm.value,
-            status_id: type,
+            status: type,
             items,
             is_draft: is_draft || 0
         };

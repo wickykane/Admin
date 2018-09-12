@@ -99,22 +99,22 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
         this.activeModal.close(data);
     }
     applyData() {
-        // this.checkRanges();
-        // if(this.isSave==true){
+        var count = 0;
         var params = Object.assign({}, this.generalForm.value);
-        // params['ranges']=this.ranges;
         params['ship_options'] = this.getShipOptions();
-        console.log(this.upsList.length);
-        if(this.upsList.length==0){
+        console.log(this.upsList);
+
+        for (var i = 0; i < this.upsList.length; i++) {
+            if (this.upsList[i].selected) {
+                count++;
+            }
+        }
+        if (count == 0) {
             return false;
         }
         this.itemService.checkCondition(params).subscribe(res => {
             this.activeModal.close({ id: '5', data: params });
         });
-        // }
-        // else{
-        //     return;
-        // }
 
     }
 

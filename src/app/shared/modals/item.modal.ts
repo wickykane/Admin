@@ -75,7 +75,6 @@ export class ItemModalContent implements OnInit {
 
     ngOnInit() {
         //  Init Fn
-        this.listMaster['certification_partNumber'] = [{ code: 'Y', value: 'Yes' }, { code: 'N', value: 'No' }];
         this.getListReference();
     }
 
@@ -85,6 +84,7 @@ export class ItemModalContent implements OnInit {
                 this.listMaster['models'] = res.data.models;
                 this.listMaster['years'] = res.data.years.map((e) => ({ id: e, name: e }));
                 this.listMaster['make'] = res.data.manufacturers;
+                this.listMaster['certification_partNumber'] = res.data.certification;
             } catch (e) {
                 console.log(e.message);
             }
