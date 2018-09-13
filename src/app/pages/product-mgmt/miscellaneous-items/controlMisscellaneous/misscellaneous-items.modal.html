@@ -54,9 +54,9 @@
                         <!-- <select name="type" formControlName="account_id"  class="form-control">
                             <option *ngFor="let item of accountList"[value]='item.id'>{{item.name}}</option>
                         </select> -->
-                        <ng-select [items]="accountList" formControlName="account_id" bindLabel="name" bindValue="id">
+                        <ng-select [items]="accountList" placeholder="---Select---" formControlName="account_id" bindLabel="name" bindValue="id">
                             <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
-                                <span [ngClass]="{'pl-3': item.level ==0,'pl-5':item.level==1}">{{ item.name}}</span>
+                                <span [ngClass]="{'pl-1': item.level ==0,'pl-3':item.level==1,'pl-5':item.level==2}">{{ item.name}}</span>
                             </ng-template>
                         </ng-select>
                     </div>

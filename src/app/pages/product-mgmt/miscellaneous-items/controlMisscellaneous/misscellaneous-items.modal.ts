@@ -57,13 +57,13 @@ export class MiscellaneousItemsModalComponent implements OnInit, OnDestroy {
                 tempAccountList.push({'name':item.name,'level':item.level,'disabled':true},...item.children)
             });
             this.accountList = tempAccountList;
-            if (this.Action == true) {
-                if(accountList.length>0){
-                    if(accountList[0].children&&accountList[0].children.length>0){
-                        this.generalForm.controls.account_id.patchValue(accountList[0].children[0].id);
-                    }
-                }
-            }
+            // if (this.Action == true) {
+            //     if(accountList.length>0){
+            //         if(accountList[0].children&&accountList[0].children.length>0){
+            //             this.generalForm.controls.account_id.patchValue(accountList[0].children[0].id);
+            //         }
+            //     }
+            // }
         });
     }
     ngOnInit() {
@@ -121,7 +121,7 @@ export class MiscellaneousItemsModalComponent implements OnInit, OnDestroy {
         this.generalForm = this.fb.group({
             'type': ['1'],
             'des': [''],
-            'account_id': [''],
+            'account_id': [null],
             "uom": "Each",
             "sts": [false],
             "no": ['']

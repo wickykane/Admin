@@ -47,6 +47,8 @@ import { DebitMemoViewComponent } from './debit-memo/view/debit-memo-view.compon
  import {ReceiptVoucherCreateComponent} from './receipt-voucher/create/receipt-voucher.create.component';
  import {ReceiptVoucherEditComponent} from './receipt-voucher/edit/receipt-voucher.edit.component';
  import { ReceiptMailModalComponent } from './receipt-voucher/modals/mail.modal';
+ import { PaymentGatewayModalComponent } from './receipt-voucher/modals/payment-gateway/payment-gateway.modal';
+ import { PaymentInformModalComponent } from './receipt-voucher/modals/payment-inform/payment-inform.modal';
  import { ReceiptDocumentTabComponent } from './receipt-voucher/receipt-tabs/document-tab.component';
  import { ReceiptInformationTabComponent } from './receipt-voucher/receipt-tabs/information-tab.component';
  import {ReceiptVoucherComponent} from './receipt-voucher/receipt-voucher.component';
@@ -108,7 +110,9 @@ import { MailModalComponent } from './ar-invoice/modals/mail.modal';
         ReceiptVoucherDetailComponent,
         ReceiptMailModalComponent,
         ReceiptDocumentTabComponent,
-        ReceiptInformationTabComponent
+        ReceiptInformationTabComponent,
+        PaymentGatewayModalComponent,
+        PaymentInformModalComponent
     ],
     providers: [FinancialService, DebitMemoService, CreditMemoService, TableService, DatePipe, Helper],
     entryComponents: [
@@ -119,7 +123,9 @@ import { MailModalComponent } from './ar-invoice/modals/mail.modal';
         MailModalComponent,
         CreditItemModalContent,
         CreditItemMiscModalContent,
-        CreditMailModalComponent
+        CreditMailModalComponent,
+        PaymentGatewayModalComponent,
+        PaymentInformModalComponent
     ]
 })
 export class FinancialModule { }

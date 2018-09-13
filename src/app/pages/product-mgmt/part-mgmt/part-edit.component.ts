@@ -48,6 +48,8 @@ export class PartEditComponent implements OnInit {
         cost_price: '',
         oem_price: '',
         uom_name: '',
+        free_ship: '',
+        ups: ''
     };
     public images: any = [];
     public dataFile: any = [];
@@ -93,8 +95,8 @@ export class PartEditComponent implements OnInit {
             expense_account_id: [null, Validators.required],
             short_des: [null],
             full_des: [null],
-            free_ship: [null, Validators.required],
-            ups: [null, Validators.required]
+            // free_ship: [null, Validators.required],
+            // ups: [null, Validators.required]
         });
         //  Init Key
         this.listMaster['account'] = [];

@@ -7,13 +7,14 @@ import { ReceiptVoucherService } from './../../receipt-voucher.service';
 @Component({
     selector: 'app-payment-gateway-modal',
     templateUrl: './payment-gateway.modal.html',
-    styleUrls: ['./modal.scss'],
+    styleUrls: ['../modal.scss'],
     providers: [ReceiptVoucherService]
 })
 export class PaymentGatewayModalComponent implements OnInit {
     // Resolve Data
     public mailForm: FormGroup;
-    @Input() invoiceId;
+    @Input() receiptId;
+    public modalTitle;
 
     constructor(public activeModal: NgbActiveModal, public toastr: ToastrService, private fb: FormBuilder, private receiptVoucherService: ReceiptVoucherService) {
         this.mailForm = fb.group({
