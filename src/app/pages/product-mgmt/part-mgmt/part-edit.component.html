@@ -147,19 +147,13 @@
                                             <div class="form-group row">
                                                 <label for="" class="col-6">Free Shipping<span class="text-danger">(*)</span></label>
                                                 <div class='col-6'>
-                                                    <select formControlName="free_ship" class="form-control">
-                                            <option value="null" selected="true" translate disabled>--Select--</option>
-                                            <option *ngFor="let de of listMaster['listQuestion']" [ngValue]="de.id">{{de.name}}</option>
-                                          </select>
+                                                   {{part.free_ship ? 'YES' : 'NO'}}
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label for="" class="col-6">UPS Shippable<span class="text-danger">(*)</span></label>
                                                 <div class='col-6'>
-                                                    <select formControlName="ups" class="form-control">
-                                            <option value="null" selected="true" translate disabled>--Select--</option>
-                                            <option *ngFor="let de of listMaster['listQuestion']" [ngValue]="de.id">{{de.name}}</option>
-                                          </select>
+                                                    {{part.ups ? 'YES' : 'NO'}}
                                                 </div>
                                             </div>
                                         </form>
