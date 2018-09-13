@@ -128,6 +128,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             this.generalForm.patchValue({ taxable: this.info.taxable });
             this.changePayment({target:{value:this.generalForm.value.payment_make}});
         }
+        this.checkAddress();
     }
 
     getListPaymentTerm() {
@@ -238,6 +239,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             for (let i = 1; i < this.addresses.length; i++) {
                 k.map(key => { key != 'type' && key != 'listType' && (this.addresses[i][key] = p[key]) });
             }
+            this.updatePayment(1);
         }
         else {
             var tmp = {};
@@ -250,6 +252,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             }
             this.addresses.push(tmp);
         }
+        this.checkAddress();
     }
 
     //  add new row addresses
@@ -263,6 +266,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
 
     removeAddress(index) {
         this.addresses.splice(index, 1);
+        this.checkAddress();
     }
 
     //  add new row bank account
@@ -517,5 +521,45 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             }
         }
     }
-
+    checkAddress() {
+        var count1 = 0;
+        var count2 = 0;
+        console.log(this.addresses);
+        this.addresses.forEach(item => {
+            if (item.type == 1) {
+                count1++;
+            }
+            if (item.type == 2) {
+                count2++;
+            }
+        });
+        if (count1 > 1) {
+            this.addresses.forEach(item => {
+                if (item.type == 1) {
+                    item.hidden = false;
+                }
+            });
+        }
+        else{
+            this.addresses.forEach(item => {
+                if (item.type == 1) {
+                    item.hidden = true;
+                }
+            });
+        }
+        if (count2 > 1) {
+            this.addresses.forEach(item => {
+                if (item.type == 2) {
+                    item.hidden = false;
+                }
+            });
+        }
+        else{
+            this.addresses.forEach(item => {
+                if (item.type == 2) {
+                    item.hidden = true;
+                }
+            });
+        }
+    }
 }
