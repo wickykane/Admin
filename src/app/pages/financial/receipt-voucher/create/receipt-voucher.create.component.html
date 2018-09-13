@@ -19,8 +19,8 @@
                                                 <span class="text-danger">(*)</span>                                                
                                                 </label>
                                                 <div class='col-6 text-primary'>
-                                                    <ng-select [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="company_id" [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="min-width: 100%;" [items]="listMaster['customer']" bindLabel="company_name"
-                                                        bindValue="id" formControlName="payer_id">
+                                                    <ng-select [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('payer_id').errors?.required) || false   }" [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="company_id" [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)"
+                                                        [virtualScroll]="true" style="min-width: 100%;" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="payer_id">
                                                     </ng-select>
                                                 </div>
                                             </div>
@@ -52,7 +52,7 @@
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
-                                                    <select class="form-control" name="warehouse_id" formControlName="warehouse_id">
+                                                    <select [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('warehouse_id').errors?.required) || false   }" class="form-control" name="warehouse_id" formControlName="warehouse_id">
                                                         <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let item of listMaster['warehouses']" [ngValue]="item.id">{{item.name}}</option>
                                                     </select>
@@ -67,7 +67,7 @@
                                                         <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
-                                                    <select class="form-control" formControlName="is_electronic">
+                                                    <select [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('is_electronic').errors?.required) || false   }" class="form-control" formControlName="is_electronic">
                                                         <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>                                                        
                                                         <option *ngFor="let item of listMaster['yes_no_options']" [ngValue]="item.value">{{item.label}}</option>
                                                     </select>
@@ -76,7 +76,7 @@
                                             <div class="form-group row">
                                                 <label class='col-6'>Payment Method<span class="text-danger">(*)</span></label>
                                                 <div class='col-6 text-primary'>
-                                                    <select class="form-control" id="payment_method_id" name="payment_method_id" formControlName="payment_method_id">
+                                                    <select [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('payment_method_id').errors?.required) || false   }" class="form-control" id="payment_method_id" name="payment_method_id" formControlName="payment_method_id">
                                                         <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let item of listMaster['payment_method']" [ngValue]="item.id">{{item.name}}</option>
                                                     </select>
@@ -88,7 +88,7 @@
                                                 </label>
                                                 <div class='col-6'>
                                                     <div class="input-group">
-                                                        <input type="number" class="form-control" formControlName="check_no">
+                                                        <input [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('check_no').errors?.required) || false   }" type="number" class="form-control" formControlName="check_no">
                                                     </div>
                                                 </div>
                                             </div>
@@ -98,7 +98,7 @@
                                                 </label>
                                                 <div class='col-6'>
                                                     <div class="input-group">
-                                                        <input type="number" class="form-control" formControlName="ref_no">
+                                                        <input [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('ref_no').errors?.required) || false   }" type="number" class="form-control" formControlName="ref_no">
                                                     </div>
                                                 </div>
                                             </div>
@@ -108,7 +108,7 @@
                                                 </label>
                                                 <div class='col-6'>
                                                     <div class="input-group">
-                                                        <input type="number" class="form-control" formControlName="account_received">
+                                                        <input [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('account_received').errors?.required) || false   }" type="number" class="form-control" formControlName="account_received">
                                                         <div class="input-group-append">
                                                             <span class="input-group-text" id="basic-addon2">$</span>
                                                         </div>
@@ -121,7 +121,7 @@
                                                 </label>
                                                 <div class='col-6'>
                                                     <div class="input-group">
-                                                        <input readonly type="number" class="form-control" formControlName="remain_amt">
+                                                        <input [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('remain_amt').errors?.required) || false   }" readonly type="number" class="form-control" formControlName="remain_amt">
                                                         <div class="input-group-append">
                                                             <span class="input-group-text" id="basic-addon2">$</span>
                                                         </div>
@@ -133,7 +133,7 @@
                                                         <span class="text-danger">(*)</span>                                                        
                                                 </label>
                                                 <div class='col-6'>
-                                                    <ng-select [items]="listMaster['parents']" formControlName="parent_id" bindLabel="des" bindValue="id">
+                                                    <ng-select [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('parent_id').errors?.required) || false   }" [items]="listMaster['parents']" formControlName="parent_id" bindLabel="des" bindValue="id">
                                                         <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
                                                             <span [ngClass]="{'pl-3': item.level == 1, 'pl-5': item.level == 2}">{{ item.des }}</span>
                                                         </ng-template>
@@ -161,7 +161,7 @@
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
-                                                    <select class="form-control" id="approver_id" name="approver_id" formControlName="approver_id">
+                                                    <select [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('approver_id').errors?.required) || false   }" class="form-control" id="approver_id" name="approver_id" formControlName="approver_id">
                                                         <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let item of listMaster['sale_mans']" [ngValue]="item.id">{{item.full_name}}</option>
                                                     </select>
