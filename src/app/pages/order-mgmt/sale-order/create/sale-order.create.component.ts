@@ -614,7 +614,6 @@ export class SaleOrderCreateComponent implements OnInit {
                 params = {
                     'items': products,
                     'is_draft_order': 1,
-                    'type': 'SAQ',
                     'sale_quote_status_id': 1,
                     'order_sts_id': 5
                 };
