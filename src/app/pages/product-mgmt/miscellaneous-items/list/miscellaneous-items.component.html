@@ -87,7 +87,7 @@
                                             <a class="btn btn-default icon-blue" title="Edit" (click)="openModal(false,false,item)">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default icon-blue" *ngIf="item.is_sys==0" title="Delete" (click)='delete(item.id)'>
+                                            <a class="btn btn-default icon-blue" *ngIf="item.is_sys==0 && item.used==0" title="Delete" (click)='delete(item.id)'>
                                                 <i class="fa fa-trash-o" aria-hidden="true"></i>
                                             </a>
                                         </td>
