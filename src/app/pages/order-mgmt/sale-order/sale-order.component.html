@@ -175,15 +175,15 @@
                                             <span class="label red" *ngIf="item.sts_code == 'CC'">{{item.sts}}</span>
                                         </td>
                                         <td class="text-nowrap">
-                                            <button ngbTooltip="Submit" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" (click)="confirmModal(item.id, 'SM')"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></button>
-                                            <button ngbTooltip="Approve" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="confirmModal(item.id, 'AP')"><i class="fa fa-check-square" aria-hidden="true"></i></button>
-                                            <button ngbTooltip="Reject" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="confirmModal(item.id, 'RJ')"><i class="fa fa-ban"></i></button>
-                                            <button ngbTooltip="Cancel" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" (click)="confirmModal(item.id, 'CC')"><i class="fa fa-times-circle"></i></button>
-                                            <button ngbTooltip="Re Open" *ngIf="item['sts_code'] == 'RJ'" class="btn btn-default" (click)="confirmModal(item.id, 'RO')"><i class="fa fa-clone"></i></button>
-                                            <button ngbTooltip="Copy" class="btn btn-default" (click)="confirmModal(item.id, 'CLONE')"><i class="fa fa-clone"></i></button>
+                                            <a ngbTooltip="Submit" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" (click)="confirmModal(item.id, 'SM')"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></a>
+                                            <a ngbTooltip="Approve" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="confirmModal(item.id, 'AP')"><i class="fa fa-check-square" aria-hidden="true"></i></a>
+                                            <a ngbTooltip="Reject" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="confirmModal(item.id, 'RJ')"><i class="fa fa-ban"></i></a>
+                                            <a ngbTooltip="Cancel" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" (click)="confirmModal(item.id, 'CC')"><i class="fa fa-times-circle"></i></a>
+                                            <a ngbTooltip="Re Open" *ngIf="item['sts_code'] == 'RJ'" class="btn btn-default" (click)="confirmModal(item.id, 'RO')"><i class="fa fa-clone"></i></a>
+                                            <a ngbTooltip="Copy" class="btn btn-default" (click)="confirmModal(item.id, 'CLONE')"><i class="fa fa-clone"></i></a>
 
-                                            <button ngbTooltip="Edit" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" [routerLink]="['/order-management/sale-order/edit', item.id]"><i class="fa fa-pencil-square"></i></button>
-                                            <button ngbTooltip="View" class="btn btn-default" [routerLink]="['/order-management/sale-order/detail', item.id]"><i class="fa fa-eye"></i></button>
+                                            <a ngbTooltip="Edit" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" [routerLink]="['/order-management/sale-order/edit', item.id]"><i class="fa fa-pencil-square"></i></a>
+                                            <a ngbTooltip="View" class="btn btn-default" [routerLink]="['/order-management/sale-order/detail', item.id]"><i class="fa fa-eye"></i></a>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -221,99 +221,5 @@
             </div>
         </div>
 
-
-
-        <!-- <div class="block-content list-order-table">
-            <button [routerLink]="['create']" style="margin: 10px 0;" class="btn btn-primary">Create Order</button>
-            <div class="table-responsive">
-                <table class="table table-striped table-vcenter custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
-                    <thead class="bg-white">
-                        <tr>
-                            <th style="width:50px"></th>
-                            <th translate>SO #</th>
-                            <th translate>Cust PO #</th>
-                            <th translate>Sales Quote #</th>
-                            <th translate>Customer</th>
-                            <th translate>Salesperson</th>
-                            <th class="text-center " translate>Type</th>
-                            <th class="text-center" translate>Order date</th>
-                            <th class="text-center" translate>Delivery date</th>
-                            <th class="text-center" translate>Total</th>
-                            <th translate>Status</th>
-                            <th translate>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
-                        <tr>
-                            <td>
-                                <img *ngIf="item.sts_code!='CP'" src="assets/img/qbicon-gray.png" width="20px" height="20px">
-                                <a *ngIf="item.sts_code=='CP'" href="https://sandbox.qbo.intuit.com/app/sales" target="_blank">
-                                    <img placement="top" ngbTooltip="Sent Invoice To QuickBooks {{item.updated_at}}" src="../../assets/img/qbicons.png"
-                                        width="20px" height="20px">
-                                </a>
-                            </td>
-                            <td><a [routerLink]="['detail', item.id]">{{item.code}}</a></td>
-                            <td>{{item.cus_po}}</td>
-                            <td>{{item.quote_no}}</td>
-                            <td>{{item.buyer_name}}</td>
-                            <td>{{item.sale_person_name}}</td>
-                            <td class="text-center">
-                                <span *ngIf="item.type == 'PKU'">Pickup</span>
-                                <span *ngIf="item.type == 'ONL'">Ecommerce</span>
-                                <span *ngIf="item.type == 'NO'">Regular Order</span>
-                                <span *ngIf="item.type == 'XD'">X-Docks</span>
-                            </td>
-                            <td class="text-center">{{item.order_date | date:'MM/dd/yyy'}}</td>
-                            <td class="text-center">{{item.ship_date | date:'MM/dd/yyyy'}}</td>
-                            <td class="text-center">{{item.total_price | currency}}</td>
-                            <td>
-                                <span class="label label-draft" *ngIf="item.sts_code == 'NW'">{{item.sts}}</span>
-                                <span class="label label-warning" *ngIf="item.sts_code == 'IP'">{{item.sts}}</span>
-                                <span class="label label-draft" *ngIf="item.sts_code == 'PP'">{{item.sts}}</span>
-                                <span class="label  label-success" *ngIf="item.sts_code == 'CP'">{{item.sts}}</span>
-                                <span class="label  label-success" *ngIf="item.sts_code == 'AP'">{{item.sts}}</span>
-                                <span class="label label-draft" *ngIf="item.sts_code == 'RS'">{{item.sts}}</span>
-                                <span class="label  label-draft" *ngIf="item.sts_code == 'DL'">{{item.sts}}</span>
-                                <span class="label label-danger" *ngIf="item.sts_code == 'PD'">{{item.sts}}</span>
-                                <span class="label  label-draft" *ngIf="item.sts_code == 'Draft'">{{item.sts}}</span>
-                            </td>
-                            <td class="text-nowrap">
-                                <button placement="top" ngbTooltip="Submited" *ngIf="item.sts_code == 'NW'" type="button" class="btn btn-default" (click)="updateStatusOrder(item.id, 6)"><i class="fa fa-check-circle"></i></button>
-                                <button placement="top" ngbTooltip="Approve" *ngIf="item.sts_code == 'SM'" type="button" class="btn btn-default" (click)="putApproveOrder(item.id)"><i class="fa fa-check-square"></i></button>
-                                <button ngbTooltip="Click to Reject" data-toggle="tooltip" *ngIf="item.sts_code=='SM'" type="button" class="btn btn-default" (click)="updateStatusOrder(item.id, 7)">
-                                    <i class="fa fa-ban"></i>
-                                </button>
-                                <a *ngIf="item.sts_code == 'NW'" class="btn btn-default" [routerLink]="['edit', item.id]"> <i class="fa fa-pencil"></i> </a>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tbody *ngIf="list.items.length == 0">
-                        <tr>
-                            <td colspan="100%" class="text-center" translate>No data.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-
-            <div class="row normal-pagination" *ngIf="list.items.length > 0">
-                <div class="col-md-6">
-                    <div class="text-left">
-                        <div class="col-md-6" style="padding-left: 0px;">
-                            <span style="float: left; padding-right: 10px;">{{list.items.length}}/{{tableService.pagination.total_record}} items </span>
-                            <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length" (change)="tableService.changeLength()">
-                                <option *ngFor="let option of tableService.itemPerPageOptions" [ngValue]="option">{{option}}</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="text-right">
-                        <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length" [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page" [maxSize]="tableService.maxSize"
-                          [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
-                    </div>
-                </div>
-            </div>
-        </div> -->
     </div>
 </div>
