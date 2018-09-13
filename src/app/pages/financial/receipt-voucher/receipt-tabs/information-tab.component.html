@@ -13,10 +13,10 @@
     </div>
     <section class="rma-page block main-container block-order">
         <div class="row">
-            <div class="col-md-4 padding-lr-5">
+            <div class="col-md-12 padding-lr-5">
                 <div class="card height-100">
                     <div class="card-header">
-                        <strong>Invoice Information</strong>
+                        <strong>Receipt Voucher Information</strong>
                     </div>
                     <div class="card-body">
                         <div class="row information  height-100">
@@ -100,192 +100,13 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-2 padding-lr-5">
-                <div class="card height-100">
-                    <div class="card-header">
-                        <strong>Customer Information</strong>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="form-group row">
-                                    <label class="control-label col-6" translate>Customer Name</label>
-                                    <div class="col-6">
-                                        {{detail['company_name']}}
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class=" control-label col-6" translate>Contact Name</label>
-                                    <div class="col-6">
-                                        {{detail['contact_user']['full_name']}}
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-                                    <label class="control-label col-6" translate>Phone</label>
-                                    <div class="col-6">
-                                        {{detail['contact_user']['phone']}}
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-                                    <label class="control-label col-6" translate>Email</label>
-                                    <div class="col-6">
-                                        {{detail['contact_user']['email']}}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-2 padding-lr-5">
-                <div class="card height-100">
-                    <div class="card-header">
-                        <strong>Bill To</strong>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="form-group row">
-                                    <label class="control-label col-6" translate>Label</label>
-                                    <div class="col-6">
-                                        {{ detail.billing['name']}}
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class=" control-label col-6" translate>Address</label>
-                                    <div class="col-6">
-                                        {{detail.billing['address_line']}}
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-                                    <label class="control-label col-6" translate>City/State</label>
-                                    <div class="col-6">
-                                        {{detail.billing['city_name']}}/{{detail.billing['state_name']}}
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-                                    <label class="control-label col-6" translate>Zip</label>
-                                    <div class="col-6">
-                                        {{detail.billing['zip_code']}}
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="control-label col-6" translate>Country</label>
-                                    <div class="col-6">
-                                        {{detail.billing['country_name']}}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-2 padding-lr-5">
-                <div class="card height-100">
-                    <div class="card-header">
-                        <strong>Ship To</strong>
-                    </div>
-                    <div class="card-body">
-                        <div class="row" *ngIf="detail['carrier_id'] == 999">
-                            <div class="col-md-12 ">
-                                <p>Customer will pickup goods in stores.</p>
-                            </div>
-                        </div>
-                        <div class="row" *ngIf="detail['carrier_id'] != 999">
-                            <div class="col-12">
-                                <div class="form-group row">
-                                    <label class="control-label col-6" translate>Label</label>
-                                    <div class="col-6">
-                                        {{ detail.shipping_address['name']}}
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class=" control-label col-6" translate>Address</label>
-                                    <div class="col-6">
-                                        {{detail.shipping_address['address_line']}}
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-                                    <label class="control-label col-6" translate>City/State</label>
-                                    <div class="col-6">
-                                        {{detail.shipping_address['city_name']}}/{{detail.shipping_address['state_name']}}
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-                                    <label class="control-label col-6" translate>Zip</label>
-                                    <div class="col-6">
-                                        {{detail.shipping_address['zip_code']}}
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="control-label col-6" translate>Country</label>
-                                    <div class="col-6">
-                                        {{detail.shipping_address['country_name']}}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-2 padding-lr-5">
-                <div class="card height-100">
-                    <div class="card-header">
-                        <strong>Shipping Method</strong>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="form-group row">
-                                    <label class="control-label col-6" translate>Warehouse</label>
-                                    <div class="col-6">
-                                        {{detail['warehouse_name'] }}
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class=" control-label col-6" translate>Ship Via</label>
-                                    <div class="col-6">
-                                        {{detail['shipping_method']?.carrier_name }}
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-                                    <label class="control-label col-6" translate>Option</label>
-                                    <div class="col-6">
-                                        {{detail['shipping_method']?.options_name }}
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="control-label col-6" translate>Ship rate</label>
-                                    <div class="col-6">
-                                        {{detail['shipping_method']?.ship_rate_name }}
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="control-label col-6" translate>POD Sign Off Date</label>
-                                    <div class="col-6">
-                                        {{ detail['shipping_method']?.ship_date }}
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <div class="row mg-top-10">
             <div class="col-12 padding-lr-5">
                 <div class="card no-border">
                     <div class="card-header">
-                        <strong>Line Items</strong>
+                        <strong>Outstanding Invoices & Debit Memos</strong>
                     </div>
                     <div class="card-body no-padding">
                         <div class="table-responsive">

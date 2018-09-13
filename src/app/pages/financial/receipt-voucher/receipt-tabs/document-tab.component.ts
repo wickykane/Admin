@@ -1,13 +1,13 @@
 import { Component, Input, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { FinancialService } from '../../financial.service';
+import { ReceiptVoucherService } from '../receipt-voucher.service';
 import { TableService } from './../../../../services/table.service';
 
 @Component({
     selector: 'app-receipt-document-tab',
     templateUrl: './document-tab.component.html',
     styleUrls: ['./receipt-tab.component.scss'],
-    providers: [FinancialService]
+    providers: [ReceiptVoucherService]
 })
 export class ReceiptDocumentTabComponent implements OnInit {
 
@@ -15,10 +15,10 @@ export class ReceiptDocumentTabComponent implements OnInit {
      * letiable Declaration
      */
 
-    public _invoiceId;
-    @Input() set invoiceId(id) {
+    public _receiptId;
+    @Input() set receiptId(id) {
         if (id) {
-            this._invoiceId = id;
+            this._receiptId = id;
         }
     }
     public detail = {
@@ -29,7 +29,7 @@ export class ReceiptDocumentTabComponent implements OnInit {
         public fb: FormBuilder,
         private vRef: ViewContainerRef,
         public tableService: TableService,
-        private financialService: FinancialService) {
+        private receiptVoucherService: ReceiptVoucherService) {
     }
 
     ngOnInit() {
