@@ -7,7 +7,7 @@ import { ReceiptVoucherService } from './../../receipt-voucher.service';
 @Component({
     selector: 'app-payment-inform-modal',
     templateUrl: './payment-inform.modal.html',
-    styleUrls: ['./modal.scss'],
+    styleUrls: ['../modal.scss'],
     providers: [ReceiptVoucherService]
 })
 export class PaymentInformModalComponent implements OnInit {
