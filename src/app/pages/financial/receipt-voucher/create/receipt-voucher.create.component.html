@@ -19,8 +19,8 @@
                                                 <span class="text-danger">(*)</span>                                                
                                                 </label>
                                                 <div class='col-6 text-primary'>
-                                                    <ng-select [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="company_id" [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="min-width: 100%; margin-left: 2px;" (change)="changeCustomer(); getDefaultNote();"
-                                                        [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="company_id">
+                                                    <ng-select [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="company_id" [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="min-width: 100%;" [items]="listMaster['customer']"
+                                                        bindLabel="company_name" bindValue="id" formControlName="payer_id">
                                                     </ng-select>
                                                 </div>
                                             </div>
@@ -29,7 +29,7 @@
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6 text-primary'>
-                                                    <input readonly type="text" class="form-control" formControlName="inv_num">
+                                                    <input readonly type="text" class="form-control" formControlName="voucher_no">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -38,7 +38,7 @@
                                                 </label>
                                                 <div class='col-6 text-primary'>
                                                     <div clickOutside (clickOutside)="paymentDate.close()" class="input-group">
-                                                        <input class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="inv_dt" ngbDatepicker #paymentDate="ngbDatepicker">
+                                                        <input [maxDate]="generalForm.value.payment_dt | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="payment_dt" ngbDatepicker #paymentDate="ngbDatepicker">
                                                         <div class="input-group-append">
                                                             <button class="btn btn-outline-secondary" (click)="paymentDate.toggle()" type="button">
                                                                 <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -67,7 +67,7 @@
                                                         <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
-                                                    <select class="form-control" formControlName="apply_late_fee">
+                                                    <select class="form-control" formControlName="is_electronic">
                                                         <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>                                                        
                                                         <option *ngFor="let item of listMaster['yes_no_options']" [ngValue]="item.value">{{item.label}}</option>
                                                     </select>
@@ -76,10 +76,30 @@
                                             <div class="form-group row">
                                                 <label class='col-6'>Payment Method<span class="text-danger">(*)</span></label>
                                                 <div class='col-6 text-primary'>
-                                                    <select class="form-control" id="payment_method_id" name="payment_method_id" formControlName="payment_method_id">
+                                                    <select  class="form-control" id="payment_method_id" name="payment_method_id" formControlName="payment_method_id">
                                                         <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let item of listMaster['payment_method']" [ngValue]="item.id">{{item.name}}</option>
                                                     </select>
+                                                </div>
+                                            </div>
+                                            <div *ngIf="generalForm.value.payment_method_id == 'manual'" class="form-group row">
+                                                <label class='col-6'> Check Number 
+                                                    <span class="text-danger">(*)</span>
+                                                </label>
+                                                <div class='col-6'>
+                                                    <div class="input-group">
+                                                        <input type="number" class="form-control" formControlName="check_no">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div *ngIf="generalForm.value.payment_method_id == 'check'" class="form-group row">
+                                                <label class='col-6'> Reference Number 
+                                                    <span class="text-danger">(*)</span>
+                                                </label>
+                                                <div class='col-6'>
+                                                    <div class="input-group">
+                                                        <input type="number" class="form-control" formControlName="ref_no">
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -88,7 +108,20 @@
                                                 </label>
                                                 <div class='col-6'>
                                                     <div class="input-group">
-                                                        <input type="number" class="form-control" formControlName="payment_method_id">
+                                                        <input type="number" class="form-control" formControlName="account_received">
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text" id="basic-addon2">$</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div *ngIf="generalForm.value.payment_method_id == 'check'" class="form-group row">
+                                                <label class='col-6'> Remaining Amount
+                                                    <span class="text-danger">(*)</span>
+                                                </label>
+                                                <div class='col-6'>
+                                                    <div class="input-group">
+                                                        <input readonly type="number" class="form-control" formControlName="remain_amt">
                                                         <div class="input-group-append">
                                                             <span class="input-group-text" id="basic-addon2">$</span>
                                                         </div>
@@ -120,7 +153,7 @@
                                             <div class="form-group row">
                                                 <label class='col-6'>Created By</label>
                                                 <div class='col-6'>
-                                                    <strong>Khiet Pham</strong>
+                                                    <strong>{{generalForm.value.created_by }}</strong>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -137,13 +170,13 @@
                                             <div class="form-group row">
                                                 <label class='col-6'>Last Updated Date</label>
                                                 <div class='col-6'>
-                                                    <strong>01/23/2009</strong>
+                                                    <strong>{{generalForm.value.updated_date }}</strong>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label class='col-6'>Last Updated By</label>
                                                 <div class='col-6'>
-                                                    <strong>Khiet Pham</strong>
+                                                    <strong>{{generalForm.value.updated_by }}</strong>
                                                 </div>
                                             </div>
                                         </form>
@@ -165,7 +198,7 @@
                         <div class="search-invoice">
                             <div>
                                 <i class="fa fa-search"></i>
-                                <input type="text" placeholder="Search Invoice & Debit Memo">
+                                <input [(ngModel)]="data['search']" type="text" placeholder="Search Invoice & Debit Memo">
                             </div>
                         </div>
                         <div class="table-responsive">
@@ -187,7 +220,7 @@
                                         <th translate>Current Balance</th>
                                         <th translate>Awaiting Approval Payment</th>
                                         <th translate>Balance Due</th>
-                                        <th translate>Applied Amount</th>
+                                        <th translate style="width: 100px;">Applied Amount</th>
                                     </tr>
                                 </thead>
                                 <tbody *ngIf="list['items'].length === 0">
@@ -268,7 +301,7 @@
                                         <strong >Amount Received</strong>
                                     </label>
                                     <div class='col-6 offset-md-1 padding-lr-10 text-primary'>
-                                        <strong>{{order_info.sub_total | currency}}</strong>
+                                        <strong>{{data['summary']?.sub_total | currency}}</strong>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -276,7 +309,7 @@
                                         <strong>Applied Amount</strong>
                                     </label>
                                     <div class='col-6 offset-md-1 padding-lr-10'>
-                                        <strong class="text-success">{{order_info.total | currency}}</strong>
+                                        <strong class="text-success">{{data['summary']?.total | currency}}</strong>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -284,7 +317,7 @@
                                             <strong>Change</strong>
                                         </label>
                                     <div class='col-6 offset-md-1 padding-lr-10'>
-                                        <strong>{{order_info.total | currency}}</strong>
+                                        <strong>{{data['summary']?.total | currency}}</strong>
                                     </div>
                                 </div>
                             </div>
