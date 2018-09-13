@@ -326,6 +326,9 @@ export class SaleQuotationCreateComponent implements OnInit {
         try {
             switch (type) {
                 case 'shipping':
+                    if (!flag) {
+                        this.generalForm.patchValue({ 'carrier_id': null, 'ship_method_option': null, 'ship_method_rate': null });
+                    }
                     const ship_id = this.generalForm.value.shipping_id || this.data['default_shipping_id'];
                     if (ship_id) {
                         this.addr_select.shipping = this.findDataById(ship_id, this.customer.shipping);
