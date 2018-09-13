@@ -6,12 +6,14 @@ import { routerTransition } from '../../../router.animations';
 import { TableService } from '../../../services/table.service';
 import { PurchaseService } from '../../purchase-mgmt/purchase.service';
 import { RMAKeyService } from './keys.control';
+
 import { CommonService } from './../../../services/common.service';
+
 import { ItemsControl } from '../../../../../node_modules/@ngu/carousel/src/ngu-carousel/ngu-carousel.interface';
 @Component({
     selector: 'app-rma',
     templateUrl: './rma.component.html',
-    styleUrls: ['../rma.component.scss'],
+    styleUrls: ['./rma-list.component.scss'],
     animations: [routerTransition()],
     providers: [RMAKeyService, CommonService]
 })
