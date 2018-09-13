@@ -16,6 +16,7 @@ import { BankKeyService } from './keys.control';
   selector: 'app-bank',
   providers: [BankService, BankKeyService],
   templateUrl: 'bank.component.html',
+  styleUrls: ['./bank.component.scss'],
   animations: [routerTransition()]
 })
 
