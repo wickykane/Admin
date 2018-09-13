@@ -13,6 +13,7 @@ import { PaymentTermService } from './payterm.service';
   selector: 'app-payterm',
   providers: [PaymentTermService, PayTermKeyService],
   templateUrl: 'payterm.component.html',
+  styleUrls: ['./payterm.component.scss'],
   animations: [routerTransition()]
 })
 

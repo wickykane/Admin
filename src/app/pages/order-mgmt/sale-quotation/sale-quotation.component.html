@@ -144,7 +144,7 @@
                                             <a ngbTooltip="Approve" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="confirmModal(item.id, 'AM')"><i class="fa fa-check"></i></a>
                                             <a ngbTooltip="Reject" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="confirmModal(item.id, 'RM')"><i class="fa fa-ban" aria-hidden="true"></i></a>
                                             <a ngbTooltip="Copy" class="btn btn-default" (click)="confirmModal(item.id, 'CLONE')"><i class="fa fa-clone"></i></a>
-                                            <a ngbTooltip="View" *ngIf="item['sts_code'] == 'AM' || item['sts_code'] == 'EM'" class="btn btn-default" [routerLink]="['/order-management/sale-quotation/detail', item.id]"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                            <a ngbTooltip="View" class="btn btn-default" [routerLink]="['/order-management/sale-quotation/detail', item.id]"><i class="fa fa-eye" aria-hidden="true"></i></a>
                                             <a ngbTooltip="Convert to SO" *ngIf="item['sts_code'] == 'AM'" class="btn btn-default" (click)="confirmModal(item.id, 'SC')"><i class="fa fa-exchange" aria-hidden="true"></i></a>
                                         </td>
                                     </tr>
