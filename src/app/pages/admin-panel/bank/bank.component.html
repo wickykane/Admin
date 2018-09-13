@@ -68,7 +68,7 @@
                                         <td>{{item.swift}}</td>
                                         <td>{{item.num_of_branch}}</td>
                                         <td>{{item.full_name}}</td>
-                                        <td>{{item.updated_at}}</td>
+                                        <td>{{item.updated_at ? (item.updated_at | date:'MM/dd/yyyy') : ''}}</td>
                                         <td>
                                             <a class="btn btn-default" (click)="editBank(item)" title="Edit Bank">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
