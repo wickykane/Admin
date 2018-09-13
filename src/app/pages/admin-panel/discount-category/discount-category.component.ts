@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { routerTransition } from '../../../router.animations';
 
 // Services
 import { TableService } from '../../../services/index';
 import { DiscountCategoryService } from './discount-category.service';
+import { DiscountCategoryKeyService } from './keys.control';
 
 @Component({
     selector: 'app-discount-category',
     templateUrl: './discount-category.component.html',
-    providers: [DiscountCategoryService],
+    providers: [DiscountCategoryService, DiscountCategoryKeyService],
     styleUrls: ['./discount-category.component.scss'],
     animations: [routerTransition()]
 })
@@ -23,12 +25,16 @@ export class DiscountCategoryComponent implements OnInit {
 
 
     constructor(
+        private activeRouter: ActivatedRoute,
+        private router: Router,
+        public keyService: DiscountCategoryKeyService,
         public tableService: TableService,
         private discountCategoryService: DiscountCategoryService
     ) {
         //  Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
+        this.keyService.watchContext.next(this);
     }
 
     ngOnInit() {
@@ -58,5 +64,9 @@ export class DiscountCategoryComponent implements OnInit {
                 console.log(e);
             }
         });
+    }
+
+    createDiscountCategory() {
+        this.router.navigate(['/admin-panel/discount-category/create']);
     }
 }

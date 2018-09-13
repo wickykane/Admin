@@ -15,7 +15,7 @@ import { TerminatePolicyModalContent } from './modal/terminate-policy.modal';
     selector: 'app-late-fee-policy-detail',
     templateUrl: './late-fee-policy-detail.component.html',
     providers: [LateFeePolicyService, LateFeePolicyDetailKeyService],
-    styleUrls: ['./late-fee-policy.component.scss'],
+    styleUrls: ['./late-fee-policy-detail.component.scss'],
     animations: [routerTransition()]
 })
 export class LateFeePolicyDetailComponent implements OnInit {
