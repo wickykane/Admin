@@ -13,6 +13,7 @@ import { LateFeePolicyService } from './late-fee-policy.service';
     selector: 'app-late-fee-policy',
     providers: [LateFeePolicyService, LateFeePolicyListKeyService],
     templateUrl: 'late-fee-policy.component.html',
+    styleUrls: ['./late-fee-policy.component.scss'],
     animations: [routerTransition()]
 })
 

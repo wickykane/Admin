@@ -147,7 +147,7 @@
                                                width="20px" height="20px">
                                        </a>
                                         </td>
-                                        <td>{{item.code}}</td>
+                                        <td><a class="text-primary" [routerLink]="['detail', item.id]">{{item.code}}</a></td>
                                         <td>{{item.cus_po}}</td>
                                         <td>{{item.quote_no}}</td>
                                         <td>{{item.buyer_name}}</td>

@@ -12,7 +12,7 @@ import { PaymentTermService } from './payterm.service';
     selector: 'app-payterm-create',
     templateUrl: './payterm-create.component.html',
     providers: [PaymentTermService, PayTermKeyService],
-    styleUrls: ['./payterm.component.scss'],
+    styleUrls: ['./payterm-create.component.scss'],
     animations: [routerTransition()]
 })
 export class PayTermCreateComponent implements OnInit {

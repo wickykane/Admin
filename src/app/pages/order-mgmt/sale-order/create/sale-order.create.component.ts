@@ -214,11 +214,11 @@ export class SaleOrderCreateComponent implements OnInit {
                 });
 
                 if (default_billing) {
-                    this.selectAddress('billing');
+                    this.selectAddress('billing', true);
                 }
 
                 if (default_shipping) {
-                    this.selectAddress('shipping');
+                    this.selectAddress('shipping', true);
                 }
 
             } catch (e) {
@@ -256,10 +256,13 @@ export class SaleOrderCreateComponent implements OnInit {
         this.updateTotal();
     }
 
-    selectAddress(type) {
+    selectAddress(type, flag?) {
         try {
             switch (type) {
                 case 'shipping':
+                    if (!flag) {
+                        this.generalForm.patchValue({ 'carrier_id': null, 'ship_method_option': null, 'ship_method_rate': null });
+                    }
                     const ship_id = this.generalForm.value.shipping_id;
                     if (ship_id) {
                         this.addr_select.shipping = this.findDataById(ship_id, this.customer.shipping);
@@ -286,7 +289,6 @@ export class SaleOrderCreateComponent implements OnInit {
     }
 
     changeShipVia() {
-
         const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id);
         this.listMaster['options'] = carrier.options || [];
         this.listMaster['ship_rates'] = carrier.ship_rate || [];

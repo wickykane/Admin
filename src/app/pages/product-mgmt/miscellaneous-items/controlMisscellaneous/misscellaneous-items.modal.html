@@ -56,7 +56,7 @@
                         </select> -->
                         <ng-select [items]="accountList" formControlName="account_id" bindLabel="name" bindValue="id">
                             <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
-                                <span [ngClass]="{'pl-3': item.level != undefined}">{{ item.name}}</span>
+                                <span [ngClass]="{'pl-3': item.level ==0,'pl-5':item.level==1}">{{ item.name}}</span>
                             </ng-template>
                         </ng-select>
                     </div>
