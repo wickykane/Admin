@@ -13,7 +13,8 @@ import { ReceiptVoucherService } from './../../receipt-voucher.service';
 export class PaymentInformModalComponent implements OnInit {
     // Resolve Data
     public mailForm: FormGroup;
-    @Input() invoiceId;
+    @Input() receiptId;
+    public modalTitle;
 
     constructor(public activeModal: NgbActiveModal, public toastr: ToastrService, private fb: FormBuilder, private receiptVoucherService: ReceiptVoucherService) {
         this.mailForm = fb.group({
