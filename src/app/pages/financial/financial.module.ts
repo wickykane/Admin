@@ -110,7 +110,9 @@ import { MailModalComponent } from './ar-invoice/modals/mail.modal';
         ReceiptVoucherDetailComponent,
         ReceiptMailModalComponent,
         ReceiptDocumentTabComponent,
-        ReceiptInformationTabComponent
+        ReceiptInformationTabComponent,
+        PaymentGatewayModalComponent,
+        PaymentInformModalComponent
     ],
     providers: [FinancialService, DebitMemoService, CreditMemoService, TableService, DatePipe, Helper],
     entryComponents: [
