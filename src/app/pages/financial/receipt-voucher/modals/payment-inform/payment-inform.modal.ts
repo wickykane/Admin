@@ -2,20 +2,20 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { FinancialService } from './../../financial.service';
+import { ReceiptVoucherService } from './../../receipt-voucher.service';
 
 @Component({
     selector: 'app-payment-inform-modal',
     templateUrl: './payment-inform.modal.html',
     styleUrls: ['./modal.scss'],
-    providers: [FinancialService]
+    providers: [ReceiptVoucherService]
 })
 export class PaymentInformModalComponent implements OnInit {
     // Resolve Data
     public mailForm: FormGroup;
     @Input() invoiceId;
 
-    constructor(public activeModal: NgbActiveModal, public toastr: ToastrService, private fb: FormBuilder, private financialService: FinancialService) {
+    constructor(public activeModal: NgbActiveModal, public toastr: ToastrService, private fb: FormBuilder, private receiptVoucherService: ReceiptVoucherService) {
         this.mailForm = fb.group({
             'send_to': [null, Validators.required],
             'subject': [null],
@@ -28,10 +28,10 @@ export class PaymentInformModalComponent implements OnInit {
 
     ok() {
         const params = this.mailForm.value;
-        this.financialService.sendMail(this.invoiceId, params).subscribe(res => {
-            this.toastr.success(res.message);
-            this.activeModal.close(this.mailForm.value);
-        });
+        // this.financialService.sendMail(this.invoiceId, params).subscribe(res => {
+        //     this.toastr.success(res.message);
+        //     this.activeModal.close(this.mailForm.value);
+        // });
     }
 
     cancel() {

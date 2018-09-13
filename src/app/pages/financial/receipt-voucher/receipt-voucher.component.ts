@@ -233,28 +233,28 @@ export class ReceiptVoucherComponent implements OnInit {
     }
 
     createInvoice() {
-        this.router.navigate(['/financial/invoice/create']);
+        this.router.navigate(['/financial/receipt-voucher/create']);
     }
 
     viewInvoice(id?) {
         if (id) {
-            this.router.navigate(['/financial/invoice/view', id]);
+            this.router.navigate(['/financial/receipt-voucher/view', id]);
         } else {
             const selectedInvoiceId = this.list.items[this.selectedIndex].id;
             if (selectedInvoiceId) {
-                this.router.navigate(['/financial/invoice/view', selectedInvoiceId]);
+                this.router.navigate(['/financial/receipt-voucher/view', selectedInvoiceId]);
             }
         }
     }
 
     editInvoice(id?) {
         if (id) {
-            this.router.navigate(['/financial/invoice/edit', id]);
+            this.router.navigate(['/financial/receipt-voucher/edit', id]);
         } else {
             const selectedInvoiceId = this.list.items[this.selectedIndex].id;
             const selectedInvoiceStatus = this.list.items[this.selectedIndex].invoice_status_id;
             if (selectedInvoiceId && selectedInvoiceStatus === 1) {
-                this.router.navigate(['/financial/invoice/edit', selectedInvoiceId]);
+                this.router.navigate(['/financial/receipt-voucher/edit', selectedInvoiceId]);
             }
         }
     }
@@ -288,7 +288,7 @@ export class ReceiptVoucherComponent implements OnInit {
     }
 
     printPDF(id, inv_num) {
-        const path = 'ar-invoice/print-pdf/';
+        const path = 'receipt-voucher/print-pdf/';
         const url = `${environment.api_url}${path}${id}`;
         const headers: HttpHeaders = new HttpHeaders();
         // Check if Pdf exist
