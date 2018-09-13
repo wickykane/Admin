@@ -10,5 +10,23 @@ export class ReceiptVoucherService {
      * RECEIPT SERVICE
      */
     //
+    getPaymentMethod() {
+        const url = 'ar-invoice/get-payment-method';
+        return this.API.get(url);
+    }
 
+    getGenerateCode() {
+        const url = 'ar-invoice/general-code';
+        return this.API.get(url);
+    }
+
+    getListInvoiceAndMemo(params) {
+        const url = 'ar-invoice/general-code';
+        return this.API.get(url, params);
+    }
+
+    createVoucher(params) {
+        const url = 'ar-invoice/general-code';
+        return this.API.post(url, params);
+    }
 }

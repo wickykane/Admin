@@ -21,14 +21,13 @@ import { HotkeysService } from 'angular2-hotkeys';
 import * as _ from 'lodash';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { OrderService } from '../../../order-mgmt/order-mgmt.service';
-import { FinancialService } from './../../financial.service';
-
+import { ReceiptVoucherService } from './../receipt-voucher.service';
 
 @Component({
     selector: 'app-create-receipt-voucher',
     templateUrl: './receipt-voucher.create.component.html',
     styleUrls: ['../receipt-voucher.component.scss'],
-    providers: [OrderService, HotkeysService, InvoiceCreateKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }],
+    providers: [OrderService, ReceiptVoucherService, HotkeysService, InvoiceCreateKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }],
     animations: [routerTransition()]
 })
 
@@ -46,38 +45,6 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         '2': 'Are you sure that you want to save & submit this invoice to approver? ',
         '4': 'Are you sure that you want to validate this invoice?',
         'default': 'The data you have entered may not be saved, are you sure that you want to leave?',
-    };
-
-    public customer: any = {
-        'last_sales_order': '',
-        'current_dept': '',
-        'discount_level': '',
-        'items_in_quote': '',
-        'buyer_type': '',
-        primary: [],
-        billing: [],
-        shipping: [],
-        contact: []
-    };
-
-    public addr_select: any = {
-        shipping: {},
-        billing: {},
-        contact: {}
-    };
-
-    public order_info: any = {
-        total: 0,
-        order_summary: {},
-        sub_total: 0,
-        order_date: '',
-        customer_po: '',
-        total_discount: 0,
-        company_id: null,
-        selected_programs: [],
-        discount_percent: 0,
-        vat_percent: 0,
-        shipping_cost: 0
     };
 
     public list: any = {
@@ -101,36 +68,22 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         private orderService: OrderService,
         private _hotkeysService: HotkeysService,
         public keyService: InvoiceCreateKeyService,
-        private financialService: FinancialService,
+        private voucherService: ReceiptVoucherService,
         private dt: DatePipe) {
         this.generalForm = fb.group({
             'approver_id': [null, Validators.required],
-            'company_id': [null, Validators.required],
-            'carrier_id': [null], // Default Ups
-            'ship_rate': [null],
-            'ship_method_option': [null],
+            'payer_id': [null, Validators.required],
             'warehouse_id': [null],
-            'contact_user_id': [null],
-
-            'sales_person': [null],
             'payment_method_id': [null, Validators.required],
-            'payment_term_id': [null, Validators.required],
-            'billing_id': [null],
-            'shipping_id': [null],
             'note': [null],
-            'apply_late_fee': [null],
-            'due_dt': [null, Validators.required],
-            'payment_term_range': [null],
-
-            // Invoice
-            'inv_dt': [null, Validators.required],
-            'inv_num': [null, Validators.required],
-            'order_id': [null, Validators.required],
+            'is_electronic': [null],
+            'account_received': [null, Validators.required],
+            'payment_dt': [null, Validators.required],
+            'voucher_no': [null, Validators.required],
             'updated_by': [null],
             'updated_date': [null],
             'created_by': [null],
             'parent_id': [null],
-
             'check_no': [null, Validators.required],
             'ref_no': [null, Validators.required],
             'remain_amt': [null, Validators.required]
@@ -141,26 +94,20 @@ export class ReceiptVoucherCreateComponent implements OnInit {
 
     async ngOnInit() {
         const user = JSON.parse(localStorage.getItem('currentUser'));
+        const currentDt = new Date();
 
         // List Master
-        this.orderService.getOrderReference().subscribe(res => { Object.assign(this.listMaster, res.data); });
+        this.getListReference();
         await this.getListPaymentMethod();
         this.getGenerateCode();
-        this.listMaster['yes_no_options'] = [{ value: 0, label: 'No' }, { value: 1, label: 'Yes' }];
-
-        //  Item
-        this.list.items = [];
-        const currentDt = new Date();
 
         this.generalForm.patchValue({
             approver_id: user.id,
             updated_by: user.full_name,
             created_by: user.full_name,
-            updated_date: currentDt.toISOString().slice(0, 10)
+            updated_date: currentDt.toISOString().slice(0, 10),
+            payment_dt: currentDt.toISOString().slice(0, 10)
         });
-
-        // Init Date
-        this.generalForm.controls['inv_dt'].patchValue(currentDt.toISOString().slice(0, 10));
 
         // Lazy Load filter
         this.data['page'] = 1;
@@ -173,18 +120,39 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             this.data['page'] = 1;
             this.searchCustomer(key);
         });
+
+        // Init Change Event
+        this.onChangePaymentMethod();
+        this.onChangeWareHouse();
     }
 
     /**
      * Mater Data
      */
 
+    getListReference() {
+        this.listMaster['yes_no_options'] = [{ value: 0, label: 'No' }, { value: 1, label: 'Yes' }];
+        this.orderService.getOrderReference().subscribe(res => {
+            Object.assign(this.listMaster, res.data);
+        });
+    }
+
+    getListInvoiceAndMemo() {
+        const params = {
+            inv_no: this.data['search'],
+            warehouse_id: this.generalForm.value.warehouse_id,
+        };
+        this.voucherService.getListInvoiceAndMemo(params).subscribe(res => {
+            this.list.items = [{}] || res.data;
+        });
+    }
+
     resetChangeData() {
     }
 
     getListPaymentMethod() {
         return new Promise(resolve => {
-            this.financialService.getPaymentMethod().subscribe(res => {
+            this.voucherService.getPaymentMethod().subscribe(res => {
                 this.listMaster['payment_method'] = res.data;
                 resolve(true);
             });
@@ -192,19 +160,8 @@ export class ReceiptVoucherCreateComponent implements OnInit {
     }
 
     getGenerateCode() {
-        this.financialService.getGenerateCode().subscribe(res => {
-            this.generalForm.get('inv_num').patchValue(res.data.code);
-        });
-    }
-
-    getDetailCustomerById(company_id, flag?) {
-        this.orderService.getDetailCompany(company_id).subscribe(res => {
-            try {
-                this.customer = res.data;
-                this.generalForm.patchValue({ apply_late_fee: res.data.apply_late_fee || null });
-            } catch (e) {
-                console.log(e);
-            }
+        this.voucherService.getGenerateCode().subscribe(res => {
+            this.generalForm.get('voucher_no').patchValue(res.data.code);
         });
     }
 
@@ -226,17 +183,17 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         this.list.checklist = this.list.items.filter(item => item.is_checked);
     }
 
-
-    changeCustomer(flag?) {
-        const company_id = this.generalForm.value.company_id;
-        if (company_id) {
-            this.getDetailCustomerById(company_id, flag);
-            this.resetChangeData();
-        }
+    onChangePaymentMethod() {
+        this.generalForm.get('payment_method_id').valueChanges.subscribe(id => {
+            const payment = this.listMaster['payment_method'].find(item => +item.id === +id);
+            this.data['payment'] = payment || {};
+        });
     }
-
-
-
+    onChangeWareHouse() {
+        this.generalForm.get('warehouse_id').valueChanges.subscribe(id => {
+            this.getListInvoiceAndMemo();
+        });
+    }
     updateTotal() {
 
     }
@@ -253,19 +210,9 @@ export class ReceiptVoucherCreateComponent implements OnInit {
 
         const params = {
             ...this.generalForm.value,
-            inv_status: type,
-            sub_total: this.order_info.sub_total,
-            total_due: this.order_info.total,
-            is_early: this.data['is_early'] || 0,
-            early_percent: (this.data['is_fixed_early']) ? null : (this.order_info['incentive_percent'] || 0),
-            policy_amt: (this.order_info['incentive'] || 0),
-            aprvr_id: this.generalForm.value.approver_id,
-            sale_person_id: this.generalForm.value.sales_person,
-            inv_detail: items,
-            is_draft: is_draft || 0,
         };
 
-        this.financialService.createInvoice(params).subscribe(res => {
+        this.voucherService.createVoucher(params).subscribe(res => {
             try {
                 if (res.status) {
                     this.toastr.success(res.message);
