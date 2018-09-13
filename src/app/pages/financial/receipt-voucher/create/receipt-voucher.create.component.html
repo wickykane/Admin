@@ -19,8 +19,8 @@
                                                 <span class="text-danger">(*)</span>                                                
                                                 </label>
                                                 <div class='col-6 text-primary'>
-                                                    <ng-select [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="company_id" [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="min-width: 100%;" [items]="listMaster['customer']"
-                                                        bindLabel="company_name" bindValue="id" formControlName="payer_id">
+                                                    <ng-select [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="company_id" [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="min-width: 100%;" [items]="listMaster['customer']" bindLabel="company_name"
+                                                        bindValue="id" formControlName="payer_id">
                                                     </ng-select>
                                                 </div>
                                             </div>
@@ -37,7 +37,7 @@
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6 text-primary'>
-                                                    <div clickOutside (clickOutside)="paymentDate.close()" class="input-group">
+                                                    <div [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('payment_dt').errors?.required) || false   }" clickOutside (clickOutside)="paymentDate.close()" class="input-group">
                                                         <input [maxDate]="generalForm.value.payment_dt | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="payment_dt" ngbDatepicker #paymentDate="ngbDatepicker">
                                                         <div class="input-group-append">
                                                             <button class="btn btn-outline-secondary" (click)="paymentDate.toggle()" type="button">
@@ -76,7 +76,7 @@
                                             <div class="form-group row">
                                                 <label class='col-6'>Payment Method<span class="text-danger">(*)</span></label>
                                                 <div class='col-6 text-primary'>
-                                                    <select  class="form-control" id="payment_method_id" name="payment_method_id" formControlName="payment_method_id">
+                                                    <select class="form-control" id="payment_method_id" name="payment_method_id" formControlName="payment_method_id">
                                                         <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let item of listMaster['payment_method']" [ngValue]="item.id">{{item.name}}</option>
                                                     </select>
@@ -198,7 +198,7 @@
                         <div class="search-invoice">
                             <div>
                                 <i class="fa fa-search"></i>
-                                <input [(ngModel)]="data['search']" type="text" placeholder="Search Invoice & Debit Memo">
+                                <input (keyup.enter)="getListInvoiceAndMemo()" [(ngModel)]="data['search']" type="text" placeholder="Search Invoice & Debit Memo">
                             </div>
                         </div>
                         <div class="table-responsive">
@@ -231,7 +231,7 @@
                                 <ng-container *ngIf="list['items'].length > 0">
                                     <tbody *ngFor="let item of list['items']; let $index = index;">
                                         <tr>
-                                            <td>
+                                            <td class="text-center">
                                                 <label class="css-input css-checkbox css-checkbox-default">
                                                     <input class="cb-element" type="checkbox" [(ngModel)]="item.is_checked" (change)="isAllChecked()">
                                                     <span></span>
@@ -253,7 +253,7 @@
                                             </td>
                                             <td>{{item.sku | currency }}</td>
                                             <td>
-                                                <input [isDecimal]="true" numberDirective [min]="0" [max]="100" class="form-control input-sm" type="number" [(ngModel)]="item.discount_percent">
+                                                <input [isDecimal]="true" numberDirective [min]="0" class="form-control input-sm" type="number" [(ngModel)]="item.applied_amt">
                                             </td>
                                         </tr>
                                     </tbody>
@@ -262,7 +262,7 @@
                             </table>
                         </div>
                         <div>
-                            <button class="btn btn-secondary mt-2">Clear Payment</button>
+                            <button (click)="clearPayment()" class="btn btn-secondary mt-2">Clear Payment</button>
                             <p class="text-danger mt-2">
                                 (*) For the invoice document, the Current Balance is including the early payment incentive if any.
                                 <br> (**) If you enter a partial payment for an invoice on which an Early Payment Incentive is active you will remove the discount opportunity.

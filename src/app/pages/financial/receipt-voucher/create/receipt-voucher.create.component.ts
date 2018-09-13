@@ -189,11 +189,25 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             this.data['payment'] = payment || {};
         });
     }
+
     onChangeWareHouse() {
         this.generalForm.get('warehouse_id').valueChanges.subscribe(id => {
+            this.data['search'] = null;
             this.getListInvoiceAndMemo();
         });
     }
+
+    clearPayment() {
+        this.data['search'] = null;
+        // this.getListInvoiceAndMemo();
+        const checkedList = this.list.checklist.map(item => item.id);
+        this.list.items.forEach(item => {
+            if (checkedList.length > 0 && checkedList.indexOf(item.id) !== 1) {
+                item.applied_amt = 0;
+            }
+        });
+    }
+
     updateTotal() {
 
     }
@@ -202,6 +216,11 @@ export class ReceiptVoucherCreateComponent implements OnInit {
     }
 
     createInvoice(type, is_draft?, is_continue?) {
+        if (this.generalForm.invalid) {
+            this.data['showError'] = true;
+            return;
+        }
+
         const items = this.list.items.map(item => {
             item.is_item = (item.misc_id) ? 0 : 1;
             item.order_detail_id = item.id;
