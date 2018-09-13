@@ -1,52 +1,67 @@
 <div [@routerTransition]>
     <app-page-header [heading]="'LIST OF WAREHOUSE'" [icon]="'fa-th-list'"></app-page-header>
-    <div class="block-content list-order-table">
+    <div class="block anchor-scroll block-order">
+        <!-- <div class="block-content list-order-table"> -->
         <!-- <button [routerLink]="['create']" style="margin: 10px 0;" class="btn btn-primary">Add New Warehouse</button> -->
-
-        <div class="table-responsive">
-            <table class="table table-striped table-vcenter custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex"
-                (onEnter)="selectData($event)">
-                <thead class="bg-white">
-                    <tr>
-                        <th>ID</th>
-                        <th>Warehouse Name</th>
-                        <th>Address</th>
-                        <th>Status</th>
-                        <th class="text-center">Is Shipping Origin</th>
-                        <th>Last Updated On</th>
-                        <th>Last Updated By</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
-                    <tr>
-                        <td>{{item.id}}</td>
-                        <td>{{item.name }}</td>
-                        <td>{{item.address}}</td>
-                        <td>
-                            <label class="switch" placement="top" ngbTooltip="Click to Active or Inactive">
-                                <input type="checkbox" [(ngModel)]="item.ac" (change)="changeStatus(item.id,item.ac)" (ngModelChange)="item.ac = $event ? 1 : 0" >
-                                <div class="slider round"></div>
-                            </label>
-                        </td>
-                        <td class="text-center">
-                          <a class="btn btn-default" *ngIf="!item.is_shipping_origin" (click)="setShipping(item.id)" title="Set Shipping">
-                          <span class="text-success"><i class="fa fa-check"></i></span></a>
-                          <span *ngIf="item.is_shipping_origin" class="text-disable"><i class="fa fa-check"></i></span>
-                          </td>
-                        <td>{{item.updated_dt}}</td>
-                        <td>{{item.updated_by}}</td>
-                        <td>
-                          <a class="btn btn-default" [routerLink]="['/admin-panel/warehouse/edit/',item.id]"  title="View Warehouse">
-                              <i class="fa fa-eye" aria-hidden="true"></i>
-                          </a>
-                      </td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="row mg-top-10">
+            <div class="col-12">
+                <div class="card no-border">
+                    <div class="card-header">
+                        <strong>Line Items</strong>
+                    </div>
+                    <div class="card-body no-padding">
+                        <div class="table-responsive list">
+                            <table class="table table-bordered table-order" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex"
+                                (onEnter)="selectData($event)">
+                                <thead class="bg-white">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Warehouse Name</th>
+                                        <th>Address</th>
+                                        <th>Status</th>
+                                        <th class="text-center">Is Shipping Origin</th>
+                                        <th>Last Updated On</th>
+                                        <th>Last Updated By</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
+                                    <tr>
+                                        <td>{{item.id}}</td>
+                                        <td>{{item.name }}</td>
+                                        <td>{{item.address}}</td>
+                                        <td>
+                                            <label class="switch" placement="top" ngbTooltip="Click to Active or Inactive">
+                                                <input type="checkbox" [(ngModel)]="item.ac" (change)="changeStatus(item.id,item.ac)" (ngModelChange)="item.ac = $event ? 1 : 0">
+                                                <div class="slider round"></div>
+                                            </label>
+                                        </td>
+                                        <td class="text-center">
+                                            <a class="btn btn-default" *ngIf="!item.is_shipping_origin" (click)="setShipping(item.id)" title="Set Shipping">
+                                                <span class="text-success">
+                                                    <i class="fa fa-check"></i>
+                                                </span>
+                                            </a>
+                                            <span *ngIf="item.is_shipping_origin" class="text-disable">
+                                                <i class="fa fa-check"></i>
+                                            </span>
+                                        </td>
+                                        <td>{{item.updated_dt}}</td>
+                                        <td>{{item.updated_by}}</td>
+                                        <td>
+                                            <a class="btn btn-default" [routerLink]="['/admin-panel/warehouse/edit/',item.id]" title="View Warehouse">
+                                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <div class="row normal-pagination" *ngIf="list.items.length > 0">
+        <div class="row normal-pagination mg-top-10" *ngIf="list.items.length > 0">
             <div class="col-md-6">
                 <div class="text-left">
                     <div class="col-md-6" style="padding-left: 0px;">

@@ -2,96 +2,112 @@
     <app-page-header [heading]="'LIST OF PAYMENT METHODS'" [icon]="'fa-th-list'"></app-page-header>
     <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
 
-    <div class="block-content pd-bottom bg-gray-light short-width">
-        <div class="row">
-            <form class="form-horizontal form-search" role="form" [formGroup]="searchForm" (ngSubmit)="tableService.searchAction()">
-                <div class="block-search">
-                    <label class="control-label">Description</label>
-                    <input type="text" class="form-control" formControlName="name">
+    <div class="block anchor-scroll block-order">
+        <div class="block-content pd-bottom padding-lr-0 mt-2">
+            <div class="row">
+                <div class="col-6">
+                    <form class="row form-horizontal form-search filter-order-group" role="form" [formGroup]="searchForm">
+                        <div class="col-md-4 block-search">
+                            <label class="control-label">Description</label>
+                            <input type="text" class="form-control" formControlName="name">
+                        </div>
+                        <div class="col-md-4 block-search">
+                            <label class="control-label">Type</label>
+                            <select class="form-control" formControlName="type">
+                                <option value="null" disabled>--Select--</option>
+                                <option *ngFor="let type of listMaster.paymentTypes" [value]="type.key">{{type.name}}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 block-search">
+                            <label class="control-label">Status</label>
+                            <select class="form-control" formControlName="ac">
+                                <option *ngFor="let status of listMaster.status" [value]="status.key" [disabled]="status.key === null">{{status.name}}</option>
+                            </select>
+                        </div>
+                    </form>
                 </div>
-                <div class="block-search">
-                    <label class="control-label">Type</label>
-                    <select class="form-control" formControlName="type">
-                        <option value="null" disabled>--Select--</option>
-                        <option *ngFor="let type of listMaster.paymentTypes" [value]="type.key">{{type.name}}</option>
-                    </select>
-                </div>
-                <div class="block-search">
-                    <label class="control-label">Status</label>
-                    <select class="form-control" formControlName="ac">
-                        <option *ngFor="let status of listMaster.status" [value]="status.key" [disabled]="status.key === null">{{status.name}}</option>
-                    </select>
-                </div>
-                <div class="block-btn-search">
-                    <label class="control-label">&nbsp;</label>
-                    <div class="group-btn-search">
-                        <button type="submit" class="btn btn-primary">Search</button>
-                        <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchForm)">Reset</button>
+                <div class="col-3">
+                    <div class="block-btn-search">
+                        <div class="mt-1 group-btn-search">
+                            <button type="button" class="btn-default-custom" (click)="tableService.searchAction()">Search</button>
+                            <button type="button" class="btn-default-custom" (click)="tableService.resetAction(this.searchForm)">Reset</button>
+                        </div>
                     </div>
                 </div>
-            </form>
+            </div>
         </div>
-    </div>
 
-    <div class="list-order-table">
-        <button style="margin: 10px 0;" class="btn btn-primary" [routerLink]="['/admin-panel/payment-methods/create']">Add New</button>
-
-        <div class="table-responsive">
-            <table class="table table-striped table-vcenter table-hover custom-table">
-                <thead class="bg-white">
-                    <tr>
-                        <th>
-                            <label class="css-input css-checkbox css-checkbox-default">
-                                <input class="cb-all" type="checkbox" [(ngModel)]="isCheckedAllPaymentMethod" (change)="checkAll($event)">
-                                <span></span>
-                            </label>
-                        </th>
-                        <th class="vertical-top" translate>Code</th>
-                        <th class="vertical-top" translate>Description</th>
-                        <th class="vertical-top" translate>Type</th>
-                        <th class="vertical-top" translate>Status</th>
-                        <th class="vertical-top text-center" translate>Show in store</th>
-                        <th class="vertical-top text-center" translate>Used</th>
-                        <th class="vertical-top text-center" translate>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngIf="!paymentMethods.length">
-                        <td colspan="100%" class="text-center">No data.</td>
-                    </tr>
-                    <tr *ngFor="let paymentMethod of paymentMethods">
-                        <td>
-                            <label class="css-input css-checkbox css-checkbox-default">
-                                <input class="cb-element" type="checkbox" [(ngModel)]="paymentMethod.checked" (change)="isAllChecked()">
-                                <span></span>
-                            </label>
-                        </td>
-                        <td>{{paymentMethod.cd}}</td>
-                        <td>{{paymentMethod.name}}</td>
-                        <td>{{paymentMethod.type_name}}</td>
-                        <td>
-                            <label class="switch" placement="top">
-                                <input type="checkbox" [(ngModel)]="paymentMethod.ac" (change)="changePaymentMethodStatus(paymentMethod)">
-                                <div class="slider round"></div>
-                            </label>
-                        </td>
-                        <td class="text-center">
-                            <i *ngIf="paymentMethod.show_in_store" class="fa fa-check" aria-hidden="true"></i>
-                        </td>
-                        <td class="text-center">
-                            <i *ngIf="paymentMethod.used" class="fa fa-check" aria-hidden="true"></i>
-                        </td>
-                        <td class="text-center">
-                            <a class="btn btn-primary-outline" (click)="editPaymentMethod(paymentMethod.id)">
-                                <i class="fa fa-pencil" aria-hidden="true"></i>
-                            </a>
-                            <a class="btn btn-primary-outline" [hidden]="paymentMethod.used" (click)="deletePaymentMethod(paymentMethod)">
-                                <i class="fa fa-trash" aria-hidden="true"></i>
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="row mg-top-10">
+            <div class="col-12">
+                <div class="card no-border">
+                    <div class="card-header">
+                        <strong>Payment Method</strong>
+                        <button [routerLink]="['create']" style="margin:0; float:right" class="btn btn-link">
+                            <i class="fa fa-plus text-success"></i> Add New</button>
+                    </div>
+                    <div class="card-body no-padding">
+                        <div class="table-responsive list">
+                            <table class="table table-bordered table-order">
+                                <thead class="bg-white">
+                                    <tr>
+                                        <th>
+                                            <label class="css-input css-checkbox css-checkbox-default">
+                                                <input class="cb-all" type="checkbox" [(ngModel)]="isCheckedAllPaymentMethod" (change)="checkAll($event)">
+                                                <span></span>
+                                            </label>
+                                        </th>
+                                        <th class="vertical-top" translate>Code</th>
+                                        <th class="vertical-top" translate>Description</th>
+                                        <th class="vertical-top" translate>Type</th>
+                                        <th class="vertical-top" translate>Status</th>
+                                        <th class="vertical-top text-center" translate>Show in store</th>
+                                        <th class="vertical-top text-center" translate>Used</th>
+                                        <th class="vertical-top text-center" translate>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let paymentMethod of paymentMethods">
+                                        <td class="text-center">
+                                            <label class="css-input css-checkbox css-checkbox-default">
+                                                <input class="cb-element" type="checkbox" [(ngModel)]="paymentMethod.checked" (change)="isAllChecked()">
+                                                <span></span>
+                                            </label>
+                                        </td>
+                                        <td>{{paymentMethod.cd}}</td>
+                                        <td>{{paymentMethod.name}}</td>
+                                        <td class="text-center">{{paymentMethod.type_name}}</td>
+                                        <td class="text-center">
+                                            <label class="switch" placement="top">
+                                                <input type="checkbox" [(ngModel)]="paymentMethod.ac" (change)="changePaymentMethodStatus(paymentMethod)">
+                                                <div class="slider round"></div>
+                                            </label>
+                                        </td>
+                                        <td class="text-center">
+                                            <i *ngIf="paymentMethod.show_in_store" class="fa fa-check" aria-hidden="true"></i>
+                                        </td>
+                                        <td class="text-center">
+                                            <i *ngIf="paymentMethod.used" class="fa fa-check" aria-hidden="true"></i>
+                                        </td>
+                                        <td class="text-left">
+                                            <a class="btn btn-primary-outline" (click)="editPaymentMethod(paymentMethod.id)">
+                                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                                            </a>
+                                            <a class="btn btn-primary-outline" [hidden]="paymentMethod.used" (click)="deletePaymentMethod(paymentMethod)">
+                                                <i class="fa fa-trash" aria-hidden="true"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tbody *ngIf="!paymentMethods.length">
+                                    <tr>
+                                        <td colspan="100%" class="text-center" translate>No data.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="row normal-pagination" *ngIf="paymentMethods.length > 0">
@@ -113,9 +129,5 @@
                 </div>
             </div>
         </div>
-
-        <button style="margin: 10px 0;" class="btn btn-primary" [routerLink]="['/admin-panel/payment-methods/create']">Add New</button>
     </div>
-
-    <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
 </div>

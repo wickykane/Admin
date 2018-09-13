@@ -80,12 +80,13 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         shipping_cost: 0
     };
 
-    public list = {
+    public list: any = {
         items: [],
-        backItems: []
+        checklist: []
     };
 
     public searchKey = new Subject<any>(); // Lazy load filter
+    public checkAllItem;
 
     /**
      * Init Data
@@ -325,7 +326,21 @@ export class ReceiptVoucherCreateComponent implements OnInit {
     /**
      * Internal Function
      */
-    selectData(data) { }
+    // Table event
+    selectData(index) {
+        console.log(index);
+    }
+
+    checkAll(ev) {
+        this.list.items.forEach(x => x.is_checked = ev.target.checked);
+        this.list.checklist = this.list.items.filter(item => item.is_checked);
+    }
+
+    isAllChecked() {
+        this.checkAllItem = this.list.items.every(item => item.is_checked);
+        this.list.checklist = this.list.items.filter(item => item.is_checked);
+    }
+
     changeLateFee() {
         const late_fee = this.generalForm.value.apply_late_fee;
         if (late_fee) {
@@ -488,7 +503,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
 
         this.list = {
             items: [],
-            backItems: []
+
         };
         this.generalForm.reset();
         this.ngOnInit();

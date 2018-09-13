@@ -11,7 +11,7 @@ import { ReturnReasonService } from './return-reason.service';
     selector: 'app-reason-create',
     templateUrl: './return-reason-create.component.html',
     providers: [ReturnReasonService, ReturnReasonKeyService],
-    styleUrls: ['./reason.component.scss'],
+    styleUrls: ['./return-reason-create.component.scss'],
     animations: [routerTransition()]
 })
 export class ReturnReasonCreateComponent implements OnInit {

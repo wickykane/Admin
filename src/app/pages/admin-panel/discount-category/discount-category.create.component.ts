@@ -16,7 +16,7 @@ import { DiscountCategoryService } from './discount-category.service';
     selector: 'app-discount-category-create',
     templateUrl: './discount-category.create.component.html',
     providers: [DiscountCategoryService],
-    styleUrls: ['./discount-category.component.scss'],
+    styleUrls: ['./discount-category-create.component.scss'],
     animations: [routerTransition()]
 })
 export class DiscountCategoryCreateComponent implements OnInit {
