@@ -15,6 +15,7 @@ import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
     selector: 'app-miscellaneous',
     templateUrl: './miscellaneous-items.component.html',
     animations: [routerTransition()],
+    styleUrls: ['./miscellaneous-items.component.scss'],
     providers: [MiscellaneousItemsKeyService, CommonService, ProductService]
 })
 export class MiscellaneousItemsComponent implements OnInit {

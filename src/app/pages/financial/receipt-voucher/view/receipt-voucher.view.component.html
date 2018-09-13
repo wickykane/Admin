@@ -5,12 +5,12 @@
         <ngb-tabset class="tabs-order full-width">
             <ngb-tab title="Information">
                 <ng-template ngbTabContent>
-                    <app-invoice-info-tab [invoiceId]="invoiceId"></app-invoice-info-tab>
+                    <app-receipt-info-tab [receiptId]="receiptId"></app-receipt-info-tab>
                 </ng-template>
             </ngb-tab>            
             <ngb-tab title="Document">
                 <ng-template ngbTabContent>
-                    <app-invoice-document-tab></app-invoice-document-tab>
+                    <app-receipt-document-tab [receiptId]="receiptId"></app-receipt-document-tab>
                 </ng-template>
             </ngb-tab>
         </ngb-tabset>

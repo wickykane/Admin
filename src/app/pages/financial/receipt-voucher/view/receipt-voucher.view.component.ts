@@ -1,5 +1,4 @@
 import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -7,9 +6,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
-import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
-import { InvoiceModalContent } from '../../../../shared/modals/invoice.modal';
-import { FinancialService } from '../../financial.service';
+import { ReceiptVoucherService } from '../receipt-voucher.service';
 import { InvoiceDetailKeyService } from './keys.view.control';
 
 
@@ -27,7 +24,7 @@ export class ReceiptVoucherDetailComponent implements OnInit {
      */
 
     public data = {};
-    public invoiceId;
+    public receiptId;
 
 
     /**
@@ -38,7 +35,7 @@ export class ReceiptVoucherDetailComponent implements OnInit {
         private modalService: NgbModal,
         public toastr: ToastrService,
         private router: Router,
-        private financialService: FinancialService,
+        private receiptVoucherService: ReceiptVoucherService,
         public keyService: InvoiceDetailKeyService,
         private _hotkeysService: HotkeysService,
         private route: ActivatedRoute) {
@@ -48,14 +45,14 @@ export class ReceiptVoucherDetailComponent implements OnInit {
 
     ngOnInit() {
         this.data['id'] = this.route.snapshot.paramMap.get('id');
-        this.invoiceId = this.data['id'];
+        this.receiptId = this.data['id'];
     }
     /**
      * Mater Data
      */
 
     back() {
-        this.router.navigate(['/financial/invoice/']);
+        this.router.navigate(['/financial/receipt-voucher/']);
     }
 
 }
