@@ -126,21 +126,25 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             'inv_dt': [null, Validators.required],
             'inv_num': [null, Validators.required],
             'order_id': [null, Validators.required],
+            'updated_by': [null],
+            'updated_date': [null],
+            'created_by': [null],
+            'parent_id': [null],
+
+            'check_no': [null, Validators.required],
+            'ref_no': [null, Validators.required],
+            'remain_amt': [null, Validators.required]
         });
         //  Init Key
         this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     async ngOnInit() {
-        this.data['id'] = this.route.snapshot.queryParams['quote_id'];
-        this.data['is_copy'] = this.route.snapshot.queryParams['is_copy'] || 0;
-
         const user = JSON.parse(localStorage.getItem('currentUser'));
 
         // List Master
         this.orderService.getOrderReference().subscribe(res => { Object.assign(this.listMaster, res.data); });
         await this.getListPaymentMethod();
-        await this.getListPaymentTerm();
         this.getGenerateCode();
         this.listMaster['yes_no_options'] = [{ value: 0, label: 'No' }, { value: 1, label: 'Yes' }];
 
@@ -148,16 +152,15 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         this.list.items = [];
         const currentDt = new Date();
 
+        this.generalForm.patchValue({
+            approver_id: user.id,
+            updated_by: user.full_name,
+            created_by: user.full_name,
+            updated_date: currentDt.toISOString().slice(0, 10)
+        });
+
         // Init Date
         this.generalForm.controls['inv_dt'].patchValue(currentDt.toISOString().slice(0, 10));
-
-        // Invoice
-        this.generalForm.controls['inv_dt'].valueChanges.debounceTime(300).subscribe(data => {
-            if (!this.generalForm.value['payment_term_id']) { return; }
-            this.generalForm.controls['payment_term_range'].setValue(this.getPaymentTermRange(this.generalForm.value['payment_term_id']));
-            this.getInvoiceDueDate(this.generalForm.value['payment_term_range']);
-            this.getEarlyPaymentValue();
-        });
 
         // Lazy Load filter
         this.data['page'] = 1;
@@ -177,39 +180,6 @@ export class ReceiptVoucherCreateComponent implements OnInit {
      */
 
     resetChangeData() {
-        this.list.items = [];
-        const oldForm = this.generalForm.value;
-        this.generalForm.reset();
-        this.generalForm.patchValue({
-            inv_dt: oldForm.inv_dt,
-            inv_num: oldForm.inv_num,
-            company_id: oldForm.company_id,
-        });
-
-        this.addr_select = {
-            shipping: {},
-            billing: {},
-            contact: {}
-        };
-        this.data['order_detail'] = {};
-        this.data['shipping_method'] = {};
-        this.data['shipping_address'] = {};
-        this.data['is_fixed_early'] = null;
-        this.order_info = {};
-        this.updateTotal();
-    }
-
-    getDefaultNote() {
-        if (!this.generalForm.value.apply_late_fee || !this.generalForm.value.due_dt || !this.generalForm.value.company_id) {
-            return;
-        }
-        const params = {
-            due_dt: this.generalForm.value.due_dt,
-            company_id: this.generalForm.value.company_id
-        };
-        this.financialService.getNote(params).subscribe(res => {
-            this.generalForm.patchValue({ note: res.data.message });
-        });
     }
 
     getListPaymentMethod() {
@@ -221,86 +191,9 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         });
     }
 
-    getListPaymentTerm() {
-        return new Promise(resolve => {
-            this.financialService.getListPaymentTerm().subscribe(res => {
-                this.listMaster['payment_term'] = res.data;
-                resolve(true);
-            });
-        });
-    }
-
-    getOrderByCustomerId(company_id) {
-        const params = {
-            cus_id: company_id
-        };
-        this.financialService.getOrderByCustomerId(params).subscribe(res => {
-            try {
-                this.listMaster['sales_order'] = res.data;
-            } catch (e) {
-                console.log(e);
-            }
-        });
-    }
-
     getGenerateCode() {
         this.financialService.getGenerateCode().subscribe(res => {
             this.generalForm.get('inv_num').patchValue(res.data.code);
-        });
-    }
-
-    getEarlyPaymentValue() {
-        const issue_dt = this.generalForm.get('inv_dt').value;
-        const payment_term_id = this.generalForm.get('payment_term_id').value;
-        const payment_term = this.listMaster['payment_term'].find(item => item.id === this.generalForm.get('payment_term_id').value) || {};
-        this.data['is_early'] = payment_term.early_pmt_incentive;
-        const total_due = this.order_info['total'];
-        if (issue_dt && payment_term_id && total_due && this.data['is_early']) {
-            this.financialService.getEarlyPaymentValue(issue_dt, payment_term_id, total_due).subscribe(res => {
-                if (res.data) {
-                    this.data['is_fixed_early'] = res.data.is_fixed;
-                    this.order_info.incentive_percent = res.data.percent;
-                    this.order_info.incentive = res.data.value;
-                    this.order_info.expires_dt = res.data.expires_dt;
-                    this.order_info.grand_total = this.order_info.total - this.order_info.incentive;
-                }
-            });
-        } else {
-            // Reset Early Payment data
-            this.order_info['incentive'] = null;
-            this.order_info['incentive_percent'] = null;
-        }
-    }
-
-    getPaymentTermRange(id) {
-        const paymentTerm = (this.listMaster['payment_term'] || []).find(item => item.id === id);
-        return paymentTerm.term_day;
-    }
-
-    changePaymentTerms() {
-        const listPaymentTerms = this.listMaster['payment_term'];
-        for (const unit of listPaymentTerms) {
-            if (unit.id === this.generalForm.value['payment_term_id']) {
-                this.generalForm.controls['payment_term_range'].setValue(unit.term_day);
-                this.getInvoiceDueDate(this.generalForm.value['payment_term_range']);
-            }
-        }
-    }
-
-    getInvoiceDueDate(paymentTermDayLimit) {
-        const params = {
-            issue_dt: this.generalForm.value['inv_dt'],
-            payment_term_dt: paymentTermDayLimit
-        };
-        this.financialService.getInvoiceDueDate(params).subscribe(res => {
-            try {
-                if (params['payment_term_dt'] && res.data.due_dt) {
-                    this.generalForm.controls['due_dt'].setValue(this.dt.transform(new Date(res.data.due_dt), 'MM/dd/yyyy'));
-                }
-                this.getDefaultNote();
-            } catch (e) {
-                console.log(e);
-            }
         });
     }
 
@@ -309,14 +202,6 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             try {
                 this.customer = res.data;
                 this.generalForm.patchValue({ apply_late_fee: res.data.apply_late_fee || null });
-                if (res.data.buyer_type === 'PS') {
-                    this.addr_select.contact = res.data.contact[0];
-                    this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
-                }
-                if (flag) {
-                    this.selectAddress('billing', flag);
-                    this.selectAddress('shipping', flag);
-                }
             } catch (e) {
                 console.log(e);
             }
@@ -341,172 +226,22 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         this.list.checklist = this.list.items.filter(item => item.is_checked);
     }
 
-    changeLateFee() {
-        const late_fee = this.generalForm.value.apply_late_fee;
-        if (late_fee) {
-            this.getDefaultNote();
-        } else {
-            this.generalForm.patchValue({ note: null });
-        }
-    }
-
-    changeSalesOrder(event) {
-        this.list.items = event.detail.map(item => {
-            item.qty_inv = item.qty;
-            return item;
-        });
-
-        this.data['order_detail'] = { ...event.order, sales_person: event.order.sale_person_id, sale_person_name: event.sale_person_name, ship_rate: event.order.ship_method_rate };
-        this.data['shipping_address'] = event.shipping_address;
-        this.data['shipping_method'] = event.shipping_method;
-
-        this.generalForm.patchValue({
-            ...this.data['order_detail'], inv_dt: this.generalForm.value.inv_dt,
-        });
-        this.selectAddress('billing');
-        this.updateTotal();
-    }
 
     changeCustomer(flag?) {
         const company_id = this.generalForm.value.company_id;
         if (company_id) {
             this.getDetailCustomerById(company_id, flag);
-            this.getOrderByCustomerId(company_id);
             this.resetChangeData();
         }
-
-        if (!flag) {
-            this.list.items = [];
-            this.updateTotal();
-        }
     }
 
-    selectAddress(type, flag?) {
-        try {
-            switch (type) {
-                case 'shipping':
-                    const ship_id = this.generalForm.value.shipping_id;
-                    if (ship_id) {
-                        this.addr_select.shipping = this.findDataById(ship_id, this.customer.shipping);
-                    }
-                    break;
-                case 'billing':
-                    const billing_id = this.generalForm.value.billing_id;
-                    if (billing_id) {
-                        this.addr_select.billing = this.findDataById(billing_id, this.customer.billing);
-                    }
-                    break;
-            }
-        } catch (e) {
-            console.log(e);
-        }
-    }
-
-    findDataById(id, arr) {
-        const item = arr.filter(x => x.address_id === id);
-        return item[0];
-    }
-
-    selectContact() {
-        const id = this.generalForm.value.contact_user_id;
-        if (id) {
-            const temp = this.customer.contact.filter(x => x.id === id);
-            this.addr_select.contact = temp[0];
-        }
-    }
 
 
     updateTotal() {
-        this.order_info.total = 0;
-        this.order_info.sub_total = 0;
 
-        const items = this.list.items.filter(i => !i.misc_id);
-        this.groupTax(this.list.items);
-        this.order_info.order_summary = {};
-        this.order_info.order_summary['total_item'] = items.length;
-        items.forEach(item => {
-            this.order_info.order_summary['total_cogs'] = (this.order_info.order_summary['total_cogs'] || 0) + (+item.cost_price || 0) * (item.quantity || 0);
-            this.order_info.order_summary['total_vol'] = (this.order_info.order_summary['total_vol'] || 0) + (+item.vol || 0) * (item.quantity || 0);
-            this.order_info.order_summary['total_weight'] = (this.order_info.order_summary['total_weight'] || 0) + (+item.wt || 0) * (item.quantity || 0);
-        });
-
-
-        this.list.items.forEach(item => {
-            item.amount = (+item.qty_inv * (+item.price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
-            this.order_info.sub_total += item.amount;
-        });
-        this.order_info.total = +this.order_info['total_tax'] + +this.order_info.sub_total;
-        if (this.order_info.incentive_percent) {
-            this.order_info.incentive = +this.order_info.incentive_percent * +this.order_info.total / 100;
-        }
-        this.order_info.grand_total = +this.order_info.total - +this.order_info.incentive;
-    }
-
-    deleteAction(id, item_condition) {
-        this.list.items = this.list.items.filter((item) => {
-            return (item.item_id + (item.item_condition_id || 'mis') !== (id + (item.item_condition_id || 'mis')));
-        });
-        this.updateTotal();
-    }
-
-    groupTax(items) {
-        this.order_info['taxs'] = [];
-        this.order_info['total_tax'] = 0;
-        const taxs = items.map(item => item.tax_percent || 0);
-        const unique = taxs.filter((i, index) => taxs.indexOf(i) === index);
-        unique.forEach((tax, index) => {
-            let taxAmount = 0;
-            items.filter(item => item.tax_percent === tax).map(i => {
-                taxAmount += (+i.tax_percent * +i.qty_inv * ((+i.price || 0) * (100 - (+i.discount_percent || 0)) / 100) / 100);
-            });
-            this.order_info['total_tax'] = this.order_info['total_tax'] + +(taxAmount.toFixed(2));
-            this.order_info['taxs'].push({
-                value: tax, amount: taxAmount.toFixed(2)
-            });
-        });
     }
 
     resetInvoice() {
-        this.listMaster = {};
-        this.data = {};
-        this.customer = {
-            'last_sales_order': '',
-            'current_dept': '',
-            'discount_level': '',
-            'items_in_quote': '',
-            'buyer_type': '',
-            primary: [],
-            billing: [],
-            shipping: [],
-            contact: []
-        };
-
-        this.addr_select = {
-            shipping: {},
-            billing: {},
-            contact: {}
-        };
-
-        this.order_info = {
-            total: 0,
-            order_summary: {},
-            sub_total: 0,
-            order_date: '',
-            customer_po: '',
-            total_discount: 0,
-            company_id: null,
-            selected_programs: [],
-            discount_percent: 0,
-            vat_percent: 0,
-            shipping_cost: 0
-        };
-
-        this.list = {
-            items: [],
-
-        };
-        this.generalForm.reset();
-        this.ngOnInit();
     }
 
     createInvoice(type, is_draft?, is_continue?) {
