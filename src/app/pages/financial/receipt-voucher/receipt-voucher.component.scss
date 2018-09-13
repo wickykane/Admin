@@ -524,3 +524,24 @@
         }
     }
 }
+
+// Invoice
+.search-invoice {
+    border-left: 1px solid rgb(222, 226, 230);
+    border-right: 1px solid rgb(222, 226, 230);
+    
+    div {
+        position:  relative;
+        padding: 15px;
+    }
+
+    i {
+        position: absolute; 
+        left: 20px;
+        top: 20px;
+    }
+    input {
+        padding-left: 20px;
+        min-width: 250px;
+    }
+}
