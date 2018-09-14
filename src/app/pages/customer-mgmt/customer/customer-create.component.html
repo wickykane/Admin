@@ -218,7 +218,7 @@
                                 <tr *ngFor="let item of addresses; let i = index">
                                     <td>{{i+1}}</td>
                                     <td>
-                                        <select class="form-control" name="type" [(ngModel)]="item.type">
+                                        <select class="form-control"(change)="checkAddress()" name="type" [(ngModel)]="item.type">
                                             <option value="null" selected="true">--Select--</option>
                                             <option *ngFor="let i of item.listType" [ngValue]="i.id">{{i.name}}</option>
                                         </select>
@@ -254,7 +254,7 @@
                                         <input type="checkbox" name="is_default" (change)="checkIsDefault($event, i)" [(ngModel)]="item.is_default" [disabled]="item.type==3 || item.type==4">
                                     </td>
                                     <td>
-                                        <button [disabled]="item.type==3 || item.type==4" type="button" class="btn btn-default" (click)="removeAddress(i)">
+                                        <button [hidden]="item.hidden" [disabled]="item.type==3 || item.type==4" type="button" class="btn btn-default" (click)="removeAddress(i)">
                                             <i class="fa fa-times" aria-hidden="true"></i>
                                         </button>
                                         <button ngbTooltip="Same address for Billing/Shipping Address" placement="bottom" type="button" class="btn btn-default" (click)="dupAddress(item.type)">
