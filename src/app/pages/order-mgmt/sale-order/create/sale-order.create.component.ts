@@ -459,9 +459,9 @@ export class SaleOrderCreateComponent implements OnInit {
     }
 
     calcTaxShipping() {
-        if (!this.generalForm.value.shipping_id) {
-            return;
-        }
+        // if (!this.generalForm.value.shipping_id) {
+        //     return;
+        // }
         const params = {
             'customer': this.generalForm.value.buyer_id,
             'warehouse': this.generalForm.value.warehouse_id,
