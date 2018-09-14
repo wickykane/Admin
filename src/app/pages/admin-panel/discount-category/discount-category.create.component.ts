@@ -149,6 +149,7 @@ export class DiscountCategoryCreateComponent implements OnInit {
     }
 
     changeCategory(id, item) {
+      console.log(item);
         if (id) {
             if (this.listCheckSubCat.indexOf(id) !== -1) {
                 this.data['products'].map(obj => {
@@ -279,10 +280,7 @@ export class DiscountCategoryCreateComponent implements OnInit {
             } catch (e) {
                 console.log(e);
             }
-        },
-            err => {
-                this.toastr.error(err);
-            });
+        });
 
     }
 }
