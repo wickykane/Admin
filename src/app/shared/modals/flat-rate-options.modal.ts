@@ -79,6 +79,14 @@ export class FlatRateOptionsModalComponent implements OnInit, OnDestroy {
             this.activeModal.close({ id: '2', data: this.generalForm.value });
         });
     }
-
+    checkPositiveNumber(e) {
+        const pattern = /[0-9.]/;
+        const inputChar = String.fromCharCode(e.charCode);
+   
+        if (!pattern.test(inputChar)) {    
+            // invalid character, prevent input
+            event.preventDefault();
+        }
+    }
 
 }
