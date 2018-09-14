@@ -193,7 +193,7 @@
                             <div class="input-group" clickOutside (clickOutside)="d&&d.close()">
                                 <input class="form-control" placeholder="mm/dd/yyyy" name="from_dt" [disabled]="newRate === null || newRate === ''"
                                     (click)="d.toggle()" (keydown)="$event.preventDefault()" (dateSelect)="checkEffectiveDate()"
-                                    formControlName="effective_date" ngbDatepicker #d="ngbDatepicker">
+                                    formControlName="effective_date" ngbDatepicker #d="ngbDatepicker" [minDate]="todayDate | dateObj">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button" [disabled]="newRate === null || newRate === ''">
                                         <i class="fa fa-calendar" aria-hidden="true"></i>

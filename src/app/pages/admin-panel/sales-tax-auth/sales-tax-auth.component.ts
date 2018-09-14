@@ -77,7 +77,7 @@ export class SalesTaxAuthComponent implements OnInit {
     public oldRate = null;
     public newRate = null;
 
-    private todayDate = moment().format('YYYY-MM-DD');
+    public todayDate = moment().format('YYYY-MM-DD');
     //#endregion initialize variables
 
     //#region constructor
