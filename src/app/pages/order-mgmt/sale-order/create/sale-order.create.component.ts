@@ -103,7 +103,8 @@ export class SaleOrderCreateComponent implements OnInit {
 
     public messageConfig = {
         'create': 'Are you sure that you want to save & submit this order to approver?',
-        'quote': 'Are you sure that you want to validate this order?'
+        'validate': 'Are you sure that you want to validate this order?',
+        'quote': 'Are you sure that you want to save this order as sale quote'
     };
 
     public searchKey = new Subject<any>(); // Lazy load filter
@@ -579,7 +580,11 @@ export class SaleOrderCreateComponent implements OnInit {
             const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
             modalRef.result.then(res => {
                 if (res) {
-                    this.createOrder(type);
+                    if (type === 'quote') {
+                      this.createSaleAsQuote();
+                    } else {
+                      this.createOrder(type);
+                    }
                 }
             }, dismiss => { });
             modalRef.componentInstance.message = this.messageConfig[type];
@@ -589,6 +594,31 @@ export class SaleOrderCreateComponent implements OnInit {
             this.createOrder(type);
         }
 
+    }
+
+    createSaleAsQuote() {
+      const products = this.list.items.map(item => {
+          item.is_item = (item.misc_id) ? 0 : 1;
+          item.misc_id = (item.misc_id) ? item.misc_id : null;
+          item.item_id = (item.item_id) ? (item.item_id) : null;
+          item.is_shipping_free = (item.is_item) ? (item.is_shipping_free) : 0;
+          item.item_condition_id = (item.is_item) ? (item.item_condition_id) : null;
+          return item;
+      });
+
+      let params = {};
+      params = { ...this.generalForm.getRawValue(), ...params };
+
+      this.orderService.createSaleAsQuote(params).subscribe(res => {
+          try {
+              this.toastr.success(res.message);
+              setTimeout(() => {
+                  this.router.navigate(['/order-management/sale-order']);
+              }, 500);
+          } catch (e) {
+              console.log(e);
+          }
+      });
     }
 
     createOrder(type) {
@@ -610,7 +640,7 @@ export class SaleOrderCreateComponent implements OnInit {
                     'order_sts_id': 6
                 };
                 break;
-            case 'quote':
+            case 'validate':
                 params = {
                     'items': products,
                     'is_draft_order': 1,

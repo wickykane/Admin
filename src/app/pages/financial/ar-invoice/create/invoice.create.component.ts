@@ -41,6 +41,7 @@ export class InvoiceCreateComponent implements OnInit {
     public listMaster = {};
     public selectedIndex = 0;
     public data = {};
+    public currentDt: string;
 
     public messageConfig = {
         '2': 'Are you sure that you want to save & submit this invoice to approver? ',
@@ -149,6 +150,7 @@ export class InvoiceCreateComponent implements OnInit {
 
         // Init Date
         this.generalForm.controls['inv_dt'].patchValue(currentDt.toISOString().slice(0, 10));
+        this.currentDt = currentDt.toISOString().slice(0, 10);
 
         // Invoice
         this.generalForm.controls['inv_dt'].valueChanges.debounceTime(300).subscribe(data => {
