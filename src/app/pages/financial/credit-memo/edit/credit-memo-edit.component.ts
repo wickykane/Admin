@@ -43,6 +43,7 @@ export class CreditMemoEditComponent implements OnInit {
     public clone_items = [];
     public items_removed = [];
     public firstChanged = false;
+    public currentDate;
 
     public messageConfig = {
         '2': 'Are you sure that you want to save & submit this quotation to approver?',
@@ -146,6 +147,7 @@ export class CreditMemoEditComponent implements OnInit {
 
         // Init Date
         this.generalForm.controls['issue_date'].patchValue(currentDt.toISOString().slice(0, 10));
+        this.currentDate = (new Date()).toISOString().slice(0, 10);
 
         // Lazy Load filter
         this.data['page'] = 1;

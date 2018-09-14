@@ -43,10 +43,17 @@
                         </div>
 
                         <ng-container *ngIf="listMoreFilter[0].value">
-                            <div class="col-md-2">
+                          <div class="col-md-2">
+                              <label for="type" class="control-label" translate>Date Type</label>
+                              <select class="form-control" formControlName="date_type">
+                                  <option value="null" selected="true">--Select--</option>
+                                  <option *ngFor="let item of listMaster['dateType']" [ngValue]="item.id">{{item.name}}</option>
+                              </select>
+                          </div>
+                            <div class="col-md-2" *ngIf="this.searchForm.value.date_type == 'order_dt'">
                                 <label for="" class="control-label" translate> Order Date</label>
                                 <div clickOutside (clickOutside)="d.close()" class="input-group">
-                                    <input [maxDate]="searchForm.value.date_to | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="date_from" ngbDatepicker #d="ngbDatepicker">
+                                    <input [maxDate]="searchForm.value.date_to | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="d" formControlName="date_from" ngbDatepicker #d="ngbDatepicker">
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
                                             <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -54,10 +61,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-2" *ngIf="this.searchForm.value.date_type == 'order_dt'">
                                 <label for="" class="control-label" translate> &nbsp;</label>
                                 <div clickOutside (clickOutside)="dt.close()" class="input-group">
-                                    <input [minDate]="searchForm.value.date_from | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="date_to" ngbDatepicker #dt="ngbDatepicker">
+                                    <input [minDate]="searchForm.value.date_from | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dt" formControlName="date_to" ngbDatepicker #dt="ngbDatepicker">
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-secondary" (click)="dt.toggle()" type="button">
                                             <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -65,10 +72,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-2" *ngIf="this.searchForm.value.date_type == 'delivery_dt'">
                                 <label for="" class="control-label" translate> Delivery Date</label>
                                 <div clickOutside (clickOutside)="d1.close()" class="input-group">
-                                    <input [maxDate]="searchForm.value.ship_date_to | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="ship_date_from" ngbDatepicker #d1="ngbDatepicker">
+                                    <input [maxDate]="searchForm.value.ship_date_to | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="d1" formControlName="ship_date_from" ngbDatepicker #d1="ngbDatepicker">
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
                                             <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -76,10 +83,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-2">
-                                <label for="" class="control-label" translate> &nbsp;</label>
+                            <div class="col-md-2" *ngIf="this.searchForm.value.date_type == 'delivery_dt'">
+                                <label for="ship_date_to" class="control-label" translate> &nbsp;</label>
                                 <div clickOutside (clickOutside)="dt1.close()" class="input-group">
-                                    <input [minDate]="searchForm.value.ship_date_from | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="date_to" ngbDatepicker #dt1="ngbDatepicker">
+                                    <input [minDate]="searchForm.value.ship_date_from | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dt1" formControlName="ship_date_to" ngbDatepicker #dt1="ngbDatepicker">
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-secondary" (click)="dt1.toggle()" type="button">
                                             <i class="fa fa-calendar" aria-hidden="true"></i>

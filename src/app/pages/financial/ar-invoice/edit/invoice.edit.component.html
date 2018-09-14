@@ -92,7 +92,7 @@
                                                 </label>
                                                 <div class='col-6 text-primary'>
                                                     <div clickOutside (clickOutside)="invoicedate.close()" class="input-group">
-                                                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="inv_dt" ngbDatepicker #invoicedate="ngbDatepicker">
+                                                        <input [maxDate]="currentDt | dateObj" class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="inv_dt" ngbDatepicker #invoicedate="ngbDatepicker">
                                                         <div class="input-group-append">
                                                             <button class="btn btn-outline-secondary" (click)="invoicedate.toggle()" type="button">
                                                                 <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -120,7 +120,7 @@
                                                 <label class='col-6'>Apply Late Fee</label>
                                                 <div class='col-6'>
                                                     <select (change)="changeLateFee()" class="form-control" formControlName="apply_late_fee">
-                                                        <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>                                                        
+                                                        <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let item of listMaster['yes_no_options']" [ngValue]="item.value">{{item.label}}</option>
                                                     </select>
                                                 </div>
