@@ -174,4 +174,13 @@ export class PickupOptionsModalComponent implements OnInit, OnDestroy {
         }
         return tempWarehouse;
     }
+    checkPositiveNumber(e) {
+        const pattern = /[0-9.]/;
+        const inputChar = String.fromCharCode(e.charCode);
+   
+        if (!pattern.test(inputChar)) {    
+            // invalid character, prevent input
+            event.preventDefault();
+        }
+    }
 }
