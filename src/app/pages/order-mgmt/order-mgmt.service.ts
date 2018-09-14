@@ -160,6 +160,11 @@ export class OrderService {
         return this.API.post(url, params);
     }
 
+    createSaleAsQuote(params) {
+      const url = 'order/createSaleQuote';
+      return this.API.post(url, params);
+    }
+
     updateOrder(params, id) {
         const url = 'order/update-order/' + id;
         return this.API.put(url, params);

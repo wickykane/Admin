@@ -95,7 +95,7 @@
                                                 </label>
                                                 <div class='col-6 text-primary'>
                                                     <div clickOutside (clickOutside)="invoicedate.close()" class="input-group">
-                                                        <input [minDate]="currentDt | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="issue_date" ngbDatepicker #invoicedate="ngbDatepicker">
+                                                        <input [maxDate]="currentDt | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="issue_date" ngbDatepicker #invoicedate="ngbDatepicker">
                                                         <div class="input-group-append">
                                                             <button class="btn btn-outline-secondary" (click)="invoicedate.toggle()" type="button">
                                                                 <i class="fa fa-calendar" aria-hidden="true"></i>

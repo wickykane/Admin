@@ -1,6 +1,6 @@
 <div class='address-tab'>
     <div class="bd-example text-right">
-        <button class="btn btn-outline-secondary" [routerLink]="['/financial/invoice']"><i class="fa fa-share-square" ></i> Back</button>
+        <button class="btn btn-outline-dark" [routerLink]="['/financial/invoice']"><i class="fa fa-share-square" ></i> Back</button>
         <button *ngIf="detail['invoice_status_id'] == 1" class="btn btn-outline-primary" [routerLink]="['/financial/invoice/edit', _invoiceId]"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit</button>
         <button *ngIf="detail['invoice_status_id'] == 1" class="btn btn-outline-warning" (click)="confirmModal(_invoiceId, 2)"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i> Submit</button>
         <button *ngIf="detail['invoice_status_id'] == 1" class="btn btn-outline-danger" (click)="confirmModal(_invoiceId, 7)"><i class="fa fa-times-circle" aria-hidden="true"></i> Cancel</button>

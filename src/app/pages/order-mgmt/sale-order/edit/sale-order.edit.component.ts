@@ -727,7 +727,7 @@ export class SaleOrderEditComponent implements OnInit {
                     'order_sts_id': 1
                 };
                 break;
-            case 'quote':
+            case 'validate':
                 params = {
                     'items': products,
                     'is_draft_order': 1,

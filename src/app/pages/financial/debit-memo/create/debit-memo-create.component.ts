@@ -60,6 +60,7 @@ export class DebitMemoCreateComponent implements OnInit {
     public isSaveDraft = false;
     public isCreateNew = false;
     public data = {};
+    public currentDt;
 
     public decimalAllowed = 2;
 
@@ -137,6 +138,7 @@ export class DebitMemoCreateComponent implements OnInit {
         this.getListApprover();
 
         this.debitMemoForm.controls.issue_date.setValue(this.todayDate);
+        this.currentDt = (new Date()).toISOString().slice(0, 10);
     }
     //#endregion lifecycle hook
 
