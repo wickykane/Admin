@@ -607,6 +607,9 @@ export class SaleOrderCreateComponent implements OnInit {
       });
 
       let params = {};
+      params = {
+          'items': products
+      };
       params = { ...this.generalForm.getRawValue(), ...params };
 
       this.orderService.createSaleAsQuote(params).subscribe(res => {
