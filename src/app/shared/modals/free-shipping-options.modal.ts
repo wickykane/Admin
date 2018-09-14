@@ -57,7 +57,7 @@ export class FreeShippingOptionsModalComponent implements OnInit, OnDestroy {
         }
         if (this.isView) {
             this.generalForm.disable();
-        }else{
+        } else {
             this.isView = false;
         }
     }
@@ -86,14 +86,25 @@ export class FreeShippingOptionsModalComponent implements OnInit, OnDestroy {
     }
 
     checkCondition() {
+        console.log(this.generalForm.value.condition);
         if (this.generalForm.value.condition != '') {
-            this.generalForm.patchValue({ 'limit_total_weight': true })
+            this.generalForm.patchValue({ 'limit_total_weight': true, 'limit_order_over': true })
         }
     }
     upToValue() {
-        if(!this.isView){
+        if (!this.isView) {
             this.generalForm.patchValue({ 'lbs_to': '' });
         }
 
+    }
+    checkPositiveNumber(e) {
+        console.log(e);
+        const pattern = /[0-9.]/;
+        const inputChar = String.fromCharCode(e.charCode);
+   
+        if (!pattern.test(inputChar)) {    
+            // invalid character, prevent input
+            event.preventDefault();
+        }
     }
 }

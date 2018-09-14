@@ -49,7 +49,7 @@ export class ShippingZoneCreateComponent implements OnInit {
         'condition': '',
         'limit_total_weight': 0,
         'id': 1,
-        'price': ''
+        'price': '0.00'
     };
     public listStatus = [{
         'id': '1',
@@ -205,6 +205,7 @@ export class ShippingZoneCreateComponent implements OnInit {
     onCheckCountryState(country) {
         this.selectedCountry = country;
         this.tempListState = country.state;
+        this.checkState();
     }
 
     openShippingModal(id) {
