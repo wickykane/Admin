@@ -50,7 +50,7 @@ export class ShippingZoneEditComponent implements OnInit {
         'condition': '',
         'limit_total_weight': 0,
         'id': 1,
-        'price': ''
+        'price': '0.00'
     };
     public listStatus = [{
         'id': '1',
@@ -442,7 +442,7 @@ export class ShippingZoneEditComponent implements OnInit {
     }
     checkValidate(items, subItem, event) {
         if (this.isIE()) {
-            if (subItem.id == 1 && !subItem.checked) {
+            if (subItem.id == 1) {
                 items.forEach(item => {
                     if (item.id == 2 || item.id == 3) {
                         return item.checked = false;
