@@ -37,7 +37,7 @@
                     <div class="col-sm-12 row"> -->
                         <!-- <input *ngIf="generalForm.value.fee_type ==2" style="text-align:center" type="text" value="%" disabled class="form-control col-sm-2"> -->
                         <input style="text-align:center" type="text" value="$" disabled class="form-control col-sm-1">
-                        <input type="number" pattern="[0-9.]*" name="price" formControlName="price" (keypress)="checkPositiveNumber($event)" class="col-6 form-control">
+                        <input type="number" name="price" formControlName="price" (keypress)="checkPositiveNumber($event)" class="col-6 form-control">
                     </div>
                 <div class="w-100"></div>
                 <div class="form-group row">
@@ -53,7 +53,7 @@
                         <label class='col-6'> Lbs
                         </label>
                         <div class="col-sm-12">
-                            <input type="text" class="form-control" placeholder="From" formControlName="lbs_from">
+                            <input type="number" (keypress)="checkPositiveNumber($event)" class="form-control" placeholder="From" formControlName="lbs_from">
                         </div>
                     </div>
                     <div class="col-md-1">
@@ -79,7 +79,7 @@
                         <label class='col-6 col-form-label'> Lbs
                         </label>
                         <div class="col-sm-12">
-                            <input type="text" class="form-control" placeholder="To" formControlName="lbs_to">
+                            <input type="number" (keypress)="checkPositiveNumber($event)" class="form-control" placeholder="To" formControlName="lbs_to">
                         </div>
                     </div>
                 </div>

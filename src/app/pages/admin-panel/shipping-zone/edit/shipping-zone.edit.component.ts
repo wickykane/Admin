@@ -442,7 +442,7 @@ export class ShippingZoneEditComponent implements OnInit {
     }
     checkValidate(items, subItem, event) {
         if (this.isIE()) {
-            if (subItem.id == 1 && !subItem.checked) {
+            if (subItem.id == 1) {
                 items.forEach(item => {
                     if (item.id == 2 || item.id == 3) {
                         return item.checked = false;
