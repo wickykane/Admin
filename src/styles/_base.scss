@@ -946,3 +946,8 @@ ngu-carousel {
 .text-warning {
     color: #ff9b23 !important;
 }
+ input[type=number].custom-input::-webkit-inner-spin-button, 
+input[type=number].custom-input::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
