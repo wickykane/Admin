@@ -74,10 +74,10 @@ export class SalesTaxAuthComponent implements OnInit {
     public stateGeneralForm: FormGroup;
     public stateRateForm: FormGroup;
 
-    public oldRate = null;
+    // public oldRate = null;
     public newRate = null;
 
-    private todayDate = moment().format('YYYY-MM-DD');
+    public todayDate = moment().format('YYYY-MM-DD');
     //#endregion initialize variables
 
     //#region constructor
@@ -310,14 +310,14 @@ export class SalesTaxAuthComponent implements OnInit {
     onSelectCountryTax(countryTax) {
         this.selectedStateTax = {};
         this.newRate = null;
-        this.oldRate = null;
+        // this.oldRate = null;
         this.getCountryTaxAuthorityDetail(countryTax['id']);
     }
 
     onSelectStateTax(stateTax) {
         this.selectedCountryTax = {};
         this.newRate = null;
-        this.oldRate = null;
+        // this.oldRate = null;
         this.getStateTaxAuthorityDetail(stateTax['id'], null);
     }
 
@@ -435,7 +435,7 @@ export class SalesTaxAuthComponent implements OnInit {
             params[key] = params[key].toString();
         });
 
-        const tempOldRate = this.selectedStateTax['current_rate'];
+        // const tempOldRate = this.selectedStateTax['current_rate'];
 
         this.salesTaxAuthService.updateStateTaxAuthority(this.selectedStateTax['id'], params).subscribe(
             res => {
@@ -444,7 +444,7 @@ export class SalesTaxAuthComponent implements OnInit {
                     // this.oldRate = this.newRate !== null ? this.newRate : null;
                     if (!moment(this.stateRateForm.value.effective_date).isAfter(this.todayDate)) {
                         this.getStateTaxAuthorityDetail(this.selectedStateTax['id'], null);
-                        this.oldRate = tempOldRate;
+                        // this.oldRate = tempOldRate;
                         this.newRate = null;
                     } else {
                         this.getStateTaxAuthorityDetail(this.selectedStateTax['id'], this.selectedStateTax['current_rate']);

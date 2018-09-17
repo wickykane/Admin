@@ -574,9 +574,9 @@ export class SaleOrderEditComponent implements OnInit {
     }
 
     calcTaxShipping() {
-        if (!this.generalForm.value.shipping_id) {
-            return;
-        }
+        // if (!this.generalForm.value.shipping_id) {
+        //     return;
+        // }
         const params = {
             'customer': this.generalForm.value.buyer_id,
             'warehouse': this.generalForm.value.warehouse_id,
@@ -727,7 +727,7 @@ export class SaleOrderEditComponent implements OnInit {
                     'order_sts_id': 1
                 };
                 break;
-            case 'quote':
+            case 'validate':
                 params = {
                     'items': products,
                     'is_draft_order': 1,

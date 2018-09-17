@@ -85,9 +85,9 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
             // 'credit_balance': [null],
             'is_parent': [null],
             'sites': [null],
-            'taxable':[null],
-            'payment_method_id':[null],
-            'payment_term_id':[null]
+            'taxable': [null],
+            'payment_method_id': [null],
+            'payment_term_id': [null]
         });
 
         this.hotkeyCtrlRight = hotkeysService.add(new Hotkey('alt+r', (event: KeyboardEvent): boolean => {
@@ -233,6 +233,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
                 type: 2, country_code: null, state_id: null, listType: this.listTypeAddress, listCountry: this.listCountry, listState: []
             }];
         }
+        this.checkAddress();
     }
 
     changeCountry(item) {
@@ -289,6 +290,48 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
                 }
             }
             this.addresses.push(tmp);
+            this.checkAddress();
+        }
+    }
+    checkAddress() {
+        var count1 = 0;
+        var count2 = 0;
+        console.log(this.addresses);
+        this.addresses.forEach(item => {
+            if (item.type == 1) {
+                count1++;
+            }
+            if (item.type == 2) {
+                count2++;
+            }
+        });
+        if (count1 > 1) {
+            this.addresses.forEach(item => {
+                if (item.type == 1) {
+                    item.hidden = false;
+                }
+            });
+        }
+        else{
+            this.addresses.forEach(item => {
+                if (item.type == 1) {
+                    item.hidden = true;
+                }
+            });
+        }
+        if (count2 > 1) {
+            this.addresses.forEach(item => {
+                if (item.type == 2) {
+                    item.hidden = false;
+                }
+            });
+        }
+        else{
+            this.addresses.forEach(item => {
+                if (item.type == 2) {
+                    item.hidden = true;
+                }
+            });
         }
     }
 
@@ -303,6 +346,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
 
     removeAddress(index) {
         this.addresses.splice(index, 1);
+        this.checkAddress();
     }
 
     //  add new row bank account
@@ -398,9 +442,9 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
                     parent_company_name: this.generalForm.value.company_name,
                     code: countCode,
                     textCode: textCode,
-                    payment_method_id:this.generalForm.value.payment_method_id,
-                    payment_term_id:this.generalForm.value.payment_term_id,
-                    taxable:this.generalForm.value.taxable
+                    payment_method_id: this.generalForm.value.payment_method_id,
+                    payment_term_id: this.generalForm.value.payment_term_id,
+                    taxable: this.generalForm.value.taxable
                 };
             } catch (e) {
 

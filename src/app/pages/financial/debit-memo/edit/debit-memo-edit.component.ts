@@ -61,6 +61,7 @@ export class DebitMemoEditComponent implements OnInit {
     public isCreateNew = false;
     public isReSelectOrder = false;
     public data = {};
+    public currentDt;
 
     public decimalAllowed = 2;
 
@@ -135,6 +136,7 @@ export class DebitMemoEditComponent implements OnInit {
         this.getListApprover();
         //  Init hot keys
         this.keyService.watchContext.next(this);
+        this.currentDt = (new Date()).toISOString().slice(0, 10);
     }
     //#endregion lifecycle hook
 
