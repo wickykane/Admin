@@ -108,7 +108,7 @@
                                                 </label>
                                                 <div class='col-6'>
                                                     <div class="input-group">
-                                                        <input [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('account_received').errors?.required) || false   }" type="number" class="form-control" formControlName="account_received">
+                                                        <input [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('amount_received').errors?.required) || false   }" type="number" class="form-control" formControlName="amount_received">
                                                         <div class="input-group-append">
                                                             <span class="input-group-text" id="basic-addon2">$</span>
                                                         </div>
@@ -253,7 +253,7 @@
                                             </td>
                                             <td>{{item.sku | currency }}</td>
                                             <td>
-                                                <input [isDecimal]="true" numberDirective [min]="0" class="form-control input-sm" type="number" [(ngModel)]="item.applied_amt">
+                                                <input (changeValue)='updateTotal(item)' [isDecimal]="true" numberDirective  [min]="0" class="form-control input-sm" type="number" [(ngModel)]="item.applied_amt">
                                             </td>
                                         </tr>
                                     </tbody>
@@ -301,7 +301,7 @@
                                         <strong >Amount Received</strong>
                                     </label>
                                     <div class='col-6 offset-md-1 padding-lr-10 text-primary'>
-                                        <strong>{{data['summary']?.sub_total | currency}}</strong>
+                                        <strong>{{ generalForm.value.amount_received | currency}}</strong>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -312,14 +312,33 @@
                                         <strong class="text-success">{{data['summary']?.total | currency}}</strong>
                                     </div>
                                 </div>
-                                <div class="form-group row">
+                                <div  class="form-group row">
                                     <label class='col-5 control-label'>
                                             <strong>Change</strong>
                                         </label>
                                     <div class='col-6 offset-md-1 padding-lr-10'>
-                                        <strong>{{data['summary']?.total | currency}}</strong>
+                                        <strong>{{data['summary']?.change | currency}}</strong>
                                     </div>
                                 </div>
+                                <ng-container *ngIf="generalForm.value.payment_method_id == 'manual'">
+                                    <div class="form-group row">
+                                        <label class='col-5 control-label'>
+                                                <strong>Remaining Amount</strong>
+                                            </label>
+                                        <div class='col-6 offset-md-1 padding-lr-10'>
+                                            <strong>{{data['summary']?.change | currency}}</strong>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class='col-5 control-label'>
+                                                <strong>Amount to Credit</strong>
+                                            </label>
+                                        <div class='col-6 offset-md-1 padding-lr-10'>
+                                            <strong>{{data['amount_to_credit'] | currency}}</strong>
+                                        </div>
+                                    </div>
+                                </ng-container>
+
                             </div>
                         </div>
                     </div>
@@ -328,10 +347,10 @@
         </div>
         <div class="row">
             <div class="col-md-12 mg-top-15 text-center">
-                <button type="button" class="btn btn-outline-info" (click)="createInvoice(1, 1)" translate>Save As Draft</button>
-                <button type="button" class="btn btn-outline-danger" (click)="confirmModal(2)" [disabled]="!generalForm.valid" translate>Submit</button>
-                <button type="button" class="btn btn-outline-success" (click)="confirmModal(4)" [disabled]="!generalForm.valid" translate>Save & Validate</button>
-                <button type="button" class="btn btn-outline-dark" (click)="createInvoice(1, 1, 1); resetInvoice();" translate>Save & Create New Receipt Voucher</button>
+                <button type="button" class="btn btn-outline-info" (click)="createVoucher(1, 1)" translate>Save As Draft</button>
+                <button type="button" class="btn btn-outline-danger" (click)="confirmModal((data['summary']?.change > 0)? 'overpayment': 2)" translate>Submit</button>
+                <button type="button" class="btn btn-outline-success" (click)="confirmModal((data['summary']?.change > 0)? 'overpayment-approve': 4)" translate>Save & Validate</button>
+                <button type="button" class="btn btn-outline-dark" (click)="createVoucher(1, 1, 1); resetVoucher();" translate>Save & Create New Receipt Voucher</button>
                 <button type="button" class="btn btn-default" (click)="confirmModal(0)" translate>Back To List</button>
             </div>
         </div>

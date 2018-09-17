@@ -42,8 +42,11 @@ export class ReceiptVoucherCreateComponent implements OnInit {
     public data = {};
 
     public messageConfig = {
-        '2': 'Are you sure that you want to save & submit this invoice to approver? ',
-        '4': 'Are you sure that you want to validate this invoice?',
+        '2': 'Are you sure that you want to submit this receipt voucher?',
+        '4': 'Are you sure that you want to Save & Validate this receipt voucher?',
+        'error': 'This Receipt Voucher is missing some mandatory fields, please fulfill them before submitting.',
+        'overpayment': 'There is overpayment in this receipt voucher. Are you sure that you want to submit it?',
+        'overpayment-approve': 'There is overpayment in this receipt voucher. After approval, the system will create automatically the credit memo for the overpayment. Do you want to proceed?',
         'default': 'The data you have entered may not be saved, are you sure that you want to leave?',
     };
 
@@ -76,14 +79,14 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             'warehouse_id': [null],
             'payment_method_id': [null, Validators.required],
             'note': [null],
-            'is_electronic': [null],
-            'account_received': [null, Validators.required],
+            'is_electronic': [null, Validators.required],
+            'amount_received': [null, Validators.required],
             'payment_dt': [null, Validators.required],
             'voucher_no': [null, Validators.required],
             'updated_by': [null],
             'updated_date': [null],
             'created_by': [null],
-            'parent_id': [null],
+            'parent_id': [null, Validators.required],
             'check_no': [null, Validators.required],
             'ref_no': [null, Validators.required],
             'remain_amt': [null, Validators.required]
@@ -142,8 +145,14 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             inv_no: this.data['search'],
             warehouse_id: this.generalForm.value.warehouse_id,
         };
+        Object.keys(params).forEach(key => {
+            if (!params[key]) {
+                delete params[key];
+            }
+        });
         this.voucherService.getListInvoiceAndMemo(params).subscribe(res => {
             this.list.items = [{}] || res.data;
+            this.updateTotal();
         });
     }
 
@@ -192,6 +201,9 @@ export class ReceiptVoucherCreateComponent implements OnInit {
 
     onChangeWareHouse() {
         this.generalForm.get('warehouse_id').valueChanges.subscribe(id => {
+            if (!id) {
+                return;
+            }
             this.data['search'] = null;
             this.getListInvoiceAndMemo();
         });
@@ -208,17 +220,50 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         });
     }
 
-    updateTotal() {
+    updateTotal(_item?) {
+        if (_item) {
+            // let total = 0;
+            // this.list.items.filter(it => it.id !== _item.id).map(j => {
+            //     total += (+j.applied_amt || 0);
+            // });
+            // const remain = this.generalForm.value.amount_received - total;
+            // _item.applied_amt = (_item.applied_amt > remain) ? remain : _item.applied_amt;
+            // this.list.items[this.list.items.indexOf(_item)].applied_amt = _item.applied_amt.applied_amt;
+            // return this.updateTotal();
+        }
+
+        this.data['summary'] = {
+            total: 0,
+        };
+
+        this.list.items.map(item => {
+            this.data['summary'].total += (+item.applied_amt || 0);
+        });
+
+        this.data['summary'].change = this.generalForm.value.amount_received - this.data['summary'].total;
 
     }
 
-    resetInvoice() {
+    resetVoucher() {
+        this.generalForm.reset();
+        this.data = {};
+        this.list = {
+            items: [],
+            checklist: []
+        };
+
+        this.searchKey = new Subject<any>();
+        this.checkAllItem = null;
+        this.ngOnInit();
     }
 
-    createInvoice(type, is_draft?, is_continue?) {
-        if (this.generalForm.invalid) {
+    createVoucher(type, is_draft?, is_continue?) {
+        if (!is_draft && this.generalForm.invalid) {
             this.data['showError'] = true;
+            this.toastr.error(this.messageConfig.error);
             return;
+        } else {
+            this.data['showError'] = true;
         }
 
         const items = this.list.items.map(item => {
@@ -235,10 +280,10 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             try {
                 if (res.status) {
                     this.toastr.success(res.message);
-                    this.data['invoice_id'] = res.data;
+                    this.data['voucher_id'] = res.data;
                     if (!is_continue) {
                         setTimeout(() => {
-                            this.router.navigate(['/financial/invoice/view/' + this.data['invoice_id']]);
+                            this.router.navigate(['/financial/receipt-voucher/view/' + this.data['voucher_id']]);
                         }, 500);
                     }
                 } else {
@@ -250,14 +295,14 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         });
     }
 
-    confirmModal(type, is_draft_sq?) {
+    confirmModal(type, is_draft?) {
         const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
         modalRef.result.then(res => {
             if (res) {
                 if (type) {
-                    this.createInvoice(type, is_draft_sq);
+                    this.createVoucher(type, is_draft);
                 } else {
-                    this.router.navigate(['/financial/invoice']);
+                    this.router.navigate(['/financial/receipt-voucher']);
                 }
             }
         }, dismiss => { });
