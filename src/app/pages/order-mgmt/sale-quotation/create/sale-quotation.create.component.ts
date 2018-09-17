@@ -14,7 +14,6 @@ import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
 import { ItemModalContent } from '../../../../shared/modals/item.modal';
 import { OrderHistoryModalContent } from '../../../../shared/modals/order-history.modal';
-import { PromotionModalContent } from '../../../../shared/modals/promotion.modal';
 import { ItemMiscModalContent } from './../../../../shared/modals/item-misc.modal';
 import { SaleQuoteCreateKeyService } from './keys.create.control';
 
