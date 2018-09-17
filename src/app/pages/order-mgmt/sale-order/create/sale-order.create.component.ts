@@ -416,7 +416,7 @@ export class SaleOrderCreateComponent implements OnInit {
                 // taxAmount += (+i.tax_percent * +i.quantity * (+i.sale_price || 0) / 100);
                 taxAmount += (+i.tax_percent * +i.quantity * ((+i.sale_price || 0) * (100 - (+i.discount_percent || 0)) / 100) / 100);
             });
-            this.order_info['total_tax'] = this.order_info['total_tax'] + taxAmount.toFixed(2);
+            this.order_info['total_tax'] = this.order_info['total_tax'] + +(taxAmount.toFixed(2));
             this.order_info['taxs'].push({
                 value: tax, amount: taxAmount.toFixed(2)
             });
@@ -442,7 +442,8 @@ export class SaleOrderCreateComponent implements OnInit {
             item.amount = (+item.quantity * (+item.sale_price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
             this.order_info.sub_total += item.amount;
         });
-
+        console.log(+this.order_info.sub_total);
+        console.log(+this.order_info['total_tax']);
         this.order_info.total = +this.order_info['total_tax'] + +this.order_info.sub_total;
     }
 
