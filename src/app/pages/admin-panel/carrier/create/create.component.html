@@ -47,14 +47,15 @@
                 </div>
                 <div class="col-sm-2 form-group">
                     <label>From Weight (lbs) <span class="text-danger">(*)</span></label>
-                    <input  [textMask]="{mask: numberMaskObject()}" type="text" class="form-control" formControlName="from_weight">
+                    <input [isDecimal]="true" numberDirective [max]="generalForm.value.to_weight" type="text" class="form-control" formControlName="from_weight">
                     <div class="" *ngIf="toNumber(generalForm.get('from_weight').value) > toNumber(generalForm.get('to_weight').value)">
                       <span class="text-danger">From Weight must not be greater than To Weight</span>
                     </div>
                 </div>
                 <div class="col-sm-2 form-group">
                     <label>To Weight (lbs) <span class="text-danger">(*)</span></label>
-                    <input [textMask]="{mask: numberMaskObject()}" type="text" class="form-control" formControlName="to_weight">
+                     <!-- <input   [disabled]="item.misc_id" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (changeValue)="updateTotal()"> -->
+                    <input [isDecimal]="true" numberDirective [min]="generalForm.value.from_weight"  type="text" class="form-control" formControlName="to_weight">
                     <div class="" *ngIf="toNumber(generalForm.get('to_weight').value) < toNumber(generalForm.get('from_weight').value)">
                       <span class="text-danger">To Weight must not be less than From Weight</span>
                     </div>
