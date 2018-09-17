@@ -19,8 +19,8 @@
                                                 <span class="text-danger">(*)</span>                                                
                                                 </label>
                                                 <div class='col-6 text-primary'>
-                                                    <ng-select [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('payer_id').errors?.required) || false   }" [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="company_id" [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)"
-                                                        [virtualScroll]="true" style="min-width: 100%;" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="payer_id">
+                                                    <ng-select [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('company_id').errors?.required) || false   }" [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="company_id" [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)"
+                                                        [virtualScroll]="true" style="min-width: 100%;" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="company_id">
                                                     </ng-select>
                                                 </div>
                                             </div>
@@ -29,7 +29,7 @@
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6 text-primary'>
-                                                    <input readonly type="text" class="form-control" formControlName="voucher_no">
+                                                    <input readonly type="text" class="form-control" formControlName="number">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -37,8 +37,8 @@
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6 text-primary'>
-                                                    <div [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('payment_dt').errors?.required) || false   }" clickOutside (clickOutside)="paymentDate.close()" class="input-group">
-                                                        <input [maxDate]="generalForm.value.payment_dt | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="payment_dt" ngbDatepicker #paymentDate="ngbDatepicker">
+                                                    <div [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('payment_date').errors?.required) || false   }" clickOutside (clickOutside)="paymentDate.close()" class="input-group">
+                                                        <input [maxDate]="generalForm.value.payment_date | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="payment_date" ngbDatepicker #paymentDate="ngbDatepicker">
                                                         <div class="input-group-append">
                                                             <button class="btn btn-outline-secondary" (click)="paymentDate.toggle()" type="button">
                                                                 <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -67,7 +67,7 @@
                                                         <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
-                                                    <select [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('is_electronic').errors?.required) || false   }" class="form-control" formControlName="is_electronic">
+                                                    <select [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('electronic').errors?.required) || false   }" class="form-control" formControlName="electronic">
                                                         <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>                                                        
                                                         <option *ngFor="let item of listMaster['yes_no_options']" [ngValue]="item.value">{{item.label}}</option>
                                                     </select>
@@ -76,13 +76,13 @@
                                             <div class="form-group row">
                                                 <label class='col-6'>Payment Method<span class="text-danger">(*)</span></label>
                                                 <div class='col-6 text-primary'>
-                                                    <select [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('payment_method_id').errors?.required) || false   }" class="form-control" id="payment_method_id" name="payment_method_id" formControlName="payment_method_id">
+                                                    <select [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('payment_method').errors?.required) || false   }" class="form-control" id="payment_method" name="payment_method" formControlName="payment_method">
                                                         <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let item of listMaster['payment_method']" [ngValue]="item.id">{{item.name}}</option>
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div *ngIf="generalForm.value.payment_method_id == 'manual'" class="form-group row">
+                                            <div *ngIf="generalForm.value.payment_method == 4" class="form-group row">
                                                 <label class='col-6'> Check Number 
                                                     <span class="text-danger">(*)</span>
                                                 </label>
@@ -92,7 +92,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div *ngIf="generalForm.value.payment_method_id == 'check'" class="form-group row">
+                                            <div *ngIf="[4,5,6].indexOf(generalForm.value.payment_method)== -1" class="form-group row">
                                                 <label class='col-6'> Reference Number 
                                                     <span class="text-danger">(*)</span>
                                                 </label>
@@ -108,14 +108,15 @@
                                                 </label>
                                                 <div class='col-6'>
                                                     <div class="input-group">
-                                                        <input [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('amount_received').errors?.required) || false   }" type="number" class="form-control" formControlName="amount_received">
+                                                        <input numberDirective [isDecimal]="true" (changeValue)="updateTotal()" [min]="0" [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('price_received').errors?.required) || false   }" type="number" class="form-control"
+                                                            formControlName="price_received">
                                                         <div class="input-group-append">
                                                             <span class="input-group-text" id="basic-addon2">$</span>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div *ngIf="generalForm.value.payment_method_id == 'check'" class="form-group row">
+                                            <div *ngIf="generalForm.value.payment_method == 4" class="form-group row">
                                                 <label class='col-6'> Remaining Amount
                                                     <span class="text-danger">(*)</span>
                                                 </label>
@@ -133,7 +134,7 @@
                                                         <span class="text-danger">(*)</span>                                                        
                                                 </label>
                                                 <div class='col-6'>
-                                                    <ng-select  [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('gl_account').errors?.required) || false   }"  [items]="listMaster['account']" formControlName="gl_account" bindLabel="name" bindValue="id">
+                                                    <ng-select [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('gl_account').errors?.required) || false   }" [items]="listMaster['account']" formControlName="gl_account" bindLabel="name" bindValue="id">
                                                         <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
                                                             <span [ngClass]="{'pl-3': item.level != undefined}">{{ item.name}}
                                                             </span>
@@ -241,39 +242,55 @@
                                             <td>
                                                 {{$index + 1}}
                                             </td>
-                                            <td>{{item.sku }}</td>
-                                            <td>{{item.sku }}</td>
-                                            <td>{{item.sku }}</td>
-                                            <td>{{item.sku }}</td>
-                                            <td>{{item.sku }}</td>
-                                            <td>{{item.sku | currency }}</td>
+                                            <td>{{item.code }}</td>
+                                            <td>{{item.issue_date }}</td>
+                                            <td>{{item.due_date }}</td>
+                                            <td>{{item.payment_term_name }}</td>
+                                            <td>{{item.status_name }}</td>
+                                            <td>{{item.balance_price | currency }}</td>
                                             <td>
                                                 <a href="javascript:void(0)">
-                                                    {{ item.sku | currency }}
+                                                    {{ (item.awaiting || 0) | currency }}
                                                 </a>
                                             </td>
-                                            <td>{{item.sku | currency }}</td>
+                                            <td>{{ (item.total_price - item.applied_amt)| currency }}</td>
                                             <td>
-                                                <input (changeValue)='updateTotal(item)' [isDecimal]="true" numberDirective  [min]="0" class="form-control input-sm" type="number" [(ngModel)]="item.applied_amt">
+                                                <input (changeValue)='updateTotal(item)' [isDecimal]="true" numberDirective [min]="0" class="form-control input-sm" type="number" [(ngModel)]="item.applied_amt">
                                             </td>
                                         </tr>
                                     </tbody>
                                 </ng-container>
-
                             </table>
                         </div>
-                        <div>
-                            <button (click)="clearPayment()" class="btn btn-secondary mt-2">Clear Payment</button>
-                            <p class="text-danger mt-2">
-                                (*) For the invoice document, the Current Balance is including the early payment incentive if any.
-                                <br> (**) If you enter a partial payment for an invoice on which an Early Payment Incentive is active you will remove the discount opportunity.
-                            </p>
-
+                        <div class="row normal-pagination mg-top-10" *ngIf="list.items.length > 0">
+                            <div class="col-md-6 padding-lr-0">
+                                <div class="text-left">
+                                    <div class="col-md-6" style="padding-left: 0px;">
+                                        <span style="float: left; padding-right: 10px;">{{list.items.length}}/{{tableService.pagination.total_record}} items </span>
+                                        <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length" (change)="tableService.changeLength()">
+                                                     <option *ngFor="let option of tableService.itemPerPageOptions" [ngValue]="option">{{option}}</option>
+                                                 </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 padding-lr-0">
+                                <div class="text-right">
+                                    <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length" [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page" [maxSize]="tableService.maxSize"
+                                        [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+                                </div>
+                            </div>
                         </div>
+                        <button (click)="clearPayment()" class="btn btn-secondary mt-2">Clear Payment</button>
+                        <p class="text-danger mt-2">
+                            (*) For the invoice document, the Current Balance is including the early payment incentive if any.
+                            <br> (**) If you enter a partial payment for an invoice on which an Early Payment Incentive is active you will remove the discount opportunity.
+                        </p>
+
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="row mg-top-10 padding-child-5 justify-content-end">
             <div class="col-md-3">
                 <div class="card height-100">
@@ -283,7 +300,7 @@
                     <div class="card-body no-padding">
                         <form [formGroup]="generalForm">
                             <div>
-                                <textarea class="form-control border-0" formControlName="note" rows="7" style="resize:none"></textarea>
+                                <textarea class="form-control border-0" formControlName="description" rows="7" style="resize:none"></textarea>
                             </div>
                         </form>
                     </div>
@@ -302,7 +319,7 @@
                                         <strong >Amount Received</strong>
                                     </label>
                                     <div class='col-6 offset-md-1 padding-lr-10 text-primary'>
-                                        <strong>{{ generalForm.value.amount_received | currency}}</strong>
+                                        <strong>{{ generalForm.value.price_received | currency}}</strong>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -313,7 +330,7 @@
                                         <strong class="text-success">{{data['summary']?.total | currency}}</strong>
                                     </div>
                                 </div>
-                                <div  class="form-group row">
+                                <div *ngIf="generalForm.value.payment_method == 5" class="form-group row">
                                     <label class='col-5 control-label'>
                                             <strong>Change</strong>
                                         </label>
@@ -321,7 +338,7 @@
                                         <strong>{{data['summary']?.change | currency}}</strong>
                                     </div>
                                 </div>
-                                <ng-container *ngIf="generalForm.value.payment_method_id == 'manual'">
+                                <ng-container *ngIf="generalForm.value.payment_method != 5">
                                     <div class="form-group row">
                                         <label class='col-5 control-label'>
                                                 <strong>Remaining Amount</strong>

@@ -15,6 +15,11 @@ export class ReceiptVoucherService {
         return this.API.get(url);
     }
 
+    getPaymentMethodElectronic(id) {
+        const url = 'voucher/payment-method-by-electronic/' + id;
+        return this.API.get(url);
+    }
+
     getListReceiptVoucher(params) {
         const url = 'receipt-voucher';
         return this.API.get(url, params);
@@ -56,12 +61,12 @@ export class ReceiptVoucherService {
     }
 
     getListInvoiceAndMemo(params) {
-        const url = 'ar-invoice/general-code';
+        const url = 'voucher/get-line-item';
         return this.API.get(url, params);
     }
 
     createVoucher(params) {
-        const url = 'ar-invoice/general-code';
+        const url = 'voucher/create';
         return this.API.post(url, params);
     }
 }
