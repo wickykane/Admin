@@ -227,10 +227,7 @@ export class ItemListComponent implements OnInit {
             item.source_id = 0;
             item.source_name = 'From Master';
             item.is_shipping_free = item.free_ship;
-            //  item.quantity = 1;
-            //   item.qty_avail = item.qty_available;
-            //    item.source = 'From Master';
-            //    item.source_id = 1;
+            item.qty_avail = item.qty_available;
                 return item; }) || []);
         console.log(ids);
         this.router.navigateByData({ url: ['order-management/sale-order/create'], data: ids });
