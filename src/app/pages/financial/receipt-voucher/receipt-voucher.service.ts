@@ -40,6 +40,16 @@ export class ReceiptVoucherService {
         return this.API.put(url, params);
     }
 
+    getVoucherMasterData() {
+        const url = 'voucher/master-data';
+        return this.API.get(url);
+    }
+
+    getListAccountGL() {
+        const url = ['account', 'getAccountTree'].join('/');
+        return this.API.get(url);
+    }
+
     getGenerateCode() {
         const url = 'ar-invoice/general-code';
         return this.API.get(url);

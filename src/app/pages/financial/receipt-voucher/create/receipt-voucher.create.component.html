@@ -133,9 +133,10 @@
                                                         <span class="text-danger">(*)</span>                                                        
                                                 </label>
                                                 <div class='col-6'>
-                                                    <ng-select [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('parent_id').errors?.required) || false   }" [items]="listMaster['parents']" formControlName="parent_id" bindLabel="des" bindValue="id">
+                                                    <ng-select  [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('gl_account').errors?.required) || false   }"  [items]="listMaster['account']" formControlName="gl_account" bindLabel="name" bindValue="id">
                                                         <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
-                                                            <span [ngClass]="{'pl-3': item.level == 1, 'pl-5': item.level == 2}">{{ item.des }}</span>
+                                                            <span [ngClass]="{'pl-3': item.level != undefined}">{{ item.name}}
+                                                            </span>
                                                         </ng-template>
                                                     </ng-select>
                                                 </div>

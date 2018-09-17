@@ -86,7 +86,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             'updated_by': [null],
             'updated_date': [null],
             'created_by': [null],
-            'parent_id': [null, Validators.required],
+            'gl_account': [null, Validators.required],
             'check_no': [null, Validators.required],
             'ref_no': [null, Validators.required],
             'remain_amt': [null, Validators.required]
@@ -102,7 +102,6 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         // List Master
         this.getListReference();
         await this.getListPaymentMethod();
-        this.getGenerateCode();
 
         this.generalForm.patchValue({
             approver_id: user.id,
@@ -138,6 +137,21 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         this.orderService.getOrderReference().subscribe(res => {
             Object.assign(this.listMaster, res.data);
         });
+
+        this.voucherService.getVoucherMasterData().subscribe(res => {
+            this.generalForm.get('voucher_no').patchValue(res.data.cd);
+        });
+    }
+
+    getListAccountGL() {
+        this.voucherService.getListAccountGL().subscribe(res => {
+            const accountList = res['data'];
+            const tempAccountList = [];
+            accountList.forEach(item => {
+                tempAccountList.push({ 'name': item.name, 'level': item.level, 'disabled': true }, ...item.children);
+            });
+            this.listMaster['account'] = tempAccountList;
+        });
     }
 
     getListInvoiceAndMemo() {
@@ -165,12 +179,6 @@ export class ReceiptVoucherCreateComponent implements OnInit {
                 this.listMaster['payment_method'] = res.data;
                 resolve(true);
             });
-        });
-    }
-
-    getGenerateCode() {
-        this.voucherService.getGenerateCode().subscribe(res => {
-            this.generalForm.get('voucher_no').patchValue(res.data.code);
         });
     }
 
