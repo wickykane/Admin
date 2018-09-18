@@ -33,6 +33,7 @@ export class InvoiceComponent implements OnInit {
     };
     public user: any;
     public onoffFilter: any;
+    public dateType;
 
     searchForm: FormGroup;
 
