@@ -92,7 +92,6 @@ import { MailModalComponent } from './ar-invoice/modals/mail.modal';
         DebitMemoEditComponent,
         DebitMemoViewComponent,
         DebitInformationTabComponent,
-        MailModalComponent,
         InvoiceEditComponent,
         CreditMemoListComponent,
         CreditMemoCreateComponent,

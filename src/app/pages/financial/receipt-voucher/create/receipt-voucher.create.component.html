@@ -19,8 +19,8 @@
                                                 <span class="text-danger">(*)</span>                                                
                                                 </label>
                                                 <div class='col-6 text-primary'>
-                                                    <ng-select [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="company_id" [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="min-width: 100%;" [items]="listMaster['customer']"
-                                                        bindLabel="company_name" bindValue="id" formControlName="payer_id">
+                                                    <ng-select [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('company_id').errors?.required) || false   }" [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="company_id" [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)"
+                                                        [virtualScroll]="true" style="min-width: 100%;" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="company_id">
                                                     </ng-select>
                                                 </div>
                                             </div>
@@ -29,7 +29,7 @@
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6 text-primary'>
-                                                    <input readonly type="text" class="form-control" formControlName="voucher_no">
+                                                    <input readonly type="text" class="form-control" formControlName="number">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -37,8 +37,8 @@
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6 text-primary'>
-                                                    <div clickOutside (clickOutside)="paymentDate.close()" class="input-group">
-                                                        <input [maxDate]="generalForm.value.payment_dt | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="payment_dt" ngbDatepicker #paymentDate="ngbDatepicker">
+                                                    <div [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('payment_date').errors?.required) || false   }" clickOutside (clickOutside)="paymentDate.close()" class="input-group">
+                                                        <input [maxDate]="generalForm.value.payment_date | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="payment_date" ngbDatepicker #paymentDate="ngbDatepicker">
                                                         <div class="input-group-append">
                                                             <button class="btn btn-outline-secondary" (click)="paymentDate.toggle()" type="button">
                                                                 <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -52,7 +52,7 @@
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
-                                                    <select class="form-control" name="warehouse_id" formControlName="warehouse_id">
+                                                    <select [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('warehouse_id').errors?.required) || false   }" class="form-control" name="warehouse_id" formControlName="warehouse_id">
                                                         <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let item of listMaster['warehouses']" [ngValue]="item.id">{{item.name}}</option>
                                                     </select>
@@ -67,7 +67,7 @@
                                                         <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
-                                                    <select class="form-control" formControlName="is_electronic">
+                                                    <select [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('electronic').errors?.required) || false   }" class="form-control" formControlName="electronic">
                                                         <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>                                                        
                                                         <option *ngFor="let item of listMaster['yes_no_options']" [ngValue]="item.value">{{item.label}}</option>
                                                     </select>
@@ -76,52 +76,53 @@
                                             <div class="form-group row">
                                                 <label class='col-6'>Payment Method<span class="text-danger">(*)</span></label>
                                                 <div class='col-6 text-primary'>
-                                                    <select  class="form-control" id="payment_method_id" name="payment_method_id" formControlName="payment_method_id">
+                                                    <select [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('payment_method').errors?.required) || false   }" class="form-control" id="payment_method" name="payment_method" formControlName="payment_method">
                                                         <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let item of listMaster['payment_method']" [ngValue]="item.id">{{item.name}}</option>
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div *ngIf="generalForm.value.payment_method_id == 'manual'" class="form-group row">
+                                            <div *ngIf="generalForm.value.payment_method == 4" class="form-group row">
                                                 <label class='col-6'> Check Number 
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
                                                     <div class="input-group">
-                                                        <input type="number" class="form-control" formControlName="check_no">
+                                                        <input [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('check_no').errors?.required) || false   }" type="number" class="form-control" formControlName="check_no">
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div *ngIf="generalForm.value.payment_method_id == 'check'" class="form-group row">
+                                            <div *ngIf="[4,5,6].indexOf(generalForm.value.payment_method)== -1" class="form-group row">
                                                 <label class='col-6'> Reference Number 
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
                                                     <div class="input-group">
-                                                        <input type="number" class="form-control" formControlName="ref_no">
+                                                        <input [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('ref_no').errors?.required) || false   }" type="number" class="form-control" formControlName="ref_no">
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class='col-6'> Account Received
+                                                <label class='col-6'> Amount Received
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
                                                     <div class="input-group">
-                                                        <input type="number" class="form-control" formControlName="account_received">
+                                                        <input numberDirective [isDecimal]="true" (changeValue)="updateTotal()" [min]="0" [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('price_received').errors?.required) || false   }" type="number" class="form-control"
+                                                            formControlName="price_received">
                                                         <div class="input-group-append">
                                                             <span class="input-group-text" id="basic-addon2">$</span>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div *ngIf="generalForm.value.payment_method_id == 'check'" class="form-group row">
+                                            <div *ngIf="generalForm.value.payment_method == 4" class="form-group row">
                                                 <label class='col-6'> Remaining Amount
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
                                                     <div class="input-group">
-                                                        <input readonly type="number" class="form-control" formControlName="remain_amt">
+                                                        <input [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('remain_amt').errors?.required) || false   }" readonly type="number" class="form-control" formControlName="remain_amt">
                                                         <div class="input-group-append">
                                                             <span class="input-group-text" id="basic-addon2">$</span>
                                                         </div>
@@ -133,9 +134,10 @@
                                                         <span class="text-danger">(*)</span>                                                        
                                                 </label>
                                                 <div class='col-6'>
-                                                    <ng-select [items]="listMaster['parents']" formControlName="parent_id" bindLabel="des" bindValue="id">
+                                                    <ng-select [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('gl_account').errors?.required) || false   }" [items]="listMaster['account']" formControlName="gl_account" bindLabel="name" bindValue="id">
                                                         <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
-                                                            <span [ngClass]="{'pl-3': item.level == 1, 'pl-5': item.level == 2}">{{ item.des }}</span>
+                                                            <span [ngClass]="{'pl-3': item.level != undefined}">{{ item.name}}
+                                                            </span>
                                                         </ng-template>
                                                     </ng-select>
                                                 </div>
@@ -161,7 +163,7 @@
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
-                                                    <select class="form-control" id="approver_id" name="approver_id" formControlName="approver_id">
+                                                    <select [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('approver_id').errors?.required) || false   }" class="form-control" id="approver_id" name="approver_id" formControlName="approver_id">
                                                         <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let item of listMaster['sale_mans']" [ngValue]="item.id">{{item.full_name}}</option>
                                                     </select>
@@ -198,7 +200,7 @@
                         <div class="search-invoice">
                             <div>
                                 <i class="fa fa-search"></i>
-                                <input [(ngModel)]="data['search']" type="text" placeholder="Search Invoice & Debit Memo">
+                                <input (keyup.enter)="getListInvoiceAndMemo()" [(ngModel)]="data['search']" type="text" placeholder="Search Invoice & Debit Memo">
                             </div>
                         </div>
                         <div class="table-responsive">
@@ -231,7 +233,7 @@
                                 <ng-container *ngIf="list['items'].length > 0">
                                     <tbody *ngFor="let item of list['items']; let $index = index;">
                                         <tr>
-                                            <td>
+                                            <td class="text-center">
                                                 <label class="css-input css-checkbox css-checkbox-default">
                                                     <input class="cb-element" type="checkbox" [(ngModel)]="item.is_checked" (change)="isAllChecked()">
                                                     <span></span>
@@ -240,39 +242,62 @@
                                             <td>
                                                 {{$index + 1}}
                                             </td>
-                                            <td>{{item.sku }}</td>
-                                            <td>{{item.sku }}</td>
-                                            <td>{{item.sku }}</td>
-                                            <td>{{item.sku }}</td>
-                                            <td>{{item.sku }}</td>
-                                            <td>{{item.sku | currency }}</td>
+                                            <td>{{item.code }}</td>
+                                            <td>{{item.issue_date }}</td>
+                                            <td>{{item.due_date }}</td>
+                                            <td>{{item.payment_term_name }}</td>
+                                            <td>{{item.status_name }}</td>
+                                            <td>{{item.balance_price | currency }}</td>
                                             <td>
                                                 <a href="javascript:void(0)">
-                                                    {{ item.sku | currency }}
+                                                    {{ (item.awaiting || 0) | currency }}
                                                 </a>
                                             </td>
-                                            <td>{{item.sku | currency }}</td>
+                                            <td>{{ (item.total_price - item.applied_amt)| currency }}</td>
                                             <td>
-                                                <input [isDecimal]="true" numberDirective [min]="0" [max]="100" class="form-control input-sm" type="number" [(ngModel)]="item.discount_percent">
+                                                <input (changeValue)='updateTotal(item)' [isDecimal]="true" numberDirective [min]="0" [max]="(item.balance_price > data['remain'])? data['remain']: item.balance_price" class="form-control input-sm" type="number" [(ngModel)]="item.applied_amt">
                                             </td>
                                         </tr>
                                     </tbody>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="6" class="font-weight-bold">TOTAL</td>
+                                            <td></td>
+                                            <td colspan="100%" class="text-primary">{{ data['summary']?.balance_total | currency }}</td>
+                                        </tr>
+                                    </tbody>
                                 </ng-container>
-
                             </table>
                         </div>
-                        <div>
-                            <button class="btn btn-secondary mt-2">Clear Payment</button>
-                            <p class="text-danger mt-2">
-                                (*) For the invoice document, the Current Balance is including the early payment incentive if any.
-                                <br> (**) If you enter a partial payment for an invoice on which an Early Payment Incentive is active you will remove the discount opportunity.
-                            </p>
-
+                        <div class="row normal-pagination mg-top-10" *ngIf="list.items.length > 0">
+                            <div class="col-md-6 padding-lr-0">
+                                <div class="text-left">
+                                    <div class="col-md-6" style="padding-left: 0px;">
+                                        <span style="float: left; padding-right: 10px;">{{list.items.length}}/{{tableService.pagination.total_record}} items </span>
+                                        <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length" (change)="tableService.changeLength()">
+                                                     <option *ngFor="let option of tableService.itemPerPageOptions" [ngValue]="option">{{option}}</option>
+                                                 </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 padding-lr-0">
+                                <div class="text-right">
+                                    <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length" [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page" [maxSize]="tableService.maxSize"
+                                        [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+                                </div>
+                            </div>
                         </div>
+                        <button (click)="clearPayment()" class="btn btn-secondary mt-2">Clear Payment</button>
+                        <p class="text-danger mt-2">
+                            (*) For the invoice document, the Current Balance is including the early payment incentive if any.
+                            <br> (**) If you enter a partial payment for an invoice on which an Early Payment Incentive is active you will remove the discount opportunity.
+                        </p>
+
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="row mg-top-10 padding-child-5 justify-content-end">
             <div class="col-md-3">
                 <div class="card height-100">
@@ -282,7 +307,7 @@
                     <div class="card-body no-padding">
                         <form [formGroup]="generalForm">
                             <div>
-                                <textarea class="form-control border-0" formControlName="note" rows="7" style="resize:none"></textarea>
+                                <textarea class="form-control border-0" formControlName="description" rows="7" style="resize:none"></textarea>
                             </div>
                         </form>
                     </div>
@@ -301,7 +326,7 @@
                                         <strong >Amount Received</strong>
                                     </label>
                                     <div class='col-6 offset-md-1 padding-lr-10 text-primary'>
-                                        <strong>{{data['summary']?.sub_total | currency}}</strong>
+                                        <strong>{{ generalForm.value.price_received | currency}}</strong>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -312,14 +337,33 @@
                                         <strong class="text-success">{{data['summary']?.total | currency}}</strong>
                                     </div>
                                 </div>
-                                <div class="form-group row">
+                                <div *ngIf="generalForm.value.payment_method == 5" class="form-group row">
                                     <label class='col-5 control-label'>
                                             <strong>Change</strong>
                                         </label>
                                     <div class='col-6 offset-md-1 padding-lr-10'>
-                                        <strong>{{data['summary']?.total | currency}}</strong>
+                                        <strong>{{data['summary']?.change | currency}}</strong>
                                     </div>
                                 </div>
+                                <ng-container *ngIf="generalForm.value.payment_method != 5">
+                                    <div class="form-group row">
+                                        <label class='col-5 control-label'>
+                                                <strong>Remaining Amount</strong>
+                                            </label>
+                                        <div class='col-6 offset-md-1 padding-lr-10'>
+                                            <strong>{{data['summary']?.change | currency}}</strong>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class='col-5 control-label'>
+                                                <strong>Amount to Credit</strong>
+                                            </label>
+                                        <div class='col-6 offset-md-1 padding-lr-10'>
+                                            <strong>{{(data['amount_to_credit'] || 0) | currency}}</strong>
+                                        </div>
+                                    </div>
+                                </ng-container>
+
                             </div>
                         </div>
                     </div>
@@ -328,10 +372,10 @@
         </div>
         <div class="row">
             <div class="col-md-12 mg-top-15 text-center">
-                <button type="button" class="btn btn-outline-info" (click)="createInvoice(1, 1)" translate>Save As Draft</button>
-                <button type="button" class="btn btn-outline-danger" (click)="confirmModal(2)" [disabled]="!generalForm.valid" translate>Submit</button>
-                <button type="button" class="btn btn-outline-success" (click)="confirmModal(4)" [disabled]="!generalForm.valid" translate>Save & Validate</button>
-                <button type="button" class="btn btn-outline-dark" (click)="createInvoice(1, 1, 1); resetInvoice();" translate>Save & Create New Receipt Voucher</button>
+                <button type="button" class="btn btn-outline-info" (click)="createVoucher(1, 1)" translate>Save As Draft</button>
+                <button type="button" class="btn btn-outline-danger" (click)="confirmModal((data['summary']?.change > 0)? 'overpayment': 2)" translate>Submit</button>
+                <button type="button" class="btn btn-outline-success" (click)="confirmModal((data['summary']?.change > 0)? 'overpayment-approve': 4)" translate>Save & Validate</button>
+                <button type="button" class="btn btn-outline-dark" (click)="createVoucher(1, 1, 1); resetVoucher();" translate>Save & Create New Receipt Voucher</button>
                 <button type="button" class="btn btn-default" (click)="confirmModal(0)" translate>Back To List</button>
             </div>
         </div>

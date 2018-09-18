@@ -91,7 +91,7 @@ export class InvoiceComponent implements OnInit {
     ngOnInit() {
         //  Init Fn
         this.listMaster['listFilter'] = [{ value: false, name: 'Date Filter' }];
-        this.listMaster['dateType'] = [{ id: 0, name: 'Issue Date' }, { id: 1, name: 'Due Date' }];
+        this.listMaster['dateType'] = [{ id: 0, name: 'Invoice Date' }, { id: 1, name: 'Due Date' }];
         this.listMaster['status'] = [
             { id: 1, name: 'New' },
             { id: 2, name: 'Submitted' },
