@@ -103,7 +103,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class='col-6'> Account Received
+                                                <label class='col-6'> Amount Received
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
@@ -255,8 +255,15 @@
                                             </td>
                                             <td>{{ (item.total_price - item.applied_amt)| currency }}</td>
                                             <td>
-                                                <input (changeValue)='updateTotal(item)' [isDecimal]="true" numberDirective [min]="0" class="form-control input-sm" type="number" [(ngModel)]="item.applied_amt">
+                                                <input (changeValue)='updateTotal(item)' [isDecimal]="true" numberDirective [min]="0" [max]="(item.balance_price > data['remain'])? data['remain']: item.balance_price" class="form-control input-sm" type="number" [(ngModel)]="item.applied_amt">
                                             </td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="6" class="font-weight-bold">TOTAL</td>
+                                            <td></td>
+                                            <td colspan="100%" class="text-primary">{{ data['summary']?.balance_total | currency }}</td>
                                         </tr>
                                     </tbody>
                                 </ng-container>
@@ -352,7 +359,7 @@
                                                 <strong>Amount to Credit</strong>
                                             </label>
                                         <div class='col-6 offset-md-1 padding-lr-10'>
-                                            <strong>{{data['amount_to_credit'] | currency}}</strong>
+                                            <strong>{{(data['amount_to_credit'] || 0) | currency}}</strong>
                                         </div>
                                     </div>
                                 </ng-container>

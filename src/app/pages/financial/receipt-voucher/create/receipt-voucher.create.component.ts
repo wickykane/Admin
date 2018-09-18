@@ -182,6 +182,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         });
         this.voucherService.getListInvoiceAndMemo(params).subscribe(res => {
             this.list.items = res.data.rows || [];
+            this.tableService.matchPagingOption(res.data);
             this.updateTotal();
         });
     }
@@ -288,22 +289,23 @@ export class ReceiptVoucherCreateComponent implements OnInit {
 
     updateTotal(_item?) {
         if (_item) {
-            // let total = 0;
-            // this.list.items.filter(it => it.id !== _item.id).map(j => {
-            //     total += (+j.applied_amt || 0);
-            // });
-            // const remain = this.generalForm.value.price_received - total;
-            // _item.applied_amt = (_item.applied_amt > remain) ? remain : _item.applied_amt;
-            // this.list.items[this.list.items.indexOf(_item)].applied_amt = _item.applied_amt.applied_amt;
-            // return this.updateTotal();
+            let total = 0;
+            this.list.items.filter(it => it.id !== _item.id).map(j => {
+                total += (+j.applied_amt || 0);
+            });
+
+            const remain = this.generalForm.value.price_received - total;
+            this.data['remain'] = remain;
         }
 
         this.data['summary'] = {
             total: 0,
+            balance_total: 0,
         };
 
         this.list.items.map(item => {
             this.data['summary'].total += (+item.applied_amt || 0);
+            this.data['summary'].balance_total += (+item.balance_price || 0);
         });
 
         this.data['summary'].change = this.generalForm.value.price_received - this.data['summary'].total;
