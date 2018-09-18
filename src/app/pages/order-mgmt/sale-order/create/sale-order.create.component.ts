@@ -416,7 +416,7 @@ export class SaleOrderCreateComponent implements OnInit {
                 // taxAmount += (+i.tax_percent * +i.quantity * (+i.sale_price || 0) / 100);
                 taxAmount += (+i.tax_percent * +i.quantity * ((+i.sale_price || 0) * (100 - (+i.discount_percent || 0)) / 100) / 100);
             });
-            this.order_info['total_tax'] = this.order_info['total_tax'] + taxAmount.toFixed(2);
+            this.order_info['total_tax'] = this.order_info['total_tax'] + +(taxAmount.toFixed(2));
             this.order_info['taxs'].push({
                 value: tax, amount: taxAmount.toFixed(2)
             });
@@ -434,7 +434,7 @@ export class SaleOrderCreateComponent implements OnInit {
             this.order_info.order_summary['total_item'] = (this.order_info.order_summary['total_item'] || 0) + (+item.quantity);
             this.order_info.order_summary['total_cogs'] = (this.order_info.order_summary['total_cogs'] || 0) + (+item.cost_price || 0) * (item.quantity || 0);
             this.order_info.order_summary['total_vol'] = (this.order_info.order_summary['total_vol'] || 0) + (+item.vol || 0) * (item.quantity || 0);
-            this.order_info.order_summary['total_weight'] = (this.order_info.order_summary['total_weight'] || 0) + (+item.wt || 0) * (item.quantity || 0);
+            this.order_info.order_summary['total_weight'] = ((this.order_info.order_summary['total_weight'] || 0) + (+item.wt || 0) * (item.quantity || 0)).toFixed(2);
         });
 
 
@@ -442,7 +442,8 @@ export class SaleOrderCreateComponent implements OnInit {
             item.amount = (+item.quantity * (+item.sale_price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
             this.order_info.sub_total += item.amount;
         });
-
+        console.log(+this.order_info.sub_total);
+        console.log(+this.order_info['total_tax']);
         this.order_info.total = +this.order_info['total_tax'] + +this.order_info.sub_total;
     }
 
@@ -519,7 +520,6 @@ export class SaleOrderCreateComponent implements OnInit {
                     item.source_id = 0;
                     item.source_name = 'From Master';
                     item.is_shipping_free = item.free_ship;
-                    console.log(item);
                 });
                 this.list.items = this.list.items.concat(res.filter((item) => {
                     if (listAdded.indexOf(item.sku + item.item_condition_id) < 0) {

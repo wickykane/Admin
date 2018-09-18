@@ -31,8 +31,9 @@ export class ItemService {
         return this.API.get(url, params);
     }
     getMiscItems(params) {
+        const data = {...params, sts: 1 };
         const url = 'misc';
-        return this.API.get(url, params);
+        return this.API.get(url, data);
     }
     getMiscType() {
         const url = 'misc/types';
@@ -91,17 +92,14 @@ export class ItemService {
         return this.API.get(url);
     }
     checkCondition(params) {
-        var data = Object.assign({}, params);
-        for (var property in data) {
-        }
         const url = 'shipping-zone/check-condition';
-        return this.API.post(url, data);
+        return this.API.post(url, params);
     }
-    checkConnection(data){
+    checkConnection(data) {
         const url = 'shipping-zone/test-conection-ups';
         return this.API.post(url, data);
     }
-    checkSEFLConnection(data){
+    checkSEFLConnection(data) {
         const url = 'shipping-zone/test-conection-sefl';
         return this.API.post(url, data);
     }

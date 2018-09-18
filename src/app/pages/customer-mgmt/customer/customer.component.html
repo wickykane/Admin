@@ -12,7 +12,7 @@
                                 capitalize>
                         </div>
                         <div class="col-md-4">
-                            <label for="buyer_type" class="control-label" style="width: 80px !important">Customer Type</label>
+                            <label for="buyer_type" class="control-label" style="width: 82px !important">Customer Type</label>
                             <select class="form-control" formControlName="buyer_type">
                                 <option value="null" selected="true">--Select--</option>
                                 <option *ngFor="let item of listMaster['buyerType']" [ngValue]="item.id">{{item.name}}</option>
@@ -20,7 +20,7 @@
                         </div>
                         <div class="col-md-4">
                             <label for="email" class="control-label">Email</label>
-                            <input type="text" name="email" formControlName="email" class="form-control" id="email" placeholder="" capitalize>
+                            <input type="text" name="email" formControlName="email" class="form-control" id="email" placeholder="">
                         </div>
                     </form>
                 </div>

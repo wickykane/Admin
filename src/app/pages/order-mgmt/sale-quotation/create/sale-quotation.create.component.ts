@@ -14,7 +14,6 @@ import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
 import { ItemModalContent } from '../../../../shared/modals/item.modal';
 import { OrderHistoryModalContent } from '../../../../shared/modals/order-history.modal';
-import { PromotionModalContent } from '../../../../shared/modals/promotion.modal';
 import { ItemMiscModalContent } from './../../../../shared/modals/item-misc.modal';
 import { SaleQuoteCreateKeyService } from './keys.create.control';
 
@@ -387,7 +386,7 @@ export class SaleQuotationCreateComponent implements OnInit {
             this.order_info.order_summary['total_item'] = (this.order_info.order_summary['total_item'] || 0) + (+item.quantity);
             this.order_info.order_summary['total_cogs'] = (this.order_info.order_summary['total_cogs'] || 0) + (+item.cost_price || 0) * (item.quantity || 0);
             this.order_info.order_summary['total_vol'] = (this.order_info.order_summary['total_vol'] || 0) + (+item.vol || 0) * (item.quantity || 0);
-            this.order_info.order_summary['total_weight'] = (this.order_info.order_summary['total_weight'] || 0) + (+item.wt || 0) * (item.quantity || 0);
+            this.order_info.order_summary['total_weight'] = ((this.order_info.order_summary['total_weight'] || 0) + (+item.wt || 0) * (item.quantity || 0)).toFixed(2);
         });
 
 
