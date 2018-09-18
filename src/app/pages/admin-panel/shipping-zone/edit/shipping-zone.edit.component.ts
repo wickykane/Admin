@@ -291,7 +291,8 @@ export class ShippingZoneEditComponent implements OnInit {
     }
 
     onCheckCountryState(country) {
-        this.selectedCountry = country;
+        this.stateFilter = '';
+        this.selectedCountry = Object.assign([],country);
         this.tempListState = country.state;
         this.checkState();
     }
