@@ -275,7 +275,7 @@ export class DebitMemoEditComponent implements OnInit {
                         } else {
                             this.listDeletedLineItem =  [ ...res.data.items, ...res.data.misc];
                         }
-                        // this.listLineItems.forEach( item => this.onCalculateAmount(item));
+                        this.listLineItems.forEach( item => this.onCalculateAmount(item));
                     } else {
                         res.data.items.forEach( item => {
                             if ( this.listLineItems.findIndex(lineItem => lineItem.item_id === item.item_id) >= 0 ) {
