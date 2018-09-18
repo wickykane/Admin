@@ -120,12 +120,12 @@
                                         </label>
                                         <div class="col-12">
                                             <input type="text" class="form-control" style="width: 100%" placeholder="Start searching for a state" (ngModelChange)="filterState($event)"
-                                                [ngModel]="stateFilter">
+                                                [(ngModel)]="stateFilter">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-11 body" style="height: 169px;overflow-y: scroll;">
-                                    <div class="form-group row">
+                                    <div class="form-group row" *ngIf="stateFilter==''&&selectedCountry.state.length>0">
                                         <label class="col-11" style="padding: 10px 0 0 5px;">
                                             <input (change)="selectState()" [(ngModel)]="selectAll" id='ck-first' type="checkbox" /> All States
                                         </label>
