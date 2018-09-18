@@ -15,16 +15,14 @@
             *ngIf="debitData['sts'] === 1" (click)="onChangeDebitStatus(5)">
             <i class="fa fa-times-circle" aria-hidden="true"></i> Cancel
         </button>
-        <button class="btn btn-outline-success"
-            *ngIf="debitData['sts'] === 2" (click)="onChangeDebitStatus(3)">
-            <i class="fa fa-check-square" aria-hidden="true"></i> Approve
+        <button class="btn btn-outline-success" *ngIf="debitData['sts'] === 2 && (currentuser['id'] == debitData['approver_id'])"
+            (click)="onChangeDebitStatus(3)"><i class="fa fa-check-square" aria-hidden="true"></i> Approve
         </button>
-        <button class="btn btn-outline-danger"
-            *ngIf="debitData['sts'] === 2" (click)="onChangeDebitStatus(4)">
-            <i class="fa fa-ban" aria-hidden="true"></i> Reject
+        <button class="btn btn-outline-danger" *ngIf="debitData['sts'] === 2 && (currentuser['id'] == debitData['approver_id'])"
+            (click)="onChangeDebitStatus(4)"><i class="fa fa-ban" aria-hidden="true"></i> Reject
         </button>
         <button class="btn btn-outline-dark"
-            *ngIf="debitData['sts'] === 3 || debitData['sts'] === 7">
+            *ngIf="debitData['sts'] === 3 || debitData['sts'] === 8">
             <i class="fa fa-money" aria-hidden="true"></i> Pay
         </button>
         <button class="btn btn-outline-dark"
@@ -57,7 +55,7 @@
                                         </div>
                                         <div class="form-group row">
                                             <label class='col-6 control-label'>Document No</label>
-                                            <div class='col-6'>{{debitData['order_code']}}</div>
+                                            <div class='col-6'>{{debitData['doc_no']}}</div>
                                         </div>
                                         <div class="form-group row">
                                             <label class='col-6 control-label'>Issue Date</label>
@@ -215,11 +213,11 @@
                                 </div>
                                 <div class="form-group row">
                                     <label class="control-label col-6" translate>Option</label>
-                                    <div class="col-6">{{debitData['carrier']['ship_method_option']}}</div>
+                                    <div class="col-6">{{debitData['carrier']['options_name']}}</div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="control-label col-6" translate>Ship rate</label>
-                                    <div class="col-6">{{debitData['carrier']['ship_method_rate']}}</div>
+                                    <div class="col-6">{{debitData['carrier']['ship_rate_name']}}</div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="control-label col-6" translate>POD Sign Off Date</label>
