@@ -11,8 +11,9 @@ export class PaymentMethodsService {
         return this.apiService.get(url, params);
     }
 
-    getListMaster(paymentId) {
-        const url = 'payment-method/payment-option?ignore_id=' + paymentId;
+    getListMaster(paymentId?) {
+        const params = paymentId ? '?ignore_id=' + paymentId : '';
+        const url = 'payment-method/payment-option' + params;
         return this.apiService.get(url);
     }
 
