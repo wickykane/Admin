@@ -23,6 +23,7 @@ import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { OrderService } from '../../../order-mgmt/order-mgmt.service';
 import { ReceiptVoucherService } from './../receipt-voucher.service';
 
+import { PaymentGatewayModalComponent } from '../modals/payment-gateway/payment-gateway.modal';
 import { TableService } from './../../../../services/table.service';
 
 @Component({
@@ -47,6 +48,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         '2': 'Are you sure that you want to submit this receipt voucher?',
         '4': 'Are you sure that you want to Save & Validate this receipt voucher?',
         'error': 'This Receipt Voucher is missing some mandatory fields, please fulfill them before submitting.',
+        'error_elec': 'There is (are) missing mandatory field(s) in the receipt voucher. Please fulfill before submitting it.',
         'overpayment': 'There is overpayment in this receipt voucher. Are you sure that you want to submit it?',
         'overpayment-approve': 'There is overpayment in this receipt voucher. After approval, the system will create automatically the credit memo for the overpayment. Do you want to proceed?',
         'default': 'The data you have entered may not be saved, are you sure that you want to leave?',
@@ -79,7 +81,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         this.generalForm = fb.group({
             'approver_id': [null, Validators.required],
             'company_id': [null, Validators.required],
-            'warehouse_id': [null],
+            'warehouse_id': [null, Validators.required],
             'payment_method': [null, Validators.required],
             'description': [null],
             'electronic': [null, Validators.required],
@@ -187,13 +189,33 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         });
     }
 
-    resetChangeData() {
+    resetChangeData(flag?) {
+        if (flag === 'paymentMethodType') {
+            const id = this.generalForm.value.electronic;
+            if (!id) {
+                this.generalForm.get('check_no').setValidators([Validators.required]);
+                this.generalForm.get('ref_no').setValidators([Validators.required]);
+                this.generalForm.get('price_received').setValidators([Validators.required]);
+            } else {
+                this.generalForm.get('check_no').setValidators(null);
+                this.generalForm.get('ref_no').setValidators(null);
+                this.generalForm.get('price_received').setValidators(null);
+            }
+            this.generalForm.patchValue({
+                payment_method: null,
+                check_no: null,
+                ref_no: null,
+                price_received: null,
+            });
+            this.generalForm.updateValueAndValidity();
+        }
     }
 
     getListPaymentMethod(id) {
         return new Promise(resolve => {
             this.voucherService.getPaymentMethodElectronic(id).subscribe(res => {
                 this.listMaster['payment_method'] = res.data;
+                this.resetChangeData('paymentMethodType');
                 resolve(true);
             });
         });
@@ -222,16 +244,18 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             const payment = this.listMaster['payment_method'].find(item => +item.id === +id);
             this.data['payment'] = payment || {};
 
-            if (id === 4) {
-                this.generalForm.get('check_no').setValidators([Validators.required]);
-            }
+            if (!this.generalForm.value.electronic) {
+                if (id === 4) {
+                    this.generalForm.get('check_no').setValidators([Validators.required]);
+                }
 
-            if ([5, 6].indexOf(id) !== -1) {
-                this.generalForm.get('check_no').setValidators(null);
-                this.generalForm.get('ref_no').setValidators(null);
-            }
-            if ([4, 5, 6].indexOf(id) === -1) {
-                this.generalForm.get('ref_no').setValidators([Validators.required]);
+                if ([5, 6].indexOf(id) !== -1) {
+                    this.generalForm.get('check_no').setValidators(null);
+                    this.generalForm.get('ref_no').setValidators(null);
+                }
+                if ([4, 5, 6].indexOf(id) === -1) {
+                    this.generalForm.get('ref_no').setValidators([Validators.required]);
+                }
             }
 
             this.generalForm.patchValue({
@@ -293,7 +317,6 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             this.list.items.filter(it => it.id !== _item.id).map(j => {
                 total += (+j.applied_amt || 0);
             });
-
             const remain = this.generalForm.value.price_received - total;
             this.data['remain'] = remain;
         }
@@ -327,12 +350,10 @@ export class ReceiptVoucherCreateComponent implements OnInit {
     }
 
     createVoucher(type, is_draft?, is_continue?) {
+        this.data['showError'] = true;
         if (!is_draft && this.generalForm.invalid) {
-            this.data['showError'] = true;
             this.toastr.error(this.messageConfig.error);
             return;
-        } else {
-            this.data['showError'] = true;
         }
 
         const items = this.list.items.filter(i => i.applied_amt).map(item => {
@@ -374,6 +395,23 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             }
         }, dismiss => { });
         modalRef.componentInstance.message = this.messageConfig[type || 'default'];
+        modalRef.componentInstance.yesButtonText = 'Yes';
+        modalRef.componentInstance.noButtonText = 'No';
+    }
+
+    confirmElectricModal() {
+        // this.data['showError'] = true;
+        // if (this.generalForm.invalid) {
+        //     this.toastr.error(this.messageConfig.error_elec);
+        //     return;
+        // }
+
+        const modalRef = this.modalService.open(PaymentGatewayModalComponent, { size: 'lg' });
+        modalRef.result.then(res => {
+            if (res) {
+
+            }
+        }, dismiss => { });
         modalRef.componentInstance.yesButtonText = 'Yes';
         modalRef.componentInstance.noButtonText = 'No';
     }

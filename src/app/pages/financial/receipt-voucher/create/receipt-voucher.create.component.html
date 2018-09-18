@@ -82,53 +82,55 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div *ngIf="generalForm.value.payment_method == 4" class="form-group row">
-                                                <label class='col-6'> Check Number 
-                                                    <span class="text-danger">(*)</span>
-                                                </label>
-                                                <div class='col-6'>
-                                                    <div class="input-group">
-                                                        <input [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('check_no').errors?.required) || false   }" type="number" class="form-control" formControlName="check_no">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div *ngIf="[4,5,6].indexOf(generalForm.value.payment_method)== -1" class="form-group row">
-                                                <label class='col-6'> Reference Number 
-                                                    <span class="text-danger">(*)</span>
-                                                </label>
-                                                <div class='col-6'>
-                                                    <div class="input-group">
-                                                        <input [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('ref_no').errors?.required) || false   }" type="number" class="form-control" formControlName="ref_no">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class='col-6'> Amount Received
-                                                    <span class="text-danger">(*)</span>
-                                                </label>
-                                                <div class='col-6'>
-                                                    <div class="input-group">
-                                                        <input numberDirective [isDecimal]="true" (changeValue)="updateTotal()" [min]="0" [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('price_received').errors?.required) || false   }" type="number" class="form-control"
-                                                            formControlName="price_received">
-                                                        <div class="input-group-append">
-                                                            <span class="input-group-text" id="basic-addon2">$</span>
+                                            <ng-container *ngIf="!generalForm.value.electronic">
+                                                <div *ngIf="generalForm.value.payment_method == 4" class="form-group row">
+                                                    <label class='col-6'> Check Number 
+                                                        <span class="text-danger">(*)</span>
+                                                    </label>
+                                                    <div class='col-6'>
+                                                        <div class="input-group">
+                                                            <input [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('check_no').errors?.required) || false   }" type="number" class="form-control" formControlName="check_no">
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div *ngIf="generalForm.value.payment_method == 4" class="form-group row">
-                                                <label class='col-6'> Remaining Amount
-                                                    <span class="text-danger">(*)</span>
-                                                </label>
-                                                <div class='col-6'>
-                                                    <div class="input-group">
-                                                        <input [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('remain_amt').errors?.required) || false   }" readonly type="number" class="form-control" formControlName="remain_amt">
-                                                        <div class="input-group-append">
-                                                            <span class="input-group-text" id="basic-addon2">$</span>
+                                                <div *ngIf="[4,5,6].indexOf(generalForm.value.payment_method)== -1" class="form-group row">
+                                                    <label class='col-6'> Reference Number 
+                                                        <span class="text-danger">(*)</span>
+                                                    </label>
+                                                    <div class='col-6'>
+                                                        <div class="input-group">
+                                                            <input [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('ref_no').errors?.required) || false   }" type="number" class="form-control" formControlName="ref_no">
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                                <div class="form-group row">
+                                                    <label class='col-6'> Amount Received
+                                                        <span class="text-danger">(*)</span>
+                                                    </label>
+                                                    <div class='col-6'>
+                                                        <div class="input-group">
+                                                            <input numberDirective [isDecimal]="true" (changeValue)="updateTotal()" [min]="0" [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('price_received').errors?.required) || false   }" type="number" class="form-control"
+                                                                formControlName="price_received">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text" id="basic-addon2">$</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div *ngIf="generalForm.value.payment_method == 4" class="form-group row">
+                                                    <label class='col-6'> Remaining Amount
+                                                        <span class="text-danger">(*)</span>
+                                                    </label>
+                                                    <div class='col-6'>
+                                                        <div class="input-group">
+                                                            <input [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('remain_amt').errors?.required) || false   }" readonly type="number" class="form-control" formControlName="remain_amt">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text" id="basic-addon2">$</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </ng-container>
                                             <div class="form-group row">
                                                 <label class='col-6'>Deposit G/L Account
                                                         <span class="text-danger">(*)</span>                                                        
@@ -261,7 +263,7 @@
                                     </tbody>
                                     <tbody>
                                         <tr>
-                                            <td colspan="6" class="font-weight-bold">TOTAL</td>
+                                            <td colspan="6" class="font-weight-bold text-right">TOTAL</td>
                                             <td></td>
                                             <td colspan="100%" class="text-primary">{{ data['summary']?.balance_total | currency }}</td>
                                         </tr>
@@ -326,7 +328,7 @@
                                         <strong >Amount Received</strong>
                                     </label>
                                     <div class='col-6 offset-md-1 padding-lr-10 text-primary'>
-                                        <strong>{{ generalForm.value.price_received | currency}}</strong>
+                                        <strong>{{ (generalForm.value.price_received || 0) | currency}}</strong>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -334,7 +336,7 @@
                                         <strong>Applied Amount</strong>
                                     </label>
                                     <div class='col-6 offset-md-1 padding-lr-10'>
-                                        <strong class="text-success">{{data['summary']?.total | currency}}</strong>
+                                        <strong class="text-success">{{(data['summary']?.total || 0) | currency}}</strong>
                                     </div>
                                 </div>
                                 <div *ngIf="generalForm.value.payment_method == 5" class="form-group row">
@@ -342,7 +344,7 @@
                                             <strong>Change</strong>
                                         </label>
                                     <div class='col-6 offset-md-1 padding-lr-10'>
-                                        <strong>{{data['summary']?.change | currency}}</strong>
+                                        <strong>{{(data['summary']?.change || 0) | currency}}</strong>
                                     </div>
                                 </div>
                                 <ng-container *ngIf="generalForm.value.payment_method != 5">
@@ -351,7 +353,7 @@
                                                 <strong>Remaining Amount</strong>
                                             </label>
                                         <div class='col-6 offset-md-1 padding-lr-10'>
-                                            <strong>{{data['summary']?.change | currency}}</strong>
+                                            <strong>{{(data['summary']?.change ||0) | currency}}</strong>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -373,8 +375,11 @@
         <div class="row">
             <div class="col-md-12 mg-top-15 text-center">
                 <button type="button" class="btn btn-outline-info" (click)="createVoucher(1, 1)" translate>Save As Draft</button>
-                <button type="button" class="btn btn-outline-danger" (click)="confirmModal((data['summary']?.change > 0)? 'overpayment': 2)" translate>Submit</button>
-                <button type="button" class="btn btn-outline-success" (click)="confirmModal((data['summary']?.change > 0)? 'overpayment-approve': 4)" translate>Save & Validate</button>
+                <ng-container *ngIf="!generalForm.value.electronic">
+                    <button type="button" class="btn btn-outline-danger" (click)="confirmModal((data['summary']?.change > 0)? 'overpayment': 2)" translate>Submit</button>
+                    <button type="button" class="btn btn-outline-success" (click)="confirmModal((data['summary']?.change > 0)? 'overpayment-approve': 4)" translate>Save & Validate</button>
+                </ng-container>
+                <button *ngIf="generalForm.value.electronic" type="button" class="btn btn-outline-danger" (click)="confirmElectricModal()" translate>Save & Submit</button>
                 <button type="button" class="btn btn-outline-dark" (click)="createVoucher(1, 1, 1); resetVoucher();" translate>Save & Create New Receipt Voucher</button>
                 <button type="button" class="btn btn-default" (click)="confirmModal(0)" translate>Back To List</button>
             </div>
