@@ -70,6 +70,7 @@ export class DebitMemoEditComponent implements OnInit {
     public debitMemoForm: FormGroup;
     public debitId = null;
     public debitDetail = {};
+    public currentUser = {};
     //#endregion initialize variables
 
     //#region contructor
@@ -122,6 +123,7 @@ export class DebitMemoEditComponent implements OnInit {
 
     //#region lifecycle hook
     ngOnInit() {
+        this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
         this.debitId = this.route.snapshot.paramMap.get('id');
         // Lazy Load filter
         this.data['page'] = 1;
@@ -238,6 +240,9 @@ export class DebitMemoEditComponent implements OnInit {
 
                     this.debitMemoForm.controls.payment_method_id.setValue(res.data.payment_method_id);
                     this.debitMemoForm.controls.payment_term_id.setValue(res.data.payment_term_id);
+                    if (res.data.payment_term_id !== null && res.data.payment_term_id !== undefined) {
+                        this.onUpdateDueDate(res.data.payment_term_id);
+                    }
 
                     this.debitMemoForm.controls.billing_id.setValue(res.data.bill_addr.id);
                     this.debitMemoForm.controls.shipping_id.setValue(res.data.ship_addr.id);
@@ -275,7 +280,7 @@ export class DebitMemoEditComponent implements OnInit {
                         } else {
                             this.listDeletedLineItem =  [ ...res.data.items, ...res.data.misc];
                         }
-                        // this.listLineItems.forEach( item => this.onCalculateAmount(item));
+                        this.listLineItems.forEach( item => this.onCalculateAmount(item));
                     } else {
                         res.data.items.forEach( item => {
                             if ( this.listLineItems.findIndex(lineItem => lineItem.item_id === item.item_id) >= 0 ) {
@@ -334,7 +339,7 @@ export class DebitMemoEditComponent implements OnInit {
                     }
                     if (this.debitMemoForm.value.order_id !== null && this.debitMemoForm.value.order_id !== undefined) {
                         this.listLineItems = this.debitDetail['line_items'];
-                        this.getOrderInformation(this.debitMemoForm.value.order_id);
+                        // this.getOrderInformation(this.debitMemoForm.value.order_id);
                         this.getListLineItems(this.debitMemoForm.value.order_id);
                     }
 
@@ -431,8 +436,13 @@ export class DebitMemoEditComponent implements OnInit {
         this.getListLineItems(orderId);
     }
 
+    onChangeIssueDate() {
+        return (this.debitMemoForm.value.payment_term_id !== null && this.debitMemoForm.value.payment_term_id !== undefined)
+                && this.onUpdateDueDate(this.debitMemoForm.value.payment_term_id);
+    }
+
     onUpdateDueDate(termId) {
-        const termDays = this.listMaster['payment_terms'].find(term => term.id.toString() === termId)['term_day'] || 0;
+        const termDays = this.listMaster['payment_terms'].find(term => term.id.toString() === termId.toString())['term_day'] || 0;
         this.debitMemoForm.controls.due_date.setValue(
             moment(this.debitMemoForm.value.issue_date).add(termDays, 'days').format('YYYY-MM-DD')
         );
@@ -473,8 +483,11 @@ export class DebitMemoEditComponent implements OnInit {
         const modalRef = this.modalService.open(ItemsOrderDebitModalContent, {
             size: 'lg'
         });
-        modalRef.componentInstance.setIgnoredItems = this.listDeletedLineItem.
-            filter(item => item.item_id !== undefined && item.item_id !== null).map(item => item.item_id);
+        const params = {
+            orderId: this.debitMemoForm.value.order_id,
+            items: this.listDeletedLineItem.filter(item => item.item_id !== undefined && item.item_id !== null).map(item => item.item_id)
+        };
+        modalRef.componentInstance.setIgnoredItems = params;
         modalRef.result.then(res => {
             if (res) {
                 res.forEach(selectedItem => {
@@ -493,8 +506,11 @@ export class DebitMemoEditComponent implements OnInit {
         const modalRef = this.modalService.open(MiscItemsDebitModalContent, {
             size: 'lg'
         });
-        modalRef.componentInstance.setIgnoredItems = this.listLineItems.
-            filter(item => item.misc_id !== undefined && item.misc_id !== null).map(item => item.misc_id);
+        const params = {
+            orderId: this.debitMemoForm.value.order_id,
+            items: this.listLineItems.filter(item => item.misc_id !== undefined && item.misc_id !== null).map(item => item.misc_id)
+        };
+        modalRef.componentInstance.setIgnoredItems = params;
         modalRef.result.then(res => {
             if (res) {
                 res.forEach(selectedItem => {
@@ -537,7 +553,7 @@ export class DebitMemoEditComponent implements OnInit {
                 this.isSaveDraft = false;
                 this.isCreateNew = false;
                 status = 3;
-                modalMessage = 'Are you sure that you want to Save & Validate the credit memo?';
+                modalMessage = 'Are you sure that you want to Save & Validate the debit memo?';
                 break;
             }
         }
@@ -550,7 +566,7 @@ export class DebitMemoEditComponent implements OnInit {
                 if (yes && this.validateData() && this.listLineItems.length) {
                      this.onSaveDebitMemo(status);
                 } else if (!this.listLineItems.length) {
-                    this.toastr.warning('Please select at least 1 item to continue.');
+                    this.toastr.error('Please select at least 1 item to continue.');
                 }
             }, dismiss => { });
         }
@@ -575,7 +591,7 @@ export class DebitMemoEditComponent implements OnInit {
         params['sts'] = status;
         params['line_items'] = this.listLineItems;
 
-        params['approver_id'] = parseInt(params['approver_id'], null);
+        params['approver_id'] = status === 3 ? this.currentUser['id'] : parseInt(params['approver_id'], null);
         params['billing_id'] = parseInt(params['billing_id'], null);
         params['contact_id'] = parseInt(params['contact_id'], null);
         params['doc_type'] = parseInt(params['doc_type'], null);
@@ -610,7 +626,8 @@ export class DebitMemoEditComponent implements OnInit {
             this.listTaxs.forEach(taxItem => {
                 let sub_price = 0;
                 this.listLineItems.forEach(item => {
-                    taxItem.amount += (parseFloat(item.tax_percent) === taxItem.tax_percent) ? item.tax : 0;
+                    taxItem.amount += (parseFloat(item.tax_percent) === taxItem.tax_percent) ? parseFloat(item.tax.toFixed(this.decimalAllowed)) : 0;
+                    taxItem.amount = parseFloat(taxItem.amount.toFixed(this.decimalAllowed));
                     sub_price += item.total_price;
                 });
                 total_tax += taxItem.amount;

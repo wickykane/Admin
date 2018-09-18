@@ -81,13 +81,13 @@ export class DebitMemoService {
         return this.API.get(url);
     }
 
-    getListItemsFromOrder(params) {
-        const url = 'debit/orders/1/items';
+    getListItemsFromOrder(orderId, params) {
+        const url = `debit/orders/${orderId}/items`;
         return this.API.get(url, params);
     }
 
-    getListItemsFromMisc(params) {
-        const url = 'debit/orders/1/items';
+    getListItemsFromMisc(orderId, params) {
+        const url = `debit/orders/${orderId}/items`;
         return this.API.get(url, params);
     }
 
