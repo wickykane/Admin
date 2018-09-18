@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import * as moment from 'moment';
 import { ToastrService } from 'ngx-toastr';
 import { CommonService } from './../../../../../services/common.service';
 import { ReceiptVoucherService } from './../../receipt-voucher.service';
@@ -15,7 +16,7 @@ export class PaymentGatewayModalComponent implements OnInit {
     // Resolve Data
     public generalForm: FormGroup;
     public listMaster = {};
-    @Input() receiptId;
+    @Input() data;
     public modalTitle;
 
     constructor(public activeModal: NgbActiveModal, public toastr: ToastrService, private fb: FormBuilder, private receiptVoucherService: ReceiptVoucherService, private commonService: CommonService) {
@@ -40,12 +41,21 @@ export class PaymentGatewayModalComponent implements OnInit {
 
     ngOnInit() {
         this.listMaster['months'] = Array.from(Array(12).keys()).map(i => i + 1);
-        this.listMaster['years'] = Array.from(Array(new Date().getFullYear() + 20).keys()).map(i => i + 1).filter(i => i >= new Date().getFullYear()).reverse();
-        const user = JSON.parse(localStorage.getItem('currentUser'));
+        this.listMaster['years'] = Array.from(Array(new Date().getFullYear() + 20).keys()).map(i => i + 1).filter(i => i >= new Date().getFullYear());
+        const user = this.data.user;
+        const payer = this.data.payer;
+
         this.generalForm.patchValue({
             company_name: user.full_name,
             company_id: user.id,
+            requestor: payer.company_name,
+            current_date: moment().format('MM/DD/YYYY hh:mm'),
         });
+
+    }
+
+    changeAddress() {
+        this.data['billing'] = (this.data['payer'].billing || []).find(item => +item.address_id === +this.generalForm.value.bill_to) || {};
     }
 
     getListCountry() {

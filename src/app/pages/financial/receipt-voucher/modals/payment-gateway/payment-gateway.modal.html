@@ -15,23 +15,23 @@
                         </div>
                         <div class="card-body">
                             <form [formGroup]="generalForm" class="form-horizontal mail-form" role="form">
-                                <div class="row">
-                                    <div class="form-group col-sm-12">
+                                <div>
+                                    <div class="form-group row mt-3 col-sm-12">
                                         <label for="" translate class="col-md-5">Total Amount</label>
                                         <div class="col-md-7">
-                                            <span class="form-control text-success">
+                                            <span class="form-control text-success border-0">
                                                 {{ generalForm.value.total_amount }}                                            
                                             </span>
                                         </div>
                                     </div>
-                                    <div class="form-group col-sm-12">
+                                    <div class="form-group row col-sm-12">
                                         <label for="" translate class="col-md-5">Card Number  <span class="text-danger">(*)</span>
                                         </label>
                                         <div class="col-md-7">
                                             <input class="form-control" placeholder="0000-0000-0000-0000" type="number" numberDirective formControlName="card_no">
                                         </div>
                                     </div>
-                                    <div class="form-group col-sm-12">
+                                    <div class="form-group row col-sm-12">
                                         <label for="" translate class="col-md-5">Expiration Date  <span class="text-danger">(*)</span>
                                         </label>
                                         <div class="col-md-7">
@@ -45,32 +45,32 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="form-group col-sm-12">
+                                    <div class="form-group row col-sm-12">
                                         <label for="" translate class="col-md-5">Card Holder Name  <span class="text-danger">(*)</span>
                                         </label>
                                         <div class="col-md-7">
                                             <input class="form-control" formControlName="card_name">
                                         </div>
                                     </div>
-                                    <div class="form-group col-sm-12">
+                                    <div class="form-group row col-sm-12">
                                         <label for="" translate class="col-md-5">CVV  <span class="text-danger">(*)</span>
                                         </label>
                                         <div class="col-md-7">
                                             <input class="form-control" formControlName="cvv">
                                         </div>
                                     </div>
-                                    <div class="form-group col-sm-12">
+                                    <div class="form-group row col-sm-12">
                                         <label for="" translate class="col-md-5">Requestor
                                             </label>
                                         <div class="col-md-7">
-                                            <div class="form-control"> {{ generalForm.requestor }}</div>
+                                            <div class="form-control border-0"> {{ generalForm.value.requestor }}</div>
                                         </div>
                                     </div>
-                                    <div class="form-group col-sm-12">
+                                    <div class="form-group row col-sm-12">
                                         <label for="" translate class="col-md-5">Current Date
                                                 </label>
                                         <div class="col-md-7">
-                                            <div class="form-control"> {{ generalForm.current_date }}</div>
+                                            <div class="form-control border-0"> {{ generalForm.value.current_date }}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -86,60 +86,69 @@
                         <div class="card-body">
                             <form [formGroup]="generalForm" class="form-horizontal mail-form" role="form">
                                 <div class="row">
-                                    <div class="form-group col-sm-12">
+                                    <div class="form-group row mt-3 col-sm-12">
                                         <label for="" translate class="col-md-5">Customer Name</label>
                                         <div class="col-md-7">
-                                            <span class="form-control text-success">
+                                            <span class="form-control text-success border-0">
                                                 {{ generalForm.value.company_name }}                                            
                                             </span>
                                         </div>
                                     </div>
-                                    <div class="form-group col-sm-12">
+                                    <div class="form-group row col-sm-12">
                                         <label for="" translate class="col-md-5">Bill To  <span class="text-danger">(*)</span>
                                             </label>
                                         <div class="col-md-7">
-                                            <input class="form-control" formControlName="bill_to">
+                                            <!-- <input class="form-control" formControlName="bill_to"> -->
+                                            <select required class="form-control" id="billing_to" name="search_type" formControlName="bill_to" (change)="changeAddress()">
+                                                <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
+                                                <option *ngFor="let item of data.payer?.billing" [ngValue]="item.address_id">{{item.label}}</option>
+                                            </select>
                                         </div>
                                     </div>
-                                    <div class="form-group col-sm-12">
+                                    <div class="form-group row col-sm-12">
                                         <label for="" translate class="col-md-5">Country  <span class="text-danger">(*)</span>
                                             </label>
                                         <div class="col-md-7">
-                                            <select class="form-control" formControlName='country_code'>
+                                            <!-- <select class="form-control" formControlName='country_code'>
                                                 <option [hidden]="true" [disabled]="true"   [ngValue]="null">--Select--</option>
                                                 <option *ngFor="let item of listMaster['countries']"  [ngValue]="item.cd"> {{ item.name }}</option>                        
-                                            </select>
+                                            </select> -->
+                                            <span class="form-control border-0">  {{ data['billing']?.country_name}} </span>
                                         </div>
                                     </div>
-                                    <div class="form-group col-sm-12">
+                                    <div class="form-group row col-sm-12">
                                         <label for="" translate class="col-md-5">Address Line  <span class="text-danger">(*)</span>
                                             </label>
                                         <div class="col-md-7">
-                                            <input class="form-control" formControlName="addr_line">
+                                            <span class="form-control border-0">  {{ data['billing']?.address_line}} </span>
+                                            <!-- <input class="form-control" formControlName="addr_line"> -->
                                         </div>
                                     </div>
-                                    <div class="form-group col-sm-12">
+                                    <div class="form-group row col-sm-12">
                                         <label for="" translate class="col-md-5">City  <span class="text-danger">(*)</span>
                                             </label>
                                         <div class="col-md-7">
-                                            <input class="form-control" formControlName="city">
+                                            <!-- <input class="form-control" formControlName="city"> -->
+                                            <span class="form-control border-0">  {{ data['billing']?.city_name}} </span>
                                         </div>
                                     </div>
-                                    <div class="form-group col-sm-12">
+                                    <div class="form-group row col-sm-12">
                                         <label for="" translate class="col-md-5">State  <span class="text-danger">(*)</span>
                                                 </label>
                                         <div class="col-md-7">
-                                            <select class="form-control" formControlName='state_id'>
+                                            <!-- <select class="form-control" formControlName='state_id'>
                                                 <option [hidden]="true" [disabled]="true"   [ngValue]="null">--Select--</option>
                                                 <option *ngFor="let item of listMaster['state']"  [ngValue]="item.id"> {{ item.name }}</option>                        
-                                            </select>
+                                            </select> -->
+                                            <span class="form-control border-0">  {{ data['billing']?.state_name}} </span>
                                         </div>
                                     </div>
-                                    <div class="form-group col-sm-12">
+                                    <div class="form-group row col-sm-12">
                                         <label for="" translate class="col-md-5">Zip  <span class="text-danger">(*)</span>
                                                 </label>
                                         <div class="col-md-7">
-                                            <input class="form-control" formControlName="zip_code">
+                                            <!-- <input class="form-control" formControlName="zip_code"> -->
+                                            <span class="form-control border-0">  {{ data['billing']?.zip_code}} </span>
                                         </div>
                                     </div>
                                 </div>

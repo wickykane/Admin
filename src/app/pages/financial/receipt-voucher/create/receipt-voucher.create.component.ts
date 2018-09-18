@@ -107,6 +107,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
 
     async ngOnInit() {
         const user = JSON.parse(localStorage.getItem('currentUser'));
+        this.data['user'] = user;
         const currentDt = new Date();
 
         // List Master
@@ -221,6 +222,15 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         });
     }
 
+    getDetailCustomerById(company_id) {
+        this.orderService.getDetailCompany(company_id).subscribe(res => {
+            try {
+                this.data['payer'] = res.data;
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
     /**
      * Internal Function
      */
@@ -286,6 +296,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             }
             setTimeout(() => {
                 this.data['search'] = null;
+                this.getDetailCustomerById(id);
                 this.getListInvoiceAndMemo();
             });
         });
@@ -297,6 +308,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
                 return;
             }
             this.getListPaymentMethod(id);
+            this.getListInvoiceAndMemo();
         });
     }
 
@@ -412,8 +424,12 @@ export class ReceiptVoucherCreateComponent implements OnInit {
 
             }
         }, dismiss => { });
-        modalRef.componentInstance.yesButtonText = 'Yes';
-        modalRef.componentInstance.noButtonText = 'No';
+
+        modalRef.componentInstance.data = {
+            user: this.data['user'],
+            payer: this.data['payer'],
+            total_amount: this.data['summary'].total,
+        };
     }
 
     fetchMoreCustomer(data?) {
