@@ -12,33 +12,32 @@
             </ul>
         </section>
 
-        <div class="block-content pd-bottom padding-lr-0 mt-2">
+        <div class="block-content pd-bottom bg-gray-light short-width">
             <div class="row">
-                <div class="col-6">
-                    <form class="row form-horizontal form-search filter-order-group" role="form" [formGroup]="searchForm">
-                        <div class="col-md-4">
+                    <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
+                        <div class="block-search">
                             <label for="sale_quote_num" class="control-label">Sales Quote #</label>
                             <input autofocus="true" type="text" name="sale_quote_num" formControlName="quote_no" class="form-control" placeholder="">
                         </div>
-                        <div class="col-md-4">
+                        <div class="block-search">
                             <label for="sts" class="control-label">Status</label>
                             <ng-select class="ng-select-filter" [multiple]="true" [items]="listMaster['listStatus']" bindLabel="name" bindValue="id" formControlName="sts">
                             </ng-select>
                         </div>
-                        <div class="col-md-4">
+                        <div class="block-search">
                             <label for="buyer_name" class="control-label" translate>Customer</label>
                             <input type="text" name="buyer_name" formControlName="buyer_name" class="form-control" placeholder="">
                         </div>
 
-                        <ng-container *ngIf="listMaster['listFilter'][0].value">
-                            <div class="col-md-4">
+                        <!-- <ng-container *ngIf="listMaster['listFilter'][0].value"> -->
+                            <div class="block-search">
                                 <label for="type" class="control-label" translate>Date Type</label>
                                 <select class="form-control" formControlName="date_type">
                                     <option value="null" selected="true">--Select--</option>
                                     <option *ngFor="let item of listMaster['dateType']" [ngValue]="item.id">{{item.name}}</option>
                                 </select>
                             </div>
-                            <div class="col-md-4">
+                            <div class="block-search">
                                 <label for="" class="control-label" translate>From</label>
                                 <div class="date-group">
                                     <div clickOutside (clickOutside)="d1.close()" class="input-group">
@@ -51,7 +50,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="block-search">
                                 <label for="" class="control-label" translate>To</label>
                                 <div class="date-group">
                                     <div clickOutside (clickOutside)="dt2.close()" class="input-group">
@@ -64,13 +63,12 @@
                                     </div>
                                 </div>
                             </div>
-                        </ng-container>
+                        <!-- </ng-container> -->
                     </form>
-                </div>
-                <div class="col-3">
                     <div class="block-btn-search">
-                        <div class="mt-1 group-btn-search">
-                            <button type="button" class="btn-default-custom" (click)="moreFilter()">More Filter</button>
+                      <label class="control-label">&nbsp;</label>
+                      <div class="group-btn-search">
+                            <!-- <button type="button" class="btn-default-custom" (click)="moreFilter()">More Filter</button>
                             <div class="show-more" [hidden]="!onoffFilter">
                                 <ul class="mt-2">
                                     <li *ngFor="let item of listMaster['listFilter']; let i = index;">
@@ -79,12 +77,11 @@
                                         </label>
                                     </li>
                                 </ul>
-                            </div>
+                            </div> -->
                             <button type="button" class="btn-default-custom" (click)="tableService.searchAction()">Search</button>
                             <button type="button" class="btn-default-custom" (click)="tableService.resetAction(this.searchForm)">Reset</button>
                         </div>
                     </div>
-                </div>
             </div>
         </div>
 
