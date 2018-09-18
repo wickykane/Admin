@@ -73,4 +73,9 @@ export class ReceiptVoucherService {
         const url = ['voucher', 'status-list'].join('/');
         return this.API.get(url);
     }
+
+    updateVoucher(id, params) {
+        const url = 'voucher/update/' + id;
+        return this.API.put(url, params);
+    }
 }

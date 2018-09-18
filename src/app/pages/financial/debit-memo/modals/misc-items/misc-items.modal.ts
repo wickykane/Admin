@@ -17,9 +17,13 @@ import { DebitMemoService } from '../../debit-memo.service';
 export class MiscItemsDebitModalContent implements OnInit {
 
     public listIgnoredItems = [];
-    @Input() set setIgnoredItems(items) {
-        if (items && items.length) {
-            this.listIgnoredItems = items;
+    public orderId = '';
+    @Input() set setIgnoredItems(data) {
+        if (data && data['orderId'] !== null && data['orderId'] !== undefined) {
+            this.orderId = data['orderId'];
+        }
+        if (data && data['items'] && data['items'].length) {
+            this.listIgnoredItems = data['items'];
         }
         this.getListItems();
     }
@@ -45,7 +49,7 @@ export class MiscItemsDebitModalContent implements OnInit {
         const params = { ...this.searchForm.value};
         params['misc_ids_ignore'] = this.listIgnoredItems.join();
         Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
-        this.debitService.getListItemsFromMisc(params).subscribe(
+        this.debitService.getListItemsFromMisc(this.orderId, params).subscribe(
             res => {
                 try {
                     this.listItems = res.data.misc;

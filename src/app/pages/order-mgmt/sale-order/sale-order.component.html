@@ -11,46 +11,45 @@
               </li>
           </ul>
         </section>
-        <div class="block-content pd-bottom padding-lr-0">
+        <div class="block-content pd-bottom bg-gray-light short-width">
             <div class="row">
-                <div class="col-9">
-                    <form class="row form-horizontal form-search filter-order-group" role="form" [formGroup]="searchForm">
-                        <div class="col-md-2">
+                    <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
+                        <div class="block-search">
                             <label for="cd" class="control-label" translate>SO #</label>
                             <input type="text" name="cd" formControlName="code" class="form-control" id="cd" placeholder="" capitalize>
                         </div>
-                        <div class="col-md-2">
+                        <div class="block-search">
                             <label for="purchase_quote_cd" class="control-label">Cust PO #</label>
                             <input type="text" name="purchase_quote_cd" formControlName="cus_po" class="form-control" id="purchase_quote_cd" placeholder="">
                         </div>
-                        <div class="col-md-2">
+                        <div class="block-search">
                             <label for="contract_no" class="control-label">Sales Quote #</label>
                             <input type="text" name="contract_no" formControlName="sale_quote_num" class="form-control" id="contract_no" placeholder="">
                         </div>
-                        <div class="col-md-2">
+                        <div class="block-search">
                             <label for="part" class="control-label">Type</label>
                             <ng-select [multiple]="true" [items]="listMaster['type']" bindLabel="name" bindValue="id" formControlName="type">
                             </ng-select>
                         </div>
-                        <div class="col-md-2">
+                        <div class="block-search">
                             <label for="po_status_id" class="control-label">Status</label>
                             <ng-select [multiple]="true" [items]="listMaster['status']" bindLabel="name" bindValue="id" formControlName="sts">
                             </ng-select>
                         </div>
-                        <div class="col-md-2">
+                        <div class="block-search">
                             <label for="cd" class="control-label" translate>Customer</label>
                             <input type="text" name="cd" formControlName="buyer_name" class="form-control" id="cd" placeholder="" capitalize>
                         </div>
 
-                        <ng-container *ngIf="listMoreFilter[0].value">
-                          <div class="col-md-2">
+                        <!-- <ng-container *ngIf="listMoreFilter[0].value"> -->
+                          <div class="block-search">
                               <label for="type" class="control-label" translate>Date Type</label>
                               <select class="form-control" formControlName="date_type">
                                   <option value="null" selected="true">--Select--</option>
                                   <option *ngFor="let item of listMaster['dateType']" [ngValue]="item.id">{{item.name}}</option>
                               </select>
                           </div>
-                            <div class="col-md-2" *ngIf="this.searchForm.value.date_type == 'order_dt'">
+                            <div class="block-search">
                                 <label for="" class="control-label" translate> From</label>
                                 <div clickOutside (clickOutside)="d.close()" class="input-group">
                                     <input [maxDate]="searchForm.value.date_to | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="d" formControlName="date_from" ngbDatepicker #d="ngbDatepicker">
@@ -61,7 +60,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-2" *ngIf="this.searchForm.value.date_type == 'order_dt'">
+                            <div class="block-search">
                                 <label for="" class="control-label" translate> To</label>
                                 <div clickOutside (clickOutside)="dt.close()" class="input-group">
                                     <input [minDate]="searchForm.value.date_from | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dt" formControlName="date_to" ngbDatepicker #dt="ngbDatepicker">
@@ -72,7 +71,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-2" *ngIf="this.searchForm.value.date_type == 'delivery_dt'">
+                            <!-- <div class="block-search" *ngIf="this.searchForm.value.date_type == 'delivery_dt'">
                                 <label for="" class="control-label" translate>From</label>
                                 <div clickOutside (clickOutside)="d1.close()" class="input-group">
                                     <input [maxDate]="searchForm.value.ship_date_to | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="d1" formControlName="ship_date_from" ngbDatepicker #d1="ngbDatepicker">
@@ -83,7 +82,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-2" *ngIf="this.searchForm.value.date_type == 'delivery_dt'">
+                            <div class="block-search" *ngIf="this.searchForm.value.date_type == 'delivery_dt'">
                                 <label for="ship_date_to" class="control-label" translate> To</label>
                                 <div clickOutside (clickOutside)="dt1.close()" class="input-group">
                                     <input [minDate]="searchForm.value.ship_date_from | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dt1" formControlName="ship_date_to" ngbDatepicker #dt1="ngbDatepicker">
@@ -93,15 +92,13 @@
                                         </button>
                                     </div>
                                 </div>
-                            </div>
-                        </ng-container>
+                            </div> -->
+                        <!-- </ng-container> -->
                     </form>
-                </div>
-                <div class="col-3">
                     <div class="block-btn-search">
                         <label class="control-label">&nbsp;</label>
                         <div class="group-btn-search">
-                            <button type="button" class="btn-default-custom" (click)="onoffFilter = !onoffFilter">More Filter</button>
+                            <!-- <button type="button" class="btn-default-custom" (click)="onoffFilter = !onoffFilter">More Filter</button>
                             <div class="show-more" *ngIf="onoffFilter">
                                 <ul>
                                     <li *ngFor="let item of listMoreFilter; let i = index;">
@@ -110,12 +107,11 @@
                                         </label>
                                     </li>
                                 </ul>
-                            </div>
+                            </div> -->
                             <button type="button" class="btn-default-custom" (click)="tableService.searchAction()">Search</button>
                             <button type="button" class="btn-default-custom" (click)="tableService.resetAction(this.searchForm)">Reset</button>
                         </div>
                     </div>
-                </div>
             </div>
         </div>
 

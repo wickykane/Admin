@@ -77,8 +77,8 @@ export class SaleOrderComponent implements OnInit {
             'date_type': [null],
             'date_to': [null],
             'date_from': [null],
-            'ship_date_from': [null],
-            'ship_date_to': [null],
+            // 'ship_date_from': [null],
+            // 'ship_date_to': [null],
 
         });
 

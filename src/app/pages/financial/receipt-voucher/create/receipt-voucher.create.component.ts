@@ -23,7 +23,11 @@ import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { OrderService } from '../../../order-mgmt/order-mgmt.service';
 import { ReceiptVoucherService } from './../receipt-voucher.service';
 
+import { PaymentGatewayModalComponent } from '../modals/payment-gateway/payment-gateway.modal';
 import { TableService } from './../../../../services/table.service';
+
+import * as moment from 'moment';
+import { PaymentInformModalComponent } from '../modals/payment-inform/payment-inform.modal';
 
 @Component({
     selector: 'app-create-receipt-voucher',
@@ -45,8 +49,9 @@ export class ReceiptVoucherCreateComponent implements OnInit {
 
     public messageConfig = {
         '2': 'Are you sure that you want to submit this receipt voucher?',
-        '4': 'Are you sure that you want to Save & Validate this receipt voucher?',
+        '3': 'Are you sure that you want to Save & Validate this receipt voucher?',
         'error': 'This Receipt Voucher is missing some mandatory fields, please fulfill them before submitting.',
+        'error_elec': 'There is (are) missing mandatory field(s) in the receipt voucher. Please fulfill before submitting it.',
         'overpayment': 'There is overpayment in this receipt voucher. Are you sure that you want to submit it?',
         'overpayment-approve': 'There is overpayment in this receipt voucher. After approval, the system will create automatically the credit memo for the overpayment. Do you want to proceed?',
         'default': 'The data you have entered may not be saved, are you sure that you want to leave?',
@@ -79,7 +84,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         this.generalForm = fb.group({
             'approver_id': [null, Validators.required],
             'company_id': [null, Validators.required],
-            'warehouse_id': [null],
+            'warehouse_id': [null, Validators.required],
             'payment_method': [null, Validators.required],
             'description': [null],
             'electronic': [null, Validators.required],
@@ -105,7 +110,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
 
     async ngOnInit() {
         const user = JSON.parse(localStorage.getItem('currentUser'));
-        const currentDt = new Date();
+        this.data['user'] = user;
 
         // List Master
         this.getListReference();
@@ -114,8 +119,8 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             approver_id: user.id,
             updated_by: user.full_name,
             created_by: user.full_name,
-            updated_date: currentDt.toISOString().slice(0, 10),
-            payment_date: currentDt.toISOString().slice(0, 10)
+            updated_date: moment().format('MM/DD/YYYY'),
+            payment_date: moment().format('MM/DD/YYYY'),
         });
 
         // Lazy Load filter
@@ -187,18 +192,47 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         });
     }
 
-    resetChangeData() {
+    resetChangeData(flag?) {
+        if (flag === 'paymentMethodType') {
+            const id = this.generalForm.value.electronic;
+            if (!id) {
+                this.generalForm.get('check_no').setValidators([Validators.required]);
+                this.generalForm.get('ref_no').setValidators([Validators.required]);
+                this.generalForm.get('price_received').setValidators([Validators.required]);
+            } else {
+                this.generalForm.get('check_no').setValidators(null);
+                this.generalForm.get('ref_no').setValidators(null);
+                this.generalForm.get('price_received').setValidators(null);
+            }
+            this.generalForm.patchValue({
+                payment_method: null,
+                check_no: null,
+                ref_no: null,
+                price_received: null,
+            });
+            this.generalForm.updateValueAndValidity();
+        }
     }
 
     getListPaymentMethod(id) {
         return new Promise(resolve => {
             this.voucherService.getPaymentMethodElectronic(id).subscribe(res => {
                 this.listMaster['payment_method'] = res.data;
+                this.resetChangeData('paymentMethodType');
                 resolve(true);
             });
         });
     }
 
+    getDetailCustomerById(company_id) {
+        this.orderService.getDetailCompany(company_id).subscribe(res => {
+            try {
+                this.data['payer'] = res.data;
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
     /**
      * Internal Function
      */
@@ -222,16 +256,18 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             const payment = this.listMaster['payment_method'].find(item => +item.id === +id);
             this.data['payment'] = payment || {};
 
-            if (id === 4) {
-                this.generalForm.get('check_no').setValidators([Validators.required]);
-            }
+            if (!this.generalForm.value.electronic) {
+                if (id === 4) {
+                    this.generalForm.get('check_no').setValidators([Validators.required]);
+                }
 
-            if ([5, 6].indexOf(id) !== -1) {
-                this.generalForm.get('check_no').setValidators(null);
-                this.generalForm.get('ref_no').setValidators(null);
-            }
-            if ([4, 5, 6].indexOf(id) === -1) {
-                this.generalForm.get('ref_no').setValidators([Validators.required]);
+                if ([5, 6].indexOf(id) !== -1) {
+                    this.generalForm.get('check_no').setValidators(null);
+                    this.generalForm.get('ref_no').setValidators(null);
+                }
+                if ([4, 5, 6].indexOf(id) === -1) {
+                    this.generalForm.get('ref_no').setValidators([Validators.required]);
+                }
             }
 
             this.generalForm.patchValue({
@@ -262,6 +298,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             }
             setTimeout(() => {
                 this.data['search'] = null;
+                this.getDetailCustomerById(id);
                 this.getListInvoiceAndMemo();
             });
         });
@@ -273,6 +310,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
                 return;
             }
             this.getListPaymentMethod(id);
+            this.getListInvoiceAndMemo();
         });
     }
 
@@ -293,7 +331,6 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             this.list.items.filter(it => it.id !== _item.id).map(j => {
                 total += (+j.applied_amt || 0);
             });
-
             const remain = this.generalForm.value.price_received - total;
             this.data['remain'] = remain;
         }
@@ -327,12 +364,10 @@ export class ReceiptVoucherCreateComponent implements OnInit {
     }
 
     createVoucher(type, is_draft?, is_continue?) {
-        if (!is_draft && this.generalForm.invalid) {
-            this.data['showError'] = true;
+        this.data['showError'] = true;
+        if (!is_draft && (this.generalForm.invalid || (this.data['summary'] && !this.data['summary'].total)) ) {
             this.toastr.error(this.messageConfig.error);
             return;
-        } else {
-            this.data['showError'] = true;
         }
 
         const items = this.list.items.filter(i => i.applied_amt).map(item => {
@@ -343,13 +378,14 @@ export class ReceiptVoucherCreateComponent implements OnInit {
 
         const params = {
             ...this.generalForm.value,
-            items
+            items,
+            status: type,
         };
 
         this.voucherService.createVoucher(params).subscribe(res => {
             try {
-                this.toastr.success(res.message);
                 this.data['voucher_id'] = res.data['id'];
+                this.toastr.success(res.message);
                 if (!is_continue) {
                     setTimeout(() => {
                         console.log('/financial/receipt-voucher/view/' + this.data['voucher_id']);
@@ -376,6 +412,66 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         modalRef.componentInstance.message = this.messageConfig[type || 'default'];
         modalRef.componentInstance.yesButtonText = 'Yes';
         modalRef.componentInstance.noButtonText = 'No';
+    }
+
+    confirmElectricModal() {
+        this.data['showError'] = true;
+        if (this.generalForm.invalid || (this.data['summary'] && !this.data['summary'].total)) {
+            this.toastr.error(this.messageConfig.error_elec);
+            return;
+        }
+        this.paymentModal();
+    }
+
+    paymentModal() {
+        const modalRef = this.modalService.open(PaymentGatewayModalComponent, { size: 'lg' });
+        modalRef.result.then(res => {
+            if (res) {
+                const items = this.list.items.filter(i => i.applied_amt).map(item => {
+                    item.line_item_id = item.id;
+                    item.price_apply = item.applied_amt;
+                    return item;
+                });
+
+                const params = { ... this.generalForm.value, items, status: 1 };
+                if (this.data['voucher_id']) {
+                    this.updatePayment(res, items);
+                } else {
+                    this.voucherService.createVoucher(params).subscribe(result => {
+                        try {
+                            this.data['voucher_id'] = result.data['id'];
+                            this.updatePayment(res, items);
+                        } catch (e) {
+                            console.log(e);
+                        }
+                    }, err => {
+                        this.resultPaymentModal(0);
+                    });
+                }
+            }
+        }, dismiss => { });
+
+        modalRef.componentInstance.data = {
+            user: this.data['user'],
+            payer: this.data['payer'],
+            total_amount: this.data['summary'].total,
+        };
+    }
+
+    updatePayment(res, items) {
+        const params = { ... this.generalForm.value, ...res, items, status: 2 };
+        this.voucherService.updateVoucher(this.data['voucher_id'], params).subscribe(data => {
+            this.resultPaymentModal(1);
+        });
+    }
+
+    resultPaymentModal(type) {
+        const modalRef = this.modalService.open(PaymentInformModalComponent, { size: 'lg', windowClass: 'modal-md' });
+        modalRef.result.then(res => {
+            if (res) {
+            }
+        }, dismiss => { });
+        modalRef.componentInstance.type = type;
     }
 
     fetchMoreCustomer(data?) {

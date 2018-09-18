@@ -12,26 +12,40 @@ import { ReceiptVoucherService } from './../../receipt-voucher.service';
 })
 export class PaymentInformModalComponent implements OnInit {
     // Resolve Data
-    public mailForm: FormGroup;
-    @Input() receiptId;
+    public generalForm: FormGroup;
+    @Input() type;
     public modalTitle;
 
     constructor(public activeModal: NgbActiveModal, public toastr: ToastrService, private fb: FormBuilder, private receiptVoucherService: ReceiptVoucherService) {
-        this.mailForm = fb.group({
-            'send_to': [null, Validators.required],
-            'subject': [null],
-            'content': [null],
+        this.generalForm = fb.group({
+            'billing_id': [null, Validators.required],
+            'card_number': [null, Validators.required],
+            'expiration_year': [null, Validators.required],
+            'expiration_month': [null, Validators.required],
+            'card_holder_name': [null, Validators.required],
+            'cvv': [null, Validators.required],
+            'requestor': [null],
+            'current_date': [null],
+            'company_id': [null],
+            'company_name': [null],
+            // 'country_code': [null, Validators.required],
+            // 'addr_line': [null, Validators.required],
+            // 'city': [null, Validators.required],
+            // 'state_id': [null, Validators.required],
+            // 'zip_code': [null, Validators.required],
+            'total_amount': null,
         });
     }
 
     ngOnInit() {
+        this.modalTitle = (this.type) ? 'Payment Successful!' : 'Payment Failed';
     }
 
     ok() {
-        const params = this.mailForm.value;
+        const params = this.generalForm.value;
         // this.financialService.sendMail(this.invoiceId, params).subscribe(res => {
         //     this.toastr.success(res.message);
-        //     this.activeModal.close(this.mailForm.value);
+        //     this.activeModal.close(this.generalForm.value);
         // });
     }
 

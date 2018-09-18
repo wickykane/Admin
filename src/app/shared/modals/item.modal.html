@@ -191,7 +191,7 @@
                 <tr *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                     <td>
                         <label class="css-input css-checkbox css-checkbox-default">
-                            <input class="cb-element" type="checkbox" [(ngModel)]="item.is_checked" (change)="isAllChecked()">
+                            <input class="cb-element" type="checkbox" [(ngModel)]="item.is_checked" (change)="isAllChecked(item)">
                             <span></span>
                         </label>
                     </td>
