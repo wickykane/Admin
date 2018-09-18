@@ -67,6 +67,7 @@ export class DebitMemoCreateComponent implements OnInit {
     public searchKey = new Subject<any>(); // Lazy load filter
 
     public debitMemoForm: FormGroup;
+    public currentUser = {};
     //#endregion initialize variables
 
     //#region contructor
@@ -120,6 +121,7 @@ export class DebitMemoCreateComponent implements OnInit {
 
     //#region lifecycle hook
     ngOnInit() {
+        this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
         // Lazy Load filter
         this.data['page'] = 1;
         const params = { page: this.data['page'], length: 15 };
@@ -494,7 +496,7 @@ export class DebitMemoCreateComponent implements OnInit {
                 this.isSaveDraft = false;
                 this.isCreateNew = false;
                 status = 3;
-                modalMessage = 'Are you sure that you want to Save & Validate the credit memo?';
+                modalMessage = 'Are you sure that you want to Save & Validate the debit memo?';
                 break;
             }
         }
@@ -532,7 +534,7 @@ export class DebitMemoCreateComponent implements OnInit {
         params['sts'] = status;
         params['line_items'] = this.listLineItems;
 
-        params['approver_id'] = parseInt(params['approver_id'], null);
+        params['approver_id'] = status === 3 ? this.currentUser['id'] : parseInt(params['approver_id'], null);
         params['billing_id'] = parseInt(params['billing_id'], null);
         params['contact_id'] = parseInt(params['contact_id'], null);
         params['doc_type'] = parseInt(params['doc_type'], null);
