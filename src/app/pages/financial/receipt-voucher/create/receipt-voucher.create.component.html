@@ -374,13 +374,13 @@
         </div>
         <div class="row">
             <div class="col-md-12 mg-top-15 text-center">
-                <button type="button" class="btn btn-outline-info" (click)="createVoucher(1, 1)" translate>Save As Draft</button>
+                <button *ngIf="!data['is_payment']" type="button" class="btn btn-outline-info" (click)="createVoucher(1, 1)" translate>Save As Draft</button>
                 <ng-container *ngIf="!generalForm.value.electronic">
                     <button type="button" class="btn btn-outline-danger" (click)="confirmModal((data['summary']?.change > 0)? 'overpayment': 2)" translate>Submit</button>
-                    <button type="button" class="btn btn-outline-success" (click)="confirmModal((data['summary']?.change > 0)? 'overpayment-approve': 4)" translate>Save & Validate</button>
+                    <button type="button" class="btn btn-outline-success" (click)="confirmModal((data['summary']?.change > 0)? 'overpayment-approve': 3)" translate>Save & Validate</button>
                 </ng-container>
-                <button *ngIf="generalForm.value.electronic" type="button" class="btn btn-outline-danger" (click)="confirmElectricModal()" translate>Save & Submit</button>
-                <button type="button" class="btn btn-outline-dark" (click)="createVoucher(1, 1, 1); resetVoucher();" translate>Save & Create New Receipt Voucher</button>
+                <button *ngIf="generalForm.value.electronic" type="button" class="btn btn-outline-danger" (click)="confirmElectricModal()" translate>Save & Payment</button>
+                <button *ngIf="!data['is_payment']" type="button" class="btn btn-outline-dark" (click)="createVoucher(1, 1, 1); resetVoucher();" translate>Save & Create New Receipt Voucher</button>
                 <button type="button" class="btn btn-default" (click)="confirmModal(0)" translate>Back To List</button>
             </div>
         </div>

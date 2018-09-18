@@ -69,4 +69,9 @@ export class ReceiptVoucherService {
         const url = 'voucher/create';
         return this.API.post(url, params);
     }
+
+    updateVoucher(id, params) {
+        const url = 'voucher/update/' + id;
+        return this.API.put(url, params);
+    }
 }

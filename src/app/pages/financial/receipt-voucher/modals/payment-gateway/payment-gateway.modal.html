@@ -1,6 +1,6 @@
 <div class="modal-style">
     <div class="modal-header">
-        <p class="second-title">SEL2B - PAYMENT GATEWAY</p>
+        <h5 class="second-title text-primary">SEL2B - PAYMENT SOLUTION</h5>
         <button type="button" (click)="cancel()" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -20,7 +20,7 @@
                                         <label for="" translate class="col-md-5">Total Amount</label>
                                         <div class="col-md-7">
                                             <span class="form-control text-success border-0">
-                                                {{ generalForm.value.total_amount }}                                            
+                                                {{ generalForm.value.total_amount | currency }}                                            
                                             </span>
                                         </div>
                                     </div>
@@ -28,18 +28,18 @@
                                         <label for="" translate class="col-md-5">Card Number  <span class="text-danger">(*)</span>
                                         </label>
                                         <div class="col-md-7">
-                                            <input class="form-control" placeholder="0000-0000-0000-0000" type="number" numberDirective formControlName="card_no">
+                                            <input [ngClass]="{'border border-danger': (data['showError'] && this.generalForm.get('card_number').errors?.required) || false   }" class="form-control" placeholder="0000-0000-0000-0000" type="number" numberDirective formControlName="card_number">
                                         </div>
                                     </div>
                                     <div class="form-group row col-sm-12">
                                         <label for="" translate class="col-md-5">Expiration Date  <span class="text-danger">(*)</span>
                                         </label>
                                         <div class="col-md-7">
-                                            <select [ngClass]="{'border border-danger': false}" style="width: 90px;" class="form-control d-inline-block" formControlName='expiration_month'>
+                                            <select [ngClass]="{'border border-danger': (data['showError'] && this.generalForm.get('expiration_month').errors?.required) || false}" style="width: 90px;" class="form-control d-inline-block" formControlName='expiration_month'>
                                                 <option [hidden]="true" [disabled]="true"   [ngValue]="null">MM</option>
                                                 <option *ngFor="let item of listMaster['months']"  [ngValue]="item"> {{ item }}</option>                        
                                             </select>
-                                            <select [ngClass]="{'border border-danger': false}" style="width: 120px;" class="form-control d-inline-block" formControlName='expiration_year'>
+                                            <select [ngClass]="{'border border-danger': (data['showError'] && this.generalForm.get('expiration_year').errors?.required) || false}" style="width: 120px;" class="form-control d-inline-block" formControlName='expiration_year'>
                                                 <option [hidden]="true" [disabled]="true"  [ngValue]="null">YY</option>
                                                 <option *ngFor="let item of listMaster['years']"  [ngValue]="item"> {{ item }}</option>                        
                                             </select>
@@ -49,14 +49,14 @@
                                         <label for="" translate class="col-md-5">Card Holder Name  <span class="text-danger">(*)</span>
                                         </label>
                                         <div class="col-md-7">
-                                            <input class="form-control" formControlName="card_name">
+                                            <input [ngClass]="{'border border-danger': (data['showError'] && this.generalForm.get('card_holder_name').errors?.required) || false   }" class="form-control" formControlName="card_holder_name">
                                         </div>
                                     </div>
                                     <div class="form-group row col-sm-12">
                                         <label for="" translate class="col-md-5">CVV  <span class="text-danger">(*)</span>
                                         </label>
                                         <div class="col-md-7">
-                                            <input class="form-control" formControlName="cvv">
+                                            <input [ngClass]="{'border border-danger': (data['showError'] && this.generalForm.get('cvv').errors?.required) || false   }" class="form-control" formControlName="cvv">
                                         </div>
                                     </div>
                                     <div class="form-group row col-sm-12">
@@ -98,8 +98,8 @@
                                         <label for="" translate class="col-md-5">Bill To  <span class="text-danger">(*)</span>
                                             </label>
                                         <div class="col-md-7">
-                                            <!-- <input class="form-control" formControlName="bill_to"> -->
-                                            <select required class="form-control" id="billing_to" name="search_type" formControlName="bill_to" (change)="changeAddress()">
+                                            <!-- <input class="form-control" formControlName="billing_id"> -->
+                                            <select [ngClass]="{'border border-danger': (data['showError'] && this.generalForm.get('billing_id').errors?.required) || false   }" class="form-control" id="billing_to" name="search_type" formControlName="billing_id" (change)="changeAddress()">
                                                 <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                                 <option *ngFor="let item of data.payer?.billing" [ngValue]="item.address_id">{{item.label}}</option>
                                             </select>
@@ -158,12 +158,11 @@
                 </div>
             </div>
         </div>
-
     </div>
     <div class="modal-footer" style="padding-top: 0">
         <div class="form-group" style="margin-top: 20px;">
             <div class="text-center">
-                <button [disabled]="!generalForm.valid" style="width: 70px" class="btn btn-success" type="button" (click)="ok()" translate>Submit</button>
+                <button style="width: 70px" class="btn btn-success" type="button" (click)="ok()" translate>Submit</button>
                 <button class="btn btn-default" type="button" (click)="cancel()" translate>Cancel</button>
             </div>
         </div>
