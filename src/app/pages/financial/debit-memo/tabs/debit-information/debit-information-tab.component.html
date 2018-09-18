@@ -15,13 +15,11 @@
             *ngIf="debitData['sts'] === 1" (click)="onChangeDebitStatus(5)">
             <i class="fa fa-times-circle" aria-hidden="true"></i> Cancel
         </button>
-        <button class="btn btn-outline-success"
-            *ngIf="debitData['sts'] === 2" (click)="onChangeDebitStatus(3)">
-            <i class="fa fa-check-square" aria-hidden="true"></i> Approve
+        <button class="btn btn-outline-success" *ngIf="debitData['sts'] === 2 && (currentuser['id'] == debitData['approver_id'])"
+            (click)="onChangeDebitStatus(3)"><i class="fa fa-check-square" aria-hidden="true"></i> Approve
         </button>
-        <button class="btn btn-outline-danger"
-            *ngIf="debitData['sts'] === 2" (click)="onChangeDebitStatus(4)">
-            <i class="fa fa-ban" aria-hidden="true"></i> Reject
+        <button class="btn btn-outline-danger" *ngIf="debitData['sts'] === 2 && (currentuser['id'] == debitData['approver_id'])"
+            (click)="onChangeDebitStatus(4)"><i class="fa fa-ban" aria-hidden="true"></i> Reject
         </button>
         <button class="btn btn-outline-dark"
             *ngIf="debitData['sts'] === 3 || debitData['sts'] === 8">

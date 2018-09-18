@@ -19,7 +19,7 @@ import { DebitMemoService } from '../../debit-memo.service';
 })
 export class DebitInformationTabComponent implements OnInit {
 
-    public debitData;
+    public debitData = {};
 
     @Input() set debitInfo(debit) {
         if (debit) {
@@ -30,6 +30,7 @@ export class DebitInformationTabComponent implements OnInit {
     @Output() changeStatusSuccessfully = new EventEmitter();
 
     public listTaxs = [];
+    public currentuser = {};
 
     constructor(
         public toastr: ToastrService,
@@ -43,6 +44,7 @@ export class DebitInformationTabComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.currentuser = JSON.parse(localStorage.getItem('currentUser'));
         this.getUniqueTaxItemLine();
     }
 
