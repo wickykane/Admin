@@ -334,7 +334,7 @@ export class DebitMemoEditComponent implements OnInit {
                     }
                     if (this.debitMemoForm.value.order_id !== null && this.debitMemoForm.value.order_id !== undefined) {
                         this.listLineItems = this.debitDetail['line_items'];
-                        this.getOrderInformation(this.debitMemoForm.value.order_id);
+                        // this.getOrderInformation(this.debitMemoForm.value.order_id);
                         this.getListLineItems(this.debitMemoForm.value.order_id);
                     }
 
