@@ -238,6 +238,9 @@ export class DebitMemoEditComponent implements OnInit {
 
                     this.debitMemoForm.controls.payment_method_id.setValue(res.data.payment_method_id);
                     this.debitMemoForm.controls.payment_term_id.setValue(res.data.payment_term_id);
+                    if (res.data.payment_term_id !== null && res.data.payment_term_id !== undefined) {
+                        this.onUpdateDueDate(res.data.payment_term_id);
+                    }
 
                     this.debitMemoForm.controls.billing_id.setValue(res.data.bill_addr.id);
                     this.debitMemoForm.controls.shipping_id.setValue(res.data.ship_addr.id);
@@ -431,8 +434,13 @@ export class DebitMemoEditComponent implements OnInit {
         this.getListLineItems(orderId);
     }
 
+    onChangeIssueDate() {
+        return (this.debitMemoForm.value.payment_term_id !== null && this.debitMemoForm.value.payment_term_id !== undefined)
+                && this.onUpdateDueDate(this.debitMemoForm.value.payment_term_id);
+    }
+
     onUpdateDueDate(termId) {
-        const termDays = this.listMaster['payment_terms'].find(term => term.id.toString() === termId)['term_day'] || 0;
+        const termDays = this.listMaster['payment_terms'].find(term => term.id.toString() === termId.toString())['term_day'] || 0;
         this.debitMemoForm.controls.due_date.setValue(
             moment(this.debitMemoForm.value.issue_date).add(termDays, 'days').format('YYYY-MM-DD')
         );
@@ -610,7 +618,8 @@ export class DebitMemoEditComponent implements OnInit {
             this.listTaxs.forEach(taxItem => {
                 let sub_price = 0;
                 this.listLineItems.forEach(item => {
-                    taxItem.amount += (parseFloat(item.tax_percent) === taxItem.tax_percent) ? item.tax : 0;
+                    taxItem.amount += (parseFloat(item.tax_percent) === taxItem.tax_percent) ? parseFloat(item.tax.toFixed(this.decimalAllowed)) : 0;
+                    taxItem.amount = parseFloat(taxItem.amount.toFixed(this.decimalAllowed));
                     sub_price += item.total_price;
                 });
                 total_tax += taxItem.amount;

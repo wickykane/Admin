@@ -70,7 +70,7 @@
                                                 <div class='col-6 text-danger'>
                                                     <div clickOutside (clickOutside)="d.close()" class="input-group">
                                                         <input [maxDate]="currentDt | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="issue_date"
-                                                            ngbDatepicker #d="ngbDatepicker" (keydown)="$event.preventDefault()"
+                                                            ngbDatepicker #d="ngbDatepicker" (keydown)="$event.preventDefault()" (dateSelect)="onChangeIssueDate()"
                                                             [ngClass]="{'error-field': debitMemoForm.controls.issue_date.invalid && isClickedSave && !isSaveDraft && !isCreateNew}">
                                                         <div class="input-group-append">
                                                             <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
@@ -425,7 +425,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12 mg-top-15 text-right">
+            <div class="col-md-12 mg-top-15 text-center">
                 <button type="button" class="btn btn-default" (click)="onClickBack()" translate>BACK TO LIST</button>
                 <button type="button" class="btn btn-outline-info" (click)="onClickSave('draft')" translate>SAVE AS DRAFT</button>
                 <button type="button" class="btn btn-outline-dark" (click)="onClickSave('create')" translate>SAVE & CREATE NEW DEBIT</button>
