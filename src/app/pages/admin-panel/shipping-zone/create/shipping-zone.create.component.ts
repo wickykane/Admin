@@ -203,7 +203,8 @@ export class ShippingZoneCreateComponent implements OnInit {
     }
 
     onCheckCountryState(country) {
-        this.selectedCountry = country;
+        this.stateFilter = '';
+        this.selectedCountry = Object.assign([],country);
         this.tempListState = country.state;
         this.checkState();
     }
@@ -438,7 +439,7 @@ export class ShippingZoneCreateComponent implements OnInit {
     }
     selectState() {
         if (this.selectedCountry) {
-            this.selectedCountry.state.forEach(item => {
+            this.tempListState.forEach(item => {
                 return item.selected = this.selectAll;
             });
         }
