@@ -195,11 +195,11 @@
                                                 title="Reopen" (click)="onChangeDebitStatus(debit.id, 1)">
                                                 <i class="fa fa-clone" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default" *ngIf="debit.sts === 3 || debit.sts === 7"
+                                            <a class="btn btn-default" *ngIf="debit.sts === 3 || debit.sts === 8"
                                                 title="Receive Payment" (click)="onReceivePaymentDebitMemo()">
                                                 <i class="fa fa-money" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default"
+                                            <a class="btn btn-default" *ngIf="debit.sts != 1 && debit.sts != 4 && debit.sts != 5"
                                                 title="Send Mail" (click)="onSendMail(debit.id)">
                                                 <i class="fa fa-envelope-o" aria-hidden="true"></i>
                                             </a>

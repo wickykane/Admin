@@ -481,8 +481,11 @@ export class DebitMemoEditComponent implements OnInit {
         const modalRef = this.modalService.open(ItemsOrderDebitModalContent, {
             size: 'lg'
         });
-        modalRef.componentInstance.setIgnoredItems = this.listDeletedLineItem.
-            filter(item => item.item_id !== undefined && item.item_id !== null).map(item => item.item_id);
+        const params = {
+            orderId: this.debitMemoForm.value.order_id,
+            items: this.listDeletedLineItem.filter(item => item.item_id !== undefined && item.item_id !== null).map(item => item.item_id)
+        };
+        modalRef.componentInstance.setIgnoredItems = params;
         modalRef.result.then(res => {
             if (res) {
                 res.forEach(selectedItem => {
@@ -501,8 +504,11 @@ export class DebitMemoEditComponent implements OnInit {
         const modalRef = this.modalService.open(MiscItemsDebitModalContent, {
             size: 'lg'
         });
-        modalRef.componentInstance.setIgnoredItems = this.listLineItems.
-            filter(item => item.misc_id !== undefined && item.misc_id !== null).map(item => item.misc_id);
+        const params = {
+            orderId: this.debitMemoForm.value.order_id,
+            items: this.listLineItems.filter(item => item.misc_id !== undefined && item.misc_id !== null).map(item => item.misc_id)
+        };
+        modalRef.componentInstance.setIgnoredItems = params;
         modalRef.result.then(res => {
             if (res) {
                 res.forEach(selectedItem => {
@@ -558,7 +564,7 @@ export class DebitMemoEditComponent implements OnInit {
                 if (yes && this.validateData() && this.listLineItems.length) {
                      this.onSaveDebitMemo(status);
                 } else if (!this.listLineItems.length) {
-                    this.toastr.warning('Please select at least 1 item to continue.');
+                    this.toastr.error('Please select at least 1 item to continue.');
                 }
             }, dismiss => { });
         }
