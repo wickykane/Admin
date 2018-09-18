@@ -31,6 +31,7 @@ export class ItemModalContent implements OnInit {
     public checkAllItem;
     public data = {};
 
+    public arrIdChecked = [];
 
     public searchForm: FormGroup;
     public filterForm: FormGroup;
@@ -101,9 +102,17 @@ export class ItemModalContent implements OnInit {
         this.list.checklist = this.list.items.filter(_ => _.is_checked);
     }
 
-    isAllChecked() {
+    isAllChecked(item) {
         this.checkAllItem = this.list.items.every(_ => _.is_checked);
-        this.list.checklist = this.list.items.filter(_ => _.is_checked);
+        // this.list.checklist = this.list.items.filter(_ => _.is_checked);
+        if (item.is_checked) {
+            this.arrIdChecked.push(item.item_id + item.item_condition_id);
+            this.list.checklist.push(item);
+        } else {
+            const index = this.arrIdChecked.indexOf(item.item_id + item.item_condition_id);
+            this.arrIdChecked.splice(index, 1);
+            this.list.checklist.splice(index, 1);
+        }
     }
 
     /**
@@ -118,10 +127,10 @@ export class ItemModalContent implements OnInit {
     changeToGetSubModel() {
         const id = this.searchForm.value.model_id;
         const arr = this.listMaster['models'];
-        for ( const item of arr) {
-           if (item['model_id'] === id) {
-               return this.listMaster['sub_models'] = arr['sub_models'];
-           }
+        for (const item of arr) {
+            if (item['model_id'] === id) {
+                return this.listMaster['sub_models'] = arr['sub_models'];
+            }
         }
     }
 
@@ -129,11 +138,11 @@ export class ItemModalContent implements OnInit {
         const id = this.filterForm.value.category_id_filter;
         const arr = this.listMaster['categories'];
         this.listMaster['sub_cat'] = [];
-        for (const item of id ) {
+        for (const item of id) {
             for (const temp of arr) {
-               if (temp['category_id'] === item) {
-                this.listMaster['sub_cat'] = this.listMaster['sub_cat'].concat(temp['sub_categories']);
-               }
+                if (temp['category_id'] === item) {
+                    this.listMaster['sub_cat'] = this.listMaster['sub_cat'].concat(temp['sub_categories']);
+                }
             }
         }
     }
@@ -144,8 +153,8 @@ export class ItemModalContent implements OnInit {
     // }
 
     getList() {
-        const params = {...this.tableService.getParams(), ...this.searchForm.value, ...this.filterForm.value};
-        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
+        const params = { ...this.tableService.getParams(), ...this.searchForm.value, ...this.filterForm.value };
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
 
         this.itemService.getMasterItems(params).subscribe(res => {
             try {
@@ -160,6 +169,15 @@ export class ItemModalContent implements OnInit {
                 this.listMaster['countries'] = res.data.meta_filters.countries;
                 this.listMaster['warehouses'] = res.data.warehouses;
                 this.tableService.matchPagingOption(res.data);
+
+                this.arrIdChecked.forEach(x => {
+                    this.list.items.forEach(y => {
+                        if (x === (y.item_id + y.item_condition_id)) {
+                            y.is_checked = true;
+                        }
+                    });
+                });
+
             } catch (e) {
                 console.log(e);
             }
