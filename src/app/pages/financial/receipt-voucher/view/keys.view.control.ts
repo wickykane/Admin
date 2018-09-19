@@ -4,7 +4,7 @@ import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { Subject } from 'rxjs/Rx';
 
 @Injectable()
-export class InvoiceDetailKeyService {
+export class ReceiptDetailKeyService {
     public context: any;
     public _hotkeysService;
     public watchContext = new Subject<any>();
