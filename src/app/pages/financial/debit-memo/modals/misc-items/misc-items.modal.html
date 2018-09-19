@@ -66,6 +66,25 @@
                 </table>
             </div>
         </div>
+        <div class="row normal-pagination mg-top-10" *ngIf="listItems.length > 0">
+            <div class="col-md-6 padding-lr-0">
+                <div class="text-left">
+                    <div class="col-md-6" style="padding-left: 0px;">
+                        <span style="float: left; padding-right: 10px;">{{listItems.length}}/{{tableService.pagination.total_record}} items</span>
+                        <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length" (change)="tableService.changeLength()">
+                            <option *ngFor="let option of tableService.itemPerPageOptions" [ngValue]="option">{{option}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 padding-lr-0">
+                <div class="text-right">
+                    <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length"
+                        [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page"
+                        [maxSize]="tableService.maxSize" [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-outline-primary" (click)="onAddItem()">Add</button>

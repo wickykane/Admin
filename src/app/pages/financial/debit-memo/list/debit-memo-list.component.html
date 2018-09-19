@@ -11,92 +11,91 @@
                 </li>
             </ul>
         </section>
-
-        <div class="block-content pd-bottom padding-lr-0 mt-2">
+        <div class="block-content pd-bottom bg-gray-light short-width">
             <div class="row">
-                <div class="col-6">
-                    <form class="row form-horizontal form-search filter-order-group" role="form" [formGroup]="searchForm">
-                        <div class="col-md-4">
-                            <label for="sale_quote_num" class="control-label">DR No</label>
-                            <input #drNo autofocus="true" type="text" name="inv_num" formControlName="no" class="form-control" placeholder="">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="buyer_name" class="control-label" translate>Customer</label>
-                            <input type="text" name="cus_name" formControlName="company_name" class="form-control" placeholder="">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="sts" class="control-label">Status</label>
-                            <ng-select [multiple]="true" [items]="listMaster['status']" bindLabel="name" bindValue="id" formControlName="sts">
-                            </ng-select>
-                        </div>
-                        <ng-container *ngIf="listMaster['listFilter'][0].value">
-                            <div class="col-md-4">
-                                <label for="type" class="control-label" translate>Date Type</label>
-                                <select class="form-control" [(ngModel)]="dateType" [ngModelOptions]="{standalone: true}" (ngModelChange)="onDateTypeChanged()">
-                                    <option *ngFor="let item of listMaster['dateType']" [ngValue]="item.id">{{item.name}}</option>
-                                </select>
-                            </div>
-                            <div class="col-md-4" *ngIf="dateType == 0">
-                                <label for="" class="control-label" translate>From</label>
-                                <div class="date-group">
-                                    <div clickOutside (clickOutside)="d1.close()" class="input-group">
-                                        <input [maxDate]="searchForm.value.issue_date_to | dateObj" class="form-control" formControlName="issue_date_from" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d1="ngbDatepicker">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
-                                                <i class="fa fa-calendar" aria-hidden="true"></i>
-                                            </button>
-                                        </div>
-                                    </div>
+                <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
+                    <div class="block-search">
+                        <label for="sale_quote_num" class="control-label">DR No</label>
+                        <input #drNo autofocus="true" type="text" name="inv_num" formControlName="no" class="form-control" placeholder="">
+                    </div>
+                    <div class="block-search">
+                        <label for="buyer_name" class="control-label" translate>Customer</label>
+                        <input type="text" name="cus_name" formControlName="company_name" class="form-control" placeholder="">
+                    </div>
+                    <div class="block-search">
+                        <label for="sts" class="control-label">Status</label>
+                        <ng-select [multiple]="true" [items]="listMaster['status']" bindLabel="name" bindValue="id" formControlName="sts">
+                        </ng-select>
+                    </div>
+                    <div class="block-search">
+                        <label for="type" class="control-label" translate>Date Type</label>
+                        <select class="form-control" formControlName="sts" (change)="onDateTypeChanged()">
+                            <option *ngFor="let item of listMaster['date_type']" [ngValue]="item.id">{{item.name}}</option>
+                        </select>
+                    </div>
+                    <div class="block-search" *ngIf="searchForm.value.date_type == 0">
+                        <label for="" class="control-label" translate>From</label>
+                        <div class="date-group">
+                            <div clickOutside (clickOutside)="d1.close()" class="input-group">
+                                <input [maxDate]="searchForm.value.issue_date_to | dateObj" class="form-control" (keydown)="$event.preventDefault()" autocomplete="off"
+                                    formControlName="issue_date_from" placeholder="mm/dd/yyyy" name="dp" ngbDatepicker #d1="ngbDatepicker">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                    </button>
                                 </div>
                             </div>
-                            <div class="col-md-4" *ngIf="dateType == 1">
-                                <label for="" class="control-label" translate>From</label>
-                                <div class="date-group">
-                                    <div clickOutside (clickOutside)="d1.close()" class="input-group">
-                                        <input [maxDate]="searchForm.value.due_date_to | dateObj" class="form-control" formControlName="due_date_from" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d1="ngbDatepicker">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
-                                                <i class="fa fa-calendar" aria-hidden="true"></i>
-                                            </button>
-                                        </div>
-                                    </div>
+                        </div>
+                    </div>
+                    <div class="block-search" *ngIf="searchForm.value.date_type == 1">
+                        <label for="" class="control-label" translate>From</label>
+                        <div class="date-group">
+                            <div clickOutside (clickOutside)="d1.close()" class="input-group">
+                                <input [maxDate]="searchForm.value.due_date_to | dateObj" class="form-control" (keydown)="$event.preventDefault()" autocomplete="off"
+                                    formControlName="due_date_from" placeholder="mm/dd/yyyy" name="dp" ngbDatepicker #d1="ngbDatepicker">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                    </button>
                                 </div>
                             </div>
-                            <div class="col-md-4" *ngIf="dateType == 0">
-                                <label for="" class="control-label" translate>To</label>
-                                <div class="date-group">
-                                    <div clickOutside (clickOutside)="dt2.close()" class="input-group">
-                                        <input [minDate]="searchForm.value.issue_date_from | dateObj" class="form-control" formControlName="issue_date_to" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dt2="ngbDatepicker">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-outline-secondary" (click)="dt2.toggle()" type="button">
-                                                <i class="fa fa-calendar" aria-hidden="true"></i>
-                                            </button>
-                                        </div>
-                                    </div>
+                        </div>
+                    </div>
+                    <div class="block-search" *ngIf="searchForm.value.date_type == 0">
+                        <label for="" class="control-label" translate>To</label>
+                        <div class="date-group">
+                            <div clickOutside (clickOutside)="dt2.close()" class="input-group">
+                                <input [minDate]="searchForm.value.issue_date_from | dateObj" class="form-control" (keydown)="$event.preventDefault()" autocomplete="off"
+                                    formControlName="issue_date_to" placeholder="mm/dd/yyyy" name="dp" ngbDatepicker #dt2="ngbDatepicker">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" (click)="dt2.toggle()" type="button">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                    </button>
                                 </div>
+                            </div>
+                        </div>
 
-                            </div>
-                            <div class="col-md-4" *ngIf="dateType == 1">
-                                <label for="" class="control-label" translate>To</label>
-                                <div class="date-group">
-                                    <div clickOutside (clickOutside)="dt2.close()" class="input-group">
-                                        <input [minDate]="searchForm.value.due_date_from | dateObj" class="form-control" formControlName="due_date_to" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dt2="ngbDatepicker">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-outline-secondary" (click)="dt2.toggle()" type="button">
-                                                <i class="fa fa-calendar" aria-hidden="true"></i>
-                                            </button>
-                                        </div>
-                                    </div>
+                    </div>
+                    <div class="block-search" *ngIf="searchForm.value.date_type == 1">
+                        <label for="" class="control-label" translate>To</label>
+                        <div class="date-group">
+                            <div clickOutside (clickOutside)="dt2.close()" class="input-group">
+                                <input [minDate]="searchForm.value.due_date_from | dateObj" class="form-control" (keydown)="$event.preventDefault()" autocomplete="off"
+                                    formControlName="due_date_to" placeholder="mm/dd/yyyy" name="dp" ngbDatepicker #dt2="ngbDatepicker">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" (click)="dt2.toggle()" type="button">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                    </button>
                                 </div>
                             </div>
-                        </ng-container>
+                        </div>
+                    </div>
 
-                    </form>
-                </div>
-                <div class="col-3">
-                    <div class="block-btn-search">
-                        <div class="mt-1 group-btn-search">
-                            <button type="button" class="btn-default-custom" (click)="moreFilter()">More Filter</button>
+                </form>
+                <div class="block-btn-search">
+                  <label class="control-label">&nbsp;</label>
+                  <div class="group-btn-search">
+                        <!-- <button type="button" class="btn-default-custom" (click)="moreFilter()">More Filter</button>
                             <div class="show-more" [hidden]="!onoffFilter">
                                 <ul class="mt-2">
                                     <li *ngFor="let item of listMaster['listFilter']; let i = index;">
@@ -105,10 +104,9 @@
                                         </label>
                                     </li>
                                 </ul>
-                            </div>
-                            <button type="button" class="btn-default-custom" (click)="tableService.searchAction()">Search</button>
-                            <button type="button" class="btn-default-custom" (click)="tableService.resetAction(this.searchForm)">Reset</button>
-                        </div>
+                            </div> -->
+                        <button type="button" class="btn-default-custom" (click)="tableService.searchAction()">Search</button>
+                        <button type="button" class="btn-default-custom" (click)="tableService.resetAction(this.searchForm)">Reset</button>
                     </div>
                 </div>
             </div>
@@ -142,13 +140,15 @@
                                 </thead>
                                 <tbody *ngFor="let debit of listDebitMemo; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                                     <tr>
-                                        <td>{{debit.no}}</td>
+                                        <td>
+                                            <a class="text-primary" (click)="onViewDebitMemo(debit.id)">{{debit.no}}</a>
+                                        </td>
                                         <td class="text-center">{{debit.issue_date | date:'MM/dd/yyyy'}}</td>
                                         <td>{{debit.company_name}}</td>
                                         <td>{{debit.doc_no}}</td>
                                         <td class="text-center">{{debit.due_date | date:'MM/dd/yyyy'}}</td>
-                                        <td>{{debit.total_price}}</td>
-                                        <td>{{debit.balance_price}}</td>
+                                        <td>{{debit.total_price | currency}}</td>
+                                        <td>{{debit.balance_price | currency}}</td>
                                         <td class="text-center">
                                             <span class="badge badge-info bg-blue" *ngIf="debit.sts == 1">{{debit.sts_name}}</span>
                                             <span class="badge badge-warning bg-texas-rose" *ngIf="debit.sts == 2">{{debit.sts_name}}</span>
@@ -164,43 +164,43 @@
                                         <td>{{debit.updated_by}}</td>
                                         <td class="text-left">
                                             <a class="btn btn-default " *ngIf="debit.sts === 1"
-                                                title="Edit" (click)="onEditDebitMemo(debit.id)">
+                                                ngbTooltip="Edit" (click)="onEditDebitMemo(debit.id)">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
                                             <a class="btn btn-default " *ngIf="debit.sts === 1"
-                                                title="Submit" (click)="onChangeDebitStatus(debit.id, 2)">
+                                                ngbTooltip="Submit" (click)="onChangeDebitStatus(debit.id, 2)">
                                                 <i class="fa fa-caret-square-o-right" aria-hidden="true"></i>
                                             </a>
                                             <a class="btn btn-default " *ngIf="debit.sts === 2 && (currentuser['id'] == debit.approver_id)"
-                                                title="Approve" (click)="onChangeDebitStatus(debit.id, 3)">
+                                                ngbTooltip="Approve" (click)="onChangeDebitStatus(debit.id, 3)">
                                                 <i class="fa fa-check" aria-hidden="true"></i>
                                             </a>
                                             <a class="btn btn-default " *ngIf="debit.sts === 2 && (currentuser['id'] == debit.approver_id)"
-                                                title="Reject" (click)="onChangeDebitStatus(debit.id, 4)">
+                                                ngbTooltip="Reject" (click)="onChangeDebitStatus(debit.id, 4)">
                                                 <i class="fa fa-ban" aria-hidden="true"></i>
                                             </a>
                                             <a class="btn btn-default "
-                                                title="View" (click)="onViewDebitMemo(debit.id)">
+                                                ngbTooltip="View" (click)="onViewDebitMemo(debit.id)">
                                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                             </a>
                                             <a class="btn btn-default"
-                                                title="Print" (click)="onPrintDebitMemo(debit.id, debit.no)">
+                                                ngbTooltip="Print" (click)="onPrintDebitMemo(debit.id, debit.no)">
                                                 <i class="fa fa-download" aria-hidden="true"></i>
                                             </a>
                                             <a class="btn btn-default" *ngIf="debit.sts === 1"
-                                                title="Cancel" (click)="onChangeDebitStatus(debit.id, 5)">
+                                                ngbTooltip="Cancel" (click)="onChangeDebitStatus(debit.id, 5)">
                                                 <i class="fa fa-times-circle" aria-hidden="true"></i>
                                             </a>
                                             <a class="btn btn-default" *ngIf="debit.sts === 4"
-                                                title="Reopen" (click)="onChangeDebitStatus(debit.id, 1)">
+                                                ngbTooltip="Reopen" (click)="onChangeDebitStatus(debit.id, 1)">
                                                 <i class="fa fa-clone" aria-hidden="true"></i>
                                             </a>
                                             <a class="btn btn-default" *ngIf="debit.sts === 3 || debit.sts === 8"
-                                                title="Receive Payment" (click)="onReceivePaymentDebitMemo()">
+                                                ngbTooltip="Receive Payment" (click)="onReceivePaymentDebitMemo()">
                                                 <i class="fa fa-money" aria-hidden="true"></i>
                                             </a>
                                             <a class="btn btn-default" *ngIf="debit.sts != 1 && debit.sts != 4 && debit.sts != 5"
-                                                title="Send Mail" (click)="onSendMail(debit.id)">
+                                                ngbTooltip="Send Mail" (click)="onSendMail(debit.id)">
                                                 <i class="fa fa-envelope-o" aria-hidden="true"></i>
                                             </a>
                                         </td>
