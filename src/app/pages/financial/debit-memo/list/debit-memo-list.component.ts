@@ -145,7 +145,6 @@ export class DebitMemoListComponent implements OnInit {
     }
 
     filter(status) {
-        console.log(status);
         const params = { sts: status };
         this.debitMemoService.getListDebitMemo(params).subscribe(res => {
             try {

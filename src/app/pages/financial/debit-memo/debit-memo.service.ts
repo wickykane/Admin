@@ -87,7 +87,9 @@ export class DebitMemoService {
     }
 
     getListItemsFromMisc(orderId, params) {
-        const url = `debit/orders/${orderId}/items`;
+        params['sts'] = 1;
+        const url = 'misc';
+        // const url = `debit/orders/${orderId}/items`;
         return this.API.get(url, params);
     }
 

@@ -149,8 +149,8 @@
                                         <td>{{debit.company_name}}</td>
                                         <td>{{debit.doc_no}}</td>
                                         <td class="text-center">{{debit.due_date | date:'MM/dd/yyyy'}}</td>
-                                        <td>{{debit.total_price}}</td>
-                                        <td>{{debit.balance_price}}</td>
+                                        <td>{{debit.total_price | currency}}</td>
+                                        <td>{{debit.balance_price | currency}}</td>
                                         <td class="text-center">
                                             <span class="badge badge-info bg-blue" *ngIf="debit.sts == 1">{{debit.sts_name}}</span>
                                             <span class="badge badge-warning bg-texas-rose" *ngIf="debit.sts == 2">{{debit.sts_name}}</span>
