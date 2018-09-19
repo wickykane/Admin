@@ -66,8 +66,8 @@ export class PaymentMethodsCreateComponent implements OnInit {
             service_id: [null, Validators.required],
             service_secret: [null, Validators.required],
             sandbox: [null, Validators.required],
-            username: [null, Validators.required],
-            password: [null, Validators.required]
+            // username: [null, Validators.required],
+            // password: [null, Validators.required]
         });
     }
 
@@ -200,13 +200,14 @@ export class PaymentMethodsCreateComponent implements OnInit {
         if (
             this.paymentForm.controls.processor_type.valid &&
             this.checkFormValidationForManualType() &&
-            this.paymentForm.controls.username.valid &&
+            // this.paymentForm.controls.username.valid &&
             // this.paymentForm.controls.password.valid &&
-            this.checkPasswordIsValid() &&
+            // this.checkPasswordIsValid() &&
             this.paymentForm.controls.service_id.valid &&
             this.paymentForm.controls.sandbox.valid &&
             this.paymentForm.controls.service_secret.valid &&
-            this.paymentForm.controls.transaction_type.valid
+            (this.paymentForm.value.processor_type.toString() !== '3'
+            || (this.paymentForm.value.processor_type.toString() === '3' && this.paymentForm.controls.transaction_type.valid))
         ) {
             return true;
         }
@@ -214,13 +215,13 @@ export class PaymentMethodsCreateComponent implements OnInit {
     }
 
     checkPasswordIsValid() {
-        if ( (!this.paymentMethodId && this.paymentForm.controls.password.valid) // Create Payment Method
-            || (this.paymentMethodId && this.paymentForm.controls.password.valid && this.isChangePassword) // Edit and change password
-            || (this.paymentMethodId && this.paymentForm.controls.password.invalid && !this.isChangePassword) // Edit and do not change password
-            || (this.checkShowPasswordField() && this.paymentForm.controls.password.valid)) { // edit and change type from 'Manual' to 'Online'
-            return true;
-        }
-        return false;
+        // if ( (!this.paymentMethodId && this.paymentForm.controls.password.valid) // Create Payment Method
+        //     || (this.paymentMethodId && this.paymentForm.controls.password.valid && this.isChangePassword) // Edit and change password
+        //     || (this.paymentMethodId && this.paymentForm.controls.password.invalid && !this.isChangePassword) // Edit and do not change password
+        //     || (this.checkShowPasswordField() && this.paymentForm.controls.password.valid)) { // edit and change type from 'Manual' to 'Online'
+        //     return true;
+        // }
+        // return false;
     }
 
     testConnection() {
