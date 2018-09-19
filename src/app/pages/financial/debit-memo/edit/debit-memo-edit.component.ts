@@ -515,13 +515,13 @@ export class DebitMemoEditComponent implements OnInit {
         });
         const params = {
             orderId: this.debitMemoForm.value.order_id,
-            items: this.listDeletedLineItem.filter(item => item.item_id !== undefined && item.item_id !== null).map(item => item.item_id)
+            items: this.listDeletedLineItem.filter(item => item.order_detail_id !== undefined && item.order_detail_id !== null).map(item => item.order_detail_id)
         };
         modalRef.componentInstance.setIgnoredItems = params;
         modalRef.result.then(res => {
             if (res) {
                 res.forEach(selectedItem => {
-                    const itemIndex = this.listDeletedLineItem.findIndex( item => item.item_id === selectedItem.item_id);
+                    const itemIndex = this.listDeletedLineItem.findIndex( item => item.order_detail_id === selectedItem.order_detail_id);
                     if (itemIndex >= 0) {
                         this.listDeletedLineItem.splice(itemIndex, 1);
                     }
