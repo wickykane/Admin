@@ -29,11 +29,11 @@
                     </div>
                     <div class="block-search">
                         <label for="type" class="control-label" translate>Date Type</label>
-                        <select class="form-control" [(ngModel)]="dateType" [ngModelOptions]="{standalone: true}" (ngModelChange)="onDateTypeChanged()">
-                            <option *ngFor="let item of listMaster['dateType']" [ngValue]="item.id">{{item.name}}</option>
+                        <select class="form-control" formControlName="sts" (change)="onDateTypeChanged()">
+                            <option *ngFor="let item of listMaster['date_type']" [ngValue]="item.id">{{item.name}}</option>
                         </select>
                     </div>
-                    <div class="block-search" *ngIf="dateType == 0">
+                    <div class="block-search" *ngIf="searchForm.value.date_type == 0">
                         <label for="" class="control-label" translate>From</label>
                         <div class="date-group">
                             <div clickOutside (clickOutside)="d1.close()" class="input-group">
@@ -47,7 +47,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="block-search" *ngIf="dateType == 1">
+                    <div class="block-search" *ngIf="searchForm.value.date_type == 1">
                         <label for="" class="control-label" translate>From</label>
                         <div class="date-group">
                             <div clickOutside (clickOutside)="d1.close()" class="input-group">
@@ -61,7 +61,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="block-search" *ngIf="dateType == 0">
+                    <div class="block-search" *ngIf="searchForm.value.date_type == 0">
                         <label for="" class="control-label" translate>To</label>
                         <div class="date-group">
                             <div clickOutside (clickOutside)="dt2.close()" class="input-group">
@@ -76,7 +76,7 @@
                         </div>
 
                     </div>
-                    <div class="block-search" *ngIf="dateType == 1">
+                    <div class="block-search" *ngIf="searchForm.value.date_type == 1">
                         <label for="" class="control-label" translate>To</label>
                         <div class="date-group">
                             <div clickOutside (clickOutside)="dt2.close()" class="input-group">
@@ -106,7 +106,7 @@
                                 </ul>
                             </div> -->
                         <button type="button" class="btn-default-custom" (click)="tableService.searchAction()">Search</button>
-                        <button type="button" class="btn-default-custom" (click)="dateType = null; tableService.resetAction(this.searchForm)">Reset</button>
+                        <button type="button" class="btn-default-custom" (click)="tableService.resetAction(this.searchForm)">Reset</button>
                     </div>
                 </div>
             </div>
