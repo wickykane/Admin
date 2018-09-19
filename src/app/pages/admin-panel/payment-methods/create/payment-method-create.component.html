@@ -97,7 +97,7 @@
                     </div>
 
                     <!-- Type Online -->
-                    <div class="row create-section-info" *ngIf="this.paymentForm.value.type == 2 && this.paymentForm.value.processor_type">
+                    <!-- <div class="row create-section-info" *ngIf="this.paymentForm.value.type == 2 && this.paymentForm.value.processor_type">
                         <label>
                             <b *ngIf="this.paymentForm.value.processor_type == 1">Authorize.Net Account (*)</b>
                             <b *ngIf="this.paymentForm.value.processor_type == 2">Paypal Account (*)</b>
@@ -112,9 +112,9 @@
                         <span class="error" *ngIf="isClickedSave && this.paymentForm.controls.username.invalid">
                             (!): This field cannot be blank. Please input value.
                         </span>
-                    </div>
+                    </div> -->
 
-                    <div class="row create-section-info" *ngIf="this.paymentForm.value.type == 2 && this.paymentForm.value.processor_type">
+                    <!-- <div class="row create-section-info" *ngIf="this.paymentForm.value.type == 2 && this.paymentForm.value.processor_type">
                         <label>
                             <b>Password (*)</b>
                         </label>
@@ -149,7 +149,7 @@
                         <span class="error" *ngIf="isClickedSave && this.paymentForm.controls.password.invalid">
                             (!): This field cannot be blank. Please input value.
                         </span>
-                    </div>
+                    </div> -->
 
                     <div class="row create-section-info" *ngIf="this.paymentForm.value.type == 2 && this.paymentForm.value.processor_type">
                         <label>
@@ -187,7 +187,7 @@
                             (!): This field cannot be blank. Please input value.
                         </span>
                     </div>
-                    <div class="row create-section-info" *ngIf="this.paymentForm.value.type == 2 && this.paymentForm.value.processor_type">
+                    <div class="row create-section-info" *ngIf="this.paymentForm.value.type == 2 && this.paymentForm.value.processor_type == 3">
                         <label>
                             <b>Transaction Type (*)</b>
                         </label>
