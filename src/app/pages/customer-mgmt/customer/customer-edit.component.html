@@ -40,7 +40,7 @@
                                 <div class="col-sm-8">
                                     <select class="form-control" name="payment_term_id" formControlName="payment_term_id">
                                         <option value="null" selected="true">--Select--</option>
-                                        <option *ngFor="let item of paymentTermList" [ngValue]="item.id">{{item.cd}}</option>
+                                        <option *ngFor="let item of paymentTermList" [ngValue]="item.id">{{item.cd}} - {{item.des}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -355,7 +355,7 @@
                                             <button type="button" class="btn btn-default" (click)="addNewSite(item,i)">
                                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </button>
-                                        <button [disabled]="item.id != null" type="button" class="btn btn-default" (click)="removeSite(i)">
+                                        <button *ngIf="item.site_id == undefined" [disabled]="item.id != null" type="button" class="btn btn-default" (click)="removeSite(i)">
                                             <i class="fa fa-times" aria-hidden="true"></i>
                                         </button>
                                     </td>
