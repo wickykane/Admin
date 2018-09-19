@@ -90,7 +90,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             'electronic': [null, Validators.required],
             'price_received': [null, Validators.required],
             'payment_date': [null, Validators.required],
-            'number': [null, Validators.required],
+            'cd': [null, Validators.required],
             'updated_by': [null],
             'updated_date': [null],
             'created_by': [null],
@@ -119,7 +119,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             approver_id: user.id,
             updated_by: user.full_name,
             created_by: user.full_name,
-            updated_date: moment().format('MM/DD/YYYY'),
+            updated_date: moment().format('MM/DD/YYYY h:mm:ss'),
             payment_date: moment().format('MM/DD/YYYY'),
         });
 
@@ -154,7 +154,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         });
 
         this.voucherService.getVoucherMasterData().subscribe(res => {
-            this.generalForm.get('number').patchValue(res.data.cd);
+            this.generalForm.get('cd').patchValue(res.data.cd);
         });
     }
 
@@ -366,8 +366,8 @@ export class ReceiptVoucherCreateComponent implements OnInit {
     }
 
     createVoucher(type, is_draft?, is_continue?) {
-        this.data['showError'] = true;
         if (!is_draft && (this.generalForm.invalid || (this.data['summary'] && !this.data['summary'].total))) {
+            this.data['showError'] = true;
             this.toastr.error(this.messageConfig.error);
             return;
         }
@@ -382,6 +382,8 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             ...this.generalForm.value,
             items,
             status: type,
+            number: this.generalForm.value.check_no || this.generalForm.value.ref_no,
+            payment_date: moment(this.generalForm.value.payment_date).format('MM/DD/YYYY'),
         };
 
         this.voucherService.createVoucher(params).subscribe(res => {

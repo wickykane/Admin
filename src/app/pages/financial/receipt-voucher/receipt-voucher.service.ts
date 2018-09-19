@@ -65,6 +65,11 @@ export class ReceiptVoucherService {
         return this.API.get(url, params);
     }
 
+    getListInvoiceAndMemoById(id, params) {
+        const url = 'voucher/get-line-item/' + id;
+        return this.API.get(url, params);
+    }
+
     createVoucher(params) {
         const url = 'voucher/create';
         return this.API.post(url, params);
