@@ -32,11 +32,11 @@
                         <ng-container *ngIf="listMaster['listFilter'][0].value">
                             <div class="col-md-4">
                                 <label for="type" class="control-label" translate>Date Type</label>
-                                <select class="form-control" [(ngModel)]="dateType" [ngModelOptions]="{standalone: true}" (ngModelChange)="onDateTypeChanged()">
+                                <select class="form-control" formControlName="date_type" (change)="onDateTypeChanged()">
                                     <option *ngFor="let item of listMaster['dateType']" [ngValue]="item.id">{{item.name}}</option>
                                 </select>
                             </div>
-                            <div class="col-md-4" *ngIf="dateType == 0">
+                            <div class="col-md-4" *ngIf="searchForm.value.date_type == 0">
                                 <label for="" class="control-label" translate>From</label>
                                 <div class="date-group">
                                     <div clickOutside (clickOutside)="d1.close()" class="input-group">
@@ -49,7 +49,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4" *ngIf="dateType == 1">
+                            <div class="col-md-4" *ngIf="searchForm.value.date_type == 1">
                                 <label for="" class="control-label" translate>From</label>
                                 <div class="date-group">
                                     <div clickOutside (clickOutside)="d1.close()" class="input-group">
@@ -62,7 +62,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4" *ngIf="dateType == 0">
+                            <div class="col-md-4" *ngIf="searchForm.value.date_type == 0">
                                 <label for="" class="control-label" translate>To</label>
                                 <div class="date-group">
                                     <div clickOutside (clickOutside)="dt2.close()" class="input-group">
@@ -76,7 +76,7 @@
                                 </div>
 
                             </div>
-                            <div class="col-md-4" *ngIf="dateType == 1">
+                            <div class="col-md-4" *ngIf="searchForm.value.date_type == 1">
                                 <label for="" class="control-label" translate>To</label>
                                 <div class="date-group">
                                     <div clickOutside (clickOutside)="dt2.close()" class="input-group">
