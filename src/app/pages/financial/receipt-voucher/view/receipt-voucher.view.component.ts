@@ -7,7 +7,7 @@ import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
 import { ReceiptVoucherService } from '../receipt-voucher.service';
-import { InvoiceDetailKeyService } from './keys.view.control';
+import { ReceiptDetailKeyService } from './keys.view.control';
 
 
 @Component({
@@ -15,7 +15,7 @@ import { InvoiceDetailKeyService } from './keys.view.control';
     templateUrl: './receipt-voucher.view.component.html',
     styleUrls: ['../receipt-voucher.component.scss'],
     animations: [routerTransition()],
-    providers: [HotkeysService, InvoiceDetailKeyService]
+    providers: [HotkeysService, ReceiptDetailKeyService, ReceiptVoucherService]
 })
 
 export class ReceiptVoucherDetailComponent implements OnInit {
@@ -36,7 +36,7 @@ export class ReceiptVoucherDetailComponent implements OnInit {
         public toastr: ToastrService,
         private router: Router,
         private receiptVoucherService: ReceiptVoucherService,
-        public keyService: InvoiceDetailKeyService,
+        public keyService: ReceiptDetailKeyService,
         private _hotkeysService: HotkeysService,
         private route: ActivatedRoute) {
         //  Init Key
