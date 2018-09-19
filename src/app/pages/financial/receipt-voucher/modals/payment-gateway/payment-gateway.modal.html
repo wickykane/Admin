@@ -28,7 +28,7 @@
                                         <label for="" translate class="col-md-5">Card Number  <span class="text-danger">(*)</span>
                                         </label>
                                         <div class="col-md-7">
-                                            <input [ngClass]="{'border border-danger': (data['showError'] && this.generalForm.get('card_number').errors?.required) || false   }" class="form-control" placeholder="0000-0000-0000-0000" type="number" numberDirective formControlName="card_number">
+                                            <input [ngClass]="{'border border-danger': (data['showError'] && this.generalForm.get('card_number').errors?.required) || false   }" class="form-control" placeholder="0000-0000-0000-0000" type="text" numberDirective formControlName="card_number">
                                         </div>
                                     </div>
                                     <div class="form-group row col-sm-12">
@@ -85,7 +85,7 @@
                         </div>
                         <div class="card-body">
                             <form [formGroup]="generalForm" class="form-horizontal mail-form" role="form">
-                                <div class="row">
+                                <div>
                                     <div class="form-group row mt-3 col-sm-12">
                                         <label for="" translate class="col-md-5">Customer Name</label>
                                         <div class="col-md-7">

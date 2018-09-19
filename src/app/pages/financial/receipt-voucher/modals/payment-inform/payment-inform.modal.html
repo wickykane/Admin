@@ -8,7 +8,7 @@
     <div class="modal-body" style="padding-bottom:10px;">
         <div class="block-order">
             <div class="row block-info">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
                             <strong>Payment Information</strong>
@@ -20,7 +20,7 @@
                                         <label for="" translate class="col-md-5">Total Amount</label>
                                         <div class="col-md-7">
                                             <span class="form-control text-success border-0">
-                                                        {{ generalForm.value.total_amount }}                                            
+                                                        {{ generalForm.value.total_amount | currency }}                                            
                                                     </span>
                                         </div>
                                     </div>
@@ -34,7 +34,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group row col-sm-12">
-                                        <label for="" translate class="col-md-5">Card Holder Name  <span class="text-danger">(*)</span>
+                                        <label for="" translate class="col-md-5">Card Holder Name
                                         </label>
                                         <div class="col-md-7">
                                             <span class="form-control text-success border-0">
@@ -46,30 +46,49 @@
                                         <label for="" translate class="col-md-5">Billing Address
                                         </label>
                                         <div class="col-md-7">
-                                            <div class="form-control border-0"> {{ generalForm.value.bill_to }}</div>
+                                            <div class="form-control border-0"> {{ generalForm.value.address }}</div>
                                         </div>
                                     </div>
-                                    <div class="form-group row col-sm-12">
-                                        <label for="" translate class="col-md-5">Authorization Code
-                                                        </label>
-                                        <div class="col-md-7">
-                                            <div class="form-control border-0"> {{ generalForm.value.code }}</div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row col-sm-12">
-                                        <label for="" translate class="col-md-5">Transaction Code
+                                    <ng-container *ngIf="type">
+                                        <div class="form-group row col-sm-12">
+                                            <label for="" translate class="col-md-5">Authorization Code
                                                             </label>
-                                        <div class="col-md-7">
-                                            <div class="form-control border-0"> {{ generalForm.value.code }}</div>
+                                            <div class="col-md-7">
+                                                <div class="form-control border-0"> {{ generalForm.value.auth_cd }}</div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group row col-sm-12">
-                                        <label for="" translate class="col-md-5">Receipt Date
+                                        <div class="form-group row col-sm-12">
+                                            <label for="" translate class="col-md-5">Transaction Code
                                                                 </label>
-                                        <div class="col-md-7">
-                                            <div class="form-control border-0"> {{ generalForm.value.code }}</div>
+                                            <div class="col-md-7">
+                                                <div class="form-control border-0"> {{ generalForm.value.trans_cd }}</div>
+                                            </div>
                                         </div>
-                                    </div>
+                                        <div class="form-group row col-sm-12">
+                                            <label for="" translate class="col-md-5">Receipt Date
+                                                                    </label>
+                                            <div class="col-md-7">
+                                                <div class="form-control border-0"> {{ generalForm.value.receipt_dt }}</div>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                    <ng-container *ngIf="!type">
+                                        <div class="form-group row col-sm-12">
+                                            <label for="" translate class="col-md-5">Error Details
+                                            </label>
+                                            <div class="col-md-7">
+                                                <textarea class="form-control" rows="4" formControlName="error">                                       
+                                                </textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row col-sm-12">
+                                            <label for="" translate class="col-md-5">Error Date
+                                            </label>
+                                            <div class="col-md-7">
+                                                <div class="form-control border-0"> {{ generalForm.value.current_date }}</div>
+                                            </div>
+                                        </div>
+                                    </ng-container>
                                 </div>
                             </form>
                         </div>
@@ -81,7 +100,9 @@
     <div class="modal-footer" style="padding-top: 0">
         <div class="form-group" style="margin-top: 20px;">
             <div class="text-center">
-                <button style="width: 70px" class="btn btn-success" type="button" (click)="ok()" translate>OK</button>
+                <button *ngIf="type" style="width: 70px" class="btn btn-success" type="button" (click)="ok()" translate>OK</button>
+                <button *ngIf="!type" style="width: 70px" class="btn btn-primary" type="button" (click)="retry()" translate>RETRY</button>
+                <button *ngIf="!type" style="width: 70px" class="btn btn-secondary" type="button" (click)="cancel()" translate>CANCEL</button>
             </div>
         </div>
     </div>
