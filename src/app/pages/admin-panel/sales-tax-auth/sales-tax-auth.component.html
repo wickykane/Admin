@@ -214,10 +214,15 @@
                             <label>
                                 <b>G/L Account (*)</b>
                             </label>
-                            <select class="form-control" formControlName="gl_account_id">
+                            <ng-select  class="form-control" [items]="listMaster.gl_accounts" placeholder="---Select---" formControlName="gl_account_id" bindLabel="name" bindValue="id">
+                                <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                    <span [ngClass]="{'pl-1': item.level ==0,'pl-3':item.level==1,'pl-5':item.level==2}">{{ item.name}}</span>
+                                </ng-template>
+                            </ng-select>
+                            <!-- <select class="form-control" formControlName="gl_account_id">
                                 <option value="null" disabled>--Select--</option>
                                 <option *ngFor="let item of listMaster.gl_accounts" [value]="item.id">{{item.des}}</option>
-                            </select>
+                            </select> -->
                             <span class="error" *ngIf="isClickedSave && stateRateForm.controls.gl_account_id.invalid">
                                 (!): This field cannot be blank. Please select G/L Account.
                             </span>
