@@ -46,12 +46,10 @@
                                             <div class='col-6'>
                                                 <span class="badge badge-info bg-blue" *ngIf="detail['status'] == 1">{{detail['status_name']}}</span>
                                                 <span class="badge badge-warning bg-texas-rose" *ngIf="detail['status'] == 2">{{detail['status_name']}}</span>
-                                                <span class="badge badge-danger bg-magenta" *ngIf="detail['status'] == 3">{{detail['status_name']}}</span>
-                                                <span class="badge badge-success bg-strong-green" *ngIf="detail['status'] == 4">{{detail['status_name']}}</span>
+                                                <span class="badge badge-danger bg-magenta" *ngIf="detail['status'] == 4">{{detail['status_name']}}</span>
+                                                <span class="badge badge-success bg-strong-green" *ngIf="detail['status'] == 3">{{detail['status_name']}}</span>
                                                 <span class="badge badge-primary bg-darkblue" *ngIf="detail['status'] == 5">{{detail['status_name']}}</span>
-                                                <span class="badge badge-primary bg-lemon" *ngIf="detail['status'] == 6">{{detail['status_name']}}</span>
-                                                <span class="badge badge-danger bg-red" *ngIf="detail['status'] == 7">{{detail['status_name']}}</span>
-                                                <span class="badge badge-primary bg-bright-grey" *ngIf="detail['status'] == 8">{{detail['status_name']}}</span>
+                                                <span class="badge badge-primary bg-lemon" *ngIf="detail['status'] == 6">{{detail['status_name']}}</span>                                              
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -128,10 +126,10 @@
                                         <!-- <th class="text-center" translate>Price Source</th> -->
                                     </tr>
                                 </thead>
-                                <tr *ngIf="detail?.inv_detail?.length === 0">
+                                <tr *ngIf="detail?.items?.length === 0">
                                     <td colspan="100%" class="text-center" translate>No data.</td>
                                 </tr>
-                                <tbody *ngFor="let item of detail.inv_detail; let $index = index;">
+                                <tbody *ngFor="let item of detail.items; let $index = index;">
                                     <tr>
                                         <td>{{item.sku || item.misc_no}}</td>
                                         <td>{{item.des || item.misc_name}}</td>
