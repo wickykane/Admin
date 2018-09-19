@@ -29,7 +29,7 @@
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6 text-primary'>
-                                                    <input readonly type="text" class="form-control" formControlName="number">
+                                                    <input readonly type="text" class="form-control" formControlName="cd">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -117,7 +117,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div *ngIf="generalForm.value.payment_method == 4" class="form-group row">
+                                                <!-- <div *ngIf="generalForm.value.payment_method == 4" class="form-group row">
                                                     <label class='col-6'> Remaining Amount
                                                         <span class="text-danger">(*)</span>
                                                     </label>
@@ -129,7 +129,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div> -->
                                             </ng-container>
                                             <div class="form-group row">
                                                 <label class='col-6'>Deposit G/L Account
@@ -221,6 +221,7 @@
                                         <th translate>Due Date</th>
                                         <th translate>Payment Term</th>
                                         <th translate>Status</th>
+                                        <th translate>Total Amount</th>                                        
                                         <th translate>Current Balance</th>
                                         <th translate>Awaiting Approval Payment</th>
                                         <th translate>Balance Due</th>
@@ -249,13 +250,14 @@
                                             <td>{{item.due_date }}</td>
                                             <td>{{item.payment_term_name }}</td>
                                             <td>{{item.status_name }}</td>
+                                            <td>{{item.total_price | currency }}</td>                                            
                                             <td>{{item.balance_price | currency }}</td>
                                             <td>
                                                 <a href="javascript:void(0)">
                                                     {{ (item.awaiting || 0) | currency }}
                                                 </a>
                                             </td>
-                                            <td>{{ (item.total_price - item.applied_amt)| currency }}</td>
+                                            <td>{{ (item.balance_price - item.applied_amt)| currency }}</td>
                                             <td>
                                                 <input (changeValue)='updateTotal(item)' [isDecimal]="true" numberDirective [min]="0" [max]="(item.balance_price > data['remain'] && !generalForm.value.electronic)? data['remain']: item.balance_price" class="form-control input-sm" type="number" [(ngModel)]="item.applied_amt">
                                             </td>
@@ -374,13 +376,13 @@
         </div>
         <div class="row">
             <div class="col-md-12 mg-top-15 text-center">
-                <button *ngIf="!data['is_payment']" type="button" class="btn btn-outline-info" (click)="createVoucher(1, 1)" translate>Save As Draft</button>
+                <button *ngIf="!data['voucher_id']" type="button" class="btn btn-outline-info" (click)="createVoucher(1, 1)" translate>Save As Draft</button>
                 <ng-container *ngIf="!generalForm.value.electronic">
                     <button type="button" class="btn btn-outline-danger" (click)="confirmModal((data['summary']?.change > 0)? 'overpayment': 2)" translate>Submit</button>
                     <button type="button" class="btn btn-outline-success" (click)="confirmModal((data['summary']?.change > 0)? 'overpayment-approve': 3)" translate>Save & Validate</button>
                 </ng-container>
                 <button *ngIf="generalForm.value.electronic" type="button" class="btn btn-outline-danger" (click)="confirmElectricModal()" translate>Save & Payment</button>
-                <button *ngIf="!data['is_payment']" type="button" class="btn btn-outline-dark" (click)="createVoucher(1, 1, 1); resetVoucher();" translate>Save & Create New Receipt Voucher</button>
+                <button *ngIf="!data['voucher_id']" type="button" class="btn btn-outline-dark" (click)="createVoucher(1, 1, 1); resetVoucher();" translate>Save & Create New Receipt Voucher</button>
                 <button type="button" class="btn btn-default" (click)="confirmModal(0)" translate>Back To List</button>
             </div>
         </div>
