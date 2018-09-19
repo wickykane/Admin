@@ -142,7 +142,9 @@
                                 </thead>
                                 <tbody *ngFor="let debit of listDebitMemo; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                                     <tr>
-                                        <td>{{debit.no}}</td>
+                                        <td>
+                                            <a class="text-primary" (click)="onViewDebitMemo(debit.id)">{{debit.no}}</a>
+                                        </td>
                                         <td class="text-center">{{debit.issue_date | date:'MM/dd/yyyy'}}</td>
                                         <td>{{debit.company_name}}</td>
                                         <td>{{debit.doc_no}}</td>
@@ -164,43 +166,43 @@
                                         <td>{{debit.updated_by}}</td>
                                         <td class="text-left">
                                             <a class="btn btn-default " *ngIf="debit.sts === 1"
-                                                title="Edit" (click)="onEditDebitMemo(debit.id)">
+                                                ngbTooltip="Edit" (click)="onEditDebitMemo(debit.id)">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
                                             <a class="btn btn-default " *ngIf="debit.sts === 1"
-                                                title="Submit" (click)="onChangeDebitStatus(debit.id, 2)">
+                                                ngbTooltip="Submit" (click)="onChangeDebitStatus(debit.id, 2)">
                                                 <i class="fa fa-caret-square-o-right" aria-hidden="true"></i>
                                             </a>
                                             <a class="btn btn-default " *ngIf="debit.sts === 2 && (currentuser['id'] == debit.approver_id)"
-                                                title="Approve" (click)="onChangeDebitStatus(debit.id, 3)">
+                                                ngbTooltip="Approve" (click)="onChangeDebitStatus(debit.id, 3)">
                                                 <i class="fa fa-check" aria-hidden="true"></i>
                                             </a>
                                             <a class="btn btn-default " *ngIf="debit.sts === 2 && (currentuser['id'] == debit.approver_id)"
-                                                title="Reject" (click)="onChangeDebitStatus(debit.id, 4)">
+                                                ngbTooltip="Reject" (click)="onChangeDebitStatus(debit.id, 4)">
                                                 <i class="fa fa-ban" aria-hidden="true"></i>
                                             </a>
                                             <a class="btn btn-default "
-                                                title="View" (click)="onViewDebitMemo(debit.id)">
+                                                ngbTooltip="View" (click)="onViewDebitMemo(debit.id)">
                                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                             </a>
                                             <a class="btn btn-default"
-                                                title="Print" (click)="onPrintDebitMemo(debit.id, debit.no)">
+                                                ngbTooltip="Print" (click)="onPrintDebitMemo(debit.id, debit.no)">
                                                 <i class="fa fa-download" aria-hidden="true"></i>
                                             </a>
                                             <a class="btn btn-default" *ngIf="debit.sts === 1"
-                                                title="Cancel" (click)="onChangeDebitStatus(debit.id, 5)">
+                                                ngbTooltip="Cancel" (click)="onChangeDebitStatus(debit.id, 5)">
                                                 <i class="fa fa-times-circle" aria-hidden="true"></i>
                                             </a>
                                             <a class="btn btn-default" *ngIf="debit.sts === 4"
-                                                title="Reopen" (click)="onChangeDebitStatus(debit.id, 1)">
+                                                ngbTooltip="Reopen" (click)="onChangeDebitStatus(debit.id, 1)">
                                                 <i class="fa fa-clone" aria-hidden="true"></i>
                                             </a>
                                             <a class="btn btn-default" *ngIf="debit.sts === 3 || debit.sts === 8"
-                                                title="Receive Payment" (click)="onReceivePaymentDebitMemo()">
+                                                ngbTooltip="Receive Payment" (click)="onReceivePaymentDebitMemo()">
                                                 <i class="fa fa-money" aria-hidden="true"></i>
                                             </a>
                                             <a class="btn btn-default" *ngIf="debit.sts != 1 && debit.sts != 4 && debit.sts != 5"
-                                                title="Send Mail" (click)="onSendMail(debit.id)">
+                                                ngbTooltip="Send Mail" (click)="onSendMail(debit.id)">
                                                 <i class="fa fa-envelope-o" aria-hidden="true"></i>
                                             </a>
                                         </td>

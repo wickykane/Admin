@@ -327,7 +327,7 @@
                                     <label class='col-5 control-label'>
                                         <strong >Amount Received</strong>
                                     </label>
-                                    <div class='col-6 offset-md-1 padding-lr-10 text-primary'>
+                                    <div class='col-6 offset-md-1 padding-lr-10 text-success'>
                                         <strong>{{ (generalForm.value.price_received || 0) | currency}}</strong>
                                     </div>
                                 </div>
@@ -339,7 +339,7 @@
                                         <strong class="text-success">{{(data['summary']?.total || 0) | currency}}</strong>
                                     </div>
                                 </div>
-                                <div *ngIf="generalForm.value.payment_method == 5" class="form-group row">
+                                <div *ngIf="!generalForm.value.electronic && generalForm.value.payment_method == 5" class="form-group row">
                                     <label class='col-5 control-label'>
                                             <strong>Change</strong>
                                         </label>
@@ -347,7 +347,7 @@
                                         <strong>{{(data['summary']?.change || 0) | currency}}</strong>
                                     </div>
                                 </div>
-                                <ng-container *ngIf="generalForm.value.payment_method != 5">
+                                <ng-container *ngIf="!generalForm.value.electronic && generalForm.value.payment_method != 5">
                                     <div class="form-group row">
                                         <label class='col-5 control-label'>
                                                 <strong>Remaining Amount</strong>

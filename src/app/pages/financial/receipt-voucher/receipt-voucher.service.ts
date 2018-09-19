@@ -21,7 +21,7 @@ export class ReceiptVoucherService {
     }
 
     getListReceiptVoucher(params) {
-        const url = 'receipt-voucher';
+        const url = ['voucher', 'list'].join('/');
         return this.API.get(url, params);
     }
 
@@ -31,7 +31,7 @@ export class ReceiptVoucherService {
     }
 
     getDetailReceiptVoucher(id) {
-        const url = ['receipt-voucher', id].join('/');
+        const url = ['voucher', 'view', id].join('/');
         return this.API.get(url);
     }
 
@@ -68,6 +68,10 @@ export class ReceiptVoucherService {
     createVoucher(params) {
         const url = 'voucher/create';
         return this.API.post(url, params);
+    }
+    countVoucherStatus() {
+        const url = ['voucher', 'status-list'].join('/');
+        return this.API.get(url);
     }
 
     updateVoucher(id, params) {

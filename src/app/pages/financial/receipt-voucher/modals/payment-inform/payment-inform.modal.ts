@@ -14,39 +14,36 @@ export class PaymentInformModalComponent implements OnInit {
     // Resolve Data
     public generalForm: FormGroup;
     @Input() type;
+    @Input() data;
     public modalTitle;
 
     constructor(public activeModal: NgbActiveModal, public toastr: ToastrService, private fb: FormBuilder, private receiptVoucherService: ReceiptVoucherService) {
         this.generalForm = fb.group({
-            'billing_id': [null, Validators.required],
-            'card_number': [null, Validators.required],
-            'expiration_year': [null, Validators.required],
-            'expiration_month': [null, Validators.required],
-            'card_holder_name': [null, Validators.required],
-            'cvv': [null, Validators.required],
-            'requestor': [null],
+            'billing_id': [null],
+            'card_number': [null],
+            'card_holder_name': [null],
             'current_date': [null],
-            'company_id': [null],
-            'company_name': [null],
-            // 'country_code': [null, Validators.required],
-            // 'addr_line': [null, Validators.required],
-            // 'city': [null, Validators.required],
-            // 'state_id': [null, Validators.required],
-            // 'zip_code': [null, Validators.required],
             'total_amount': null,
+            'address': null,
+            'error': null,
+            'auth_cd': null,
+            'trans_cd': null,
+            'receipt_dt': null,
         });
     }
 
     ngOnInit() {
-        this.modalTitle = (this.type) ? 'Payment Successful!' : 'Payment Failed';
+        this.modalTitle = (this.type) ? 'Payment Successful!' : 'Payment Failed!';
+        const address = [this.data.address_line, this.data.city_name, this.data.state_name, this.data.zip_code, this.data.country_name].join(' ');
+        this.generalForm.patchValue({ ...this.data, address, error: this.data.respone.message });
     }
 
     ok() {
-        const params = this.generalForm.value;
-        // this.financialService.sendMail(this.invoiceId, params).subscribe(res => {
-        //     this.toastr.success(res.message);
-        //     this.activeModal.close(this.generalForm.value);
-        // });
+        this.activeModal.close(0);
+    }
+
+    retry() {
+        this.activeModal.close(this.generalForm.value);
     }
 
     cancel() {
