@@ -339,6 +339,9 @@ export class DebitMemoEditComponent implements OnInit {
                     }
                     if (this.debitMemoForm.value.order_id !== null && this.debitMemoForm.value.order_id !== undefined) {
                         this.listLineItems = this.debitDetail['line_items'];
+                        this.orderInformation.bill_info = this.debitDetail['bill_addr'];
+                        this.orderInformation.ship_info = this.debitDetail['ship_addr'];
+                        this.orderInformation.shipping_method = this.debitDetail['carrier'];
                         // this.getOrderInformation(this.debitMemoForm.value.order_id);
                         this.getListLineItems(this.debitMemoForm.value.order_id);
                     }
@@ -426,14 +429,36 @@ export class DebitMemoEditComponent implements OnInit {
         this.contactDetail = this.listMaster['contacts'].find(cont => cont.id.toString() === contactId);
     }
 
-    onSelectOrder(orderId) {
+    onSelectOrder() {
+        const orderId = this.debitMemoForm.value.order_id;
         this.isReSelectOrder = true;
         this.listLineItems = [];
         this.listDeletedLineItem = [];
         this.listTaxs = [];
+        this.debitMemoForm.patchValue({
+            payment_method_id: null,
+            payment_term_id: null,
+            due_date: null,
+            sale_person_id: null,
+            approver_id: null,
+
+            billing_id: null,
+            shipping_id: null,
+
+            sub_total_price: 0,
+            tax: 0,
+            total_price: 0
+        });
+        this.orderInformation.bill_info = {};
+        this.orderInformation.ship_info = {};
+        this.orderInformation.shipping_method = {};
         this.getUniqueTaxItemLine();
-        this.getOrderInformation(orderId);
-        this.getListLineItems(orderId);
+        if (orderId !== null && orderId !== undefined) {
+            this.getOrderInformation(orderId);
+            this.getListLineItems(orderId);
+        } else {
+            this.debitMemoForm.controls.order_id.setValue(null);
+        }
     }
 
     onChangeIssueDate() {
@@ -442,7 +467,8 @@ export class DebitMemoEditComponent implements OnInit {
     }
 
     onUpdateDueDate(termId) {
-        const termDays = this.listMaster['payment_terms'].find(term => term.id.toString() === termId.toString())['term_day'] || 0;
+        const paymentTerm = this.listMaster['payment_terms'].find(term => term.id.toString() === termId.toString());
+        const termDays = paymentTerm ? paymentTerm['term_day'] : 0;
         this.debitMemoForm.controls.due_date.setValue(
             moment(this.debitMemoForm.value.issue_date).add(termDays, 'days').format('YYYY-MM-DD')
         );
@@ -460,10 +486,14 @@ export class DebitMemoEditComponent implements OnInit {
     }
 
     onCalculateAmount(item) {
-        item['qty'] = parseInt(item['qty'], 0);
-        item['price'] = parseFloat((item['price']).toFixed(this.decimalAllowed) || '0');
-        item['discount_percent'] = parseFloat((item['discount_percent']) || '0');
-        item['tax_percent'] = parseFloat((item['tax_percent']).toFixed(this.decimalAllowed) || '0)');
+        item['qty'] = item['qty'] ? parseInt(item['qty'], 0) : 0;
+        item['price'] = parseFloat(item['price']) || 0;
+        item['discount_percent'] = parseFloat(item['discount_percent']) || 0;
+        item['tax_percent'] = parseFloat(item['tax_percent']) || 0;
+
+        item['price'] = parseFloat(item['price'].toFixed(this.decimalAllowed));
+        item['discount_percent'] = parseFloat(item['discount_percent'].toFixed(this.decimalAllowed));
+        item['tax_percent'] = parseFloat(item['tax_percent'].toFixed(this.decimalAllowed));
 
         item['discount_percent'] = item['discount_percent'] < 100 ? item['discount_percent'] : 100;
         item['tax_percent'] = item['tax_percent'] < 100 ? item['tax_percent'] : 100;
@@ -563,10 +593,12 @@ export class DebitMemoEditComponent implements OnInit {
             modalRef.componentInstance.yesButtonText = 'YES';
             modalRef.componentInstance.noButtonText = 'NO';
             modalRef.result.then(yes => {
-                if (yes && this.validateData() && this.listLineItems.length) {
+                if (yes && this.validateData() && this.validateItemData() && this.listLineItems.length) {
                      this.onSaveDebitMemo(status);
                 } else if (!this.listLineItems.length) {
                     this.toastr.error('Please select at least 1 item to continue.');
+                } else if (!this.validateItemData()) {
+                    this.toastr.error('Item is invalid.');
                 }
             }, dismiss => { });
         }
@@ -652,6 +684,16 @@ export class DebitMemoEditComponent implements OnInit {
 
     validateData() {
         return this.debitMemoForm.valid;
+    }
+
+    validateItemData() {
+        let isValidate = true;
+        this.listLineItems.forEach(item => {
+            if (!item.qty) {
+                isValidate = false;
+            }
+        });
+        return isValidate;
     }
     //#endregion utility functions
 }
