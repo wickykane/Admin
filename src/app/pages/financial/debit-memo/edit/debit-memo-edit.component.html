@@ -18,6 +18,7 @@
                                         <span class="text-danger">(*)</span>
                                         <div>
                                             <ng-select appKeyNavigate="company_id" [typeahead]="searchKey"
+                                                [ngStyle]="{'border': (debitMemoForm.controls.company_id.invalid && isClickedSave && !isSaveDraft && !isCreateNew) ? '1px solid red' : '' }"
                                                 (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 110px; margin-left: 2px;"
                                                 (change)="onSelectCustomer()" [items]="listMaster['customers']"
                                                 bindLabel="company_name" bindValue="id" formControlName="company_id">
@@ -70,7 +71,7 @@
                                                 <div class='col-6 text-danger'>
                                                     <div clickOutside (clickOutside)="d.close()" class="input-group">
                                                         <input [maxDate]="currentDt | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="issue_date"
-                                                            ngbDatepicker #d="ngbDatepicker" (keydown)="$event.preventDefault()"
+                                                            ngbDatepicker #d="ngbDatepicker" (keydown)="$event.preventDefault()" (dateSelect)="onChangeIssueDate()"
                                                             [ngClass]="{'error-field': debitMemoForm.controls.issue_date.invalid && isClickedSave && !isSaveDraft && !isCreateNew}">
                                                         <div class="input-group-append">
                                                             <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
@@ -97,11 +98,15 @@
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6 text-primary'>
-                                                    <select required class="form-control" id="order_type" (change)="onSelectOrder($event.target.value)" formControlName="order_id"
+                                                    <ng-select id="order_type" (change)="onSelectOrder()" formControlName="order_id"
+                                                        [items]="listMaster['sale_orders']" bindLabel="code" bindValue="id"
+                                                        [ngStyle]="{'border': (debitMemoForm.controls.order_id.invalid && isClickedSave && !isSaveDraft && !isCreateNew) ? '1px solid red' : '' }">
+                                                    </ng-select>
+                                                    <!-- <select required class="form-control" id="order_type" (change)="onSelectOrder($event.target.value)" formControlName="order_id"
                                                         [ngClass]="{'error-field': debitMemoForm.controls.order_id.invalid && isClickedSave && !isSaveDraft && !isCreateNew}">
                                                         <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let type of listMaster['sale_orders']" [value]="type.id">{{type.code}}</option>
-                                                    </select>
+                                                    </select> -->
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -288,13 +293,13 @@
                                             <label class='col-6'>Option
                                                 <span class="text-danger">(*)</span>
                                             </label>
-                                            <div class='col-6'>{{orderInformation.shipping_method['ship_method_option']}}</div>
+                                            <div class='col-6'>{{orderInformation.shipping_method['options_name']}}</div>
                                         </div>
                                         <div class="form-group row">
                                             <label class='col-6'>Ship Rate
                                                 <span class="text-danger">(*)</span>
                                             </label>
-                                            <div class='col-6'>{{orderInformation.shipping_method['ship_method_rate']}}</div>
+                                            <div class='col-6'>{{orderInformation.shipping_method['ship_rate_name']}}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -344,6 +349,7 @@
                                         <td class="text-center">{{item.uom}}</td>
                                         <td class="input-field text-center">
                                             <input type="number" style="width: 60px;" class="form-control input-sm" [isDecimal]="false" numberDirective [min]="0"
+                                                [ngStyle]="{'border-color': (!item.qty && isClickedSave && !isSaveDraft && !isCreateNew) ? 'red' : '' }"
                                                 OnlyNumber="true" [(ngModel)]="item.qty" (blur)="onCalculateAmount(item); getUniqueTaxItemLine();">
                                         </td>
                                         <td class="input-field text-center">
@@ -359,7 +365,7 @@
                                             <input type="number" style="width: 60px;" class="form-control input-sm" [isDecimal]="true" numberDirective [min]="0" [max]="100"
                                                 OnlyNumber="true" [(ngModel)]="item.tax_percent" (blur)="onCalculateAmount(item); getUniqueTaxItemLine();">
                                         </td>
-                                        <td class="text-center">${{item.total_price}}</td>
+                                        <td class="text-center">{{item.total_price | currency}}</td>
                                         <td class="text-center">{{item.income_account_name}}</td>
                                     </tr>
                                 </tbody>
@@ -403,19 +409,19 @@
                                 <div class="form-group row">
                                     <label class='col-3 control-label text-warning'>Sub Total</label>
                                     <div class='col-9'>
-                                        <span class="">${{debitMemoForm.value.sub_total_price}}</span>
+                                        <span class="">{{debitMemoForm.value.sub_total_price | currency}}</span>
                                     </div>
                                 </div>
                                 <div class="form-group row" *ngFor="let tax of listTaxs">
                                     <label class='col-3 control-label'> + Tax {{tax.tax_percent}}%</label>
                                     <div class='col-9'>
-                                        <span class="text-success">$ {{tax.amount}}</span>
+                                        <span class="text-success">{{tax.amount | currency}}</span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class='col-3 control-label text-warning'>Total Due</label>
                                     <div class='col-9'>
-                                        <span class="text-primary">${{debitMemoForm.value.total_price}}</span>
+                                        <span class="text-primary">{{debitMemoForm.value.total_price | currency}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -425,7 +431,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12 mg-top-15 text-right">
+            <div class="col-md-12 mg-top-15 text-center">
                 <button type="button" class="btn btn-default" (click)="onClickBack()" translate>BACK TO LIST</button>
                 <button type="button" class="btn btn-outline-info" (click)="onClickSave('draft')" translate>SAVE AS DRAFT</button>
                 <!-- <button type="button" class="btn btn-success" (click)="onClickSave('create')" translate>SAVE & CREATE NEW DEBIT</button> -->

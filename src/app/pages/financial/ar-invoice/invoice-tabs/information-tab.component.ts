@@ -153,7 +153,7 @@ export class InvoiceInformationTabComponent implements OnInit {
         if (this.invoice_info.incentive_percent) {
             this.invoice_info.incentive = +this.invoice_info.incentive_percent * +this.invoice_info.total / 100;
         }
-        this.invoice_info.grand_total = +this.invoice_info.total - +this.invoice_info.incentive;
+        this.invoice_info.grand_total = +this.invoice_info.total - +this.invoice_info.incentive + ((this.detail['policy_type'] === 'Late') ? (+this.detail['policy_amt'] || 0) : 0);
     }
 
 
