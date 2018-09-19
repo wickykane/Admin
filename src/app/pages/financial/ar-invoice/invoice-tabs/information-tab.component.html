@@ -419,15 +419,15 @@
                                     </div>
                                     <span class="col-12 text-danger">{{detail['policy_des']}}</span>
                                 </div>
-                                <div *ngIf="detail['is_early']" class="form-group row">
+                                <div *ngIf="detail['is_early'] || detail['policy_type']=='Late'" class="form-group row">
                                     <label class="col-6 control-label ">
-                                            <strong>Adjusted Total Due</strong>
-                                        </label>
+                                        <strong>Adjusted Total Due</strong>
+                                    </label>
                                     <div class="col-6 padding-lr-10">
                                         <strong>{{(invoice_info.grand_total || 0) | currency}}</strong>
                                     </div>
                                 </div>
-                                <div  class="form-group row">
+                                <div class="form-group row">
                                     <label class="col-6 control-label ">
                                             <strong>Paid Amount</strong>
                                         </label>
@@ -435,7 +435,7 @@
                                         <strong>{{(detail.paid_amt || 0) | currency}}</strong>
                                     </div>
                                 </div>
-                                <div  class="form-group row margin-lr-0 text-light bg-danger">
+                                <div class="form-group row margin-lr-0 text-light bg-danger">
                                     <label class="col-6 control-label ">
                                             <strong>Balance Amount</strong>
                                         </label>

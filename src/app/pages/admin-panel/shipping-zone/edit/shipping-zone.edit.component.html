@@ -113,7 +113,7 @@
                                         </label>
                                         <div class="col-12">
                                             <input type="text" class="form-control" style="width: 100%" placeholder="Start searching for a state"
-                                            (ngModelChange)="filterState($event)" ([ngModel])="stateFilter">
+                                            (ngModelChange)="filterState($event)" [(ngModel)]="stateFilter">
                                         </div>
                                     </div>
                                 </div>
@@ -125,7 +125,7 @@
                                 <div class="col-11 body" style="height: 169px;overflow-y: scroll;">
                                     <div class="form-group row" *ngFor="let state of selectedCountry['state'];let i = index">
                                             <label class='col-11'>
-                                            <input type="checkbox" [(ngModel)]="state.selected"> {{state.name}}
+                                            <input type="checkbox" [(ngModel)]="state.selected" (change)="checkState()"> {{state.name}}
                                         </label>
                                     </div>
                                 </div>
