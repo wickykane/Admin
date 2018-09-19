@@ -84,7 +84,8 @@ export class SaleQuotationCreateComponent implements OnInit {
         contact: {
             'full_name': '',
             'phone': '',
-            'email': ''
+            'email': '',
+            'id': ''
         }
     };
 
@@ -268,8 +269,9 @@ export class SaleQuotationCreateComponent implements OnInit {
                 }
 
                 // if (res.data.buyer_type === 'PS') {
-                this.addr_select.contact = res.data.contact[0];
-                this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
+                this.addr_select.contact = res.data.contact[0] || this.addr_select.contact;
+                this.generalForm.patchValue({ contact_user_id: this.addr_select.contact.id, 'carrier_id': null, 'ship_method_option': null, 'ship_method_rate': null });
+
                 // }
 
                 if (!flag) {
@@ -282,12 +284,12 @@ export class SaleQuotationCreateComponent implements OnInit {
                         payment_term_id: this.customer.payment_term_id || null,
                     });
 
-                    if (default_billing) {
-                        this.selectAddress('billing');
+                    if (!_.isEmpty(default_billing)) {
+                        this.selectAddress('billing', true);
                     }
 
-                    if (default_shipping) {
-                        this.selectAddress('shipping');
+                    if (!_.isEmpty(default_shipping)) {
+                        this.selectAddress('shipping', true);
                     }
                 }
 
@@ -349,6 +351,10 @@ export class SaleQuotationCreateComponent implements OnInit {
     getShippingReference(id, flag?) {
         this.orderService.getShippingReference(id).subscribe(res => {
             this.listMaster['carriers'] = res.data;
+            const arr = res.data.filter(item => item.name === 'UPS');
+            if (arr.length > 0 ) {
+                this.generalForm.patchValue({ 'carrier_id': 1 , 'ship_method_option': null });
+            }
             this.changeShip(flag);
         });
     }
@@ -471,7 +477,7 @@ export class SaleQuotationCreateComponent implements OnInit {
     }
 
     changeShip(flag?) {
-        const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id) || {};
+        const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id) || { 'options': [], 'ship_rate': [], 'own_carrirer': ''};
         this.listMaster['options'] = (carrier.options || []).map(item => {
             item.cd = + item.cd;
             return item;

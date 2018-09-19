@@ -76,7 +76,8 @@ export class SaleOrderEditComponent implements OnInit {
         },
         contact: {
             'phone': '',
-            'email': ''
+            'email': '',
+            'id': ''
         }
     };
 
@@ -131,7 +132,7 @@ export class SaleOrderEditComponent implements OnInit {
             'description': [null],
             'payment_term_id': [null, Validators.required],
             'approver_id': [null, Validators.required],
-            'carrier_id': [2],
+            'carrier_id': [null],
             'ship_method_rate': [null, Validators.required],
             'ship_method_option': [null],
             'order_sts_name': [null]
@@ -227,7 +228,7 @@ export class SaleOrderEditComponent implements OnInit {
     //             this.customer = res.data;
     //             // if (res.data.buyer_type === 'PS') {
     //                 this.addr_select.contact = res.data.contact[0];
-    //                 this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
+    //                 this.generalForm.patchValue({ contact_user_id: this.addr_select.contact.id });
     //             // }
     //
     //             if (flag) {
@@ -245,8 +246,8 @@ export class SaleOrderEditComponent implements OnInit {
             try {
                 this.customer = res.data;
                 // if (res.data.buyer_type === 'PS') {
-                this.addr_select.contact = res.data.contact[0];
-                this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
+                this.addr_select.contact = res.data.contact[0] || this.addr_select.contact;
+                this.generalForm.patchValue({ contact_user_id: this.addr_select.contact.id });
                 // }
                 if (!flag) {
                     const default_billing = (this.customer.billing || []).find(item => item.set_default) || {};
@@ -258,11 +259,11 @@ export class SaleOrderEditComponent implements OnInit {
                         payment_term_id: this.customer.payment_term_id || null,
                     });
 
-                    if (default_billing) {
+                    if (!_.isEmpty(default_billing)) {
                         this.selectAddress('billing', flag);
                     }
 
-                    if (default_shipping) {
+                    if (!_.isEmpty(default_shipping)) {
                         this.selectAddress('shipping', flag);
                     }
                 }
@@ -329,12 +330,16 @@ export class SaleOrderEditComponent implements OnInit {
     getShippingReference(id, flag?) {
         this.orderService.getShippingReference(id).subscribe(res => {
             this.listMaster['carriers'] = res.data;
+            const arr = res.data.filter(item => item.name === 'UPS');
+            if (arr.length > 0 ) {
+                // this.generalForm.patchValue({ 'carrier_id': 1 , 'ship_method_option': null });
+            }
             this.changeShipVia(flag);
         });
     }
 
     changeShipVia(flag?) {
-        const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id);
+        const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id) || { 'options': [], 'ship_rate': [], 'own_carrirer': ''};
         this.listMaster['options'] = carrier.options || [];
         this.listMaster['ship_rates'] = carrier.ship_rate || [];
 
