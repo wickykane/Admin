@@ -97,7 +97,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             'gl_account': [null, Validators.required],
             'check_no': [null, Validators.required],
             'ref_no': [null, Validators.required],
-            'remain_amt': [null]
+            'remain_amt': [null],
         });
 
         //  Assign get list function name, override letiable here
@@ -259,6 +259,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             if (!this.generalForm.value.electronic) {
                 if (id === 4) {
                     this.generalForm.get('check_no').setValidators([Validators.required]);
+                    this.generalForm.get('ref_no').setValidators(null);
                 }
 
                 if ([5, 6].indexOf(id) !== -1) {
@@ -267,6 +268,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
                 }
                 if ([4, 5, 6].indexOf(id) === -1) {
                     this.generalForm.get('ref_no').setValidators([Validators.required]);
+                    this.generalForm.get('check_no').setValidators(null);
                 }
             }
 
@@ -365,7 +367,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
 
     createVoucher(type, is_draft?, is_continue?) {
         this.data['showError'] = true;
-        if (!is_draft && (this.generalForm.invalid || (this.data['summary'] && !this.data['summary'].total)) ) {
+        if (!is_draft && (this.generalForm.invalid || (this.data['summary'] && !this.data['summary'].total))) {
             this.toastr.error(this.messageConfig.error);
             return;
         }
@@ -375,7 +377,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             item.price_apply = item.applied_amt;
             return item;
         });
-
+        type = (type === 'overpayment') ? 2 : (type === 'overpayment-approve') ? 3 : type;
         const params = {
             ...this.generalForm.value,
             items,
@@ -388,7 +390,6 @@ export class ReceiptVoucherCreateComponent implements OnInit {
                 this.toastr.success(res.message);
                 if (!is_continue) {
                     setTimeout(() => {
-                        console.log('/financial/receipt-voucher/view/' + this.data['voucher_id']);
                         this.router.navigate(['/financial/receipt-voucher/view/' + this.data['voucher_id']]);
                     }, 500);
                 }
@@ -445,7 +446,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
                             console.log(e);
                         }
                     }, err => {
-                        this.resultPaymentModal(0);
+                        this.resultPaymentModal(0, err);
                     });
                 }
             }
@@ -461,17 +462,23 @@ export class ReceiptVoucherCreateComponent implements OnInit {
     updatePayment(res, items) {
         const params = { ... this.generalForm.value, ...res, items, status: 2 };
         this.voucherService.updateVoucher(this.data['voucher_id'], params).subscribe(data => {
-            this.resultPaymentModal(1);
+            this.resultPaymentModal(1, { ...res, respone: data });
+        }, err => {
+            this.resultPaymentModal(0, { ...res, respone: err });
         });
     }
 
-    resultPaymentModal(type) {
+    resultPaymentModal(type, data) {
         const modalRef = this.modalService.open(PaymentInformModalComponent, { size: 'lg', windowClass: 'modal-md' });
         modalRef.result.then(res => {
             if (res) {
+                this.confirmElectricModal();
+            } else {
+                this.router.navigate(['/financial/receipt-voucher/view/' + this.data['voucher_id']]);
             }
         }, dismiss => { });
         modalRef.componentInstance.type = type;
+        modalRef.componentInstance.data = data;
     }
 
     fetchMoreCustomer(data?) {

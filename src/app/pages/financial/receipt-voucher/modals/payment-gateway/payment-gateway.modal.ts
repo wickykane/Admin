@@ -94,7 +94,7 @@ export class PaymentGatewayModalComponent implements OnInit {
         if (!this.generalForm.valid) {
             return;
         } else {
-            this.activeModal.close(this.generalForm.value);
+            this.activeModal.close({ ...this.generalForm.value, ...this.data['billing'] });
         }
         // this.receiptVoucherService.sendMail(this.invoiceId, params).subscribe(res => {
         //     this.toastr.success(res.message);

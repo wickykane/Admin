@@ -107,6 +107,18 @@ export class SaleOrderComponent implements OnInit {
      * Internal Function
      */
 
+     filter(status) {
+         const params = { sts: status };
+         this.orderService.getListOrder(params).subscribe(res => {
+             try {
+                 this.list.items = res.data.rows;
+                 this.tableService.matchPagingOption(res.data);
+             } catch (e) {
+                 console.log(e);
+             }
+         });
+     }
+
     countOrderStatus() {
         this.orderService.countStatus().subscribe(res => {
             res.data.map(item => {

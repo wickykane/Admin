@@ -128,4 +128,26 @@ export class TableService {
             itemPerPageOptions: this.itemPerPageOptions
         };
     }
+    customSearchAction() {
+        let fl = false;
+        let isCheck = false;
+        Object.keys(this.context.searchForm.value).forEach(k => {
+            if (k !== 'email' && this.context.searchForm.value[k] && this.context.searchForm.value[k] !== 'null') {
+                isCheck = true;
+                fl = true;
+            }
+            if (this.context.searchForm.value['email'] && this.context.searchForm.value['email'] !== 'null' && String(this.context.searchForm.value['email']).trim() !== '') {
+                fl = true;
+            }
+            if ( this.context.searchForm.value['email'] && this.context.searchForm.value['email'] !== 'null' && String(this.context.searchForm.value['email']).trim() !== '') {
+               if (isCheck === true) {
+                fl = true;
+               }
+            }
+        });
+        if (!fl) {return false; }
+        this.temptParams = { ...this.getParams(), ...this.context.searchForm.value };
+        this.pagination['page'] = 1;
+        return this.context[this.getListFnName]();
+    }
 }
