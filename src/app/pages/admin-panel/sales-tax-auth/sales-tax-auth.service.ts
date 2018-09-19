@@ -37,7 +37,7 @@ export class SalesTaxAuthService {
     }
 
     getGLAccount() {
-        const url = 'account/getList/3';
+        const url = 'account/getAccountTree';
         return this.apiService.get(url);
     }
 

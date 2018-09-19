@@ -206,7 +206,13 @@ export class SalesTaxAuthComponent implements OnInit {
         this.salesTaxAuthService.getGLAccount().subscribe(
             res => {
                 try {
-                    this.listMaster.gl_accounts = res.data;
+                    // this.listMaster.gl_accounts = res.data;
+                    const accountList = res['data'];
+                    const tempAccountList = [];
+                    accountList.forEach(item => {
+                        tempAccountList.push({ 'name': item.name, 'level': item.level, 'disabled': true }, ...item.children);
+                    });
+                    this.listMaster.gl_accounts = tempAccountList;
                 } catch (err) {
                     console.log(err);
                 }
@@ -238,7 +244,7 @@ export class SalesTaxAuthComponent implements OnInit {
         this.salesTaxAuthService.getCountryTaxAuthorityDetail(countryId).subscribe(
             res => {
                 try {
-                    this.selectedCountryTax = res.data ;
+                    this.selectedCountryTax = res.data;
                     this.countryGeneralForm.patchValue(this.selectedCountryTax);
                     this.currentForm = 'country';
                     this.isClickedSave = false;
@@ -258,7 +264,7 @@ export class SalesTaxAuthComponent implements OnInit {
         this.salesTaxAuthService.getStateTaxAuthorityDetail(stateId).subscribe(
             res => {
                 try {
-                    this.selectedStateTax = res.data ;
+                    this.selectedStateTax = res.data;
                     this.stateGeneralForm.patchValue(this.selectedStateTax);
                     this.stateRateForm.patchValue(this.selectedStateTax);
                     this.stateGeneralForm.controls.state_code.setValue(this.selectedStateTax['state']['code']);
@@ -323,7 +329,7 @@ export class SalesTaxAuthComponent implements OnInit {
 
     onSelectStateDropdown(selectedState) {
         if (selectedState) {
-            const state = this.listMaster.states.find(_ => _.id === selectedState.id );
+            const state = this.listMaster.states.find(_ => _.id === selectedState.id);
             this.stateGeneralForm.controls.state_code.setValue(state.code);
         }
     }
@@ -349,23 +355,23 @@ export class SalesTaxAuthComponent implements OnInit {
         if (this.selectedStateTax['id']) {
             this.stateGeneralForm.patchValue(this.selectedStateTax);
             this.stateRateForm.patchValue(this.selectedStateTax);
-            const state = this.listMaster.states.find(_ => _.id === this.selectedStateTax['state_id'] );
+            const state = this.listMaster.states.find(_ => _.id === this.selectedStateTax['state_id']);
             this.stateGeneralForm.controls.state_code.setValue(state.code);
         }
     }
 
     onSaveTaxAuthority() {
         this.isClickedSave = true;
-        if ( this.isCreateNew && this.currentForm === 'country' && this.validateCountryGeneralForm()) {
+        if (this.isCreateNew && this.currentForm === 'country' && this.validateCountryGeneralForm()) {
             this.onCreateCountryTaxAuthority();
         }
-        if ( this.isCreateNew && this.currentForm === 'state' && this.validateStateGeneralForm() && this.validateStateRateForm()) {
+        if (this.isCreateNew && this.currentForm === 'state' && this.validateStateGeneralForm() && this.validateStateRateForm()) {
             this.onCreateStateTaxAuthority();
         }
-        if ( !this.isCreateNew && this.currentForm === 'country' && this.validateCountryGeneralForm()) {
+        if (!this.isCreateNew && this.currentForm === 'country' && this.validateCountryGeneralForm()) {
             this.onUpdateCountryTaxAuthority();
         }
-        if ( !this.isCreateNew && this.currentForm === 'state' && this.validateStateGeneralForm() && this.validateStateRateForm()) {
+        if (!this.isCreateNew && this.currentForm === 'state' && this.validateStateGeneralForm() && this.validateStateRateForm()) {
             this.onUpdateStateTaxAuthority();
         }
     }
@@ -373,7 +379,7 @@ export class SalesTaxAuthComponent implements OnInit {
 
     //#region call API for Save data
     onCreateCountryTaxAuthority() {
-        const params =  { ...this.countryGeneralForm.value };
+        const params = { ...this.countryGeneralForm.value };
         params['ac'] = params['ac'].toString();
         this.salesTaxAuthService.createCountryTaxAuthority(params).subscribe(
             res => {
@@ -391,9 +397,9 @@ export class SalesTaxAuthComponent implements OnInit {
     }
 
     onUpdateCountryTaxAuthority() {
-        const params =  { ...this.countryGeneralForm.value };
+        const params = { ...this.countryGeneralForm.value };
         params['ac'] = params['ac'].toString();
-        this.salesTaxAuthService.updateCountryTaxAuthority(this.selectedCountryTax['id'] , params).subscribe(
+        this.salesTaxAuthService.updateCountryTaxAuthority(this.selectedCountryTax['id'], params).subscribe(
             res => {
                 try {
                     this.handleFinishSaveCountry();
@@ -409,7 +415,7 @@ export class SalesTaxAuthComponent implements OnInit {
     }
 
     onCreateStateTaxAuthority() {
-        const params =  { ...this.stateGeneralForm.value, ...this.stateRateForm.value };
+        const params = { ...this.stateGeneralForm.value, ...this.stateRateForm.value };
         params['tax_authority_country_id'] = this.selectedCountryTax['id'];
         params['ac'] = '1';
         this.salesTaxAuthService.createStateTaxAuthority(params).subscribe(
@@ -428,7 +434,7 @@ export class SalesTaxAuthComponent implements OnInit {
     }
 
     onUpdateStateTaxAuthority() {
-        const params =  { ...this.stateGeneralForm.value, ...this.stateRateForm.value };
+        const params = { ...this.stateGeneralForm.value, ...this.stateRateForm.value };
         params['tax_authority_country_id'] = this.selectedStateTax['tax_authority_country_id'];
         params['current_rate'] = (this.newRate !== null && this.newRate !== '') ? this.newRate : params['current_rate'];
         Object.keys(params).forEach(key => {
