@@ -115,14 +115,6 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         // List Master
         this.getListReference();
 
-        this.generalForm.patchValue({
-            approver_id: user.id,
-            updated_by: user.full_name,
-            created_by: user.full_name,
-            updated_date: moment().format('MM/DD/YYYY h:mm:ss'),
-            payment_date: moment().format('MM/DD/YYYY'),
-        });
-
         // Lazy Load filter
         this.data['page'] = 1;
         const params = { page: this.data['page'], length: 15 };
@@ -130,7 +122,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
         });
-        this.searchKey.subscribe(key => {
+        this.searchKey.debounceTime(300).subscribe(key => {
             this.data['page'] = 1;
             this.searchCustomer(key);
         });
@@ -140,6 +132,16 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         this.onChangeWareHouse();
         this.onChangePayer();
         this.onChangePaymentMethodType();
+
+        // Init Value
+        this.generalForm.patchValue({
+            approver_id: user.id,
+            updated_by: user.full_name,
+            created_by: user.full_name,
+            updated_date: moment().format('MM/DD/YYYY h:mm:ss'),
+            payment_date: moment().format('MM/DD/YYYY'),
+            electronic: 0,
+        });
     }
 
     /**
@@ -388,9 +390,9 @@ export class ReceiptVoucherCreateComponent implements OnInit {
 
         this.voucherService.createVoucher(params).subscribe(res => {
             try {
-                this.data['voucher_id'] = res.data['id'];
                 this.toastr.success(res.message);
                 if (!is_continue) {
+                    this.data['voucher_id'] = res.data['id'];
                     setTimeout(() => {
                         this.router.navigate(['/financial/receipt-voucher/view/' + this.data['voucher_id']]);
                     }, 500);

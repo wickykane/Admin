@@ -164,7 +164,7 @@ export class InvoiceEditComponent implements OnInit {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
         });
-        this.searchKey.subscribe(key => {
+        this.searchKey.debounceTime(300).subscribe(key => {
             this.data['page'] = 1;
             this.searchCustomer(key);
         });
@@ -356,6 +356,7 @@ export class InvoiceEditComponent implements OnInit {
                 if (flag) {
                     this.selectAddress('billing', flag);
                     this.selectAddress('shipping', flag);
+                    this.selectContact();
                 }
             } catch (e) {
                 console.log(e);
@@ -565,6 +566,7 @@ export class InvoiceEditComponent implements OnInit {
             sale_person_id: this.generalForm.value.sales_person,
             inv_detail: items,
             is_draft: is_draft || 0,
+            policy_des: this.order_info['expires_dt'] || null,
         };
 
         this.financialService.updateInvoice(this.data['id'], params).subscribe(res => {
