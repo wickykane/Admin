@@ -1,11 +1,11 @@
-import { Directive, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 
 // tslint:disable-next-line:directive-selector
 @Directive({ selector: '[cdArrowTable]' })
 // tslint:disable-next-line:class-name
 export class cdArrowTable implements OnDestroy {
-    constructor(private _hotkeysService: HotkeysService) {
+    constructor(private _hotkeysService: HotkeysService, public element: ElementRef) {
         this.hotKeyConfig();
     }
     private _selectedIndex;
@@ -57,6 +57,7 @@ export class cdArrowTable implements OnDestroy {
         this._hotkeysService.add(new Hotkey('space', (event: KeyboardEvent): boolean => {
             if (this._selectedIndex >= 0) {
                 this.onEnter.emit(this._selectedIndex);
+                this.element.nativeElement.click();
                 return false; //  Prevent bubbling
             }
             //  event.preventDefault();
