@@ -365,7 +365,7 @@ export class ShippingZoneCreateComponent implements OnInit {
             }
             else if ((subItem.id == 2 && subItem.checked) || (subItem.id == 3 && subItem.checked)) {
                 if (items[0].id == 1 && items[0].checked) {
-                    subItem.checked=false;
+                    subItem.checked = false;
                     this.toastr.error('There is a conflict. You cannot active this Quote because Free Shipping is ON')
                     event.preventDefault();
                 }
