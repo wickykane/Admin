@@ -128,7 +128,12 @@ export class PartEditComponent implements OnInit {
         this.productService.getAccountType().subscribe(
             res => {
                 try {
-                    this.listMaster['account'] = res.data;
+                  const accountList = res['data'];
+                  const tempAccountList = [];
+                  accountList.forEach(item => {
+                      tempAccountList.push({ 'name': item.name, 'level': item.level, 'disabled': true }, ...item.children);
+                  });
+                  this.listMaster['account'] = tempAccountList;
 
                 } catch (e) {
                     console.log(e);
