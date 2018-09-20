@@ -43,7 +43,6 @@ export class SaleQuotationDetailComponent implements OnInit {
         public keyService: SaleQuoteDetailKeyService,
         private route: ActivatedRoute) {
         //  Init Key
-        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
 
     }
 

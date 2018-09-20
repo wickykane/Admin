@@ -51,20 +51,19 @@ export class KeyNavigateDirective implements OnInit, AfterViewInit {
 
     ngOnInit(): void {
         if (this._config) {
-            const elementDom = this._config[this.appKeyNavigate];
-            elementDom.element = (this._config[this.appKeyNavigate].ng_select) ? this.ngSelect : this._element;
-            if (elementDom.focus) {
-                if (elementDom.ng_select) {
-                    this.ngSelect.focus();
-                } else {
-                    this._element.nativeElement.focus();
-                }
-            }
             this.keyConfigChange.emit(this._config);
         }
     }
 
     ngAfterViewInit(): void {
-
+        const elementDom = this._config[this.appKeyNavigate];
+        elementDom.element = (this._config[this.appKeyNavigate].ng_select) ? this.ngSelect : this._element;
+        if (elementDom.focus) {
+            if (elementDom.ng_select) {
+                this.ngSelect.focus();
+            } else {
+                this._element.nativeElement.focus();
+            }
+        }
     }
 }

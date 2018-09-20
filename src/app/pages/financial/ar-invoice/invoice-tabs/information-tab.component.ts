@@ -97,6 +97,7 @@ export class InvoiceInformationTabComponent implements OnInit {
                 this.detail.contact_user = res.data.contact_user || [];
                 this.detail.shipping_address = res.data.shipping_address || [];
                 this.detail.billing = res.data.billing_address || [];
+                this.getEarlyPaymentValue();
             } catch (e) {
                 console.log(e);
             }
@@ -127,4 +128,16 @@ export class InvoiceInformationTabComponent implements OnInit {
         modalRef.componentInstance.noButtonText = 'No';
     }
 
+    getEarlyPaymentValue() {
+        const issue_dt = this.detail['inv_dt'];
+        const payment_term_id = this.detail['payment_term_id'];
+        const total_due = this.detail['sub_tot'];
+        if (this.detail['policy_type'] === 'Early' && issue_dt && payment_term_id && total_due) {
+            this.financialService.getEarlyPaymentValue(issue_dt, payment_term_id, total_due).subscribe(res => {
+                if (res.data) {
+                    this.detail['policy_des'] = res.data.expires_dt;
+                }
+            });
+        }
+    }
 }
