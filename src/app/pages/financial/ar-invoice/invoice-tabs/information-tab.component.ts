@@ -103,25 +103,6 @@ export class InvoiceInformationTabComponent implements OnInit {
         });
     }
 
-    groupTax(items) {
-        this.invoice_info['taxs'] = [];
-        this.invoice_info['total_tax'] = 0;
-        const taxs = items.map(item => item.tax_percent || 0);
-        const unique = taxs.filter((i, index) => taxs.indexOf(i) === index);
-        unique.forEach((tax, index) => {
-            let taxAmount = 0;
-            items.filter(item => item.tax_percent === tax).map(i => {
-                taxAmount += (+i.tax_percent * +i.qty_inv * ((+i.price || 0) * (100 - (+i.discount_percent || 0)) / 100) / 100);
-            });
-            this.invoice_info['total_tax'] = this.invoice_info['total_tax'] + +taxAmount.toFixed(2);
-            this.invoice_info['taxs'].push({
-                value: tax, amount: taxAmount.toFixed(2)
-            });
-        });
-    }
-
-
-
     updateStatus(id, status) {
         const params = { status };
         this.financialService.updateInvoiceStatus(id, params).subscribe(res => {
