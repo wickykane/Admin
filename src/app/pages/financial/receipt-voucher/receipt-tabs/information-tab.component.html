@@ -1,14 +1,22 @@
 <div class='address-tab'>
     <div class="bd-example text-right">
-        <button class="btn btn-outline-secondary" [routerLink]="['/financial/receipt-voucher']"><i class="fa fa-share-square" ></i> Back</button>
-        <button *ngIf="detail['status'] == 1" class="btn btn-outline-primary" [routerLink]="['/financial/receipt-voucher/edit', _receiptId]"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit</button>
-        <button *ngIf="detail['status'] == 1" class="btn btn-outline-warning" (click)="confirmModal(_receiptId, 2)"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i> Submit</button>
-        <button *ngIf="detail['status'] == 1" class="btn btn-outline-danger" (click)="confirmModal(_receiptId, 5)"><i class="fa fa-times-circle" aria-hidden="true"></i> Cancel</button>
-        <button *ngIf="detail['status'] == 2" class="btn btn-outline-success" (click)="confirmModal(_receiptId, 3)"><i class="fa fa-check-square"></i> Approve</button>
-        <button *ngIf="detail['status'] == 2" class="btn btn-outline-danger" (click)="confirmModal(_receiptId, 4)"><i class="fa fa-ban" aria-hidden="true"></i> Reject</button>
+        <button class="btn btn-outline-secondary" [routerLink]="['/financial/receipt-voucher']"><i class="fa fa-share-square"></i>
+            Back</button>
+        <button *ngIf="detail['status'] == 1" class="btn btn-outline-primary" [routerLink]="['/financial/receipt-voucher/edit', _receiptId]"><i
+                class="fa fa-pencil-square" aria-hidden="true"></i> Edit</button>
+        <button *ngIf="detail['status'] == 1" class="btn btn-outline-warning" (click)="confirmModal(_receiptId, 2)"><i
+                class="fa fa-caret-square-o-right" aria-hidden="true"></i> Submit</button>
+        <button *ngIf="detail['status'] == 1" class="btn btn-outline-danger" (click)="confirmModal(_receiptId, 5)"><i
+                class="fa fa-times-circle" aria-hidden="true"></i> Cancel</button>
+        <button *ngIf="detail['status'] == 2" class="btn btn-outline-success" (click)="confirmModal(_receiptId, 3)"><i
+                class="fa fa-check-square"></i> Approve</button>
+        <button *ngIf="detail['status'] == 2" class="btn btn-outline-danger" (click)="confirmModal(_receiptId, 4)"><i
+                class="fa fa-ban" aria-hidden="true"></i> Reject</button>
         <!-- <button *ngIf="[4,8].indexOf(detail['status']) != -1" class="btn btn-outline-dark"><i class="fa fa-money" aria-hidden="true"></i> Pay</button> -->
-        <button class="btn btn-outline-dark" (click)="printPDF(_receiptId, detail['inv_num'] )"><i class="fa fa-download" aria-hidden="true"></i> Print</button>
-        <button *ngIf="[3,4,6,7,8].indexOf(detail['status']) != -1" class="btn btn-outline-dark" (click)="sendMail(_receiptId)"><i class="fa fa-envelope-o" aria-hidden="true"></i> Send Mail</button>
+        <button class="btn btn-outline-dark" (click)="printPDF(_receiptId, detail['inv_num'] )"><i class="fa fa-download"
+                aria-hidden="true"></i> Print</button>
+        <button *ngIf="[3,4,6,7,8].indexOf(detail['status']) != -1" class="btn btn-outline-dark" (click)="sendMail(_receiptId)"><i
+                class="fa fa-envelope-o" aria-hidden="true"></i> Send Mail</button>
     </div>
     <section class="rma-page block main-container block-order">
         <div class="row">
@@ -22,18 +30,18 @@
                             <div class="col-md-12 fix-padding">
                                 <div class="row">
                                     <div class="col-md-3 padding-lr-5 ">
-                                            <div class="form-group row">
-                                                    <label class='col-6 control-label'>Customer Name</label>
-                                                    <div class='col-6'>
-                                                        {{detail['company_name']}}
-                                                    </div>
-                                                </div>
+                                        <div class="form-group row">
+                                            <label class='col-6 control-label'>Customer Name</label>
+                                            <div class='col-6'>
+                                                {{detail['company_name']}}
+                                            </div>
+                                        </div>
                                         <div class="form-group row">
                                             <label class='col-6 control-label'>Voucher No</label>
                                             <div class='col-6'>
                                                 {{detail['cd']}}
                                             </div>
-                                        </div>                                       
+                                        </div>
                                         <div class="form-group row">
                                             <label class='col-6 control-label'>Payment Date</label>
                                             <div class='col-6'>
@@ -48,7 +56,7 @@
                                                 <span class="badge badge-danger bg-magenta" *ngIf="detail['status'] == 4">{{detail['status_name']}}</span>
                                                 <span class="badge badge-success bg-strong-green" *ngIf="detail['status'] == 3">{{detail['status_name']}}</span>
                                                 <span class="badge badge-primary bg-darkblue" *ngIf="detail['status'] == 5">{{detail['status_name']}}</span>
-                                                <span class="badge badge-primary bg-lemon" *ngIf="detail['status'] == 6">{{detail['status_name']}}</span>                                              
+                                                <span class="badge badge-primary bg-lemon" *ngIf="detail['status'] == 6">{{detail['status_name']}}</span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -71,18 +79,30 @@
                                                 {{ detail['payment_method_name']}}
                                             </div>
                                         </div>
+                                        <div class="form-group row" *ngIf="detail['payment_method_id'] == 4">
+                                            <label class='col-6 control-label'>Check Number</label>
+                                            <div class='col-6'>
+                                                {{ detail['number']}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" *ngIf="detail['payment_method_id'] == 3 || [4,5,6].indexOf(detail['payment_method_id']) == -1">
+                                            <label class='col-6 control-label'>Reference Number</label>
+                                            <div class='col-6'>
+                                                {{ detail['number']}}
+                                            </div>
+                                        </div>
                                         <div class="form-group row">
                                             <label class='col-6 control-label'>Deposit G/L Account</label>
                                             <div class='col-6'>
                                                 {{detail['gl_account_name']}}
                                             </div>
-                                        </div>                                       
+                                        </div>
                                     </div>
                                     <div class="col-md-3 customer-infomation bolder padding-lr-5">
                                         <div class="form-group row">
                                             <label class='col-6 control-label'>Created By</label>
                                             <div class='col-6'>
-                                                {{ detail['approver']}}
+                                                {{ detail['created_by']}}
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -94,15 +114,15 @@
                                         <div class="form-group row">
                                             <label class='col-6 control-label'>Last Updated Date</label>
                                             <div class='col-6'>
-                                                {{detail['approver']}}
+                                                {{detail['updated_at']|date:'MM/dd/yyyy'}}
                                             </div>
-                                        </div> 
+                                        </div>
                                         <div class="form-group row">
                                             <label class='col-6 control-label'>Last Updated By</label>
                                             <div class='col-6'>
-                                                {{detail['approver']}}
+                                               {{detail['updated_by']}}
                                             </div>
-                                        </div>                                    
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -130,7 +150,7 @@
                                         <th class="text-center" translate>Payment Term</th>
                                         <th class="text-nowrap text-center" translate>Status</th>
                                         <th class="text-nowrap text-center" translate>Total Amount</th>
-                                        <th class="text-center" translate>Apply Amount</th>                                        
+                                        <th class="text-center" translate>Apply Amount</th>
                                     </tr>
                                 </thead>
                                 <tr *ngIf="detail?.items?.length === 0">
@@ -145,7 +165,7 @@
                                         <td>{{item.payment_term['des'] }}</td>
                                         <td>{{item.status}}</td>
                                         <td>{{item.total_amount|currency}}</td>
-                                        <td>{{item.price_apply|currency}}</td>                                       
+                                        <td>{{item.price_apply|currency}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -175,36 +195,44 @@
                             <div class="col-12">
                                 <div class="form-group row">
                                     <label class='col-5 control-label'>
-                                            <strong class="text-warning">Amount Received</strong>
-                                        </label>
+                                        <strong class="text-warning">Amount Received</strong>
+                                    </label>
                                     <div class='col-6 offset-md-1 padding-lr-10'>
                                         <strong>{{detail['price_received'] | currency}}</strong>
-                                    </div>
-                                </div>                               
-                                <div class="form-group row">
-                                    <label class='col-5 control-label'>
-                                            <strong class="text-warning">Apply Amount</strong>
-                                        </label>
-                                    <div class='col-6 offset-md-1 padding-lr-10'>
-                                        <strong class="text-primary">{{detail['price_apply'] | currency}}</strong>
-                                    </div>
-                                </div>   
-                                <div class="form-group row">
-                                    <label class='col-5 control-label'>
-                                            <strong class="text-warning">Remaining Amount</strong>
-                                        </label>
-                                    <div class='col-6 offset-md-1 padding-lr-10'>
-                                        <strong class="text-primary">{{detail['price_change'] | currency}}</strong>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class='col-5 control-label'>
-                                            <strong class="text-warning">Amount to Credit</strong>
-                                        </label>
+                                        <strong class="text-warning">Apply Amount</strong>
+                                    </label>
+                                    <div class='col-6 offset-md-1 padding-lr-10'>
+                                        <strong class="text-primary">{{detail['price_apply'] | currency}}</strong>
+                                    </div>
+                                </div>
+                                <div class="form-group row" *ngIf="detail['payment_method_id'] !=5" >
+                                    <label class='col-5 control-label'>
+                                        <strong class="text-warning">Remaining Amount</strong>
+                                    </label>
+                                    <div class='col-6 offset-md-1 padding-lr-10'>
+                                        <strong class="text-primary">{{detail['price_remaining'] | currency}}</strong>
+                                    </div>
+                                </div>
+                                <div class="form-group row" *ngIf="detail['payment_method_id']==5">
+                                    <label class='col-5 control-label'>
+                                        <strong class="text-warning">Change</strong>
+                                    </label>
                                     <div class='col-6 offset-md-1 padding-lr-10'>
                                         <strong class="text-primary">{{detail['price_change'] | currency}}</strong>
                                     </div>
-                                </div>                          
+                                </div>
+                                <div class="form-group row" *ngIf="detail['payment_method_id'] !=5">
+                                    <label class='col-5 control-label'>
+                                        <strong class="text-warning">Amount to Credit</strong>
+                                    </label>
+                                    <div class='col-6 offset-md-1 padding-lr-10'>
+                                        <strong class="text-primary">{{detail['price_to_credit'] | currency}}</strong>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
