@@ -156,18 +156,18 @@ export class ReceiptInformationTabComponent implements OnInit {
                 if (!this.is_fullfill) {
                     this.selected_message = this.messageConfig.submited_full_fill;
                 }
-                if (this.is_fullfill && Number(this.detail.price_change) === 0) {
+                if (this.is_fullfill && Number(this.detail.price_remaining) === 0) {
                     this.selected_message = this.messageConfig.submited_zero_amount_remain;
                 }
-                if (this.is_fullfill && Number(this.detail.price_change) > 0) {
+                if (this.is_fullfill && Number(this.detail.price_remaining) > 0) {
                     this.selected_message = this.messageConfig.submited_is_amount_remain;
                 }
                 break;
             case 3:
-                if (Number(this.detail.price_change) === 0) {
+                if (Number(this.detail.price_remaining) === 0) {
                     this.selected_message = this.messageConfig.approved_zero_amount_remain;
                 }
-                if (Number(this.detail.price_change) > 0) {
+                if (Number(this.detail.price_remaining) > 0) {
                     this.selected_message = this.messageConfig.approved_is_amount_remain;
                 }
                 break;
