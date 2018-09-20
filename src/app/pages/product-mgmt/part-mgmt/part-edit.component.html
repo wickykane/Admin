@@ -178,15 +178,9 @@
                                                   <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
-                                                    <ng-select [items]="listMaster['account']" groupBy="group" formControlName="inventory_account_id" bindLabel="name" bindValue="id">
-                                                        <ng-template ng-label-tmp let-item="item">
-                                                            <b>{{item.name}}</b>
-                                                        </ng-template>
-                                                        <ng-template ng-optgroup-tmp let-item="item" let-index="index">
-                                                            {{item.group}}
-                                                        </ng-template>
+                                                    <ng-select  [items]="listMaster['account']" placeholder="---Select---" formControlName="inventory_account_id" bindLabel="name" bindValue="id">
                                                         <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
-                                                            <b>{{item.name}}</b>
+                                                            <span [ngClass]="{'pl-1': item.level ==0,'pl-3':item.level==1,'pl-5':item.level==2}">{{ item.name}}</span>
                                                         </ng-template>
                                                     </ng-select>
                                                 </div>
@@ -197,17 +191,11 @@
                                                   <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6 '>
-                                                    <ng-select [items]="listMaster['account']" groupBy="group" formControlName="income_account_id" bindLabel="name" bindValue="id">
-                                                        <ng-template ng-label-tmp let-item="item">
-                                                            <b>{{item.name}}</b>
-                                                        </ng-template>
-                                                        <ng-template ng-optgroup-tmp let-item="item" let-index="index">
-                                                            {{item.group}}
-                                                        </ng-template>
-                                                        <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
-                                                            <b>{{item.name}}</b>
-                                                        </ng-template>
-                                                    </ng-select>
+                                                  <ng-select  [items]="listMaster['account']" placeholder="---Select---" formControlName="income_account_id" bindLabel="name" bindValue="id">
+                                                      <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                                          <span [ngClass]="{'pl-1': item.level ==0,'pl-3':item.level==1,'pl-5':item.level==2}">{{ item.name}}</span>
+                                                      </ng-template>
+                                                  </ng-select>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -229,17 +217,11 @@
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
-                                                    <ng-select [items]="listMaster['account']" groupBy="group" formControlName="expense_account_id" bindLabel="name" bindValue="id">
-                                                        <ng-template ng-label-tmp let-item="item">
-                                                            <b>{{item.name}}</b>
-                                                        </ng-template>
-                                                        <ng-template ng-optgroup-tmp let-item="item" let-index="index">
-                                                            {{item.group}}
-                                                        </ng-template>
-                                                        <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
-                                                            <b>{{item.name}}</b>
-                                                        </ng-template>
-                                                    </ng-select>
+                                                  <ng-select  [items]="listMaster['account']" placeholder="---Select---" formControlName="expense_account_id" bindLabel="name" bindValue="id">
+                                                      <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                                          <span [ngClass]="{'pl-1': item.level ==0,'pl-3':item.level==1,'pl-5':item.level==2}">{{ item.name}}</span>
+                                                      </ng-template>
+                                                  </ng-select>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
