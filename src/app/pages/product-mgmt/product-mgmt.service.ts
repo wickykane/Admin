@@ -5,7 +5,7 @@ import { ApiService } from '../../services/api.service';
 @Injectable()
 export class ProductService {
     public token: string;
-    constructor(private $http: Http, private apiService: ApiService) {}
+    constructor(private $http: Http, private apiService: ApiService) { }
 
     updateItem(id, data) {
         const url = 'item/update/' + id;
@@ -128,8 +128,8 @@ export class ProductService {
     }
 
     getAccountType() {
-      const url = 'item/get-account-type';
-      return this.apiService.get(url);
+        const url = 'account/getAccountTree';
+        return this.apiService.get(url);
     }
     // mass price
     getListMassPrice(params) {
@@ -154,34 +154,34 @@ export class ProductService {
     }
     getMiscList(params) {
         const url = 'misc';
-        return this.apiService.get(url,params);
+        return this.apiService.get(url, params);
     }
     createNewMiscItems(params) {
         const url = 'misc';
-        return this.apiService.post(url,params);
+        return this.apiService.post(url, params);
     }
-    updateMiscItems(id,params) {
-        const url = 'misc/'+id;
-        return this.apiService.put(url,params);
+    updateMiscItems(id, params) {
+        const url = 'misc/' + id;
+        return this.apiService.put(url, params);
     }
-    generateMiscNumber(){
+    generateMiscNumber() {
         const url = 'misc/generate-number';
         return this.apiService.get(url);
     }
-    getAccountList(){
-         const url = ['account', 'getAccountTree'].join('/');
+    getAccountList() {
+        const url = ['account', 'getAccountTree'].join('/');
         return this.apiService.get(url);
     }
-    deleteMisc(id){
-        const url = 'misc/'+id;
+    deleteMisc(id) {
+        const url = 'misc/' + id;
         return this.apiService.delete(url);
     }
-    activeStatus(id){
-        const url = 'misc/'+id+'/active';
+    activeStatus(id) {
+        const url = 'misc/' + id + '/active';
         return this.apiService.put(url);
     }
-    inActiveStatus(id){
-        const url = 'misc/'+id+'/in-active';
+    inActiveStatus(id) {
+        const url = 'misc/' + id + '/in-active';
         return this.apiService.put(url);
     }
 
