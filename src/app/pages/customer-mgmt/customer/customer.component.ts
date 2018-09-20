@@ -94,7 +94,14 @@ export class CustomerComponent implements OnInit {
 
     getList() {
         const params = {...this.tableService.getParams(), ...this.searchForm.value};
-        Object.keys(params).forEach((key) => (params[key] === null || params[key]=== '') && delete params[key]);
+        Object.keys(params).forEach((key) => {
+            if (key !== 'email' && (params[key] === null || params[key] === '' )) {
+                 delete params[key];
+                }
+            if (params['email'] === null || params['email'] === '' || String(params['email']).trim() === '') {
+                delete params['email'];
+            }
+        });
 
         this.customerService.getListBuyer(params).subscribe(res => {
             try {
