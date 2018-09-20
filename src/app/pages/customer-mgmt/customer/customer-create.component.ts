@@ -251,9 +251,9 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
 
     changeBank(item) {
 
-        item.bank_swift = this.listBank.map(x => {
+        this.listBank.map(x => {
             if (item.bank_id === x.id) {
-                return x.swift;
+                item.bank_swift = x.swift;
             }
         });
         this.commonService.getListBranchByBank(item.bank_id).subscribe(res => {
