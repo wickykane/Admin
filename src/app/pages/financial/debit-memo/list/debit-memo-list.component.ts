@@ -67,10 +67,8 @@ export class DebitMemoListComponent implements OnInit {
             company_name: [null],
             sts: [null],
             date_type: [null],
-            issue_date_from: [null],
-            issue_date_to: [null],
-            due_date_from: [null],
-            due_date_to: [null]
+            date_from: [null],
+            date_to: [null]
         });
         //  Init hot keys
         this.keyService.watchContext.next(this);
@@ -81,7 +79,6 @@ export class DebitMemoListComponent implements OnInit {
 
     ngOnInit() {
         this.currentuser = JSON.parse(localStorage.getItem('currentUser'));
-        this.listMaster['listFilter'] = [{ value: false, name: 'Date Filter' }];
         this.listMaster['dateType'] = [
             { id: 0, name: 'Issue Date' },
             { id: 1, name: 'Due Date' }
