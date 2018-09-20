@@ -5,7 +5,7 @@ import { Subject } from 'rxjs/Rx';
 import { Helper } from '../../../shared/index';
 
 @Injectable()
-export class InvoiceKeyService {
+export class ReceiptKeyService {
     public context: any;
     public _hotkeysService;
     public watchContext = new Subject<any>();
