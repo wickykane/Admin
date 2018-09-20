@@ -128,26 +128,23 @@
                                             <span class="badge badge-info bg-blue" *ngIf="item.sts_code == 'NW'">{{item.sts}}</span>
                                             <span class="badge badge-warning bg-texas-rose" *ngIf="item.sts_code == 'SB'">{{item.sts}}</span>
                                             <span class="badge badge-danger bg-magenta" *ngIf="item.sts_code == 'RJ'">{{item.sts}}</span>
-                                            <span class="badge badge-success bg-strong-green" *ngIf="item.sts_code == 'AP'">{{item.sts}}</span>
+                                            <span class="badge badge-success bg-strong-green" *ngIf="item.sts_code == 'RC'">{{item.sts}}</span>
                                             <span class="badge badge-danger bg-red" *ngIf="item.sts_code == 'CC'">{{item.sts}}</span>
-                                            <span class="badge badge-primary bg-lemon" *ngIf="item.sts_code == 'RD'">{{item.sts}}</span>
-                                            <span class="badge badge-primary" *ngIf="item.sts_code == 'RF'">{{item.sts}}</span>
-                                            <span class="badge badge-primary bg-darkblue" *ngIf="item.sts_code == 'IU'">{{item.sts}}</span>
-                                            <span class="badge badge-primary bg-bright-grey" *ngIf="item.sts_code == 'EX'">{{item.sts}}</span>
+                                            <span class="badge badge-primary bg-lemon" *ngIf="item.sts_code == 'ER'">{{item.sts}}</span>                                           
                                         </td>
                                         <td>{{item.created_at|date:'MM/dd/yyyy'}}</td>
                                         <td>{{item.created_by}}</td>
                                         <td>{{item.updated_at|date:'MM/dd/yyyy'}}</td>
                                         <td>{{item.updated_by}}</td>
                                         <td>
-                                            <a class="btn btn-default" ngbTooltip="View" (click)="viewInvoice(item.id)">
+                                            <a class="btn btn-default" ngbTooltip="View" (click)="viewReceipt(item.id)">
                                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default " ngbTooltip="Edit" (click)="editInvoice(item.id)"
-                                                *ngIf="item.invoice_status_id == 1">
+                                            <a class="btn btn-default " ngbTooltip="Edit" (click)="editReceipt(item.id)"
+                                                *ngIf="item.sts_code == 'NW'">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
-                                            <a ngbTooltip="Submit" *ngIf="item.invoice_status_id == 1" class="btn btn-default"
+                                            <!-- <a ngbTooltip="Submit" *ngIf="item.invoice_status_id == 1" class="btn btn-default"
                                                 (click)="confirmModal(item.id, 2)"><i class="fa fa-caret-square-o-right"
                                                     aria-hidden="true"></i></a>
                                             <a class="btn btn-default" ngbTooltip="Cancel" (click)="confirmModal(item.id, 7)"
@@ -162,10 +159,10 @@
                                                 class="btn btn-default"><i class="fa fa-money" aria-hidden="true"></i></a>
                                             <a class="btn btn-default" ngbTooltip="Print" (click)="printPDF(item.id, item.inv_num)">
                                                 <i class="fa fa-download" aria-hidden="true"></i>
-                                            </a>
-                                            <a ngbTooltip="Send Mail" *ngIf="[3,4,6,7,8].indexOf(item['invoice_status_id']) != -1"
+                                            </a> -->
+                                            <!-- <a ngbTooltip="Send Mail" *ngIf="[3,4,6,7,8].indexOf(item['invoice_status_id']) != -1"
                                                 class="btn btn-default" (click)="sendMail(item.id)"><i class="fa fa-envelope-o"
-                                                    aria-hidden="true"></i></a>
+                                                    aria-hidden="true"></i></a> -->
                                             <!-- <a ngbTooltip="Reopen" *ngIf="item['invoice_status_id'] == 3" class="btn btn-default" (click)="confirmModal(item.id, 1)"><i class="fa fa-external-link-square"></i></a> -->
                                         </td>
                                     </tr>

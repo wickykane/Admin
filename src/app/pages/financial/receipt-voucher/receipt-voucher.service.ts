@@ -25,11 +25,6 @@ export class ReceiptVoucherService {
         return this.API.get(url, params);
     }
 
-    getListMasterForReceiptVoucher() {
-        const url = ['receipt-voucher', 'refer'].join('/');
-        return this.API.get(url);
-    }
-
     getDetailReceiptVoucher(id) {
         const url = ['voucher', 'view', id].join('/');
         return this.API.get(url);
@@ -40,9 +35,9 @@ export class ReceiptVoucherService {
         return this.API.get(url, params);
     }
 
-    updateReceiptVoucherStatus(id, params) {
-        const url = ['receipt-voucher', id].join('/');
-        return this.API.put(url, params);
+    updateReceiptVoucherStatus(params) {
+        const url = ['voucher', 'change-status'].join('/');
+        return this.API.post(url, params);
     }
 
     getVoucherMasterData() {
@@ -62,6 +57,11 @@ export class ReceiptVoucherService {
 
     getListInvoiceAndMemo(params) {
         const url = 'voucher/get-line-item';
+        return this.API.get(url, params);
+    }
+
+    getListInvoiceAndMemoById(id, params) {
+        const url = 'voucher/get-line-item/' + id;
         return this.API.get(url, params);
     }
 

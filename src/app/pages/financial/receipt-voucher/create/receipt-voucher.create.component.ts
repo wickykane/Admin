@@ -90,7 +90,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             'electronic': [null, Validators.required],
             'price_received': [null, Validators.required],
             'payment_date': [null, Validators.required],
-            'number': [null, Validators.required],
+            'cd': [null, Validators.required],
             'updated_by': [null],
             'updated_date': [null],
             'created_by': [null],
@@ -115,14 +115,6 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         // List Master
         this.getListReference();
 
-        this.generalForm.patchValue({
-            approver_id: user.id,
-            updated_by: user.full_name,
-            created_by: user.full_name,
-            updated_date: moment().format('MM/DD/YYYY'),
-            payment_date: moment().format('MM/DD/YYYY'),
-        });
-
         // Lazy Load filter
         this.data['page'] = 1;
         const params = { page: this.data['page'], length: 15 };
@@ -130,7 +122,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
         });
-        this.searchKey.subscribe(key => {
+        this.searchKey.debounceTime(300).subscribe(key => {
             this.data['page'] = 1;
             this.searchCustomer(key);
         });
@@ -140,6 +132,16 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         this.onChangeWareHouse();
         this.onChangePayer();
         this.onChangePaymentMethodType();
+
+        // Init Value
+        this.generalForm.patchValue({
+            approver_id: user.id,
+            updated_by: user.full_name,
+            created_by: user.full_name,
+            updated_date: moment().format('MM/DD/YYYY h:mm:ss'),
+            payment_date: moment().format('MM/DD/YYYY'),
+            electronic: 0,
+        });
     }
 
     /**
@@ -154,7 +156,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         });
 
         this.voucherService.getVoucherMasterData().subscribe(res => {
-            this.generalForm.get('number').patchValue(res.data.cd);
+            this.generalForm.get('cd').patchValue(res.data.cd);
         });
     }
 
@@ -366,8 +368,8 @@ export class ReceiptVoucherCreateComponent implements OnInit {
     }
 
     createVoucher(type, is_draft?, is_continue?) {
-        this.data['showError'] = true;
         if (!is_draft && (this.generalForm.invalid || (this.data['summary'] && !this.data['summary'].total))) {
+            this.data['showError'] = true;
             this.toastr.error(this.messageConfig.error);
             return;
         }
@@ -382,13 +384,15 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             ...this.generalForm.value,
             items,
             status: type,
+            number: this.generalForm.value.check_no || this.generalForm.value.ref_no,
+            payment_date: moment(this.generalForm.value.payment_date).format('MM/DD/YYYY'),
         };
 
         this.voucherService.createVoucher(params).subscribe(res => {
             try {
-                this.data['voucher_id'] = res.data['id'];
                 this.toastr.success(res.message);
                 if (!is_continue) {
+                    this.data['voucher_id'] = res.data['id'];
                     setTimeout(() => {
                         this.router.navigate(['/financial/receipt-voucher/view/' + this.data['voucher_id']]);
                     }, 500);

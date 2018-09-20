@@ -78,7 +78,8 @@ export class SaleOrderCreateComponent implements OnInit {
         contact: {
             'full_name': '',
             'phone': '',
-            'email': ''
+            'email': '',
+            'id': ''
         }
     };
 
@@ -201,8 +202,8 @@ export class SaleOrderCreateComponent implements OnInit {
             try {
                 this.customer = res.data;
                 // if (res.data.buyer_type === 'PS') {
-                this.addr_select.contact = res.data.contact[0];
-                this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
+                this.addr_select.contact = res.data.contact[0] || this.addr_select.contact;
+                this.generalForm.patchValue({ contact_user_id: this.addr_select.contact.id});
                 // }
 
                 const default_billing = (this.customer.billing || []).find(item => item.set_default) || {};
@@ -214,11 +215,11 @@ export class SaleOrderCreateComponent implements OnInit {
                     payment_term_id: this.customer.payment_term_id || null,
                 });
 
-                if (default_billing) {
+                if (!_.isEmpty(default_billing)) {
                     this.selectAddress('billing', true);
                 }
 
-                if (default_shipping) {
+                if (!_.isEmpty(default_shipping)) {
                     this.selectAddress('shipping', true);
                 }
 
@@ -265,6 +266,7 @@ export class SaleOrderCreateComponent implements OnInit {
                         this.generalForm.patchValue({ 'carrier_id': null, 'ship_method_option': null, 'ship_method_rate': null });
                     }
                     const ship_id = this.generalForm.value.shipping_id;
+
                     if (ship_id) {
                         this.addr_select.shipping = this.findDataById(ship_id, this.customer.shipping);
                         this.getShippingReference(ship_id);
@@ -285,12 +287,16 @@ export class SaleOrderCreateComponent implements OnInit {
     getShippingReference(id) {
         this.orderService.getShippingReference(id).subscribe(res => {
             this.listMaster['carriers'] = res.data;
+            const arr = res.data.filter(item => item.name === 'UPS');
+            if (arr.length > 0 ) {
+                this.generalForm.patchValue({ 'carrier_id': 1 , 'ship_method_option': null });
+            }
             this.changeShipVia();
         });
     }
 
     changeShipVia() {
-        const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id);
+        const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id) || { 'options': [], 'ship_rate': [], 'own_carrirer': ''};
         this.listMaster['options'] = carrier.options || [];
         this.listMaster['ship_rates'] = carrier.ship_rate || [];
 
@@ -304,7 +310,7 @@ export class SaleOrderCreateComponent implements OnInit {
 
             if (+this.generalForm.value.carrier_id === 1) {
                 default_option = '01';
-                default_ship_rate = 9;
+                default_ship_rate = null;
             }
 
             if (+this.generalForm.value.carrier_id === 2) {
@@ -442,8 +448,7 @@ export class SaleOrderCreateComponent implements OnInit {
             item.amount = (+item.quantity * (+item.sale_price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
             this.order_info.sub_total += item.amount;
         });
-        console.log(+this.order_info.sub_total);
-        console.log(+this.order_info['total_tax']);
+
         this.order_info.total = +this.order_info['total_tax'] + +this.order_info.sub_total;
     }
 

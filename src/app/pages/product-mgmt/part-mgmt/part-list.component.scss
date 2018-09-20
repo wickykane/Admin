@@ -300,3 +300,48 @@ fieldset.custom-border.height-100 {
         }
     }
 }
+
+.card {
+    .card-header {
+        padding: 5px 0px 5px 10px;
+        color: #000;
+        background: rgb(252, 252, 252);
+        /* Old browsers */
+        background: -moz-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 47%, rgba(234, 234, 234, 1) 100%);
+        /* FF3.6-15 */
+        background: -webkit-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 47%, rgba(234, 234, 234, 1) 100%);
+        /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 47%, rgba(234, 234, 234, 1) 100%);
+        /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        // filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#eaeaea',GradientType=0 ); /* IE6-9 */
+    }
+    .card-body {
+        padding: 5px;
+        .table-order {
+            margin-bottom: 0;
+            th {
+                padding: 5px;
+                color: #630606;
+                font-weight: bold;
+                text-align: center;
+                white-space: nowrap;
+            }
+            td {
+                padding: 5px;
+            }
+        }
+    }
+    .card-body.no-padding {
+        padding: 0
+    }
+}
+
+
+.mg-top-10 {
+  margin-top: 10px;
+}
+
+.padding-lr-0 {
+  padding-left: 0;
+  padding-right: 0;
+}
