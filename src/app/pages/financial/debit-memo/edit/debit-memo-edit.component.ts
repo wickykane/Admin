@@ -623,7 +623,7 @@ export class DebitMemoEditComponent implements OnInit {
         params['sts'] = status;
         params['line_items'] = this.listLineItems;
 
-        params['approver_id'] = status === 3 ? this.currentUser['user_id'] : parseInt(params['approver_id'], null);
+        params['approver_id'] = status === 3 ? this.currentUser['id'] : parseInt(params['approver_id'], null);
         params['billing_id'] = parseInt(params['billing_id'], null);
         params['contact_id'] = parseInt(params['contact_id'], null);
         params['doc_type'] = parseInt(params['doc_type'], null);
