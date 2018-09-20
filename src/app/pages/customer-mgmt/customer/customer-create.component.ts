@@ -255,7 +255,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
             if (item.bank_id === x.id) {
                 return x.swift;
             }
-        })[0];
+        });
         this.commonService.getListBranchByBank(item.bank_id).subscribe(res => {
             try {
                 item.listBranch = res.data;
@@ -270,7 +270,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
             if (item.branch_id === x.id) {
                 return x.address;
             }
-        })[0];
+        });
     }
 
     dupAddress(type) {
