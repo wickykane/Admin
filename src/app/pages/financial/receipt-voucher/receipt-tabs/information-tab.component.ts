@@ -32,20 +32,31 @@ export class ReceiptInformationTabComponent implements OnInit {
     data = {};
 
     public messageConfig = {
-        1: 'Are you sure that you want to reopen the current invoice?',
-        2: 'Are you sure that you want to submit the invoice to approver?',
-        7: 'Are you sure that you want to cancel current invoice?',
-        4: 'Are you sure that you want to approve the current invoice?',
-        3: 'Are you sure that you want to reject the current invoice?',
+        submited_full_fill: 'This Receipt Voucher is missing some mandatory fields, please fulfill them before submitting.',
+        submited_is_amount_remain: 'There is overpayment in this receipt voucher. Are you sure that you want to submit it? ',
+        submited_zero_amount_remain: 'Are you sure that you want to submit this receipt voucher?',
+        approved_is_amount_remain: 'There is overpayment in this receipt voucher. After approval, the system will create automatically the credit memo for the overpayment. Do you want to proceed? ',
+        approved_zero_amount_remain: 'Are you sure that you want to Approve this receipt voucher? ',
+        mix_multi_receipt: 'Some documents have been paid by customer, current applied amount in this receipt voucher will be converted to Credit Memo for overpayment. Do you want to proceed?',
+        reject: 'Are you sure that you want to reject this receipt voucher?',
+        cancel: 'Are you sure that you want to cancel this receipt voucher?'
     };
-
-    public invoice_info: any = {};
+    public selected_message = '';
 
     public detail: any = {
-        'contact_user': {},
-        'billing': {},
-        'shipping_address': {},
         'items': [],
+    };
+    public is_fullfill = true;
+
+    public key_required = {
+        company_id: null,
+        payment_date: null,
+        warehouse_id: null,
+        electronic: null,
+        payment_method_id: null,
+        gl_account: null,
+        approver_id: null,
+        price_received: null
     };
 
 
@@ -61,7 +72,7 @@ export class ReceiptInformationTabComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.getList();
+        this.getDetailVoucher();
     }
 
     /**
@@ -89,25 +100,43 @@ export class ReceiptInformationTabComponent implements OnInit {
         modalRef.componentInstance.invoiceId = id;
     }
 
-    getList() {
+    getDetailVoucher() {
         this.receiptVoucherService.getDetailReceiptVoucher(this._receiptId).subscribe(res => {
             try {
                 this.detail = res.data;
-                this.detail.contact_user = res.data.contact_user || [];
-                this.detail.shipping_address = res.data.shipping_address || [];
-                this.detail.billing = res.data.billing_address || [];
+                this.key_required =  {
+                    company_id: res.data.company_id,
+                    payment_date: res.data.payment_date,
+                    warehouse_id: res.data.warehouse_id,
+                    electronic: res.data.electronic,
+                    payment_method_id: res.data.payment_method_id,
+                    gl_account: res.data.gl_account,
+                    approver_id: res.data.approver_id,
+                    price_received: res.data.price_received
+                };
+                console.log(this.key_required);
+                this.checkFieldRequired(this.key_required);
             } catch (e) {
                 console.log(e);
             }
         });
     }
+    checkFieldRequired(params) {
+        console.log(params);
+        Object.keys(params).forEach((key) => {
+            if (params[key] === null || params[key] === '') {
+                return this.is_fullfill = false;
+            }
+        });
+        console.log(this.is_fullfill);
+    }
 
     updateStatus(id, status) {
-        const params = { status };
-        this.receiptVoucherService.updateReceiptVoucherStatus(id, params).subscribe(res => {
+        const params = { voucher_id: id, status };
+        this.receiptVoucherService.updateReceiptVoucherStatus(params).subscribe(res => {
             try {
                 this.toastr.success(res.message);
-                this.getList();
+                this.getDetailVoucher();
             } catch (e) {
                 console.log(e);
             }
@@ -121,7 +150,36 @@ export class ReceiptInformationTabComponent implements OnInit {
                 this.updateStatus(id, status);
             }
         }, dismiss => { });
-        modalRef.componentInstance.message = this.messageConfig[status];
+
+        switch (status) {
+            case 2:
+                if (!this.is_fullfill) {
+                    this.selected_message = this.messageConfig.submited_full_fill;
+                }
+                if (this.is_fullfill && Number(this.detail.price_remaining) === 0) {
+                    this.selected_message = this.messageConfig.submited_zero_amount_remain;
+                }
+                if (this.is_fullfill && Number(this.detail.price_remaining) > 0) {
+                    this.selected_message = this.messageConfig.submited_is_amount_remain;
+                }
+                break;
+            case 3:
+                if (Number(this.detail.price_remaining) === 0) {
+                    this.selected_message = this.messageConfig.approved_zero_amount_remain;
+                }
+                if (Number(this.detail.price_remaining) > 0) {
+                    this.selected_message = this.messageConfig.approved_is_amount_remain;
+                }
+                break;
+            case 4:
+                this.selected_message = this.messageConfig.reject;
+                break;
+            case 5:
+                this.selected_message = this.messageConfig.cancel;
+                break;
+        }
+        console.log(this.selected_message);
+        modalRef.componentInstance.message = this.selected_message;
         modalRef.componentInstance.yesButtonText = 'Yes';
         modalRef.componentInstance.noButtonText = 'No';
     }

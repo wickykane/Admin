@@ -29,16 +29,16 @@
                     </div>
                     <div class="block-search">
                         <label for="type" class="control-label" translate>Date Type</label>
-                        <select class="form-control" formControlName="sts" (change)="onDateTypeChanged()">
-                            <option *ngFor="let item of listMaster['date_type']" [ngValue]="item.id">{{item.name}}</option>
+                        <select class="form-control" formControlName="date_type">
+                            <option *ngFor="let item of listMaster['dateType']" [ngValue]="item.id">{{item.name}}</option>
                         </select>
                     </div>
-                    <div class="block-search" *ngIf="searchForm.value.date_type == 0">
+                    <div class="block-search">
                         <label for="" class="control-label" translate>From</label>
                         <div class="date-group">
                             <div clickOutside (clickOutside)="d1.close()" class="input-group">
-                                <input [maxDate]="searchForm.value.issue_date_to | dateObj" class="form-control" (keydown)="$event.preventDefault()" autocomplete="off"
-                                    formControlName="issue_date_from" placeholder="mm/dd/yyyy" name="dp" ngbDatepicker #d1="ngbDatepicker">
+                                <input [maxDate]="searchForm.value.date_to | dateObj" class="form-control" (keydown)="$event.preventDefault()" autocomplete="off"
+                                    formControlName="date_from" placeholder="mm/dd/yyyy" name="dp" ngbDatepicker #d1="ngbDatepicker">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
                                         <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -47,7 +47,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="block-search" *ngIf="searchForm.value.date_type == 1">
+                    <!-- <div class="block-search" *ngIf="searchForm.value.date_type == 1">
                         <label for="" class="control-label" translate>From</label>
                         <div class="date-group">
                             <div clickOutside (clickOutside)="d1.close()" class="input-group">
@@ -60,13 +60,13 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="block-search" *ngIf="searchForm.value.date_type == 0">
+                    </div> -->
+                    <div class="block-search" >
                         <label for="" class="control-label" translate>To</label>
                         <div class="date-group">
                             <div clickOutside (clickOutside)="dt2.close()" class="input-group">
-                                <input [minDate]="searchForm.value.issue_date_from | dateObj" class="form-control" (keydown)="$event.preventDefault()" autocomplete="off"
-                                    formControlName="issue_date_to" placeholder="mm/dd/yyyy" name="dp" ngbDatepicker #dt2="ngbDatepicker">
+                                <input [minDate]="searchForm.value.date_from | dateObj" class="form-control" (keydown)="$event.preventDefault()" autocomplete="off"
+                                    formControlName="date_to" placeholder="mm/dd/yyyy" name="dp" ngbDatepicker #dt2="ngbDatepicker">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" (click)="dt2.toggle()" type="button">
                                         <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -76,7 +76,7 @@
                         </div>
 
                     </div>
-                    <div class="block-search" *ngIf="searchForm.value.date_type == 1">
+                    <!-- <div class="block-search" *ngIf="searchForm.value.date_type == 1">
                         <label for="" class="control-label" translate>To</label>
                         <div class="date-group">
                             <div clickOutside (clickOutside)="dt2.close()" class="input-group">
@@ -89,7 +89,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
                 </form>
                 <div class="block-btn-search">
