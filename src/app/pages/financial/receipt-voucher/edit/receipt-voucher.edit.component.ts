@@ -128,7 +128,8 @@ export class ReceiptVoucherEditComponent implements OnInit {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
         });
-        this.searchKey.subscribe(key => {
+
+        this.searchKey.debounceTime(300).subscribe(key => {
             this.data['page'] = 1;
             this.searchCustomer(key);
         });

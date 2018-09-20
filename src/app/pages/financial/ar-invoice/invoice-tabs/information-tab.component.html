@@ -315,7 +315,7 @@
                                         <td>{{item.sku || item.misc_no}}</td>
                                         <td>{{item.des || item.misc_name}}</td>
                                         <td class="text-center">{{item.condition_name}}</td>
-                                        <td>{{item.uom_name || item.uom}}</td>
+                                        <td>{{item.uom_name || item.uom || 'Each'}}</td>
                                         <td class="text-center">
                                             <i *ngIf="item.is_shipping_free" class="text-success fa fa-check"></i>
                                         </td>
@@ -375,13 +375,13 @@
                                             <strong class="text-warning">Sub Total</strong>
                                         </label>
                                     <div class='col-6 offset-md-1 padding-lr-10'>
-                                        <strong>{{invoice_info['sub_total'] | currency}}</strong>
+                                        <strong>{{detail['sub_tot'] | currency}}</strong>
                                     </div>
                                 </div>
-                                <div *ngFor="let item of invoice_info['taxs']" class="form-group row">
-                                    <label class='col-6 control-label'>+ TAX ({{item.value}}%):</label>
+                                <div *ngFor="let item of detail['tax_info']" class="form-group row">
+                                    <label class='col-6 control-label'>+ TAX ({{item.tax_percent}}%):</label>
                                     <div class='col-5 padding-lr-10'>
-                                        <input class="form-control" readonly="true" [(ngModel)]="item.amount" class="form-control" value="0" type="number">
+                                        {{ item.tax | currency }}
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -389,54 +389,57 @@
                                             <strong class="text-warning">Total Due</strong>
                                         </label>
                                     <div class='col-6 offset-md-1 padding-lr-10'>
-                                        <strong class="text-primary">{{invoice_info.total | currency}}</strong>
+                                        <strong class="text-primary">{{detail.tot_amt | currency}}</strong>
                                     </div>
                                 </div>
-                                <div *ngIf="detail['is_early']" class="form-group row">
+                                <div *ngIf="detail['policy_type']=='Early'" class="form-group row">
                                     <label class='col-6 control-label'>
-                                            - Early Payment Incentive
-                                            <input readonly *ngIf="!data['is_fixed_early']" (changeValue)="updateTotal()"  [isDecimal]="true" numberDirective [min]="0" [max]="100" style="width: 50px;" class="form-control" [(ngModel)]="invoice_info['incentive_percent']" class="form-control" value="0" type="number">
-                                            <span *ngIf="!data['is_fixed_early']"> %</span>
+                                            - Early Payment Incentive <span *ngIf="detail['early_percent']">({{detail['early_percent']}} %)</span>
                                         </label>
                                     <div class='col-5 padding-lr-10'>
-                                        <div *ngIf="!data['is_fixed_early']">
+                                        <div class="text-primary">
                                             <strong>
-                                                {{ (invoice_info['incentive'] || 0) | currency}}
+                                                {{ (detail['policy_amt'] || 0) | currency}}
                                             </strong>
                                         </div>
-                                        <span *ngIf="data['is_fixed_early']">$</span>
-                                        <input style="width: calc(100% - 10px);" readonly (change)="updateTotal()" [ngClass]="{'border border-danger': invoice_info.grand_total < 0 }" *ngIf="data['is_fixed_early']" class="form-control" [(ngModel)]="invoice_info['incentive']" class="form-control"
-                                            value="0" type="number">
-                                        <div *ngIf="invoice_info['expires_dt']" class="p-2 text-danger">Expires {{ invoice_info['expires_dt']}}</div>
+                                        <div *ngIf="detail.bal_amt" class="p-2 text-danger">Expires {{ detail['policy_des']}}</div>
                                     </div>
                                 </div>
                                 <div *ngIf="detail['policy_type']=='Late'" class="form-group row">
                                     <label class="col-6 control-label ">
                                             <strong>+ Late Fee Payment</strong>
                                         </label>
-                                    <div class="col-6 padding-lr-10">
+                                    <div class="col-6 padding-lr-10 text-primary">
                                         <strong>{{(detail['policy_amt'] || 0) | currency}}</strong>
                                     </div>
                                     <span class="col-12 text-danger">{{detail['policy_des']}}</span>
                                 </div>
-                                <div *ngIf="detail['is_early'] || detail['policy_type']=='Late'" class="form-group row">
+                                <div *ngIf="detail['policy_type']=='Early' || detail['policy_type']=='Late'" class="form-group row">
                                     <label class="col-6 control-label ">
                                         <strong>Adjusted Total Due</strong>
                                     </label>
+                                    <div class="col-6 padding-lr-10 text-danger">
+                                        <strong>{{(detail['adj_tot_amt'] || 0) | currency}}</strong>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-6 control-label ">
+                                            <strong>Awaiting Approval Payment</strong>
+                                        </label>
                                     <div class="col-6 padding-lr-10">
-                                        <strong>{{(invoice_info.grand_total || 0) | currency}}</strong>
+                                        <strong>{{(detail.awaiting_approval_payment || 0) | currency}}</strong>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-6 control-label ">
                                             <strong>Paid Amount</strong>
                                         </label>
-                                    <div class="col-6 padding-lr-10">
+                                    <div class="col-6 padding-lr-10 text-success">
                                         <strong>{{(detail.paid_amt || 0) | currency}}</strong>
                                     </div>
                                 </div>
                                 <div class="form-group row margin-lr-0 text-light bg-danger">
-                                    <label class="col-6 control-label ">
+                                    <label class="col-6 control-label">
                                             <strong>Balance Amount</strong>
                                         </label>
                                     <div class="col-6 padding-lr-10">
