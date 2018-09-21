@@ -47,6 +47,7 @@ export class QuoteInformationTabComponent implements OnInit {
     }
 
     @Output() stockValueChange = new EventEmitter();
+    @Output() shortcutChange = new EventEmitter();
 
     public detail = {
         'contact_user': {},
@@ -73,6 +74,7 @@ export class QuoteInformationTabComponent implements OnInit {
     ngOnInit() {
         this.getList();
         this.order_info['taxs'] = [];
+        this.shortcutChange.emit(this.keyService.getKeys());
     }
 
     /**

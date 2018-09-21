@@ -6,8 +6,11 @@ import { Component, Input, OnInit } from '@angular/core';
     styleUrls: ['./shortcut.component.scss']
 })
 export class ShortcutComponent implements OnInit {
-    @Input() listShortcut: any;
-    constructor() {}
+    public _list;
+    @Input() set listShortcut(list) {
+        this._list = list || [];
+    }
+    constructor() { }
 
-    ngOnInit() {}
+    ngOnInit() { }
 }
