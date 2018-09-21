@@ -2,7 +2,7 @@ import { Directive, ElementRef, EventEmitter, Input, OnDestroy, Output } from '@
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 
 // tslint:disable-next-line:directive-selector
-@Directive({ selector: '[cdArrowTable]' })
+@Directive({ selector: '[cdArrowTable]', providers: [HotkeysService] })
 // tslint:disable-next-line:class-name
 export class cdArrowTable implements OnDestroy {
     constructor(private _hotkeysService: HotkeysService, public element: ElementRef) {

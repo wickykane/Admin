@@ -12,13 +12,15 @@ import { ShortcutComponent } from '../short-cut/shortcut.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgbDateCustomParserFormatter } from '../../helper/dateformat';
 
+import { HotkeyModule } from 'angular2-hotkeys';
+
 @NgModule({
-    imports: [CommonModule, FormsModule, ReactiveFormsModule, NgbModule.forRoot(), TextMaskModule, NgSelectModule],
+    imports: [HotkeyModule.forRoot(), CommonModule, FormsModule, ReactiveFormsModule, NgbModule.forRoot(), TextMaskModule, NgSelectModule],
     declarations: [KeyNavigateDirective, cdArrowTable, OnlyNumber, SortColumnDirective, UppercaseDirective, TrueFalseValueDirective,
         DateObjectPipe, Select2Pipe, ShortcutComponent, NgStickyDirective, ClickOutsideDirective, NumberDirective],
-    exports: [NumberDirective, KeyNavigateDirective, cdArrowTable, OnlyNumber, SortColumnDirective, UppercaseDirective, DateObjectPipe, TrueFalseValueDirective,
+    exports: [HotkeyModule, NumberDirective, KeyNavigateDirective, cdArrowTable, OnlyNumber, SortColumnDirective, UppercaseDirective, DateObjectPipe, TrueFalseValueDirective,
         FormsModule, ReactiveFormsModule, NgbModule, TextMaskModule, NgSelectModule, ShortcutComponent, NgStickyDirective, ClickOutsideDirective],
-    providers: [{ provide: NgbDateAdapter, useClass: NgbUTCStringAdapter }, {provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter}]
+    providers: [{ provide: NgbDateAdapter, useClass: NgbUTCStringAdapter }, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }]
 })
 
 export class CommonShareModule { }
