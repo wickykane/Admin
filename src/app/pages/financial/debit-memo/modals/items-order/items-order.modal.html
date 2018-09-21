@@ -7,7 +7,7 @@
     <div class="modal-body">
         <div class="search-block block-content pd-bottom tab-content bg-gray-light">
             <div class="row">
-                <form class="form-horizontal form-search" [formGroup]="searchForm" (ngSubmit)="getListItems()">
+                <form class="form-horizontal form-search" [formGroup]="searchForm" (ngSubmit)="onSearchList()">
                     <div class="block-search">
                         <label for="so" class="control-label">Item No</label>
                         <input type="text" name="so" formControlName="no" class="form-control">
@@ -20,7 +20,7 @@
                         <label class="control-label">&nbsp;</label>
                         <div>
                             <button type="submit" class="btn btn-primary">Search</button>
-                            <button type="button" class="btn btn-default" (click)="searchForm.reset(); getListItems()">Reset</button>
+                            <button type="button" class="btn btn-default" (click)="searchForm.reset(); onSearchList()">Reset</button>
                         </div>
                     </div>
                 </form>
