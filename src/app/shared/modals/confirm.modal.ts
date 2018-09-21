@@ -3,7 +3,8 @@ import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'app-confirm-modal',
-    templateUrl: './confirm.modal.html'
+    templateUrl: './confirm.modal.html',
+    styleUrls: ['./site.modal.scss']
 })
 // tslint:disable-next-line:component-class-suffix
 export class ConfirmModalContent implements OnInit {
