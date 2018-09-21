@@ -172,7 +172,7 @@
                                             </a>
                                             <a ngbTooltip="Approve" *ngIf="item['invoice_status_id'] == 2" class="btn btn-default" (click)="confirmModal(item.id, 4)"><i class="fa fa-check"></i></a>
                                             <a ngbTooltip="Reject" *ngIf="item['invoice_status_id'] == 2" class="btn btn-default" (click)="confirmModal(item.id, 3)"><i class="fa fa-ban" aria-hidden="true"></i></a>
-                                            <a ngbTooltip="Pay" *ngIf="[4,8].indexOf(item['invoice_status_id']) != -1" class="btn btn-default"><i class="fa fa-money" aria-hidden="true"></i></a>
+                                            <a ngbTooltip="Pay" *ngIf="[4, 5, 8].indexOf(item['invoice_status_id']) != -1" class="btn btn-default"><i class="fa fa-money" aria-hidden="true"></i></a>
                                             <a class="btn btn-default" ngbTooltip="Print" (click)="printPDF(item.id, item.inv_num)">
                                                 <i class="fa fa-download" aria-hidden="true"></i>
                                             </a>
