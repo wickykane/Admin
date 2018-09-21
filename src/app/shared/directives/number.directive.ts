@@ -30,7 +30,11 @@ export class NumberDirective implements OnInit {
     @HostListener('input', ['$event'])
     onInputChange($event) {
         const event = $event.target.value;
-        const value = (event > this._max) ? this._max : (event < this._min) ? this._min : event;
+        let value = (event > this._max) ? this._max : (event < this._min) ? this._min : event;
+        const decimal = (String(value).split('.'));
+        if (decimal[1] && decimal[1].length > 2) {
+            value = decimal[0] + '.' + decimal[1].substr(0, 2);
+        }
         if (event !== value) {
             this.ngModel.viewToModelUpdate(value);
             this.ngModel.valueAccessor.writeValue(value);

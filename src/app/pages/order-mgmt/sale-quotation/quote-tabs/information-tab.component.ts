@@ -2,10 +2,12 @@ import { Component, EventEmitter, Input, OnInit, Output, ViewContainerRef } from
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HotkeysService } from 'angular2-hotkeys';
 import * as _ from 'lodash';
 import { ToastrService } from 'ngx-toastr';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { OrderService } from '../../../order-mgmt/order-mgmt.service';
+import { SaleQuoteDetailKeyService } from '../view/keys.detail.control';
 import { TableService } from './../../../../services/table.service';
 
 
@@ -45,6 +47,7 @@ export class QuoteInformationTabComponent implements OnInit {
     }
 
     @Output() stockValueChange = new EventEmitter();
+    @Output() shortcutChange = new EventEmitter();
 
     public detail = {
         'contact_user': {},
@@ -60,12 +63,18 @@ export class QuoteInformationTabComponent implements OnInit {
         private router: Router,
         private modalService: NgbModal,
         public tableService: TableService,
-        private orderService: OrderService) {
+        private orderService: OrderService,
+        public keyService: SaleQuoteDetailKeyService,
+        private _hotkeysService: HotkeysService,
+    ) {
+        //  Init Key
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {
         this.getList();
         this.order_info['taxs'] = [];
+        this.shortcutChange.emit(this.keyService.getKeys());
     }
 
     /**
@@ -136,5 +145,9 @@ export class QuoteInformationTabComponent implements OnInit {
 
     cloneQuote(id) {
         this.router.navigate(['/order-management/sale-quotation/create'], { queryParams: { is_copy: 1, quote_id: id } });
+    }
+
+    goBack() {
+        this.router.navigate(['/order-management/sale-quotation']);
     }
 }

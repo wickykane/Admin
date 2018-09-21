@@ -10,26 +10,26 @@
               <div class="row mg-top15">
                 <div class="col-md-2 col-sm-3 block-custom">
                   <div class="block-link">
-                    <a data-ui-sref="app.dashboard.overall">
+                    <a  [routerLink]="['/product-management/part-list']">
                       <div class="block-img">
                         <img src="assets/images/icon/1.png">
                       </div>
-                      <h5 translate class="color-gray">Overall</h5>
+                      <h5 translate class="color-gray">Produts</h5>
                     </a>
                   </div>
                 </div>
                 <div class="col-md-2 col-sm-3 block-custom">
                   <div class="block-link">
-                    <a data-ui-sref="app.dashboard.promotion">
+                    <a [routerLink]="['/product-management/miscellaneous-list']">
                       <div class="block-img">
                         <img src="assets/images/icon/1.png">
                       </div>
-                      <h5 translate class="color-gray">Promotion</h5>
+                      <h5 translate class="color-gray">Misc Items</h5>
                     </a>
                   </div>
                 </div>
               </div>
-              <div class="row mg-top15">
+              <!-- <div class="row mg-top15">
                 <div class="col-md-2 col-sm-3 block-custom">
                   <div class="block-link">
                     <a data-ui-sref="app.purchasing.quotation.manage">
@@ -70,12 +70,11 @@
                     </a>
                   </div>
                 </div>
-
-              </div>
-              <div class="row mg-top15">
+              </div>-->
+              <div class="row mg-top15"> 
                   <div class="col-md-2 col-sm-3 block-custom">
                     <div class="block-link">
-                      <a data-ui-sref="app.orders.sales-quotation.list">
+                      <a  [routerLink]="['/order-management/sale-quotation']" >
                         <div class="block-img">
                           <img src="assets/images/icon/7.png">
                         </div>
@@ -85,7 +84,7 @@
                   </div>
                 <div class="col-md-2 col-sm-3 block-custom">
                   <div class="block-link">
-                    <a data-ui-sref="app.orders.sale-order.list">
+                    <a [routerLink]="['/order-management/sale-order']">
                       <div class="block-img">
                         <img src="assets/images/icon/8.png">
                       </div>
@@ -94,7 +93,7 @@
                   </div>
                 </div>
 
-                <div class="col-md-2 col-sm-3 block-custom">
+                <!-- <div class="col-md-2 col-sm-3 block-custom">
                   <div class="block-link">
                     <a data-ui-sref="app.orders.delivery-order.list">
                       <div class="block-img">
@@ -113,10 +112,10 @@
                       <h5 translate class="color-gray">Return Orders</h5>
                     </a>
                   </div>
-                </div>
+                </div> -->
                 <div class="col-md-2 col-sm-3 block-custom">
                   <div class="block-link">
-                    <a data-ui-sref="app.customer">
+                    <a [routerLink]="['/customer']">
                       <div class="block-img">
                         <img src="assets/images/icon/11.png">
                       </div>
@@ -128,21 +127,21 @@
               <div class="row mg-top15">
                   <div class="col-md-2 col-sm-3 block-custom">
                     <div class="block-link">
-                      <a data-ui-sref="app.promotions.budget.list">
+                      <a [routerLink]="['/financial/invoice']">
                         <div class="block-img">
                           <img src="assets/images/icon/12.png">
                         </div>
-                        <h5 translate class="color-gray">Promotion Budgets</h5>
+                        <h5 translate class="color-gray">AR Invoice</h5>
                       </a>
                     </div>
                   </div>
                   <div class="col-md-2 col-sm-3 block-custom">
                     <div class="block-link">
-                      <a data-ui-sref="app.promotions.campaign.list">
+                      <a [routerLink]="['/financial/receipt-voucher']">
                         <div class="block-img">
                           <img src="assets/images/icon/13.png">
                         </div>
-                        <h5 translate class="color-gray">Promotion Campaign</h5>
+                        <h5 translate class="color-gray">Receipt Voucher</h5>
                       </a>
                     </div>
                   </div>
@@ -161,26 +160,26 @@
                 <ol>
                   <li>Sel2B Backend:
                     <ul class="guide-list-content">
-                      <li>Purchase Management.</li>
+                      <li>Products Management.</li>
                       <li>Sales Management.</li>
-                      <li>Delivery Management</li>
-                      <li>Promotion Management.</li>
-                      <li>Bundle Management.</li>
+                      <li>Customer Management</li>
+                      <li>Financial Management.</li>
+                      <!-- <li>Bundle Management.</li>
                       <li>Product Management.</li>
-                      <li>Quotes Management (Purchase/Sales).</li>
+                      <li>Quotes Management (Purchase/Sales).</li> -->
                     </ul>
                   </li>
                   <li>Sel2B Storefront:
                     <ul class="guide-list-content">
-                      <li>Buyer profile.</li>
-                      <li>Buyer buys/re-orders products online.</li>
-                      <li>Buyer participates in promotion event. System calculates the promotional products.</li>
-                      <li>Buyer checkout and creates the order from Sel2B Storefront to Sel2B Backend.</li>
+                      <li>Customer profile.</li>
+                      <li>Customer buys/re-orders products online.</li>
+                      <li>Customer participates in promotion event. System calculates the promotional products.</li>
+                      <li>Customer checkout and creates the order from Sel2B Storefront to Sel2B Backend.</li>
                     </ul>
                   </li>
                   <li>Sel2B Supplier Portal:
                     <ul class="guide-list-content">
-                      <li>A portal where suppliers can manage their purchase orders, quotes and products while in business with Hacarem Spirits ltd</li>
+                      <li>A portal where suppliers can manage their purchase orders, quotes and products while in business with NABP</li>
                     </ul>
                   </li>
                 </ol>

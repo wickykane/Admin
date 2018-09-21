@@ -41,7 +41,10 @@ export class SaleQuoteDetailKeyService {
     }
 
     getKeys() {
-        return Array.from(this._hotkeysService.hotkeys);
+        if (this._hotkeysService) {
+            return Array.from(this._hotkeysService.hotkeys);
+        }
+        return [];
     }
 
     getKeyConfig() {
@@ -49,10 +52,10 @@ export class SaleQuoteDetailKeyService {
     }
 
     initKey() {
-        // this._hotkeysService.add(new Hotkey('alt+n', (event: KeyboardEvent): boolean => {
-        //     event.preventDefault();
-        //     this.context.createOrder();
-        //     return;
-        // }, undefined, 'Create Quotation'));
+        this._hotkeysService.add(new Hotkey('alt+backspace', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            this.context.goBack();
+            return;
+        }, undefined, 'Back'));
     }
 }

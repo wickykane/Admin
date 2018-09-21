@@ -2,6 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { Hotkey } from 'angular2-hotkeys';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
+import { Helper } from '../../../../shared/index';
 
 @Injectable()
 export class SaleQuoteCreateKeyService {
@@ -12,27 +13,12 @@ export class SaleQuoteCreateKeyService {
     private keyConfig = {
         company_id: {
             element: null,
-            prev: 'contact_user_id',
-            next: 'customer_po',
-        },
-        contact_user_id: {
-            element: null,
-            prev: 'company_id',
-            next: 'contact_user_id',
-        },
-        customer_po: {
-            element: null,
-            prev: 'company_id',
-            next: 'type',
-        },
-        type: {
-            element: null,
-            prev: 'customer_po',
-            next: 'type',
+            focus: true,
+            ng_select: true,
         },
     };
 
-    constructor() {
+    constructor(public helper: Helper) {
         this.watchContext.subscribe(res => {
             this.context = res.context;
             this._hotkeysService = res.service;
@@ -54,5 +40,17 @@ export class SaleQuoteCreateKeyService {
         //     this.context.createOrder();
         //     return;
         // }, undefined, 'Create Quotation'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+t', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            this.context.selectTable();
+            return;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Select Table'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+i', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            this.context.addNewItem();
+            return;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Add Item'));
     }
 }
