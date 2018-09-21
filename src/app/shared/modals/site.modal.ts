@@ -247,6 +247,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
                 if (this.addresses[i].type == type) {
                     tmp = JSON.parse(JSON.stringify(this.addresses[i]));
                     tmp['is_default'] = false;
+                    tmp['address_id'] = undefined;
                     break;
                 }
             }
