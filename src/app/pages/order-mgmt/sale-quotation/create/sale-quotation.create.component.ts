@@ -19,6 +19,7 @@ import { SaleQuoteCreateKeyService } from './keys.create.control';
 
 import { HotkeysService } from 'angular2-hotkeys';
 import * as _ from 'lodash';
+import { cdArrowTable } from '../../../../shared/index';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 
 
@@ -113,6 +114,7 @@ export class SaleQuotationCreateComponent implements OnInit {
 
 
     public searchKey = new Subject<any>(); // Lazy load filter
+    @ViewChild(cdArrowTable) table: cdArrowTable;
 
     /**
      * Init Data
@@ -308,6 +310,11 @@ export class SaleQuotationCreateComponent implements OnInit {
      */
     selectData(data) { }
 
+    selectTable() {
+        this.selectedIndex = 0;
+        this.table.element.nativeElement.querySelector('td a').focus();
+    }
+
     changeCustomer(flag?) {
         const company_id = this.generalForm.value.company_id;
         this.customer = { ...this.copy_customer };
@@ -352,8 +359,8 @@ export class SaleQuotationCreateComponent implements OnInit {
         this.orderService.getShippingReference(id).subscribe(res => {
             this.listMaster['carriers'] = res.data;
             const arr = res.data.filter(item => item.name === 'UPS');
-            if (arr.length > 0 ) {
-                this.generalForm.patchValue({ 'carrier_id': 1 , 'ship_method_option': null });
+            if (arr.length > 0) {
+                this.generalForm.patchValue({ 'carrier_id': 1, 'ship_method_option': null });
             }
             this.changeShip(flag);
         });
@@ -477,7 +484,7 @@ export class SaleQuotationCreateComponent implements OnInit {
     }
 
     changeShip(flag?) {
-        const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id) || { 'options': [], 'ship_rate': [], 'own_carrirer': ''};
+        const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id) || { 'options': [], 'ship_rate': [], 'own_carrirer': '' };
         this.listMaster['options'] = (carrier.options || []).map(item => {
             item.cd = + item.cd;
             return item;
