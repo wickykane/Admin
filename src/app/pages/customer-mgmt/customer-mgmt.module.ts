@@ -3,10 +3,6 @@ import { NgModule } from '@angular/core';
 import { CustomerManagementRoutingModule } from './customer-mgmt-routing.module';
 import { CustomerEditComponent } from './customer/customer-edit.component';
 
-import { CustomerSegmentComponent } from './customer-segment/customer-segment.component';
-import { CustomerSegmentCreateComponent } from './customer-segment/customer-segment.create.component';
-import { CustomerSegmentEditComponent } from './customer-segment/customer-segment.edit.component';
-
 import { CustomerCreateComponent } from './customer/customer-create.component';
 import { CustomerViewComponent } from './customer/customer-view.component';
 import { CustomerComponent } from './customer/customer.component';
@@ -40,9 +36,7 @@ import { ItemModalModule } from '../../shared/modals/item.module';
     CommonShareModule,
     ItemModalModule
   ],
-  declarations: [CustomerSegmentComponent, CustomerSegmentCreateComponent,
-    CustomerSegmentEditComponent,
-    CustomerComponent, CustomerCreateComponent, CustomerViewComponent,
+  declarations: [CustomerComponent, CustomerCreateComponent, CustomerViewComponent,
     CustomerAddressTabComponent, CustomerContactTabComponent, CustomerEditComponent, CustomerSiteTabComponent, CustomerQuoteTabComponent,
     CustomerSaleOrderTabComponent, CustomerInvoiceTabComponent, CustomerShipmentTabComponent, CustomerPaymentTabComponent,
     CustomerRMATabComponent, CustomerAccountTabComponent],

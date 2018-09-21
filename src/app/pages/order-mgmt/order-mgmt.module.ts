@@ -4,14 +4,6 @@ import { NgModule } from '@angular/core';
 
 import { OrderMgmtRoutingModule } from './order-mgmt-routing.module';
 
-//  Buyer rfq
-import { BuyerRfqComponent } from './buyer-rfq/buyer-rfq.component';
-
-//  Delievery order
-import { DelieveryOrderCreateComponent } from './delivery-order/delivery-order-create.component';
-import { DelieveryOrderDetailComponent } from './delivery-order/delivery-order-detail.component';
-import { DeliveryOrderComponent } from './delivery-order/delivery-order.component';
-
 //  Sale Order
 import { SaleOrderCreateComponent } from './sale-order/create/sale-order.create.component';
 import { SaleOrderEditComponent } from './sale-order/edit/sale-order.edit.component';
@@ -19,11 +11,6 @@ import { PrintInvoiceComponent } from './sale-order/print/print.invoice.componen
 import { PrintOrderComponent } from './sale-order/print/print.oder.component';
 import { SaleOrderComponent } from './sale-order/sale-order.component';
 import { SaleOrderDetailComponent } from './sale-order/view/sale-order.detail.component';
-
-//  Sale Price
-import { SalePriceCreateComponent } from './sale-price/sale-price-create.component';
-import { SalePriceEditComponent } from './sale-price/sale-price-edit.component';
-import { SalePriceComponent } from './sale-price/sale-price.component';
 
 //  Sale Quotation
 import { SaleQuotationCreateComponent } from './sale-quotation/create/sale-quotation.create.component';
@@ -63,14 +50,7 @@ import { QuoteHistoryTabComponent } from './sale-quotation/quote-tabs/quote-hist
         ItemModalModule
     ],
     declarations: [
-        BuyerRfqComponent,
-        DeliveryOrderComponent,
-        DelieveryOrderDetailComponent,
-        DelieveryOrderCreateComponent,
         SaleOrderComponent,
-        SalePriceComponent,
-        SalePriceCreateComponent,
-        SalePriceEditComponent,
         SaleQuotationComponent,
         SaleQuotationCreateComponent,
         SaleQuotationDetailComponent,
