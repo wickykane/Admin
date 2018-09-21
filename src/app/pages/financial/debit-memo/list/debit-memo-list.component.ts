@@ -80,7 +80,7 @@ export class DebitMemoListComponent implements OnInit {
     ngOnInit() {
         this.currentuser = JSON.parse(localStorage.getItem('currentUser'));
         this.listMaster['dateType'] = [
-            { id: 0, name: 'Issue Date' },
+            { id: null, name: 'Issue Date' },
             { id: 1, name: 'Due Date' }
         ];
 
@@ -119,12 +119,19 @@ export class DebitMemoListComponent implements OnInit {
 
     getListDebitMemo() {
         const params = { ...this.tableService.getParams(), ...this.searchForm.value };
+        if (params['date_type']) {
+            params['due_date_from'] = params['date_from'];
+            params['due_date_to'] = params['date_to'];
+        } else {
+            params['issue_date_from'] = params['date_from'];
+            params['issue_date_to'] = params['date_to'];
+        }
         Object.keys(params).forEach((key) => {
             if (params[key] instanceof Array) {
                 params[key] = params[key].join(',');
             }
             // tslint:disable-next-line:no-unused-expression
-            (params[key] === null || params[key] === '') && delete params[key];
+            (params[key] === null || params[key] === '' || key === 'date_type' || key === 'date_from' || key === 'date_to') && delete params[key];
         });
         this.debitMemoService.getListDebitMemo(params).subscribe(
             res => {
