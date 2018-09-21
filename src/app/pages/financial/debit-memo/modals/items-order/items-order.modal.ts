@@ -19,9 +19,10 @@ export class ItemsOrderDebitModalContent implements OnInit {
     public listIgnoredItems = [];
     public orderId = '';
     @Input() set setIgnoredItems(data) {
-        if (data && data['orderId'] !== null && data['orderId'] !== undefined
-            && data['items'] && data['items'].length) {
+        if (data && data['orderId'] !== null && data['orderId'] !== undefined) {
             this.orderId = data['orderId'];
+        }
+        if (data && data['items'] && data['items'].length) {
             this.listIgnoredItems = data['items'];
             this.getListItems();
         }

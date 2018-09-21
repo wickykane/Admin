@@ -176,6 +176,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             code: this.data['search'],
             warehouse_id: this.generalForm.value.warehouse_id,
             company_id: this.generalForm.value.company_id,
+            ...this.tableService.getParams(),
         };
 
         if (!params.warehouse_id || !params.company_id) {
@@ -320,13 +321,13 @@ export class ReceiptVoucherCreateComponent implements OnInit {
 
     clearPayment() {
         this.data['search'] = null;
-        // this.getListInvoiceAndMemo();
-        const checkedList = this.list.checklist.map(item => item.id);
-        this.list.items.forEach(item => {
-            if (checkedList.length > 0 && checkedList.indexOf(item.id) !== -1) {
-                item.applied_amt = 0;
-            }
-        });
+        this.tableService.searchAction();
+        // const checkedList = this.list.checklist.map(item => item.id);
+        // this.list.items.forEach(item => {
+        //     if (checkedList.length > 0 && checkedList.indexOf(item.id) !== -1) {
+        //         item.applied_amt = 0;
+        //     }
+        // });
     }
 
     updateTotal(_item?) {

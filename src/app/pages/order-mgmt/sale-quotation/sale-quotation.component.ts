@@ -8,6 +8,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
+import { cdArrowTable } from '../../../shared/index';
 import { OrderService } from '../order-mgmt.service';
 import { ConfirmModalContent } from './../../../shared/modals/confirm.modal';
 
@@ -57,6 +58,7 @@ export class SaleQuotationComponent implements OnInit {
         'EX': { color: 'bright-grey', name: 'Expired' },
     };
 
+    @ViewChild(cdArrowTable) table: cdArrowTable;
     constructor(public router: Router,
         public fb: FormBuilder,
         public toastr: ToastrService,
@@ -64,7 +66,7 @@ export class SaleQuotationComponent implements OnInit {
         private orderService: OrderService,
         private modalService: NgbModal,
         private _hotkeysService: HotkeysService,
-        public saleQuoteKeyService: SaleQuoteKeyService,
+        public keyService: SaleQuoteKeyService,
         private renderer: Renderer) {
 
         this.searchForm = fb.group({
@@ -80,7 +82,7 @@ export class SaleQuotationComponent implements OnInit {
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
         //  Init Key
-        this.saleQuoteKeyService.watchContext.next({ context: this, service: this._hotkeysService });
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
 
     }
 
@@ -182,6 +184,19 @@ export class SaleQuotationComponent implements OnInit {
         this.router.navigate(['/order-management/sale-quotation/create'], { queryParams: { is_copy: 1, quote_id: id } });
     }
 
+    createQuote() {
+        this.router.navigate(['/order-management/sale-quotation/create']);
+    }
+
+    viewQuote() {
+        const id = this.list.items[this.selectedIndex].id;
+        this.router.navigate(['/order-management/sale-quotation/detail', id]);
+    }
+
+    selectTable() {
+        this.selectedIndex = 0;
+        this.table.element.nativeElement.querySelector('td a').focus();
+    }
     confirmModal(id, status) {
         const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
         modalRef.result.then(res => {
