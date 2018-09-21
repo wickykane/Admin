@@ -174,7 +174,7 @@ export class ReceiptInformationTabComponent implements OnInit {
             case 4:
                 this.selected_message = this.messageConfig.reject;
                 break;
-            case 5:
+            case 6:
                 this.selected_message = this.messageConfig.cancel;
                 break;
         }
