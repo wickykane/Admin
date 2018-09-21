@@ -209,12 +209,12 @@
                             <table class="table table-bordered table-order" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                                 <thead>
                                     <tr>
-                                        <th>
+                                        <!-- <th>
                                             <label class="css-input css-checkbox css-checkbox-default">
                                                 <input class="cb-all" type="checkbox" [(ngModel)]="checkAllItem" (change)="checkAll($event)">
                                                 <span></span>
                                             </label>
-                                        </th>
+                                        </th> -->
                                         <th translate>No.</th>
                                         <th style="width:150px" translate>Document No</th>
                                         <th translate>Issue Date</th>
@@ -236,16 +236,16 @@
                                 <ng-container *ngIf="list['items'].length > 0">
                                     <tbody *ngFor="let item of list['items']; let $index = index;">
                                         <tr>
-                                            <td class="text-center">
+                                            <!-- <td class="text-center">
                                                 <label class="css-input css-checkbox css-checkbox-default">
                                                     <input class="cb-element" type="checkbox" [(ngModel)]="item.is_checked" (change)="isAllChecked()">
                                                     <span></span>
                                                 </label>
-                                            </td>
+                                            </td> -->
                                             <td>
                                                 {{$index + 1}}
                                             </td>
-                                            <td>{{item.code }}</td>
+                                            <td><a class="text-primary" [routerLink]="[(item.doc_type == 1)?'/financial/invoice/view': '/financial/debit-memo/view', item.id]">{{item.code }}</a></td>
                                             <td>{{item.issue_date }}</td>
                                             <td>{{item.due_date }}</td>
                                             <td>{{item.payment_term_name }}</td>
