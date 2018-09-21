@@ -58,6 +58,12 @@ export class SaleQuotationDetailComponent implements OnInit {
         this.orderDetail = detail;
     }
 
+    shortcut(event) {
+        setTimeout(() => {
+            this.data['shortcut'] = event;
+        });
+    }
+
     cancel() {
         this.router.navigate(['/order-management/sale-quotation']);
     }

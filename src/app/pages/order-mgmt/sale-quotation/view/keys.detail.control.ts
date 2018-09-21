@@ -52,12 +52,10 @@ export class SaleQuoteDetailKeyService {
     }
 
     initKey() {
-        setTimeout(() => {
-            this._hotkeysService.add(new Hotkey('alt+backspace', (event: KeyboardEvent): boolean => {
-                event.preventDefault();
-                this.context.goBack();
-                return;
-            }, undefined, 'Back'));
-        }, 500);
+        this._hotkeysService.add(new Hotkey('alt+backspace', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            this.context.goBack();
+            return;
+        }, undefined, 'Back'));
     }
 }
