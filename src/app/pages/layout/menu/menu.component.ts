@@ -101,7 +101,7 @@ export class MenuComponent implements OnInit {
                     },
                     {
                         link: '/financial/debit-memo',
-                        name: 'Debit'
+                        name: 'Debit Memo'
                     }
                 ]
             },
