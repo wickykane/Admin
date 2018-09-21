@@ -18,7 +18,7 @@
                         <form class="form-horizontal form-search" [formGroup]="searchForm">
                             <div class="block-search">
                                 <label for="type" class="control-label" translate>Year From </label>
-                                <select formControlName="year_from" class="form-control">
+                                <select [keyConfig]="data['key_config']" appKeyNavigate="year_from" formControlName="year_from" class="form-control">
                                     <option value="null" selected="true" translate>--Select--</option>
                                     <option *ngFor="let de of listMaster['years']" [ngValue]="de.id">{{de.name}}</option>
                                 </select>
