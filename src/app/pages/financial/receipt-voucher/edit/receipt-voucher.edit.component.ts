@@ -41,6 +41,8 @@ import { PaymentInformModalComponent } from '../modals/payment-inform/payment-in
 export class ReceiptVoucherEditComponent implements OnInit {
 
     public generalForm: FormGroup;
+    public searchForm: FormGroup;
+
     public listMaster = {};
     public selectedIndex = 0;
     public data = {};
@@ -79,6 +81,9 @@ export class ReceiptVoucherEditComponent implements OnInit {
         public tableService: TableService,
         private voucherService: ReceiptVoucherService,
         private dt: DatePipe) {
+        this.searchForm = fb.group({
+            code: 1
+        });
         this.generalForm = fb.group({
             'approver_id': [null, Validators.required],
             'company_id': [null, Validators.required],
