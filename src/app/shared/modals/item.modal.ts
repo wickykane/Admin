@@ -6,12 +6,14 @@ import { TableService } from './../../services/table.service';
 import { ItemService } from './item.service';
 
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
+import { Helper } from './../helper/common.helper';
 
 @Component({
     selector: 'app-item-modal-content',
     templateUrl: './item.modal.html',
-    providers: [TableService],
+    providers: [TableService, HotkeysService],
 })
 // tslint:disable-next-line:component-class-suffix
 export class ItemModalContent implements OnInit {
@@ -37,6 +39,8 @@ export class ItemModalContent implements OnInit {
     public filterForm: FormGroup;
 
     constructor(public activeModal: NgbActiveModal,
+        private helper: Helper,
+        private _hotkeysService: HotkeysService,
         public itemService: ItemService,
         public fb: FormBuilder,
         public toastr: ToastrService,
@@ -77,6 +81,7 @@ export class ItemModalContent implements OnInit {
     ngOnInit() {
         //  Init Fn
         this.getListReference();
+        this.initKeyBoard();
     }
 
     getListReference() {
@@ -182,5 +187,42 @@ export class ItemModalContent implements OnInit {
                 console.log(e);
             }
         });
+    }
+
+    // Keyboard
+    resetKeys() {
+        const keys = Array.from(this._hotkeysService.hotkeys);
+        keys.map(key => {
+            this._hotkeysService.remove(key);
+        });
+    }
+
+    initKeyBoard() {
+        // Keyboard Handle
+        setTimeout(() => {
+            this.resetKeys();
+        });
+
+        this.data['key_config'] = {
+            year_from: {
+                element: null,
+                focus: true,
+            }
+        };
+
+        // this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+t', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+        //     event.preventDefault();
+        //     console.log(1);
+        //     const e: ExtendedKeyboardEvent = event;
+        //     e.returnValue = false; // Prevent bubbling
+        //     return e;
+        // }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Select Table'));
+
+        // this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+i', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+        //     event.preventDefault();
+        //     const e: ExtendedKeyboardEvent = event;
+        //     e.returnValue = false; // Prevent bubbling
+        //     return e;
+        // }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Add Item'));
     }
 }
