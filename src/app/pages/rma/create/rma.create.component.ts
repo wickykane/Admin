@@ -4,11 +4,11 @@ import { Form, FormArray, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
+import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs/Subject';
 import { OrderService } from '../../order-mgmt/order-mgmt.service';
 import { RmaService } from '../rma.service';
 import { RMACreateKeyService } from './keys.control';
-import { ToastrService } from 'ngx-toastr';
 
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { routerTransition } from '../../../router.animations';
@@ -57,7 +57,6 @@ export class RmaCreateComponent implements OnInit {
         vat_percent_amount: 0,
         shipping_cost: 0
     };
-    
     /**
      * Init Data
      */
