@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from './../../services/table.service';
@@ -8,6 +8,7 @@ import { ItemService } from './item.service';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
+import { cdArrowTable } from '../index';
 import { Helper } from './../helper/common.helper';
 
 @Component({
@@ -19,7 +20,8 @@ import { Helper } from './../helper/common.helper';
 export class ItemModalContent implements OnInit {
     @Input() id;
     @Input() flagBundle;
-
+    @ViewChild('tabSet') tabSet;
+    @ViewChild(cdArrowTable) table: cdArrowTable;
     /**
      * Variable Declaration
      */
@@ -99,7 +101,8 @@ export class ItemModalContent implements OnInit {
 
     // Table event
     selectData(index) {
-        console.log(index);
+        this.list.items[index].is_checked = !this.list.items[index].is_checked;
+        this.isAllChecked(this.list.items[index]);
     }
 
     checkAll(ev) {
@@ -189,40 +192,110 @@ export class ItemModalContent implements OnInit {
         });
     }
 
-    // Keyboard
-    resetKeys() {
-        const keys = Array.from(this._hotkeysService.hotkeys);
-        keys.map(key => {
-            this._hotkeysService.remove(key);
-        });
+    selectTable() {
+        this.selectedIndex = 0;
+        if (this.table.element.nativeElement.querySelector('td input')) {
+            this.table.element.nativeElement.querySelector('td label').focus();
+        }
     }
+    // Keyboard
 
     initKeyBoard() {
-        // Keyboard Handle
-        setTimeout(() => {
-            this.resetKeys();
-        });
-
         this.data['key_config'] = {
             year_from: {
                 element: null,
                 focus: true,
+            },
+            oem: {
+                elment: null,
+                focus: true,
+            },
+            vin: {
+                elment: null,
+                focus: true,
+            },
+            brand_id_filter: {
+                element: null,
+                ng_select: true,
             }
         };
 
-        // this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+t', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
-        //     event.preventDefault();
-        //     console.log(1);
-        //     const e: ExtendedKeyboardEvent = event;
-        //     e.returnValue = false; // Prevent bubbling
-        //     return e;
-        // }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Select Table'));
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            event.preventDefault();
+            (document.activeElement as HTMLInputElement).blur();
+            this.tabSet.select('vin');
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Select Vin'));
 
-        // this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+i', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
-        //     event.preventDefault();
-        //     const e: ExtendedKeyboardEvent = event;
-        //     e.returnValue = false; // Prevent bubbling
-        //     return e;
-        // }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Add Item'));
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+e', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            event.preventDefault();
+            (document.activeElement as HTMLInputElement).blur();
+
+            this.tabSet.select('vehicle');
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Select Vehicle'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+p', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            event.preventDefault();
+            (document.activeElement as HTMLInputElement).blur();
+            this.tabSet.select('part_number');
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Select Part Number'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+1', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            event.preventDefault();
+            (document.activeElement as HTMLInputElement).blur();
+            if (this.data['key_config'].brand_id_filter) {
+                this.data['key_config'].brand_id_filter.element.focus();
+            }
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Focus Filter'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            event.preventDefault();
+            this.tableService.searchAction();
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Search'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+r', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            event.preventDefault();
+            this.tableService.resetAction();
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+2', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            event.preventDefault();
+            this.tableService.resetAction(this.filterForm);
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset Filter'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+t', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            this.selectTable();
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Select Table'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+o', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            event.preventDefault();
+            this.activeModal.close(this.list.checklist);
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'OK'));
     }
 }

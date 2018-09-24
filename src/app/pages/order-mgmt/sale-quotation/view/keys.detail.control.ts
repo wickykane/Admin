@@ -1,15 +1,11 @@
-import { Injectable, OnDestroy } from '@angular/core';
-import { Hotkey, HotkeysService } from 'angular2-hotkeys';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
+import { Injectable } from '@angular/core';
+import { Hotkey } from 'angular2-hotkeys';
+import { KeyboardBaseService } from './../../../../shared/helper/keyServiceBase';
 
 @Injectable()
-export class SaleQuoteDetailKeyService {
-    public context: any;
-    public _hotkeysService;
-    public watchContext = new Subject<any>();
+export class SaleQuoteDetailKeyService extends KeyboardBaseService {
 
-    private keyConfig = {
+    keyConfig = {
         company_id: {
             element: null,
             prev: 'contact_user_id',
@@ -31,25 +27,6 @@ export class SaleQuoteDetailKeyService {
             next: 'type',
         },
     };
-
-    constructor() {
-        this.watchContext.subscribe(res => {
-            this.context = res.context;
-            this._hotkeysService = res.service;
-            this.initKey();
-        });
-    }
-
-    getKeys() {
-        if (this._hotkeysService) {
-            return Array.from(this._hotkeysService.hotkeys);
-        }
-        return [];
-    }
-
-    getKeyConfig() {
-        return this.keyConfig;
-    }
 
     initKey() {
         this._hotkeysService.add(new Hotkey('alt+backspace', (event: KeyboardEvent): boolean => {
