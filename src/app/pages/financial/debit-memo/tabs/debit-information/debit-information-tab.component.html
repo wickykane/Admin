@@ -304,13 +304,13 @@
                                         <strong class="text-warning">Sub Total</strong>
                                     </label>
                                     <div class='col-6'>
-                                        <span class="">${{debitData['sub_total_price']}}</span>
+                                        <span class="">{{debitData['sub_total_price'] |currency}}</span>
                                     </div>
                                 </div>
                                 <div class="form-group row" *ngFor="let tax of listTaxs">
                                     <label class='col-4 control-label'> + Tax {{tax.tax_percent}}%</label>
                                     <div class='col-6'>
-                                        <span class="text-success">$ {{tax.amount}}</span>
+                                        <span class="text-success">{{tax.amount |currency}}</span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -318,13 +318,21 @@
                                         <strong class="text-warning">Total Due</strong>
                                     </label>
                                     <div class='col-6'>
-                                        <span class="text-primary">${{debitData['total_price']}}</span>
+                                        <span class="text-primary">{{debitData['total_price']|currency}}</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-4 control-label ">
+                                            <strong>Awaiting Approval Payment</strong>
+                                        </label>
+                                    <div class="col-6">
+                                        <strong>{{(debitData['awaiting_approval_payment'] || 0) | currency}}</strong>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class='col-4 control-label'>Paid Amount</label>
                                     <div class='col-6'>
-                                        <span class="text-success">$0</span>
+                                        <span class="text-success">{{debitData['paid_amount']|currency}}</span>
                                     </div>
                                 </div>
                                 <div class="form-group row margin-lr-0 text-light bg-danger">
@@ -332,7 +340,7 @@
                                             <strong>Balance Amount</strong>
                                         </label>
                                     <div class="col-6 padding-lr-10">
-                                        <strong>${{debitData['total_price']}}</strong>
+                                        <strong>{{debitData['balance_price']|currency}}</strong>
                                     </div>
                                 </div>
                             </div>

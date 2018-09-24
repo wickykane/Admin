@@ -10,11 +10,9 @@ import { ShippingZoneRoutingModule } from './shipping-zone-routing.module';
 import { TableService } from '../../../services/index';
 // Table Service
 import { CommonShareModule } from '../../../shared/index';
-import { CustomerService } from '../../customer-mgmt/customer.service';
-import { PurchaseService } from '../../purchase-mgmt/purchase.service';
 import { ShippingZoneCreateComponent } from './create/shipping-zone.create.component';
-import { ShippingZoneService } from './shipping-zone.service';
 import { ShippingZoneEditComponent } from './edit/shipping-zone.edit.component';
+import { ShippingZoneService } from './shipping-zone.service';
 import { ShippingZoneViewComponent } from './view/shipping-zone.view.component';
 @NgModule({
   imports: [
@@ -26,7 +24,7 @@ import { ShippingZoneViewComponent } from './view/shipping-zone.view.component';
     CommonShareModule,
     ShippingZoneRoutingModule
   ],
-  declarations: [ShippingZoneComponent, ShippingZoneCreateComponent,ShippingZoneEditComponent,ShippingZoneViewComponent],
-  providers: [ShippingZoneService, TableService, PurchaseService, CustomerService]
+  declarations: [ShippingZoneComponent, ShippingZoneCreateComponent, ShippingZoneEditComponent, ShippingZoneViewComponent],
+  providers: [ShippingZoneService, TableService]
 })
 export class ShippingZoneModule { }

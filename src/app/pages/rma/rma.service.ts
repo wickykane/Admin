@@ -5,6 +5,12 @@ import { ApiService } from '../../services/index';
 export class RmaService {
 
   constructor(private API: ApiService) { }
+
+  getListRMA(params) {
+    const url = ['rma', 'get-list'].join('/');
+    return this.API.get(url, params);
+  }
+
   getAllSts(params) {
     const url = ['reports', 'get-all-orders-status'].join('/');
     return this.API.get(url, params);
@@ -30,6 +36,7 @@ export class RmaService {
     return this.API.customPost(url, params);
   }
 
+
   getRefundMethod() {
     const url = ['bank/list?is_all=1'].join('/');
     return this.API.get(url);
@@ -50,8 +57,8 @@ export class RmaService {
     return this.API.post(url, params);
   }
   getOrderInfo(id) {
-    const url = 'rma/get-info-order/'+id;
-    return this.API.get(url,null);
+    const url = 'rma/get-info-order/' + id;
+    return this.API.get(url);
   }
 
   getReturnReason() {

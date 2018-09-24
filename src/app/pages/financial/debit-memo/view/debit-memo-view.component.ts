@@ -14,7 +14,6 @@ import { DebitMemoService } from '../debit-memo.service';
 @Component({
     selector: 'app-debit-memo-view',
     templateUrl: './debit-memo-view.component.html',
-    styleUrls: ['./debit-memo-view.component.scss'],
     animations: [routerTransition()],
     providers: [DebitMemoService]
 })
@@ -50,6 +49,7 @@ export class DebitMemoViewComponent implements OnInit {
             res => {
                 try {
                     this.debitDetail = res.data;
+                    this.debitDetail['paid_amount'] = (this.debitDetail['total_price'] - this.debitDetail['balance_price']) || 0;
                 } catch (err) {
                     console.log(err);
                 }
