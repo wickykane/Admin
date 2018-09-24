@@ -23,7 +23,7 @@ import { SendMailDebitModalContent } from '../modals/send-email/send-mail.modal'
     templateUrl: './debit-memo-list.component.html',
     styleUrls: ['./debit-memo-list.component.scss'],
     animations: [routerTransition()],
-    providers: [DebitMemoListKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }]
+    providers: [DebitMemoListKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }, TableService]
 })
 export class DebitMemoListComponent implements OnInit {
 
