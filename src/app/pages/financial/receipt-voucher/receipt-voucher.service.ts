@@ -78,4 +78,9 @@ export class ReceiptVoucherService {
         const url = 'voucher/update/' + id;
         return this.API.put(url, params);
     }
+
+    getPaymentMethodOption() {
+        const url = 'sale-quote/sq-references';
+        return this.API.get(url);
+    }
 }

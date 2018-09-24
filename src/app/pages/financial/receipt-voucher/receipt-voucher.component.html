@@ -22,29 +22,34 @@
                     </div>
                     <div class="block-search">
                         <label for="payment_method" class="control-label" translate>Payment Method</label>
-                        <input type="text" name="payment_method" formControlName="payment_method" class="form-control"
-                            placeholder="">
+                        <select class="form-control" formControlName="payment_method">
+                            <option [hidden]="true" [disabled]="true" [ngValue]="null"></option>
+                            <option *ngFor="let item of listMaster['paymentMethod']" [ngValue]="item.id">{{item.name}}</option>
+                        </select>
                     </div>
                     <div class="block-search">
                         <label for="customer_id" class="control-label" translate>Payer</label>
-                        <input type="text" name="customer_id" formControlName="customer_id" class="form-control"
-                            placeholder="">
+                        <ng-select  [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)"
+                            [virtualScroll]="true" style="width:100px; max-width:100%" [items]="listMaster['customer']"
+                            bindLabel="company_name" bindValue="id" formControlName="customer_id">
+                        </ng-select>
                     </div>
                     <div class="block-search">
                         <label for="sts" class="control-label">Status</label>
-                        <ng-select class="ng-select-filter" [multiple]="true" [items]="listMaster['count-status']" bindLabel="name"
-                            bindValue="id" formControlName="status">
+                        <ng-select class="ng-select-filter" [multiple]="true" [items]="this.listMaster['list-status']"
+                            bindLabel="name" bindValue="id" formControlName="status">
                         </ng-select>
                     </div>
                     <div class="block-search">
                         <label for="electronic" class="control-label" translate>Electronic</label>
-                        <select class="form-control" fromControlName="electronic">
+                        <select class="form-control" formControlName="electronic">
+                            <option [hidden]="true" [disabled]="true" [ngValue]="null"></option>
                             <option *ngFor="let item of listMaster['electType']" [ngValue]="item.id">{{item.name}}</option>
                         </select>
                     </div>
                     <div class="block-search">
                         <label for="date_type" class="control-label" translate>Date Type</label>
-                        <select class="form-control" fromControlName="date_type">
+                        <select class="form-control" formControlName="date_type">
                             <option *ngFor="let item of listMaster['dateType']" [ngValue]="item.id">{{item.name}}</option>
                         </select>
                     </div>
@@ -130,7 +135,7 @@
                                             <span class="badge badge-danger bg-magenta" *ngIf="item.sts_code == 'RJ'">{{item.sts}}</span>
                                             <span class="badge badge-success bg-strong-green" *ngIf="item.sts_code == 'RC'">{{item.sts}}</span>
                                             <span class="badge badge-danger bg-red" *ngIf="item.sts_code == 'CC'">{{item.sts}}</span>
-                                            <span class="badge badge-primary bg-lemon" *ngIf="item.sts_code == 'ER'">{{item.sts}}</span>                                           
+                                            <span class="badge badge-primary bg-lemon" *ngIf="item.sts_code == 'ER'">{{item.sts}}</span>
                                         </td>
                                         <td>{{item.created_at|date:'MM/dd/yyyy'}}</td>
                                         <td>{{item.created_by}}</td>
