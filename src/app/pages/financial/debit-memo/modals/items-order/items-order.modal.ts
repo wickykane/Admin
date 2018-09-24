@@ -45,6 +45,10 @@ export class ItemsOrderDebitModalContent implements OnInit {
 
     ngOnInit() {}
 
+    onSearchList() {
+        return this.listIgnoredItems.length && this.getListItems();
+    }
+
     getListItems() {
         const params = { ...this.searchForm.value};
         params['item_ids'] = this.listIgnoredItems.join();

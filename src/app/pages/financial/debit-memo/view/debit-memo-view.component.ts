@@ -50,6 +50,7 @@ export class DebitMemoViewComponent implements OnInit {
             res => {
                 try {
                     this.debitDetail = res.data;
+                    this.debitDetail['paid_amount'] = (this.debitDetail['total_price'] - this.debitDetail['balance_price']) || 0;
                 } catch (err) {
                     console.log(err);
                 }
