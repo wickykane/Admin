@@ -1,18 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { BundleMgmtCreateComponent } from './bundle-mgmt/bundle-mgmt-create.component';
-import { BundleMgmtEditComponent } from './bundle-mgmt/bundle-mgmt-edit.component';
-import { BundleMgmtComponent } from './bundle-mgmt/bundle-mgmt.component';
-
-import { ConditionProductGroupCreateComponent } from './condition-product-group/condition-product-group-create.component';
-import { ConditionProductGroupEditComponent } from './condition-product-group/condition-product-group-edit.component';
-import { ConditionProductGroupComponent } from './condition-product-group/condition-product-group.component';
-
-import { ECatalogCreateComponent } from './e-catalog/e-catalog-create.component';
-import { ECatalogEditComponent } from './e-catalog/e-catalog-edit.component';
-import { ECatalogComponent } from './e-catalog/e-catalog.component';
-
 import { ItemListComponent } from './item-list/item-list.component';
 import { PartDetailComponent } from './part-mgmt/part-detail.component';
 import { PartEditComponent } from './part-mgmt/part-edit.component';
@@ -48,30 +36,6 @@ const routes: Routes = [
      {
         path: 'part-list/edit/:id',
         component: PartEditComponent
-    },
-    {
-        path: 'bundle',
-        children: [
-            { path: '', component: BundleMgmtComponent },
-            { path: 'create', component: BundleMgmtCreateComponent },
-            { path: 'edit/:id', component: BundleMgmtEditComponent }
-        ]
-    },
-    {
-        path: 'condition-product',
-        children: [
-            { path: '', component: ConditionProductGroupComponent },
-            { path: 'create', component: ConditionProductGroupCreateComponent },
-            { path: 'edit/:id', component: ConditionProductGroupEditComponent }
-        ]
-    },
-    {
-        path: 'e-catalog',
-        children: [
-            { path: '', component: ECatalogComponent },
-            { path: 'create', component: ECatalogCreateComponent },
-            { path: 'edit/:id', component: ECatalogEditComponent }
-        ]
     },
     {
         path: 'mass-price',

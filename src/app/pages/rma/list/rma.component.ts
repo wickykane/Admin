@@ -4,18 +4,17 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 import { TableService } from '../../../services/table.service';
-import { PurchaseService } from '../../purchase-mgmt/purchase.service';
 import { RMAKeyService } from './keys.control';
 
+import {RmaService } from '../rma.service';
 import { CommonService } from './../../../services/common.service';
 
-import { ItemsControl } from '../../../../../node_modules/@ngu/carousel/src/ngu-carousel/ngu-carousel.interface';
 @Component({
     selector: 'app-rma',
     templateUrl: './rma.component.html',
     styleUrls: ['./rma-list.component.scss'],
     animations: [routerTransition()],
-    providers: [RMAKeyService, CommonService]
+    providers: [RMAKeyService, CommonService, TableService]
 })
 export class RmaComponent implements OnInit {
 
@@ -41,9 +40,9 @@ export class RmaComponent implements OnInit {
         public toastr: ToastrService,
         private vRef: ViewContainerRef,
         public tableService: TableService,
-        private purchaseService: PurchaseService,
         public keyService: RMAKeyService,
-        private commonService: CommonService
+        private commonService: CommonService,
+        private rmaService: RmaService
     ) {
 
         this.searchForm = fb.group({
@@ -97,54 +96,54 @@ export class RmaComponent implements OnInit {
 
     }
 
-    sendMail(id) {
-        const params = {
-            'sts': 'SP'
-        };
-        this.purchaseService.sendMailPO(params, id).subscribe(res => {
-            try {
-                this.toastr.success(res.message);
-                this.getList();
-            } catch (e) {
-                console.log(e);
-            }
-        });
-    }
+    // sendMail(id) {
+    //     const params = {
+    //         'sts': 'SP'
+    //     };
+    //     this.rmaService.sendMailPO(params, id).subscribe(res => {
+    //         try {
+    //             this.toastr.success(res.message);
+    //             this.getList();
+    //         } catch (e) {
+    //             console.log(e);
+    //         }
+    //     });
+    // }
 
-    sentToSuppPQ(id) {
-        this.purchaseService.sentToSuppPQ(id).subscribe(res => {
-            try {
-                this.toastr.success(res.message);
-                this.getList();
-            } catch (e) {
-                console.log(e);
-            }
-        });
-    }
+    // sentToSuppPQ(id) {
+    //     this.rmaService.sentToSuppPQ(id).subscribe(res => {
+    //         try {
+    //             this.toastr.success(res.message);
+    //             this.getList();
+    //         } catch (e) {
+    //             console.log(e);
+    //         }
+    //     });
+    // }
 
-    approve(id) {
-        this.purchaseService.aprvByMgrPQ(id).subscribe(res => {
-            try {
-                this.toastr.success(res.message);
-                this.getList();
-            } catch (e) {
-                console.log(e);
-            }
-        });
+    // approve(id) {
+    //     this.rmaService.aprvByMgrPQ(id).subscribe(res => {
+    //         try {
+    //             this.toastr.success(res.message);
+    //             this.getList();
+    //         } catch (e) {
+    //             console.log(e);
+    //         }
+    //     });
 
-    }
+    // }
 
-    reject(id) {
-        this.purchaseService.rjtByMgrPQ(id).subscribe(res => {
-            try {
-                this.toastr.success(res.message);
-                this.getList();
-            } catch (e) {
-                console.log(e);
-            }
-        });
+    // reject(id) {
+    //     this.rmaService.rjtByMgrPQ(id).subscribe(res => {
+    //         try {
+    //             this.toastr.success(res.message);
+    //             this.getList();
+    //         } catch (e) {
+    //             console.log(e);
+    //         }
+    //     });
 
-    }
+    // }
 
     getListMaster() {
         this.commonService.getMasterData().subscribe(res => {
@@ -159,7 +158,7 @@ export class RmaComponent implements OnInit {
         const params = { ...this.tableService.getParams(), ...this.searchForm.value };
         Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
         console.log(params);
-        this.purchaseService.getListPurchaseOrder(params).subscribe(res => {
+        this.rmaService.getListRMA(params).subscribe(res => {
             try {
                 this.list.items = res.data.rows;
                 this.list.items.forEach(item => {

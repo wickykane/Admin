@@ -11,7 +11,6 @@ import { TableService } from '../../services/index';
 // Table Service
 import { CommonShareModule } from '../../shared/index';
 import { CustomerService } from '../customer-mgmt/customer.service';
-import { PurchaseService } from '../purchase-mgmt/purchase.service';
 import { RmaCreateComponent } from './create/rma.create.component';
 import { RmaEditComponent } from './edit/rma.edit.component';
 import { RmaService } from './rma.service';
@@ -27,6 +26,6 @@ import { RmaService } from './rma.service';
     RmaRoutingModule
   ],
   declarations: [RmaComponent, RmaCreateComponent, RmaEditComponent],
-  providers: [RmaService, TableService, PurchaseService, CustomerService]
+  providers: [RmaService, TableService, CustomerService]
 })
 export class RmaModule { }
