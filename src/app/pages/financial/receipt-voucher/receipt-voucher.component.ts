@@ -120,8 +120,17 @@ export class ReceiptVoucherComponent implements OnInit {
             console.log(res);
         });
     }
-
-
+    filter(status) {
+        const params = { status };
+        this.receiptVoucherService.getListReceiptVoucher(params).subscribe(res => {
+            try {
+                this.list.items = res.data.rows;
+                this.tableService.matchPagingOption(res.data);
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
 
     getList() {
         const params = { ...this.tableService.getParams(), ...this.searchForm.value };

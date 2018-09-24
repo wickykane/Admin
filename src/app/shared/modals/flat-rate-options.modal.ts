@@ -4,7 +4,6 @@ import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from './../../services/table.service';
 
-import { CustomerService } from '../../pages/customer-mgmt/customer.service';
 import { ItemService } from './item.service';
 
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -29,7 +28,6 @@ export class FlatRateOptionsModalComponent implements OnInit, OnDestroy {
         public router: Router,
         public toastr: ToastrService,
         private itemService: ItemService,
-        private customerService: CustomerService,
         private modalService: NgbModal,
         private hotkeysService: HotkeysService,
         private commonService: CommonService,
