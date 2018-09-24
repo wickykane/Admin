@@ -422,6 +422,7 @@ export class SaleQuotationCreateComponent implements OnInit {
     addNewItem() {
         const modalRef = this.modalService.open(ItemModalContent, { size: 'lg' });
         modalRef.result.then(res => {
+            this.data['modal'] = null;
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
@@ -447,12 +448,15 @@ export class SaleQuotationCreateComponent implements OnInit {
 
                 this.updateTotal();
             }
-        }, dismiss => { });
+        }, dismiss => {
+            this.data['modal'] = null;
+        });
     }
 
     addNewMiscItem() {
         const modalRef = this.modalService.open(ItemMiscModalContent, { size: 'lg' });
         modalRef.result.then(res => {
+            this.data['modal'] = null;
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
@@ -480,7 +484,9 @@ export class SaleQuotationCreateComponent implements OnInit {
 
                 this.updateTotal();
             }
-        }, dismiss => { });
+        }, dismiss => {
+            this.data['modal'] = null;
+        });
     }
 
     changeShip(flag?) {
