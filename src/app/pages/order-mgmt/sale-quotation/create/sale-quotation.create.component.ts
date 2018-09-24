@@ -312,7 +312,9 @@ export class SaleQuotationCreateComponent implements OnInit {
 
     selectTable() {
         this.selectedIndex = 0;
-        this.table.element.nativeElement.querySelector('td a').focus();
+        if (this.table.element.nativeElement.querySelector('td button')) {
+            this.table.element.nativeElement.querySelector('td button').focus();
+        }
     }
 
     changeCustomer(flag?) {
@@ -422,7 +424,7 @@ export class SaleQuotationCreateComponent implements OnInit {
     addNewItem() {
         const modalRef = this.modalService.open(ItemModalContent, { size: 'lg' });
         modalRef.result.then(res => {
-            this.data['modal'] = null;
+            this.keyService.reInitKey();
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
@@ -449,7 +451,7 @@ export class SaleQuotationCreateComponent implements OnInit {
                 this.updateTotal();
             }
         }, dismiss => {
-            this.data['modal'] = null;
+            this.keyService.reInitKey();
         });
     }
 
