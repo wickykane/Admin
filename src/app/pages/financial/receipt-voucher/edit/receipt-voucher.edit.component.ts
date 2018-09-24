@@ -99,7 +99,7 @@ export class ReceiptVoucherEditComponent implements OnInit {
             'created_by': [null],
             'gl_account': [null, Validators.required],
             'check_no': [null, Validators.required],
-            'ref_no': [null, Validators.required],
+            'ref_no': [null],
             'remain_amt': [null],
         });
 
@@ -221,11 +221,11 @@ export class ReceiptVoucherEditComponent implements OnInit {
             const id = this.generalForm.value.electronic;
             if (!id) {
                 this.generalForm.get('check_no').setValidators([Validators.required]);
-                this.generalForm.get('ref_no').setValidators([Validators.required]);
+                // this.generalForm.get('ref_no').setValidators([Validators.required]);
                 this.generalForm.get('price_received').setValidators([Validators.required]);
             } else {
                 this.generalForm.get('check_no').setValidators(null);
-                this.generalForm.get('ref_no').setValidators(null);
+                // this.generalForm.get('ref_no').setValidators(null);
                 this.generalForm.get('price_received').setValidators(null);
             }
             if (!init) {
@@ -286,15 +286,15 @@ export class ReceiptVoucherEditComponent implements OnInit {
         if (!this.generalForm.value.electronic) {
             if (id === 4) {
                 this.generalForm.get('check_no').setValidators([Validators.required]);
-                this.generalForm.get('ref_no').setValidators(null);
+                // this.generalForm.get('ref_no').setValidators(null);
             }
 
             if ([5, 6].indexOf(id) !== -1) {
                 this.generalForm.get('check_no').setValidators(null);
-                this.generalForm.get('ref_no').setValidators(null);
+                // this.generalForm.get('ref_no').setValidators(null);
             }
             if ([4, 5, 6].indexOf(id) === -1) {
-                this.generalForm.get('ref_no').setValidators([Validators.required]);
+                // this.generalForm.get('ref_no').setValidators([Validators.required]);
                 this.generalForm.get('check_no').setValidators(null);
             }
         }
