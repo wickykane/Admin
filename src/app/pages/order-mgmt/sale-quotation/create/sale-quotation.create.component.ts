@@ -188,7 +188,7 @@ export class SaleQuotationCreateComponent implements OnInit {
 
         // Lazy Load filter
         this.data['page'] = 1;
-        const params = { page: this.data['page'], length: 15 };
+        const params = { page: this.data['page'], length: 100 };
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
@@ -242,7 +242,7 @@ export class SaleQuotationCreateComponent implements OnInit {
                 this.changeCustomer(1);
 
                 // Lazy Load filter
-                const params = { page: this.data['page'], length: 15 };
+                const params = { page: this.data['page'], length: 100 };
                 this.orderService.getAllCustomer(params).subscribe(result => {
                     const idList = result.data.rows.map(item => item.id);
                     this.listMaster['customer'] = result.data.rows;
@@ -682,7 +682,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         if (this.data['page'] > this.data['total_page']) {
             return;
         }
-        const params = { page: this.data['page'], length: 15 };
+        const params = { page: this.data['page'], length: 100 };
         if (this.data['searchKey']) {
             params['company_name'] = this.data['searchKey'];
         }
@@ -694,7 +694,7 @@ export class SaleQuotationCreateComponent implements OnInit {
 
     searchCustomer(key) {
         this.data['searchKey'] = key;
-        const params = { page: this.data['page'], length: 15 };
+        const params = { page: this.data['page'], length: 100 };
         if (key) {
             params['company_name'] = key;
         }

@@ -124,7 +124,7 @@ export class DebitMemoCreateComponent implements OnInit {
         this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
         // Lazy Load filter
         this.data['page'] = 1;
-        const params = { page: this.data['page'], length: 15 };
+        const params = { page: this.data['page'], length: 100 };
         this.debitService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customers'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
@@ -310,7 +310,7 @@ export class DebitMemoCreateComponent implements OnInit {
         if (this.data['page'] > this.data['total_page']) {
             return;
         }
-        const params = { page: this.data['page'], length: 15 };
+        const params = { page: this.data['page'], length: 100 };
         if (this.data['searchKey']) {
             params['company_name'] = this.data['searchKey'];
         }
@@ -322,7 +322,7 @@ export class DebitMemoCreateComponent implements OnInit {
 
     searchCustomer(key) {
         this.data['searchKey'] = key;
-        const params = { page: this.data['page'], length: 15 };
+        const params = { page: this.data['page'], length: 100 };
         if (key) {
             params['company_name'] = key;
         }
