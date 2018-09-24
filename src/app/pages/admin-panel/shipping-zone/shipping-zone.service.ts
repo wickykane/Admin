@@ -57,8 +57,8 @@ export class ShippingZoneService {
     const url = ['shipping-zone/create'].join('/');
     return this.API.post(url, params);
   }
-  updateShippingZone(id,params) {
-    const url = ['shipping-zone/update/'+id].join('/');
+  updateShippingZone(id, params) {
+    const url = ['shipping-zone/update/' + id].join('/');
     return this.API.put(url, params);
   }
   getMasterData() {
@@ -66,15 +66,15 @@ export class ShippingZoneService {
     return this.API.get(url);
   }
   getEditMasterData(id) {
-    const url = ['shipping-zone/master-data/'+id].join('/');
+    const url = ['shipping-zone/master-data/' + id].join('/');
     return this.API.get(url);
   }
   getList(params) {
     const url = ['shipping-zone/list'].join('/');
-    return this.API.get(url,params);
+    return this.API.get(url, params);
   }
-  getShippingZoneById(id){
-    const url = ['shipping-zone/view/'+id].join('/');
+  getShippingZoneById(id) {
+    const url = ['shipping-zone/view/' + id].join('/');
     return this.API.get(url);
   }
 }
