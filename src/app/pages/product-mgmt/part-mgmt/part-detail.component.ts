@@ -84,16 +84,16 @@ export class PartDetailComponent implements OnInit {
         this.generalForm = fb.group({
             is_quotable: [null],
             is_show_price: [null],
-            sell_price: [null, Validators.required],
+            sell_price: [{value: null, disabled: true}],
             freight_class: [{ disabled: true }, Validators.required],
             is_taxable: [null, Validators.required],
-            inventory_account_id: [null, Validators.required],
-            income_account_id: [null, Validators.required],
-            expense_account_id: [null, Validators.required],
+            inventory_account_id: [{value: null, disabled: true}],
+            income_account_id: [{value: null, disabled: true}],
+            expense_account_id: [{value: null, disabled: true}],
             short_des: [null],
             full_des: [null],
-            free_ship: [null, Validators.required],
-            ups: [null, Validators.required]
+            free_ship: [{value: null, disabled: true}],
+            ups: [{value: null, disabled: true}]
         });
         //  Init Key
         this.listMaster['account'] = [];
