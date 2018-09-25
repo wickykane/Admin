@@ -358,7 +358,7 @@
                                               <span class="text-primary">Product Description</span>
                                             </label>
                                             <div class='col-12'>
-                                              <ckeditor readonly [(ngModel)]="detail.full_des" [config]="ckeConfig"></ckeditor>
+                                              <ckeditor [readonly]="true" [(ngModel)]="detail.full_des" [config]="ckeConfig"></ckeditor>
                                             </div>
                                         </div>
                                     </div>
@@ -372,8 +372,8 @@
         <div class="col-md-3 images-block p-l-5 p-r-2">
             <fieldset class="custom-border">
                 <div class="mb-3">
-                    <input type="file" class="hidden" accept="image/*" #file (change)="uploadFile($event)" multiple>
-                    <button class="btn btn-block btn-upload" (click)="file.click()">Select File Here To Upload</button>
+                    <input disabled="true" type="file" class="hidden" accept="image/*" #file (change)="uploadFile($event)" multiple>
+                    <button disabled="true" class="btn btn-block btn-upload" (click)="file.click()">Select File Here To Upload</button>
                 </div>
                 <div class="row">
                     <div class="col-md-12">

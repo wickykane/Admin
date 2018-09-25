@@ -7,7 +7,7 @@
         <button *ngIf="detail['sts_code'] =='SB'" class="btn btn-outline-success" (click)="confirmModal(_creditId, 4)"><i class="fa fa-check-square"></i> Approve</button>
         <button *ngIf="detail['sts_code'] == 'SB'" class="btn btn-outline-danger" (click)="confirmModal(_creditId, 3)"><i class="fa fa-ban" aria-hidden="true"></i> Reject</button>
         <button *ngIf="[4,8].indexOf(detail['sts_code']) != -1" class="btn btn-outline-dark"><i class="fa fa-money" aria-hidden="true"></i> Pay</button>
-        <button *ngIf="['AP','RD'].indexOf(detail['sts_code']) != -1" class="btn btn-outline-dark"  [routerLink]="['/financial/credit-memo/apply-credit',_creditId]"><i class="fa fa-clipboard" aria-hidden="true"></i> Apply to Invoice</button>        
+        <button *ngIf="['AP','RD'].indexOf(detail['sts_code']) != -1" class="btn btn-outline-dark"  [routerLink]="['/financial/credit-memo/apply-credit',_creditId]"><i class="fa fa-clipboard" aria-hidden="true"></i> Apply to Invoice</button>
         <button class="btn btn-outline-dark" (click)="printPDF(_creditId)"><i class="fa fa-download" aria-hidden="true"></i> Print</button>
         <button *ngIf="['SB','AP','RJ','CC','RD','RF'].indexOf(detail['sts_code']) != -1" class="btn btn-outline-dark" (click)="sendMail(_creditId)"><i class="fa fa-envelope-o" aria-hidden="true"></i> Send Mail</button>
     </div>
@@ -16,7 +16,7 @@
             <div class="col-md-4 padding-lr-5">
                 <div class="card height-100">
                     <div class="card-header">
-                        <strong>Invoice Information</strong>
+                        <strong>Credit Memo Information</strong>
                     </div>
                     <div class="card-body">
                         <div class="row information  height-100">
@@ -48,7 +48,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class='col-6 control-label'>Invoice Status</label>
+                                            <label class='col-6 control-label'>Credit Status</label>
                                             <div class='col-6'>
                                                 <span class="badge badge-info bg-blue" *ngIf="detail['sts_code'] == 'NW'">{{detail['sts']}}</span>
                                                 <span class="badge badge-warning bg-texas-rose" *ngIf="detail['sts_code'] == 'SB'">{{detail['sts']}}</span>
@@ -56,9 +56,9 @@
                                                 <span class="badge badge-success bg-strong-green" *ngIf="detail['sts_code'] == 'RJ'">{{detail['sts']}}</span>
                                                 <span class="badge badge-primary bg-darkblue" *ngIf="detail['sts_code'] == 'CC'">{{detail['sts']}}</span>
                                                 <span class="badge badge-primary bg-lemon" *ngIf="detail['sts_code'] == 'RD'">{{detail['sts']}}</span>
-                                                <span class="badge badge-danger bg-red" *ngIf="detail['sts_code'] == 'RF'">{{detail['sts']}}</span>                                                
+                                                <span class="badge badge-danger bg-red" *ngIf="detail['sts_code'] == 'RF'">{{detail['sts']}}</span>
                                             </div>
-                                        </div>                                       
+                                        </div>
                                     </div>
                                     <div class="col-md-6 customer-infomation bolder padding-lr-5">
 
@@ -296,12 +296,12 @@
                                         <th class="text-center" translate>Condition</th>
                                         <th class="text-center" translate>UOM</th>
                                         <th class="text-center" translate>Free Ship</th>
-                                        <th class="text-nowrap text-center" translate>QTY</th>                                        
+                                        <th class="text-nowrap text-center" translate>QTY</th>
                                         <th class="text-center" translate>Unit Price</th>
                                         <th class="text-center" translate>Disc %</th>
                                         <th class="text-center" translate>Tax %</th>
                                         <th class="text-center" translate>Amount</th>
-                                        
+
                                     </tr>
                                 </thead>
                                 <tr *ngIf="detail?.items?.length === 0">
@@ -316,7 +316,7 @@
                                         <td class="text-center">
                                             <i *ngIf="item.is_shipping_free" class="text-success fa fa-check"></i>
                                         </td>
-                                        <td class="text-right">{{item.quantity}}</td>                                       
+                                        <td class="text-right">{{item.quantity}}</td>
                                         <td class="text-right">
                                             <div>
                                                 {{ item.price | currency }}
@@ -382,7 +382,7 @@
                                 </div>
                                 <div class="form-group row">
                                     <label class='col-6 control-label'>
-                                           Used/Refunded Amount                                           
+                                           Used/Refunded Amount
                                         </label>
                                     <div class='col-5 padding-lr-10'>
                                         <div *ngIf="!data['is_fixed_early']">
