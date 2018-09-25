@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from './../../services/table.service';
@@ -11,13 +11,15 @@ import { ToastrService } from 'ngx-toastr';
 import { cdArrowTable } from '../index';
 import { Helper } from './../helper/common.helper';
 
+declare var jQuery: any;
+
 @Component({
     selector: 'app-item-modal-content',
     templateUrl: './item.modal.html',
     providers: [TableService, HotkeysService],
 })
 // tslint:disable-next-line:component-class-suffix
-export class ItemModalContent implements OnInit {
+export class ItemModalContent implements OnInit, OnDestroy {
     @Input() id;
     @Input() flagBundle;
     @ViewChild('tabSet') tabSet;
@@ -194,9 +196,8 @@ export class ItemModalContent implements OnInit {
 
     selectTable() {
         this.selectedIndex = 0;
-        if (this.table.element.nativeElement.querySelector('td input')) {
-            this.table.element.nativeElement.querySelector('td label').focus();
-        }
+        jQuery('.modal').focus();
+        this.table.scrollToTable('.modal-open .modal');
     }
     // Keyboard
 
@@ -297,5 +298,36 @@ export class ItemModalContent implements OnInit {
             e.returnValue = false; // Prevent bubbling
             return e;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'OK'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+pageup', (event: KeyboardEvent): boolean => {
+            this.tableService.pagination.page--;
+            if (this.tableService.pagination.page < 1) {
+                this.tableService.pagination.page = 1;
+                return;
+            }
+            this.tableService.changePage(this.tableService.pagination.page);
+            return;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Next page'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+pagedown', (event: KeyboardEvent): boolean => {
+            this.tableService.pagination.page++;
+            if (this.tableService.pagination.page > this.tableService.pagination.total_page) {
+                this.tableService.pagination.page = this.tableService.pagination.total_page;
+                return;
+            }
+            this.tableService.changePage(this.tableService.pagination.page);
+            return;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Previous page'));
+    }
+
+    resetKeys() {
+        const keys = Array.from(this._hotkeysService.hotkeys);
+        keys.map(key => {
+            this._hotkeysService.remove(key);
+        });
+    }
+
+    ngOnDestroy(): void {
+        this.resetKeys();
     }
 }

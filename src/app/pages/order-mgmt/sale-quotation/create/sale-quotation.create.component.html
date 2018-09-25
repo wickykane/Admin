@@ -400,7 +400,7 @@
                                 </tbody>
                                 <ng-container *ngIf="list['items'].length > 0">
                                     <tbody *ngFor="let item of list['items']; let $index = index;">
-                                        <tr>
+                                        <tr [ngClass]="{'row-selected': $index == selectedIndex}">
                                             <td>
                                                 <button class="btn btn-danger btn-xs" type="button" (click)="deleteAction(item.item_id || item.misc_id, item.item_condition_id)">
                                                     <i class="fa fa-trash"></i>
