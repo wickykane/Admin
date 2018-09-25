@@ -91,6 +91,7 @@ export class AccountModalComponent implements OnInit {
         this.listMaster['parents'].forEach(item => {
           item.disabled = item.id === this.item.id;
         });
+        this.listMaster['parents'] = this.listMaster['parents'].filter(item => item.level !== 2 );
       } catch (e) {
         console.log(e);
       }
