@@ -150,10 +150,26 @@ export class CreditInformationTabComponent implements OnInit {
         });
     }
 
+    reopentCredit(id) {
+        this.creditMemoService.reopenCredit( id).subscribe(res => {
+            try {
+                this.toastr.success(res.message);
+                this.getList();
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
+
     confirmModal(id, status) {
+        console.log(id);
         const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
         modalRef.result.then(res => {
             if (res) {
+                if (status === 'RE-OPEN') {
+                    this.reopentCredit(id);
+                    return;
+                }
                 this.updateStatus(id, status);
             }
         }, dismiss => { });
