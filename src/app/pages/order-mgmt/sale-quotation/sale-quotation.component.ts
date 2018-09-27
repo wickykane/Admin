@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from './../../../services/table.service';
@@ -18,7 +18,8 @@ import { ConfirmModalContent } from './../../../shared/modals/confirm.modal';
     templateUrl: './sale-quotation.component.html',
     styleUrls: ['./sale-quotation.component.scss'],
     providers: [SaleQuoteKeyService, TableService],
-    animations: [routerTransition()]
+    animations: [routerTransition()],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SaleQuotationComponent implements OnInit {
     /**
@@ -60,6 +61,7 @@ export class SaleQuotationComponent implements OnInit {
 
     @ViewChild(cdArrowTable) table: cdArrowTable;
     constructor(public router: Router,
+        private cd: ChangeDetectorRef,
         public fb: FormBuilder,
         public toastr: ToastrService,
         public tableService: TableService,
@@ -103,10 +105,15 @@ export class SaleQuotationComponent implements OnInit {
     /**
      * Internal Function
      */
+    refresh() {
+        this.cd.detectChanges();
+    }
+
     getListStatus() {
         this.orderService.getListSaleQuotationStatus().subscribe(res => {
             try {
                 this.listMaster['listStatus'] = res.data;
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
@@ -123,6 +130,7 @@ export class SaleQuotationComponent implements OnInit {
             try {
                 this.list.items = res.data.rows;
                 this.tableService.matchPagingOption(res.data);
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
@@ -141,6 +149,7 @@ export class SaleQuotationComponent implements OnInit {
             this.listMaster['count-status'] = Object.keys(this.statusConfig).map(key => {
                 return this.statusConfig[key];
             });
+            this.refresh();
         });
     }
 
@@ -161,6 +170,7 @@ export class SaleQuotationComponent implements OnInit {
             try {
                 this.list.items = res.data.rows;
                 this.tableService.matchPagingOption(res.data);
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
