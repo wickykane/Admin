@@ -88,7 +88,7 @@ export class ReceiptVoucherComponent implements OnInit {
 
     ngOnInit() {
         //  Init Fn
-        this.listMaster['dateType'] = [{ id: 'payment_date', name: 'Payment Date' }, { id: 'created_at', name: 'Creadted On' }, { id: 'updated_at', name: 'Updated On' }];
+        this.listMaster['dateType'] = [{ id: 'payment_date', name: 'Payment Date' }, { id: 'created_at', name: 'Created On' }, { id: 'updated_at', name: 'Updated On' }];
         this.listMaster['electType'] = [{ id: 0, name: 'No' }, { id: 1, name: 'Yes' }];
         // Function Init
         this.getList();
