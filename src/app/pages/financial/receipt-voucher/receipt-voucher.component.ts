@@ -4,16 +4,16 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from './../../../services/table.service';
 import { ReceiptVoucherService } from './receipt-voucher.service';
 
-import { environment } from '../../../../environments/environment';
-import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
+import { Subject } from 'rxjs/Subject';
 import { routerTransition } from '../../../router.animations';
+import { OrderService } from '../../order-mgmt/order-mgmt.service';
 import { ReceiptKeyService } from './keys.list.control';
-import { ReceiptMailModalComponent } from './modals/mail.modal';
+
 
 
 @Component({
@@ -21,7 +21,7 @@ import { ReceiptMailModalComponent } from './modals/mail.modal';
     templateUrl: './receipt-voucher.component.html',
     styleUrls: ['./receipt-voucher.component.scss'],
     animations: [routerTransition()],
-    providers: [ReceiptKeyService, HotkeysService, TableService, ReceiptVoucherService]
+    providers: [OrderService, ReceiptKeyService, HotkeysService, TableService, ReceiptVoucherService]
 })
 export class ReceiptVoucherComponent implements OnInit {
     public listMaster = {};
@@ -32,8 +32,10 @@ export class ReceiptVoucherComponent implements OnInit {
     };
     public user: any;
     public onoffFilter: any;
+    public data = {};
 
     searchForm: FormGroup;
+    public searchKey = new Subject<any>(); // Lazy load filter
 
     public messageConfig = {
         '2': 'Are you sure that you want to submit this credit memo?',
@@ -61,6 +63,7 @@ export class ReceiptVoucherComponent implements OnInit {
         private modalService: NgbModal,
         private _hotkeysService: HotkeysService,
         public receiptKeyService: ReceiptKeyService,
+        private orderService: OrderService,
         private http: HttpClient,
         private renderer: Renderer) {
 
@@ -85,12 +88,23 @@ export class ReceiptVoucherComponent implements OnInit {
 
     ngOnInit() {
         //  Init Fn
-        this.listMaster['dateType'] = [{ id: 'payment_date', name: 'Payment Date' }, { id: 'created_at', name: 'Creadted On' }, { id: 'updated_at', name: 'Updated On' }];
+        this.listMaster['dateType'] = [{ id: 'payment_date', name: 'Payment Date' }, { id: 'created_at', name: 'Created On' }, { id: 'updated_at', name: 'Updated On' }];
         this.listMaster['electType'] = [{ id: 0, name: 'No' }, { id: 1, name: 'Yes' }];
         // Function Init
         this.getList();
         this.getCountStatus();
         this.getListReferenceData();
+        // Lazy Load filter
+        this.data['page'] = 1;
+        const params = { page: this.data['page'], length: 100 };
+        this.orderService.getAllCustomer(params).subscribe(res => {
+            this.listMaster['customer'] = res.data.rows;
+            this.data['total_page'] = res.data.total_page;
+        });
+        this.searchKey.debounceTime(300).subscribe(key => {
+            this.data['page'] = 1;
+            this.searchCustomer(key);
+        });
     }
     /**
      * Table Event
@@ -103,6 +117,7 @@ export class ReceiptVoucherComponent implements OnInit {
      */
     getCountStatus() {
         this.receiptVoucherService.countVoucherStatus().subscribe(res => {
+            this.listMaster['list-status'] = res.data;
             res.data.map(item => {
                 if (this.statusConfig[item.cd]) {
                     this.statusConfig[item.cd].count = item.count;
@@ -115,15 +130,56 @@ export class ReceiptVoucherComponent implements OnInit {
             });
         });
     }
+
     getListReferenceData() {
-        this.receiptVoucherService.getVoucherMasterData().subscribe(res => {
-            console.log(res);
+        this.receiptVoucherService.getPaymentMethodOption().subscribe(res => {
+           this.listMaster['paymentMethod'] = res.data.payment_method;
+           console.log(this.listMaster['paymentMethod']);
         });
     }
 
+    filter(status) {
+        const params = { status };
+        console.log(params);
+        this.receiptVoucherService.getListReceiptVoucher(params).subscribe(res => {
+            try {
+                this.list.items = res.data.rows;
+                this.tableService.matchPagingOption(res.data);
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
 
+    searchCustomer(key) {
+        this.data['searchKey'] = key;
+        const params = { page: this.data['page'], length: 100 };
+        if (key) {
+            params['company_name'] = key;
+        }
+        this.orderService.getAllCustomer(params).subscribe(res => {
+            this.listMaster['customer'] = res.data.rows;
+            this.data['total_page'] = res.data.total_page;
+        });
+    }
+
+    fetchMoreCustomer(data?) {
+        this.data['page']++;
+        if (this.data['page'] > this.data['total_page']) {
+            return;
+        }
+        const params = { page: this.data['page'], length: 100 };
+        if (this.data['searchKey']) {
+            params['company_name'] = this.data['searchKey'];
+        }
+        this.orderService.getAllCustomer(params).subscribe(res => {
+            this.listMaster['customer'] = this.listMaster['customer'].concat(res.data.rows);
+            this.data['total_page'] = res.data.total_page;
+        });
+    }
 
     getList() {
+        console.log(this.searchForm.value);
         const params = { ...this.tableService.getParams(), ...this.searchForm.value };
         Object.keys(params).forEach((key) => {
             if (params[key] instanceof Array) {

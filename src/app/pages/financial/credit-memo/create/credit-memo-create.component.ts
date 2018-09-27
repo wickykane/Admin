@@ -458,7 +458,7 @@ export class CreditMemoCreateComponent implements OnInit {
 
     createMemo(type, is_draft?, is_continue?) {
         const items = this.list.items.map(item => {
-            item.discount_percent = item.discount;
+            item.discount_percent = item.discount_percent;
             item.is_item = (item.misc_id) ? 0 : 1;
             return item;
         });

@@ -13,13 +13,13 @@ import { routerTransition } from '../../../../router.animations';
 import { CommonService } from './../../../../services/common.service';
 
 import * as moment from 'moment';
+import { CustomRateOptionsModalComponent } from '../../../../shared/modals/custom-rate-options.modal';
+import { FlatRateOptionsModalComponent } from '../../../../shared/modals/flat-rate-options.modal';
+import { FreeShippingOptionsModalComponent } from '../../../../shared/modals/free-shipping-options.modal';
+import { PickupOptionsModalComponent } from '../../../../shared/modals/pickup-options.modal';
+import { SEFLConfigurationModalComponent } from '../../../../shared/modals/sefl-configuration.modal';
 import { StateFilterModalComponent } from '../../../../shared/modals/stateFilter.modal';
 import { UPSConfigurationModalComponent } from '../../../../shared/modals/ups-configuration.modal';
-import { SEFLConfigurationModalComponent } from '../../../../shared/modals/sefl-configuration.modal';
-import { FreeShippingOptionsModalComponent } from '../../../../shared/modals/free-shipping-options.modal';
-import { FlatRateOptionsModalComponent } from '../../../../shared/modals/flat-rate-options.modal';
-import { CustomRateOptionsModalComponent } from '../../../../shared/modals/custom-rate-options.modal';
-import { PickupOptionsModalComponent } from '../../../../shared/modals/pickup-options.modal';
 @Component({
     selector: 'app-create-shipping-zone',
     templateUrl: './shipping-zone.create.component.html',

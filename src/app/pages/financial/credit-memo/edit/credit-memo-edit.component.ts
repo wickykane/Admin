@@ -349,10 +349,20 @@ export class CreditMemoEditComponent implements OnInit {
         this.order_info.total = +this.order_info['total_tax'] + +this.order_info.sub_total;
     }
 
+    // deleteAction(id, item_condition) {
+    //     this.list.items = this.list.items.filter((item) => {
+    //         if (item.item_id === id && item.is_item === 1) {
+    //             this.items_removed.push(item.id);
+    //         }
+    //         return ((item.item_id || item.misc_id) + (item.item_condition_id || 'mis') !== (id + (item_condition || 'mis')));
+    //     });
+    //     this.updateTotal();
+    // }
     deleteAction(id, item_condition) {
         this.list.items = this.list.items.filter((item) => {
             if (item.item_id === id && item.is_item === 1) {
-                this.items_removed.push(item.id);
+                this.items_removed.push(item.item_id);
+                console.log(this.items_removed);
             }
             return ((item.item_id || item.misc_id) + (item.item_condition_id || 'mis') !== (id + (item_condition || 'mis')));
         });
@@ -375,6 +385,43 @@ export class CreditMemoEditComponent implements OnInit {
             });
         });
     }
+    // addNewItem() {
+    //     if (this.items_removed.length === 0) {
+    //         return;
+    //     }
+    //     const modalRef = this.modalService.open(CreditItemModalContent, { size: 'lg' });
+    //     modalRef.result.then(res => {
+    //         if (res instanceof Array && res.length > 0) {
+    //             const listAdded = [];
+    //             (this.list.items).forEach((item) => {
+    //                 listAdded.push(item.sku + item.item_condition_id);
+    //             });
+    //             res.forEach((item) => {
+    //                 if (item.sale_price) { item.sale_price = Number(item.sale_price); }
+    //                 item['products'] = [];
+    //                 item.quantity = 1;
+    //                 item.is_shipping_free = item.is_shipping_free || item.free_ship;
+    //                 item['order_detail_id'] = null;
+    //                 item.totalItem = item.sale_price;
+    //                 item.source_id = 0;
+    //                 item.source_name = 'From Master';
+    //             });
+    //             this.list.items = this.list.items.concat(res.filter((item) => {
+    //                 const idx = this.items_removed.indexOf(item.id);
+    //                 if (idx !== -1) { this.items_removed.splice(idx, 1); }
+    //                 console.log(this.items_removed);
+    //                 if (listAdded.indexOf(item.sku + item.item_condition_id) < 0) {
+    //                     return listAdded.indexOf(item.sku + item.item_condition_id) < 0;
+    //                 } else {
+    //                     this.toastr.error('The item ' + item.no + ' already added in the order');
+    //                 }
+    //             }));
+
+    //             this.updateTotal();
+    //         }
+    //     }, dismiss => { });
+    //     modalRef.componentInstance.items_removed = { item_id: this.items_removed, document_type: this.generalForm.value.document_type, document_id: this.generalForm.value.document_id };
+    // }
     addNewItem() {
         if (this.items_removed.length === 0) {
             return;
@@ -491,7 +538,7 @@ export class CreditMemoEditComponent implements OnInit {
 
     createMemo(type, is_draft_sq?) {
         const items = this.list.items.map(item => {
-            item.discount_percent = item.discount;
+            item.discount_percent = item.discount_percent;
             item.is_item = (item.misc_id) ? 0 : 1;
             return item;
         });
