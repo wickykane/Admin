@@ -141,7 +141,9 @@ export class ItemModalContent implements OnInit, OnDestroy {
         this.searchForm.reset();
         this.filterForm.reset();
         this.list.items = [];
-        this.refresh();
+        setTimeout(() => {
+            this.refresh();            
+        });
     }
 
     changeToGetSubModel() {

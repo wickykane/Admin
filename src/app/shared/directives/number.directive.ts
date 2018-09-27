@@ -10,6 +10,7 @@ import { NgModel } from '@angular/forms';
 export class NumberDirective implements OnInit {
     _max;
     _min;
+    _init = false;
     public regexStr = '^[0-9]*$';
     @Output() changeValue = new EventEmitter();
 
@@ -74,8 +75,9 @@ export class NumberDirective implements OnInit {
     ngOnInit() {
         this.regexStr = (this.isDecimal) ? '^[0-9]+[.]?[0-9]*$' : this.regexStr;
         this.ngModel.valueChanges.subscribe(data => {
-            if (data && this.isDecimal) {
+            if (data && !this._init && this.isDecimal) {
                 this.ngModel.valueAccessor.writeValue((+data).toFixed(2));
+                this._init = true;
             }
         });
     }
