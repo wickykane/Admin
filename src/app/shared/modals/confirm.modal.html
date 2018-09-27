@@ -1,5 +1,4 @@
-
-<div class="confirm-modal">
+<div class="confirm-modal" (keyup.enter)="activeModal.close(true)">
     <div class="modal-header">
         <h5 class="modal-title">Confirm</h5>
         <button type="button" class="close" aria-label="Close" (click)="activeModal.close(false)">

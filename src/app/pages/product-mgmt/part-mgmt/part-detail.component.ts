@@ -56,6 +56,7 @@ export class PartDetailComponent implements OnInit {
         image_del: []
     };
     public item_condition;
+    public productId;
     galleryOptions: NgxGalleryOptions[];
 
     public detail = {
@@ -193,6 +194,7 @@ export class PartDetailComponent implements OnInit {
     }
 
     getDetailPart(id) {
+        this.productId = id;
         this.productService.getDetailPart(id).subscribe(res => {
             try {
                 if (res.status) {

@@ -220,7 +220,7 @@ export class SaleQuotationCreateComponent implements OnInit {
                     shipping_id: (data.shipping_id || {}).id,
                     billing_id: (data.billing_id || {}).id,
                     ship_rate: +data.ship_method_rate,
-                    ship_method_option: +data.ship_method_option,
+                    ship_method_option: data.ship_method_option,
                 });
 
                 // Set item and update
@@ -430,8 +430,10 @@ export class SaleQuotationCreateComponent implements OnInit {
     addNewItem() {
         const modalRef = this.modalService.open(ItemModalContent, { size: 'lg' });
         modalRef.result.then(res => {
-            this.keyService.reInitKey();
-            this.table.reInitKey(this.data['tableKey']);
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
@@ -459,16 +461,21 @@ export class SaleQuotationCreateComponent implements OnInit {
                 this.selectTable();
             }
         }, dismiss => {
-            this.keyService.reInitKey();
-            this.table.reInitKey(this.data['tableKey']);
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
         });
     }
 
     addNewMiscItem() {
         const modalRef = this.modalService.open(ItemMiscModalContent, { size: 'lg' });
         modalRef.result.then(res => {
-            this.keyService.reInitKey();
-            this.table.reInitKey(this.data['tableKey']);
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
+
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
@@ -498,15 +505,17 @@ export class SaleQuotationCreateComponent implements OnInit {
                 this.selectTable();
             }
         }, dismiss => {
-            this.keyService.reInitKey();
-            this.table.reInitKey(this.data['tableKey']);
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
         });
     }
 
     changeShip(flag?) {
         const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id) || { 'options': [], 'ship_rate': [], 'own_carrirer': '' };
         this.listMaster['options'] = (carrier.options || []).map(item => {
-            item.cd = + item.cd;
+            item.cd = item.cd;
             return item;
         });
         this.listMaster['ship_rates'] = carrier.ship_rate || [];
@@ -515,7 +524,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         let default_ship_rate = null;
         let enable = false;
         if (+this.generalForm.value.carrier_id === 2 || this.generalForm.value.carrier_id !== 999 && !carrier.own_carrirer) {
-            default_option = 888;
+            default_option = '888';
             default_ship_rate = 8;
             enable = [1, 2].indexOf(+this.generalForm.value.carrier_id) > -1;
             if (+this.generalForm.value.carrier_id === 1) {

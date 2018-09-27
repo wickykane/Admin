@@ -80,7 +80,7 @@
                                      <label class='col-6'>Payment Terms
 
                                      </label>
-                                     <div class='col-'>
+                                     <div class='col-6'>
                                           {{detail['payment_term_name']}}
                                      </div>
                                   </div>
@@ -208,7 +208,12 @@
                          <strong>Ship To</strong>
                       </div>
                       <div class="card-body p-25">
-                         <div class="row">
+                        <div class="row" *ngIf="!detail['shipping_id']">
+                          <div class="col-12">
+                             Customer will pickup goods in store
+                          </div>
+                        </div>
+                         <div class="row" *ngIf="detail['shipping_id']">
                            <div class="col-12">
                               <div class="form-group row">
                                  <label class="control-label col-5" translate>Label</label>
@@ -262,34 +267,32 @@
                          <div class="row">
                             <div class="col-12">
                                <div class="form-group row">
-                                  <label class='col-6'>Warehouse
-
-                                  </label>
+                                  <label class='col-6'>Warehouse</label>
                                   <div class='col-6'>
                                      {{detail['warehouse_name']}}
                                   </div>
                                </div>
                                <div class="form-group row">
-                                  <label class='col-6'>Ship Via
-
-                                  </label>
-                                  <div class='col-6'>
+                                  <label class='col-6'>Ship Via </label>
+                                  <div class='col-6'  *ngIf="!detail['shipping_id']">
+                                     Pickup in Store
+                                  </div>
+                                  <div class='col-6'  *ngIf="detail['shipping_id']">
                                      {{detail['carrier_name']}}
                                   </div>
                                </div>
                                <div class="form-group row">
-                                  <label class='col-6'>Option
-
-                                  </label>
+                                  <label class='col-6'>Option</label>
                                   <div class='col-6'>
                                      {{detail['shipping_method_option_name']}}
                                   </div>
                                </div>
                                <div class="form-group row">
-                                  <label class='col-6'>Ship Rate
-
-                                  </label>
-                                  <div class='col-6'>
+                                  <label class='col-6'>Ship Rate</label>
+                                  <div class='col-6' *ngIf="!detail['shipping_id']">
+                                     Manual Rate
+                                  </div>
+                                  <div class='col-6'  *ngIf="detail['shipping_id']">
                                      {{detail['shipping_method_rate_name']}}
                                   </div>
                                </div>

@@ -17,7 +17,10 @@
                                             <label for="code" class="control-label" translate> <strong>Customer Name</strong> </label>
                                             <span class="text-danger">(*)</span>
                                             <div>
-                                                <ng-select [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 110px; margin-left: 2px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="buyer_id">
+                                                <ng-select class="infinity-scroll-select"  [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 110px; margin-left: 2px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="buyer_id">
+                                                    <ng-template ng-option-tmp let-item="item">
+                                                        <span title="{{item.company_name}}">{{item.company_name}}</span>
+                                                    </ng-template>
                                                 </ng-select>
                                             </div>
                                         </div>
@@ -101,7 +104,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class='col-6'>Priority</label>
+                                                <label class='col-6'>Priority <span class="text-danger">(*)</span></label>
                                                 <div class='col-6 text-danger'>
                                                     <select required class="form-control" id="priority" name="priority" formControlName="prio_level">
                                     <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>

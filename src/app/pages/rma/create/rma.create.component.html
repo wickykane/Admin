@@ -15,7 +15,11 @@
                                         <label for="code" class="control-label" translate>Customer</label>
                                         <span class="text-danger">(*) </span>
                                         <div>
-                                            <ng-select  [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 150px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="buyer">
+                                            <ng-select class="infinity-scroll-select" [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 150px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id"
+                                                formControlName="buyer">
+                                                <ng-template ng-option-tmp let-item="item">
+                                                    <span title="{{item.company_name}}">{{item.company_name}}</span>
+                                                </ng-template>
                                             </ng-select>
                                         </div>
                                     </div>
@@ -153,7 +157,7 @@
                                                 </ng-select>
                                             </div>
                                         </div>
-                                        <div class="form-group row" >
+                                        <div class="form-group row">
                                             <label class='col-5'>Cover Ship. Fee
                                                 <span class="text-danger">(*)</span>
                                             </label>

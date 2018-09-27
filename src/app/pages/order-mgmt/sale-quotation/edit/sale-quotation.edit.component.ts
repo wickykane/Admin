@@ -201,10 +201,9 @@ export class SaleQuotationEditComponent implements OnInit {
                     shipping_id: (data.shipping_id || {}).id,
                     billing_id: (data.billing_id || {}).id,
                     ship_rate: +data.ship_method_rate,
-                    ship_method_option: +data.ship_method_option,
+                    ship_method_option: data.ship_method_option,
                     sale_quote_no: data.cd
                 });
-                console.log(this.generalForm.value);
 
                 // Set item and update
                 this.list.items = (data.items || []).map(item => {
@@ -466,16 +465,16 @@ export class SaleQuotationEditComponent implements OnInit {
 
         const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id) || { 'options': [], 'ship_rate': [], 'own_carrirer': ''};
         this.listMaster['options'] = (carrier.options || []).map(item => {
-            item.cd = + item.cd;
+            item.cd = item.cd;
             return item;
         });
         this.listMaster['ship_rates'] = carrier.ship_rate || [];
-        console.log(carrier);
+
         let default_option = null;
         let default_ship_rate = null;
         let enable = false;
         if (+this.generalForm.value.carrier_id === 2 || this.generalForm.value.carrier_id !== 999 && !carrier.own_carrirer) {
-            default_option = 888;
+            default_option = '888';
             default_ship_rate = 8;
             enable = [2, 1].indexOf(+this.generalForm.value.carrier_id) > -1;
             if (+this.generalForm.value.carrier_id === 1) {
@@ -520,6 +519,7 @@ export class SaleQuotationEditComponent implements OnInit {
             this.generalForm.patchValue({ ship_method_option: default_option, ship_rate: default_ship_rate });
         }
         this.generalForm.updateValueAndValidity();
+
     }
     //  Show order history
     showViewOrderHistory() {
