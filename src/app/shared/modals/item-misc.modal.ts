@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from './../../services/table.service';
@@ -6,15 +6,21 @@ import { TableService } from './../../services/table.service';
 import { ItemService } from './item.service';
 
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
+import { cdArrowTable } from '../index';
+import { Helper } from './../helper/common.helper';
+
+declare var jQuery: any;
 
 @Component({
     selector: 'app-item-misc-modal-content',
     templateUrl: './item-misc.modal.html'
 })
 // tslint:disable-next-line:component-class-suffix
-export class ItemMiscModalContent implements OnInit {
+export class ItemMiscModalContent implements OnInit, OnDestroy {
     @Input() company_id;
+    @ViewChild(cdArrowTable) table: cdArrowTable;
 
     /**
      * Variable Declaration
@@ -35,6 +41,8 @@ export class ItemMiscModalContent implements OnInit {
     constructor(public activeModal: NgbActiveModal,
         public itemService: ItemService,
         public fb: FormBuilder,
+        private helper: Helper,
+        private _hotkeysService: HotkeysService,
         public toastr: ToastrService,
         public tableService: TableService) {
         this.searchForm = fb.group({
@@ -53,12 +61,14 @@ export class ItemMiscModalContent implements OnInit {
     ngOnInit() {
         this.getListType();
         this.getList();
+        this.initKeyBoard();
     }
 
 
     // Table event
     selectData(index) {
-        console.log(index);
+        this.list.items[index].is_checked = !this.list.items[index].is_checked;
+        this.isAllChecked();
     }
 
     checkAll(ev) {
@@ -99,5 +109,84 @@ export class ItemMiscModalContent implements OnInit {
         this.itemService.getMiscType().subscribe(res => {
             this.listMaster['type'] = res.data;
         });
+    }
+
+    selectTable() {
+        this.selectedIndex = 0;
+        jQuery('.modal').focus();
+        this.table.scrollToTable('.modal-open .modal');
+    }
+    // Keyboard
+
+    initKeyBoard() {
+        this.data['key_config'] = {
+            no: {
+                element: null,
+                focus: true,
+            },
+        };
+
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            event.preventDefault();
+            this.tableService.searchAction();
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Search'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+r', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            event.preventDefault();
+            this.tableService.resetAction();
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+t', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            this.selectTable();
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Select Table'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+o', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            event.preventDefault();
+            this.activeModal.close(this.list.checklist);
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'OK'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+pageup', (event: KeyboardEvent): boolean => {
+            this.tableService.pagination.page--;
+            if (this.tableService.pagination.page < 1) {
+                this.tableService.pagination.page = 1;
+                return;
+            }
+            this.tableService.changePage(this.tableService.pagination.page);
+            return;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Next page'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+pagedown', (event: KeyboardEvent): boolean => {
+            this.tableService.pagination.page++;
+            if (this.tableService.pagination.page > this.tableService.pagination.total_page) {
+                this.tableService.pagination.page = this.tableService.pagination.total_page;
+                return;
+            }
+            this.tableService.changePage(this.tableService.pagination.page);
+            return;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Previous page'));
+    }
+
+    resetKeys() {
+        const keys = Array.from(this._hotkeysService.hotkeys);
+        keys.map(key => {
+            this._hotkeysService.remove(key);
+        });
+    }
+
+    ngOnDestroy(): void {
+        this.resetKeys();
     }
 }
