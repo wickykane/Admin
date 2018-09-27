@@ -20,7 +20,7 @@ import { CreditMailModalComponent } from '../modals/send-email/mail.modal';
     templateUrl: './credit-memo-list.component.html',
     styleUrls: ['../credit-memo.component.scss'],
     animations: [routerTransition()],
-    providers: [CreditMemoListKeyService]
+    providers: [CreditMemoListKeyService, TableService]
 })
 export class CreditMemoListComponent implements OnInit {
     /**
@@ -48,10 +48,9 @@ export class CreditMemoListComponent implements OnInit {
     public statusConfig = {
         'NW': { color: 'blue', name: 'New', img: './assets/images/icon/new.png' },
         'SB': { color: 'texas-rose', name: 'Submited' },
-        'RJ': { color: 'magenta', name: 'Rejected' },
         'AP': { color: 'strong-green', name: 'Approved', img: './assets/images/icon/approved.png' },
+        'RJ': { color: 'magenta', name: 'Rejected' },
         'CC': { color: 'red', name: 'Canceled', img: './assets/images/icon/cancel.png' },
-        // 'SC': { color: 'lemon', name: 'Completed', img: './assets/images/icon/full_delivered.png' },
         'RD': { color: 'lemon', name: 'Refund Due' },
         'RF': { color: 'bright-grey', name: 'Refunded' },
     };
@@ -163,7 +162,7 @@ export class CreditMemoListComponent implements OnInit {
         }, dismiss => { });
         modalRef.componentInstance.creditId = id;
     }
-    printPDF(id, inv_num) {
+    printPDF(id) {
         const path = 'credit-memo/export-pdf/';
         const url = `${environment.api_url}${path}${id}`;
         const headers: HttpHeaders = new HttpHeaders();

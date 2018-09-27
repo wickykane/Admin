@@ -178,7 +178,6 @@ export class ReceiptInformationTabComponent implements OnInit {
                 this.selected_message = this.messageConfig.cancel;
                 break;
         }
-        console.log(this.selected_message);
         modalRef.componentInstance.message = this.selected_message;
         modalRef.componentInstance.yesButtonText = 'Yes';
         modalRef.componentInstance.noButtonText = 'No';
