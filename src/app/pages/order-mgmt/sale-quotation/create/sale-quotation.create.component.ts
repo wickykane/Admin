@@ -220,7 +220,7 @@ export class SaleQuotationCreateComponent implements OnInit {
                     shipping_id: (data.shipping_id || {}).id,
                     billing_id: (data.billing_id || {}).id,
                     ship_rate: +data.ship_method_rate,
-                    ship_method_option: +data.ship_method_option,
+                    ship_method_option: data.ship_method_option,
                 });
 
                 // Set item and update
@@ -506,7 +506,7 @@ export class SaleQuotationCreateComponent implements OnInit {
     changeShip(flag?) {
         const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id) || { 'options': [], 'ship_rate': [], 'own_carrirer': '' };
         this.listMaster['options'] = (carrier.options || []).map(item => {
-            item.cd = + item.cd;
+            item.cd = item.cd;
             return item;
         });
         this.listMaster['ship_rates'] = carrier.ship_rate || [];
@@ -515,7 +515,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         let default_ship_rate = null;
         let enable = false;
         if (+this.generalForm.value.carrier_id === 2 || this.generalForm.value.carrier_id !== 999 && !carrier.own_carrirer) {
-            default_option = 888;
+            default_option = '888';
             default_ship_rate = 8;
             enable = [1, 2].indexOf(+this.generalForm.value.carrier_id) > -1;
             if (+this.generalForm.value.carrier_id === 1) {
