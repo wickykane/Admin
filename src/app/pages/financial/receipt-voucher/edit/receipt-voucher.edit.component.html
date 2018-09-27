@@ -248,7 +248,7 @@
                                             <td>
                                                 {{$index + 1}}
                                             </td>
-                                            <td><a class="text-primary" [routerLink]="[(item.doc_type == 1)?'/financial/invoice/view': '/financial/debit-memo/view', item.id]">{{item.code }}</a></td>
+                                            <td><a class="text-primary" target="_blank" [routerLink]="[(item.doc_type == 1)?'/financial/invoice/view': '/financial/debit-memo/view', item.id]">{{item.code }}</a></td>
                                             <td>{{item.issue_date }}</td>
                                             <td>{{item.due_date }}</td>
                                             <td>{{item.payment_term_name }}</td>
