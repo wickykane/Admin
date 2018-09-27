@@ -142,7 +142,7 @@ export class ItemModalContent implements OnInit, OnDestroy {
         this.filterForm.reset();
         this.list.items = [];
         setTimeout(() => {
-            this.refresh();            
+            this.refresh();
         });
     }
 

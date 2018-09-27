@@ -29,6 +29,7 @@ export class NumberDirective implements OnInit {
 
     @HostListener('input', ['$event'])
     onInputChange($event) {
+        this._init = true;
         const event = $event.target.value;
         let value = (event > this._max) ? this._max : (event < this._min) ? this._min : event;
         const decimal = (String(value).split('.'));
@@ -76,7 +77,7 @@ export class NumberDirective implements OnInit {
         this.regexStr = (this.isDecimal) ? '^[0-9]+[.]?[0-9]*$' : this.regexStr;
         this.ngModel.valueChanges.subscribe(data => {
             if (data && !this._init && this.isDecimal) {
-                this.ngModel.valueAccessor.writeValue((+data).toFixed(2));
+                this.ngModel.valueAccessor.writeValue(Number((+data).toFixed(2)));
                 this._init = true;
             }
         });
