@@ -120,14 +120,12 @@
                                             <span class="badge badge-success bg-strong-green" *ngIf="item.sts_code == 'AP'">{{item.sts}}</span>
                                             <span class="badge badge-danger bg-red" *ngIf="item.sts_code == 'CC'">{{item.sts}}</span>
                                             <span class="badge badge-primary bg-lemon" *ngIf="item.sts_code == 'RD'">{{item.sts}}</span>
-                                            <span class="badge badge-primary" *ngIf="item.sts_code == 'RF'">{{item.sts}}</span>
-                                            <span class="badge badge-primary bg-darkblue" *ngIf="item.sts_code == 'IU'">{{item.sts}}</span>
-                                            <span class="badge badge-primary bg-bright-grey" *ngIf="item.sts_code == 'EX'">{{item.sts}}</span>
+                                            <span class="badge badge-primary bg-bright-grey" *ngIf="item.sts_code == 'RF'">{{item.sts}}</span>
                                         </td>
                                         <td class="text-center">{{item.age }}</td>
                                         <td class="text-center">{{item.updated_at | date:'MM/dd/yyyy' }}</td>
                                         <td class="text-center">{{item.updated_by}}</td>
-                                        <td class="text-center">
+                                        <td>
                                             <a class="btn btn-default " ngbTooltip="View" (click)="viewCredit(item.id)">
                                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                             </a>

@@ -13,10 +13,10 @@
         <button *ngIf="detail['status'] == 2" class="btn btn-outline-danger" (click)="confirmModal(_receiptId, 4)"><i
                 class="fa fa-ban" aria-hidden="true"></i> Reject</button>
         <!-- <button *ngIf="[4,8].indexOf(detail['status']) != -1" class="btn btn-outline-dark"><i class="fa fa-money" aria-hidden="true"></i> Pay</button> -->
-        <button class="btn btn-outline-dark" (click)="printPDF(_receiptId, detail['inv_num'] )"><i class="fa fa-download"
-                aria-hidden="true"></i> Print</button>
-        <button *ngIf="[3,4,6,7,8].indexOf(detail['status']) != -1" class="btn btn-outline-dark" (click)="sendMail(_receiptId)"><i
-                class="fa fa-envelope-o" aria-hidden="true"></i> Send Mail</button>
+        <!-- <button class="btn btn-outline-dark" (click)="printPDF(_receiptId, detail['inv_num'] )"><i class="fa fa-download"
+                aria-hidden="true"></i> Print</button> -->
+        <!-- <button *ngIf="[3,4,6,7,8].indexOf(detail['status']) != -1" class="btn btn-outline-dark" (click)="sendMail(_receiptId)"><i
+                class="fa fa-envelope-o" aria-hidden="true"></i> Send Mail</button> -->
     </div>
     <section class="rma-page block main-container block-order">
         <div class="row">

@@ -11,6 +11,7 @@ import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs/Subject';
 import { routerTransition } from '../../../router.animations';
+import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
 import { OrderService } from '../../order-mgmt/order-mgmt.service';
 import { ReceiptKeyService } from './keys.list.control';
 
@@ -38,11 +39,11 @@ export class ReceiptVoucherComponent implements OnInit {
     public searchKey = new Subject<any>(); // Lazy load filter
 
     public messageConfig = {
-        '2': 'Are you sure that you want to submit this credit memo?',
-        '5': 'Are you sure that you want to cancel this credit memo?',
+        '2': 'Are you sure that you want to submit this receipt voucher?',
+        '6': 'Are you sure that you want to cancel this receipt voucher?',
         'RE-OPEN': 'Are you sure that you want to reopen the credit memo?',
-        '3': 'Are you sure that you want to approve the current credit memo?',
-        '4': 'Are you sure that you want to reject the current credit memo?'
+        '3': 'Are you sure that you want to approve the current receipt voucher?',
+        '4': 'Are you sure that you want to reject the current receipt voucher?'
     };
 
     public statusConfig = {
@@ -223,6 +224,28 @@ export class ReceiptVoucherComponent implements OnInit {
                 this.router.navigate(['/financial/receipt-voucher/edit', selectedInvoiceId]);
             }
         }
+    }
+    updateStatus(id, status) {
+        const params = { voucher_id: id, status };
+        this.receiptVoucherService.updateReceiptVoucherStatus(params).subscribe(res => {
+            try {
+                this.toastr.success(res.message);
+                this.getList();
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
+    confirmModal(id, status) {
+        const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
+        modalRef.result.then(res => {
+            if (res) {
+                this.updateStatus(id, status);
+            }
+        }, dismiss => { });
+        modalRef.componentInstance.message = this.messageConfig[status];
+        modalRef.componentInstance.yesButtonText = 'Yes';
+        modalRef.componentInstance.noButtonText = 'No';
     }
 
 }
