@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from './../../services/table.service';
@@ -17,6 +17,7 @@ declare var jQuery: any;
     selector: 'app-item-modal-content',
     templateUrl: './item.modal.html',
     providers: [TableService, HotkeysService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 // tslint:disable-next-line:component-class-suffix
 export class ItemModalContent implements OnInit, OnDestroy {
@@ -44,6 +45,7 @@ export class ItemModalContent implements OnInit, OnDestroy {
 
     constructor(public activeModal: NgbActiveModal,
         private helper: Helper,
+        private cd: ChangeDetectorRef,
         private _hotkeysService: HotkeysService,
         public itemService: ItemService,
         public fb: FormBuilder,
@@ -88,6 +90,10 @@ export class ItemModalContent implements OnInit, OnDestroy {
         this.initKeyBoard();
     }
 
+    refresh() {
+        this.cd.detectChanges();
+    }
+
     getListReference() {
         this.itemService.getReferenceList().subscribe(res => {
             try {
@@ -95,6 +101,7 @@ export class ItemModalContent implements OnInit, OnDestroy {
                 this.listMaster['years'] = res.data.years.map((e) => ({ id: e, name: e }));
                 this.listMaster['make'] = res.data.manufacturers;
                 this.listMaster['certification_partNumber'] = res.data.certification;
+                this.refresh();
             } catch (e) {
                 console.log(e.message);
             }
@@ -105,11 +112,13 @@ export class ItemModalContent implements OnInit, OnDestroy {
     selectData(index) {
         this.list.items[index].is_checked = !this.list.items[index].is_checked;
         this.isAllChecked(this.list.items[index]);
+        this.refresh();
     }
 
     checkAll(ev) {
         this.list.items.forEach(x => x.is_checked = ev.target.checked);
         this.list.checklist = this.list.items.filter(_ => _.is_checked);
+        this.refresh();
     }
 
     isAllChecked(item) {
@@ -132,6 +141,7 @@ export class ItemModalContent implements OnInit, OnDestroy {
         this.searchForm.reset();
         this.filterForm.reset();
         this.list.items = [];
+        this.refresh();
     }
 
     changeToGetSubModel() {
@@ -170,6 +180,7 @@ export class ItemModalContent implements OnInit, OnDestroy {
             try {
                 if (!res.data.rows) {
                     this.list.items = [];
+                    this.refresh();
                     return;
                 }
                 this.list.items = res.data.rows;
@@ -187,6 +198,8 @@ export class ItemModalContent implements OnInit, OnDestroy {
                         }
                     });
                 });
+
+                this.refresh();
 
             } catch (e) {
                 console.log(e);
@@ -225,6 +238,7 @@ export class ItemModalContent implements OnInit, OnDestroy {
             event.preventDefault();
             (document.activeElement as HTMLInputElement).blur();
             this.tabSet.select('vin');
+            this.refresh();
             const e: ExtendedKeyboardEvent = event;
             e.returnValue = false; // Prevent bubbling
             return e;
@@ -235,6 +249,7 @@ export class ItemModalContent implements OnInit, OnDestroy {
             (document.activeElement as HTMLInputElement).blur();
 
             this.tabSet.select('vehicle');
+            this.refresh();
             const e: ExtendedKeyboardEvent = event;
             e.returnValue = false; // Prevent bubbling
             return e;
@@ -244,6 +259,7 @@ export class ItemModalContent implements OnInit, OnDestroy {
             event.preventDefault();
             (document.activeElement as HTMLInputElement).blur();
             this.tabSet.select('part_number');
+            this.refresh();
             const e: ExtendedKeyboardEvent = event;
             e.returnValue = false; // Prevent bubbling
             return e;

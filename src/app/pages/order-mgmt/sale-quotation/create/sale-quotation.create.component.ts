@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -28,7 +28,8 @@ import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
     templateUrl: './sale-quotation.create.component.html',
     styleUrls: ['../sale-quotation.component.scss'],
     providers: [HotkeysService, SaleQuoteCreateKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }],
-    animations: [routerTransition()]
+    animations: [routerTransition()],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class SaleQuotationCreateComponent implements OnInit {
@@ -129,6 +130,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         private orderService: OrderService,
         private _hotkeysService: HotkeysService,
         public keyService: SaleQuoteCreateKeyService,
+        private cd: ChangeDetectorRef,
         private dt: DatePipe) {
         this.generalForm = fb.group({
             'approver_id': [null, Validators.required],
@@ -206,6 +208,9 @@ export class SaleQuotationCreateComponent implements OnInit {
     /**
      * Mater Data
      */
+    refresh() {
+        this.cd.detectChanges();
+    }
 
     getDetailQuote() {
         this.orderService.getSaleQuoteDetail(this.data['id']).subscribe(res => {
@@ -252,7 +257,7 @@ export class SaleQuotationCreateComponent implements OnInit {
                     this.data['total_page'] = result.data.total_page;
                 });
 
-
+                this.refresh();
 
             } catch (e) {
                 console.log(e);
@@ -299,6 +304,8 @@ export class SaleQuotationCreateComponent implements OnInit {
                     this.selectAddress('billing', flag);
                     this.selectAddress('shipping', flag);
                 }
+
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
@@ -318,6 +325,7 @@ export class SaleQuotationCreateComponent implements OnInit {
                 this.table.element.nativeElement.querySelectorAll('td button')[this.selectedIndex].focus();
             }
         });
+        this.refresh();
     }
 
     changeCustomer(flag?) {
@@ -355,6 +363,7 @@ export class SaleQuotationCreateComponent implements OnInit {
                     }
                     break;
             }
+            this.refresh();
         } catch (e) {
             console.log(e);
         }
@@ -390,6 +399,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         // }
         item.source_id = 2;
         item.source_name = 'Manual';
+        this.refresh();
     }
 
     updateTotal() {
@@ -414,6 +424,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         });
 
         this.order_info.total = +this.order_info['total_tax'] + +this.order_info.sub_total;
+        this.refresh();
     }
 
     deleteAction(id, item_condition) {
@@ -600,6 +611,7 @@ export class SaleQuotationCreateComponent implements OnInit {
 
     remove = function (index) {
         this.data['programs'].splice(index, 1);
+        this.refresh();
     };
 
 
@@ -652,6 +664,7 @@ export class SaleQuotationCreateComponent implements OnInit {
                 value: tax, amount: taxAmount.toFixed(2)
             });
         });
+        this.refresh();
     }
 
     createOrder(type, is_draft_sq?) {
@@ -712,6 +725,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = this.listMaster['customer'].concat(res.data.rows);
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
     }
 
@@ -724,6 +738,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
     }
 }
