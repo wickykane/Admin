@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -29,7 +29,8 @@ import { FinancialService } from './../../financial.service';
     templateUrl: './invoice.create.component.html',
     styleUrls: ['../invoice.component.scss'],
     providers: [OrderService, HotkeysService, InvoiceCreateKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }],
-    animations: [routerTransition()]
+    animations: [routerTransition()],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class InvoiceCreateComponent implements OnInit {
@@ -102,6 +103,7 @@ export class InvoiceCreateComponent implements OnInit {
         private _hotkeysService: HotkeysService,
         public keyService: InvoiceCreateKeyService,
         private financialService: FinancialService,
+        private cd: ChangeDetectorRef,
         private dt: DatePipe) {
         this.generalForm = fb.group({
             'approver_id': [null, Validators.required],
@@ -138,7 +140,7 @@ export class InvoiceCreateComponent implements OnInit {
         const user = JSON.parse(localStorage.getItem('currentUser'));
 
         // List Master
-        this.orderService.getOrderReference().subscribe(res => { Object.assign(this.listMaster, res.data); });
+        this.orderService.getOrderReference().subscribe(res => { Object.assign(this.listMaster, res.data); this.refresh(); });
         await this.getListPaymentMethod();
         await this.getListPaymentTerm();
         this.getGenerateCode();
@@ -166,16 +168,21 @@ export class InvoiceCreateComponent implements OnInit {
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
         this.searchKey.debounceTime(300).subscribe(key => {
             this.data['page'] = 1;
             this.searchCustomer(key);
         });
+        this.refresh();
     }
 
     /**
      * Mater Data
      */
+    refresh() {
+        this.cd.detectChanges();
+    }
 
     resetChangeData() {
         this.list.items = [];
@@ -210,6 +217,7 @@ export class InvoiceCreateComponent implements OnInit {
         };
         this.financialService.getNote(params).subscribe(res => {
             this.generalForm.patchValue({ note: res.data.message });
+            this.refresh();
         });
     }
 
@@ -217,6 +225,7 @@ export class InvoiceCreateComponent implements OnInit {
         return new Promise(resolve => {
             this.financialService.getPaymentMethod().subscribe(res => {
                 this.listMaster['payment_method'] = res.data;
+                this.refresh();
                 resolve(true);
             });
         });
@@ -226,6 +235,7 @@ export class InvoiceCreateComponent implements OnInit {
         return new Promise(resolve => {
             this.financialService.getListPaymentTerm().subscribe(res => {
                 this.listMaster['payment_term'] = res.data;
+                this.refresh();
                 resolve(true);
             });
         });
@@ -238,6 +248,7 @@ export class InvoiceCreateComponent implements OnInit {
         this.financialService.getOrderByCustomerId(params).subscribe(res => {
             try {
                 this.listMaster['sales_order'] = res.data;
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
@@ -247,6 +258,7 @@ export class InvoiceCreateComponent implements OnInit {
     getGenerateCode() {
         this.financialService.getGenerateCode().subscribe(res => {
             this.generalForm.get('inv_num').patchValue(res.data.code);
+            this.refresh();
         });
     }
 
@@ -264,12 +276,14 @@ export class InvoiceCreateComponent implements OnInit {
                     this.order_info.incentive = res.data.value;
                     this.order_info.expires_dt = res.data.expires_dt;
                     this.order_info.grand_total = this.order_info.total - this.order_info.incentive;
+                    this.refresh();
                 }
             });
         } else {
             // Reset Early Payment data
             this.order_info['incentive'] = null;
             this.order_info['incentive_percent'] = null;
+            this.refresh();
         }
     }
 
@@ -284,6 +298,7 @@ export class InvoiceCreateComponent implements OnInit {
             if (unit.id === this.generalForm.value['payment_term_id']) {
                 this.generalForm.controls['payment_term_range'].setValue(unit.term_day);
                 this.getInvoiceDueDate(this.generalForm.value['payment_term_range']);
+                this.refresh();
             }
         }
     }
@@ -299,6 +314,7 @@ export class InvoiceCreateComponent implements OnInit {
                     this.generalForm.controls['due_dt'].setValue(this.dt.transform(new Date(res.data.due_dt), 'MM/dd/yyyy'));
                 }
                 this.getDefaultNote();
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
@@ -318,6 +334,7 @@ export class InvoiceCreateComponent implements OnInit {
                     this.selectAddress('billing', flag);
                     this.selectAddress('shipping', flag);
                 }
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
@@ -335,6 +352,7 @@ export class InvoiceCreateComponent implements OnInit {
         } else {
             this.generalForm.patchValue({ note: null });
         }
+        this.refresh();
     }
 
     changeSalesOrder(event) {
@@ -366,6 +384,7 @@ export class InvoiceCreateComponent implements OnInit {
             this.list.items = [];
             this.updateTotal();
         }
+        this.refresh();
     }
 
     selectAddress(type, flag?) {
@@ -384,6 +403,7 @@ export class InvoiceCreateComponent implements OnInit {
                     }
                     break;
             }
+            this.refresh();
         } catch (e) {
             console.log(e);
         }
@@ -400,6 +420,7 @@ export class InvoiceCreateComponent implements OnInit {
             const temp = this.customer.contact.filter(x => x.id === id);
             this.addr_select.contact = temp[0];
         }
+        this.refresh();
     }
 
 
@@ -427,6 +448,7 @@ export class InvoiceCreateComponent implements OnInit {
             this.order_info.incentive = +this.order_info.incentive_percent * +this.order_info.total / 100;
         }
         this.order_info.grand_total = +this.order_info.total - +this.order_info.incentive;
+        this.refresh();
     }
 
     deleteAction(id, item_condition) {
@@ -451,6 +473,7 @@ export class InvoiceCreateComponent implements OnInit {
                 value: tax, amount: taxAmount.toFixed(2)
             });
         });
+        this.refresh();
     }
 
     resetInvoice() {
@@ -494,6 +517,7 @@ export class InvoiceCreateComponent implements OnInit {
         };
         this.generalForm.reset();
         this.ngOnInit();
+        this.refresh();
     }
 
     createInvoice(type, is_draft?, is_continue?) {
@@ -565,6 +589,7 @@ export class InvoiceCreateComponent implements OnInit {
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = this.listMaster['customer'].concat(res.data.rows);
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
     }
 
@@ -577,6 +602,7 @@ export class InvoiceCreateComponent implements OnInit {
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
     }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CustomerService } from '../customer.service';
@@ -13,7 +13,8 @@ import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
     selector: 'app-buyer',
     templateUrl: './customer.component.html',
     styleUrls: ['./customer.component.scss'],
-    animations: [routerTransition()]
+    animations: [routerTransition()],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomerComponent implements OnInit {
 
@@ -40,7 +41,8 @@ export class CustomerComponent implements OnInit {
         private vRef: ViewContainerRef,
         public tableService: TableService,
         private modalService: NgbModal,
-        private customerService: CustomerService) {
+        private customerService: CustomerService,
+        private cd: ChangeDetectorRef) {
 
         this.searchForm = fb.group({
             'buyer_name': [null],
@@ -72,6 +74,10 @@ export class CustomerComponent implements OnInit {
     selectData(index) {
         console.log(index);
     }
+
+    refresh() {
+       this.cd.detectChanges();
+     }
     /**
      * Internal Function
      */
@@ -83,6 +89,7 @@ export class CustomerComponent implements OnInit {
                     try {
                         this.toastr.success(res.message);
                         this.getList();
+                        this.refresh();
                     } catch (e) {
                         console.log(e);
                     }
@@ -107,6 +114,7 @@ export class CustomerComponent implements OnInit {
             try {
                 this.list.items = res.data.rows;
                 this.tableService.matchPagingOption(res.data);
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }

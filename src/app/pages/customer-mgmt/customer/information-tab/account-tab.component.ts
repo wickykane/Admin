@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewContainerRef, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewContainerRef } from '@angular/core';
 import { CustomerService } from '../../customer.service';
 
 
@@ -6,6 +6,7 @@ import { CustomerService } from '../../customer.service';
     selector: 'app-customer-account-tab',
     templateUrl: './account-tab.component.html',
     styleUrls: ['./information-tab.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomerAccountTabComponent implements OnInit {
 
@@ -23,26 +24,31 @@ export class CustomerAccountTabComponent implements OnInit {
         accounts: [],
         cards: [],
     };
-    public listCreditCard=[];
-    constructor(private customerService: CustomerService) {
+    public listCreditCard = [];
+    constructor(private customerService: CustomerService, private cd: ChangeDetectorRef) {
 
     }
 
     ngOnInit() {
         this.getListCreditCard();
     }
+
+    refresh() {
+        this.cd.detectChanges();
+    }
+
     getListCreditCard() {
         this.customerService.getCreditCard().subscribe(res => {
             this.listCreditCard = res.data;
-            console.log(this.getListCreditCard);
+            this.refresh();
             // this.credit_cards.forEach(card => { card.listCard = res.data });
-        })
+        });
     }
-    getCardType(id){
-        var name =''
+    getCardType(id) {
+        let name = '';
         this.listCreditCard.forEach(item => {
-            if(item.id == id){
-                 name= item.name;
+            if (item.id === id) {
+                name = item.name;
             }
         });
         return name;

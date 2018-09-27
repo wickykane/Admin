@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbTab } from '@ng-bootstrap/ng-bootstrap';
@@ -11,7 +11,8 @@ import { PartKeyService } from './keys.control';
     selector: 'app-part-list',
     templateUrl: './part-list.component.html',
     styleUrls: ['./part-list.component.scss'],
-    providers: [PartKeyService]
+    providers: [PartKeyService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PartListComponent implements OnInit {
     /**
@@ -39,7 +40,8 @@ export class PartListComponent implements OnInit {
         private router: Router,
         public tableService: TableService,
         public itemKeyService: PartKeyService,
-        private productService: ProductService
+        private productService: ProductService,
+        private cd: ChangeDetectorRef
     ) {
         this.searchForm = fb.group({
             cd: [null],
@@ -79,6 +81,10 @@ export class PartListComponent implements OnInit {
      * Master Data
      */
 
+     refresh() {
+         this.cd.detectChanges();
+     }
+
     getListReference() {
         this.productService.getReferList().subscribe(res => {
             try {
@@ -92,6 +98,7 @@ export class PartListComponent implements OnInit {
                 }));
                 this.listMaster['makes'] = res.data.makes;
                 this.listMaster['certification'] = res.data.certification;
+                this.refresh();
             } catch (e) {
                 console.log(e.message);
             }
@@ -185,6 +192,7 @@ export class PartListComponent implements OnInit {
                 this.listMaster['brands'] = _.orderBy(res.data.meta_filters.brands, ['name'], ['asc']);
                 this.listMaster['categories'] = _.orderBy(res.data.meta_filters.categories, ['name'], ['asc']);
                 this.tableService.matchPagingOption(res.data);
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { OrderService } from '../../../order-mgmt/order-mgmt.service';
 import { CustomerService } from '../../customer.service';
@@ -9,7 +9,8 @@ import { TableService } from './../../../../services/table.service';
     selector: 'app-customer-sale-order-tab',
     templateUrl: './sale-order-tab.component.html',
     styleUrls: ['./information-tab.component.scss'],
-    providers: [OrderService]
+    providers: [OrderService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomerSaleOrderTabComponent implements OnInit {
 
@@ -38,7 +39,7 @@ export class CustomerSaleOrderTabComponent implements OnInit {
         private vRef: ViewContainerRef,
         public tableService: TableService,
         private customerService: CustomerService,
-        private orderService: OrderService) {
+        private orderService: OrderService, private cd: ChangeDetectorRef) {
 
         this.searchForm = fb.group({
             'company_name': [null],
@@ -61,9 +62,14 @@ export class CustomerSaleOrderTabComponent implements OnInit {
     /**
      * Internal Function
      */
+     refresh() {
+         this.cd.detectChanges();
+     }
+
     getListStatus() {
         this.orderService.getListStatus().subscribe(res => {
             this.listMaster['status'] = res.results;
+            this.refresh();
         });
     }
 
@@ -75,6 +81,7 @@ export class CustomerSaleOrderTabComponent implements OnInit {
             try {
                 this.list.items = res.data.rows || [];
                 this.tableService.matchPagingOption(res.data);
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
