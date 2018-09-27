@@ -123,7 +123,7 @@ export class SaleOrderEditComponent implements OnInit {
             'order_date': [null, Validators.required],
             'delivery_date': [null],
             'contact_user_id': [null],
-            'prio_level': [null],
+            'prio_level': [null, Validators.required],
             'sale_person_id': [null, Validators.required],
             'warehouse_id': [Validators.required],
             'payment_method_id': [null, Validators.required],
@@ -353,14 +353,19 @@ export class SaleOrderEditComponent implements OnInit {
         let enable = false;
 
         if (+this.generalForm.value.carrier_id === 2 || this.generalForm.value.carrier_id !== 999 && !carrier.own_carrirer) {
-            default_option = 888;
-            default_ship_rate = 8;
+          default_option = '888';
+          default_ship_rate = 7;
 
-            if (+this.generalForm.value.carrier_id === 1) {
-                default_option = '01';
-                default_ship_rate = 9;
-            }
-            enable = [1, 2].indexOf(+this.generalForm.value.carrier_id) > -1;
+          if (+this.generalForm.value.carrier_id === 1) {
+              default_option = '01';
+              default_ship_rate = null;
+          }
+
+          if (+this.generalForm.value.carrier_id === 2) {
+              default_option = '888';
+              default_ship_rate = 8;
+          }
+          enable = [1, 2].indexOf(+this.generalForm.value.carrier_id) > -1;
 
         }
 

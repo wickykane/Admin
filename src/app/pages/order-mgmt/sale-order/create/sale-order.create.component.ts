@@ -305,7 +305,7 @@ export class SaleOrderCreateComponent implements OnInit {
         let enable = false;
 
         if (+this.generalForm.value.carrier_id === 2 || this.generalForm.value.carrier_id !== 999 && !carrier.own_carrirer) {
-            default_option = 888;
+            default_option = '888';
             default_ship_rate = 7;
 
             if (+this.generalForm.value.carrier_id === 1) {
@@ -314,7 +314,7 @@ export class SaleOrderCreateComponent implements OnInit {
             }
 
             if (+this.generalForm.value.carrier_id === 2) {
-                default_option = 888;
+                default_option = '888';
                 default_ship_rate = 8;
             }
             enable = [1, 2].indexOf(+this.generalForm.value.carrier_id) > -1;
