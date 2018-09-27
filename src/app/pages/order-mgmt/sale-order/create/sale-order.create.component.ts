@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, ViewContainerRef, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewContainerRef, ViewEncapsulation } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
@@ -27,7 +27,8 @@ import { SaleOrderCreateKeyService } from './keys.control';
     templateUrl: './sale-order.create.component.html',
     styleUrls: ['../sale-order.component.scss'],
     providers: [SaleOrderCreateKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }],
-    animations: [routerTransition()]
+    animations: [routerTransition()],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class SaleOrderCreateComponent implements OnInit {
@@ -115,6 +116,7 @@ export class SaleOrderCreateComponent implements OnInit {
      */
     constructor(
         private vRef: ViewContainerRef,
+        private cd: ChangeDetectorRef,
         private fb: FormBuilder,
         public toastr: ToastrService,
         private router: Router,
@@ -172,7 +174,7 @@ export class SaleOrderCreateComponent implements OnInit {
         this.generalForm.controls['sale_person_id'].patchValue(user.id);
         this.generalForm.controls['approver_id'].patchValue(user.id);
 
-        this.orderService.generatePOCode().subscribe(res => { this.generalForm.controls['customer_po'].patchValue(res.data); });
+        this.orderService.generatePOCode().subscribe(res => { this.generalForm.controls['customer_po'].patchValue(res.data); this.refresh(); });
 
         // Lazy Load filter
         this.data['page'] = 1;
@@ -180,15 +182,22 @@ export class SaleOrderCreateComponent implements OnInit {
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
-        this.searchKey.subscribe(key => {
+        this.searchKey.debounceTime(300).subscribe(key => {
             this.data['page'] = 1;
             this.searchCustomer(key);
         });
+
+        this.refresh();
     }
     /**
      * Mater Data
      */
+    refresh() {
+        this.cd.detectChanges();
+    }
+
     numberMaskObject(max?) {
         return createNumberMask({
             allowDecimal: true,
@@ -203,7 +212,7 @@ export class SaleOrderCreateComponent implements OnInit {
                 this.customer = res.data;
                 // if (res.data.buyer_type === 'PS') {
                 this.addr_select.contact = res.data.contact[0] || this.addr_select.contact;
-                this.generalForm.patchValue({ contact_user_id: this.addr_select.contact.id});
+                this.generalForm.patchValue({ contact_user_id: this.addr_select.contact.id });
                 // }
 
                 const default_billing = (this.customer.billing || []).find(item => item.set_default) || {};
@@ -222,7 +231,7 @@ export class SaleOrderCreateComponent implements OnInit {
                 if (!_.isEmpty(default_shipping)) {
                     this.selectAddress('shipping', true);
                 }
-
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
@@ -279,6 +288,7 @@ export class SaleOrderCreateComponent implements OnInit {
                     }
                     break;
             }
+            this.refresh();
         } catch (e) {
             console.log(e);
         }
@@ -288,15 +298,15 @@ export class SaleOrderCreateComponent implements OnInit {
         this.orderService.getShippingReference(id).subscribe(res => {
             this.listMaster['carriers'] = res.data;
             const arr = res.data.filter(item => item.name === 'UPS');
-            if (arr.length > 0 ) {
-                this.generalForm.patchValue({ 'carrier_id': 1 , 'ship_method_option': null });
+            if (arr.length > 0) {
+                this.generalForm.patchValue({ 'carrier_id': 1, 'ship_method_option': null });
             }
             this.changeShipVia();
         });
     }
 
     changeShipVia() {
-        const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id) || { 'options': [], 'ship_rate': [], 'own_carrirer': ''};
+        const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id) || { 'options': [], 'ship_rate': [], 'own_carrirer': '' };
         this.listMaster['options'] = carrier.options || [];
         this.listMaster['ship_rates'] = carrier.ship_rate || [];
 
@@ -353,6 +363,7 @@ export class SaleOrderCreateComponent implements OnInit {
 
         this.generalForm.patchValue({ ship_method_option: default_option, ship_method_rate: default_ship_rate });
         this.generalForm.updateValueAndValidity();
+        this.refresh();
     }
 
     findDataById(id, arr) {
@@ -374,6 +385,7 @@ export class SaleOrderCreateComponent implements OnInit {
             const temp = this.customer.contact.filter(x => x.id === id);
             this.addr_select.contact = temp[0];
         }
+        this.refresh();
     }
 
     changeFromSource(item) {
@@ -382,6 +394,7 @@ export class SaleOrderCreateComponent implements OnInit {
         // }
         item.source_id = 2;
         item.source_name = 'Manual';
+        this.refresh();
     }
 
     changeOrderType() {
@@ -409,6 +422,7 @@ export class SaleOrderCreateComponent implements OnInit {
             });
             this.generalForm.get('prio_level').patchValue('SD');
         }
+        this.refresh();
     }
 
     groupTax(items) {
@@ -427,6 +441,7 @@ export class SaleOrderCreateComponent implements OnInit {
                 value: tax, amount: taxAmount.toFixed(2)
             });
         });
+        this.refresh();
     }
 
     updateTotal() {
@@ -450,6 +465,7 @@ export class SaleOrderCreateComponent implements OnInit {
         });
 
         this.order_info.total = +this.order_info['total_tax'] + +this.order_info.sub_total;
+        this.refresh();
     }
 
 
@@ -462,6 +478,7 @@ export class SaleOrderCreateComponent implements OnInit {
                     }
                 });
             });
+            this.refresh();
         }
     }
 
@@ -482,7 +499,7 @@ export class SaleOrderCreateComponent implements OnInit {
 
             if (res.data.mics) {
                 const old_misc = this.list.items.filter(item => item.misc_id && [1, 2].indexOf(item.misc_id) === -1 && +item.source_id !== 3);
-                const items = res.data.items;
+                const items = res.data.items || this.list.items.filter(item => !item.misc_id);
                 const misc = res.data.mics.map(item => {
                     item.is_misc = 1;
                     item.misc_id = item.id;
@@ -498,6 +515,7 @@ export class SaleOrderCreateComponent implements OnInit {
             this.list.items.forEach(item => item.tax_percent = res.data.tax_percent);
             this.updateTotal();
             this.order_info['original_ship_cost'] = res.data.price;
+            this.refresh();
         });
     }
 
@@ -586,9 +604,9 @@ export class SaleOrderCreateComponent implements OnInit {
             modalRef.result.then(res => {
                 if (res) {
                     if (type === 'quote') {
-                      this.createSaleAsQuote();
+                        this.createSaleAsQuote();
                     } else {
-                      this.createOrder(type);
+                        this.createOrder(type);
                     }
                 }
             }, dismiss => { });
@@ -602,31 +620,31 @@ export class SaleOrderCreateComponent implements OnInit {
     }
 
     createSaleAsQuote() {
-      const products = this.list.items.map(item => {
-          item.is_item = (item.misc_id) ? 0 : 1;
-          item.misc_id = (item.misc_id) ? item.misc_id : null;
-          item.item_id = (item.item_id) ? (item.item_id) : null;
-          item.is_shipping_free = (item.is_item) ? (item.is_shipping_free) : 0;
-          item.item_condition_id = (item.is_item) ? (item.item_condition_id) : null;
-          return item;
-      });
+        const products = this.list.items.map(item => {
+            item.is_item = (item.misc_id) ? 0 : 1;
+            item.misc_id = (item.misc_id) ? item.misc_id : null;
+            item.item_id = (item.item_id) ? (item.item_id) : null;
+            item.is_shipping_free = (item.is_item) ? (item.is_shipping_free) : 0;
+            item.item_condition_id = (item.is_item) ? (item.item_condition_id) : null;
+            return item;
+        });
 
-      let params = {};
-      params = {
-          'items': products
-      };
-      params = { ...this.generalForm.getRawValue(), ...params };
+        let params = {};
+        params = {
+            'items': products
+        };
+        params = { ...this.generalForm.getRawValue(), ...params };
 
-      this.orderService.createSaleAsQuote(params).subscribe(res => {
-          try {
-              this.toastr.success(res.message);
-              setTimeout(() => {
-                  this.router.navigate(['/order-management/sale-order']);
-              }, 500);
-          } catch (e) {
-              console.log(e);
-          }
-      });
+        this.orderService.createSaleAsQuote(params).subscribe(res => {
+            try {
+                this.toastr.success(res.message);
+                setTimeout(() => {
+                    this.router.navigate(['/order-management/sale-order']);
+                }, 500);
+            } catch (e) {
+                console.log(e);
+            }
+        });
     }
 
     createOrder(type) {
@@ -693,6 +711,7 @@ export class SaleOrderCreateComponent implements OnInit {
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = this.listMaster['customer'].concat(res.data.rows);
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
     }
 
@@ -705,6 +724,7 @@ export class SaleOrderCreateComponent implements OnInit {
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
     }
 }

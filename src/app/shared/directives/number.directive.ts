@@ -26,7 +26,6 @@ export class NumberDirective implements OnInit {
 
     }
 
-
     @HostListener('input', ['$event'])
     onInputChange($event) {
         const event = $event.target.value;
@@ -74,6 +73,11 @@ export class NumberDirective implements OnInit {
 
     ngOnInit() {
         this.regexStr = (this.isDecimal) ? '^[0-9]+[.]?[0-9]*$' : this.regexStr;
+        this.ngModel.valueChanges.subscribe(data => {
+            if (data && this.isDecimal) {
+                this.ngModel.valueAccessor.writeValue((+data).toFixed(2));
+            }
+        });
     }
 
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService } from '../order-mgmt.service';
@@ -16,7 +16,8 @@ import { SaleOrderKeyService } from './keys.control';
     templateUrl: './sale-order.component.html',
     styleUrls: ['./sale-order.component.scss'],
     providers: [SaleOrderKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }],
-    animations: [routerTransition()]
+    animations: [routerTransition()],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SaleOrderComponent implements OnInit {
 
@@ -59,6 +60,7 @@ export class SaleOrderComponent implements OnInit {
     searchForm: FormGroup;
 
     constructor(public router: Router,
+        private cd: ChangeDetectorRef,
         public fb: FormBuilder,
         public toastr: ToastrService,
         private vRef: ViewContainerRef,
@@ -100,6 +102,10 @@ export class SaleOrderComponent implements OnInit {
     /**
      * Table Event
      */
+    refresh() {
+        this.cd.detectChanges();
+    }
+
     selectData(index) {
         console.log(index);
     }
@@ -107,17 +113,18 @@ export class SaleOrderComponent implements OnInit {
      * Internal Function
      */
 
-     filter(status) {
-         const params = { sts: status };
-         this.orderService.getListOrder(params).subscribe(res => {
-             try {
-                 this.list.items = res.data.rows;
-                 this.tableService.matchPagingOption(res.data);
-             } catch (e) {
-                 console.log(e);
-             }
-         });
-     }
+    filter(status) {
+        const params = { sts: status };
+        this.orderService.getListOrder(params).subscribe(res => {
+            try {
+                this.list.items = res.data.rows;
+                this.tableService.matchPagingOption(res.data);
+                this.refresh();
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
 
     countOrderStatus() {
         this.orderService.countStatus().subscribe(res => {
@@ -131,12 +138,14 @@ export class SaleOrderComponent implements OnInit {
             this.countStatus = Object.keys(this.statusConfig).map(key => {
                 return this.statusConfig[key];
             });
+            this.refresh();
         });
     }
 
     getListStatus() {
         this.orderService.getListStatus().subscribe(res => {
             this.listMaster['status'] = res.data;
+            this.refresh();
         });
 
     }
@@ -159,6 +168,7 @@ export class SaleOrderComponent implements OnInit {
             try {
                 this.list.items = res.data.rows;
                 this.tableService.matchPagingOption(res.data);
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
@@ -198,23 +208,23 @@ export class SaleOrderComponent implements OnInit {
     }
 
     cloneNewOrder(id) {
-      this.orderService.cloneOrder(id).subscribe(res => {
-          this.toastr.success(res.message);
-          setTimeout(() => {
-              this.router.navigate(['/order-management/sale-order/edit', res.data.id]);
-          }, 1000);
-      }
-      );
+        this.orderService.cloneOrder(id).subscribe(res => {
+            this.toastr.success(res.message);
+            setTimeout(() => {
+                this.router.navigate(['/order-management/sale-order/edit', res.data.id]);
+            }, 1000);
+        }
+        );
     }
 
     putApproveOrder(order_id) {
         // const params = {'status_code': 'AP'};
         this.orderService.approveOrd(order_id).subscribe(res => {
             // if (res.status) {
-                this.toastr.success(res.message);
-                setTimeout(() => {
-                    this.getList();
-                }, 500);
+            this.toastr.success(res.message);
+            setTimeout(() => {
+                this.getList();
+            }, 500);
             // } else {
             //     this.toastr.error(res.message);
             // }
@@ -225,10 +235,10 @@ export class SaleOrderComponent implements OnInit {
     updateStatusOrder(order_id, status) {
         this.orderService.updateStatusOrder(order_id, status).subscribe(res => {
             // if (res.status) {
-                this.toastr.success(res.message);
-                setTimeout(() => {
-                    this.getList();
-                }, 500);
+            this.toastr.success(res.message);
+            setTimeout(() => {
+                this.getList();
+            }, 500);
             // } else {
             //     this.toastr.error(res.message);
             // }

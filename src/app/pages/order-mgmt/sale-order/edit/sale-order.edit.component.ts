@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, ViewContainerRef, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewContainerRef, ViewEncapsulation } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
@@ -26,7 +26,8 @@ import { SaleOrderCreateKeyService } from './keys.control';
     templateUrl: './sale-order.edit.component.html',
     styleUrls: ['../sale-order.component.scss'],
     providers: [SaleOrderCreateKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }],
-    animations: [routerTransition()]
+    animations: [routerTransition()],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class SaleOrderEditComponent implements OnInit {
@@ -107,6 +108,7 @@ export class SaleOrderEditComponent implements OnInit {
      */
     constructor(
         private vRef: ViewContainerRef,
+        private cd: ChangeDetectorRef,
         private fb: FormBuilder,
         public toastr: ToastrService,
         private router: Router,
@@ -150,6 +152,7 @@ export class SaleOrderEditComponent implements OnInit {
         });
         this.orderService.getSQReference().subscribe(res => {
             this.listMaster = { ...this.listMaster, ...res.data };
+            this.refresh();
         });
         //  Item
         // this.list.items = [];
@@ -164,6 +167,7 @@ export class SaleOrderEditComponent implements OnInit {
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
         this.searchKey.subscribe(key => {
             this.data['page'] = 1;
@@ -176,6 +180,10 @@ export class SaleOrderEditComponent implements OnInit {
     /**
      * Mater Data
      */
+    refresh() {
+        this.cd.detectChanges();
+    }
+
     getDetailOrder() {
         this.orderService.getOrderDetail(this.route.snapshot.paramMap.get('id')).subscribe(res => {
             try {
@@ -205,9 +213,9 @@ export class SaleOrderEditComponent implements OnInit {
                         this.listMaster['customer'].push({ id: res.data.buyer_id, company_name: res.data.buyer_name });
                     }
                     this.data['total_page'] = result.data.total_page;
+                    this.refresh();
                 });
-
-
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
@@ -276,7 +284,7 @@ export class SaleOrderEditComponent implements OnInit {
                 if (this.generalForm.value.shipping_id == null) {
                     this.getShippingReference('');
                 }
-
+                this.refresh();
 
             } catch (e) {
                 console.log(e);
@@ -300,6 +308,7 @@ export class SaleOrderEditComponent implements OnInit {
             // this.list.items = [];
             this.updateTotal();
         }
+        this.refresh();
     }
 
     selectAddress(type, flag?) {
@@ -322,6 +331,7 @@ export class SaleOrderEditComponent implements OnInit {
                     }
                     break;
             }
+            this.refresh();
         } catch (e) {
             console.log(e);
         }
@@ -331,20 +341,21 @@ export class SaleOrderEditComponent implements OnInit {
         this.orderService.getShippingReference(id).subscribe(res => {
             this.listMaster['carriers'] = res.data;
             const arr = res.data.filter(item => item.name === 'UPS');
-            if (arr.length > 0 ) {
+            if (arr.length > 0) {
                 // this.generalForm.patchValue({ 'carrier_id': 1 , 'ship_method_option': null });
             }
             this.changeShipVia(flag);
+            this.refresh();
         });
     }
 
     changeShipVia(flag?) {
-        const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id) || { 'options': [], 'ship_rate': [], 'own_carrirer': ''};
+        const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id) || { 'options': [], 'ship_rate': [], 'own_carrirer': '' };
         this.listMaster['options'] = carrier.options || [];
         this.listMaster['ship_rates'] = carrier.ship_rate || [];
-
         // Edit first time not init data
         if (flag) {
+            this.refresh();
             return;
         }
 
@@ -353,19 +364,19 @@ export class SaleOrderEditComponent implements OnInit {
         let enable = false;
 
         if (+this.generalForm.value.carrier_id === 2 || this.generalForm.value.carrier_id !== 999 && !carrier.own_carrirer) {
-          default_option = '888';
-          default_ship_rate = 7;
+            default_option = '888';
+            default_ship_rate = 7;
 
-          if (+this.generalForm.value.carrier_id === 1) {
-              default_option = '01';
-              default_ship_rate = null;
-          }
+            if (+this.generalForm.value.carrier_id === 1) {
+                default_option = '01';
+                default_ship_rate = null;
+            }
 
-          if (+this.generalForm.value.carrier_id === 2) {
-              default_option = '888';
-              default_ship_rate = 8;
-          }
-          enable = [1, 2].indexOf(+this.generalForm.value.carrier_id) > -1;
+            if (+this.generalForm.value.carrier_id === 2) {
+                default_option = '888';
+                default_ship_rate = 8;
+            }
+            enable = [1, 2].indexOf(+this.generalForm.value.carrier_id) > -1;
 
         }
 
@@ -401,6 +412,7 @@ export class SaleOrderEditComponent implements OnInit {
 
         this.generalForm.patchValue({ ship_method_option: default_option, ship_method_rate: default_ship_rate });
         this.generalForm.updateValueAndValidity();
+        this.refresh();
     }
 
     findDataById(id, arr) {
@@ -422,6 +434,7 @@ export class SaleOrderEditComponent implements OnInit {
             const temp = this.customer.contact.filter(x => x.id === id);
             this.addr_select.contact = temp[0];
         }
+        this.refresh();
     }
 
     cloneRecord(record, list) {
@@ -472,6 +485,7 @@ export class SaleOrderEditComponent implements OnInit {
         // }
         item.source_id = 2;
         item.source_name = 'Manual';
+        this.refresh();
     }
 
     changeOrderType() {
@@ -499,6 +513,7 @@ export class SaleOrderEditComponent implements OnInit {
             });
             this.generalForm.get('prio_level').patchValue('SD');
         }
+        this.refresh();
     }
 
     groupTax(items) {
@@ -518,6 +533,7 @@ export class SaleOrderEditComponent implements OnInit {
                 value: tax, amount: taxAmount.toFixed(2)
             });
         });
+        this.refresh();
     }
 
     updateTotal() {
@@ -541,6 +557,7 @@ export class SaleOrderEditComponent implements OnInit {
         });
 
         this.order_info.total = +this.order_info['total_tax'] + +this.order_info.sub_total;
+        this.refresh();
     }
 
     deleteAction(sku, item_condition) {
@@ -562,6 +579,7 @@ export class SaleOrderEditComponent implements OnInit {
                     try {
                         this.promotionList = response.results.promotion;
                         this.list.items = response.results.items;
+                        this.refresh();
                     } catch (e) {
                         console.log(e.message);
                     }
@@ -580,6 +598,7 @@ export class SaleOrderEditComponent implements OnInit {
                     }
                 });
             });
+            this.refresh();
         }
     }
 
@@ -599,7 +618,7 @@ export class SaleOrderEditComponent implements OnInit {
         this.orderService.getTaxShipping(params).subscribe(res => {
             if (res.data.mics) {
                 const old_misc = this.list.items.filter(item => item.misc_id && [1, 2].indexOf(item.misc_id) === -1 && +item.source_id !== 3);
-                const items = res.data.items;
+                const items = res.data.items || this.list.items.filter(item => !item.misc_id);
                 const misc = res.data.mics.map(item => {
                     item.is_misc = 1;
                     item.misc_id = item.id;
@@ -615,6 +634,7 @@ export class SaleOrderEditComponent implements OnInit {
             this.list.items.forEach(item => item.tax_percent = res.data.tax_percent);
             this.updateTotal();
             this.order_info['original_ship_cost'] = res.data.price;
+            this.refresh();
         });
     }
 
@@ -715,6 +735,7 @@ export class SaleOrderEditComponent implements OnInit {
 
     remove = function (index) {
         this.data['programs'].splice(index, 1);
+        this.refresh();
     };
 
 
@@ -781,6 +802,7 @@ export class SaleOrderEditComponent implements OnInit {
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = this.listMaster['customer'].concat(res.data.rows);
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
     }
 
@@ -793,6 +815,7 @@ export class SaleOrderEditComponent implements OnInit {
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
     }
 

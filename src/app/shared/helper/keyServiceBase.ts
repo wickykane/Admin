@@ -25,10 +25,13 @@ export class KeyboardBaseService implements OnDestroy {
     }
 
     getKeys() {
-        return Array.from(this._hotkeysService.hotkeys);
+        return Array.from((this._hotkeysService) ? this._hotkeysService.hotkeys : []);
     }
 
     resetKeys() {
+        if (!this._hotkeysService) {
+            return;
+        }
         const keys = Array.from(this._hotkeysService.hotkeys);
         keys.map(key => {
             this._hotkeysService.remove(key);
