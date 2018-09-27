@@ -327,7 +327,7 @@ table.custom-table {
                 vertical-align: middle;
                 label {
                     &:focus {
-                        outline: none;
+                        // outline: none;
                     }
                 }
             }
@@ -825,6 +825,16 @@ ngu-carousel {
   top: 0
 }
 
+.infinity-scroll-select {
+    .ng-dropdown-panel {
+        width: 200px !important;
+    }    
+}
+
+.ng-dropdown-panel {
+    width: auto !important;
+    min-width: 100%;
+}
 
 .tabs-order {
     ul.nav-tabs {

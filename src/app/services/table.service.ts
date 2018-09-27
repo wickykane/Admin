@@ -12,7 +12,7 @@ export class TableService {
         order: null,
         sort: null
     };
-    pagination = {
+    pagination: any = {
         page: 1,
         length: this.itemPerPageOptions[0],
         total_record: 0
@@ -75,7 +75,7 @@ export class TableService {
         Object.keys(this.context.searchForm.value).forEach(k => {
             if (this.context.searchForm.value[k] && this.context.searchForm.value[k] !== 'null') { fl = true; }
         });
-        if (!fl) {return false; }
+        if (!fl) { return false; }
         this.temptParams = { ...this.getParams(), ...this.context.searchForm.value };
         this.pagination['page'] = 1;
         return this.context[this.getListFnName]();
@@ -139,13 +139,13 @@ export class TableService {
             if (this.context.searchForm.value['email'] && this.context.searchForm.value['email'] !== 'null' && String(this.context.searchForm.value['email']).trim() !== '') {
                 fl = true;
             }
-            if ( this.context.searchForm.value['email'] && this.context.searchForm.value['email'] !== 'null' && String(this.context.searchForm.value['email']).trim() !== '') {
-               if (isCheck === true) {
-                fl = true;
-               }
+            if (this.context.searchForm.value['email'] && this.context.searchForm.value['email'] !== 'null' && String(this.context.searchForm.value['email']).trim() !== '') {
+                if (isCheck === true) {
+                    fl = true;
+                }
             }
         });
-        if (!fl) {return false; }
+        if (!fl) { return false; }
         this.temptParams = { ...this.getParams(), ...this.context.searchForm.value };
         this.pagination['page'] = 1;
         return this.context[this.getListFnName]();

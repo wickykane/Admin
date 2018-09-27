@@ -9,7 +9,7 @@ export class KeyboardBaseService implements OnDestroy {
     public context: any;
     public _hotkeysService;
     public watchContext = new Subject<any>();
-
+    public keys = [];
     public keyConfig = {};
 
     constructor(public helper: Helper) {
@@ -18,6 +18,10 @@ export class KeyboardBaseService implements OnDestroy {
             this._hotkeysService = res.service;
             this.initKey();
         });
+    }
+
+    reInitKey() {
+        this._hotkeysService.add(this.keys);
     }
 
     getKeys() {

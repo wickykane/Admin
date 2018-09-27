@@ -312,9 +312,12 @@ export class SaleQuotationCreateComponent implements OnInit {
 
     selectTable() {
         this.selectedIndex = 0;
-        if (this.table.element.nativeElement.querySelector('td button')) {
-            this.table.element.nativeElement.querySelector('td button').focus();
-        }
+        this.table.scrollToTable();
+        setTimeout(() => {
+            if (this.table.element.nativeElement.querySelectorAll('td button')) {
+                this.table.element.nativeElement.querySelectorAll('td button')[this.selectedIndex].focus();
+            }
+        });
     }
 
     changeCustomer(flag?) {
@@ -414,9 +417,12 @@ export class SaleQuotationCreateComponent implements OnInit {
     }
 
     deleteAction(id, item_condition) {
+        const lastLength = this.list.items.length;
         this.list.items = this.list.items.filter((item) => {
             return ((item.item_id || item.misc_id) + (item.item_condition_id || 'mis') !== (id + (item_condition || 'mis')));
         });
+        const index = this.selectedIndex - (lastLength - this.list.items.length);
+        this.selectedIndex = (index < 0) ? 0 : index;
         this.updateTotal();
     }
 
@@ -424,7 +430,10 @@ export class SaleQuotationCreateComponent implements OnInit {
     addNewItem() {
         const modalRef = this.modalService.open(ItemModalContent, { size: 'lg' });
         modalRef.result.then(res => {
-            this.keyService.reInitKey();
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
@@ -449,16 +458,24 @@ export class SaleQuotationCreateComponent implements OnInit {
                 }));
 
                 this.updateTotal();
+                this.selectTable();
             }
         }, dismiss => {
-            this.keyService.reInitKey();
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
         });
     }
 
     addNewMiscItem() {
         const modalRef = this.modalService.open(ItemMiscModalContent, { size: 'lg' });
         modalRef.result.then(res => {
-            this.data['modal'] = null;
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
+
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
@@ -485,9 +502,13 @@ export class SaleQuotationCreateComponent implements OnInit {
                 }));
 
                 this.updateTotal();
+                this.selectTable();
             }
         }, dismiss => {
-            this.data['modal'] = null;
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
         });
     }
 
