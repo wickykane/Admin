@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -14,7 +14,8 @@ import { routerTransition } from '../../../router.animations';
     templateUrl: './mass-price.component.html',
     styleUrls: ['./mass-price.component.scss'],
     providers: [{ provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }],
-    animations: [routerTransition()]
+    animations: [routerTransition()],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MassPriceComponent implements OnInit {
 
@@ -33,7 +34,8 @@ export class MassPriceComponent implements OnInit {
         public toastr: ToastrService,
         private vRef: ViewContainerRef,
         public tableService: TableService,
-        private productService: ProductService) {
+        private productService: ProductService,
+        private cd: ChangeDetectorRef) {
 
         this.searchForm = fb.group({
             'date_from': [null],
@@ -48,6 +50,10 @@ export class MassPriceComponent implements OnInit {
     ngOnInit() {
         //  Init Fn
         this.getList();
+    }
+
+    refresh() {
+        this.cd.detectChanges();
     }
     /**
      * Table Event
@@ -68,6 +74,7 @@ export class MassPriceComponent implements OnInit {
             try {
                 this.list.items = res.data.rows;
                 this.tableService.matchPagingOption(res.data);
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }

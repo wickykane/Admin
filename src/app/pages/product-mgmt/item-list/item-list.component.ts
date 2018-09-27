@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as  _ from 'lodash';
@@ -10,7 +10,8 @@ import { ItemKeyService } from './keys.control';
     selector: 'app-item-list',
     templateUrl: './item-list.component.html',
     styleUrls: ['./item-list.component.scss'],
-    providers: [ItemKeyService]
+    providers: [ItemKeyService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ItemListComponent implements OnInit {
 
@@ -39,7 +40,8 @@ export class ItemListComponent implements OnInit {
         private router: Router,
         public tableService: TableService,
         public itemKeyService: ItemKeyService,
-        private productService: ProductService
+        private productService: ProductService,
+        private cd: ChangeDetectorRef
     ) {
         this.searchForm = fb.group({
             'warehouse': [null],
@@ -86,11 +88,15 @@ export class ItemListComponent implements OnInit {
     /**
      * Master Data
      */
+     refresh() {
+         this.cd.detectChanges();
+     }
 
     getListWarehouse() {
         this.productService.getListWarehouse().subscribe(res => {
             try {
                 this.listMaster['warehouses'] = res.data;
+                this.refresh();
             } catch (e) {
                 console.log(e.message);
             }
@@ -104,6 +110,7 @@ export class ItemListComponent implements OnInit {
                 this.listMaster['years'] = res.data.years.map((e) => ({ id: e, name: e }));
                 this.listMaster['make'] = res.data.makes;
                 this.listMaster['certification_partNumber'] = res.data.certification;
+                this.refresh();
             } catch (e) {
                 console.log(e.message);
             }

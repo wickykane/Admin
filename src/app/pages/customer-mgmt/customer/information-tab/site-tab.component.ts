@@ -1,13 +1,14 @@
-import { TableService } from './../../../../services/table.service';
-import { Component, OnInit, ViewContainerRef, Input } from '@angular/core';
-import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewContainerRef } from '@angular/core';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CustomerService } from '../../customer.service';
+import { TableService } from './../../../../services/table.service';
 
 
 @Component({
     selector: 'app-customer-site-tab',
     templateUrl: './site-tab.component.html',
     styleUrls: ['./information-tab.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomerSiteTabComponent implements OnInit {
 
@@ -23,8 +24,12 @@ export class CustomerSiteTabComponent implements OnInit {
     };
 
     constructor(
-        private customerService: CustomerService) {
+        private customerService: CustomerService, private cd: ChangeDetectorRef) {
     }
 
     ngOnInit() {}
+
+    refresh() {
+        this.cd.detectChanges();
+    }
 }

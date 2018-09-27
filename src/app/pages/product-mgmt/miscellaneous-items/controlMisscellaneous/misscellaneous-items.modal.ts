@@ -1,5 +1,5 @@
 import { state } from '@angular/animations';
-import { Component, Input, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -12,7 +12,8 @@ import { ProductService } from '../../product-mgmt.service';
 @Component({
     selector: 'misscellaneous-items-modal',
     templateUrl: './misscellaneous-items.modal.html',
-    providers: [CommonService, ProductService]
+    providers: [CommonService, ProductService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MiscellaneousItemsModalComponent implements OnInit, OnDestroy {
 
@@ -31,21 +32,28 @@ export class MiscellaneousItemsModalComponent implements OnInit, OnDestroy {
         private hotkeysService: HotkeysService,
         private commonService: CommonService,
         private productService: ProductService,
-        public activeModal: NgbActiveModal) {
+        public activeModal: NgbActiveModal,
+        private cd: ChangeDetectorRef) {
 
 
 
 
 
     }
+    refresh() {
+        this.cd.detectChanges();
+    }
+
     getMiscType() {
         this.productService.getMiscTypeList().subscribe(res => {
             this.miscTypeList = res['data'];
+            this.refresh();
         });
     }
     getgenerateMiscNumber() {
         this.productService.generateMiscNumber().subscribe(res => {
             this.generalForm.controls.no.patchValue((res['message']));
+            this.refresh();
         });
     }
     getAccountList() {
@@ -64,6 +72,7 @@ export class MiscellaneousItemsModalComponent implements OnInit, OnDestroy {
             //         }
             //     }
             // }
+            this.refresh();
         });
     }
     ngOnInit() {
@@ -107,12 +116,14 @@ export class MiscellaneousItemsModalComponent implements OnInit, OnDestroy {
         if (this.Action == true) {
             this.productService.createNewMiscItems(this.generalForm.value).subscribe(res => {
                 this.activeModal.close(true);
+                this.refresh();
             });
         }
         else {
             this.productService.updateMiscItems(this.miscItems['id'], this.generalForm.getRawValue()).subscribe(res => {
                 this.toastr.success(res.message);
                 this.activeModal.close(true);
+                this.refresh();
             });
         }
 
