@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../product-mgmt.service';
@@ -10,7 +10,8 @@ import { routerTransition } from '../../../router.animations';
     selector: 'app-mass-price-create',
     templateUrl: './mass-price.create.component.html',
     styleUrls: ['./mass-price.component.scss'],
-    animations: [routerTransition()]
+    animations: [routerTransition()],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MassPriceCreateComponent implements OnInit {
     /**
@@ -29,7 +30,8 @@ export class MassPriceCreateComponent implements OnInit {
         public fb: FormBuilder,
         public toastr: ToastrService,
         private vRef: ViewContainerRef,
-        private productService: ProductService) {
+        private productService: ProductService,
+        private cd: ChangeDetectorRef) {
         this.generalForm = fb.group({
             'name': [null, Validators.required],
             'path': [null]
@@ -37,6 +39,10 @@ export class MassPriceCreateComponent implements OnInit {
     }
 
     ngOnInit() {
+    }
+
+    refresh() {
+        this.cd.detectChanges();
     }
     /**
      * Mater Data
@@ -51,7 +57,7 @@ export class MassPriceCreateComponent implements OnInit {
         if (event.target.files && event.target.files.length > 0) {
             const files = event.target.files;
             this.listFile = Array.of(...files);
-            this.generalForm.patchValue({ path: this.listFile[0].name});
+            this.generalForm.patchValue({ path: this.listFile[0].name });
         }
     }
 
@@ -69,6 +75,7 @@ export class MassPriceCreateComponent implements OnInit {
                     setTimeout(() => {
                         this.router.navigate(['/product-management/mass-price/detail/' + res.data.id]);
                     }, 1000);
+                    this.refresh();
                 } catch (e) {
                     console.log(e);
                 }

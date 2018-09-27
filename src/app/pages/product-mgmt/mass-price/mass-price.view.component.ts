@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../product-mgmt.service';
@@ -29,7 +29,8 @@ export class MassPriceViewComponent implements OnInit {
         public fb: FormBuilder,
         public toastr: ToastrService,
         private vRef: ViewContainerRef,
-        private productService: ProductService) {
+        private productService: ProductService,
+        private cd: ChangeDetectorRef) {
 
     }
 
@@ -38,6 +39,10 @@ export class MassPriceViewComponent implements OnInit {
         this.route.params.subscribe(params =>
             this.getDetailMassPrice(params.id)
         );
+    }
+
+    refresh() {
+        this.cd.detectChanges();
     }
     /**
      * Mater Data
@@ -52,6 +57,7 @@ export class MassPriceViewComponent implements OnInit {
                 this.file = res.data['file'];
                 this.created_at = res.data['created_at'];
                 this.log = res.data['log'];
+                this.refresh();
             } catch (e) { }
         });
     }

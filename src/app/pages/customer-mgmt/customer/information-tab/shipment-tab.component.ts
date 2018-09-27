@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CustomerService } from '../../customer.service';
 import { TableService } from './../../../../services/table.service';
@@ -8,6 +8,7 @@ import { TableService } from './../../../../services/table.service';
     selector: 'app-customer-shipment-tab',
     templateUrl: './shipment-tab.component.html',
     styleUrls: ['./information-tab.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomerShipmentTabComponent implements OnInit {
 
@@ -35,7 +36,7 @@ export class CustomerShipmentTabComponent implements OnInit {
         public fb: FormBuilder,
         private vRef: ViewContainerRef,
         public tableService: TableService,
-        private customerService: CustomerService) {
+        private customerService: CustomerService, private cd: ChangeDetectorRef) {
 
         this.searchForm = fb.group({
             'buyer_name': [null],
@@ -55,6 +56,9 @@ export class CustomerShipmentTabComponent implements OnInit {
     /**
      * Internal Function
      */
+     refresh() {
+         this.cd.detectChanges();
+     }
 
     getList() {
         const params = {...this.tableService.getParams(), ...this.searchForm.value};
@@ -64,6 +68,7 @@ export class CustomerShipmentTabComponent implements OnInit {
             try {
                 this.list.items = [] || res.data.rows;
                 this.tableService.matchPagingOption(res.data);
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewContainerRef, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewContainerRef } from '@angular/core';
 import { CustomerService } from '../../customer.service';
 
 
@@ -6,6 +6,7 @@ import { CustomerService } from '../../customer.service';
     selector: 'app-customer-address-tab',
     templateUrl: './address-tab.component.html',
     styleUrls: ['./information-tab.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomerAddressTabComponent implements OnInit {
 
@@ -20,13 +21,13 @@ export class CustomerAddressTabComponent implements OnInit {
         items: []
     };
 
-    constructor(private customerService: CustomerService) {
+    constructor(private customerService: CustomerService, private cd: ChangeDetectorRef) {
 
     }
 
     ngOnInit() {
         this.customerService.getRoute().subscribe(res => {
-            var t = setInterval(() => {
+            let t = setInterval(() => {
                 for (let i = 0; i < this.list.items.length; i++) {
                     if (this.list.items[i].route_id > 0) {
                         clearInterval(t);
@@ -40,7 +41,12 @@ export class CustomerAddressTabComponent implements OnInit {
                     }
                 }
             }, 500);
+            this.refresh();
         });
 
+    }
+
+    refresh() {
+        this.cd.detectChanges();
     }
 }

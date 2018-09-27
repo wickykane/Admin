@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild, ViewContainerRef
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CustomerService } from '../customer.service';
 
@@ -12,7 +13,8 @@ import { CustomerKeyService } from './keys.control';
     templateUrl: './customer-view.component.html',
     styleUrls: ['./customer.component.scss'],
     animations: [routerTransition()],
-    providers: [CustomerKeyService]
+    providers: [CustomerKeyService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class CustomerViewComponent implements OnInit {
@@ -31,13 +33,18 @@ export class CustomerViewComponent implements OnInit {
         public route: ActivatedRoute,
         public toastr: ToastrService,
         public customerKeyService: CustomerKeyService,
-        private customerService: CustomerService) {
+        private customerService: CustomerService,
+        private cd: ChangeDetectorRef) {
         //  Init Key
         this.customerKeyService.watchContext.next(this);
     }
 
     ngOnInit() {
         this.route.params.subscribe(params => this.getDetailCustomer(params.id));
+    }
+
+    refresh() {
+        this.cd.detectChanges();
     }
 
     selectTab(id) {
@@ -63,13 +70,15 @@ export class CustomerViewComponent implements OnInit {
                 }
                 this.customer['address'] = [...((this.customer['company_type'] === 'CP') ? res.data['head_office'] : res.data['primary']),
                 ...res.data['billing'], ...res.data['shipping']];
+
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
         });
     }
     setAddressType(address, type, is_cp) {
-        var listTypeAddress = ['', 'Head Office', 'Billing', 'Shipping'];
+        const listTypeAddress = ['', 'Head Office', 'Billing', 'Shipping'];
         is_cp && (address.address_type = listTypeAddress[type]);
         !is_cp && (address.address_type = type > 1 ? listTypeAddress[type] : 'Primary');
     }
