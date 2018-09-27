@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -29,7 +29,8 @@ import { FinancialService } from './../../financial.service';
     templateUrl: './invoice.edit.component.html',
     styleUrls: ['../invoice.component.scss'],
     providers: [OrderService, HotkeysService, InvoiceEditKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }],
-    animations: [routerTransition()]
+    animations: [routerTransition()],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class InvoiceEditComponent implements OnInit {
@@ -102,6 +103,7 @@ export class InvoiceEditComponent implements OnInit {
         private _hotkeysService: HotkeysService,
         public keyService: InvoiceEditKeyService,
         private financialService: FinancialService,
+        private cd: ChangeDetectorRef,
         private dt: DatePipe) {
         this.generalForm = fb.group({
             'approver_id': [null, Validators.required],
@@ -135,7 +137,7 @@ export class InvoiceEditComponent implements OnInit {
         this.data['id'] = this.route.snapshot.paramMap.get('id');
         const user = JSON.parse(localStorage.getItem('currentUser'));
         // List Master
-        this.orderService.getOrderReference().subscribe(res => { Object.assign(this.listMaster, res.data); });
+        this.orderService.getOrderReference().subscribe(res => { Object.assign(this.listMaster, res.data); this.refresh(); });
         await this.getListPaymentMethod();
         await this.getListPaymentTerm();
 
@@ -155,6 +157,7 @@ export class InvoiceEditComponent implements OnInit {
             this.generalForm.controls['payment_term_range'].setValue(this.getPaymentTermRange(this.generalForm.value['payment_term_id']));
             this.getInvoiceDueDate(this.generalForm.value['payment_term_range']);
             this.getEarlyPaymentValue();
+            this.refresh();
         });
 
         // Lazy Load filter
@@ -163,6 +166,7 @@ export class InvoiceEditComponent implements OnInit {
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
         this.searchKey.debounceTime(300).subscribe(key => {
             this.data['page'] = 1;
@@ -170,11 +174,16 @@ export class InvoiceEditComponent implements OnInit {
         });
 
         this.getDetailInvoice();
+        this.refresh();
     }
 
     /**
      * Mater Data
      */
+    refresh() {
+        this.cd.detectChanges();
+    }
+
     resetChangeData() {
         this.list.items = [];
         const oldForm = this.generalForm.value;
@@ -208,6 +217,7 @@ export class InvoiceEditComponent implements OnInit {
         };
         this.financialService.getNote(params).subscribe(res => {
             this.generalForm.patchValue({ note: res.data.message });
+            this.refresh();
         });
     }
 
@@ -216,7 +226,7 @@ export class InvoiceEditComponent implements OnInit {
             try {
                 const data = res.data;
                 this.data['invoice'] = data;
-                this.generalForm.patchValue(data);
+                this.generalForm.patchValue({ ...data, approver_id: data.aprvr_id});
                 this.list.items = data.inv_detail;
                 this.updateTotal();
 
@@ -230,6 +240,7 @@ export class InvoiceEditComponent implements OnInit {
                     //     this.listMaster['customer'].push({ id: res.data.buyer_id, company_name: res.data.buyer_name });
                     // }
                     this.data['total_page'] = result.data.total_page;
+                    this.refresh();
                 });
             } catch (e) {
                 console.log(e);
@@ -241,6 +252,7 @@ export class InvoiceEditComponent implements OnInit {
         return new Promise(resolve => {
             this.financialService.getPaymentMethod().subscribe(res => {
                 this.listMaster['payment_method'] = res.data;
+                this.refresh();
                 resolve(true);
             });
         });
@@ -250,6 +262,7 @@ export class InvoiceEditComponent implements OnInit {
         return new Promise(resolve => {
             this.financialService.getListPaymentTerm().subscribe(res => {
                 this.listMaster['payment_term'] = res.data;
+                this.refresh();
                 resolve(true);
             });
         });
@@ -268,6 +281,7 @@ export class InvoiceEditComponent implements OnInit {
                         this.changeSalesOrder(order, flag);
                     }
                 }
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
@@ -277,6 +291,7 @@ export class InvoiceEditComponent implements OnInit {
     getGenerateCode() {
         this.financialService.getGenerateCode().subscribe(res => {
             this.generalForm.get('inv_num').patchValue(res.data.code);
+            this.refresh();
         });
     }
 
@@ -298,6 +313,8 @@ export class InvoiceEditComponent implements OnInit {
                         this.updateTotal();
                     }
                     this.data['inited'] = true;
+                    this.refresh();
+
                 }
             });
         } else {
@@ -305,6 +322,8 @@ export class InvoiceEditComponent implements OnInit {
             this.order_info['incentive'] = null;
             this.order_info['incentive_percent'] = null;
             this.data['inited'] = true;
+            this.refresh();
+
         }
     }
 
@@ -319,6 +338,7 @@ export class InvoiceEditComponent implements OnInit {
             if (unit.id === this.generalForm.value['payment_term_id']) {
                 this.generalForm.controls['payment_term_range'].setValue(unit.term_day);
                 this.getInvoiceDueDate(this.generalForm.value['payment_term_range']);
+                this.refresh();
             }
         }
     }
@@ -334,6 +354,7 @@ export class InvoiceEditComponent implements OnInit {
                     this.generalForm.controls['due_dt'].setValue(this.dt.transform(new Date(res.data.due_dt), 'MM/dd/yyyy'));
                 }
                 this.getDefaultNote();
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
@@ -358,6 +379,7 @@ export class InvoiceEditComponent implements OnInit {
                     this.selectAddress('shipping', flag);
                     this.selectContact();
                 }
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
@@ -376,6 +398,7 @@ export class InvoiceEditComponent implements OnInit {
         } else {
             this.generalForm.patchValue({ note: null });
         }
+        this.refresh();
     }
 
     changeSalesOrder(event, flag?) {
@@ -384,6 +407,7 @@ export class InvoiceEditComponent implements OnInit {
                 item.qty_inv = item.qty;
                 return item;
             });
+            this.refresh();
         }
 
         this.data['order_detail'] = { ...event.order, sales_person: event.order.sale_person_id, sale_person_name: event.sale_person_name, ship_rate: event.order.ship_method_rate };
@@ -417,6 +441,7 @@ export class InvoiceEditComponent implements OnInit {
             this.list.items = [];
             this.updateTotal();
         }
+        this.refresh();
     }
 
     selectAddress(type, flag?) {
@@ -435,6 +460,7 @@ export class InvoiceEditComponent implements OnInit {
                     }
                     break;
             }
+            this.refresh();
         } catch (e) {
             console.log(e);
         }
@@ -451,6 +477,7 @@ export class InvoiceEditComponent implements OnInit {
             const temp = this.customer.contact.filter(x => x.id === id);
             this.addr_select.contact = temp[0];
         }
+        this.refresh();
     }
 
 
@@ -478,6 +505,7 @@ export class InvoiceEditComponent implements OnInit {
             this.order_info.incentive = +this.order_info.incentive_percent * +this.order_info.total / 100;
         }
         this.order_info.grand_total = +this.order_info.total - +this.order_info.incentive;
+        this.refresh();
     }
 
     deleteAction(id, item_condition) {
@@ -502,6 +530,7 @@ export class InvoiceEditComponent implements OnInit {
                 value: tax, amount: taxAmount.toFixed(2)
             });
         });
+        this.refresh();
     }
 
     resetInvoice() {
@@ -545,6 +574,7 @@ export class InvoiceEditComponent implements OnInit {
         };
         this.generalForm.reset();
         this.ngOnInit();
+        this.refresh();
     }
 
     createInvoice(type, is_draft?, is_continue?) {
@@ -615,6 +645,7 @@ export class InvoiceEditComponent implements OnInit {
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = this.listMaster['customer'].concat(res.data.rows);
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
     }
 
@@ -627,6 +658,7 @@ export class InvoiceEditComponent implements OnInit {
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
     }
 }

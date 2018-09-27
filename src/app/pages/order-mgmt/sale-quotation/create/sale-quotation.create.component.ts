@@ -165,9 +165,10 @@ export class SaleQuotationCreateComponent implements OnInit {
         this.listMaster['multi_ship'] = [{ id: 0, label: 'No' }, { id: 1, label: 'Yes' }];
         this.listMaster['from_src'] = [{ id: 0, label: 'From Master' }, { id: 1, label: 'From Quote' }, { id: 2, label: 'Manual' }];
 
-        this.orderService.getOrderReference().subscribe(res => { Object.assign(this.listMaster, res.data); });
+        this.orderService.getOrderReference().subscribe(res => { Object.assign(this.listMaster, res.data); this.refresh(); });
         this.orderService.getSQReference().subscribe(res => {
             this.listMaster = { ...this.listMaster, ...res.data };
+            this.refresh();
         });
         this.orderService.generateSaleQuoteCode().subscribe(res => { this.generalForm.get('sale_quote_no').patchValue(res.data); });
 
@@ -195,7 +196,7 @@ export class SaleQuotationCreateComponent implements OnInit {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
         });
-        this.searchKey.subscribe(key => {
+        this.searchKey.debounceTime(300).subscribe(key => {
             this.data['page'] = 1;
             this.searchCustomer(key);
         });
@@ -204,6 +205,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         if (this.data['is_copy'] && this.data['id']) {
             this.getDetailQuote();
         }
+        this.refresh();
     }
     /**
      * Mater Data
@@ -580,6 +582,7 @@ export class SaleQuotationCreateComponent implements OnInit {
             this.generalForm.patchValue({ ship_method_option: default_option, ship_rate: default_ship_rate });
         }
         this.generalForm.updateValueAndValidity();
+        this.refresh();
     }
 
 
@@ -631,7 +634,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         this.orderService.getTaxShipping(params).subscribe(res => {
             if (res.data.mics) {
                 const old_misc = this.list.items.filter(item => item.misc_id && [1, 2].indexOf(item.misc_id) === -1 && +item.source_id !== 3);
-                const items = res.data.items;
+                const items = res.data.items || this.list.items.filter(item => !item.misc_id);
                 const misc = res.data.mics.map(item => {
                     item.is_misc = 1;
                     item.misc_id = item.id;
