@@ -430,8 +430,10 @@ export class SaleQuotationCreateComponent implements OnInit {
     addNewItem() {
         const modalRef = this.modalService.open(ItemModalContent, { size: 'lg' });
         modalRef.result.then(res => {
-            this.keyService.reInitKey();
-            this.table.reInitKey(this.data['tableKey']);
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
@@ -459,16 +461,21 @@ export class SaleQuotationCreateComponent implements OnInit {
                 this.selectTable();
             }
         }, dismiss => {
-            this.keyService.reInitKey();
-            this.table.reInitKey(this.data['tableKey']);
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
         });
     }
 
     addNewMiscItem() {
         const modalRef = this.modalService.open(ItemMiscModalContent, { size: 'lg' });
         modalRef.result.then(res => {
-            this.keyService.reInitKey();
-            this.table.reInitKey(this.data['tableKey']);
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
+
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
@@ -498,8 +505,10 @@ export class SaleQuotationCreateComponent implements OnInit {
                 this.selectTable();
             }
         }, dismiss => {
-            this.keyService.reInitKey();
-            this.table.reInitKey(this.data['tableKey']);
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
         });
     }
 

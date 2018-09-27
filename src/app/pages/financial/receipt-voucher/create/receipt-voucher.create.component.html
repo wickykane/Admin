@@ -19,8 +19,11 @@
                                                 <span class="text-danger">(*)</span>                                                
                                                 </label>
                                                 <div class='col-6 text-primary'>
-                                                    <ng-select [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('company_id').errors?.required) || false   }" [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="company_id" [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)"
+                                                    <ng-select class="infinity-scroll-select"  [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('company_id').errors?.required) || false   }" [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="company_id" [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)"
                                                         [virtualScroll]="true" style="min-width: 100%;" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="company_id">
+                                                        <ng-template ng-option-tmp let-item="item">
+                                                            <span title="{{item.company_name}}">{{item.company_name}}</span>
+                                                        </ng-template>
                                                     </ng-select>
                                                 </div>
                                             </div>
