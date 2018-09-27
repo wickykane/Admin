@@ -5,7 +5,7 @@
         <section id="statusIndicator" class="status-indicator-section">
             <ul class="status-ctn dashboard-content">
                 <li style="cursor: pointer;" (click)="filter(item.status)" *ngFor="let item of listMaster['count-status']" class="status-item dashboard-stat {{item.color}}">
-                    <img [hidden]="!item.img" [src]="item.img" alt="">
+                    <img *ngIf="item.img" [src]="item.img" alt="">
                     <div class="status-count">{{ item.count || 0 }}</div>
                     <div class="status-lbl text-uppercase">{{ item.name }}</div>
                 </li>
@@ -124,7 +124,7 @@
                                             {{item.total_price | currency}}
                                         </td>
                                         <td class="text-center">
-                                            <!-- <span class="badge badge-info bg-blue" *ngIf="item.sts_code == 'NW'">{{item.sts}}</span>
+                                            <span class="badge badge-info bg-blue" *ngIf="item.sts_code == 'NW'">{{item.sts}}</span>
                                             <span class="badge badge-warning bg-texas-rose" *ngIf="item.sts_code == 'SM'">{{item.sts}}</span>
                                             <span class="badge badge-danger bg-magenta" *ngIf="item.sts_code == 'RM'">{{item.sts}}</span>
                                             <span class="badge badge-success bg-strong-green" *ngIf="item.sts_code == 'AM'">{{item.sts}}</span>
@@ -132,17 +132,17 @@
                                             <span class="badge badge-primary bg-lemon" *ngIf="item.sts_code == 'SC'">{{item.sts}}</span>
                                             <span class="badge badge-primary" *ngIf="item.sts_code == 'RO'">{{item.sts}}</span>
                                             <span class="badge badge-primary bg-darkblue" *ngIf="item.sts_code == 'IU'">{{item.sts}}</span>
-                                            <span class="badge badge-primary bg-bright-grey" *ngIf="item.sts_code == 'EX'">{{item.sts}}</span> -->
+                                            <span class="badge badge-primary bg-bright-grey" *ngIf="item.sts_code == 'EX'">{{item.sts}}</span>
                                         </td>
                                         <td>
-                                            <!-- <a ngbTooltip="Edit" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" [routerLink]="['/order-management/sale-quotation/edit', item.id]"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                            <a ngbTooltip="Edit" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" [routerLink]="['/order-management/sale-quotation/edit', item.id]"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                             <a ngbTooltip="Submit" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" href="javascript:void(0)" (click)="confirmModal(item.id, 'SM')"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></a>
                                             <a ngbTooltip="Cancel" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" href="javascript:void(0)" (click)="confirmModal(item.id, 'CC')"><i class="fa fa-times-circle" aria-hidden="true"></i></a>
                                             <a ngbTooltip="Approve" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" href="javascript:void(0)" (click)="confirmModal(item.id, 'AM')"><i class="fa fa-check"></i></a>
                                             <a ngbTooltip="Reject" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" href="javascript:void(0)" (click)="confirmModal(item.id, 'RM')"><i class="fa fa-ban" aria-hidden="true"></i></a>
                                             <a ngbTooltip="Copy" class="btn btn-default" href="javascript:void(0)" (click)="confirmModal(item.id, 'CLONE')"><i class="fa fa-clone"></i></a>
                                             <a ngbTooltip="View" class="btn btn-default" [routerLink]="['/order-management/sale-quotation/detail', item.id]"><i class="fa fa-eye" aria-hidden="true"></i></a>
-                                            <a ngbTooltip="Convert to SO" *ngIf="item['sts_code'] == 'AM'" href="javascript:void(0)" class="btn btn-default" (click)="confirmModal(item.id, 'SC')"><i class="fa fa-exchange" aria-hidden="true"></i></a> -->
+                                            <a ngbTooltip="Convert to SO" *ngIf="item['sts_code'] == 'AM'" href="javascript:void(0)" class="btn btn-default" (click)="confirmModal(item.id, 'SC')"><i class="fa fa-exchange" aria-hidden="true"></i></a>
                                         </td>
                                     </tr>
 
