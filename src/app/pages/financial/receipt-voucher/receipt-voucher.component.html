@@ -29,9 +29,9 @@
                     </div>
                     <div class="block-search">
                         <label for="customer_id" class="control-label" translate>Payer</label>
-                        <ng-select  [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)"
-                            [virtualScroll]="true" style="width:100px; max-width:100%" [items]="listMaster['customer']"
-                            bindLabel="company_name" bindValue="id" formControlName="customer_id">
+                        <ng-select [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true"
+                            style="width:100px; max-width:100%" [items]="listMaster['customer']" bindLabel="company_name"
+                            bindValue="id" formControlName="customer_id">
                         </ng-select>
                     </div>
                     <div class="block-search">
@@ -149,26 +149,20 @@
                                                 *ngIf="item.sts_code == 'NW'">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
-                                            <!-- <a ngbTooltip="Submit" *ngIf="item.invoice_status_id == 1" class="btn btn-default"
+                                            <a ngbTooltip="Submit" *ngIf="item.sts_code == 'NW'" class="btn btn-default"
                                                 (click)="confirmModal(item.id, 2)"><i class="fa fa-caret-square-o-right"
                                                     aria-hidden="true"></i></a>
-                                            <a class="btn btn-default" ngbTooltip="Cancel" (click)="confirmModal(item.id, 7)"
-                                                *ngIf="item.invoice_status_id == 1">
+                                            <a class="btn btn-default" ngbTooltip="Cancel" (click)="confirmModal(item.id, 6)"
+                                                *ngIf="item.sts_code == 'NW'">
                                                 <i class="fa fa-times-circle" aria-hidden="true"></i>
                                             </a>
-                                            <a ngbTooltip="Approve" *ngIf="item['invoice_status_id'] == 2" class="btn btn-default"
-                                                (click)="confirmModal(item.id, 4)"><i class="fa fa-check"></i></a>
-                                            <a ngbTooltip="Reject" *ngIf="item['invoice_status_id'] == 2" class="btn btn-default"
-                                                (click)="confirmModal(item.id, 3)"><i class="fa fa-ban" aria-hidden="true"></i></a>
-                                            <a ngbTooltip="Pay" *ngIf="[4,8].indexOf(item['invoice_status_id']) != -1"
-                                                class="btn btn-default"><i class="fa fa-money" aria-hidden="true"></i></a>
+                                            <a ngbTooltip="Approve" *ngIf="item.sts_code == 'SB'" class="btn btn-default"
+                                                (click)="confirmModal(item.id, 3)"><i class="fa fa-check"></i></a>
+                                            <a ngbTooltip="Reject" *ngIf="item.sts_code == 'SB'" class="btn btn-default"
+                                                (click)="confirmModal(item.id, 4)"><i class="fa fa-ban" aria-hidden="true"></i></a>
                                             <a class="btn btn-default" ngbTooltip="Print" (click)="printPDF(item.id, item.inv_num)">
                                                 <i class="fa fa-download" aria-hidden="true"></i>
-                                            </a> -->
-                                            <!-- <a ngbTooltip="Send Mail" *ngIf="[3,4,6,7,8].indexOf(item['invoice_status_id']) != -1"
-                                                class="btn btn-default" (click)="sendMail(item.id)"><i class="fa fa-envelope-o"
-                                                    aria-hidden="true"></i></a> -->
-                                            <!-- <a ngbTooltip="Reopen" *ngIf="item['invoice_status_id'] == 3" class="btn btn-default" (click)="confirmModal(item.id, 1)"><i class="fa fa-external-link-square"></i></a> -->
+                                            </a>
                                         </td>
                                     </tr>
                                 </tbody>
