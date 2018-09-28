@@ -70,7 +70,7 @@
                                         <td>{{item.full_name}}</td>
                                         <td>{{item.update_dt}}</td>
                                         <td>
-                                            <a class="btn btn-default" (click)="editPayment(item.id)" title="Edit Payment Term">
+                                            <a *ngIf="!item.is_sys" class="btn btn-default" (click)="editPayment(item.id)" title="Edit Payment Term">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
                                             <!-- <a class="btn btn-default" (click)="deletePayment(item.id)" title="Delete Payment Term">

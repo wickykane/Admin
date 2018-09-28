@@ -20,8 +20,8 @@ import { SaleQuoteEditKeyService } from './keys.edit.control';
 
 import { HotkeysService } from 'angular2-hotkeys';
 import * as _ from 'lodash';
-import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { cdArrowTable } from '../../../../shared/index';
+import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 
 @Component({
     selector: 'app-edit-quotation',

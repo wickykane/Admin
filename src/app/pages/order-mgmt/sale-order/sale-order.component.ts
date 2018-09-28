@@ -35,6 +35,7 @@ export class SaleOrderComponent implements OnInit {
 
     public statusConfig = {
         'NW': { color: 'blue', name: 'New', img: './assets/images/icon/new.png' },
+        'RV': { color: 'bg-secondary', name: 'Revised' },
         'SM': { color: 'texas-rose', name: 'Submited' },
         'AP': { color: 'strong-green', name: 'Approved', img: './assets/images/icon/approved.png' },
         'IP': { color: 'rock-blue', name: 'Allocated' },
