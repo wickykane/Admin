@@ -46,6 +46,13 @@
                                         </div>
                                     </div>
                                     <div class="form-group row col-sm-12">
+                                        <label for="" translate class="col-md-5">CVV  <span class="text-danger">(*)</span>
+                                            </label>
+                                        <div class="col-md-7">
+                                            <input [ngClass]="{'border border-danger': (data['showError'] && this.generalForm.get('cvv').errors?.required) || false   }" class="form-control" formControlName="cvv">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row col-sm-12">
                                         <label for="" translate class="col-md-5">Card Holder Name  <span class="text-danger">(*)</span>
                                         </label>
                                         <div class="col-md-7">
@@ -53,10 +60,10 @@
                                         </div>
                                     </div>
                                     <div class="form-group row col-sm-12">
-                                        <label for="" translate class="col-md-5">CVV  <span class="text-danger">(*)</span>
-                                        </label>
+                                        <label for="" translate class="col-md-5">Email  <span class="text-danger">(*)</span>
+                                                    </label>
                                         <div class="col-md-7">
-                                            <input [ngClass]="{'border border-danger': (data['showError'] && this.generalForm.get('cvv').errors?.required) || false   }" class="form-control" formControlName="cvv">
+                                            <input [ngClass]="{'border border-danger': (data['showError'] && (this.generalForm.get('email').errors?.required || this.generalForm.get('email').errors?.email)) || false   }" type="email" class="form-control" formControlName='email'>
                                         </div>
                                     </div>
                                     <div class="form-group row col-sm-12">
