@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NguCarousel } from '@ngu/carousel';
@@ -82,7 +82,8 @@ export class PartEditComponent implements OnInit {
         public route: ActivatedRoute,
         public itemKeyService: PartKeyService,
         private productService: ProductService,
-        public toastr: ToastrService
+        public toastr: ToastrService,
+        private cd: ChangeDetectorRef
     ) {
         this.generalForm = fb.group({
             is_quotable: [null],
@@ -123,6 +124,10 @@ export class PartEditComponent implements OnInit {
         ];
     }
 
+    refresh() {
+        this.cd.detectChanges();
+    }
+
 
     getAccountType() {
         this.productService.getAccountType().subscribe(
@@ -134,7 +139,7 @@ export class PartEditComponent implements OnInit {
                       tempAccountList.push({ 'name': item.name, 'level': item.level, 'disabled': true }, ...item.children);
                   });
                   this.listMaster['account'] = tempAccountList;
-
+                  this.refresh();
                 } catch (e) {
                     console.log(e);
                 }
@@ -192,6 +197,7 @@ export class PartEditComponent implements OnInit {
                     if (res.status) {
                         this.toastr.success(res.message);
                         this.router.navigate(['/product-management/part-list']);
+                        this.refresh();
                     }
                 } catch (e) {
                     console.log(e);
@@ -218,6 +224,7 @@ export class PartEditComponent implements OnInit {
                         item['item_image_id'] = item.item_image_id;
                     });
                     this.generalForm.patchValue(res.data.item);
+                    this.refresh();
                 }
             } catch (e) {
                 console.log(e);

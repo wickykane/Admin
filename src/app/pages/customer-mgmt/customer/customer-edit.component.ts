@@ -1,5 +1,5 @@
 import { state } from '@angular/animations';
-import { Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonService } from '../../../services/common.service';
@@ -19,7 +19,8 @@ import { Helper } from '../../../shared/index';
     selector: 'app-customer-edit',
     templateUrl: './customer-edit.component.html',
     styleUrls: ['./customer.component.scss'],
-    animations: [routerTransition()]
+    animations: [routerTransition()],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomerEditComponent implements OnInit, OnDestroy {
 
@@ -73,7 +74,8 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         private modalService: NgbModal,
         private hotkeysService: HotkeysService,
         private commonService: CommonService,
-        public helper: Helper) {
+        public helper: Helper,
+        private cd: ChangeDetectorRef) {
         this.generalForm = fb.group({
             'buyer_type': [null, Validators.required],
             'addresses': [null],
@@ -100,9 +102,9 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             // 'credit_balance': [null],
             'is_parent': [null],
             'sites': [null],
-            'taxable':[null],
-            'payment_method_id':[null],
-            'payment_term_id':[null]
+            'taxable': [null],
+            'payment_method_id': [null],
+            'payment_term_id': [null]
 
         });
 
@@ -123,12 +125,13 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         this.getListCustomerType();
         this.getListSalePerson();
         this.getListCountryAdmin();
-        this.customerService.getRoute().subscribe(res => { this.routeList = res.data; });
+        this.customerService.getRoute().subscribe(res => { this.routeList = res.data; this.refresh(); });
     }
     getListCreditCard() {
         this.customerService.getCreditCard().subscribe(res => {
             this.getListCreditCard = res.data;
             this.credit_cards.forEach(card => { card.listCard = res.data });
+            this.refresh();
         })
     }
     getDetailSupplier(id) {
@@ -158,6 +161,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                 this.getListPaymentMethod();
                 //  this.changeCountry(res.data['primary'][0]['country_code'], 'states_primary');
                 //  this.addressList = this.mergeAddressList(res.data);
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
@@ -167,6 +171,10 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         this.hotkeysService.remove(this.hotkeyCtrlLeft);
         this.hotkeysService.remove(this.hotkeyCtrlRight);
     }
+
+    refresh() {
+      this.cd.detectChanges();
+    }
     /**
      * get list master data
      */
@@ -174,6 +182,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         this.customerService.getListCustomerType().subscribe(res => {
             try {
                 this.listMaster['customerType'] = res.data;
+                this.refresh();
             } catch (e) {
 
             }
@@ -185,6 +194,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             const tmp = this.generalForm.value.code.split('-');
             this.countCode = Number(tmp[1]);
             this.textCode = tmp[0] + '-';
+            this.refresh();
             // this.generalForm.patchValue(this.detail['head_office'][0]);
             //  this.generalForm.patchValue({primary: this})
         }
@@ -192,18 +202,20 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     getListPaymentTerm() {
         this.customerService.getListPaymentTerm().subscribe(res => {
             this.paymentTermList = res.data;
+            this.refresh();
         })
     }
     getListPaymentMethod() {
         this.customerService.getListPaymentMethod().subscribe(res => {
             this.paymentMethodList = res.data;
+            this.refresh();
         })
     }
     getListSalePerson() {
         this.commonService.getOrderReference().subscribe(res => {
             try {
                 this.listMaster['salePersons'] = res.data.sale_mans;
-
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
@@ -214,6 +226,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         this.commonService.getListCountry().subscribe(res => {
             try {
                 this.listCountry = res.data;
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
@@ -227,6 +240,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                 for (const bank of this.bank_accounts) {
                     bank.listBank = this.listBank;
                     this.changeBank(bank);
+                    this.refresh();
                 }
             } catch (e) {
                 console.log(e);
@@ -236,9 +250,10 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     getListBankSites(item) {
         this.commonService.getAllListBank().subscribe(res => {
             try {
-                var listBank = res.data;
-                item.listBank =listBank;
-                this.changeBankSites(item,listBank);
+                const listBank = res.data;
+                item.listBank = listBank;
+                this.changeBankSites(item, listBank);
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
@@ -321,6 +336,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                     if (item.state_id == element.id)
                         item.state_name = element.name;
                 });
+                this.refresh();
             } catch (e) {
 
             }
@@ -337,12 +353,13 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             try {
                 item.listBranch = res.data;
                 this.changeBranch(item);
+                this.refresh();
             } catch (e) {
 
             }
         });
     }
-    changeBankSites(item,listBank) {
+    changeBankSites(item, listBank) {
         for (let i = 0; i < listBank.length; i++) {
             if (item.bank_id === listBank[i].id) {
                 item.bank_swift = listBank[i].swift;
@@ -352,6 +369,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             try {
                 item.listBranch = res.data;
                 this.changeBranchSites(item);
+                this.refresh();
             } catch (e) {
 
             }
@@ -438,7 +456,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     }
 
     //  add new Site
-    addNewSite(item?,index?) {
+    addNewSite(item?, index?) {
         var k = ['name', 'country_code', 'address_1', 'city', 'state_id', 'zip_code'];
         for (let i = 0; i < this.addresses.length; i++) {
             for (let j = 0; j < k.length; j++) {
@@ -457,17 +475,18 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                 modalRef.componentInstance.index = index;
                 modalRef.componentInstance.paddr = JSON.parse(JSON.stringify(this.addresses));
                 modalRef.componentInstance.isEdit = true;
+                this.refresh();
                 modalRef.result.then(res => {
-                    if( res['index']!=undefined){
-                        this.sites[res.index]= res.params;
+                    if (res['index'] != undefined) {
+                        this.sites[res.index] = res.params;
                     }
-                    else{
+                    else {
 
-                    
-                    if (!this.helper.isEmptyObject(res)) {
-                        this.sites.push(res);
+
+                        if (!this.helper.isEmptyObject(res)) {
+                            this.sites.push(res);
+                        }
                     }
-                }
                 });
                 modalRef.componentInstance.info = {
                     parent_company_name: this.generalForm.value.company_name,
@@ -486,8 +505,8 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
 
     checkIsDefault($event, idx) {
         for (let i = 0; i < this.addresses.length; i++) {
-            const item = this.addresses[i];
-            if (idx != i && item.type == this.addresses[idx].type) {
+            let item = this.addresses[i];
+            if (idx !== i && item.type === this.addresses[idx].type) {
                 item.is_default = false;
             }
         }
@@ -530,6 +549,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                             this.router.navigate(['/customer']);
                         }, 2000);
                         this.toastr.success(res.message);
+                        this.refresh();
                     } catch (e) {
                         console.log(e);
                     }

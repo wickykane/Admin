@@ -17,7 +17,7 @@
                                             <label for="code" class="control-label" translate> <strong>Customer Name</strong> </label>
                                             <span class="text-danger">(*)</span>
                                             <div>
-                                                <ng-select class="infinity-scroll-select"  [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 110px; margin-left: 2px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="buyer_id">
+                                                <ng-select class="infinity-scroll-select"  [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 100px; margin-left: 2px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="buyer_id">
                                                     <ng-template ng-option-tmp let-item="item">
                                                         <span title="{{item.company_name}}">{{item.company_name}}</span>
                                                     </ng-template>

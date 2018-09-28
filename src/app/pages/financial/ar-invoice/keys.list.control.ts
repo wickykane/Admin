@@ -1,16 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Hotkey, HotkeysService } from 'angular2-hotkeys';
-// tslint:disable-next-line:import-blacklist
-import { Subject } from 'rxjs/Rx';
-import { Helper } from '../../../shared/index';
+import { KeyboardBaseService } from './../../../shared/helper/keyServiceBase';
 
 @Injectable()
-export class InvoiceKeyService {
-    public context: any;
-    public _hotkeysService;
-    public watchContext = new Subject<any>();
+export class InvoiceKeyService extends KeyboardBaseService {
 
-    private keyConfig = {
+    keyConfig = {
         company_id: {
             element: null,
             prev: 'contact_user_id',
@@ -33,27 +27,6 @@ export class InvoiceKeyService {
         },
     };
 
-    constructor() {
-        this.watchContext.subscribe(res => {
-            this.context = res.context;
-            this._hotkeysService = res.service;
-            this.initKey();
-        });
-    }
-
-    getKeys() {
-        return Array.from(this._hotkeysService.hotkeys);
-    }
-
-    getKeyConfig() {
-        return this.keyConfig;
-    }
-
     initKey() {
-        // this._hotkeysService.add(new Hotkey('alt+n', (event: KeyboardEvent): boolean => {
-        //     event.preventDefault();
-        //     this.context.createOrder();
-        //     return;
-        // }, undefined, 'Create Quotation'));
     }
 }

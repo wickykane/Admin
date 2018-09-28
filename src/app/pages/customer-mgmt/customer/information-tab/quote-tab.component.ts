@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CustomerService } from '../../customer.service';
 import { TableService } from './../../../../services/table.service';
@@ -8,6 +8,7 @@ import { TableService } from './../../../../services/table.service';
     selector: 'app-customer-quote-tab',
     templateUrl: './quote-tab.component.html',
     styleUrls: ['./information-tab.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomerQuoteTabComponent implements OnInit {
 
@@ -35,7 +36,7 @@ export class CustomerQuoteTabComponent implements OnInit {
         public fb: FormBuilder,
         private vRef: ViewContainerRef,
         public tableService: TableService,
-        private customerService: CustomerService) {
+        private customerService: CustomerService, private cd: ChangeDetectorRef) {
 
         this.searchForm = fb.group({
             'code': [null],
@@ -55,6 +56,10 @@ export class CustomerQuoteTabComponent implements OnInit {
      * Internal Function
      */
 
+     refresh() {
+         this.cd.detectChanges();
+     }
+
     getList() {
         const params = {...this.searchForm.value};
         Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
@@ -62,6 +67,7 @@ export class CustomerQuoteTabComponent implements OnInit {
         this.customerService.getListQuote(this._customerId, params).subscribe(res => {
             try {
                 this.list.items = res.data;
+                this.refresh();
                 //  this.tableService.matchPagingOption(res.data);
             } catch (e) {
                 console.log(e);

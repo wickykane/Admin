@@ -1,13 +1,13 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
+import { CommonService } from '../../../../services/common.service';
 import { routerTransition } from '../../../../router.animations';
 import { TableService } from '../../../../services/table.service';
 import { MiscellaneousItemsKeyService } from '../keys.control';
-import { CommonService } from '../../../../services/common.service';
 import { ItemsControl } from '../../../../../../node_modules/@ngu/carousel/src/ngu-carousel/ngu-carousel.interface';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 import { MiscellaneousItemsModalComponent } from '../controlMisscellaneous/misscellaneous-items.modal';
 import { ProductService } from '../../product-mgmt.service';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
@@ -16,7 +16,8 @@ import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
     templateUrl: './miscellaneous-items.component.html',
     animations: [routerTransition()],
     styleUrls: ['./miscellaneous-items.component.scss'],
-    providers: [MiscellaneousItemsKeyService, CommonService, ProductService]
+    providers: [MiscellaneousItemsKeyService, CommonService, ProductService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MiscellaneousItemsComponent implements OnInit {
 
@@ -43,7 +44,8 @@ export class MiscellaneousItemsComponent implements OnInit {
         public keyService: MiscellaneousItemsKeyService,
         private commonService: CommonService,
         private productService: ProductService,
-        private modalService: NgbModal
+        private modalService: NgbModal,
+        private cd: ChangeDetectorRef
     ) {
 
         this.searchForm = fb.group({
@@ -66,6 +68,10 @@ export class MiscellaneousItemsComponent implements OnInit {
         // this.getListMaster();
 
         this.user = JSON.parse(localStorage.getItem('currentUser'));
+    }
+
+    refresh() {
+        this.cd.detectChanges();
     }
     /**
      * Table Event
@@ -97,6 +103,7 @@ export class MiscellaneousItemsComponent implements OnInit {
             try {
                 this.list.items = res.data.rows;
                 this.tableService.matchPagingOption(res.data);
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
@@ -124,6 +131,7 @@ export class MiscellaneousItemsComponent implements OnInit {
                     try {
                         this.toastr.success(res.message);
                         this.getList();
+                        this.refresh();
                     } catch (e) {
                         console.log(e);
                     }
@@ -138,6 +146,7 @@ export class MiscellaneousItemsComponent implements OnInit {
                     try {
                         this.toastr.success(res.message);
                         this.getList();
+                        this.refresh();
                     } catch (e) {
                         console.log(e);
                     }
@@ -148,6 +157,7 @@ export class MiscellaneousItemsComponent implements OnInit {
                     try {
                         this.toastr.success(res.message);
                         this.getList();
+                        this.refresh();
                     } catch (e) {
                         console.log(e);
                     }

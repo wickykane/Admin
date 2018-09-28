@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NguCarousel } from '@ngu/carousel';
@@ -20,7 +20,8 @@ import { PartKeyService } from './keys.control';
     templateUrl: './part-detail.component.html',
     styleUrls: ['./part-list.component.scss'],
     providers: [PartKeyService],
-    animations: [routerTransition()]
+    animations: [routerTransition()],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PartDetailComponent implements OnInit {
     /**
@@ -80,7 +81,8 @@ export class PartDetailComponent implements OnInit {
         public route: ActivatedRoute,
         public itemKeyService: PartKeyService,
         private productService: ProductService,
-        public toastr: ToastrService
+        public toastr: ToastrService,
+        private cd: ChangeDetectorRef
     ) {
         this.generalForm = fb.group({
             is_quotable: [null],
@@ -121,13 +123,17 @@ export class PartDetailComponent implements OnInit {
         ];
     }
 
+    refresh() {
+        this.cd.detectChanges();
+    }
+
 
     getAccountType() {
         this.productService.getAccountType().subscribe(
             res => {
                 try {
                     this.listMaster['account'] = res.data;
-
+                    this.refresh();
                 } catch (e) {
                     console.log(e);
                 }

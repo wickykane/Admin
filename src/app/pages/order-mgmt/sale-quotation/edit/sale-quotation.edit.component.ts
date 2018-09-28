@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -21,13 +21,15 @@ import { SaleQuoteEditKeyService } from './keys.edit.control';
 import { HotkeysService } from 'angular2-hotkeys';
 import * as _ from 'lodash';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
+import { cdArrowTable } from '../../../../shared/index';
 
 @Component({
     selector: 'app-edit-quotation',
     templateUrl: './sale-quotation.edit.component.html',
     styleUrls: ['../sale-quotation.component.scss'],
     providers: [HotkeysService, SaleQuoteEditKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }],
-    animations: [routerTransition()]
+    animations: [routerTransition()],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class SaleQuotationEditComponent implements OnInit {
@@ -113,6 +115,7 @@ export class SaleQuotationEditComponent implements OnInit {
 
 
     public searchKey = new Subject<any>(); // Lazy load filter
+    @ViewChild(cdArrowTable) table: cdArrowTable;
 
     /**
      * Init Data
@@ -127,6 +130,7 @@ export class SaleQuotationEditComponent implements OnInit {
         private orderService: OrderService,
         private _hotkeysService: HotkeysService,
         public keyService: SaleQuoteEditKeyService,
+        private cd: ChangeDetectorRef,
         private dt: DatePipe) {
         this.generalForm = fb.group({
             'approver_id': [null, Validators.required],
@@ -158,9 +162,10 @@ export class SaleQuotationEditComponent implements OnInit {
         const user = JSON.parse(localStorage.getItem('currentUser'));
         this.listMaster['from_src'] = [{ id: 0, label: 'From Master' }, { id: 1, label: 'From Quote' }, { id: 2, label: 'Manual' }];
 
-        this.orderService.getOrderReference().subscribe(res => { Object.assign(this.listMaster, res.data); });
+        this.orderService.getOrderReference().subscribe(res => { Object.assign(this.listMaster, res.data); this.refresh(); });
         this.orderService.getSQReference().subscribe(res => {
             this.listMaster = { ...this.listMaster, ...res.data };
+            this.refresh();
         });
 
         //  Item
@@ -176,18 +181,24 @@ export class SaleQuotationEditComponent implements OnInit {
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
-        this.searchKey.subscribe(key => {
+        this.searchKey.debounceTime(300).subscribe(key => {
             this.data['page'] = 1;
             this.searchCustomer(key);
         });
 
         // Get Detail Quote
         this.getDetailQuote();
+        this.refresh();
     }
     /**
      * Mater Data
      */
+    refresh() {
+        this.cd.detectChanges();
+    }
+
     getDetailQuote() {
         this.orderService.getSaleQuoteDetail(this.data['id']).subscribe(res => {
             try {
@@ -231,9 +242,8 @@ export class SaleQuotationEditComponent implements OnInit {
                         this.listMaster['customer'].push({ id: res.data.buyer_id, company_name: res.data.buyer_name });
                     }
                     this.data['total_page'] = result.data.total_page;
+                    this.refresh();
                 });
-
-
 
             } catch (e) {
                 console.log(e);
@@ -252,7 +262,7 @@ export class SaleQuotationEditComponent implements OnInit {
                 }
                 // if (res.data.buyer_type === 'PS') {
                 this.addr_select.contact = res.data.contact[0] || this.addr_select.contact;
-                this.generalForm.patchValue({ contact_user_id: this.addr_select.contact.id});
+                this.generalForm.patchValue({ contact_user_id: this.addr_select.contact.id });
                 // }
                 if (!flag) {
                     const default_billing = (this.customer.billing || []).find(item => item.set_default) || {};
@@ -281,6 +291,7 @@ export class SaleQuotationEditComponent implements OnInit {
                 if (this.generalForm.value.shipping_id == null) {
                     this.getShippingReference('');
                 }
+                this.refresh();
 
             } catch (e) {
                 console.log(e);
@@ -292,6 +303,17 @@ export class SaleQuotationEditComponent implements OnInit {
      * Internal Function
      */
     selectData(data) { }
+
+    selectTable() {
+        this.selectedIndex = 0;
+        this.table.scrollToTable();
+        setTimeout(() => {
+            if (this.table.element.nativeElement.querySelectorAll('td button')) {
+                this.table.element.nativeElement.querySelectorAll('td button')[this.selectedIndex].focus();
+            }
+        });
+        this.refresh();
+    }
 
     changeCustomer(flag?) {
         const company_id = this.generalForm.value.company_id;
@@ -305,6 +327,7 @@ export class SaleQuotationEditComponent implements OnInit {
             // this.list.items = [];
             this.updateTotal();
         }
+        this.refresh();
     }
 
     selectAddress(type, flag?) {
@@ -327,6 +350,7 @@ export class SaleQuotationEditComponent implements OnInit {
                     }
                     break;
             }
+            this.refresh();
         } catch (e) {
             console.log(e);
         }
@@ -336,7 +360,7 @@ export class SaleQuotationEditComponent implements OnInit {
         this.orderService.getShippingReference(id).subscribe(res => {
             this.listMaster['carriers'] = res.data;
             const arr = res.data.filter(item => item.name === 'UPS');
-            if (arr.length > 0 ) {
+            if (arr.length > 0) {
                 // this.generalForm.patchValue({ 'carrier_id': 1 , 'ship_method_option': null });
             }
             this.changeShip(flag);
@@ -354,6 +378,7 @@ export class SaleQuotationEditComponent implements OnInit {
             const temp = this.customer.contact.filter(x => x.id === id);
             this.addr_select.contact = temp[0];
         }
+        this.refresh();
     }
 
     changeFromSource(item) {
@@ -362,6 +387,7 @@ export class SaleQuotationEditComponent implements OnInit {
         // }
         item.source_id = 2;
         item.source_name = 'Manual';
+        this.refresh();
     }
 
     updateTotal() {
@@ -386,6 +412,7 @@ export class SaleQuotationEditComponent implements OnInit {
         });
 
         this.order_info.total = +this.order_info['total_tax'] + +this.order_info.sub_total;
+        this.refresh();
     }
 
     deleteAction(id, item_condition) {
@@ -399,6 +426,10 @@ export class SaleQuotationEditComponent implements OnInit {
     addNewItem() {
         const modalRef = this.modalService.open(ItemModalContent, { size: 'lg' });
         modalRef.result.then(res => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
@@ -463,7 +494,7 @@ export class SaleQuotationEditComponent implements OnInit {
 
     changeShip(flag?) {
 
-        const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id) || { 'options': [], 'ship_rate': [], 'own_carrirer': ''};
+        const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id) || { 'options': [], 'ship_rate': [], 'own_carrirer': '' };
         this.listMaster['options'] = (carrier.options || []).map(item => {
             item.cd = item.cd;
             return item;
@@ -519,7 +550,7 @@ export class SaleQuotationEditComponent implements OnInit {
             this.generalForm.patchValue({ ship_method_option: default_option, ship_rate: default_ship_rate });
         }
         this.generalForm.updateValueAndValidity();
-
+        this.refresh();
     }
     //  Show order history
     showViewOrderHistory() {
@@ -549,6 +580,7 @@ export class SaleQuotationEditComponent implements OnInit {
 
     remove = function (index) {
         this.data['programs'].splice(index, 1);
+        this.refresh();
     };
 
 
@@ -568,7 +600,7 @@ export class SaleQuotationEditComponent implements OnInit {
         this.orderService.getTaxShipping(params).subscribe(res => {
             if (res.data.mics) {
                 const old_misc = this.list.items.filter(item => item.misc_id && [1, 2].indexOf(item.misc_id) === -1 && +item.source_id !== 3);
-                const items = res.data.items;
+                const items = res.data.items || this.list.items.filter(item => !item.misc_id);
                 const misc = res.data.mics.map(item => {
                     item.is_misc = 1;
                     item.misc_id = item.id;
@@ -583,6 +615,7 @@ export class SaleQuotationEditComponent implements OnInit {
             this.list.items.forEach(item => item.tax_percent = res.data.tax_percent);
             this.updateTotal();
             this.order_info['original_ship_cost'] = res.data.price;
+            this.refresh();
         });
     }
 
@@ -601,6 +634,7 @@ export class SaleQuotationEditComponent implements OnInit {
                 value: tax, amount: taxAmount.toFixed(2)
             });
         });
+        this.refresh();
     }
 
     confirmModal(type, is_draft_sq?) {
@@ -660,6 +694,7 @@ export class SaleQuotationEditComponent implements OnInit {
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = this.listMaster['customer'].concat(res.data.rows);
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
     }
 
@@ -672,6 +707,7 @@ export class SaleQuotationEditComponent implements OnInit {
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
     }
 }
