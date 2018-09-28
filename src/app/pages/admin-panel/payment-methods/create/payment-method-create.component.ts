@@ -157,6 +157,9 @@ export class PaymentMethodsCreateComponent implements OnInit {
             name: this.paymentForm.value.name,
             type: this.paymentForm.value.type
         };
+        if (this.paymentMethodId) {
+            params['ignore_id'] = this.paymentMethodId;
+        }
         this.paymentMethodService.checkDupliateDisplayName(params).subscribe(
             res => {
                 this.toastr.success('This name can be used!');
