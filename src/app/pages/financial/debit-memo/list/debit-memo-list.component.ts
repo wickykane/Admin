@@ -16,6 +16,7 @@ import { DebitMemoListKeyService } from './keys.list.control';
 
 import { DebitMemoService } from '../debit-memo.service';
 
+import { HotkeysService } from 'angular2-hotkeys';
 import { SendMailDebitModalContent } from '../modals/send-email/send-mail.modal';
 
 @Component({
@@ -24,7 +25,7 @@ import { SendMailDebitModalContent } from '../modals/send-email/send-mail.modal'
     styleUrls: ['./debit-memo-list.component.scss'],
     animations: [routerTransition()],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [DebitMemoListKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }, TableService]
+    providers: [DebitMemoListKeyService, HotkeysService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }, TableService]
 })
 export class DebitMemoListComponent implements OnInit {
 
@@ -58,6 +59,7 @@ export class DebitMemoListComponent implements OnInit {
         private vRef: ViewContainerRef,
         private cd: ChangeDetectorRef,
         private modalService: NgbModal,
+        private _hotkeysService: HotkeysService,
         public keyService: DebitMemoListKeyService,
         public tableService: TableService,
         public debitMemoService: DebitMemoService,
@@ -73,8 +75,7 @@ export class DebitMemoListComponent implements OnInit {
             date_to: [null]
         });
         //  Init hot keys
-        this.keyService.watchContext.next(this);
-
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
         this.tableService.getListFnName = 'getListDebitMemo';
         this.tableService.context = this;
     }
