@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -26,7 +26,8 @@ import { CreditMemoService } from './../credit-memo.service';
     templateUrl: './credit-memo-create.component.html',
     styleUrls: ['../credit-memo.component.scss'],
     providers: [OrderService, HotkeysService, CreditMemoCreateKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }],
-    animations: [routerTransition()]
+    animations: [routerTransition()],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class CreditMemoCreateComponent implements OnInit {
@@ -93,6 +94,7 @@ export class CreditMemoCreateComponent implements OnInit {
      */
     constructor(
         private vRef: ViewContainerRef,
+        private cd: ChangeDetectorRef,
         private fb: FormBuilder,
         public toastr: ToastrService,
         private router: Router,
@@ -148,16 +150,22 @@ export class CreditMemoCreateComponent implements OnInit {
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
         this.searchKey.subscribe(key => {
             this.data['page'] = 1;
             this.searchCustomer(key);
         });
+        this.refresh();
     }
 
     /**
      * Mater Data
      */
+    refresh() {
+        this.cd.detectChanges();
+    }
+
     getListPaymentMethod() {
         return new Promise(resolve => {
             this.creditMemoService.getPaymentMethod().subscribe(res => {
@@ -194,6 +202,7 @@ export class CreditMemoCreateComponent implements OnInit {
         this.creditMemoService.getGenerateCode().subscribe(res => {
             this.generalForm.get('credit_num').patchValue(res.data.cd);
             this.listMaster['documentType'] = res.data.document_type;
+            this.refresh();
         });
     }
 
@@ -215,7 +224,9 @@ export class CreditMemoCreateComponent implements OnInit {
         });
         this.creditMemoService.getAllSaleOrderByCus(company_id).subscribe(res => {
             this.listMaster['invoice-list'] = res.data;
+            this.refresh();
         });
+        this.refresh();
     }
 
     /**
@@ -252,6 +263,7 @@ export class CreditMemoCreateComponent implements OnInit {
             this.list.items = [];
             this.updateTotal();
         }
+        this.refresh();
     }
 
     selectAddress(type, flag?) {
@@ -270,6 +282,7 @@ export class CreditMemoCreateComponent implements OnInit {
                     }
                     break;
             }
+            this.refresh();
         } catch (e) {
             console.log(e);
         }
@@ -286,6 +299,7 @@ export class CreditMemoCreateComponent implements OnInit {
             const temp = this.customer.contact.filter(x => x.id === id);
             this.addr_select.contact = temp[0];
         }
+        this.refresh();
     }
 
 
@@ -309,6 +323,7 @@ export class CreditMemoCreateComponent implements OnInit {
             this.order_info.sub_total += item.amount;
         });
         this.order_info.total = +this.order_info['total_tax'] + +this.order_info.sub_total;
+        this.refresh();
     }
 
     deleteAction(id, item_condition) {
@@ -337,6 +352,7 @@ export class CreditMemoCreateComponent implements OnInit {
                 value: tax, amount: taxAmount.toFixed(2)
             });
         });
+        this.refresh();
     }
     addNewItem() {
         if (this.items_removed.length === 0) {
@@ -516,6 +532,7 @@ export class CreditMemoCreateComponent implements OnInit {
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = this.listMaster['customer'].concat(res.data.rows);
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
     }
 
@@ -528,6 +545,7 @@ export class CreditMemoCreateComponent implements OnInit {
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
     }
 }

@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -35,7 +35,8 @@ import { PaymentInformModalComponent } from '../modals/payment-inform/payment-in
     templateUrl: './receipt-voucher.edit.component.html',
     styleUrls: ['../receipt-voucher.component.scss'],
     providers: [OrderService, ReceiptVoucherService, HotkeysService, TableService, InvoiceEditKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }],
-    animations: [routerTransition()]
+    animations: [routerTransition()],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class ReceiptVoucherEditComponent implements OnInit {
@@ -70,6 +71,7 @@ export class ReceiptVoucherEditComponent implements OnInit {
      */
     constructor(
         private vRef: ViewContainerRef,
+        private cd: ChangeDetectorRef,
         private fb: FormBuilder,
         public toastr: ToastrService,
         private router: Router,
@@ -132,6 +134,7 @@ export class ReceiptVoucherEditComponent implements OnInit {
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
 
         this.searchKey.debounceTime(300).subscribe(key => {
@@ -146,6 +149,10 @@ export class ReceiptVoucherEditComponent implements OnInit {
     /**
      * Mater Data
      */
+    refresh() {
+        this.cd.detectChanges();
+    }
+
     getVoucherDetail() {
         this.voucherService.getDetailReceiptVoucher(this.data['voucher_id']).subscribe(async res => {
             this.data['voucher'] = res.data;
@@ -177,6 +184,7 @@ export class ReceiptVoucherEditComponent implements OnInit {
         this.getListAccountGL();
         this.orderService.getOrderReference().subscribe(res => {
             Object.assign(this.listMaster, res.data);
+            this.refresh();
         });
     }
 
@@ -188,6 +196,7 @@ export class ReceiptVoucherEditComponent implements OnInit {
                 tempAccountList.push({ 'name': item.name, 'level': item.level, 'disabled': true }, ...item.children);
             });
             this.listMaster['account'] = tempAccountList;
+            this.refresh();
         });
     }
 
@@ -213,6 +222,7 @@ export class ReceiptVoucherEditComponent implements OnInit {
             this.data['loadItem'] = true;
             this.tableService.matchPagingOption(res.data);
             this.updateTotal();
+            this.refresh();
         });
     }
 
@@ -237,6 +247,7 @@ export class ReceiptVoucherEditComponent implements OnInit {
                 });
             }
             this.generalForm.updateValueAndValidity();
+            this.refresh();
         }
     }
 
@@ -255,6 +266,7 @@ export class ReceiptVoucherEditComponent implements OnInit {
             try {
                 this.data['payer'] = res.data;
                 this.listMaster['customer'] = [{ id: this.data['payer'].company_id, company_name: this.data['payer'].company_name }, ...this.listMaster['customer']];
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
@@ -271,11 +283,13 @@ export class ReceiptVoucherEditComponent implements OnInit {
     checkAll(ev) {
         this.list.items.forEach(x => x.is_checked = ev.target.checked);
         this.list.checklist = this.list.items.filter(item => item.is_checked);
+        this.refresh();
     }
 
     isAllChecked() {
         this.checkAllItem = this.list.items.every(item => item.is_checked);
         this.list.checklist = this.list.items.filter(item => item.is_checked);
+        this.refresh();
     }
 
     onChangePaymentMethod(flag?) {
@@ -305,6 +319,7 @@ export class ReceiptVoucherEditComponent implements OnInit {
         });
 
         this.generalForm.updateValueAndValidity();
+        this.refresh();
     }
 
     onChangeWareHouse(flag?) {
@@ -360,6 +375,7 @@ export class ReceiptVoucherEditComponent implements OnInit {
             });
             const remain = this.generalForm.value.price_received - total;
             this.data['remain'] = remain;
+            this.refresh();
         }
 
         this.data['summary'] = {
@@ -374,6 +390,7 @@ export class ReceiptVoucherEditComponent implements OnInit {
 
         this.data['summary'].change = this.generalForm.value.price_received - this.data['summary'].total;
         this.generalForm.patchValue({ remain_amt: this.data['summary'].change });
+        this.refresh();
 
     }
 
@@ -394,6 +411,7 @@ export class ReceiptVoucherEditComponent implements OnInit {
         if (!is_draft && (this.generalForm.invalid || (this.data['summary'] && !this.data['summary'].total))) {
             this.toastr.error(this.messageConfig.error);
             this.data['showError'] = true;
+            this.refresh();
             return;
         }
 
@@ -420,6 +438,7 @@ export class ReceiptVoucherEditComponent implements OnInit {
                         this.router.navigate(['/financial/receipt-voucher/view/' + this.data['voucher_id']]);
                     }, 500);
                 }
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
@@ -449,6 +468,7 @@ export class ReceiptVoucherEditComponent implements OnInit {
             return;
         }
         this.paymentModal();
+        this.refresh();
     }
 
     paymentModal() {
@@ -507,6 +527,7 @@ export class ReceiptVoucherEditComponent implements OnInit {
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = this.listMaster['customer'].concat(res.data.rows);
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
     }
 
@@ -519,6 +540,7 @@ export class ReceiptVoucherEditComponent implements OnInit {
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
     }
 }

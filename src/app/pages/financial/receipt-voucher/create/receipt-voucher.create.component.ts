@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -34,7 +34,8 @@ import { PaymentInformModalComponent } from '../modals/payment-inform/payment-in
     templateUrl: './receipt-voucher.create.component.html',
     styleUrls: ['../receipt-voucher.component.scss'],
     providers: [OrderService, ReceiptVoucherService, HotkeysService, TableService, InvoiceCreateKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }],
-    animations: [routerTransition()]
+    animations: [routerTransition()],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class ReceiptVoucherCreateComponent implements OnInit {
@@ -72,6 +73,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
     constructor(
         private vRef: ViewContainerRef,
         private fb: FormBuilder,
+        private cd: ChangeDetectorRef,
         public toastr: ToastrService,
         private router: Router,
         private route: ActivatedRoute,
@@ -151,17 +153,23 @@ export class ReceiptVoucherCreateComponent implements OnInit {
     /**
      * Mater Data
      */
+    refresh() {
+        this.cd.detectChanges();
+    }
 
     getListReference() {
         this.listMaster['yes_no_options'] = [{ value: 0, label: 'No' }, { value: 1, label: 'Yes' }];
         this.getListAccountGL();
         this.orderService.getOrderReference().subscribe(res => {
             Object.assign(this.listMaster, res.data);
+            this.refresh();
         });
 
         this.voucherService.getVoucherMasterData().subscribe(res => {
             this.generalForm.get('cd').patchValue(res.data.cd);
+            this.refresh();
         });
+        this.refresh();
     }
 
     getListAccountGL() {
@@ -172,6 +180,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
                 tempAccountList.push({ 'name': item.name, 'level': item.level, 'disabled': true }, ...item.children);
             });
             this.listMaster['account'] = tempAccountList;
+            this.refresh();
         });
     }
 
@@ -196,6 +205,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             this.list.items = res.data.rows || [];
             this.tableService.matchPagingOption(res.data);
             this.updateTotal();
+            this.refresh();
         });
     }
 
@@ -218,6 +228,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
                 price_received: null,
             });
             this.generalForm.updateValueAndValidity();
+            this.refresh();
         }
     }
 
@@ -226,6 +237,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             this.voucherService.getPaymentMethodElectronic(id).subscribe(res => {
                 this.listMaster['payment_method'] = res.data;
                 this.resetChangeData('paymentMethodType');
+                this.refresh();
                 resolve(true);
             });
         });
@@ -235,6 +247,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         this.orderService.getDetailCompany(company_id).subscribe(res => {
             try {
                 this.data['payer'] = res.data;
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
@@ -251,11 +264,13 @@ export class ReceiptVoucherCreateComponent implements OnInit {
     checkAll(ev) {
         this.list.items.forEach(x => x.is_checked = ev.target.checked);
         this.list.checklist = this.list.items.filter(item => item.is_checked);
+        this.refresh();
     }
 
     isAllChecked() {
         this.checkAllItem = this.list.items.every(item => item.is_checked);
         this.list.checklist = this.list.items.filter(item => item.is_checked);
+        this.refresh();
     }
 
     onChangePaymentMethod() {
@@ -285,6 +300,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             });
 
             this.generalForm.updateValueAndValidity();
+            this.refresh();
         });
     }
 
@@ -342,6 +358,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             });
             const remain = this.generalForm.value.price_received - total;
             this.data['remain'] = remain;
+            this.refresh();
         }
 
         this.data['summary'] = {
@@ -356,7 +373,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
 
         this.data['summary'].change = this.generalForm.value.price_received - this.data['summary'].total;
         this.generalForm.patchValue({ remain_amt: this.data['summary'].change });
-
+        this.refresh();
     }
 
     resetVoucher() {
@@ -502,6 +519,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = this.listMaster['customer'].concat(res.data.rows);
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
     }
 
@@ -514,6 +532,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
     }
 }
