@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from './../../../../services/table.service';
@@ -23,6 +23,7 @@ import { SendMailDebitModalContent } from '../modals/send-email/send-mail.modal'
     templateUrl: './debit-memo-list.component.html',
     styleUrls: ['./debit-memo-list.component.scss'],
     animations: [routerTransition()],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [DebitMemoListKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }, TableService]
 })
 export class DebitMemoListComponent implements OnInit {
@@ -55,6 +56,7 @@ export class DebitMemoListComponent implements OnInit {
         public fb: FormBuilder,
         public toastr: ToastrService,
         private vRef: ViewContainerRef,
+        private cd: ChangeDetectorRef,
         private modalService: NgbModal,
         public keyService: DebitMemoListKeyService,
         public tableService: TableService,
@@ -89,11 +91,16 @@ export class DebitMemoListComponent implements OnInit {
         this.getCountStatus();
     }
 
+    refresh() {
+        this.cd.detectChanges();
+    }
+
     getDebitStatusList() {
         this.debitMemoService.getDebitStatusList().subscribe(
             res => {
                 try {
                     this.listMaster['status'] = res.data;
+                    this.refresh();
                 } catch (err) {
                     console.log(err);
                 }
@@ -114,6 +121,7 @@ export class DebitMemoListComponent implements OnInit {
             this.listMaster['count-status'] = Object.keys(this.statusConfig).map(key => {
                 return this.statusConfig[key];
             });
+            this.refresh();
         });
     }
 
@@ -139,6 +147,7 @@ export class DebitMemoListComponent implements OnInit {
                     this.listDebitMemo = res.data.rows;
                     this.selectedIndex = 0;
                     this.tableService.matchPagingOption(res.data);
+                    this.refresh();
                 } catch (err) {
                     console.log(err);
                 }
@@ -155,6 +164,7 @@ export class DebitMemoListComponent implements OnInit {
                 this.listDebitMemo = res.data.rows;
                 this.selectedIndex = 0;
                 this.tableService.matchPagingOption(res.data);
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
@@ -203,13 +213,13 @@ export class DebitMemoListComponent implements OnInit {
             }
         }
         const modalRef = this.modalService.open(ConfirmModalContent);
-            modalRef.componentInstance.message = modalMessage;
-            modalRef.componentInstance.yesButtonText = 'YES';
-            modalRef.componentInstance.noButtonText = 'NO';
-            modalRef.result.then(yes => {
-                if (yes) {
-                    this.updateDebitStatus(debitId, newStatus);
-                }
+        modalRef.componentInstance.message = modalMessage;
+        modalRef.componentInstance.yesButtonText = 'YES';
+        modalRef.componentInstance.noButtonText = 'NO';
+        modalRef.result.then(yes => {
+            if (yes) {
+                this.updateDebitStatus(debitId, newStatus);
+            }
         }, no => { });
     }
 
@@ -235,13 +245,13 @@ export class DebitMemoListComponent implements OnInit {
         });
     }
 
-    onReceivePayment() {}
+    onReceivePayment() { }
 
     onSendMail(debitId) {
         const modalRef = this.modalService.open(SendMailDebitModalContent, { size: 'lg', windowClass: 'modal-md' });
         modalRef.componentInstance.debitId = debitId;
         modalRef.result.then(res => {
-        }, dismiss => {});
+        }, dismiss => { });
     }
 
     updateDebitStatus(debitId, newStatus) {
