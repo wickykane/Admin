@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from '../../../../services/table.service';
@@ -20,7 +20,8 @@ import { CreditMailModalComponent } from '../modals/send-email/mail.modal';
     templateUrl: './credit-memo-list.component.html',
     styleUrls: ['../credit-memo.component.scss'],
     animations: [routerTransition()],
-    providers: [CreditMemoListKeyService, TableService]
+    providers: [CreditMemoListKeyService, TableService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CreditMemoListComponent implements OnInit {
     /**
@@ -64,6 +65,7 @@ export class CreditMemoListComponent implements OnInit {
         private _hotkeysService: HotkeysService,
         public creditMemoListKeyService: CreditMemoListKeyService,
         private http: HttpClient,
+        private cd: ChangeDetectorRef,
         private renderer: Renderer) {
 
         this.searchForm = fb.group({
@@ -99,12 +101,16 @@ export class CreditMemoListComponent implements OnInit {
     /**
      * Internal Function
      */
+    refresh() {
+        this.cd.detectChanges();
+    }
     filter(sts) {
         const params = { sts };
         this.creditMemoService.getListCreditMemo(params).subscribe(res => {
             try {
                 this.list.items = res.data.rows;
                 this.tableService.matchPagingOption(res.data);
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
@@ -114,6 +120,7 @@ export class CreditMemoListComponent implements OnInit {
         this.creditMemoService.getListStatusCredit().subscribe(res => {
             try {
                 this.listMaster['listStatus'] = res.data;
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
@@ -131,6 +138,7 @@ export class CreditMemoListComponent implements OnInit {
             this.listMaster['count-status'] = Object.keys(this.statusConfig).map(key => {
                 return this.statusConfig[key];
             });
+            this.refresh();
         });
     }
 
@@ -151,6 +159,7 @@ export class CreditMemoListComponent implements OnInit {
             try {
                 this.list.items = res.data.rows;
                 this.tableService.matchPagingOption(res.data);
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
@@ -170,17 +179,17 @@ export class CreditMemoListComponent implements OnInit {
             headers,
             responseType: 'blob',
         }).subscribe(res => {
-                const file = new Blob([res], { type: 'application/pdf' });
-                const fileURL = URL.createObjectURL(file);
-                const newWindow = window.open(fileURL);
-                newWindow.focus();
-                newWindow.print();
-            });
+            const file = new Blob([res], { type: 'application/pdf' });
+            const fileURL = URL.createObjectURL(file);
+            const newWindow = window.open(fileURL);
+            newWindow.focus();
+            newWindow.print();
+        });
     }
 
     updateStatus(id, status) {
         const params = { credit_id: id, status };
-        this.creditMemoService.updateCreditStatus( params).subscribe(res => {
+        this.creditMemoService.updateCreditStatus(params).subscribe(res => {
             try {
                 this.toastr.success(res.message);
                 this.getList();
@@ -191,7 +200,7 @@ export class CreditMemoListComponent implements OnInit {
     }
 
     reopentCredit(id) {
-        this.creditMemoService.reopenCredit( id).subscribe(res => {
+        this.creditMemoService.reopenCredit(id).subscribe(res => {
             try {
                 this.toastr.success(res.message);
                 this.getList();

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, Input, OnInit, ViewContainerRef, ViewChild } from '@angular/core';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -11,8 +11,10 @@ export class ConfirmModalContent implements OnInit {
     @Input() message;
     @Input() yesButtonText;
     @Input() noButtonText;
-
+    @ViewChild('okButton') okButton;
     constructor(public activeModal: NgbActiveModal) { }
 
-    ngOnInit() { }
+    ngOnInit() {
+        this.okButton.nativeElement.focus();
+    }
 }
