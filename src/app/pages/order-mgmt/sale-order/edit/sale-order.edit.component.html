@@ -17,7 +17,7 @@
                                             <label for="code" class="control-label" translate> <strong>Customer Name</strong> </label>
                                             <span class="text-danger">(*)</span>
                                             <div>
-                                                <ng-select class="infinity-scroll-select"  [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 100px; margin-left: 2px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="buyer_id">
+                                                <ng-select [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('buyer_id').errors?.required) || false   }"  class="infinity-scroll-select"  [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 100px; margin-left: 2px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="buyer_id">
                                                     <ng-template ng-option-tmp let-item="item">
                                                         <span title="{{item.company_name}}">{{item.company_name}}</span>
                                                     </ng-template>
@@ -82,7 +82,7 @@
                                  <span class="text-danger">(*)</span>
                                  </label>
                                                 <div class='col-6 text-primary'>
-                                                    <select required class="form-control" id="order_type" name="order-type" formControlName="type" (change)="changeOrderType()">
+                                                    <select required class="form-control" id="order_type" name="order-type" formControlName="type" [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('type').errors?.required) || false   }" (change)="changeOrderType()">
                                     <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                     <option *ngFor="let item of listMaster['order_types']" [ngValue]="item.code">{{item.value}}</option>
                                     </select>
@@ -94,7 +94,7 @@
                                  </label>
                                                 <div class='col-6 text-danger'>
                                                     <div clickOutside (clickOutside)="d.close()" class="input-group">
-                                                        <input class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="order_date" ngbDatepicker #d="ngbDatepicker">
+                                                        <input class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="order_date" [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('order_date').errors?.required) || false   }" ngbDatepicker #d="ngbDatepicker">
                                                         <div class="input-group-append">
                                                             <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
                                           <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -106,7 +106,7 @@
                                             <div class="form-group row">
                                                 <label class='col-6'>Priority <span class="text-danger">(*)</span></label>
                                                 <div class='col-6 text-danger'>
-                                                    <select required class="form-control" id="priority" name="priority" formControlName="prio_level">
+                                                    <select required class="form-control" id="priority" name="priority" formControlName="prio_level" [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('prio_level').errors?.required) || false   }">
                                     <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                     <option *ngFor="let item of list_priority" [ngValue]="item.code">{{item.value}}</option>
                                     </select>
@@ -125,7 +125,7 @@
                                             <div class="form-group row">
                                                 <label class='col-6'>Payment Method<span class="text-danger">(*)</span></label>
                                                 <div class='col-6 text-primary'>
-                                                    <select class="form-control" name="payment_method_id" formControlName="payment_method_id">
+                                                    <select class="form-control" name="payment_method_id" formControlName="payment_method_id" [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('payment_method_id').errors?.required) || false   }">
                                     <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                     <option *ngFor="let item of listMaster['payment_method']" [ngValue]="item.id">{{item.name}}</option>
                                     </select>
@@ -136,7 +136,7 @@
                                  <span class="text-danger">(*)</span>
                                  </label>
                                                 <div class='col-6 text-danger'>
-                                                    <select class="form-control" name="payment_term_id" formControlName="payment_term_id">
+                                                    <select class="form-control" name="payment_term_id" formControlName="payment_term_id" [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('payment_term_id').errors?.required) || false   }">
                                     <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                     <option *ngFor="let item of listMaster['payment_term']" [ngValue]="item.id">{{item.des}}</option>
                                     </select>
@@ -145,7 +145,7 @@
                                             <div class="form-group row">
                                                 <label class='col-6'>Salesperson<span class="text-danger">(*)</span></label>
                                                 <div class='col-6 text-primary'>
-                                                    <select class="form-control" name="sale_person_id" formControlName="sale_person_id">
+                                                    <select class="form-control" name="sale_person_id" formControlName="sale_person_id" [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('sale_person_id').errors?.required) || false   }">
                                     <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                     <option *ngFor="let item of listMaster['sale_mans']" [ngValue]="item.id">{{item.full_name}}</option>
                                     </select>
@@ -156,7 +156,7 @@
                                  <span class="text-danger">(*)</span>
                                  </label>
                                                 <div class='col-6'>
-                                                    <select (change)="getQtyAvail()" class="form-control" name="approver_id" formControlName="approver_id">
+                                                    <select (change)="getQtyAvail()" class="form-control" name="approver_id" formControlName="approver_id" [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('approver_id').errors?.required) || false   }">
                                     <option [hidden]="true" [disabled]="false"  [ngValue]="null">--Select--</option>
                                     <option *ngFor="let item of listMaster['sale_mans']" [ngValue]="item.id">{{item.full_name}}</option>
                                     </select>
@@ -186,7 +186,7 @@
                               </label>
                                             <div class="col-7">
                                                 <form [formGroup]="generalForm">
-                                                    <select required class="form-control" id="billing_to" name="search_type" formControlName="billing_id" (change)="selectAddress('billing')">
+                                                    <select required class="form-control" id="billing_to" name="search_type" formControlName="billing_id" [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('billing_id').errors?.required) || false   }" (change)="selectAddress('billing')">
                                     <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                     <option *ngFor="let item of customer.billing" [ngValue]="item.address_id">{{item.label}}</option>
                                     </select>
@@ -247,7 +247,7 @@
                                  </label>
                                             <div class="col-7">
                                                 <form [formGroup]="generalForm">
-                                                    <select required class="form-control" id="shiping_to" name="search_type" formControlName="shipping_id" (change)="selectAddress('shipping')">
+                                                    <select required class="form-control" id="shiping_to" name="search_type" formControlName="shipping_id" [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('shipping_id').errors?.required) || false   }" (change)="selectAddress('shipping')">
                                        <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                        <option *ngFor="let item of customer.shipping" [ngValue]="item.address_id">{{item.label}}</option>
                                        </select>
@@ -305,7 +305,7 @@
                               <span class="text-danger">(*)</span>
                               </label>
                                                 <div class='col-6'>
-                                                    <select (change)="getQtyAvail()" class="form-control" name="warehouse_id" formControlName="warehouse_id">
+                                                    <select (change)="getQtyAvail()" class="form-control" name="warehouse_id" formControlName="warehouse_id" [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('warehouse_id').errors?.required) || false   }">
                                  <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                  <option *ngFor="let item of listMaster['warehouses']" [ngValue]="item.id">{{item.name}}</option>
                                  </select>
@@ -317,7 +317,7 @@
                               <span class="text-danger">(*)</span>
                               </label>
                                                 <div class='col-6'>
-                                                    <select (change)="changeShipVia()" class="form-control" name="carrier_id" formControlName="carrier_id">
+                                                    <select (change)="changeShipVia()" class="form-control" name="carrier_id" formControlName="carrier_id" [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('carrier_id').errors?.required) || false   }">
                                  <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                  <option *ngFor="let item of listMaster['carriers']" [ngValue]="item.id">{{item.name}}</option>
                                  </select>
@@ -329,7 +329,7 @@
                               <span class="text-danger">(*)</span>
                               </label>
                                                 <div class='col-6'>
-                                                    <select class="form-control" name="ship_method_option" formControlName="ship_method_option">
+                                                    <select class="form-control" name="ship_method_option" formControlName="ship_method_option" [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('ship_method_option').errors?.required) || false   }">
                                  <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                  <option *ngFor="let item of listMaster['options']" [ngValue]="item.cd">{{item.name}}</option>
                                  </select>
@@ -341,7 +341,7 @@
                               <span class="text-danger">(*)</span>
                               </label>
                                                 <div class='col-6'>
-                                                    <select class="form-control" name="ship_method_rate" formControlName="ship_method_rate">
+                                                    <select class="form-control" name="ship_method_rate" [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('ship_method_rate').errors?.required) || false   }" formControlName="ship_method_rate">
                                  <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                  <option *ngFor="let item of listMaster['ship_rates']" [ngValue]="item.id">{{item.name}}</option>
                                  </select>
@@ -562,11 +562,10 @@
         </div>
         <div class="row">
             <div class="col-md-12 mg-top-15 text-right">
-                <!-- <button type="button" class="btn btn-outline-primary" (click)="createOrder('create')" [disabled]="!generalForm.valid" translate>Update</button> -->
-                <!-- <button type="button" class="btn btn-default" [routerLink]="['/order-management/sale-order']" translate>Back To List</button> -->
                 <button type="button" class="btn btn-outline-info" (click)="createOrder('draft')" translate>Save</button>
                 <button type="button" class="btn btn-outline-success" (click)="confirmModal('validate')" translate>Save & Validate</button>
                 <button type="button" class="btn btn-outline-danger" (click)="confirmModal('create')" translate>Save & Submit</button>
+                <button type="button" class="btn btn-outline-secondary" (click)="confirmModal('cancel')" translate>Cancel Order</button>                
                 <button type="button" class="btn btn-default" (click)="confirmModal(0)" translate>Back To List</button>
             </div>
         </div>

@@ -107,6 +107,8 @@ export class SaleOrderEditComponent implements OnInit {
     public messageConfig = {
         'create': 'Are you sure that you want to save & submit this order to approver?',
         'validate': 'Are you sure that you want to validate this order?',
+        'error': 'This sales order is missing some mandatory fields, please fulfill them before submit',
+        'cancel': 'Are you sure that you want to cancel current sales order?',
         'default': 'The data you have entered may not be saved, are you sure that you want to leave?',
     };
 
@@ -141,9 +143,9 @@ export class SaleOrderEditComponent implements OnInit {
             'description': [null],
             'payment_term_id': [null, Validators.required],
             'approver_id': [null, Validators.required],
-            'carrier_id': [null],
+            'carrier_id': [null, Validators.required],
             'ship_method_rate': [null, Validators.required],
-            'ship_method_option': [null],
+            'ship_method_option': [null, Validators.required],
             'order_sts_name': [null]
         });
         //  Init Key
@@ -751,6 +753,10 @@ export class SaleOrderEditComponent implements OnInit {
             modalRef.result.then(res => {
                 if (res) {
                     if (type) {
+                        if (type === 'cancel') {
+                            this.cancelOrder();
+                            return;
+                        }
                         this.createOrder(type);
                     } else {
                         this.router.navigate(['/order-management/sale-order']);
@@ -765,7 +771,23 @@ export class SaleOrderEditComponent implements OnInit {
         }
     }
 
+    cancelOrder() {
+        const id = this.route.snapshot.paramMap.get('id');
+        this.orderService.cancelOrder(id).subscribe(res => {
+            this.toastr.success(res.message);
+            setTimeout(() => {
+                this.router.navigate(['/order-management/sale-order']);
+            }, 500);
+        });
+    }
+
     createOrder(type) {
+        if (type !== 'draft' && this.generalForm.invalid) {
+            this.toastr.error(this.messageConfig.error);
+            this.data['showError'] = true;
+            this.refresh();
+            return;
+        }
         const products = this.list.items.map(item => {
             item.is_item = (item.misc_id) ? 0 : 1;
             item.misc_id = (item.misc_id) ? item.misc_id : null;
