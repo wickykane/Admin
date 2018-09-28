@@ -13,6 +13,7 @@ import { OrderService } from '../../order-mgmt.service';
 // tslint:disable-next-line:import-blacklist
 import { Subject } from 'rxjs';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
+import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { ItemMiscModalContent } from '../../../../shared/modals/item-misc.modal';
 import { ItemModalContent } from '../../../../shared/modals/item.modal';
 import { OrderHistoryModalContent } from '../../../../shared/modals/order-history.modal';
@@ -102,6 +103,12 @@ export class SaleOrderEditComponent implements OnInit {
     public list_priority = [];
 
     public searchKey = new Subject<any>(); // Lazy load filter
+
+    public messageConfig = {
+        'create': 'Are you sure that you want to save & submit this order to approver?',
+        'validate': 'Are you sure that you want to validate this order?',
+        'default': 'The data you have entered may not be saved, are you sure that you want to leave?',
+    };
 
     /**
      * Init Data
@@ -738,6 +745,25 @@ export class SaleOrderEditComponent implements OnInit {
         this.refresh();
     };
 
+    confirmModal(type) {
+        if (type !== 'draft') {
+            const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
+            modalRef.result.then(res => {
+                if (res) {
+                    if (type) {
+                        this.createOrder(type);
+                    } else {
+                        this.router.navigate(['/order-management/sale-order']);
+                    }
+                }
+            }, dismiss => { });
+            modalRef.componentInstance.message = this.messageConfig[type || 'default'];
+            modalRef.componentInstance.yesButtonText = 'Yes';
+            modalRef.componentInstance.noButtonText = 'No';
+        } else {
+            this.createOrder(type);
+        }
+    }
 
     createOrder(type) {
         const products = this.list.items.map(item => {
