@@ -4,7 +4,6 @@ import { KeyboardBaseService } from './../../../../shared/helper/keyServiceBase'
 @Injectable()
 export class DebitMemoListKeyService extends KeyboardBaseService  {
     initKey() {
-        this.resetKeys();
         this._hotkeysService.add(new Hotkey('f1', (event: KeyboardEvent): any => {
             event.preventDefault();
             this.context.addNewDebitMemo();

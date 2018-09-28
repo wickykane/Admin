@@ -5,7 +5,6 @@ import { KeyboardBaseService } from './../../../../shared/helper/keyServiceBase'
 export class CreditMemoListKeyService extends KeyboardBaseService {
 
     initKey() {
-        this.resetKeys();
         this._hotkeysService.add(new Hotkey('f1', (event: KeyboardEvent): any => {
             event.preventDefault();
             this.context.addNewDebitMemo();

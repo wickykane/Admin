@@ -15,6 +15,7 @@ export class SaleQuoteCreateKeyService extends KeyboardBaseService {
 
     initKey() {
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+backspace', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            (document.activeElement as HTMLElement).blur();
             this.context.confirmModal(0);
             const e: ExtendedKeyboardEvent = event;
             e.returnValue = false; // Prevent bubbling
