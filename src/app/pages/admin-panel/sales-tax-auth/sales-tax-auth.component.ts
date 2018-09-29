@@ -315,15 +315,13 @@ export class SalesTaxAuthComponent implements OnInit {
 
     onSelectCountryTax(countryTax) {
         this.selectedStateTax = {};
-        this.newRate = null;
-        // this.oldRate = null;
+        this.onResetForm();
         this.getCountryTaxAuthorityDetail(countryTax['id']);
     }
 
     onSelectStateTax(stateTax) {
         this.selectedCountryTax = {};
-        this.newRate = null;
-        // this.oldRate = null;
+        this.onResetForm();
         this.getStateTaxAuthorityDetail(stateTax['id'], null);
     }
 
@@ -507,10 +505,11 @@ export class SalesTaxAuthComponent implements OnInit {
     }
 
     onResetForm() {
+        this.newRate = null;
         this.countryGeneralForm.reset();
         this.stateGeneralForm.reset();
         this.stateRateForm.reset();
-        this.stateRateForm.controls.effective_date.setValue(moment().format('YYYY-MM-DD'));
+        this.stateRateForm.controls.effective_date.setValue(this.todayDate);
         this.isClickedSave = false;
     }
     //#endregion utility functions

@@ -18,6 +18,7 @@ import { MiscItemsDebitModalContent } from '../modals/misc-items/misc-items.moda
 
 import { DebitMemoService } from '../debit-memo.service';
 
+import { HotkeysService } from 'angular2-hotkeys';
 import * as  _ from 'lodash';
 import * as moment from 'moment';
 
@@ -27,7 +28,7 @@ import * as moment from 'moment';
     styleUrls: ['./debit-memo-create.component.scss'],
     animations: [routerTransition()],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [DebitMemoCreateKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }]
+    providers: [DebitMemoCreateKeyService, HotkeysService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }]
 })
 export class DebitMemoCreateComponent implements OnInit {
 
@@ -78,6 +79,7 @@ export class DebitMemoCreateComponent implements OnInit {
         private vRef: ViewContainerRef,
         private cd: ChangeDetectorRef,
         private modalService: NgbModal,
+        private _hotkeysService: HotkeysService,
         public keyService: DebitMemoCreateKeyService,
         public tableService: TableService,
         public debitService: DebitMemoService,
@@ -117,7 +119,7 @@ export class DebitMemoCreateComponent implements OnInit {
             }
         ];
         //  Init hot keys
-        this.keyService.watchContext.next(this);
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
     //#endregion constructor
 
