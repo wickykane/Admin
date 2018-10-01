@@ -60,7 +60,7 @@
         <div class="col-md-12">
 
             <div class="form-group row">
-                <h5 style="font-weight:600;margin-left: 10px">Business Hours</h5>
+                <h5 style="font-weight:600;margin-left: 10px">Business Hours <span class="text-danger" *ngIf="checkBussinessHour(timeList.bussiness_hours)">(At least one working day must be selected and defined for the warehouse.)</span></h5>
             </div>
             <div class="form-group row" *ngFor="let item of timeList.bussiness_hours;let i=index;trackBy:trackByFn">
                 <div class="col-md-1">
