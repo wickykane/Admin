@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -47,8 +47,8 @@ export class CreditMemoEditComponent implements OnInit {
     public currentDate;
 
     public messageConfig = {
-        '2': 'Are you sure that you want to save & submit this quotation to approver?',
-        '4': 'Are you sure that you want to validate this quotation?',
+        '2': 'Are you sure that you want to save & submit the credit memo to approver?',
+        '4': 'Are you sure that you want to Save & Validate the credit memo?',
         'default': 'The data you have entered may not be saved, are you sure that you want to leave?',
     };
 
@@ -125,7 +125,6 @@ export class CreditMemoEditComponent implements OnInit {
             'document_type': [1, Validators.required],
             'gl_account': [null, Validators.required],
             'issue_date': [null, Validators.required],
-            // 'credit_num': [null, Validators.required],
             'document_id': [null, Validators.required],
         });
         //  Init Key
@@ -164,6 +163,7 @@ export class CreditMemoEditComponent implements OnInit {
             this.searchCustomer(key);
         });
         this.getDetailCreditMemo();
+        this.updateTotal();
     }
 
     /**
@@ -216,7 +216,6 @@ export class CreditMemoEditComponent implements OnInit {
                 const data = res.data;
                 this.generalForm.patchValue(data);
                 this.list.items = data.items || [];
-                // this.updateTotal();
                 this.changeCustomer(1);
                 this.changeInvoice(event);
 
@@ -238,9 +237,11 @@ export class CreditMemoEditComponent implements OnInit {
     }
 
     getDetailCustomerById(company_id, flag?) {
+        console.log(company_id);
         this.orderService.getDetailCompany(company_id).subscribe(res => {
             try {
                 this.customer = res.data;
+                console.log(this.customer);
                 if (res.data.buyer_type === 'PS') {
                     this.addr_select.contact = res.data.contact[0];
                     this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
@@ -249,6 +250,7 @@ export class CreditMemoEditComponent implements OnInit {
                     this.selectAddress('billing', flag);
                     this.selectAddress('shipping', flag);
                 }
+                this.selectContact();
                 this.refresh();
             } catch (e) {
                 console.log(e);
