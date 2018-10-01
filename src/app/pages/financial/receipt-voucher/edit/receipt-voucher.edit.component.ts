@@ -487,7 +487,7 @@ export class ReceiptVoucherEditComponent implements OnInit {
                     return item;
                 });
 
-                const params = { ... this.generalForm.value, items, status: 1 };
+                const params = { ... this.generalForm.value, items, status: 1 , price_received: this.data['summary'].total};
                 this.updatePayment(res, items);
             }
         }, dismiss => { });
