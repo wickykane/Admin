@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -28,7 +28,8 @@ import { CreditMemoService } from './../credit-memo.service';
     templateUrl: './credit-memo-edit.component.html',
     styleUrls: ['../credit-memo.component.scss'],
     providers: [OrderService, HotkeysService, CreditMemoEditKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }],
-    animations: [routerTransition()]
+    animations: [routerTransition()],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class CreditMemoEditComponent implements OnInit {
@@ -46,8 +47,8 @@ export class CreditMemoEditComponent implements OnInit {
     public currentDate;
 
     public messageConfig = {
-        '2': 'Are you sure that you want to save & submit this quotation to approver?',
-        '4': 'Are you sure that you want to validate this quotation?',
+        '2': 'Are you sure that you want to save & submit the credit memo to approver?',
+        '4': 'Are you sure that you want to Save & Validate the credit memo?',
         'default': 'The data you have entered may not be saved, are you sure that you want to leave?',
     };
 
@@ -96,6 +97,7 @@ export class CreditMemoEditComponent implements OnInit {
      */
     constructor(
         private vRef: ViewContainerRef,
+        private cd: ChangeDetectorRef,
         private fb: FormBuilder,
         public toastr: ToastrService,
         private router: Router,
@@ -123,7 +125,6 @@ export class CreditMemoEditComponent implements OnInit {
             'document_type': [1, Validators.required],
             'gl_account': [null, Validators.required],
             'issue_date': [null, Validators.required],
-            // 'credit_num': [null, Validators.required],
             'document_id': [null, Validators.required],
         });
         //  Init Key
@@ -155,17 +156,23 @@ export class CreditMemoEditComponent implements OnInit {
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
         this.searchKey.subscribe(key => {
             this.data['page'] = 1;
             this.searchCustomer(key);
         });
         this.getDetailCreditMemo();
+        this.updateTotal();
     }
 
     /**
      * Mater Data
      */
+    refresh() {
+        this.cd.detectChanges();
+    }
+
     getListPaymentMethod() {
         return new Promise(resolve => {
             this.creditMemoService.getPaymentMethod().subscribe(res => {
@@ -200,6 +207,7 @@ export class CreditMemoEditComponent implements OnInit {
     getGenerateCode() {
         this.creditMemoService.getGenerateCode().subscribe(res => {
             this.listMaster['documentType'] = res.data.document_type;
+            this.refresh();
         });
     }
     getDetailCreditMemo() {
@@ -208,7 +216,6 @@ export class CreditMemoEditComponent implements OnInit {
                 const data = res.data;
                 this.generalForm.patchValue(data);
                 this.list.items = data.items || [];
-                // this.updateTotal();
                 this.changeCustomer(1);
                 this.changeInvoice(event);
 
@@ -221,6 +228,7 @@ export class CreditMemoEditComponent implements OnInit {
                         this.listMaster['customer'].push({ id: res.data.buyer_id, company_name: res.data.buyer_name });
                     }
                     this.data['total_page'] = result.data.total_page;
+                    this.refresh();
                 });
             } catch (e) {
                 console.log(e);
@@ -229,9 +237,11 @@ export class CreditMemoEditComponent implements OnInit {
     }
 
     getDetailCustomerById(company_id, flag?) {
+        console.log(company_id);
         this.orderService.getDetailCompany(company_id).subscribe(res => {
             try {
                 this.customer = res.data;
+                console.log(this.customer);
                 if (res.data.buyer_type === 'PS') {
                     this.addr_select.contact = res.data.contact[0];
                     this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
@@ -240,12 +250,15 @@ export class CreditMemoEditComponent implements OnInit {
                     this.selectAddress('billing', flag);
                     this.selectAddress('shipping', flag);
                 }
+                this.selectContact();
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
         });
         this.creditMemoService.getAllSaleOrderByCus(company_id).subscribe(res => {
             this.listMaster['invoice-list'] = res.data;
+            this.refresh();
         });
     }
 
@@ -288,6 +301,7 @@ export class CreditMemoEditComponent implements OnInit {
             this.list.items = [];
             this.updateTotal();
         }
+        this.refresh();
     }
 
     selectAddress(type, flag?) {
@@ -306,6 +320,7 @@ export class CreditMemoEditComponent implements OnInit {
                     }
                     break;
             }
+            this.refresh();
         } catch (e) {
             console.log(e);
         }
@@ -322,6 +337,7 @@ export class CreditMemoEditComponent implements OnInit {
             const temp = this.customer.contact.filter(x => x.id === id);
             this.addr_select.contact = temp[0];
         }
+        this.refresh();
     }
 
 
@@ -330,7 +346,7 @@ export class CreditMemoEditComponent implements OnInit {
         this.order_info.sub_total = 0;
 
         const items = this.list.items.filter(i => !i.misc_id);
-        if (this.list.items.length > 0 ) {
+        if (this.list.items.length > 0) {
             this.groupTax(this.list.items);
         }
         this.order_info.order_summary = {};
@@ -347,6 +363,7 @@ export class CreditMemoEditComponent implements OnInit {
             this.order_info.sub_total += item.amount;
         });
         this.order_info.total = +this.order_info['total_tax'] + +this.order_info.sub_total;
+        this.refresh();
     }
     deleteAction(id, item_condition) {
         this.list.items = this.list.items.filter((item) => {
@@ -374,6 +391,7 @@ export class CreditMemoEditComponent implements OnInit {
                 value: tax, amount: taxAmount.toFixed(2)
             });
         });
+        this.refresh();
     }
     addNewItem() {
         if (this.items_removed.length === 0) {
@@ -550,6 +568,7 @@ export class CreditMemoEditComponent implements OnInit {
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = this.listMaster['customer'].concat(res.data.rows);
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
     }
 
@@ -562,6 +581,7 @@ export class CreditMemoEditComponent implements OnInit {
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
     }
 }

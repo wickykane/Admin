@@ -20,6 +20,7 @@ import { SaleQuoteEditKeyService } from './keys.edit.control';
 
 import { HotkeysService } from 'angular2-hotkeys';
 import * as _ from 'lodash';
+import { cdArrowTable } from '../../../../shared/index';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 
 @Component({
@@ -114,6 +115,7 @@ export class SaleQuotationEditComponent implements OnInit {
 
 
     public searchKey = new Subject<any>(); // Lazy load filter
+    @ViewChild(cdArrowTable) table: cdArrowTable;
 
     /**
      * Init Data
@@ -302,6 +304,17 @@ export class SaleQuotationEditComponent implements OnInit {
      */
     selectData(data) { }
 
+    selectTable() {
+        this.selectedIndex = 0;
+        this.table.scrollToTable();
+        setTimeout(() => {
+            if (this.table.element.nativeElement.querySelectorAll('td button')) {
+                this.table.element.nativeElement.querySelectorAll('td button')[this.selectedIndex].focus();
+            }
+        });
+        this.refresh();
+    }
+
     changeCustomer(flag?) {
         const company_id = this.generalForm.value.company_id;
         this.customer = { ...this.copy_customer };
@@ -413,6 +426,10 @@ export class SaleQuotationEditComponent implements OnInit {
     addNewItem() {
         const modalRef = this.modalService.open(ItemModalContent, { size: 'lg' });
         modalRef.result.then(res => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
@@ -489,7 +506,7 @@ export class SaleQuotationEditComponent implements OnInit {
         let enable = false;
         if (+this.generalForm.value.carrier_id === 2 || this.generalForm.value.carrier_id !== 999 && !carrier.own_carrirer) {
             default_option = '888';
-            default_ship_rate = 8;
+            default_ship_rate = 7;
             enable = [2, 1].indexOf(+this.generalForm.value.carrier_id) > -1;
             if (+this.generalForm.value.carrier_id === 1) {
                 default_option = null;
