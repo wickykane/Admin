@@ -329,23 +329,23 @@
                                 <thead>
                                     <tr>
                                         <!-- <th style="width:100px" translate>Action</th> -->
-                                        <th translate>Item No</th>
-                                        <th translate>Description</th>
-                                        <th translate>Condition</th>
-                                        <th translate>UOM</th>
-                                        <th translate>Free Ship</th>
-                                        <th class="text-nowrap" style="width:100px" translate>Ordered</th>
-                                        <th class="text-nowrap" style="width:100px" translate>Canceled</th>
-                                        <th class="text-nowrap" style="width:100px" translate>Remaining</th>
+                                        <th style="width:100px" translate>Item No</th>
+                                        <th style="width:150px" translate>Description</th>
+                                        <th style="width:75px" translate>Condition</th>
+                                        <th style="width:75px" translate>UOM</th>
+                                        <th style="width:75px" translate>Free Ship</th>
+                                        <th style="width:75px" translate>Ordered</th>
+                                        <th style="width:75px" translate>Canceled</th>
+                                        <th style="width:75px" translate>Remaining</th>
 
-                                        <th translate style="width:100px">Shipped</th>
-                                        <th translate style="width:100px">Returned</th>
-                                        <th class="text-center" style="width:100px" translate>Unit Price</th>
-                                        <th style="width:100px" translate>Disc %</th>
-                                        <th style="width:100px" translate>Tax %</th>
-                                        <th translate style="width:100px">Amount</th>
-                                        <th translate style="width:100px">G/L Account</th>
-                                        <th translate style="width:100px">Price Source</th>
+                                        <th translate style="width:75px">Shipped</th>
+                                        <th translate style="width:75px">Returned</th>
+                                        <th style="width:75px" translate>Unit Price</th>
+                                        <th style="width:75px" translate>Disc %</th>
+                                        <th style="width:75px" translate>Tax %</th>
+                                        <th translate style="width:75px">Amount</th>
+                                        <th translate style="width:75px">G/L Account</th>
+                                        <th translate style="width:75px">Price Source</th>
                                     </tr>
                                 </thead>
                                 <tr *ngIf="detail['subs'].length === 0">
@@ -362,19 +362,19 @@
                                         <td class="text-center">
                                             <i *ngIf="item.is_shipping_free" class="text-success fa fa-check"></i>
                                         </td>
-                                        <td>
+                                        <td class="text-right">
                                             {{item.quantity }}
                                         </td>
-                                        <td>
+                                        <td class="text-right">
                                             {{item.quantity }}
                                         </td>
-                                        <td>
+                                        <td class="text-right">
                                             {{item.quantity }}
                                         </td>
 
-                                        <td>{{item.qty_shipped}}</td>
-                                        <td>0</td>
-                                        <td>
+                                        <td class="text-right">{{item.qty_shipped}}</td>
+                                        <td class="text-right">0</td>
+                                        <td class="text-right">
                                             <div>
                                                 {{item.sale_price | currency}}
                                                 <!-- <span>$</span>
@@ -383,15 +383,15 @@
                                                 </div> -->
                                             </div>
                                         </td>
-                                        <td>
+                                        <td class="text-right">
                                             {{item.discount_percent }}
                                             <!-- <input readonly class="form-control input-sm" type="number" [(ngModel)]="item.discount_percent" (change)="updateTotal();changeFromSource(item)"> -->
                                         </td>
-                                        <td>
+                                        <td class="text-right">
                                             {{item.tax_percent }}
                                             <!-- <input readonly class="form-control input-sm" type="number" [(ngModel)]="item.tax_percent" (change)="updateTotal();changeFromSource(item)"> -->
                                         </td>
-                                        <td class="text-center">
+                                        <td class="text-right">
                                             <span>{{item.total_price | currency}}</span>
                                         </td>
                                         <td>
@@ -399,8 +399,8 @@
                                         </td>
                                         <td class="text-center">
                                             <span>
-                               {{item.source_name}}
-                               </span>
+                                             {{item.source_name}}
+                                            </span>
                                         </td>
                                     </tr>
                                 </tbody>
