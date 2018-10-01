@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CustomerService } from '../../customer.service';
 import { TableService } from './../../../../services/table.service';
@@ -8,6 +8,7 @@ import { TableService } from './../../../../services/table.service';
     selector: 'app-customer-invoice-tab',
     templateUrl: './invoice-tab.component.html',
     styleUrls: ['./information-tab.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomerInvoiceTabComponent implements OnInit {
 
@@ -35,7 +36,8 @@ export class CustomerInvoiceTabComponent implements OnInit {
         public fb: FormBuilder,
         private vRef: ViewContainerRef,
         public tableService: TableService,
-        private customerService: CustomerService) {
+        private customerService: CustomerService,
+        private cd: ChangeDetectorRef) {
 
         this.searchForm = fb.group({
             'buyer_name': [null],
@@ -50,11 +52,16 @@ export class CustomerInvoiceTabComponent implements OnInit {
         this.tableService.context = this;
     }
 
-    ngOnInit() {}
+    ngOnInit() {
+      this.getList();
+    }
 
     /**
      * Internal Function
      */
+     refresh() {
+         this.cd.detectChanges();
+     }
 
     getList() {
         const params = {...this.tableService.getParams(), ...this.searchForm.value};
@@ -64,6 +71,7 @@ export class CustomerInvoiceTabComponent implements OnInit {
             try {
                 this.list.items = [] || res.data.rows;
                 this.tableService.matchPagingOption(res.data);
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }

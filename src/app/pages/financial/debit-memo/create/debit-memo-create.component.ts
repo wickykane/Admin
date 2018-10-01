@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from './../../../../services/table.service';
@@ -18,6 +18,7 @@ import { MiscItemsDebitModalContent } from '../modals/misc-items/misc-items.moda
 
 import { DebitMemoService } from '../debit-memo.service';
 
+import { HotkeysService } from 'angular2-hotkeys';
 import * as  _ from 'lodash';
 import * as moment from 'moment';
 
@@ -26,7 +27,8 @@ import * as moment from 'moment';
     templateUrl: './debit-memo-create.component.html',
     styleUrls: ['./debit-memo-create.component.scss'],
     animations: [routerTransition()],
-    providers: [DebitMemoCreateKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [DebitMemoCreateKeyService, HotkeysService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }]
 })
 export class DebitMemoCreateComponent implements OnInit {
 
@@ -34,7 +36,7 @@ export class DebitMemoCreateComponent implements OnInit {
     @ViewChild('fieldNote') noteText: ElementRef;
 
     public listMaster = {
-        customers : [],
+        customers: [],
         contacts: [],
         document_types: [],
         sale_orders: [],
@@ -75,7 +77,9 @@ export class DebitMemoCreateComponent implements OnInit {
         public fb: FormBuilder,
         public toastr: ToastrService,
         private vRef: ViewContainerRef,
+        private cd: ChangeDetectorRef,
         private modalService: NgbModal,
+        private _hotkeysService: HotkeysService,
         public keyService: DebitMemoCreateKeyService,
         public tableService: TableService,
         public debitService: DebitMemoService,
@@ -115,7 +119,7 @@ export class DebitMemoCreateComponent implements OnInit {
             }
         ];
         //  Init hot keys
-        this.keyService.watchContext.next(this);
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
     //#endregion constructor
 
@@ -145,11 +149,16 @@ export class DebitMemoCreateComponent implements OnInit {
     //#endregion lifecycle hook
 
     //#region load master data
+    refresh() {
+        this.cd.detectChanges();
+    }
+
     getDebitMemoNo() {
         this.debitService.getDebitMemoNoAuto().subscribe(
             res => {
                 try {
                     this.debitMemoForm.controls.debt_no.setValue(res.message);
+                    this.refresh();
                 } catch (err) {
                     console.log(err);
                 }
@@ -164,6 +173,7 @@ export class DebitMemoCreateComponent implements OnInit {
             res => {
                 try {
                     this.listMaster['contacts'] = res.data;
+                    this.refresh();
                 } catch (err) {
                     console.log(err);
                 }
@@ -178,6 +188,7 @@ export class DebitMemoCreateComponent implements OnInit {
             res => {
                 try {
                     this.listMaster['sale_orders'] = res.data;
+                    this.refresh();
                 } catch (err) {
                     console.log(err);
                 }
@@ -192,6 +203,7 @@ export class DebitMemoCreateComponent implements OnInit {
             res => {
                 try {
                     this.listMaster['payment_methods'] = res.data;
+                    this.refresh();
                 } catch (err) {
                     console.log(err);
                 }
@@ -206,6 +218,7 @@ export class DebitMemoCreateComponent implements OnInit {
             res => {
                 try {
                     this.listMaster['payment_terms'] = res.data;
+                    this.refresh();
                 } catch (err) {
                     console.log(err);
                 }
@@ -220,6 +233,7 @@ export class DebitMemoCreateComponent implements OnInit {
             res => {
                 try {
                     this.listMaster['sales_person'] = res.data;
+                    this.refresh();
                 } catch (err) {
                     console.log(err);
                 }
@@ -234,6 +248,7 @@ export class DebitMemoCreateComponent implements OnInit {
             res => {
                 try {
                     this.listMaster['approvers'] = res.data;
+                    this.refresh();
                 } catch (err) {
                     console.log(err);
                 }
@@ -264,6 +279,7 @@ export class DebitMemoCreateComponent implements OnInit {
                     this.debitMemoForm.controls.billing_id.setValue(res.data.bill_addr.id);
                     this.debitMemoForm.controls.shipping_id.setValue(res.data.ship_addr.id);
                     // this.debitMemoForm.controls.carrier_id.setValue(res.data.carrier.id);
+                    this.refresh();
                 } catch (err) {
                     console.log(err);
                 }
@@ -278,6 +294,7 @@ export class DebitMemoCreateComponent implements OnInit {
             res => {
                 try {
                     this.listMaster['bill_labels'] = res.data;
+                    this.refresh();
                 } catch (err) {
                     console.log(err);
                 }
@@ -291,9 +308,10 @@ export class DebitMemoCreateComponent implements OnInit {
         this.debitService.getListLineItems(orderId).subscribe(
             res => {
                 try {
-                    this.listLineItems =  [ ...res.data.items, ...res.data.misc];
-                    this.listLineItems.forEach( item => this.onCalculateAmount(item));
+                    this.listLineItems = [...res.data.items, ...res.data.misc];
+                    this.listLineItems.forEach(item => this.onCalculateAmount(item));
                     this.getUniqueTaxItemLine();
+                    this.refresh();
                 } catch (err) {
                     console.log(err);
                 }
@@ -317,6 +335,7 @@ export class DebitMemoCreateComponent implements OnInit {
         this.debitService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customers'] = this.listMaster['customers'].concat(res.data.rows);
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
     }
 
@@ -329,6 +348,7 @@ export class DebitMemoCreateComponent implements OnInit {
         this.debitService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customers'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
     }
 
@@ -364,10 +384,12 @@ export class DebitMemoCreateComponent implements OnInit {
             this.listMaster['sale_orders'] = [];
             this.listMaster['bill_labels'] = [];
         }
+        this.refresh();
     }
 
     onSelectContact(contactId) {
         this.contactDetail = this.listMaster['contacts'].find(cont => cont.id.toString() === contactId);
+        this.refresh();
     }
 
     onSelectOrder() {
@@ -399,11 +421,12 @@ export class DebitMemoCreateComponent implements OnInit {
         } else {
             this.debitMemoForm.controls.order_id.setValue(null);
         }
+        this.refresh();
     }
 
     onChangeIssueDate() {
         return (this.debitMemoForm.value.payment_term_id !== null && this.debitMemoForm.value.payment_term_id !== undefined)
-                && this.onUpdateDueDate(this.debitMemoForm.value.payment_term_id);
+            && this.onUpdateDueDate(this.debitMemoForm.value.payment_term_id);
     }
 
     onUpdateDueDate(termId) {
@@ -412,10 +435,12 @@ export class DebitMemoCreateComponent implements OnInit {
         this.debitMemoForm.controls.due_date.setValue(
             moment(this.debitMemoForm.value.issue_date).add(termDays, 'days').format('YYYY-MM-DD')
         );
+        this.refresh();
     }
 
     onChangeBillTo(billId) {
         this.orderInformation.bill_info = this.listMaster['bill_labels'].find(bill => bill.id.toString() === billId) || {};
+        this.refresh();
     }
 
     onDeleteLineItem(deletedItem, index) {
@@ -423,6 +448,7 @@ export class DebitMemoCreateComponent implements OnInit {
         this.listDeletedLineItem.push(deletedItem);
         this.listLineItems.splice(index, 1);
         this.getUniqueTaxItemLine();
+        this.refresh();
     }
 
     onCalculateAmount(item) {
@@ -440,9 +466,10 @@ export class DebitMemoCreateComponent implements OnInit {
 
         item['base_price'] = parseFloat((item['qty'] * item['price']).toFixed(this.decimalAllowed) || '0');
 
-        item['discount'] =  parseFloat((item['base_price'] / 100 * item['discount_percent']).toFixed(this.decimalAllowed) || '0');
+        item['discount'] = parseFloat((item['base_price'] / 100 * item['discount_percent']).toFixed(this.decimalAllowed) || '0');
         item['total_price'] = parseFloat((item['base_price'] - item['discount']).toFixed(this.decimalAllowed) || '0');
         item['tax'] = parseFloat((item['total_price'] / 100 * item['tax_percent']).toFixed(this.decimalAllowed) || '0');
+        this.refresh();
     }
 
     onAddNote() {
@@ -461,15 +488,16 @@ export class DebitMemoCreateComponent implements OnInit {
         modalRef.result.then(res => {
             if (res) {
                 res.forEach(selectedItem => {
-                    const itemIndex = this.listDeletedLineItem.findIndex( item => item.order_detail_id === selectedItem.order_detail_id);
+                    const itemIndex = this.listDeletedLineItem.findIndex(item => item.order_detail_id === selectedItem.order_detail_id);
                     if (itemIndex >= 0) {
                         this.listDeletedLineItem.splice(itemIndex, 1);
                     }
                     this.listLineItems.push(selectedItem);
                 });
                 this.getUniqueTaxItemLine();
+                this.refresh();
             }
-        }, dismiss => {});
+        }, dismiss => { });
     }
 
     openModalAddMiscItems() {
@@ -484,15 +512,16 @@ export class DebitMemoCreateComponent implements OnInit {
         modalRef.result.then(res => {
             if (res) {
                 res.forEach(selectedItem => {
-                    const itemIndex = this.listDeletedLineItem.findIndex( item => item.misc_id === selectedItem.misc_id);
+                    const itemIndex = this.listDeletedLineItem.findIndex(item => item.misc_id === selectedItem.misc_id);
                     if (itemIndex >= 0) {
                         this.listDeletedLineItem.splice(itemIndex, 1);
                     }
                     this.listLineItems.push(selectedItem);
                 });
                 this.getUniqueTaxItemLine();
+                this.refresh();
             }
-        }, dismiss => {});
+        }, dismiss => { });
     }
 
     onClickSave(saveMethod) {
@@ -527,14 +556,14 @@ export class DebitMemoCreateComponent implements OnInit {
                 break;
             }
         }
-        if ( status !== 1) {
+        if (status !== 1) {
             const modalRef = this.modalService.open(ConfirmModalContent);
             modalRef.componentInstance.message = modalMessage;
             modalRef.componentInstance.yesButtonText = 'YES';
             modalRef.componentInstance.noButtonText = 'NO';
             modalRef.result.then(yes => {
                 if (yes && this.validateData() && this.validateItemData() && this.listLineItems.length) {
-                     this.onSaveDebitMemo(status);
+                    this.onSaveDebitMemo(status);
                 } else if (!this.listLineItems.length) {
                     this.toastr.error('Please select at least 1 item to continue.');
                 } else if (!this.validateItemData()) {
@@ -542,6 +571,7 @@ export class DebitMemoCreateComponent implements OnInit {
                 }
             }, dismiss => { });
         }
+        this.refresh();
     }
 
     onClickBack() {
@@ -559,7 +589,7 @@ export class DebitMemoCreateComponent implements OnInit {
 
     //#region call api submit
     onSaveDebitMemo(status) {
-        const params = { ...this.debitMemoForm.value};
+        const params = { ...this.debitMemoForm.value };
         params['sts'] = status;
         params['line_items'] = this.listLineItems;
 
@@ -590,9 +620,9 @@ export class DebitMemoCreateComponent implements OnInit {
     getUniqueTaxItemLine() {
         if (this.listLineItems.length) {
             this.listTaxs = _.uniq(this.listLineItems.map(item => parseFloat(item.tax_percent)))
-                .map( item => {
-                    return {tax_percent: item, amount: 0};
-            });
+                .map(item => {
+                    return { tax_percent: item, amount: 0 };
+                });
 
             let total_tax = 0;
             this.listTaxs.forEach(taxItem => {
@@ -612,6 +642,7 @@ export class DebitMemoCreateComponent implements OnInit {
             this.debitMemoForm.controls.tax.setValue(0);
             this.debitMemoForm.controls.total_price.setValue(0);
         }
+        this.refresh();
     }
 
     handleSaveSuccessfully(status, debitId) {

@@ -24,7 +24,9 @@ import { ProductMgmtComponent } from './product-mgmt.component';
 
 // Services
 import { TableService } from '../../services/index';
+import { Helper } from './../../shared/helper/common.helper';
 import { ProductService } from './product-mgmt.service';
+
 
 @NgModule({
     imports: [
@@ -42,7 +44,7 @@ import { ProductService } from './product-mgmt.service';
     declarations: [
         ProductMgmtComponent,
         ItemListComponent,
-                MassPriceComponent,
+        MassPriceComponent,
         MassPriceCreateComponent,
         MassPriceViewComponent,
         PartListComponent,
@@ -51,7 +53,7 @@ import { ProductService } from './product-mgmt.service';
         MiscellaneousItemsComponent,
         MiscellaneousItemsModalComponent
     ],
-    providers: [ProductService, TableService],
+    providers: [ProductService, TableService, Helper],
     entryComponents: [MiscellaneousItemsModalComponent]
 })
-export class ProductMgmtModule {}
+export class ProductMgmtModule { }

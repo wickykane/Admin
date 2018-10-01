@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FinancialService } from '../financial.service';
@@ -22,7 +22,8 @@ import { MailModalComponent } from './modals/mail.modal';
     templateUrl: './invoice.component.html',
     styleUrls: ['./invoice.component.scss'],
     animations: [routerTransition()],
-    providers: [InvoiceKeyService, HotkeysService, TableService]
+    providers: [InvoiceKeyService, HotkeysService, TableService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InvoiceComponent implements OnInit {
     public listMaster = {};
@@ -59,6 +60,7 @@ export class InvoiceComponent implements OnInit {
 
     constructor(public router: Router,
         public fb: FormBuilder,
+        private cd: ChangeDetectorRef,
         public toastr: ToastrService,
         public tableService: TableService,
         private financialService: FinancialService,
@@ -122,12 +124,17 @@ export class InvoiceComponent implements OnInit {
     /**
      * Internal Function
      */
+    refresh() {
+        this.cd.detectChanges();
+    }
+
     filter(status) {
         const params = { status };
         this.financialService.getListInvoice(params).subscribe(res => {
             try {
                 this.list.items = res.data.rows;
                 this.tableService.matchPagingOption(res.data);
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
@@ -137,6 +144,7 @@ export class InvoiceComponent implements OnInit {
     getListStatus() {
         this.financialService.getInvoiceStatus().subscribe(res => {
             this.listMaster['status'] = res.data.status;
+            this.refresh();
         });
     }
 
@@ -151,6 +159,7 @@ export class InvoiceComponent implements OnInit {
             this.listMaster['count-status'] = Object.keys(this.statusConfig).map(key => {
                 return this.statusConfig[key];
             });
+            this.refresh();
         });
     }
 
@@ -228,6 +237,7 @@ export class InvoiceComponent implements OnInit {
                 this.list.items = res.data.rows;
                 this.appendItemsToInvoice();
                 this.tableService.matchPagingOption(res.data);
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
@@ -266,6 +276,7 @@ export class InvoiceComponent implements OnInit {
             try {
                 this.listInvoiceItemsRef = res.data;
                 this.getList();
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
@@ -282,6 +293,7 @@ export class InvoiceComponent implements OnInit {
                 unit['items_details'] = listItemsRef[unit['id']];
             }
         }
+        this.refresh();
     }
 
     convertStatus(id, key) {
