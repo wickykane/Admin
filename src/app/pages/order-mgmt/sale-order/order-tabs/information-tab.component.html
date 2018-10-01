@@ -437,7 +437,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group row">
-                                            <label class='col-7'>Total Items</label>
+                                            <label class='col-7'>Total Ordered Items</label>
                                             <div class='col-5'>
                                                 {{ detail['total_item'] || 0}}
                                             </div>
@@ -455,9 +455,15 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class='col-7'>Total Returned Items</label>
+                                            <label class='col-7'>Total Canceled Items</label>
                                             <div class='col-5'>
-                                                0
+                                                {{detail['qty_canceled'] || 0 }}
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-7'>Total Return COGS</label>
+                                            <div class='col-5'>
+                                                {{detail['return_cogs'] || 0}}
                                             </div>
                                         </div>
                                     </div>
@@ -477,7 +483,13 @@
                                         <div class="form-group row">
                                             <label class='col-7'>Total Shipped Items </label>
                                             <div class='col-5'>
-                                                {{detail['qty_shipped']}}
+                                                {{detail['qty_shipped'] || 0 }}
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-7'>Total Returned Items </label>
+                                            <div class='col-5'>
+                                                {{detail['qty_returned'] || 0}}
                                             </div>
                                         </div>
                                     </div>
