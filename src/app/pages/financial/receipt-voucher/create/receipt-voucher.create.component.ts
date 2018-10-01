@@ -464,7 +464,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
                     return item;
                 });
 
-                const params = { ... this.generalForm.value, items, status: 1 };
+                const params = { ... this.generalForm.value, items, status: 1, price_received: this.data['summary'].total };
                 if (this.data['voucher_id']) {
                     this.updatePayment(res, items);
                 } else {
