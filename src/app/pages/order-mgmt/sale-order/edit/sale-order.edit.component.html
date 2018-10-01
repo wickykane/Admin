@@ -17,7 +17,8 @@
                                             <label for="code" class="control-label" translate> <strong>Customer Name</strong> </label>
                                             <span class="text-danger">(*)</span>
                                             <div>
-                                                <ng-select [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('buyer_id').errors?.required) || false   }"  class="infinity-scroll-select"  [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 100px; margin-left: 2px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="buyer_id">
+                                                <ng-select [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('buyer_id').errors?.required) || false   }" class="infinity-scroll-select" [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true"
+                                                    style="width: 100px; margin-left: 2px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="buyer_id">
                                                     <ng-template ng-option-tmp let-item="item">
                                                         <span title="{{item.company_name}}">{{item.company_name}}</span>
                                                     </ng-template>
@@ -25,10 +26,10 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div *ngIf="generalForm.value.buyer_id" class="col-md-3 ">
+                                    <div *ngIf="generalForm.getRawValue().buyer_id" class="col-md-3 ">
                                         <i>Last Sales Date:</i> {{customer.last_sales_order|date:'MM/dd/yyyy'}}
                                     </div>
-                                    <div *ngIf="generalForm.value.buyer_id" class="col-md-5 ">
+                                    <div *ngIf="generalForm.getRawValue().buyer_id" class="col-md-5 ">
                                         <i class="text-warning fa fa-exclamation-circle"></i> <strong>Current Debt:</strong> <span class="text-warning">{{customer.current_dept |currency}}</span>
                                         <strong class="ml-2">Current Store Credit:</strong> <span class="text-success">{{customer.current_dept |currency}}</span>
                                     </div>
@@ -415,22 +416,23 @@
                                         <td class="text-center">
                                             <i *ngIf="item.is_shipping_free" class="text-success fa fa-check"></i>
                                         </td>
-                                        <td [ngClass]="{'d-none':  (wh.warehouse_id  || wh.id) != generalForm.value.warehouse_id}" *ngFor="let wh of item['warehouse']">
+                                        <td [ngClass]="{'d-none':  (wh.warehouse_id  || wh.id) != generalForm.getRawValue().warehouse_id}" *ngFor="let wh of item['warehouse']">
                                             {{wh.qty_available}}
                                         </td>
                                         <td>
-                                            <input  numberDirective [min]="0" [disabled]="item.misc_id" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (changeValue)="updateTotal()">
+                                            <input numberDirective [min]="0" [disabled]="item.misc_id || data['user'].user_type !== 1 && data['editable_sts'].indexOf(data['order_data']?.order_sts_short_name) !== -1" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (changeValue)="updateTotal()">
                                         </td>
                                         <td>
                                             <div>
                                                 <span>$</span>
                                                 <div style="display:inline-block;width:80%">
-                                                    <input [isDecimal]="true" numberDirective [min]="0" class="form-control input-sm" type="number" [(ngModel)]="item.sale_price" (changeValue)="updateTotal();changeFromSource(item)">
+                                                    <input [disabled]="!item.misc_id && data['user'].user_type !== 1 && data['editable_sts'].indexOf(data['order_data']?.order_sts_short_name) !== -1" [isDecimal]="true" numberDirective [min]="0" class="form-control input-sm" type="number" [(ngModel)]="item.sale_price" (changeValue)="updateTotal();changeFromSource(item)">
                                                 </div>
                                             </div>
                                         </td>
                                         <td>
-                                            <input [isDecimal]="true" numberDirective [min]="0" [max]="100" class="form-control input-sm" type="number" [(ngModel)]="item.discount_percent" (changeValue)="updateTotal();changeFromSource(item)">
+                                            <input [disabled]="!item.misc_id && data['user'].user_type !== 1 && data['editable_sts'].indexOf(data['order_data']?.order_sts_short_name) !== -1" [isDecimal]="true" numberDirective [min]="0" [max]="100" class="form-control input-sm" type="number" [(ngModel)]="item.discount_percent"
+                                                (changeValue)="updateTotal();changeFromSource(item)">
                                         </td>
                                         <td>
                                             <input readonly [isDecimal]="true" numberDirective [min]="0" [max]="100" class="form-control input-sm" type="number" [(ngModel)]="item.tax_percent" (changeValue)="updateTotal();changeFromSource(item)">
@@ -449,7 +451,7 @@
                             </table>
                         </div>
                         <div class="col-12 no-padding">
-                            <button (click)="addNewItem()" class="btn btn-link" translate>
+                            <button [disabled]="data['user']?.user_type !== 1 && data['editable_sts'].indexOf(data['order_data']?.order_sts_short_name) !== -1" (click)="addNewItem()" class="btn btn-link" translate>
                   <i class="fa fa-plus"></i>Add New Item</button>
                             <button (click)="addNewMiscItem()" class="btn btn-link">
                   <i class="fa fa-plus"></i>Misc Item</button>
@@ -565,7 +567,7 @@
                 <button type="button" class="btn btn-outline-info" (click)="createOrder('draft')" translate>Save</button>
                 <button type="button" class="btn btn-outline-success" (click)="confirmModal('validate')" translate>Save & Validate</button>
                 <button type="button" class="btn btn-outline-danger" (click)="confirmModal('create')" translate>Save & Submit</button>
-                <button type="button" class="btn btn-outline-secondary" (click)="confirmModal('cancel')" translate>Cancel Order</button>                
+                <button type="button" class="btn btn-outline-secondary" (click)="confirmModal('cancel')" translate>Cancel Order</button>
                 <button type="button" class="btn btn-default" (click)="confirmModal(0)" translate>Back To List</button>
             </div>
         </div>
