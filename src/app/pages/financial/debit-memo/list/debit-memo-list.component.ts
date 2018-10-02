@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from './../../../../services/table.service';
@@ -142,6 +142,8 @@ export class DebitMemoListComponent implements OnInit {
             // tslint:disable-next-line:no-unused-expression
             (params[key] === null || params[key] === '' || key === 'date_type' || key === 'date_from' || key === 'date_to') && delete params[key];
         });
+        // params.order = 'id';
+        // params.sort = 'desc';
         this.debitMemoService.getListDebitMemo(params).subscribe(
             res => {
                 try {
