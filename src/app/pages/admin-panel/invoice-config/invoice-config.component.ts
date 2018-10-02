@@ -7,10 +7,12 @@ import { routerTransition } from '../../../router.animations';
 import { InvoiceConfigService } from './invoice-chasing-config.service';
 import { EmailTemplateModalContent } from './modals/email-template/email-template.modal';
 
+import { InvoiceConfigKeyService } from './keys.control';
+
 @Component({
     selector: 'app-invoice-config',
     templateUrl: 'invoice-config.component.html',
-    providers: [InvoiceConfigService],
+    providers: [InvoiceConfigService, InvoiceConfigKeyService],
     styleUrls: ['./invoice-config.component.scss'],
     animations: [routerTransition()]
 })
@@ -76,7 +78,8 @@ export class InvoiceConfigComponent implements OnInit {
         private fb: FormBuilder,
         private toastr: ToastrService,
         private modalService: NgbModal,
-        private invoiceService: InvoiceConfigService
+        private invoiceService: InvoiceConfigService,
+        public keyService: InvoiceConfigKeyService
     ) {
         this.invoiceForm = fb.group({
             beforeOn: [false],
@@ -86,6 +89,7 @@ export class InvoiceConfigComponent implements OnInit {
             afterRemindFrequency: [null],
             afterRemindValue: [null]
         });
+        this.keyService.watchContext.next(this);
     }
 
     ngOnInit() {

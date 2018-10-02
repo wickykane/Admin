@@ -1,87 +1,87 @@
 <div [@routerTransition]>
     <app-page-header [heading]="'CREATE NEW PAYMENT TERM'" [icon]="'fa-th-list'"></app-page-header>
-    <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
+    <!-- <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut> -->
     <section class="rma-page block">
-        <div style="margin: 15px 0">
-            <a class="btn btn-outline-info" [routerLink]="['/admin-panel/payment-term']">
-                <i class="fa fa-arrow-left"></i> Back</a>
+        <div class="bd-example text-right mg-t-15">
+            <button class="btn btn-outline-dark" [routerLink]="['/admin-panel/payment-term']">Back To List</button>
         </div>
-        <fieldset class="custom-border">
-            <legend class="custom-border">GENERAL INFORMATION</legend>
-            <form class="form-search full-width form-horizontal" [formGroup]="generalForm">
-                <div class="row">
-                    <div class="col-sm-2 form-group">
-                        <label> Code
-                            <span class="text-danger">(*)</span>
-                        </label>
-                        <input type="text" name="" class="form-control" formControlName="cd" readonly>
-                    </div>
-                    <div class="col-sm-2 form-group">
-                        <label> Description
-                            <span class="text-danger">(*)</span>
-                        </label>
-                        <input type="text" name="" class="form-control" formControlName="des" [readonly]="isEdit">
-                    </div>
-                    <div class="col-sm-2 form-group">
-                        <label> Day Limit
-                            <span class="text-danger">(*)</span>
-                        </label>                       
-                        <input  numberDirective  [min]="0"  type="text" name="" class="form-control" formControlName="term_day" maxlength="5" [readonly]="isEdit">
-                    </div>
-                    <div class="col-sm-2 form-group">
-                        <label> Status
-                            <span class="text-danger">(*)</span>
-                        </label>
-                        <select class="form-control" formControlName="ac" name="status" >
-                            <option value="null" selected="false">--Select--</option>
-                            <option *ngFor="let item of listMaster['status']" [ngValue]="item.key">{{item.value}}</option>
-                        </select>
-                    </div>
-                    <div class="col-sm-2 form-group">
-                        <label> Early Payment Incentive?
-                        </label>
-                        <div class="">
-                            <input type="checkbox" name="" class="" formControlName="early_pmt_incentive" ng-true="1" (change)="changeIncentive($event)">
+        <div class="custom-border card height-100 mg-bt-15 mg-t-15">
+            <div class="card-header">
+                <strong>GENERAL INFORMATION</strong>
+            </div>
+            <div class="card-body">
+                <form class="form-search full-width form-horizontal" [formGroup]="generalForm">
+                    <div class="row">
+                        <div class="col-sm-2 form-group">
+                            <label> Code
+                                <span class="text-danger">(*)</span>
+                            </label>
+                            <input type="text" name="" class="form-control" formControlName="cd" readonly>
                         </div>
-                    </div>
-                </div>
-                <div class="row" *ngIf="this.generalForm.get('early_pmt_incentive').value == 1">
-                    <div class="col-sm-2 form-group">
-                        <label> Discount Days
-                            <span class="text-danger">(*)</span>
-                        </label>
-                        <input type="text" name="" class="form-control" formControlName="dsct_day" [textMask]="{mask: numberMaskObject()}" [readonly]="isEdit">
-                    </div>
-                    <div class="col-sm-2 form-group">
-                        <label> Discount Type
-                            <span class="text-danger">(*)</span>
-                        </label>
-                        <select class="form-control" formControlName="dsct_type" name="dsct_type" [attr.disabled]="isEdit==true ?'true':null" >
-                            <option *ngFor="let item of listMaster['early']" [ngValue]="item.key" >{{item.value}}</option>
-                        </select>
-                    </div>
-                    <div class="col-sm-2 form-group">
-                        <label> Discount Value
-                            <span class="text-danger">(*)</span>
-                        </label>
-                        <!-- <input type="text" name="" class="form-control" formControlName="dsct_value" [textMask]="{mask: numberMaskObjectDecimal()}" [readonly]="isEdit" > -->
-                        <div class="input-group">
-                            <input type="text" name="" class="form-control" formControlName="dsct_value" [textMask]="{mask: numberMaskObjectDecimal()}" [readonly]="isEdit">
-                            <div class="input-group-append">
-                                <span class="input-group-text" *ngIf="this.generalForm.get('dsct_type').value == 1">%</span>
-                                <span class="input-group-text" *ngIf="this.generalForm.get('dsct_type').value == 2">$</span>
+                        <div class="col-sm-2 form-group">
+                            <label> Description
+                                <span class="text-danger">(*)</span>
+                            </label>
+                            <input type="text" name="" class="form-control" formControlName="des" [readonly]="isEdit">
+                        </div>
+                        <div class="col-sm-2 form-group">
+                            <label> Day Limit
+                                <span class="text-danger">(*)</span>
+                            </label>
+                            <input  numberDirective  [min]="0"  type="text" name="" class="form-control" formControlName="term_day" maxlength="5" [readonly]="isEdit">
+                        </div>
+                        <div class="col-sm-2 form-group">
+                            <label> Status
+                                <span class="text-danger">(*)</span>
+                            </label>
+                            <select class="form-control" formControlName="ac" name="status" >
+                                <option value="null" selected="false">--Select--</option>
+                                <option *ngFor="let item of listMaster['status']" [ngValue]="item.key">{{item.value}}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-2 form-group">
+                            <label> Early Payment Incentive?
+                            </label>
+                            <div class="">
+                                <input type="checkbox" name="" class="" formControlName="early_pmt_incentive" ng-true="1" (change)="changeIncentive($event)">
                             </div>
                         </div>
                     </div>
-                </div>
-            </form>
-        </fieldset>
-
-    </section>
-    <div class="row">
-        <div class="col-md-12 mg-top-15 text-center">
+                    <div class="row" *ngIf="this.generalForm.get('early_pmt_incentive').value == 1">
+                        <div class="col-sm-2 form-group">
+                            <label> Discount Days
+                                <span class="text-danger">(*)</span>
+                            </label>
+                            <input type="text" name="" class="form-control" formControlName="dsct_day" [textMask]="{mask: numberMaskObject()}" [readonly]="isEdit">
+                        </div>
+                        <div class="col-sm-2 form-group">
+                            <label> Discount Type
+                                <span class="text-danger">(*)</span>
+                            </label>
+                            <select class="form-control" formControlName="dsct_type" name="dsct_type" [attr.disabled]="isEdit==true ?'true':null" >
+                                <option *ngFor="let item of listMaster['early']" [ngValue]="item.key" >{{item.value}}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-2 form-group">
+                            <label> Discount Value
+                                <span class="text-danger">(*)</span>
+                            </label>
+                            <!-- <input type="text" name="" class="form-control" formControlName="dsct_value" [textMask]="{mask: numberMaskObjectDecimal()}" [readonly]="isEdit" > -->
+                            <div class="input-group">
+                                <input type="text" name="" class="form-control" formControlName="dsct_value" [textMask]="{mask: numberMaskObjectDecimal()}" [readonly]="isEdit">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" *ngIf="this.generalForm.get('dsct_type').value == 1">%</span>
+                                    <span class="input-group-text" *ngIf="this.generalForm.get('dsct_type').value == 2">$</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="block-content block-content-full text-center" style="margin-top:15px;">
             <button class="btn btn btn-outline-primary" (click)="payloadData()" [disabled]="!generalForm.valid">Save</button>
             <button class="btn btn-default" type="button" [routerLink]="['/admin-panel/payment-term']">Cancel</button>
         </div>
-    </div>
+    </section>
 </div>
