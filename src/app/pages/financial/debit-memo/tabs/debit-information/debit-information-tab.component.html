@@ -307,10 +307,10 @@
                                         <span class="">{{debitData['sub_total_price'] |currency}}</span>
                                     </div>
                                 </div>
-                                <div class="form-group row" *ngFor="let tax of listTaxs">
-                                    <label class='col-4 control-label'> + Tax {{tax.tax_percent}}%</label>
+                                <div class="form-group row" *ngFor="let item of listTaxs">
+                                    <label class='col-4 control-label'> + Tax {{item.tax_percent}}% </label>
                                     <div class='col-6'>
-                                        <span class="text-success">{{tax.amount |currency}}</span>
+                                        <span class="text-success">{{item.tax | currency}}</span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
