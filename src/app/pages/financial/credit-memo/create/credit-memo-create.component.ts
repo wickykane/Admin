@@ -45,7 +45,7 @@ export class CreditMemoCreateComponent implements OnInit {
 
     public messageConfig = {
         '2': 'Are you sure that you want to save & submit the credit memo to approver?',
-        '4': 'Are you sure that you want to Save & Validate the credit memo?',
+        '3': 'Are you sure that you want to Save & Validate the credit memo?',
         'default': 'The data you have entered may not be saved, are you sure that you want to leave?',
     };
 
