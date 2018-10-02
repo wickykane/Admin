@@ -9,10 +9,10 @@ import { TableService } from '../../../services/table.service';
 import { NgbDateCustomParserFormatter } from '../../../shared/helper/dateformat';
 import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
 
-import { RmaService } from '../rma.service';
+import { HotkeysService } from 'angular2-hotkeys';
+import { RMAService } from '../rma.service';
 import { CommonService } from './../../../services/common.service';
 import { RMAKeyService } from './keys.control';
-
 
 
 @Component({
@@ -70,7 +70,8 @@ export class RmaComponent implements OnInit {
         public keyService: RMAKeyService,
         private modalService: NgbModal,
         public tableService: TableService,
-        private orderService: RmaService) {
+        private orderService: RMAService,
+        private _hotkeysService: HotkeysService) {
 
         this.searchForm = fb.group({
             'code': [null],
@@ -88,6 +89,8 @@ export class RmaComponent implements OnInit {
         //  Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
+
+          this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {

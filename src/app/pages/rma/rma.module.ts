@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -10,10 +10,11 @@ import { RmaRoutingModule } from './rma-routing.module';
 import { TableService } from '../../services/index';
 import { CommonShareModule, Helper,  PageHeaderModule } from '../../shared/index';
 // Table Service
+import { ItemModalModule } from '../../shared/modals/item.module';
 import { CustomerService } from '../customer-mgmt/customer.service';
 import { RmaCreateComponent } from './create/rma.create.component';
 import { RmaEditComponent } from './edit/rma.edit.component';
-import { RmaService } from './rma.service';
+import { RMAService } from './rma.service';
 import { RmaDetailComponent } from './view/rma.view.component';
 
 @NgModule({
@@ -24,9 +25,10 @@ import { RmaDetailComponent } from './view/rma.view.component';
     FormsModule,
     ReactiveFormsModule,
     CommonShareModule,
-    RmaRoutingModule
+    RmaRoutingModule,
+    ItemModalModule
   ],
   declarations: [RmaComponent, RmaCreateComponent, RmaEditComponent, RmaDetailComponent],
-  providers: [RmaService, TableService, CustomerService, Helper]
+  providers: [RMAService, TableService, CustomerService, DatePipe, Helper]
 })
 export class RmaModule { }

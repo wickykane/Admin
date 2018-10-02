@@ -26,7 +26,7 @@
                            </div>
                         </div>
                         <div class="col-md-5">
-                            <i class="text-warning fa fa-exclamation-triangle"></i> <strong>Current return Rate:</strong> 15%
+                            <i class="text-warning fa fa-exclamation-triangle"></i> <strong>Current Return Rate:</strong> 15%
                         </div>
                      </form>
                   </div>
@@ -37,7 +37,7 @@
                            <div class="form-group row">
                               <label class='col-6 control-label'>Return Order No <span class="text-danger">(*)</span></label>
                               <div class='col-6 text-primary'>
-                                <input type="text" class="form-control" formControlName="customer_po" readonly>
+                                <input type="text" class="form-control" formControlName="rma_no" readonly>
                               </div>
                            </div>
                            <div class="form-group row">
@@ -45,10 +45,10 @@
                               <span class="text-danger">(*)</span>
                               </label>
                               <div class='col-6 text-danger'>
-                                 <div clickOutside (clickOutside)="d.close()" class="input-group">
-                                    <input class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="order_date" ngbDatepicker #d="ngbDatepicker">
+                                 <div clickOutside (clickOutside)="d1.close()" class="input-group">
+                                    <input class="form-control" [maxDate]="currentDt | dateObj" placeholder="mm/dd/yyyy" name="request_date" formControlName="request_date" ngbDatepicker #d1="ngbDatepicker">
                                     <div class="input-group-append">
-                                       <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                                       <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
                                        <i class="fa fa-calendar" aria-hidden="true"></i>
                                        </button>
                                     </div>
@@ -58,15 +58,18 @@
                            <div class="form-group row">
                               <label class='col-6'>Sales Order No <span class="text-danger">(*)</span></label>
                               <div class='col-6 '>
-                                <ng-select class="infinity-scroll-select" [virtualScroll]="true" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="buyer_id">
+                                <ng-select class="infinity-scroll-select" [virtualScroll]="true" (change)="changeSalesOrder()" [items]="listMaster['list-order']" bindLabel="name" bindValue="id" formControlName="order_no" required>
                                    <ng-template ng-option-tmp let-item="item">
-                                       <span title="{{item.company_name}}">{{item.company_name}}</span>
+                                       <span title="{{item.name}}">{{item.name}}</span>
                                    </ng-template>
                                </ng-select>
                               </div>
                            </div>
                            <div class="form-group row">
-                              <label class='col-6'>Invoice No </label>
+                              <label class='col-6'>Invoice No
+                                <!--status order Partial Delivery, Completed sẽ xuất hiện required
+                                <span class="text-danger">(*)</span> -->
+                              </label>
                               <div class='col-6 '>
                                 <form [formGroup]="generalForm">
                                 <ng-select class="infinity-scroll-select" [virtualScroll]="true" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="buyer_id">
@@ -91,14 +94,14 @@
                                  <label class='col-6'>Return Time
                                  </label>
                                  <div class='col-6 text-primary'>
-                                    <input type="text" class="form-control" formControlName="customer_po" readonly>
+                                    <input type="text" class="form-control" formControlName="request_date" readonly>
                                  </div>
                               </div>
                               <div class="form-group row">
                                  <label class='col-6'>Delivery Time
                                  </label>
                                  <div class='col-6 text-primary'>
-                                    <input type="text" class="form-control" formControlName="customer_po" readonly>
+                                    <input type="text" class="form-control" formControlName="delivery_date" readonly>
                                  </div>
                               </div>
                               <div class="form-group row">
@@ -143,9 +146,9 @@
                              <span class="text-danger">(*)</span>
                              </label>
                              <div class='col-6'>
-                                <select (change)="getQtyAvail()" class="form-control" name="warehouse_id" formControlName="warehouse_id">
+                                <select (change)="changeType()" class="form-control" name="type" formControlName="type">
                                 <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
-                                <option *ngFor="let item of listMaster['warehouses']" [ngValue]="item.id">{{item.name}}</option>
+                                <option *ngFor="let item of listMaster['type']" [ngValue]="item.id">{{item.name}}</option>
                                 </select>
                              </div>
                           </div>
@@ -154,7 +157,7 @@
                              <span class="text-danger">(*)</span>
                              </label>
                              <div class='col-6'>
-                                  <input type="text" class="form-control" formControlName="customer_po" readonly>
+                                  <input type="text" class="form-control" formControlName="warehouse" readonly>
                              </div>
                           </div>
                           <div class="form-group row">
@@ -169,19 +172,43 @@
                              </div>
                           </div>
 
-                          <div class="form-group row">
-                             <label class='col-6'>Carrier</label>
+                          <div class="form-group row" *ngIf="true">
+                             <label class='col-6'>Carrier
+                               <!--Ship Via = NAB Fleet
+                               <span class="text-danger">(*)</span> -->
+                             </label>
                              <div class='col-6'>
-                                <input type="text" class="form-control" formControlName="customer_po">
+                                <input type="text" class="form-control" formControlName="carrier_name" *ngIf="true">
+                                <select (change)="changeShipVia()" class="form-control" name="carrier_name" formControlName="carrier_name"  *ngIf="false">
+                                <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
+                                <option *ngFor="let item of listMaster['carriers']" [ngValue]="item.id">{{item.name}}</option>
+                                </select>
                              </div>
                           </div>
 
-                          <div class="form-group row">
+                          <div class="form-group row" *ngIf="true">
                              <label class='col-6'>Tracking No</label>
                              <div class='col-6'>
-                                <input type="text" class="form-control" formControlName="customer_po">
+                                <input type="text" class="form-control" formControlName="tracking_no">
                              </div>
                           </div>
+
+                          <div class="form-group row" *ngIf="true">
+                             <label class='col-6'>Arrival  Date
+                             <span class="text-danger">(*)</span>
+                             </label>
+                             <div class='col-6 text-danger'>
+                                <div clickOutside (clickOutside)="d2.close()" class="input-group">
+                                   <input class="form-control" [maxDate]="currentDt | dateObj" placeholder="mm/dd/yyyy" name="arrival_date" formControlName="arrival_date" ngbDatepicker #d2="ngbDatepicker">
+                                   <div class="input-group-append">
+                                      <button class="btn btn-outline-secondary" (click)="d2.toggle()" type="button">
+                                      <i class="fa fa-calendar" aria-hidden="true"></i>
+                                      </button>
+                                   </div>
+                                </div>
+                             </div>
+                          </div>
+
                         </form>
                        </div>
                     </div>
