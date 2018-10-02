@@ -329,8 +329,7 @@ export class CreditMemoCreateComponent implements OnInit {
     deleteAction(id, item_condition) {
         this.list.items = this.list.items.filter((item) => {
             if (item.item_id === id && item.is_item === 1) {
-                this.items_removed.push(item.id);
-                console.log(this.items_removed);
+                this.items_removed.push(item.item_id);
             }
             return ((item.item_id || item.misc_id) + (item.item_condition_id || 'mis') !== (id + (item_condition || 'mis')));
         });
