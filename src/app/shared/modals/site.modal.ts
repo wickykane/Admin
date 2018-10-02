@@ -90,9 +90,9 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             await this.itemService.getListCountryAdmin().subscribe(res => { this.listCountry = res.data; this.changeCustomerType(); });
             this.listTypeAddress = [{ id: 1, name: 'Billing' }, { id: 2, name: 'Shipping' }];
             await this.commonService.getOrderReference().subscribe(res => this.listMaster['salePersons'] = res.data.sale_mans);
-            await this.commonService.getAllListBank().subscribe(res => this.listBank = res.data);
+            // await this.commonService.getAllListBank().subscribe(res => this.listBank = res.data);
             await this.customerService.getRoute().subscribe(res => { this.routeList = res.data; });
-            await this.customerService.getCreditCard().subscribe(res => { this.getListCreditCard = res.data; this.credit_cards.forEach(card => { card.listCard = res.data }); });
+            // await this.customerService.getCreditCard().subscribe(res => { this.getListCreditCard = res.data; this.credit_cards.forEach(card => { card.listCard = res.data }); });
 
             this.setData();
         })();
