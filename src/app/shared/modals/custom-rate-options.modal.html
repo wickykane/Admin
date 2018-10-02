@@ -68,7 +68,7 @@
                         <div class="col-sm-12 row">
                                 <input *ngIf="generalForm.value.fee_type ==2" style="text-align:center" type="text" value="%" disabled class="form-control col-sm-2">
                                 <input *ngIf="generalForm.value.fee_type ==1" style="text-align:center" type="text" value="$" disabled class="form-control col-sm-2">
-                            <input type="number" (keypress)="checkPositiveNumber($event)"  formControlName="handling_fee" id="handling_fee" class="form-control col-sm-10 custom-input">
+                            <input type="number" (keypress)="checkPositiveNumber($event)" numberDirective [isDecimal]="true"  formControlName="handling_fee" id="handling_fee" class="form-control col-sm-10 custom-input">
                         </div>
                     </div>
                 </div>
@@ -90,7 +90,7 @@
                     </label>
                     <div class="row input-append">
                         <div class="col-sm-10">
-                            <input type="number" (keypress)="checkPositiveNumber($event)" [disabled]="isView" [(ngModel)]="item.lbs_from" class="form-control custom-input">
+                            <input type="number" (keypress)="checkPositiveNumber($event)" numberDirective [isDecimal]="true" [disabled]="isView" [(ngModel)]="item.lbs_from" class="form-control custom-input">
                         </div>
                         <div class="col-sm-2">
                                 <input *ngIf="generalForm.value.charge_shipping == 1" type="text" value="lbs" disabled="true" class="form-control">
@@ -108,7 +108,7 @@
                     </label>
                     <div class="row input-append">
                         <div class="col-sm-10">
-                            <input type="number" (keypress)="checkPositiveNumber($event)" [disabled]="isView" [(ngModel)]="item.lbs_to" class="form-control custom-input">
+                            <input type="number" (keypress)="checkPositiveNumber($event)" numberDirective [isDecimal]="true" [disabled]="isView" [(ngModel)]="item.lbs_to" class="form-control custom-input">
                         </div>
                         <div class="col-sm-2">
                             <input *ngIf="generalForm.value.charge_shipping == 1" type="text" value="lbs" disabled="true" class="form-control">
@@ -128,7 +128,7 @@
                             <input type="text" value="$" disabled="true" class="form-control">
                         </div>
                         <div class="col-sm-10">
-                            <input type="number" (keypress)="checkPositiveNumber($event)" [disabled]="isView" [(ngModel)]="item.shipping_fee" class="form-control custom-input">
+                            <input type="number" (keypress)="checkPositiveNumber($event)" numberDirective [isDecimal]="true" [disabled]="isView" [(ngModel)]="item.shipping_fee" class="form-control custom-input">
                         </div>
                     </div>
                 </div>
