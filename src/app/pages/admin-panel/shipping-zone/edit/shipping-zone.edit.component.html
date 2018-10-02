@@ -3,11 +3,14 @@
     <!-- <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut> -->
 
     <section class="rma-page block main-container block-order">
-        <div class="row">
+        <div class="row block-info">
             <div class="col-md-12 mg-top-15">
-                <div class="block-border">
-                    <h5 class="title-border" translate>GENERAL INFORMATION</h5>
-                    <div class="row informaion">
+                <div class="card height-100">
+                    <div class="card-header">
+                        <strong>GENERAL INFORMATION</strong>
+                    </div>
+                    <div class="card-body">
+                        <div class="row informaion height-100">
                         <div class="col-md-12">
                             <form [formGroup]="generalForm" class="form-search full-width form-inline">
                                 <div class="col-md-3">
@@ -49,14 +52,18 @@
                                 </div>
                             </form>
                         </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row block-info">
             <div class="col-md-12 mg-top-15">
-                <div class="block-border full-block">
-                    <h5 class="title-border" translate>SHIPPING COUNTRIES & REGIONS</h5>
+                <div class="card height-100">
+                    <div class="card-header">
+                        <strong>SHIPPING COUNTRIES & REGIONS</strong>
+                    </div>
+                    <div class="card-body">
                     <div class="row countries-group">
                             <div class="table-custom col-md-3">
                             <div class="header">
@@ -82,7 +89,7 @@
                             </div>
                         </div>
                         <div style="display: table;height: 269px" *ngIf="listSelectCountry.length>0">
-                                <span style="display: table-cell;vertical-align: middle"><i class="fa fa-angle-double-right" style="font-size:36px"></i></span>
+                                <span style="display: table-cell;vertical-align: middle"><i class="fa fa-angle-double-right" style="font-size:36px;color:#e0e0e0"></i></span>
                             </div>
                             <div class="table-custom col-md-3" style="text-align: center" *ngIf="listSelectCountry.length>0">
                                     <span style="font-weight: bold">Selected Countries</span>
@@ -103,7 +110,7 @@
                             </div>
                         </div>
                         <div style="display: table;height: 269px" *ngIf="selectedCountry">
-                                <span style="display: table-cell;vertical-align: middle"><i class="fa fa-angle-double-right" style="font-size:36px"></i></span>
+                                <span style="display: table-cell;vertical-align: middle"><i class="fa fa-angle-double-right" style="font-size:36px;color:#e0e0e0"></i></span>
                             </div>
                             <div class="col-md-3 table-custom" *ngIf="selectedCountry">
                             <div class="header">
@@ -132,25 +139,29 @@
                             </div>
                         </div>
                     </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row block-info">
             <div class="col-md-12 mg-top-15">
-                <div class="block-border full-block">
-                    <h5 class="title-border" translate>SETUP SHIPPING QUOTES</h5>
+                <div class="card height-100">
+                    <div class="card-header">
+                        <strong>SETUP SHIPPING QUOTES</strong>
+                    </div>
+                    <div class="card-body">
                     <div class="col-md-12" *ngFor="let item of listShipping">
                         <div class="row">
                             <div class="col-md-6">
-                                <h6 class="title-border" translate style="margin-top: 10px">{{item.name}}</h6>
+                                <h6 class="title-border text-blue" translate style="margin-top: 10px"><i class="fa fa-caret-right"></i> {{item.name}}</h6>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12 table-custom1">
+                            <div class="col-md-12">
                                 <div class="header">
-                                    <div class="col-12 title" *ngFor="let subItem of item.data;trackBy: trackByFn;let i2 =index">
+                                    <div class="col-12 title mb-2 border-bottom-custom" *ngFor="let subItem of item.data;trackBy: trackByFn;let i2 =index">
                                         <div class="form-group row">
-                                            <label class="control-label col-4 text-danger" for="shipping_to" translate>{{subItem.name}}
+                                            <label class="control-label col-4" for="shipping_to" translate><strong>{{subItem.name}}</strong>
 
                                             </label>
                                             <label class="control-label col-5" for="shipping_to" translate>{{subItem.des}}
@@ -165,7 +176,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-1">
-                                                <button type="button" [disabled]="subItem.checked == false" class="btn btn-primary" (click)="openShippingModal(subItem.id)">
+                                                <button type="button" [disabled]="subItem.checked == false" class="btn-default-custom" (click)="openShippingModal(subItem.id)">
                                                     Edit
                                                 </button>
                                             </div>
@@ -175,13 +186,14 @@
                             </div>
                         </div>
                     </div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12 mg-top-15 text-center">
-                <button type="button" class="btn btn-primary" [disabled]="generalForm.invalid" (click)="save()" translate>Update</button>
-                <button type="button" class="btn btn-default" [routerLink]="['/admin-panel/shipping-zone']" translate>Cancel</button>
+                <button type="button" class="btn-default-custom" [disabled]="generalForm.invalid" (click)="save()" translate>Update</button>
+                <button type="button" class="btn-default-custom" [routerLink]="['/admin-panel/shipping-zone']" translate>Cancel</button>
             </div>
         </div>
     </section>
