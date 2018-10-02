@@ -118,7 +118,17 @@ a {
 .btn-outline-secondary {
     height: 21px;
 }
-
+.btn-outline-blue{
+    color: #2196f3;
+    background-color: transparent;
+    background-image: none;
+    border-color: #2196f3;
+}
+.btn-outline-blue:hover{
+    color: #fff;
+    background-color: #2196f3;
+    border-color: #2196f3;
+}
 .btn-copy {
     background: #138891;
     color: $white;
@@ -767,11 +777,11 @@ ngu-carousel {
 .table-custom{
     margin:25px;
     padding: 15px;
-    border:1px solid black;
+    border:1px solid #e0e0e0;
     .header{
         margin: 0 -30px 0 0;
         .title{
-            border-bottom: 1px solid black;
+            border-bottom: 1px solid #e0e0e0;
             margin-left: -15px;
         }
         .title:nth-last-child(1){
@@ -789,9 +799,9 @@ ngu-carousel {
 .table-custom1{
     .header{
         margin: 0 30px 0 0;
-        border:1px solid black;
+        border:1px solid #e0e0e0;
         .title{
-            border-bottom: 1px solid black;
+            border-bottom: 1px solid #e0e0e0;
             >div{
                 margin-bottom: 0;
             margin-top: 10px;
@@ -965,4 +975,17 @@ ngu-carousel {
 input[type=number].custom-input::-webkit-outer-spin-button { 
   -webkit-appearance: none; 
   margin: 0; 
+}
+.custom-modal-header {
+    background-color: #2196f3;
+    .modal-title {
+        font-size: 16px;
+        color: white;
+    }
+    button.close{
+        span {
+            font-size: 24px;
+            color: white;
+        }
+    }
 }

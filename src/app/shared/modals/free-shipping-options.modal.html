@@ -1,4 +1,4 @@
-<div class="modal-header">
+<div class="modal-header custom-modal-header">
     <span class="modal-title">Free Shipping Options</span>
     <button type="button" class="close" aria-label="Close" (click)="closeX()">
         <span aria-hidden="true">&times;</span>
@@ -96,6 +96,6 @@
 
 </div>
 <div class="modal-footer">
-    <button *ngIf="isView == false" type="button" class="btn btn-outline-primary" (click)="applyData()">OK</button>
-    <button type="button" class="btn btn-outline-dark" (click)="closeX()">Close</button>
+    <button type="button" class="btn btn-outline-dark" (click)="closeX()">Cancel</button>
+    <button *ngIf="isView == false" type="button" class="btn btn-outline-primary" (click)="applyData()">Submit</button>
 </div>
