@@ -3,11 +3,14 @@
     <!-- <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut> -->
 
     <section class="rma-page block main-container block-order">
-        <div class="row">
+        <div class="row block-info">
             <div class="col-md-12 mg-top-15">
-                <div class="block-border">
-                    <h5 class="title-border" translate>GENERAL INFORMATION</h5>
-                    <div class="row informaion">
+                <div class="card height-100">
+                    <div class="card-header">
+                        <strong>GENERAL INFORMATION</strong>
+                    </div>
+                    <div class="card-body">
+                    <div class="row informaion height-100">
                         <div class="col-md-12">
                             <form [formGroup]="generalForm" class="form-search full-width form-inline">
                                 <div class="col-md-4">
@@ -47,10 +50,11 @@
                             </form>
                         </div>
                     </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row block-info">
             <div class="col-md-12 mg-top-15">
                 <div class="block-border full-block">
                     <h5 class="title-border" translate>SHIPPING COUNTRIES & REGIONS</h5>
