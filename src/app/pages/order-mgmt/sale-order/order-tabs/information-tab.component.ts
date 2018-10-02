@@ -124,7 +124,8 @@ export class SaleOrderInformationTabComponent implements OnInit {
                     this.totalShipQTY += item.qty_shipped;
                 });
 
-                this.groupTax(this.detail['subs']);
+                this.order_info['taxs'] = [];
+                this.order_info['taxs'] = this.detail['tax_info'];
 
 
             } catch (e) {
