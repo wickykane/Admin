@@ -28,8 +28,8 @@
     </div>
     <div class="block-content pd-top mt-2">
         <div class="table-responsive">
-            <table class="table table-striped table-vcenter table-hover custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex"
-                (onEnter)="selectData($event)">
+            <table class="table table-striped table-vcenter table-hover custom-table" cdArrowTable [collection]="list.items"
+                [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                 <thead class="bg-white">
                     <tr>
                         <th>
@@ -38,24 +38,12 @@
                                 <span></span>
                             </label>
                         </th>
-                        <th translate>Part No</th>
-                        <th translate>Oem #</th>
-                        <th translate>Partlinks #</th>
+                        <th translate>Item No</th>
                         <th translate>Description</th>
-                        <th translate>Make</th>
-                        <th translate>Model</th>
                         <th translate>Condition</th>
-                        <th translate>From</th>
-                        <th translate>To</th>
-                        <th translate>Brand</th>
-                        <th translate>Cert</th>
-                        <th translate>Sales Price</th>
-                        <th *ngFor="let item of listMaster['warehouses']">
-                            {{item.name}} Avail QTY
-                        </th>
+                        <th translate>UOM</th>
                     </tr>
                 </thead>
-
                 <tr *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                     <td>
                         <label class="css-input css-checkbox css-checkbox-default">
@@ -63,19 +51,10 @@
                             <span></span>
                         </label>
                     </td>
-                    <td>{{item.sku}}</td>
-                    <td>{{item.oem}}</td>
-                    <td>{{item.partlinks_no}}</td>
+                    <td>{{item.part_no}}</td>
                     <td>{{item.des}}</td>
-                    <td>{{item.make_name}}</td>
-                    <td>{{item.model_name}}</td>
                     <td>{{item.condition_name}}</td>
-                    <td>{{item.yr_from}}</td>
-                    <td>{{item.yr_to}}</td>
-                    <td>{{item.brand_name}}</td>
-                    <td>{{item.cert=='Y'?'Yes':'No'}}</td>
-                    <th>{{item.sale_price|currency:'$'}}</th>
-                    <td *ngFor="let wh_qty of item.warehouse">{{wh_qty['qty_available']}}</td>
+                    <td>{{item.uom_name}}</td>
                 </tr>
                 <tr *ngIf="list.items.length === 0">
                     <td colspan="100%" class="text-center">No data.</td>
