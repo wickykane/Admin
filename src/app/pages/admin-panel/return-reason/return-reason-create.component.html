@@ -1,53 +1,53 @@
 <div [@routerTransition]>
     <app-page-header [heading]="'CREATE NEW RETURN REASON'" [icon]="'fa-th-list'"></app-page-header>
-    <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
+    <!-- <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut> -->
     <section class="rma-page block">
-        <div style="margin: 15px 0">
-            <a class="btn btn-outline-info" [routerLink]="['/admin-panel/return-reason']">
-                <i class="fa fa-arrow-left"></i> Back</a>
+        <div class="bd-example text-right mg-t-15">
+            <button class="btn btn-outline-dark" [routerLink]="['/admin-panel/return-reason']">Back To List</button>
         </div>
-        <fieldset class="custom-border">
-            <legend class="custom-border">GENERAL INFORMATION</legend>
-            <form class="form-search full-width form-horizontal" [formGroup]="generalForm">
-                <div class="row">
-                    <div class="col-sm-2 form-group">
-                        <label> Code
-                            <span class="text-danger">(*)</span>
-                        </label>
-                        <input disabled type="text" name="" class="form-control" formControlName="cd">
-                    </div>
-                    <div class="col-sm-2 form-group">
-                        <label> Description
-                            <span class="text-danger">(*)</span>
-                        </label>
-                        <input type="text" name="" class="form-control" formControlName="des">
-                    </div>
-                    <div class="col-sm-2 form-group">
-                        <label> Exclude RR Calc
-                            <span class="text-danger">(*)</span>
-                        </label>
-                        <div class="">
-                            <input type="checkbox" name="" class="" formControlName="exclude_rr_calc" ng-true="1">
+        <div class="custom-border card height-100 mg-bt-15 mg-t-15">
+            <div class="card-header">
+                <strong>GENERAL INFORMATION</strong>
+            </div>
+            <div class="card-body">
+                <form class="form-search full-width form-horizontal" [formGroup]="generalForm">
+                    <div class="row">
+                        <div class="col-sm-2 form-group">
+                            <label> Code
+                                <span class="text-danger">(*)</span>
+                            </label>
+                            <input disabled type="text" name="" class="form-control" formControlName="cd">
+                        </div>
+                        <div class="col-sm-2 form-group">
+                            <label> Description
+                                <span class="text-danger">(*)</span>
+                            </label>
+                            <input type="text" name="" class="form-control" formControlName="des">
+                        </div>
+                        <div class="col-sm-2 form-group">
+                            <label> Exclude RR Calc
+                                <span class="text-danger">(*)</span>
+                            </label>
+                            <div class="">
+                                <input type="checkbox" name="" class="" formControlName="exclude_rr_calc" ng-true="1">
+                            </div>
+                        </div>
+                        <div class="col-sm-2 form-group">
+                            <label> Status
+                                <span class="text-danger">(*)</span>
+                            </label>
+                            <select class="form-control" formControlName="sts" name="status">
+                                <!-- <option value="null" selected="false">--Select--</option> -->
+                                <option *ngFor="let item of listMaster['status']" [ngValue]="item.key">{{item.value}}</option>
+                            </select>
                         </div>
                     </div>
-                    <div class="col-sm-2 form-group">
-                        <label> Status
-                            <span class="text-danger">(*)</span>
-                        </label>
-                        <select class="form-control" formControlName="sts" name="status">
-                            <!-- <option value="null" selected="false">--Select--</option> -->
-                            <option *ngFor="let item of listMaster['status']" [ngValue]="item.key">{{item.value}}</option>
-                        </select>
-                    </div>
-                </div>
-            </form>
-        </fieldset>
-
-    </section>
-    <div class="row">
-        <div class="col-md-12 mg-top-15 text-center">
+                </form>
+            </div>
+        </div>
+        <div class="block-content block-content-full text-center" style="margin-top:15px;">
             <button class="btn btn btn-outline-primary" (click)="payloadData()" [disabled]="!generalForm.valid">Save</button>
             <button class="btn btn-default" type="button" [routerLink]="['/admin-panel/return-reason']">Cancel</button>
         </div>
-    </div>
+    </section>
 </div>
