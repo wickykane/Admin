@@ -86,8 +86,8 @@ export class FreeShippingOptionsModalComponent implements OnInit, OnDestroy {
 
     checkCondition() {
         console.log(this.generalForm.value.condition);
-        if (this.generalForm.value.condition != '') {
-            this.generalForm.patchValue({ 'limit_total_weight': true, 'limit_order_over': true })
+        if (this.generalForm.value.condition !== '') {
+            this.generalForm.patchValue({ 'limit_total_weight': true, 'limit_order_over': true });
         }
     }
     upToValue() {
@@ -97,7 +97,6 @@ export class FreeShippingOptionsModalComponent implements OnInit, OnDestroy {
 
     }
     checkPositiveNumber(e) {
-        console.log(e);
         const pattern = /[0-9.]/;
         const inputChar = String.fromCharCode(e.charCode);
 
