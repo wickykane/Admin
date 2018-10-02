@@ -34,12 +34,12 @@ export class FlatRateOptionsModalComponent implements OnInit, OnDestroy {
         public activeModal: NgbActiveModal) {
 
         this.generalForm = fb.group({
-            "name": ['',Validators.required],
-            "type": [''],
-            "shipping_fee": ['',Validators.required],
-            "fee_type": [''],
-            "handling_fee": [''],
-            "id": "2"
+            'name': ['', Validators.required],
+            'type': [''],
+            'shipping_fee': ['', Validators.required],
+            'fee_type': [''],
+            'handling_fee': [''],
+            'id': '2'
         });
 
 
@@ -47,10 +47,10 @@ export class FlatRateOptionsModalComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        if(this.flatRateList){
+        if (this.flatRateList) {
             this.generalForm.patchValue(this.flatRateList);
         }
-        if(this.isView){
+        if (this.isView) {
             this.generalForm.disable();
         }
     }
@@ -80,8 +80,7 @@ export class FlatRateOptionsModalComponent implements OnInit, OnDestroy {
     checkPositiveNumber(e) {
         const pattern = /[0-9.]/;
         const inputChar = String.fromCharCode(e.charCode);
-   
-        if (!pattern.test(inputChar)) {    
+        if (!pattern.test(inputChar)) {
             // invalid character, prevent input
             event.preventDefault();
         }

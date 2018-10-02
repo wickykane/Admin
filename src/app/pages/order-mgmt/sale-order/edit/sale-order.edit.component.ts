@@ -374,7 +374,7 @@ export class SaleOrderEditComponent implements OnInit {
 
             if (+this.generalForm.value.carrier_id === 2) {
                 default_option = '888';
-                default_ship_rate = 8;
+                default_ship_rate = 7;
             }
             enable = [1, 2].indexOf(+this.generalForm.value.carrier_id) > -1;
 
@@ -546,11 +546,9 @@ export class SaleOrderEditComponent implements OnInit {
         items.forEach(item => {
             this.order_info.order_summary['total_item'] = (this.order_info.order_summary['total_item'] || 0) + (+item.quantity);
             this.order_info.order_summary['total_cogs'] = (this.order_info.order_summary['total_cogs'] || 0) + (+item.cost_price || 0) * (item.quantity || 0);
-            this.order_info.order_summary['total_vol'] = (this.order_info.order_summary['total_vol'] || 0) + (+item.vol || 0);
-            this.order_info.order_summary['total_weight'] = +((this.order_info.order_summary['total_weight'] || 0) + (+item.wt || 0)).toFixed(2);
+            this.order_info.order_summary['total_vol'] = (this.order_info.order_summary['total_vol'] || 0) + (+item.vol || 0) * (item.quantity || 0);
+            this.order_info.order_summary['total_weight'] = +((this.order_info.order_summary['total_weight'] || 0) + (+item.wt || 0) * (item.quantity || 0)).toFixed(2);
         });
-
-
         this.list.items.forEach(item => {
             item.amount = (+item.quantity * (+item.sale_price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
             this.order_info.sub_total += item.amount;
