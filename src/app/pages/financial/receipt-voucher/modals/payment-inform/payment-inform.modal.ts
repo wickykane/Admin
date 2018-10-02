@@ -26,8 +26,8 @@ export class PaymentInformModalComponent implements OnInit {
             'total_amount': null,
             'address': null,
             'error': null,
-            'auth_cd': null,
-            'trans_cd': null,
+            'auth_code': null,
+            'trans_id': null,
             'receipt_dt': null,
         });
     }
@@ -35,7 +35,10 @@ export class PaymentInformModalComponent implements OnInit {
     ngOnInit() {
         this.modalTitle = (this.type) ? 'Payment Successful!' : 'Payment Failed!';
         const address = [this.data.address_line, this.data.city_name, this.data.state_name, this.data.zip_code, this.data.country_name].join(' ');
-        this.generalForm.patchValue({ ...this.data, address, error: this.data.respone.message });
+        let cardNumber = this.data.card_number;
+        cardNumber = 'xxxx-' + cardNumber.substr(cardNumber.length - 4, cardNumber.length);
+        const respone = this.data.respone.data || {};
+        this.generalForm.patchValue({ ...this.data, address, receipt_dt: this.data.current_date, error: this.data.respone.message, card_number: cardNumber, auth_code: respone.auth_code, trans_id: respone.trans_id });
     }
 
     ok() {
