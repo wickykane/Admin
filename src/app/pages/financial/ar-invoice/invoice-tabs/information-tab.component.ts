@@ -10,6 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../../../../environments/environment';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { MailModalComponent } from '../modals/mail.modal';
+import { PODModalComponent } from '../modals/POD/pod.modal';
 
 @Component({
     selector: 'app-invoice-info-tab',
@@ -139,5 +140,15 @@ export class InvoiceInformationTabComponent implements OnInit {
                 }
             });
         }
+    }
+
+    updatePOD() {
+        const modalRef = this.modalService.open(PODModalComponent, { size: 'sm' });
+        modalRef.result.then(res => {
+            if (res) {
+                this.ngOnInit();
+            }
+        }, dismiss => { });
+        modalRef.componentInstance.invoiceId = this._invoiceId;
     }
 }

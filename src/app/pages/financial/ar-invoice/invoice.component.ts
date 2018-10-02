@@ -50,7 +50,7 @@ export class InvoiceComponent implements OnInit {
     public statusConfig = {
         'New': { color: 'blue', name: 'New', id: 1, img: './assets/images/icon/new.png' },
         'Submitted': { color: 'texas-rose', name: 'Submited', id: 2 },
-        'Rejected': { color: 'magenta', name: 'Rejected', id: 3 },
+        // 'Rejected': { color: 'magenta', name: 'Rejected', id: 3 },
         'Approved': { color: 'strong-green', name: 'Approved', id: 4, img: './assets/images/icon/approved.png' },
         'Partially Paid': { color: 'darkblue', name: 'Partially Paid', id: 5, img: './assets/images/icon/partial_delivered.png' },
         'Fully Paid': { color: 'lemon', name: 'Fully Paid', id: 6, img: './assets/images/icon/full_delivered.png' },
@@ -95,16 +95,6 @@ export class InvoiceComponent implements OnInit {
         //  Init Fn
         this.listMaster['listFilter'] = [{ value: false, name: 'Date Filter' }];
         this.listMaster['dateType'] = [{ id: 0, name: 'Invoice Date' }, { id: 1, name: 'Due Date' }];
-        this.listMaster['status'] = [
-            { id: 1, name: 'New' },
-            { id: 2, name: 'Submitted' },
-            { id: 3, name: 'Rejected' },
-            { id: 4, name: 'Approved' },
-            { id: 5, name: 'Partially Paid' },
-            { id: 6, name: 'Fully Paid' },
-            { id: 7, name: 'Canceled' },
-            { id: 8, name: 'Overdue' }
-        ];
         this.listMaster['inv_type'] = [
             { id: 1, name: 'Sales Order' }
         ];
