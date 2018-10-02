@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { RmaCreateComponent } from './create/rma.create.component';
 import { RmaEditComponent } from './edit/rma.edit.component';
 import { RmaComponent } from './list/rma.component';
+import { RmaDetailComponent } from './view/rma.view.component';
 
 
 const routes: Routes = [
@@ -15,6 +16,9 @@ const routes: Routes = [
     },
     {
         path: 'edit/:id', component: RmaEditComponent,
+    },
+    {
+        path: 'detail/:id', component: RmaDetailComponent,
     }
 ];
 
