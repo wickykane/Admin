@@ -9,6 +9,7 @@ export class InvoiceEditKeyService extends KeyboardBaseService {
             element: null,
             prev: 'contact_user_id',
             next: 'customer_po',
+            ng_select: true,
         },
         contact_user_id: {
             element: null,

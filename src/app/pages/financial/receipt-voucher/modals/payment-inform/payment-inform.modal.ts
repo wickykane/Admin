@@ -37,7 +37,8 @@ export class PaymentInformModalComponent implements OnInit {
         const address = [this.data.address_line, this.data.city_name, this.data.state_name, this.data.zip_code, this.data.country_name].join(' ');
         let cardNumber = this.data.card_number;
         cardNumber = 'xxxx-' + cardNumber.substr(cardNumber.length - 4, cardNumber.length);
-        this.generalForm.patchValue({ ...this.data, address, receipt_dt: this.data.current_date, error: this.data.respone.message, card_number: cardNumber });
+        const respone = this.data.respone.data || {};
+        this.generalForm.patchValue({ ...this.data, address, receipt_dt: this.data.current_date, error: this.data.respone.message, card_number: cardNumber, auth_code: respone.auth_code, trans_id: respone.trans_id });
     }
 
     ok() {
