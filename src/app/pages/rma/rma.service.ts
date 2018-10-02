@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiService } from '../../services/index';
 
 @Injectable()
-export class RmaService {
+export class RMAService {
 
   constructor(private API: ApiService) { }
 
@@ -11,44 +11,23 @@ export class RmaService {
     return this.API.get(url, params);
   }
 
-  getAllSts(params) {
-    const url = ['reports', 'get-all-orders-status'].join('/');
-    return this.API.get(url, params);
+  getAllCustomer(params?) {
+      const url = 'buyer/get-all';
+      return this.API.get(url, params);
   }
 
-  getRMAInfo() {
+  generateRMACode() {
     const url = ['rma', 'generate'].join('/');
     return this.API.get(url);
   }
 
-  getListOrders() {
-    const url = ['reference', 'order'].join('/');
+  getRMATypeReference() {
+    const url = ['rma', 'type'].join('/');
     return this.API.get(url);
   }
 
-  getOrderById(id) {
-    const url = ['reference', 'order', id, 'items'].join('/');
-    return this.API.get(url);
-  }
-
-  createRMA(params) {
-    const url = ['rma', 'create'].join('/');
-    return this.API.customPost(url, params);
-  }
-
-
-  getRefundMethod() {
-    const url = ['bank/list?is_all=1'].join('/');
-    return this.API.get(url);
-  }
-
-  getPaymentTerm() {
-    const url = ['bank/list?is_all=1'].join('/');
-    return this.API.get(url);
-  }
-
-  getApprover() {
-    const url = ['bank/list?is_all=1'].join('/');
+  getOrderReference() {
+    const url = ['rma', 'sales-order-no'].join('/');
     return this.API.get(url);
   }
 
@@ -56,13 +35,5 @@ export class RmaService {
     const url = ['rma/create'].join('/');
     return this.API.post(url, params);
   }
-  getOrderInfo(id) {
-    const url = 'rma/get-info-order/' + id;
-    return this.API.get(url);
-  }
 
-  getReturnReason() {
-    const url = ['bank/list?is_all=1'].join('/');
-    return this.API.get(url);
-  }
 }
