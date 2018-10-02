@@ -4,8 +4,7 @@
     <div class="block anchor-scroll block-order">
         <section id="statusIndicator" class="status-indicator-section">
             <ul class="status-ctn dashboard-content">
-                <li style="cursor: pointer;" (click)="filter(item.status)" *ngFor="let item of listMaster['count-status']"
-                    class="status-item dashboard-stat {{item.color}}">
+                <li style="cursor: pointer;" (click)="filter(item.status)" *ngFor="let item of listMaster['count-status']" class="status-item dashboard-stat {{item.color}}">
                     <img *ngIf="item.img" [src]="item.img" alt="">
                     <div class="status-count">{{ item.count || 0 }}</div>
                     <div class="status-lbl text-uppercase">{{ item.name }}</div>
@@ -17,8 +16,7 @@
                 <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
                     <div class="block-search">
                         <label for="sale_quote_num" class="control-label">Receipt No</label>
-                        <input autofocus="true" type="text" name="receipt_no" formControlName="receipt_no" class="form-control"
-                            placeholder="">
+                        <input autofocus="true" type="text" name="receipt_no" formControlName="receipt_no" class="form-control" placeholder="">
                     </div>
                     <div class="block-search">
                         <label for="payment_method" class="control-label" translate>Payment Method</label>
@@ -29,15 +27,12 @@
                     </div>
                     <div class="block-search">
                         <label for="customer_id" class="control-label" translate>Payer</label>
-                        <ng-select [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true"
-                            style="width:100px; max-width:100%" [items]="listMaster['customer']" bindLabel="company_name"
-                            bindValue="id" formControlName="customer_id">
+                        <ng-select class="infinity-scroll-select" style="width: 110px;" [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="customer_id">
                         </ng-select>
                     </div>
                     <div class="block-search">
                         <label for="sts" class="control-label">Status</label>
-                        <ng-select class="ng-select-filter" [multiple]="true" [items]="this.listMaster['list-status']"
-                            bindLabel="name" bindValue="id" formControlName="status">
+                        <ng-select class="ng-select-filter" [multiple]="true" [items]="this.listMaster['list-status']" bindLabel="name" bindValue="id" formControlName="status">
                         </ng-select>
                     </div>
                     <div class="block-search">
@@ -57,8 +52,7 @@
                         <label for="date_from" class="control-label" translate>From</label>
                         <div class="date-group">
                             <div clickOutside (clickOutside)="d1.close()" class="input-group">
-                                <input [maxDate]="searchForm.value.date_to | dateObj" class="form-control"
-                                    formControlName="date_from" placeholder="mm/dd/yyyy" name="dp" ngbDatepicker #d1="ngbDatepicker">
+                                <input [maxDate]="searchForm.value.date_to | dateObj" class="form-control" formControlName="date_from" placeholder="mm/dd/yyyy" name="dp" ngbDatepicker #d1="ngbDatepicker">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
                                         <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -71,8 +65,7 @@
                         <label for="date_to" class="control-label" translate>To</label>
                         <div class="date-group">
                             <div clickOutside (clickOutside)="dt2.close()" class="input-group">
-                                <input [minDate]="searchForm.value.date_from | dateObj" class="form-control"
-                                    formControlName="date_to" placeholder="mm/dd/yyyy" name="dp" ngbDatepicker #dt2="ngbDatepicker">
+                                <input [minDate]="searchForm.value.date_from | dateObj" class="form-control" formControlName="date_to" placeholder="mm/dd/yyyy" name="dp" ngbDatepicker #dt2="ngbDatepicker">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" (click)="dt2.toggle()" type="button">
                                         <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -101,8 +94,7 @@
                     </div>
                     <div class="card-body no-padding">
                         <div class="table-responsive list">
-                            <table class="table table-bordered table-order" cdArrowTable [collection]="list.items"
-                                [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
+                            <table class="table table-bordered table-order" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                                 <thead class="bg-white">
                                     <tr>
                                         <th>Voucher</th>
@@ -145,21 +137,16 @@
                                             <a class="btn btn-default" ngbTooltip="View" (click)="viewReceipt(item.id)">
                                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default " ngbTooltip="Edit" (click)="editReceipt(item.id)"
-                                                *ngIf="item.sts_code == 'NW'">
+                                            <a class="btn btn-default " ngbTooltip="Edit" (click)="editReceipt(item.id)" *ngIf="item.sts_code == 'NW'">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
-                                            <a ngbTooltip="Submit" *ngIf="item.sts_code == 'NW'" class="btn btn-default"
-                                                (click)="confirmModal(item.id, 2)"><i class="fa fa-caret-square-o-right"
+                                            <a ngbTooltip="Submit" *ngIf="item.sts_code == 'NW'" class="btn btn-default" (click)="confirmModal(item.id, 2)"><i class="fa fa-caret-square-o-right"
                                                     aria-hidden="true"></i></a>
-                                            <a class="btn btn-default" ngbTooltip="Cancel" (click)="confirmModal(item.id, 6)"
-                                                *ngIf="item.sts_code == 'NW'">
+                                            <a class="btn btn-default" ngbTooltip="Cancel" (click)="confirmModal(item.id, 6)" *ngIf="item.sts_code == 'NW'">
                                                 <i class="fa fa-times-circle" aria-hidden="true"></i>
                                             </a>
-                                            <a ngbTooltip="Approve" *ngIf="item.sts_code == 'SB'" class="btn btn-default"
-                                                (click)="confirmModal(item.id, 3)"><i class="fa fa-check"></i></a>
-                                            <a ngbTooltip="Reject" *ngIf="item.sts_code == 'SB'" class="btn btn-default"
-                                                (click)="confirmModal(item.id, 4)"><i class="fa fa-ban" aria-hidden="true"></i></a>
+                                            <a ngbTooltip="Approve" *ngIf="item.sts_code == 'SB'" class="btn btn-default" (click)="confirmModal(item.id, 3)"><i class="fa fa-check"></i></a>
+                                            <a ngbTooltip="Reject" *ngIf="item.sts_code == 'SB'" class="btn btn-default" (click)="confirmModal(item.id, 4)"><i class="fa fa-ban" aria-hidden="true"></i></a>
                                             <!-- <a class="btn btn-default" ngbTooltip="Print" (click)="printPDF(item.id, item.inv_num)">
                                                 <i class="fa fa-download" aria-hidden="true"></i>
                                             </a> -->
@@ -186,8 +173,7 @@
                     <div class="col-md-6" style="padding-left: 0px;">
                         <span style="float: left; padding-right: 10px;">{{list.items.length}}/{{tableService.pagination.total_record}}
                             items </span>
-                        <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length"
-                            (change)="tableService.changeLength()">
+                        <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length" (change)="tableService.changeLength()">
                             <option *ngFor="let option of tableService.itemPerPageOptions" [ngValue]="option">{{option}}</option>
                         </select>
                     </div>
@@ -195,10 +181,8 @@
             </div>
             <div class="col-md-6 padding-lr-0">
                 <div class="text-right">
-                    <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)"
-                        [pageSize]="tableService.pagination.length" [collectionSize]="tableService.pagination.total_record || 120"
-                        [(page)]="tableService.pagination.page" [maxSize]="tableService.maxSize" [rotate]="true"
-                        [boundaryLinks]="true"></ngb-pagination>
+                    <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length" [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page" [maxSize]="tableService.maxSize"
+                        [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
                 </div>
             </div>
         </div>

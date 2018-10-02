@@ -411,7 +411,7 @@ export class SaleOrderEditComponent implements OnInit {
 
             if (+this.generalForm.getRawValue().carrier_id === 2) {
                 default_option = '888';
-                default_ship_rate = 8;
+                default_ship_rate = 7;
             }
             enable = [1, 2].indexOf(+this.generalForm.getRawValue().carrier_id) > -1;
 

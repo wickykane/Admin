@@ -155,8 +155,8 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                 // tslint:disable-next-line:no-unused-expression
                 // this.detail['company_type'] === 'CP' && (res.data['primary'] = res.data['head_office']);
                 this.changeCustomerType();
-                this.getListBank();
-                this.getListCreditCard();
+                // this.getListBank();
+                // this.getListCreditCard();
                 this.getListPaymentTerm();
                 this.getListPaymentMethod();
                 //  this.changeCountry(res.data['primary'][0]['country_code'], 'states_primary');
@@ -280,9 +280,9 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                 this.changeCountry(this.sites[i].addresses[j]);
                 this.displayCountry(this.sites[i].addresses[j]);
             }
-            for (let j = 0; j < this.sites[i].bank_accounts.length; j++) {
-                this.getListBankSites(this.sites[i].bank_accounts[j]);
-            }
+            // for (let j = 0; j < this.sites[i].bank_accounts.length; j++) {
+            //     this.getListBankSites(this.sites[i].bank_accounts[j]);
+            // }
             // this.orderAddress(this.sites[i].addresses);
         }
         // this.orderAddress(this.addresses);

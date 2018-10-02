@@ -76,6 +76,7 @@ export class SalesTaxAuthComponent implements OnInit {
 
     // public oldRate = null;
     public newRate = null;
+    public newRateTemp = null;
 
     public todayDate = moment().format('YYYY-MM-DD');
     //#endregion initialize variables
@@ -315,15 +316,13 @@ export class SalesTaxAuthComponent implements OnInit {
 
     onSelectCountryTax(countryTax) {
         this.selectedStateTax = {};
-        this.newRate = null;
-        // this.oldRate = null;
+        this.onResetForm();
         this.getCountryTaxAuthorityDetail(countryTax['id']);
     }
 
     onSelectStateTax(stateTax) {
         this.selectedCountryTax = {};
-        this.newRate = null;
-        // this.oldRate = null;
+        this.onResetForm();
         this.getStateTaxAuthorityDetail(stateTax['id'], null);
     }
 
@@ -344,7 +343,10 @@ export class SalesTaxAuthComponent implements OnInit {
     onCheckNewRate() {
         if (this.newRate === null || this.newRate === '') {
             this.stateRateForm.controls.effective_date.setValue(this.selectedStateTax['effective_date']);
+        } else if (this.newRate !== this.newRateTemp) {
+            this.stateRateForm.controls.effective_date.setValue(this.todayDate);
         }
+        this.newRateTemp = this.newRate;
     }
 
     onClickReset() {
@@ -455,6 +457,7 @@ export class SalesTaxAuthComponent implements OnInit {
                     } else {
                         this.getStateTaxAuthorityDetail(this.selectedStateTax['id'], this.selectedStateTax['current_rate']);
                     }
+                    this.newRateTemp = this.newRate;
                     this.toastr.success(res.message);
                 } catch (err) {
                     console.log(err);
@@ -507,10 +510,12 @@ export class SalesTaxAuthComponent implements OnInit {
     }
 
     onResetForm() {
+        this.newRate = null;
+        this.newRateTemp = null;
         this.countryGeneralForm.reset();
         this.stateGeneralForm.reset();
         this.stateRateForm.reset();
-        this.stateRateForm.controls.effective_date.setValue(moment().format('YYYY-MM-DD'));
+        this.stateRateForm.controls.effective_date.setValue(this.todayDate);
         this.isClickedSave = false;
     }
     //#endregion utility functions

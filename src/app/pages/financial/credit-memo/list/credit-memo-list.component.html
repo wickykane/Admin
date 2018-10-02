@@ -141,16 +141,16 @@
                                                     class="fa fa-check"></i></a>
                                             <a ngbTooltip="Reject" *ngIf="item['sts_code'] == 'SB'" class="btn btn-default" (click)="confirmModal(item.id, 4)"><i
                                                     class="fa fa-ban" aria-hidden="true"></i></a>
-                                            <!-- <a ngbTooltip="Pay" *ngIf="[4,8].indexOf(item['invoice_status_id']) != -1" class="btn btn-default"><i
-                                                    class="fa fa-money" aria-hidden="true"></i></a> -->
+                                            <a ngbTooltip="Pay" *ngIf="['SB','AP','RD'].indexOf(item['sts_code']) != -1" class="btn btn-default"><i
+                                                    class="fa fa-money" aria-hidden="true"></i></a>
                                             <a class="btn btn-default" ngbTooltip="Print" (click)="printPDF(item.id)">
                                                 <i class="fa fa-download" aria-hidden="true"></i>
                                             </a>
                                             <a ngbTooltip="Re Open" *ngIf="item['sts_code'] == 'RJ'" class="btn btn-default" (click)="confirmModal(item.id, 'RE-OPEN')"><i
                                                     class="fa fa-clone" aria-hidden="true"></i></a>
-                                            <!-- <a ngbTooltip="Send Mail" *ngIf="['SB','AP','RJ','CC','RD','RF'].indexOf(item['sts_code']) != -1" class="btn btn-default"
+                                            <a ngbTooltip="Send Mail" *ngIf="['SB','AP','RJ','CC','RD','RF'].indexOf(item['sts_code']) != -1" class="btn btn-default"
                                                 (click)="sendMail(item.id)"><i class="fa fa-envelope-o"
-                                                    aria-hidden="true"></i></a> -->
+                                                    aria-hidden="true"></i></a>
                                             <a ngbTooltip="Apply to Invoice" *ngIf="['AP','RD'].indexOf(item['sts_code']) != -1" class="btn btn-default" [routerLink]="['apply-credit', item.id]"><i
                                                     class="fa fa-clipboard" aria-hidden="true"></i></a>
                                         </td>

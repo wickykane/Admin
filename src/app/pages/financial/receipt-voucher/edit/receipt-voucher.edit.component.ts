@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -381,12 +381,18 @@ export class ReceiptVoucherEditComponent implements OnInit {
         this.data['summary'] = {
             total: 0,
             balance_total: 0,
+            balance_due_total: 0,
+            applied_amt_total: 0
         };
 
         this.list.items.map(item => {
             this.data['summary'].total += (+item.applied_amt || 0);
             this.data['summary'].balance_total += (+item.balance_price || 0);
+            this.data['summary'].applied_amt_total += (+item.applied_amt || 0);
         });
+        this.data['summary'].balance_due_total = this.data['summary'].balance_total - this.data['summary'].applied_amt_total;
+
+
 
         this.data['summary'].change = this.generalForm.value.price_received - this.data['summary'].total;
         this.generalForm.patchValue({ remain_amt: this.data['summary'].change });
@@ -481,7 +487,7 @@ export class ReceiptVoucherEditComponent implements OnInit {
                     return item;
                 });
 
-                const params = { ... this.generalForm.value, items, status: 1 };
+                const params = { ... this.generalForm.value, items, status: 1 , price_received: this.data['summary'].total};
                 this.updatePayment(res, items);
             }
         }, dismiss => { });

@@ -24,7 +24,8 @@ export class DebitInformationTabComponent implements OnInit {
     @Input() set debitInfo(debit) {
         if (debit) {
             this.debitData = debit;
-            this.getUniqueTaxItemLine();
+             this.listTaxs = this.debitData['tax_info'];
+            // this.getUniqueTaxItemLine();
         }
     }
     @Output() changeStatusSuccessfully = new EventEmitter();
@@ -45,7 +46,9 @@ export class DebitInformationTabComponent implements OnInit {
 
     ngOnInit() {
         this.currentuser = JSON.parse(localStorage.getItem('currentUser'));
-        this.getUniqueTaxItemLine();
+        // this.getUniqueTaxItemLine();
+        // this.listTaxs = this.debitData['tax_info'];
+        // console.log(this.listTaxs);
     }
 
     getUniqueTaxItemLine() {

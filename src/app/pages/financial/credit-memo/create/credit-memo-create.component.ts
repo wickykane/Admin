@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -44,8 +44,8 @@ export class CreditMemoCreateComponent implements OnInit {
     public currentDt;
 
     public messageConfig = {
-        '2': 'Are you sure that you want to save & submit this quotation to approver?',
-        '4': 'Are you sure that you want to validate this quotation?',
+        '2': 'Are you sure that you want to save & submit the credit memo to approver?',
+        '3': 'Are you sure that you want to Save & Validate the credit memo?',
         'default': 'The data you have entered may not be saved, are you sure that you want to leave?',
     };
 
@@ -329,8 +329,7 @@ export class CreditMemoCreateComponent implements OnInit {
     deleteAction(id, item_condition) {
         this.list.items = this.list.items.filter((item) => {
             if (item.item_id === id && item.is_item === 1) {
-                this.items_removed.push(item.id);
-                console.log(this.items_removed);
+                this.items_removed.push(item.item_id);
             }
             return ((item.item_id || item.misc_id) + (item.item_condition_id || 'mis') !== (id + (item_condition || 'mis')));
         });

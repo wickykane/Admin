@@ -21,6 +21,7 @@ export class PaymentGatewayModalComponent implements OnInit {
 
     constructor(public activeModal: NgbActiveModal, public toastr: ToastrService, private fb: FormBuilder, private receiptVoucherService: ReceiptVoucherService, private commonService: CommonService) {
         this.generalForm = fb.group({
+            'email': [null, Validators.compose([Validators.required, Validators.email])],
             'billing_id': [null, Validators.required],
             'card_number': [null, Validators.required],
             'expiration_year': [null, Validators.required],
