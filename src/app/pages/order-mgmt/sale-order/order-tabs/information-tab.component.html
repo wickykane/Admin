@@ -537,7 +537,7 @@
                             <strong>Total Paid</strong>
                             </label>
                                     <div class='col-6 offset-md-1 padding-lr-10'>
-                                        <strong>{{(detail['total_paid'] |0)  | currency}}</strong>
+                                        <strong>{{(detail['total_paid'] ||0)  | currency}}</strong>
                                     </div>
                                 </div>
                                 <div class="form-group row">
