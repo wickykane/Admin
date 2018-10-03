@@ -35,7 +35,6 @@ export class PaymentTermComponent implements OnInit {
   constructor(
     private cd: ChangeDetectorRef,
     private fb: FormBuilder,
-    private cd: ChangeDetectorRef,
     public tableService: TableService,
     private activeRouter: ActivatedRoute,
     private router: Router,
@@ -63,10 +62,6 @@ export class PaymentTermComponent implements OnInit {
   /**
    * Table Event
    */
-  refresh() {
-    this.cd.detectChanges();
-  }
-
   refresh() {
     this.cd.detectChanges();
   }
