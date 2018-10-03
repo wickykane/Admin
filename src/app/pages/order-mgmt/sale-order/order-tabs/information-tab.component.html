@@ -10,7 +10,7 @@
         <button ngbTooltip="Copy" class="btn btn-outline-dark" (click)="confirmModal(_orderId, 'CLONE')"><i class="fa fa-clone"></i> Copy</button>
         <button ngbTooltip="Edit" *ngIf="_orderDetail['order_sts_short_name'] == 'NW'" class="btn btn-outline-dark" [routerLink]="['/order-management/sale-order/edit', _orderId]"><i class="fa fa-pencil-square"></i> Edit</button>
         <button ngbTooltip="Generate Invoice" (click)="generateInvoice()" *ngIf="['AP', 'IP', 'PP', 'RS'].indexOf(_orderDetail['order_sts_short_name']) != -1" class="btn btn-outline-dark"><i class="fa fa-plus"></i> Generate Invoice</button>
-        
+
     </div>
     <section class="rma-page block main-container block-order">
         <div class="row block-info">
@@ -368,14 +368,14 @@
                                             {{item.quantity }}
                                         </td>
                                         <td class="text-right">
-                                            {{item.quantity }}
+                                            {{item.qty_cancel }}
                                         </td>
                                         <td class="text-right">
-                                            {{item.quantity }}
+                                            {{item.qty_remain }}
                                         </td>
 
                                         <td class="text-right">{{item.qty_shipped}}</td>
-                                        <td class="text-right">0</td>
+                                        <td class="text-right">{{ item.qty_return }}</td>
                                         <td class="text-right">
                                             <div>
                                                 {{item.sale_price | currency}}
@@ -459,13 +459,13 @@
                                         <div class="form-group row">
                                             <label class='col-7'>Total Canceled Items</label>
                                             <div class='col-5'>
-                                                {{detail['qty_canceled'] || 0 }}
+                                                {{detail['qty_cancel'] || 0 }}
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class='col-7'>Total Return COGS</label>
                                             <div class='col-5'>
-                                                {{detail['return_cogs'] || 0}}
+                                                {{detail['total_return_cogs'] || 0}}
                                             </div>
                                         </div>
                                     </div>
@@ -491,7 +491,7 @@
                                         <div class="form-group row">
                                             <label class='col-7'>Total Returned Items </label>
                                             <div class='col-5'>
-                                                {{detail['qty_returned'] || 0}}
+                                                {{detail['qty_return'] || 0}}
                                             </div>
                                         </div>
                                     </div>
@@ -513,23 +513,23 @@
                                     <label class='col-5 control-label'>
                             <strong class="text-warning">Sub Total</strong>
                             </label>
-                            <div class='col-6 offset-md-1 padding-lr-10'>
-                               <strong>{{detail['sub_total_price'] | currency}}</strong>
-                            </div>
-                         </div>
-                         <div *ngFor="let item of order_info['taxs']" class="form-group row">
-                             <label class='col-6 control-label'>+ TAX ({{item.tax_percent}}%):</label>
-                             <div class='col-5 padding-lr-10'>
-                                    {{ item.tax | currency }}
-                                 <!-- <input class="form-control" readonly="true" [(ngModel)]="item.tax" class="form-control" value="0" type="number"> -->
-                             </div>
-                         </div>
-                         <div class="form-group row margin-lr-0 text-light bg-danger">
-                             <label class="col-5 control-label ">
+                                    <div class='col-6 offset-md-1 padding-lr-10'>
+                                        <strong>{{detail['sub_total_price'] | currency}}</strong>
+                                    </div>
+                                </div>
+                                <div *ngFor="let item of order_info['taxs']" class="form-group row">
+                                    <label class='col-6 control-label'>+ TAX ({{item.tax_percent}}%):</label>
+                                    <div class='col-5 padding-lr-10'>
+                                        {{ item.tax | currency }}
+                                        <!-- <input class="form-control" readonly="true" [(ngModel)]="item.tax" class="form-control" value="0" type="number"> -->
+                                    </div>
+                                </div>
+                                <div class="form-group row margin-lr-0 text-light bg-danger">
+                                    <label class="col-5 control-label ">
                                  <strong>Grand Total:</strong>
                              </label>
                                     <div class="col-6 offset-md-1 ">
-                                        <strong>{{detail['total_price'] | currency}}</strong>
+                                        <strong>{{(detail['total_price'] || 0)  | currency}}</strong>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -537,7 +537,7 @@
                             <strong>Total Paid</strong>
                             </label>
                                     <div class='col-6 offset-md-1 padding-lr-10'>
-                                        <strong>$0.00</strong>
+                                        <strong>{{(detail['total_paid'] |0)  | currency}}</strong>
                                     </div>
                                 </div>
                                 <div class="form-group row">
