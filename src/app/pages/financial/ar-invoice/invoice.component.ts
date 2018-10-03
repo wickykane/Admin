@@ -44,6 +44,7 @@ export class InvoiceComponent implements OnInit {
         7: 'Are you sure that you want to cancel current invoice?',
         4: 'Are you sure that you want to approve the current invoice?',
         3: 'Are you sure that you want to reject the current invoice?',
+        11: 'Are you sure that you want to revise the current invoice?',
     };
 
 
@@ -56,6 +57,7 @@ export class InvoiceComponent implements OnInit {
         'Fully Paid': { color: 'lemon', name: 'Fully Paid', id: 6, img: './assets/images/icon/full_delivered.png' },
         'Canceled': { color: 'red', name: 'Canceled', id: 7, img: './assets/images/icon/cancel.png' },
         'Overdue': { color: 'bright-grey', name: 'Overdue', id: 8 },
+        'Revised': { color: 'texas-rose', name: 'Revised', id: 9 },
     };
 
     constructor(public router: Router,
@@ -158,6 +160,9 @@ export class InvoiceComponent implements OnInit {
         this.financialService.updateInvoiceStatus(id, params).subscribe(res => {
             try {
                 this.toastr.success(res.message);
+                if (+id === 11) {
+                    this.editInvoice(id);
+                }
                 this.getList();
                 this.getCountStatus();
             } catch (e) {

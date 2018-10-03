@@ -115,7 +115,7 @@ export class SaleOrderInformationTabComponent implements OnInit {
                 this.detail = res.data;
                 this.stockValueChange.emit(res.data);
 
-                this.detail.shipping = res.data.shipping_address ? res.data.shipping_address : this.addr_select.shipping ;
+                this.detail.shipping = res.data.shipping_address ? res.data.shipping_address : this.addr_select.shipping;
                 this.detail.billing = res.data.billing_address ? res.data.billing_address : this.addr_select.billing;
 
                 this.detail['subs'] = res.data.items;
@@ -184,23 +184,23 @@ export class SaleOrderInformationTabComponent implements OnInit {
     }
 
     cloneNewOrder(id) {
-      this.orderService.cloneOrder(id).subscribe(res => {
-          this.toastr.success(res.message);
-          setTimeout(() => {
-              this.router.navigate(['/order-management/sale-order/edit', res.data.id]);
-          }, 1000);
-      }
-      );
+        this.orderService.cloneOrder(id).subscribe(res => {
+            this.toastr.success(res.message);
+            setTimeout(() => {
+                this.router.navigate(['/order-management/sale-order/edit', res.data.id]);
+            }, 1000);
+        }
+        );
     }
 
     putApproveOrder(order_id) {
         // const params = {'status_code': 'AP'};
         this.orderService.approveOrd(order_id).subscribe(res => {
             // if (res.status) {
-                this.toastr.success(res.message);
-                setTimeout(() => {
-                    this.router.navigate(['/order-management/sale-order']);
-                }, 500);
+            this.toastr.success(res.message);
+            setTimeout(() => {
+                this.router.navigate(['/order-management/sale-order']);
+            }, 500);
             // } else {
             //     this.toastr.error(res.message);
             // }
@@ -211,10 +211,10 @@ export class SaleOrderInformationTabComponent implements OnInit {
     updateStatusOrder(order_id, status) {
         this.orderService.updateStatusOrder(order_id, status).subscribe(res => {
             // if (res.status) {
-                this.toastr.success(res.message);
-                setTimeout(() => {
-                    this.router.navigate(['/order-management/sale-order']);
-                }, 500);
+            this.toastr.success(res.message);
+            setTimeout(() => {
+                this.router.navigate(['/order-management/sale-order']);
+            }, 500);
             // } else {
             //     this.toastr.error(res.message);
             // }
@@ -227,4 +227,18 @@ export class SaleOrderInformationTabComponent implements OnInit {
         this.router.navigate(['/order-management/sale-order']);
     }
 
+    generateInvoice() {
+        const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
+        modalRef.result.then(res => {
+            if (res) {
+                this.orderService.generateInvoice(this._orderId).subscribe(result => {
+                    this.toastr.success(result.message);
+                    this.router.navigate(['/financial/invoice/view/' + result.data.id]);
+                });
+            }
+        }, dismiss => { });
+        modalRef.componentInstance.message = 'Are you sure that you want to create an invoice for this sales order?';
+        modalRef.componentInstance.yesButtonText = 'Yes';
+        modalRef.componentInstance.noButtonText = 'No';
+    }
 }

@@ -1,17 +1,18 @@
 <div class='address-tab'>
     <div class="bd-example text-right">
         <button class="btn btn-outline-dark" [routerLink]="['/financial/invoice']"><i class="fa fa-share-square" ></i> Back</button>
-        <button *ngIf="detail['invoice_status_id'] == 1" class="btn btn-outline-primary" [routerLink]="['/financial/invoice/edit', _invoiceId]"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit</button>
-        <button *ngIf="detail['invoice_status_id'] == 1" class="btn btn-outline-warning" (click)="confirmModal(_invoiceId, 2)"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i> Submit</button>
-        <button *ngIf="detail['invoice_status_id'] == 1" class="btn btn-outline-danger" (click)="confirmModal(_invoiceId, 7)"><i class="fa fa-times-circle" aria-hidden="true"></i> Cancel</button>
+        <button *ngIf="detail['invoice_status_id'] == 1 || detail['invoice_status_id'] == 11" class="btn btn-outline-primary" [routerLink]="['/financial/invoice/edit', _invoiceId]"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit</button>
+        <button *ngIf="detail['invoice_status_id'] == 1 || detail['invoice_status_id'] == 11" class="btn btn-outline-warning" (click)="confirmModal(_invoiceId, 2)"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i> Submit</button>
+        <button *ngIf="detail['invoice_status_id'] == 2" class="btn btn-outline-warning" (click)="confirmModal(_invoiceId, 11)"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i> Revise</button>
         <button *ngIf="detail['invoice_status_id'] == 2" class="btn btn-outline-success" (click)="confirmModal(_invoiceId, 4)"><i class="fa fa-check-square"></i> Approve</button>
-        <button *ngIf="detail['invoice_status_id'] == 2" class="btn btn-outline-danger" (click)="confirmModal(_invoiceId, 3)"><i class="fa fa-ban" aria-hidden="true"></i> Reject</button>
+        <button *ngIf="detail['invoice_status_id'] == 1 || detail['invoice_status_id'] == 2" class="btn btn-outline-danger" (click)="confirmModal(_invoiceId, 7)"><i class="fa fa-times-circle" aria-hidden="true"></i> Cancel</button>
+        <!-- <button *ngIf="detail['invoice_status_id'] == 2" class="btn btn-outline-danger" (click)="confirmModal(_invoiceId, 3)"><i class="fa fa-ban" aria-hidden="true"></i> Reject</button> -->
         <button *ngIf="[4, 5, 8].indexOf(detail['invoice_status_id']) != -1" class="btn btn-outline-dark"><i class="fa fa-money" aria-hidden="true"></i> Pay</button>
         <button class="btn btn-outline-dark" (click)="printPDF(_invoiceId, detail['inv_num'] )"><i class="fa fa-download" aria-hidden="true"></i> Print</button>
         <button *ngIf="[3,4,6,7,8].indexOf(detail['invoice_status_id']) != -1" class="btn btn-outline-dark" (click)="sendMail(_invoiceId)"><i class="fa fa-envelope-o" aria-hidden="true"></i> Send Mail</button>
-        
+
         <button *ngIf="!own_carrirer && [4,5,6,8].indexOf(detail['invoice_status_id']) != -1" class="btn btn-outline-info" (click)="updatePOD()"><i class="fa fa-calendar" aria-hidden="true"></i> Update POD Date</button>
-        
+
         <!-- <button *ngIf="detail['invoice_status_id'] == 3" class="btn btn-outline-dark" (click)="confirmModal(_invoiceId, 1)"><i class="fa fa-external-link-square" aria-hidden="true"></i> Reopen</button> -->
     </div>
     <section class="rma-page block main-container block-order">
@@ -408,15 +409,7 @@
                                         <div *ngIf="detail.bal_amt" class="p-2 text-danger">Expires {{ detail['policy_des']}}</div>
                                     </div>
                                 </div>
-                                <div *ngIf="detail['policy_type']=='Late'" class="form-group row">
-                                    <label class="col-6 control-label ">
-                                            <strong>+ Late Fee Payment</strong>
-                                        </label>
-                                    <div class="col-6 padding-lr-10 text-primary">
-                                        <strong>{{(detail['policy_amt'] || 0) | currency}}</strong>
-                                    </div>
-                                    <span class="col-12 text-danger">{{detail['policy_des']}}</span>
-                                </div>
+
                                 <div *ngIf="detail['policy_type']=='Early' || detail['policy_type']=='Late'" class="form-group row">
                                     <label class="col-6 control-label ">
                                         <strong>Adjusted Total Due</strong>
@@ -442,12 +435,21 @@
                                     </div>
                                 </div>
                                 <div class="form-group row margin-lr-0 text-light bg-danger">
-                                    <label class="col-6 control-label">
+                                    <label class="col-6">
                                             <strong>Balance Amount</strong>
                                         </label>
                                     <div class="col-6 padding-lr-10">
                                         <strong>{{(detail.bal_amt || 0) | currency}}</strong>
                                     </div>
+                                </div>
+                                <div *ngIf="detail['policy_type']=='Late'" class="form-group row">
+                                    <label class="col-6 control-label ">
+                                                <strong>Late Fee Payment</strong>
+                                            </label>
+                                    <div class="col-6 padding-lr-10 text-primary">
+                                        <strong>{{(detail['policy_amt'] || 0) | currency}}</strong>
+                                    </div>
+                                    <span class="col-12 text-danger">{{detail['policy_des']}}</span>
                                 </div>
                             </div>
                         </div>

@@ -38,6 +38,7 @@ export class InvoiceInformationTabComponent implements OnInit {
         7: 'Are you sure that you want to cancel current invoice?',
         4: 'Are you sure that you want to approve the current invoice?',
         3: 'Are you sure that you want to reject the current invoice?',
+        11: 'Are you sure that you want to revise the current invoice?',
     };
 
     public invoice_info: any = {};
@@ -110,6 +111,10 @@ export class InvoiceInformationTabComponent implements OnInit {
         this.financialService.updateInvoiceStatus(id, params).subscribe(res => {
             try {
                 this.toastr.success(res.message);
+                if (+id === 11) {
+                    this.router.navigate(['/financial/invoice/edit/' + id]);
+                    return;
+                }
                 this.getList();
             } catch (e) {
                 console.log(e);

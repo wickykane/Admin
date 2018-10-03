@@ -294,5 +294,8 @@ export class OrderService {
         const url = 'sale-quote/count-status';
         return this.API.get(url);
     }
-
+    generateInvoice(id) {
+        const url = 'order/invoice/' + id;
+        return this.API.post(url);
+    }
 }
