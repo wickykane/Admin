@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -14,7 +14,8 @@ import { LateFeePolicyService } from './late-fee-policy.service';
     providers: [LateFeePolicyService, LateFeePolicyListKeyService],
     templateUrl: 'late-fee-policy.component.html',
     styleUrls: ['./late-fee-policy.component.scss'],
-    animations: [routerTransition()]
+    animations: [routerTransition()],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class LateFeePolicyComponent implements OnInit {
@@ -30,6 +31,7 @@ export class LateFeePolicyComponent implements OnInit {
     public data = {};
 
     constructor(
+        private cd: ChangeDetectorRef,
         private fb: FormBuilder,
         public tableService: TableService,
         private activeRouter: ActivatedRoute,
@@ -64,6 +66,9 @@ export class LateFeePolicyComponent implements OnInit {
     /**
      * Table Event
      */
+    refresh() {
+        this.cd.detectChanges();
+    }
 
     selectData(index) {
         console.log(index);
@@ -81,6 +86,7 @@ export class LateFeePolicyComponent implements OnInit {
             try {
                 this.list.items = res.data.rows;
                 this.tableService.matchPagingOption(res.data);
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -17,7 +17,8 @@ import { LedgerKeyService } from './keys.control';
   providers: [LedgerService, LedgerKeyService],
   templateUrl: 'ledger.component.html',
   styleUrls: ['ledger.component.scss'],
-  animations: [routerTransition()]
+  animations: [routerTransition()],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class LedgerComponent implements OnInit {
@@ -55,6 +56,7 @@ export class LedgerComponent implements OnInit {
 
 
   constructor(
+    private cd: ChangeDetectorRef,
     private fb: FormBuilder,
     public tableService: TableService,
     private router: Router,
@@ -100,6 +102,9 @@ export class LedgerComponent implements OnInit {
       { id: 1, value: 'Active' },
     ];
   }
+  refresh() {
+      this.cd.detectChanges();
+  }
 
   /**
    * Tree Account
@@ -111,6 +116,7 @@ export class LedgerComponent implements OnInit {
   getAccountTree() {
     this.ledgerService.getAccountTree().subscribe(res => {
       this.listMaster['account_list'] = [{ ...res.data, name: 'General Ledger - Accounts' }];
+      this.refresh();
     });
   }
 
@@ -119,6 +125,7 @@ export class LedgerComponent implements OnInit {
       this.generalForm.patchValue(res.data);
       this.data['selectedAccount'] = (flag) ? res.data : this.data['selectedAccount'];
       this.data['selectedAccount']['is_credit'] = res.data.is_credit;
+      this.refresh();
     });
   }
 
@@ -128,6 +135,7 @@ export class LedgerComponent implements OnInit {
       this.data['selectedAccount'] = (flag) ? res.data : this.data['selectedAccount'];
       this.data['selectedAccount']['is_credit'] = res.data.is_credit;
       this.data['selectedAccount']['account_type_name'] = res.data.account_type_name;
+      this.refresh();
     });
   }
 
@@ -136,12 +144,14 @@ export class LedgerComponent implements OnInit {
       this.generalDetailForm.patchValue(res.data);
       this.data['selectedAccount'] = (flag) ? res.data : this.data['selectedAccount'];
       this.data['selectedAccount']['is_credit'] = res.data.is_credit;
+      this.refresh();
     });
   }
 
   getAccountCode() {
     this.ledgerService.getAccountCode().subscribe(res => {
       this.generalForm.patchValue({ cd: res.data });
+      this.refresh();
     });
   }
 
@@ -183,6 +193,7 @@ export class LedgerComponent implements OnInit {
         } else {
           this.toastr.error(res.message);
         }
+        this.refresh();
       });
     } else {
       const id = this.data['selectedAccount'].id;
@@ -194,6 +205,7 @@ export class LedgerComponent implements OnInit {
         } else {
           this.toastr.error(res.message);
         }
+        this.refresh();
       });
     }
   }
@@ -212,6 +224,7 @@ export class LedgerComponent implements OnInit {
         } else {
           this.toastr.error(res.message);
         }
+        this.refresh();
       });
     } else {
       const id = this.data['selectedAccount'].id;
@@ -223,6 +236,7 @@ export class LedgerComponent implements OnInit {
         } else {
           this.toastr.error(res.message);
         }
+        this.refresh();
       });
     }
   }
@@ -252,6 +266,7 @@ export class LedgerComponent implements OnInit {
           }
           return true;
         });
+        this.refresh();
       } catch (e) {
         console.log(e);
       }
@@ -264,6 +279,7 @@ export class LedgerComponent implements OnInit {
       try {
         this.toastr.success(res.message);
         this.getList();
+        this.refresh();
       } catch (e) {
         console.log(e);
       }
@@ -282,6 +298,7 @@ export class LedgerComponent implements OnInit {
           try {
             this.toastr.success(res.message);
             this.getList();
+            this.refresh();
           } catch (e) {
             console.log(e);
           }

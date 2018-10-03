@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from './../../../../services/table.service';
@@ -12,7 +12,8 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
     selector: 'app-customer-modal-content',
     templateUrl: './customer.modal.html',
-    providers: [CustomerService, LateFeePolicyService]
+    providers: [CustomerService, LateFeePolicyService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 // tslint:disable-next-line:component-class-suffix
 export class CustomerModalContent implements OnInit {
@@ -34,6 +35,7 @@ export class CustomerModalContent implements OnInit {
     public filterForm: FormGroup;
 
     constructor(public activeModal: NgbActiveModal,
+        private cd: ChangeDetectorRef,
         public customerService: CustomerService,
         public lateFeePolicyService: LateFeePolicyService,
         public fb: FormBuilder,
@@ -61,6 +63,10 @@ export class CustomerModalContent implements OnInit {
     }
 
     // Table event
+    refresh() {
+        this.cd.detectChanges();
+    }
+
     selectData(index) {
         console.log(index);
     }
@@ -83,6 +89,7 @@ export class CustomerModalContent implements OnInit {
         this.lateFeePolicyService.getListCustomerType().subscribe(res => {
             try {
                 this.listMaster['buyerType'] = res.data;
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
@@ -100,6 +107,7 @@ export class CustomerModalContent implements OnInit {
             try {
                 this.list.items = res.data.rows;
                 this.tableService.matchPagingOption(res.data);
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
