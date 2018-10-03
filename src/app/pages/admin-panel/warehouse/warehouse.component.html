@@ -37,12 +37,12 @@
                                             </label>
                                         </td>
                                         <td class="text-center">
-                                            <a class="btn btn-default" *ngIf="!item.is_shipping_origin" (click)="setShipping(item.id)" title="Set Shipping">
+                                            <a class="btn btn-default" *ngIf="item.is_shipping_origin" (click)="setShipping(item.id)" title="Set Shipping">
                                                 <span class="text-success">
                                                     <i class="fa fa-check"></i>
                                                 </span>
                                             </a>
-                                            <span *ngIf="item.is_shipping_origin" class="text-disable">
+                                            <span *ngIf="!item.is_shipping_origin" class="text-disable">
                                                 <i class="fa fa-check"></i>
                                             </span>
                                         </td>
