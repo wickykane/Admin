@@ -243,7 +243,6 @@ export class SaleQuotationCreateComponent implements OnInit {
                 });
 
                 this.order_info['original_ship_cost'] = data.original_ship_cost;
-                this.selectAddress('shipping', 1);
                 this.updateTotal();
 
                 this.changeCustomer(1);
@@ -279,7 +278,7 @@ export class SaleQuotationCreateComponent implements OnInit {
 
                 // if (res.data.buyer_type === 'PS') {
                 this.addr_select.contact = res.data.contact[0] || this.addr_select.contact;
-                this.generalForm.patchValue({ contact_user_id: this.addr_select.contact.id, 'carrier_id': null, 'ship_method_option': null, 'ship_method_rate': null });
+                this.generalForm.patchValue({ contact_user_id: this.addr_select.contact.id });
 
                 // }
 
@@ -374,10 +373,10 @@ export class SaleQuotationCreateComponent implements OnInit {
     getShippingReference(id, flag?) {
         this.orderService.getShippingReference(id).subscribe(res => {
             this.listMaster['carriers'] = res.data;
-            const arr = res.data.filter(item => item.name === 'UPS');
-            if (arr.length > 0) {
-                this.generalForm.patchValue({ 'carrier_id': 1, 'ship_method_option': null });
-            }
+            // const arr = res.data.filter(item => item.name === 'UPS');
+            // if (arr.length > 0) {
+            //     this.generalForm.patchValue({ 'carrier_id': 1, 'ship_method_option': null });
+            // }
             this.changeShip(flag);
         });
     }

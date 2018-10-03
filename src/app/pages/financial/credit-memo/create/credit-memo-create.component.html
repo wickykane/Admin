@@ -110,7 +110,7 @@
                                             <div class="form-group row">
                                                 <label class='col-6'>Document Type <span class="text-danger">(*)</span></label>
                                                 <div class='col-6'>
-                                                    <select class="form-control" formControlName="document_type">
+                                                    <select (change)="getListDocument()" class="form-control" formControlName="document_type">
                                                         <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let item of listMaster['documentType']" [ngValue]="item.id">{{item.name}}</option>
                                                     </select>
@@ -121,7 +121,7 @@
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
-                                                    <ng-select (change)="changeInvoice($event)" [items]="listMaster['invoice-list']" bindLabel="inv_num" bindValue="id" formControlName="document_id">
+                                                    <ng-select (change)="changeInvoice($event)" [items]="listMaster['invoice-list']" bindLabel="code" bindValue="id" formControlName="document_id">
                                                     </ng-select>
                                                 </div>
                                             </div>

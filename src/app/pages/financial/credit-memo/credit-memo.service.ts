@@ -31,7 +31,7 @@ export class CreditMemoService {
     }
 
     getAllSaleOrderByCus(id) {
-        const params = {'cus_id': id};
+        const params = { 'cus_id': id };
         const url = 'ar-invoice/get-list';
         return this.API.get(url, params);
     }
@@ -126,5 +126,13 @@ export class CreditMemoService {
     applyCreditForInvoice(credit_id, params) {
         const url = ['credit-apply', 'apply', credit_id].join('/');
         return this.API.post(url, params);
+    }
+    getListDocument(params) {
+        const url = 'credit-memo/get-content';
+        return this.API.get(url, params);
+    }
+    getDetailDocument(params) {
+        const url = 'credit-memo/get-info-content';
+        return this.API.get(url, params);
     }
 }

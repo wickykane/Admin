@@ -152,7 +152,7 @@ export class CreditMemoCreateComponent implements OnInit {
             this.data['total_page'] = res.data.total_page;
             this.refresh();
         });
-        this.searchKey.subscribe(key => {
+        this.searchKey.debounceTime(300).subscribe(key => {
             this.data['page'] = 1;
             this.searchCustomer(key);
         });
@@ -218,24 +218,74 @@ export class CreditMemoCreateComponent implements OnInit {
                     this.selectAddress('billing', flag);
                     this.selectAddress('shipping', flag);
                 }
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
         });
-        this.creditMemoService.getAllSaleOrderByCus(company_id).subscribe(res => {
+        this.getListDocument();
+    }
+
+    getListDocument() {
+        if (!this.generalForm.value.company_id || !this.generalForm.value.document_type) {
+            return;
+        }
+        this.resetDataChange();
+        const params = {
+            cus_id: this.generalForm.value.company_id,
+            doc_type: this.generalForm.value.document_type
+        };
+
+        this.creditMemoService.getListDocument(params).subscribe(res => {
             this.listMaster['invoice-list'] = res.data;
             this.refresh();
+        });
+
+        if (this.generalForm.value.document_type === 2) {
+            this.setDefaulValueRMA();
+        }
+    }
+    /**
+     * Internal Function
+     */
+    resetDataChange() {
+        this.generalForm.patchValue({
+            document_id: null,
+            payment_term_id: null,
+            payment_method_id: null,
+            gl_account: null,
+            billing_id: null,
+        });
+        this.list.items = [];
+        this.data['shipping_address'] = {};
+        this.data['order_detail'] = {};
+        this.addr_select.billing = {};
+        this.data['shipping_method'] = {};
+        this.refresh();
+    }
+
+    setDefaulValueRMA() {
+        const user = JSON.parse(localStorage.getItem('currentUser'));
+        const default_payment = (this.listMaster['payment_method'].find(item => item.cd === 'SC') || {}).id;
+        this.generalForm.get('payment_method_id').disable();
+        this.generalForm.patchValue({
+            payment_method_id: default_payment,
+            payment_term_id: 1,
+            gl_account: 162,
+            approver_id: user.id,
+            sale_person_id: user.id,
         });
         this.refresh();
     }
 
-    /**
-     * Internal Function
-     */
     selectData(data) { }
 
     changeInvoice(event) {
-        this.creditMemoService.getDetailInvoice(this.generalForm.value.document_id).subscribe(res => {
+        const params = {
+            id: this.generalForm.value.document_id,
+            doc_type: this.generalForm.value.document_type
+        };
+        this.creditMemoService.getDetailDocument(params).subscribe(res => {
             this.list.items = res.data.inv_detail.map(item => {
                 item.quantity = item.qty_inv;
                 if (!item.is_item) { item.sku = item.misc_no; }
@@ -353,6 +403,7 @@ export class CreditMemoCreateComponent implements OnInit {
         });
         this.refresh();
     }
+
     addNewItem() {
         if (this.items_removed.length === 0) {
             return;
