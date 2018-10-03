@@ -28,12 +28,13 @@ import { TableService } from './../../../../services/table.service';
 
 import * as moment from 'moment';
 import { PaymentInformModalComponent } from '../modals/payment-inform/payment-inform.modal';
+import { FinancialService } from './../../financial.service';
 
 @Component({
     selector: 'app-create-receipt-voucher',
     templateUrl: './receipt-voucher.create.component.html',
     styleUrls: ['../receipt-voucher.component.scss'],
-    providers: [OrderService, ReceiptVoucherService, HotkeysService, TableService, InvoiceCreateKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }],
+    providers: [FinancialService, OrderService, ReceiptVoucherService, HotkeysService, TableService, InvoiceCreateKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }],
     animations: [routerTransition()],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -82,6 +83,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         private _hotkeysService: HotkeysService,
         public keyService: InvoiceCreateKeyService,
         public tableService: TableService,
+        private finacialService: FinancialService,
         private voucherService: ReceiptVoucherService,
         private dt: DatePipe) {
         this.searchForm = fb.group({
@@ -134,7 +136,6 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         });
 
         // Init Change Event
-        this.onChangePaymentMethod();
         this.onChangeWareHouse();
         this.onChangePayer();
         this.onChangePaymentMethodType();
@@ -148,11 +149,30 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             payment_date: moment().format('MM/DD/YYYY'),
             electronic: 0,
         });
+
+        this.data['invoice_id'] = this.route.snapshot.queryParams.invoice_id;
+        if (this.data['invoice_id']) {
+            this.getDetailInvoice();
+        }
     }
 
     /**
      * Mater Data
      */
+    getDetailInvoice() {
+        this.finacialService.getDetailInvoice(this.data['invoice_id']).subscribe(res => {
+            const data = res.data;
+            this.generalForm.patchValue({
+                company_id: data.company_id,
+                warehouse_id: data.warehouse_id,
+                electronic: 1,
+                payment_method: 27,
+                gl_account: 162,
+            });
+            this.getListInvoiceAndMemo(data.inv_num, data.tot_amt);
+        });
+    }
+
     refresh() {
         this.cd.detectChanges();
     }
@@ -184,9 +204,12 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         });
     }
 
-    getListInvoiceAndMemo() {
+    getListInvoiceAndMemo(code?, tot_amt?) {
+        if (this.data['invoice_id'] && !code) {
+            return;
+        }
         const params = {
-            code: this.data['search'],
+            code: code || this.data['search'],
             warehouse_id: this.generalForm.value.warehouse_id,
             company_id: this.generalForm.value.company_id,
             ...this.tableService.getParams(),
@@ -204,13 +227,18 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         this.voucherService.getListInvoiceAndMemo(params).subscribe(res => {
             this.list.items = res.data.rows || [];
             this.tableService.matchPagingOption(res.data);
+            if (code) {
+                this.data['invoice_id'] = null;
+                const index = this.list.items.findIndex(item => item.code === code);
+                this.list.items[index].applied_amt = tot_amt;
+            }
             this.updateTotal();
             this.refresh();
         });
     }
 
     resetChangeData(flag?) {
-        if (flag === 'paymentMethodType') {
+        if (flag === 'paymentMethodType' && !this.data['invoice_id']) {
             const id = this.generalForm.value.electronic;
             if (!id) {
                 this.generalForm.get('check_no').setValidators([Validators.required]);
@@ -237,6 +265,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             this.voucherService.getPaymentMethodElectronic(id).subscribe(res => {
                 this.listMaster['payment_method'] = res.data;
                 this.resetChangeData('paymentMethodType');
+                this.onChangePaymentMethod();
                 this.refresh();
                 resolve(true);
             });

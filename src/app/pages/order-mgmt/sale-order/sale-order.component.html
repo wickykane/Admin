@@ -3,13 +3,13 @@
     <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
     <div class="block anchor-scroll block-order">
         <section id="statusIndicator" class="status-indicator-section">
-          <ul class="status-ctn dashboard-content">
-              <li style="cursor: pointer;" (click)="filter(item.status)" *ngFor="let item of countStatus" class="status-item dashboard-stat {{item.color}}">
-                  <img *ngIf="item.img" [src]="item.img" alt="">
-                  <div class="status-count">{{ item.count || 0 }}</div>
-                  <div class="status-lbl text-uppercase">{{ item.name }}</div>
-              </li>
-          </ul>
+            <ul class="status-ctn dashboard-content">
+                <li style="cursor: pointer;" (click)="filter(item.status)" *ngFor="let item of countStatus" class="status-item dashboard-stat {{item.color}}">
+                    <img *ngIf="item.img" [src]="item.img" alt="">
+                    <div class="status-count">{{ item.count || 0 }}</div>
+                    <div class="status-lbl text-uppercase">{{ item.name }}</div>
+                </li>
+            </ul>
         </section>
         <div class="block-content pd-bottom bg-gray-light short-width">
             <div class="row">
@@ -41,37 +41,37 @@
                             <input type="text" name="cd" formControlName="buyer_name" class="form-control" id="cd" placeholder="" capitalize>
                         </div>
 
-                        <!-- <ng-container *ngIf="listMoreFilter[0].value"> -->
-                          <div class="block-search">
-                              <label for="type" class="control-label" translate>Date Type</label>
-                              <select class="form-control" formControlName="date_type">
+                    <!-- <ng-container *ngIf="listMoreFilter[0].value"> -->
+                    <div class="block-search">
+                        <label for="type" class="control-label" translate>Date Type</label>
+                        <select class="form-control" formControlName="date_type">
                                   <option value="null" selected="true">--Select--</option>
                                   <option *ngFor="let item of listMaster['dateType']" [ngValue]="item.id">{{item.name}}</option>
                               </select>
-                          </div>
-                            <div class="block-search">
-                                <label for="" class="control-label" translate> From</label>
-                                <div clickOutside (clickOutside)="d.close()" class="input-group">
-                                    <input [maxDate]="searchForm.value.date_to | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="d" formControlName="date_from" ngbDatepicker #d="ngbDatepicker">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                    </div>
+                    <div class="block-search">
+                        <label for="" class="control-label" translate> From</label>
+                        <div clickOutside (clickOutside)="d.close()" class="input-group">
+                            <input [maxDate]="searchForm.value.date_to | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="d" formControlName="date_from" ngbDatepicker #d="ngbDatepicker">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
                                             <i class="fa fa-calendar" aria-hidden="true"></i>
                                         </button>
-                                    </div>
-                                </div>
                             </div>
-                            <div class="block-search">
-                                <label for="" class="control-label" translate> To</label>
-                                <div clickOutside (clickOutside)="dt.close()" class="input-group">
-                                    <input [minDate]="searchForm.value.date_from | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dt" formControlName="date_to" ngbDatepicker #dt="ngbDatepicker">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary" (click)="dt.toggle()" type="button">
+                        </div>
+                    </div>
+                    <div class="block-search">
+                        <label for="" class="control-label" translate> To</label>
+                        <div clickOutside (clickOutside)="dt.close()" class="input-group">
+                            <input [minDate]="searchForm.value.date_from | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dt" formControlName="date_to" ngbDatepicker #dt="ngbDatepicker">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" (click)="dt.toggle()" type="button">
                                             <i class="fa fa-calendar" aria-hidden="true"></i>
                                         </button>
-                                    </div>
-                                </div>
                             </div>
-                            <!-- <div class="block-search" *ngIf="this.searchForm.value.date_type == 'delivery_dt'">
+                        </div>
+                    </div>
+                    <!-- <div class="block-search" *ngIf="this.searchForm.value.date_type == 'delivery_dt'">
                                 <label for="" class="control-label" translate>From</label>
                                 <div clickOutside (clickOutside)="d1.close()" class="input-group">
                                     <input [maxDate]="searchForm.value.ship_date_to | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="d1" formControlName="ship_date_from" ngbDatepicker #d1="ngbDatepicker">
@@ -93,12 +93,12 @@
                                     </div>
                                 </div>
                             </div> -->
-                        <!-- </ng-container> -->
-                    </form>
-                    <div class="block-btn-search">
-                        <label class="control-label">&nbsp;</label>
-                        <div class="group-btn-search">
-                            <!-- <button type="button" class="btn-default-custom" (click)="onoffFilter = !onoffFilter">More Filter</button>
+                    <!-- </ng-container> -->
+                </form>
+                <div class="block-btn-search">
+                    <label class="control-label">&nbsp;</label>
+                    <div class="group-btn-search">
+                        <!-- <button type="button" class="btn-default-custom" (click)="onoffFilter = !onoffFilter">More Filter</button>
                             <div class="show-more" *ngIf="onoffFilter">
                                 <ul>
                                     <li *ngFor="let item of listMoreFilter; let i = index;">
@@ -108,10 +108,10 @@
                                     </li>
                                 </ul>
                             </div> -->
-                            <button type="button" class="btn-default-custom" (click)="tableService.searchAction()">Search</button>
-                            <button type="button" class="btn-default-custom" (click)="tableService.resetAction(this.searchForm)">Reset</button>
-                        </div>
+                        <button type="button" class="btn-default-custom" (click)="tableService.searchAction()">Search</button>
+                        <button type="button" class="btn-default-custom" (click)="tableService.resetAction(this.searchForm)">Reset</button>
                     </div>
+                </div>
             </div>
         </div>
 
@@ -127,34 +127,34 @@
                             <table class="table table-bordered table-order" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                                 <thead class="bg-white">
                                     <tr>
-                                        <th style="width:50px"></th>
+                                        <!-- <th style="width:50px"></th> -->
                                         <th translate>SO #</th>
                                         <th translate>Cust PO #</th>
                                         <th translate>Sales Quote #</th>
                                         <th translate>Customer</th>
-                                        <th translate>Salesperson</th>
                                         <th class="text-center " translate>Type</th>
                                         <th class="text-center" translate>Order date</th>
-                                        <th class="text-center" translate>Delivery date</th>
-                                        <th class="text-center" translate>Total</th>
                                         <th translate>Status</th>
+                                        <th class="text-center" translate>Delivery date</th>
+                                        <th class="text-center" translate>Total Amount</th>
+                                        <th class="text-center" translate>Total Paid</th>
+                                        <th class="text-center" translate>Total Refunded</th>
+                                        <th translate>Salesperson</th>
                                         <th translate>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                                     <tr>
-                                        <td>
+                                        <!-- <td>
                                             <img *ngIf="item.sts_code!='CP'" src="assets/img/qbicon-gray.png" width="20px" height="20px">
                                             <a *ngIf="item.sts_code=='CP'" href="https://sandbox.qbo.intuit.com/app/sales" target="_blank">
-                                           <img placement="top" ngbTooltip="Sent Invoice To QuickBooks {{item.updated_at}}" src="../../assets/img/qbicons.png"
-                                               width="20px" height="20px">
-                                       </a>
-                                        </td>
+                                                <img placement="top" ngbTooltip="Sent Invoice To QuickBooks {{item.updated_at}}" src="../../assets/img/qbicons.png" width="20px" height="20px">
+                                            </a>
+                                        </td> -->
                                         <td><a class="text-primary" [routerLink]="['detail', item.id]">{{item.code}}</a></td>
                                         <td>{{item.cus_po}}</td>
                                         <td>{{item.quote_no}}</td>
                                         <td>{{item.buyer_name}}</td>
-                                        <td>{{item.sale_person_name}}</td>
                                         <td class="text-center">
                                             <span *ngIf="item.type == 'PKU'">Pickup</span>
                                             <span *ngIf="item.type == 'ONL'">Ecommerce</span>
@@ -162,11 +162,10 @@
                                             <span *ngIf="item.type == 'XD'">X-Docks</span>
                                         </td>
                                         <td class="text-center">{{item.order_date | date:'MM/dd/yyy'}}</td>
-                                        <td class="text-center">{{item.delivery_date | date:'MM/dd/yyyy'}}</td>
-                                        <td class="text-center">{{item.total_price | currency}}</td>
                                         <td>
                                             <span class="label blue" *ngIf="item.sts_code == 'NW'">{{item.sts}}</span>
                                             <span class="label texas-rose" *ngIf="item.sts_code == 'SM'">{{item.sts}}</span>
+                                            <!-- <span class="label texas-rose" *ngIf="item.sts_code == 'RV'">{{item.sts}}</span>                                             -->
                                             <span class="label strong-green" *ngIf="item.sts_code == 'AP'">{{item.sts}}</span>
                                             <span class="label rock-blue" *ngIf="item.sts_code == 'IP'">{{item.sts}}</span>
                                             <span class="label green" *ngIf="item.sts_code == 'PP'">{{item.sts}}</span>
@@ -177,6 +176,13 @@
                                             <span class="label magenta" *ngIf="item.sts_code == 'RJ'">{{item.sts}}</span>
                                             <span class="label red" *ngIf="item.sts_code == 'CC'">{{item.sts}}</span>
                                         </td>
+                                        <td class="text-center">{{item.delivery_date | date:'MM/dd/yyyy'}}</td>
+                                        
+                                        <td class="text-center">{{(item.total_price || 0) | currency}}</td>
+                                        <td class="text-center">{{(item.total_paid || 0) | currency}}</td>
+                                        <td class="text-center">{{(item.total_refunded || 0) | currency}}</td>
+                                        
+                                        <td>{{item.sale_person_name}}</td>
                                         <td class="text-nowrap">
                                             <a ngbTooltip="Submit" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" (click)="confirmModal(item.id, 'SM')"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></a>
                                             <a ngbTooltip="Approve" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="confirmModal(item.id, 'AP')"><i class="fa fa-check-square" aria-hidden="true"></i></a>
@@ -185,7 +191,7 @@
                                             <a ngbTooltip="Re Open" *ngIf="item['sts_code'] == 'RJ'" class="btn btn-default" (click)="confirmModal(item.id, 'RO')"><i class="fa fa-clone"></i></a>
                                             <a ngbTooltip="Copy" class="btn btn-default" (click)="confirmModal(item.id, 'CLONE')"><i class="fa fa-clone"></i></a>
 
-                                            <a ngbTooltip="Edit" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" [routerLink]="['/order-management/sale-order/edit', item.id]"><i class="fa fa-pencil-square"></i></a>
+                                            <a ngbTooltip="Edit" *ngIf="item['sts_code'] == 'NW' || item['sts_code'] == 'RV' || !item['total_paid'] && (item['sts_code'] == 'AP' || item['sts_code'] == 'IP' || item['sts_code'] == 'PP' || item['sts_code'] == 'RS') " class="btn btn-default" [routerLink]="['/order-management/sale-order/edit', item.id]"><i class="fa fa-pencil-square"></i></a>
                                             <a ngbTooltip="View" class="btn btn-default" [routerLink]="['/order-management/sale-order/detail', item.id]"><i class="fa fa-eye"></i></a>
                                         </td>
                                     </tr>
@@ -219,7 +225,7 @@
             <div class="col-md-6 padding-lr-0">
                 <div class="text-right">
                     <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length" [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page" [maxSize]="tableService.maxSize"
-                      [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+                        [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
                 </div>
             </div>
         </div>

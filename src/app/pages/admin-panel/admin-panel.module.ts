@@ -72,6 +72,7 @@ import { TaxTreeComponent } from './sales-tax-auth/tax-tree/tax-tree.component';
 import { CommonService, TableService } from '../../services/index';
 import {
     CommonShareModule,
+    Helper,
     PageHeaderModule,
     StatModule
 } from '../../shared/index';
@@ -157,6 +158,6 @@ import { CKEditorModule } from 'ng2-ckeditor';
         SendSampleModalContent,
         AccountModalComponent
     ],
-    providers: [TableService, CommonService, AdminPanelService]
+    providers: [TableService, CommonService, AdminPanelService, Helper]
 })
 export class AdminPanelModule { }

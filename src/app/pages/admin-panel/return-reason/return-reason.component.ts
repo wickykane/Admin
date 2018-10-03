@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -14,7 +14,8 @@ import { ReturnReasonService } from './return-reason.service';
   providers: [ReturnReasonService, ReturnReasonKeyService],
   templateUrl: 'return-reason.component.html',
   styleUrls: ['./reason.component.scss'],
-  animations: [routerTransition()]
+  animations: [routerTransition()],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class ReturnReasonComponent implements OnInit {
@@ -30,6 +31,7 @@ export class ReturnReasonComponent implements OnInit {
 
   public data = {};
   constructor(
+    private cd: ChangeDetectorRef,
     private fb: FormBuilder,
     public tableService: TableService,
     private activeRouter: ActivatedRoute,
@@ -62,6 +64,10 @@ export class ReturnReasonComponent implements OnInit {
    * Table Event
    */
 
+  refresh() {
+    this.cd.detectChanges();
+  }
+
   selectData(index) {
     console.log(index);
   }
@@ -78,6 +84,7 @@ export class ReturnReasonComponent implements OnInit {
       try {
         this.list.items = res.data.rows;
         this.tableService.matchPagingOption(res.data);
+        this.refresh();
       } catch (e) {
         console.log(e);
       }
@@ -90,6 +97,7 @@ export class ReturnReasonComponent implements OnInit {
         this.returnReasonService.deleteReturnReason(id).subscribe(res => {
           try {
             this.toastr.success(res.message);
+            this.refresh();
             this.getList();
           } catch (e) {
             console.log(e);

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { routerTransition } from '../../../router.animations';
 
 // Services
@@ -11,7 +11,8 @@ import { WarehouseService } from './warehouse.service';
     templateUrl: './warehouse.component.html',
     styleUrls: ['./warehouse.component.scss'],
     providers: [WarehouseService],
-    animations: [routerTransition()]
+    animations: [routerTransition()],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WarehouseComponent implements OnInit {
     public list = {
@@ -23,6 +24,7 @@ export class WarehouseComponent implements OnInit {
     public selectedIndex = 0;
 
     constructor(
+        private cd: ChangeDetectorRef,
         public tableService: TableService,
         public toastr: ToastrService,
         private warehouseService: WarehouseService
@@ -41,10 +43,15 @@ export class WarehouseComponent implements OnInit {
         this.user = JSON.parse(localStorage.getItem('currentUser'));
     }
 
+    refresh() {
+        this.cd.detectChanges();
+    }
+
     changeStatus(id, status) {
         this.warehouseService.changeStatus(id, status).subscribe(res => {
             try {
                 this.toastr.success(res.message);
+                this.refresh();
                 this.getList();
             } catch (e) {
 
@@ -56,6 +63,7 @@ export class WarehouseComponent implements OnInit {
         this.warehouseService.setShipping(id).subscribe(res => {
             try {
                 this.toastr.success(res.message);
+                this.refresh();
                 this.getList();
             } catch (e) {
 
@@ -77,6 +85,7 @@ export class WarehouseComponent implements OnInit {
             try {
                 this.list.items = res.data.rows;
                 this.tableService.matchPagingOption(res.data);
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
