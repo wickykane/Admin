@@ -5,6 +5,44 @@
         <div class="bd-example text-right mg-t-15">
             <button class="btn btn-outline-dark" [routerLink]="['/admin-panel/payment-term']">Back To List</button>
         </div>
+<<<<<<< HEAD
+        <fieldset class="custom-border">
+            <legend class="custom-border">GENERAL INFORMATION</legend>
+            <form class="form-search full-width form-horizontal" [formGroup]="generalForm">
+                <div class="row">
+                    <div class="col-sm-2 form-group">
+                        <label> Code
+                            <span class="text-danger">(*)</span>
+                        </label>
+                        <input type="text" name="" class="form-control" formControlName="cd" readonly>
+                    </div>
+                    <div class="col-sm-2 form-group">
+                        <label> Description
+                            <span class="text-danger">(*)</span>
+                        </label>
+                        <input type="text" name="" class="form-control" formControlName="des" [readonly]="isEdit">
+                    </div>
+                    <div class="col-sm-2 form-group">
+                        <label> Terms Day
+                            <span class="text-danger">(*)</span>
+                        </label>                       
+                        <input  numberDirective  [min]="0"  type="text" name="" class="form-control" formControlName="term_day" maxlength="5" [readonly]="isEdit">
+                    </div>
+                    <div class="col-sm-2 form-group">
+                        <label> Status
+                            <span class="text-danger">(*)</span>
+                        </label>
+                        <select class="form-control" formControlName="ac" name="status" >
+                            <option value="null" selected="false">--Select--</option>
+                            <option *ngFor="let item of listMaster['status']" [ngValue]="item.key">{{item.value}}</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-2 form-group">
+                        <label> Early Payment Incentive?
+                        </label>
+                        <div class="">
+                            <input type="checkbox" name="" class="" formControlName="early_pmt_incentive" ng-true="1" (change)="changeIncentive($event)">
+=======
         <div class="custom-border card height-100 mg-bt-15 mg-t-15">
             <div class="card-header">
                 <strong>GENERAL INFORMATION</strong>
@@ -45,6 +83,7 @@
                             <div class="">
                                 <input type="checkbox" name="" class="" formControlName="early_pmt_incentive" ng-true="1" (change)="changeIncentive($event)">
                             </div>
+>>>>>>> 7595c239d03c3577a04a5b9c066fd38ff7f46980
                         </div>
                     </div>
                     <div class="row" *ngIf="this.generalForm.get('early_pmt_incentive').value == 1">

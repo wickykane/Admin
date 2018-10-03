@@ -1,4 +1,4 @@
-import {  ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService } from '../order-mgmt.service';
@@ -35,6 +35,7 @@ export class SaleOrderComponent implements OnInit {
 
     public statusConfig = {
         'NW': { color: 'blue', name: 'New', img: './assets/images/icon/new.png' },
+        // 'RV': { color: 'bg-secondary', name: 'Revised' },
         'SM': { color: 'texas-rose', name: 'Submited' },
         'AP': { color: 'strong-green', name: 'Approved', img: './assets/images/icon/approved.png' },
         'IP': { color: 'rock-blue', name: 'Allocated' },
@@ -72,7 +73,7 @@ export class SaleOrderComponent implements OnInit {
         this.searchForm = fb.group({
             'code': [null],
             'cus_po': [null],
-            'sale_quote_num': [null],
+            'quote_no': [null],
             'type': [null],
             'sts': [null],
             'buyer_name': [null],

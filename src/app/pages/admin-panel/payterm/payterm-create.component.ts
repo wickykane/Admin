@@ -3,6 +3,7 @@ import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 
+import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 import { PayTermKeyService } from './keys.control';
@@ -27,6 +28,7 @@ export class PayTermCreateComponent implements OnInit {
         public fb: FormBuilder,
         public toastr: ToastrService,
         public keyService: PayTermKeyService,
+        private _hotkeysService: HotkeysService,
         private paytermService: PaymentTermService) {
         this.generalForm = fb.group({
             'id': [null],
@@ -39,8 +41,7 @@ export class PayTermCreateComponent implements OnInit {
             'term_day': [null, Validators.required],
             'ac': [0, Validators.required]
         });
-        this.keyService.watchContext.next(this);
-        this.changeIncentive();
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {
@@ -49,12 +50,14 @@ export class PayTermCreateComponent implements OnInit {
                 this.getDetailPaymentTerm(params.id);
                 this.isEdit = true;
                 this.generalForm.get('early_pmt_incentive').disable();
+                this.refresh();
             } else {
                 this.getGenerateCode();
             }
         });
         this.listMaster['status'] = [{ key: 0, value: 'In Active' }, { key: 1, value: 'Active' }];
         this.listMaster['early'] = [{ key: 1, value: 'Percent' }, { key: 2, value: 'Fixed Amount' }];
+        this.changeIncentive();
     }
     refresh() {
         this.cd.detectChanges();
@@ -114,6 +117,7 @@ export class PayTermCreateComponent implements OnInit {
                 }
             );
         }
+        this.refresh();
     }
 
     getDetailPaymentTerm(id) {

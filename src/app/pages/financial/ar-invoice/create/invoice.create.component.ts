@@ -547,6 +547,10 @@ export class InvoiceCreateComponent implements OnInit {
                 if (res.status) {
                     this.toastr.success(res.message);
                     this.data['invoice_id'] = res.data;
+                    if (type === 4) {
+                        this.router.navigate(['/financial/receipt-voucher/create'], { queryParams: { invoice_id: this.data['invoice_id'] } });
+                        return;
+                    }
                     if (!is_continue) {
                         setTimeout(() => {
                             this.router.navigate(['/financial/invoice/view/' + this.data['invoice_id']]);

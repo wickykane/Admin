@@ -1,181 +1,147 @@
 <div [@routerTransition]>
-    <app-page-header [heading]="'CREATE NEW SHIPPING ZONE'"></app-page-header>
-    <!-- <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut> -->
-
-    <section class="rma-page block main-container block-order">
-        <div class="row">
-            <div class="col-md-12 mg-top-15">
-                <div class="block-border">
-                    <h5 class="title-border" translate>GENERAL INFORMATION</h5>
-                    <div class="row informaion">
-                        <div class="col-md-12">
-                            <form [formGroup]="generalForm" class="form-search full-width form-inline">
-                                <div class="col-md-3">
-                                    <div class="form-group row">
-                                        <label for="code" class="control-label col-5" translate>Zone No
-                                            <span class="text-danger">(*) </span>
-                                        </label>
-
-                                        <div class="col-7">
-                                            {{listMasterData['cd']}}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group row">
-                                        <label for="code" class="control-label col-5" translate>Zone Name
-                                            <span class="text-danger">(*) </span>
-                                        </label>
-
-                                        <div class="col-7">
-                                            <input type="text" class="form-control" formControlName="name" maxlength="200" style="width: 100%">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group row">
-                                        <label for="code" class="control-label col-5" translate>Status
-                                            <span class="text-danger">(*) </span>
-                                        </label>
-
-                                        <div class="col-7">
-                                            <!-- <ng-select class="custom" formControlName="status" [items]="listStatus" bindLabel="name" bindValue="id" autocomplete="off" [multiple]="false">
-                                            </ng-select> -->
-                                            <select formControlName="status" class="form-group">
-                                                <option *ngFor="let item of listStatus" [value]='item.id'>{{item.name}}</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
+        <app-page-header [heading]="'CREATE NEW SHIPPING ZONE'"></app-page-header>
+        <!-- <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut> -->
+    
+        <section class="rma-page block main-container block-order">
+            <div class="row block-info">
+                <div class="col-md-12 mg-top-15">
+                    <div class="card height-100">
+                        <div class="card-header">
+                            <strong>GENERAL INFORMATION</strong>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12 mg-top-15">
-                <div class="block-border full-block">
-                    <h5 class="title-border" translate>SHIPPING COUNTRIES & REGIONS</h5>
-                    <div class="row countries-group">
-                        <div class="table-custom col-md-3">
-                            <div class="header">
-                                <div class="col-12 title">
-                                    <div class="form-group row">
-                                        <label class="control-label col-5" for="shipping_to" translate> Filter
-                                        </label>
-                                        <div class="col-7">
-                                            <form [formGroup]="generalForm">
-                                                <input type="text" class="form-control" style="width: 100%" placeholder="Start searching for a country" (ngModelChange)="filterCountry($event)"
-                                                    [ngModel]="countryFilter" [ngModelOptions]="{standalone: true}">
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-11 body" style="height: 200px;overflow-y: scroll;">
-                                    <div class="form-group row" *ngFor="let country of listCountry;let i = index">
-                                        <label class='col-5'>
-                                            <input type="checkbox" [(ngModel)]="country.selected" (change)="selectCountry($event.target.checked,country)"> {{country.name}}
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div style="display: table;height: 269px" *ngIf="listSelectCountry.length>0">
-                            <span style="display: table-cell;vertical-align: middle">
-                                <i class="fa fa-angle-double-right" style="font-size:36px"></i>
-                            </span>
-                        </div>
-                        <div class="table-custom col-md-3" style="text-align: center" *ngIf="listSelectCountry.length>0">
-                            <span style="font-weight: bold">Selected Countries</span>
-                            <div class="header" style="margin-top: 5px">
-                                <div class="col-12 title list-items" *ngFor="let item of listSelectCountry;trackBy: trackByFn">
-                                    <div class="form-group row">
-                                        <label class="control-label col-5" for="shipping_to" translate>
-                                            <span class="text-danger"></span> {{item.name}}
-                                        </label>
-                                        <div class="col-7" style="text-align: right">
-                                            <label style="color: #007bff">{{calculateStateLength(item.state)}} of
-                                                <span *ngIf="listMasterData['state'][item.country_code]">{{listMasterData['state'][item.country_code].length}} States</span>
-                                                <span *ngIf="listMasterData['state'][item.country_code] == undefined">0 States</span>
-                                            </label>
-                                            <a class="btn btn-default " title="Edit" (click)="onCheckCountryState(item)">
-                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div style="display: table;height: 269px" *ngIf="selectedCountry">
-                            <span style="display: table-cell;vertical-align: middle">
-                                <i class="fa fa-angle-double-right" style="font-size:36px"></i>
-                            </span>
-                        </div>
-                        <div class="col-md-3 table-custom" *ngIf="selectedCountry">
-                            <div class="header">
-                                <div class="col-12 title">
-                                    <div class="form-group row">
-                                        <label class="control-label col-12" for="shipping_to" style="text-align: center; font-weight: bold" translate>Select States for {{selectedCountry['name']}}
-                                        </label>
-                                        <div class="col-12">
-                                            <input type="text" class="form-control" style="width: 100%" placeholder="Start searching for a state" (ngModelChange)="filterState($event)"
-                                                [(ngModel)]="stateFilter">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-11 body" style="height: 169px;overflow-y: scroll;">
-                                    <div class="form-group row" *ngIf="stateFilter==''&&selectedCountry.state.length>0">
-                                        <label class="col-11" style="padding: 10px 0 0 5px;">
-                                            <input (change)="selectState()" [(ngModel)]="selectAll" id='ck-first' type="checkbox" /> All States
-                                        </label>
-                                    </div>
-                                    <div class="form-group row" *ngFor="let state of selectedCountry['state'];let i = index">
-                                        <label class='col-11'>
-                                            <input type="checkbox" [(ngModel)]="state.selected" (change)="checkState()"> {{state.name}}
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12 mg-top-15">
-                <div class="block-border full-block">
-                    <h5 class="title-border" translate>SETUP SHIPPING QUOTES</h5>
-                    <div class="col-md-12" *ngFor="let item of listShipping">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h6 class="title-border" translate style="margin-top: 10px">{{item.name}}</h6>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 table-custom1">
-                                <div class="header">
-                                    <div class="col-12 title" *ngFor="let subItem of item.data;trackBy: trackByFn;let i2 =index">
-                                        <div class="form-group row">
-                                            <label class="control-label col-4 text-danger" for="shipping_to" translate>{{subItem.name}}
-
-                                            </label>
-                                            <label class="control-label col-5" for="shipping_to" translate>{{subItem.des}}
-
-                                            </label>
-                                            <div class="col-2">
-                                                <div class="switcher">
-                                                    <label class="switch">
-                                                        <input type="checkbox" [(ngModel)]="subItem.checked" checked="{{subItem.checked ? true:null}}" value="{{subItem.checked}}"
-                                                            (click)="checkValidate(item.data,subItem,$event)">
-                                                        <span class="slider round"></span>
-                                                    </label>
+                        <div class="card-body">
+                            <div class="row informaion height-100">
+                                <div class="col-md-12">
+                                    <form [formGroup]="generalForm" class="form-search full-width form-inline">
+                                        <div class="col-md-3">
+                                            <div class="form-group row">
+                                                <label for="code" class="control-label col-5" translate>Zone No
+                                                    <span class="text-danger">(*) </span>
+                                                </label>
+    
+                                                <div class="col-7">
+                                                    {{listMasterData['cd']}}
                                                 </div>
                                             </div>
-                                            <div class="col-1">
-                                                <button type="button" [disabled]="subItem.checked == false" class="btn btn-primary" (click)="openShippingModal(subItem.id)">
-                                                    Edit
-                                                </button>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group row">
+                                                <label for="code" class="control-label col-5" translate>Zone Name
+                                                    <span class="text-danger">(*) </span>
+                                                </label>
+    
+                                                <div class="col-7">
+                                                    <input type="text" class="form-control" formControlName="name" maxlength="200" style="width: 100%">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group row">
+                                                <label for="code" class="control-label col-5" translate>Status
+                                                    <span class="text-danger">(*) </span>
+                                                </label>
+    
+                                                <div class="col-7">
+                                                    <!-- <ng-select class="custom" formControlName="status" [items]="listStatus" bindLabel="name" bindValue="id" autocomplete="off" [multiple]="false">
+                                                </ng-select> -->
+                                                    <select formControlName="status" class="form-group">
+                                                        <option *ngFor="let item of listStatus" [value]='item.id'>{{item.name}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row block-info">
+                <div class="col-md-12 mg-top-15">
+                    <div class="card height-100">
+                        <div class="card-header">
+                            <strong>SHIPPING COUNTRIES & REGIONS</strong>
+                        </div>
+                        <!-- <h5 class="title-border" translate>SHIPPING COUNTRIES & REGIONS</h5> -->
+                        <div class="card-body">
+                            <div class="row countries-group">
+                                <div class="table-custom col-md-3">
+                                    <div class="header">
+                                        <div class="col-12 title">
+                                            <div class="form-group row">
+                                                <label class="control-label col-5" for="shipping_to" translate> Filter
+                                                </label>
+                                                <div class="col-7">
+                                                    <form [formGroup]="generalForm">
+                                                        <input type="text" class="form-control" style="width: 100%" placeholder="Start searching for a country" (ngModelChange)="filterCountry($event)"
+                                                            [ngModel]="countryFilter" [ngModelOptions]="{standalone: true}">
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-11 body" style="height: 200px;overflow-y: scroll;">
+                                            <div class="form-group row" *ngFor="let country of listCountry;let i = index">
+                                                <label class='col-5'>
+                                                    <input type="checkbox" [(ngModel)]="country.selected" (change)="selectCountry($event.target.checked,country)"> {{country.name}}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="display: table;height: 269px" *ngIf="listSelectCountry.length>0">
+                                    <span style="display: table-cell;vertical-align: middle">
+                                        <i class="fa fa-angle-double-right" style="font-size:36px;color:#e0e0e0"></i>
+                                    </span>
+                                </div>
+                                <div class="table-custom col-md-3" style="text-align: center" *ngIf="listSelectCountry.length>0">
+                                    <span style="font-weight: bold">Selected Countries</span>
+                                    <div class="header" style="margin-top: 5px">
+                                        <div class="col-12 title list-items" *ngFor="let item of listSelectCountry;trackBy: trackByFn">
+                                            <div class="form-group row">
+                                                <label class="control-label col-5" for="shipping_to" translate>
+                                                    <span class="text-danger"></span> {{item.name}}
+                                                </label>
+                                                <div class="col-7" style="text-align: right">
+                                                    <label style="color: #007bff">{{calculateStateLength(item.state)}} of
+                                                        <span *ngIf="listMasterData['state'][item.country_code]">{{listMasterData['state'][item.country_code].length}} States</span>
+                                                        <span *ngIf="listMasterData['state'][item.country_code] == undefined">0 States</span>
+                                                    </label>
+                                                    <a class="btn btn-default " title="Edit" (click)="onCheckCountryState(item)">
+                                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="display: table;height: 269px" *ngIf="selectedCountry">
+                                    <span style="display: table-cell;vertical-align: middle">
+                                        <i class="fa fa-angle-double-right" style="font-size:36px;color:#e0e0e0"></i>
+                                    </span>
+                                </div>
+                                <div class="col-md-3 table-custom" *ngIf="selectedCountry">
+                                    <div class="header">
+                                        <div class="col-12 title">
+                                            <div class="form-group row">
+                                                <label class="control-label col-12" for="shipping_to" style="text-align: center; font-weight: bold" translate>Select States for {{selectedCountry['name']}}
+                                                </label>
+                                                <div class="col-12">
+                                                    <input type="text" class="form-control" style="width: 100%" placeholder="Start searching for a state" (ngModelChange)="filterState($event)"
+                                                        [(ngModel)]="stateFilter">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-11 body" style="height: 169px;overflow-y: scroll;">
+                                            <div class="form-group row" *ngIf="stateFilter==''&&selectedCountry.state.length>0">
+                                                <label class="col-11" style="padding: 10px 0 0 5px;">
+                                                    <input (change)="selectState()" [(ngModel)]="selectAll" id='ck-first' type="checkbox" /> All States
+                                                </label>
+                                            </div>
+                                            <div class="form-group row" *ngFor="let state of selectedCountry['state'];let i = index">
+                                                <label class='col-11'>
+                                                    <input type="checkbox" [(ngModel)]="state.selected" (change)="checkState()"> {{state.name}}
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
@@ -185,12 +151,59 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12 mg-top-15 text-center">
-                <button type="button" class="btn btn-primary" [disabled]="generalForm.invalid" (click)="save()" translate>Create</button>
-                <button type="button" class="btn btn-default" [routerLink]="['/admin-panel/shipping-zone']" translate>Cancel</button>
+            <div class="row block-info">
+                <div class="col-md-12 mg-top-15">
+                    <div class="card height-100">
+                        <div class="card-header">
+                            <strong>SETUP SHIPPING QUOTES</strong>
+                        </div>
+                        <div class="card-body">
+                        <div class="col-md-12" *ngFor="let item of listShipping">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6 class="title-border text-blue" translate style="margin-top: 10px"><i class="fa fa-caret-right"></i> {{item.name}}</h6>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="header">
+                                        <div class="col-12 title mb-2 border-bottom-custom" *ngFor="let subItem of item.data;trackBy: trackByFn;let i2 =index">
+                                            <div class="form-group row">
+                                                <label class="control-label col-4" for="shipping_to" translate><strong>{{subItem.name}}</strong>
+    
+                                                </label>
+                                                <label class="control-label col-5" for="shipping_to" translate>{{subItem.des}}
+    
+                                                </label>
+                                                <div class="col-2">
+                                                    <div class="switcher">
+                                                        <label class="switch">
+                                                            <input type="checkbox" [(ngModel)]="subItem.checked" checked="{{subItem.checked ? true:null}}" value="{{subItem.checked}}"
+                                                                (click)="checkValidate(item.data,subItem,$event)">
+                                                            <span class="slider round"></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-1">
+                                                    <button type="button" [disabled]="subItem.checked == false" class="btn-default-custom" (click)="openShippingModal(subItem.id)">
+                                                        Edit
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </section>
-</div>
+            <div class="row">
+                <div class="col-md-12 mg-top-15 text-center">
+                    <button type="button" class="btn-default-custom" [disabled]="generalForm.invalid" (click)="save()" translate>Create</button>
+                    <button type="button" class="btn-default-custom" [routerLink]="['/admin-panel/shipping-zone']" translate>Cancel</button>
+                </div>
+            </div>
+        </section>
+    </div>

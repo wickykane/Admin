@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 import { TableService } from '../../../services/index';
@@ -34,11 +35,13 @@ export class PaymentTermComponent implements OnInit {
   constructor(
     private cd: ChangeDetectorRef,
     private fb: FormBuilder,
+    private cd: ChangeDetectorRef,
     public tableService: TableService,
     private activeRouter: ActivatedRoute,
     private router: Router,
     private paymentTerm: PaymentTermService,
     public keyService: PayTermKeyService,
+    private _hotkeysService: HotkeysService,
     private modalService: NgbModal,
     private toastr: ToastrService) {
     this.searchForm = fb.group({
@@ -49,7 +52,7 @@ export class PaymentTermComponent implements OnInit {
     // Assign get list function name, override variable here
     this.tableService.getListFnName = 'getList';
     this.tableService.context = this;
-    this.keyService.watchContext.next(this);
+    this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
   }
 
   ngOnInit() {
@@ -60,6 +63,9 @@ export class PaymentTermComponent implements OnInit {
   /**
    * Table Event
    */
+  refresh() {
+    this.cd.detectChanges();
+  }
 
   refresh() {
     this.cd.detectChanges();
