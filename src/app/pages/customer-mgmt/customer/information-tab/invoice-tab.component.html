@@ -1,5 +1,5 @@
-<div class='address-tab'>
-    <div class="block-content pd-bottom bg-gray-light mb-2">
+<div class="block anchor-scroll block-order">
+    <div class="block-content pd-bottom bg-gray-light short-width">
         <div class="row">
             <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
                 <div class="block-search">
@@ -17,54 +17,64 @@
                 <div class="block-search">
                     <label for="buyer_type" class="control-label">Status</label>
                     <select class="form-control" formControlName="buyer_type">
-                                <option value="null" selected="true">--Select--</option>
-                                <option *ngFor="let item of listMaster['statusSO']" [ngValue]="item.id">{{item.name}}</option>
-                            </select>
+                        <option value="null" selected="true">--Select--</option>
+                        <option *ngFor="let item of listMaster['statusSO']" [ngValue]="item.id">{{item.name}}</option>
+                    </select>
                 </div>
             </form>
             <div class="block-btn-search">
                 <label class="control-label">&nbsp;</label>
                 <div class="group-btn-search">
-                    <button type="button" class="btn btn-primary" (click)="tableService.searchAction()">Search</button>
-                    <button type="button" class="btn btn-default" (click)="tableService.resetAction(searchForm)">Cancel</button>
+                    <button type="button" class="btn-default-custom" (click)="tableService.searchAction()">Search</button>
+                    <button type="button" class="btn-default-custom" (click)="tableService.resetAction(searchForm)">Cancel</button>
                 </div>
             </div>
         </div>
     </div>
-    <div class='scroll-container'>
-        <table class='table table-custom  margin-full-0'>
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Invoice No</th>
-                    <th>SO No</th>
-                    <th>Due Date</th>
-                    <th>Bill To</th>
-                    <th>Billing Address</th>
-                    <th>Total Amount</th>
-                    <th>Balance Amount</th>
-                    <th>Status</th>
-                    <th>Aged Overdue</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of list.items">
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.id | currency }}</td>
-                    <td>{{ item.id | currency }}</td>
-                    <td>{{ item.id }}</td>                    
-                    <td>{{ item.id }}</td>
-                </tr>
-                <tr *ngIf="list.items.length == 0">
-                    <td class="text-center" colspan="100%">No data.</td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="row mg-top-10">
+        <div class="col-12">
+            <div class="card no-border">
+                <div class="card-header">
+                    <strong>Line Items</strong>
+                </div>
+                <div class="card-body no-padding">
+                    <div class="scroll-container table-responsive list">
+                        <table class='table table-bordered table-order'>
+                            <thead class="bg-white">
+                                <tr>
+                                    <th>No</th>
+                                    <th>Invoice No</th>
+                                    <th>SO No</th>
+                                    <th>Due Date</th>
+                                    <th>Bill To</th>
+                                    <th>Billing Address</th>
+                                    <th>Total Amount</th>
+                                    <th>Balance Amount</th>
+                                    <th>Status</th>
+                                    <th>Aged Overdue</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of list.items">
+                                    <td>{{ item.id }}</td>
+                                    <td>{{ item.id }}</td>
+                                    <td>{{ item.id }}</td>
+                                    <td>{{ item.id }}</td>
+                                    <td>{{ item.id }}</td>
+                                    <td>{{ item.id }}</td>
+                                    <td>{{ item.id | currency }}</td>
+                                    <td>{{ item.id | currency }}</td>
+                                    <td>{{ item.id }}</td>
+                                    <td>{{ item.id }}</td>
+                                </tr>
+                                <tr *ngIf="list.items.length == 0">
+                                    <td class="text-center" colspan="100%">No data.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
 </div>
