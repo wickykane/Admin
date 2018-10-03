@@ -1,4 +1,4 @@
-<div class="modal-header">
+<div class="modal-header custom-modal-header">
     <span class="modal-title">Flat Rate Options</span>
     <button type="button" class="close" aria-label="Close" (click)="closeX()">
         <span aria-hidden="true">&times;</span>
@@ -42,7 +42,7 @@
                         <div class="col-sm-12 row">
                             <input style="text-align:center" *ngIf="generalForm.value.type==1||generalForm.value.type==2" type="text" value="$" disabled class="form-control col-sm-2">
                             <input style="text-align:center" *ngIf="generalForm.value.type==3" type="text" value="%" disabled class="form-control col-sm-2">
-                            <input type="number" (keypress)="checkPositiveNumber($event)" name="shipping_fee" formControlName="shipping_fee" class="form-control col-sm-10">
+                            <input type="number" (keypress)="checkPositiveNumber($event)" numberDirective [isDecimal]="true" name="shipping_fee" formControlName="shipping_fee" class="form-control col-sm-10">
                         </div>
                         <span class="col-md-12" style="color: red" *ngIf="generalForm.controls.shipping_fee.touched&&generalForm.controls.shipping_fee.errors?.required">
                             (!) This field cannot be blank.
@@ -73,7 +73,7 @@
                         <div class="col-sm-12 row">
                             <input *ngIf="generalForm.value.fee_type ==2" style="text-align:center" type="text" value="%" disabled class="form-control col-sm-2">
                             <input *ngIf="generalForm.value.fee_type ==1" style="text-align:center" type="text" value="$" disabled class="form-control col-sm-2">
-                            <input type="number" (keypress)="checkPositiveNumber($event)" name="handling_fee" formControlName="handling_fee" class="form-control col-sm-10 custom-input">
+                            <input type="number" (keypress)="checkPositiveNumber($event)" numberDirective [isDecimal]="true" name="handling_fee" formControlName="handling_fee" class="form-control col-sm-10 custom-input">
                         </div>
                     </div>
                 </div>
@@ -91,6 +91,6 @@
 
 </div>
 <div class="modal-footer">
-    <button *ngIf="!isView" type="button" class="btn btn-outline-primary" [disabled]="generalForm.invalid" (click)="applyData()">OK</button>
-    <button type="button" class="btn btn-outline-dark" (click)="closeX()">Close</button>
+        <button type="button" class="btn btn-outline-dark" (click)="closeX()">Cancel</button>
+    <button *ngIf="!isView" type="button" class="btn btn-outline-primary" [disabled]="generalForm.invalid" (click)="applyData()">Submit</button>
 </div>

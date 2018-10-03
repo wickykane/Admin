@@ -1,4 +1,4 @@
-<div class="modal-header">
+<div class="modal-header custom-modal-header">
     <span class="modal-title">UPS Configuration</span>
     <button type="button" class="close" aria-label="Close" (click)="closeX()">
         <span aria-hidden="true">&times;</span>
@@ -135,7 +135,7 @@
                                     <div class="col-sm-12 row">
                                         <input *ngIf="generalForm.value.fee_type ==2" style="text-align:center" type="text" value="%" disabled class="form-control col-sm-2">
                                         <input *ngIf="generalForm.value.fee_type ==1" style="text-align:center" type="text" value="$" disabled class="form-control col-sm-2">
-                                        <input type="number" (keypress)="checkPositiveNumber($event)"  name="handling_fee" formControlName="handling_fee" class="form-control col-sm-10 custom-input">
+                                        <input type="number" (keypress)="checkPositiveNumber($event)" numberDirective [isDecimal]="true"  name="handling_fee" formControlName="handling_fee" class="form-control col-sm-10 custom-input">
                                     </div>
                                 </div>
                             </div>
@@ -195,7 +195,7 @@
                                     <div class="col-sm-12 row">
                                         <input *ngIf="generalForm.value.markup_type ==2" style="text-align:center" type="text" value="%" disabled class="form-control col-sm-2">
                                         <input *ngIf="generalForm.value.markup_type ==1" style="text-align:center" type="text" value="$" disabled class="form-control col-sm-2">
-                                        <input type="number" (keypress)="checkPositiveNumber($event)"  name="markup_type_value" formControlName="markup_type_value" class="form-control col-sm-10 custom-input">
+                                        <input type="number" (keypress)="checkPositiveNumber($event)" numberDirective [isDecimal]="true"  name="markup_type_value" formControlName="markup_type_value" class="form-control col-sm-10 custom-input">
                                     </div>
                                 </div>
                             </div>

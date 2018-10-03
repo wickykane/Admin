@@ -1,89 +1,98 @@
 <div [@routerTransition]>
     <app-page-header [heading]="'LIST OF BRANCH'" [icon]="'fa-th-list'"></app-page-header>
-
-    <div class="block-content pd-bottom bg-gray-light short-width">
-        <div class="row">
-            <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
-                <div class="block-search">
-                    <label for="name" class="control-label">Name</label>
-                    <input type="text" name="name" formControlName="branch_name" class="form-control" id="name" placeholder="">
+    <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
+    <div class="block anchor-scroll block-order">
+        <div class="block-content pd-bottom padding-lr-0 mt-2">
+            <div class="row">
+                <form class="form-horizontal form-search filter-order-group" role="form" [formGroup]="searchForm">
+                    <div class="block-search">
+                        <label for="name" class="control-label">Name</label>
+                        <input type="text" name="name" formControlName="branch_name" class="form-control" id="name" placeholder="">
+                    </div>
+                </form>
+                <div class="block btn-search">
+                    <div class="mt-1 group-btn-search">
+                        <button type="button" class="btn-default-custom" (click)="tableService.searchAction()">Search</button>
+                        <button type="button" class="btn-default-custom" (click)="tableService.resetAction(this.searchForm)">Reset</button>
+                    </div>
                 </div>
-            </form>
-            <div class="block-btn-search">
-                <label class="control-label">&nbsp;</label>
-                <div class="group-btn-search">
-                    <button type="button" class="btn btn-primary" (click)="tableService.searchAction()">Search</button>
-                    <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchForm)">Reset</button>
+            </div>
+        </div>
+        <div class="row mg-top-10">
+            <div class="col-12">
+                <div style="margin: 15px 0">
+                    <a class="btn btn-outline-info" [routerLink]="['/admin-panel/bank']">
+                        <i class="fa fa-arrow-left"></i> Back</a>
+                </div>
+                <div class="card no-border">
+                    <div class="card-header">
+                    </div>
+                    <div class="card-body no-padding">
+                        <div class="table-responsive list">
+                            <table class="table table-bordered table-order" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex"
+                                (onEnter)="selectData($event)">
+                                <thead class="bg-white">
+                                    <tr>
+                                        <th>Bank Code</th>
+                                        <th>Branch Code</th>
+                                        <th>Branch Name</th>
+                                        <th>Country</th>
+                                        <th>Address Line</th>
+                                        <th>City</th>
+                                        <th>State/Provine</th>
+                                        <th>Zip/Postal Code</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngIf="list.items.length == 0">
+                                    <tr>
+                                        <td class="text-center" colspan="100%">No data.</td>
+                                    </tr>
+                                </tbody>
+                                <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
+                                    <tr>
+                                        <td>{{item.bank_code}}</td>
+                                        <td>{{ item.branch_code }}</td>
+                                        <td>{{item.branch_name}}</td>
+                                        <td>{{item.country_name}}</td>
+                                        <td>{{item.address}}</td>
+                                        <td>{{item.city}}</td>
+                                        <td>{{item.state_name}}</td>
+                                        <td>{{item.zip_code}}</td>
+                                        <td>
+                                            <a class="btn btn-default " (click)="editBranch(item.id, 1)" title="Edit Branch">
+                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                            </a>
+                                            <a class="btn btn-default" (click)="deleteBranch(data['bank_id'], item.id)" title="Delete Branch">
+                                                <i class="fa fa-trash" aria-hidden="true"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="block-content list-order-table">
-        <div style="margin: 15px 0">
-            <a class="btn btn-outline-info" [routerLink]="['/admin-panel/bank']">
-                <i class="fa fa-arrow-left"></i> Back</a>
-        </div>
-        <div class="table-responsive">
-            <table class="table table-striped table-vcenter custom-table" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex"
-                (onEnter)="selectData($event)">
-                <thead class="bg-white">
-                    <tr>
-                        <th>Bank Code</th>
-                        <th>Branch Code</th>
-                        <th>Branch Name</th>
-                        <th>Country</th>
-                        <th>Address Line</th>
-                        <th>City</th>
-                        <th>State/Provine</th>
-                        <th>Zip/Postal Code</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody *ngIf="list.items.length == 0">
-                    <tr>
-                        <td class="text-center" colspan="100%">No data.</td>
-                    </tr>
-                </tbody>
-                <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
-                    <tr>
-                        <td>{{item.bank_code}}</td>
-                        <td>{{ item.branch_code }}</td>
-                        <td>{{item.branch_name}}</td>
-                        <td>{{item.country_name}}</td>
-                        <td>{{item.address}}</td>
-                        <td>{{item.city}}</td>
-                        <td>{{item.state_name}}</td>
-                        <td>{{item.zip_code}}</td>
-                        <td>
-                            <a class="btn btn-default " (click)="editBranch(item.id, 1)" title="Edit Branch">
-                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                            </a>
-                            <a class="btn btn-default" (click)="deleteBranch(data['bank_id'], item.id)" title="Delete Branch">
-                                <i class="fa fa-trash" aria-hidden="true"></i>
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
 
-        <div class="row normal-pagination" *ngIf="list.items.length > 0">
-            <div class="col-md-6">
-                <div class="text-left">
-                    <div class="col-md-6" style="padding-left: 0px;">
-                        <span style="float: left; padding-right: 10px;">{{list.items.length}}/{{tableService.pagination.total_record}} items </span>
-                        <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length" (change)="tableService.changeLength()">
-                            <option *ngFor="let option of tableService.itemPerPageOptions" [ngValue]="option">{{option}}</option>
-                        </select>
-                    </div>
+    <div class="row normal-pagination" *ngIf="list.items.length > 0">
+        <div class="col-md-6">
+            <div class="text-left">
+                <div class="col-md-6" style="padding-left: 0px;">
+                    <span style="float: left; padding-right: 10px;">{{list.items.length}}/{{tableService.pagination.total_record}} items </span>
+                    <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length" (change)="tableService.changeLength()">
+                        <option *ngFor="let option of tableService.itemPerPageOptions" [ngValue]="option">{{option}}</option>
+                    </select>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="text-right">
-                    <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length"
-                        [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page"
-                        [maxSize]="tableService.maxSize" [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
-                </div>
+        </div>
+        <div class="col-md-6">
+            <div class="text-right">
+                <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length"
+                    [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page"
+                    [maxSize]="tableService.maxSize" [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
             </div>
         </div>
     </div>

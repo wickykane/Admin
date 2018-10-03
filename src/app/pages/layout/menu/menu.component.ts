@@ -108,7 +108,7 @@ export class MenuComponent implements OnInit {
             {
                 flag: 'rma',
                 link: '/rma',
-                main_name: 'Return Order List',
+                main_name: 'Return Order',
                 icon: '',
                 sub: false,
                 child: []
