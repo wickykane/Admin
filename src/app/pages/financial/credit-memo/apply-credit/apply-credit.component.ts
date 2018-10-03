@@ -24,7 +24,7 @@ import { CreditMemoService } from './../credit-memo.service';
     selector: 'app-apply-credit-memo',
     templateUrl: './apply-credit.component.html',
     styleUrls: ['../credit-memo.component.scss'],
-    providers: [OrderService, HotkeysService, CreditMemoCreateKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }],
+    providers: [OrderService, HotkeysService, CreditMemoCreateKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }, TableService],
     animations: [routerTransition()]
 })
 
@@ -73,6 +73,9 @@ export class CreditMemoApplyComponent implements OnInit {
         public tableService: TableService,
         private dt: DatePipe) {
         //  Init Key
+         //  Assign get list function name, override letiable here
+         this.tableService.getListFnName = 'getDataApplyByCreditId';
+         this.tableService.context = this;
         this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
         this.searchForm = fb.group({
             'code': [null]
@@ -82,15 +85,15 @@ export class CreditMemoApplyComponent implements OnInit {
     async ngOnInit() {
         this.data['id'] = this.route.snapshot.paramMap.get('id');
         this.listMaster['docType'] = [{ id: 1, name: 'Invoice' }, { id: 2, name: 'Debit Memo' }];
-        await this.getDataApplyByCreditId(this.data['id']);
+        await this.getDataApplyByCreditId();
     }
       // Table event
       selectData(index) {
         console.log(index);
     }
 
-    getDataApplyByCreditId(id) {
-        this.creditMemoService.getDataForApplyById(id).subscribe(res => {
+    getDataApplyByCreditId() {
+        this.creditMemoService.getDataForApplyById(this.data['id']).subscribe(res => {
             try {
                 this.main_info = { ...this.main_info, ...res.data };
                 console.log(this.main_info);
@@ -105,7 +108,7 @@ export class CreditMemoApplyComponent implements OnInit {
         });
     }
     getList(id) {
-        const params = { ...this.searchForm.value };
+        const params = { ...this.searchForm.value,  ...this.tableService.getParams() };
         Object.keys(params).forEach((key) => {
             if (params[key] instanceof Array) {
                 params[key] = params[key].join(',');
@@ -118,6 +121,7 @@ export class CreditMemoApplyComponent implements OnInit {
         this.creditMemoService.getTableDataInvoiceById(id, params).subscribe(res => {
             try {
                 this.list.items = res.data.rows;
+                this.tableService.matchPagingOption(res.data);
                 this.updateBalance();
             } catch (e) {
                 console.log(e);
