@@ -59,11 +59,9 @@ export class PayTermCreateComponent implements OnInit {
         this.listMaster['early'] = [{ key: 1, value: 'Percent' }, { key: 2, value: 'Fixed Amount' }];
         this.changeIncentive();
     }
-
     refresh() {
         this.cd.detectChanges();
     }
-
     payloadData() {
         if (this.generalForm.get('id').value) {
             this.updatePaymentTerm(this.generalForm.get('id').value);
@@ -83,6 +81,7 @@ export class PayTermCreateComponent implements OnInit {
         delete params.id;
         this.paytermService.createPayment(params).subscribe(res => {
             this.toastr.success(res.message);
+            this.refresh();
             setTimeout(() => {
                 this.router.navigate(['/admin-panel/payment-term']);
             }, 100);
@@ -126,6 +125,7 @@ export class PayTermCreateComponent implements OnInit {
             this.paytermService.getDetailPayment(id).subscribe(res => {
                 this.generalForm.patchValue(res.data);
                 this.changeIncentive();
+                this.refresh();
             }, err => {
                 console.log(err.message);
             });
@@ -136,6 +136,7 @@ export class PayTermCreateComponent implements OnInit {
         params.early_pmt_incentive = (params.early_pmt_incentive) ? 1 : 0;
         this.paytermService.updatePayment(id, params).subscribe(res => {
             this.toastr.success(res.message);
+            this.refresh();
             this.router.navigate(['/admin-panel/payment-term']);
         }, err => {
             this.toastr.error(err.message);

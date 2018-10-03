@@ -1,4 +1,4 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, NgModule, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, CUSTOM_ELEMENTS_SCHEMA, NgModule, OnInit, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
@@ -17,7 +17,8 @@ import { DiscountCategoryService } from './discount-category.service';
     templateUrl: './discount-category.edit.component.html',
     providers: [DiscountCategoryService],
     styleUrls: ['./discount-category-create.component.scss'],
-    animations: [routerTransition()]
+    animations: [routerTransition()],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DiscountCategoryEditComponent implements OnInit {
     /*
@@ -37,6 +38,7 @@ export class DiscountCategoryEditComponent implements OnInit {
      * Init Data
      */
     constructor(private vRef: ViewContainerRef,
+        private cd: ChangeDetectorRef,
         private fb: FormBuilder,
         private discountCategoryService: DiscountCategoryService,
         public toastr: ToastrService,
@@ -61,6 +63,9 @@ export class DiscountCategoryEditComponent implements OnInit {
             }, 1000)
         );
     }
+    refresh() {
+        this.cd.detectChanges();
+    }
     /**
      * Mater Data
      */
@@ -75,6 +80,7 @@ export class DiscountCategoryEditComponent implements OnInit {
                         await new Promise((calback) => { this.changeCategory(e.category_id, e, true); });
                     })();
                 });
+                this.refresh();
             },
             err => {
 
@@ -88,6 +94,7 @@ export class DiscountCategoryEditComponent implements OnInit {
                 this.masterTypeArr = Array.of(...res.data.apply_for);
                 this.initDisabledType(this.listMaster['category']);
                 this.initDisabledType(this.masterTypeArr);
+                this.refresh();
             },
             err => {
 
@@ -294,6 +301,7 @@ export class DiscountCategoryEditComponent implements OnInit {
                 setTimeout(() => {
                     this.router.navigate(['/admin-panel/discount-category']);
                 }, 500);
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }

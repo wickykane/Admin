@@ -13,33 +13,33 @@
         </section>
         <div class="block-content pd-bottom bg-gray-light short-width">
             <div class="row">
-                <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
-                    <div class="block-search">
-                        <label for="cd" class="control-label" translate>SO #</label>
-                        <input type="text" name="cd" formControlName="code" class="form-control" id="cd" placeholder="" capitalize>
-                    </div>
-                    <div class="block-search">
-                        <label for="purchase_quote_cd" class="control-label">Cust PO #</label>
-                        <input type="text" name="purchase_quote_cd" formControlName="cus_po" class="form-control" id="purchase_quote_cd" placeholder="">
-                    </div>
-                    <div class="block-search">
-                        <label for="contract_no" class="control-label">Sales Quote #</label>
-                        <input type="text" name="contract_no" formControlName="sale_quote_num" class="form-control" id="contract_no" placeholder="">
-                    </div>
-                    <div class="block-search">
-                        <label for="part" class="control-label">Type</label>
-                        <ng-select [multiple]="true" [items]="listMaster['type']" bindLabel="name" bindValue="id" formControlName="type">
-                        </ng-select>
-                    </div>
-                    <div class="block-search">
-                        <label for="po_status_id" class="control-label">Status</label>
-                        <ng-select [multiple]="true" [items]="listMaster['status']" bindLabel="name" bindValue="id" formControlName="sts">
-                        </ng-select>
-                    </div>
-                    <div class="block-search">
-                        <label for="cd" class="control-label" translate>Customer</label>
-                        <input type="text" name="cd" formControlName="buyer_name" class="form-control" id="cd" placeholder="" capitalize>
-                    </div>
+                    <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
+                        <div class="block-search">
+                            <label for="cd" class="control-label" translate>SO #</label>
+                            <input type="text" name="cd" formControlName="code" class="form-control" id="cd" placeholder="" capitalize>
+                        </div>
+                        <div class="block-search">
+                            <label for="purchase_quote_cd" class="control-label">Cust PO #</label>
+                            <input type="text" name="purchase_quote_cd" formControlName="cus_po" class="form-control" id="purchase_quote_cd" placeholder="">
+                        </div>
+                        <div class="block-search">
+                            <label for="contract_no" class="control-label">Sales Quote #</label>
+                            <input type="text" name="contract_no" formControlName="quote_no" class="form-control" id="contract_no" placeholder="">
+                        </div>
+                        <div class="block-search">
+                            <label for="part" class="control-label">Type</label>
+                            <ng-select [multiple]="true" [items]="listMaster['type']" bindLabel="name" bindValue="id" formControlName="type">
+                            </ng-select>
+                        </div>
+                        <div class="block-search">
+                            <label for="po_status_id" class="control-label">Status</label>
+                            <ng-select [multiple]="true" [items]="listMaster['status']" bindLabel="name" bindValue="id" formControlName="sts">
+                            </ng-select>
+                        </div>
+                        <div class="block-search">
+                            <label for="cd" class="control-label" translate>Customer</label>
+                            <input type="text" name="cd" formControlName="buyer_name" class="form-control" id="cd" placeholder="" capitalize>
+                        </div>
 
                     <!-- <ng-container *ngIf="listMoreFilter[0].value"> -->
                     <div class="block-search">

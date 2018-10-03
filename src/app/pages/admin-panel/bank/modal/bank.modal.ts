@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BankService } from '../bank.service';
@@ -6,7 +6,8 @@ import { BankService } from '../bank.service';
 @Component({
   selector: 'app-bank-modal',
   templateUrl: './bank.modal.html',
-  providers: [BankService]
+  providers: [BankService],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BankModalComponent implements OnInit {
   // Resolve Data
@@ -15,7 +16,8 @@ export class BankModalComponent implements OnInit {
   @Input() modalTitle;
   @Input() isEdit;
 
-  constructor(public activeModal: NgbActiveModal, private fb: FormBuilder, private bankService: BankService) {
+  constructor(public activeModal: NgbActiveModal, private fb: FormBuilder, private bankService: BankService,
+    private cd: ChangeDetectorRef) {
     this.bankForm = fb.group({
       'code': [{ value: null, disabled: true }],
       'name': [null, Validators.required],
@@ -29,9 +31,14 @@ export class BankModalComponent implements OnInit {
     }
   }
 
+  refresh() {
+      this.cd.detectChanges();
+  }
+
   getDetailBank(id) {
     this.bankService.getDetailBank(id).subscribe((res) => {
       this.bankForm.patchValue(res.data);
+      this.refresh();
     });
   }
 

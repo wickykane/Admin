@@ -73,7 +73,7 @@ export class SaleOrderComponent implements OnInit {
         this.searchForm = fb.group({
             'code': [null],
             'cus_po': [null],
-            'sale_quote_num': [null],
+            'quote_no': [null],
             'type': [null],
             'sts': [null],
             'buyer_name': [null],

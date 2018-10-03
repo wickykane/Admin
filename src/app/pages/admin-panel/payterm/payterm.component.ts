@@ -33,8 +33,8 @@ export class PaymentTermComponent implements OnInit {
 
   public data = {};
   constructor(
-    private fb: FormBuilder,
     private cd: ChangeDetectorRef,
+    private fb: FormBuilder,
     public tableService: TableService,
     private activeRouter: ActivatedRoute,
     private router: Router,
@@ -95,6 +95,7 @@ export class PaymentTermComponent implements OnInit {
         this.paymentTerm.deletePayment(id).subscribe(res => {
           try {
             this.toastr.success(res.message);
+            this.refresh();
             this.getList();
           } catch (e) {
             console.log(e);
