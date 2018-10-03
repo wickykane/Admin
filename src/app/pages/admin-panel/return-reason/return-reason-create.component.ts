@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -12,13 +12,15 @@ import { ReturnReasonService } from './return-reason.service';
     templateUrl: './return-reason-create.component.html',
     providers: [ReturnReasonService, ReturnReasonKeyService],
     styleUrls: ['./return-reason-create.component.scss'],
-    animations: [routerTransition()]
+    animations: [routerTransition()],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ReturnReasonCreateComponent implements OnInit {
 
     generalForm: FormGroup;
     public listMaster = {};
     constructor(public router: Router,
+        private cd: ChangeDetectorRef,
         public route: ActivatedRoute,
         public fb: FormBuilder,
         public toastr: ToastrService,
@@ -44,6 +46,11 @@ export class ReturnReasonCreateComponent implements OnInit {
         });
         this.listMaster['status'] = [{ key: 'IA', value: 'In Active' }, { key: 'AT', value: 'Active' }];
     }
+
+    refresh() {
+        this.cd.detectChanges();
+    }
+
     payloadData() {
         if (this.generalForm.get('id').value) {
             this.updateReturnReason(this.generalForm.get('id').value);
@@ -54,12 +61,14 @@ export class ReturnReasonCreateComponent implements OnInit {
     getGenerateCode() {
         this.returnReasonService.getGenerateCode().subscribe(res => {
             this.generalForm.get('cd').patchValue (res.message);
+            this.refresh();
         });
     }
     createReturnReason() {
         const params = this.generalForm.value;
         this.returnReasonService.createReturnReason(params).subscribe(res => {
             this.toastr.success(res.message);
+            this.refresh();
             this.router.navigate(['/admin-panel/return-reason']);
         }, err => {
             console.log(err);
@@ -69,6 +78,7 @@ export class ReturnReasonCreateComponent implements OnInit {
         console.log(id);
         this.returnReasonService.getDetailReturnReason(id).subscribe(res => {
             this.generalForm.patchValue(res.data);
+            this.refresh();
         }, err => {
             console.log(err.message);
         });
@@ -78,6 +88,7 @@ export class ReturnReasonCreateComponent implements OnInit {
         const params = this.generalForm.value;
         this.returnReasonService.updateReturnReason(id, params).subscribe(res => {
             this.toastr.success(res.message);
+            this.refresh();
             this.router.navigate(['/admin-panel/return-reason']);
         }, err => {
             this.toastr.error(err.message);
