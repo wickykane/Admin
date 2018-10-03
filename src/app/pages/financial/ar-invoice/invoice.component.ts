@@ -44,18 +44,20 @@ export class InvoiceComponent implements OnInit {
         7: 'Are you sure that you want to cancel current invoice?',
         4: 'Are you sure that you want to approve the current invoice?',
         3: 'Are you sure that you want to reject the current invoice?',
+        11: 'Are you sure that you want to revise the current invoice?',
     };
 
 
     public statusConfig = {
         'New': { color: 'blue', name: 'New', id: 1, img: './assets/images/icon/new.png' },
         'Submitted': { color: 'texas-rose', name: 'Submited', id: 2 },
-        'Rejected': { color: 'magenta', name: 'Rejected', id: 3 },
+        // 'Rejected': { color: 'magenta', name: 'Rejected', id: 3 },
         'Approved': { color: 'strong-green', name: 'Approved', id: 4, img: './assets/images/icon/approved.png' },
         'Partially Paid': { color: 'darkblue', name: 'Partially Paid', id: 5, img: './assets/images/icon/partial_delivered.png' },
         'Fully Paid': { color: 'lemon', name: 'Fully Paid', id: 6, img: './assets/images/icon/full_delivered.png' },
         'Canceled': { color: 'red', name: 'Canceled', id: 7, img: './assets/images/icon/cancel.png' },
         'Overdue': { color: 'bright-grey', name: 'Overdue', id: 8 },
+        'Revised': { color: 'texas-rose', name: 'Revised', id: 9 },
     };
 
     constructor(public router: Router,
@@ -95,16 +97,6 @@ export class InvoiceComponent implements OnInit {
         //  Init Fn
         this.listMaster['listFilter'] = [{ value: false, name: 'Date Filter' }];
         this.listMaster['dateType'] = [{ id: 0, name: 'Invoice Date' }, { id: 1, name: 'Due Date' }];
-        this.listMaster['status'] = [
-            { id: 1, name: 'New' },
-            { id: 2, name: 'Submitted' },
-            { id: 3, name: 'Rejected' },
-            { id: 4, name: 'Approved' },
-            { id: 5, name: 'Partially Paid' },
-            { id: 6, name: 'Fully Paid' },
-            { id: 7, name: 'Canceled' },
-            { id: 8, name: 'Overdue' }
-        ];
         this.listMaster['inv_type'] = [
             { id: 1, name: 'Sales Order' }
         ];
@@ -168,6 +160,9 @@ export class InvoiceComponent implements OnInit {
         this.financialService.updateInvoiceStatus(id, params).subscribe(res => {
             try {
                 this.toastr.success(res.message);
+                if (+id === 11) {
+                    this.editInvoice(id);
+                }
                 this.getList();
                 this.getCountStatus();
             } catch (e) {

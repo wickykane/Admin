@@ -115,4 +115,8 @@ export class FinancialService {
         const url = 'ar-invoice/send-email/' + id;
         return this.API.post(url, params);
     }
+    updatePOD(id, params) {
+        const url = 'ar-invoice/send-email/' + id;
+        return this.API.post(url, params);
+    }
 }

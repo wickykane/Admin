@@ -7,7 +7,9 @@ import { ChartsModule } from 'ng2-charts';
 
 import { InvoiceCreateComponent } from './ar-invoice/create/invoice.create.component';
 import { InvoiceComponent } from './ar-invoice/invoice.component';
+import { PODModalComponent } from './ar-invoice/modals/POD/pod.modal';
 import { InvoiceDetailComponent } from './ar-invoice/view/invoice.view.component';
+
 
 //  Saleorder Tab
 import { TableService } from '../../services/index';
@@ -44,15 +46,15 @@ import { DebitInformationTabComponent } from './debit-memo/tabs/debit-informatio
 import { DebitMemoViewComponent } from './debit-memo/view/debit-memo-view.component';
 
 // Receipt Voucher
- import {ReceiptVoucherCreateComponent} from './receipt-voucher/create/receipt-voucher.create.component';
- import {ReceiptVoucherEditComponent} from './receipt-voucher/edit/receipt-voucher.edit.component';
- import { ReceiptMailModalComponent } from './receipt-voucher/modals/mail.modal';
- import { PaymentGatewayModalComponent } from './receipt-voucher/modals/payment-gateway/payment-gateway.modal';
- import { PaymentInformModalComponent } from './receipt-voucher/modals/payment-inform/payment-inform.modal';
- import { ReceiptDocumentTabComponent } from './receipt-voucher/receipt-tabs/document-tab.component';
- import { ReceiptInformationTabComponent } from './receipt-voucher/receipt-tabs/information-tab.component';
- import {ReceiptVoucherComponent} from './receipt-voucher/receipt-voucher.component';
- import {ReceiptVoucherDetailComponent} from './receipt-voucher/view/receipt-voucher.view.component';
+import { ReceiptVoucherCreateComponent } from './receipt-voucher/create/receipt-voucher.create.component';
+import { ReceiptVoucherEditComponent } from './receipt-voucher/edit/receipt-voucher.edit.component';
+import { ReceiptMailModalComponent } from './receipt-voucher/modals/mail.modal';
+import { PaymentGatewayModalComponent } from './receipt-voucher/modals/payment-gateway/payment-gateway.modal';
+import { PaymentInformModalComponent } from './receipt-voucher/modals/payment-inform/payment-inform.modal';
+import { ReceiptDocumentTabComponent } from './receipt-voucher/receipt-tabs/document-tab.component';
+import { ReceiptInformationTabComponent } from './receipt-voucher/receipt-tabs/information-tab.component';
+import { ReceiptVoucherComponent } from './receipt-voucher/receipt-voucher.component';
+import { ReceiptVoucherDetailComponent } from './receipt-voucher/view/receipt-voucher.view.component';
 
 
 import { CKEditorModule } from 'ng2-ckeditor';
@@ -111,7 +113,8 @@ import { MailModalComponent } from './ar-invoice/modals/mail.modal';
         ReceiptDocumentTabComponent,
         ReceiptInformationTabComponent,
         PaymentGatewayModalComponent,
-        PaymentInformModalComponent
+        PaymentInformModalComponent,
+        PODModalComponent,
     ],
     providers: [FinancialService, DebitMemoService, CreditMemoService, TableService, DatePipe, Helper],
     entryComponents: [
@@ -124,7 +127,8 @@ import { MailModalComponent } from './ar-invoice/modals/mail.modal';
         CreditItemMiscModalContent,
         CreditMailModalComponent,
         PaymentGatewayModalComponent,
-        PaymentInformModalComponent
+        PaymentInformModalComponent,
+        PODModalComponent
     ]
 })
 export class FinancialModule { }

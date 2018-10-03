@@ -159,10 +159,13 @@ export class OrderService {
         const url = 'order/create-order';
         return this.API.post(url, params);
     }
-
+    cancelOrder(id) {
+        const url = 'order/cancel-order/' + id;
+        return this.API.post(url);
+    }
     createSaleAsQuote(params) {
-      const url = 'order/createSaleQuote';
-      return this.API.post(url, params);
+        const url = 'order/createSaleQuote';
+        return this.API.post(url, params);
     }
 
     updateOrder(params, id) {
@@ -291,5 +294,8 @@ export class OrderService {
         const url = 'sale-quote/count-status';
         return this.API.get(url);
     }
-
+    generateInvoice(id) {
+        const url = 'order/invoice/' + id;
+        return this.API.post(url);
+    }
 }
