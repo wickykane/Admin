@@ -199,16 +199,6 @@
 
         <div class="row block-info" style="margin-top:15px;">
             <div class="col-sm-12">
-                <!-- <div class="custom-header">
-                    <h3 class="custom-header">ADDRESS:
-                        <strong class="text-danger">{{addresses.length}}</strong>
-                        <span *ngIf="addresses.length > 1">Records</span>
-                        <span *ngIf="addresses.length <= 1">Record</span>
-                    </h3>
-                    <div class="wrap-keyboard right-toggle-button" (click)="flagAddress = !flagAddress">
-                        <span class="fa" [ngClass]="{'fa-minus': flagAddress,'fa-plus': !flagAddress}"></span>
-                    </div>
-                </div> -->
                 <div class="card no-border">
                     <div class="card-header">
                         ADDRESS:
@@ -216,7 +206,7 @@
                         <span *ngIf="addresses.length > 1">Records</span>
                         <span *ngIf="addresses.length <= 1">Record</span>
 
-                        <div class="wrap-keyboard right-toggle-button text-danger mr-2" (click)="flagAddress = !flagAddress">
+                        <div class="wrap-keyboard right-toggle-button text-danger mr-2 wrap-icon" (click)="flagAddress = !flagAddress">
                             <span class="fa" [ngClass]="{'fa-minus': flagAddress,'fa-plus': !flagAddress}"></span>
                         </div>
                     </div>
@@ -329,7 +319,7 @@
                         <strong class="text-danger">{{sites.length}}</strong>
                         <span *ngIf="sites.length > 1">Records</span>
                         <span *ngIf="sites.length <= 1">Record</span>
-                        <div class="wrap-keyboard right-toggle-button text-danger mr-2" (click)="flagSite = !flagSite">
+                        <div class="wrap-keyboard right-toggle-button text-danger mr-2 wrap-icon" (click)="flagSite = !flagSite">
                             <span class="fa" [ngClass]="{'fa-minus': flagSite,'fa-plus': !flagSite}"></span>
                         </div>
                     </div>
@@ -409,7 +399,7 @@
                         <strong class="text-danger">{{bank_accounts.length}}</strong>
                         <span *ngIf="bank_accounts.length > 1">Records</span>
                         <span *ngIf="bank_accounts.length <= 1">Record</span>
-                        <div class="wrap-keyboard right-toggle-button mr-2 text-danger" (click)="flagAccount = !flagAccount">
+                        <div class="wrap-keyboard right-toggle-button text-danger mr-2 wrap-icon" (click)="flagAccount = !flagAccount">
                             <span class="fa" [ngClass]="{'fa-minus': flagAccount,'fa-plus': !flagAccount}"></span>
                         </div>
                     </div>
@@ -492,7 +482,7 @@
                         <strong class="text-danger">{{credit_cards.length}}</strong>
                         <span *ngIf="credit_cards.length > 1">Records</span>
                         <span *ngIf="credit_cards.length <= 1">Record</span>
-                        <div class="wrap-keyboard right-toggle-button mr-2 text-danger" (click)="flagCreditCard = !flagCreditCard">
+                        <div class="wrap-keyboard right-toggle-button text-danger mr-2 wrap-icon" (click)="flagCreditCard = !flagCreditCard">
                             <span class="fa" [ngClass]="{'fa-minus': flagCreditCard,'fa-plus': !flagCreditCard}"></span>
                         </div>
                     </div>
@@ -575,7 +565,7 @@
                         <strong class="text-danger">{{bank_card.length}}</strong>
                         <span *ngIf="bank_card.length > 1">Records</span>
                         <span *ngIf="bank_card.length <= 1">Record</span>
-                    <div class="wrap-keyboard right-toggle-button mr-2 text-danger" (click)="flagCard = !flagCard">
+                    <div class="wrap-keyboard right-toggle-button text-danger mr-2 wrap-icon" (click)="flagCard = !flagCard">
                         <span class="fa" [ngClass]="{'fa-minus': flagCard,'fa-plus': !flagCard}"></span>
                     </div>
                 </div>
@@ -645,7 +635,7 @@
                         <strong class="text-danger">{{contacts.length}}</strong>
                         <span *ngIf="contacts.length > 1">Records</span>
                         <span *ngIf="contacts.length <= 1">Record</span>
-                        <div class="wrap-keyboard right-toggle-button mr-2 text-danger" (click)="flagContact = !flagContact">
+                        <div class="wrap-keyboard right-toggle-button text-danger mr-2 wrap-icon" (click)="flagContact = !flagContact">
                             <span class="fa" [ngClass]="{'fa-minus': flagContact,'fa-plus': !flagContact}"></span>
                         </div>
                     </div>
