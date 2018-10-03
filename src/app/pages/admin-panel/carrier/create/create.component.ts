@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -15,7 +15,8 @@ import { CarrierCreateKeyService } from './keys.control';
     templateUrl: './create.component.html',
     styleUrls: ['./create.component.scss'],
     providers: [CarrierCreateKeyService],
-    animations: [routerTransition()]
+    animations: [routerTransition()],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CreateComponent implements OnInit {
 
@@ -27,6 +28,7 @@ export class CreateComponent implements OnInit {
     id: any = null;
 
     constructor(
+        private cd: ChangeDetectorRef,
         public router: Router,
         public fb: FormBuilder,
         public toastr: ToastrService,
@@ -80,6 +82,10 @@ export class CreateComponent implements OnInit {
         })();
     }
 
+    refresh() {
+        this.cd.detectChanges();
+    }
+
     toNumber(str) {
       return Number(str);
     }
@@ -98,6 +104,7 @@ export class CreateComponent implements OnInit {
             })();
         });
         this.listBankAccount = data.banks;
+        this.refresh();
     }
     numberMaskObject(max?) {
         return createNumberMask({
@@ -111,18 +118,21 @@ export class CreateComponent implements OnInit {
     getCarrierById(id) {
         this.cs.getCarrierById(id).subscribe(res => {
             this.setData(res.data);
+            this.refresh();
         });
     }
 
     getStateByCountry(country_code, type) {
         this.cos.getStateByCountry({country: country_code}).subscribe(res => {
             this.listMaster[type + 'State'] = res.data;
+            this.refresh();
         });
     }
 
     getGenerateCode() {
         this.cs.getGenerateCode().subscribe(res => {
             this.listMaster['generate-code'] = res.message;
+            this.refresh();
         });
     }
 
@@ -130,6 +140,7 @@ export class CreateComponent implements OnInit {
         this.cos.getListCountry().subscribe(res => {
             this.listMaster['countries'] = res.data;
             calback();
+            this.refresh();
         });
     }
 
@@ -137,6 +148,7 @@ export class CreateComponent implements OnInit {
         this.cs.getListBank().subscribe(res => {
             this.listMaster['bank'] = res.data.rows;
             calback();
+            this.refresh();
         });
     }
 
@@ -148,6 +160,7 @@ export class CreateComponent implements OnInit {
         this.cs.getBranchByBank(id).subscribe(res => {
             item.list_branch = res.data.rows;
             if (calback) { calback(); }
+            this.refresh();
         });
     }
 
@@ -190,6 +203,7 @@ export class CreateComponent implements OnInit {
         if (this.id) {
             this.cs.putCarrierById(this.id, param).subscribe(res => {
                 this.toastr.success(res.message);
+                this.refresh();
                 setTimeout(() => {
                     this.router.navigate(['/admin-panel/carrier']);
                 }, 500);
@@ -197,6 +211,7 @@ export class CreateComponent implements OnInit {
         } else {
             this.cs.createCarrier(param).subscribe(res => {
                 this.toastr.success(res.message);
+                this.refresh();
                 setTimeout(() => {
                     this.router.navigate(['/admin-panel/carrier']);
                 }, 500);

@@ -1,4 +1,4 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, NgModule, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, CUSTOM_ELEMENTS_SCHEMA, NgModule, OnInit, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
@@ -17,7 +17,8 @@ import { DiscountCategoryService } from './discount-category.service';
     templateUrl: './discount-category.create.component.html',
     providers: [DiscountCategoryService],
     styleUrls: ['./discount-category-create.component.scss'],
-    animations: [routerTransition()]
+    animations: [routerTransition()],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DiscountCategoryCreateComponent implements OnInit {
     /*
@@ -36,7 +37,8 @@ export class DiscountCategoryCreateComponent implements OnInit {
     /**
      * Init Data
      */
-    constructor(private vRef: ViewContainerRef, private fb: FormBuilder, private discountCategoryService: DiscountCategoryService, public toastr: ToastrService, private router: Router) {
+    constructor(private vRef: ViewContainerRef, private fb: FormBuilder, private discountCategoryService: DiscountCategoryService, public toastr: ToastrService, private router: Router,
+        private cd: ChangeDetectorRef) {
 
         this.generalForm = fb.group({
             'code': [null],
@@ -55,6 +57,9 @@ export class DiscountCategoryCreateComponent implements OnInit {
         this.generateCode();
         this.addNewLine();
     }
+    refresh() {
+        this.cd.detectChanges();
+    }
     /**
      * Mater Data
      */
@@ -62,6 +67,7 @@ export class DiscountCategoryCreateComponent implements OnInit {
         this.discountCategoryService.generateCode().subscribe(
             res => {
                 this.generalForm.patchValue({ code: res.message });
+                this.refresh();
             },
             err => {
 
@@ -75,6 +81,7 @@ export class DiscountCategoryCreateComponent implements OnInit {
                 this.masterTypeArr = Array.of(...res.data.apply_for);
                 this.initDisabledType(this.listMaster['category']);
                 this.initDisabledType(this.masterTypeArr);
+                this.refresh();
             },
             err => {
 
@@ -277,6 +284,7 @@ export class DiscountCategoryCreateComponent implements OnInit {
                 setTimeout(() => {
                     this.router.navigate(['/admin-panel/discount-category']);
                 }, 500);
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }

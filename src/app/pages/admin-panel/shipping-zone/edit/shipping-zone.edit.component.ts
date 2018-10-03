@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, ViewContainerRef, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewContainerRef, ViewEncapsulation } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -24,7 +24,8 @@ import { PickupOptionsModalComponent } from '../../../../shared/modals/pickup-op
     templateUrl: './shipping-zone.edit.component.html',
     styleUrls: ['../shipping-zone.component.scss', '../create/shipping-zone.create.component.scss'],
     animations: [routerTransition()],
-    providers: [DatePipe, CommonService]
+    providers: [DatePipe, CommonService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class ShippingZoneEditComponent implements OnInit {
@@ -111,6 +112,7 @@ export class ShippingZoneEditComponent implements OnInit {
 
     public pickupStoreList = [];
     constructor(
+        private cdr: ChangeDetectorRef,
         private vRef: ViewContainerRef,
         private fb: FormBuilder,
         public toastr: ToastrService,
@@ -133,6 +135,9 @@ export class ShippingZoneEditComponent implements OnInit {
         this.route.params.subscribe(params => this.id = params.id);
         this.getListMasterData();
     }
+    refresh() {
+        this.cdr.detectChanges();
+    }
     getListMasterData() {
         this.shippingZoneService.getEditMasterData(this.id).subscribe(res => {
             this.listMasterData = res.data;
@@ -146,6 +151,7 @@ export class ShippingZoneEditComponent implements OnInit {
                 }
             }
             this.getFormById(this.id);
+            this.refresh();
         })
     }
     selectOldCountry(isSelect, item) {
@@ -182,6 +188,7 @@ export class ShippingZoneEditComponent implements OnInit {
             this.cd = res.data.cd;
             this.checkListCountry(res.data.shipping_country);
             this.checkListShipping(res.data.shipping_zone_quotes);
+            this.refresh();
         })
     }
     checkListCountry(countryList) {
@@ -189,7 +196,7 @@ export class ShippingZoneEditComponent implements OnInit {
             for (var j = 0; j < countryList.length; j++) {
                 if (this.listCountry[i].country_code == countryList[j].ctr_cd) {
                     this.listCountry[i].selected = true;
-                    
+
                     this.selectCountry(true, this.listCountry[i], countryList[j]);
                 }
             }
@@ -200,33 +207,33 @@ export class ShippingZoneEditComponent implements OnInit {
         for (var i = 0; i < this.listShipping.length; i++) {
             for (var j = 0; j < this.listShipping[i].data.length; j++) {
                 for (var k = 0; k < shippingZoneQuotesList.length; k++) {
-                    
+
                     if (this.listShipping[i].data[j].id == shippingZoneQuotesList[k].shp_quotes_id) {
                         var id = this.listShipping[i].data[j].id;
                         this.listShipping[i].data[j].checked = true;
                         if (id == 1) {
                             this.freeShippingList = { ...shippingZoneQuotesList[k].data, id };
-                            
+
                         }
                         if (id == 2) {
                             this.flatRateList = { ...shippingZoneQuotesList[k].data, id };
-                            
+
                         }
                         if (id == 3) {
                             this.customRateList = { ...shippingZoneQuotesList[k].data, id };
-                            
+
                         }
                         if (id == 4) {
                             this.pickupList = { ...shippingZoneQuotesList[k].data, id };
-                            
+
                         }
                         if (id == 5) {
                             this.upsList = { ...shippingZoneQuotesList[k].data, id };
-                            
+
                         }
                         if (id == 6) {
                             this.seflList = { ...shippingZoneQuotesList[k].data, id };
-                            
+
                         }
                     }
                 }
@@ -254,7 +261,7 @@ export class ShippingZoneEditComponent implements OnInit {
         return arr.filter(isSearch);
     }
     selectCountry(isSelect, item, itemById) {
-        
+
         item.state = this.listMasterData['state'][item.country_code];
         for (var i = 0; i < item.state.length; i++) {
             for (var j = 0; j < itemById.state.length; j++) {
@@ -385,7 +392,7 @@ export class ShippingZoneEditComponent implements OnInit {
                 }
 
             }
-            
+
             listCountry[i].state = listId;
             delete listCountry[i].selected;
             delete listCountry[i].index;
@@ -438,7 +445,7 @@ export class ShippingZoneEditComponent implements OnInit {
             setTimeout(() => {
                 this.router.navigate(['/admin-panel/shipping-zone']);
             }, 500);
-
+            this.refresh();
         });
     }
     checkValidate(items, subItem, event) {

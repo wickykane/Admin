@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -8,7 +8,8 @@ import { BankService } from '../bank.service';
 @Component({
   selector: 'app-branch-modal',
   templateUrl: './branch.modal.html',
-  providers: [BankService]
+  providers: [BankService],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BranchModalComponent implements OnInit {
   // Resolve Data
@@ -24,6 +25,7 @@ export class BranchModalComponent implements OnInit {
     private fb: FormBuilder,
     private bankService: BankService,
     private commonService: CommonService,
+    private cd: ChangeDetectorRef,
   ) {
     this.branchForm = fb.group({
       'bankname': [{ value: null, disabled: true }],
@@ -44,6 +46,10 @@ export class BranchModalComponent implements OnInit {
     this.getListCountry();
   }
 
+  refresh() {
+    this.cd.detectChanges();
+  }
+
   changeCountry() {
     const id = this.branchForm.value.country_code;
     const params = {
@@ -57,6 +63,7 @@ export class BranchModalComponent implements OnInit {
       try {
         this.branchForm.patchValue(res.data);
         this.changeCountry();
+        this.refresh();
       } catch (e) {
         console.log(e);
       }
@@ -67,6 +74,7 @@ export class BranchModalComponent implements OnInit {
     this.commonService.getStateByCountry(params).subscribe(res => {
       try {
         this.listMaster['state'] = res.data;
+        this.refresh();
       } catch (e) {
         console.log(e);
       }
@@ -77,6 +85,7 @@ export class BranchModalComponent implements OnInit {
     this.commonService.getListCountry().subscribe(res => {
       try {
         this.listMaster['countries'] = res.data;
+        this.refresh();
       } catch (e) {
         console.log(e);
       }

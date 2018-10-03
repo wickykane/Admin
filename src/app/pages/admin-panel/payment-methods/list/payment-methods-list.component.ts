@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from './../../../../services/table.service';
@@ -17,7 +17,8 @@ import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
     templateUrl: './payment-methods-list.component.html',
     styleUrls: ['./payment-methods-list.component.scss'],
     animations: [routerTransition()],
-    providers: [PaymentMethodsKeyService, PaymentMethodsService]
+    providers: [PaymentMethodsKeyService, PaymentMethodsService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PaymentMethodsListComponent implements OnInit {
     /**
@@ -45,6 +46,7 @@ export class PaymentMethodsListComponent implements OnInit {
     public isCheckedAllPaymentMethod = false;
 
     constructor(
+        private cd: ChangeDetectorRef,
         public router: Router,
         public fb: FormBuilder,
         public toastr: ToastrService,
@@ -71,6 +73,10 @@ export class PaymentMethodsListComponent implements OnInit {
     /**
      * Table Event
      */
+    refresh() {
+        this.cd.detectChanges();
+    }
+
     selectData(index) {
         console.log(index);
     }
@@ -95,6 +101,7 @@ export class PaymentMethodsListComponent implements OnInit {
                     this.paymentMethods = res.data.rows;
                     this.isAllChecked();
                     this.tableService.matchPagingOption(res.data);
+                    this.refresh();
                 } catch (err) {
                     console.log(err);
                 }
@@ -110,6 +117,7 @@ export class PaymentMethodsListComponent implements OnInit {
           res => {
             try {
                 this.listMaster.paymentTypes = res.data;
+                this.refresh();
             } catch (err) {
                 console.log(err);
             }
@@ -131,6 +139,7 @@ export class PaymentMethodsListComponent implements OnInit {
             res => {
                 try {
                     this.toastr.success(res.message);
+                    this.refresh();
                 } catch (err) {
                     console.log(err);
                     payment.ac = payment.ac ? 0 : 1;
@@ -153,6 +162,7 @@ export class PaymentMethodsListComponent implements OnInit {
                     try {
                         this.toastr.success(res.message);
                         this.getListPaymentMethods();
+                        this.refresh();
                     } catch (err) {
                         console.log(err);
                     }
@@ -179,6 +189,7 @@ export class PaymentMethodsListComponent implements OnInit {
                         try {
                             this.toastr.success(res.message);
                             this.getListPaymentMethods();
+                            this.refresh();
                         } catch (err) {
                             console.log(err);
                         }

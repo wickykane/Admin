@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -12,7 +12,8 @@ declare var jQuery: any;
     selector: 'app-email-template-modal-content',
     templateUrl: './email-template.modal.html',
     providers: [InvoiceConfigService],
-    styleUrls: ['./email-template.modal.scss']
+    styleUrls: ['./email-template.modal.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 // tslint:disable-next-line:component-class-suffix
 export class EmailTemplateModalContent implements OnInit {
@@ -35,6 +36,7 @@ export class EmailTemplateModalContent implements OnInit {
     private id = null;
 
     constructor(
+        private cd: ChangeDetectorRef,
         public activeModal: NgbActiveModal,
         private modalService: NgbModal,
         private toastr: ToastrService,
@@ -43,6 +45,10 @@ export class EmailTemplateModalContent implements OnInit {
 
     ngOnInit() {
         this.getTemplateFromAPI();
+    }
+
+    refresh() {
+        this.cd.detectChanges();
     }
 
     getTemplateFromAPI() {
@@ -66,6 +72,7 @@ export class EmailTemplateModalContent implements OnInit {
                 this.emailTemplate = res.data.config_value;
                 this.id = res.data.id;
                 this.getFieldTags();
+                this.refresh();
             },
             err => {
                 console.log(err);
@@ -88,6 +95,7 @@ export class EmailTemplateModalContent implements OnInit {
                     this.emailTemplate.email_tpl.subject = this.emailTemplate.email_tpl.subject.replace(regex, item.value);
                     this.emailTemplate.email_tpl.body = this.emailTemplate.email_tpl.body.replace(regex, item.value);
                 });
+                this.refresh();
             },
             err => {
                 console.log(err);
@@ -108,6 +116,7 @@ export class EmailTemplateModalContent implements OnInit {
         this.invoiceService.saveEmailTemplate(this.id, params).subscribe(
             res => {
                 this.toastr.success(res.message);
+                this.refresh();
                 setTimeout(() => {
                     this.activeModal.close();
                 }, 500);
@@ -137,6 +146,7 @@ export class EmailTemplateModalContent implements OnInit {
                     this.invoiceService.sendEmailSample(params).subscribe(
                         _res => {
                             this.toastr.success(_res.message);
+                            this.refresh();
                         },
                         err => {
                             console.log(err);

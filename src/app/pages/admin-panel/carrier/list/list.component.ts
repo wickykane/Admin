@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -13,7 +13,8 @@ import {CarrierKeyService} from './keys.control';
     templateUrl: './list.component.html',
     styleUrls: ['./list.component.scss'],
     providers: [CarrierKeyService],
-    animations: [routerTransition()]
+    animations: [routerTransition()],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ListComponent implements OnInit {
     public list = {
@@ -24,6 +25,7 @@ export class ListComponent implements OnInit {
     searchForm: FormGroup;
 
     constructor(public router: Router,
+        private cd: ChangeDetectorRef,
         public fb: FormBuilder,
         public toastr: ToastrService,
         private vRef: ViewContainerRef,
@@ -47,6 +49,10 @@ export class ListComponent implements OnInit {
         this.user = JSON.parse(localStorage.getItem('currentUser'));
     }
 
+    refresh() {
+        this.cd.detectChanges();
+    }
+
     getList() {
         const params = {...this.tableService.getParams(), ...this.searchForm.value};
         Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
@@ -54,6 +60,7 @@ export class ListComponent implements OnInit {
         this.cs.getListCarrier(params).subscribe(res => {
             this.list.items = res.data.rows;
             this.tableService.matchPagingOption(res.data);
+            this.refresh();
         });
     }
 

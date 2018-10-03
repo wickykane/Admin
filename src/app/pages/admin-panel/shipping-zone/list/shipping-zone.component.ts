@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -12,7 +12,8 @@ import { CommonService } from './../../../../services/common.service';
     templateUrl: './shipping-zone.component.html',
     styleUrls: ['../shipping-zone.component.scss'],
     animations: [routerTransition()],
-    providers: [ShippingZoneKeyService, CommonService]
+    providers: [ShippingZoneKeyService, CommonService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ShippingZoneComponent implements OnInit {
 
@@ -35,6 +36,7 @@ export class ShippingZoneComponent implements OnInit {
 
     constructor(public router: Router,
         public fb: FormBuilder,
+        private cd: ChangeDetectorRef,
         public toastr: ToastrService,
         private vRef: ViewContainerRef,
         public tableService: TableService,
@@ -65,7 +67,9 @@ export class ShippingZoneComponent implements OnInit {
         this.user = JSON.parse(localStorage.getItem('currentUser'));
     }
 
-
+    refresh() {
+        this.cd.detectChanges();
+    }
 
 
 
@@ -73,7 +77,7 @@ export class ShippingZoneComponent implements OnInit {
     // getListMaster() {
     //     this.commonService.getMasterData().subscribe(res => {
     //         const data = res.data;
-            
+
     //         this.listMaster['rma_type'] = data.rma_type;
     //         this.listMaster['status'] = data.rma_status;
     //     });
@@ -81,29 +85,32 @@ export class ShippingZoneComponent implements OnInit {
     getListCountry() {
         this.commonService.getCountryList().subscribe(res => {
             this.countryList = res.data;
+            this.refresh();
         });
     }
     changeStatus(id) {
         this.commonService.changeStatus(id).subscribe(res => {
             this.getList();
+            this.refresh();
         });
     }
     getList() {
         const params = { ...this.tableService.getParams(), ...this.searchForm.value };
         Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
-        
+
         this.shippingZoneService.getList(params).subscribe(res => {
             try {
                 this.list.items = res.data.rows;
-                
+
                 this.tableService.matchPagingOption(res.data);
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
         });
     }
     createShippingZone() {
-        
+
         // setTimeout(() => {
         this.router.navigate(['/admin-panel/shipping-zone/create']);
         // },500);
