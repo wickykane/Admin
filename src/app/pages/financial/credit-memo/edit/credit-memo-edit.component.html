@@ -18,10 +18,8 @@
                                             </label>
                                             <span class="text-danger">(*)</span>
                                             <div>
-                                                <ng-select class="infinity-scroll-select"  [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="company_id" [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)"
-                                                    [virtualScroll]="true" style="width: 100px; margin-left: 2px;" (change)="changeCustomer()"
-                                                    [items]="listMaster['customer']" bindLabel="company_name" bindValue="id"
-                                                    formControlName="company_id">
+                                                <ng-select class="infinity-scroll-select" [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="company_id" [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 100px; margin-left: 2px;" (change)="changeCustomer()"
+                                                    [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="company_id">
                                                     <ng-template ng-option-tmp let-item="item">
                                                         <span title="{{item.company_name}}">{{item.company_name}}</span>
                                                     </ng-template>
@@ -110,7 +108,7 @@
                                             <div class="form-group row">
                                                 <label class='col-6'>Document Type <span class="text-danger">(*)</span></label>
                                                 <div class='col-6'>
-                                                    <select class="form-control" formControlName="document_type">
+                                                    <select (change)="getListDocument()" class="form-control" formControlName="document_type">
                                                         <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let item of listMaster['documentType']" [ngValue]="item.id">{{item.name}}</option>
                                                     </select>
@@ -121,7 +119,7 @@
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
-                                                    <ng-select (change)="changeInvoice($event)" [items]="listMaster['invoice-list']" bindLabel="inv_num" bindValue="id" formControlName="document_id">
+                                                    <ng-select (change)="changeInvoice($event)" [items]="listMaster['invoice-list']" bindLabel="code" bindValue="id" formControlName="document_id">
                                                     </ng-select>
                                                 </div>
                                             </div>
@@ -263,14 +261,14 @@
                                 <strong>Ship To</strong>
                             </div>
                             <div class="card-body p-25">
-                                <div class="row"  *ngIf="generalForm.value.carrier_id == 999" >
-                                        <!--  -->
+                                <div class="row" *ngIf="generalForm.value.carrier_id == 999">
+                                    <!--  -->
                                     <div class="col-md-12">
                                         <p>Customer will pickup goods in stores.</p>
                                     </div>
                                 </div>
                                 <!--  -->
-                                <div class="row"  *ngIf="generalForm.value.carrier_id != 999">
+                                <div class="row" *ngIf="generalForm.value.carrier_id != 999">
                                     <div class="col-12 ">
                                         <div class="form-group row">
                                             <label class=" control-label col-5" for="shiping_to" translate>Label
@@ -378,8 +376,7 @@
                     </div>
                     <div class="card-body no-padding">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-order" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex"
-                                (onEnter)="selectData($event)">
+                            <table class="table table-bordered table-order" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                                 <thead>
                                     <tr>
                                         <th translate style="width: 100px;">Action</th>
@@ -412,27 +409,30 @@
                                             <td class="text-center">{{item.condition_name}}</td>
                                             <td>{{item.uom_name || item.uom || 'Each'}}</td>
                                             <td>
-                                                <input [disabled]="item.misc_id" [isDecimal]="true" numberDirective [min]="0" [disabled]="item.misc_id" style="width: 60px;"
-                                                    class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (changeValue)="updateTotal()">
+                                                <input [disabled]="item.misc_id || generalForm.value.document_type == 2 " [isDecimal]="true" numberDirective [min]="0" [disabled]="item.misc_id" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (changeValue)="updateTotal()">
                                             </td>
                                             <td>
-                                                <div>
-
+                                                <div *ngIf="!(item.misc_id && item.id == 6)">
+                                                    <span style="vertical-align: middle;">$</span>
                                                     <div style="display:inline-block;width:80%">
-                                                        <input [isDecimal]="true" numberDirective [min]="0" class="form-control input-sm" type="number" [(ngModel)]="item.price"
-                                                            (changeValue)="updateTotal();changeFromSource(item)">
+                                                        <input [disabled]="generalForm.value.document_type == 2 && !item.misc_id" [isDecimal]="true" numberDirective [min]="0" class="form-control input-sm" type="number" [(ngModel)]="item.price" (changeValue)="updateTotal();">
                                                     </div>
+                                                </div>
+                                                <div *ngIf="item.misc_id && item.id == 6" class="text-danger">
+                                                    <span style="vertical-align: middle;">($</span>
+                                                    <div style="display:inline-block;width:80%">
+                                                        <input [disabled]="generalForm.value.document_type == 2 && !item.misc_id" [isDecimal]="true" numberDirective [min]="0" class="form-control input-sm" type="number" [(ngModel)]="item.price" (changeValue)="updateTotal();">
+                                                    </div>
+                                                    <span>)</span>
                                                 </div>
                                             </td>
                                             <td>
-                                                <input [isDecimal]="true" numberDirective [min]="0" [max]="100" class="form-control input-sm" type="number" [(ngModel)]="item.discount_percent"
-                                                    (changeValue)="updateTotal()">
+                                                <input [disabled]="generalForm.value.document_type == 2 && !item.misc_id" [isDecimal]="true" numberDirective [min]="0" [max]="100" class="form-control input-sm" type="number" [(ngModel)]="item.discount_percent" (changeValue)="updateTotal()">
                                             </td>
                                             <td>
-                                                <input [isDecimal]="true" numberDirective [min]="0" [max]="100" class="form-control input-sm" type="number" [(ngModel)]="item.tax_percent"
-                                                    (changeValue)="updateTotal()">
+                                                <input [disabled]="generalForm.value.document_type == 2" [isDecimal]="true" numberDirective [min]="0" [max]="100" class="form-control input-sm" type="number" [(ngModel)]="item.tax_percent" (changeValue)="updateTotal()">
                                             </td>
-                                            <td class="text-center">
+                                            <td class="text-center" [ngClass]="{'text-danger': item.misc_id && item.id == 6}">
                                                 <span>{{item.amount | currency}}</span>
                                             </td>
                                         </tr>
@@ -488,6 +488,12 @@
                                     <label class='col-6 control-label'>+ TAX ({{item.value}}%):</label>
                                     <div class='col-5 padding-lr-10'>
                                         <input class="form-control" readonly="true" [(ngModel)]="item.amount" class="form-control" value="0" type="number">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class='col-6 control-label'>- Restocking Fee</label>
+                                    <div class='col-6 padding-lr-10'>
+                                        <strong>{{(order_info.restocking_fee || 0) | currency}}</strong>
                                     </div>
                                 </div>
                                 <div class="form-group row margin-lr-0 text-light bg-danger">
