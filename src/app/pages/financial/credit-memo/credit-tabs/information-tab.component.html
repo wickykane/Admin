@@ -7,9 +7,9 @@
         <button *ngIf="detail['sts_code'] =='SB'" class="btn btn-outline-success" (click)="confirmModal(_creditId, 3)"><i class="fa fa-check-square"></i> Approve</button>
         <button *ngIf="detail['sts_code'] == 'SB'" class="btn btn-outline-danger" (click)="confirmModal(_creditId, 4)"><i class="fa fa-ban" aria-hidden="true"></i> Reject</button>
         <button *ngIf="['AP','RD'].indexOf(detail['sts_code']) != -1" class="btn btn-outline-dark"><i class="fa fa-money" aria-hidden="true"></i> Pay</button>
-        <button *ngIf="['AP','RD'].indexOf(detail['sts_code']) != -1" class="btn btn-outline-dark"  [routerLink]="['/financial/credit-memo/apply-credit',_creditId]"><i class="fa fa-clipboard" aria-hidden="true"></i> Apply to Invoice</button>
+        <button *ngIf="['AP','RD'].indexOf(detail['sts_code']) != -1" class="btn btn-outline-dark" [routerLink]="['/financial/credit-memo/apply-credit',_creditId]"><i class="fa fa-clipboard" aria-hidden="true"></i> Apply to Invoice</button>
         <button class="btn btn-outline-dark" (click)="printPDF(_creditId)"><i class="fa fa-download" aria-hidden="true"></i> Print</button>
-        <button *ngIf="detail['sts_code'] == 'RJ'" class="btn btn-outline-dark" (click)="confirmModal(_creditId, 'RE-OPEN')"><i class="fa fa-external-link-square" aria-hidden="true"></i> Reopen</button>        
+        <button *ngIf="detail['sts_code'] == 'RJ'" class="btn btn-outline-dark" (click)="confirmModal(_creditId, 'RE-OPEN')"><i class="fa fa-external-link-square" aria-hidden="true"></i> Reopen</button>
         <button *ngIf="['SB','AP','CC','RD','RF'].indexOf(detail['sts_code']) != -1" class="btn btn-outline-dark" (click)="sendMail(_creditId)"><i class="fa fa-envelope-o" aria-hidden="true"></i> Send Mail</button>
     </div>
     <section class="rma-page block main-container block-order">
@@ -374,6 +374,12 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
+                                    <label class='col-6 control-label'>- Restocking Fee</label>
+                                    <div class='col-6 padding-lr-10'>
+                                        <strong>{{(detail['restocking_fee'] || 0) | currency}}</strong>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
                                     <label class='col-5 control-label'>
                                             <strong class="text-warning">Total Due</strong>
                                         </label>
@@ -394,7 +400,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group row margin-lr-0 text-light bg-danger">
-                                    <label class="col-6 control-label">
+                                    <label class="col-6">
                                             <strong>Balance Amount</strong>
                                         </label>
                                     <div class="col-6 padding-lr-10">
