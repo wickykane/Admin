@@ -1,117 +1,127 @@
 <div [@routerTransition]>
 
     <div class="block-header">
-        <h3 class="block-title-lg">{{customer['company_name'] }} <span *ngIf="customer['company_type'] == 'CP' && customer['company_parent_id']" class="parent-company">Parent Company: {{ customer['company_parent_code'] + ' ' + customer['company_parent_name']}}</span> </h3>
+        <h3 class="block-title-lg">{{customer['company_name'] }}
+            <span *ngIf="customer['company_type'] == 'CP' && customer['company_parent_id']" class="parent-company">Parent Company: {{ customer['company_parent_code'] + ' ' + customer['company_parent_name']}}</span>
+        </h3>
     </div>
 
     <!-- <app-shortcut [listShortcut]='customerKeyService.getKeys()'></app-shortcut> -->
-    <section class='main-container'>
-        <div class="informaion">
-            <h5 class="text-uppercase font-weight-bold">
-              <span>INFORMATION</span>
-              <!-- <span *ngIf="customer['company_type'] == 'CP' && customer['company_parent_id']" style="float:right">PARENT COMPANY: {{ customer['company_parent_code'] + ' ' + customer['company_parent_name']}}</span> -->
-            </h5>
-            <div class="d-flex">
-                <div class="col-md-3 customer-infomation">
-                    <div class="row">
-                        <label class='col-6'>Type</label>
-                        <div class='col-6'>{{ customer['company_type_name'] }}</div>
+    <section class='rma-page block main-container block-order'>
+        <div class="row informaion">
+            <div class="col-md-12">
+                <div class="card height-100">
+                    <div class="card-header">
+                        <strong>INFORMATION</strong>
                     </div>
-                    <div class="row">
-                        <label class='col-6'>Code</label>
-                        <div class='col-6'>{{ customer['code'] }}</div>
-                    </div>
-                    <div class="row">
-                        <label class='col-6'>Phone</label>
-                        <div class='col-6'>{{ customer['phone'] }}</div>
-                    </div>
-                    <div class="row">
-                        <label class='col-6'>Fax</label>
-                        <div class='col-6'>{{ customer['fax'] }}</div>
-                    </div>
-                    <div class="row">
-                        <label class='col-6'>Discount Level</label>
-                        <div class='col-6 text-success'>{{ customer['discount_level'] }}</div>
-                    </div>
-                    <div class="row">
-                        <label class='col-6'>Salesperson</label>
-                        <div class='col-6'>{{ customer['sales_person'] }}</div>
-                    </div>
-                </div>
-                <div class="col-md-3 customer-infomation bolder">
-                    <div class="row">
-                        <label class='col-6'>Total Sales Orders</label>
-                        <div class='col-6 text-primary'><a (click)="selectTab('so')">{{ customer['total_sales_orders'] || 0 }}</a></div>
-                    </div>
-                    <div class="row">
-                        <label class='col-6'>Total Sales Quotes</label>
-                        <div class='col-6 text-primary'><a (click)="selectTab('quote')">{{ customer['total_sales_quote'] || 0 }}</a></div>
-                    </div>
-                    <div class="row">
-                        <label class='col-6'>Gross Sales YTD</label>
-                        <div class='col-6 text-success'>{{ customer['gross_sales_ytd'] }}</div>
-                    </div>
-                    <div class="row">
-                        <label class='col-6'>Net Sales YTD</label>
-                        <div class='col-6 text-success'>{{ customer['net_sales_ytd'] }}</div>
-                    </div>
-                    <div class="row">
-                        <label class='col-6'>COGS YTD</label>
-                        <div class='col-6 text-success'>{{ customer['cogs_ytd'] }}</div>
-                    </div>
-                    <div class="row">
-                        <label class='col-6'>Gross Profit % YTD</label>
-                        <div class='col-6 text-success'>{{ customer['gross_profit_ytd'] }}</div>
-                    </div>
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="col-md-3 customer-infomation">
+                                <div class="row">
+                                    <label class='col-6'>Type</label>
+                                    <div class='col-6'>{{ customer['company_type_name'] }}</div>
+                                </div>
+                                <div class="row">
+                                    <label class='col-6'>Code</label>
+                                    <div class='col-6'>{{ customer['code'] }}</div>
+                                </div>
+                                <div class="row">
+                                    <label class='col-6'>Phone</label>
+                                    <div class='col-6'>{{ customer['phone'] }}</div>
+                                </div>
+                                <div class="row">
+                                    <label class='col-6'>Fax</label>
+                                    <div class='col-6'>{{ customer['fax'] }}</div>
+                                </div>
+                                <div class="row">
+                                    <label class='col-6'>Discount Level</label>
+                                    <div class='col-6 text-success'>{{ customer['discount_level'] }}</div>
+                                </div>
+                                <div class="row">
+                                    <label class='col-6'>Salesperson</label>
+                                    <div class='col-6'>{{ customer['sales_person'] }}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 customer-infomation bolder">
+                                <div class="row">
+                                    <label class='col-6'>Total Sales Orders</label>
+                                    <div class='col-6 text-primary'>
+                                        <a (click)="selectTab('so')">{{ customer['total_sales_orders'] || 0 }}</a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label class='col-6'>Total Sales Quotes</label>
+                                    <div class='col-6 text-primary'>
+                                        <a (click)="selectTab('quote')">{{ customer['total_sales_quote'] || 0 }}</a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label class='col-6'>Gross Sales YTD</label>
+                                    <div class='col-6 text-success'>{{ customer['gross_sales_ytd'] }}</div>
+                                </div>
+                                <div class="row">
+                                    <label class='col-6'>Net Sales YTD</label>
+                                    <div class='col-6 text-success'>{{ customer['net_sales_ytd'] }}</div>
+                                </div>
+                                <div class="row">
+                                    <label class='col-6'>COGS YTD</label>
+                                    <div class='col-6 text-success'>{{ customer['cogs_ytd'] }}</div>
+                                </div>
+                                <div class="row">
+                                    <label class='col-6'>Gross Profit % YTD</label>
+                                    <div class='col-6 text-success'>{{ customer['gross_profit_ytd'] }}</div>
+                                </div>
 
-                </div>
-                <div class="col-md-3 customer-infomation ">
-                    <div class="row">
-                        <label class='col-6'>Total Sales Invoices</label>
-                        <div class='col-6 text-primary'>{{ customer['total_sales_invoices'] }}</div>
-                    </div>
-                    <div class="row">
-                        <label class='col-6'>Total Amount</label>
-                        <div class='col-6 text-primary'>{{ customer['total_amount'] | currency:'$' }}</div>
-                    </div>
-                    <div class="row">
-                        <label class='col-6'>Total Overdue Invoices</label>
-                        <div class='col-6 text-danger'>{{ customer['total_overdue_invoice'] }}</div>
-                    </div>
-                    <div class="row">
-                        <label class='col-6'>Total Outstanding Amount</label>
-                        <div class='col-6 text-danger'>{{ customer['total_outstanding_amount'] | currency:'$'}}</div>
-                    </div>
-                    <div class="row">
-                        <label class='col-6'>Total Refunded Amount</label>
-                        <div class='col-6 text-danger'>{{ customer['total_refunded_amount'] | currency:'$'}}</div>
-                    </div>
-                </div>
-                <div class="col-md-3 customer-infomation bolder">
-                    <div class="row">
-                        <label class='col-6'>Total RMA Orders</label>
-                        <div class='col-6 text-primary'>{{ customer['total_rma_orders'] }}</div>
-                    </div>
-                    <div class="row">
-                        <label class='col-6'>Total Returned Items</label>
-                        <div class='col-6 text-primary'>{{ customer['total_returned_items'] }}</div>
-                    </div>
-                    <div class="row">
-                        <label class='col-6'>Total Received Item</label>
-                        <div class='col-6 text-primary'>{{ customer['total_received_items'] }}</div>
-                    </div>
-                    <div class="row">
-                        <label class='col-6'>Credit Limit</label>
-                        <div class='col-6'>{{ customer['credit_limit'] | currency:'$'}}</div>
-                    </div>
-                    <div class="row">
-                        <label class='col-6'>Credit Balance</label>
-                        <div class='col-6'>{{ customer['credit_balance'] | currency:'$'}}</div>
-                    </div>
-                </div>
+                            </div>
+                            <div class="col-md-3 customer-infomation ">
+                                <div class="row">
+                                    <label class='col-6'>Total Sales Invoices</label>
+                                    <div class='col-6 text-primary'>{{ customer['total_sales_invoices'] }}</div>
+                                </div>
+                                <div class="row">
+                                    <label class='col-6'>Total Amount</label>
+                                    <div class='col-6 text-primary'>{{ customer['total_amount'] | currency:'$' }}</div>
+                                </div>
+                                <div class="row">
+                                    <label class='col-6'>Total Overdue Invoices</label>
+                                    <div class='col-6 text-danger'>{{ customer['total_overdue_invoice'] }}</div>
+                                </div>
+                                <div class="row">
+                                    <label class='col-6'>Total Outstanding Amount</label>
+                                    <div class='col-6 text-danger'>{{ customer['total_outstanding_amount'] | currency:'$'}}</div>
+                                </div>
+                                <div class="row">
+                                    <label class='col-6'>Total Refunded Amount</label>
+                                    <div class='col-6 text-danger'>{{ customer['total_refunded_amount'] | currency:'$'}}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 customer-infomation bolder">
+                                <div class="row">
+                                    <label class='col-6'>Total RMA Orders</label>
+                                    <div class='col-6 text-primary'>{{ customer['total_rma_orders'] }}</div>
+                                </div>
+                                <div class="row">
+                                    <label class='col-6'>Total Returned Items</label>
+                                    <div class='col-6 text-primary'>{{ customer['total_returned_items'] }}</div>
+                                </div>
+                                <div class="row">
+                                    <label class='col-6'>Total Received Item</label>
+                                    <div class='col-6 text-primary'>{{ customer['total_received_items'] }}</div>
+                                </div>
+                                <div class="row">
+                                    <label class='col-6'>Credit Limit</label>
+                                    <div class='col-6'>{{ customer['credit_limit'] | currency:'$'}}</div>
+                                </div>
+                                <div class="row">
+                                    <label class='col-6'>Credit Balance</label>
+                                    <div class='col-6'>{{ customer['credit_balance'] | currency:'$'}}</div>
+                                </div>
+                            </div>
 
+                        </div>
+                    </div>
+                </div>
             </div>
-
         </div>
         <div class="information-tab">
             <ngb-tabset #tabSet>
@@ -185,7 +195,7 @@
     </section>
     <section class="mb-2">
         <div class="block-content block-content-full text-center">
-          <button type="button" class="btn btn-default text-uppercase gradient-white" title="Edit" [routerLink]="['/customer/edit/' + customerId]">EDIT</button>
+            <button type="button" class="btn btn-default text-uppercase gradient-white" title="Edit" [routerLink]="['/customer/edit/' + customerId]">EDIT</button>
             <button type="button" class="btn btn-default text-uppercase gradient-white" [routerLink]="['/customer']">Back To List</button>
         </div>
     </section>

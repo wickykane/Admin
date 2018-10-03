@@ -1,5 +1,5 @@
-<div class='address-tab'>
-    <div class="block-content pd-bottom bg-gray-light mb-2">
+<div class="block anchor-scroll block-order">
+    <div class="block-content pd-bottom bg-gray-light short-width">
         <div class="row">
             <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
                 <div class="block-search">
@@ -17,16 +17,16 @@
                 <div class="block-search">
                     <label for="buyer_type" class="control-label">Status</label>
                     <select class="form-control" formControlName="buyer_type">
-                                <option value="null" selected="true">--Select--</option>
-                                <option *ngFor="let item of listMaster['statusSO']" [ngValue]="item.id">{{item.name}}</option>
-                            </select>
+                        <option value="null" selected="true">--Select--</option>
+                        <option *ngFor="let item of listMaster['statusSO']" [ngValue]="item.id">{{item.name}}</option>
+                    </select>
                 </div>
                 <div class="block-search">
                     <label for="buyer_type" class="control-label">Date Type</label>
                     <select class="form-control" formControlName="buyer_type">
-                            <option value="null" selected="true">--Select--</option>
-                            <option *ngFor="let item of listMaster['dateType']" [ngValue]="item.id">{{item.name}}</option>
-                        </select>
+                        <option value="null" selected="true">--Select--</option>
+                        <option *ngFor="let item of listMaster['dateType']" [ngValue]="item.id">{{item.name}}</option>
+                    </select>
                 </div>
                 <div class="block-search">
                     <label for="buyer_type" class="control-label">From</label>
@@ -34,8 +34,8 @@
                         <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="from" ngbDatepicker #d1="ngbDatepicker">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
-                                    <i class="fa fa-calendar" aria-hidden="true"></i>
-                                </button>
+                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -45,8 +45,8 @@
                         <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="to" ngbDatepicker #t1="ngbDatepicker">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" (click)="t1.toggle()" type="button">
-                                    <i class="fa fa-calendar" aria-hidden="true"></i>
-                                </button>
+                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -54,48 +54,58 @@
             <div class="block-btn-search">
                 <label class="control-label">&nbsp;</label>
                 <div class="group-btn-search">
-                    <button type="button" class="btn btn-primary" (click)="tableService.searchAction()">Search</button>
-                    <button type="button" class="btn btn-default" (click)="tableService.resetAction(searchForm)">Cancel</button>
+                    <button type="button" class="btn-default-custom" (click)="tableService.searchAction()">Search</button>
+                    <button type="button" class="btn-default-custom" (click)="tableService.resetAction(searchForm)">Cancel</button>
                 </div>
             </div>
         </div>
     </div>
-    <div class='scroll-container'>
-        <table class='table table-custom margin-full-0'>
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Tracking No</th>
-                    <th>Route</th>
-                    <th>Sales Order</th>
-                    <th>Carrier</th>
-                    <th>Pickup Date</th>
-                    <th>Ship To</th>
-                    <th>Address</th>
-                    <th>Status</th>
-                    <th>Delivered Date</th>
-                    <th>POD Sign-off Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of list.items">
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.id }}</td>
-                </tr>
-                <tr *ngIf="list.items.length == 0">
-                    <td class="text-center" colspan="100%">No data.</td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="row mg-top-10">
+        <div class="col-12">
+            <div class="card no-border">
+                <div class="card-header">
+                    <strong>Line Items</strong>
+                </div>
+                <div class="card-body no-padding">
+                    <div class="scroll-container table-responsive list">
+                        <table class='table table-bordered table-order'>
+                            <thead class="bg-white">
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tracking No</th>
+                                    <th>Route</th>
+                                    <th>Sales Order</th>
+                                    <th>Carrier</th>
+                                    <th>Pickup Date</th>
+                                    <th>Ship To</th>
+                                    <th>Address</th>
+                                    <th>Status</th>
+                                    <th>Delivered Date</th>
+                                    <th>POD Sign-off Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of list.items">
+                                    <td>{{ item.id }}</td>
+                                    <td>{{ item.id }}</td>
+                                    <td>{{ item.id }}</td>
+                                    <td>{{ item.id }}</td>
+                                    <td>{{ item.id }}</td>
+                                    <td>{{ item.id }}</td>
+                                    <td>{{ item.id }}</td>
+                                    <td>{{ item.id }}</td>
+                                    <td>{{ item.id }}</td>
+                                    <td>{{ item.id }}</td>
+                                    <td>{{ item.id }}</td>
+                                </tr>
+                                <tr *ngIf="list.items.length == 0">
+                                    <td class="text-center" colspan="100%">No data.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
 </div>
