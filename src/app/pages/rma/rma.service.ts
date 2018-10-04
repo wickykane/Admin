@@ -7,7 +7,7 @@ export class RMAService {
   constructor(private API: ApiService) { }
 
   getListRMA(params) {
-    const url = ['rma', 'get-list'].join('/');
+    const url = ['return-order', 'list'].join('/');
     return this.API.get(url, params);
   }
 
@@ -16,24 +16,54 @@ export class RMAService {
       return this.API.get(url, params);
   }
 
-  generateRMACode() {
-    const url = ['rma', 'generate'].join('/');
+  getRMAMasterData() {
+    const url = ['return-order', 'master-data'].join('/');
     return this.API.get(url);
   }
 
-  getRMATypeReference() {
-    const url = ['rma', 'type'].join('/');
+  getDetailCompany(id) {
+      const url = 'buyer/detail/' + id;
+      return this.API.get(url);
+  }
+
+  getRMAReference() {
+      const url = 'return-order/reference';
+      return this.API.get(url);
+  }
+
+  getListItemsFromOrder(orderId, params) {
+      const url = `debit/orders/${orderId}/items`;
+      return this.API.get(url, params);
+  }
+
+  listOrderByCompany(compnay_id) {
+    const url = 'return-order/list-order-by-company/' + compnay_id;
     return this.API.get(url);
+  }
+
+  listInvoiceByOrder(order_id) {
+    const url = 'return-order/list-invoice-by-order/' + order_id;
+    return this.API.get(url);
+  }
+
+  checkDateTime(params) {
+    const url = 'return-order/check-date-time';
+    return this.API.post(url, params);
+  }
+
+  createReturnOrder(params) {
+    const url = 'return-order/create';
+    return this.API.post(url, params);
   }
 
   getOrderReference() {
-    const url = ['rma', 'sales-order-no'].join('/');
-    return this.API.get(url);
+      const url = 'order/reference-data';
+      return this.API.get(url);
   }
 
-  getOrderReferenve(params) {
-    const url = ['rma/create'].join('/');
-    return this.API.post(url, params);
+  getOrderDetail(id) {
+      const url = ['order', id].join('/');
+      return this.API.get(url);
   }
 
 }

@@ -8,27 +8,35 @@ import { RmaRoutingModule } from './rma-routing.module';
 
 
 import { TableService } from '../../services/index';
-import { CommonShareModule, Helper,  PageHeaderModule } from '../../shared/index';
+import { CommonShareModule, Helper, PageHeaderModule } from '../../shared/index';
 // Table Service
 import { ItemModalModule } from '../../shared/modals/item.module';
-import { CustomerService } from '../customer-mgmt/customer.service';
+import { ItemsOrderModalContent } from './modals/items-order.modal';
+
 import { RmaCreateComponent } from './create/rma.create.component';
 import { RmaEditComponent } from './edit/rma.edit.component';
 import { RMAService } from './rma.service';
 import { RmaDetailComponent } from './view/rma.view.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    PageHeaderModule,
-    NgbModule,
-    FormsModule,
-    ReactiveFormsModule,
-    CommonShareModule,
-    RmaRoutingModule,
-    ItemModalModule
-  ],
-  declarations: [RmaComponent, RmaCreateComponent, RmaEditComponent, RmaDetailComponent],
-  providers: [RMAService, TableService, CustomerService, DatePipe, Helper]
+    imports: [
+        CommonModule,
+        PageHeaderModule,
+        NgbModule,
+        FormsModule,
+        ReactiveFormsModule,
+        CommonShareModule,
+        RmaRoutingModule,
+        ItemModalModule
+    ],
+    declarations: [ItemsOrderModalContent,
+        RmaComponent,
+        RmaCreateComponent,
+        RmaEditComponent,
+        RmaDetailComponent],
+    providers: [RMAService, TableService, DatePipe, Helper],
+    entryComponents: [
+        ItemsOrderModalContent,
+    ]
 })
 export class RmaModule { }

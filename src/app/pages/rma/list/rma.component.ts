@@ -70,7 +70,7 @@ export class RmaComponent implements OnInit {
         public keyService: RMAKeyService,
         private modalService: NgbModal,
         public tableService: TableService,
-        private orderService: RMAService,
+        private service: RMAService,
         private _hotkeysService: HotkeysService) {
 
         this.searchForm = fb.group({
@@ -173,15 +173,15 @@ export class RmaComponent implements OnInit {
 
         this.list.items = [{}, {}];
 
-        // this.service.getListOrder(params).subscribe(res => {
-        //     try {
-        //         this.list.items = res.data.rows;
-        //         this.tableService.matchPagingOption(res.data);
-        //         this.refresh();
-        //     } catch (e) {
-        //         console.log(e);
-        //     }
-        // });
+        this.service.getListRMA(params).subscribe(res => {
+            try {
+                this.list.items = res.data.rows;
+                this.tableService.matchPagingOption(res.data);
+                this.refresh();
+            } catch (e) {
+                console.log(e);
+            }
+        });
     }
 
 
