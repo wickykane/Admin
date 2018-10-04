@@ -296,7 +296,7 @@ export class CreditMemoCreateComponent implements OnInit {
             this.data['shipping_method'] = res.data.shipping_method;
 
             this.generalForm.patchValue({
-                ...this.data['order_detail'], approver_id: res.data.aprvr_id
+                ...this.data['order_detail'], approver_id: res.data.approver_id || res.data.aprvr_id
             });
             this.selectAddress('billing');
             this.updateTotal();
@@ -370,7 +370,7 @@ export class CreditMemoCreateComponent implements OnInit {
 
         this.list.items.forEach(item => {
             item.amount = (+item.quantity * (+item.price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
-            if (item.misc_id && item.id === 6) {
+            if (item.misc_id && item.misc_id === 6) {
                 this.order_info.restocking_fee = item.amount || 0;
                 return;
             }
