@@ -160,8 +160,6 @@ export class RmaCreateComponent implements OnInit {
             this.refresh();
         });
 
-        this.service.getListRMA({}).subscribe(res => { });
-
         //  Item
         this.list.replaceItem = [];
         this.list.returnItem = [];
@@ -272,6 +270,21 @@ export class RmaCreateComponent implements OnInit {
     }
 
     checkInvoice() {
+
+        const check = this.listMaster['list_invoice'].filter(item => item.id === this.generalForm.value.invoice_id);
+
+        if (check[0]['pod_sign_off_date']) {
+            const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
+            modalRef.result.then(res => {
+                this.router.navigate(['/financial/invoice/edit', check[0]['id']]);
+            }, dismiss => {
+                this.generalForm.patchValue({ invoice_id: null });
+            });
+            modalRef.componentInstance.message = 'Please update POD Date for the input invoice so that the system will calculate the return rate correctly';
+            modalRef.componentInstance.yesButtonText = 'Yes';
+            modalRef.componentInstance.noButtonText = 'No';
+        }
+
         const params = {
             order_id: this.generalForm.value.order_id,
             invoice_id: this.generalForm.value.invoice_id,
@@ -461,29 +474,29 @@ export class RmaCreateComponent implements OnInit {
     }
 
     updateTotal() {
-      this.order_info_replace.total = 0;
-      this.order_info_replace.sub_total = 0;
+        this.order_info_replace.total = 0;
+        this.order_info_replace.sub_total = 0;
 
-      this.order_info_replace.order_summary = {};
-      this.list.replaceItem.forEach(item => {
-          this.order_info_replace.order_summary['total_item'] = (this.order_info_replace.order_summary['total_item'] || 0) + (+item.replace_quantity);
-          this.order_info_replace.order_summary['total_cogs'] = (this.order_info_replace.order_summary['total_cogs'] || 0) + (+item.cost_price || 0) * (item.replace_quantity || 0);
-      });
+        this.order_info_replace.order_summary = {};
+        this.list.replaceItem.forEach(item => {
+            this.order_info_replace.order_summary['total_item'] = (this.order_info_replace.order_summary['total_item'] || 0) + (+item.replace_quantity);
+            this.order_info_replace.order_summary['total_cogs'] = (this.order_info_replace.order_summary['total_cogs'] || 0) + (+item.cost_price || 0) * (item.replace_quantity || 0);
+        });
 
 
-      this.list.replaceItem.forEach(item => {
-          item.amount = (+item.return_qty * (+item.sale_price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
-          this.order_info_replace.sub_total += item.amount;
-      });
+        this.list.replaceItem.forEach(item => {
+            item.amount = (+item.return_qty * (+item.sale_price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
+            this.order_info_replace.sub_total += item.amount;
+        });
 
-      this.order_info_replace.total = +this.order_info_replace.sub_total;
-      this.refresh();
+        this.order_info_replace.total = +this.order_info_replace.sub_total;
+        this.refresh();
     }
 
     deleteLineItem(deletedItem, index) {
         deletedItem.deleted = true;
         this.list.returnItem_delete.push(deletedItem);
-        this.list.returnItem .splice(index, 1);
+        this.list.returnItem.splice(index, 1);
         this.calcTotal();
         this.refresh();
     }
@@ -602,10 +615,10 @@ export class RmaCreateComponent implements OnInit {
 
     createOrder(type) {
 
-      this.generalForm.patchValue({
-        request_date: moment(this.generalForm.value.request_date).format('MM/DD/YYYY'),
-        arrival_date: moment(this.generalForm.value.arrival_date).format('MM/DD/YYYY')
-      });
+        this.generalForm.patchValue({
+            request_date: moment(this.generalForm.value.request_date).format('MM/DD/YYYY'),
+            arrival_date: moment(this.generalForm.value.arrival_date).format('MM/DD/YYYY')
+        });
 
         let params = {};
         switch (type) {
@@ -617,14 +630,14 @@ export class RmaCreateComponent implements OnInit {
                 break;
             case 'validate':
                 params = {
-                  'items': this.list.returnItem,
-                  'replace_items': this.list.replaceItem || null
+                    'items': this.list.returnItem,
+                    'replace_items': this.list.replaceItem || null
                 };
                 break;
             case 'draft':
                 params = {
-                  'items': this.list.returnItem,
-                  'replace_items': this.list.replaceItem || null
+                    'items': this.list.returnItem,
+                    'replace_items': this.list.replaceItem || null
                 };
                 break;
         }
