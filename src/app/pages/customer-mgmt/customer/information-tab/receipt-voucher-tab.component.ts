@@ -5,12 +5,12 @@ import { TableService } from './../../../../services/table.service';
 
 
 @Component({
-    selector: 'app-customer-quote-tab',
-    templateUrl: './quote-tab.component.html',
+    selector: 'app-customer-receipt-voucher-tab',
+    templateUrl: './receipt-voucher-tab.component.html',
     styleUrls: ['./information-tab.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CustomerQuoteTabComponent implements OnInit {
+export class CustomerReceiptVoucherTabComponent implements OnInit {
 
     /**
      * letiable Declaration
@@ -36,12 +36,15 @@ export class CustomerQuoteTabComponent implements OnInit {
         public fb: FormBuilder,
         private vRef: ViewContainerRef,
         public tableService: TableService,
-        private customerService: CustomerService, private cd: ChangeDetectorRef) {
+        private customerService: CustomerService,
+        private cd: ChangeDetectorRef) {
 
         this.searchForm = fb.group({
-            'quote_no': [null],
-            'buyer_name': [null],
-            'sts': [null],
+            'receipt_no': [null],
+            'payment_method': [null],
+            'customer_id': [null],
+            'electronic': [null],
+            'status': [null],
             'date_type': [null],
             'date_from': [null],
             'date_to': [null]
@@ -52,25 +55,26 @@ export class CustomerQuoteTabComponent implements OnInit {
         this.tableService.context = this;
     }
 
-    ngOnInit() { }
+    ngOnInit() {
+      this.getList();
+    }
 
     /**
      * Internal Function
      */
-
      refresh() {
          this.cd.detectChanges();
      }
 
     getList() {
-        const params = {...this.searchForm.value};
+        const params = {...this.tableService.getParams(), ...this.searchForm.value};
         Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
-        this.customerService.getListQuote(this._customerId, params).subscribe(res => {
+        this.customerService.getListInvoice(params).subscribe(res => {
             try {
-                this.list.items = res.data;
+                this.list.items = [] || res.data.rows;
+                this.tableService.matchPagingOption(res.data);
                 this.refresh();
-                //  this.tableService.matchPagingOption(res.data);
             } catch (e) {
                 console.log(e);
             }
