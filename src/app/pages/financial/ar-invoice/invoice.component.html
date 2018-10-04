@@ -124,6 +124,7 @@
                             <table class="table table-bordered table-order" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                                 <thead class="bg-white">
                                     <tr>
+                                        <th style="width:50px"></th>
                                         <th>Invoice #</th>
                                         <th>Invoice Date</th>
                                         <th>SO #</th>
@@ -142,6 +143,12 @@
                                 </thead>
                                 <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                                     <tr>
+                                        <td>
+                                            <img *ngIf="item.sts_code!='CP'" src="assets/img/qbicon-gray.png" width="20px" height="20px">
+                                            <a *ngIf="item.sts_code=='CP'" href="https://sandbox.qbo.intuit.com/app/sales" target="_blank">
+                                                <img placement="top" ngbTooltip="Sent Invoice To QuickBooks {{item.updated_at}}" src="../../assets/img/qbicons.png" width="20px" height="20px">
+                                            </a>
+                                        </td>
                                         <td>
                                             <a class="text-primary" [routerLink]="['view', item.id]">{{item.inv_num}}</a>
                                         </td>

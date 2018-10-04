@@ -412,13 +412,13 @@
                                                 <input [disabled]="item.misc_id || generalForm.value.document_type == 2 " [isDecimal]="true" numberDirective [min]="0" [disabled]="item.misc_id" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (changeValue)="updateTotal()">
                                             </td>
                                             <td>
-                                                <div *ngIf="!(item.misc_id && item.id == 6)">
+                                                <div *ngIf="!(item.misc_id && item.misc_id == 6)">
                                                     <span style="vertical-align: middle;">$</span>
                                                     <div style="display:inline-block;width:80%">
                                                         <input [disabled]="generalForm.value.document_type == 2 && !item.misc_id" [isDecimal]="true" numberDirective [min]="0" class="form-control input-sm" type="number" [(ngModel)]="item.price" (changeValue)="updateTotal();">
                                                     </div>
                                                 </div>
-                                                <div *ngIf="item.misc_id && item.id == 6" class="text-danger">
+                                                <div *ngIf="item.misc_id && item.misc_id == 6" class="text-danger">
                                                     <span style="vertical-align: middle;">($</span>
                                                     <div style="display:inline-block;width:80%">
                                                         <input [disabled]="generalForm.value.document_type == 2 && !item.misc_id" [isDecimal]="true" numberDirective [min]="0" class="form-control input-sm" type="number" [(ngModel)]="item.price" (changeValue)="updateTotal();">
@@ -432,7 +432,7 @@
                                             <td>
                                                 <input [disabled]="generalForm.value.document_type == 2" [isDecimal]="true" numberDirective [min]="0" [max]="100" class="form-control input-sm" type="number" [(ngModel)]="item.tax_percent" (changeValue)="updateTotal()">
                                             </td>
-                                            <td class="text-center" [ngClass]="{'text-danger': item.misc_id && item.id == 6}">
+                                            <td class="text-center" [ngClass]="{'text-danger': item.misc_id && item.misc_id == 6}">
                                                 <span>{{item.amount | currency}}</span>
                                             </td>
                                         </tr>

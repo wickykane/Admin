@@ -370,7 +370,7 @@ export class CreditMemoCreateComponent implements OnInit {
 
         this.list.items.forEach(item => {
             item.amount = (+item.quantity * (+item.price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
-            if (item.misc_id && item.id === 6) {
+            if (item.misc_id && item.misc_id === 6) {
                 this.order_info.restocking_fee = item.amount || 0;
                 return;
             }
