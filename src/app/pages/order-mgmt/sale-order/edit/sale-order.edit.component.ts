@@ -592,6 +592,11 @@ export class SaleOrderEditComponent implements OnInit {
         });
 
         this.order_info.total = +this.order_info['total_tax'] + +this.order_info.sub_total;
+
+        if (this.data['order_data']) {
+            this.order_info['total_due'] = this.order_info.total - (this.data['order_data'].total_paid || 0) - (this.data['order_data'].total_refund || 0);
+        }
+
         this.refresh();
     }
 

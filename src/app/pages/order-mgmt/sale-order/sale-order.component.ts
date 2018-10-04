@@ -218,6 +218,12 @@ export class SaleOrderComponent implements OnInit {
         );
     }
 
+    edit(id) {
+        this.orderService.checkOrderEditable(id).subscribe(res => {
+            this.router.navigate(['/order-management/sale-order/edit', id]);
+        });
+    }
+
     putApproveOrder(order_id) {
         // const params = {'status_code': 'AP'};
         this.orderService.approveOrd(order_id).subscribe(res => {
