@@ -43,7 +43,6 @@ export class InvoiceInformationTabComponent implements OnInit {
     };
 
     public invoice_info: any = {};
-    public own_carrirer = false;
 
     public detail: any = {
         'contact_user': {},

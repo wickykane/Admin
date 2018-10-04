@@ -296,7 +296,7 @@ export class CreditMemoCreateComponent implements OnInit {
             this.data['shipping_method'] = res.data.shipping_method;
 
             this.generalForm.patchValue({
-                ...this.data['order_detail'], approver_id: res.data.aprvr_id
+                ...this.data['order_detail'], approver_id: res.data.approver_id || res.data.aprvr_id
             });
             this.selectAddress('billing');
             this.updateTotal();
