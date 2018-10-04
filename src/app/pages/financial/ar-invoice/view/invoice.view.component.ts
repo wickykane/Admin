@@ -28,7 +28,7 @@ export class InvoiceDetailComponent implements OnInit {
 
     public data = {};
     public invoiceId;
-
+    @ViewChild('tabSet') tabSet;
 
     /**
      * Init Data
@@ -58,4 +58,7 @@ export class InvoiceDetailComponent implements OnInit {
         this.router.navigate(['/financial/invoice/']);
     }
 
+    selectTab(id) {
+        this.tabSet.select(id);
+    }
 }
