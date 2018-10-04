@@ -166,8 +166,8 @@
                                         </td>
                                         <td>{{item.aging_overdue}}</td>
                                         <!-- <td>{{item.paid_amount|currency}}</td> -->
-                                        <td>{{ item.updated_at}}</td>
-                                        <td>{{ item.updated_by}}</td>
+                                        <td>{{ item.updated_dt}}</td>
+                                        <td>{{ (item.updated_by_firstname && item.updated_by_lastname )? item.updated_by_firstname + ' ' + item.updated_by_lastname : ''}}</td>
                                         <td>
                                             <a class="btn btn-default" ngbTooltip="View" (click)="viewInvoice(item.id)">
                                                 <i class="fa fa-eye" aria-hidden="true"></i>

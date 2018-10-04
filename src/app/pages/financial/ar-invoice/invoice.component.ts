@@ -292,7 +292,7 @@ export class InvoiceComponent implements OnInit {
     }
 
     convertStatus(id, key) {
-        const stt = this.listMaster[key].find(item => item.id === id);
+        const stt = (this.listMaster[key] || []).find(item => item.id === id) || {};
         return stt.name;
     }
 
