@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { routerTransition } from '../../../router.animations';
@@ -12,7 +12,8 @@ import { WarehouseService } from './warehouse.service';
     templateUrl: './warehouse-create.component.html',
     styleUrls: ['./warehouse.component.scss'],
     providers: [WarehouseService, ToastrService],
-    animations: [routerTransition()]
+    animations: [routerTransition()],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WarehouseCreateComponent implements OnInit {
     generalForm: FormGroup;
@@ -22,6 +23,7 @@ export class WarehouseCreateComponent implements OnInit {
     // public country_code: any = '';
     // public state_id: any = '';
     constructor(
+        private cd: ChangeDetectorRef,
         public fb: FormBuilder,
         public router: Router,
         public toastr: ToastrService,
@@ -52,6 +54,10 @@ export class WarehouseCreateComponent implements OnInit {
         this.getListCountryAdmin();
     }
 
+    refresh() {
+        this.cd.detectChanges();
+    }
+
     changeCountry() {
         console.log('country:', this.generalForm.value.country_code);
 
@@ -67,6 +73,7 @@ export class WarehouseCreateComponent implements OnInit {
         this.commonService.getStateByCountry(params).subscribe(res => {
             try {
                 this.listState = res.data;
+                this.refresh();
             } catch (e) {}
         });
     }
@@ -79,6 +86,7 @@ export class WarehouseCreateComponent implements OnInit {
         this.commonService.getListCountry().subscribe(res => {
             try {
                 this.listCountry = res.data;
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
@@ -102,6 +110,7 @@ export class WarehouseCreateComponent implements OnInit {
             //             setTimeout(() => {
             //                 this.router.navigate(['/warehouse']);
             //             }, 2000);
+            //             this.refresh();
             //             this.toastr.success(res.message);
             //         } catch (e) {
             //             console.log(e);

@@ -93,8 +93,8 @@
 
                 </form>
                 <div class="block-btn-search">
-                  <label class="control-label">&nbsp;</label>
-                  <div class="group-btn-search">
+                    <label class="control-label">&nbsp;</label>
+                    <div class="group-btn-search">
                         <!-- <button type="button" class="btn-default-custom" (click)="moreFilter()">More Filter</button>
                             <div class="show-more" [hidden]="!onoffFilter">
                                 <ul class="mt-2">
@@ -135,6 +135,8 @@
                                         <th>Balance Amount</th>
                                         <th>Status</th>
                                         <th>Aged Overdue</th>
+                                        <th>Last Updated On</th>
+                                        <th>Last Updated By</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -154,28 +156,32 @@
                                         <td>
                                             <span class="badge badge-info bg-blue" *ngIf="item.invoice_status_id == 1">{{convertStatus(item.invoice_status_id, 'status')}}</span>
                                             <span class="badge badge-warning bg-texas-rose" *ngIf="item.invoice_status_id == 2">{{convertStatus(item.invoice_status_id, 'status')}}</span>
-                                            <span class="badge badge-danger bg-magenta" *ngIf="item.invoice_status_id == 3">{{convertStatus(item.invoice_status_id, 'status')}}</span>
+                                            <!-- <span class="badge badge-danger bg-magenta" *ngIf="item.invoice_status_id == 3">{{convertStatus(item.invoice_status_id, 'status')}}</span> -->
                                             <span class="badge badge-success bg-strong-green" *ngIf="item.invoice_status_id == 4">{{convertStatus(item.invoice_status_id, 'status')}}</span>
                                             <span class="badge badge-primary bg-darkblue" *ngIf="item.invoice_status_id == 5">{{convertStatus(item.invoice_status_id, 'status')}}</span>
                                             <span class="badge badge-primary bg-lemon" *ngIf="item.invoice_status_id == 6">{{convertStatus(item.invoice_status_id, 'status')}}</span>
                                             <span class="badge badge-danger bg-red" *ngIf="item.invoice_status_id == 7">{{convertStatus(item.invoice_status_id, 'status')}}</span>
                                             <span class="badge badge-primary bg-bright-grey" *ngIf="item.invoice_status_id == 8">{{convertStatus(item.invoice_status_id, 'status')}}</span>
+                                            <span class="badge badge-warning bg-texas-rose" *ngIf="item.invoice_status_id == 11">{{convertStatus(item.invoice_status_id, 'status')}}</span>
                                         </td>
                                         <td>{{item.aging_overdue}}</td>
                                         <!-- <td>{{item.paid_amount|currency}}</td> -->
+                                        <td>{{ item.updated_at}}</td>
+                                        <td>{{ item.updated_by}}</td>
                                         <td>
                                             <a class="btn btn-default" ngbTooltip="View" (click)="viewInvoice(item.id)">
                                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default " ngbTooltip="Edit" (click)="editInvoice(item.id)" *ngIf="item.invoice_status_id == 1">
+                                            <a class="btn btn-default " ngbTooltip="Edit" (click)="editInvoice(item.id)" *ngIf="item.invoice_status_id == 1 || item.invoice_status_id == 11">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
-                                            <a ngbTooltip="Submit" *ngIf="item.invoice_status_id == 1" class="btn btn-default" (click)="confirmModal(item.id, 2)"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></a>
-                                            <a class="btn btn-default" ngbTooltip="Cancel" (click)="confirmModal(item.id, 7)" *ngIf="item.invoice_status_id == 1">
+                                            <a ngbTooltip="Submit" *ngIf="item.invoice_status_id == 1 || item.invoice_status_id == 11 " class="btn btn-default" (click)="confirmModal(item.id, 2)"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></a>
+                                            <a ngbTooltip="Revise" *ngIf="item.invoice_status_id == 2" class="btn btn-default" (click)="confirmModal(item.id, 11)"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></a>
+                                            <a ngbTooltip="Approve" *ngIf="item['invoice_status_id'] == 2" class="btn btn-default" (click)="confirmModal(item.id, 4)"><i class="fa fa-check"></i></a>
+                                            <a class="btn btn-default" ngbTooltip="Cancel" (click)="confirmModal(item.id, 7)" *ngIf="item.invoice_status_id == 1 || item['invoice_status_id'] == 2">
                                                 <i class="fa fa-times-circle" aria-hidden="true"></i>
                                             </a>
-                                            <a ngbTooltip="Approve" *ngIf="item['invoice_status_id'] == 2" class="btn btn-default" (click)="confirmModal(item.id, 4)"><i class="fa fa-check"></i></a>
-                                            <a ngbTooltip="Reject" *ngIf="item['invoice_status_id'] == 2" class="btn btn-default" (click)="confirmModal(item.id, 3)"><i class="fa fa-ban" aria-hidden="true"></i></a>
+                                            <!-- <a ngbTooltip="Reject" *ngIf="item['invoice_status_id'] == 2" class="btn btn-default" (click)="confirmModal(item.id, 3)"><i class="fa fa-ban" aria-hidden="true"></i></a> -->
                                             <a ngbTooltip="Pay" *ngIf="[4, 5, 8].indexOf(item['invoice_status_id']) != -1" class="btn btn-default"><i class="fa fa-money" aria-hidden="true"></i></a>
                                             <a class="btn btn-default" ngbTooltip="Print" (click)="printPDF(item.id, item.inv_num)">
                                                 <i class="fa fa-download" aria-hidden="true"></i>
@@ -215,7 +221,7 @@
             <div class="col-md-6 padding-lr-0">
                 <div class="text-right">
                     <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length" [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page" [maxSize]="tableService.maxSize"
-                      [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+                        [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
                 </div>
             </div>
         </div>

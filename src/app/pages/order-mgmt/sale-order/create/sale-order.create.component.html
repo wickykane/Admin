@@ -11,7 +11,7 @@
             <div class="card-body">
                <div class="row information height-100">
                   <div class="col-md-12 p-l-5 p-r-5">
-                     <form [formGroup]="generalForm" class="form-search full-width form-inline border-bottom">
+                     <form [formGroup]="generalForm" class="form-search full-width form-inline">
                         <div class="col-md-4">
                            <div class="form-group">
                               <label for="code" class="control-label" translate> <strong>Customer Name</strong> </label>
@@ -403,7 +403,7 @@
                      </tr>
                   <tbody *ngFor="let item of list['items']; let $index = index;">
                      <tr>
-                        <td>
+                        <td class="text-center">
                            <button class="btn btn-danger btn-xs" type="button" (click)="deleteAction(item.sku, item.item_condition_id)">
                            <i class="fa fa-trash"></i>
                            </button>

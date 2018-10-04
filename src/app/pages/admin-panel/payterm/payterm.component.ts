@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 import { TableService } from '../../../services/index';
@@ -14,7 +15,8 @@ import { PaymentTermService } from './payterm.service';
   providers: [PaymentTermService, PayTermKeyService],
   templateUrl: 'payterm.component.html',
   styleUrls: ['./payterm.component.scss'],
-  animations: [routerTransition()]
+  animations: [routerTransition()],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class PaymentTermComponent implements OnInit {
@@ -31,12 +33,14 @@ export class PaymentTermComponent implements OnInit {
 
   public data = {};
   constructor(
+    private cd: ChangeDetectorRef,
     private fb: FormBuilder,
     public tableService: TableService,
     private activeRouter: ActivatedRoute,
     private router: Router,
     private paymentTerm: PaymentTermService,
     public keyService: PayTermKeyService,
+    private _hotkeysService: HotkeysService,
     private modalService: NgbModal,
     private toastr: ToastrService) {
     this.searchForm = fb.group({
@@ -47,7 +51,7 @@ export class PaymentTermComponent implements OnInit {
     // Assign get list function name, override variable here
     this.tableService.getListFnName = 'getList';
     this.tableService.context = this;
-    this.keyService.watchContext.next(this);
+    this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
   }
 
   ngOnInit() {
@@ -58,6 +62,9 @@ export class PaymentTermComponent implements OnInit {
   /**
    * Table Event
    */
+  refresh() {
+    this.cd.detectChanges();
+  }
 
   selectData(index) {
     console.log(index);
@@ -75,6 +82,7 @@ export class PaymentTermComponent implements OnInit {
       try {
         this.list.items = res.data.rows;
         this.tableService.matchPagingOption(res.data);
+        this.refresh();
       } catch (e) {
         console.log(e);
       }
@@ -87,6 +95,7 @@ export class PaymentTermComponent implements OnInit {
         this.paymentTerm.deletePayment(id).subscribe(res => {
           try {
             this.toastr.success(res.message);
+            this.refresh();
             this.getList();
           } catch (e) {
             console.log(e);

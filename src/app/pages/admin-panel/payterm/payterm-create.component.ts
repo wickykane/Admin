@@ -1,8 +1,9 @@
-import { Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 
+import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 import { PayTermKeyService } from './keys.control';
@@ -13,7 +14,8 @@ import { PaymentTermService } from './payterm.service';
     templateUrl: './payterm-create.component.html',
     providers: [PaymentTermService, PayTermKeyService],
     styleUrls: ['./payterm-create.component.scss'],
-    animations: [routerTransition()]
+    animations: [routerTransition()],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PayTermCreateComponent implements OnInit {
 
@@ -21,10 +23,12 @@ export class PayTermCreateComponent implements OnInit {
     public isEdit = false;
     public listMaster = {};
     constructor(public router: Router,
+        private cd: ChangeDetectorRef,
         public route: ActivatedRoute,
         public fb: FormBuilder,
         public toastr: ToastrService,
         public keyService: PayTermKeyService,
+        private _hotkeysService: HotkeysService,
         private paytermService: PaymentTermService) {
         this.generalForm = fb.group({
             'id': [null],
@@ -37,8 +41,7 @@ export class PayTermCreateComponent implements OnInit {
             'term_day': [null, Validators.required],
             'ac': [0, Validators.required]
         });
-        this.keyService.watchContext.next(this);
-        this.changeIncentive();
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {
@@ -47,12 +50,17 @@ export class PayTermCreateComponent implements OnInit {
                 this.getDetailPaymentTerm(params.id);
                 this.isEdit = true;
                 this.generalForm.get('early_pmt_incentive').disable();
+                this.refresh();
             } else {
                 this.getGenerateCode();
             }
         });
         this.listMaster['status'] = [{ key: 0, value: 'In Active' }, { key: 1, value: 'Active' }];
         this.listMaster['early'] = [{ key: 1, value: 'Percent' }, { key: 2, value: 'Fixed Amount' }];
+        this.changeIncentive();
+    }
+    refresh() {
+        this.cd.detectChanges();
     }
     payloadData() {
         if (this.generalForm.get('id').value) {
@@ -64,6 +72,7 @@ export class PayTermCreateComponent implements OnInit {
     getGenerateCode() {
         this.paytermService.getGenerateCode().subscribe(res => {
             this.generalForm.get('cd').patchValue(res.message);
+            this.refresh();
         });
     }
     createPaymentTerm() {
@@ -72,6 +81,7 @@ export class PayTermCreateComponent implements OnInit {
         delete params.id;
         this.paytermService.createPayment(params).subscribe(res => {
             this.toastr.success(res.message);
+            this.refresh();
             setTimeout(() => {
                 this.router.navigate(['/admin-panel/payment-term']);
             }, 100);
@@ -107,6 +117,7 @@ export class PayTermCreateComponent implements OnInit {
                 }
             );
         }
+        this.refresh();
     }
 
     getDetailPaymentTerm(id) {
@@ -114,6 +125,7 @@ export class PayTermCreateComponent implements OnInit {
             this.paytermService.getDetailPayment(id).subscribe(res => {
                 this.generalForm.patchValue(res.data);
                 this.changeIncentive();
+                this.refresh();
             }, err => {
                 console.log(err.message);
             });
@@ -124,6 +136,7 @@ export class PayTermCreateComponent implements OnInit {
         params.early_pmt_incentive = (params.early_pmt_incentive) ? 1 : 0;
         this.paytermService.updatePayment(id, params).subscribe(res => {
             this.toastr.success(res.message);
+            this.refresh();
             this.router.navigate(['/admin-panel/payment-term']);
         }, err => {
             this.toastr.error(err.message);

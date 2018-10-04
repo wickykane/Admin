@@ -33,8 +33,8 @@ export class NumberDirective implements OnInit {
         const event = $event.target.value;
         let value = (event > this._max) ? this._max : (event < this._min) ? this._min : event;
         const decimal = (String(value).split('.'));
-        if (decimal[1] && decimal[1].length > 2) {
-            value = decimal[0] + '.' + decimal[1].substr(0, 2);
+        if (decimal[1] && decimal[1].length > this.isDecimal) {
+            value = decimal[0] + '.' + decimal[1].substr(0, this.isDecimal);
         }
         if (event !== value) {
             this.ngModel.viewToModelUpdate(value);
@@ -46,6 +46,7 @@ export class NumberDirective implements OnInit {
     @HostListener('keydown', ['$event'])
     onKeyDown(event) {
         const e = event;
+        const selected = getSelection().toString();
         if ([46, 8, 9, 27, 13, 110].indexOf(e.keyCode) !== -1 ||
             // Allow: Ctrl+A
             (e.keyCode === 65 && e.ctrlKey === true) ||
@@ -61,7 +62,7 @@ export class NumberDirective implements OnInit {
             return;
         }
 
-        const current: string = this.element.nativeElement.value;
+        const current: string = (selected) ? '' : this.element.nativeElement.value;
         const ch: string = current.concat(e.key);
 
         const regEx = new RegExp(this.regexStr);
@@ -74,7 +75,8 @@ export class NumberDirective implements OnInit {
     }
 
     ngOnInit() {
-        this.regexStr = (this.isDecimal) ? '^[0-9]+[.]?[0-9]*$' : this.regexStr;
+        this.isDecimal = (this.isDecimal === true) ? 2 : this.isDecimal;
+        this.regexStr = (this.isDecimal) ? `^[0-9]+[.]?[0-9]{0,${this.isDecimal}}$` : this.regexStr;
         this.ngModel.valueChanges.subscribe(data => {
             if (data && !this._init && this.isDecimal) {
                 this.ngModel.valueAccessor.writeValue(Number((+data).toFixed(2)));

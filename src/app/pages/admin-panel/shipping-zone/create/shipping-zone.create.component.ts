@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, ViewContainerRef, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewContainerRef, ViewEncapsulation } from '@angular/core';
 import { Form, FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -25,7 +25,8 @@ import { UPSConfigurationModalComponent } from '../../../../shared/modals/ups-co
     templateUrl: './shipping-zone.create.component.html',
     styleUrls: ['../shipping-zone.component.scss', './shipping-zone.create.component.scss'],
     animations: [routerTransition()],
-    providers: [DatePipe, RMACreateKeyService, CommonService]
+    providers: [DatePipe, RMACreateKeyService, CommonService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class ShippingZoneCreateComponent implements OnInit {
@@ -110,6 +111,7 @@ export class ShippingZoneCreateComponent implements OnInit {
 
     public pickupStoreList = [];
     constructor(
+        private cd: ChangeDetectorRef,
         public keyService: RMACreateKeyService,
         private vRef: ViewContainerRef,
         private fb: FormBuilder,
@@ -133,6 +135,9 @@ export class ShippingZoneCreateComponent implements OnInit {
     ngOnInit() {
         this.getListMasterData();
     }
+    refresh() {
+        this.cd.detectChanges();
+    }
     getListMasterData() {
         this.shippingZoneService.getMasterData().subscribe(res => {
             this.listMasterData = res.data;
@@ -145,6 +150,7 @@ export class ShippingZoneCreateComponent implements OnInit {
                     this.listShipping[i].data[j].checked = false;
                 }
             }
+            this.refresh();
         })
     }
     filterCountry(key) {
@@ -350,7 +356,7 @@ export class ShippingZoneCreateComponent implements OnInit {
             setTimeout(() => {
                 this.router.navigate(['/admin-panel/shipping-zone']);
             }, 500);
-
+            this.refresh();
         });
     }
     checkValidate(items, subItem, event) {

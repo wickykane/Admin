@@ -1,5 +1,4 @@
-
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -7,12 +6,15 @@ import { routerTransition } from '../../../router.animations';
 import { InvoiceConfigService } from './invoice-chasing-config.service';
 import { EmailTemplateModalContent } from './modals/email-template/email-template.modal';
 
+import { InvoiceConfigKeyService } from './keys.control';
+
 @Component({
     selector: 'app-invoice-config',
     templateUrl: 'invoice-config.component.html',
-    providers: [InvoiceConfigService],
+    providers: [InvoiceConfigService, InvoiceConfigKeyService],
     styleUrls: ['./invoice-config.component.scss'],
-    animations: [routerTransition()]
+    animations: [routerTransition()],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InvoiceConfigComponent implements OnInit {
     /**
@@ -73,10 +75,12 @@ export class InvoiceConfigComponent implements OnInit {
     public isProcessingRequest = false;
 
     constructor(
+        private cd: ChangeDetectorRef,
         private fb: FormBuilder,
         private toastr: ToastrService,
         private modalService: NgbModal,
-        private invoiceService: InvoiceConfigService
+        private invoiceService: InvoiceConfigService,
+        public keyService: InvoiceConfigKeyService
     ) {
         this.invoiceForm = fb.group({
             beforeOn: [false],
@@ -86,6 +90,7 @@ export class InvoiceConfigComponent implements OnInit {
             afterRemindFrequency: [null],
             afterRemindValue: [null]
         });
+        this.keyService.watchContext.next(this);
     }
 
     ngOnInit() {
@@ -95,6 +100,9 @@ export class InvoiceConfigComponent implements OnInit {
     /**
      * Table Event
      */
+    refresh() {
+        this.cd.detectChanges();
+    }
 
     selectData(index) {
     }
@@ -158,6 +166,7 @@ export class InvoiceConfigComponent implements OnInit {
                     this.invoiceForm.controls['afterRemindValue'].setValue(
                         res.data.rows[index]['config_value']['send_reminder_value']
                     );
+                    this.refresh();
                 } catch (err) {
                     console.log(err);
                 }
@@ -209,6 +218,7 @@ export class InvoiceConfigComponent implements OnInit {
                         setTimeout(() => {
                             window.history.back();
                         }, 500);
+                        this.refresh();
                     },
                     err => {
                         console.log(err.message);

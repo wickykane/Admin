@@ -156,6 +156,26 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div class="row normal-pagination mg-top-10" *ngIf="list.items.length > 0">
+                            <div class="col-md-6 padding-lr-0">
+                                <div class="text-left">
+                                    <div class="col-md-6" style="padding-left: 0px;">
+                                        <span style="float: left; padding-right: 10px;">{{list.items.length}}/{{tableService.pagination.total_record}}
+                                            items </span>
+                                        <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length" (change)="tableService.changeLength()">
+                                            <option *ngFor="let option of tableService.itemPerPageOptions" [ngValue]="option">{{option}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 padding-lr-0">
+                                <div class="text-right">
+                                    <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length"
+                                        [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page"
+                                        [maxSize]="tableService.maxSize" [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-12 no-padding">
                             <button (click)="clearPayment()" class="btn btn-link" translate>
                                 <i class="fa fa-plus"></i>Clear Payment

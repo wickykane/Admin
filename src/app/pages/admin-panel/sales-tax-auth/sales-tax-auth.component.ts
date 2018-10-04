@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from './../../../services/table.service';
@@ -18,7 +18,8 @@ import * as moment from 'moment';
     templateUrl: './sales-tax-auth.component.html',
     styleUrls: ['./sales-tax-auth.component.scss'],
     animations: [routerTransition()],
-    providers: [SalesTaxAuthService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }]
+    providers: [SalesTaxAuthService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SalesTaxAuthComponent implements OnInit {
     /**
@@ -83,6 +84,7 @@ export class SalesTaxAuthComponent implements OnInit {
 
     //#region constructor
     constructor(
+        private cd: ChangeDetectorRef,
         public router: Router,
         public fb: FormBuilder,
         public toastr: ToastrService,
@@ -129,11 +131,16 @@ export class SalesTaxAuthComponent implements OnInit {
      * Internal Function
      */
     //#region load list master
+    refresh() {
+        this.cd.detectChanges();
+    }
+
     getListCountryDropDown() {
         this.salesTaxAuthService.getListCountryDropDown().subscribe(
             res => {
                 try {
                     this.listMaster.countries = res.data;
+                    this.refresh();
                 } catch (err) {
                     console.log(err);
                 }
@@ -149,6 +156,7 @@ export class SalesTaxAuthComponent implements OnInit {
             res => {
                 try {
                     this.listMaster.tax_auth_types = res.data;
+                    this.refresh();
                 } catch (err) {
                     console.log(err);
                 }
@@ -164,6 +172,7 @@ export class SalesTaxAuthComponent implements OnInit {
             res => {
                 try {
                     this.listMaster.states = res.data;
+                    this.refresh();
                 } catch (err) {
                     console.log(err);
                 }
@@ -179,6 +188,7 @@ export class SalesTaxAuthComponent implements OnInit {
             res => {
                 try {
                     this.listMaster.cal_tax_base_on = res.data;
+                    this.refresh();
                 } catch (err) {
                     console.log(err);
                 }
@@ -194,6 +204,7 @@ export class SalesTaxAuthComponent implements OnInit {
             res => {
                 try {
                     this.listMaster.sale_tax_on_shippping = res.data;
+                    this.refresh();
                 } catch (err) {
                     console.log(err);
                 }
@@ -214,6 +225,7 @@ export class SalesTaxAuthComponent implements OnInit {
                         tempAccountList.push({ 'name': item.name, 'level': item.level, 'disabled': true }, ...item.children);
                     });
                     this.listMaster.gl_accounts = tempAccountList;
+                    this.refresh();
                 } catch (err) {
                     console.log(err);
                 }
@@ -231,6 +243,7 @@ export class SalesTaxAuthComponent implements OnInit {
             res => {
                 try {
                     this.listSalesTax = res.data;
+                    this.refresh();
                 } catch (err) {
                     console.log(err);
                 }
@@ -251,6 +264,7 @@ export class SalesTaxAuthComponent implements OnInit {
                     this.isClickedSave = false;
                     this.isCreateNew = false;
                     this.getStateList(this.selectedCountryTax['country_code']);
+                    this.refresh();
                 } catch (err) {
                     console.log(err);
                 }
@@ -274,6 +288,7 @@ export class SalesTaxAuthComponent implements OnInit {
                     this.currentForm = 'state';
                     this.isClickedSave = false;
                     this.isCreateNew = false;
+                    this.refresh();
                 } catch (err) {
                     console.log(err);
                 }
@@ -388,6 +403,7 @@ export class SalesTaxAuthComponent implements OnInit {
                 try {
                     this.handleFinishSaveCountry();
                     this.toastr.success(res.message);
+                    this.refresh();
                 } catch (err) {
                     console.log(err);
                 }
@@ -406,6 +422,7 @@ export class SalesTaxAuthComponent implements OnInit {
                 try {
                     this.handleFinishSaveCountry();
                     this.toastr.success(res.message);
+                    this.refresh();
                 } catch (err) {
                     console.log(err);
                 }
@@ -425,6 +442,7 @@ export class SalesTaxAuthComponent implements OnInit {
                 try {
                     this.handleFinishSaveState();
                     this.toastr.success(res.message);
+                    this.refresh();
                 } catch (err) {
                     console.log(err);
                 }
@@ -459,6 +477,7 @@ export class SalesTaxAuthComponent implements OnInit {
                     }
                     this.newRateTemp = this.newRate;
                     this.toastr.success(res.message);
+                    this.refresh();
                 } catch (err) {
                     console.log(err);
                 }

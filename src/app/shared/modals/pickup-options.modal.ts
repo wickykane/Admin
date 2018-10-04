@@ -10,6 +10,7 @@ import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { CommonService } from '../../services/common.service';
+import { invalid } from '../../../../node_modules/moment';
 
 @Component({
     selector: 'app-pickup-options-modal',
@@ -43,10 +44,10 @@ export class PickupOptionsModalComponent implements OnInit, OnDestroy {
         private commonService: CommonService,
         public activeModal: NgbActiveModal) {
         this.generalForm = fb.group({
-            "name": ['', Validators.required],
-            "warehouse": [''],
-            "handling_fee": [''],
-            "id": "4",
+            'name': ['', Validators.required],
+            'warehouse': [''],
+            'handling_fee': [''],
+            'id': '4',
             // 'ranges':[this.fb.array([])]
         });
 
@@ -175,10 +176,40 @@ export class PickupOptionsModalComponent implements OnInit, OnDestroy {
     checkPositiveNumber(e) {
         const pattern = /[0-9.]/;
         const inputChar = String.fromCharCode(e.charCode);
-   
-        if (!pattern.test(inputChar)) {    
+        if (!pattern.test(inputChar)) {
             // invalid character, prevent input
             event.preventDefault();
         }
     }
+    checkBussinessHour(item) {
+        let checked = true;
+        item.forEach(subItem => {
+            if (subItem.selected) {
+                checked = false;
+            }
+        });
+        return checked;
+    }
+    checkAllBussinessHour() {
+        let checked = true;
+        if (this._wareHouseList) {
+            this._wareHouseList.forEach(subItem => {
+                subItem.bussiness_hours.forEach(item => {
+                    if (item.selected) {
+                        checked = false;
+                    }
+                });
+            });
+            if (checked) {
+                this.generalForm.setErrors({ invalid: true });
+            } else {
+                this.generalForm.setErrors(null);
+            }
+            console.log(this.generalForm);
+            return checked;
+        } else {
+            return false;
+        }
+    }
+
 }

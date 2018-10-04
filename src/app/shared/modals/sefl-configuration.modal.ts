@@ -58,10 +58,10 @@ export class SEFLConfigurationModalComponent implements OnInit, OnDestroy {
         if (this.seflModalList) {
             this.generalForm.patchValue(this.seflModalList);
         }
-        if(this.isView){
+        if (this.isView) {
             this.generalForm.disable();
         }
-        else{
+        else {
             this.isView = false;
         }
     }
@@ -143,8 +143,7 @@ export class SEFLConfigurationModalComponent implements OnInit, OnDestroy {
     checkPositiveNumber(e) {
         const pattern = /[0-9.]/;
         const inputChar = String.fromCharCode(e.charCode);
-   
-        if (!pattern.test(inputChar)) {    
+        if (!pattern.test(inputChar)) {
             // invalid character, prevent input
             event.preventDefault();
         }

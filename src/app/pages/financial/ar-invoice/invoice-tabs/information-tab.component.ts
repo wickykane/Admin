@@ -10,6 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../../../../environments/environment';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { MailModalComponent } from '../modals/mail.modal';
+import { PODModalComponent } from '../modals/POD/pod.modal';
 
 @Component({
     selector: 'app-invoice-info-tab',
@@ -37,9 +38,11 @@ export class InvoiceInformationTabComponent implements OnInit {
         7: 'Are you sure that you want to cancel current invoice?',
         4: 'Are you sure that you want to approve the current invoice?',
         3: 'Are you sure that you want to reject the current invoice?',
+        11: 'Are you sure that you want to revise the current invoice?',
     };
 
     public invoice_info: any = {};
+    public own_carrirer = true;
 
     public detail: any = {
         'contact_user': {},
@@ -109,6 +112,10 @@ export class InvoiceInformationTabComponent implements OnInit {
         this.financialService.updateInvoiceStatus(id, params).subscribe(res => {
             try {
                 this.toastr.success(res.message);
+                if (+id === 11) {
+                    this.router.navigate(['/financial/invoice/edit/' + id]);
+                    return;
+                }
                 this.getList();
             } catch (e) {
                 console.log(e);
@@ -139,5 +146,15 @@ export class InvoiceInformationTabComponent implements OnInit {
                 }
             });
         }
+    }
+
+    updatePOD() {
+        const modalRef = this.modalService.open(PODModalComponent, { size: 'sm' });
+        modalRef.result.then(res => {
+            if (res) {
+                this.ngOnInit();
+            }
+        }, dismiss => { });
+        modalRef.componentInstance.invoiceId = this._invoiceId;
     }
 }

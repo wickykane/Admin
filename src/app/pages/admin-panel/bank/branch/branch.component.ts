@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -9,11 +9,14 @@ import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { BankService } from '../bank.service';
 import { BranchModalComponent } from '../modal/branch.modal';
 
+import { BankKeyService } from '../keys.control';
 @Component({
   selector: 'app-branch',
-  providers: [BankService],
+  providers: [BankService, BankKeyService],
   templateUrl: 'branch.component.html',
-  animations: [routerTransition()]
+  styleUrls: ['../bank.component.scss'],
+  animations: [routerTransition()],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class BranchComponent implements OnInit {
@@ -29,13 +32,15 @@ export class BranchComponent implements OnInit {
 
   public data = {};
   constructor(
+    private cd: ChangeDetectorRef,
     private fb: FormBuilder,
     public tableService: TableService,
     private activeRouter: ActivatedRoute,
     private router: Router,
     private bankService: BankService,
     private modalService: NgbModal,
-    private toastr: ToastrService) {
+    private toastr: ToastrService,
+    public keyService: BankKeyService) {
     this.searchForm = fb.group({
       'branch_name': [null],
     });
@@ -43,6 +48,8 @@ export class BranchComponent implements OnInit {
     // Assign get list function name, override variable here
     this.tableService.getListFnName = 'getList';
     this.tableService.context = this;
+    //  Init Key
+    this.keyService.watchContext.next(this);
   }
 
   ngOnInit() {
@@ -54,6 +61,9 @@ export class BranchComponent implements OnInit {
   /**
    * Table Event
    */
+  refresh() {
+    this.cd.detectChanges();
+  }
 
   selectData(index) {
     console.log(index);
@@ -66,6 +76,7 @@ export class BranchComponent implements OnInit {
   getBankDetail(id) {
     this.bankService.getDetailBank(id).subscribe(res => {
       this.data['bankData'] = res.data;
+      this.refresh();
     });
   }
 
@@ -77,6 +88,7 @@ export class BranchComponent implements OnInit {
       try {
         this.list.items = res.data.rows;
         this.tableService.matchPagingOption(res.data);
+        this.refresh();
       } catch (e) {
         console.log(e);
       }
@@ -87,6 +99,7 @@ export class BranchComponent implements OnInit {
     this.bankService.createBranch(this.data['bank_id'], params).subscribe(res => {
       try {
         this.toastr.success(res.message);
+        this.refresh();
         this.getList();
       } catch (e) {
         console.log(e);
@@ -98,6 +111,7 @@ export class BranchComponent implements OnInit {
     this.bankService.updateBranch(bankId, branchId, params).subscribe(res => {
       try {
         this.toastr.success(res.message);
+        this.refresh();
         this.getList();
       } catch (e) {
         console.log(e);
@@ -112,6 +126,7 @@ export class BranchComponent implements OnInit {
         this.bankService.deleteBranch(bankId, branchId).subscribe(res => {
           try {
             this.toastr.success(res.message);
+            this.refresh();
             this.getList();
           } catch (e) {
             console.log(e);
