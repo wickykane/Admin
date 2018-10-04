@@ -4,14 +4,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { routerTransition } from '../../../router.animations';
-import { TableService } from '../../../services/table.service';
-import { NgbDateCustomParserFormatter } from '../../../shared/helper/dateformat';
-import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
+import { routerTransition } from '../../../../router.animations';
+import { TableService } from '../../../../services/table.service';
+import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
+import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 
 import { HotkeysService } from 'angular2-hotkeys';
 import { RMAService } from '../rma.service';
-import { CommonService } from './../../../services/common.service';
+import { CommonService } from './../../../../services/common.service';
 import { RMAKeyService } from './keys.control';
 
 
@@ -70,7 +70,7 @@ export class RmaComponent implements OnInit {
         public keyService: RMAKeyService,
         private modalService: NgbModal,
         public tableService: TableService,
-        private orderService: RMAService,
+        private service: RMAService,
         private _hotkeysService: HotkeysService) {
 
         this.searchForm = fb.group({
@@ -173,15 +173,15 @@ export class RmaComponent implements OnInit {
 
         this.list.items = [{}, {}];
 
-        // this.service.getListOrder(params).subscribe(res => {
-        //     try {
-        //         this.list.items = res.data.rows;
-        //         this.tableService.matchPagingOption(res.data);
-        //         this.refresh();
-        //     } catch (e) {
-        //         console.log(e);
-        //     }
-        // });
+        this.service.getListRMA(params).subscribe(res => {
+            try {
+                this.list.items = res.data.rows;
+                this.tableService.matchPagingOption(res.data);
+                this.refresh();
+            } catch (e) {
+                console.log(e);
+            }
+        });
     }
 
 
@@ -220,7 +220,7 @@ export class RmaComponent implements OnInit {
         // this.service.cloneOrder(id).subscribe(res => {
         //     this.toastr.success(res.message);
         //     setTimeout(() => {
-        //         this.router.navigate(['/order-management/sale-order/edit', res.data.id]);
+        //         this.router.navigate(['/order-management/return-order/edit', res.data.id]);
         //     }, 1000);
         // }
         // );

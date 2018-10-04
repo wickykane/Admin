@@ -40,6 +40,14 @@ import { ItemModalModule } from '../../shared/modals/item.module';
 import { QuoteInformationTabComponent } from './sale-quotation/quote-tabs/information-tab.component';
 import { QuoteHistoryTabComponent } from './sale-quotation/quote-tabs/quote-history.component';
 
+import { ItemsOrderModalContent } from './rma/modals/items-order.modal';
+
+import { RmaCreateComponent } from './rma/create/rma.create.component';
+import { RmaEditComponent } from './rma/edit/rma.edit.component';
+import { RmaComponent } from './rma/list/rma.component';
+import { RMAService } from './rma/rma.service';
+import { RmaDetailComponent } from './rma/view/rma.view.component';
+
 
 @NgModule({
     imports: [
@@ -71,9 +79,14 @@ import { QuoteHistoryTabComponent } from './sale-quotation/quote-tabs/quote-hist
         SaleOrderEditComponent,
         SaleQuotationEditComponent,
         QuoteInformationTabComponent,
-        QuoteHistoryTabComponent
+        QuoteHistoryTabComponent,
+        ItemsOrderModalContent,
+        RmaComponent,
+        RmaCreateComponent,
+        RmaEditComponent,
+        RmaDetailComponent
         ],
-    providers: [OrderService, TableService, DatePipe, Helper],
-    entryComponents: []
+    providers: [OrderService, TableService, DatePipe, Helper, RMAService],
+    entryComponents: [ItemsOrderModalContent]
 })
 export class OrderMgmtModule { }
