@@ -319,7 +319,8 @@ export class SaleOrderCreateComponent implements OnInit {
             default_ship_rate = 7;
 
             if (+this.generalForm.value.carrier_id === 1) {
-                default_option = '01';
+                // default_option = '01';
+                default_option = null;
                 default_ship_rate = null;
             }
 

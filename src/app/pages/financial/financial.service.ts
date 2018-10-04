@@ -116,7 +116,7 @@ export class FinancialService {
         return this.API.post(url, params);
     }
     updatePOD(id, params) {
-        const url = 'ar-invoice/send-email/' + id;
-        return this.API.post(url, params);
+        const url = 'ar-invoice/update-pod-sign-off-date/' + id;
+        return this.API.put(url, params);
     }
 }
