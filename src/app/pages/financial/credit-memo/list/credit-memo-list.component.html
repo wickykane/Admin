@@ -38,8 +38,7 @@
                         <label for="" class="control-label" translate>From</label>
                         <div class="date-group">
                             <div clickOutside (clickOutside)="d1.close()" class="input-group">
-                                <input [maxDate]="searchForm.value.date_to | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="date_from"
-                                    ngbDatepicker #d1="ngbDatepicker">
+                                <input [maxDate]="searchForm.value.date_to | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="date_from" ngbDatepicker #d1="ngbDatepicker">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
                                         <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -52,8 +51,7 @@
                         <label for="" class="control-label" translate>To</label>
                         <div class="date-group">
                             <div clickOutside (clickOutside)="dt2.close()" class="input-group">
-                                <input [minDate]="searchForm.value.date_from | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="date_to"
-                                    ngbDatepicker #dt2="ngbDatepicker">
+                                <input [minDate]="searchForm.value.date_from | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="date_to" ngbDatepicker #dt2="ngbDatepicker">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" (click)="dt2.toggle()" type="button">
                                         <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -82,10 +80,10 @@
                     </div>
                     <div class="card-body no-padding">
                         <div class="table-responsive list">
-                            <table class="table table-bordered table-order" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex"
-                                (onEnter)="selectData($event)">
+                            <table class="table table-bordered table-order" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                                 <thead class="bg-white">
                                     <tr>
+                                        <th style="width:50px"></th>
                                         <th translate style="width:8%">Credit Memo No</th>
                                         <th translate translate style="width:8%">Issue Date</th>
                                         <th translate>Customer</th>
@@ -101,6 +99,12 @@
                                 </thead>
                                 <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                                     <tr>
+                                        <td>
+                                            <img *ngIf="item.sts_code!='CP'" src="assets/img/qbicon-gray.png" width="20px" height="20px">
+                                            <a *ngIf="item.sts_code=='CP'" href="https://sandbox.qbo.intuit.com/app/sales" target="_blank">
+                                                <img placement="top" ngbTooltip="Sent Invoice To QuickBooks {{item.updated_at}}" src="../../assets/img/qbicons.png" width="20px" height="20px">
+                                            </a>
+                                        </td>
                                         <td>
                                             <a class="text-primary" [routerLink]="['view', item.id]">{{item.cd}}</a>
                                         </td>
@@ -148,8 +152,7 @@
                                             </a>
                                             <a ngbTooltip="Re Open" *ngIf="item['sts_code'] == 'RJ'" class="btn btn-default" (click)="confirmModal(item.id, 'RE-OPEN')"><i
                                                     class="fa fa-clone" aria-hidden="true"></i></a>
-                                            <a ngbTooltip="Send Mail" *ngIf="['SB','AP','RJ','CC','RD','RF'].indexOf(item['sts_code']) != -1" class="btn btn-default"
-                                                (click)="sendMail(item.id)"><i class="fa fa-envelope-o"
+                                            <a ngbTooltip="Send Mail" *ngIf="['SB','AP','RJ','CC','RD','RF'].indexOf(item['sts_code']) != -1" class="btn btn-default" (click)="sendMail(item.id)"><i class="fa fa-envelope-o"
                                                     aria-hidden="true"></i></a>
                                             <a ngbTooltip="Apply to Invoice" *ngIf="['AP','RD'].indexOf(item['sts_code']) != -1" class="btn btn-default" [routerLink]="['apply-credit', item.id]"><i
                                                     class="fa fa-clipboard" aria-hidden="true"></i></a>
@@ -186,9 +189,8 @@
             </div>
             <div class="col-md-6 padding-lr-0">
                 <div class="text-right">
-                    <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length"
-                        [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page"
-                        [maxSize]="tableService.maxSize" [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+                    <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length" [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page" [maxSize]="tableService.maxSize"
+                        [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
                 </div>
             </div>
         </div>
