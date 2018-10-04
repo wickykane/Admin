@@ -45,6 +45,7 @@ import { ItemsOrderModalContent } from './rma/modals/items-order.modal';
 import { RmaCreateComponent } from './rma/create/rma.create.component';
 import { RmaEditComponent } from './rma/edit/rma.edit.component';
 import { RmaComponent } from './rma/list/rma.component';
+import { ReturnOrderInformationTabComponent } from './rma/order-tabs/information-tab.component';
 import { RMAService } from './rma/rma.service';
 import { RmaDetailComponent } from './rma/view/rma.view.component';
 
@@ -84,7 +85,8 @@ import { RmaDetailComponent } from './rma/view/rma.view.component';
         RmaComponent,
         RmaCreateComponent,
         RmaEditComponent,
-        RmaDetailComponent
+        RmaDetailComponent,
+        ReturnOrderInformationTabComponent
         ],
     providers: [OrderService, TableService, DatePipe, Helper, RMAService],
     entryComponents: [ItemsOrderModalContent]

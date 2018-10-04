@@ -11,6 +11,11 @@ export class RMAService {
     return this.API.get(url, params);
   }
 
+  getDetailRMA(id) {
+      const url = 'return-order/view/' + id;
+      return this.API.get(url);
+  }
+
   getAllCustomer(params?) {
       const url = 'buyer/get-all';
       return this.API.get(url, params);

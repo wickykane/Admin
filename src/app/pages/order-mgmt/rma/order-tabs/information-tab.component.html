@@ -1,6 +1,6 @@
 <div [@routerTransition]>
-<app-page-header [heading]="'CREATE NEW RETURN ORDERS'"></app-page-header>
-<app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
+<!-- <app-page-header [heading]="'DETAIL RETURN ORDERS'"></app-page-header> -->
+<!-- <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut> -->
 <section class="rma-page block main-container block-order">
    <div class="row block-info">
       <div class="col-md-5 p-l-5 p-r-2">
@@ -10,59 +10,33 @@
             </div>
             <div class="card-body">
                <div class="row information height-100">
-                  <div class="col-md-12 p-l-5 p-r-5">
-                     <form [formGroup]="generalForm" class="form-search full-width form-inline border-bottom">
-                        <div class="col-md-5">
-                           <div class="form-group">
-                              <label for="code" class="control-label" translate> <strong>Customer Name</strong> </label>
-                              <span class="text-danger">(*)</span>
-                              <div>
-                                 <ng-select class="infinity-scroll-select"  [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 100px; margin-left: 2px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="company_id">
-                                    <ng-template ng-option-tmp let-item="item">
-                                        <span title="{{item.company_name}}">{{item.company_name}}</span>
-                                    </ng-template>
-                                </ng-select>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="col-md-5">
-                            <i class="text-warning fa fa-exclamation-triangle"></i> <strong>Current Return Rate:</strong> 15%
-                        </div>
-                     </form>
-                  </div>
                   <div class="col-md-12 fix-padding">
                      <div class="row">
                         <div class="col-md-6 bolder">
-                          <form [formGroup]="generalForm">
+                          <div class="form-group row">
+                             <label class='col-6 control-label'>Customer Name</label>
+                             <div class='col-6'>
+                               {{detail['company_name']}}
+                             </div>
+                          </div>
                            <div class="form-group row">
-                              <label class='col-6 control-label'>Return Order No <span class="text-danger">(*)</span></label>
-                              <div class='col-6 text-primary'>
-                                <input type="text" class="form-control" formControlName="rma_no" readonly>
+                              <label class='col-6 control-label'>Return Order No </label>
+                              <div class='col-'>
+                                {{detail['cd']}}
                               </div>
                            </div>
                            <div class="form-group row">
                               <label class='col-6'>Request Date
-                              <span class="text-danger">(*)</span>
+
                               </label>
-                              <div class='col-6 text-danger'>
-                                 <div clickOutside (clickOutside)="d1.close()" class="input-group">
-                                    <input class="form-control" [maxDate]="currentDt | dateObj" placeholder="mm/dd/yyyy" name="request_date" formControlName="request_date" ngbDatepicker #d1="ngbDatepicker">
-                                    <div class="input-group-append">
-                                       <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
-                                       <i class="fa fa-calendar" aria-hidden="true"></i>
-                                       </button>
-                                    </div>
-                                 </div>
+                              <div class='col-6'>
+                                {{detail['request_date']}}
                               </div>
                            </div>
                            <div class="form-group row">
-                              <label class='col-6'>Sales Order No <span class="text-danger">(*)</span></label>
+                              <label class='col-6'>Sales Order No </label>
                               <div class='col-6 '>
-                                <ng-select class="infinity-scroll-select" [virtualScroll]="true" (change)="changeSalesOrder()" [items]="listMaster['list_order']" bindLabel="code" bindValue="id" formControlName="order_id" required>
-                                   <ng-template ng-option-tmp let-item="item">
-                                       <span title="{{item.code}}">{{item.code}}</span>
-                                   </ng-template>
-                               </ng-select>
+                                {{detail['order_code']}}
                               </div>
                            </div>
                            <div class="form-group row">
@@ -70,58 +44,43 @@
                                 <span class="text-danger" *ngIf="requiredInv">(*)</span>
                               </label>
                               <div class='col-6 '>
-                                <form [formGroup]="generalForm">
-                                <ng-select class="infinity-scroll-select" (change)="checkInvoice()" [virtualScroll]="true" [items]="listMaster['list_invoice']" bindLabel="cd" bindValue="id" formControlName="invoice_id">
-                                   <ng-template ng-option-tmp let-item="item">
-                                       <span title="{{item.cd}}">{{item.cd}}</span>
-                                   </ng-template>
-                               </ng-select>
-                                </form>
+                                {{detail['invoice_code']}}
                               </div>
                            </div>
-                           <div class="form-group row">
-                              <label class='col-6'>Status</label>
-                              <div class='col-6 text-success'>
-                                 <strong>1-NEW</strong>
-                              </div>
-                           </div>
-                         </form>
                         </div>
                         <div class="col-md-6 customer-infomation">
-                           <form [formGroup]="generalForm">
+                              <div class="form-group row">
+                                 <label class='col-6'>Status</label>
+                                 <div class='col-6 text-success'>
+                                    <strong>{{detail['sts_name']}}</strong>
+                                 </div>
+                              </div>
                               <div class="form-group row">
                                  <label class='col-6'>Return Time
                                  </label>
                                  <div class='col-6 text-primary'>
-                                    <input type="text" class="form-control" formControlName="return_time" readonly>
+                                   {{detail['return_time']}}
                                  </div>
                               </div>
                               <div class="form-group row">
                                  <label class='col-6'>Delivery Date
                                  </label>
                                  <div class='col-6 text-primary'>
-                                    <input type="text" class="form-control" formControlName="delivery_date" readonly>
+                                   {{detail['delivery_date']}}
                                  </div>
                               </div>
                               <div class="form-group row">
                                  <label class='col-6'>Salesperson</label>
-                                 <div class='col-6 text-primary'>
-                                    <select class="form-control" name="sale_person_id" formControlName="sale_person_id">
-                                    <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
-                                    <option *ngFor="let item of listMaster['sale_mans']" [ngValue]="item.id">{{item.full_name}}</option>
-                                    </select>
+                                 <div class='col-6'>
+                                   {{detail['sale_person_name']}}
                                  </div>
                               </div>
                               <div class="form-group row">
                                  <label class='col-6'>Approver</label>
                                  <div class='col-6'>
-                                    <select class="form-control" name="approver_id" formControlName="approver_id">
-                                    <option [hidden]="true" [disabled]="false"  [ngValue]="null">--Select--</option>
-                                    <option *ngFor="let item of listMaster['sale_mans']" [ngValue]="item.id">{{item.full_name}}</option>
-                                    </select>
+                                   {{detail['approver_name']}}
                                  </div>
                               </div>
-                           </form>
                         </div>
                      </div>
                   </div>
@@ -139,74 +98,57 @@
                  <div class="card-body p-25">
                     <div class="row">
                        <div class="col-12">
-                         <form [formGroup]="generalForm">
                           <div class="form-group row">
                              <label class='col-6'>Return Type
-                             <span class="text-danger">(*)</span>
+
                              </label>
                              <div class='col-6'>
-                                <select (change)="changeType()" class="form-control" name="order_return_type" formControlName="order_return_type">
-                                <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
-                                <option *ngFor="let item of listMaster['type']" [ngValue]="item.key">{{item.value}}</option>
-                                </select>
+                               {{detail['return_type_name']}}
                              </div>
                           </div>
                           <div class="form-group row">
                              <label class='col-6'>Return Warehouse
-                             <span class="text-danger">(*)</span>
+
                              </label>
                              <div class='col-6'>
-                                  <input type="text" class="form-control" formControlName="warehouse" readonly>
+                                {{detail['warehouse_name']}}
                              </div>
                           </div>
                           <div class="form-group row">
                              <label class='col-6'>Ship Via
-                             <span class="text-danger">(*)</span>
+
                              </label>
                              <div class='col-6'>
-                               <select (change)="changeShipVia()" class="form-control" name="ship_via" formControlName="ship_via">
-                               <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
-                               <option *ngFor="let item of listMaster['ship_via']" [ngValue]="item.key">{{item.value}}</option>
-                               </select>
+                               {{detail['ship_via_name']}}
                              </div>
                           </div>
 
-                          <div class="form-group row" *ngIf="generalForm.value.ship_via != 3">
+                          <div class="form-group row" *ngIf="detail.ship_via != 3">
                              <label class='col-6'>Carrier
-                               <span class="text-danger" *ngIf="generalForm.value.ship_via == 2">(*)</span>
+                               <span class="text-danger" *ngIf="detail.ship_via == 2">(*)</span>
                              </label>
-                             <div class='col-6'>
-                                <input type="text" class="form-control" formControlName="carrier" *ngIf="generalForm.value.ship_via == 1">
-
-                                <select (change)="changeShipVia()" class="form-control" name="carrier_id" formControlName="carrier_id" *ngIf="generalForm.value.ship_via == 2">
-                                <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
-                                <option *ngFor="let item of listMaster['carrier']" [ngValue]="item.id">{{item.cd}}</option>
-                                </select>
+                             <div class='col-6' *ngIf="detail.ship_via == 1">
+                               {{detail['carrier']}}
+                             </div>
+                             <div class='col-6' *ngIf="detail.ship_via == 2">
+                               {{detail['carrier_name']}}
                              </div>
                           </div>
 
-                          <div class="form-group row" *ngIf="generalForm.value.ship_via == 1">
+                          <div class="form-group row" *ngIf="detail.ship_via == 1">
                              <label class='col-6'>Tracking No</label>
                              <div class='col-6'>
-                                <input type="text" class="form-control" formControlName="tracking_no">
+                                {{detail['tracking_no']}}
                              </div>
                           </div>
 
-                          <div class="form-group row"  *ngIf="generalForm.value.ship_via == 3">
+                          <div class="form-group row"  *ngIf="detail.ship_via == 3">
                              <label class='col-6'>Arrival  Date</label>
                              <div class='col-6 text-danger'>
-                                <div clickOutside (clickOutside)="d2.close()" class="input-group">
-                                   <input class="form-control" [maxDate]="currentDt | dateObj" placeholder="mm/dd/yyyy" name="arrival_date" formControlName="arrival_date" ngbDatepicker #d2="ngbDatepicker">
-                                   <div class="input-group-append">
-                                      <button class="btn btn-outline-secondary" (click)="d2.toggle()" type="button">
-                                      <i class="fa fa-calendar" aria-hidden="true"></i>
-                                      </button>
-                                   </div>
-                                </div>
+                               {{detail['sts_name']}}
                              </div>
                           </div>
 
-                        </form>
                        </div>
                     </div>
                  </div>
@@ -222,15 +164,10 @@
                         <div class="col-12">
                            <div class="form-group row">
                               <label class="control-label col-5" for="billing_to" translate> Label
-                              <span class="text-danger">(*)</span>
+
                               </label>
                               <div class="col-7">
-                                 <form [formGroup]="generalForm">
-                                    <select required class="form-control" id="billing_to" name="search_type" formControlName="bill_to" (change)="selectAddress('billing')">
-                                    <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
-                                    <option *ngFor="let item of customer.billing" [ngValue]="item.address_id">{{item.label}}</option>
-                                    </select>
-                                 </form>
+                                {{detail.billing.label}}
                               </div>
                            </div>
                         </div>
@@ -238,7 +175,7 @@
                            <div class="form-group row">
                               <label class="control-label col-5" translate>Address</label>
                               <div class="col-7">
-                                 {{addr_select.billing.address_line}}
+                                 {{detail.billing.address_line}}
                               </div>
                            </div>
                         </div>
@@ -246,7 +183,7 @@
                            <div class="form-group row">
                               <label class=" control-label col-5" translate>City / State</label>
                               <div class="col-7">
-                                 {{addr_select.billing.city_name}}/ {{addr_select.billing.state_name}}
+                                 {{detail.billing.city_name}}/ {{addr_select.billing.state_name}}
                               </div>
                            </div>
                         </div>
@@ -254,7 +191,7 @@
                            <div class="form-group row">
                               <label class="control-label col-5" translate>Zip</label>
                               <div class="col-7">
-                                 {{addr_select.billing.zip_code}}
+                                 {{detail.billing.zip_code}}
                               </div>
                            </div>
                         </div>
@@ -262,7 +199,7 @@
                            <div class="form-group row">
                               <label class="control-label col-5" translate>Country</label>
                               <div class="col-7">
-                                 {{addr_select.billing.country_name}}
+                                 {{detail.billing.country_name}}
                               </div>
                            </div>
                         </div>
@@ -280,15 +217,10 @@
                            <div class="col-12">
                               <div class="form-group row">
                                  <label class=" control-label col-5" for="shiping_to" translate>Label
-                                 <span class="text-danger">(*)</span>
+
                                  </label>
                                  <div class="col-7">
-                                    <form [formGroup]="generalForm">
-                                       <select required class="form-control" id="shiping_to" name="search_type" formControlName="ship_to" (change)="selectAddress('shipping')">
-                                       <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
-                                       <option *ngFor="let item of customer.shipping" [ngValue]="item.address_id">{{item.label}}</option>
-                                       </select>
-                                    </form>
+                                     {{detail.shipping.label}}
                                  </div>
                               </div>
                            </div>
@@ -296,7 +228,7 @@
                               <div class="form-group row">
                                  <label class=" control-label col-5" translate>Address</label>
                                  <div class="col-7">
-                                    {{addr_select.shipping.address_line}}
+                                    {{detail.shipping.address_line}}
                                  </div>
                               </div>
                            </div>
@@ -304,7 +236,7 @@
                               <div class="form-group row">
                                  <label class=" control-label col-5" translate>City / State</label>
                                  <div class="col-7">
-                                    {{addr_select.shipping.city_name}} / {{addr_select.shipping.state_name}}
+                                    {{detail.shipping.city_name}} / {{addr_select.shipping.state_name}}
                                  </div>
                               </div>
                            </div>
@@ -312,7 +244,7 @@
                               <div class="form-group row">
                                  <label class=" control-label col-5" translate>Zip</label>
                                  <div class="col-7">
-                                    {{addr_select.shipping.zip_code}}
+                                    {{detail.shipping.zip_code}}
                                  </div>
                               </div>
                            </div>
@@ -320,7 +252,7 @@
                               <div class="form-group row">
                                  <label class="control-label col-5" translate>Country</label>
                                  <div class="col-7">
-                                    {{addr_select.shipping.country_name}}
+                                    {{detail.shipping.country_name}}
                                  </div>
                               </div>
                            </div>
@@ -343,20 +275,22 @@
                   <table class="table table-bordered table-order">
                   <thead>
                      <tr>
-                        <th style="width:70px" translate>Action</th>
+                        <!-- <th style="width:70px" translate>Action</th> -->
                         <th style="width:100px" translate>Item No</th>
                         <th translate>Description</th>
                         <th translate>Condition</th>
-                        <th translate>Warranty</th>
                         <th translate>UOM</th>
-                        <th translate>Possible Return QTY</th>
-                        <th class="text-nowrap" style="width:100px" translate>Return QTY</th>
+                        <th translate>Returned QTY</th>
+                        <th class="text-nowrap" style="width:100px" translate>Accepted QTY</th>
                         <th class="text-center" style="width:100px" translate>Unit Price</th>
                         <th style="width:100px" translate>Disc %</th>
                         <th style="width:100px" translate>Tax %</th>
-                        <th translate>Total Amount</th>
+                        <th translate>Amount Before Receipt</th>
+                        <th translate>Amount After Receipt</th>
                         <th translate>Return Reason</th>
+                        <th translate>Warranty</th>
                         <th translate>Status</th>
+                        <th translate>Receipt Date</th>
                      </tr>
                   </thead>
                   <tr *ngIf="list.returnItem.length === 0">
@@ -364,27 +298,21 @@
                      </tr>
                   <tbody *ngFor="let item of list.returnItem; let $index = index;">
                      <tr>
-                       <td class="text-center">
+                       <!-- <td class="text-center">
                            <button class="btn btn-xs" type="button" (click)="deleteLineItem(item, i)">
                                <i class="fa fa-trash"></i>
                            </button>
-                       </td>
+                       </td> -->
                         <td>{{item.sku}}</td>
                         <td>{{item.des}}</td>
                         <td>{{item.condition_name}}</td>
-                        <td class="text-center">
-                          <label class="css-input css-checkbox css-checkbox-default">
-                              <input class="cb-element" type="checkbox" [(ngModel)]="item.warranty">
-                              <span></span>
-                          </label>
-                        </td>
                         <td>{{item.uom_name}}</td>
-                        <td class="text-center">{{item.qty_allow}}</td>
+                        <td class="text-center">{{item.return_qty}}</td>
                         <td class="text-center">
-                            <input numberDirective [isDecimal]="false" [min]="1" [max]="2" style="width: 100px;" class="form-control input-sm" type="number" [(ngModel)]="item.return_quantity" (changeValue)="calcTotal()">
+                            {{item.accept_qty}}
                         </td>
                         <td class="text-center">
-                            <span>{{item.sale_price}}</span>
+                            <span>{{item.price | currency}}</span>
                         </td>
                         <td class="text-center">
                           <span>{{item.discount_percent}}</span>
@@ -393,30 +321,39 @@
                           <span>{{item.tax_percent}}</span>
                         </td>
                         <td class="text-center">
-                           <span>{{item.amount | currency}}</span>
-                        </td>
-                        <td>
-                          <select required class="form-control" [(ngModel)]="item.return_reason">
-                          <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
-                          <option *ngFor="let it of item['reason']" [ngValue]="it.id">{{it.cd}}</option>
-                          </select>
+                           <span>{{item.amount_before_receipt | currency}}</span>
                         </td>
                         <td class="text-center">
-                             New
+                          <span>{{item.amount_after_receipt | currency}}</span>
+                        </td>
+                        <td>
+                          {{item.return_reason_name}}
+                        </td>
+                        <td class="text-center">
+                          <label class="css-input css-checkbox css-checkbox-default">
+                            <input disabled class="cb-element" type="checkbox" [(ngModel)]="item.warranty">
+                            <span></span>
+                          </label>
+                        </td>
+                        <td class="text-center">
+                             {{item.sts_name}}
+                        </td>
+                        <td class="text-center">
+                             {{item.receipt_date}}
                         </td>
                      </tr>
                   </tbody>
                   </table>
                </div>
-               <div class="col-12 no-padding">
+               <!-- <div class="col-12 no-padding">
                   <button (click)="openModalAddItemsOrder()" class="btn btn-link" translate>
                   <i class="fa fa-plus"></i>Add Item</button>
-               </div>
+               </div> -->
             </div>
          </div>
       </div>
    </div>
-   <div class="row mg-top-10" *ngIf="generalForm.value.order_return_type == 3">
+   <div class="row mg-top-10" *ngIf="detail.order_return_type == 3">
       <div class="col-12 padding-lr-5">
          <div class="card no-border">
             <div class="card-header">
@@ -427,7 +364,7 @@
                   <table class="table table-bordered table-order">
                   <thead>
                      <tr>
-                        <th style="width:70px" translate>Action</th>
+                        <!-- <th style="width:70px" translate>Action</th> -->
                         <th style="width:100px" translate>Item No</th>
                         <th translate>Description</th>
                         <th translate>Condition</th>
@@ -442,17 +379,17 @@
                      </tr>
                   <tbody *ngFor="let item of replaceItem; let $index = index;">
                      <tr>
-                        <td class="text-center">
+                        <!-- <td class="text-center">
                            <button class="btn btn-danger btn-xs" type="button" (click)="deleteAction(item.sku, item.item_condition_id)">
                            <i class="fa fa-trash"></i>
                            </button>
-                        </td>
+                        </td> -->
                         <td>{{item.sku}}</td>
                         <td>{{item.des}}</td>
                         <td>{{item.condition_name}}</td>
                         <td>{{item.uom_name}}</td>
                         <td class="text-center">
-                            <input numberDirective [isDecimal]="false" [min]="1" style="width: 100px;" class="form-control input-sm" type="number" [(ngModel)]="item.replace_quantity" (changeValue)="updateTotal()">
+                            {{item.replace_quantity}}
                         </td>
                         <td>
                             <span>{{item.sale_price}}</span>
@@ -464,10 +401,10 @@
                   </tbody>
                   </table>
                </div>
-               <div class="col-12 no-padding">
+               <!-- <div class="col-12 no-padding">
                   <button (click)="addNewItem()" class="btn btn-link" translate>
                   <i class="fa fa-plus"></i>Add Item</button>
-               </div>
+               </div> -->
             </div>
          </div>
       </div>
@@ -479,11 +416,7 @@
                <strong>Note</strong>
             </div>
             <div class="card-body">
-               <form [formGroup]="generalForm">
-                  <div>
-                     <textarea class="form-control border-0" formControlName="note" rows="11" style="resize:none"></textarea>
-                  </div>
-               </form>
+                {{detail['des']}}
             </div>
          </div>
       </div>
@@ -496,15 +429,15 @@
                <div class="row">
                   <div class="col-12">
                      <div class="form-group row">
-                        <label class='col-7 control-label'>Total Returned Items</label>
+                        <label class='col-7 control-label'>Total Accepted Items</label>
                         <div class='col-5'>
-                           <span class="text-success">{{ order_info.order_summary['total_item'] || 0}}</span>
+                           <span class="text-success">{{ detail['before_total_item'] || 0}}</span>
                         </div>
                      </div>
                      <div class="form-group row">
-                        <label class='col-7 control-label'>Total Returned COGS</label>
+                        <label class='col-7 control-label'>Total COGS</label>
                         <div class='col-5'>
-                           <span class="text-success">{{ (order_info.order_summary['total_cogs'] || 0) | currency}}</span>
+                           <span class="text-success">{{ (detail['before_total_cogs'] || 0) | currency}}</span>
                         </div>
                      </div>
                      <div class="form-group row">
@@ -512,14 +445,14 @@
                         <strong class="text-warning">Sub Total</strong>
                         </label>
                         <div class='col-6 offset-md-1 padding-lr-10'>
-                           <strong>{{order_info.sub_total | currency}}</strong>
+                           <strong>{{detail['before_sub_total'] | currency}}</strong>
                         </div>
                      </div>
 
-                     <div *ngFor="let item of order_info['taxs']" class="form-group row">
-                         <label class='col-5 control-label'>+ TAX ({{item.value}}%):</label>
+                     <div *ngFor="let item of detail['before_tax']" class="form-group row">
+                         <label class='col-5 control-label'>+ TAX ({{item.key}}%):</label>
                          <div class='col-6 offset-md-1 padding-lr-10'>
-                             <input class="form-control" readonly="true" [(ngModel)]="item.amount" class="form-control" value="0" type="number">
+                             <input class="form-control" readonly="true" [(ngModel)]="item.value" class="form-control" value="0" type="number">
                          </div>
                      </div>
                      <div class="form-group row margin-lr-0 text-light bg-danger">
@@ -527,7 +460,7 @@
                              <strong>Total Due:</strong>
                          </label>
                          <div class="col-6 offset-md-1 ">
-                             <strong>{{order_info.total | currency}}</strong>
+                             <strong>{{detail['before_total_price'] | currency}}</strong>
                          </div>
                      </div>
                   </div>
@@ -535,7 +468,55 @@
             </div>
          </div>
       </div>
-      <div class="col-md-2"  *ngIf="generalForm.value.order_return_type == 3">
+      <div class="col-md-2">
+         <div class="card height-100">
+            <div class="card-header">
+               <strong>Total After WH Receipt</strong>
+            </div>
+            <div class="card-body">
+               <div class="row">
+                  <div class="col-12">
+                     <div class="form-group row">
+                        <label class='col-7 control-label'>Total Accepted Items</label>
+                        <div class='col-5'>
+                           <span class="text-success">{{ detail['after_total_item'] || 0}}</span>
+                        </div>
+                     </div>
+                     <div class="form-group row">
+                        <label class='col-7 control-label'>Total COGS</label>
+                        <div class='col-5'>
+                           <span class="text-success">{{ (detail['after_total_cogs'] || 0) | currency}}</span>
+                        </div>
+                     </div>
+                     <div class="form-group row">
+                        <label class='col-5 control-label'>
+                        <strong class="text-warning">Sub Total</strong>
+                        </label>
+                        <div class='col-6 offset-md-1 padding-lr-10'>
+                           <strong>{{detail['after_sub_total'] | currency}}</strong>
+                        </div>
+                     </div>
+
+                     <div *ngFor="let item of detail['after_tax']" class="form-group row">
+                         <label class='col-5 control-label'>+ TAX ({{item.key}}%):</label>
+                         <div class='col-6 offset-md-1 padding-lr-10'>
+                             <input class="form-control" readonly="true" [(ngModel)]="item.value" class="form-control" value="0" type="number">
+                         </div>
+                     </div>
+                     <div class="form-group row margin-lr-0 text-light bg-danger">
+                         <label class="col-5 control-label ">
+                             <strong>Total Due:</strong>
+                         </label>
+                         <div class="col-6 offset-md-1 ">
+                             <strong>{{detail['after_total_price'] | currency}}</strong>
+                         </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="col-md-2"  *ngIf="detail.order_return_type == 3">
          <div class="card height-100">
             <div class="card-header">
                <strong>Total Replacement</strong>
@@ -546,13 +527,13 @@
                      <div class="form-group row">
                         <label class='col-7 control-label'>Total Replaced Items</label>
                         <div class='col-5'>
-                           <span class="text-success">{{ order_info_replace.order_summary['total_item'] || 0}}</span>
+                           <span class="text-success">{{ detail['total_item_replace'] || 0}}</span>
                         </div>
                      </div>
                      <div class="form-group row">
                         <label class='col-7 control-label'>Total COGS</label>
                         <div class='col-5'>
-                           <span class="text-success">{{ (order_info_replace.order_summary['total_cogs'] || 0) | currency}}</span>
+                           <span class="text-success">{{ (detail['total_cogs_replace'] || 0) | currency}}</span>
                         </div>
                      </div>
                      <div class="form-group row">
@@ -560,7 +541,7 @@
                         <strong class="text-warning">Sub Total</strong>
                         </label>
                         <div class='col-6 offset-md-1 padding-lr-10'>
-                           <strong>{{order_info_replace.sub_total | currency}}</strong>
+                           <strong>{{detail['sub_total_replace'] | currency}}</strong>
                         </div>
                      </div>
                      <div class="form-group row margin-lr-0 text-light bg-danger">
@@ -568,7 +549,7 @@
                              <strong>Total Due:</strong>
                          </label>
                          <div class="col-6 offset-md-1 ">
-                             <strong>{{order_info_replace.total | currency}}</strong>
+                             <strong>{{detail['total_price_replace'] | currency}}</strong>
                          </div>
                      </div>
                   </div>
@@ -581,7 +562,7 @@
       <div class="col-md-12 mg-top-15 text-right">
         <!-- <button type="button" class="btn btn-outline-warning" (click)="confirmCreateOrder('draft')" translate>Save As Draft</button> -->
          <!-- <button type="button" class="btn btn-outline-info" (click)="confirmCreateOrder('validate')" [disabled]="!generalForm.valid" translate>Save & Validate</button> -->
-         <button type="button" class="btn btn-outline-primary" (click)="confirmCreateOrder('create')" [disabled]="!generalForm.valid" translate>Save & Submit</button>
+         <!-- <button type="button" class="btn btn-outline-primary" (click)="confirmCreateOrder('create')" [disabled]="!generalForm.valid" translate>Save & Submit</button> -->
          <!-- <button type="button" class="btn btn-outline-success" (click)="confirmCreateOrder('quote')" [disabled]="!generalForm.valid" translate>Save As Quote</button> -->
          <button type="button" class="btn btn-default" (click)="back()" translate>Back to list</button>
       </div>

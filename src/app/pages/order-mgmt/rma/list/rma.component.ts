@@ -10,6 +10,8 @@ import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateform
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 
 import { HotkeysService } from 'angular2-hotkeys';
+// tslint:disable-next-line:import-blacklist
+import { Subject } from 'rxjs';
 import { RMAService } from '../rma.service';
 import { CommonService } from './../../../../services/common.service';
 import { RMAKeyService } from './keys.control';
@@ -57,8 +59,9 @@ export class RmaComponent implements OnInit {
         items: []
     };
     //  public showProduct: boolean = false;
-    public onoffFilter: any;
+    public data = {};
     public listMoreFilter: any = [];
+    public searchKey = new Subject<any>();
 
     searchForm: FormGroup;
 
@@ -74,15 +77,15 @@ export class RmaComponent implements OnInit {
         private _hotkeysService: HotkeysService) {
 
         this.searchForm = fb.group({
-            'code': [null],
-            'cus_po': [null],
-            'sale_quote_num': [null],
-            'type': [null],
-            'sts': [null],
+            'cd': [null],
+            'return_type_id': [null],
+            'company_id': [null],
+            'warehouse_id': [null],
+            'sts_id': [null],
             'buyer_name': [null],
-            'date_type': [null],
-            'date_to': [null],
-            'date_from': [null],
+            // 'date_type': [null],
+            'request_date_to': [null],
+            'request_date_from': [null],
 
         });
 
@@ -90,7 +93,7 @@ export class RmaComponent implements OnInit {
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
 
-          this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {
@@ -99,9 +102,24 @@ export class RmaComponent implements OnInit {
         this.listMaster['dateType'] = [{ id: 'order_dt', name: 'Order Date' }, { id: 'delivery_dt', name: 'Delivery Date' }];
         this.listMaster['type'] = [{ id: 'PKU', name: 'Pickup ' }, { id: 'NO', name: 'Regular Order' }, { id: 'ONL', name: 'Ecommerce' }, { id: 'XD', name: 'X-Docks' }];
 
-        this.getList();
-        this.getListStatus();
+        this.getRMAReference();
         this.countOrderStatus();
+        this.getList();
+
+        // Lazy Load filter
+        this.data['page'] = 1;
+        const params = { page: this.data['page'], length: 100 };
+        this.service.getAllCustomer(params).subscribe(res => {
+            this.listMaster['customer'] = res.data.rows;
+            this.data['total_page'] = res.data.total_page;
+            this.refresh();
+        });
+        this.searchKey.debounceTime(300).subscribe(key => {
+            this.data['page'] = 1;
+            this.searchCustomer(key);
+        });
+
+        this.refresh();
     }
     /**
      * Table Event
@@ -117,22 +135,8 @@ export class RmaComponent implements OnInit {
      * Internal Function
      */
 
-    filter(status) {
-        this.list.items = [{}, {}];
-        // const params = { sts: status };
-        // this.service.getListOrder(params).subscribe(res => {
-        //     try {
-        //         this.list.items = res.data.rows;
-        //         this.tableService.matchPagingOption(res.data);
-        //         this.refresh();
-        //     } catch (e) {
-        //         console.log(e);
-        //     }
-        // });
-    }
-
     countOrderStatus() {
-      this.countStatus = [{}, {}];
+        this.countStatus = [{}, {}];
         // this.service.countStatus().subscribe(res => {
         //     res.data.map(item => {
         //         if (this.statusConfig[item.short_name]) {
@@ -148,13 +152,45 @@ export class RmaComponent implements OnInit {
         // });
     }
 
-    getListStatus() {
-        this.listMaster['status'] = [{}, {}];
-        // this.service.getListStatus().subscribe(res => {
-        //     this.listMaster['status'] = res.data;
-        //     this.refresh();
-        // });
+    getRMAReference() {
+        this.service.getOrderReference().subscribe(res => {
+            this.listMaster['warehouses'] = res.data.warehouses || []; this.refresh();
+        });
+        this.service.getRMAReference().subscribe(res => {
+            this.listMaster['return_status'] = res.data.return_status || [];
+            this.listMaster['return_type'] = res.data.return_type || [];
+            this.refresh();
+        });
 
+    }
+
+    fetchMoreCustomer(data?) {
+        this.data['page']++;
+        if (this.data['page'] > this.data['total_page']) {
+            return;
+        }
+        const params = { page: this.data['page'], length: 100 };
+        if (this.data['searchKey']) {
+            params['company_name'] = this.data['searchKey'];
+        }
+        this.service.getAllCustomer(params).subscribe(res => {
+            this.listMaster['customer'] = this.listMaster['customer'].concat(res.data.rows);
+            this.data['total_page'] = res.data.total_page;
+            this.refresh();
+        });
+    }
+
+    searchCustomer(key) {
+        this.data['searchKey'] = key;
+        const params = { page: this.data['page'], length: 100 };
+        if (key) {
+            params['company_name'] = key;
+        }
+        this.service.getAllCustomer(params).subscribe(res => {
+            this.listMaster['customer'] = res.data.rows;
+            this.data['total_page'] = res.data.total_page;
+            this.refresh();
+        });
     }
 
     getList() {
@@ -167,9 +203,9 @@ export class RmaComponent implements OnInit {
             // tslint:disable-next-line:no-unused-expression
             (params[key] === null || params[key] === '') && delete params[key];
         });
-
-        params.order = 'id';
-        params.sort = 'desc';
+        //
+        // params.order = 'id';
+        // params.sort = 'desc';
 
         this.list.items = [{}, {}];
 

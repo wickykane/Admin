@@ -11,7 +11,8 @@ import { RMAService } from '../rma.service';
 @Component({
   selector: 'app-rma.view',
   templateUrl: './rma.view.component.html',
-  styleUrls: ['../rma.component.scss']
+  styleUrls: ['../rma.component.scss'],
+  animations: [routerTransition()],
 })
 export class RmaDetailComponent implements OnInit {
   /**
