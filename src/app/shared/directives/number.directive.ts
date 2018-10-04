@@ -46,6 +46,7 @@ export class NumberDirective implements OnInit {
     @HostListener('keydown', ['$event'])
     onKeyDown(event) {
         const e = event;
+        const selected = getSelection().toString();
         if ([46, 8, 9, 27, 13, 110].indexOf(e.keyCode) !== -1 ||
             // Allow: Ctrl+A
             (e.keyCode === 65 && e.ctrlKey === true) ||
@@ -61,7 +62,7 @@ export class NumberDirective implements OnInit {
             return;
         }
 
-        const current: string = this.element.nativeElement.value;
+        const current: string = (selected) ? '' : this.element.nativeElement.value;
         const ch: string = current.concat(e.key);
 
         const regEx = new RegExp(this.regexStr);
