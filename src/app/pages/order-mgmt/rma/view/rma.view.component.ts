@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ToastrService } from 'ngx-toastr';
-import { routerTransition } from '../../../router.animations';
+import { routerTransition } from '../../../../router.animations';
 import { RMAService } from '../rma.service';
 
 @Component({
@@ -54,7 +54,7 @@ export class RmaDetailComponent implements OnInit {
     this.orderDetail = detail;
   }
   cancel() {
-    this.router.navigate(['rma']);
+    this.router.navigate(['/order-management/return-order']);
   }
 
   putApproveOrder(order_id) {

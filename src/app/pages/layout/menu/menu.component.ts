@@ -42,6 +42,10 @@ export class MenuComponent implements OnInit {
                     {
                         link: '/order-management/sale-order',
                         name: 'Sales Orders'
+                    },
+                    {
+                        link: '/order-management/return-order',
+                        name: 'Return Orders'
                     }
                 ]
             },
@@ -105,14 +109,14 @@ export class MenuComponent implements OnInit {
                     }
                 ]
             },
-            {
-                flag: 'rma',
-                link: '/rma',
-                main_name: 'Return Order',
-                icon: '',
-                sub: false,
-                child: []
-            },
+            // {
+            //     flag: 'rma',
+            //     link: '/rma',
+            //     main_name: 'Return Order',
+            //     icon: '',
+            //     sub: false,
+            //     child: []
+            // },
             {
                 flag: 'admin-panel',
                 link: '/admin-panel',

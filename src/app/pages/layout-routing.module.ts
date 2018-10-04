@@ -14,7 +14,6 @@ const routes: Routes = [
             { path: 'product-management', loadChildren: '../pages/product-mgmt/product-mgmt.module#ProductMgmtModule' },
             { path: 'order-management', loadChildren: '../pages/order-mgmt/order-mgmt.module#OrderMgmtModule' },
             { path: 'customer', loadChildren: '../pages/customer-mgmt/customer-mgmt.module#CustomerMgmtModule' },
-            { path: 'rma', loadChildren: '../pages/rma/rma.module#RmaModule' },
             { path: 'financial', loadChildren: '../pages/financial/financial.module#FinancialModule' }
 
         ]

@@ -14,6 +14,12 @@ import { SaleQuotationComponent } from './sale-quotation/sale-quotation.componen
 import {SaleQuotationRfqCreateComponent} from './sale-quotation/sale-quotation.rfq.create.component';
 import {SaleQuotationDetailComponent} from './sale-quotation/view/sale-quotation.detail.component';
 
+import { RmaCreateComponent } from './rma/create/rma.create.component';
+import { RmaEditComponent } from './rma/edit/rma.edit.component';
+import { RmaComponent } from './rma/list/rma.component';
+import { RMAService } from './rma/rma.service';
+import { RmaDetailComponent } from './rma/view/rma.view.component';
+
 const routes: Routes = [
   {
     path: 'sale-order',
@@ -32,6 +38,15 @@ const routes: Routes = [
       {path: 'edit/:id', component: SaleQuotationEditComponent},
       {path: 'detail/:id', component: SaleQuotationDetailComponent},
       {path: 'create/rfq/:id', component: SaleQuotationRfqCreateComponent}
+    ]
+  },
+  {
+    path: 'return-order',
+    children: [
+      { path: '', component: RmaComponent },
+      {path: 'create', component: RmaCreateComponent},
+      {path: 'edit/:id', component: RmaEditComponent},
+      {path: 'detail/:id', component: RmaDetailComponent}
     ]
   }
 ];

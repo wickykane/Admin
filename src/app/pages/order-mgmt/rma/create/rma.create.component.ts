@@ -7,8 +7,8 @@ import * as moment from 'moment';
 
 import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { routerTransition } from '../../../router.animations';
-import { NgbDateCustomParserFormatter } from '../../../shared/helper/dateformat';
+import { routerTransition } from '../../../../router.animations';
+import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
 import { RMAService } from '../rma.service';
 import { RMACreateKeyService } from './keys.control';
 
@@ -16,8 +16,8 @@ import { HotkeysService } from 'angular2-hotkeys';
 // tslint:disable-next-line:import-blacklist
 import { Subject } from 'rxjs';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
-import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
-import { ItemModalContent } from '../../../shared/modals/item.modal';
+import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
+import { ItemModalContent } from '../../../../shared/modals/item.modal';
 import { ItemsOrderModalContent } from '../modals/items-order.modal';
 
 @Component({
@@ -235,7 +235,7 @@ export class RmaCreateComponent implements OnInit {
         modalRef.result.then(res => {
             if (res) {
                 setTimeout(() => {
-                    this.router.navigate(['rma']);
+                    this.router.navigate(['/order-management/return-order']);
                 }, 500);
             }
         }, dismiss => { });
@@ -592,7 +592,7 @@ export class RmaCreateComponent implements OnInit {
         //     try {
         //         this.toastr.success(res.message);
         //         setTimeout(() => {
-        //             this.router.navigate(['/order-management/sale-order']);
+        //             this.router.navigate(['/order-management//sale-order']);
         //         }, 500);
         //     } catch (e) {
         //         console.log(e);
@@ -636,7 +636,7 @@ export class RmaCreateComponent implements OnInit {
             try {
                 this.toastr.success('Create Return Order Successfully');
                 setTimeout(() => {
-                    this.router.navigate(['rma']);
+                    this.router.navigate(['/order-management/return-order']);
                 }, 500);
             } catch (e) {
                 console.log(e);
