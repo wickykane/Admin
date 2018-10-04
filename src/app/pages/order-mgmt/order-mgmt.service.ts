@@ -298,4 +298,8 @@ export class OrderService {
         const url = 'order/invoice/' + id;
         return this.API.post(url);
     }
+    checkOrderEditable(id) {
+        const url = ['sale-quote', 'detail', id].join('/');
+        return this.API.get(url);
+    }
 }

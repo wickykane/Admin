@@ -116,7 +116,7 @@
                                             <div class="form-group row">
                                                 <label class='col-6'>Order Status</label>
                                                 <div class='col-6 text-success'>
-                                                  {{ generalForm.value.order_sts_name}}
+                                                    {{ generalForm.value.order_sts_name}}
                                                 </div>
                                             </div>
                                         </form>
@@ -404,10 +404,10 @@
                                 </tr>
                                 <tbody *ngFor="let item of list['items']; let $index = index;">
                                     <tr>
-                                        <td>
+                                        <td class="text-center">
                                             <button class="btn btn-danger btn-xs" type="button" (click)="deleteAction(item.sku, item.item_condition_id)">
-                           <i class="fa fa-trash"></i>
-                           </button>
+                                                <i class="fa fa-trash"></i>
+                                            </button>
                                         </td>
                                         <td>{{item.sku}}</td>
                                         <td>{{item.des}}</td>
@@ -420,13 +420,15 @@
                                             {{wh.qty_available}}
                                         </td>
                                         <td>
-                                            <input numberDirective [min]="0" [disabled]="item.misc_id || data['user'].user_type !== 1 && data['editable_sts'].indexOf(data['order_data']?.order_sts_short_name) !== -1" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (changeValue)="updateTotal()">
+                                            <input numberDirective [min]="0" [disabled]="item.misc_id || data['user'].user_type !== 1 && data['editable_sts'].indexOf(data['order_data']?.order_sts_short_name) !== -1" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity"
+                                                (changeValue)="updateTotal()">
                                         </td>
                                         <td>
                                             <div>
                                                 <span>$</span>
                                                 <div style="display:inline-block;width:80%">
-                                                    <input [disabled]="!item.misc_id && data['user'].user_type !== 1 && data['editable_sts'].indexOf(data['order_data']?.order_sts_short_name) !== -1" [isDecimal]="true" numberDirective [min]="0" class="form-control input-sm" type="number" [(ngModel)]="item.sale_price" (changeValue)="updateTotal();changeFromSource(item)">
+                                                    <input [disabled]="!item.misc_id && data['user'].user_type !== 1 && data['editable_sts'].indexOf(data['order_data']?.order_sts_short_name) !== -1" [isDecimal]="true" numberDirective [min]="0" class="form-control input-sm" type="number" [(ngModel)]="item.sale_price"
+                                                        (changeValue)="updateTotal();changeFromSource(item)">
                                                 </div>
                                             </div>
                                         </td>
@@ -535,8 +537,8 @@
                             <div class="col-12">
                                 <div class="form-group row">
                                     <label class='col-5 control-label'>
-                        <strong class="text-warning">Sub Total</strong>
-                        </label>
+                                        <strong class="text-warning">Sub Total</strong>
+                                    </label>
                                     <div class='col-6 offset-md-1 padding-lr-10'>
                                         <strong>{{order_info.sub_total | currency}}</strong>
                                     </div>
@@ -550,10 +552,34 @@
                                 </div>
                                 <div class="form-group row margin-lr-0 text-light bg-danger">
                                     <label class="col-5 control-label ">
-                             <strong>Grand Total:</strong>
-                         </label>
+                                        <strong>Grand Total:</strong>
+                                    </label>
                                     <div class="col-6 offset-md-1 ">
                                         <strong>{{order_info.total | currency}}</strong>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class='col-5 control-label'>
+                                            <strong class="text-warning">Total Paid</strong>
+                                        </label>
+                                    <div class='col-6 offset-md-1 padding-lr-10'>
+                                        <strong>{{(data['order_data']?.total_paid || 0 ) | currency}}</strong>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class='col-5 control-label'>
+                                                <strong class="text-warning">Total Refunded</strong>
+                                            </label>
+                                    <div class='col-6 offset-md-1 padding-lr-10'>
+                                        <strong>{{(data['order_data']?.total_refund || 0 ) | currency}}</strong>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class='col-5 control-label'>
+                                                    <strong class="text-warning">Total Due</strong>
+                                                </label>
+                                    <div class='col-6 offset-md-1 padding-lr-10'>
+                                        <strong>{{ (order_info.total_due || 0) | currency}}</strong>
                                     </div>
                                 </div>
                             </div>
