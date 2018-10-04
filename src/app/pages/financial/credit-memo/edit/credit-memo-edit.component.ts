@@ -219,7 +219,9 @@ export class CreditMemoEditComponent implements OnInit {
                 this.generalForm.patchValue(data);
                 this.list.items = data.items || [];
                 this.changeCustomer(1);
-
+                if (data.payment_method_id === 1) {
+                    this.generalForm.get('payment_method_id').disable(); // Disable If Store Credit
+                }
 
                 // Lazy Load filter
                 const params = { page: this.data['page'], length: 100 };
@@ -578,7 +580,7 @@ export class CreditMemoEditComponent implements OnInit {
         });
 
         const params = {
-            ...this.generalForm.value,
+            ...this.generalForm.getRawValue(),
             status: type,
             original_ship_cost: this.order_info['original_ship_cost'],
             items,
