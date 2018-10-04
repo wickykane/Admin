@@ -579,7 +579,7 @@
                                                     <strong class="text-warning">Total Due</strong>
                                                 </label>
                                     <div class='col-6 offset-md-1 padding-lr-10'>
-                                        <strong>{{ (order_info.total_due || 0) | currency}}</strong>
+                                        <strong>{{ (order_info['total_due'] || 0) | currency}}</strong>
                                     </div>
                                 </div>
                             </div>
