@@ -37,8 +37,7 @@
                         <label for="" class="control-label" translate>From</label>
                         <div class="date-group">
                             <div clickOutside (clickOutside)="d1.close()" class="input-group">
-                                <input [maxDate]="searchForm.value.date_to | dateObj" class="form-control" (keydown)="$event.preventDefault()" autocomplete="off"
-                                    formControlName="date_from" placeholder="mm/dd/yyyy" name="dp" ngbDatepicker #d1="ngbDatepicker">
+                                <input [maxDate]="searchForm.value.date_to | dateObj" class="form-control" (keydown)="$event.preventDefault()" autocomplete="off" formControlName="date_from" placeholder="mm/dd/yyyy" name="dp" ngbDatepicker #d1="ngbDatepicker">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
                                         <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -61,12 +60,11 @@
                             </div>
                         </div>
                     </div> -->
-                    <div class="block-search" >
+                    <div class="block-search">
                         <label for="" class="control-label" translate>To</label>
                         <div class="date-group">
                             <div clickOutside (clickOutside)="dt2.close()" class="input-group">
-                                <input [minDate]="searchForm.value.date_from | dateObj" class="form-control" (keydown)="$event.preventDefault()" autocomplete="off"
-                                    formControlName="date_to" placeholder="mm/dd/yyyy" name="dp" ngbDatepicker #dt2="ngbDatepicker">
+                                <input [minDate]="searchForm.value.date_from | dateObj" class="form-control" (keydown)="$event.preventDefault()" autocomplete="off" formControlName="date_to" placeholder="mm/dd/yyyy" name="dp" ngbDatepicker #dt2="ngbDatepicker">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" (click)="dt2.toggle()" type="button">
                                         <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -93,8 +91,8 @@
 
                 </form>
                 <div class="block-btn-search">
-                  <label class="control-label">&nbsp;</label>
-                  <div class="group-btn-search">
+                    <label class="control-label">&nbsp;</label>
+                    <div class="group-btn-search">
                         <!-- <button type="button" class="btn-default-custom" (click)="moreFilter()">More Filter</button>
                             <div class="show-more" [hidden]="!onoffFilter">
                                 <ul class="mt-2">
@@ -124,6 +122,7 @@
                             <table class="table table-bordered table-order" cdArrowTable [collection]="listDebitMemo" [(selectedIndex)]="selectedIndex">
                                 <thead class="bg-white">
                                     <tr>
+                                        <th style="width:50px"></th>
                                         <th>Debit Memo No</th>
                                         <th>Issue Date</th>
                                         <th>Customer Name</th>
@@ -140,6 +139,12 @@
                                 </thead>
                                 <tbody *ngFor="let debit of listDebitMemo; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                                     <tr>
+                                        <td>
+                                            <img *ngIf="item.sts_code!='CP'" src="assets/img/qbicon-gray.png" width="20px" height="20px">
+                                            <a *ngIf="item.sts_code=='CP'" href="https://sandbox.qbo.intuit.com/app/sales" target="_blank">
+                                                <img placement="top" ngbTooltip="Sent Invoice To QuickBooks {{item.updated_at}}" src="../../assets/img/qbicons.png" width="20px" height="20px">
+                                            </a>
+                                        </td>
                                         <td>
                                             <a class="text-primary" (click)="onViewDebitMemo(debit.id)">{{debit.no}}</a>
                                         </td>
@@ -163,44 +168,34 @@
                                         <td class="text-center">{{debit.updated_at | date:'MM/dd/yyyy'}}</td>
                                         <td>{{debit.updated_by}}</td>
                                         <td class="text-left">
-                                            <a class="btn btn-default " *ngIf="debit.sts === 1"
-                                                ngbTooltip="Edit" (click)="onEditDebitMemo(debit.id)">
+                                            <a class="btn btn-default " *ngIf="debit.sts === 1" ngbTooltip="Edit" (click)="onEditDebitMemo(debit.id)">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default " *ngIf="debit.sts === 1"
-                                                ngbTooltip="Submit" (click)="onChangeDebitStatus(debit.id, 2)">
+                                            <a class="btn btn-default " *ngIf="debit.sts === 1" ngbTooltip="Submit" (click)="onChangeDebitStatus(debit.id, 2)">
                                                 <i class="fa fa-caret-square-o-right" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default " *ngIf="debit.sts === 2 && (currentuser['id'] == debit.approver_id)"
-                                                ngbTooltip="Approve" (click)="onChangeDebitStatus(debit.id, 3)">
+                                            <a class="btn btn-default " *ngIf="debit.sts === 2 && (currentuser['id'] == debit.approver_id)" ngbTooltip="Approve" (click)="onChangeDebitStatus(debit.id, 3)">
                                                 <i class="fa fa-check" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default " *ngIf="debit.sts === 2 && (currentuser['id'] == debit.approver_id)"
-                                                ngbTooltip="Reject" (click)="onChangeDebitStatus(debit.id, 4)">
+                                            <a class="btn btn-default " *ngIf="debit.sts === 2 && (currentuser['id'] == debit.approver_id)" ngbTooltip="Reject" (click)="onChangeDebitStatus(debit.id, 4)">
                                                 <i class="fa fa-ban" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default "
-                                                ngbTooltip="View" (click)="onViewDebitMemo(debit.id)">
+                                            <a class="btn btn-default " ngbTooltip="View" (click)="onViewDebitMemo(debit.id)">
                                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default"
-                                                ngbTooltip="Print" (click)="onPrintDebitMemo(debit.id, debit.no)">
+                                            <a class="btn btn-default" ngbTooltip="Print" (click)="onPrintDebitMemo(debit.id, debit.no)">
                                                 <i class="fa fa-download" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default" *ngIf="debit.sts === 1"
-                                                ngbTooltip="Cancel" (click)="onChangeDebitStatus(debit.id, 5)">
+                                            <a class="btn btn-default" *ngIf="debit.sts === 1" ngbTooltip="Cancel" (click)="onChangeDebitStatus(debit.id, 5)">
                                                 <i class="fa fa-times-circle" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default" *ngIf="debit.sts === 4"
-                                                ngbTooltip="Reopen" (click)="onChangeDebitStatus(debit.id, 1)">
+                                            <a class="btn btn-default" *ngIf="debit.sts === 4" ngbTooltip="Reopen" (click)="onChangeDebitStatus(debit.id, 1)">
                                                 <i class="fa fa-clone" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default" *ngIf="debit.sts === 3 || debit.sts === 8"
-                                                ngbTooltip="Receive Payment" (click)="onReceivePaymentDebitMemo()">
+                                            <a class="btn btn-default" *ngIf="debit.sts === 3 || debit.sts === 8" ngbTooltip="Receive Payment" (click)="onReceivePaymentDebitMemo()">
                                                 <i class="fa fa-money" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default" *ngIf="debit.sts != 1 && debit.sts != 4 && debit.sts != 5"
-                                                ngbTooltip="Send Mail" (click)="onSendMail(debit.id)">
+                                            <a class="btn btn-default" *ngIf="debit.sts != 1 && debit.sts != 4 && debit.sts != 5" ngbTooltip="Send Mail" (click)="onSendMail(debit.id)">
                                                 <i class="fa fa-envelope-o" aria-hidden="true"></i>
                                             </a>
                                         </td>
@@ -235,9 +230,8 @@
             </div>
             <div class="col-md-6 padding-lr-0">
                 <div class="text-right">
-                    <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length"
-                        [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page"
-                        [maxSize]="tableService.maxSize" [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+                    <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length" [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page" [maxSize]="tableService.maxSize"
+                        [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
                 </div>
             </div>
         </div>

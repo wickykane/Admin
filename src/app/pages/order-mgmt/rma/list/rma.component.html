@@ -1,5 +1,5 @@
 <div [@routerTransition]>
-    <app-page-header [heading]="'LIST OF RMA'" [icon]="'fa-th-list'"></app-page-header>
+    <app-page-header [heading]="'LIST OF RETURN ORDERS'" [icon]="'fa-th-list'"></app-page-header>
     <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
     <div class="block anchor-scroll block-order">
         <section id="statusIndicator" class="status-indicator-section">
@@ -16,39 +16,42 @@
                 <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
                     <div class="block-search">
                         <label for="cd" class="control-label" translate>Order No</label>
-                        <input type="text" name="cd" formControlName="code" class="form-control" id="cd" placeholder="" capitalize>
+                        <input type="text" name="cd" formControlName="cd" class="form-control" placeholder="" capitalize>
                     </div>
                     <div class="block-search">
-                        <label for="purchase_quote_cd" class="control-label">Return Type</label>
-                        <ng-select [multiple]="true" [items]="listMaster['type']" bindLabel="name" bindValue="id" formControlName="type">
+                        <label for="return_type_id" class="control-label">Return Type</label>
+                        <ng-select [multiple]="true" [items]="listMaster['return_type']" bindLabel="value" bindValue="key" formControlName="return_type_id">
                         </ng-select>
                     </div>
                     <div class="block-search">
                         <label for="contract_no" class="control-label">Customer</label>
-                        <ng-select [multiple]="true" [items]="listMaster['type']" bindLabel="name" bindValue="id" formControlName="type">
+                        <ng-select class="infinity-scroll-select"  [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 100px; margin-left: 2px;" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="company_id">
+                           <ng-template ng-option-tmp let-item="item">
+                               <span title="{{item.company_name}}">{{item.company_name}}</span>
+                           </ng-template>
+                       </ng-select>
+                    </div>
+                    <div class="block-search">
+                        <label for="warehouse_id" class="control-label">Warehouse</label>
+                        <ng-select [multiple]="true" [items]="listMaster['warehouses']" bindLabel="name" bindValue="id" formControlName="warehouse_id">
                         </ng-select>
                     </div>
                     <div class="block-search">
-                        <label for="part" class="control-label">Warehouse</label>
-                        <ng-select [multiple]="true" [items]="listMaster['type']" bindLabel="name" bindValue="id" formControlName="type">
+                        <label for="sts_id" class="control-label">Status</label>
+                        <ng-select [multiple]="true" [items]="listMaster['return_status']" bindLabel="name" bindValue="id" formControlName="sts_id">
                         </ng-select>
                     </div>
-                    <div class="block-search">
-                        <label for="po_status_id" class="control-label">Status</label>
-                        <ng-select [multiple]="true" [items]="listMaster['status']" bindLabel="name" bindValue="id" formControlName="sts">
-                        </ng-select>
-                    </div>
-                    <div class="block-search">
+                    <!-- <div class="block-search">
                         <label for="type" class="control-label" translate>Date Type</label>
                         <select class="form-control" formControlName="date_type">
                                   <option value="null" selected="true">--Select--</option>
                                   <option *ngFor="let item of listMaster['dateType']" [ngValue]="item.id">{{item.name}}</option>
                               </select>
-                    </div>
+                    </div> -->
                     <div class="block-search">
                         <label for="" class="control-label" translate> From</label>
                         <div clickOutside (clickOutside)="d.close()" class="input-group">
-                            <input [maxDate]="searchForm.value.date_to | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="d" formControlName="date_from" ngbDatepicker #d="ngbDatepicker">
+                            <input [maxDate]="searchForm.value.request_date_to | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="d" formControlName="request_date_from" ngbDatepicker #d="ngbDatepicker">
                             <div class="input-group-append">
                                 <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
                                             <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -59,7 +62,7 @@
                     <div class="block-search">
                         <label for="" class="control-label" translate> To</label>
                         <div clickOutside (clickOutside)="dt.close()" class="input-group">
-                            <input [minDate]="searchForm.value.date_from | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dt" formControlName="date_to" ngbDatepicker #dt="ngbDatepicker">
+                            <input [minDate]="searchForm.value.request_date_from | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dt" formControlName="request_date_to" ngbDatepicker #dt="ngbDatepicker">
                             <div class="input-group-append">
                                 <button class="btn btn-outline-secondary" (click)="dt.toggle()" type="button">
                                             <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -109,19 +112,19 @@
                                 </thead>
                                 <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                                     <tr>
-                                        <td><a class="text-primary" [routerLink]="['detail', item.id]">{{item.code}}</a></td>
-                                        <td>{{item.cus_po}}</td>
-                                        <td>{{item.quote_no}}</td>
-                                        <td>{{item.buyer_name}}</td>
+                                        <td><a class="text-primary" [routerLink]="['detail', item.id]">{{item.cd}}</a></td>
+                                        <td>{{item.return_type}}</td>
+                                        <td>{{item.company_name}}</td>
+                                        <td>{{item.request_date}}</td>
+                                        <td><span *ngIf="item.sts_name">{{item.sts_name['name']}}</span></td>
+                                        <td>{{item.order_code}}</td>
+                                        <td>{{item.warehouse_name}}</td>
+                                        <td class="text-center">{{item.total_return_qty}}</td>
+                                        <td class="text-center">{{item.total_accepted_qty}}</td>
+                                        <td>{{item.return_time}}</td>
                                         <td>{{item.sale_person_name}}</td>
-                                        <td></td>
-                                        <td>{{item.order_date | date:'MM/dd/yyy'}}</td>
-                                        <td>{{item.delivery_date | date:'MM/dd/yyyy'}}</td>
-                                        <td>{{item.total_price | currency}}</td>
-                                        <td> </td>
-                                        <td> </td>
-                                        <td> </td>
-                                        <td> </td>
+                                        <td>{{item.updated_at}}</td>
+                                        <td>{{item.updated_by}}</td>
                                         <td class="text-nowrap">
                                             <a ngbTooltip="Submit" class="btn btn-default" (click)="confirmModal(item.id, 'SM')"><i class="fa fa-share-square-o"></i></a>
                                             <a ngbTooltip="Approve" class="btn btn-default" (click)="confirmModal(item.id, 'AP')"><i class="fa fa-check" aria-hidden="true"></i></a>

@@ -241,6 +241,9 @@ export class CreditMemoCreateComponent implements OnInit {
             this.refresh();
         });
 
+        this.generalForm.get('payment_method_id').enable();
+        this.generalForm.get('payment_term_id').enable();
+
         if (this.generalForm.value.document_type === 2) {
             this.setDefaulValueRMA();
         }
@@ -268,6 +271,8 @@ export class CreditMemoCreateComponent implements OnInit {
         const user = JSON.parse(localStorage.getItem('currentUser'));
         const default_payment = (this.listMaster['payment_method'].find(item => item.cd === 'SC') || {}).id;
         this.generalForm.get('payment_method_id').disable();
+        this.generalForm.get('payment_term_id').disable();
+
         this.generalForm.patchValue({
             payment_method_id: default_payment,
             payment_term_id: 1,
@@ -296,7 +301,7 @@ export class CreditMemoCreateComponent implements OnInit {
             this.data['shipping_method'] = res.data.shipping_method;
 
             this.generalForm.patchValue({
-                ...this.data['order_detail'], approver_id: res.data.aprvr_id
+                ...this.data['order_detail'], approver_id: res.data.approver_id || res.data.aprvr_id
             });
             this.selectAddress('billing');
             this.updateTotal();
@@ -370,7 +375,7 @@ export class CreditMemoCreateComponent implements OnInit {
 
         this.list.items.forEach(item => {
             item.amount = (+item.quantity * (+item.price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
-            if (item.misc_id && item.id === 6) {
+            if (item.misc_id && item.misc_id === 6) {
                 this.order_info.restocking_fee = item.amount || 0;
                 return;
             }
@@ -533,7 +538,7 @@ export class CreditMemoCreateComponent implements OnInit {
         });
 
         const params = {
-            ...this.generalForm.value,
+            ...this.generalForm.getRawValue(),
             status: type,
             items,
             is_draft: is_draft || 0

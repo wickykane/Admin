@@ -1,6 +1,6 @@
 import { DecimalPipe } from '@angular/common';
 import { Directive, ElementRef, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
-import { NgModel } from '@angular/forms';
+import { NgControl, NgModel } from '@angular/forms';
 
 @Directive({
     // tslint:disable-next-line:directive-selector
@@ -23,8 +23,7 @@ export class NumberDirective implements OnInit {
         this._min = value || 0;
     }
 
-    constructor(private number: DecimalPipe, private element: ElementRef, private ngModel: NgModel) {
-
+    constructor(private number: DecimalPipe, private element: ElementRef, private ngModel: NgModel, private formControl: NgControl) {
     }
 
     @HostListener('input', ['$event'])
@@ -46,6 +45,7 @@ export class NumberDirective implements OnInit {
     @HostListener('keydown', ['$event'])
     onKeyDown(event) {
         const e = event;
+        const selected = getSelection().toString();
         if ([46, 8, 9, 27, 13, 110].indexOf(e.keyCode) !== -1 ||
             // Allow: Ctrl+A
             (e.keyCode === 65 && e.ctrlKey === true) ||
@@ -61,7 +61,7 @@ export class NumberDirective implements OnInit {
             return;
         }
 
-        const current: string = this.element.nativeElement.value;
+        const current: string = (selected) ? '' : this.element.nativeElement.value;
         const ch: string = current.concat(e.key);
 
         const regEx = new RegExp(this.regexStr);
@@ -76,12 +76,18 @@ export class NumberDirective implements OnInit {
     ngOnInit() {
         this.isDecimal = (this.isDecimal === true) ? 2 : this.isDecimal;
         this.regexStr = (this.isDecimal) ? `^[0-9]+[.]?[0-9]{0,${this.isDecimal}}$` : this.regexStr;
+
         this.ngModel.valueChanges.subscribe(data => {
             if (data && !this._init && this.isDecimal) {
                 this.ngModel.valueAccessor.writeValue(Number((+data).toFixed(2)));
                 this._init = true;
             }
         });
+
+        if (this.formControl.value && !this._init && this.isDecimal) {
+            this.formControl.control.setValue(Number((+this.formControl.value).toFixed(2)));
+            this._init = true;
+        }
     }
 
 }

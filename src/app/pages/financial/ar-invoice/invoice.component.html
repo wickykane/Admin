@@ -124,6 +124,7 @@
                             <table class="table table-bordered table-order" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                                 <thead class="bg-white">
                                     <tr>
+                                        <th style="width:50px"></th>
                                         <th>Invoice #</th>
                                         <th>Invoice Date</th>
                                         <th>SO #</th>
@@ -142,6 +143,12 @@
                                 </thead>
                                 <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                                     <tr>
+                                        <td>
+                                            <img *ngIf="item.sts_code!='CP'" src="assets/img/qbicon-gray.png" width="20px" height="20px">
+                                            <a *ngIf="item.sts_code=='CP'" href="https://sandbox.qbo.intuit.com/app/sales" target="_blank">
+                                                <img placement="top" ngbTooltip="Sent Invoice To QuickBooks {{item.updated_at}}" src="../../assets/img/qbicons.png" width="20px" height="20px">
+                                            </a>
+                                        </td>
                                         <td>
                                             <a class="text-primary" [routerLink]="['view', item.id]">{{item.inv_num}}</a>
                                         </td>
@@ -166,8 +173,8 @@
                                         </td>
                                         <td>{{item.aging_overdue}}</td>
                                         <!-- <td>{{item.paid_amount|currency}}</td> -->
-                                        <td>{{ item.updated_at}}</td>
-                                        <td>{{ item.updated_by}}</td>
+                                        <td>{{ item.updated_dt}}</td>
+                                        <td>{{ (item.updated_by_firstname && item.updated_by_lastname )? item.updated_by_firstname + ' ' + item.updated_by_lastname : ''}}</td>
                                         <td>
                                             <a class="btn btn-default" ngbTooltip="View" (click)="viewInvoice(item.id)">
                                                 <i class="fa fa-eye" aria-hidden="true"></i>
@@ -178,7 +185,7 @@
                                             <a ngbTooltip="Submit" *ngIf="item.invoice_status_id == 1 || item.invoice_status_id == 11 " class="btn btn-default" (click)="confirmModal(item.id, 2)"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></a>
                                             <a ngbTooltip="Revise" *ngIf="item.invoice_status_id == 2" class="btn btn-default" (click)="confirmModal(item.id, 11)"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></a>
                                             <a ngbTooltip="Approve" *ngIf="item['invoice_status_id'] == 2" class="btn btn-default" (click)="confirmModal(item.id, 4)"><i class="fa fa-check"></i></a>
-                                            <a class="btn btn-default" ngbTooltip="Cancel" (click)="confirmModal(item.id, 7)" *ngIf="item.invoice_status_id == 1 || item['invoice_status_id'] == 2">
+                                            <a class="btn btn-default" ngbTooltip="Cancel" (click)="confirmModal(item.id, 7)" *ngIf="[1,2,4].indexOf(item.invoice_status_id) != -1">
                                                 <i class="fa fa-times-circle" aria-hidden="true"></i>
                                             </a>
                                             <!-- <a ngbTooltip="Reject" *ngIf="item['invoice_status_id'] == 2" class="btn btn-default" (click)="confirmModal(item.id, 3)"><i class="fa fa-ban" aria-hidden="true"></i></a> -->

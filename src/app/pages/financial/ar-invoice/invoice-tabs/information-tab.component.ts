@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FinancialService } from '../../financial.service';
 import { TableService } from './../../../../services/table.service';
@@ -11,6 +11,7 @@ import { environment } from '../../../../../environments/environment';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { MailModalComponent } from '../modals/mail.modal';
 import { PODModalComponent } from '../modals/POD/pod.modal';
+import { InvoiceDetailComponent } from '../view/invoice.view.component';
 
 @Component({
     selector: 'app-invoice-info-tab',
@@ -42,7 +43,6 @@ export class InvoiceInformationTabComponent implements OnInit {
     };
 
     public invoice_info: any = {};
-    public own_carrirer = true;
 
     public detail: any = {
         'contact_user': {},
@@ -60,6 +60,7 @@ export class InvoiceInformationTabComponent implements OnInit {
         private http: HttpClient,
         private modalService: NgbModal,
         private financialService: FinancialService,
+        @Inject(InvoiceDetailComponent) private parent: InvoiceDetailComponent,
         public tableService: TableService) {
     }
 
@@ -156,5 +157,9 @@ export class InvoiceInformationTabComponent implements OnInit {
             }
         }, dismiss => { });
         modalRef.componentInstance.invoiceId = this._invoiceId;
+    }
+
+    selectTab(id) {
+        this.parent.selectTab(id);
     }
 }

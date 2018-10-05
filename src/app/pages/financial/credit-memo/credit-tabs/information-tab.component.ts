@@ -97,7 +97,7 @@ export class CreditInformationTabComponent implements OnInit {
                 this.detail.contact_user = res.data.contact_user || [];
                 this.detail.shipping_address = res.data.shipping || [];
                 this.detail.billing = res.data.billing || [];
-                this.updateTotal();
+                // this.updateTotal();
             } catch (e) {
                 console.log(e);
             }

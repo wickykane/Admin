@@ -40,7 +40,7 @@ export class SaleOrderComponent implements OnInit {
         'AP': { color: 'strong-green', name: 'Approved', img: './assets/images/icon/approved.png' },
         'IP': { color: 'rock-blue', name: 'Allocated' },
         'PP': { color: 'green', name: 'Preparing' },
-        'RS': { color: 'darkblue', name: 'Ready To Ship' },
+        'RS': { color: 'darkblue', name: 'Ready To Deliver' },
         'DL': { color: 'pink', name: 'Delivering' },
         'PD': { color: 'bright-grey', name: 'Partial Delivery' },
         'CP': { color: 'lemon', name: 'Completed', img: './assets/images/icon/full_delivered.png' },
@@ -216,6 +216,12 @@ export class SaleOrderComponent implements OnInit {
             }, 1000);
         }
         );
+    }
+
+    edit(id) {
+        this.orderService.checkOrderEditable(id).subscribe(res => {
+            this.router.navigate(['/order-management/sale-order/edit', id]);
+        });
     }
 
     putApproveOrder(order_id) {

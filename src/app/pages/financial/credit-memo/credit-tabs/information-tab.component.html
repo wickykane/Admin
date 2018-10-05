@@ -53,11 +53,11 @@
                                             <div class='col-6'>
                                                 <span class="badge badge-info bg-blue" *ngIf="detail['sts_code'] == 'NW'">{{detail['sts']}}</span>
                                                 <span class="badge badge-warning bg-texas-rose" *ngIf="detail['sts_code'] == 'SB'">{{detail['sts']}}</span>
-                                                <span class="badge badge-danger bg-magenta" *ngIf="detail['sts_code'] == 'AP'">{{detail['sts']}}</span>
-                                                <span class="badge badge-success bg-strong-green" *ngIf="detail['sts_code'] == 'RJ'">{{detail['sts']}}</span>
-                                                <span class="badge badge-primary bg-darkblue" *ngIf="detail['sts_code'] == 'CC'">{{detail['sts']}}</span>
+                                                <span class="badge badge-danger bg-magenta" *ngIf="detail['sts_code'] == 'RJ'">{{detail['sts']}}</span>
+                                                <span class="badge badge-success bg-strong-green" *ngIf="detail['sts_code'] == 'AP'">{{detail['sts']}}</span>
+                                                <span class="badge badge-danger bg-red" *ngIf="detail['sts_code'] == 'CC'">{{detail['sts']}}</span>
                                                 <span class="badge badge-primary bg-lemon" *ngIf="detail['sts_code'] == 'RD'">{{detail['sts']}}</span>
-                                                <span class="badge badge-danger bg-red" *ngIf="detail['sts_code'] == 'RF'">{{detail['sts']}}</span>
+                                                <span class="badge badge-primary bg-bright-grey" *ngIf="detail['sts_code'] == 'RF'">{{detail['sts']}}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -296,7 +296,7 @@
                                         <th class="text-center" translate>Description</th>
                                         <th class="text-center" translate>Condition</th>
                                         <th class="text-center" translate>UOM</th>
-                                        <th class="text-center" translate>Free Ship</th>
+                                        <!-- <th class="text-center" translate>Free Ship</th> -->
                                         <th class="text-nowrap text-center" translate>QTY</th>
                                         <th class="text-center" translate>Unit Price</th>
                                         <th class="text-center" translate>Disc %</th>
@@ -314,9 +314,9 @@
                                         <td>{{item.des || item.misc_name}}</td>
                                         <td class="text-center">{{item.condition_name}}</td>
                                         <td>{{item.uom_name || item.uom}}</td>
-                                        <td class="text-center">
+                                        <!-- <td class="text-center">
                                             <i *ngIf="item.is_shipping_free" class="text-success fa fa-check"></i>
-                                        </td>
+                                        </td> -->
                                         <td class="text-right">{{item.quantity}}</td>
                                         <td class="text-right">
                                             <div>
@@ -364,13 +364,13 @@
                                             <strong class="text-warning">Sub Total</strong>
                                         </label>
                                     <div class='col-6 offset-md-1 padding-lr-10'>
-                                        <strong>{{detail['sub_total'] | currency}}</strong>
+                                        <strong>{{detail['sub_total_price'] | currency}}</strong>
                                     </div>
                                 </div>
-                                <div *ngFor="let item of detail['taxs']" class="form-group row">
-                                    <label class='col-6 control-label'>+ TAX ({{item.value}}%):</label>
+                                <div *ngFor="let item of detail['tax']" class="form-group row">
+                                    <label class='col-6 control-label'>+ TAX ({{item.key}}%):</label>
                                     <div class='col-5 padding-lr-10'>
-                                        <input class="form-control" readonly="true" [(ngModel)]="item.amount" class="form-control" value="0" type="number">
+                                        <input class="form-control" readonly="true" [(ngModel)]="item.value" class="form-control" value="0" type="number">
                                     </div>
                                 </div>
                                 <div class="form-group row">
