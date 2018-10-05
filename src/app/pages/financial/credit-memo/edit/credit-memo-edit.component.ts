@@ -219,8 +219,9 @@ export class CreditMemoEditComponent implements OnInit {
                 this.generalForm.patchValue(data);
                 this.list.items = data.items || [];
                 this.changeCustomer(1);
-                if (data.payment_method_id === 1) {
+                if (data.document_type === 2) {
                     this.generalForm.get('payment_method_id').disable(); // Disable If Store Credit
+                    this.generalForm.get('payment_term_id').disable();
                 }
 
                 // Lazy Load filter
@@ -281,6 +282,9 @@ export class CreditMemoEditComponent implements OnInit {
             this.refresh();
         });
 
+        this.generalForm.get('payment_method_id').enable();
+        this.generalForm.get('payment_term_id').enable();
+
         if (this.generalForm.value.document_type === 2 && !flag) {
             this.setDefaulValueRMA();
         }
@@ -310,6 +314,7 @@ export class CreditMemoEditComponent implements OnInit {
         const user = JSON.parse(localStorage.getItem('currentUser'));
         const default_payment = (this.listMaster['payment_method'].find(item => item.cd === 'SC') || {}).id;
         this.generalForm.get('payment_method_id').disable();
+        this.generalForm.get('payment_term_id').disable();
         this.generalForm.patchValue({
             payment_method_id: default_payment,
             payment_term_id: 1,
