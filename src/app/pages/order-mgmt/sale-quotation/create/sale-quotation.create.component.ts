@@ -618,9 +618,9 @@ export class SaleQuotationCreateComponent implements OnInit {
 
 
     calculateShipping() {
-        // if (!this.generalForm.value.shipping_id) {
-        //     return;
-        // }
+        if (!this.generalForm.value.ship_rate || !this.generalForm.value.company_id) {
+            return;
+        }
         const params = {
             'customer': this.generalForm.value.company_id,
             'warehouse': this.generalForm.value.warehouse_id,

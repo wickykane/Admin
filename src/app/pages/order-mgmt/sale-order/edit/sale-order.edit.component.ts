@@ -643,9 +643,9 @@ export class SaleOrderEditComponent implements OnInit {
     }
 
     calcTaxShipping() {
-        // if (!this.generalForm.getRawValue().shipping_id) {
-        //     return;
-        // }
+        if (!this.generalForm.value.ship_method_rate || !this.generalForm.value.buyer_id) {
+            return;
+        }
         const params = {
             'customer': this.generalForm.getRawValue().buyer_id,
             'warehouse': this.generalForm.getRawValue().warehouse_id,
