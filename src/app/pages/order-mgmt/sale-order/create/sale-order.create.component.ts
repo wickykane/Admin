@@ -506,19 +506,18 @@ export class SaleOrderCreateComponent implements OnInit {
         };
         this.orderService.getTaxShipping(params).subscribe(res => {
 
-            if (res.data.mics) {
-                const old_misc = this.list.items.filter(item => item.misc_id && [1, 2].indexOf(item.misc_id) === -1 && +item.source_id !== 3);
-                const items = res.data.items || this.list.items.filter(item => !item.misc_id);
-                const misc = res.data.mics.map(item => {
-                    item.is_misc = 1;
-                    item.misc_id = item.id;
-                    item.discount_percent = 0;
-                    item.warehouse = this.listMaster['warehouses'];
-                    return item;
-                });
+            res.data.mics = res.data.mics || [];
+            const old_misc = this.list.items.filter(item => item.misc_id && [1, 2].indexOf(item.misc_id) === -1 && +item.source_id !== 3);
+            const items = res.data.items || this.list.items.filter(item => !item.misc_id);
+            const misc = res.data.mics.map(item => {
+                item.is_misc = 1;
+                item.misc_id = item.id;
+                item.discount_percent = 0;
+                item.warehouse = this.listMaster['warehouses'];
+                return item;
+            });
 
-                this.list.items = items.concat(misc, old_misc);
-            }
+            this.list.items = items.concat(misc, old_misc);
 
             // Assign tax to all item
             this.list.items.forEach(item => item.tax_percent = res.data.tax_percent);
