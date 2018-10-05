@@ -144,16 +144,16 @@
                                             <a class="btn btn-default" ngbTooltip="View" (click)="viewReceipt(item.id)">
                                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default " ngbTooltip="Edit" (click)="editReceipt(item.id)" *ngIf="item.sts_code == 'NW'">
+                                            <a class="btn btn-default " ngbTooltip="Edit" (click)="editReceipt(item.id)" *ngIf="item.sts_code == 'NW' || item.sts_code == 'ER'">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
-                                            <a ngbTooltip="Submit" *ngIf="item.sts_code == 'NW'" class="btn btn-default" (click)="confirmModal(item.id, 2)"><i class="fa fa-caret-square-o-right"
+                                            <a ngbTooltip="Submit" *ngIf="item.sts_code == 'NW' && item.electronic != 'Yes'" class="btn btn-default" (click)="confirmModal(item.id, 2)"><i class="fa fa-caret-square-o-right"
                                                     aria-hidden="true"></i></a>
                                             <a class="btn btn-default" ngbTooltip="Cancel" (click)="confirmModal(item.id, 6)" *ngIf="item.sts_code == 'NW'">
                                                 <i class="fa fa-times-circle" aria-hidden="true"></i>
                                             </a>
-                                            <a ngbTooltip="Approve" *ngIf="item.sts_code == 'SB'" class="btn btn-default" (click)="confirmModal(item.id, 3)"><i class="fa fa-check"></i></a>
-                                            <a ngbTooltip="Reject" *ngIf="item.sts_code == 'SB'" class="btn btn-default" (click)="confirmModal(item.id, 4)"><i class="fa fa-ban" aria-hidden="true"></i></a>
+                                            <a ngbTooltip="Approve" *ngIf="item.sts_code == 'SB' && item.electronic != 'Yes'" class="btn btn-default" (click)="confirmModal(item.id, 3)"><i class="fa fa-check"></i></a>
+                                            <a ngbTooltip="Reject" *ngIf="item.sts_code == 'SB' && item.electronic != 'Yes'" class="btn btn-default" (click)="confirmModal(item.id, 4)"><i class="fa fa-ban" aria-hidden="true"></i></a>
                                             <!-- <a class="btn btn-default" ngbTooltip="Print" (click)="printPDF(item.id, item.inv_num)">
                                                 <i class="fa fa-download" aria-hidden="true"></i>
                                             </a> -->
