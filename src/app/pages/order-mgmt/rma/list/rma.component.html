@@ -25,7 +25,7 @@
                     </div>
                     <div class="block-search">
                         <label for="contract_no" class="control-label">Customer</label>
-                        <ng-select class="infinity-scroll-select"  [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 100px; margin-left: 2px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="company_id">
+                        <ng-select class="infinity-scroll-select"  [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 100px; margin-left: 2px;" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="company_id">
                            <ng-template ng-option-tmp let-item="item">
                                <span title="{{item.company_name}}">{{item.company_name}}</span>
                            </ng-template>
