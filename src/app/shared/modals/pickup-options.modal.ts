@@ -193,23 +193,18 @@ export class PickupOptionsModalComponent implements OnInit, OnDestroy {
     checkAllBussinessHour() {
         let checked = true;
         if (this._wareHouseList) {
+            let keepGoing = true;
             this._wareHouseList.forEach(subItem => {
-                subItem.bussiness_hours.forEach(item => {
-                    if (item.selected) {
+                if (keepGoing) {
+                    if (this.checkBussinessHour(subItem.bussiness_hours)) {
+                        checked = true;
+                        keepGoing = false;
+                    } else {
                         checked = false;
                     }
-                });
+                }
             });
-            if (checked) {
-                this.generalForm.setErrors({ invalid: true });
-            } else {
-                this.generalForm.setErrors(null);
-            }
-            console.log(this.generalForm);
             return checked;
-        } else {
-            return false;
         }
     }
-
 }
