@@ -36,6 +36,7 @@ export class ReturnOrderInformationTabComponent implements OnInit {
     }
 
     @Output() stockValueChange = new EventEmitter();
+    public requiredInv = true;
 
     public detail = {
         'billing': {},
