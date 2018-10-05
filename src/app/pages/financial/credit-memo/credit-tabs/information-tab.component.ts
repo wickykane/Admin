@@ -94,6 +94,7 @@ export class CreditInformationTabComponent implements OnInit {
         this.creditMemoService.getDetailCreditMemo(this._creditId).subscribe(res => {
             try {
                 this.detail = res.data;
+                this.detail.items =  this.detail.items || [];
                 this.detail.contact_user = res.data.contact_user || [];
                 this.detail.shipping_address = res.data.shipping || [];
                 this.detail.billing = res.data.billing || [];
