@@ -171,6 +171,7 @@ export class CreditMemoListComponent implements OnInit {
         }, dismiss => { });
         modalRef.componentInstance.creditId = id;
     }
+
     printPDF(id) {
         const path = 'credit-memo/export-pdf/';
         const url = `${environment.api_url}${path}${id}`;
@@ -179,11 +180,9 @@ export class CreditMemoListComponent implements OnInit {
             headers,
             responseType: 'blob',
         }).subscribe(res => {
-            const file = new Blob([res], { type: 'application/pdf' });
-            const fileURL = URL.createObjectURL(file);
-            const newWindow = window.open(fileURL);
+            const newWindow = window.open(`assets/pdfjs/web/viewer.html?openFile=false&encrypt=true&fileName=CreditMemo.pdf&file=${btoa(url)}`, '_blank');
+            newWindow.document.title = 'CreditMemo';
             newWindow.focus();
-            newWindow.print();
         });
     }
 
