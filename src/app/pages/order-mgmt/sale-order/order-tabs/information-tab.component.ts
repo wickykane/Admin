@@ -227,11 +227,13 @@ export class SaleOrderInformationTabComponent implements OnInit {
     }
 
     edit() {
-        const id = this._orderId;
-        this.orderService.checkOrderEditable(id).subscribe(res => {
-            this.router.navigate(['/order-management/sale-order/edit', id]);
-        });
+        if (this.detail['edit_message']) {
+            this.toastr.error(this.detail['edit_message']);
+        } else {
+            this.router.navigate(['/order-management/sale-order/edit', this._orderId]);
+        }
     }
+    
     generateInvoice() {
         const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
         modalRef.result.then(res => {

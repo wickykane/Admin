@@ -74,6 +74,7 @@ export class CreditInformationTabComponent implements OnInit {
         }, dismiss => { });
         modalRef.componentInstance.creditId = id;
     }
+
     printPDF(id) {
         const path = 'credit-memo/export-pdf/';
         const url = `${environment.api_url}${path}${id}`;
@@ -82,19 +83,18 @@ export class CreditInformationTabComponent implements OnInit {
             headers,
             responseType: 'blob',
         }).subscribe(res => {
-                const file = new Blob([res], { type: 'application/pdf' });
-                const fileURL = URL.createObjectURL(file);
-                const newWindow = window.open(fileURL);
-                newWindow.focus();
-                newWindow.print();
-            });
+            const newWindow = window.open(`assets/pdfjs/web/viewer.html?openFile=false&encrypt=true&fileName=CreditMemo.pdf&file=${btoa(url)}`, '_blank');
+            newWindow.document.title = 'CreditMemo';
+            newWindow.focus();
+        });
     }
+
 
     getList() {
         this.creditMemoService.getDetailCreditMemo(this._creditId).subscribe(res => {
             try {
                 this.detail = res.data;
-                this.detail.items =  this.detail.items || [];
+                this.detail.items = this.detail.items || [];
                 this.detail.contact_user = res.data.contact_user || [];
                 this.detail.shipping_address = res.data.shipping || [];
                 this.detail.billing = res.data.billing || [];
@@ -131,7 +131,7 @@ export class CreditInformationTabComponent implements OnInit {
             const amount = (+item.quantity * (+item.price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
             this.detail.sub_total += amount;
         });
-        this.detail.total = (+this.detail['total_tax'] || 0)  + +this.detail.sub_total;
+        this.detail.total = (+this.detail['total_tax'] || 0) + +this.detail.sub_total;
         if (this.detail.incentive_percent) {
             this.detail.incentive = +this.detail.incentive_percent * +this.detail.total / 100;
         }
@@ -152,7 +152,7 @@ export class CreditInformationTabComponent implements OnInit {
     }
 
     reopentCredit(id) {
-        this.creditMemoService.reopenCredit( id).subscribe(res => {
+        this.creditMemoService.reopenCredit(id).subscribe(res => {
             try {
                 this.toastr.success(res.message);
                 this.getList();

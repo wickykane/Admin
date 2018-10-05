@@ -218,10 +218,13 @@ export class SaleOrderComponent implements OnInit {
         );
     }
 
-    edit(id) {
-        this.orderService.checkOrderEditable(id).subscribe(res => {
+    edit(item) {
+        if (item.edit_message) {
+            this.toastr.error(item.edit_message);
+        } else {
+            const id = item.id;
             this.router.navigate(['/order-management/sale-order/edit', id]);
-        });
+        }
     }
 
     putApproveOrder(order_id) {
