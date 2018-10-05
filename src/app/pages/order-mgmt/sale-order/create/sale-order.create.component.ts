@@ -215,7 +215,7 @@ export class SaleOrderCreateComponent implements OnInit {
                 this.generalForm.patchValue({ contact_user_id: this.addr_select.contact.id });
                 // }
 
-                const default_billing = (this.customer.billing || []).find(item => item.set_default) || {};
+                const default_billing = (this.customer.billing || []).find(item => item.set_default) || this.customer.billing[0] || {};
                 const default_shipping = (this.customer.shipping || []).find(item => item.set_default) || this.customer.shipping[0] || {};
                 this.generalForm.patchValue({
                     billing_id: default_billing.address_id || null,
@@ -272,7 +272,7 @@ export class SaleOrderCreateComponent implements OnInit {
             switch (type) {
                 case 'shipping':
                     if (!flag) {
-                        this.generalForm.patchValue({ 'carrier_id': null, 'ship_method_option': null, 'ship_method_rate': null });
+                        this.generalForm.patchValue({ 'carrier_id': 4, 'ship_method_option': null, 'ship_method_rate': null });
                     }
                     const ship_id = this.generalForm.getRawValue().shipping_id;
 
@@ -306,7 +306,7 @@ export class SaleOrderCreateComponent implements OnInit {
     }
 
     changeShipVia() {
-        const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.getRawValue().carrier_id) || { 'options': [], 'ship_rate': [], 'own_carrirer': '' };
+        const carrier = (this.listMaster['carriers'] || []).find(item => item.id === this.generalForm.getRawValue().carrier_id) || { 'options': [], 'ship_rate': [], 'own_carrirer': '' };
         this.listMaster['options'] = carrier.options || [];
         this.listMaster['ship_rates'] = carrier.ship_rate || [];
 
@@ -429,6 +429,7 @@ export class SaleOrderCreateComponent implements OnInit {
             this.generalForm.patchValue({ carrier_id: 4 });
             this.generalForm.get('carrier_id').enable();
             this.generalForm.get('ship_method_rate').enable();
+            this.changeShipVia();
         }
         this.refresh();
     }
