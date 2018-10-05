@@ -191,7 +191,7 @@
                                             <a ngbTooltip="Re Open" *ngIf="item['sts_code'] == 'RJ'" class="btn btn-default" (click)="confirmModal(item.id, 'RO')"><i class="fa fa-clone"></i></a>
                                             <a ngbTooltip="Copy" class="btn btn-default" (click)="confirmModal(item.id, 'CLONE')"><i class="fa fa-clone"></i></a>
 
-                                            <a ngbTooltip="Edit" *ngIf="item['sts_code'] == 'NW' || item['sts_code'] == 'RV' || !item['total_paid'] && (item['sts_code'] == 'AP' || item['sts_code'] == 'IP' || item['sts_code'] == 'PP' || item['sts_code'] == 'RS') " class="btn btn-default" (click)="edit(item.id)"><i class="fa fa-pencil-square"></i></a>
+                                            <a ngbTooltip="Edit" *ngIf="item['sts_code'] == 'NW' || item['sts_code'] == 'RV' || !item['total_paid'] && (item['sts_code'] == 'AP' || item['sts_code'] == 'IP' || item['sts_code'] == 'PP' || item['sts_code'] == 'RS') " class="btn btn-default" (click)="edit(item)"><i class="fa fa-pencil-square"></i></a>
                                             <a ngbTooltip="View" class="btn btn-default" [routerLink]="['/order-management/sale-order/detail', item.id]"><i class="fa fa-eye"></i></a>
                                         </td>
                                     </tr>
