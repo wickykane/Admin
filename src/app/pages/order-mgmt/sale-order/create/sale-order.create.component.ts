@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 
 import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
 import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
@@ -17,8 +18,6 @@ import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { ItemMiscModalContent } from '../../../../shared/modals/item-misc.modal';
 import { ItemModalContent } from '../../../../shared/modals/item.modal';
 import { OrderHistoryModalContent } from '../../../../shared/modals/order-history.modal';
-// import { OrderSaleQuoteModalContent } from '../../../../shared/modals/order-salequote.modal';
-import { PromotionModalContent } from '../../../../shared/modals/promotion.modal';
 import { SaleOrderCreateKeyService } from './keys.control';
 
 
@@ -123,6 +122,7 @@ export class SaleOrderCreateComponent implements OnInit {
         private route: ActivatedRoute,
         private modalService: NgbModal,
         private orderService: OrderService,
+        private _hotkeysService: HotkeysService,
         public keyService: SaleOrderCreateKeyService,
         private dt: DatePipe) {
         this.generalForm = fb.group({
@@ -147,7 +147,7 @@ export class SaleOrderCreateComponent implements OnInit {
             'ship_method_option': [null]
         });
         //  Init Key
-        this.keyService.watchContext.next(this);
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {

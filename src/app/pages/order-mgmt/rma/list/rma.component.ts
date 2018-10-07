@@ -13,7 +13,6 @@ import { HotkeysService } from 'angular2-hotkeys';
 // tslint:disable-next-line:import-blacklist
 import { Subject } from 'rxjs';
 import { RMAService } from '../rma.service';
-import { CommonService } from './../../../../services/common.service';
 import { RMAKeyService } from './keys.control';
 
 
@@ -31,24 +30,22 @@ export class RmaComponent implements OnInit {
      * Variable Declaration
      */
     public messageConfig = {
-        'SM': 'Are you sure that you want to submit current order ?',
-        'CC': 'Are you sure that you want to cancel current order?',
-        'AP': 'Are you sure that you want to approve current order?',
+        'SB': 'Are you sure that you want to submit this order to approver?',
+        'CC': 'Are you sure that you want to cancel this return order?',
+        'AP': 'Are you sure that you want to approve and send this return order to warehouse?',
         'RJ': 'Are you sure that you want to reject current order?',
-        'RV': 'Are you sure that you want to revise current order?',
+        'RC': 'Are you sure that you want to revise this return order?',
+        'CC_AR': 'Are you sure that you want to cancel this order and inform to warehouse?'
     };
 
     public statusConfig = {
         'NW': { color: 'blue', name: 'New', img: './assets/images/icon/new.png' },
-        'SM': { color: 'texas-rose', name: 'Submited' },
-        'AP': { color: 'strong-green', name: 'Approved', img: './assets/images/icon/approved.png' },
-        'IP': { color: 'rock-blue', name: 'Allocated' },
-        'PP': { color: 'green', name: 'Preparing' },
-        'RS': { color: 'darkblue', name: 'Ready To Ship' },
-        'DL': { color: 'pink', name: 'Delivering' },
-        'PD': { color: 'bright-grey', name: 'Partial Delivery' },
+        'SB': { color: 'texas-rose', name: 'Submited' },
+        'RC': { color: 'strong-green', name: 'Revised', img: './assets/images/icon/approved.png' },
+        'AR': { color: 'rock-blue', name: 'Awaiting Receipt' },
+        'IR': { color: 'green', name: 'In Receipt' },
+        'RT': { color: 'darkblue', name: 'Received' },
         'CP': { color: 'lemon', name: 'Completed', img: './assets/images/icon/full_delivered.png' },
-        'RJ': { color: 'magenta', name: 'Rejected' },
         'CC': { color: 'red', name: 'Canceled', img: './assets/images/icon/cancel.png' },
     };
 
@@ -58,10 +55,9 @@ export class RmaComponent implements OnInit {
     public list = {
         items: []
     };
-    //  public showProduct: boolean = false;
     public data = {};
-    public listMoreFilter: any = [];
     public searchKey = new Subject<any>();
+    public selected_message = '';
 
     searchForm: FormGroup;
 
@@ -83,7 +79,6 @@ export class RmaComponent implements OnInit {
             'warehouse_id': [null],
             'sts_id': [null],
             'buyer_name': [null],
-            // 'date_type': [null],
             'request_date_to': [null],
             'request_date_from': [null],
 
@@ -98,12 +93,11 @@ export class RmaComponent implements OnInit {
 
     ngOnInit() {
         //  Init Fn
-        this.listMoreFilter = [{ value: false, name: 'Date Filter' }];
         this.listMaster['dateType'] = [{ id: 'order_dt', name: 'Order Date' }, { id: 'delivery_dt', name: 'Delivery Date' }];
         this.listMaster['type'] = [{ id: 'PKU', name: 'Pickup ' }, { id: 'NO', name: 'Regular Order' }, { id: 'ONL', name: 'Ecommerce' }, { id: 'XD', name: 'X-Docks' }];
 
         this.getRMAReference();
-        this.countOrderStatus();
+        // this.countOrderStatus();
         this.getList();
 
         // Lazy Load filter
@@ -135,33 +129,44 @@ export class RmaComponent implements OnInit {
      * Internal Function
      */
 
-    countOrderStatus() {
-        this.countStatus = [{}, {}];
-        // this.service.countStatus().subscribe(res => {
-        //     res.data.map(item => {
-        //         if (this.statusConfig[item.short_name]) {
-        //             this.statusConfig[item.short_name].count = item.count;
-        //             this.statusConfig[item.short_name].status = item.id;
-        //             this.statusConfig[item.short_name].name = item.name;
-        //         }
-        //     });
-        //     this.countStatus = Object.keys(this.statusConfig).map(key => {
-        //         return this.statusConfig[key];
-        //     });
-        //     this.refresh();
-        // });
+    filter(status) {
+        const params = { sts_id: status };
+        this.service.getListRMA(params).subscribe(res => {
+            try {
+                this.list.items = res.data.rows;
+                this.tableService.matchPagingOption(res.data);
+                this.refresh();
+            } catch (e) {
+                console.log(e);
+            }
+        });
     }
 
     getRMAReference() {
+        this.countStatus = [{}, {}];
         this.service.getOrderReference().subscribe(res => {
             this.listMaster['warehouses'] = res.data.warehouses || []; this.refresh();
         });
         this.service.getRMAReference().subscribe(res => {
             this.listMaster['return_status'] = res.data.return_status || [];
+            // count status
+            this.listMaster['return_status'].map(item => {
+                if (this.statusConfig[item.cd]) {
+                    this.statusConfig[item.cd].count = item.count;
+                    this.statusConfig[item.cd].status = item.id;
+                    this.statusConfig[item.cd].name = item.name;
+                }
+            });
+            this.countStatus = Object.keys(this.statusConfig).map(key => {
+                return this.statusConfig[key];
+            });
             this.listMaster['return_type'] = res.data.return_type || [];
             this.refresh();
         });
 
+    }
+    detailOrder(id) {
+        this.router.navigate(['/order-management/sale-order/detail', id]);
     }
 
     fetchMoreCustomer(data?) {
@@ -204,8 +209,8 @@ export class RmaComponent implements OnInit {
             (params[key] === null || params[key] === '') && delete params[key];
         });
         //
-        // params.order = 'id';
-        // params.sort = 'desc';
+        params.order = 'id';
+        params.sort = 'desc';
 
         this.list.items = [{}, {}];
 
@@ -218,72 +223,47 @@ export class RmaComponent implements OnInit {
                 console.log(e);
             }
         });
+        this.refresh();
     }
 
+    updateStatus(id, status) {
+        const params = { return_order_id: id, status_id: status };
+        this.service.updateStatus(params).subscribe(res => {
+            try {
+                this.toastr.success(res.message);
+                this.getList();
+                this.getRMAReference();
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
 
-    confirmModal(id, status) {
+    confirmModal(id, status, status_item) {
         const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
         modalRef.result.then(res => {
             if (res) {
-                switch (status) {
-                    case 'SM':
-                        this.updateStatusOrder(id, 6);
-                        break;
-                    case 'AP':
-                        this.putApproveOrder(id);
-                        break;
-                    case 'RJ':
-                        this.updateStatusOrder(id, 11);
-                        break;
-                    case 'CC':
-                        this.updateStatusOrder(id, 7);
-                        break;
-                    case 'RO':
-                        this.updateStatusOrder(id, 1);
-                        break;
-                    case 'CLONE':
-                        this.cloneNewOrder(id);
-                        break;
-                }
+                this.updateStatus(id, status);
             }
         }, dismiss => { });
-        modalRef.componentInstance.message = this.messageConfig[status];
+        switch (status) {
+            case 2:
+                // cancel
+                this.selected_message = (status_item < 3) ? this.messageConfig.CC : this.messageConfig.CC_AR ;
+                break;
+            case 3:
+                this.selected_message = this.messageConfig.SB;
+                break;
+            case 4:
+            // this.selected_message = this.messageConfig.reject;
+            // break;
+            case 5:
+            this.selected_message = this.messageConfig.AP;
+            break;
+        }
+        modalRef.componentInstance.message = this.selected_message;
         modalRef.componentInstance.yesButtonText = 'Yes';
         modalRef.componentInstance.noButtonText = 'No';
-    }
-
-    cloneNewOrder(id) {
-        // this.service.cloneOrder(id).subscribe(res => {
-        //     this.toastr.success(res.message);
-        //     setTimeout(() => {
-        //         this.router.navigate(['/order-management/return-order/edit', res.data.id]);
-        //     }, 1000);
-        // }
-        // );
-    }
-
-    putApproveOrder(order_id) {
-
-        // this.service.approveOrd(order_id).subscribe(res => {
-        //
-        //     this.toastr.success(res.message);
-        //     setTimeout(() => {
-        //         this.getList();
-        //     }, 500);
-        //
-        // }
-        // );
-    }
-
-    updateStatusOrder(order_id, status) {
-        // this.service.updateStatusOrder(order_id, status).subscribe(res => {
-        //
-        //     this.toastr.success(res.message);
-        //     setTimeout(() => {
-        //         this.getList();
-        //     }, 500);
-        // }
-        // );
     }
 
 }

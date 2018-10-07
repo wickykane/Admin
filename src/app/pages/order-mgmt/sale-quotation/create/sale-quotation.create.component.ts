@@ -142,10 +142,8 @@ export class SaleQuotationCreateComponent implements OnInit {
             'ship_rate': [null],
             'ship_method_option': [null],
             'warehouse_id': [1, Validators.required],
-
             'delivery_date': [null],
             'contact_user_id': [null],
-
             'sales_person': [null, Validators.required],
             'payment_method_id': [null, Validators.required],
             'payment_term_id': [null, Validators.required],

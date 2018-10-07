@@ -70,5 +70,10 @@ export class RMAService {
       const url = ['order', id].join('/');
       return this.API.get(url);
   }
+  // change status return order
+  updateStatus(params) {
+      const url = ['return-order', 'change-status'].join('/');
+      return this.API.post(url, params);
+  }
 
 }
