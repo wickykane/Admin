@@ -241,6 +241,9 @@ export class CreditMemoCreateComponent implements OnInit {
             this.refresh();
         });
 
+        this.generalForm.get('payment_method_id').enable();
+        this.generalForm.get('payment_term_id').enable();
+
         if (this.generalForm.value.document_type === 2) {
             this.setDefaulValueRMA();
         }
@@ -268,6 +271,8 @@ export class CreditMemoCreateComponent implements OnInit {
         const user = JSON.parse(localStorage.getItem('currentUser'));
         const default_payment = (this.listMaster['payment_method'].find(item => item.cd === 'SC') || {}).id;
         this.generalForm.get('payment_method_id').disable();
+        this.generalForm.get('payment_term_id').disable();
+
         this.generalForm.patchValue({
             payment_method_id: default_payment,
             payment_term_id: 1,

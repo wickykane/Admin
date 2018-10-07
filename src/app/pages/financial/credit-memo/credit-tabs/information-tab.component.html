@@ -305,7 +305,7 @@
 
                                     </tr>
                                 </thead>
-                                <tr *ngIf="detail?.items?.length === 0">
+                                <tr *ngIf="detail.items?.length === 0">
                                     <td colspan="100%" class="text-center" translate>No data.</td>
                                 </tr>
                                 <tbody *ngFor="let item of detail.items; let $index = index;">
@@ -364,13 +364,13 @@
                                             <strong class="text-warning">Sub Total</strong>
                                         </label>
                                     <div class='col-6 offset-md-1 padding-lr-10'>
-                                        <strong>{{detail['sub_total'] | currency}}</strong>
+                                        <strong>{{detail['sub_total_price'] | currency}}</strong>
                                     </div>
                                 </div>
-                                <div *ngFor="let item of detail['taxs']" class="form-group row">
-                                    <label class='col-6 control-label'>+ TAX ({{item.value}}%):</label>
+                                <div *ngFor="let item of detail['tax']" class="form-group row">
+                                    <label class='col-6 control-label'>+ TAX ({{item.key}}%):</label>
                                     <div class='col-5 padding-lr-10'>
-                                        <input class="form-control" readonly="true" [(ngModel)]="item.amount" class="form-control" value="0" type="number">
+                                        <input class="form-control" readonly="true" numberDirective isDecimal="true" [(ngModel)]="item.value" class="form-control" value="0" type="number">
                                     </div>
                                 </div>
                                 <div class="form-group row">

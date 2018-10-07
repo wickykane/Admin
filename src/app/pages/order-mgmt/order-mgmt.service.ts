@@ -295,7 +295,7 @@ export class OrderService {
         return this.API.get(url);
     }
     generateInvoice(id) {
-        const url = 'order/invoice/' + id;
+        const url = 'order/generateInvoice/' + id;
         return this.API.post(url);
     }
     checkOrderEditable(id) {
