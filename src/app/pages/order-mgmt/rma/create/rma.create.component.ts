@@ -96,9 +96,9 @@ export class RmaCreateComponent implements OnInit {
 
 
     public messageConfig = {
-        'create': 'Are you sure that you want to save & submit this return order?',
-        'validate': 'Are you sure that you want to validate this return order?',
-        'quote': 'Are you sure that you want to save this order as sale quote'
+        'SB': 'Are you sure that you want to submit this return order to approver?', // Submit
+        'AR': ': Are you sure that you approve and send this return order to Warehouse for receipt?', // waiting receive
+        'back': 'The data you have entered may not be saved, are you sure that you want to leave?'
     };
 
     public searchKey = new Subject<any>(); // Lazy load filter
@@ -237,7 +237,7 @@ export class RmaCreateComponent implements OnInit {
                 }, 500);
             }
         }, dismiss => { });
-        modalRef.componentInstance.message = 'The data you have entered may not be saved, are you sure that you want to leave?';
+        modalRef.componentInstance.message = this.messageConfig['back'];
         modalRef.componentInstance.yesButtonText = 'Yes';
         modalRef.componentInstance.noButtonText = 'No';
     }
@@ -363,6 +363,7 @@ export class RmaCreateComponent implements OnInit {
                 this.list.returnItem = (data.items || []);
                 this.list.returnItem.forEach(item => {
                     item['reason'] = this.listMaster['return_reason'];
+                    item['return_quantity'] = item['qty_return'];
                 });
 
                 this.calcTotal();
@@ -465,7 +466,7 @@ export class RmaCreateComponent implements OnInit {
 
 
         this.list.returnItem.forEach(item => {
-            item.amount = (+item.return_qty * (+item.sale_price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
+            item.amount = ((+item.return_quantity || 0) * (+item.sale_price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
             this.order_info.sub_total += item.amount;
         });
 
@@ -565,15 +566,11 @@ export class RmaCreateComponent implements OnInit {
 
 
     confirmCreateOrder(type) {
-        if (type !== 'draft') {
+        if (type !== 'NW') {
             const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
             modalRef.result.then(res => {
                 if (res) {
-                    if (type === 'quote') {
-                        this.createSaleAsQuote();
-                    } else {
-                        this.createOrder(type);
-                    }
+                    this.createOrder(type);
                 }
             }, dismiss => { });
             modalRef.componentInstance.message = this.messageConfig[type];
@@ -585,59 +582,33 @@ export class RmaCreateComponent implements OnInit {
 
     }
 
-    createSaleAsQuote() {
-        const products = this.list.replaceItem.map(item => {
-            item.is_item = (item.misc_id) ? 0 : 1;
-            item.misc_id = (item.misc_id) ? item.misc_id : null;
-            item.item_id = (item.item_id) ? (item.item_id) : null;
-            item.is_shipping_free = (item.is_item) ? (item.is_shipping_free) : 0;
-            item.item_condition_id = (item.is_item) ? (item.item_condition_id) : null;
-            return item;
-        });
-
-        let params = {};
-        params = {
-            'items': products
-        };
-        params = { ...this.generalForm.getRawValue(), ...params };
-
-        // this.service.createSaleAsQuote(params).subscribe(res => {
-        //     try {
-        //         this.toastr.success(res.message);
-        //         setTimeout(() => {
-        //             this.router.navigate(['/order-management//sale-order']);
-        //         }, 500);
-        //     } catch (e) {
-        //         console.log(e);
-        //     }
-        // });
-    }
-
     createOrder(type) {
 
         this.generalForm.patchValue({
             request_date: moment(this.generalForm.value.request_date).format('MM/DD/YYYY'),
             arrival_date: moment(this.generalForm.value.arrival_date).format('MM/DD/YYYY')
         });
-
         let params = {};
         switch (type) {
-            case 'create':
+            case 'SB':
                 params = {
                     'items': this.list.returnItem,
-                    'replace_items': this.list.replaceItem || null
+                    'replace_items': this.list.replaceItem || null,
+                    'status': 3
                 };
                 break;
-            case 'validate':
+            case 'AR':
                 params = {
                     'items': this.list.returnItem,
-                    'replace_items': this.list.replaceItem || null
+                    'replace_items': this.list.replaceItem || null,
+                    'status': 5
                 };
                 break;
-            case 'draft':
+            case 'NW':
                 params = {
                     'items': this.list.returnItem,
-                    'replace_items': this.list.replaceItem || null
+                    'replace_items': this.list.replaceItem || null,
+                    'status': 1
                 };
                 break;
         }
@@ -647,7 +618,7 @@ export class RmaCreateComponent implements OnInit {
 
         this.service.createReturnOrder(params).subscribe(res => {
             try {
-                this.toastr.success('Create Return Order Successfully');
+                this.toastr.success(res.message);
                 setTimeout(() => {
                     this.router.navigate(['/order-management/return-order']);
                 }, 500);

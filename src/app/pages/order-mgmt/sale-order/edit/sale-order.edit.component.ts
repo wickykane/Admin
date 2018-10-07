@@ -17,7 +17,6 @@ import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { ItemMiscModalContent } from '../../../../shared/modals/item-misc.modal';
 import { ItemModalContent } from '../../../../shared/modals/item.modal';
 import { OrderHistoryModalContent } from '../../../../shared/modals/order-history.modal';
-// import { OrderSaleQuoteModalContent } from '../../../../shared/modals/order-salequote.modal';
 import { PromotionModalContent } from '../../../../shared/modals/promotion.modal';
 import { SaleOrderCreateKeyService } from './keys.control';
 

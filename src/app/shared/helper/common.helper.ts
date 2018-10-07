@@ -18,9 +18,7 @@ export class Helper {
         }
     }
     changeNumberToZero(num) {
-        console.log(num);
         if (_.isNumber(num)) {
-            console.log(num);
             return num;
         }
         return 0;
