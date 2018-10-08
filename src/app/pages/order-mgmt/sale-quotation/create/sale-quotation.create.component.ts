@@ -142,10 +142,8 @@ export class SaleQuotationCreateComponent implements OnInit {
             'ship_rate': [null],
             'ship_method_option': [null],
             'warehouse_id': [1, Validators.required],
-
             'delivery_date': [null],
             'contact_user_id': [null],
-
             'sales_person': [null, Validators.required],
             'payment_method_id': [null, Validators.required],
             'payment_term_id': [null, Validators.required],
@@ -631,18 +629,17 @@ export class SaleQuotationCreateComponent implements OnInit {
             'items': this.list.items.filter(item => !item.misc_id)
         };
         this.orderService.getTaxShipping(params).subscribe(res => {
-            if (res.data.mics) {
-                const old_misc = this.list.items.filter(item => item.misc_id && [1, 2].indexOf(item.misc_id) === -1 && +item.source_id !== 3);
-                const items = res.data.items || this.list.items.filter(item => !item.misc_id);
-                const misc = res.data.mics.map(item => {
-                    item.is_misc = 1;
-                    item.misc_id = item.id;
-                    item.discount_percent = 0;
-                    return item;
-                });
+            res.data.mics = res.data.mics || [];
+            const old_misc = this.list.items.filter(item => item.misc_id && [1, 2].indexOf(item.misc_id) === -1 && +item.source_id !== 3);
+            const items = res.data.items || this.list.items.filter(item => !item.misc_id);
+            const misc = res.data.mics.map(item => {
+                item.is_misc = 1;
+                item.misc_id = item.id;
+                item.discount_percent = 0;
+                return item;
+            });
 
-                this.list.items = items.concat(misc, old_misc);
-            }
+            this.list.items = items.concat(misc, old_misc);
 
             // Assign tax to all item
             this.list.items.forEach(item => item.tax_percent = res.data.tax_percent);

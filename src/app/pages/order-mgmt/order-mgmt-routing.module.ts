@@ -11,13 +11,11 @@ import { SaleOrderDetailComponent } from './sale-order/view/sale-order.detail.co
 import {SaleQuotationCreateComponent} from './sale-quotation/create/sale-quotation.create.component';
 import {SaleQuotationEditComponent} from './sale-quotation/edit/sale-quotation.edit.component';
 import { SaleQuotationComponent } from './sale-quotation/sale-quotation.component';
-import {SaleQuotationRfqCreateComponent} from './sale-quotation/sale-quotation.rfq.create.component';
 import {SaleQuotationDetailComponent} from './sale-quotation/view/sale-quotation.detail.component';
 
 import { RmaCreateComponent } from './rma/create/rma.create.component';
 import { RmaEditComponent } from './rma/edit/rma.edit.component';
 import { RmaComponent } from './rma/list/rma.component';
-import { RMAService } from './rma/rma.service';
 import { RmaDetailComponent } from './rma/view/rma.view.component';
 
 const routes: Routes = [
@@ -37,7 +35,6 @@ const routes: Routes = [
       {path: 'create', component: SaleQuotationCreateComponent},
       {path: 'edit/:id', component: SaleQuotationEditComponent},
       {path: 'detail/:id', component: SaleQuotationDetailComponent},
-      {path: 'create/rfq/:id', component: SaleQuotationRfqCreateComponent}
     ]
   },
   {

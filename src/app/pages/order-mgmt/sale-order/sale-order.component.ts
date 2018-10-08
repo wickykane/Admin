@@ -5,6 +5,7 @@ import { OrderService } from '../order-mgmt.service';
 import { TableService } from './../../../services/table.service';
 
 import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 import { NgbDateCustomParserFormatter } from '../../../shared/helper/dateformat';
@@ -65,6 +66,7 @@ export class SaleOrderComponent implements OnInit {
         public fb: FormBuilder,
         public toastr: ToastrService,
         private vRef: ViewContainerRef,
+        private _hotkeysService: HotkeysService,
         public keyService: SaleOrderKeyService,
         private modalService: NgbModal,
         public tableService: TableService,
@@ -79,15 +81,14 @@ export class SaleOrderComponent implements OnInit {
             'buyer_name': [null],
             'date_type': [null],
             'date_to': [null],
-            'date_from': [null],
-            // 'ship_date_from': [null],
-            // 'ship_date_to': [null],
+            'date_from': [null]
 
         });
 
         //  Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {
@@ -217,42 +218,38 @@ export class SaleOrderComponent implements OnInit {
         }
         );
     }
+    createOrder() {
+        this.router.navigate(['/order-management/sale-order/create']);
+    }
+    viewOrder() {
+        const id = this.list.items[this.selectedIndex].id;
+        this.router.navigate(['/order-management/sale-order/detail', id]);
+    }
 
-    edit(id) {
-        this.orderService.checkOrderEditable(id).subscribe(res => {
+    edit(item) {
+        if (item.edit_message) {
+            this.toastr.error(item.edit_message);
+        } else {
+            const id = item.id;
             this.router.navigate(['/order-management/sale-order/edit', id]);
-        });
+        }
     }
 
     putApproveOrder(order_id) {
-        // const params = {'status_code': 'AP'};
         this.orderService.approveOrd(order_id).subscribe(res => {
-            // if (res.status) {
             this.toastr.success(res.message);
             setTimeout(() => {
                 this.getList();
             }, 500);
-            // } else {
-            //     this.toastr.error(res.message);
-            // }
-        }
-        );
+        });
     }
 
     updateStatusOrder(order_id, status) {
         this.orderService.updateStatusOrder(order_id, status).subscribe(res => {
-            // if (res.status) {
             this.toastr.success(res.message);
             setTimeout(() => {
                 this.getList();
             }, 500);
-            // } else {
-            //     this.toastr.error(res.message);
-            // }
-        }
-        );
+        });
     }
-
-
-
 }

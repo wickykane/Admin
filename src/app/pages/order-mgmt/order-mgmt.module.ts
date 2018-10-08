@@ -16,7 +16,6 @@ import { SaleOrderDetailComponent } from './sale-order/view/sale-order.detail.co
 import { SaleQuotationCreateComponent } from './sale-quotation/create/sale-quotation.create.component';
 import { SaleQuotationEditComponent } from './sale-quotation/edit/sale-quotation.edit.component';
 import { SaleQuotationComponent } from './sale-quotation/sale-quotation.component';
-import { SaleQuotationRfqCreateComponent } from './sale-quotation/sale-quotation.rfq.create.component';
 import { SaleQuotationDetailComponent } from './sale-quotation/view/sale-quotation.detail.component';
 
 //  Saleorder Tab
@@ -66,7 +65,6 @@ import { RmaDetailComponent } from './rma/view/rma.view.component';
         SaleQuotationComponent,
         SaleQuotationCreateComponent,
         SaleQuotationDetailComponent,
-        SaleQuotationRfqCreateComponent,
         SaleOrderCreateComponent,
         SaleOrderDetailComponent,
         PrintOrderComponent,

@@ -112,28 +112,26 @@
                                 </thead>
                                 <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                                     <tr>
-                                        <td><a class="text-primary" [routerLink]="['detail', item.id]">{{item.cd}}</a></td>
+                                        <td><a class="text-primary" [routerLink]="['detail', item?.id]">{{item.cd}}</a></td>
                                         <td>{{item.return_type}}</td>
                                         <td>{{item.company_name}}</td>
-                                        <td>{{item.request_date}}</td>
+                                        <td>{{item.request_date |date:'MM/dd/yyyy'}}</td>
                                         <td><span *ngIf="item.sts_name">{{item.sts_name['name']}}</span></td>
-                                        <td>{{item.order_code}}</td>
+                                        <td><a class="text-primary" (click)="detailOrder(item.order_id)">{{item.order_code}}</a></td>
                                         <td>{{item.warehouse_name}}</td>
                                         <td class="text-center">{{item.total_return_qty}}</td>
                                         <td class="text-center">{{item.total_accepted_qty}}</td>
-                                        <td>{{item.return_time}}</td>
+                                        <td class="text-center">{{item.return_time}}</td>
                                         <td>{{item.sale_person_name}}</td>
-                                        <td>{{item.updated_at}}</td>
+                                        <td>{{item.updated_at |date:'MM/dd/yyyy'}}</td>
                                         <td>{{item.updated_by}}</td>
                                         <td class="text-nowrap">
-                                            <a ngbTooltip="Submit" class="btn btn-default" (click)="confirmModal(item.id, 'SM')"><i class="fa fa-share-square-o"></i></a>
-                                            <a ngbTooltip="Approve" class="btn btn-default" (click)="confirmModal(item.id, 'AP')"><i class="fa fa-check" aria-hidden="true"></i></a>
-                                            <a ngbTooltip="Reject" class="btn btn-default" (click)="confirmModal(item.id, 'RJ')"><i class="fa fa-ban"></i></a>
-                                            <a ngbTooltip="Cancel" class="btn btn-default" (click)="confirmModal(item.id, 'CC')"><i class="fa fa-times-circle"></i></a>
+                                            <a *ngIf="[1].indexOf(item.sts_id)!== -1" ngbTooltip="Submit" class="btn btn-default" (click)="confirmModal(item.id, 3 ,item?.sts_id)"><i class="fa fa-share-square-o"></i></a>
+                                            <a  *ngIf="[3].indexOf(item.sts_id)!== -1" ngbTooltip="Approve" class="btn btn-default" (click)="confirmModal(item.id, 5)"><i class="fa fa-check" aria-hidden="true"></i></a>
+                                            <a *ngIf="[1].indexOf(item.sts_id)!== -1" ngbTooltip="Cancel" class="btn btn-default" (click)="confirmModal(item.id, 2)"><i class="fa fa-times-circle"></i></a>
                                             <a ngbTooltip="Revise" class="btn btn-default" (click)="confirmModal(item.id, 'RV')"><i class="fa fa-pencil-square"></i></a>
-
-                                            <a ngbTooltip="Edit" class="btn btn-default" [routerLink]="['edit', item.id]"><i class="fa fa-pencil"></i></a>
-                                            <a ngbTooltip="View" class="btn btn-default" [routerLink]="['detail', item.id]"><i class="fa fa-eye"></i></a>
+                                            <a *ngIf="[1].indexOf(item.sts_id)!== -1" ngbTooltip="Edit" class="btn btn-default" [routerLink]="['edit', item.id]"><i class="fa fa-pencil"></i></a>
+                                            <a  ngbTooltip="View" class="btn btn-default" [routerLink]="['detail', item.id]"><i class="fa fa-eye"></i></a>
                                         </td>
                                     </tr>
                                 </tbody>
