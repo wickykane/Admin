@@ -251,7 +251,7 @@ export class CreditMemoEditComponent implements OnInit {
                     this.listMaster['customer'] = [...this.listMaster['customer'], { id: res.data.company_id, company_name: res.data.company_name }];
                 }
 
-                if (res.data.buyer_type === 'PS') {
+                if (res.data.buyer_type === 'PS' && res.data.contact[0]) {
                     this.addr_select.contact = res.data.contact[0];
                     this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
                 }
@@ -407,7 +407,7 @@ export class CreditMemoEditComponent implements OnInit {
         const id = this.generalForm.value.contact_user_id;
         if (id) {
             const temp = this.customer.contact.filter(x => x.id === id);
-            this.addr_select.contact = temp[0];
+            this.addr_select.contact = temp[0] || {};
         }
         this.refresh();
     }
@@ -436,7 +436,9 @@ export class CreditMemoEditComponent implements OnInit {
             }
             this.order_info.sub_total += item.amount;
         });
-        this.order_info.total = +this.order_info['total_tax'] + +this.order_info.sub_total - this.order_info.restocking_fee;
+        this.data['remain'] = this.order_info.sub_total;
+        this.order_info.sub_total -= this.order_info.restocking_fee;
+        this.order_info.total = +this.order_info['total_tax'] + +this.order_info.sub_total;
         this.refresh();
     }
 
