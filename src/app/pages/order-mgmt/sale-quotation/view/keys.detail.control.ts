@@ -6,25 +6,9 @@ import { KeyboardBaseService } from './../../../../shared/helper/keyServiceBase'
 export class SaleQuoteDetailKeyService extends KeyboardBaseService {
 
     keyConfig = {
-        company_id: {
+        back_button: {
             element: null,
-            prev: 'contact_user_id',
-            next: 'customer_po',
-        },
-        contact_user_id: {
-            element: null,
-            prev: 'company_id',
-            next: 'contact_user_id',
-        },
-        customer_po: {
-            element: null,
-            prev: 'company_id',
-            next: 'type',
-        },
-        type: {
-            element: null,
-            prev: 'customer_po',
-            next: 'type',
+            focus: true,
         },
     };
 

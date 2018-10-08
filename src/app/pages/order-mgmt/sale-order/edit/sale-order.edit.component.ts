@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewContainerRef, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
@@ -14,19 +14,19 @@ import { OrderService } from '../../order-mgmt.service';
 // tslint:disable-next-line:import-blacklist
 import { Subject } from 'rxjs';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
+import { cdArrowTable } from '../../../../shared';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { ItemMiscModalContent } from '../../../../shared/modals/item-misc.modal';
 import { ItemModalContent } from '../../../../shared/modals/item.modal';
 import { OrderHistoryModalContent } from '../../../../shared/modals/order-history.modal';
 import { PromotionModalContent } from '../../../../shared/modals/promotion.modal';
-import { SaleOrderCreateKeyService } from './keys.control';
-
+import { SaleOrderEditKeyService } from './keys.control';
 
 @Component({
     selector: 'app-edit-order',
     templateUrl: './sale-order.edit.component.html',
     styleUrls: ['../sale-order.component.scss'],
-    providers: [SaleOrderCreateKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }],
+    providers: [SaleOrderEditKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }],
     animations: [routerTransition()],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -103,6 +103,7 @@ export class SaleOrderEditComponent implements OnInit {
     public list_priority = [];
 
     public searchKey = new Subject<any>(); // Lazy load filter
+    @ViewChild(cdArrowTable) table: cdArrowTable;
 
     public messageConfig = {
         'create': 'Are you sure that you want to save & submit this order to approver?',
@@ -124,7 +125,7 @@ export class SaleOrderEditComponent implements OnInit {
         private route: ActivatedRoute,
         private modalService: NgbModal,
         private orderService: OrderService,
-        public keyService: SaleOrderCreateKeyService,
+        public keyService: SaleOrderEditKeyService,
         private _hotkeysService: HotkeysService,
         private dt: DatePipe) {
         this.generalForm = fb.group({
@@ -185,6 +186,19 @@ export class SaleOrderEditComponent implements OnInit {
      */
     refresh() {
         this.cd.detectChanges();
+    }
+
+
+    selectTable() {
+        this.selectedIndex = 0;
+        this.table.scrollToTable();
+        setTimeout(() => {
+            const button = this.table.element.nativeElement.querySelectorAll('td button');
+            if (button && button[this.selectedIndex]) {
+                button[this.selectedIndex].focus();
+            }
+        });
+        this.refresh();
     }
 
     disableControl() {
@@ -595,12 +609,14 @@ export class SaleOrderEditComponent implements OnInit {
     }
 
     deleteAction(sku, item_condition) {
+        const lastLength = this.list.items.length;
         this.list.items = this.list.items.filter((item) => {
             return (item.sku + (item.item_condition_id || 'mis') !== (sku + (item_condition || 'mis')));
         });
+        const index = this.selectedIndex - (lastLength - this.list.items.length);
+        this.selectedIndex = (index < 0) ? 0 : index;
         this.updateTotal();
     }
-
 
     checkListPromotion(data) {
         const modalRef = this.modalService.open(PromotionModalContent, { size: 'lg' });
@@ -676,6 +692,10 @@ export class SaleOrderEditComponent implements OnInit {
     addNewItem() {
         const modalRef = this.modalService.open(ItemModalContent, { size: 'lg' });
         modalRef.result.then(res => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
@@ -701,12 +721,21 @@ export class SaleOrderEditComponent implements OnInit {
 
                 this.updateTotal();
             }
-        }, dismiss => { });
+        }, dismiss => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
+        });
     }
 
     addNewMiscItem() {
         const modalRef = this.modalService.open(ItemMiscModalContent, { size: 'lg' });
         modalRef.result.then(res => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
@@ -741,7 +770,12 @@ export class SaleOrderEditComponent implements OnInit {
 
                 this.updateTotal();
             }
-        }, dismiss => { });
+        }, dismiss => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
+        });
     }
     //  Show order history
     showViewOrderHistory() {

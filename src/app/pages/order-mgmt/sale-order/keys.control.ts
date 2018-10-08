@@ -19,6 +19,14 @@ export class SaleOrderKeyService extends KeyboardBaseService {
     };
 
     initKey() {
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+f1', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            if (this.keyConfig.code.element) {
+                this.keyConfig.code.element.nativeElement.focus();
+            }
+            return;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Focus Search'));
+
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+n', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             this.context.createOrder();

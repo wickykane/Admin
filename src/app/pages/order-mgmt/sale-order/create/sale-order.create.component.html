@@ -379,7 +379,7 @@
             </div>
             <div class="card-body no-padding">
                <div class="table-responsive">
-                  <table class="table table-bordered table-order">
+                  <table class="table table-bordered table-order" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex">
                   <thead>
                      <tr>
                         <th style="width:70px" translate>Action</th>
@@ -402,7 +402,7 @@
                      <td colspan="100%" class="text-center" translate>No data.</td>
                      </tr>
                   <tbody *ngFor="let item of list['items']; let $index = index;">
-                     <tr>
+                     <tr [ngClass]="{'row-selected': $index == selectedIndex}">
                         <td class="text-center">
                            <button class="btn btn-danger btn-xs" type="button" (click)="deleteAction(item.sku, item.item_condition_id)">
                            <i class="fa fa-trash"></i>
