@@ -319,7 +319,10 @@
                                         </td> -->
                                         <td class="text-right">{{item.quantity}}</td>
                                         <td class="text-right">
-                                            <div>
+                                            <div *ngIf="item.misc_id && item.misc_id == 6" class="text-danger">
+                                                ({{ item.price | currency }})
+                                            </div>
+                                            <div *ngIf="!(item.misc_id && item.misc_id == 6)">
                                                 {{ item.price | currency }}
                                             </div>
                                         </td>
@@ -330,7 +333,12 @@
                                             {{item.tax_percent}}
                                         </td>
                                         <td class="text-right">
-                                            <span>{{item.total_price | currency}}</span>
+                                            <div *ngIf="item.misc_id && item.misc_id == 6" class="text-danger">
+                                                ({{ item.total_price | currency }})
+                                            </div>
+                                            <div *ngIf="!(item.misc_id && item.misc_id == 6)">
+                                                {{ item.total_price | currency }}
+                                            </div>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -373,12 +381,12 @@
                                         <input class="form-control" readonly="true" numberDirective isDecimal="true" [(ngModel)]="item.value" class="form-control" value="0" type="number">
                                     </div>
                                 </div>
-                                <div class="form-group row">
+                                <!-- <div class="form-group row">
                                     <label class='col-6 control-label'>- Restocking Fee</label>
                                     <div class='col-6 padding-lr-10'>
                                         <strong>{{(detail['restocking_fee'] || 0) | currency}}</strong>
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="form-group row">
                                     <label class='col-5 control-label'>
                                             <strong class="text-warning">Total Due</strong>

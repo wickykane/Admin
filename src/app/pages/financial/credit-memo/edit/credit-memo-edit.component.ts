@@ -436,7 +436,9 @@ export class CreditMemoEditComponent implements OnInit {
             }
             this.order_info.sub_total += item.amount;
         });
-        this.order_info.total = +this.order_info['total_tax'] + +this.order_info.sub_total - this.order_info.restocking_fee;
+        this.data['remain'] = this.order_info.sub_total;
+        this.order_info.sub_total -= this.order_info.restocking_fee;
+        this.order_info.total = +this.order_info['total_tax'] + +this.order_info.sub_total;
         this.refresh();
     }
 

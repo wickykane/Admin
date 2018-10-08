@@ -233,7 +233,7 @@ export class SaleOrderInformationTabComponent implements OnInit {
             this.router.navigate(['/order-management/sale-order/edit', this._orderId]);
         }
     }
-    
+
     generateInvoice() {
         const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
         modalRef.result.then(res => {
