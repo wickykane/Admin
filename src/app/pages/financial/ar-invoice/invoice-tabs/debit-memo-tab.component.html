@@ -1,35 +1,64 @@
-<div class="address-tab">
-    <div class="scroll-container block-order">
-        <div class="card">
-            <div class="card-body">
-                <table class="table table-bordered table-order">
-                  <thead>
-                      <tr>
-                          <th>No</th>
-                          <th>DR Memo No</th>
-                          <th>Due Date</th>
-                          <th>Total Amount</th>
-                          <th>Balance Amount</th>
-                          <th>Status</th>
-                          <th>Aged Overdue</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      <tr *ngFor="let item of list.items">
-                          <td>{{ item.id }}</td>
-                          <td>{{ item.id }}</td>
-                          <td>{{ item.id }}</td>
-                          <td>{{ item.id }}</td>
-                          <td>{{ item.id }}</td>
-                          <td>{{ item.id }}</td>
-                          <td>{{ item.id }}</td>
-                      </tr>
-                      <tr *ngIf="list.items.length == 0">
-                          <td class="text-center" colspan="100%">No data.</td>
-                      </tr>
-                  </tbody>
-                </table>
+<div class="block anchor-scroll block-order">
+    <div class="row mg-top-10">
+        <div class="col-12">
+            <div class="card no-border">
+                    <div class="card-header">
+                        <strong>Line Items</strong>
+                    </div>
+                    <div class="card-body no-padding">
+                        <div class="scroll-container table-responsive list">
+                            <table class='table table-bordered table-order'>
+                                <thead class="bg-white">
+                                    <tr>
+                                        <th translate>Credit Memo No</th>
+                                        <th translate translate>Issue Date</th>
+                                        <th translate>Customer</th>
+                                        <th translate translate>Related Document</th>
+                                        <th translate translate>Total Amount</th>
+                                        <th translate translate>Balance Amount</th>
+                                        <th class="text-center" translate>Status</th>
+                                        <th class="text-center" translate>Age</th>
+                                        <th class="text-center" translate>Last Updated Date</th>
+                                        <th class="text-center" translate>Last Updated By</th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngFor="let item of list.items">
+                                    <tr>
+                                        <td>
+                                            {{item.cd}}
+                                        </td>
+                                        <td class="text-center">{{item.issue_date | date:'MM/dd/yyyy' }}</td>
+                                        <td>{{item.customer_name}}</td>
+                                        <td class="text-center">{{item.inv_num}}</td>
+                                        <td class="text-center">
+                                            {{item.total_price | currency}}
+                                        </td>
+                                        <td class="text-center">
+                                            {{item.balance_price | currency}}
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="badge badge-info bg-blue" *ngIf="item.sts_code == 'NW'">{{item.sts}}</span>
+                                            <span class="badge badge-warning bg-texas-rose" *ngIf="item.sts_code == 'SB'">{{item.sts}}</span>
+                                            <span class="badge badge-danger bg-magenta" *ngIf="item.sts_code == 'RJ'">{{item.sts}}</span>
+                                            <span class="badge badge-success bg-strong-green" *ngIf="item.sts_code == 'AP'">{{item.sts}}</span>
+                                            <span class="badge badge-danger bg-red" *ngIf="item.sts_code == 'CC'">{{item.sts}}</span>
+                                            <span class="badge badge-primary bg-lemon" *ngIf="item.sts_code == 'RD'">{{item.sts}}</span>
+                                            <span class="badge badge-primary bg-bright-grey" *ngIf="item.sts_code == 'RF'">{{item.sts}}</span>
+                                        </td>
+                                        <td class="text-center">{{item.age }}</td>
+                                        <td class="text-center">{{item.updated_at | date:'MM/dd/yyyy' }}</td>
+                                        <td class="text-center">{{item.updated_by}}</td>
+                                    </tr>
+                                </tbody>
+                                <tbody *ngIf="list.items.length == 0">
+                                    <tr>
+                                        <td class="text-center" colspan="100%">No data.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>

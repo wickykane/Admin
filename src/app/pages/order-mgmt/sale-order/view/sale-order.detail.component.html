@@ -13,6 +13,11 @@
                     <app-order-invoice-tab [orderId]="orderId"></app-order-invoice-tab>
                 </ng-template>
             </ngb-tab>
+            <ngb-tab title="Receipt Voucher">
+                    <ng-template ngbTabContent>
+                        <app-order-receipt-voucher-tab [orderId]="orderId"></app-order-receipt-voucher-tab>
+                    </ng-template>
+                </ngb-tab>
             <ngb-tab title="RMA">
                 <ng-template ngbTabContent>
                     <app-order-rma-tab [orderId]="orderId"></app-order-rma-tab>
@@ -25,7 +30,7 @@
             </ngb-tab>   
             <ngb-tab title="Debit Memo">
                 <ng-template ngbTabContent>
-                    <app-order-credit-note-tab [orderId]="orderId"></app-order-credit-note-tab>
+                    <app-order-debit-note-tab [orderId]="orderId"></app-order-debit-note-tab>
                 </ng-template>
             </ngb-tab>           
             <ngb-tab title="Shipment">

@@ -3,15 +3,14 @@ import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { OrderService } from '../../../order-mgmt/order-mgmt.service';
 import { TableService } from './../../../../services/table.service';
 
-import { FinancialService } from '../../../financial/financial.service';
 
 @Component({
-    selector: 'app-order-invoice-tab',
-    templateUrl: './invoice-tab.component.html',
+    selector: 'app-order-receipt-voucher-tab',
+    templateUrl: './receipt-voucher-tab.component.html',
     styleUrls: ['./order-tab.component.scss'],
-    providers: [OrderService, FinancialService]
+    providers: [OrderService]
 })
-export class SaleOrderInvoiceTabComponent implements OnInit {
+export class SaleOrderReceiptVoucherTabComponent implements OnInit {
 
     /**
      * letiable Declaration
@@ -37,17 +36,14 @@ export class SaleOrderInvoiceTabComponent implements OnInit {
         public fb: FormBuilder,
         private vRef: ViewContainerRef,
         public tableService: TableService,
-        private orderService: OrderService,
-        private financialService: FinancialService
+        private orderService: OrderService
       ) {
         //  Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
     }
 
-    ngOnInit() {
-        this.getListStatus();
-    }
+    ngOnInit() {}
 
     /**
      * Internal Function
@@ -59,21 +55,12 @@ export class SaleOrderInvoiceTabComponent implements OnInit {
 
         this.orderService.getInvoice( this._orderId).subscribe(res => {
             try {
-                this.list.items = res.data;
+                this.list.items =  res.data;
                 this.tableService.matchPagingOption(res.data);
             } catch (e) {
                 console.log(e);
             }
         });
     }
-    convertStatus(id, key) {
-        const stt = (this.listMaster[key] || []).find(item => item.id === id) || {};
-        return stt.name;
-    }
-    getListStatus() {
-        this.financialService.getInvoiceStatus().subscribe(res => {
-            this.listMaster['status'] = res.data.status;
-            // this.refresh();
-        });
-    }
+
 }

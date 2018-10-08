@@ -40,11 +40,16 @@ export class CustomerInvoiceTabComponent implements OnInit {
         private cd: ChangeDetectorRef) {
 
         this.searchForm = fb.group({
-            'buyer_name': [null],
-            'email': [null],
-            'buyer_type': [null],
-            'from': [null],
-            'to': [null]
+            'inv_num': [null],
+            'cus_name': [null],
+            'order_num': [null],
+            'sku': [null],
+            'status': [null],
+            'inv_type': [null],
+            'inv_dt_from': [null],
+            'inv_dt_to': [null],
+            'inv_due_dt_from': [null],
+            'inv_due_dt_to': [null],
         });
 
         //  Assign get list function name, override letiable here

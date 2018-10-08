@@ -8,6 +8,11 @@
                     <app-invoice-info-tab [invoiceId]="invoiceId"></app-invoice-info-tab>
                 </ng-template>
             </ngb-tab>
+            <ngb-tab title="Receipt Voucher">
+                <ng-template ngbTabContent>
+                    <app-invoice-receipt-voucher-tab [invoiceId]="invoiceId"></app-invoice-receipt-voucher-tab>
+                </ng-template>
+            </ngb-tab>
             <ngb-tab id="credit" title="Credit Memo">
                 <ng-template ngbTabContent>
                     <app-invoice-credit-memo-tab></app-invoice-credit-memo-tab>

@@ -20,6 +20,9 @@ import { SaleQuotationDetailComponent } from './sale-quotation/view/sale-quotati
 
 //  Saleorder Tab
 import { SaleOrderCreditNoteTabComponent } from './sale-order/order-tabs/credit-note-tab.component';
+import { SaleOrderDebitNoteTabComponent } from './sale-order/order-tabs/debit-note-tab.component';
+import { SaleOrderReceiptVoucherTabComponent } from './sale-order/order-tabs/receipt-voucher-tab.component';
+
 import { SaleOrderInformationTabComponent } from './sale-order/order-tabs/information-tab.component';
 import { SaleOrderInvoiceTabComponent } from './sale-order/order-tabs/invoice-tab.component';
 import { SaleOrderPaymentTabComponent} from './sale-order/order-tabs/payment-tab.component';
@@ -79,6 +82,8 @@ import { RmaDetailComponent } from './rma/view/rma.view.component';
         SaleQuotationEditComponent,
         QuoteInformationTabComponent,
         QuoteHistoryTabComponent,
+        SaleOrderDebitNoteTabComponent,
+        SaleOrderReceiptVoucherTabComponent,
         ItemsOrderModalContent,
         RmaComponent,
         RmaCreateComponent,
