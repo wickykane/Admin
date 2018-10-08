@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 
 import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
 import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
@@ -124,6 +125,7 @@ export class SaleOrderEditComponent implements OnInit {
         private modalService: NgbModal,
         private orderService: OrderService,
         public keyService: SaleOrderCreateKeyService,
+        private _hotkeysService: HotkeysService,
         private dt: DatePipe) {
         this.generalForm = fb.group({
             'buyer_id': [null, Validators.required],
@@ -148,7 +150,7 @@ export class SaleOrderEditComponent implements OnInit {
             'order_sts_name': [null]
         });
         //  Init Key
-        this.keyService.watchContext.next(this);
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {
@@ -269,25 +271,6 @@ export class SaleOrderEditComponent implements OnInit {
             integerLimit: max || null
         });
     }
-
-    // getDetailCustomerById(buyer_id, flag?) {
-    //     this.orderService.getDetailCompany(buyer_id).subscribe(res => {
-    //         try {
-    //             this.customer = res.data;
-    //             // if (res.data.buyer_type === 'PS') {
-    //                 this.addr_select.contact = res.data.contact[0];
-    //                 this.generalForm.patchValue({ contact_user_id: this.addr_select.contact.id });
-    //             // }
-    //
-    //             if (flag) {
-    //                 this.selectAddress('billing', flag);
-    //                 this.selectAddress('shipping', flag);
-    //             }
-    //         } catch (e) {
-    //             console.log(e);
-    //         }
-    //     });
-    // }
 
     getDetailCustomerById(buyer_id, flag?) {
         this.orderService.getDetailCompany(buyer_id).subscribe(res => {
