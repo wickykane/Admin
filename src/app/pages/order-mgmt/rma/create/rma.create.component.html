@@ -390,10 +390,10 @@
                                 <tr *ngIf="list.returnItem.length === 0">
                                     <td colspan="100%" class="text-center" translate>No data.</td>
                                 </tr>
-                                <tbody *ngFor="let item of list.returnItem; let $index = index;">
+                                <tbody *ngFor="let item of list.returnItem; let index = index;">
                                     <tr>
                                         <td class="text-center">
-                                            <button class="btn btn-xs" type="button" (click)="deleteLineItem(item, i)">
+                                            <button class="btn btn-xs" type="button" (click)="deleteLineItem(item, index)">
                                                 <i class="fa fa-trash"></i>
                                             </button>
                                         </td>
@@ -470,7 +470,7 @@
                                 <tr *ngIf="list.replaceItem.length === 0">
                                     <td colspan="100%" class="text-center" translate>No data.</td>
                                 </tr>
-                                <tbody *ngFor="let item of replaceItem; let $index = index;">
+                                <tbody *ngFor="let item of list.replaceItem; let index = index;">
                                     <tr>
                                         <td class="text-center">
                                             <button class="btn btn-danger btn-xs" type="button" (click)="deleteAction(item.sku, item.item_condition_id)">
@@ -513,7 +513,7 @@
                     <div class="card-body">
                         <form [formGroup]="generalForm">
                             <div>
-                                <textarea class="form-control border-0" formControlName="note" rows="11" style="resize:none"></textarea>
+                                <textarea class="form-control border-0" formControlName="des" rows="11" style="resize:none"></textarea>
                             </div>
                         </form>
                     </div>

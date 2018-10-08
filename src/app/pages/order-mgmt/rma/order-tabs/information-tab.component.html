@@ -307,7 +307,7 @@
                         <td>{{item.des}}</td>
                         <td>{{item.condition_name}}</td>
                         <td>{{item.uom_name}}</td>
-                        <td class="text-center">{{item.return_qty}}</td>
+                        <td class="text-center">{{item.return_quantity}}</td>
                         <td class="text-center">
                             {{item.accept_qty}}
                         </td>
@@ -377,7 +377,7 @@
                   <tr *ngIf="list.replaceItem.length === 0">
                      <td colspan="100%" class="text-center" translate>No data.</td>
                      </tr>
-                  <tbody *ngFor="let item of replaceItem; let $index = index;">
+                  <tbody *ngFor="let item of list.replaceItem; let $index = index;">
                      <tr>
                         <!-- <td class="text-center">
                            <button class="btn btn-danger btn-xs" type="button" (click)="deleteAction(item.sku, item.item_condition_id)">
