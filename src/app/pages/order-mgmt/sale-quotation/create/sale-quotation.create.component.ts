@@ -320,8 +320,9 @@ export class SaleQuotationCreateComponent implements OnInit {
         this.selectedIndex = 0;
         this.table.scrollToTable();
         setTimeout(() => {
-            if (this.table.element.nativeElement.querySelectorAll('td button')) {
-                this.table.element.nativeElement.querySelectorAll('td button')[this.selectedIndex].focus();
+            const button = this.table.element.nativeElement.querySelectorAll('td button');
+            if (button && button[this.selectedIndex]) {
+                button[this.selectedIndex].focus();
             }
         });
         this.refresh();
