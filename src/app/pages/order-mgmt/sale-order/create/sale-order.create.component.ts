@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewContainerRef, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
@@ -15,6 +15,7 @@ import { OrderService } from '../../order-mgmt.service';
 // tslint:disable-next-line:import-blacklist
 import { Subject } from 'rxjs';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
+import { cdArrowTable } from '../../../../shared';
 import { ItemMiscModalContent } from '../../../../shared/modals/item-misc.modal';
 import { ItemModalContent } from '../../../../shared/modals/item.modal';
 import { OrderHistoryModalContent } from '../../../../shared/modals/order-history.modal';
@@ -109,6 +110,7 @@ export class SaleOrderCreateComponent implements OnInit {
     };
 
     public searchKey = new Subject<any>(); // Lazy load filter
+    @ViewChild(cdArrowTable) table: cdArrowTable;
 
     /**
      * Init Data
@@ -196,6 +198,19 @@ export class SaleOrderCreateComponent implements OnInit {
      */
     refresh() {
         this.cd.detectChanges();
+    }
+
+
+    selectTable() {
+        this.selectedIndex = 0;
+        this.table.scrollToTable();
+        setTimeout(() => {
+            const button = this.table.element.nativeElement.querySelectorAll('td button');
+            if (button && button[this.selectedIndex]) {
+                button[this.selectedIndex].focus();
+            }
+        });
+        this.refresh();
     }
 
     numberMaskObject(max?) {
@@ -528,15 +543,22 @@ export class SaleOrderCreateComponent implements OnInit {
     }
 
     deleteAction(sku, item_condition) {
+        const lastLength = this.list.items.length;
         this.list.items = this.list.items.filter((item) => {
             return (item.sku + (item.item_condition_id || 'mis') !== (sku + (item_condition || 'mis')));
         });
+        const index = this.selectedIndex - (lastLength - this.list.items.length);
+        this.selectedIndex = (index < 0) ? 0 : index;
         this.updateTotal();
     }
 
     addNewItem() {
         const modalRef = this.modalService.open(ItemModalContent, { size: 'lg' });
         modalRef.result.then(res => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
@@ -562,13 +584,22 @@ export class SaleOrderCreateComponent implements OnInit {
 
                 this.updateTotal();
             }
-        }, dismiss => { });
+        }, dismiss => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
+        });
 
     }
 
     addNewMiscItem() {
         const modalRef = this.modalService.open(ItemMiscModalContent, { size: 'lg' });
         modalRef.result.then(res => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
@@ -603,7 +634,12 @@ export class SaleOrderCreateComponent implements OnInit {
 
                 this.updateTotal();
             }
-        }, dismiss => { });
+        }, dismiss => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
+        });
     }
 
     confirmCreateOrder(type) {

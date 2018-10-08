@@ -236,6 +236,24 @@ export class ItemModalContent implements OnInit, OnDestroy {
             }
         };
 
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+f1', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            event.preventDefault();
+            const defaultConfig = {
+                vin: 'vin',
+                vehicle: 'year_from',
+                part_number: 'oem'
+            };
+
+            const activeTab = defaultConfig[this.tabSet.activeId];
+
+            if (this.data['key_config'][activeTab].element) {
+                this.data['key_config'][activeTab].element.nativeElement.focus();
+            }
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Focus Search'));
+
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             event.preventDefault();
             (document.activeElement as HTMLInputElement).blur();
