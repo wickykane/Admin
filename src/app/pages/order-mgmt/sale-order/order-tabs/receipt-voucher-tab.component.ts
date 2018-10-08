@@ -55,7 +55,7 @@ export class SaleOrderReceiptVoucherTabComponent implements OnInit {
 
         this.orderService.getInvoice( this._orderId).subscribe(res => {
             try {
-                this.list.items = [] || res.data.rows;
+                this.list.items =  res.data;
                 this.tableService.matchPagingOption(res.data);
             } catch (e) {
                 console.log(e);
