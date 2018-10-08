@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService } from '../order-mgmt.service';
@@ -8,6 +8,7 @@ import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/n
 import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
+import { cdArrowTable } from '../../../shared';
 import { NgbDateCustomParserFormatter } from '../../../shared/helper/dateformat';
 import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
 import { SaleOrderKeyService } from './keys.control';
@@ -25,6 +26,8 @@ export class SaleOrderComponent implements OnInit {
     /**
      * letiable Declaration
      */
+    @ViewChild(cdArrowTable) table: cdArrowTable;
+
     public messageConfig = {
         'SM': 'Are you sure that you want to submit current order ?',
         'CC': 'Are you sure that you want to cancel current order?',
@@ -177,7 +180,6 @@ export class SaleOrderComponent implements OnInit {
         });
     }
 
-
     confirmModal(id, status) {
         const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
         modalRef.result.then(res => {
@@ -251,5 +253,10 @@ export class SaleOrderComponent implements OnInit {
                 this.getList();
             }, 500);
         });
+    }
+
+    selectTable() {
+        this.selectedIndex = 0;
+        this.table.element.nativeElement.querySelector('td a').focus();
     }
 }
