@@ -517,8 +517,7 @@ export class RmaCreateComponent implements OnInit {
             items: this.list.returnItem_delete
         };
         modalRef.componentInstance.setIgnoredItems = params;
-        console.log(this.list.returnItem_delete);
-        console.log(this.list.returnItem);
+
         modalRef.result.then(res => {
             if (res) {
               console.log(res);
@@ -549,7 +548,7 @@ export class RmaCreateComponent implements OnInit {
                 res.forEach((item) => {
                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
                     item.tax_percent = 0;
-                    item.quantity = 1;
+                    item.replace_quantity = 1;
                     item['order_detail_id'] = null;
                     item.discount_percent = 0;
                     item.source_id = 0;

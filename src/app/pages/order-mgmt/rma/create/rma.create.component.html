@@ -430,6 +430,7 @@
                                                 <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
                                                 <option *ngFor="let it of item['reason']" [ngValue]="it.id">{{it.des}}</option>
                                             </select>
+                                            <span class="text-danger" *ngIf="!item.return_reason">Field is required</span>
                                         </td>
                                         <td class="text-center">
                                             New
