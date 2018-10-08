@@ -388,7 +388,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         const id = this.generalForm.value.contact_user_id;
         if (id) {
             const temp = this.customer.contact.filter(x => x.id === id);
-            this.addr_select.contact = temp[0];
+            this.addr_select.contact = temp[0] || {};
         }
     }
 
