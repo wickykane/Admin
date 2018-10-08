@@ -38,6 +38,7 @@ export class ReturnOrderInformationTabComponent implements OnInit {
     @Output() stockValueChange = new EventEmitter();
     public requiredInv = true;
 
+
     public detail = {
         'billing': {},
         'shipping': {},
@@ -114,8 +115,8 @@ export class ReturnOrderInformationTabComponent implements OnInit {
                 this.detail.shipping = res.data.shipping_data ? res.data.shipping_data : this.addr_select.shipping;
                 this.detail.billing = res.data.billing_data ? res.data.billing_data : this.addr_select.billing;
 
-                this.list.returnItem = res.data.items;
-                this.list.replaceItem = res.data.items_replace;
+                this.list.returnItem = res.data.items || [];
+                this.list.replaceItem = res.data.items_replace || [];
 
 
             } catch (e) {

@@ -19,9 +19,6 @@ export class ItemsOrderModalContent implements OnInit {
     public listIgnoredItems = [];
     public orderId = '';
     @Input() set setIgnoredItems(data) {
-        if (data && data['orderId'] !== null && data['orderId'] !== undefined) {
-            this.orderId = data['orderId'];
-        }
         if (data && data['items'] && data['items'].length) {
             this.listIgnoredItems = data['items'];
             this.getListItems();
@@ -50,20 +47,8 @@ export class ItemsOrderModalContent implements OnInit {
     }
 
     getListItems() {
-        const params = { ...this.searchForm.value};
-        params['item_ids'] = this.listIgnoredItems.join();
-        Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
-        this.service.getListItemsFromOrder(this.orderId, params).subscribe(
-            res => {
-                try {
-                    this.listItems = res.data.items;
-                } catch (err) {
-                    console.log(err);
-                }
-            }, err => {
-                console.log(err);
-            }
-        );
+          this.listItems = this.listIgnoredItems;
+          this.listItems.map(item => item.is_checked = false);
     }
 
     checkAll(ev) {
@@ -77,10 +62,7 @@ export class ItemsOrderModalContent implements OnInit {
     }
 
     onAddItem() {
-        this.listItemSelected.forEach(item => {
-            item['base_price'] = (item['qty'] * item['price']) || 0;
-            item['total_price'] = (item['base_price'] - item['discount']) || 0;
-        });
+
         this.activeModal.close(this.listItemSelected);
     }
 }

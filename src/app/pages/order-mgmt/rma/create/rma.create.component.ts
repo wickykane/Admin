@@ -97,7 +97,7 @@ export class RmaCreateComponent implements OnInit {
 
     public messageConfig = {
         'SB': 'Are you sure that you want to submit this return order to approver?', // Submit
-        'AR': ': Are you sure that you approve and send this return order to Warehouse for receipt?', // waiting receive
+        'AR': 'Are you sure that you approve and send this return order to Warehouse for receipt?', // waiting receive
         'back': 'The data you have entered may not be saved, are you sure that you want to leave?'
     };
 
@@ -138,7 +138,7 @@ export class RmaCreateComponent implements OnInit {
             'arrival_date': [null],
             'bill_to': [null, Validators.required],
             'ship_to': [null, Validators.required],
-            'note': [null],
+            'des': [null],
         });
         //  Init Key
         this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
@@ -486,7 +486,7 @@ export class RmaCreateComponent implements OnInit {
 
 
         this.list.replaceItem.forEach(item => {
-            item.amount = (+item.return_qty * (+item.sale_price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
+            item.amount = (+item.replace_quantity * (+item.sale_price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
             this.order_info_replace.sub_total += item.amount;
         });
 
@@ -514,18 +514,23 @@ export class RmaCreateComponent implements OnInit {
             size: 'lg'
         });
         const params = {
-            orderId: this.generalForm.value.order_id,
-            items: this.list.returnItem_delete.filter(item => item.order_detail_id !== undefined && item.order_detail_id !== null).map(item => item.order_detail_id)
+            items: this.list.returnItem_delete
         };
         modalRef.componentInstance.setIgnoredItems = params;
+
         modalRef.result.then(res => {
             if (res) {
+              console.log(res);
                 res.forEach(selectedItem => {
                     const itemIndex = this.list.returnItem_delete.findIndex(item => item.order_detail_id === selectedItem.order_detail_id);
                     if (itemIndex >= 0) {
                         this.list.returnItem_delete.splice(itemIndex, 1);
                     }
-                    this.list.returnItem_delete.push(selectedItem);
+                    this.list.returnItem.push(selectedItem);
+                    this.list.returnItem.forEach(item => {
+                        item['reason'] = this.listMaster['return_reason'];
+                        item['return_quantity'] = item['qty_return'];
+                    });
                 });
                 this.calcTotal();
             }
@@ -543,7 +548,7 @@ export class RmaCreateComponent implements OnInit {
                 res.forEach((item) => {
                     if (item.sale_price) { item.sale_price = Number(item.sale_price); }
                     item.tax_percent = 0;
-                    item.quantity = 1;
+                    item.replace_quantity = 1;
                     item['order_detail_id'] = null;
                     item.discount_percent = 0;
                     item.source_id = 0;
