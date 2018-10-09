@@ -39,11 +39,15 @@ export class CustomerRMATabComponent implements OnInit {
         private customerService: CustomerService, private cd: ChangeDetectorRef) {
 
         this.searchForm = fb.group({
+            'code': [null],
+            'cus_po': [null],
+            'sale_quote_num': [null],
+            'type': [null],
+            'sts': [null],
             'buyer_name': [null],
-            'email': [null],
-            'buyer_type': [null],
-            'from': [null],
-            'to': [null]
+            'date_type': [null],
+            'date_to': [null],
+            'date_from': [null],
         });
 
         //  Assign get list function name, override letiable here

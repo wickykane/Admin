@@ -5,12 +5,12 @@ import { TableService } from './../../../../services/table.service';
 
 
 @Component({
-    selector: 'app-customer-invoice-tab',
-    templateUrl: './invoice-tab.component.html',
+    selector: 'app-customer-receipt-voucher-tab',
+    templateUrl: './receipt-voucher-tab.component.html',
     styleUrls: ['./information-tab.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CustomerInvoiceTabComponent implements OnInit {
+export class CustomerReceiptVoucherTabComponent implements OnInit {
 
     /**
      * letiable Declaration
@@ -40,16 +40,14 @@ export class CustomerInvoiceTabComponent implements OnInit {
         private cd: ChangeDetectorRef) {
 
         this.searchForm = fb.group({
-            'inv_num': [null],
-            'cus_name': [null],
-            'order_num': [null],
-            'sku': [null],
+            'receipt_no': [null],
+            'payment_method': [null],
+            'customer_id': [null],
+            'electronic': [null],
             'status': [null],
-            'inv_type': [null],
-            'inv_dt_from': [null],
-            'inv_dt_to': [null],
-            'inv_due_dt_from': [null],
-            'inv_due_dt_to': [null],
+            'date_type': [null],
+            'date_from': [null],
+            'date_to': [null]
         });
 
         //  Assign get list function name, override letiable here
@@ -74,14 +72,13 @@ export class CustomerInvoiceTabComponent implements OnInit {
 
         this.customerService.getListInvoice(this._customerId, params).subscribe(res => {
             try {
-                this.list.items = res.data.rows;
+                this.list.items = [] || res.data.rows;
                 this.tableService.matchPagingOption(res.data);
                 this.refresh();
             } catch (e) {
                 console.log(e);
             }
         });
-        this.refresh();
     }
 
 }

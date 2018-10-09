@@ -42,12 +42,15 @@ export class CustomerSaleOrderTabComponent implements OnInit {
         private orderService: OrderService, private cd: ChangeDetectorRef) {
 
         this.searchForm = fb.group({
-            'company_name': [null],
             'code': [null],
-            'purchase_order_cd': [null],
-            'order_sts_id': [null],
-            'order_date_from': [null],
-            'order_date_to': [null]
+            'cus_po': [null],
+            'quote_no': [null],
+            'type': [null],
+            'sts': [null],
+            'buyer_name': [null],
+            'date_type': [null],
+            'date_to': [null],
+            'date_from': [null],
         });
 
         //  Assign get list function name, override letiable here

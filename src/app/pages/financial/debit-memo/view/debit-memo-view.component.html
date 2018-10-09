@@ -8,6 +8,11 @@
                     <app-debit-info-tab [debitInfo]="debitDetail" (changeStatusSuccessfully)="getDebitDetail()"></app-debit-info-tab>
                 </ng-template>
             </ngb-tab>
+            <ngb-tab title="Receipt Voucher">
+                    <ng-template ngbTabContent>
+                        <app-receipt-voucher-tab [orderId]="debitId"></app-receipt-voucher-tab>
+                    </ng-template>
+                </ngb-tab>
             <ngb-tab title="Payment">
                 <ng-template ngbTabContent>
                     <!-- <app-order-invoice-tab [orderId]="orderId"></app-order-invoice-tab> -->

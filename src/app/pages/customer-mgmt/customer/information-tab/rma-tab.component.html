@@ -1,65 +1,71 @@
 <div class="block anchor-scroll block-order">
-    <div class="block-content pd-bottom bg-gray-light short-width">
-        <div class="row">
-            <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
-                <div class="block-search">
-                    <label for="buyer_name" class="control-label">RMA No</label>
-                    <input type="text" name="buyer_name" formControlName="buyer_name" class="form-control">
-                </div>
-                <div class="block-search">
-                    <label for="buyer_name" class="control-label">SO No</label>
-                    <input type="text" name="buyer_name" formControlName="buyer_name" class="form-control">
-                </div>
-                <div class="block-search">
-                    <label for="buyer_name" class="control-label">Customer</label>
-                    <input type="text" name="buyer_name" formControlName="buyer_name" class="form-control">
-                </div>
-                <div class="block-search">
-                    <label for="buyer_type" class="control-label">Status</label>
-                    <select class="form-control" formControlName="buyer_type">
-                        <option value="null" selected="true">--Select--</option>
-                        <option *ngFor="let item of listMaster['statusSO']" [ngValue]="item.id">{{item.name}}</option>
-                    </select>
-                </div>
-                <div class="block-search">
-                    <label for="buyer_type" class="control-label">Date Type</label>
-                    <select class="form-control" formControlName="buyer_type">
-                        <option value="null" selected="true">--Select--</option>
-                        <option *ngFor="let item of listMaster['dateType']" [ngValue]="item.id">{{item.name}}</option>
-                    </select>
-                </div>
-                <div class="block-search">
-                    <label for="buyer_type" class="control-label">From</label>
-                    <div class="input-group">
-                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="from" ngbDatepicker #d1="ngbDatepicker">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
-                                <i class="fa fa-calendar" aria-hidden="true"></i>
-                            </button>
+        <div class="block-content pd-bottom bg-gray-light short-width">
+                <div class="row">
+                    <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
+                        <div class="block-search">
+                            <label for="cd" class="control-label" translate>Order No</label>
+                            <input type="text" name="cd" formControlName="code" class="form-control" id="cd" placeholder="" capitalize>
+                        </div>
+                        <div class="block-search">
+                            <label for="purchase_quote_cd" class="control-label">Return Type</label>
+                            <ng-select [multiple]="true" [items]="listMaster['type']" bindLabel="name" bindValue="id" formControlName="type">
+                            </ng-select>
+                        </div>
+                        <div class="block-search">
+                            <label for="contract_no" class="control-label">Customer</label>
+                            <ng-select [multiple]="true" [items]="listMaster['type']" bindLabel="name" bindValue="id" formControlName="type">
+                            </ng-select>
+                        </div>
+                        <div class="block-search">
+                            <label for="part" class="control-label">Warehouse</label>
+                            <ng-select [multiple]="true" [items]="listMaster['type']" bindLabel="name" bindValue="id" formControlName="type">
+                            </ng-select>
+                        </div>
+                        <div class="block-search">
+                            <label for="po_status_id" class="control-label">Status</label>
+                            <ng-select [multiple]="true" [items]="listMaster['status']" bindLabel="name" bindValue="id" formControlName="sts">
+                            </ng-select>
+                        </div>
+                        <div class="block-search">
+                            <label for="type" class="control-label" translate>Date Type</label>
+                            <select class="form-control" formControlName="date_type">
+                                      <option value="null" selected="true">--Select--</option>
+                                      <option *ngFor="let item of listMaster['dateType']" [ngValue]="item.id">{{item.name}}</option>
+                                  </select>
+                        </div>
+                        <div class="block-search">
+                            <label for="" class="control-label" translate> From</label>
+                            <div clickOutside (clickOutside)="d.close()" class="input-group">
+                                <input [maxDate]="searchForm.value.date_to | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="d" formControlName="date_from" ngbDatepicker #d="ngbDatepicker">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                            </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="block-search">
+                            <label for="" class="control-label" translate> To</label>
+                            <div clickOutside (clickOutside)="dt.close()" class="input-group">
+                                <input [minDate]="searchForm.value.date_from | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dt" formControlName="date_to" ngbDatepicker #dt="ngbDatepicker">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" (click)="dt.toggle()" type="button">
+                                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                            </button>
+                                </div>
+                            </div>
+                        </div>
+    
+                    </form>
+                    <div class="block-btn-search">
+                        <label class="control-label">&nbsp;</label>
+                        <div class="group-btn-search">
+                            <button type="button" class="btn-default-custom" (click)="tableService.searchAction()">Search</button>
+                            <button type="button" class="btn-default-custom" (click)="tableService.resetAction(this.searchForm)">Reset</button>
                         </div>
                     </div>
-                </div>
-                <div class="block-search">
-                    <label for="buyer_type" class="control-label">To</label>
-                    <div class="input-group">
-                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="to" ngbDatepicker #t1="ngbDatepicker">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" (click)="t1.toggle()" type="button">
-                                <i class="fa fa-calendar" aria-hidden="true"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-            <div class="block-btn-search">
-                <label class="control-label">&nbsp;</label>
-                <div class="group-btn-search">
-                    <button type="button" class="btn-default-custom" (click)="tableService.searchAction()">Search</button>
-                    <button type="button" class="btn-default-custom" (click)="tableService.resetAction(searchForm)">Cancel</button>
                 </div>
             </div>
-        </div>
-    </div>
     <div class="row mg-top-10">
         <div class="col-12">
             <div class="card no-border">
@@ -70,32 +76,44 @@
                     <div class="scroll-container table-responsive list">
                         <table class='table table-bordered table-order'>
                             <thead class="bg-white">
-                                <tr>
-                                    <th>No</th>
-                                    <th>RMA No</th>
-                                    <th>SO No</th>
-                                    <th>Customer</th>
-                                    <th>Type</th>
-                                    <th>Issue Date</th>
-                                    <th>Total Amount</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let item of list.items">
-                                    <td>{{ item.id }}</td>
-                                    <td>{{ item.id }}</td>
-                                    <td>{{ item.id }}</td>
-                                    <td>{{ item.id }}</td>
-                                    <td>{{ item.id }}</td>
-                                    <td>{{ item.id }}</td>
-                                    <td>{{ item.id | currency }}</td>
-                                    <td>{{ item.id }}</td>
-                                </tr>
-                                <tr *ngIf="list.items.length == 0">
-                                    <td class="text-center" colspan="100%">No data.</td>
-                                </tr>
-                            </tbody>
+                                    <tr>
+                                            <th translate>Return Order No</th>
+                                            <th translate>Return Type</th>
+                                            <th translate>Customer</th>
+                                            <th translate>Request Date</th>
+                                            <th translate>Status</th>
+                                            <th translate>Sales Order No</th>
+                                            <th translate>Warehouse</th>
+                                            <th translate>Total Return QTY</th>
+                                            <th translate>Total Accepted QTY</th>
+                                            <th translate>Return Time</th>
+                                            <th translate>Salesperson</th>
+                                            <th translate>Last Updated On</th>
+                                            <th translate>Last Updated By</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
+                                        <tr>
+                                            <td>{{item.code}}</td>
+                                            <td>{{item.cus_po}}</td>
+                                            <td>{{item.quote_no}}</td>
+                                            <td>{{item.buyer_name}}</td>
+                                            <td>{{item.sale_person_name}}</td>
+                                            <td></td>
+                                            <td>{{item.order_date | date:'MM/dd/yyy'}}</td>
+                                            <td>{{item.delivery_date | date:'MM/dd/yyyy'}}</td>
+                                            <td>{{item.total_price | currency}}</td>
+                                            <td> </td>
+                                            <td> </td>
+                                            <td> </td>
+                                            <td> </td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody *ngIf="list.items.length == 0">
+                                        <tr>
+                                            <td colspan="100%" class="text-center" translate>No data.</td>
+                                        </tr>
+                                    </tbody>
                         </table>
                     </div>
                 </div>
