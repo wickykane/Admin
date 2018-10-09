@@ -42,7 +42,7 @@ export class ItemMiscModalContent implements OnInit, OnDestroy {
         public itemService: ItemService,
         public fb: FormBuilder,
         private helper: Helper,
-        private _hotkeysService: HotkeysService,
+        public _hotkeysService: HotkeysService,
         public toastr: ToastrService,
         public tableService: TableService) {
         this.searchForm = fb.group({
