@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewContainerRef, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
@@ -16,6 +16,7 @@ import { HotkeysService } from 'angular2-hotkeys';
 // tslint:disable-next-line:import-blacklist
 import { Subject } from 'rxjs';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
+import { cdArrowTable } from '../../../../shared/index';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { ItemModalContent } from '../../../../shared/modals/item.modal';
 import { ItemsOrderModalContent } from '../modals/items-order.modal';
@@ -45,6 +46,7 @@ export class RmaCreateComponent implements OnInit {
         list_invoice: []
     };
     public selectedIndex = 0;
+    public selectedIndex2 = 0;
     public data = {};
     public customer = {
         billing: [],
@@ -94,7 +96,6 @@ export class RmaCreateComponent implements OnInit {
     public currentDt;
     public requiredInv = false;
 
-
     public messageConfig = {
         'SB': 'Are you sure that you want to submit this return order to approver?', // Submit
         'AR': 'Are you sure that you approve and send this return order to Warehouse for receipt?', // waiting receive
@@ -102,6 +103,8 @@ export class RmaCreateComponent implements OnInit {
     };
 
     public searchKey = new Subject<any>(); // Lazy load filter
+    @ViewChild('cdTable') table: cdArrowTable;
+    @ViewChild('cdTable2') table2: cdArrowTable;
 
     /**
      * Init Data
@@ -116,7 +119,7 @@ export class RmaCreateComponent implements OnInit {
         private modalService: NgbModal,
         private service: RMAService,
         public keyService: RMACreateKeyService,
-        private _hotkeysService: HotkeysService,
+        public _hotkeysService: HotkeysService,
         private dt: DatePipe) {
         this.generalForm = fb.group({
             'company_id': [null, Validators.required],
@@ -191,6 +194,40 @@ export class RmaCreateComponent implements OnInit {
         this.cd.detectChanges();
     }
 
+    selectData(data) { }
+
+    selectData2(data) { }
+
+    selectTable() {
+      this.table2.reInitKey(this.data['tableKey']);
+      console.log(this.table);
+      console.log(this.table2);
+        this.selectedIndex = 0;
+        this.table.scrollToTable();
+        setTimeout(() => {
+            const button = this.table.element.nativeElement.querySelectorAll('td button');
+            if (button && button[this.selectedIndex]) {
+                button[this.selectedIndex].focus();
+            }
+        });
+        this.refresh();
+    }
+
+    selectTable2() {
+      this.table.reInitKey(this.data['tableKey']);
+      console.log(this.table);
+      console.log(this.table2);
+        this.selectedIndex2 = 0;
+        this.table2.scrollToTable();
+        setTimeout(() => {
+            const button = this.table2.element.nativeElement.querySelectorAll('td button');
+            if (button && button[this.selectedIndex2]) {
+                button[this.selectedIndex2].focus();
+            }
+        });
+        this.refresh();
+    }
+
     numberMaskObject(max?) {
         return createNumberMask({
             allowDecimal: true,
@@ -228,7 +265,7 @@ export class RmaCreateComponent implements OnInit {
     /**
      * Internal Function
      */
-    back() {
+    backList() {
         const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
         modalRef.result.then(res => {
             if (res) {
@@ -519,8 +556,11 @@ export class RmaCreateComponent implements OnInit {
         modalRef.componentInstance.setIgnoredItems = params;
 
         modalRef.result.then(res => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
             if (res) {
-              console.log(res);
                 res.forEach(selectedItem => {
                     const itemIndex = this.list.returnItem_delete.findIndex(item => item.order_detail_id === selectedItem.order_detail_id);
                     if (itemIndex >= 0) {
@@ -533,13 +573,24 @@ export class RmaCreateComponent implements OnInit {
                     });
                 });
                 this.calcTotal();
+                // this.selectTable();
             }
-        }, dismiss => { });
+        }, dismiss => {
+            console.log(this.data['tableKey']);
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
+        });
     }
 
     addNewItem() {
         const modalRef = this.modalService.open(ItemModalContent, { size: 'lg' });
         modalRef.result.then(res => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table2.reInitKey(this.data['tableKey']);
+            }
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.replaceItem).forEach((item) => {
@@ -564,8 +615,14 @@ export class RmaCreateComponent implements OnInit {
                 }));
 
                 this.updateTotal();
+                // this.selectTable2();
             }
-        }, dismiss => { });
+        }, dismiss => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table2.reInitKey(this.data['tableKey']);
+            }
+        });
 
     }
 
