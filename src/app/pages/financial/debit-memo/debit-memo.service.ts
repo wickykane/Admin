@@ -117,4 +117,8 @@ export class DebitMemoService {
         const url = 'debit/' + debitId + '/send';
         return this.API.post(url, params);
     }
+    getReceiptVoucher(debitId) {
+        const url = 'debit/voucher/' + debitId;
+        return this.API.get(url);
+    }
 }

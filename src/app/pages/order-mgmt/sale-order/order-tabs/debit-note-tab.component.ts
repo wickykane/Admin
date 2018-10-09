@@ -50,13 +50,9 @@ export class SaleOrderDebitNoteTabComponent implements OnInit {
      */
 
     getList() {
-        const params = {...this.tableService.getParams()};
-        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
-
-        this.orderService.getInvoice( this._orderId).subscribe(res => {
+        this.orderService.getDebitMemo( this._orderId).subscribe(res => {
             try {
-                this.list.items = [] || res.data.rows;
-                this.tableService.matchPagingOption(res.data);
+                this.list.items =  res.data.rows;
             } catch (e) {
                 console.log(e);
             }
