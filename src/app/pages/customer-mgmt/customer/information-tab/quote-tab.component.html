@@ -59,26 +59,26 @@
                     <div class="scroll-container table-responsive list">
                         <table class='table table-bordered table-order'>
                             <thead class="bg-white">
-                                <tr>
-                                    <th>No</th>
+                                <tr>                                  
                                     <th>Quote No</th>
                                     <th>Quote Date</th>
-                                    <th>Customer</th>
-                                    <th>Total Items</th>
+                                    <th>Salesperson</th>
+                                    <th>Approver</th>
+                                    <th>Expiry date</th>
                                     <th>Total Amount</th>
                                     <th>Status</th>
 
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let item of list.items">
-                                    <td>{{ item.id }}</td>
-                                    <td>{{ item.cd }}</td>
-                                    <td>{{ item.qt_dt }}</td>
-                                    <td>{{ item.buyer_name }}</td>
-                                    <td>{{ item.total_item }}</td>
+                                <tr *ngFor="let item of list.items; let i = index;">                                   
+                                    <td><a class="text-primary" [routerLink]="['/order-management/sale-quotation/detail',item.id]">{{ item.quote_no }}</a></td>
+                                    <td>{{ item.quote_date }}</td>
+                                    <td>{{ item.sale_person_name }}</td>
+                                    <td>{{ item.approver_name }}</td>
+                                    <td>{{ item.expire_dt }}</td>
                                     <td>{{ item.total_price | currency }}</td>
-                                    <td>{{ item.sts }}</td>
+                                    <td>{{ item.status_name }}</td>
                                 </tr>
                                 <tr *ngIf="list.items.length == 0">
                                     <td class="text-center" colspan="100%">No data.</td>
@@ -88,6 +88,25 @@
                     </div>
 
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="row normal-pagination mg-top-10" *ngIf="list.items.length > 0">
+        <div class="col-md-6">
+            <div class="text-left">
+                <div class="col-md-6" style="padding-left: 0px;">
+                    <span style="float: left; padding-right: 10px;">{{list.items.length}}/{{tableService.pagination.total_record}} items </span>
+                    <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length" (change)="tableService.changeLength()">
+                        <option *ngFor="let option of tableService.itemPerPageOptions" [ngValue]="option">{{option}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="text-right">
+                <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length"
+                    [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page"
+                    [maxSize]="tableService.maxSize" [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
             </div>
         </div>
     </div>
