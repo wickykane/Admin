@@ -199,8 +199,8 @@ export class RmaCreateComponent implements OnInit {
     selectData2(data) { }
 
     selectTable() {
-      this.table2.reInitKey(this.data['tableKey']);
 
+        this.data['cdTable'] = 'table2';
         this.selectedIndex = 0;
         this.table.scrollToTable();
         setTimeout(() => {
@@ -213,8 +213,8 @@ export class RmaCreateComponent implements OnInit {
     }
 
     selectTable2() {
-      this.table.reInitKey(this.data['tableKey']);
 
+        this.data['cdTable'] = 'table';
         this.selectedIndex2 = 0;
         this.table2.scrollToTable();
         setTimeout(() => {
