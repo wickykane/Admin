@@ -368,7 +368,7 @@
                     </div>
                     <div class="card-body no-padding">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-order return" #cdTable='cdArrowTable' cdArrowTable [collection]="list.returnItem" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
+                            <table class="table table-bordered table-order return" #cdTable='cdArrowTable' [disabledKey]="data['cdTable'] == 'table'" cdArrowTable [collection]="list.returnItem" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                                 <thead>
                                     <tr>
                                         <th style="width:70px" translate>Action</th>
@@ -455,7 +455,7 @@
                     </div>
                     <div class="card-body no-padding">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-order replace" #cdTable2='cdArrowTable' cdArrowTable [collection]="list.replaceItem" [(selectedIndex)]="selectedIndex2" (onEnter)="selectData2($event)">
+                            <table class="table table-bordered table-order replace" #cdTable2='cdArrowTable' [disabledKey]="data['cdTable'] == 'table2'" cdArrowTable [collection]="list.replaceItem" [(selectedIndex)]="selectedIndex2" (onEnter)="selectData2($event)">
                                 <thead>
                                     <tr>
                                         <th style="width:70px" translate>Action</th>
