@@ -70,7 +70,7 @@ export class CustomerReceiptVoucherTabComponent implements OnInit {
         const params = {...this.tableService.getParams(), ...this.searchForm.value};
         Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
-        this.customerService.getListInvoice(params).subscribe(res => {
+        this.customerService.getListInvoice(this._customerId, params).subscribe(res => {
             try {
                 this.list.items = [] || res.data.rows;
                 this.tableService.matchPagingOption(res.data);
