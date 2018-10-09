@@ -26,6 +26,7 @@ export class cdArrowTable implements OnDestroy {
         this._selectedIndex = value;
     }
 
+    @Input() disabledKey;
 
     ngOnDestroy() {
         this.resetKeys();
@@ -67,7 +68,7 @@ export class cdArrowTable implements OnDestroy {
 
     hotKeyConfig() {
         this._hotkeysService.add(new Hotkey('up', (event: KeyboardEvent): boolean => {
-            if (this._selectedIndex === 0) {
+            if (this._selectedIndex === 0 || this.disabledKey) {
                 return;
             }
             this._selectedIndex--;
@@ -76,7 +77,7 @@ export class cdArrowTable implements OnDestroy {
         }, undefined, 'Up'));
 
         this._hotkeysService.add(new Hotkey('down', (event: KeyboardEvent): boolean => {
-            if (this._collection.length === 0 || this._selectedIndex === this._collection.length - 1) {
+            if (this._collection.length === 0 || this._selectedIndex === this._collection.length - 1 || this.disabledKey) {
                 return;
             }
             this._selectedIndex++;
