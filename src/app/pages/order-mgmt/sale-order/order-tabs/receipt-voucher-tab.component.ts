@@ -53,9 +53,9 @@ export class SaleOrderReceiptVoucherTabComponent implements OnInit {
         const params = {...this.tableService.getParams()};
         Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
-        this.orderService.getInvoice( this._orderId).subscribe(res => {
+        this.orderService.getReceiptVoucher(this._orderId).subscribe(res => {
             try {
-                this.list.items =  res.data;
+                this.list.items =  res.data.rows;
                 this.tableService.matchPagingOption(res.data);
             } catch (e) {
                 console.log(e);

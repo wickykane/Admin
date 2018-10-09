@@ -226,6 +226,18 @@ export class OrderService {
         const url = 'order/order-invoice/' + id;
         return this.API.get(url);
     }
+    getReceiptVoucher(id) {
+        const url = 'order/voucher/' + id;
+        return this.API.get(url);
+    }
+    getCreditMemo(id) {
+        const url = 'order/credit-memo/' + id;
+        return this.API.get(url);
+    }
+    getDebitMemo(id) {
+        const url = 'order/debit-memo/' + id;
+        return this.API.get(url);
+    }
     previewOrder(params) {
         const url = 'order/preview-order';
         return this.API.post(url, params);
@@ -254,9 +266,9 @@ export class OrderService {
         const url = 'order/reference-data';
         return this.API.get(url);
     }
-    getRMAForOrder(order_id, params) {
-        const url = 'rma/get-data-by-order/' + order_id;
-        return this.API.get(url, params);
+    getRMA(order_id) {
+        const url = 'order/rma/' + order_id;
+        return this.API.get(url);
     }
     convertOrderToSO(buyer_id, params) {
         const url = 'order/sale-quote/buyer-approved/' + buyer_id;

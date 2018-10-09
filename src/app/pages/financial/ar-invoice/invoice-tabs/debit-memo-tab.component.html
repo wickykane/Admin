@@ -10,44 +10,43 @@
                             <table class='table table-bordered table-order'>
                                 <thead class="bg-white">
                                     <tr>
-                                        <th translate>Credit Memo No</th>
-                                        <th translate translate>Issue Date</th>
-                                        <th translate>Customer</th>
-                                        <th translate translate>Related Document</th>
-                                        <th translate translate>Total Amount</th>
-                                        <th translate translate>Balance Amount</th>
-                                        <th class="text-center" translate>Status</th>
-                                        <th class="text-center" translate>Age</th>
-                                        <th class="text-center" translate>Last Updated Date</th>
-                                        <th class="text-center" translate>Last Updated By</th>
+                                        <th>Debit Memo No</th>
+                                        <th>Issue Date</th>
+                                        <th>Customer Name</th>
+                                        <th>Related Document</th>
+                                        <th>Due Date</th>
+                                        <th>Total Due</th>
+                                        <th>Balance Due</th>
+                                        <th>Status</th>
+                                        <th>Aged Overdue</th>
+                                        <th>Last Updated Date</th>
+                                        <th>Last Updated By</th>
                                     </tr>
                                 </thead>
                                 <tbody *ngFor="let item of list.items">
                                     <tr>
                                         <td>
-                                            {{item.cd}}
+                                          {{item.no}}
                                         </td>
-                                        <td class="text-center">{{item.issue_date | date:'MM/dd/yyyy' }}</td>
-                                        <td>{{item.customer_name}}</td>
-                                        <td class="text-center">{{item.inv_num}}</td>
-                                        <td class="text-center">
-                                            {{item.total_price | currency}}
+                                        <td>{{item.issue_date | date:'MM/dd/yyyy'}}</td>
+                                        <td>{{item.company_name}}</td>
+                                        <td>{{item.doc_no}}</td>
+                                        <td>{{item.due_date | date:'MM/dd/yyyy'}}</td>
+                                        <td>{{item.total_price | currency}}</td>
+                                        <td>{{item.balance_price | currency}}</td>
+                                        <td>
+                                            <span class="badge badge-info bg-blue" *ngIf="item.sts == 1">{{item.sts_name}}</span>
+                                            <span class="badge badge-warning bg-texas-rose" *ngIf="item.sts == 2">{{item.sts_name}}</span>
+                                            <span class="badge badge-danger bg-magenta" *ngIf="item.sts == 3">{{item.sts_name}}</span>
+                                            <span class="badge badge-success bg-strong-green" *ngIf="item.sts == 4">{{item.sts_name}}</span>
+                                            <span class="badge badge-primary bg-darkblue" *ngIf="item.sts == 5">{{item.sts_name}}</span>
+                                            <span class="badge badge-primary bg-lemon" *ngIf="item.sts == 6">{{item.sts_name}}</span>
+                                            <span class="badge badge-danger bg-red" *ngIf="item.sts == 7">{{item.sts_name}}</span>
+                                            <span class="badge badge-primary bg-bright-grey" *ngIf="item.sts == 8">{{item.sts_name}}</span>
                                         </td>
-                                        <td class="text-center">
-                                            {{item.balance_price | currency}}
-                                        </td>
-                                        <td class="text-center">
-                                            <span class="badge badge-info bg-blue" *ngIf="item.sts_code == 'NW'">{{item.sts}}</span>
-                                            <span class="badge badge-warning bg-texas-rose" *ngIf="item.sts_code == 'SB'">{{item.sts}}</span>
-                                            <span class="badge badge-danger bg-magenta" *ngIf="item.sts_code == 'RJ'">{{item.sts}}</span>
-                                            <span class="badge badge-success bg-strong-green" *ngIf="item.sts_code == 'AP'">{{item.sts}}</span>
-                                            <span class="badge badge-danger bg-red" *ngIf="item.sts_code == 'CC'">{{item.sts}}</span>
-                                            <span class="badge badge-primary bg-lemon" *ngIf="item.sts_code == 'RD'">{{item.sts}}</span>
-                                            <span class="badge badge-primary bg-bright-grey" *ngIf="item.sts_code == 'RF'">{{item.sts}}</span>
-                                        </td>
-                                        <td class="text-center">{{item.age }}</td>
-                                        <td class="text-center">{{item.updated_at | date:'MM/dd/yyyy' }}</td>
-                                        <td class="text-center">{{item.updated_by}}</td>
+                                        <td>{{item.aged}}</td>
+                                        <td class="text-center">{{item.updated_at | date:'MM/dd/yyyy'}}</td>
+                                        <td>{{item.updated_by}}</td>
                                     </tr>
                                 </tbody>
                                 <tbody *ngIf="list.items.length == 0">

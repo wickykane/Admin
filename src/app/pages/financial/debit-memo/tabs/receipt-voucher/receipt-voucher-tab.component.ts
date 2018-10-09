@@ -2,11 +2,12 @@ import { Component, Input, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TableService } from './../../../../../services/table.service';
 
+import { DebitMemoService } from '../../debit-memo.service';
 @Component({
     selector: 'app-receipt-voucher-tab',
     templateUrl: './receipt-voucher-tab.component.html',
     styleUrls: ['./receipt-voucher-tab.component.scss'],
-    providers: []
+    providers: [DebitMemoService]
 })
 export class ReceiptVoucherTabComponent implements OnInit {
 
@@ -18,7 +19,7 @@ export class ReceiptVoucherTabComponent implements OnInit {
     @Input() set orderId(id) {
         if (id) {
             this._orderId = id;
-            // this.getList();
+            this.getList();
         }
     }
     @Input() set listItem(list) {
@@ -38,7 +39,8 @@ export class ReceiptVoucherTabComponent implements OnInit {
     constructor(
         public fb: FormBuilder,
         private vRef: ViewContainerRef,
-        public tableService: TableService
+        public tableService: TableService,
+        public debitService: DebitMemoService
       ) {
         //  Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
@@ -51,18 +53,14 @@ export class ReceiptVoucherTabComponent implements OnInit {
      * Internal Function
      */
 
-    // getList() {
-    //     const params = {...this.tableService.getParams()};
-    //     Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
-
-    //     this.orderService.getInvoice( this._orderId).subscribe(res => {
-    //         try {
-    //             this.list.items = [] || res.data.rows;
-    //             this.tableService.matchPagingOption(res.data);
-    //         } catch (e) {
-    //             console.log(e);
-    //         }
-    //     });
-    // }
+    getList() {
+        this.debitService.getReceiptVoucher( this._orderId).subscribe(res => {
+            try {
+                this.list.items =  res.data.rows;
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
 
 }
