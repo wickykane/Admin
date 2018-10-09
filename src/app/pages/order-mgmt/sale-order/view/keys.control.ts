@@ -13,10 +13,25 @@ export class SaleOrderViewKeyService extends KeyboardBaseService {
     };
 
     initKey() {
+        if (this.context.parent.data['shortcut']) {
+            return;
+        }
         this._hotkeysService.add(new Hotkey('alt+backspace', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             this.context.cancel();
             return;
         }, undefined, 'Back'));
+
+        this._hotkeysService.add(new Hotkey('alt+pagedown', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            this.context.changeTab(1);
+            return;
+        }, undefined, 'Next Tab'));
+
+        this._hotkeysService.add(new Hotkey('alt+pageup', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            this.context.changeTab(-1);
+            return;
+        }, undefined, 'Prev Tab'));
     }
 }

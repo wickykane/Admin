@@ -22,13 +22,18 @@ export class KeyboardBaseService implements OnDestroy {
 
     reInitKey() {
         this._hotkeysService.add(this.keys);
+        setTimeout(() => {
+            if (this.context.refresh) {
+                this.context.refresh();
+            }
+        });
     }
 
     getKeys() {
         return Array.from((this._hotkeysService) ? this._hotkeysService.hotkeys : []);
     }
 
-    resetKeys() {
+    resetKeys(flag?) {
         if (!this._hotkeysService) {
             return;
         }
@@ -36,6 +41,13 @@ export class KeyboardBaseService implements OnDestroy {
         keys.map(key => {
             this._hotkeysService.remove(key);
         });
+        if (!flag) {
+            setTimeout(() => {
+                if (this.context.refresh) {
+                    this.context.refresh();
+                }
+            });
+        }
     }
 
     initKey() { }
@@ -45,6 +57,6 @@ export class KeyboardBaseService implements OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.resetKeys();
+        this.resetKeys(1);
     }
 }

@@ -17,8 +17,9 @@
                                             <label for="code" class="control-label" translate> <strong>Customer Name</strong> </label>
                                             <span class="text-danger">(*)</span>
                                             <div>
-                                                <ng-select [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="buyer_id" [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('buyer_id').errors?.required) || false   }" class="infinity-scroll-select" [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true"
-                                                    style="width: 100px; margin-left: 2px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="buyer_id">
+                                                <ng-select [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="buyer_id" [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('buyer_id').errors?.required) || false   }" class="infinity-scroll-select" [typeahead]="searchKey"
+                                                    (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 100px; margin-left: 2px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id"
+                                                    formControlName="buyer_id">
                                                     <ng-template ng-option-tmp let-item="item">
                                                         <span title="{{item.company_name}}">{{item.company_name}}</span>
                                                     </ng-template>
@@ -382,7 +383,7 @@
                         <div class="table-responsive">
                             <table class="table table-bordered table-order" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                                 <thead>
-                                    <tr>
+                                    <tr [ngClass]="{'row-selected': $index == selectedIndex}">
                                         <th style="width:50px" translate>Action</th>
                                         <th style="width:70px" translate>Item No</th>
                                         <th translate>Description</th>

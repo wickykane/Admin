@@ -381,7 +381,7 @@
                             <table class="table table-bordered table-order" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                                 <thead>
                                     <tr>
-                                        <th style="width:100px" translate>Action</th>
+                                        <th style="width:50px" translate>Action</th>
                                         <th style="width:150px" translate>Item No</th>
                                         <th translate>Description</th>
                                         <th translate>Condition</th>
@@ -404,7 +404,7 @@
                                 <ng-container *ngIf="list['items'].length > 0">
                                     <tbody *ngFor="let item of list['items']; let $index = index;">
                                         <tr [ngClass]="{'row-selected': $index == selectedIndex}">
-                                            <td>
+                                            <td class="text-center"> 
                                                 <button class="btn btn-danger btn-xs" type="button" (click)="deleteAction(item.item_id || item.misc_id, item.item_condition_id)">
                                                         <i class="fa fa-trash"></i>
                                                     </button>
