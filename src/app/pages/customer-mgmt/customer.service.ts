@@ -64,7 +64,7 @@ export class CustomerService {
     }
 
     getListQuote(id, params) {
-        const url = 'buyer/purchase-orders/' + id;
+        const url = 'buyer/sale-quote/' + id;
         return this.API.get(url, params);
     }
 
@@ -73,8 +73,8 @@ export class CustomerService {
         return this.API.get(url, params);
     }
 
-    getListInvoice(params) {
-        const url = 'buyer/index';
+    getListInvoice(id, params) {
+        const url = 'buyer/invoice/' + id;
         return this.API.get(url, params);
     }
 
@@ -83,8 +83,8 @@ export class CustomerService {
         return this.API.get(url, params);
     }
 
-    getListPayment(params) {
-        const url = 'buyer/index';
+    getListPayment(id, params) {
+        const url = 'buyer/payment/' + id;
         return this.API.get(url, params);
     }
 
@@ -156,11 +156,11 @@ export class CustomerService {
         const url = 'buyer/list-route-gate-time';
         return this.API.get(url);
     }
-    getListPaymentTerm(){
+    getListPaymentTerm() {
         const url = 'buyer/payment-terms';
         return this.API.get(url);
     }
-    getListPaymentMethod(){
+    getListPaymentMethod() {
         const url = 'buyer/payment-methods';
         return this.API.get(url);
     }

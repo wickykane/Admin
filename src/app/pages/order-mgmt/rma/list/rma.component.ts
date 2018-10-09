@@ -42,10 +42,10 @@ export class RmaComponent implements OnInit {
     public statusConfig = {
         'NW': { color: 'blue', name: 'New', img: './assets/images/icon/new.png' },
         'SB': { color: 'texas-rose', name: 'Submited' },
-        'RC': { color: 'strong-green', name: 'Revised', img: './assets/images/icon/approved.png' },
+        'RS': { color: 'strong-green', name: 'Revised', img: './assets/images/icon/approved.png' },
         'AR': { color: 'rock-blue', name: 'Awaiting Receipt' },
         'IR': { color: 'green', name: 'In Receipt' },
-        'RT': { color: 'darkblue', name: 'Received' },
+        'RC': { color: 'darkblue', name: 'Received' },
         'CP': { color: 'lemon', name: 'Completed', img: './assets/images/icon/full_delivered.png' },
         'CC': { color: 'red', name: 'Canceled', img: './assets/images/icon/cancel.png' },
     };
