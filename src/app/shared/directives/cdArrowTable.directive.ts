@@ -4,7 +4,7 @@ import { Helper } from './../helper/common.helper';
 declare var jQuery: any;
 
 // tslint:disable-next-line:directive-selector
-@Directive({ selector: '[cdArrowTable]', providers: [HotkeysService, Helper] })
+@Directive({ selector: '[cdArrowTable]', providers: [HotkeysService, Helper], exportAs: 'cdArrowTable' })
 // tslint:disable-next-line:class-name
 export class cdArrowTable implements OnDestroy {
     constructor(private _hotkeysService: HotkeysService, public element: ElementRef, private helper: Helper) {

@@ -16,7 +16,7 @@
                 <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
                     <div class="block-search">
                         <label for="cd" class="control-label" translate>Order No</label>
-                        <input type="text" name="cd" formControlName="cd" class="form-control" placeholder="" capitalize>
+                        <input [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="cd" type="text" name="cd" formControlName="cd" class="form-control" placeholder="" capitalize>
                     </div>
                     <div class="block-search">
                         <label for="return_type_id" class="control-label">Return Type</label>
@@ -51,7 +51,7 @@
                     <div class="block-search">
                         <label for="" class="control-label" translate> From</label>
                         <div clickOutside (clickOutside)="d.close()" class="input-group">
-                            <input [maxDate]="searchForm.value.request_date_to | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="d" formControlName="request_date_from" ngbDatepicker #d="ngbDatepicker">
+                            <input [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="request_date_from" [maxDate]="searchForm.value.request_date_to | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="d" formControlName="request_date_from" ngbDatepicker #d="ngbDatepicker">
                             <div class="input-group-append">
                                 <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
                                             <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -62,7 +62,7 @@
                     <div class="block-search">
                         <label for="" class="control-label" translate> To</label>
                         <div clickOutside (clickOutside)="dt.close()" class="input-group">
-                            <input [minDate]="searchForm.value.request_date_from | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dt" formControlName="request_date_to" ngbDatepicker #dt="ngbDatepicker">
+                            <input [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="request_date_to" [minDate]="searchForm.value.request_date_from | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dt" formControlName="request_date_to" ngbDatepicker #dt="ngbDatepicker">
                             <div class="input-group-append">
                                 <button class="btn btn-outline-secondary" (click)="dt.toggle()" type="button">
                                             <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -112,12 +112,12 @@
                                 </thead>
                                 <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                                     <tr>
-                                        <td><a class="text-primary" [routerLink]="['detail', item?.id]">{{item.cd}}</a></td>
+                                        <td><a class="text-primary" [routerLink]="['detail', item.id]">{{item.cd}}</a></td>
                                         <td>{{item.return_type}}</td>
                                         <td>{{item.company_name}}</td>
                                         <td>{{item.request_date |date:'MM/dd/yyyy'}}</td>
                                         <td><span *ngIf="item.sts_name">{{item.sts_name['name']}}</span></td>
-                                        <td><a class="text-primary" (click)="detailOrder(item.order_id)">{{item.order_code}}</a></td>
+                                        <td><a class="text-primary" [routerLink]="['/order-management/sale-order/detail', item.order_id]">{{item.order_code}}</a></td>
                                         <td>{{item.warehouse_name}}</td>
                                         <td class="text-center">{{item.total_return_qty}}</td>
                                         <td class="text-center">{{item.total_accepted_qty}}</td>
