@@ -5,6 +5,7 @@
     </button>
 </div>
 <div class="modal-body">
+    <app-shortcut [listShortcut]='_hotkeysService.hotkeys'></app-shortcut>
     <div class="search-block block-content pd-bottom tab-content bg-gray-light">
         <div class="row">
             <ngb-tabset #tabSet class="tab-header" activeId="vehicle" type="pills" (tabChange)="resetTab()">

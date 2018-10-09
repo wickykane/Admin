@@ -23,6 +23,9 @@ export class TableService {
 
     changeLength() {
         this.pagination['page'] = 1;
+        if (this.context.selectedIndex) {
+            this.context.selectedIndex = 0;
+        }
         if (this.context.searchForm) {
             this.temptSearchParams = this.context.searchForm.value;
 
@@ -108,6 +111,9 @@ export class TableService {
 
     changePage(index) {
         this.pagination['page'] = index;
+        if (this.context.selectedIndex) {
+            this.context.selectedIndex = 0;
+        }
         if (this.context.searchForm) {
             this.temptSearchParams = this.context.searchForm.value;
 
