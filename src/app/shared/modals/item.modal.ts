@@ -46,7 +46,7 @@ export class ItemModalContent implements OnInit, OnDestroy {
     constructor(public activeModal: NgbActiveModal,
         private helper: Helper,
         private cd: ChangeDetectorRef,
-        private _hotkeysService: HotkeysService,
+        public _hotkeysService: HotkeysService,
         public itemService: ItemService,
         public fb: FormBuilder,
         public toastr: ToastrService,
