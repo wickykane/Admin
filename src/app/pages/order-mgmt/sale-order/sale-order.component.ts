@@ -189,7 +189,7 @@ export class SaleOrderComponent implements OnInit {
                         this.updateStatusOrder(id, 6);
                         break;
                     case 'AP':
-                        this.putApproveOrder(id);
+                        this.updateStatusOrder(id, 5);
                         break;
                     case 'RJ':
                         this.updateStatusOrder(id, 11);
