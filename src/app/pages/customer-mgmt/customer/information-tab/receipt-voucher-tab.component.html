@@ -12,12 +12,7 @@
                                 <option [hidden]="true" [disabled]="true" [ngValue]="null"></option>
                                 <option *ngFor="let item of listMaster['paymentMethod']" [ngValue]="item.id">{{item.name}}</option>
                             </select>
-                        </div>
-                        <div class="block-search">
-                            <label for="customer_id" class="control-label" translate>Payer</label>
-                            <ng-select class="infinity-scroll-select" style="width: 110px;" [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="customer_id">
-                            </ng-select>
-                        </div>
+                        </div>                       
                         <div class="block-search">
                             <label for="sts" class="control-label">Status</label>
                             <ng-select class="ng-select-filter" [multiple]="true" [items]="this.listMaster['list-status']" bindLabel="name" bindValue="id" formControlName="status">
