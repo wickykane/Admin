@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -16,7 +16,8 @@ import { TerminatePolicyModalContent } from './modal/terminate-policy.modal';
     templateUrl: './late-fee-policy-detail.component.html',
     providers: [LateFeePolicyService, LateFeePolicyDetailKeyService],
     styleUrls: ['./late-fee-policy-detail.component.scss'],
-    animations: [routerTransition()]
+    animations: [routerTransition()],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LateFeePolicyDetailComponent implements OnInit {
 
@@ -35,6 +36,7 @@ export class LateFeePolicyDetailComponent implements OnInit {
     public isEdit = false;
 
     constructor(public router: Router,
+        private cd: ChangeDetectorRef,
         public route: ActivatedRoute,
         public fb: FormBuilder,
         public toastr: ToastrService,
@@ -105,6 +107,10 @@ export class LateFeePolicyDetailComponent implements OnInit {
         this.initLateFeeRules();
     }
 
+    refresh() {
+        this.cd.detectChanges();
+    }
+
     checkAll(ev) {
         this.list.items.forEach(x => (x.is_checked = ev.target.checked));
         this.list.checklist = this.list.items.filter(_ => _.is_checked);
@@ -136,6 +142,7 @@ export class LateFeePolicyDetailComponent implements OnInit {
         this.lateFeePolicyService.getListCustomerType().subscribe(res => {
             try {
                 this.listMaster['buyerType'] = res.data;
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
@@ -178,6 +185,7 @@ export class LateFeePolicyDetailComponent implements OnInit {
         this.lateFeePolicyService.getGenerateCode().subscribe(res => {
             this.generalForm.controls['code'].setValue(res.data.code);
             this.listMaster['generate-code'] = res.data.code;
+            this.refresh();
         });
     }
 
@@ -215,6 +223,7 @@ export class LateFeePolicyDetailComponent implements OnInit {
         params['company'] = listCustomer;
         this.lateFeePolicyService.createLateFeePolicy(params).subscribe(res => {
             this.toastr.success(res.message);
+            this.refresh();
             this.router.navigate(['/admin-panel/late-fee-policy']);
         }, err => {
             console.log(err);
@@ -231,6 +240,7 @@ export class LateFeePolicyDetailComponent implements OnInit {
         params['company'] = listCustomer;
         this.lateFeePolicyService.updateLateFeePolicy(id, params).subscribe(res => {
             this.toastr.success(res.message);
+            this.refresh();
             this.router.navigate(['/admin-panel/late-fee-policy']);
         }, err => {
             console.log(err);
@@ -257,6 +267,7 @@ export class LateFeePolicyDetailComponent implements OnInit {
                     this.list.items = res.data.detail;
                 }
                 this.keyService.watchContext.next(this);
+                this.refresh();
             }, err => {
                 console.log(err.message);
             });

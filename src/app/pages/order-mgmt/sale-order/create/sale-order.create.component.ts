@@ -1,10 +1,11 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewContainerRef, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 
 import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
 import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
@@ -14,11 +15,10 @@ import { OrderService } from '../../order-mgmt.service';
 // tslint:disable-next-line:import-blacklist
 import { Subject } from 'rxjs';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
+import { cdArrowTable } from '../../../../shared';
 import { ItemMiscModalContent } from '../../../../shared/modals/item-misc.modal';
 import { ItemModalContent } from '../../../../shared/modals/item.modal';
 import { OrderHistoryModalContent } from '../../../../shared/modals/order-history.modal';
-// import { OrderSaleQuoteModalContent } from '../../../../shared/modals/order-salequote.modal';
-import { PromotionModalContent } from '../../../../shared/modals/promotion.modal';
 import { SaleOrderCreateKeyService } from './keys.control';
 
 
@@ -110,6 +110,7 @@ export class SaleOrderCreateComponent implements OnInit {
     };
 
     public searchKey = new Subject<any>(); // Lazy load filter
+    @ViewChild(cdArrowTable) table: cdArrowTable;
 
     /**
      * Init Data
@@ -123,6 +124,7 @@ export class SaleOrderCreateComponent implements OnInit {
         private route: ActivatedRoute,
         private modalService: NgbModal,
         private orderService: OrderService,
+        private _hotkeysService: HotkeysService,
         public keyService: SaleOrderCreateKeyService,
         private dt: DatePipe) {
         this.generalForm = fb.group({
@@ -147,7 +149,7 @@ export class SaleOrderCreateComponent implements OnInit {
             'ship_method_option': [null]
         });
         //  Init Key
-        this.keyService.watchContext.next(this);
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {
@@ -198,6 +200,19 @@ export class SaleOrderCreateComponent implements OnInit {
         this.cd.detectChanges();
     }
 
+
+    selectTable() {
+        this.selectedIndex = 0;
+        this.table.scrollToTable();
+        setTimeout(() => {
+            const button = this.table.element.nativeElement.querySelectorAll('td button');
+            if (button && button[this.selectedIndex]) {
+                button[this.selectedIndex].focus();
+            }
+        });
+        this.refresh();
+    }
+
     numberMaskObject(max?) {
         return createNumberMask({
             allowDecimal: true,
@@ -215,8 +230,8 @@ export class SaleOrderCreateComponent implements OnInit {
                 this.generalForm.patchValue({ contact_user_id: this.addr_select.contact.id });
                 // }
 
-                const default_billing = (this.customer.billing || []).find(item => item.set_default) || {};
-                const default_shipping = (this.customer.shipping || []).find(item => item.set_default) || {};
+                const default_billing = (this.customer.billing || []).find(item => item.set_default) || this.customer.billing[0] || {};
+                const default_shipping = (this.customer.shipping || []).find(item => item.set_default) || this.customer.shipping[0] || {};
                 this.generalForm.patchValue({
                     billing_id: default_billing.address_id || null,
                     shipping_id: default_shipping.address_id || null,
@@ -256,7 +271,7 @@ export class SaleOrderCreateComponent implements OnInit {
     }
 
     changeCustomer() {
-        const buyer_id = this.generalForm.value.buyer_id;
+        const buyer_id = this.generalForm.getRawValue().buyer_id;
         this.customer = Object.create(this.copy_customer);
         this.addr_select = Object.create(this.copy_addr);
         if (buyer_id) {
@@ -272,9 +287,9 @@ export class SaleOrderCreateComponent implements OnInit {
             switch (type) {
                 case 'shipping':
                     if (!flag) {
-                        this.generalForm.patchValue({ 'carrier_id': null, 'ship_method_option': null, 'ship_method_rate': null });
+                        this.generalForm.patchValue({ 'carrier_id': 4, 'ship_method_option': null, 'ship_method_rate': null });
                     }
-                    const ship_id = this.generalForm.value.shipping_id;
+                    const ship_id = this.generalForm.getRawValue().shipping_id;
 
                     if (ship_id) {
                         this.addr_select.shipping = this.findDataById(ship_id, this.customer.shipping);
@@ -282,7 +297,7 @@ export class SaleOrderCreateComponent implements OnInit {
                     }
                     break;
                 case 'billing':
-                    const billing_id = this.generalForm.value.billing_id;
+                    const billing_id = this.generalForm.getRawValue().billing_id;
                     if (billing_id) {
                         this.addr_select.billing = this.findDataById(billing_id, this.customer.billing);
                     }
@@ -297,16 +312,16 @@ export class SaleOrderCreateComponent implements OnInit {
     getShippingReference(id) {
         this.orderService.getShippingReference(id).subscribe(res => {
             this.listMaster['carriers'] = res.data;
-            const arr = res.data.filter(item => item.name === 'UPS');
-            if (arr.length > 0) {
-                this.generalForm.patchValue({ 'carrier_id': 1, 'ship_method_option': null });
-            }
+            // const arr = res.data.filter(item => item.name === 'UPS');
+            // if (arr.length > 0) {
+            //     this.generalForm.patchValue({ 'carrier_id': 1, 'ship_method_option': null });
+            // }
             this.changeShipVia();
         });
     }
 
     changeShipVia() {
-        const carrier = this.listMaster['carriers'].find(item => item.id === this.generalForm.value.carrier_id) || { 'options': [], 'ship_rate': [], 'own_carrirer': '' };
+        const carrier = (this.listMaster['carriers'] || []).find(item => item.id === this.generalForm.getRawValue().carrier_id) || { 'options': [], 'ship_rate': [], 'own_carrirer': '' };
         this.listMaster['options'] = carrier.options || [];
         this.listMaster['ship_rates'] = carrier.ship_rate || [];
 
@@ -314,24 +329,25 @@ export class SaleOrderCreateComponent implements OnInit {
         let default_ship_rate = null;
         let enable = false;
 
-        if (+this.generalForm.value.carrier_id === 2 || this.generalForm.value.carrier_id !== 999 && !carrier.own_carrirer) {
+        if (+this.generalForm.getRawValue().carrier_id === 2 || this.generalForm.getRawValue().carrier_id !== 999 && !carrier.own_carrirer) {
             default_option = '888';
             default_ship_rate = 7;
 
-            if (+this.generalForm.value.carrier_id === 1) {
-                default_option = '01';
+            if (+this.generalForm.getRawValue().carrier_id === 1) {
+                // default_option = '01';
+                default_option = null;
                 default_ship_rate = null;
             }
 
-            if (+this.generalForm.value.carrier_id === 2) {
+            if (+this.generalForm.getRawValue().carrier_id === 2) {
                 default_option = '888';
                 default_ship_rate = 7;
             }
-            enable = [1, 2].indexOf(+this.generalForm.value.carrier_id) > -1;
+            enable = [1, 2].indexOf(+this.generalForm.getRawValue().carrier_id) > -1;
 
         }
 
-        if (+this.generalForm.value.carrier_id === 999) {
+        if (+this.generalForm.getRawValue().carrier_id === 999) {
             default_ship_rate = 7;
             this.generalForm.patchValue({ shipping_id: null });
             this.generalForm.get('shipping_id').clearValidators();
@@ -380,10 +396,10 @@ export class SaleOrderCreateComponent implements OnInit {
     }
 
     selectContact() {
-        const id = this.generalForm.value.contact_user_id;
+        const id = this.generalForm.getRawValue().contact_user_id;
         if (id) {
             const temp = this.customer.contact.filter(x => x.id === id);
-            this.addr_select.contact = temp[0];
+            this.addr_select.contact = temp[0] || {};
         }
         this.refresh();
     }
@@ -411,6 +427,10 @@ export class SaleOrderCreateComponent implements OnInit {
                 });
             });
             this.generalForm.get('prio_level').patchValue('CW');
+            this.generalForm.patchValue({ carrier_id: 999 });
+            this.generalForm.get('carrier_id').disable();
+            this.generalForm.get('ship_method_rate').disable();
+            this.changeShipVia();
         } else {
             const selected_Code = ['SD', 'ND', 'OT'];
             selected_Code.forEach(key => {
@@ -421,6 +441,10 @@ export class SaleOrderCreateComponent implements OnInit {
                 });
             });
             this.generalForm.get('prio_level').patchValue('SD');
+            this.generalForm.patchValue({ carrier_id: 4 });
+            this.generalForm.get('carrier_id').enable();
+            this.generalForm.get('ship_method_rate').enable();
+            this.changeShipVia();
         }
         this.refresh();
     }
@@ -473,7 +497,7 @@ export class SaleOrderCreateComponent implements OnInit {
         if (this.list.items && this.list.items.length > 0) {
             this.list.items.map(item => {
                 item.warehouse.find(k => {
-                    if (k['warehouse_id'] === this.generalForm.value.warehouse_id) {
+                    if (k['warehouse_id'] === this.generalForm.getRawValue().warehouse_id) {
                         return item.qty_avail = k.qty_available;
                     }
                 });
@@ -483,33 +507,32 @@ export class SaleOrderCreateComponent implements OnInit {
     }
 
     calcTaxShipping() {
-        // if (!this.generalForm.value.shipping_id) {
-        //     return;
-        // }
+        if (!this.generalForm.getRawValue().ship_method_rate || !this.generalForm.getRawValue().buyer_id) {
+            return;
+        }
         const params = {
-            'customer': this.generalForm.value.buyer_id,
-            'warehouse': this.generalForm.value.warehouse_id,
-            'address': this.generalForm.value.shipping_id,
-            'ship_via': this.generalForm.value.carrier_id,
+            'customer': this.generalForm.getRawValue().buyer_id,
+            'warehouse': this.generalForm.getRawValue().warehouse_id,
+            'address': this.generalForm.getRawValue().shipping_id,
+            'ship_via': this.generalForm.getRawValue().carrier_id,
             'option': this.generalForm.getRawValue().ship_method_option,
-            'ship_rate': this.generalForm.value.ship_method_rate,
+            'ship_rate': this.generalForm.getRawValue().ship_method_rate,
             'items': this.list.items.filter(item => !item.misc_id)
         };
         this.orderService.getTaxShipping(params).subscribe(res => {
 
-            if (res.data.mics) {
-                const old_misc = this.list.items.filter(item => item.misc_id && [1, 2].indexOf(item.misc_id) === -1 && +item.source_id !== 3);
-                const items = res.data.items || this.list.items.filter(item => !item.misc_id);
-                const misc = res.data.mics.map(item => {
-                    item.is_misc = 1;
-                    item.misc_id = item.id;
-                    item.discount_percent = 0;
-                    item.warehouse = this.listMaster['warehouses'];
-                    return item;
-                });
+            res.data.mics = res.data.mics || [];
+            const old_misc = this.list.items.filter(item => item.misc_id && [1, 2].indexOf(item.misc_id) === -1 && +item.source_id !== 3);
+            const items = res.data.items || this.list.items.filter(item => !item.misc_id);
+            const misc = res.data.mics.map(item => {
+                item.is_misc = 1;
+                item.misc_id = item.id;
+                item.discount_percent = 0;
+                item.warehouse = this.listMaster['warehouses'];
+                return item;
+            });
 
-                this.list.items = items.concat(misc, old_misc);
-            }
+            this.list.items = items.concat(misc, old_misc);
 
             // Assign tax to all item
             this.list.items.forEach(item => item.tax_percent = res.data.tax_percent);
@@ -520,15 +543,22 @@ export class SaleOrderCreateComponent implements OnInit {
     }
 
     deleteAction(sku, item_condition) {
+        const lastLength = this.list.items.length;
         this.list.items = this.list.items.filter((item) => {
             return (item.sku + (item.item_condition_id || 'mis') !== (sku + (item_condition || 'mis')));
         });
+        const index = this.selectedIndex - (lastLength - this.list.items.length);
+        this.selectedIndex = (index < 0) ? 0 : index;
         this.updateTotal();
     }
 
     addNewItem() {
         const modalRef = this.modalService.open(ItemModalContent, { size: 'lg' });
         modalRef.result.then(res => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
@@ -554,13 +584,22 @@ export class SaleOrderCreateComponent implements OnInit {
 
                 this.updateTotal();
             }
-        }, dismiss => { });
+        }, dismiss => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
+        });
 
     }
 
     addNewMiscItem() {
         const modalRef = this.modalService.open(ItemMiscModalContent, { size: 'lg' });
         modalRef.result.then(res => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
@@ -595,7 +634,12 @@ export class SaleOrderCreateComponent implements OnInit {
 
                 this.updateTotal();
             }
-        }, dismiss => { });
+        }, dismiss => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
+        });
     }
 
     confirmCreateOrder(type) {

@@ -7,9 +7,9 @@
         <button *ngIf="detail['sts_code'] =='SB'" class="btn btn-outline-success" (click)="confirmModal(_creditId, 3)"><i class="fa fa-check-square"></i> Approve</button>
         <button *ngIf="detail['sts_code'] == 'SB'" class="btn btn-outline-danger" (click)="confirmModal(_creditId, 4)"><i class="fa fa-ban" aria-hidden="true"></i> Reject</button>
         <button *ngIf="['AP','RD'].indexOf(detail['sts_code']) != -1" class="btn btn-outline-dark"><i class="fa fa-money" aria-hidden="true"></i> Pay</button>
-        <button *ngIf="['AP','RD'].indexOf(detail['sts_code']) != -1" class="btn btn-outline-dark"  [routerLink]="['/financial/credit-memo/apply-credit',_creditId]"><i class="fa fa-clipboard" aria-hidden="true"></i> Apply to Invoice</button>
+        <button *ngIf="['AP','RD'].indexOf(detail['sts_code']) != -1" class="btn btn-outline-dark" [routerLink]="['/financial/credit-memo/apply-credit',_creditId]"><i class="fa fa-clipboard" aria-hidden="true"></i> Apply to Invoice</button>
         <button class="btn btn-outline-dark" (click)="printPDF(_creditId)"><i class="fa fa-download" aria-hidden="true"></i> Print</button>
-        <button *ngIf="detail['sts_code'] == 'RJ'" class="btn btn-outline-dark" (click)="confirmModal(_creditId, 'RE-OPEN')"><i class="fa fa-external-link-square" aria-hidden="true"></i> Reopen</button>        
+        <button *ngIf="detail['sts_code'] == 'RJ'" class="btn btn-outline-dark" (click)="confirmModal(_creditId, 'RE-OPEN')"><i class="fa fa-external-link-square" aria-hidden="true"></i> Reopen</button>
         <button *ngIf="['SB','AP','CC','RD','RF'].indexOf(detail['sts_code']) != -1" class="btn btn-outline-dark" (click)="sendMail(_creditId)"><i class="fa fa-envelope-o" aria-hidden="true"></i> Send Mail</button>
     </div>
     <section class="rma-page block main-container block-order">
@@ -53,11 +53,11 @@
                                             <div class='col-6'>
                                                 <span class="badge badge-info bg-blue" *ngIf="detail['sts_code'] == 'NW'">{{detail['sts']}}</span>
                                                 <span class="badge badge-warning bg-texas-rose" *ngIf="detail['sts_code'] == 'SB'">{{detail['sts']}}</span>
-                                                <span class="badge badge-danger bg-magenta" *ngIf="detail['sts_code'] == 'AP'">{{detail['sts']}}</span>
-                                                <span class="badge badge-success bg-strong-green" *ngIf="detail['sts_code'] == 'RJ'">{{detail['sts']}}</span>
-                                                <span class="badge badge-primary bg-darkblue" *ngIf="detail['sts_code'] == 'CC'">{{detail['sts']}}</span>
+                                                <span class="badge badge-danger bg-magenta" *ngIf="detail['sts_code'] == 'RJ'">{{detail['sts']}}</span>
+                                                <span class="badge badge-success bg-strong-green" *ngIf="detail['sts_code'] == 'AP'">{{detail['sts']}}</span>
+                                                <span class="badge badge-danger bg-red" *ngIf="detail['sts_code'] == 'CC'">{{detail['sts']}}</span>
                                                 <span class="badge badge-primary bg-lemon" *ngIf="detail['sts_code'] == 'RD'">{{detail['sts']}}</span>
-                                                <span class="badge badge-danger bg-red" *ngIf="detail['sts_code'] == 'RF'">{{detail['sts']}}</span>
+                                                <span class="badge badge-primary bg-bright-grey" *ngIf="detail['sts_code'] == 'RF'">{{detail['sts']}}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -296,7 +296,7 @@
                                         <th class="text-center" translate>Description</th>
                                         <th class="text-center" translate>Condition</th>
                                         <th class="text-center" translate>UOM</th>
-                                        <th class="text-center" translate>Free Ship</th>
+                                        <!-- <th class="text-center" translate>Free Ship</th> -->
                                         <th class="text-nowrap text-center" translate>QTY</th>
                                         <th class="text-center" translate>Unit Price</th>
                                         <th class="text-center" translate>Disc %</th>
@@ -305,7 +305,7 @@
 
                                     </tr>
                                 </thead>
-                                <tr *ngIf="detail?.items?.length === 0">
+                                <tr *ngIf="detail.items?.length === 0">
                                     <td colspan="100%" class="text-center" translate>No data.</td>
                                 </tr>
                                 <tbody *ngFor="let item of detail.items; let $index = index;">
@@ -314,12 +314,15 @@
                                         <td>{{item.des || item.misc_name}}</td>
                                         <td class="text-center">{{item.condition_name}}</td>
                                         <td>{{item.uom_name || item.uom}}</td>
-                                        <td class="text-center">
+                                        <!-- <td class="text-center">
                                             <i *ngIf="item.is_shipping_free" class="text-success fa fa-check"></i>
-                                        </td>
+                                        </td> -->
                                         <td class="text-right">{{item.quantity}}</td>
                                         <td class="text-right">
-                                            <div>
+                                            <div *ngIf="item.misc_id && item.misc_id == 6" class="text-danger">
+                                                ({{ item.price | currency }})
+                                            </div>
+                                            <div *ngIf="!(item.misc_id && item.misc_id == 6)">
                                                 {{ item.price | currency }}
                                             </div>
                                         </td>
@@ -330,7 +333,12 @@
                                             {{item.tax_percent}}
                                         </td>
                                         <td class="text-right">
-                                            <span>{{item.total_price | currency}}</span>
+                                            <div *ngIf="item.misc_id && item.misc_id == 6" class="text-danger">
+                                                ({{ item.total_price | currency }})
+                                            </div>
+                                            <div *ngIf="!(item.misc_id && item.misc_id == 6)">
+                                                {{ item.total_price | currency }}
+                                            </div>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -364,15 +372,21 @@
                                             <strong class="text-warning">Sub Total</strong>
                                         </label>
                                     <div class='col-6 offset-md-1 padding-lr-10'>
-                                        <strong>{{detail['sub_total'] | currency}}</strong>
+                                        <strong>{{detail['sub_total_price'] | currency}}</strong>
                                     </div>
                                 </div>
-                                <div *ngFor="let item of detail['taxs']" class="form-group row">
-                                    <label class='col-6 control-label'>+ TAX ({{item.value}}%):</label>
+                                <div *ngFor="let item of detail['tax']" class="form-group row">
+                                    <label class='col-6 control-label'>+ TAX ({{item.key}}%):</label>
                                     <div class='col-5 padding-lr-10'>
-                                        <input class="form-control" readonly="true" [(ngModel)]="item.amount" class="form-control" value="0" type="number">
+                                        <input class="form-control" readonly="true" numberDirective isDecimal="true" [(ngModel)]="item.value" class="form-control" value="0" type="number">
                                     </div>
                                 </div>
+                                <!-- <div class="form-group row">
+                                    <label class='col-6 control-label'>- Restocking Fee</label>
+                                    <div class='col-6 padding-lr-10'>
+                                        <strong>{{(detail['restocking_fee'] || 0) | currency}}</strong>
+                                    </div>
+                                </div> -->
                                 <div class="form-group row">
                                     <label class='col-5 control-label'>
                                             <strong class="text-warning">Total Due</strong>
@@ -394,7 +408,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group row margin-lr-0 text-light bg-danger">
-                                    <label class="col-6 control-label">
+                                    <label class="col-6">
                                             <strong>Balance Amount</strong>
                                         </label>
                                     <div class="col-6 padding-lr-10">

@@ -11,13 +11,13 @@
             <div class="card-body">
                <div class="row information height-100">
                   <div class="col-md-12 p-l-5 p-r-5">
-                     <form [formGroup]="generalForm" class="form-search full-width form-inline border-bottom">
+                     <form [formGroup]="generalForm" class="form-search full-width form-inline">
                         <div class="col-md-4">
                            <div class="form-group">
                               <label for="code" class="control-label" translate> <strong>Customer Name</strong> </label>
                               <span class="text-danger">(*)</span>
                               <div>
-                                 <ng-select class="infinity-scroll-select"  [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 100px; margin-left: 2px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="buyer_id">
+                                 <ng-select class="infinity-scroll-select" [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="buyer_id"  [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 100px; margin-left: 2px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="buyer_id">
                                     <ng-template ng-option-tmp let-item="item">
                                         <span title="{{item.company_name}}">{{item.company_name}}</span>
                                     </ng-template> 
@@ -319,7 +319,7 @@
                               <div class='col-6'>
                                  <select (change)="changeShipVia()" class="form-control" name="carrier_id" formControlName="carrier_id">
                                  <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
-                                 <option *ngFor="let item of listMaster['carriers']" [ngValue]="item.id">{{item.name}}</option>
+                                 <option *ngFor="let item of listMaster['carriers']" [hidden]="item.id === 999 && generalForm.value.type != 'PKU'" [ngValue]="item.id">{{item.name}}</option>
                                  </select>
                               </div>
                            </div>
@@ -379,7 +379,7 @@
             </div>
             <div class="card-body no-padding">
                <div class="table-responsive">
-                  <table class="table table-bordered table-order">
+                  <table class="table table-bordered table-order" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex">
                   <thead>
                      <tr>
                         <th style="width:70px" translate>Action</th>
@@ -402,8 +402,8 @@
                      <td colspan="100%" class="text-center" translate>No data.</td>
                      </tr>
                   <tbody *ngFor="let item of list['items']; let $index = index;">
-                     <tr>
-                        <td>
+                     <tr [ngClass]="{'row-selected': $index == selectedIndex}">
+                        <td class="text-center">
                            <button class="btn btn-danger btn-xs" type="button" (click)="deleteAction(item.sku, item.item_condition_id)">
                            <i class="fa fa-trash"></i>
                            </button>

@@ -1,5 +1,5 @@
 import { transition } from '@angular/animations';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -14,7 +14,8 @@ import { PaymentMethodsService } from '../payment-method.service';
     templateUrl: './payment-method-create.component.html',
     styleUrls: ['./payment-method-create.component.scss'],
     animations: [routerTransition()],
-    providers: [PaymentMethodsService]
+    providers: [PaymentMethodsService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PaymentMethodsCreateComponent implements OnInit {
     /**
@@ -49,6 +50,7 @@ export class PaymentMethodsCreateComponent implements OnInit {
     public paymentForm: FormGroup;
 
     constructor(
+        private cd: ChangeDetectorRef,
         public router: Router,
         public route: ActivatedRoute,
         public fb: FormBuilder,
@@ -85,6 +87,10 @@ export class PaymentMethodsCreateComponent implements OnInit {
     /**
      * Internal Function
      */
+    refresh() {
+        this.cd.detectChanges();
+    }
+
     getListMaster(paymentMethodId) {
         this.paymentMethodService.getListMaster(paymentMethodId).subscribe(
             res => {
@@ -92,6 +98,7 @@ export class PaymentMethodsCreateComponent implements OnInit {
                     this.listMaster.paymentTypes = res.data['payment_type'];
                     this.listMaster.paymentProcessors = res.data['payment_processor_type'];
                     this.listMaster.transactionTypes = res.data['payment_transaction_type'];
+                    this.refresh();
                 } catch (err) {
                     console.log(err);
                 }
@@ -108,6 +115,7 @@ export class PaymentMethodsCreateComponent implements OnInit {
                 try {
                     this.paymentMethodDetail = res.data;
                     this.paymentForm.patchValue({ ...res.data, ...res.data.online_configuration });
+                    this.refresh();
                 } catch (err) {
                     console.log(err);
                 }
@@ -163,6 +171,7 @@ export class PaymentMethodsCreateComponent implements OnInit {
         this.paymentMethodService.checkDupliateDisplayName(params).subscribe(
             res => {
                 this.toastr.success('This name can be used!');
+                this.refresh();
             },
             err => {
                 console.log(err);
@@ -241,6 +250,7 @@ export class PaymentMethodsCreateComponent implements OnInit {
                     this.toastr.success(res.message);
                     this.messageTestConnection = res.message;
                     this.testConnectionResult = true;
+                    this.refresh();
                 } catch (err) {
                     console.log(err);
                 }
@@ -266,6 +276,7 @@ export class PaymentMethodsCreateComponent implements OnInit {
         this.paymentMethodService.createPaymentMethod(params).subscribe(
             res => {
                 this.handleSavePaymentMethodSuccessfully(res);
+                this.refresh();
             },
             err => {
                 console.log(err);
@@ -277,6 +288,7 @@ export class PaymentMethodsCreateComponent implements OnInit {
         this.paymentMethodService.editPaymentMethod(this.paymentMethodId, params).subscribe(
             res => {
                 this.handleSavePaymentMethodSuccessfully(res);
+                this.refresh();
             },
             err => {
                 console.log(err);

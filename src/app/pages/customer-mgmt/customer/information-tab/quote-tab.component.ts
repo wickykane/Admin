@@ -39,10 +39,12 @@ export class CustomerQuoteTabComponent implements OnInit {
         private customerService: CustomerService, private cd: ChangeDetectorRef) {
 
         this.searchForm = fb.group({
-            'code': [null],
-            'company_name': [null],
-            'qt_dt_from': [null],
-            'qt_dt_to': [null],
+            'quote_no': [null],
+            'buyer_name': [null],
+            'sts': [null],
+            'date_type': [null],
+            'date_from': [null],
+            'date_to': [null]
         });
 
         //  Assign get list function name, override letiable here

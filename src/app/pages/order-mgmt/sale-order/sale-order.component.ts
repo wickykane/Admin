@@ -1,12 +1,14 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService } from '../order-mgmt.service';
 import { TableService } from './../../../services/table.service';
 
 import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
+import { cdArrowTable } from '../../../shared';
 import { NgbDateCustomParserFormatter } from '../../../shared/helper/dateformat';
 import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
 import { SaleOrderKeyService } from './keys.control';
@@ -24,6 +26,8 @@ export class SaleOrderComponent implements OnInit {
     /**
      * letiable Declaration
      */
+    @ViewChild(cdArrowTable) table: cdArrowTable;
+
     public messageConfig = {
         'SM': 'Are you sure that you want to submit current order ?',
         'CC': 'Are you sure that you want to cancel current order?',
@@ -40,7 +44,7 @@ export class SaleOrderComponent implements OnInit {
         'AP': { color: 'strong-green', name: 'Approved', img: './assets/images/icon/approved.png' },
         'IP': { color: 'rock-blue', name: 'Allocated' },
         'PP': { color: 'green', name: 'Preparing' },
-        'RS': { color: 'darkblue', name: 'Ready To Ship' },
+        'RS': { color: 'darkblue', name: 'Ready To Deliver' },
         'DL': { color: 'pink', name: 'Delivering' },
         'PD': { color: 'bright-grey', name: 'Partial Delivery' },
         'CP': { color: 'lemon', name: 'Completed', img: './assets/images/icon/full_delivered.png' },
@@ -65,6 +69,7 @@ export class SaleOrderComponent implements OnInit {
         public fb: FormBuilder,
         public toastr: ToastrService,
         private vRef: ViewContainerRef,
+        private _hotkeysService: HotkeysService,
         public keyService: SaleOrderKeyService,
         private modalService: NgbModal,
         public tableService: TableService,
@@ -79,15 +84,14 @@ export class SaleOrderComponent implements OnInit {
             'buyer_name': [null],
             'date_type': [null],
             'date_to': [null],
-            'date_from': [null],
-            // 'ship_date_from': [null],
-            // 'ship_date_to': [null],
+            'date_from': [null]
 
         });
 
         //  Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {
@@ -176,7 +180,6 @@ export class SaleOrderComponent implements OnInit {
         });
     }
 
-
     confirmModal(id, status) {
         const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
         modalRef.result.then(res => {
@@ -217,36 +220,43 @@ export class SaleOrderComponent implements OnInit {
         }
         );
     }
+    createOrder() {
+        this.router.navigate(['/order-management/sale-order/create']);
+    }
+    viewOrder() {
+        const id = this.list.items[this.selectedIndex].id;
+        this.router.navigate(['/order-management/sale-order/detail', id]);
+    }
+
+    edit(item) {
+        if (item.edit_message) {
+            this.toastr.error(item.edit_message);
+        } else {
+            const id = item.id;
+            this.router.navigate(['/order-management/sale-order/edit', id]);
+        }
+    }
 
     putApproveOrder(order_id) {
-        // const params = {'status_code': 'AP'};
         this.orderService.approveOrd(order_id).subscribe(res => {
-            // if (res.status) {
             this.toastr.success(res.message);
             setTimeout(() => {
                 this.getList();
             }, 500);
-            // } else {
-            //     this.toastr.error(res.message);
-            // }
-        }
-        );
+        });
     }
 
     updateStatusOrder(order_id, status) {
         this.orderService.updateStatusOrder(order_id, status).subscribe(res => {
-            // if (res.status) {
             this.toastr.success(res.message);
             setTimeout(() => {
                 this.getList();
             }, 500);
-            // } else {
-            //     this.toastr.error(res.message);
-            // }
-        }
-        );
+        });
     }
 
-
-
+    selectTable() {
+        this.selectedIndex = 0;
+        this.table.element.nativeElement.querySelector('td a').focus();
+    }
 }

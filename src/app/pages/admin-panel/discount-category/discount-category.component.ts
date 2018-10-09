@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { routerTransition } from '../../../router.animations';
 
@@ -12,7 +12,8 @@ import { DiscountCategoryKeyService } from './keys.control';
     templateUrl: './discount-category.component.html',
     providers: [DiscountCategoryService, DiscountCategoryKeyService],
     styleUrls: ['./discount-category.component.scss'],
-    animations: [routerTransition()]
+    animations: [routerTransition()],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DiscountCategoryComponent implements OnInit {
     public list = {
@@ -25,6 +26,7 @@ export class DiscountCategoryComponent implements OnInit {
 
 
     constructor(
+        private cd: ChangeDetectorRef,
         private activeRouter: ActivatedRoute,
         private router: Router,
         public keyService: DiscountCategoryKeyService,
@@ -40,6 +42,10 @@ export class DiscountCategoryComponent implements OnInit {
     ngOnInit() {
         this.getList();
         this.user = JSON.parse(localStorage.getItem('currentUser'));
+    }
+
+    refresh() {
+        this.cd.detectChanges();
     }
 
     selectData(index) {
@@ -60,6 +66,7 @@ export class DiscountCategoryComponent implements OnInit {
             try {
                 this.list.items = res.data.rows;
                 this.tableService.matchPagingOption(res.data);
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }

@@ -152,7 +152,7 @@ export class CreditMemoCreateComponent implements OnInit {
             this.data['total_page'] = res.data.total_page;
             this.refresh();
         });
-        this.searchKey.subscribe(key => {
+        this.searchKey.debounceTime(300).subscribe(key => {
             this.data['page'] = 1;
             this.searchCustomer(key);
         });
@@ -210,7 +210,7 @@ export class CreditMemoCreateComponent implements OnInit {
         this.orderService.getDetailCompany(company_id).subscribe(res => {
             try {
                 this.customer = res.data;
-                if (res.data.buyer_type === 'PS') {
+                if (res.data.buyer_type === 'PS' && res.data.contact[0]) {
                     this.addr_select.contact = res.data.contact[0];
                     this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
                 }
@@ -218,26 +218,81 @@ export class CreditMemoCreateComponent implements OnInit {
                     this.selectAddress('billing', flag);
                     this.selectAddress('shipping', flag);
                 }
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
         });
-        this.creditMemoService.getAllSaleOrderByCus(company_id).subscribe(res => {
+        this.getListDocument();
+    }
+
+    getListDocument() {
+        if (!this.generalForm.value.company_id || !this.generalForm.value.document_type) {
+            return;
+        }
+        this.resetDataChange();
+        const params = {
+            cus_id: this.generalForm.value.company_id,
+            doc_type: this.generalForm.value.document_type
+        };
+
+        this.creditMemoService.getListDocument(params).subscribe(res => {
             this.listMaster['invoice-list'] = res.data;
             this.refresh();
+        });
+
+        this.generalForm.get('payment_method_id').enable();
+        this.generalForm.get('payment_term_id').enable();
+
+        if (this.generalForm.value.document_type === 2) {
+            this.setDefaulValueRMA();
+        }
+    }
+    /**
+     * Internal Function
+     */
+    resetDataChange() {
+        this.generalForm.patchValue({
+            document_id: null,
+            payment_term_id: null,
+            payment_method_id: null,
+            gl_account: null,
+            billing_id: null,
+        });
+        this.list.items = [];
+        this.data['shipping_address'] = {};
+        this.data['order_detail'] = {};
+        this.addr_select.billing = {};
+        this.data['shipping_method'] = {};
+        this.refresh();
+    }
+
+    setDefaulValueRMA() {
+        const user = JSON.parse(localStorage.getItem('currentUser'));
+        const default_payment = (this.listMaster['payment_method'].find(item => item.cd === 'SC') || {}).id;
+        this.generalForm.get('payment_method_id').disable();
+        this.generalForm.get('payment_term_id').disable();
+
+        this.generalForm.patchValue({
+            payment_method_id: default_payment,
+            payment_term_id: 1,
+            gl_account: 162,
+            approver_id: user.id,
+            sale_person_id: user.id,
         });
         this.refresh();
     }
 
-    /**
-     * Internal Function
-     */
     selectData(data) { }
 
     changeInvoice(event) {
-        this.creditMemoService.getDetailInvoice(this.generalForm.value.document_id).subscribe(res => {
+        const params = {
+            id: this.generalForm.value.document_id,
+            doc_type: this.generalForm.value.document_type
+        };
+        this.creditMemoService.getDetailDocument(params).subscribe(res => {
             this.list.items = res.data.inv_detail.map(item => {
-                item.quantity = item.qty_inv;
+                item.quantity = item.qty_inv || item.accept_qty || 0;
                 if (!item.is_item) { item.sku = item.misc_no; }
                 return item;
             });
@@ -246,7 +301,7 @@ export class CreditMemoCreateComponent implements OnInit {
             this.data['shipping_method'] = res.data.shipping_method;
 
             this.generalForm.patchValue({
-                ...this.data['order_detail'], approver_id: res.data.aprvr_id
+                ...this.data['order_detail'], approver_id: res.data.approver_id || res.data.aprvr_id
             });
             this.selectAddress('billing');
             this.updateTotal();
@@ -290,14 +345,14 @@ export class CreditMemoCreateComponent implements OnInit {
 
     findDataById(id, arr) {
         const item = arr.filter(x => x.address_id === id);
-        return item[0];
+        return item[0] || {};
     }
 
     selectContact() {
         const id = this.generalForm.value.contact_user_id;
         if (id) {
             const temp = this.customer.contact.filter(x => x.id === id);
-            this.addr_select.contact = temp[0];
+            this.addr_select.contact = temp[0] || {};
         }
         this.refresh();
     }
@@ -306,7 +361,7 @@ export class CreditMemoCreateComponent implements OnInit {
     updateTotal() {
         this.order_info.total = 0;
         this.order_info.sub_total = 0;
-
+        this.order_info.restocking_fee = 0;
         const items = this.list.items.filter(i => !i.misc_id);
         this.groupTax(this.list.items);
         this.order_info.order_summary = {};
@@ -320,8 +375,14 @@ export class CreditMemoCreateComponent implements OnInit {
 
         this.list.items.forEach(item => {
             item.amount = (+item.quantity * (+item.price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
+            if (item.misc_id && item.misc_id === 6) {
+                this.order_info.restocking_fee = item.amount || 0;
+                return;
+            }
             this.order_info.sub_total += item.amount;
         });
+        this.data['remain'] = this.order_info.sub_total;
+        this.order_info.sub_total -= this.order_info.restocking_fee;
         this.order_info.total = +this.order_info['total_tax'] + +this.order_info.sub_total;
         this.refresh();
     }
@@ -353,6 +414,7 @@ export class CreditMemoCreateComponent implements OnInit {
         });
         this.refresh();
     }
+
     addNewItem() {
         if (this.items_removed.length === 0) {
             return;
@@ -375,9 +437,8 @@ export class CreditMemoCreateComponent implements OnInit {
                     item.source_name = 'From Master';
                 });
                 this.list.items = this.list.items.concat(res.filter((item) => {
-                    const idx = this.items_removed.indexOf(item.id);
+                    const idx = this.items_removed.indexOf(item.item_id || item.id);
                     if (idx !== -1) { this.items_removed.splice(idx, 1); }
-                    console.log(this.items_removed);
                     if (listAdded.indexOf(item.sku + item.item_condition_id) < 0) {
                         return listAdded.indexOf(item.sku + item.item_condition_id) < 0;
                     } else {
@@ -479,7 +540,7 @@ export class CreditMemoCreateComponent implements OnInit {
         });
 
         const params = {
-            ...this.generalForm.value,
+            ...this.generalForm.getRawValue(),
             status: type,
             items,
             is_draft: is_draft || 0

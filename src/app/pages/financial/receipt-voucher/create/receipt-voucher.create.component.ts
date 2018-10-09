@@ -225,10 +225,10 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             }
         });
         this.voucherService.getListInvoiceAndMemo(params).subscribe(res => {
+            this.data['invoice_id'] = null;
             this.list.items = res.data.rows || [];
             this.tableService.matchPagingOption(res.data);
             if (code) {
-                this.data['invoice_id'] = null;
                 const index = this.list.items.findIndex(item => item.code === code);
                 this.list.items[index].applied_amt = tot_amt;
             }
@@ -276,6 +276,10 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         this.orderService.getDetailCompany(company_id).subscribe(res => {
             try {
                 this.data['payer'] = res.data;
+                const existed = (this.listMaster['customer'] || []).find(item => item.id === this.data['payer'].company_id);
+                if (!existed) {
+                    this.listMaster['customer'] = [{ id: this.data['payer'].company_id, company_name: this.data['payer'].company_name }, ...this.listMaster['customer']];
+                }
                 this.refresh();
             } catch (e) {
                 console.log(e);

@@ -57,7 +57,7 @@ export class InvoiceComponent implements OnInit {
         'Fully Paid': { color: 'lemon', name: 'Fully Paid', id: 6, img: './assets/images/icon/full_delivered.png' },
         'Canceled': { color: 'red', name: 'Canceled', id: 7, img: './assets/images/icon/cancel.png' },
         'Overdue': { color: 'bright-grey', name: 'Overdue', id: 8 },
-        'Revised': { color: 'texas-rose', name: 'Revised', id: 9 },
+        'Revised': { color: 'texas-rose', name: 'Revised', id: 11 },
     };
 
     constructor(public router: Router,
@@ -292,7 +292,7 @@ export class InvoiceComponent implements OnInit {
     }
 
     convertStatus(id, key) {
-        const stt = this.listMaster[key].find(item => item.id === id);
+        const stt = (this.listMaster[key] || []).find(item => item.id === id) || {};
         return stt.name;
     }
 

@@ -1,34 +1,55 @@
-<div class="address-tab">
-    <div class="scroll-container block-order">
-        <div class="card">
-            <div class="card-body">
-                <table class="table table-bordered table-order">
-                  <thead>
-                      <tr>
-                          <th>No</th>
-                          <th>RMA No</th>
-                          <th>Request Date</th>
-                          <th>RMA Type</th>
-                          <th>Status</th>
-                          <th>Total Amount</th>
-                          <th>Created By</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      <tr *ngFor="let item of list.items">
-                          <td>{{ item.id }}</td>
-                          <td>{{ item.id }}</td>
-                          <td>{{ item.id }}</td>
-                          <td>{{ item.id }}</td>
-                          <td>{{ item.id }}</td>
-                          <td>{{ item.id }}</td>
-                          <td>{{ item.id }}</td>
-                      </tr>
-                      <tr *ngIf="list.items.length == 0">
-                          <td class="text-center" colspan="100%">No data.</td>
-                      </tr>
-                  </tbody>
-                </table>
+<div class="block anchor-scroll block-order">
+    <div class="row mg-top-10">
+        <div class="col-12">
+            <div class="card no-border">
+                <div class="card-header">
+                    <strong>Line Items</strong>
+                </div>
+                <div class="card-body no-padding">
+                    <div class="scroll-container table-responsive list">
+                        <table class='table table-bordered table-order'>
+                            <thead class="bg-white">
+                                <tr>
+                                    <th translate>Return Order No</th>
+                                    <th translate>Return Type</th>
+                                    <th translate>Customer</th>
+                                    <th translate>Request Date</th>
+                                    <th translate>Status</th>
+                                    <th translate>Sales Order No</th>
+                                    <th translate>Warehouse</th>
+                                    <th translate>Total Return QTY</th>
+                                    <th translate>Total Accepted QTY</th>
+                                    <th translate>Return Time</th>
+                                    <th translate>Salesperson</th>
+                                    <th translate>Last Updated On</th>
+                                    <th translate>Last Updated By</th>
+                                </tr>
+                            </thead>
+                            <tbody *ngFor="let item of list.items">
+                                <tr>
+                                    <td>{{item.code}}</td>
+                                    <td>{{item.cus_po}}</td>
+                                    <td>{{item.quote_no}}</td>
+                                    <td>{{item.buyer_name}}</td>
+                                    <td>{{item.sale_person_name}}</td>
+                                    <td></td>
+                                    <td>{{item.order_date | date:'MM/dd/yyy'}}</td>
+                                    <td>{{item.delivery_date | date:'MM/dd/yyyy'}}</td>
+                                    <td>{{item.total_price | currency}}</td>
+                                    <td> </td>
+                                    <td> </td>
+                                    <td> </td>
+                                    <td> </td>
+                                </tr>
+                            </tbody>
+                            <tbody *ngIf="list.items.length == 0">
+                                <tr>
+                                    <td class="text-center" colspan="100%">No data.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

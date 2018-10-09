@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -8,7 +8,8 @@ import { LedgerService } from '../ledger.service';
   selector: 'app-account-modal',
   templateUrl: './account.modal.html',
   styleUrls: ['../ledger.component.scss'],
-  providers: [LedgerService]
+  providers: [LedgerService],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AccountModalComponent implements OnInit {
   // Resolve Data
@@ -21,7 +22,8 @@ export class AccountModalComponent implements OnInit {
   @ViewChild('select') select;
   public selectedParent = {};
 
-  constructor(private toastr: ToastrService, private ledgerService: LedgerService, public activeModal: NgbActiveModal, private fb: FormBuilder) {
+  constructor(private toastr: ToastrService, private ledgerService: LedgerService, public activeModal: NgbActiveModal, private fb: FormBuilder,
+    private cd: ChangeDetectorRef) {
     this.accountForm = fb.group({
       'type': [null],
       'detail_type': [null],
@@ -55,6 +57,10 @@ export class AccountModalComponent implements OnInit {
     }
   }
 
+  refresh() {
+      this.cd.detectChanges();
+  }
+
   changeSubAccount() {
     this.accountForm.patchValue({ parent_id: null });
   }
@@ -62,6 +68,7 @@ export class AccountModalComponent implements OnInit {
   getDetailAccount(id) {
     this.ledgerService.getDetailAccountById(id).subscribe((res) => {
       this.accountForm.patchValue({ ...res.data, is_sub_acc: (res.data.parent_id) ? 1 : 0 });
+      this.refresh();
     });
   }
 
@@ -92,6 +99,7 @@ export class AccountModalComponent implements OnInit {
           item.disabled = item.id === this.item.id;
         });
         this.listMaster['parents'] = this.listMaster['parents'].filter(item => item.level !== 2 );
+        this.refresh();
       } catch (e) {
         console.log(e);
       }
@@ -104,10 +112,12 @@ export class AccountModalComponent implements OnInit {
       try {
         if (res.status) {
           this.toastr.success(res.message);
+          this.refresh();
           this.activeModal.close(this.accountForm.value);
         } else {
           this.toastr.error(res.message);
         }
+        this.refresh();
       } catch (e) {
         console.log(e);
       }
@@ -120,10 +130,12 @@ export class AccountModalComponent implements OnInit {
       try {
         if (res.status) {
           this.toastr.success(res.message);
+          this.refresh();
           this.activeModal.close(this.accountForm.value);
         } else {
           this.toastr.error(res.message);
         }
+        this.refresh();
       } catch (e) {
         console.log(e);
       }

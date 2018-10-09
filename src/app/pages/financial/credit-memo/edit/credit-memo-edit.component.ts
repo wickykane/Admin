@@ -158,7 +158,7 @@ export class CreditMemoEditComponent implements OnInit {
             this.data['total_page'] = res.data.total_page;
             this.refresh();
         });
-        this.searchKey.subscribe(key => {
+        this.searchKey.debounceTime(300).subscribe(key => {
             this.data['page'] = 1;
             this.searchCustomer(key);
         });
@@ -204,12 +204,14 @@ export class CreditMemoEditComponent implements OnInit {
             });
         });
     }
+
     getGenerateCode() {
         this.creditMemoService.getGenerateCode().subscribe(res => {
             this.listMaster['documentType'] = res.data.document_type;
             this.refresh();
         });
     }
+
     getDetailCreditMemo() {
         this.creditMemoService.getDetailCreditMemo(this.data['id']).subscribe(res => {
             try {
@@ -217,7 +219,10 @@ export class CreditMemoEditComponent implements OnInit {
                 this.generalForm.patchValue(data);
                 this.list.items = data.items || [];
                 this.changeCustomer(1);
-                this.changeInvoice(event);
+                if (data.document_type === 2) {
+                    this.generalForm.get('payment_method_id').disable(); // Disable If Store Credit
+                    this.generalForm.get('payment_term_id').disable();
+                }
 
                 // Lazy Load filter
                 const params = { page: this.data['page'], length: 100 };
@@ -236,13 +241,17 @@ export class CreditMemoEditComponent implements OnInit {
         });
     }
 
+
     getDetailCustomerById(company_id, flag?) {
-        console.log(company_id);
         this.orderService.getDetailCompany(company_id).subscribe(res => {
             try {
                 this.customer = res.data;
-                console.log(this.customer);
-                if (res.data.buyer_type === 'PS') {
+                const idList = (this.listMaster['customer'] || []).map(item => item.id);
+                if (res.data.company_id && idList.indexOf(res.data.company_id) === -1) {
+                    this.listMaster['customer'] = [...this.listMaster['customer'], { id: res.data.company_id, company_name: res.data.company_name }];
+                }
+
+                if (res.data.buyer_type === 'PS' && res.data.contact[0]) {
                     this.addr_select.contact = res.data.contact[0];
                     this.generalForm.patchValue({ contact_user_id: res.data.contact[0]['id'] });
                 }
@@ -256,23 +265,84 @@ export class CreditMemoEditComponent implements OnInit {
                 console.log(e);
             }
         });
-        this.creditMemoService.getAllSaleOrderByCus(company_id).subscribe(res => {
+        this.getListDocument(flag);
+    }
+
+    getListDocument(flag?) {
+        if (!this.generalForm.value.company_id || !this.generalForm.value.document_type) {
+            return;
+        }
+
+        if (!flag) {
+            this.resetDataChange();
+        }
+        const params = {
+            cus_id: this.generalForm.value.company_id,
+            doc_type: this.generalForm.value.document_type
+        };
+
+        this.creditMemoService.getListDocument(params).subscribe(res => {
             this.listMaster['invoice-list'] = res.data;
+            this.changeInvoice(flag);
             this.refresh();
         });
+
+        this.generalForm.get('payment_method_id').enable();
+        this.generalForm.get('payment_term_id').enable();
+
+        if (this.generalForm.value.document_type === 2 && !flag) {
+            this.setDefaulValueRMA();
+        }
+
     }
 
     /**
      * Internal Function
      */
+    resetDataChange() {
+        this.generalForm.patchValue({
+            document_id: null,
+            payment_term_id: null,
+            payment_method_id: null,
+            gl_account: null,
+            billing_id: null,
+        });
+        this.list.items = [];
+        this.data['shipping_address'] = {};
+        this.data['order_detail'] = {};
+        this.addr_select.billing = {};
+        this.data['shipping_method'] = {};
+        this.refresh();
+    }
+
+    setDefaulValueRMA() {
+        const user = JSON.parse(localStorage.getItem('currentUser'));
+        const default_payment = (this.listMaster['payment_method'].find(item => item.cd === 'SC') || {}).id;
+        this.generalForm.get('payment_method_id').disable();
+        this.generalForm.get('payment_term_id').disable();
+        this.generalForm.patchValue({
+            payment_method_id: default_payment,
+            payment_term_id: 1,
+            gl_account: 162,
+            approver_id: user.id,
+            sale_person_id: user.id,
+        });
+        this.refresh();
+    }
+
     selectData(data) { }
 
-    changeInvoice(event) {
+    changeInvoice(flag?) {
+        const params = {
+            id: this.generalForm.value.document_id,
+            doc_type: this.generalForm.value.document_type
+        };
         if (this.generalForm.value.document_id !== null) {
-            this.creditMemoService.getDetailInvoice(this.generalForm.value.document_id).subscribe(res => {
+            this.creditMemoService.getDetailDocument(params).subscribe(res => {
                 if (this.firstChanged) {
                     this.list.items = res.data.inv_detail.map(item => {
-                        item.quantity = item.qty_inv;
+                        item.quantity = item.qty_inv || item.accept_qty || 0;
+                        if (!item.is_item) { item.sku = item.misc_no; }
                         return item;
                     });
                 }
@@ -280,9 +350,11 @@ export class CreditMemoEditComponent implements OnInit {
                 this.data['order_detail'] = res.data;
                 this.data['shipping_address'] = res.data.shipping_address;
                 this.data['shipping_method'] = res.data.shipping_method;
-                this.generalForm.patchValue({
-                    ...this.data['order_detail'], approver_id: res.data.aprvr_id
-                });
+                if (!flag) {
+                    this.generalForm.patchValue({
+                        ...this.data['order_detail'], approver_id: res.data.approver_id || res.data.aprvr_id
+                    });
+                }
                 this.selectAddress('billing');
                 this.updateTotal();
             });
@@ -328,14 +400,14 @@ export class CreditMemoEditComponent implements OnInit {
 
     findDataById(id, arr) {
         const item = arr.filter(x => x.address_id === id);
-        return item[0];
+        return item[0] || {};
     }
 
     selectContact() {
         const id = this.generalForm.value.contact_user_id;
         if (id) {
             const temp = this.customer.contact.filter(x => x.id === id);
-            this.addr_select.contact = temp[0];
+            this.addr_select.contact = temp[0] || {};
         }
         this.refresh();
     }
@@ -344,11 +416,9 @@ export class CreditMemoEditComponent implements OnInit {
     updateTotal() {
         this.order_info.total = 0;
         this.order_info.sub_total = 0;
-
+        this.order_info.restocking_fee = 0;
         const items = this.list.items.filter(i => !i.misc_id);
-        if (this.list.items.length > 0) {
-            this.groupTax(this.list.items);
-        }
+        this.groupTax(this.list.items);
         this.order_info.order_summary = {};
         this.order_info.order_summary['total_item'] = items.length;
         items.forEach(item => {
@@ -360,11 +430,18 @@ export class CreditMemoEditComponent implements OnInit {
 
         this.list.items.forEach(item => {
             item.amount = (+item.quantity * (+item.price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
+            if (item.misc_id && item.misc_id === 6) {
+                this.order_info.restocking_fee = item.amount || 0;
+                return;
+            }
             this.order_info.sub_total += item.amount;
         });
+        this.data['remain'] = this.order_info.sub_total;
+        this.order_info.sub_total -= this.order_info.restocking_fee;
         this.order_info.total = +this.order_info['total_tax'] + +this.order_info.sub_total;
         this.refresh();
     }
+
     deleteAction(id, item_condition) {
         this.list.items = this.list.items.filter((item) => {
             if (item.item_id === id && item.is_item === 1) {
@@ -515,7 +592,7 @@ export class CreditMemoEditComponent implements OnInit {
         });
 
         const params = {
-            ...this.generalForm.value,
+            ...this.generalForm.getRawValue(),
             status: type,
             original_ship_cost: this.order_info['original_ship_cost'],
             items,

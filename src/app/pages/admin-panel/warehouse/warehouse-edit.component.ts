@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { routerTransition } from '../../../router.animations';
@@ -12,7 +12,8 @@ import { WarehouseService } from './warehouse.service';
     templateUrl: './warehouse-edit.component.html',
     styleUrls: ['./warehouse.component.scss'],
     providers: [WarehouseService, ToastrService],
-    animations: [routerTransition()]
+    animations: [routerTransition()],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WarehouseEditComponent implements OnInit {
     generalForm: FormGroup;
@@ -22,6 +23,7 @@ export class WarehouseEditComponent implements OnInit {
     public listCountry: any = [];
     public listState: any = [];
     constructor(
+        private cd: ChangeDetectorRef,
         public fb: FormBuilder,
         public router: Router,
         public route: ActivatedRoute,
@@ -56,6 +58,10 @@ export class WarehouseEditComponent implements OnInit {
         );
     }
 
+    refresh() {
+        this.cd.detectChanges();
+    }
+
     getDetailWarehouse(id) {
         this.idWarehouse = id;
         this.warehouseService
@@ -64,6 +70,7 @@ export class WarehouseEditComponent implements OnInit {
                 try {
                     this.generalForm.patchValue(res.data);
                     this.contactForm.patchValue(res.data);
+                    this.refresh();
                 } catch (e) {}
             });
     }
@@ -83,6 +90,7 @@ export class WarehouseEditComponent implements OnInit {
         this.commonService.getStateByCountry(params).subscribe(res => {
             try {
                 this.listState = res.data;
+                this.refresh();
             } catch (e) {}
         });
     }
@@ -95,6 +103,7 @@ export class WarehouseEditComponent implements OnInit {
         this.commonService.getListCountry().subscribe(res => {
             try {
                 this.listCountry = res.data;
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
@@ -119,6 +128,7 @@ export class WarehouseEditComponent implements OnInit {
             //             setTimeout(() => {
             //                 this.router.navigate(['/warehouse']);
             //             }, 2000);
+            //             this.refresh();
             //             this.toastr.success(res.message);
             //         } catch (e) {
             //             console.log(e);

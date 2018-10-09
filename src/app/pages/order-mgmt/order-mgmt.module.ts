@@ -16,11 +16,13 @@ import { SaleOrderDetailComponent } from './sale-order/view/sale-order.detail.co
 import { SaleQuotationCreateComponent } from './sale-quotation/create/sale-quotation.create.component';
 import { SaleQuotationEditComponent } from './sale-quotation/edit/sale-quotation.edit.component';
 import { SaleQuotationComponent } from './sale-quotation/sale-quotation.component';
-import { SaleQuotationRfqCreateComponent } from './sale-quotation/sale-quotation.rfq.create.component';
 import { SaleQuotationDetailComponent } from './sale-quotation/view/sale-quotation.detail.component';
 
 //  Saleorder Tab
 import { SaleOrderCreditNoteTabComponent } from './sale-order/order-tabs/credit-note-tab.component';
+import { SaleOrderDebitNoteTabComponent } from './sale-order/order-tabs/debit-note-tab.component';
+import { SaleOrderReceiptVoucherTabComponent } from './sale-order/order-tabs/receipt-voucher-tab.component';
+
 import { SaleOrderInformationTabComponent } from './sale-order/order-tabs/information-tab.component';
 import { SaleOrderInvoiceTabComponent } from './sale-order/order-tabs/invoice-tab.component';
 import { SaleOrderPaymentTabComponent} from './sale-order/order-tabs/payment-tab.component';
@@ -40,6 +42,15 @@ import { ItemModalModule } from '../../shared/modals/item.module';
 import { QuoteInformationTabComponent } from './sale-quotation/quote-tabs/information-tab.component';
 import { QuoteHistoryTabComponent } from './sale-quotation/quote-tabs/quote-history.component';
 
+import { ItemsOrderModalContent } from './rma/modals/items-order.modal';
+
+import { RmaCreateComponent } from './rma/create/rma.create.component';
+import { RmaEditComponent } from './rma/edit/rma.edit.component';
+import { RmaComponent } from './rma/list/rma.component';
+import { ReturnOrderInformationTabComponent } from './rma/order-tabs/information-tab.component';
+import { RMAService } from './rma/rma.service';
+import { RmaDetailComponent } from './rma/view/rma.view.component';
+
 
 @NgModule({
     imports: [
@@ -54,7 +65,6 @@ import { QuoteHistoryTabComponent } from './sale-quotation/quote-tabs/quote-hist
         SaleQuotationComponent,
         SaleQuotationCreateComponent,
         SaleQuotationDetailComponent,
-        SaleQuotationRfqCreateComponent,
         SaleOrderCreateComponent,
         SaleOrderDetailComponent,
         PrintOrderComponent,
@@ -71,9 +81,17 @@ import { QuoteHistoryTabComponent } from './sale-quotation/quote-tabs/quote-hist
         SaleOrderEditComponent,
         SaleQuotationEditComponent,
         QuoteInformationTabComponent,
-        QuoteHistoryTabComponent
+        QuoteHistoryTabComponent,
+        SaleOrderDebitNoteTabComponent,
+        SaleOrderReceiptVoucherTabComponent,
+        ItemsOrderModalContent,
+        RmaComponent,
+        RmaCreateComponent,
+        RmaEditComponent,
+        RmaDetailComponent,
+        ReturnOrderInformationTabComponent
         ],
-    providers: [OrderService, TableService, DatePipe, Helper],
-    entryComponents: []
+    providers: [OrderService, TableService, DatePipe, Helper, RMAService],
+    entryComponents: [ItemsOrderModalContent]
 })
 export class OrderMgmtModule { }

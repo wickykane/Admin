@@ -4,6 +4,8 @@ import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { FinancialService } from './../../../financial.service';
 
+import * as moment from 'moment';
+
 @Component({
     selector: 'app-pod-modal',
     templateUrl: './pod.modal.html',
@@ -15,7 +17,8 @@ export class PODModalComponent implements OnInit {
     @Input() invoiceId;
     constructor(public activeModal: NgbActiveModal, public toastr: ToastrService, private fb: FormBuilder, private financialService: FinancialService) {
         this.generalForm = fb.group({
-            'delivery_date': [null, Validators.required],
+            'date': [null, Validators.required],
+            'time': [null, Validators.required],
         });
     }
 
@@ -23,7 +26,11 @@ export class PODModalComponent implements OnInit {
     }
 
     ok() {
-        this.financialService.updatePOD(this.invoiceId, this.generalForm.value).subscribe(res => {
+        const params = {
+            date: moment(this.generalForm.value.date + ' ' + this.generalForm.value.time).format('MM/DD/YYYY HH:mm'),
+        };
+
+        this.financialService.updatePOD(this.invoiceId, params).subscribe(res => {
             this.toastr.success(res.message);
             this.activeModal.close(true);
         });

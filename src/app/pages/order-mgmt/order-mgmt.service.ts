@@ -223,7 +223,7 @@ export class OrderService {
         return this.API.get(url);
     }
     getInvoice(id) {
-        const url = 'order/invoice/' + id;
+        const url = 'order/order-invoice/' + id;
         return this.API.get(url);
     }
     previewOrder(params) {
@@ -295,7 +295,11 @@ export class OrderService {
         return this.API.get(url);
     }
     generateInvoice(id) {
-        const url = 'order/invoice/' + id;
+        const url = 'order/generateInvoice/' + id;
         return this.API.post(url);
+    }
+    checkOrderEditable(id) {
+        const url = ['sale-quote', 'detail', id].join('/');
+        return this.API.get(url);
     }
 }

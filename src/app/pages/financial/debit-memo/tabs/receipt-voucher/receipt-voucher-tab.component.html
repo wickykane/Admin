@@ -1,0 +1,56 @@
+<div class="block anchor-scroll block-order">
+        <div class="row mg-top-10">
+            <div class="col-12">
+                <div class="card no-border">
+                    <div class="card-body no-padding">
+                        <div class="scroll-container table-responsive list">
+                            <table class='table table-bordered table-order'>
+                                <thead class="bg-white">
+                                        <tr>
+                                                <th>Voucher</th>
+                                                <th>Payer</th>
+                                                <th>Payment Date</th>
+                                                <th>Payment Method</th>
+                                                <th>Electric Payment</th>
+                                                <th>Received Amount</th>
+                                                <th>Status</th>
+                                                <th>Created On</th>
+                                                <th>Created By</th>
+                                                <th>Last Updated On</th>
+                                                <th>Last Updated By</th>
+                                            </tr>
+                                </thead>
+                                <tbody *ngFor="let item of list.items">
+                                        <tr>
+                                                <td>{{item.cd}}</td>
+                                                <td>{{item.company_name}}</td>
+                                                <td>{{item.payment_date|date:'MM/dd/yyyy'}}</td>
+                                                <td>{{item.payment_method}}</td>
+                                                <td>{{item.electronic}}</td>
+                                                <td>{{item.price_received|currency}}</td>
+                                                <td>
+                                                    <span class="badge badge-info bg-blue" *ngIf="item.sts_code == 'NW'">{{item.sts}}</span>
+                                                    <span class="badge badge-warning bg-texas-rose" *ngIf="item.sts_code == 'SB'">{{item.sts}}</span>
+                                                    <span class="badge badge-danger bg-magenta" *ngIf="item.sts_code == 'RJ'">{{item.sts}}</span>
+                                                    <span class="badge badge-success bg-strong-green" *ngIf="item.sts_code == 'RC'">{{item.sts}}</span>
+                                                    <span class="badge badge-danger bg-red" *ngIf="item.sts_code == 'CC'">{{item.sts}}</span>
+                                                    <span class="badge badge-primary bg-lemon" *ngIf="item.sts_code == 'ER'">{{item.sts}}</span>
+                                                </td>
+                                                <td>{{item.created_at|date:'MM/dd/yyyy'}}</td>
+                                                <td>{{item.created_by}}</td>
+                                                <td>{{item.updated_at|date:'MM/dd/yyyy'}}</td>
+                                                <td>{{item.updated_by}}</td>
+                                            </tr>
+                                </tbody>
+                                <tbody *ngIf="list.items.length == 0">
+                                    <tr>
+                                        <td class="text-center" colspan="100%">No data.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

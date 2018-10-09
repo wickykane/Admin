@@ -1,6 +1,6 @@
 <div class='address-tab'>
     <div class="bd-example text-right">
-        <button class="btn btn-outline-secondary" [routerLink]="['/order-management/sale-quotation']"><i class="fa fa-share-square" ></i> Back</button>
+        <button [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="back_button"  class="btn btn-outline-secondary" [routerLink]="['/order-management/sale-quotation']"><i class="fa fa-share-square" ></i> Back</button>
         <button *ngIf="detail['sale_quote_status_id'] == 1" class="btn btn-outline-primary" [routerLink]="['/order-management/sale-quotation/edit', _orderId]"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit</button>
         <button *ngIf="detail['sale_quote_status_id'] == 1" class="btn btn-outline-warning" (click)="confirmModal(_orderId,'SM')"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i> Submit</button>
         <button *ngIf="detail['sale_quote_status_id'] == 1" class="btn btn-outline-danger" (click)="confirmModal(_orderId, 'CC')"><i class="fa fa-times-circle" aria-hidden="true"></i> Cancel</button>

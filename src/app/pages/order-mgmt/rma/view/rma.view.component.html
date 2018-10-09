@@ -1,0 +1,24 @@
+<div [@routerTransition]>
+    <app-page-header [heading]="'DETAIL RETURN ORDERS'" [icon]="'fa-th-list'"></app-page-header>
+    <!-- <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut> -->
+    <section class="main-container block-order-detail">
+        <ngb-tabset class="tabs-order">
+            <ngb-tab title="Information">
+                <ng-template ngbTabContent>
+                    <app-rma-info-tab [orderId]="orderId" [orderDetail]="orderDetail" (stockValueChange)="checkRender($event)"></app-rma-info-tab>
+                </ng-template>
+            </ngb-tab>
+            <ngb-tab title="Credit Memo">
+                <!-- <ng-template ngbTabContent>
+                    <app-order-credit-note-tab [orderId]="orderId"></app-order-credit-note-tab>
+                </ng-template> -->
+            </ngb-tab>
+
+            <ngb-tab title="History">
+                <!-- <ng-template ngbTabContent>
+                    <app-sale-order-history-tab [orderId]="orderId"></app-sale-order-history-tab>
+                </ng-template> -->
+            </ngb-tab>
+        </ngb-tabset>
+    </section>
+</div>
