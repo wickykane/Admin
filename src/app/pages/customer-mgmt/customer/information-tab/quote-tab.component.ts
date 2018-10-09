@@ -61,14 +61,14 @@ export class CustomerQuoteTabComponent implements OnInit {
      }
 
     getList() {
-        const params = {...this.searchForm.value};
+        const params = {...this.tableService.getParams(), ...this.searchForm.value};
         Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
         this.customerService.getListQuote(this._customerId, params).subscribe(res => {
             try {
-                this.list.items = res.data;
-                this.refresh();
-                //  this.tableService.matchPagingOption(res.data);
+                this.list.items = res.data.rows;
+                 this.tableService.matchPagingOption(res.data);
+                 this.refresh();
             } catch (e) {
                 console.log(e);
             }
