@@ -199,7 +199,9 @@ export class RmaCreateComponent implements OnInit {
     selectData2(data) { }
 
     selectTable() {
-
+      this.table2.reInitKey(this.data['tableKey']);
+      console.log(this.table);
+      console.log(this.table2);
         this.selectedIndex = 0;
         this.table.scrollToTable();
         setTimeout(() => {
@@ -212,8 +214,9 @@ export class RmaCreateComponent implements OnInit {
     }
 
     selectTable2() {
-
-        this.table2.reInitKey(this.data['tableKey']);
+      this.table.reInitKey(this.data['tableKey']);
+      console.log(this.table);
+      console.log(this.table2);
         this.selectedIndex2 = 0;
         this.table2.scrollToTable();
         setTimeout(() => {
@@ -570,7 +573,7 @@ export class RmaCreateComponent implements OnInit {
                     });
                 });
                 this.calcTotal();
-                this.selectTable();
+                // this.selectTable();
             }
         }, dismiss => {
             console.log(this.data['tableKey']);
@@ -612,7 +615,7 @@ export class RmaCreateComponent implements OnInit {
                 }));
 
                 this.updateTotal();
-                this.selectTable2();
+                // this.selectTable2();
             }
         }, dismiss => {
             if (this.keyService.keys.length > 0) {

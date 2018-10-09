@@ -23,9 +23,13 @@ export class RMACreateKeyService extends KeyboardBaseService {
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+t', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
 
-
-            this.context.selectTable();
-
+            this.context.data['tableKey'] = this.context.table.getKeys();
+            setTimeout(() => {
+                if (this.context.table2) {
+                  this.context.table2.resetKeys();
+                }
+                this.context.selectTable();
+            });
 
 
             const e: ExtendedKeyboardEvent = event;
@@ -35,7 +39,13 @@ export class RMACreateKeyService extends KeyboardBaseService {
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+y', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
 
-            this.context.selectTable2();
+          this.context.data['tableKey'] = this.context.table2.getKeys();
+          setTimeout(() => {
+              if (this.context.table) {
+                this.context.table.resetKeys();
+              }
+              this.context.selectTable2();
+          });
 
 
             const e: ExtendedKeyboardEvent = event;
