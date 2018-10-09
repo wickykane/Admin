@@ -1,94 +1,102 @@
 <div class="block anchor-scroll block-order">
-        <div class="block-content pd-bottom bg-gray-light short-width">
-                <div class="row">
-                    <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
-                        <div class="block-search">
-                            <label for="sale_quote_num" class="control-label">Invoice #</label>
-                            <input autofocus="true" type="text" name="inv_num" formControlName="inv_num" class="form-control" placeholder="">
-                        </div>
-                        <div class="block-search">
-                            <label for="order_num" class="control-label">SO #</label>
-                            <input autofocus="true" type="text" name="order_num" formControlName="order_num" class="form-control" placeholder="">
-                        </div>
-                        <div class="block-search">
-                            <label for="buyer_name" class="control-label" translate>Customer</label>
-                            <input type="text" name="cus_name" formControlName="cus_name" class="form-control" placeholder="">
-                        </div>
-                        <div class="block-search">
-                            <label for="sts" class="control-label">Status</label>
-                            <ng-select class="ng-select-filter" [multiple]="true" [items]="listMaster['status']" bindLabel="name" bindValue="id" formControlName="status">
-                            </ng-select>
-                        </div>
-                        <div class="block-search">
-                            <label for="type" class="control-label" translate>Date Type</label>
-                            <select class="form-control" [(ngModel)]="dateType" [ngModelOptions]="{standalone: true}" (ngModelChange)="onDateTypeChanged()">
-                                        <option *ngFor="let item of listMaster['dateType']" [ngValue]="item.id">{{item.name}}</option>
-                                    </select>
-                        </div>
-                        <div class="block-search" *ngIf="dateType == 0">
-                            <label for="" class="control-label" translate>From</label>
-                            <div class="date-group">
-                                <div clickOutside (clickOutside)="d1.close()" class="input-group">
-                                    <input [maxDate]="searchForm.value.inv_dt_to | dateObj" class="form-control" formControlName="inv_dt_from" placeholder="mm/dd/yyyy" name="dp" ngbDatepicker #d1="ngbDatepicker">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
-                                                    <i class="fa fa-calendar" aria-hidden="true"></i>
-                                                </button>
-                                    </div>
-                                </div>
+    <div class="block-content pd-bottom bg-gray-light short-width">
+        <div class="row">
+            <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
+                <div class="block-search">
+                    <label for="sale_quote_num" class="control-label">Invoice #</label>
+                    <input autofocus="true" type="text" name="inv_num" formControlName="inv_num" class="form-control"
+                        placeholder="">
+                </div>
+                <div class="block-search">
+                    <label for="order_num" class="control-label">SO #</label>
+                    <input autofocus="true" type="text" name="order_num" formControlName="order_num" class="form-control"
+                        placeholder="">
+                </div>
+                <div class="block-search">
+                    <label for="buyer_name" class="control-label" translate>Customer</label>
+                    <input type="text" name="cus_name" formControlName="cus_name" class="form-control" placeholder="">
+                </div>
+                <div class="block-search">
+                    <label for="sts" class="control-label">Status</label>
+                    <ng-select class="ng-select-filter" [multiple]="true" [items]="listMaster['status']" bindLabel="name"
+                        bindValue="id" formControlName="status">
+                    </ng-select>
+                </div>
+                <div class="block-search">
+                    <label for="type" class="control-label" translate>Date Type</label>
+                    <select class="form-control" [(ngModel)]="dateType" [ngModelOptions]="{standalone: true}"
+                        (ngModelChange)="onDateTypeChanged()">
+                        <option *ngFor="let item of listMaster['dateType']" [ngValue]="item.id">{{item.name}}</option>
+                    </select>
+                </div>
+                <div class="block-search" *ngIf="dateType == 0">
+                    <label for="" class="control-label" translate>From</label>
+                    <div class="date-group">
+                        <div clickOutside (clickOutside)="d1.close()" class="input-group">
+                            <input [maxDate]="searchForm.value.inv_dt_to | dateObj" class="form-control"
+                                formControlName="inv_dt_from" placeholder="mm/dd/yyyy" name="dp" ngbDatepicker #d1="ngbDatepicker">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </button>
                             </div>
-                        </div>
-                        <div class="block-search" *ngIf="dateType == 1">
-                            <label for="" class="control-label" translate>From</label>
-                            <div class="date-group">
-                                <div clickOutside (clickOutside)="d1.close()" class="input-group">
-                                    <input [maxDate]="searchForm.value.inv_due_dt_to | dateObj" class="form-control" formControlName="inv_due_dt_from" placeholder="mm/dd/yyyy" name="dp" ngbDatepicker #d1="ngbDatepicker">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
-                                                    <i class="fa fa-calendar" aria-hidden="true"></i>
-                                                </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="block-search" *ngIf="dateType == 0">
-                            <label for="" class="control-label" translate>To</label>
-                            <div class="date-group">
-                                <div clickOutside (clickOutside)="dt2.close()" class="input-group">
-                                    <input [minDate]="searchForm.value.inv_dt_from | dateObj" class="form-control" formControlName="inv_dt_to" placeholder="mm/dd/yyyy" name="dp" ngbDatepicker #dt2="ngbDatepicker">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary" (click)="dt2.toggle()" type="button">
-                                                    <i class="fa fa-calendar" aria-hidden="true"></i>
-                                                </button>
-                                    </div>
-                                </div>
-                            </div>
-    
-                        </div>
-                        <div class="block-search" *ngIf="dateType == 1">
-                            <label for="" class="control-label" translate>To</label>
-                            <div class="date-group">
-                                <div clickOutside (clickOutside)="dt2.close()" class="input-group">
-                                    <input [minDate]="searchForm.value.inv_due_dt_from | dateObj" class="form-control" formControlName="inv_due_dt_to" placeholder="mm/dd/yyyy" name="dp" ngbDatepicker #dt2="ngbDatepicker">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary" (click)="dt2.toggle()" type="button">
-                                                    <i class="fa fa-calendar" aria-hidden="true"></i>
-                                                </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-    
-                    </form>
-                    <div class="block-btn-search">
-                        <label class="control-label">&nbsp;</label>
-                        <div class="group-btn-search">
-                            <button type="button" class="btn-default-custom" (click)="tableService.searchAction()">Search</button>
-                            <button type="button" class="btn-default-custom" (click)="tableService.resetAction(this.searchForm)">Reset</button>
                         </div>
                     </div>
                 </div>
+                <div class="block-search" *ngIf="dateType == 1">
+                    <label for="" class="control-label" translate>From</label>
+                    <div class="date-group">
+                        <div clickOutside (clickOutside)="d1.close()" class="input-group">
+                            <input [maxDate]="searchForm.value.inv_due_dt_to | dateObj" class="form-control"
+                                formControlName="inv_due_dt_from" placeholder="mm/dd/yyyy" name="dp" ngbDatepicker #d1="ngbDatepicker">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="block-search" *ngIf="dateType == 0">
+                    <label for="" class="control-label" translate>To</label>
+                    <div class="date-group">
+                        <div clickOutside (clickOutside)="dt2.close()" class="input-group">
+                            <input [minDate]="searchForm.value.inv_dt_from | dateObj" class="form-control"
+                                formControlName="inv_dt_to" placeholder="mm/dd/yyyy" name="dp" ngbDatepicker #dt2="ngbDatepicker">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" (click)="dt2.toggle()" type="button">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="block-search" *ngIf="dateType == 1">
+                    <label for="" class="control-label" translate>To</label>
+                    <div class="date-group">
+                        <div clickOutside (clickOutside)="dt2.close()" class="input-group">
+                            <input [minDate]="searchForm.value.inv_due_dt_from | dateObj" class="form-control"
+                                formControlName="inv_due_dt_to" placeholder="mm/dd/yyyy" name="dp" ngbDatepicker #dt2="ngbDatepicker">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" (click)="dt2.toggle()" type="button">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+            <div class="block-btn-search">
+                <label class="control-label">&nbsp;</label>
+                <div class="group-btn-search">
+                    <button type="button" class="btn-default-custom" (click)="tableService.searchAction()">Search</button>
+                    <button type="button" class="btn-default-custom" (click)="tableService.resetAction(this.searchForm)">Reset</button>
+                </div>
             </div>
+        </div>
+    </div>
     <div class="row mg-top-10">
         <div class="col-12">
             <div class="card no-border">
@@ -99,11 +107,11 @@
                     <div class="scroll-container table-responsive list">
                         <table class='table table-bordered table-order'>
                             <thead class="bg-white">
-                                <tr>                                    
+                                <tr>
                                     <th>Invoice No</th>
                                     <th>Invoice Date</th>
                                     <th>SO No</th>
-                                    <th>Due Date</th>                                   
+                                    <th>Due Date</th>
                                     <th>Total Amount</th>
                                     <th>Balance Amount</th>
                                     <th>Status</th>
@@ -111,11 +119,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let item of list.items">                                  
+                                <tr *ngFor="let item of list.items">
                                     <td>{{ item.inv_num }}</td>
                                     <td>{{item.inv_dt|date:'MM/dd/yyyy'}}</td>
                                     <td>{{ item.order_num }}</td>
-                                    <td>{{ item.due_dt }}</td>                                   
+                                    <td>{{ item.due_dt }}</td>
                                     <td>{{ item.total_amount | currency }}</td>
                                     <td>{{ item.balance_amount | currency }}</td>
                                     <td>{{ item.status_name }}</td>
@@ -128,6 +136,28 @@
                         </table>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="row normal-pagination mg-top-10" *ngIf="list.items.length > 0">
+        <div class="col-md-6">
+            <div class="text-left">
+                <div class="col-md-6" style="padding-left: 0px;">
+                    <span style="float: left; padding-right: 10px;">{{list.items.length}}/{{tableService.pagination.total_record}}
+                        items </span>
+                    <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length"
+                        (change)="tableService.changeLength()">
+                        <option *ngFor="let option of tableService.itemPerPageOptions" [ngValue]="option">{{option}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="text-right">
+                <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)"
+                    [pageSize]="tableService.pagination.length" [collectionSize]="tableService.pagination.total_record || 120"
+                    [(page)]="tableService.pagination.page" [maxSize]="tableService.maxSize" [rotate]="true"
+                    [boundaryLinks]="true"></ngb-pagination>
             </div>
         </div>
     </div>

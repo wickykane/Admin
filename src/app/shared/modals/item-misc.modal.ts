@@ -90,6 +90,7 @@ export class ItemMiscModalContent implements OnInit, OnDestroy {
         const params = { ...this.tableService.getParams(), ...this.searchForm.value };
         Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
         console.log(params);
+        params.is_popup = 1;
 
         this.itemService.getMiscItems(params).subscribe(res => {
             try {
