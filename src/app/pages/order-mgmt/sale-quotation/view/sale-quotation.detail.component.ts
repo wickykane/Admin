@@ -29,6 +29,7 @@ export class SaleQuotationDetailComponent implements OnInit {
         order_sts_short_name: ''
     };
 
+    @ViewChild('tabSet') tabSet;
 
     /**
      * Init Data
@@ -68,4 +69,7 @@ export class SaleQuotationDetailComponent implements OnInit {
         this.router.navigate(['/order-management/sale-quotation']);
     }
 
+    selectTab(id) {
+        this.tabSet.select(id);
+    }
 }

@@ -55,11 +55,6 @@ export class SaleOrderDetailComponent implements OnInit {
     /**
      * Mater Data
      */
-    shortcut(event) {
-        setTimeout(() => {
-            this.data['shortcut'] = event;
-        });
-    }
 
     checkRender(detail) {
         this.orderDetail = detail;

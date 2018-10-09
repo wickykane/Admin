@@ -440,7 +440,7 @@ export class SaleOrderCreateComponent implements OnInit {
                     }
                 });
             });
-            this.generalForm.get('prio_level').patchValue('SD');
+            this.generalForm.get('prio_level').patchValue('ND');
             this.generalForm.patchValue({ carrier_id: 4 });
             this.generalForm.get('carrier_id').enable();
             this.generalForm.get('ship_method_rate').enable();

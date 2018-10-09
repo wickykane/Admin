@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -9,6 +9,7 @@ import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { OrderService } from '../../../order-mgmt/order-mgmt.service';
 import { SaleQuoteDetailKeyService } from '../view/keys.detail.control';
 import { TableService } from './../../../../services/table.service';
+import { SaleQuotationDetailComponent } from './../view/sale-quotation.detail.component';
 
 
 @Component({
@@ -26,6 +27,7 @@ export class QuoteInformationTabComponent implements OnInit {
     public _orderId;
     public _orderDetail;
     public order_info = {};
+    public data = {};
 
     public messageConfig = {
         'SM': 'Are you sure that you want to Submit this quotation to approver?',
@@ -47,7 +49,6 @@ export class QuoteInformationTabComponent implements OnInit {
     }
 
     @Output() stockValueChange = new EventEmitter();
-    @Output() shortcutChange = new EventEmitter();
 
     public detail = {
         'contact_user': {},
@@ -66,6 +67,7 @@ export class QuoteInformationTabComponent implements OnInit {
         private orderService: OrderService,
         public keyService: SaleQuoteDetailKeyService,
         private _hotkeysService: HotkeysService,
+        @Inject(SaleQuotationDetailComponent) private parent: SaleQuotationDetailComponent,
     ) {
         //  Init Key
         this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
@@ -74,12 +76,20 @@ export class QuoteInformationTabComponent implements OnInit {
     ngOnInit() {
         this.getList();
         this.order_info['taxs'] = [];
-        this.shortcutChange.emit(this.keyService.getKeys());
+        this.data['tab'] = {
+            active: 0,
+        };
+        this.changeShortcut();
     }
 
     /**
      * Internal Function
      */
+    changeShortcut() {
+        setTimeout(() => {
+            this.parent.data['shortcut'] = this.keyService.getKeys();
+        });
+    }
 
     getList() {
         this.orderService.getSaleQuoteDetail(this._orderId).subscribe(res => {
@@ -88,7 +98,6 @@ export class QuoteInformationTabComponent implements OnInit {
                 this.detail.contact_user = res.data.contact_user || [];
                 this.detail.shipping_address = res.data.shipping_id || [];
                 this.detail.billing = res.data.billing_id || [];
-                // this.groupTax(this.detail.items);
                 this.stockValueChange.emit(res.data);
                 this.order_info['taxs'] = [];
                 this.order_info['taxs'] = this.detail['tax_info'];
@@ -96,24 +105,6 @@ export class QuoteInformationTabComponent implements OnInit {
             } catch (e) {
                 console.log(e);
             }
-        });
-    }
-
-    groupTax(items) {
-        this.order_info['taxs'] = [];
-        this.order_info['total_tax'] = 0;
-        const taxs = items.map(item => item.tax_percent || 0);
-        const unique = taxs.filter((i, index) => taxs.indexOf(i) === index);
-        unique.forEach((tax, index) => {
-            let taxAmount = 0;
-            items.filter(item => item.tax_percent === tax).map(i => {
-                // taxAmount += (+i.tax_percent * +i.qty * (+i.price || 0) / 100);
-                taxAmount += (+i.tax_percent * +i.qty * ((+i.sale_price || 0) * (100 - (+i.discount || 0)) / 100) / 100);
-            });
-            this.order_info['total_tax'] = this.order_info['total_tax'] + taxAmount.toFixed(2);
-            this.order_info['taxs'].push({
-                value: tax, amount: taxAmount.toFixed(2)
-            });
         });
     }
 
@@ -151,5 +142,12 @@ export class QuoteInformationTabComponent implements OnInit {
 
     goBack() {
         this.router.navigate(['/order-management/sale-quotation']);
+    }
+
+    changeTab(step) {
+        this.data['tab'].active = +this.parent.tabSet.activeId;
+        this.data['tab'].active += step;
+        this.data['tab'].active = Math.min(Math.max(this.data['tab'].active, 0), 7);
+        this.parent.selectTab(String(this.data['tab'].active));
     }
 }
