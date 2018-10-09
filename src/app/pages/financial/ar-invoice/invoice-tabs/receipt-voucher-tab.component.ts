@@ -47,8 +47,13 @@ export class InvoiceReceiptVoucherTabComponent implements OnInit {
      */
 
     getList() {
-        const params = { ...this.tableService.getParams() };
-        Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
+        this.financialService.getListReceiptVoucher( this._invoiceId).subscribe(res => {
+            try {
+                this.list.items =  res.data.rows;
+            } catch (e) {
+                console.log(e);
+            }
+        });
     }
 
 }
