@@ -2,11 +2,13 @@ import { Component, EventEmitter, Input, OnInit, Output, ViewContainerRef } from
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HotkeysService } from 'angular2-hotkeys';
 import * as _ from 'lodash';
 import { ToastrService } from 'ngx-toastr';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { OrderService } from '../../../order-mgmt/order-mgmt.service';
 import { TableService } from './../../../../services/table.service';
+import { SaleOrderViewKeyService } from './../view/keys.control';
 
 
 @Component({
@@ -34,6 +36,7 @@ export class SaleOrderInformationTabComponent implements OnInit {
     }
 
     @Output() stockValueChange = new EventEmitter();
+    @Output() shortcutChange = new EventEmitter();
 
     public detail = {
         'billing': {},
@@ -95,13 +98,17 @@ export class SaleOrderInformationTabComponent implements OnInit {
         private router: Router,
         private vRef: ViewContainerRef,
         private modalService: NgbModal,
+        private _hotkeysService: HotkeysService,
+        public keyService: SaleOrderViewKeyService,
         public tableService: TableService,
         private orderService: OrderService) {
+        //  Init Key
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {
         this.getList();
-
+        this.shortcutChange.emit(this.keyService.getKeys());
     }
 
     /**
