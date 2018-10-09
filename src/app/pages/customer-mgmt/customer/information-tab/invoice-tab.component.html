@@ -99,58 +99,32 @@
                     <div class="scroll-container table-responsive list">
                         <table class='table table-bordered table-order'>
                             <thead class="bg-white">
-                                    <tr>
-                                            <th>Invoice #</th>
-                                            <th>Invoice Date</th>
-                                            <th>SO #</th>
-                                            <th>Customer</th>
-                                            <th>Due Date</th>
-                                            <th>Total Amount</th>
-                                            <th>Incentive</th>
-                                            <th>Penalty</th>
-                                            <th>Balance Amount</th>
-                                            <th>Status</th>
-                                            <th>Aged Overdue</th>
-                                            <th>Last Updated On</th>
-                                            <th>Last Updated By</th>
-                                        </tr>
+                                <tr>                                    
+                                    <th>Invoice No</th>
+                                    <th>Invoice Date</th>
+                                    <th>SO No</th>
+                                    <th>Due Date</th>                                   
+                                    <th>Total Amount</th>
+                                    <th>Balance Amount</th>
+                                    <th>Status</th>
+                                    <th>Aged Overdue</th>
+                                </tr>
                             </thead>
-                            <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
-                                    <tr>
-                                        <td>
-                                            {{item.inv_num}}
-                                        </td>
-                                        <td>{{item.inv_dt}}</td>
-                                        <td>{{item.order_num}}</td>
-                                        <td>{{item.name}}</td>
-                                        <td>{{item.due_dt}}</td>
-                                        <td>{{item.total_amount|currency}}</td>
-                                        <td>{{item.incentive|currency}}</td>
-                                        <td>{{item.penalty|currency}}</td>
-                                        <td>{{item.balance_amount|currency}}</td>
-                                        <td>
-                                            <span class="badge badge-info bg-blue" *ngIf="item.invoice_status_id == 1">{{convertStatus(item.invoice_status_id, 'status')}}</span>
-                                            <span class="badge badge-warning bg-texas-rose" *ngIf="item.invoice_status_id == 2">{{convertStatus(item.invoice_status_id, 'status')}}</span>
-                                            <!-- <span class="badge badge-danger bg-magenta" *ngIf="item.invoice_status_id == 3">{{convertStatus(item.invoice_status_id, 'status')}}</span> -->
-                                            <span class="badge badge-success bg-strong-green" *ngIf="item.invoice_status_id == 4">{{convertStatus(item.invoice_status_id, 'status')}}</span>
-                                            <span class="badge badge-primary bg-darkblue" *ngIf="item.invoice_status_id == 5">{{convertStatus(item.invoice_status_id, 'status')}}</span>
-                                            <span class="badge badge-primary bg-lemon" *ngIf="item.invoice_status_id == 6">{{convertStatus(item.invoice_status_id, 'status')}}</span>
-                                            <span class="badge badge-danger bg-red" *ngIf="item.invoice_status_id == 7">{{convertStatus(item.invoice_status_id, 'status')}}</span>
-                                            <span class="badge badge-primary bg-bright-grey" *ngIf="item.invoice_status_id == 8">{{convertStatus(item.invoice_status_id, 'status')}}</span>
-                                            <span class="badge badge-warning bg-texas-rose" *ngIf="item.invoice_status_id == 11">{{convertStatus(item.invoice_status_id, 'status')}}</span>
-                                        </td>
-                                        <td>{{item.aging_overdue}}</td>
-                                        <!-- <td>{{item.paid_amount|currency}}</td> -->
-                                        <td>{{ item.updated_at}}</td>
-                                        <td>{{ item.updated_by}}</td>
-                                    </tr>
-
-                                </tbody>
-                                <tbody *ngIf="list.items.length == 0">
-                                    <tr>
-                                        <td colspan="100%" class="text-center" translate>No data.</td>
-                                    </tr>
-                                </tbody>
+                            <tbody>
+                                <tr *ngFor="let item of list.items">                                  
+                                    <td>{{ item.inv_num }}</td>
+                                    <td>{{item.inv_dt|date:'MM/dd/yyyy'}}</td>
+                                    <td>{{ item.order_num }}</td>
+                                    <td>{{ item.due_dt }}</td>                                   
+                                    <td>{{ item.total_amount | currency }}</td>
+                                    <td>{{ item.balance_amount | currency }}</td>
+                                    <td>{{ item.status_name }}</td>
+                                    <td>{{ item.aging_overdue }}</td>
+                                </tr>
+                                <tr *ngIf="list.items.length == 0">
+                                    <td class="text-center" colspan="100%">No data.</td>
+                                </tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>

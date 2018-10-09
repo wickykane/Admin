@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
 import { TableService } from '../../../../services/table.service';
 import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
+import { cdArrowTable } from '../../../../shared/index';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 
 import { HotkeysService } from 'angular2-hotkeys';
@@ -41,10 +42,10 @@ export class RmaComponent implements OnInit {
     public statusConfig = {
         'NW': { color: 'blue', name: 'New', img: './assets/images/icon/new.png' },
         'SB': { color: 'texas-rose', name: 'Submited' },
-        'RC': { color: 'strong-green', name: 'Revised', img: './assets/images/icon/approved.png' },
+        'RS': { color: 'strong-green', name: 'Revised', img: './assets/images/icon/approved.png' },
         'AR': { color: 'rock-blue', name: 'Awaiting Receipt' },
         'IR': { color: 'green', name: 'In Receipt' },
-        'RT': { color: 'darkblue', name: 'Received' },
+        'RC': { color: 'darkblue', name: 'Received' },
         'CP': { color: 'lemon', name: 'Completed', img: './assets/images/icon/full_delivered.png' },
         'CC': { color: 'red', name: 'Canceled', img: './assets/images/icon/cancel.png' },
     };
@@ -61,6 +62,7 @@ export class RmaComponent implements OnInit {
 
     searchForm: FormGroup;
 
+    @ViewChild(cdArrowTable) table: cdArrowTable;
     constructor(public router: Router,
         private cd: ChangeDetectorRef,
         public fb: FormBuilder,
@@ -125,6 +127,25 @@ export class RmaComponent implements OnInit {
     selectData(index) {
         console.log(index);
     }
+
+    selectTable() {
+        this.selectedIndex = 0;
+        this.table.element.nativeElement.querySelector('td a').focus();
+    }
+
+    createRMA() {
+      this.router.navigate(['/order-management/return-order/create']);
+    }
+
+    detailRMA() {
+      const id = this.list.items[this.selectedIndex].id;
+      this.router.navigate(['/order-management/return-order/detail', id]);
+    }
+
+    detailOrder() {
+        const id = this.list.items[this.selectedIndex].order_id;
+        this.router.navigate(['/order-management/sale-order/detail', id]);
+    }
     /**
      * Internal Function
      */
@@ -164,9 +185,6 @@ export class RmaComponent implements OnInit {
             this.refresh();
         });
 
-    }
-    detailOrder(id) {
-        this.router.navigate(['/order-management/sale-order/detail', id]);
     }
 
     fetchMoreCustomer(data?) {
@@ -209,8 +227,8 @@ export class RmaComponent implements OnInit {
             (params[key] === null || params[key] === '') && delete params[key];
         });
         //
-        params.order = 'id';
-        params.sort = 'desc';
+        // params.order = 'id';
+        // params.sort = 'desc';
 
         this.list.items = [{}, {}];
 
@@ -220,7 +238,7 @@ export class RmaComponent implements OnInit {
                 this.tableService.matchPagingOption(res.data);
                 this.refresh();
             } catch (e) {
-                console.log(e);
+                // console.log(e);
             }
         });
         this.refresh();

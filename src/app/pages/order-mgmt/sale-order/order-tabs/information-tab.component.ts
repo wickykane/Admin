@@ -1,12 +1,15 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HotkeysService } from 'angular2-hotkeys';
 import * as _ from 'lodash';
 import { ToastrService } from 'ngx-toastr';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { OrderService } from '../../../order-mgmt/order-mgmt.service';
+import { SaleOrderDetailComponent } from '../view/sale-order.detail.component';
 import { TableService } from './../../../../services/table.service';
+import { SaleOrderViewKeyService } from './../view/keys.control';
 
 
 @Component({
@@ -95,18 +98,31 @@ export class SaleOrderInformationTabComponent implements OnInit {
         private router: Router,
         private vRef: ViewContainerRef,
         private modalService: NgbModal,
+        private _hotkeysService: HotkeysService,
+        public keyService: SaleOrderViewKeyService,
         public tableService: TableService,
+        @Inject(SaleOrderDetailComponent) private parent: SaleOrderDetailComponent,
         private orderService: OrderService) {
+        //  Init Key
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {
         this.getList();
-
+        this.data['tab'] = {
+            active: 0,
+        };
+        this.changeShortcut();
     }
 
     /**
      * Internal Function
      */
+    changeShortcut() {
+        setTimeout(() => {
+            this.parent.data['shortcut'] = this.keyService.getKeys();
+        });
+    }
 
     getList() {
 
@@ -247,5 +263,12 @@ export class SaleOrderInformationTabComponent implements OnInit {
         modalRef.componentInstance.message = 'Are you sure that you want to create an invoice for this sales order?';
         modalRef.componentInstance.yesButtonText = 'Yes';
         modalRef.componentInstance.noButtonText = 'No';
+    }
+
+    changeTab(step) {
+        this.data['tab'].active = +this.parent.tabSet.activeId;
+        this.data['tab'].active += step;
+        this.data['tab'].active = Math.min(Math.max(this.data['tab'].active, 0), 7);
+        this.parent.selectTab(String(this.data['tab'].active));
     }
 }

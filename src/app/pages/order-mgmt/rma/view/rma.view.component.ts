@@ -7,12 +7,14 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
 import { RMAService } from '../rma.service';
+import { RMAViewKeyService } from './keys.control';
 
 @Component({
   selector: 'app-rma.view',
   templateUrl: './rma.view.component.html',
   styleUrls: ['../rma.component.scss'],
   animations: [routerTransition()],
+  providers: [RMAViewKeyService],
 })
 export class RmaDetailComponent implements OnInit {
   /**
@@ -37,7 +39,8 @@ export class RmaDetailComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private modalService: NgbModal,
-    private service: RMAService) {
+    private service: RMAService,
+    public keyService: RMAViewKeyService) {
     //  Init Key
 
 

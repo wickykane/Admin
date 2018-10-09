@@ -6,33 +6,33 @@ import { KeyboardBaseService } from './../../../../shared/helper/keyServiceBase'
 export class SaleQuoteDetailKeyService extends KeyboardBaseService {
 
     keyConfig = {
-        company_id: {
+        back_button: {
             element: null,
-            prev: 'contact_user_id',
-            next: 'customer_po',
-        },
-        contact_user_id: {
-            element: null,
-            prev: 'company_id',
-            next: 'contact_user_id',
-        },
-        customer_po: {
-            element: null,
-            prev: 'company_id',
-            next: 'type',
-        },
-        type: {
-            element: null,
-            prev: 'customer_po',
-            next: 'type',
+            focus: true,
         },
     };
 
     initKey() {
+        if (this.context.parent.data['shortcut']) {
+            return;
+        }
+
         this._hotkeysService.add(new Hotkey('alt+backspace', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             this.context.goBack();
             return;
         }, undefined, 'Back'));
+
+        this._hotkeysService.add(new Hotkey('alt+pagedown', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            this.context.changeTab(1);
+            return;
+        }, undefined, 'Next Tab'));
+
+        this._hotkeysService.add(new Hotkey('alt+pageup', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            this.context.changeTab(-1);
+            return;
+        }, undefined, 'Prev Tab'));
     }
 }

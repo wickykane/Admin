@@ -1,14 +1,14 @@
 <div [@routerTransition]>
     <app-page-header [heading]="'SALES QUOTATION DETAIL'" [icon]="'fa-th-list'"></app-page-header>
-    <app-shortcut  [listShortcut]="data['shortcut']"></app-shortcut>
+    <app-shortcut [listShortcut]="data['shortcut']"></app-shortcut>
     <section class="main-container block-order-detail">
-        <ngb-tabset class="tabs-order full-width">
-            <ngb-tab title="Information">
+        <ngb-tabset  #tabSet class="tabs-order full-width">
+            <ngb-tab id='0' title="Information">
                 <ng-template ngbTabContent>
-                    <app-quote-info-tab (shortcutChange)="shortcut($event)" [orderId]="orderId" [orderDetail]="orderDetail" (stockValueChange)="checkRender($event)"></app-quote-info-tab>
+                    <app-quote-info-tab [orderId]="orderId" [orderDetail]="orderDetail" (stockValueChange)="checkRender($event)"></app-quote-info-tab>
                 </ng-template>
             </ngb-tab>
-            <ngb-tab title="History">
+            <ngb-tab id='1' title="History">
                 <ng-template ngbTabContent>
                     <app-quote-history-tab [saleQuoteId]="orderId"></app-quote-history-tab>
                 </ng-template>

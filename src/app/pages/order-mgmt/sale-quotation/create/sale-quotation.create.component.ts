@@ -320,8 +320,9 @@ export class SaleQuotationCreateComponent implements OnInit {
         this.selectedIndex = 0;
         this.table.scrollToTable();
         setTimeout(() => {
-            if (this.table.element.nativeElement.querySelectorAll('td button')) {
-                this.table.element.nativeElement.querySelectorAll('td button')[this.selectedIndex].focus();
+            const button = this.table.element.nativeElement.querySelectorAll('td button');
+            if (button && button[this.selectedIndex]) {
+                button[this.selectedIndex].focus();
             }
         });
         this.refresh();
@@ -388,7 +389,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         const id = this.generalForm.value.contact_user_id;
         if (id) {
             const temp = this.customer.contact.filter(x => x.id === id);
-            this.addr_select.contact = temp[0];
+            this.addr_select.contact = temp[0] || {};
         }
     }
 

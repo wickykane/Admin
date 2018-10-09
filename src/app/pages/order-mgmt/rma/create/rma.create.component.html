@@ -18,7 +18,7 @@
                                             </label>
                                             <span class="text-danger">(*)</span>
                                             <div>
-                                                <ng-select class="infinity-scroll-select" [typeahead]="searchKey"
+                                                <ng-select class="infinity-scroll-select"  [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="company_id" [typeahead]="searchKey"
                                                     (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true"
                                                     style="width: 100px; margin-left: 2px;" (change)="changeCustomer()"
                                                     [items]="listMaster['customer']" bindLabel="company_name" bindValue="id"
@@ -368,7 +368,7 @@
                     </div>
                     <div class="card-body no-padding">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-order">
+                            <table class="table table-bordered table-order return" #cdTable='cdArrowTable' [disabledKey]="data['cdTable'] == 'table'" cdArrowTable [collection]="list.returnItem" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                                 <thead>
                                     <tr>
                                         <th style="width:70px" translate>Action</th>
@@ -391,9 +391,9 @@
                                     <td colspan="100%" class="text-center" translate>No data.</td>
                                 </tr>
                                 <tbody *ngFor="let item of list.returnItem; let $index = index;">
-                                    <tr>
+                                    <tr [ngClass]="{'row-selected': $index == selectedIndex}">
                                         <td class="text-center">
-                                            <button class="btn btn-xs" type="button" (click)="deleteLineItem(item, i)">
+                                            <button class="btn btn-xs" type="button" (click)="deleteLineItem(item, $index)">
                                                 <i class="fa fa-trash"></i>
                                             </button>
                                         </td>
@@ -430,6 +430,7 @@
                                                 <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
                                                 <option *ngFor="let it of item['reason']" [ngValue]="it.id">{{it.des}}</option>
                                             </select>
+                                            <span class="text-danger" *ngIf="!item.return_reason">Field is required</span>
                                         </td>
                                         <td class="text-center">
                                             New
@@ -454,7 +455,7 @@
                     </div>
                     <div class="card-body no-padding">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-order">
+                            <table class="table table-bordered table-order replace" #cdTable2='cdArrowTable' [disabledKey]="data['cdTable'] == 'table2'" cdArrowTable [collection]="list.replaceItem" [(selectedIndex)]="selectedIndex2" (onEnter)="selectData2($event)">
                                 <thead>
                                     <tr>
                                         <th style="width:70px" translate>Action</th>
@@ -470,10 +471,10 @@
                                 <tr *ngIf="list.replaceItem.length === 0">
                                     <td colspan="100%" class="text-center" translate>No data.</td>
                                 </tr>
-                                <tbody *ngFor="let item of replaceItem; let $index = index;">
-                                    <tr>
+                                <tbody *ngFor="let item of list.replaceItem; let $index = index;">
+                                    <tr [ngClass]="{'row-selected': $index == selectedIndex2}">
                                         <td class="text-center">
-                                            <button class="btn btn-danger btn-xs" type="button" (click)="deleteAction(item.sku, item.item_condition_id)">
+                                            <button class="btn btn-default btn-xs" type="button" (click)="deleteAction(item.sku, item.item_condition_id)">
                                                 <i class="fa fa-trash"></i>
                                             </button>
                                         </td>
@@ -513,7 +514,7 @@
                     <div class="card-body">
                         <form [formGroup]="generalForm">
                             <div>
-                                <textarea class="form-control border-0" formControlName="note" rows="11" style="resize:none"></textarea>
+                                <textarea class="form-control border-0" formControlName="des" rows="11" style="resize:none"></textarea>
                             </div>
                         </form>
                     </div>
@@ -621,7 +622,7 @@
                     translate>Save & Submit</button>
                 <button type="button" class="btn btn-outline-success" (click)="confirmCreateOrder('AR')" [disabled]="!generalForm.valid"
                     translate>Save & Send to WH</button>
-                <button type="button" class="btn btn-default" (click)="back()" translate>Back to list</button>
+                <button type="button" class="btn btn-default" (click)="backList()" translate>Back to list</button>
             </div>
         </div>
     </section>

@@ -4,7 +4,7 @@ import { Helper } from './../helper/common.helper';
 declare var jQuery: any;
 
 // tslint:disable-next-line:directive-selector
-@Directive({ selector: '[cdArrowTable]', providers: [HotkeysService, Helper] })
+@Directive({ selector: '[cdArrowTable]', providers: [HotkeysService, Helper], exportAs: 'cdArrowTable' })
 // tslint:disable-next-line:class-name
 export class cdArrowTable implements OnDestroy {
     constructor(private _hotkeysService: HotkeysService, public element: ElementRef, private helper: Helper) {
@@ -26,6 +26,7 @@ export class cdArrowTable implements OnDestroy {
         this._selectedIndex = value;
     }
 
+    @Input() disabledKey;
 
     ngOnDestroy() {
         this.resetKeys();
@@ -57,21 +58,32 @@ export class cdArrowTable implements OnDestroy {
         }
     }
 
+    focusElement() {
+        const button = this.element.nativeElement.querySelectorAll('tr td:first-child a') && this.element.nativeElement.querySelectorAll('tr td:first-child a')[this._selectedIndex]
+            || this.element.nativeElement.querySelectorAll('tr td:first-child button') && this.element.nativeElement.querySelectorAll('tr td:first-child button')[this._selectedIndex];
+        if (button) {
+            button.focus();
+        }
+    }
+
     hotKeyConfig() {
         this._hotkeysService.add(new Hotkey('up', (event: KeyboardEvent): boolean => {
-            if (this._selectedIndex === 0) {
+          console.log(this.disabledKey);
+            if (this._selectedIndex === 0 || this.disabledKey) {
                 return;
             }
             this._selectedIndex--;
             this.selectedIndexChange.emit(this._selectedIndex);
+            this.focusElement();
         }, undefined, 'Up'));
 
         this._hotkeysService.add(new Hotkey('down', (event: KeyboardEvent): boolean => {
-            if (this._collection.length === 0 || this._selectedIndex === this._collection.length - 1) {
+            if (this._collection.length === 0 || this._selectedIndex === this._collection.length - 1 || this.disabledKey) {
                 return;
             }
             this._selectedIndex++;
             this.selectedIndexChange.emit(this._selectedIndex);
+            this.focusElement();
 
         }, undefined, 'Down'));
 

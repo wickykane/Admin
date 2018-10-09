@@ -9,6 +9,9 @@ import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { RMAService } from '../rma.service';
 import { TableService } from './../../../../services/table.service';
 
+import { HotkeysService } from 'angular2-hotkeys';
+import { RMAViewKeyService } from '../view/keys.control';
+
 
 @Component({
     selector: 'app-rma-info-tab',
@@ -37,6 +40,7 @@ export class ReturnOrderInformationTabComponent implements OnInit {
 
     @Output() stockValueChange = new EventEmitter();
     public requiredInv = true;
+
 
     public detail = {
         'billing': {},
@@ -92,7 +96,11 @@ export class ReturnOrderInformationTabComponent implements OnInit {
         private vRef: ViewContainerRef,
         private modalService: NgbModal,
         public tableService: TableService,
-        private service: RMAService) {
+        private service: RMAService,
+        public keyService: RMAViewKeyService,
+        private _hotkeysService: HotkeysService) {
+          
+          this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {
@@ -114,8 +122,8 @@ export class ReturnOrderInformationTabComponent implements OnInit {
                 this.detail.shipping = res.data.shipping_data ? res.data.shipping_data : this.addr_select.shipping;
                 this.detail.billing = res.data.billing_data ? res.data.billing_data : this.addr_select.billing;
 
-                this.list.returnItem = res.data.items;
-                this.list.replaceItem = res.data.items_replace;
+                this.list.returnItem = res.data.items || [];
+                this.list.replaceItem = res.data.items_replace || [];
 
 
             } catch (e) {
@@ -124,7 +132,7 @@ export class ReturnOrderInformationTabComponent implements OnInit {
         });
     }
 
-    back() {
+    backList() {
         this.router.navigate(['/order-management/return-order']);
     }
 

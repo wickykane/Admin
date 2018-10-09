@@ -52,16 +52,18 @@
                 </thead>
 
                 <tr *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
-                    <td>
-                        <label class="css-input css-checkbox css-checkbox-default">
-                            <input class="cb-element" type="checkbox" [(ngModel)]="item.is_checked" (change)="isAllChecked()">
-                            <span></span>
-                        </label>
-                    </td>
-                    <td>{{item.no}}</td>
-                    <td>{{item.des}}</td>
-                    <td>{{item.type_name}}</td>
-                    <td>{{ item.uom}}</td>
+                    <ng-container *ngIf="item.id  != 6">
+                        <td>
+                            <label class="css-input css-checkbox css-checkbox-default">
+                                    <input class="cb-element" type="checkbox" [(ngModel)]="item.is_checked" (change)="isAllChecked()">
+                                    <span></span>
+                                </label>
+                        </td>
+                        <td>{{item.no}}</td>
+                        <td>{{item.des}}</td>
+                        <td>{{item.type_name}}</td>
+                        <td>{{ item.uom}}</td>
+                    </ng-container>
                 </tr>
                 <tr *ngIf="list.items.length === 0">
                     <td colspan="100%" class="text-center">No data.</td>

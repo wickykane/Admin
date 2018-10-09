@@ -491,7 +491,9 @@
 
       .card-body {
         padding: 5px;
-
+        .control-label {
+            font-weight: bold;
+        }
         .table-order {
           margin-bottom: 0;
 

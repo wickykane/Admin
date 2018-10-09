@@ -46,7 +46,7 @@ export class ItemModalContent implements OnInit, OnDestroy {
     constructor(public activeModal: NgbActiveModal,
         private helper: Helper,
         private cd: ChangeDetectorRef,
-        private _hotkeysService: HotkeysService,
+        public _hotkeysService: HotkeysService,
         public itemService: ItemService,
         public fb: FormBuilder,
         public toastr: ToastrService,
@@ -235,6 +235,24 @@ export class ItemModalContent implements OnInit, OnDestroy {
                 ng_select: true,
             }
         };
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+f1', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            event.preventDefault();
+            const defaultConfig = {
+                vin: 'vin',
+                vehicle: 'year_from',
+                part_number: 'oem'
+            };
+
+            const activeTab = defaultConfig[this.tabSet.activeId];
+
+            if (this.data['key_config'][activeTab].element) {
+                this.data['key_config'][activeTab].element.nativeElement.focus();
+            }
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Focus Search'));
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             event.preventDefault();

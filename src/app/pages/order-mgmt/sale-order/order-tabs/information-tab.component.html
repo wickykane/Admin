@@ -1,6 +1,6 @@
 <div class='address-tab'>
     <div class="bd-example text-right">
-        <button class="btn btn-outline-dark" (click)="cancel()">Back To List</button>
+        <button [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="back_button" class="btn btn-outline-dark" (click)="cancel()">Back To List</button>
 
         <button ngbTooltip="Submit" *ngIf="_orderDetail['order_sts_short_name'] == 'NW'" class="btn btn-outline-dark" (click)="confirmModal(_orderId, 'SM')"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i> Submit</button>
         <button ngbTooltip="Approve" *ngIf="_orderDetail['order_sts_short_name'] == 'SM'" class="btn btn-outline-dark" (click)="confirmModal(_orderId, 'AP')"><i class="fa fa-check-square" aria-hidden="true"></i> Approve</button>

@@ -307,12 +307,12 @@
                         <td>{{item.des}}</td>
                         <td>{{item.condition_name}}</td>
                         <td>{{item.uom_name}}</td>
-                        <td class="text-center">{{item.return_qty}}</td>
+                        <td class="text-center">{{item.return_quantity}}</td>
                         <td class="text-center">
-                            {{item.accept_qty}}
+                            {{item.accept_quantity}}
                         </td>
                         <td class="text-center">
-                            <span>{{item.price | currency}}</span>
+                            <span>{{item.sale_price | currency}}</span>
                         </td>
                         <td class="text-center">
                           <span>{{item.discount_percent}}</span>
@@ -377,7 +377,7 @@
                   <tr *ngIf="list.replaceItem.length === 0">
                      <td colspan="100%" class="text-center" translate>No data.</td>
                      </tr>
-                  <tbody *ngFor="let item of replaceItem; let $index = index;">
+                  <tbody *ngFor="let item of list.replaceItem; let $index = index;">
                      <tr>
                         <!-- <td class="text-center">
                            <button class="btn btn-danger btn-xs" type="button" (click)="deleteAction(item.sku, item.item_condition_id)">
@@ -564,7 +564,7 @@
          <!-- <button type="button" class="btn btn-outline-info" (click)="confirmCreateOrder('validate')" [disabled]="!generalForm.valid" translate>Save & Validate</button> -->
          <!-- <button type="button" class="btn btn-outline-primary" (click)="confirmCreateOrder('create')" [disabled]="!generalForm.valid" translate>Save & Submit</button> -->
          <!-- <button type="button" class="btn btn-outline-success" (click)="confirmCreateOrder('quote')" [disabled]="!generalForm.valid" translate>Save As Quote</button> -->
-         <button type="button" class="btn btn-default" (click)="back()" translate>Back to list</button>
+         <button type="button" class="btn btn-default" (click)="backList()" translate>Back to list</button>
       </div>
    </div>
 </section>

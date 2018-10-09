@@ -42,7 +42,7 @@ export class ItemMiscModalContent implements OnInit, OnDestroy {
         public itemService: ItemService,
         public fb: FormBuilder,
         private helper: Helper,
-        private _hotkeysService: HotkeysService,
+        public _hotkeysService: HotkeysService,
         public toastr: ToastrService,
         public tableService: TableService) {
         this.searchForm = fb.group({
@@ -126,6 +126,15 @@ export class ItemMiscModalContent implements OnInit, OnDestroy {
             },
         };
 
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+f1', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            event.preventDefault();
+            if (this.data['key_config'].no.element) {
+                this.data['key_config'].no.element.nativeElement.focus();
+            }
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Focus Search'));
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             event.preventDefault();

@@ -1,48 +1,37 @@
-import { Injectable, OnDestroy } from '@angular/core';
-import { Hotkey, HotkeysService } from 'angular2-hotkeys';
-// tslint:disable-next-line:import-blacklist
-import { Subject } from 'rxjs/Rx';
+import { Injectable } from '@angular/core';
+import { Hotkey } from 'angular2-hotkeys';
+import { KeyboardBaseService } from './../../../../shared/helper/keyServiceBase';
+
 @Injectable()
-export class SaleOrderViewKeyService implements OnDestroy {
-    public context: any;
-    public watchContext = new Subject<any>();
+export class SaleOrderViewKeyService extends KeyboardBaseService {
 
-    constructor(private _hotkeysService: HotkeysService) {
-        this.watchContext.subscribe(res => {
-            this.context = res;
-            this.initKey();
-        });
-    }
-
-    ngOnDestroy() {
-        this.resetKeys();
-    }
-
-    resetKeys() {
-        const keys = this.getKeys();
-        for (const key of keys) {
-            this._hotkeysService.remove(key);
-        }
-    }
-
-    getKeys() {
-        return Array.from(this._hotkeysService.hotkeys);
-    }
+    keyConfig = {
+        back_button: {
+            element: null,
+            focus: true,
+        },
+    };
 
     initKey() {
-        this.resetKeys();
-        this._hotkeysService.add(new Hotkey('ctrl+f', (event: KeyboardEvent): any => {
+        if (this.context.parent.data['shortcut']) {
+            return;
+        }
+        this._hotkeysService.add(new Hotkey('alt+backspace', (event: KeyboardEvent): boolean => {
             event.preventDefault();
-            this.context.tableService.searchAction();
-            event.returnValue = false;
-            return event;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Search'));
-        this._hotkeysService.add(new Hotkey('ctrl+r', (event: KeyboardEvent): any => {
-            event.preventDefault();
-            this.context.tableService.resetAction(this.context.searchForm);
-            event.returnValue = false;
-            return event;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset'));
+            this.context.cancel();
+            return;
+        }, undefined, 'Back'));
 
+        this._hotkeysService.add(new Hotkey('alt+pagedown', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            this.context.changeTab(1);
+            return;
+        }, undefined, 'Next Tab'));
+
+        this._hotkeysService.add(new Hotkey('alt+pageup', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            this.context.changeTab(-1);
+            return;
+        }, undefined, 'Prev Tab'));
     }
 }
