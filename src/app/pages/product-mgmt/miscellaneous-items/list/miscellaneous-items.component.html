@@ -9,12 +9,12 @@
                     <form class="row form-horizontal form-search filter-order-group" role="form" [formGroup]="searchForm">
                         <div class="col-md-4">
                             <label for="no" class="control-label">Item No</label>
-                            <input type="text" name="no" formControlName="no" class="form-control" id="rma_no" placeholder="" focus-element="focusAuto"
+                            <input type="text" name="no" [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="no" formControlName="no" class="form-control" placeholder="" focus-element="focusAuto"
                                 capitalize>
                         </div>
                         <div class="col-md-4">
                             <label for="des" class="control-label">Description</label>
-                            <input type="text" name="des" formControlName="des" class="form-control" id="so_no" placeholder="" capitalize>
+                            <input type="text" name="des" formControlName="des" class="form-control" placeholder="" capitalize>
                         </div>
                         <div class="col-md-4">
                             <label for="part" class="control-label">Type</label>
@@ -49,7 +49,7 @@
                     </div>
                     <div class="card-body no-padding">
                         <div class="table-responsive list">
-                            <table class="table table-bordered table-order" (onEnter)="selectData($event)">
+                            <table class="table table-bordered table-order" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                                 <thead class="bg-white">
                                     <tr>
                                         <th>Item No</th>
@@ -62,8 +62,8 @@
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
-                                    <tr>
+                                <tbody *ngFor="let item of  list.items; let i = index;">
+                                    <tr [ngClass]="{'row-selected': i == selectedIndex}">
                                         <td>{{item.no}}</td>
                                         <td>{{item.des}}</td>
                                         <td>{{item.type_name}}</td>
@@ -81,10 +81,10 @@
                                             </label>
                                         </td>
                                         <td>
-                                            <a class="btn btn-default icon-blue" title="View" (click)="openModal(false,true,item)">
+                                            <a class="btn btn-default" title="View" (click)="openModal(false,true,item)">
                                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default icon-blue" title="Edit" (click)="openModal(false,false,item)">
+                                            <a class="btn btn-default" title="Edit" (click)="openModal(false,false,item)">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
                                             <a class="btn btn-default icon-blue" *ngIf="item.is_sys==0 && item.used==0" title="Delete" (click)='delete(item.id)'>
