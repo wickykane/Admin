@@ -16,7 +16,10 @@ export class KeyboardBaseService implements OnDestroy {
         this.watchContext.subscribe(res => {
             this.context = res.context;
             this._hotkeysService = res.service;
-            this.initKey();
+            this.resetKeys();
+            setTimeout(() => {
+                this.initKey();
+            });
         });
     }
 
