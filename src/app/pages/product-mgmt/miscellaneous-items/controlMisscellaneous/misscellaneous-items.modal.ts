@@ -8,11 +8,12 @@ import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { CommonService } from '../../../../services/common.service';
 import { ProductService } from '../../product-mgmt.service';
+import { Helper } from './../../../../shared/helper/common.helper';
 
 @Component({
     selector: 'misscellaneous-items-modal',
     templateUrl: './misscellaneous-items.modal.html',
-    providers: [CommonService, ProductService],
+    providers: [CommonService, ProductService, HotkeysService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MiscellaneousItemsModalComponent implements OnInit, OnDestroy {
@@ -24,16 +25,17 @@ export class MiscellaneousItemsModalComponent implements OnInit, OnDestroy {
     @Input() miscItems;
     miscTypeList: any;
     accountList: any;
-    title: any = "";
+    title: any = '';
     constructor(public fb: FormBuilder,
         public router: Router,
         public toastr: ToastrService,
         private modalService: NgbModal,
-        private hotkeysService: HotkeysService,
+        private _hotkeysService: HotkeysService,
         private commonService: CommonService,
         private productService: ProductService,
         public activeModal: NgbActiveModal,
-        private cd: ChangeDetectorRef) {
+        private cd: ChangeDetectorRef,
+        private helper: Helper) {
 
 
 
@@ -59,10 +61,10 @@ export class MiscellaneousItemsModalComponent implements OnInit, OnDestroy {
     getAccountList() {
         this.productService.getAccountList().subscribe(res => {
             // this.accountList = res['data']['children'];
-            var accountList= res['data'];
-            var tempAccountList =[];
+            const accountList = res['data'];
+            const tempAccountList = [];
             accountList.forEach(item => {
-                tempAccountList.push({'name':item.name,'level':item.level,'disabled':true},...item.children)
+                tempAccountList.push({ 'name': item.name, 'level': item.level, 'disabled': true }, ...item.children);
             });
             this.accountList = tempAccountList;
             // if (this.Action == true) {
@@ -76,30 +78,60 @@ export class MiscellaneousItemsModalComponent implements OnInit, OnDestroy {
         });
     }
     ngOnInit() {
-        if (this.Action == true) {
-            this.title = "Add new";
+        if (this.Action === true) {
+            this.title = 'Add new';
             this.buildForm();
             this.getgenerateMiscNumber();
-        }
-        else {
+        } else {
 
             if (this.isView) {
-                this.title = "View";
-            } if(!this.isView) {
-                this.title = "Edit";
+                this.title = 'View';
+            } if (!this.isView) {
+                this.title = 'Edit';
             }
-            if(this.miscItems.is_sys==1 || this.miscItems.used!=0){
+            if (this.miscItems.is_sys === 1 || this.miscItems.used !== 0) {
                 this.editSystemForm();
             }
-            if(this.miscItems.is_sys==0 && this.miscItems.used==0){
+            if (this.miscItems.is_sys === 0 && this.miscItems.used === 0) {
                 this.editForm();
             }
         }
         this.getMiscType();
         this.getAccountList();
+        this.initKeyBoard();
     }
 
-    ngOnDestroy() {
+    initKeyBoard() {
+
+      this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+          if (this.generalForm.valid) {
+              this.saveModal();
+          }
+          const e: ExtendedKeyboardEvent = event;
+          e.returnValue = false; // Prevent bubbling
+          return e;
+      }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save, Update'));
+
+      this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+c', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+          if (this.generalForm.valid) {
+              this.closeX();
+          }
+          const e: ExtendedKeyboardEvent = event;
+          e.returnValue = false; // Prevent bubbling
+          return e;
+      }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Close'));
+
+    }
+
+    resetKeys() {
+        const keys = Array.from(this._hotkeysService.hotkeys);
+        keys.map(key => {
+            this._hotkeysService.remove(key);
+        });
+    }
+
+    ngOnDestroy(): void {
+        this.resetKeys();
     }
 
 
@@ -113,13 +145,12 @@ export class MiscellaneousItemsModalComponent implements OnInit, OnDestroy {
         this.activeModal.close(false);
     }
     saveModal() {
-        if (this.Action == true) {
+        if (this.Action === true) {
             this.productService.createNewMiscItems(this.generalForm.value).subscribe(res => {
                 this.activeModal.close(true);
                 this.refresh();
             });
-        }
-        else {
+        } else {
             this.productService.updateMiscItems(this.miscItems['id'], this.generalForm.getRawValue()).subscribe(res => {
                 this.toastr.success(res.message);
                 this.activeModal.close(true);
@@ -133,9 +164,9 @@ export class MiscellaneousItemsModalComponent implements OnInit, OnDestroy {
             'type': ['1'],
             'des': [''],
             'account_id': [null],
-            "uom": "Each",
-            "sts": [false],
-            "no": ['']
+            'uom': 'Each',
+            'sts': [false],
+            'no': ['']
         });
     }
     editForm() {
@@ -143,9 +174,9 @@ export class MiscellaneousItemsModalComponent implements OnInit, OnDestroy {
             'type': [{ value: this.miscItems['type'], disabled: this.isView }],
             'des': [{ value: this.miscItems['des'], disabled: this.isView }],
             'account_id': [{ value: this.miscItems['account_id'], disabled: this.isView }],
-            "uom": [{ value: this.miscItems['uom'], disabled: this.isView }],
-            "sts": [{ value: this.miscItems['sts'], disabled: this.isView }],
-            "no": [{ value: this.miscItems['no'], disabled: this.isView }]
+            'uom': [{ value: this.miscItems['uom'], disabled: this.isView }],
+            'sts': [{ value: this.miscItems['sts'], disabled: this.isView }],
+            'no': [{ value: this.miscItems['no'], disabled: this.isView }]
         });
     }
     editSystemForm() {
@@ -153,9 +184,9 @@ export class MiscellaneousItemsModalComponent implements OnInit, OnDestroy {
             'type': [{ value: this.miscItems['type'], disabled: true }],
             'des': [{ value: this.miscItems['des'], disabled: true }],
             'account_id': [{ value: this.miscItems['account_id'], disabled: this.isView }],
-            "uom": [{ value: this.miscItems['uom'], disabled: true }],
-            "sts": [{ value: this.miscItems['sts'], disabled: true }],
-            "no": [{ value: this.miscItems['no'], disabled: true }]
+            'uom': [{ value: this.miscItems['uom'], disabled: true }],
+            'sts': [{ value: this.miscItems['sts'], disabled: true }],
+            'no': [{ value: this.miscItems['no'], disabled: true }]
         });
     }
 }

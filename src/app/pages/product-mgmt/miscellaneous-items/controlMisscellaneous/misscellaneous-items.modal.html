@@ -5,7 +5,7 @@
     </button>
 </div>
 <div class="modal-body">
-
+    <app-shortcut [listShortcut]='_hotkeysService.hotkeys'></app-shortcut>
     <form [formGroup]="generalForm" class="form-search full-width form-horizontal">
         <div class="row">
             <div class="col-md-12">
@@ -17,7 +17,7 @@
                         </label>
                     </div>
                     <div class="col-md-8">
-                        <input type="text" disabled formControlName="no"  id="name" class="form-control">
+                        <input type="text" disabled formControlName="no" class="form-control">
                     </div>
                 </div>
                 <div class="row mb-2">
@@ -28,7 +28,7 @@
                         </label>
                     </div>
                     <div class="col-md-8">
-                        <select name="type" formControlName="type"   class="form-control">
+                        <select name="type" formControlName="type" autofocus class="form-control">
                             <option *ngFor="let item of miscTypeList"[value]='item.id'>{{item.name}}</option>
                         </select>
                     </div>
@@ -41,7 +41,7 @@
                         </label>
                     </div>
                     <div class="col-md-8">
-                        <input type="text" formControlName="des"  id="name" class="form-control">
+                        <input type="text" formControlName="des" class="form-control">
                     </div>
                 </div>
                 <div class="row mb-2">
@@ -69,7 +69,7 @@
                         </label>
                     </div>
                     <div class="col-md-8">
-                        <!-- <input type="text"  id="name" disabled value="Each" class="form-control"> -->
+                        <!-- <input type="text" disabled value="Each" class="form-control"> -->
                     <label>{{generalForm.getRawValue().uom}}</label>
                     </div>
                 </div>
