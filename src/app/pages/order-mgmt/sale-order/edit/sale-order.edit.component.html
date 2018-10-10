@@ -454,9 +454,9 @@
                             </table>
                         </div>
                         <div class="col-12 no-padding">
-                            <button [disabled]="data['user']?.user_type !== 1 && data['editable_sts'].indexOf(data['order_data']?.order_sts_short_name) !== -1" (click)="addNewItem()" class="btn btn-link" translate>
+                            <button [disabled]="data['user']?.user_type !== 1 && data['editable_sts'].indexOf(data['order_data']?.order_sts_short_name) !== -1" (click)="keyService.saveKeys(); addNewItem()" class="btn btn-link" translate>
                   <i class="fa fa-plus"></i>Add New Item</button>
-                            <button (click)="addNewMiscItem()" class="btn btn-link">
+                            <button (click)="keyService.saveKeys(); addNewMiscItem()" class="btn btn-link">
                   <i class="fa fa-plus"></i>Misc Item</button>
                             <button (click)="calcTaxShipping()" class="btn btn-link">Calc Tax & Shipping</button>
                         </div>

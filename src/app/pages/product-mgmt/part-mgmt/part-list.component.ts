@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, V
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbTab } from '@ng-bootstrap/ng-bootstrap';
+import { HotkeysService } from 'angular2-hotkeys';
 import * as  _ from 'lodash';
 import { ProductService } from '../product-mgmt.service';
 import { TableService } from './../../../services/table.service';
@@ -11,7 +12,7 @@ import { PartKeyService } from './keys.control';
     selector: 'app-part-list',
     templateUrl: './part-list.component.html',
     styleUrls: ['./part-list.component.scss'],
-    providers: [PartKeyService],
+    providers: [PartKeyService, HotkeysService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PartListComponent implements OnInit {
@@ -41,7 +42,8 @@ export class PartListComponent implements OnInit {
         public tableService: TableService,
         public itemKeyService: PartKeyService,
         private productService: ProductService,
-        private cd: ChangeDetectorRef
+        private cd: ChangeDetectorRef,
+        public _hotkeysService: HotkeysService,
     ) {
         this.searchForm = fb.group({
             cd: [null],
@@ -71,7 +73,7 @@ export class PartListComponent implements OnInit {
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
         //  Init Key
-        this.itemKeyService.watchContext.next(this);
+        this.itemKeyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {
@@ -81,9 +83,9 @@ export class PartListComponent implements OnInit {
      * Master Data
      */
 
-     refresh() {
-         this.cd.detectChanges();
-     }
+    refresh() {
+        this.cd.detectChanges();
+    }
 
     getListReference() {
         this.productService.getReferList().subscribe(res => {
@@ -109,8 +111,11 @@ export class PartListComponent implements OnInit {
      * Table Event
      */
     selectData(index) {
-        console.log(index);
+        this.list.items[index].is_checked = !this.list.items[index].is_checked;
+        this.isAllChecked();
+        this.refresh();
     }
+
 
     checkAll(ev) {
         this.list.items.forEach(x => (x.is_checked = ev.target.checked));
@@ -169,13 +174,13 @@ export class PartListComponent implements OnInit {
             });
 
         } catch (e) { }
-        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
 
         Object.keys(params).forEach((key) => {
             if ((params[key] !== null || params[key] !== '')) {
                 if ((typeof params[key]) === 'object') {
 
-                    if (params[key][0] === null || params[key][0] === '' ) {
+                    if (params[key][0] === null || params[key][0] === '') {
                         delete params[key];
                     }
 
