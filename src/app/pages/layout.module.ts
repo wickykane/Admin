@@ -10,15 +10,17 @@ import { LayoutComponent } from './layout.component';
 import { FooterComponent } from './layout/footer/footer.component';
 import { MenuComponent } from './layout/menu/menu.component';
 
+import { CommonShareModule } from '../shared';
+
 
 
 @NgModule({
     imports: [
         CommonModule,
+        CommonShareModule,
         LayoutRoutingModule,
         TranslateModule,
         NgbDropdownModule.forRoot(),
-        NgbModule.forRoot()
     ],
     declarations: [LayoutComponent, SidebarComponent, HeaderComponent, MenuComponent, FooterComponent]
 })

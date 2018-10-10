@@ -60,7 +60,9 @@ export class cdArrowTable implements OnDestroy {
 
     focusElement() {
         const button = this.element.nativeElement.querySelectorAll('tr td:first-child a') && this.element.nativeElement.querySelectorAll('tr td:first-child a')[this._selectedIndex]
-            || this.element.nativeElement.querySelectorAll('tr td:first-child button') && this.element.nativeElement.querySelectorAll('tr td:first-child button')[this._selectedIndex];
+            || this.element.nativeElement.querySelectorAll('tr td:first-child button') && this.element.nativeElement.querySelectorAll('tr td:first-child button')[this._selectedIndex]
+            || this.element.nativeElement.querySelectorAll('tr td:last-child a:first-child') && this.element.nativeElement.querySelectorAll('tr td:last-child a:first-child')[this._selectedIndex];
+
         if (button) {
             button.focus();
         }
@@ -68,7 +70,7 @@ export class cdArrowTable implements OnDestroy {
 
     hotKeyConfig() {
         this._hotkeysService.add(new Hotkey('up', (event: KeyboardEvent): boolean => {
-          console.log(this.disabledKey);
+            console.log(this.disabledKey);
             if (this._selectedIndex === 0 || this.disabledKey) {
                 return;
             }
