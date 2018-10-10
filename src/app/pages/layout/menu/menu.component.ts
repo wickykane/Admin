@@ -76,11 +76,11 @@ export class MenuComponent implements OnInit {
                 child: [
                     {
                         link: '/product-management/part-list',
-                        name: 'Part Management '
+                        name: '<u>P</u>art Management '
                     },
                     {
                         link: '/product-management/item-list',
-                        name: 'Inventory Items'
+                        name: '<u>I</u>nventory Items'
                     },
                     {
                         link: '/product-management/miscellaneous-list',
@@ -157,6 +157,22 @@ export class MenuComponent implements OnInit {
             e.returnValue = false; // Prevent bubbling
             return e;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Menu > Sale Order'));
+
+        this._hotkeysService.add(new Hotkey('shift+alt+p', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            (document.activeElement as HTMLElement).blur();
+            this.router.navigate(['/product-management/part-list']);
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Menu > Part Management'));
+
+        this._hotkeysService.add(new Hotkey('shift+alt+i', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            (document.activeElement as HTMLElement).blur();
+            this.router.navigate(['/product-management/item-list']);
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Menu > Inventory Items'));
 
     }
 
