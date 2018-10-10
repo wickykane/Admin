@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbTab } from '@ng-bootstrap/ng-bootstrap';
 import { HotkeysService } from 'angular2-hotkeys';
 import * as  _ from 'lodash';
+import { cdArrowTable } from '../../../shared';
 import { ProductService } from '../product-mgmt.service';
 import { TableService } from './../../../services/table.service';
 import { PartKeyService } from './keys.control';
@@ -23,7 +24,7 @@ export class PartListComponent implements OnInit {
     public filterForm: FormGroup;
 
     public listMaster = {};
-    public selectedIndex = -1;
+    public selectedIndex = 0;
     public list = {
         items: [],
         checklist: []
@@ -31,6 +32,7 @@ export class PartListComponent implements OnInit {
     public checkAllItem;
     public data = {};
     @ViewChild('tabSet') tabSet;
+    @ViewChild(cdArrowTable) table: cdArrowTable;
 
     /**
      * Init Data
@@ -82,6 +84,18 @@ export class PartListComponent implements OnInit {
     /**
      * Master Data
      */
+
+    selectTable() {
+        this.selectedIndex = 0;
+        this.table.scrollToTable();
+        setTimeout(() => {
+            const button = this.table.element.nativeElement.querySelectorAll('td:last-child a:first-child');
+            if (button && button[this.selectedIndex]) {
+                button[this.selectedIndex].focus();
+            }
+        });
+        this.refresh();
+    }
 
     refresh() {
         this.cd.detectChanges();

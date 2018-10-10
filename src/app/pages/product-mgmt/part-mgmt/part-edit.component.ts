@@ -12,6 +12,7 @@ import {
     NgxGalleryOptions,
 } from 'ngx-gallery';
 
+import { HotkeysService } from 'angular2-hotkeys';
 import { ProductService } from '../product-mgmt.service';
 import { PartKeyService } from './keys.control';
 
@@ -19,7 +20,7 @@ import { PartKeyService } from './keys.control';
     selector: 'app-part-edit',
     templateUrl: './part-edit.component.html',
     styleUrls: ['./part-list.component.scss'],
-    providers: [PartKeyService],
+    providers: [PartKeyService, HotkeysService],
     animations: [routerTransition()]
 })
 export class PartEditComponent implements OnInit {
@@ -27,6 +28,7 @@ export class PartEditComponent implements OnInit {
      * Variable Declaration
      */
     public listMaster = {};
+    public data = {};
     public generalForm: FormGroup;
     public part = {
         part_no: '',
@@ -59,11 +61,12 @@ export class PartEditComponent implements OnInit {
     };
     public item_condition;
     galleryOptions: NgxGalleryOptions[];
+    @ViewChild('file') chooseFile;
 
     public detail = {
         short_des: '',
         full_des: '',
-        category_discounts: {discount: ''}
+        category_discounts: { discount: '' }
     };
 
     public ckeConfig = {
@@ -81,6 +84,7 @@ export class PartEditComponent implements OnInit {
         public router: Router,
         public route: ActivatedRoute,
         public itemKeyService: PartKeyService,
+        public _hotkeysService: HotkeysService,
         private productService: ProductService,
         public toastr: ToastrService,
         private cd: ChangeDetectorRef
@@ -101,13 +105,13 @@ export class PartEditComponent implements OnInit {
         });
         //  Init Key
         this.listMaster['account'] = [];
-
-        this.itemKeyService.watchContext.next(this);
+        this.itemKeyService.watchContext.next({ context: this, service: this._hotkeysService });
         this.getAccountType();
 
     }
 
     ngOnInit() {
+        this.data['page_type'] = 'edit';
         this.listMaster['listQuestion'] = [{ id: 0, name: 'No' }, { id: 1, name: 'Yes' }];
         this.url_image = `${environment.api_url}file/view?path=`;
         this.route.params.subscribe(params => this.getDetailPart(params.id));
@@ -133,13 +137,13 @@ export class PartEditComponent implements OnInit {
         this.productService.getAccountType().subscribe(
             res => {
                 try {
-                  const accountList = res['data'];
-                  const tempAccountList = [];
-                  accountList.forEach(item => {
-                      tempAccountList.push({ 'name': item.name, 'level': item.level, 'disabled': true }, ...item.children);
-                  });
-                  this.listMaster['account'] = tempAccountList;
-                  this.refresh();
+                    const accountList = res['data'];
+                    const tempAccountList = [];
+                    accountList.forEach(item => {
+                        tempAccountList.push({ 'name': item.name, 'level': item.level, 'disabled': true }, ...item.children);
+                    });
+                    this.listMaster['account'] = tempAccountList;
+                    this.refresh();
                 } catch (e) {
                     console.log(e);
                 }
@@ -211,7 +215,7 @@ export class PartEditComponent implements OnInit {
             try {
                 if (res.status) {
                     this.part = res.data.item ? res.data.item : this.part;
-                    this.detail.short_des = res.data.item ?  res.data.item.short_des : null;
+                    this.detail.short_des = res.data.item ? res.data.item.short_des : null;
                     this.detail.full_des = res.data.item ? res.data.item.full_des : null;
                     this.detail.category_discounts = res.data.category_discounts || this.detail.category_discounts;
                     this.listMaster['freight_class'] = res.data.freight_class;
