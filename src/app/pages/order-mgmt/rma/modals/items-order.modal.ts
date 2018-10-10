@@ -41,8 +41,8 @@ export class ItemsOrderModalContent implements OnInit {
         public fb: FormBuilder,
         private toastr: ToastrService,
         private service: RMAService,
-        private _hotkeysService: HotkeysService,
-        private helper: Helper) {
+        public _hotkeysService: HotkeysService,
+        public helper: Helper) {
         this.searchForm = fb.group({
             no: [null],
             des: [null]

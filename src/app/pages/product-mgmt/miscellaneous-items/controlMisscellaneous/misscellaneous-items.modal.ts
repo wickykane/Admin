@@ -30,7 +30,7 @@ export class MiscellaneousItemsModalComponent implements OnInit, OnDestroy {
         public router: Router,
         public toastr: ToastrService,
         private modalService: NgbModal,
-        private _hotkeysService: HotkeysService,
+        public _hotkeysService: HotkeysService,
         private commonService: CommonService,
         private productService: ProductService,
         public activeModal: NgbActiveModal,
