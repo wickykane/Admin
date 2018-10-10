@@ -1,6 +1,6 @@
 <div [@routerTransition]>
     <app-page-header [heading]="'EDIT PART MANAGEMENT'" [icon]="'fa-th-list'"></app-page-header>
-    <!-- <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut> -->
+    <app-shortcut [listShortcut]='itemKeyService.getKeys()'></app-shortcut>
     <div class="row main-container block-order">
         <div class="col-md-9">
             <section class="rma-page block mt-7">
@@ -138,7 +138,7 @@
                                             <div class="form-group row">
                                                 <label for="" class="col-6">Freight Class <span class="text-danger">(*)</span></label>
                                                 <div class='col-6'>
-                                                    <select formControlName="freight_class" class="form-control">
+                                                    <select [keyConfig]="itemKeyService.getKeyConfig()" appKeyNavigate="freight_class" formControlName="freight_class" class="form-control">
                                             <option value="null" selected="true" translate disabled>--Select--</option>
                                             <option *ngFor="let de of listMaster['freight_class']" [ngValue]="de.id">{{de.name}}</option>
                                           </select>
@@ -147,7 +147,7 @@
                                             <div class="form-group row">
                                                 <label for="" class="col-6">Free Shipping<span class="text-danger">(*)</span></label>
                                                 <div class='col-6'>
-                                                   {{part.free_ship ? 'YES' : 'NO'}}
+                                                    {{part.free_ship ? 'YES' : 'NO'}}
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -178,7 +178,7 @@
                                                   <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
-                                                    <ng-select  [items]="listMaster['account']" placeholder="---Select---" formControlName="inventory_account_id" bindLabel="name" bindValue="id">
+                                                    <ng-select [items]="listMaster['account']" placeholder="---Select---" formControlName="inventory_account_id" bindLabel="name" bindValue="id">
                                                         <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
                                                             <span [ngClass]="{'pl-1': item.level ==0,'pl-3':item.level==1,'pl-5':item.level==2}">{{ item.name}}</span>
                                                         </ng-template>
@@ -191,11 +191,11 @@
                                                   <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6 '>
-                                                  <ng-select  [items]="listMaster['account']" placeholder="---Select---" formControlName="income_account_id" bindLabel="name" bindValue="id">
-                                                      <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
-                                                          <span [ngClass]="{'pl-1': item.level ==0,'pl-3':item.level==1,'pl-5':item.level==2}">{{ item.name}}</span>
-                                                      </ng-template>
-                                                  </ng-select>
+                                                    <ng-select [items]="listMaster['account']" placeholder="---Select---" formControlName="income_account_id" bindLabel="name" bindValue="id">
+                                                        <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                                            <span [ngClass]="{'pl-1': item.level ==0,'pl-3':item.level==1,'pl-5':item.level==2}">{{ item.name}}</span>
+                                                        </ng-template>
+                                                    </ng-select>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -204,7 +204,7 @@
                                                 </label>
                                                 <div class='col-6 '>
                                                     <div class="input-group">
-                                                            <input [isDecimal]="true" numberDirective [min]="0" class="form-control" type="number" formControlName="sell_price" >
+                                                        <input [isDecimal]="true" numberDirective [min]="0" class="form-control" type="number" formControlName="sell_price">
                                                         <!-- <input type="text" class="form-control" formControlName="sell_price"> -->
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">$</span>
@@ -217,11 +217,11 @@
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
-                                                  <ng-select  [items]="listMaster['account']" placeholder="---Select---" formControlName="expense_account_id" bindLabel="name" bindValue="id">
-                                                      <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
-                                                          <span [ngClass]="{'pl-1': item.level ==0,'pl-3':item.level==1,'pl-5':item.level==2}">{{ item.name}}</span>
-                                                      </ng-template>
-                                                  </ng-select>
+                                                    <ng-select [items]="listMaster['account']" placeholder="---Select---" formControlName="expense_account_id" bindLabel="name" bindValue="id">
+                                                        <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                                            <span [ngClass]="{'pl-1': item.level ==0,'pl-3':item.level==1,'pl-5':item.level==2}">{{ item.name}}</span>
+                                                        </ng-template>
+                                                    </ng-select>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -325,7 +325,7 @@
                                               <span class="text-primary">Short Description</span>
                                             </label>
                                             <div class='col-12'>
-                                              <textarea name="name" rows="8" class="form-control" [(ngModel)]="detail.short_des"></textarea>
+                                                <textarea name="name" rows="8" class="form-control" [(ngModel)]="detail.short_des"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -335,7 +335,7 @@
                                               <span class="text-primary">Product Description</span>
                                             </label>
                                             <div class='col-12'>
-                                              <ckeditor [(ngModel)]="detail.full_des" [config]="ckeConfig"></ckeditor>
+                                                <ckeditor [(ngModel)]="detail.full_des" [config]="ckeConfig"></ckeditor>
                                             </div>
                                         </div>
                                     </div>

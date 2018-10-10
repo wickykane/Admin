@@ -7,26 +7,86 @@ import { Helper } from './../../../shared/helper/common.helper';
 @Injectable()
 export class ItemKeyService extends KeyboardBaseService {
 
-    keyConfig = {};
+    keyConfig = {
+        warehouse: {
+            element: null,
+            focus: true,
+        },
+        year_from: {
+            element: null,
+        },
+        oem: {
+            elment: null,
+        },
+        vin: {
+            elment: null,
+        },
+        partlinks_no_filter: {
+            element: null,
+        },
+        freight_class: {
+            element: null,
+        }
+    };
 
     initKey() {
-        this._hotkeysService.add(new Hotkey('ctrl+1', (event: KeyboardEvent): boolean => {
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+f1', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             event.preventDefault();
+            const defaultConfig = {
+                vin: 'vin',
+                vehicle: 'year_from',
+                part_number: 'oem'
+            };
+
+            const activeTab = defaultConfig[this.context.tabSet.activeId];
+
+            if (this.keyConfig[activeTab].element) {
+                this.keyConfig[activeTab].element.nativeElement.focus();
+            }
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Focus Search'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            (document.activeElement as HTMLInputElement).blur();
             this.context.selectTab('vin');
             return;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Search by VIN'));
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'VIN'));
 
-        this._hotkeysService.add(new Hotkey('ctrl+2', (event: KeyboardEvent): boolean => {
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+h', (event: KeyboardEvent): boolean => {
             event.preventDefault();
+            (document.activeElement as HTMLInputElement).blur();
             this.context.selectTab('vehicle');
             return;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Search by Vehicle'));
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Vehicle'));
 
-        this._hotkeysService.add(new Hotkey('ctrl+3', (event: KeyboardEvent): boolean => {
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+p', (event: KeyboardEvent): boolean => {
             event.preventDefault();
+            (document.activeElement as HTMLInputElement).blur();
             this.context.selectTab('part_number');
             return;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Search by Part Number'));
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Part Number'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+1', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            event.preventDefault();
+            (document.activeElement as HTMLInputElement).blur();
+            if (this.keyConfig.partlinks_no_filter.element) {
+                this.keyConfig.partlinks_no_filter.element.nativeElement.focus();
+            }
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Focus Filter'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+t', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            (document.activeElement as HTMLInputElement).blur();
+            this.context.selectTable();
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Select Table'));
 
         this._hotkeysService.add(new Hotkey('alt+pagedown', (event: KeyboardEvent): boolean => {
             this.context.tableService.pagination.page++;
@@ -65,21 +125,22 @@ export class ItemKeyService extends KeyboardBaseService {
         /**
          * SEARCH
          */
-        this._hotkeysService.add(new Hotkey('alt+s', (event: KeyboardEvent): boolean => {
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent): boolean => {
             event.preventDefault();
-            this.context.tableService.searchAction();
+            this.context.tableService.searchActionWithFilter();
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Search'));
 
-        this._hotkeysService.add(new Hotkey('alt+r', (event: KeyboardEvent): boolean => {
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+r', (event: KeyboardEvent): boolean => {
             event.preventDefault();
+            this.context.tableService.resetAction(this.context.filterForm);
             this.context.tableService.resetAction(this.context.searchForm);
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset'));
 
-        this._hotkeysService.add(new Hotkey('alt+f', (event: KeyboardEvent): boolean => {
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+f', (event: KeyboardEvent): boolean => {
             event.preventDefault();
-            this.context.tableService.searchAction();
+            this.context.tableService.searchActionWithFilter();
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Filter'));
 
@@ -89,10 +150,6 @@ export class ItemKeyService extends KeyboardBaseService {
             this.context.tableService.resetAction(this.context.filterForm);
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset Filter'));
-
-        this._hotkeysService.add(new Hotkey('alt+m', (event: KeyboardEvent): boolean => {
-            event.preventDefault();
-            return;
-        }, undefined, 'Mass Update Price'));
     }
+
 }

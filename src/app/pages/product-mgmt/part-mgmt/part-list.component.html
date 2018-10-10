@@ -112,7 +112,7 @@
                 </label>
                 <label for="so" class="control-label" translate>Part Link</label>
                 <div class="block-search">
-                    <input type="text" class="form-control" formControlName="partlinks_no_filter">
+                    <input [keyConfig]="itemKeyService.getKeyConfig()" appKeyNavigate="partlinks_no_filter" type="text" class="form-control" formControlName="partlinks_no_filter">
                 </div>
                 <label for="so" class="control-label" translate>Part</label>
                 <div class="block-search">

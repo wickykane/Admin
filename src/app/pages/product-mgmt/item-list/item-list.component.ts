@@ -1,7 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HotkeysService } from 'angular2-hotkeys';
 import * as  _ from 'lodash';
+import { cdArrowTable } from '../../../shared';
 import { ProductService } from '../product-mgmt.service';
 import { TableService } from './../../../services/table.service';
 import { ItemKeyService } from './keys.control';
@@ -10,7 +12,7 @@ import { ItemKeyService } from './keys.control';
     selector: 'app-item-list',
     templateUrl: './item-list.component.html',
     styleUrls: ['./item-list.component.scss'],
-    providers: [ItemKeyService],
+    providers: [ItemKeyService, HotkeysService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ItemListComponent implements OnInit {
@@ -30,6 +32,7 @@ export class ItemListComponent implements OnInit {
     public checkAllItem;
     public data = {};
     @ViewChild('tabSet') tabSet;
+    @ViewChild(cdArrowTable) table: cdArrowTable;
 
     /**
      * Init Data
@@ -39,6 +42,7 @@ export class ItemListComponent implements OnInit {
         private fb: FormBuilder,
         private router: Router,
         public tableService: TableService,
+        public _hotkeysService: HotkeysService,
         public itemKeyService: ItemKeyService,
         private productService: ProductService,
         private cd: ChangeDetectorRef
@@ -76,11 +80,10 @@ export class ItemListComponent implements OnInit {
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
         //  Init Key
-        this.itemKeyService.watchContext.next(this);
+        this.itemKeyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {
-        console.log(this.filterForm);
         //  Init Fn
         this.getListWarehouse();
         this.getListReference();
@@ -88,9 +91,15 @@ export class ItemListComponent implements OnInit {
     /**
      * Master Data
      */
-     refresh() {
-         this.cd.detectChanges();
-     }
+    refresh() {
+        this.cd.detectChanges();
+    }
+
+    selectTable() {
+        this.selectedIndex = 0;
+        this.table.scrollToTable();
+        this.refresh();
+    }
 
     getListWarehouse() {
         this.productService.getListWarehouse().subscribe(res => {
@@ -141,12 +150,14 @@ export class ItemListComponent implements OnInit {
 
     selectTab(id) {
         this.tabSet.select(id);
+        this.refresh();
     }
 
     resetTab() {
         this.searchForm.reset();
         this.filterForm.reset();
         this.list.items = [];
+        this.refresh();
     }
 
     changeToGetSubModel() {
@@ -157,6 +168,7 @@ export class ItemListComponent implements OnInit {
                 return this.listMaster['sub_models'] = arr['sub_models'];
             }
         }
+        this.refresh();
     }
 
     changeToGetSubCategory() {
@@ -170,6 +182,7 @@ export class ItemListComponent implements OnInit {
                 }
             }
         }
+        this.refresh();
     }
 
     getList() {
@@ -193,7 +206,7 @@ export class ItemListComponent implements OnInit {
             if ((params[key] !== null || params[key] !== '')) {
                 if ((typeof params[key]) === 'object') {
 
-                    if (params[key][0] === null || params[key][0] === '' ) {
+                    if (params[key][0] === null || params[key][0] === '') {
                         delete params[key];
                     }
 
@@ -218,6 +231,7 @@ export class ItemListComponent implements OnInit {
                 this.listMaster['part_no'] = res.data.meta_filters.part_no;
                 this.listMaster['manufacturers'] = res.data.meta_filters.manufacturers;
                 this.tableService.matchPagingOption(res.data);
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
@@ -235,7 +249,8 @@ export class ItemListComponent implements OnInit {
             item.source_name = 'From Master';
             item.is_shipping_free = item.free_ship;
             item.qty_avail = item.qty_available;
-                return item; }) || []);
+            return item;
+        }) || []);
         console.log(ids);
         this.router.navigateByData({ url: ['order-management/sale-order/create'], data: ids });
         //  this.router.navigate(['order-management/sale-order/create', { data : ids }])
