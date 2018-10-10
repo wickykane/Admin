@@ -5,12 +5,12 @@ import { TableService } from './../../../../services/table.service';
 
 
 @Component({
-    selector: 'app-order-credit-note-tab',
-    templateUrl: './credit-note-tab.component.html',
+    selector: 'app-order-receipt-voucher-tab',
+    templateUrl: './receipt-voucher-tab.component.html',
     styleUrls: ['./order-tab.component.scss'],
     providers: [OrderService]
 })
-export class SaleOrderCreditNoteTabComponent implements OnInit {
+export class SaleOrderReceiptVoucherTabComponent implements OnInit {
 
     /**
      * letiable Declaration
@@ -53,9 +53,9 @@ export class SaleOrderCreditNoteTabComponent implements OnInit {
         const params = {...this.tableService.getParams()};
         Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
-        this.orderService.getCreditMemo( this._orderId).subscribe(res => {
+        this.orderService.getReceiptVoucher(this._orderId).subscribe(res => {
             try {
-                this.list.items = res.data.rows;
+                this.list.items =  res.data.rows;
                 this.tableService.matchPagingOption(res.data);
             } catch (e) {
                 console.log(e);

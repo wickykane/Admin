@@ -119,4 +119,16 @@ export class FinancialService {
         const url = 'ar-invoice/update-pod-sign-off-date/' + id;
         return this.API.put(url, params);
     }
+    getListCreditMemo(id) {
+        const url = 'ar-invoice/credit-memo/' + id ;
+        return this.API.get(url);
+    }
+    getListDebitMemo(id) {
+        const url = 'ar-invoice/debit-memo/' + id ;
+        return this.API.get(url);
+    }
+    getListReceiptVoucher(id) {
+        const url = 'ar-invoice/voucher/' + id ;
+        return this.API.get(url);
+    }
 }

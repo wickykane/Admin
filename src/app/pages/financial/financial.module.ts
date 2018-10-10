@@ -17,6 +17,8 @@ import { CommonShareModule, Helper, PageHeaderModule } from '../../shared/index'
 import { InvoiceEditComponent } from './ar-invoice/edit/invoice.edit.component';
 import { InvoiceCreditMemoTabComponent } from './ar-invoice/invoice-tabs/credit-memo-tab.component';
 import { InvoiceDebitMemoTabComponent } from './ar-invoice/invoice-tabs/debit-memo-tab.component';
+import { InvoiceReceiptVoucherTabComponent } from './ar-invoice/invoice-tabs/receipt-voucher-tab.component';
+
 import { InvoiceDocumentTabComponent } from './ar-invoice/invoice-tabs/document-tab.component';
 import { InvoiceInformationTabComponent } from './ar-invoice/invoice-tabs/information-tab.component';
 import { InvoicePaymentTabComponent } from './ar-invoice/invoice-tabs/payment-tab.component';
@@ -43,6 +45,7 @@ import { ItemsOrderDebitModalContent } from './debit-memo/modals/items-order/ite
 import { MiscItemsDebitModalContent } from './debit-memo/modals/misc-items/misc-items.modal';
 import { SendMailDebitModalContent } from './debit-memo/modals/send-email/send-mail.modal';
 import { DebitInformationTabComponent } from './debit-memo/tabs/debit-information/debit-information-tab.component';
+import { ReceiptVoucherTabComponent } from './debit-memo/tabs/receipt-voucher/receipt-voucher-tab.component';
 import { DebitMemoViewComponent } from './debit-memo/view/debit-memo-view.component';
 
 // Receipt Voucher
@@ -115,6 +118,8 @@ import { MailModalComponent } from './ar-invoice/modals/mail.modal';
         PaymentGatewayModalComponent,
         PaymentInformModalComponent,
         PODModalComponent,
+        InvoiceReceiptVoucherTabComponent,
+        ReceiptVoucherTabComponent
     ],
     providers: [FinancialService, DebitMemoService, CreditMemoService, TableService, DatePipe, Helper],
     entryComponents: [

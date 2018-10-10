@@ -161,6 +161,12 @@
                     </ng-template>
                 </ngb-tab>
 
+                <ngb-tab title="RECEIPT VOUCHER">
+                    <ng-template ngbTabContent>
+                        <app-customer-receipt-voucher-tab [customerId]="customerId"></app-customer-receipt-voucher-tab>
+                    </ng-template>
+                </ngb-tab>
+
                 <ngb-tab title="SHIPMENTS">
                     <ng-template ngbTabContent>
                         <app-customer-shipment-tab [customerId]="customerId"></app-customer-shipment-tab>

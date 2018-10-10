@@ -17,6 +17,8 @@ export class CustomerInvoiceTabComponent implements OnInit {
      */
 
     public _customerId;
+    public dateType;
+
     @Input() set customerId(id) {
         if (id) {
             this._customerId = id;
@@ -40,11 +42,16 @@ export class CustomerInvoiceTabComponent implements OnInit {
         private cd: ChangeDetectorRef) {
 
         this.searchForm = fb.group({
-            'buyer_name': [null],
-            'email': [null],
-            'buyer_type': [null],
-            'from': [null],
-            'to': [null]
+            'inv_num': [null],
+            'cus_name': [null],
+            'order_num': [null],
+            'sku': [null],
+            'status': [null],
+            'inv_type': [null],
+            'inv_dt_from': [null],
+            'inv_dt_to': [null],
+            'inv_due_dt_from': [null],
+            'inv_due_dt_to': [null]
         });
 
         //  Assign get list function name, override letiable here
@@ -53,6 +60,7 @@ export class CustomerInvoiceTabComponent implements OnInit {
     }
 
     ngOnInit() {
+    this.listMaster['dateType'] = [{ id: 0, name: 'Invoice Date' }, { id: 1, name: 'Due Date' }];
       this.getList();
     }
 
@@ -62,12 +70,20 @@ export class CustomerInvoiceTabComponent implements OnInit {
      refresh() {
          this.cd.detectChanges();
      }
+     onDateTypeChanged() {
+        this.searchForm.patchValue({
+            'inv_dt_from': null,
+            'inv_dt_to': null,
+            'inv_due_dt_from': null,
+            'inv_due_dt_to': null
+        });
+    }
 
     getList() {
         const params = {...this.tableService.getParams(), ...this.searchForm.value};
         Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
-        this.customerService.getListInvoice(this._customerId, params).subscribe(res => {
+        this.customerService.getListInvoice(this.customerId, params).subscribe(res => {
             try {
                 this.list.items = res.data.rows;
                 this.tableService.matchPagingOption(res.data);

@@ -1,16 +1,15 @@
 import { Component, Input, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { OrderService } from '../../../order-mgmt/order-mgmt.service';
-import { TableService } from './../../../../services/table.service';
+import { TableService } from './../../../../../services/table.service';
 
-
+import { DebitMemoService } from '../../debit-memo.service';
 @Component({
-    selector: 'app-order-credit-note-tab',
-    templateUrl: './credit-note-tab.component.html',
-    styleUrls: ['./order-tab.component.scss'],
-    providers: [OrderService]
+    selector: 'app-receipt-voucher-tab',
+    templateUrl: './receipt-voucher-tab.component.html',
+    styleUrls: ['./receipt-voucher-tab.component.scss'],
+    providers: [DebitMemoService]
 })
-export class SaleOrderCreditNoteTabComponent implements OnInit {
+export class ReceiptVoucherTabComponent implements OnInit {
 
     /**
      * letiable Declaration
@@ -23,7 +22,12 @@ export class SaleOrderCreditNoteTabComponent implements OnInit {
             this.getList();
         }
     }
-
+    @Input() set listItem(list) {
+        if (list) {
+            this.list = list;
+            // this.getList();
+        }
+    }
     public listMaster = {};
 
     public list = {
@@ -36,7 +40,7 @@ export class SaleOrderCreditNoteTabComponent implements OnInit {
         public fb: FormBuilder,
         private vRef: ViewContainerRef,
         public tableService: TableService,
-        private orderService: OrderService
+        public debitService: DebitMemoService
       ) {
         //  Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
@@ -50,13 +54,9 @@ export class SaleOrderCreditNoteTabComponent implements OnInit {
      */
 
     getList() {
-        const params = {...this.tableService.getParams()};
-        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
-
-        this.orderService.getCreditMemo( this._orderId).subscribe(res => {
+        this.debitService.getReceiptVoucher( this._orderId).subscribe(res => {
             try {
-                this.list.items = res.data.rows;
-                this.tableService.matchPagingOption(res.data);
+                this.list.items =  res.data.rows;
             } catch (e) {
                 console.log(e);
             }

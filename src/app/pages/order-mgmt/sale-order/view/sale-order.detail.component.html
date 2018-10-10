@@ -13,32 +13,37 @@
                     <app-order-invoice-tab [orderId]="orderId"></app-order-invoice-tab>
                 </ng-template>
             </ngb-tab>
-            <ngb-tab id='2' title="RMA">
+            <ngb-tab  id='2' title="Receipt Voucher">
+                <ng-template ngbTabContent>
+                    <app-order-receipt-voucher-tab [orderId]="orderId"></app-order-receipt-voucher-tab>
+                </ng-template>
+            </ngb-tab>
+            <ngb-tab id='3' title="RMA">
                 <ng-template ngbTabContent>
                     <app-order-rma-tab [orderId]="orderId"></app-order-rma-tab>
                 </ng-template>
             </ngb-tab>
-            <ngb-tab id='3' title="Credit Memo">
+            <ngb-tab id='4' title="Credit Memo">
                 <ng-template ngbTabContent>
                     <app-order-credit-note-tab [orderId]="orderId"></app-order-credit-note-tab>
                 </ng-template>
             </ngb-tab>
-            <ngb-tab id='4' title="Debit Memo">
+            <ngb-tab id='5' title="Debit Memo">
                 <ng-template ngbTabContent>
-                    <app-order-credit-note-tab [orderId]="orderId"></app-order-credit-note-tab>
+                    <app-order-debit-note-tab [orderId]="orderId"></app-order-debit-note-tab>
                 </ng-template>
             </ngb-tab>
-            <ngb-tab id='5' title="Shipment">
+            <ngb-tab id='6' title="Shipment">
                 <ng-template ngbTabContent>
                     <app-order-shipment-tab [orderId]="orderId"></app-order-shipment-tab>
                 </ng-template>
             </ngb-tab>
-            <ngb-tab id='6' title="Payment">
+            <ngb-tab id='7' title="Payment">
                 <ng-template ngbTabContent>
                     <app-order-payment-tab [orderId]="orderId"></app-order-payment-tab>
                 </ng-template>
             </ngb-tab>
-            <ngb-tab id='7' title="History">
+            <ngb-tab id='8' title="History">
                 <ng-template ngbTabContent>
                     <app-sale-order-history-tab [orderId]="orderId"></app-sale-order-history-tab>
                 </ng-template>
