@@ -451,9 +451,9 @@
                   </table>
                </div>
                <div class="col-12 no-padding">
-                  <button (click)="addNewItem()" class="btn btn-link" translate>
+                  <button (click)="keyService.saveKeys(); addNewItem()" class="btn btn-link" translate>
                   <i class="fa fa-plus"></i>Add New Item</button>
-                  <button (click)="addNewMiscItem()" class="btn btn-link">
+                  <button (click)="keyService.saveKeys(); addNewMiscItem()" class="btn btn-link">
                   <i class="fa fa-plus"></i>Misc Item</button>
                   <button (click)="calcTaxShipping()" class="btn btn-link">Calc Tax & Shipping</button>
                </div>

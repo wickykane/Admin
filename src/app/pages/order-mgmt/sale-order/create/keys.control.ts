@@ -11,6 +11,13 @@ export class SaleOrderCreateKeyService extends KeyboardBaseService {
         },
     };
 
+    saveKeys() {
+        this.keys = this.getKeys();
+        this.context.data['tableKey'] = this.context.table.getKeys();
+        this.resetKeys();
+        this.context.table.resetKeys();
+    }
+
     initKey() {
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+backspace', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             (document.activeElement as HTMLElement).blur();
@@ -29,14 +36,10 @@ export class SaleOrderCreateKeyService extends KeyboardBaseService {
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+i', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             (document.activeElement as HTMLInputElement).blur();
-            this.keys = this.getKeys();
-            this.context.data['tableKey'] = this.context.table.getKeys();
+            this.saveKeys();
             setTimeout(() => {
-                this.resetKeys();
-                this.context.table.resetKeys();
                 this.context.addNewItem();
             });
-
             const e: ExtendedKeyboardEvent = event;
             e.returnValue = false; // Prevent bubbling
             return e;
@@ -44,11 +47,8 @@ export class SaleOrderCreateKeyService extends KeyboardBaseService {
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+m', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             (document.activeElement as HTMLInputElement).blur();
-            this.keys = this.getKeys();
-            this.context.data['tableKey'] = this.context.table.getKeys();
+            this.saveKeys();
             setTimeout(() => {
-                this.resetKeys();
-                this.context.table.resetKeys();
                 this.context.addNewMiscItem();
             });
 
@@ -66,6 +66,7 @@ export class SaleOrderCreateKeyService extends KeyboardBaseService {
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Delete Item'));
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+a', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            (document.activeElement as HTMLElement).blur();
             this.context.confirmCreateOrder('draft');
             const e: ExtendedKeyboardEvent = event;
             e.returnValue = false; // Prevent bubbling
@@ -73,6 +74,7 @@ export class SaleOrderCreateKeyService extends KeyboardBaseService {
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save as Draft'));
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            (document.activeElement as HTMLElement).blur();
             if (this.context.generalForm.valid) {
                 this.context.confirmCreateOrder('validate');
             }
@@ -82,6 +84,7 @@ export class SaleOrderCreateKeyService extends KeyboardBaseService {
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save & Validate'));
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            (document.activeElement as HTMLElement).blur();
             if (this.context.generalForm.valid) {
                 this.context.confirmCreateOrder('create');
             }

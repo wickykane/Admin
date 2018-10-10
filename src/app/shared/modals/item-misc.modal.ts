@@ -15,7 +15,8 @@ declare var jQuery: any;
 
 @Component({
     selector: 'app-item-misc-modal-content',
-    templateUrl: './item-misc.modal.html'
+    templateUrl: './item-misc.modal.html',
+    providers: [HotkeysService],
 })
 // tslint:disable-next-line:component-class-suffix
 export class ItemMiscModalContent implements OnInit, OnDestroy {
