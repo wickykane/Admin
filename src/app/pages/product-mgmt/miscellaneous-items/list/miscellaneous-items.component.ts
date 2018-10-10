@@ -46,7 +46,7 @@ export class MiscellaneousItemsComponent implements OnInit {
         private vRef: ViewContainerRef,
         public tableService: TableService,
         public keyService: MiscellaneousItemsKeyService,
-        private _hotkeysService: HotkeysService,
+        public _hotkeysService: HotkeysService,
         private commonService: CommonService,
         private productService: ProductService,
         private modalService: NgbModal,
