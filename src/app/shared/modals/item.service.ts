@@ -105,7 +105,7 @@ export class ItemService {
     }
 
     getListActiveSaleQuote(id, params) {
-        const url = 'sale-quote/item/list/' + id;
+        const url = 'sale-quote/getListByCompanyId/' + id;
         return this.API.get(url, params);
     }
 }
