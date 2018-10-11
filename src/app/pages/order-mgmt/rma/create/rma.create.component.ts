@@ -141,7 +141,7 @@ export class RmaCreateComponent implements OnInit {
             'arrival_date': [null],
             'bill_to': [null, Validators.required],
             'ship_to': [null, Validators.required],
-            'des': [null],
+            'note': [null],
         });
         //  Init Key
         this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
