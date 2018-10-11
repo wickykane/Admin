@@ -838,6 +838,10 @@ ngu-carousel {
 .infinity-scroll-select {
     .ng-dropdown-panel {
         width: 200px !important;
+    }
+    .ng-option {
+        white-space: normal !important;
+        word-break: break-all;
     }    
 }
 
