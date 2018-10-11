@@ -81,13 +81,14 @@ export class ReturnOrderInformationTabComponent implements OnInit {
         sub_total: 0,
     };
     public messageConfig = {
-        'SM': 'Are you sure that you want to submit current order ?',
-        'CC': 'Are you sure that you want to cancel current order?',
-        'CLONE': 'Are you sure that you want to copy current order?',
-        'AP': 'Are you sure that you want to approve current order?',
+        'SB': 'Are you sure that you want to submit this order to approver?',
+        'CC': 'Are you sure that you want to cancel this return order?',
+        'AP': 'Are you sure that you want to approve and send this return order to warehouse?',
         'RJ': 'Are you sure that you want to reject current order?',
-        'RO': 'Are you sure that you want to re-open current order?',
+        'RC': 'Are you sure that you want to revise this return order?',
+        'CC_AR': 'Are you sure that you want to cancel this order and inform to warehouse?'
     };
+    public selected_message = '';
 
     constructor(
         public fb: FormBuilder,
@@ -99,7 +100,7 @@ export class ReturnOrderInformationTabComponent implements OnInit {
         private service: RMAService,
         public keyService: RMAViewKeyService,
         private _hotkeysService: HotkeysService) {
-          
+
           this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
@@ -137,47 +138,43 @@ export class ReturnOrderInformationTabComponent implements OnInit {
     }
 
 
-    confirmModal(id, status) {
+    confirmModal(id, status, status_item) {
         const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
         modalRef.result.then(res => {
             if (res) {
-                switch (status) {
-                    case 'SM':
-                        this.updateStatusOrder(id, 6);
-                        break;
-                    case 'AP':
-                        this.putApproveOrder(id);
-                        break;
-                    case 'RJ':
-                        this.updateStatusOrder(id, 11);
-                        break;
-                    case 'CC':
-                        this.updateStatusOrder(id, 7);
-                        break;
-                    case 'RO':
-                        this.updateStatusOrder(id, 1);
-                        break;
-                    case 'CLONE':
-                        this.cloneNewOrder(id);
-                        break;
-                }
+                this.updateStatus(id, status);
             }
         }, dismiss => { });
-        modalRef.componentInstance.message = this.messageConfig[status];
+        switch (status) {
+            case 2:
+                // cancel
+                this.selected_message = (status_item < 3) ? this.messageConfig.CC : this.messageConfig.CC_AR ;
+                break;
+            case 3:
+                this.selected_message = this.messageConfig.SB;
+                break;
+            case 4:
+            // this.selected_message = this.messageConfig.reject;
+            // break;
+            case 5:
+            this.selected_message = this.messageConfig.AP;
+            break;
+        }
+        modalRef.componentInstance.message = this.selected_message;
         modalRef.componentInstance.yesButtonText = 'Yes';
         modalRef.componentInstance.noButtonText = 'No';
     }
 
-    cloneNewOrder(id) {
-
-    }
-
-    putApproveOrder(order_id) {
-
-    }
-
-    updateStatusOrder(order_id, status) {
-
+    updateStatus(id, status) {
+        const params = { return_order_id: id, status_id: status };
+        this.service.updateStatus(params).subscribe(res => {
+            try {
+                this.toastr.success(res.message);
+                this.router.navigate(['/order-management/return-order']);
+            } catch (e) {
+                console.log(e);
+            }
+        });
     }
 
     cancel() {
