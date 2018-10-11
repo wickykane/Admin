@@ -1,19 +1,23 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewContainerRef, ViewChild } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CustomerService } from '../customer.service';
 import { TableService } from './../../../services/table.service';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
+import { cdArrowTable } from '../../../shared/index';
 import { routerTransition } from '../../../router.animations';
 import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
+import { CustomerKeyService } from './keys.customer.control';
 
 @Component({
     selector: 'app-buyer',
     templateUrl: './customer.component.html',
     styleUrls: ['./customer.component.scss'],
     animations: [routerTransition()],
+    providers: [CustomerKeyService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomerComponent implements OnInit {
@@ -32,9 +36,8 @@ export class CustomerComponent implements OnInit {
 
     public user: any;
     public listMoreFilter: any = [];
-
     searchForm: FormGroup;
-
+    @ViewChild(cdArrowTable) table: cdArrowTable;
     constructor(public router: Router,
         public fb: FormBuilder,
         public toastr: ToastrService,
@@ -42,17 +45,23 @@ export class CustomerComponent implements OnInit {
         public tableService: TableService,
         private modalService: NgbModal,
         private customerService: CustomerService,
+        public keyService: CustomerKeyService,
+        private _hotkeysService: HotkeysService,
         private cd: ChangeDetectorRef) {
 
         this.searchForm = fb.group({
+            'buyer_code': [null],
             'buyer_name': [null],
             'email': [null],
-            'buyer_type': [null]
+            'buyer_type': [null],
+            'phone': [null]
         });
 
         //  Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
+        // this.customerKeyService.watchContext.next(this);
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {
@@ -98,9 +107,25 @@ export class CustomerComponent implements OnInit {
         });
         modalRef.componentInstance.message = 'Are you sure you want to delete ?';
     }
+    createCustomer() {
+        this.router.navigate(['/customer/create']);
+    }
+    viewCustomer() {
+        const id = this.list.items[this.selectedIndex].id;
+        this.router.navigate(['/customer/view/', id]);
+    }
+    editCustomer() {
+        const id = this.list.items[this.selectedIndex].id;
+        this.router.navigate(['/customer/edit/', id]);
+    }
 
+    selectTable() {
+        this.selectedIndex = 0;
+        this.table.element.nativeElement.querySelector('td a').focus();
+    }
     getList() {
         const params = {...this.tableService.getParams(), ...this.searchForm.value};
+        console.log(params);
         Object.keys(params).forEach((key) => {
             if (key !== 'email' && (params[key] === null || params[key] === '' )) {
                  delete params[key];
