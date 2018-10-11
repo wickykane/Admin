@@ -9,6 +9,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../../../../environments/environment';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
+import { FinancialService } from '../../financial.service';
 import { ReceiptMailModalComponent } from '../modals/mail.modal';
 
 @Component({
@@ -68,6 +69,7 @@ export class ReceiptInformationTabComponent implements OnInit {
         private http: HttpClient,
         private modalService: NgbModal,
         private receiptVoucherService: ReceiptVoucherService,
+        private financialService: FinancialService,
         public tableService: TableService) {
     }
 
@@ -136,6 +138,12 @@ export class ReceiptInformationTabComponent implements OnInit {
         this.receiptVoucherService.updateReceiptVoucherStatus(params).subscribe(res => {
             try {
                 this.toastr.success(res.message);
+                if (status === 3) {
+                    this.financialService.syncReceiptVoucherToQuickbook(id).subscribe(
+                        _res => {},
+                        err => {}
+                    );
+                }
                 this.getDetailVoucher();
             } catch (e) {
                 console.log(e);

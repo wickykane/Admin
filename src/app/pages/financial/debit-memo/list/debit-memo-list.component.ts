@@ -14,6 +14,7 @@ import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateform
 
 import { DebitMemoListKeyService } from './keys.list.control';
 
+import { FinancialService } from '../../financial.service';
 import { DebitMemoService } from '../debit-memo.service';
 
 import { HotkeysService } from 'angular2-hotkeys';
@@ -63,6 +64,7 @@ export class DebitMemoListComponent implements OnInit {
         public keyService: DebitMemoListKeyService,
         public tableService: TableService,
         public debitMemoService: DebitMemoService,
+        public financialService: FinancialService,
         private http: HttpClient,
         private renderer: Renderer) {
 
@@ -262,6 +264,12 @@ export class DebitMemoListComponent implements OnInit {
             res => {
                 try {
                     this.toastr.success(res.message);
+                    if (newStatus === 3) {
+                        this.financialService.syncDebitToQuickbook(debitId).subscribe(
+                            _res => {},
+                            err => {}
+                        );
+                    }
                     this.getListDebitMemo();
                     this.getCountStatus();
                 } catch (err) {

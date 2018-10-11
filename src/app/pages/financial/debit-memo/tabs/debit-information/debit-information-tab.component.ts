@@ -9,6 +9,7 @@ import { TableService } from './../../../../../services/table.service';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../../../../environments/environment';
+import { FinancialService } from '../../../financial.service';
 import { DebitMemoService } from '../../debit-memo.service';
 
 @Component({
@@ -41,6 +42,7 @@ export class DebitInformationTabComponent implements OnInit {
         private modalService: NgbModal,
         public tableService: TableService,
         public debitService: DebitMemoService,
+        public financialService: FinancialService,
         private http: HttpClient) {
     }
 
@@ -112,6 +114,12 @@ export class DebitInformationTabComponent implements OnInit {
             res => {
                 try {
                     this.toastr.success(res.message);
+                    if (newStatus === 3) {
+                        this.financialService.syncDebitToQuickbook(this.debitData['id']).subscribe(
+                            _res => {},
+                            err => {}
+                        );
+                    }
                     this.changeStatusSuccessfully.emit();
                 } catch (err) {
                     console.log(err);

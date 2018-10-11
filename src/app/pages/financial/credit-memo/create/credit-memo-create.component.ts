@@ -18,6 +18,7 @@ import { HotkeysService } from 'angular2-hotkeys';
 import * as _ from 'lodash';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { OrderService } from '../../../order-mgmt/order-mgmt.service';
+import { FinancialService } from '../../financial.service';
 import { CreditMemoService } from './../credit-memo.service';
 
 
@@ -104,6 +105,7 @@ export class CreditMemoCreateComponent implements OnInit {
         private _hotkeysService: HotkeysService,
         public keyService: CreditMemoCreateKeyService,
         private creditMemoService: CreditMemoService,
+        private financialService: FinancialService,
         private dt: DatePipe) {
         this.generalForm = fb.group({
             'approver_id': [null, Validators.required],
@@ -550,6 +552,12 @@ export class CreditMemoCreateComponent implements OnInit {
                 if (res.status) {
                     this.toastr.success(res.message);
                     this.data['id'] = res.data.id;
+                    if ( type === 3) {
+                        this.financialService.syncCreditToQuickbook(this.data['id']).subscribe(
+                            _res => {},
+                            err => {}
+                        );
+                    }
                     if (!is_continue) {
                         setTimeout(() => {
                             this.router.navigate(['/financial/credit-memo/view/' + this.data['id']]);
