@@ -24,7 +24,12 @@ export class QuickbookOverviewComponent implements OnInit {
 
     public authorInfo = {
         code: null,
-        realmId: null
+        realm_id: null
+    };
+
+    public settingInfo = {
+        auth_url: '',
+        state: ''
     };
 
     constructor(
@@ -45,17 +50,45 @@ export class QuickbookOverviewComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.getSettingInfo();
         this.authorInfo = {
             code: this.route.snapshot.queryParams['code'],
-            realmId: this.route.snapshot.queryParams['realmId']
+            realm_id: this.route.snapshot.queryParams['realmId']
         };
-        if (this.authorInfo.code && this.authorInfo.realmId) {
-            console.log(this.authorInfo);
+        if (this.authorInfo.code && this.authorInfo.realm_id) {
+            this.sendInfo();
         }
     }
 
+    getSettingInfo() {
+        this.quickbookService.getSettingInfoQuickbook().subscribe(
+            res => {
+                this.settingInfo = res.data;
+            }, err => {}
+        );
+    }
+
+    sendInfo() {
+        this.quickbookService.sendLoginQuickbookInfo(this.authorInfo).subscribe(
+            res => {
+                this.getSettingInfo();
+            }, err => {}
+        );
+    }
+
     onClickInstall() {
-        const newWindow = window.open(window.location.href + '?code=asdddsdasd&realmId=45');
+        const newWindow = window.open(this.settingInfo.auth_url);
         newWindow.focus();
     }
+
+    onClickUninstall() {
+        this.quickbookService.uninstallQuickbook(this.authorInfo).subscribe(
+            res => {
+                window.location.replace(location.pathname);
+                // this.getSettingInfo();
+            }, err => {}
+        );
+    }
+
+
 }

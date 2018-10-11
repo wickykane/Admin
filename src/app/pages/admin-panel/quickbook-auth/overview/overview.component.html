@@ -21,7 +21,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row text" *ngIf="!authorInfo.code || !authorInfo.realmId">
+            <div class="row text" *ngIf="settingInfo.state != 'authorized'">
                 <p>Please click on "Install Quickbook Online" to link SEL2B to a Quickbook Online Account</p>
             </div>
         </div>
@@ -29,8 +29,8 @@
             <div class="main-logo">
                 <img src="assets/img/quickbooks_logo.png" alt="QuickBooks" />
             </div>
-            <button *ngIf="!authorInfo.code || !authorInfo.realmId" class="action" (click)="onClickInstall()">Install Quickbooks Online</button>
-            <button *ngIf="authorInfo.code && authorInfo.realmId" class="action" (click)="onClickInstall()">Uninstall Quickbooks Online</button>
+            <button *ngIf="settingInfo.state != 'authorized'" class="action" (click)="onClickInstall()">Install Quickbooks Online</button>
+            <button *ngIf="settingInfo.state == 'authorized'" class="action" (click)="onClickUninstall()">Uninstall Quickbooks Online</button>
         </div>
     </div>
 </div>
