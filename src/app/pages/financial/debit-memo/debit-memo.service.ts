@@ -121,4 +121,8 @@ export class DebitMemoService {
         const url = 'debit/voucher/' + debitId;
         return this.API.get(url);
     }
+    getDebitHistory(id) {
+        const url = ['debit/history', id].join('/');
+        return this.API.get(url);
+    }
 }
