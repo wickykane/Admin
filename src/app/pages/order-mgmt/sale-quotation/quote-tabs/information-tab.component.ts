@@ -70,7 +70,9 @@ export class QuoteInformationTabComponent implements OnInit {
         @Inject(SaleQuotationDetailComponent) private parent: SaleQuotationDetailComponent,
     ) {
         //  Init Key
-        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
+        if (!this.parent.data['shortcut']) {
+            this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
+        }
     }
 
     ngOnInit() {
