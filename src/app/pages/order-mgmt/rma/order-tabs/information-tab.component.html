@@ -1,6 +1,13 @@
 <div [@routerTransition]>
 <!-- <app-page-header [heading]="'DETAIL RETURN ORDERS'"></app-page-header> -->
 <!-- <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut> -->
+<div class="bd-example text-right">
+    <button  *ngIf="[3].indexOf(_orderDetail.sts)!== -1" ngbTooltip="Approve" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail.id, 5)"><i class="fa fa-check" aria-hidden="true"></i> Approve</button>
+    <button *ngIf="[1].indexOf(_orderDetail.sts)!== -1" ngbTooltip="Cancel" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail.id, 2)"><i class="fa fa-times-circle"></i> Cancel</button>
+    <button *ngIf="[1].indexOf(_orderDetail.sts)!== -1" ngbTooltip="Edit" class="btn btn-outline-dark" [routerLink]="['edit', _orderDetail.id]"><i class="fa fa-pencil"></i> Edit</button>
+
+
+</div>
 <section class="rma-page block main-container block-order">
    <div class="row block-info">
       <div class="col-md-5 p-l-5 p-r-2">
@@ -103,7 +110,7 @@
 
                              </label>
                              <div class='col-6'>
-                               {{detail['return_type_name']}}
+                               {{detail['order_return_type_name']}}
                              </div>
                           </div>
                           <div class="form-group row">
@@ -145,7 +152,7 @@
                           <div class="form-group row"  *ngIf="detail['ship_via'] == 3">
                              <label class='col-6'>Arrival  Date</label>
                              <div class='col-6 text-danger'>
-                               {{detail['sts_name']}}
+                               {{detail['arrival_date']}}
                              </div>
                           </div>
 
@@ -564,7 +571,7 @@
          <!-- <button type="button" class="btn btn-outline-info" (click)="confirmCreateOrder('validate')" [disabled]="!generalForm.valid" translate>Save & Validate</button> -->
          <!-- <button type="button" class="btn btn-outline-primary" (click)="confirmCreateOrder('create')" [disabled]="!generalForm.valid" translate>Save & Submit</button> -->
          <!-- <button type="button" class="btn btn-outline-success" (click)="confirmCreateOrder('quote')" [disabled]="!generalForm.valid" translate>Save As Quote</button> -->
-         <button type="button" class="btn btn-default" (click)="backList()" translate>Back to list</button>
+         <button type="button" class="btn btn-outline-dark" (click)="backList()" translate>Back to list</button>
       </div>
    </div>
 </section>

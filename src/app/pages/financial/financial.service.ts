@@ -131,4 +131,20 @@ export class FinancialService {
         const url = 'ar-invoice/voucher/' + id ;
         return this.API.get(url);
     }
+    syncInvoiceToQuickbook(invoiceId) {
+        const url = `quick-books/sync-invoice/${invoiceId}?force=true`;
+        return this.API.post(url);
+    }
+    syncReceiptVoucherToQuickbook(voucherId) {
+        const url = `quick-books/sync-payment/${voucherId}?force=true`;
+        return this.API.post(url);
+    }
+    syncDebitToQuickbook(debitId) {
+        const url = `quick-books/sync-debit-memo/${debitId}?force=true`;
+        return this.API.post(url);
+    }
+    syncCreditToQuickbook(creditId) {
+        const url = `quick-books/sync-credit-memo/${creditId}?force=true`;
+        return this.API.post(url);
+    }
 }
