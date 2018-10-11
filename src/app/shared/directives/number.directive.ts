@@ -35,7 +35,7 @@ export class NumberDirective implements OnInit {
             this.changeValue.emit(this._min);
         }
     }
-    
+
     @HostListener('input', ['$event'])
     onInputChange($event) {
         this._init = true;
