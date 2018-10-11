@@ -51,7 +51,7 @@ export class QuoteModalContent implements OnInit, OnDestroy {
         this.searchForm = fb.group({
             'quote_no': [null],
             'part_no': [null],
-            'quote_date': [null],
+            'quote_dt': [null],
         });
 
         //  Assign get list function name, override variable here
