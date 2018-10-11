@@ -21,7 +21,7 @@
                                                     (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 100px; margin-left: 2px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id"
                                                     formControlName="buyer_id">
                                                     <ng-template ng-option-tmp let-item="item">
-                                                        <span title="{{item.company_name}}" [innerHTML]="item.company_name"></span>
+                                                        <span  [innerHTML]="item.company_name"></span>
                                                     </ng-template>
                                                 </ng-select>
                                             </div>
