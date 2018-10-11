@@ -105,6 +105,8 @@
                                         <th class="text-center" translate style="width:8%">Expiry date</th>
                                         <th class="text-center" translate style="width:8%">Total</th>
                                         <th class="text-center" translate style="width:7%">Status</th>
+                                        <th class="text-center" translate style="width:7%">Last Update On</th>
+                                        <th class="text-center" translate style="width:7%">Last Update By</th>
                                         <th translate>Action</th>
                                     </tr>
                                 </thead>
@@ -133,6 +135,11 @@
                                             <span class="badge badge-primary" *ngIf="item.sts_code == 'RO'">{{item.sts}}</span>
                                             <span class="badge badge-primary bg-darkblue" *ngIf="item.sts_code == 'IU'">{{item.sts}}</span>
                                             <span class="badge badge-primary bg-bright-grey" *ngIf="item.sts_code == 'EX'">{{item.sts}}</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span ng-if="item.expiry_date!=null">{{item.last_update_on | date:'MM/dd/yyyy' }}</span>
+                                        </td> <td class="text-center">
+                                            <span ng-if="item.expiry_date!=null">{{item.last_update_by}}</span>
                                         </td>
                                         <td>
                                             <a ngbTooltip="Edit" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" [routerLink]="['/order-management/sale-quotation/edit', item.id]"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>

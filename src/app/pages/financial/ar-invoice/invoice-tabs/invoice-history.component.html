@@ -1,0 +1,26 @@
+<div class="container">
+        <div class="page-header" style="margin-top:20px">
+        </div>
+        <ul class="timeline">
+          <ng-container *ngFor="let item of listMaster['timeline'].slice().reverse(); let i = index;">
+              <li [ngClass]="{'timeline-inverted': i%2==0,'': i%2!=0}">
+                <div class="timeline-badge primary"></div>
+                <div class="timeline-panel">
+                  <div class="timeline-heading">
+                    <h4 class="timeline-title"><i class="fa fa-calendar"></i> {{item.log_date }}</h4>
+                  </div>
+                  <ul>
+                    <li class="timeline-body" *ngFor="let it of item.log_data">
+                      <p>
+                        <span class="text-left">{{it.log_user_name}}</span>
+                        <span class="text-right" style="padding-left:50px;"><small class="text-muted">{{it.log_date}}</small></span>
+                      </p>
+                      <p>{{it.log_content}}</p>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+          </ng-container>
+        </ul>
+    </div>
+    

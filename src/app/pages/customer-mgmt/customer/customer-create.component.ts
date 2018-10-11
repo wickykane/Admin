@@ -68,7 +68,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
             'registration_no': [null],
             'bank_accounts': [null],
             'credit_cards': [null],
-            'phone': [null],
+            'phone': [null, Validators.required],
             'fax': [null],
             'email': [null],
             'credit_limit': [null],
@@ -115,17 +115,17 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         this.customerService.getCreditCard().subscribe(res => {
             this.getListCreditCard = res.data;
             this.credit_cards.forEach(card => { card.listCard = res.data });
-        })
+        });
     }
     getListPaymentTerm() {
         this.customerService.getListPaymentTerm().subscribe(res => {
             this.paymentTermList = res.data;
-        })
+        });
     }
     getListPaymentMethod() {
         this.customerService.getListPaymentMethod().subscribe(res => {
             this.paymentMethodList = res.data;
-        })
+        });
     }
     ngOnDestroy() {
         this.hotkeysService.remove(this.hotkeyCtrlLeft);

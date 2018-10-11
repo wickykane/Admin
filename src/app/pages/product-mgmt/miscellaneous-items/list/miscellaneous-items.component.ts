@@ -8,8 +8,11 @@ import { CommonService } from '../../../../services/common.service';
 import { cdArrowTable } from '../../../../shared/index';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { MiscellaneousItemsKeyService } from '../keys.control';
+
 import { HotkeysService } from 'angular2-hotkeys';
-import { ItemsControl } from '../../../../../../node_modules/@ngu/carousel/src/ngu-carousel/ngu-carousel.interface';
+
+// import { ItemsControl } from '../../../../../../node_modules/@ngu/carousel/src/ngu-carousel/ngu-carousel.interface';
+
 import { TableService } from '../../../../services/table.service';
 import { ProductService } from '../../product-mgmt.service';
 import { MiscellaneousItemsModalComponent } from '../controlMisscellaneous/misscellaneous-items.modal';

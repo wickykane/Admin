@@ -838,6 +838,10 @@ ngu-carousel {
 .infinity-scroll-select {
     .ng-dropdown-panel {
         width: 200px !important;
+    }
+    .ng-option {
+        white-space: normal !important;
+        word-break: break-all;
     }    
 }
 
@@ -945,6 +949,22 @@ ngu-carousel {
 }
 
 // Modal
+
+// .modal-open {
+//     .modal.fade {
+//         .modal-dialog {
+//             bottom: 500px !important;
+//             transition: bottom ease-out .5s !important;
+//         }
+//     }
+
+//     .modal.show {
+//         .modal-dialog  {
+//             bottom: 0 !important;
+//         }
+//     }
+// }
+
 .modal-md {
     .modal-dialog {
         max-width: 500px;

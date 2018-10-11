@@ -1,37 +1,47 @@
 <div [@routerTransition]>
     <app-page-header [heading]="'LIST OF CUSTOMERS'" [icon]="'fa-th-list'"></app-page-header>
-
+    <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
     <div class="block anchor-scroll block-order">
-        <div class="block-content pd-bottom padding-lr-0 mt-2">
+        <div class="block-content pd-bottom bg-gray-light short-width">
             <div class="row">
-                <div class="col-6">
-                    <form class="row form-horizontal form-search filter-order-group" role="form" [formGroup]="searchForm">
-                        <div class="col-md-4">
-                            <label for="buyer_name" class="control-label">Name</label>
-                            <input type="text" name="buyer_name" formControlName="buyer_name" class="form-control" id="buyer_name" placeholder="" focus-element="focusAuto"
+                <!-- <div class="col-6"> -->
+                    <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
+                        <div class="block-search">
+                            <label for="buyer_name" class="control-label">Code</label>
+                            <input [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="buyer_code"  type="text" name="buyer_code"  formControlName="buyer_code" class="form-control" id="buyer_code" placeholder="" focus-element="focusAuto"
                                 capitalize>
                         </div>
-                        <div class="col-md-4">
+                        <div class="block-search">
+                            <label for="buyer_name" class="control-label">Name</label>
+                            <input [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="buyer_name"  type="text" name="buyer_name"  formControlName="buyer_name" class="form-control" id="buyer_name" placeholder="" focus-element="focusAuto"
+                                capitalize>
+                        </div>
+                        <div class="block-search">
                             <label for="buyer_type" class="control-label" style="width: 82px !important">Customer Type</label>
                             <select class="form-control" formControlName="buyer_type">
                                 <option value="null" selected="true">--Select--</option>
                                 <option *ngFor="let item of listMaster['buyerType']" [ngValue]="item.id">{{item.name}}</option>
                             </select>
                         </div>
-                        <div class="col-md-4">
+                        <div class="block-search">
                             <label for="email" class="control-label">Email</label>
                             <input type="text" name="email" formControlName="email" class="form-control" id="email" placeholder="">
                         </div>
+                        <div class="block-search">
+                            <label for="email" class="control-label">Phone</label>
+                            <input type="tel" name="phone" formControlName="phone" class="form-control" id="phone" placeholder="">
+                        </div>
                     </form>
-                </div>
-                <div class="col-6">
+                <!-- </div> -->
+                <!-- <div class="col-6"> -->
                     <div class="block-btn-search">
-                        <div class="mt-1 group-btn-search">
+                        <label class="control-label">&nbsp;</label>
+                        <div class="group-btn-search">
                             <button type="button" class="btn-default-custom" (click)="tableService.customSearchAction()">Search</button>
                             <button type="button" class="btn-default-custom" (click)="tableService.resetAction(this.searchForm)">Reset</button>
                         </div>
                     </div>
-                </div>
+                <!-- </div> -->
             </div>
         </div>
 
@@ -52,7 +62,7 @@
                                 (onEnter)="selectData($event)">
                                 <thead class="bg-white">
                                     <tr>
-                                        <th>ID</th>
+                                        <th>Code</th>
                                         <th>Customer Type</th>
                                         <th>Customer Name</th>
                                         <th>Email</th>
@@ -64,7 +74,7 @@
                                 </thead>
                                 <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                                     <tr>
-                                        <td>{{item.id}}</td>
+                                        <td>{{item.buyer_code}}</td>
                                         <td>{{ item.buyer_type_name }}</td>
                                         <td>{{item.company_name}}</td>
                                         <td>{{item.email}}</td>
