@@ -85,7 +85,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             'registration_no': [null],
             'bank_accounts': [null],
             'credit_cards': [null],
-            'phone': [null],
+            'phone': [null,  Validators.required],
             'fax': [null],
             'email': [null],
             'credit_limit': [null],

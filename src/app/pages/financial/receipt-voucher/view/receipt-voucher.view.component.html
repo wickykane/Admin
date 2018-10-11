@@ -13,6 +13,11 @@
                     <app-receipt-document-tab [receiptId]="receiptId"></app-receipt-document-tab>
                 </ng-template>
             </ngb-tab>
+            <ngb-tab title="History">
+                    <ng-template ngbTabContent>
+                        <app-receipt-history-tab [receiptId]="receiptId"></app-receipt-history-tab>
+                    </ng-template>
+                </ngb-tab>
         </ngb-tabset>
     </section>
 </div>

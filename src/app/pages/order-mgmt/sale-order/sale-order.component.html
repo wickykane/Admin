@@ -110,11 +110,13 @@
                                         <th class="text-center " translate>Type</th>
                                         <th class="text-center" translate>Order date</th>
                                         <th translate>Status</th>
-                                        <th class="text-center" translate>Delivery date</th>
+                                        <!-- <th class="text-center" translate>Delivery date</th> -->
                                         <th class="text-center" translate>Total Amount</th>
                                         <th class="text-center" translate>Total Paid</th>
                                         <th class="text-center" translate>Total Refunded</th>
                                         <th translate>Salesperson</th>
+                                        <th translate>Last Update On</th>
+                                        <th translate>Last Update By</th>
                                         <th translate>Action</th>
                                     </tr>
                                 </thead>
@@ -151,13 +153,14 @@
                                             <span class="label magenta" *ngIf="item.sts_code == 'RJ'">{{item.sts}}</span>
                                             <span class="label red" *ngIf="item.sts_code == 'CC'">{{item.sts}}</span>
                                         </td>
-                                        <td class="text-center">{{item.delivery_date | date:'MM/dd/yyyy'}}</td>
+                                        <!-- <td class="text-center">{{item.delivery_date | date:'MM/dd/yyyy'}}</td> -->
 
                                         <td class="text-center">{{(item.total_price || 0) | currency}}</td>
                                         <td class="text-center">{{(item.total_paid || 0) | currency}}</td>
                                         <td class="text-center">{{(item.total_refunded || 0) | currency}}</td>
-
                                         <td>{{item.sale_person_name}}</td>
+                                        <td class="text-center">{{item.last_update_on | date:'MM/dd/yyyy'}}</td>
+                                        <td class="text-center">{{item.last_update_by }}</td>
                                         <td class="text-nowrap">
                                             <a href="javascript:void(0)" ngbTooltip="Submit" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" (click)="confirmModal(item.id, 'SM')"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></a>
                                             <a href="javascript:void(0)" ngbTooltip="Approve" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="confirmModal(item.id, 'AP')"><i class="fa fa-check-square" aria-hidden="true"></i></a>
