@@ -135,4 +135,8 @@ export class CreditMemoService {
         const url = 'credit-memo/get-info-content';
         return this.API.get(url, params);
     }
+    getCreditHistory(id) {
+        const url = ['credit-memo/history', id].join('/');
+        return this.API.get(url);
+    }
 }
