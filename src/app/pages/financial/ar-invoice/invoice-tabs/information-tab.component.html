@@ -64,6 +64,18 @@
                                                 {{detail['apply_late_fee']? 'Yes': 'No'}}
                                             </div>
                                         </div>
+                                        <div class="form-group row">
+                                            <label class='col-6 control-label'>Salesperson</label>
+                                            <div class='col-6'>
+                                                {{detail['sale_person_name']}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class='col-6 control-label'>Approver</label>
+                                            <div class='col-6'>
+                                                {{ detail['aprvr_name']}}
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-md-6 customer-infomation bolder padding-lr-5">
 
@@ -86,15 +98,15 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class='col-6 control-label'>Salesperson</label>
+                                            <label class='col-6 control-label'>Last Update On</label>
                                             <div class='col-6'>
-                                                {{detail['sale_person_name']}}
+                                                {{detail['last_update_on']}}
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class='col-6 control-label'>Approver</label>
+                                            <label class='col-6 control-label'>Last Update By</label>
                                             <div class='col-6'>
-                                                {{ detail['aprvr_name']}}
+                                                {{ detail['last_update_by']}}
                                             </div>
                                         </div>
                                     </div>

@@ -5,7 +5,7 @@ import { CommonService } from '../../../../services/common.service';
 import { routerTransition } from '../../../../router.animations';
 import { TableService } from '../../../../services/table.service';
 import { MiscellaneousItemsKeyService } from '../keys.control';
-import { ItemsControl } from '../../../../../../node_modules/@ngu/carousel/src/ngu-carousel/ngu-carousel.interface';
+// import { ItemsControl } from '../../../../../../node_modules/@ngu/carousel/src/ngu-carousel/ngu-carousel.interface';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { MiscellaneousItemsModalComponent } from '../controlMisscellaneous/misscellaneous-items.modal';

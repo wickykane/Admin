@@ -6,14 +6,14 @@ import { CustomerService } from '../customer.service';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 import { TableService } from './../../../services/table.service';
-import { CustomerKeyService } from './keys.control';
+// import { CustomerKeyService } from './keys.customer.control';
 
 @Component({
     selector: 'app-customer-view',
     templateUrl: './customer-view.component.html',
     styleUrls: ['./customer.component.scss'],
     animations: [routerTransition()],
-    providers: [CustomerKeyService],
+    // providers: [CustomerKeyService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
@@ -32,11 +32,11 @@ export class CustomerViewComponent implements OnInit {
         public tableService: TableService,
         public route: ActivatedRoute,
         public toastr: ToastrService,
-        public customerKeyService: CustomerKeyService,
+        // public customerKeyService: CustomerKeyService,
         private customerService: CustomerService,
         private cd: ChangeDetectorRef) {
         //  Init Key
-        this.customerKeyService.watchContext.next(this);
+        // this.customerKeyService.watchContext.next(this);
     }
 
     ngOnInit() {
