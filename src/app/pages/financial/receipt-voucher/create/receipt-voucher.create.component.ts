@@ -450,6 +450,12 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         this.voucherService.createVoucher(params).subscribe(res => {
             try {
                 this.toastr.success(res.message);
+                if (type === 3) {
+                    this.finacialService.syncReceiptVoucherToQuickbook(res.data['id']).subscribe(
+                        _res => {},
+                        err => {}
+                    );
+                }
                 if (!is_continue) {
                     this.data['voucher_id'] = res.data['id'];
                     setTimeout(() => {

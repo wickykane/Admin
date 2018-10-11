@@ -163,6 +163,12 @@ export class InvoiceComponent implements OnInit {
                 if (+id === 11) {
                     this.editInvoice(id);
                 }
+                if (status === 4) {
+                    this.financialService.syncInvoiceToQuickbook(id).subscribe(
+                        _res => {},
+                        err => {}
+                    );
+                }
                 this.getList();
                 this.getCountStatus();
             } catch (e) {

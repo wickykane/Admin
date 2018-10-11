@@ -548,6 +548,10 @@ export class InvoiceCreateComponent implements OnInit {
                     this.toastr.success(res.message);
                     this.data['invoice_id'] = res.data;
                     if (type === 4) {
+                        this.financialService.syncInvoiceToQuickbook(this.data['invoice_id']).subscribe(
+                            _res => {},
+                            err => {}
+                        );
                         this.router.navigate(['/financial/receipt-voucher/create'], { queryParams: { invoice_id: this.data['invoice_id'] } });
                         return;
                     }

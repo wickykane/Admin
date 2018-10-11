@@ -9,6 +9,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../../../../environments/environment';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
+import { FinancialService } from '../../financial.service';
 import { CreditMailModalComponent } from '../modals/send-email/mail.modal';
 
 @Component({
@@ -56,6 +57,7 @@ export class CreditInformationTabComponent implements OnInit {
         private router: Router,
         private modalService: NgbModal,
         private creditMemoService: CreditMemoService,
+        public financialService: FinancialService,
         public tableService: TableService,
         private http: HttpClient) {
     }
@@ -144,6 +146,12 @@ export class CreditInformationTabComponent implements OnInit {
         this.creditMemoService.updateCreditStatus(params).subscribe(res => {
             try {
                 this.toastr.success(res.message);
+                if (status === 3) {
+                    this.financialService.syncCreditToQuickbook(id).subscribe(
+                        _res => {},
+                        err => {}
+                    );
+                }
                 this.getList();
             } catch (e) {
                 console.log(e);

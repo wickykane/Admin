@@ -16,6 +16,7 @@ import { DebitMemoCreateKeyService } from '../create/keys.create.control';
 import { ItemsOrderDebitModalContent } from '../modals/items-order/items-order.modal';
 import { MiscItemsDebitModalContent } from '../modals/misc-items/misc-items.modal';
 
+import { FinancialService } from '../../financial.service';
 import { DebitMemoService } from '../debit-memo.service';
 
 import { HotkeysService } from 'angular2-hotkeys';
@@ -87,6 +88,7 @@ export class DebitMemoEditComponent implements OnInit {
         public keyService: DebitMemoCreateKeyService,
         public tableService: TableService,
         public debitService: DebitMemoService,
+        public financialService: FinancialService,
         private renderer: Renderer) {
 
         this.debitMemoForm = fb.group({
@@ -663,6 +665,12 @@ export class DebitMemoEditComponent implements OnInit {
             res => {
                 try {
                     this.toastr.success(res.message);
+                    if ( status === 3) {
+                        this.financialService.syncDebitToQuickbook(this.debitId).subscribe(
+                            _res => {},
+                            err => {}
+                        );
+                    }
                     this.handleSaveSuccessfully(status, this.debitId);
                 } catch (err) {
                     console.log(err);

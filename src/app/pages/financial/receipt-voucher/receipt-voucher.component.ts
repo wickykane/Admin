@@ -13,8 +13,8 @@ import { Subject } from 'rxjs/Subject';
 import { routerTransition } from '../../../router.animations';
 import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
 import { OrderService } from '../../order-mgmt/order-mgmt.service';
+import { FinancialService } from '../financial.service';
 import { ReceiptKeyService } from './keys.list.control';
-
 
 
 @Component({
@@ -64,6 +64,7 @@ export class ReceiptVoucherComponent implements OnInit {
         private modalService: NgbModal,
         private _hotkeysService: HotkeysService,
         public receiptKeyService: ReceiptKeyService,
+        public financialService: FinancialService,
         private orderService: OrderService,
         private http: HttpClient,
         private renderer: Renderer) {
@@ -230,6 +231,12 @@ export class ReceiptVoucherComponent implements OnInit {
         this.receiptVoucherService.updateReceiptVoucherStatus(params).subscribe(res => {
             try {
                 this.toastr.success(res.message);
+                if (status === 3) {
+                    this.financialService.syncReceiptVoucherToQuickbook(id).subscribe(
+                        _res => {},
+                        err => {}
+                    );
+                }
                 this.getList();
                 this.getCountStatus();
             } catch (e) {
