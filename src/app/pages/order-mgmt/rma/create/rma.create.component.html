@@ -24,7 +24,7 @@
                                                     [items]="listMaster['customer']" bindLabel="company_name" bindValue="id"
                                                     formControlName="company_id">
                                                     <ng-template ng-option-tmp let-item="item">
-                                                        <span title="{{item.company_name}}">{{item.company_name}}</span>
+                                                        <span title="{{item.company_name}}" [innerHTML]="item.company_name"></span>
                                                     </ng-template>
                                                 </ng-select>
                                             </div>

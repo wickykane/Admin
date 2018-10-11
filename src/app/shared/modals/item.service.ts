@@ -31,7 +31,7 @@ export class ItemService {
         return this.API.get(url, params);
     }
     getMiscItems(params) {
-        const data = {...params, sts: 1 };
+        const data = { ...params, sts: 1 };
         const url = 'misc';
         return this.API.get(url, data);
     }
@@ -102,5 +102,10 @@ export class ItemService {
     checkSEFLConnection(data) {
         const url = 'shipping-zone/test-conection-sefl';
         return this.API.post(url, data);
+    }
+
+    getListActiveSaleQuote(id, params) {
+        const url = 'sale-quote/item/list/' + id;
+        return this.API.get(url, params);
     }
 }

@@ -644,23 +644,26 @@ export class SaleOrderCreateComponent implements OnInit {
     }
 
     showListQuote() {
-        const modalRef = this.modalService.open(QuoteModalContent, { size: 'lg' });
-        modalRef.result.then(res => {
-            if (this.keyService.keys.length > 0) {
-                this.keyService.reInitKey();
-                this.table.reInitKey(this.data['tableKey']);
-            }
-            if (res) {
-                setTimeout(() => {
-                    this.router.navigate(['order-management/sale-quotation/detail/', res]);
-                });
-            }
-        }, dismiss => {
-            if (this.keyService.keys.length > 0) {
-                this.keyService.reInitKey();
-                this.table.reInitKey(this.data['tableKey']);
-            }
-        });
+        if (this.generalForm.value.buyer_id) {
+            const modalRef = this.modalService.open(QuoteModalContent, { size: 'lg' });
+            modalRef.result.then(res => {
+                if (this.keyService.keys.length > 0) {
+                    this.keyService.reInitKey();
+                    this.table.reInitKey(this.data['tableKey']);
+                }
+                if (res) {
+                    setTimeout(() => {
+                        this.router.navigate(['order-management/sale-quotation/detail/', res]);
+                    });
+                }
+            }, dismiss => {
+                if (this.keyService.keys.length > 0) {
+                    this.keyService.reInitKey();
+                    this.table.reInitKey(this.data['tableKey']);
+                }
+            });
+            modalRef.componentInstance.company_id = this.generalForm.value.buyer_id;
+        }
     }
 
     confirmCreateOrder(type) {

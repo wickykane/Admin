@@ -26,6 +26,16 @@ export class NumberDirective implements OnInit {
     constructor(private number: DecimalPipe, private element: ElementRef, private ngModel: NgModel, private formControl: NgControl) {
     }
 
+    @HostListener('blur', ['$event'])
+    onBlur($event) {
+        const event = $event.target.value;
+        if (!event) {
+            this.ngModel.viewToModelUpdate(this._min);
+            this.ngModel.valueAccessor.writeValue(this._min);
+            this.changeValue.emit(this._min);
+        }
+    }
+    
     @HostListener('input', ['$event'])
     onInputChange($event) {
         this._init = true;

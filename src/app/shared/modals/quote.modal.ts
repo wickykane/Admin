@@ -104,10 +104,8 @@ export class QuoteModalContent implements OnInit, OnDestroy {
     getList() {
         const params = { ...this.tableService.getParams(), ...this.searchForm.value };
         Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
-        console.log(params);
-        params.is_popup = 1;
 
-        this.itemService.getMiscItems(params).subscribe(res => {
+        this.itemService.getListActiveSaleQuote(this.company_id, params).subscribe(res => {
             try {
                 if (!res.data.rows) {
                     this.list.items = [];
