@@ -21,6 +21,7 @@ import { HotkeysService } from 'angular2-hotkeys';
 import * as _ from 'lodash';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { OrderService } from '../../../order-mgmt/order-mgmt.service';
+import { FinancialService } from '../../financial.service';
 import { ReceiptVoucherService } from './../receipt-voucher.service';
 
 import { PaymentGatewayModalComponent } from '../modals/payment-gateway/payment-gateway.modal';
@@ -82,6 +83,7 @@ export class ReceiptVoucherEditComponent implements OnInit {
         public keyService: InvoiceEditKeyService,
         public tableService: TableService,
         private voucherService: ReceiptVoucherService,
+        private financialService: FinancialService,
         private dt: DatePipe) {
         this.searchForm = fb.group({
             code: 1
@@ -439,6 +441,12 @@ export class ReceiptVoucherEditComponent implements OnInit {
             try {
                 this.data['voucher_id'] = res.data['id'];
                 this.toastr.success(res.message);
+                if (type === 3) {
+                    this.financialService.syncReceiptVoucherToQuickbook(res.data['id']).subscribe(
+                        _res => {},
+                        err => {}
+                    );
+                }
                 if (!is_continue) {
                     setTimeout(() => {
                         this.router.navigate(['/financial/receipt-voucher/view/' + this.data['voucher_id']]);

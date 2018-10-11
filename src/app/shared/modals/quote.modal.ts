@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from './../../services/table.service';
@@ -14,12 +14,13 @@ import { Helper } from './../helper/common.helper';
 declare var jQuery: any;
 
 @Component({
-    selector: 'app-item-misc-modal-content',
-    templateUrl: './item-misc.modal.html',
+    selector: 'app-quote-modal-content',
+    templateUrl: './quote.modal.html',
     providers: [HotkeysService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 // tslint:disable-next-line:component-class-suffix
-export class ItemMiscModalContent implements OnInit, OnDestroy {
+export class QuoteModalContent implements OnInit, OnDestroy {
     @Input() company_id;
     @ViewChild(cdArrowTable) table: cdArrowTable;
 
@@ -41,6 +42,7 @@ export class ItemMiscModalContent implements OnInit, OnDestroy {
 
     constructor(public activeModal: NgbActiveModal,
         public itemService: ItemService,
+        private cd: ChangeDetectorRef,
         public fb: FormBuilder,
         private helper: Helper,
         public _hotkeysService: HotkeysService,
@@ -48,9 +50,8 @@ export class ItemMiscModalContent implements OnInit, OnDestroy {
         public tableService: TableService) {
         this.searchForm = fb.group({
             'no': [null],
-            'des': [null],
-            'type': [null],
-            'sts': 1
+            'part_no': [null],
+            'qt_dt': [null],
         });
 
         //  Assign get list function name, override variable here
@@ -60,21 +61,31 @@ export class ItemMiscModalContent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.getListType();
         this.getList();
         this.initKeyBoard();
     }
 
+    refresh() {
+        this.cd.detectChanges();
+    }
 
     // Table event
-    selectData(index) {
-        this.list.items[index].is_checked = !this.list.items[index].is_checked;
+    selectData(index, flag?) {
+        if (!flag) {
+            this.list.items[index].is_checked = !this.list.items[index].is_checked;
+        }
+        this.list.items.forEach((item, i) => {
+            if (i !== index) {
+                item.is_checked = false;
+            }
+        });
+        this.refresh();
         this.isAllChecked();
     }
 
     checkAll(ev) {
-        this.list.items.forEach(x => x.is_checked = ev.target.checked);
-        this.list.checklist = this.list.items.filter(_ => _.is_checked);
+        // this.list.items.forEach(x => x.is_checked = ev.target.checked);
+        // this.list.checklist = this.list.items.filter(_ => _.is_checked);
     }
 
     isAllChecked() {
@@ -86,30 +97,27 @@ export class ItemMiscModalContent implements OnInit, OnDestroy {
      * Internal Function
      */
 
+    ok() {
+        const checkedItem = this.list.items.filter(item => item.is_checked)[0] || {};
+        this.activeModal.close(checkedItem.id);
+    }
     getList() {
-        console.log(this.searchForm);
         const params = { ...this.tableService.getParams(), ...this.searchForm.value };
         Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
-        console.log(params);
-        params.is_popup = 1;
 
-        this.itemService.getMiscItems(params).subscribe(res => {
+        this.itemService.getListActiveSaleQuote(this.company_id, params).subscribe(res => {
             try {
                 if (!res.data.rows) {
                     this.list.items = [];
+                    this.refresh();
                     return;
                 }
                 this.list.items = res.data.rows;
                 this.tableService.matchPagingOption(res.data);
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
-        });
-    }
-
-    getListType() {
-        this.itemService.getMiscType().subscribe(res => {
-            this.listMaster['type'] = res.data;
         });
     }
 
@@ -163,11 +171,11 @@ export class ItemMiscModalContent implements OnInit, OnDestroy {
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+o', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             event.preventDefault();
-            this.activeModal.close(this.list.checklist);
+            this.ok();
             const e: ExtendedKeyboardEvent = event;
             e.returnValue = false; // Prevent bubbling
             return e;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'OK'));
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'View'));
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+pageup', (event: KeyboardEvent): boolean => {
             this.tableService.pagination.page--;

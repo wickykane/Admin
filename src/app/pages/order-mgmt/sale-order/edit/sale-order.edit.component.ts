@@ -20,6 +20,7 @@ import { ItemMiscModalContent } from '../../../../shared/modals/item-misc.modal'
 import { ItemModalContent } from '../../../../shared/modals/item.modal';
 import { OrderHistoryModalContent } from '../../../../shared/modals/order-history.modal';
 import { PromotionModalContent } from '../../../../shared/modals/promotion.modal';
+import { QuoteModalContent } from '../../../../shared/modals/quote.modal';
 import { SaleOrderEditKeyService } from './keys.control';
 
 @Component({
@@ -776,6 +777,29 @@ export class SaleOrderEditComponent implements OnInit {
                 this.table.reInitKey(this.data['tableKey']);
             }
         });
+    }
+
+    showListQuote() {
+        if (this.generalForm.value.buyer_id) {
+            const modalRef = this.modalService.open(QuoteModalContent, { size: 'lg' });
+            modalRef.result.then(res => {
+                if (this.keyService.keys.length > 0) {
+                    this.keyService.reInitKey();
+                    this.table.reInitKey(this.data['tableKey']);
+                }
+                if (res) {
+                    setTimeout(() => {
+                        this.router.navigate(['order-management/sale-quotation/detail/', res]);
+                    });
+                }
+            }, dismiss => {
+                if (this.keyService.keys.length > 0) {
+                    this.keyService.reInitKey();
+                    this.table.reInitKey(this.data['tableKey']);
+                }
+            });
+            modalRef.componentInstance.company_id = this.generalForm.value.buyer_id;
+        }
     }
     //  Show order history
     showViewOrderHistory() {

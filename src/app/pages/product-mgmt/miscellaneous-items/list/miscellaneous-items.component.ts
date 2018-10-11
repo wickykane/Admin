@@ -1,16 +1,21 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CommonService } from '../../../../services/common.service';
-import { routerTransition } from '../../../../router.animations';
-import { TableService } from '../../../../services/table.service';
-import { MiscellaneousItemsKeyService } from '../keys.control';
-// import { ItemsControl } from '../../../../../../node_modules/@ngu/carousel/src/ngu-carousel/ngu-carousel.interface';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { MiscellaneousItemsModalComponent } from '../controlMisscellaneous/misscellaneous-items.modal';
-import { ProductService } from '../../product-mgmt.service';
+import { routerTransition } from '../../../../router.animations';
+import { CommonService } from '../../../../services/common.service';
+import { cdArrowTable } from '../../../../shared/index';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
+import { MiscellaneousItemsKeyService } from '../keys.control';
+
+import { HotkeysService } from 'angular2-hotkeys';
+
+// import { ItemsControl } from '../../../../../../node_modules/@ngu/carousel/src/ngu-carousel/ngu-carousel.interface';
+
+import { TableService } from '../../../../services/table.service';
+import { ProductService } from '../../product-mgmt.service';
+import { MiscellaneousItemsModalComponent } from '../controlMisscellaneous/misscellaneous-items.modal';
 @Component({
     selector: 'app-miscellaneous',
     templateUrl: './miscellaneous-items.component.html',
@@ -36,12 +41,15 @@ export class MiscellaneousItemsComponent implements OnInit {
 
     searchForm: FormGroup;
     miscTypeList: any;
+    @ViewChild(cdArrowTable) table: cdArrowTable;
+
     constructor(public router: Router,
         public fb: FormBuilder,
         public toastr: ToastrService,
         private vRef: ViewContainerRef,
         public tableService: TableService,
         public keyService: MiscellaneousItemsKeyService,
+        public _hotkeysService: HotkeysService,
         private commonService: CommonService,
         private productService: ProductService,
         private modalService: NgbModal,
@@ -58,7 +66,8 @@ export class MiscellaneousItemsComponent implements OnInit {
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
         //  Init Key
-        this.keyService.watchContext.next(this);
+        //  Init Key
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {
@@ -78,6 +87,11 @@ export class MiscellaneousItemsComponent implements OnInit {
      */
     selectData(index) {
         console.log(index);
+    }
+
+    selectTable() {
+        this.selectedIndex = 0;
+        this.table.element.nativeElement.querySelector('td a').focus();
     }
     /**
      * Internal Function
@@ -140,7 +154,7 @@ export class MiscellaneousItemsComponent implements OnInit {
         });
     }
     updateStatus(checked, item) {
-        if (item.is_sys == 0 || item.used == 0) {
+        if (item.is_sys === 0 || item.used === 0) {
             if (checked) {
                 this.productService.activeStatus(item.id).subscribe(res => {
                     try {
@@ -151,8 +165,7 @@ export class MiscellaneousItemsComponent implements OnInit {
                         console.log(e);
                     }
                 });
-            }
-            else {
+            } else {
                 this.productService.inActiveStatus(item.id).subscribe(res => {
                     try {
                         this.toastr.success(res.message);

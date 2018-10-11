@@ -6,7 +6,7 @@
             <form class="form-horizontal form-search" [formGroup]="searchForm">
                 <label for="type" class="control-label" style="font-weight: bold;" translate>SELECT WH</label>
                 <div class="block-search">
-                    <select (change)="tableService.searchAction()" formControlName="warehouse" class="form-control">
+                    <select [keyConfig]="itemKeyService.getKeyConfig()" appKeyNavigate="warehouse" (change)="tableService.searchAction()" formControlName="warehouse" class="form-control">
                         <option value="null" selected="true" translate disabled>--Select--</option>
                         <option *ngFor="let de of listMaster['warehouses']" [ngValue]="de.id">{{de.name}}</option>
                     </select>
@@ -23,7 +23,7 @@
                         <form class="form-horizontal form-search form-vehicle" [formGroup]="searchForm">
                             <label for="type" class="control-label" translate>Year From</label>
                             <div class="block-search">
-                                <select formControlName="year_from" class="form-control">
+                                <select [keyConfig]="itemKeyService.getKeyConfig()" appKeyNavigate="year_from" formControlName="year_from" class="form-control">
                                     <option value="null" selected="true" translate disabled>--Select--</option>
                                     <option *ngFor="let de of listMaster['years']" [ngValue]="de.id">{{de.name}}</option>
                                 </select>
@@ -71,7 +71,7 @@
                         <form class="form-horizontal form-search form-part-number" [formGroup]="searchForm">
                             <label for="so" class="control-label" translate>OEM #</label>
                             <div class="block-search">
-                                <input type="text" name="so" formControlName="oem" class="form-control">
+                                <input [keyConfig]="itemKeyService.getKeyConfig()" appKeyNavigate="oem" type="text" name="so" formControlName="oem" class="form-control">
                             </div>
                             <label for="so" class="control-label" translate>Partlinks #</label>
                             <div class="block-search">
@@ -103,7 +103,7 @@
                         <form class="form-horizontal form-search" [formGroup]="searchForm">
                             <label for="so" class="control-label" translate>Number</label>
                             <div class="block-search">
-                                <input type="text" name="so" formControlName="vin" class="form-control">
+                                <input [keyConfig]="itemKeyService.getKeyConfig()" appKeyNavigate="vin" type="text" name="so" formControlName="vin" class="form-control">
                             </div>
                             <div class="block-btn-search">
                                 <label class="control-label">&nbsp;</label>
@@ -126,7 +126,7 @@
                 <label class="control-label" translate><h4 class="name_form">FILTER: </h4></label>
                 <label for="so" class="control-label" translate>Part Link</label>
                 <div class="block-search">
-                    <input type="text" class="form-control" formControlName="partlinks_no_filter">
+                    <input [keyConfig]="itemKeyService.getKeyConfig()" appKeyNavigate="partlinks_no_filter" type="text" class="form-control" formControlName="partlinks_no_filter">
                 </div>
                 <label for="so" class="control-label" translate>Part</label>
                 <div class="block-search">
@@ -240,7 +240,7 @@
         <div class="col-md-6 padding-lr-0">
             <div class="text-right">
                 <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length" [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page" [maxSize]="tableService.maxSize"
-                  [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+                    [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
             </div>
         </div>
     </div>

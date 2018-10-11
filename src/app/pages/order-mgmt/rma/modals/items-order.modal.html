@@ -5,6 +5,7 @@
         </button>
     </div>
     <div class="modal-body">
+        <app-shortcut [listShortcut]='_hotkeysService.hotkeys'></app-shortcut>
         <!-- <div class="search-block block-content pd-bottom tab-content bg-gray-light">
             <div class="row">
                 <form class="form-horizontal form-search" [formGroup]="searchForm" (ngSubmit)="onSearchList()">
@@ -28,7 +29,7 @@
         </div> -->
         <div class="block-content pd-top mt-2">
             <div class="table-responsive">
-                <table class="table table-striped table-vcenter table-hover custom-table">
+                <table class="table table-striped table-vcenter table-hover custom-table" cdArrowTable [collection]="listItems" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                     <thead class="bg-white">
                         <tr>
                             <th>
@@ -45,7 +46,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let item of listItems">
+                        <tr *ngFor="let item of listItems; let i = index;"  [ngClass]="{'row-selected': i == selectedIndex}">
                             <td>
                                 <label class="css-input css-checkbox css-checkbox-default">
                                     <input class="cb-element" type="checkbox" [(ngModel)]="item.is_checked" (change)="isAllChecked()">

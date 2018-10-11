@@ -117,6 +117,12 @@ export class InvoiceInformationTabComponent implements OnInit {
                     this.router.navigate(['/financial/invoice/edit/' + id]);
                     return;
                 }
+                if (status === 4) {
+                    this.financialService.syncInvoiceToQuickbook(id).subscribe(
+                        _res => {},
+                        err => {}
+                    );
+                }
                 this.getList();
             } catch (e) {
                 console.log(e);

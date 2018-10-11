@@ -24,7 +24,7 @@
                                                     [items]="listMaster['customer']" bindLabel="company_name" bindValue="id"
                                                     formControlName="company_id">
                                                     <ng-template ng-option-tmp let-item="item">
-                                                        <span title="{{item.company_name}}">{{item.company_name}}</span>
+                                                        <span  [innerHTML]="item.company_name"></span>
                                                     </ng-template>
                                                 </ng-select>
                                             </div>
@@ -202,7 +202,7 @@
                                                     <select (change)="changeShipVia()" class="form-control" name="carrier_id"
                                                         formControlName="carrier_id" *ngIf="generalForm.value.ship_via == 2">
                                                         <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
-                                                        <option *ngFor="let item of listMaster['carrier']" [ngValue]="item.id">{{item.cd}}</option>
+                                                        <option *ngFor="let item of listMaster['carrier']" [ngValue]="item.id">{{item.name}}</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -514,7 +514,7 @@
                     <div class="card-body">
                         <form [formGroup]="generalForm">
                             <div>
-                                <textarea class="form-control border-0" formControlName="des" rows="11" style="resize:none"></textarea>
+                                <textarea class="form-control border-0" formControlName="note" rows="11" style="resize:none"></textarea>
                             </div>
                         </form>
                     </div>
@@ -618,8 +618,8 @@
             <div class="col-md-12 mg-top-15 text-right">
                 <button type="button" class="btn btn-outline-warning" (click)="confirmCreateOrder('NW')" translate>Save
                     As Draft</button>
-                <button type="button" class="btn btn-outline-primary" (click)="confirmCreateOrder('SB')" [disabled]="!generalForm.valid"
-                    translate>Save & Submit</button>
+                <!-- <button type="button" class="btn btn-outline-primary" (click)="confirmCreateOrder('SB')" [disabled]="!generalForm.valid"
+                    translate>Save & Submit</button> -->
                 <button type="button" class="btn btn-outline-success" (click)="confirmCreateOrder('AR')" [disabled]="!generalForm.valid"
                     translate>Save & Send to WH</button>
                 <button type="button" class="btn btn-default" (click)="backList()" translate>Back to list</button>

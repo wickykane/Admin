@@ -1,11 +1,13 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 
 @Component({
     selector: 'app-menu',
     templateUrl: './menu.component.html',
-    styleUrls: ['./menu.component.scss']
+    styleUrls: ['./menu.component.scss'],
+    providers: [HotkeysService],
 })
 export class MenuComponent implements OnInit {
     MENU_CONSTANT = [];
@@ -15,10 +17,12 @@ export class MenuComponent implements OnInit {
     constructor(
         private translate: TranslateService,
         public router: Router,
+        public _hotkeysService: HotkeysService,
         private elRef: ElementRef
     ) { }
 
     ngOnInit() {
+        this.initKeyMenu();
         this.MENU_CONSTANT = [
             {
                 flag: '',
@@ -37,11 +41,11 @@ export class MenuComponent implements OnInit {
                 child: [
                     {
                         link: '/order-management/sale-quotation',
-                        name: 'Sales Quotation'
+                        name: 'Sales <u>Q</u>uotation'
                     },
                     {
                         link: '/order-management/sale-order',
-                        name: 'Sales Orders'
+                        name: 'Sales <u>O</u>rders'
                     },
                     {
                         link: '/order-management/return-order',
@@ -72,11 +76,11 @@ export class MenuComponent implements OnInit {
                 child: [
                     {
                         link: '/product-management/part-list',
-                        name: 'Part Management '
+                        name: '<u>P</u>art Management '
                     },
                     {
                         link: '/product-management/item-list',
-                        name: 'Inventory Items'
+                        name: '<u>I</u>nventory Items'
                     },
                     {
                         link: '/product-management/miscellaneous-list',
@@ -135,6 +139,41 @@ export class MenuComponent implements OnInit {
             //     child: []
             // }
         ];
+    }
+
+    initKeyMenu() {
+        this._hotkeysService.add(new Hotkey('shift+alt+q', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            (document.activeElement as HTMLElement).blur();
+            this.router.navigate(['/order-management/sale-quotation']);
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Menu > Sale Quotation'));
+
+        this._hotkeysService.add(new Hotkey('shift+alt+o', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            (document.activeElement as HTMLElement).blur();
+            this.router.navigate(['/order-management/sale-order']);
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Menu > Sale Order'));
+
+        this._hotkeysService.add(new Hotkey('shift+alt+p', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            (document.activeElement as HTMLElement).blur();
+            this.router.navigate(['/product-management/part-list']);
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Menu > Part Management'));
+
+        this._hotkeysService.add(new Hotkey('shift+alt+i', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            (document.activeElement as HTMLElement).blur();
+            this.router.navigate(['/product-management/item-list']);
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Menu > Inventory Items'));
+
     }
 
     addExpandClass(element: any, e) {

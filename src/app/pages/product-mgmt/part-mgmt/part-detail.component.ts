@@ -12,6 +12,7 @@ import {
     NgxGalleryOptions,
 } from 'ngx-gallery';
 
+import { HotkeysService } from 'angular2-hotkeys';
 import { ProductService } from '../product-mgmt.service';
 import { PartKeyService } from './keys.control';
 
@@ -19,7 +20,7 @@ import { PartKeyService } from './keys.control';
     selector: 'app-part-detail',
     templateUrl: './part-detail.component.html',
     styleUrls: ['./part-list.component.scss'],
-    providers: [PartKeyService],
+    providers: [PartKeyService, HotkeysService],
     animations: [routerTransition()],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -28,6 +29,7 @@ export class PartDetailComponent implements OnInit {
      * Variable Declaration
      */
     public listMaster = {};
+    public data = {};
     public generalForm: FormGroup;
     public part = {
         part_no: '',
@@ -79,6 +81,7 @@ export class PartDetailComponent implements OnInit {
         private fb: FormBuilder,
         public router: Router,
         public route: ActivatedRoute,
+        public _hotkeysService: HotkeysService,
         public itemKeyService: PartKeyService,
         private productService: ProductService,
         public toastr: ToastrService,
@@ -87,26 +90,26 @@ export class PartDetailComponent implements OnInit {
         this.generalForm = fb.group({
             is_quotable: [null],
             is_show_price: [null],
-            sell_price: [{value: null, disabled: true}],
+            sell_price: [{ value: null, disabled: true }],
             freight_class: [{ disabled: true }, Validators.required],
             is_taxable: [null, Validators.required],
-            inventory_account_id: [{value: null, disabled: true}],
-            income_account_id: [{value: null, disabled: true}],
-            expense_account_id: [{value: null, disabled: true}],
+            inventory_account_id: [{ value: null, disabled: true }],
+            income_account_id: [{ value: null, disabled: true }],
+            expense_account_id: [{ value: null, disabled: true }],
             short_des: [null],
             full_des: [null],
-            free_ship: [{value: null, disabled: true}],
-            ups: [{value: null, disabled: true}]
+            free_ship: [{ value: null, disabled: true }],
+            ups: [{ value: null, disabled: true }]
         });
-        //  Init Key
         this.listMaster['account'] = [];
-
-        this.itemKeyService.watchContext.next(this);
+        //  Init Key
+        this.itemKeyService.watchContext.next({ context: this, service: this._hotkeysService });
         this.getAccountType();
 
     }
 
     ngOnInit() {
+        this.data['page_type'] = 'detail';
         this.listMaster['listQuestion'] = [{ id: 0, name: 'No' }, { id: 1, name: 'Yes' }];
         this.url_image = `${environment.api_url}file/view?path=`;
         this.route.params.subscribe(params => this.getDetailPart(params.id));
@@ -205,7 +208,7 @@ export class PartDetailComponent implements OnInit {
             try {
                 if (res.status) {
                     this.part = res.data.item ? res.data.item : this.part;
-                    this.detail.short_des = res.data.item ?  res.data.item.short_des : null;
+                    this.detail.short_des = res.data.item ? res.data.item.short_des : null;
                     this.detail.full_des = res.data.item ? res.data.item.full_des : null;
                     this.detail.category_discounts = res.data.category_discounts || this.detail.category_discounts;
                     this.listMaster['freight_class'] = res.data.freight_class;
