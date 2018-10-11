@@ -49,9 +49,9 @@ export class QuoteModalContent implements OnInit, OnDestroy {
         public toastr: ToastrService,
         public tableService: TableService) {
         this.searchForm = fb.group({
-            'no': [null],
+            'quote_no': [null],
             'part_no': [null],
-            'qt_dt': [null],
+            'quote_date': [null],
         });
 
         //  Assign get list function name, override variable here
@@ -130,7 +130,7 @@ export class QuoteModalContent implements OnInit, OnDestroy {
 
     initKeyBoard() {
         this.data['key_config'] = {
-            no: {
+            quote_no: {
                 element: null,
                 focus: true,
             },
@@ -138,8 +138,8 @@ export class QuoteModalContent implements OnInit, OnDestroy {
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+f1', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             event.preventDefault();
-            if (this.data['key_config'].no.element) {
-                this.data['key_config'].no.element.nativeElement.focus();
+            if (this.data['key_config'].quote_no.element) {
+                this.data['key_config'].quote_no.element.nativeElement.focus();
             }
             const e: ExtendedKeyboardEvent = event;
             e.returnValue = false; // Prevent bubbling

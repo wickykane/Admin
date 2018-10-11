@@ -104,7 +104,9 @@ export class SaleOrderInformationTabComponent implements OnInit {
         @Inject(SaleOrderDetailComponent) private parent: SaleOrderDetailComponent,
         private orderService: OrderService) {
         //  Init Key
-        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
+        if (!this.parent.data['shortcut']) {
+            this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
+        }
     }
 
     ngOnInit() {
