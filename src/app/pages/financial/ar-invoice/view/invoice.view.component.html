@@ -33,6 +33,11 @@
                     <app-invoice-document-tab></app-invoice-document-tab>
                 </ng-template>
             </ngb-tab>
+            <ngb-tab title="History">
+                <ng-template ngbTabContent>
+                    <app-invoice-history-tab [invoiceId]="invoiceId"></app-invoice-history-tab>
+                </ng-template>
+            </ngb-tab>
         </ngb-tabset>
     </section>
 </div>

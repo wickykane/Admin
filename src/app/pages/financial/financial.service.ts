@@ -147,4 +147,12 @@ export class FinancialService {
         const url = `quick-books/sync-credit-memo/${creditId}?force=true`;
         return this.API.post(url);
     }
+    getInvoiceHistory(id) {
+        const url = ['ar-invoice/history', id].join('/');
+        return this.API.get(url);
+    }
+    getReceiptVoucherHistory(id) {
+        const url = ['voucher/history', id].join('/');
+        return this.API.get(url);
+    }
 }

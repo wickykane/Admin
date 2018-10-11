@@ -22,6 +22,7 @@ import { InvoiceReceiptVoucherTabComponent } from './ar-invoice/invoice-tabs/rec
 import { InvoiceDocumentTabComponent } from './ar-invoice/invoice-tabs/document-tab.component';
 import { InvoiceInformationTabComponent } from './ar-invoice/invoice-tabs/information-tab.component';
 import { InvoicePaymentTabComponent } from './ar-invoice/invoice-tabs/payment-tab.component';
+import { InvoiceHistoryTabComponent } from './ar-invoice/invoice-tabs/invoice-history.component';
 import { FinancialRoutingModule } from './financial-routing.module';
 import { FinancialService } from './financial.service';
 
@@ -30,6 +31,7 @@ import { CreditMemoListComponent } from './credit-memo//list/credit-memo-list.co
 import { CreditMemoApplyComponent } from './credit-memo/apply-credit/apply-credit.component';
 import { CreditMemoService } from './credit-memo/credit-memo.service';
 import { CreditInformationTabComponent } from './credit-memo/credit-tabs/information-tab.component';
+import { CreditHistoryTabComponent } from './credit-memo/credit-tabs/credit-history.component';
 import { CreditPaymentTabComponent } from './credit-memo/credit-tabs/payment-tab.component';
 import { CreditMemoEditComponent } from './credit-memo/edit/credit-memo-edit.component';
 import { CreditItemMiscModalContent } from './credit-memo/modals/item-misc/item-misc.modal';
@@ -40,7 +42,9 @@ import { CreditMemoDetailComponent } from './credit-memo/view/credit-memo-view.c
 import { DebitMemoCreateComponent } from './debit-memo/create/debit-memo-create.component';
 import { DebitMemoService } from './debit-memo/debit-memo.service';
 import { DebitMemoEditComponent } from './debit-memo/edit/debit-memo-edit.component';
+
 import { DebitMemoListComponent } from './debit-memo/list/debit-memo-list.component';
+import { DebitHistoryTabComponent } from './debit-memo/tabs/debit-history.component';
 import { ItemsOrderDebitModalContent } from './debit-memo/modals/items-order/items-order.modal';
 import { MiscItemsDebitModalContent } from './debit-memo/modals/misc-items/misc-items.modal';
 import { SendMailDebitModalContent } from './debit-memo/modals/send-email/send-mail.modal';
@@ -57,6 +61,7 @@ import { PaymentInformModalComponent } from './receipt-voucher/modals/payment-in
 import { ReceiptDocumentTabComponent } from './receipt-voucher/receipt-tabs/document-tab.component';
 import { ReceiptInformationTabComponent } from './receipt-voucher/receipt-tabs/information-tab.component';
 import { ReceiptVoucherComponent } from './receipt-voucher/receipt-voucher.component';
+import { ReceiptHistoryTabComponent } from './receipt-voucher/receipt-tabs/receipt-history.component';
 import { ReceiptVoucherDetailComponent } from './receipt-voucher/view/receipt-voucher.view.component';
 
 
@@ -65,6 +70,10 @@ import { CKEditorModule } from 'ng2-ckeditor';
 //  Modal
 import { ItemModalModule } from '../../shared/modals/item.module';
 import { MailModalComponent } from './ar-invoice/modals/mail.modal';
+
+
+
+
 
 @NgModule({
     imports: [
@@ -87,6 +96,7 @@ import { MailModalComponent } from './ar-invoice/modals/mail.modal';
         InvoiceCreditMemoTabComponent,
         InvoiceDebitMemoTabComponent,
         InvoicePaymentTabComponent,
+        InvoiceHistoryTabComponent,
         InvoiceDocumentTabComponent,
         MailModalComponent,
         DebitMemoListComponent,
@@ -97,10 +107,12 @@ import { MailModalComponent } from './ar-invoice/modals/mail.modal';
         DebitMemoEditComponent,
         DebitMemoViewComponent,
         DebitInformationTabComponent,
+        DebitHistoryTabComponent,
         InvoiceEditComponent,
         CreditMemoListComponent,
         CreditMemoCreateComponent,
         CreditInformationTabComponent,
+        CreditHistoryTabComponent,
         CreditMemoDetailComponent,
         CreditPaymentTabComponent,
         CreditItemModalContent,
@@ -111,6 +123,7 @@ import { MailModalComponent } from './ar-invoice/modals/mail.modal';
         ReceiptVoucherCreateComponent,
         ReceiptVoucherEditComponent,
         ReceiptVoucherComponent,
+        ReceiptHistoryTabComponent,
         ReceiptVoucherDetailComponent,
         ReceiptMailModalComponent,
         ReceiptDocumentTabComponent,
