@@ -603,6 +603,12 @@ export class InvoiceEditComponent implements OnInit {
             try {
                 if (res.status) {
                     this.toastr.success(res.message);
+                    if (type === 4) {
+                        this.financialService.syncInvoiceToQuickbook(this.data['id']).subscribe(
+                            _res => {},
+                            err => {}
+                        );
+                    }
                     if (!is_continue) {
                         setTimeout(() => {
                             this.router.navigate(['/financial/invoice/view/' + this.data['id']]);
