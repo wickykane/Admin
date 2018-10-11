@@ -11,60 +11,91 @@
                     <div class="card-body">
                         <div class="row information  height-100">
                             <div class="col-md-12 fix-padding">
-                                <div class="row">
-                                    <div class="col-md-2 bolder ">
-                                        <div class="form-group row">
-                                            <label class='col-6 control-label'>Customer Name</label>
-                                            <div class='col-6'>
-                                                {{main_info['company_name']}}
+                                <form [formGroup]="generalForm">
+                                    <div class="row">
+                                        <div class="col-md-2 bolder ">
+                                            <div class="form-group row">
+                                                <label class='col-6 control-label'>Customer Name</label>
+                                                <div class='col-6'>
+                                                    {{main_info['company_name']}}
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class='col-6'>Credit Memo No</label>
+                                                <div class='col-6 '>
+                                                    {{main_info['cd']}}
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class='col-6'>Issue Date</label>
+                                                <div class='col-6 '>
+                                                    {{main_info['issue_date'] |date:'MM/dd/yyyy'}}
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class='col-6 control-label'>Status</label>
+                                                <div class='col-6'>
+                                                    {{main_info['status_name']}}
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class='col-6 control-label'>Warehouse
+                                                    <span class="text-danger">(*)</span>
+                                                </label>
+                                                <div class='col-6'>
+                                                    <select (change)="queryInvoiceByWH()" class="form-control" name="warehouse_id"
+                                                        formControlName="warehouse_id">
+                                                        <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
+                                                        <option *ngFor="let item of listMaster['warehouses']" [ngValue]="item.id">{{item.name}}</option>
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="form-group row">
-                                            <label class='col-6'>Credit Memo No</label>
-                                            <div class='col-6 '>
-                                                {{main_info['cd']}}
+                                        <div class="col-md-2 bolder ">
+                                            <div class="form-group row">
+                                                <label class='col-6 control-label'>Original Amount</label>
+                                                <div class='col-6'>
+                                                    {{main_info['total_price'] |currency}}
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class='col-6'>Issue Date</label>
-                                            <div class='col-6 '>
-                                                {{main_info['issue_date']}}
+                                            <div class="form-group row">
+                                                <label class='col-6'>Remaining Amount</label>
+                                                <div class='col-6 '>
+                                                    {{main_info['remain_amount']|currency}}
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class='col-6 control-label'>Status</label>
-                                            <div class='col-6'>
-                                                {{main_info['status_name']}}
+
+                                            <div class="form-group row">
+                                                <label class='col-6'>Deposit G/L Account
+                                                    <span class="text-danger">(*)</span>
+                                                </label>
+                                                <div class='col-6 '>
+                                                    <ng-select [items]="accountList" formControlName="gl_account"
+                                                        bindLabel="name" bindValue="id">
+                                                        <ng-template ng-option-tmp let-item="item" let-index="index"
+                                                            let-search="searchTerm">
+                                                            <span [ngClass]="{'pl-3': item.level != undefined}">{{
+                                                                item.name}}
+                                                            </span>
+                                                        </ng-template>
+                                                    </ng-select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class='col-6'>Created On</label>
+                                                <div class='col-6 '>
+                                                    {{main_info['created_at']}}
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class='col-6 control-label'>Created By</label>
+                                                <div class='col-6'>
+                                                    {{main_info['created_by']}}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-2 bolder ">
-                                        <div class="form-group row">
-                                            <label class='col-6 control-label'>Original Amount</label>
-                                            <div class='col-6'>
-                                                {{main_info['total_price'] |currency}}
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class='col-6'>Remaining Amount</label>
-                                            <div class='col-6 '>
-                                                {{main_info['remain_amount']|currency}}
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class='col-6'>Created On</label>
-                                            <div class='col-6 '>
-                                                {{main_info['created_at']}}
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class='col-6 control-label'>Created By</label>
-                                            <div class='col-6'>
-                                                {{main_info['created_by']}}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -79,16 +110,10 @@
                     </div>
                     <div class="row">
                         <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
-                            <!-- <div class="block-search">
-                                <label for="type" class="control-label" translate>Doc Type</label>
-                                <select class="form-control" formControlName="doc_type">
-                                    <option value="null" selected="true">--Select--</option>
-                                    <option *ngFor="let item of listMaster['docType']" [ngValue]="item.id">{{item.name}}</option>
-                                </select>
-                            </div> -->
                             <div class="block-search">
                                 <label for="code" class="control-label">Code</label>
-                                <input type="text" name="code" formControlName="code" class="form-control" id="code" placeholder="" capitalize>
+                                <input type="text" name="code" formControlName="code" class="form-control" id="code"
+                                    placeholder="" capitalize>
                             </div>
                         </form>
                         <div class="block-btn-search">
@@ -106,7 +131,7 @@
                                     <tr>
                                         <th translate style="width: 50px;"></th>
                                         <th style="width:50px" translate>No</th>
-                                        <th  style="width:100px" translate>Document No</th>
+                                        <th style="width:100px" translate>Document No</th>
                                         <th style="width:150px" translate>Issue Date</th>
                                         <th style="width:200px" translate>Payment Term</th>
                                         <th class="text-nowrap" style="width:100px" translate> Status</th>
@@ -122,31 +147,33 @@
                                     </tr>
                                 </tbody>
                                 <ng-container *ngIf="list['items'].length > 0">
-                                    <tbody *ngFor="let item of list['items']; let $index = index;" [ngClass]="{'row-selected': i == selectedIndex}" >
+                                    <tbody *ngFor="let item of list['items']; let $index = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                                         <tr>
                                             <td>
                                                 <label class="css-input css-checkbox css-checkbox-default">
-                                                    <input class="cb-element" type="checkbox" [(ngModel)]="item.is_checked" (change)="isAllChecked()">
+                                                    <input class="cb-element" type="checkbox" [(ngModel)]="item.is_checked"
+                                                        (change)="isAllChecked()">
                                                     <span></span>
                                                 </label>
                                             </td>
                                             <td>{{$index+1}}</td>
                                             <td>{{item.code}}</td>
-                                            <td class="text-center">{{item.issue_date}}</td>
+                                            <td class="text-center">{{item.issue_date |date:'MM/dd/yyyy'}}</td>
                                             <td>{{item.payment_term_name}}</td>
                                             <td>{{item.status_name}}</td>
                                             <td>{{item.original_amount | currency}}</td>
                                             <td>{{item.balance_due|currency}}</td>
                                             <td>
-                                                <input [isDecimal]="true" numberDirective [min]="0" [max]="item.original_amount" class="form-control input-sm" type="number"
-                                                    [(ngModel)]="item.amount" (changeValue)="updateBalance()">
+                                                <input [isDecimal]="true" numberDirective [min]="0" [max]="item.original_amount"
+                                                    class="form-control input-sm" type="number" [(ngModel)]="item.amount"
+                                                    (changeValue)="updateBalance()">
                                             </td>
                                             <td></td>
                                         </tr>
                                     </tbody>
                                 </ng-container>
                                 <tbody *ngIf="list['items'].length != 0">
-                                    <tr>                                        
+                                    <tr>
                                         <td colspan="6"></td>
                                         <td>{{main_info.total_current_balance | currency}}</td>
                                         <td>{{main_info.total_balance_due|currency}}</td>
@@ -162,7 +189,8 @@
                                     <div class="col-md-6" style="padding-left: 0px;">
                                         <span style="float: left; padding-right: 10px;">{{list.items.length}}/{{tableService.pagination.total_record}}
                                             items </span>
-                                        <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length" (change)="tableService.changeLength()">
+                                        <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length"
+                                            (change)="tableService.changeLength()">
                                             <option *ngFor="let option of tableService.itemPerPageOptions" [ngValue]="option">{{option}}</option>
                                         </select>
                                     </div>
@@ -170,30 +198,44 @@
                             </div>
                             <div class="col-md-6 padding-lr-0">
                                 <div class="text-right">
-                                    <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length"
-                                        [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page"
-                                        [maxSize]="tableService.maxSize" [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+                                    <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)"
+                                        [pageSize]="tableService.pagination.length" [collectionSize]="tableService.pagination.total_record || 120"
+                                        [(page)]="tableService.pagination.page" [maxSize]="tableService.maxSize"
+                                        [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 no-padding">
+
+
+                        <button (click)="clearPayment()" class="btn btn-secondary mt-2">Clear Payment</button>
+                        <p class="text-danger mt-2">
+                            *) For the Invoice document, the Original Balance is including the
+                            early
+                            payment incentive if any.
+                            <br> (**) If you enter a partial payment for an invoice on which an Early
+                            Payment
+                            Incentive is active, you will remove the discount opportunity.
+                        </p>
+                        <!-- <div class="col-12 no-padding">
                             <button (click)="clearPayment()" class="btn btn-link" translate>
                                 <i class="fa fa-plus"></i>Clear Payment
                             </button>
                         </div>
                         <div class="col-12 no-padding">
-                            <p class="text-danger">(*) For the Invoice document, the Original Balance is including the early
+                            <p class="text-danger">(*) For the Invoice document, the Original Balance is including the
+                                early
                                 payment incentive if any.</p>
-                            <p class="text-danger">(**) If you enter a partial payment for an invoice on which an Early Payment
+                            <p class="text-danger">(**) If you enter a partial payment for an invoice on which an Early
+                                Payment
                                 Incentive is active, you will remove the discount opportunity.</p>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12 mg-top-15 text-right">
-                <button type="button" class="btn btn-outline-info" (click)="createApplyCredit()" translate>Apply Credit</button>
+                <button type="button" class="btn btn-outline-info" (click)="createApplyCredit()" [disabled]="generalForm.invalid" translate>Apply Credit</button>
                 <button type="button" class="btn btn-default" (click)="confirmModal()" translate>Cancel</button>
             </div>
         </div>
