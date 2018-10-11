@@ -21,7 +21,7 @@
                                                     (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 100px; margin-left: 2px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id"
                                                     formControlName="buyer_id">
                                                     <ng-template ng-option-tmp let-item="item">
-                                                        <span  [innerHTML]="item.company_name"></span>
+                                                        <span [innerHTML]="item.company_name"></span>
                                                     </ng-template>
                                                 </ng-select>
                                             </div>
@@ -68,7 +68,7 @@
                                                 {{customer.discount_level}}
                                             </div>
                                         </div>
-                                        <div class="form-group row">
+                                        <div *ngIf="generalForm.value.buyer_id" class="form-group row">
                                             <label class='col-6'>Active Quote</label>
                                             <div class='col-6'>
                                                 <a class="text-primary" href="javascript: void(0)" (click)="keyService.saveKeys(); showListQuote()">{{customer['qty_quote'] || 0}}</a>
