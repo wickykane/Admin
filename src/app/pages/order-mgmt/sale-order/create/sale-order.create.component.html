@@ -19,7 +19,7 @@
                                             <span class="text-danger">(*)</span>
                                             <div>
                                                 <ng-select class="infinity-scroll-select" [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="buyer_id" [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 100px; margin-left: 2px;" (change)="changeCustomer()"
-                                                    [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="buyer_id">
+                                                    [items]="listMaster['customer']" bindLabel="name" bindValue="id" formControlName="buyer_id">
                                                     <ng-template ng-option-tmp let-item="item">
                                                         <span [innerHTML]="item.company_name"></span>
                                                     </ng-template>
