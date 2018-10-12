@@ -106,6 +106,7 @@ export class SaleOrderEditKeyService extends KeyboardBaseService {
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+b', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             if (this.context.generalForm.value.buyer_id) {
+                (document.activeElement as HTMLElement).blur();
                 this.saveKeys();
                 setTimeout(() => {
                     this.context.showListQuote();
