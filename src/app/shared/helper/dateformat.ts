@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { isNumber, padNumber, toInteger } from '@ng-bootstrap/ng-bootstrap/util/util';
+import * as moment from 'moment';
 
 @Injectable()
 export class NgbDateCustomParserFormatter extends NgbDateParserFormatter {
     parse(value: string): NgbDateStruct {
         if (value) {
+            value = moment(value).format('DD/MM/YYYY');
             const dateParts = value.trim().split('/');
             if (dateParts.length === 1 && isNumber(dateParts[0])) {
                 return { day: toInteger(dateParts[0]), month: null, year: null };

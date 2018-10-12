@@ -431,11 +431,9 @@
                         <strong>Note</strong>
                     </div>
                     <div class="card-body no-padding">
-
-                        <div class="col-md-12">
-                            {{detail['description']}}
+                        <div>
+                            <textarea readonly class="form-control border-0"  rows="11" style="resize:none; background-color: #fff;" [(ngModel)]="detail['description']"></textarea>
                         </div>
-
                     </div>
                 </div>
             </div>
