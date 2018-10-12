@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit, ViewContainerRef, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from './../../services/table.service';
@@ -88,14 +88,14 @@ export class ItemQuoteModalContent implements OnInit {
         console.log(params);
         Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
 
-        this.itemService.getListAllItemFromQuote(this.company_id, params).subscribe(res => {
+        this.itemService.getListActiveSaleQuote(this.company_id, params).subscribe(res => {
             try {
                 if (!res.data.rows) {
                     this.list.items = [];
                     this.refresh();
                     return;
                 }
-                this.list.items = res.data.rows;
+                this.list.items = res.data;
                 this.listMaster['warehouses'] = res.data.warehouses;
                 this.tableService.matchPagingOption(res.data);
                 this.refresh();

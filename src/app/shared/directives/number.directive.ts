@@ -29,10 +29,10 @@ export class NumberDirective implements OnInit {
     @HostListener('blur', ['$event'])
     onBlur($event) {
         const event = $event.target.value;
-        if (!event) {
-            this.ngModel.viewToModelUpdate(this._min);
-            this.ngModel.valueAccessor.writeValue(this._min);
-            this.changeValue.emit(this._min);
+        if (!Number(event)) {
+            this.ngModel.viewToModelUpdate(Number(event));
+            this.ngModel.valueAccessor.writeValue(Number(event));
+            this.changeValue.emit(Number(event));
         }
     }
 

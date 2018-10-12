@@ -105,8 +105,13 @@ export class SaleOrderEditKeyService extends KeyboardBaseService {
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Calc Tax & Shipping'));
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+b', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
-            this.saveKeys();
-            this.context.showListQuote();
+            if (this.context.generalForm.value.buyer_id) {
+                (document.activeElement as HTMLElement).blur();
+                this.saveKeys();
+                setTimeout(() => {
+                    this.context.showListQuote();
+                });
+            }
             const e: ExtendedKeyboardEvent = event;
             e.returnValue = false; // Prevent bubbling
             return e;
