@@ -155,4 +155,8 @@ export class FinancialService {
         const url = ['voucher/history', id].join('/');
         return this.API.get(url);
     }
+    getSettingInfoQuickbook() {
+        const url = 'quick-books/oauth2/settings';
+        return this.API.get(url);
+    }
 }

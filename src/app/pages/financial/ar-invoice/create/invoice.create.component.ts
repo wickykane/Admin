@@ -44,6 +44,8 @@ export class InvoiceCreateComponent implements OnInit {
     public data = {};
     public currentDt: string;
 
+    public isInstallQuickbook = false;
+
     public messageConfig = {
         '2': 'Are you sure that you want to save & submit this invoice to approver? ',
         '4': 'Are you sure that you want to validate this invoice?',
@@ -138,7 +140,7 @@ export class InvoiceCreateComponent implements OnInit {
         this.data['is_copy'] = this.route.snapshot.queryParams['is_copy'] || 0;
 
         const user = JSON.parse(localStorage.getItem('currentUser'));
-
+        this.getQuickbookSettings();
         // List Master
         this.orderService.getOrderReference().subscribe(res => { Object.assign(this.listMaster, res.data); this.refresh(); });
         await this.getListPaymentMethod();
@@ -339,6 +341,14 @@ export class InvoiceCreateComponent implements OnInit {
                 console.log(e);
             }
         });
+    }
+
+    getQuickbookSettings() {
+        this.financialService.getSettingInfoQuickbook().subscribe(
+            res => {
+                this.isInstallQuickbook = res.data.state === 'authorized' ? true : false;
+            }, err => {}
+        );
     }
 
     /**
@@ -547,7 +557,7 @@ export class InvoiceCreateComponent implements OnInit {
                 if (res.status) {
                     this.toastr.success(res.message);
                     this.data['invoice_id'] = res.data;
-                    if (type === 4) {
+                    if (type === 4 && this.isInstallQuickbook) {
                         this.financialService.syncInvoiceToQuickbook(this.data['invoice_id']).subscribe(
                             _res => {},
                             err => {}

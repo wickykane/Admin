@@ -34,6 +34,8 @@ export class DebitInformationTabComponent implements OnInit {
     public listTaxs = [];
     public currentuser = {};
 
+    public isInstallQuickbook = false;
+
     constructor(
         public toastr: ToastrService,
         public fb: FormBuilder,
@@ -48,6 +50,7 @@ export class DebitInformationTabComponent implements OnInit {
 
     ngOnInit() {
         this.currentuser = JSON.parse(localStorage.getItem('currentUser'));
+        this.getQuickbookSettings();
         // this.getUniqueTaxItemLine();
         // this.listTaxs = this.debitData['tax_info'];
         // console.log(this.listTaxs);
@@ -68,6 +71,14 @@ export class DebitInformationTabComponent implements OnInit {
                 total_tax += taxItem.amount;
             });
         }
+    }
+
+    getQuickbookSettings() {
+        this.financialService.getSettingInfoQuickbook().subscribe(
+            res => {
+                this.isInstallQuickbook = res.data.state === 'authorized' ? true : false;
+            }, err => {}
+        );
     }
 
     onClickEdit() {
@@ -114,7 +125,7 @@ export class DebitInformationTabComponent implements OnInit {
             res => {
                 try {
                     this.toastr.success(res.message);
-                    if (newStatus === 3) {
+                    if (newStatus === 3 && this.isInstallQuickbook) {
                         this.financialService.syncDebitToQuickbook(this.debitData['id']).subscribe(
                             _res => {},
                             err => {}

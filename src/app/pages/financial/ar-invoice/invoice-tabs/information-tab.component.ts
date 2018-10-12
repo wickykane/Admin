@@ -32,6 +32,7 @@ export class InvoiceInformationTabComponent implements OnInit {
         }
     }
     data = {};
+    public isInstallQuickbook = false;
 
     public messageConfig = {
         1: 'Are you sure that you want to reopen the current invoice?',
@@ -65,6 +66,7 @@ export class InvoiceInformationTabComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.getQuickbookSettings();
         this.getList();
         this.invoice_info['taxs'] = [];
     }
@@ -108,20 +110,28 @@ export class InvoiceInformationTabComponent implements OnInit {
         });
     }
 
+    getQuickbookSettings() {
+        this.financialService.getSettingInfoQuickbook().subscribe(
+            res => {
+                this.isInstallQuickbook = res.data.state === 'authorized' ? true : false;
+            }, err => {}
+        );
+    }
+
     updateStatus(id, status) {
         const params = { status };
         this.financialService.updateInvoiceStatus(id, params).subscribe(res => {
             try {
                 this.toastr.success(res.message);
-                if (+id === 11) {
-                    this.router.navigate(['/financial/invoice/edit/' + id]);
-                    return;
-                }
-                if (status === 4) {
+                if (status === 4 && this.isInstallQuickbook) {
                     this.financialService.syncInvoiceToQuickbook(id).subscribe(
                         _res => {},
                         err => {}
                     );
+                }
+                if (+id === 11) {
+                    this.router.navigate(['/financial/invoice/edit/' + id]);
+                    return;
                 }
                 this.getList();
             } catch (e) {
