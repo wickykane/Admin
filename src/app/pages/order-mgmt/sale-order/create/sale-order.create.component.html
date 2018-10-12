@@ -18,11 +18,8 @@
                                             </label>
                                             <span class="text-danger">(*)</span>
                                             <div>
-                                                <ng-select class="infinity-scroll-select" [keyConfig]="keyService.getKeyConfig()"
-                                                    appKeyNavigate="buyer_id" [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)"
-                                                    [virtualScroll]="true" style="width: 100px; margin-left: 2px;"
-                                                    (change)="changeCustomer()" [items]="listMaster['customer']"
-                                                    bindLabel="company_name" bindValue="id" formControlName="buyer_id">
+                                                <ng-select class="infinity-scroll-select" [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="buyer_id" [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 100px; margin-left: 2px;" (change)="changeCustomer()"
+                                                    [items]="listMaster['customer']" bindLabel="company_name" bindValue="id" formControlName="buyer_id">
                                                     <ng-template ng-option-tmp let-item="item">
                                                         <span [innerHTML]="item.company_name"></span>
                                                     </ng-template>
@@ -48,8 +45,7 @@
                                             <label class='col-6 control-label'>Contact</label>
                                             <div class='col-6 text-primary'>
                                                 <form [formGroup]="generalForm">
-                                                    <select class="form-control" formControlName="contact_user_id" name="contact"
-                                                        (change)="selectContact()">
+                                                    <select class="form-control" formControlName="contact_user_id" name="contact" (change)="selectContact()">
                                                         <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let item of customer.contact" [ngValue]="item.id">{{item.full_name}}</option>
                                                     </select>
@@ -77,7 +73,7 @@
                                         <div *ngIf="generalForm.value.buyer_id" class="form-group row">
                                             <label class='col-6'>Active Quote</label>
                                             <div class='col-6'>
-                                                <a class="text-primary" href="javascript: void(0)" (click)="keyService.saveKeys(); showListQuote()">{{customer['qty_quote']
+                                                <a class="text-primary" href="javascript: void(0)" (click)="keyService.saveKeys(); showListQuote()">{{data['qty_quote']
                                                     || 0}}</a>
                                             </div>
                                         </div>
@@ -97,8 +93,7 @@
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6 text-primary'>
-                                                    <select required class="form-control" id="order_type" name="order-type"
-                                                        formControlName="type" (change)="changeOrderType()">
+                                                    <select required class="form-control" id="order_type" name="order-type" formControlName="type" (change)="changeOrderType()">
                                                         <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let item of listMaster['order_types']"
                                                             [ngValue]="item.code">{{item.value}}</option>
@@ -111,11 +106,9 @@
                                                 </label>
                                                 <div class='col-6 text-danger'>
                                                     <div clickOutside (clickOutside)="d.close()" class="input-group">
-                                                        <input class="form-control" placeholder="mm/dd/yyyy" name="dp"
-                                                            formControlName="order_date" ngbDatepicker #d="ngbDatepicker">
+                                                        <input class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="order_date" ngbDatepicker #d="ngbDatepicker">
                                                         <div class="input-group-append">
-                                                            <button class="btn btn-outline-secondary" (click)="d.toggle()"
-                                                                type="button">
+                                                            <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
                                                                 <i class="fa fa-calendar" aria-hidden="true"></i>
                                                             </button>
                                                         </div>
@@ -125,8 +118,7 @@
                                             <div class="form-group row">
                                                 <label class='col-6'>Priority <span class="text-danger">(*)</span></label>
                                                 <div class='col-6 text-danger'>
-                                                    <select required class="form-control" id="priority" name="priority"
-                                                        formControlName="prio_level">
+                                                    <select required class="form-control" id="priority" name="priority" formControlName="prio_level">
                                                         <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let item of list_priority" [ngValue]="item.code">{{item.value}}</option>
                                                     </select>
@@ -145,8 +137,7 @@
                                             <div class="form-group row">
                                                 <label class='col-6'>Payment Method<span class="text-danger">(*)</span></label>
                                                 <div class='col-6 text-primary'>
-                                                    <select class="form-control" name="payment_method_id"
-                                                        formControlName="payment_method_id">
+                                                    <select class="form-control" name="payment_method_id" formControlName="payment_method_id">
                                                         <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let item of listMaster['payment_method']"
                                                             [ngValue]="item.id">{{item.name}}</option>
@@ -179,8 +170,7 @@
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
-                                                    <select (change)="getQtyAvail()" class="form-control" name="approver_id"
-                                                        formControlName="approver_id">
+                                                    <select (change)="getQtyAvail()" class="form-control" name="approver_id" formControlName="approver_id">
                                                         <option [hidden]="true" [disabled]="false" [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let item of listMaster['sale_mans']" [ngValue]="item.id">{{item.full_name}}</option>
                                                     </select>
@@ -210,8 +200,7 @@
                                             </label>
                                             <div class="col-7">
                                                 <form [formGroup]="generalForm">
-                                                    <select required class="form-control" id="billing_to" name="search_type"
-                                                        formControlName="billing_id" (change)="selectAddress('billing')">
+                                                    <select required class="form-control" id="billing_to" name="search_type" formControlName="billing_id" (change)="selectAddress('billing')">
                                                         <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let item of customer.billing" [ngValue]="item.address_id">{{item.label}}</option>
                                                     </select>
@@ -272,8 +261,7 @@
                                             </label>
                                             <div class="col-7">
                                                 <form [formGroup]="generalForm">
-                                                    <select required class="form-control" id="shiping_to" name="search_type"
-                                                        formControlName="shipping_id" (change)="selectAddress('shipping')">
+                                                    <select required class="form-control" id="shiping_to" name="search_type" formControlName="shipping_id" (change)="selectAddress('shipping')">
                                                         <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let item of customer.shipping" [ngValue]="item.address_id">{{item.label}}</option>
                                                     </select>
@@ -293,8 +281,7 @@
                                         <div class="form-group row">
                                             <label class=" control-label col-5" translate>City / State</label>
                                             <div class="col-7">
-                                                {{addr_select.shipping.city_name}} /
-                                                {{addr_select.shipping.state_name}}
+                                                {{addr_select.shipping.city_name}} / {{addr_select.shipping.state_name}}
                                             </div>
                                         </div>
                                     </div>
@@ -332,8 +319,7 @@
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
-                                                    <select (change)="getQtyAvail()" class="form-control" name="warehouse_id"
-                                                        formControlName="warehouse_id">
+                                                    <select (change)="getQtyAvail()" class="form-control" name="warehouse_id" formControlName="warehouse_id">
                                                         <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let item of listMaster['warehouses']" [ngValue]="item.id">{{item.name}}</option>
                                                     </select>
@@ -345,8 +331,7 @@
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
-                                                    <select (change)="changeShipVia()" class="form-control" name="carrier_id"
-                                                        formControlName="carrier_id">
+                                                    <select (change)="changeShipVia()" class="form-control" name="carrier_id" formControlName="carrier_id">
                                                         <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let item of listMaster['carriers']" [hidden]="item.id === 999 && generalForm.value.type != 'PKU'"
                                                             [ngValue]="item.id">{{item.name}}</option>
@@ -359,8 +344,7 @@
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
-                                                    <select class="form-control" name="ship_method_option"
-                                                        formControlName="ship_method_option">
+                                                    <select class="form-control" name="ship_method_option" formControlName="ship_method_option">
                                                         <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let item of listMaster['options']" [ngValue]="item.cd">{{item.name}}</option>
                                                     </select>
@@ -372,8 +356,7 @@
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
-                                                    <select class="form-control" name="ship_method_rate"
-                                                        formControlName="ship_method_rate">
+                                                    <select class="form-control" name="ship_method_rate" formControlName="ship_method_rate">
                                                         <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let item of listMaster['ship_rates']" [ngValue]="item.id">{{item.name}}</option>
                                                     </select>
@@ -385,12 +368,9 @@
                                                 </label>
                                                 <div class='col-6'>
                                                     <div clickOutside (clickOutside)="da.close()" class="input-group">
-                                                        <input class="form-control" placeholder="mm/dd/yyyy" name="dp"
-                                                            [placement]="'left'" formControlName="delivery_date"
-                                                            ngbDatepicker #da="ngbDatepicker">
+                                                        <input class="form-control" placeholder="mm/dd/yyyy" name="dp" [placement]="'left'" formControlName="delivery_date" ngbDatepicker #da="ngbDatepicker">
                                                         <div class="input-group-append">
-                                                            <button class="btn btn-outline-secondary" (click)="da.toggle()"
-                                                                type="button">
+                                                            <button class="btn btn-outline-secondary" (click)="da.toggle()" type="button">
                                                                 <i class="fa fa-calendar" aria-hidden="true"></i>
                                                             </button>
                                                         </div>
@@ -414,8 +394,7 @@
                     </div>
                     <div class="card-body no-padding">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-order" cdArrowTable [collection]="list.items"
-                                [(selectedIndex)]="selectedIndex">
+                            <table class="table table-bordered table-order" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex">
                                 <thead>
                                     <tr>
                                         <th style="width:70px" translate>Action</th>
@@ -451,32 +430,25 @@
                                         <td class="text-center">
                                             <i *ngIf="item.is_shipping_free" class="text-success fa fa-check"></i>
                                         </td>
-                                        <td [ngClass]="{'d-none': (wh.warehouse_id  || wh.id) != generalForm.value.warehouse_id}"
-                                            *ngFor="let wh of item['warehouse']">
+                                        <td [ngClass]="{'d-none': (wh.warehouse_id  || wh.id) != generalForm.value.warehouse_id}" *ngFor="let wh of item['warehouse']">
                                             {{wh.qty_available}}
                                         </td>
                                         <td>
-                                            <input numberDirective [min]="0" [disabled]="item.misc_id" style="width: 60px;"
-                                                class="form-control input-sm" type="number" [(ngModel)]="item.quantity"
-                                                (changeValue)="updateTotal()">
+                                            <input numberDirective [min]="0" [disabled]="item.misc_id" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (changeValue)="updateTotal()">
                                         </td>
                                         <td>
                                             <div>
                                                 <span>$</span>
                                                 <div style="display:inline-block;width:80%">
-                                                    <input [isDecimal]="true" numberDirective [min]="0" class="form-control input-sm"
-                                                        type="number" [(ngModel)]="item.sale_price" (changeValue)="updateTotal();changeFromSource(item)">
+                                                    <input [isDecimal]="true" numberDirective [min]="0" class="form-control input-sm" type="number" [(ngModel)]="item.sale_price" (changeValue)="updateTotal();changeFromSource(item)">
                                                 </div>
                                             </div>
                                         </td>
                                         <td>
-                                            <input [isDecimal]="true" numberDirective [min]="0" [max]="100" class="form-control input-sm"
-                                                type="number" [(ngModel)]="item.discount_percent" (changeValue)="updateTotal();">
+                                            <input [isDecimal]="true" numberDirective [min]="0" [max]="100" class="form-control input-sm" type="number" [(ngModel)]="item.discount_percent" (changeValue)="updateTotal();">
                                         </td>
                                         <td>
-                                            <input readonly [isDecimal]="true" numberDirective [min]="0" [max]="100"
-                                                class="form-control input-sm" type="number" [(ngModel)]="item.tax_percent"
-                                                (changeValue)="updateTotal();">
+                                            <input readonly [isDecimal]="true" numberDirective [min]="0" [max]="100" class="form-control input-sm" type="number" [(ngModel)]="item.tax_percent" (changeValue)="updateTotal();">
                                         </td>
                                         <td class="text-center">
                                             <span>{{item.amount | currency}}</span>
@@ -592,8 +564,7 @@
                                 <div *ngFor="let item of order_info['taxs']" class="form-group row">
                                     <label class='col-5 control-label'>+ TAX ({{item.value}}%):</label>
                                     <div class='col-6 offset-md-1 padding-lr-10'>
-                                        <input class="form-control" readonly="true" [(ngModel)]="item.amount" class="form-control"
-                                            value="0" type="number">
+                                        <input class="form-control" readonly="true" [(ngModel)]="item.amount" class="form-control" value="0" type="number">
                                     </div>
                                 </div>
                                 <div class="form-group row margin-lr-0 text-light bg-danger">
@@ -614,12 +585,9 @@
             <div class="col-md-12 mg-top-15 text-right">
                 <button type="button" class="btn btn-outline-warning" (click)="confirmCreateOrder('draft')" translate>Save
                     As Draft</button>
-                <button type="button" class="btn btn-outline-info" (click)="confirmCreateOrder('validate')" [disabled]="!generalForm.valid"
-                    translate>Save & Validate</button>
-                <button type="button" class="btn btn-outline-primary" (click)="confirmCreateOrder('create')" [disabled]="!generalForm.valid"
-                    translate>Save & Submit</button>
-                <button type="button" class="btn btn-outline-success" (click)="confirmCreateOrder('quote')" [disabled]="!generalForm.valid"
-                    translate>Save As Quote</button>
+                <button type="button" class="btn btn-outline-info" (click)="confirmCreateOrder('validate')" [disabled]="!generalForm.valid" translate>Save & Validate</button>
+                <button type="button" class="btn btn-outline-primary" (click)="confirmCreateOrder('create')" [disabled]="!generalForm.valid" translate>Save & Submit</button>
+                <button type="button" class="btn btn-outline-success" (click)="confirmCreateOrder('quote')" [disabled]="!generalForm.valid" translate>Save As Quote</button>
                 <button type="button" class="btn btn-default" (click)="back()" translate>Back to list</button>
             </div>
         </div>

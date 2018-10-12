@@ -277,10 +277,17 @@ export class SaleOrderCreateComponent implements OnInit {
         this.addr_select = Object.create(this.copy_addr);
         if (buyer_id) {
             this.getDetailCustomerById(buyer_id);
+            this.getActiveSaleQuote(buyer_id);
         }
         // this.list.items = [];
         this.generalForm.controls['description'].patchValue('');
         this.updateTotal();
+    }
+
+    getActiveSaleQuote(id) {
+        this.orderService.getQuantityActiveQuote(id).subscribe(res => {
+            this.data['qty_quote'] = res.data;
+        });
     }
 
     selectAddress(type, flag?) {
