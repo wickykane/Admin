@@ -203,7 +203,9 @@ export class SaleOrderEditComponent implements OnInit {
     }
 
     disableControl() {
-        if (this.data['user'].user_type !== 1 && this.data['editable_sts'].indexOf(this.data['order_data'].order_sts_short_name) !== -1) {
+        this.data['disable'] = this.data['editable_sts'].indexOf(this.data['order_data'].order_sts_short_name) !== -1;
+        // this.data['user'].user_type !== 1 &&
+        if (this.data['disable']) {
             this.generalForm.get('buyer_id').disable();
             this.generalForm.get('contact_user_id').disable();
             this.generalForm.get('type').disable();
@@ -225,6 +227,7 @@ export class SaleOrderEditComponent implements OnInit {
 
         }
     }
+
 
     getDetailOrder() {
         this.orderService.getOrderDetail(this.route.snapshot.paramMap.get('id')).subscribe(res => {
@@ -342,19 +345,12 @@ export class SaleOrderEditComponent implements OnInit {
         this.addr_select = Object.create(this.copy_addr);
         if (buyer_id) {
             this.getDetailCustomerById(buyer_id, flag);
-            this.getActiveSaleQuote(buyer_id);
         }
         if (!flag) {
             // this.list.items = [];
             this.updateTotal();
         }
         this.refresh();
-    }
-
-    getActiveSaleQuote(id) {
-        this.orderService.getQuantityActiveQuote(id).subscribe(res => {
-            this.data['qty_quote'] = res.data;
-        });
     }
 
     selectAddress(type, flag?) {
@@ -444,7 +440,7 @@ export class SaleOrderEditComponent implements OnInit {
         }
 
         // Check disable method options
-        if (!enable) {
+        if (!enable || !this.data['disable']) {
             this.generalForm.controls['ship_method_option'].disable();
         } else {
             this.generalForm.controls['ship_method_option'].enable();
@@ -558,8 +554,12 @@ export class SaleOrderEditComponent implements OnInit {
                     }
                 });
             });
-            this.generalForm.get('carrier_id').enable();
-            this.generalForm.get('ship_method_rate').enable();
+
+            if (!this.data['disable']) {
+                this.generalForm.get('carrier_id').enable();
+                this.generalForm.get('ship_method_rate').enable();
+            }
+
             if (!flag) {
                 this.generalForm.get('prio_level').patchValue('ND');
                 this.generalForm.patchValue({ carrier_id: 4 });
