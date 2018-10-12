@@ -48,7 +48,6 @@
                            </div>
                            <div class="form-group row">
                               <label class='col-6'>Invoice No
-                                <span class="text-danger" *ngIf="requiredInv">(*)</span>
                               </label>
                               <div class='col-6 '>
                                 {{detail['invoice_code']}}
@@ -346,7 +345,7 @@
                           <span>{{item.amount_after_receipt | currency}}</span>
                         </td>
                         <td>
-                          {{item.return_reason_name}}
+                          {{item.return_reason_des}}
                         </td>
                         <td class="text-center">
                           <label class="css-input css-checkbox css-checkbox-default">
