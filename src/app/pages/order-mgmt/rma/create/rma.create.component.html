@@ -218,8 +218,7 @@
                                                 <label class='col-6'>Arrival Date</label>
                                                 <div class='col-6 text-danger'>
                                                     <div clickOutside (clickOutside)="d2.close()" class="input-group">
-                                                        <input class="form-control" [maxDate]="currentDt | dateObj"
-                                                            placeholder="mm/dd/yyyy" name="arrival_date"
+                                                        <input class="form-control" placeholder="mm/dd/yyyy" name="arrival_date"
                                                             formControlName="arrival_date" ngbDatepicker #d2="ngbDatepicker">
                                                         <div class="input-group-append">
                                                             <button class="btn btn-outline-secondary" (click)="d2.toggle()"
