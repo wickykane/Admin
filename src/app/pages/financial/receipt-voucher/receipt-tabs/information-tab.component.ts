@@ -138,12 +138,12 @@ export class ReceiptInformationTabComponent implements OnInit {
         this.receiptVoucherService.updateReceiptVoucherStatus(params).subscribe(res => {
             try {
                 this.toastr.success(res.message);
-                if (status === 3) {
-                    this.financialService.syncReceiptVoucherToQuickbook(id).subscribe(
-                        _res => {},
-                        err => {}
-                    );
-                }
+                // if (status === 3) {
+                //     this.financialService.syncReceiptVoucherToQuickbook(id).subscribe(
+                //         _res => {},
+                //         err => {}
+                //     );
+                // }
                 this.getDetailVoucher();
             } catch (e) {
                 console.log(e);
