@@ -49,6 +49,7 @@ export class CreditInformationTabComponent implements OnInit {
         'company': {}
     };
 
+    public isInstallQuickbook = false;
 
     constructor(
         public toastr: ToastrService,
@@ -64,6 +65,7 @@ export class CreditInformationTabComponent implements OnInit {
 
     ngOnInit() {
         this.getList();
+        this.getQuickbookSettings();
         this.detail['taxs'] = [];
     }
 
@@ -75,6 +77,14 @@ export class CreditInformationTabComponent implements OnInit {
         modalRef.result.then(res => {
         }, dismiss => { });
         modalRef.componentInstance.creditId = id;
+    }
+
+    getQuickbookSettings() {
+        this.financialService.getSettingInfoQuickbook().subscribe(
+            res => {
+                this.isInstallQuickbook = res.data.state === 'authorized' ? true : false;
+            }, err => {}
+        );
     }
 
     printPDF(id) {
@@ -146,7 +156,7 @@ export class CreditInformationTabComponent implements OnInit {
         this.creditMemoService.updateCreditStatus(params).subscribe(res => {
             try {
                 this.toastr.success(res.message);
-                if (status === 3) {
+                if (status === 3 && this.isInstallQuickbook) {
                     this.financialService.syncCreditToQuickbook(id).subscribe(
                         _res => {},
                         err => {}

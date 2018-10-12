@@ -87,6 +87,8 @@ export class InvoiceEditComponent implements OnInit {
         backItems: []
     };
 
+    public isInstallQuickbook = false;
+
     public searchKey = new Subject<any>(); // Lazy load filter
 
     /**
@@ -137,6 +139,7 @@ export class InvoiceEditComponent implements OnInit {
         this.data['id'] = this.route.snapshot.paramMap.get('id');
         const user = JSON.parse(localStorage.getItem('currentUser'));
         // List Master
+        this.getQuickbookSettings();
         this.orderService.getOrderReference().subscribe(res => { Object.assign(this.listMaster, res.data); this.refresh(); });
         await this.getListPaymentMethod();
         await this.getListPaymentTerm();
@@ -246,6 +249,14 @@ export class InvoiceEditComponent implements OnInit {
                 console.log(e);
             }
         });
+    }
+
+    getQuickbookSettings() {
+        this.financialService.getSettingInfoQuickbook().subscribe(
+            res => {
+                this.isInstallQuickbook = res.data.state === 'authorized' ? true : false;
+            }, err => {}
+        );
     }
 
     getListPaymentMethod() {
@@ -603,7 +614,7 @@ export class InvoiceEditComponent implements OnInit {
             try {
                 if (res.status) {
                     this.toastr.success(res.message);
-                    if (type === 4) {
+                    if (type === 4 && this.isInstallQuickbook) {
                         this.financialService.syncInvoiceToQuickbook(this.data['id']).subscribe(
                             _res => {},
                             err => {}

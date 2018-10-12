@@ -54,6 +54,8 @@ export class DebitMemoListComponent implements OnInit {
         'Overdue': { color: 'bright-grey', name: 'Overdue', id: 8 },
     };
 
+    public isInstallQuickbook = false;
+
     constructor(public router: Router,
         public fb: FormBuilder,
         public toastr: ToastrService,
@@ -88,7 +90,7 @@ export class DebitMemoListComponent implements OnInit {
             { id: null, name: 'Issue Date' },
             { id: 1, name: 'Due Date' }
         ];
-
+        this.getQuickbookSettings();
         this.getDebitStatusList();
         this.getListDebitMemo();
         this.getCountStatus();
@@ -96,6 +98,14 @@ export class DebitMemoListComponent implements OnInit {
 
     refresh() {
         this.cd.detectChanges();
+    }
+
+    getQuickbookSettings() {
+        this.financialService.getSettingInfoQuickbook().subscribe(
+            res => {
+                this.isInstallQuickbook = res.data.state === 'authorized' ? true : false;
+            }, err => {}
+        );
     }
 
     getDebitStatusList() {
@@ -264,7 +274,7 @@ export class DebitMemoListComponent implements OnInit {
             res => {
                 try {
                     this.toastr.success(res.message);
-                    if (newStatus === 3) {
+                    if (newStatus === 3 && this.isInstallQuickbook) {
                         this.financialService.syncDebitToQuickbook(debitId).subscribe(
                             _res => {},
                             err => {}
