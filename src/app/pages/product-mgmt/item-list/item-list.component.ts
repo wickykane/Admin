@@ -154,10 +154,12 @@ export class ItemListComponent implements OnInit {
     }
 
     resetTab() {
-        this.searchForm.reset();
-        this.filterForm.reset();
-        this.list.items = [];
-        this.refresh();
+        setTimeout(() => {
+            this.searchForm.reset();
+            this.filterForm.reset();
+            this.list.items = [];
+            this.refresh();
+        });
     }
 
     changeToGetSubModel() {
