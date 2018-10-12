@@ -102,18 +102,18 @@ export class QuoteModalContent implements OnInit, OnDestroy {
         this.activeModal.close(checkedItem.id);
     }
     getList() {
-        const params = { ...this.tableService.getParams(), ...this.searchForm.value };
+        const params = { ...this.searchForm.value };
         Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
 
         this.itemService.getListActiveSaleQuote(this.company_id, params).subscribe(res => {
             try {
-                if (!res.data.rows) {
-                    this.list.items = [];
-                    this.refresh();
-                    return;
-                }
-                this.list.items = res.data.rows;
-                this.tableService.matchPagingOption(res.data);
+                // if (!res.data.rows) {
+                //     this.list.items = [];
+                //     this.refresh();
+                //     return;
+                // }
+                this.list.items = res.data || [];
+                // this.tableService.matchPagingOption(res.data);
                 this.refresh();
             } catch (e) {
                 console.log(e);
@@ -177,25 +177,25 @@ export class QuoteModalContent implements OnInit, OnDestroy {
             return e;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'View'));
 
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+pageup', (event: KeyboardEvent): boolean => {
-            this.tableService.pagination.page--;
-            if (this.tableService.pagination.page < 1) {
-                this.tableService.pagination.page = 1;
-                return;
-            }
-            this.tableService.changePage(this.tableService.pagination.page);
-            return;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Next page'));
+        // this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+pageup', (event: KeyboardEvent): boolean => {
+        //     this.tableService.pagination.page--;
+        //     if (this.tableService.pagination.page < 1) {
+        //         this.tableService.pagination.page = 1;
+        //         return;
+        //     }
+        //     this.tableService.changePage(this.tableService.pagination.page);
+        //     return;
+        // }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Next page'));
 
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+pagedown', (event: KeyboardEvent): boolean => {
-            this.tableService.pagination.page++;
-            if (this.tableService.pagination.page > this.tableService.pagination.total_page) {
-                this.tableService.pagination.page = this.tableService.pagination.total_page;
-                return;
-            }
-            this.tableService.changePage(this.tableService.pagination.page);
-            return;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Previous page'));
+        // this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+pagedown', (event: KeyboardEvent): boolean => {
+        //     this.tableService.pagination.page++;
+        //     if (this.tableService.pagination.page > this.tableService.pagination.total_page) {
+        //         this.tableService.pagination.page = this.tableService.pagination.total_page;
+        //         return;
+        //     }
+        //     this.tableService.changePage(this.tableService.pagination.page);
+        //     return;
+        // }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Previous page'));
     }
 
     resetKeys() {
