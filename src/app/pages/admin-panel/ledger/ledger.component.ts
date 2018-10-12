@@ -320,4 +320,10 @@ export class LedgerComponent implements OnInit {
       dismiss => { });
   }
 
+  syncToQuickbook() {
+      this.ledgerService.syncLedgerAccountToQuickbook().subscribe(
+          res => {},
+          err => {}
+      );
+  }
 }

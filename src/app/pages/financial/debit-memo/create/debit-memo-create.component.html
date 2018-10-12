@@ -21,7 +21,7 @@
                                                 [ngStyle]="{'border': (debitMemoForm.controls.company_id.invalid && isClickedSave && !isSaveDraft && !isCreateNew) ? '1px solid red' : '' }"
                                                 (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 100px; margin-left: 2px;"
                                                 (change)="onSelectCustomer()" [items]="listMaster['customers']"
-                                                bindLabel="company_name" bindValue="id" formControlName="company_id">
+                                                bindLabel="name" bindValue="id" formControlName="company_id">
                                                 <ng-template ng-option-tmp let-item="item">
                                                     <span  [innerHTML]="item.company_name"></span>
                                                 </ng-template>

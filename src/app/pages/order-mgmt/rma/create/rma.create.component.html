@@ -21,7 +21,7 @@
                                                 <ng-select class="infinity-scroll-select"  [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="company_id" [typeahead]="searchKey"
                                                     (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true"
                                                     style="width: 100px; margin-left: 2px;" (change)="changeCustomer()"
-                                                    [items]="listMaster['customer']" bindLabel="company_name" bindValue="id"
+                                                    [items]="listMaster['customer']" bindLabel="name" bindValue="id"
                                                     formControlName="company_id">
                                                     <ng-template ng-option-tmp let-item="item">
                                                         <span  [innerHTML]="item.company_name"></span>

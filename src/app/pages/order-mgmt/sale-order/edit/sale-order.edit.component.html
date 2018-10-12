@@ -18,7 +18,7 @@
                                             <span class="text-danger">(*)</span>
                                             <div>
                                                 <ng-select [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="buyer_id" [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('buyer_id').errors?.required) || false   }" class="infinity-scroll-select" [typeahead]="searchKey"
-                                                    (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 100px; margin-left: 2px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="company_name" bindValue="id"
+                                                    (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 100px; margin-left: 2px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="name" bindValue="id"
                                                     formControlName="buyer_id">
                                                     <ng-template ng-option-tmp let-item="item">
                                                         <span [innerHTML]="item.company_name"></span>
@@ -71,7 +71,7 @@
                                         <div *ngIf="generalForm.value.buyer_id" class="form-group row">
                                             <label class='col-6'>Active Quote</label>
                                             <div class='col-6'>
-                                                <a class="text-primary" href="javascript: void(0)" (click)="keyService.saveKeys(); showListQuote()">{{customer['qty_quote'] || 0}}</a>
+                                                <a class="text-primary" href="javascript: void(0)" (click)="keyService.saveKeys(); showListQuote()">{{data['qty_quote'] || 0}}</a>
                                             </div>
                                         </div>
                                     </div>
