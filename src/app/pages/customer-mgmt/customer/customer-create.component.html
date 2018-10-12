@@ -12,7 +12,7 @@
                             <strong>GENERAL INFORMATION</strong>
                         </div>
                         <!-- Form Select -->
-                        <div class="card-body" *ngIf="!generalForm.value.buyer_type">
+                        <div class="card-body" *ngIf=" !generalForm.value.buyer_type || generalForm.value.buyer_type == 'null' ">
                                 <div class="row information height-100">
                                     <div class="col-md-12">
                                         <form [formGroup]="generalForm" class="form-search full-width form-horizontal">
@@ -24,7 +24,7 @@
                                                         </label>
                                                         <div class="col-sm-8">
                                                             <select class="form-control" name="buyer_type" formControlName="buyer_type" (change)="changeCustomerType()">
-                                                                <option value="null" selected="true">--Select--</option>
+                                                                <option [ngValue]="null" selected="true">--Select--</option>
                                                                 <option *ngFor="let item of listMaster['customerType']" [ngValue]="item.code">{{item.name}}</option>
                                                             </select>
                                                         </div>
@@ -42,7 +42,7 @@
                                                 </div>
                                                 <div class="col-md-4">
                                                     <div class="form-group row">
-                                                        <label for="payment_term_id" class="col-sm-4 col-form-label" style="padding: 0">Default Payment Terms </label>
+                                                        <label for="payment_term_id" class="col-sm-4 col-form-label" >Default Payment Terms </label>
                                                         <div class="col-sm-8">
                                                             <select class="form-control" name="payment_term_id" formControlName="payment_term_id">
                                                                 <option value="null" selected="true">--Select--</option>
@@ -66,7 +66,7 @@
                                               
                                                 <div class="col-md-4">
                                                     <div class="form-group row">
-                                                        <label for="credit_limit" class="col-sm-4 col-form-label" style="padding: 0">Default Payment Methods</label>
+                                                        <label for="credit_limit" class="col-sm-4 col-form-label">Default Payment Methods</label>
                                                         <div class="col-sm-8">
                                                             <select class="form-control" name="payment_method_id" formControlName="payment_method_id">
                                                                 <option value="null" selected="true">--Select--</option>
@@ -77,7 +77,7 @@
                                                 </div>                                                         
                                                 <div class="col-md-4">
                                                     <div class="form-group row">
-                                                        <label for="credit_limit" class="col-sm-4 col-form-label" style="padding: 0">Taxable</label>
+                                                        <label for="credit_limit" class="col-sm-4 col-form-label">Taxable</label>
                                                         <div class="col-sm-8">
                                                             <select class="form-control" name="taxable" formControlName="taxable">
                                                                 <option value="null" selected="true">--Select--</option>
@@ -124,7 +124,7 @@
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group row">
-                                                    <label for="payment_term_id" class="col-sm-4 col-form-label" style="padding: 0">Default Payment Terms </label>
+                                                    <label for="payment_term_id" class="col-sm-4 col-form-label">Default Payment Terms </label>
                                                     <div class="col-sm-8">
                                                         <select class="form-control" name="payment_term_id" formControlName="payment_term_id">
                                                             <option value="null" selected="true">--Select--</option>
@@ -155,7 +155,7 @@
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group row">
-                                                    <label for="credit_limit" class="col-sm-4 col-form-label" style="padding: 0">Default Payment Methods</label>
+                                                    <label for="credit_limit" class="col-sm-4 col-form-label" >Default Payment Methods</label>
                                                     <div class="col-sm-8">
                                                         <select class="form-control" name="payment_method_id" formControlName="payment_method_id">
                                                             <option value="null" selected="true">--Select--</option>
@@ -185,7 +185,7 @@
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group row">
-                                                    <label for="credit_limit" class="col-sm-4 col-form-label" style="padding: 0">Taxable</label>
+                                                    <label for="credit_limit" class="col-sm-4 col-form-label" >Taxable</label>
                                                     <div class="col-sm-8">
                                                         <select class="form-control" name="taxable" formControlName="taxable">
                                                             <option value="null" selected="true">--Select--</option>
@@ -251,7 +251,7 @@
                                                 </div>
                                                 <div class="col-md-4">
                                                     <div class="form-group row">
-                                                        <label for="payment_term_id" class="col-sm-4 col-form-label" style="padding: 0">Default Payment Terms </label>
+                                                        <label for="payment_term_id" class="col-sm-4 col-form-label" >Default Payment Terms </label>
                                                         <div class="col-sm-8">
                                                             <select class="form-control" name="payment_term_id" formControlName="payment_term_id">
                                                                 <option value="null" selected="true">--Select--</option>
@@ -292,7 +292,7 @@
                                                 </div>
                                                 <div class="col-md-4">
                                                     <div class="form-group row">
-                                                        <label for="credit_limit" class="col-sm-4 col-form-label" style="padding: 0">Default Payment Methods</label>
+                                                        <label for="credit_limit" class="col-sm-4 col-form-label" >Default Payment Methods</label>
                                                         <div class="col-sm-8">
                                                             <select class="form-control" name="payment_method_id" formControlName="payment_method_id">
                                                                 <option value="null" selected="true">--Select--</option>
@@ -332,7 +332,7 @@
                                                 </div>
                                                 <div class="col-md-4">
                                                     <div class="form-group row">
-                                                        <label for="credit_limit" class="col-sm-4 col-form-label" style="padding: 0">Taxable</label>
+                                                        <label for="credit_limit" class="col-sm-4 col-form-label" >Taxable</label>
                                                         <div class="col-sm-8">
                                                             <select class="form-control" name="taxable" formControlName="taxable">
                                                                 <option value="null" selected="true">--Select--</option>
