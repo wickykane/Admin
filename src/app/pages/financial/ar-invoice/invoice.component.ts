@@ -47,6 +47,7 @@ export class InvoiceComponent implements OnInit {
         11: 'Are you sure that you want to revise the current invoice?',
     };
 
+    public isInstallQuickbook = false;
 
     public statusConfig = {
         'New': { color: 'blue', name: 'New', id: 1, img: './assets/images/icon/new.png' },
@@ -102,6 +103,7 @@ export class InvoiceComponent implements OnInit {
         ];
         // this.getListInvoiceItemsRef();
 
+        this.getQuickbookSettings();
         this.getList();
         this.getCountStatus();
         this.getListStatus();
@@ -155,6 +157,14 @@ export class InvoiceComponent implements OnInit {
         });
     }
 
+    getQuickbookSettings() {
+        this.financialService.getSettingInfoQuickbook().subscribe(
+            res => {
+                this.isInstallQuickbook = res.data.state === 'authorized' ? true : false;
+            }, err => {}
+        );
+    }
+
     updateStatus(id, status) {
         const params = { status };
         this.financialService.updateInvoiceStatus(id, params).subscribe(res => {
@@ -163,7 +173,7 @@ export class InvoiceComponent implements OnInit {
                 if (+id === 11) {
                     this.editInvoice(id);
                 }
-                if (status === 4) {
+                if (status === 4 && this.isInstallQuickbook) {
                     this.financialService.syncInvoiceToQuickbook(id).subscribe(
                         _res => {},
                         err => {}
