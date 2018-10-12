@@ -314,4 +314,8 @@ export class OrderService {
         const url = ['sale-quote', 'detail', id].join('/');
         return this.API.get(url);
     }
+    getQuantityActiveQuote(id) {
+        const url = 'sale-quote/countListByCompanyId/' + id;
+        return this.API.get(url);
+    }
 }
