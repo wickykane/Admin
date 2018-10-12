@@ -74,6 +74,7 @@ export class DebitMemoEditComponent implements OnInit {
     public debitId = null;
     public debitDetail = {};
     public currentUser = {};
+    public isInstallQuickbook = false;
     //#endregion initialize variables
 
     //#region contructor
@@ -137,6 +138,7 @@ export class DebitMemoEditComponent implements OnInit {
             this.data['page'] = 1;
             this.searchCustomer(key);
         });
+        this.getQuickbookSettings();
         this.getDebitDetail();
         this.getListPaymentMethod();
         this.getListPaymentTerms();
@@ -151,6 +153,14 @@ export class DebitMemoEditComponent implements OnInit {
     //#region load master data
     refresh() {
         this.cd.detectChanges();
+    }
+
+    getQuickbookSettings() {
+        this.financialService.getSettingInfoQuickbook().subscribe(
+            res => {
+                this.isInstallQuickbook = res.data.state === 'authorized' ? true : false;
+            }, err => {}
+        );
     }
 
     getCustomerContacts(customerId) {
@@ -665,7 +675,7 @@ export class DebitMemoEditComponent implements OnInit {
             res => {
                 try {
                     this.toastr.success(res.message);
-                    if ( status === 3) {
+                    if ( status === 3 && this.isInstallQuickbook) {
                         this.financialService.syncDebitToQuickbook(this.debitId).subscribe(
                             _res => {},
                             err => {}
