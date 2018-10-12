@@ -398,7 +398,7 @@ export class RmaCreateComponent implements OnInit {
                 this.list.returnItem = (data.items || []);
                 this.list.returnItem.forEach(item => {
                     item['reason'] = this.listMaster['return_reason'];
-                    item['return_quantity'] = item['qty_return'];
+                    item['return_quantity'] = 1;
                 });
 
                 this.calcTotal();
@@ -567,7 +567,7 @@ export class RmaCreateComponent implements OnInit {
                     this.list.returnItem.push(selectedItem);
                     this.list.returnItem.forEach(item => {
                         item['reason'] = this.listMaster['return_reason'];
-                        item['return_quantity'] = item['qty_return'];
+                        // item['return_quantity'] = item['qty_return'];
                     });
                 });
                 this.calcTotal();
