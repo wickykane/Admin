@@ -1,714 +1,887 @@
 <div [@routerTransition]>
-    <app-page-header [heading]="'CREATE NEW CUSTOMER'" [icon]="'fa-th-list'"></app-page-header>
-    <section class="rma-page block main-container block-order">
-        <div style="margin: 15px 0">
-            <a class="btn btn-outline-info" routerLink="/customer">
-                <i class="fa fa-arrow-left"></i> Back</a>
-        </div>
-        <div class="row block-info">
-            <div class="col-md-12">
-                <div class="card height-100">
-                    <div class="card-header">
-                        <strong>GENERAL INFORMATION</strong>
-                    </div>
-                    <div class="card-body">
-                        <div class="row information height-100">
-                            <div class="col-md-12">
-                                <form [formGroup]="generalForm" class="form-search full-width form-horizontal">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group row">
-                                                <label for="buyer_type" class="col-sm-4 col-form-label">Customer Type
-                                                    <span class="text-danger">(*)</span>
-                                                </label>
-                                                <div class="col-sm-8">
-                                                    <select class="form-control" name="buyer_type" formControlName="buyer_type" (change)="changeCustomerType()">
-                                                        <option value="null" selected="true">--Select--</option>
-                                                        <option *ngFor="let item of listMaster['customerType']" [ngValue]="item.code">{{item.name}}</option>
-                                                    </select>
+        <app-page-header [heading]="'CREATE NEW CUSTOMER'" [icon]="'fa-th-list'"></app-page-header>
+        <section class="rma-page block main-container block-order">
+            <div style="margin: 15px 0">
+                <a class="btn btn-outline-info" routerLink="/customer">
+                    <i class="fa fa-arrow-left"></i> Back</a>
+            </div>
+            <div class="row block-info">
+                <div class="col-md-12">
+                    <div class="card height-100">
+                        <div class="card-header">
+                            <strong>GENERAL INFORMATION</strong>
+                        </div>
+                        <!-- Form Select -->
+                        <div class="card-body" *ngIf=" !generalForm.value.buyer_type || generalForm.value.buyer_type == 'null' ">
+                                <div class="row information height-100">
+                                    <div class="col-md-12">
+                                        <form [formGroup]="generalForm" class="form-search full-width form-horizontal">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="form-group row">
+                                                        <label for="buyer_type" class="col-sm-4 col-form-label">Customer Type
+                                                            <span class="text-danger">(*)</span>
+                                                        </label>
+                                                        <div class="col-sm-8">
+                                                            <select class="form-control" name="buyer_type" formControlName="buyer_type" (change)="changeCustomerType()">
+                                                                <option [ngValue]="null" selected="true">--Select--</option>
+                                                                <option *ngFor="let item of listMaster['customerType']" [ngValue]="item.code">{{item.name}}</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group row">
-                                                <label for="inputPassword" class="col-sm-4 col-form-label">Phone
-                                                    <span class="text-danger">(*)</span>
-                                                </label>
-                                                <div class="col-sm-8">
-                                                    <input type="text" class="form-control" (keypress)="isNumberKeyC($event)" name="phone" formControlName="phone">
+                                                <div class="col-md-4">
+                                                    <div class="form-group row">
+                                                        <label for="inputPassword" class="col-sm-4 col-form-label">Phone
+                                                            <span class="text-danger">(*)</span>
+                                                        </label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" class="form-control" (keypress)="isNumberKeyC($event)" name="phone" formControlName="phone">
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group row">
-                                                <label for="payment_term_id" class="col-sm-4 col-form-label" style="padding: 0">Default Payment Terms </label>
-                                                <div class="col-sm-8">
-                                                    <select class="form-control" name="payment_term_id" formControlName="payment_term_id">
-                                                        <option value="null" selected="true">--Select--</option>
-                                                        <option *ngFor="let item of paymentTermList" [ngValue]="item.id">{{item.cd}} - {{item.des}}</option>
-                                                    </select>
+                                                <div class="col-md-4">
+                                                    <div class="form-group row">
+                                                        <label for="payment_term_id" class="col-sm-4 col-form-label" >Default Payment Terms </label>
+                                                        <div class="col-sm-8">
+                                                            <select class="form-control" name="payment_term_id" formControlName="payment_term_id">
+                                                                <option value="null" selected="true">--Select--</option>
+                                                                <option *ngFor="let item of paymentTermList" [ngValue]="item.id">{{item.cd}} - {{item.des}}</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4" *ngIf="generalForm.value.buyer_type == 'PS'">
-                                            <div class="form-group row">
-                                                <label for="credit_limit" class="col-sm-4 col-form-label">Credit Limit
-                                                    <span class="text-danger">(*)</span>
-                                                </label>
-                                                <div class="col-sm-8">
-                                                    <input type="text" (keypress)="isNumberKey($event)" class="form-control" name="credit_limit" formControlName="credit_limit">
+                                              
+                                                <div class="w-100"></div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group row">
+                                                        <label for="code" class="col-sm-4 col-form-label">Code
+                                                            <span class="text-danger">(*)</span>
+                                                        </label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" class="form-control" name="code" formControlName="code">
+                                                        </div>
+                                                    </div>
                                                 </div>
+                                              
+                                                <div class="col-md-4">
+                                                    <div class="form-group row">
+                                                        <label for="credit_limit" class="col-sm-4 col-form-label">Default Payment Methods</label>
+                                                        <div class="col-sm-8">
+                                                            <select class="form-control" name="payment_method_id" formControlName="payment_method_id">
+                                                                <option value="null" selected="true">--Select--</option>
+                                                                <option *ngFor="let item of paymentMethodList" [ngValue]="item.id">{{item.name}}</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>                                                         
+                                                <div class="col-md-4">
+                                                    <div class="form-group row">
+                                                        <label for="credit_limit" class="col-sm-4 col-form-label">Taxable</label>
+                                                        <div class="col-sm-8">
+                                                            <select class="form-control" name="taxable" formControlName="taxable">
+                                                                <option value="null" selected="true">--Select--</option>
+                                                                <option value="1" selected="true">Yes</option>
+                                                                <option value="0" selected="true">No</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>                                           
                                             </div>
-                                        </div>
-                                        <div class="w-100"></div>
-                                        <div class="col-md-4">
-                                            <div class="form-group row">
-                                                <label for="code" class="col-sm-4 col-form-label">Code
-                                                    <span class="text-danger">(*)</span>
-                                                </label>
-                                                <div class="col-sm-8">
-                                                    <input type="text" class="form-control" name="code" formControlName="code">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'CP'">
-                                                <label for="fax" class="col-sm-4 col-form-label">Fax</label>
-                                                <div class="col-sm-8">
-                                                    <input type="text" class="form-control" name="fax" formControlName="fax">
-                                                </div>
-                                            </div>
-                                            <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'PS'">
-                                                <label for="email" class="col-sm-4 col-form-label">Email
-                                                    <span class="text-danger">(*)</span>
-                                                </label>
-                                                <div class="col-sm-8">
-                                                    <input type="text" class="form-control" name="email" formControlName="email">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group row">
-                                                <label for="credit_limit" class="col-sm-4 col-form-label" style="padding: 0">Default Payment Methods</label>
-                                                <div class="col-sm-8">
-                                                    <select class="form-control" name="payment_method_id" formControlName="payment_method_id">
-                                                        <option value="null" selected="true">--Select--</option>
-                                                        <option *ngFor="let item of paymentMethodList" [ngValue]="item.id">{{item.name}}</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4" *ngIf="generalForm.value.buyer_type == 'PS'">
-                                            <div class="form-group row">
-                                                <label for="sale_person_id" class="col-sm-4 col-form-label">Sale Person</label>
-                                                <div class="col-sm-8">
-                                                    <select class="form-control" name="sale_person_id" formControlName="sale_person_id">
-                                                        <option value="null" selected="true">--Select--</option>
-                                                        <option *ngFor="let item of listMaster['salePersons']" [ngValue]="item.id">{{item.full_name}}</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="w-100"></div>
-                                        <div class="col-md-4">
-                                            <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'CP'">
-                                                <label for="company_name" class="col-sm-4 col-form-label">Company Name
-                                                    <span class="text-danger">(*)</span>
-                                                </label>
-                                                <div class="col-sm-8">
-                                                    <input type="text" class="form-control" name="company_name" formControlName="company_name" maxlength="30">
-                                                </div>
-                                            </div>
-                                            <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'PS'">
-                                                <label for="first_name" class="col-sm-4 col-form-label">First Name
-                                                    <span class="text-danger">(*)</span>
-                                                </label>
-                                                <div class="col-sm-8">
-                                                    <input type="text" class="form-control" name="first_name" formControlName="first_name">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'CP'">
-                                                <label for="credit_limit" class="col-sm-4 col-form-label">Credit Limit</label>
-                                                <div class="col-sm-8">
-                                                    <input type="text" (keypress)="isNumberKey($event)" class="form-control" name="credit_limit" formControlName="credit_limit">
-                                                </div>
-                                            </div>
-                                            <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'PS'">
-                                                <label for="username" class="col-sm-4 col-form-label">Username</label>
-                                                <div class="col-sm-8">
-                                                    <input type="text" class="form-control" name="username" formControlName="username">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group row">
-                                                <label for="credit_limit" class="col-sm-4 col-form-label" style="padding: 0">Taxable</label>
-                                                <div class="col-sm-8">
-                                                    <select class="form-control" name="taxable" formControlName="taxable">
-                                                        <option value="null" selected="true">--Select--</option>
-                                                        <option value="1" selected="true">Yes</option>
-                                                        <option value="0" selected="true">No</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="w-100"></div>
-                                        <div class="col-md-4">
-                                            <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'CP'">
-                                                <label for="registration" class="col-sm-4 col-form-label">Registration No</label>
-                                                <div class="col-sm-8">
-                                                    <input type="text" class="form-control" name="registration" formControlName="registration_no">
-                                                </div>
-                                            </div>
-                                            <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'PS'">
-                                                <label for="last_name" class="col-sm-4 col-form-label">Last Name
-                                                    <span class="text-danger">(*)</span>
-                                                </label>
-                                                <div class="col-sm-8">
-                                                    <input type="text" class="form-control" name="last_name" formControlName="last_name">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'CP'">
-                                                <label for="sale_person_id" class="col-sm-4 col-form-label">Saleperson</label>
-                                                <div class="col-sm-8">
-                                                    <select class="form-control" name="sale_person_id" formControlName="sale_person_id">
-                                                        <option value="null" selected="true">--Select--</option>
-                                                        <option *ngFor="let item of listMaster['salePersons']" [ngValue]="item.id">{{item.full_name}}</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'PS'">
-                                                <label for="password" class="col-sm-4 col-form-label">Password </label>
-                                                <div class="col-sm-8">
-                                                    <input type="password" class="form-control" name="pwd" formControlName="password">
-                                                </div>
-                                            </div>
-                                        </div>
+                                        </form>
                                     </div>
-                                </form>
+                                </div>
+                            </div>
+                        <!-- End Form Select -->
+                        <!-- Form CP -->
+                        <div class="card-body" *ngIf="generalForm.value.buyer_type == 'CP'">
+                            <div class="row information height-100">
+                                <div class="col-md-12">
+                                    <form [formGroup]="generalForm" class="form-search full-width form-horizontal">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group row">
+                                                    <label for="buyer_type" class="col-sm-4 col-form-label">Customer Type
+                                                        <span class="text-danger">(*)</span>
+                                                    </label>
+                                                    <div class="col-sm-8">
+                                                        <select class="form-control" name="buyer_type" formControlName="buyer_type" (change)="changeCustomerType()">
+                                                            <option value="null" selected="true">--Select--</option>
+                                                            <option *ngFor="let item of listMaster['customerType']" [ngValue]="item.code">{{item.name}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group row">
+                                                    <label for="inputPassword" class="col-sm-4 col-form-label">Phone
+                                                        <span class="text-danger">(*)</span>
+                                                    </label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" (keypress)="isNumberKeyC($event)" name="phone" formControlName="phone">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group row">
+                                                    <label for="payment_term_id" class="col-sm-4 col-form-label">Default Payment Terms </label>
+                                                    <div class="col-sm-8">
+                                                        <select class="form-control" name="payment_term_id" formControlName="payment_term_id">
+                                                            <option value="null" selected="true">--Select--</option>
+                                                            <option *ngFor="let item of paymentTermList" [ngValue]="item.id">{{item.cd}} - {{item.des}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                          
+                                            <div class="w-100"></div>
+                                            <div class="col-md-4">
+                                                <div class="form-group row">
+                                                    <label for="code" class="col-sm-4 col-form-label">Code
+                                                        <span class="text-danger">(*)</span>
+                                                    </label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" name="code" formControlName="code">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'CP'">
+                                                    <label for="fax" class="col-sm-4 col-form-label">Fax</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" name="fax" formControlName="fax">
+                                                    </div>
+                                                </div>                                               
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group row">
+                                                    <label for="credit_limit" class="col-sm-4 col-form-label" >Default Payment Methods</label>
+                                                    <div class="col-sm-8">
+                                                        <select class="form-control" name="payment_method_id" formControlName="payment_method_id">
+                                                            <option value="null" selected="true">--Select--</option>
+                                                            <option *ngFor="let item of paymentMethodList" [ngValue]="item.id">{{item.name}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>   
+                                            <div class="col-md-4">
+                                                <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'CP'">
+                                                    <label for="company_name" class="col-sm-4 col-form-label">Company Name
+                                                        <span class="text-danger">(*)</span>
+                                                    </label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" name="company_name" formControlName="company_name" maxlength="30">
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'CP'">
+                                                    <label for="credit_limit" class="col-sm-4 col-form-label">Credit Limit</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" (keypress)="isNumberKey($event)" class="form-control" name="credit_limit" formControlName="credit_limit">
+                                                    </div>
+                                                </div>                                               
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group row">
+                                                    <label for="credit_limit" class="col-sm-4 col-form-label" >Taxable</label>
+                                                    <div class="col-sm-8">
+                                                        <select class="form-control" name="taxable" formControlName="taxable">
+                                                            <option value="null" selected="true">--Select--</option>
+                                                            <option value="1" selected="true">Yes</option>
+                                                            <option value="0" selected="true">No</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>                                            
+                                            <div class="col-md-4">
+                                                <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'CP'">
+                                                    <label for="registration" class="col-sm-4 col-form-label">Registration No</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" name="registration" formControlName="registration_no">
+                                                    </div>
+                                                </div>                                                
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'CP'">
+                                                    <label for="sale_person_id" class="col-sm-4 col-form-label">Saleperson</label>
+                                                    <div class="col-sm-8">
+                                                        <select class="form-control" name="sale_person_id" formControlName="sale_person_id">
+                                                            <option value="null" selected="true">--Select--</option>
+                                                            <option *ngFor="let item of listMaster['salePersons']" [ngValue]="item.id">{{item.full_name}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>                                               
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Form CP -->                    
+                        <!-- Start Form PS -->
+                        <div class="card-body" *ngIf="generalForm.value.buyer_type == 'PS'">
+                                <div class="row information height-100">
+                                    <div class="col-md-12">
+                                        <form [formGroup]="generalForm" class="form-search full-width form-horizontal">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="form-group row">
+                                                        <label for="buyer_type" class="col-sm-4 col-form-label">Customer Type
+                                                            <span class="text-danger">(*)</span>
+                                                        </label>
+                                                        <div class="col-sm-8">
+                                                            <select class="form-control" name="buyer_type" formControlName="buyer_type" (change)="changeCustomerType()">
+                                                                <option value="null" selected="true">--Select--</option>
+                                                                <option *ngFor="let item of listMaster['customerType']" [ngValue]="item.code">{{item.name}}</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group row">
+                                                        <label for="inputPassword" class="col-sm-4 col-form-label">Phone
+                                                            <span class="text-danger">(*)</span>
+                                                        </label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" class="form-control" (keypress)="isNumberKeyC($event)" name="phone" formControlName="phone">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group row">
+                                                        <label for="payment_term_id" class="col-sm-4 col-form-label" >Default Payment Terms </label>
+                                                        <div class="col-sm-8">
+                                                            <select class="form-control" name="payment_term_id" formControlName="payment_term_id">
+                                                                <option value="null" selected="true">--Select--</option>
+                                                                <option *ngFor="let item of paymentTermList" [ngValue]="item.id">{{item.cd}} - {{item.des}}</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4" *ngIf="generalForm.value.buyer_type == 'PS'">
+                                                    <div class="form-group row">
+                                                        <label for="credit_limit" class="col-sm-4 col-form-label">Credit Limit
+                                                            <span class="text-danger">(*)</span>
+                                                        </label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" (keypress)="isNumberKey($event)" class="form-control" name="credit_limit" formControlName="credit_limit">
+                                                        </div>
+                                                    </div>
+                                                </div>                                               
+                                                <div class="col-md-4">
+                                                    <div class="form-group row">
+                                                        <label for="code" class="col-sm-4 col-form-label">Code
+                                                            <span class="text-danger">(*)</span>
+                                                        </label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" class="form-control" name="code" formControlName="code">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">                                              
+                                                    <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'PS'">
+                                                        <label for="email" class="col-sm-4 col-form-label">Email
+                                                            <span class="text-danger">(*)</span>
+                                                        </label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" class="form-control" name="email" formControlName="email">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group row">
+                                                        <label for="credit_limit" class="col-sm-4 col-form-label" >Default Payment Methods</label>
+                                                        <div class="col-sm-8">
+                                                            <select class="form-control" name="payment_method_id" formControlName="payment_method_id">
+                                                                <option value="null" selected="true">--Select--</option>
+                                                                <option *ngFor="let item of paymentMethodList" [ngValue]="item.id">{{item.name}}</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4" *ngIf="generalForm.value.buyer_type == 'PS'">
+                                                    <div class="form-group row">
+                                                        <label for="sale_person_id" class="col-sm-4 col-form-label">Sale Person</label>
+                                                        <div class="col-sm-8">
+                                                            <select class="form-control" name="sale_person_id" formControlName="sale_person_id">
+                                                                <option value="null" selected="true">--Select--</option>
+                                                                <option *ngFor="let item of listMaster['salePersons']" [ngValue]="item.id">{{item.full_name}}</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>                                               
+                                                <div class="col-md-4">                                               
+                                                    <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'PS'">
+                                                        <label for="first_name" class="col-sm-4 col-form-label">First Name
+                                                            <span class="text-danger">(*)</span>
+                                                        </label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" class="form-control" name="first_name" formControlName="first_name">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">                                              
+                                                    <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'PS'">
+                                                        <label for="username" class="col-sm-4 col-form-label">Username</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" class="form-control" name="username" formControlName="username">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group row">
+                                                        <label for="credit_limit" class="col-sm-4 col-form-label" >Taxable</label>
+                                                        <div class="col-sm-8">
+                                                            <select class="form-control" name="taxable" formControlName="taxable">
+                                                                <option value="null" selected="true">--Select--</option>
+                                                                <option value="1" selected="true">Yes</option>
+                                                                <option value="0" selected="true">No</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>                                               
+                                                <div class="col-md-4">                                              
+                                                    <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'PS'">
+                                                        <label for="last_name" class="col-sm-4 col-form-label">Last Name
+                                                            <span class="text-danger">(*)</span>
+                                                        </label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" class="form-control" name="last_name" formControlName="last_name">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">                                                
+                                                    <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'PS'">
+                                                        <label for="password" class="col-sm-4 col-form-label">Password </label>
+                                                        <div class="col-sm-8">
+                                                            <input type="password" class="form-control" name="pwd" formControlName="password">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        <!-- End Form PS -->
+                    </div>
+                </div>
+            </div>
+    
+    
+    
+            <div class="row block-info" style="margin-top:15px;">
+                <div class="col-sm-12">
+                    <div class="card no-border">
+                        <div class="card-header">
+                            ADDRESS:
+                            <strong class="text-danger">{{addresses.length}}</strong>
+                            <span *ngIf="addresses.length > 1">Records</span>
+                            <span *ngIf="addresses.length <= 1">Record</span>
+    
+                            <div class="wrap-keyboard right-toggle-button text-danger mr-2 wrap-icon" (click)="flagAddress = !flagAddress">
+                                <span class="fa" [ngClass]="{'fa-minus': flagAddress,'fa-plus': !flagAddress}"></span>
+                            </div>
+                        </div>
+                        <div class="card-body no-padding">
+                            <div *ngIf="flagAddress">
+                                <div class="table-responsive list">
+                                    <table class="table table-bordered table-order" >
+                                        <thead class="bg-white">
+                                            <tr>
+                                                <th> No </th>
+                                                <th> Type </th>
+                                                <th> Name
+                                                    <span class="text-danger"> (*)</span>
+                                                </th>
+                                                <th> Country
+                                                    <span class="text-danger"> (*)</span>
+                                                </th>
+                                                <th> Address 1
+                                                    <span class="text-danger"> (*)</span>
+                                                </th>
+                                                <th> Address 2 </th>
+                                                <th> City
+                                                    <span class="text-danger"> (*)</span>
+                                                </th>
+                                                <th> State
+                                                    <span class="text-danger"> (*)</span>
+                                                </th>
+                                                <th> Zip Code
+                                                    <span class="text-danger"> (*)</span>
+                                                </th>
+                                                <th>Default</th>
+                                                <th> Action </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of addresses; let i = index">
+                                                <td>{{i+1}}</td>
+                                                <td>
+                                                    <select class="form-control" (change)="checkAddress()" name="type" [(ngModel)]="item.type">
+                                                        <option value="null" selected="true">--Select--</option>
+                                                        <option *ngFor="let i of item.listType" [ngValue]="i.id">{{i.name}}</option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control" name="name" [(ngModel)]="item.name">
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" name="country_code" [(ngModel)]="item.country_code" (change)="checkIsDefault($event, i);changeCountry(item)">
+                                                        <option value="null" selected>--Select--</option>
+                                                        <option *ngFor="let i of item.listCountry" [ngValue]="i.cd">{{i.name}}</option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control" name="address_1" [(ngModel)]="item.address_1">
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control" name="address_2" [(ngModel)]="item.address_2">
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control" name="city_name" [(ngModel)]="item.city">
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" name="state_id" [(ngModel)]="item.state_id">
+                                                        <option value="null" selected="true">--Select--</option>
+                                                        <option *ngFor="let i of item.listState" [ngValue]="i.id">{{i.name}}</option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control" name="zip_code" [(ngModel)]="item.zip_code">
+                                                </td>
+                                                <td>
+                                                    <input type="checkbox" name="is_default" (change)="checkIsDefault($event, i)" [(ngModel)]="item.is_default" [disabled]="item.type==3 || item.type==4">
+                                                </td>
+                                                <td>
+                                                    <button [hidden]="item.hidden" [disabled]="item.type==3 || item.type==4" type="button" class="btn btn-default" (click)="removeAddress(i)">
+                                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                                    </button>
+                                                    <button ngbTooltip="Same address for Billing/Shipping Address" placement="bottom" type="button" class="btn btn-default" (click)="dupAddress(item.type)">
+                                                        <i class="fa fa-clone" aria-hidden="true"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <button type="button" class="btn btn-link mt-2" (click)="addNewAddress()">
+                                    <i class="fa fa-plus" aria-hidden="true"></i> Add new address</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-
-
-        <div class="row block-info" style="margin-top:15px;">
-            <div class="col-sm-12">
-                <div class="card no-border">
-                    <div class="card-header">
-                        ADDRESS:
-                        <strong class="text-danger">{{addresses.length}}</strong>
-                        <span *ngIf="addresses.length > 1">Records</span>
-                        <span *ngIf="addresses.length <= 1">Record</span>
-
-                        <div class="wrap-keyboard right-toggle-button text-danger mr-2 wrap-icon" (click)="flagAddress = !flagAddress">
-                            <span class="fa" [ngClass]="{'fa-minus': flagAddress,'fa-plus': !flagAddress}"></span>
-                        </div>
-                    </div>
-                    <div class="card-body no-padding">
-                        <div *ngIf="flagAddress">
-                            <div class="table-responsive list">
-                                <table class="table table-bordered table-order" >
-                                    <thead class="bg-white">
-                                        <tr>
-                                            <th> No </th>
-                                            <th> Type </th>
-                                            <th> Name
-                                                <span class="text-danger"> (*)</span>
-                                            </th>
-                                            <th> Country
-                                                <span class="text-danger"> (*)</span>
-                                            </th>
-                                            <th> Address 1
-                                                <span class="text-danger"> (*)</span>
-                                            </th>
-                                            <th> Address 2 </th>
-                                            <th> City
-                                                <span class="text-danger"> (*)</span>
-                                            </th>
-                                            <th> State
-                                                <span class="text-danger"> (*)</span>
-                                            </th>
-                                            <th> Zip Code
-                                                <span class="text-danger"> (*)</span>
-                                            </th>
-                                            <th>Default</th>
-                                            <th> Action </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let item of addresses; let i = index">
-                                            <td>{{i+1}}</td>
-                                            <td>
-                                                <select class="form-control" (change)="checkAddress()" name="type" [(ngModel)]="item.type">
-                                                    <option value="null" selected="true">--Select--</option>
-                                                    <option *ngFor="let i of item.listType" [ngValue]="i.id">{{i.name}}</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" name="name" [(ngModel)]="item.name">
-                                            </td>
-                                            <td>
-                                                <select class="form-control" name="country_code" [(ngModel)]="item.country_code" (change)="checkIsDefault($event, i);changeCountry(item)">
-                                                    <option value="null" selected>--Select--</option>
-                                                    <option *ngFor="let i of item.listCountry" [ngValue]="i.cd">{{i.name}}</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" name="address_1" [(ngModel)]="item.address_1">
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" name="address_2" [(ngModel)]="item.address_2">
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" name="city_name" [(ngModel)]="item.city">
-                                            </td>
-                                            <td>
-                                                <select class="form-control" name="state_id" [(ngModel)]="item.state_id">
-                                                    <option value="null" selected="true">--Select--</option>
-                                                    <option *ngFor="let i of item.listState" [ngValue]="i.id">{{i.name}}</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" name="zip_code" [(ngModel)]="item.zip_code">
-                                            </td>
-                                            <td>
-                                                <input type="checkbox" name="is_default" (change)="checkIsDefault($event, i)" [(ngModel)]="item.is_default" [disabled]="item.type==3 || item.type==4">
-                                            </td>
-                                            <td>
-                                                <button [hidden]="item.hidden" [disabled]="item.type==3 || item.type==4" type="button" class="btn btn-default" (click)="removeAddress(i)">
-                                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                                </button>
-                                                <button ngbTooltip="Same address for Billing/Shipping Address" placement="bottom" type="button" class="btn btn-default" (click)="dupAddress(item.type)">
-                                                    <i class="fa fa-clone" aria-hidden="true"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <button type="button" class="btn btn-link mt-2" (click)="addNewAddress()">
-                                <i class="fa fa-plus" aria-hidden="true"></i> Add new address</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="row" style="margin-top:15px;" *ngIf="generalForm.value.buyer_type == 'CP'">
-            <div class="col-sm-12">
-                <!-- <div class="custom-header">
-                    <h3 class="custom-header">SITES:
-                        <strong class="text-danger">{{sites.length}}</strong>
-                        <span *ngIf="sites.length > 1">Records</span>
-                        <span *ngIf="sites.length <= 1">Record</span>
-                    </h3>
-                    <div class="wrap-keyboard right-toggle-button" (click)="flagSite = !flagSite">
-                        <span class="fa" [ngClass]="{'fa-minus': flagSite,'fa-plus': !flagSite}"></span>
-                    </div>
-                </div> -->
-                <div class="card no-border">
-                    <div class="card-header">
-                        SITES:
-                        <strong class="text-danger">{{sites.length}}</strong>
-                        <span *ngIf="sites.length > 1">Records</span>
-                        <span *ngIf="sites.length <= 1">Record</span>
-                        <div class="wrap-keyboard right-toggle-button text-danger mr-2 wrap-icon" (click)="flagSite = !flagSite">
+    
+    
+            <div class="row" style="margin-top:15px;" *ngIf="generalForm.value.buyer_type == 'CP'">
+                <div class="col-sm-12">
+                    <!-- <div class="custom-header">
+                        <h3 class="custom-header">SITES:
+                            <strong class="text-danger">{{sites.length}}</strong>
+                            <span *ngIf="sites.length > 1">Records</span>
+                            <span *ngIf="sites.length <= 1">Record</span>
+                        </h3>
+                        <div class="wrap-keyboard right-toggle-button" (click)="flagSite = !flagSite">
                             <span class="fa" [ngClass]="{'fa-minus': flagSite,'fa-plus': !flagSite}"></span>
                         </div>
-                    </div>
-                    <div class="card-body no-padding">
-                        <div *ngIf="flagSite">
-                            <div class="table-responsive list">
-                                <table class="table table-bordered table-order">
-                                    <thead class="bg-white">
-                                        <tr>
-                                            <th> No </th>
-                                            <th> Site Code </th>
-                                            <th> Site Name </th>
-                                            <th> Country </th>
-                                            <th> Address 1 </th>
-                                            <th> Address 2 </th>
-                                            <th> City </th>
-                                            <th> State </th>
-                                            <th> Zip Code </th>
-                                            <th> Action </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let item of sites; let i = index">
-                                            <td>{{i+1}}</td>
-                                            <td>
-                                                {{item.site_code}}
-                                            </td>
-                                            <td>
-                                                {{item.site_name}}
-                                            </td>
-                                            <td>
-                                                {{item.addresses[0].country_name}}
-                                            </td>
-                                            <td>
-                                                {{item.addresses[0].address_1}}
-                                            </td>
-                                            <td>
-                                                {{item.addresses[0].address_2}}
-                                            </td>
-                                            <td>
-                                                {{item.addresses[0].city}}
-                                            </td>
-                                            <td>
-                                                {{item.addresses[0].state_name}}
-                                            </td>
-                                            <td>
-                                                {{item.addresses[0].zip_code}}
-                                            </td>
-                                            <td>
-                                                <button type="button" class="btn btn-default" (click)="addNewSite(item,i)">
-                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                                </button>
-                                                <button type="button" class="btn btn-default" (click)="removeSite(i)">
-                                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                    </div> -->
+                    <div class="card no-border">
+                        <div class="card-header">
+                            SITES:
+                            <strong class="text-danger">{{sites.length}}</strong>
+                            <span *ngIf="sites.length > 1">Records</span>
+                            <span *ngIf="sites.length <= 1">Record</span>
+                            <div class="wrap-keyboard right-toggle-button text-danger mr-2 wrap-icon" (click)="flagSite = !flagSite">
+                                <span class="fa" [ngClass]="{'fa-minus': flagSite,'fa-plus': !flagSite}"></span>
                             </div>
-                            <button type="button" class="btn btn-link mt-2" (click)="addNewSite()">
-                                <i class="fa fa-plus" aria-hidden="true"></i> Add new site</button>
+                        </div>
+                        <div class="card-body no-padding">
+                            <div *ngIf="flagSite">
+                                <div class="table-responsive list">
+                                    <table class="table table-bordered table-order">
+                                        <thead class="bg-white">
+                                            <tr>
+                                                <th> No </th>
+                                                <th> Site Code </th>
+                                                <th> Site Name </th>
+                                                <th> Country </th>
+                                                <th> Address 1 </th>
+                                                <th> Address 2 </th>
+                                                <th> City </th>
+                                                <th> State </th>
+                                                <th> Zip Code </th>
+                                                <th> Action </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of sites; let i = index">
+                                                <td>{{i+1}}</td>
+                                                <td>
+                                                    {{item.site_code}}
+                                                </td>
+                                                <td>
+                                                    {{item.site_name}}
+                                                </td>
+                                                <td>
+                                                    {{item.addresses[0].country_name}}
+                                                </td>
+                                                <td>
+                                                    {{item.addresses[0].address_1}}
+                                                </td>
+                                                <td>
+                                                    {{item.addresses[0].address_2}}
+                                                </td>
+                                                <td>
+                                                    {{item.addresses[0].city}}
+                                                </td>
+                                                <td>
+                                                    {{item.addresses[0].state_name}}
+                                                </td>
+                                                <td>
+                                                    {{item.addresses[0].zip_code}}
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="btn btn-default" (click)="addNewSite(item,i)">
+                                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-default" (click)="removeSite(i)">
+                                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <button type="button" class="btn btn-link mt-2" (click)="addNewSite()">
+                                    <i class="fa fa-plus" aria-hidden="true"></i> Add new site</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-
-
-        <!-- <div class="row" style="margin-top:15px;">
-            <div class="col-sm-12">
-
-                <div class="card no-border">
+    
+    
+    
+            <!-- <div class="row" style="margin-top:15px;">
+                <div class="col-sm-12">
+    
+                    <div class="card no-border">
+                        <div class="card-header">
+                            BANK ACCOUNTS:
+                            <strong class="text-danger">{{bank_accounts.length}}</strong>
+                            <span *ngIf="bank_accounts.length > 1">Records</span>
+                            <span *ngIf="bank_accounts.length <= 1">Record</span>
+                            <div class="wrap-keyboard right-toggle-button text-danger mr-2 wrap-icon" (click)="flagAccount = !flagAccount">
+                                <span class="fa" [ngClass]="{'fa-minus': flagAccount,'fa-plus': !flagAccount}"></span>
+                            </div>
+                        </div>
+                        <div class="card-body no-padding">
+                            <div *ngIf="flagAccount">
+                                <div class="table-responsive list">
+                                    <table class="table table-bordered table-order">
+                                        <thead class="bg-white">
+                                            <tr>
+                                                <th> No </th>
+                                                <th> Bank Name
+                                                    <span class="text-danger">(*)</span>
+                                                </th>
+                                                <th> SWIFT </th>
+                                                <th> Branch
+                                                    <span class="text-danger">(*)</span>
+                                                </th>
+                                                <th> Address </th>
+                                                <th> Account Name
+                                                    <span class="text-danger">(*)</span>
+                                                </th>
+                                                <th> Account No
+                                                    <span class="text-danger">(*)</span>
+                                                </th>
+                                                <th> IBAN </th>
+                                                <th> Action </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of bank_accounts; let i = index">
+                                                <td>{{i+1}}</td>
+                                                <td>
+                                                    <select class="form-control" name="bank_id" [(ngModel)]="item.bank_id" (change)="changeBank(item)">
+                                                        <option value="null" selected="true">--Select--</option>
+                                                        <option *ngFor="let i of item.listBank" [ngValue]="i.id">{{i.name}}</option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input type="text" readonly class="form-control-plaintext" name="bank_swift" [(ngModel)]="item.bank_swift">
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" name="branch_id" [(ngModel)]="item.branch_id" (change)="changeBranch(item)">
+                                                        <option value="null" selected="true">--Select--</option>
+                                                        <option *ngFor="let i of item.listBranch" [ngValue]="i.id">{{i.branch_name}}</option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input type="text" readonly class="form-control-plaintext" name="full_address" [(ngModel)]="item.full_address">
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control" name="account_name" [(ngModel)]="item.account_name">
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control" name="account_no" (keypress)="isNumberKeyC($event)" [(ngModel)]="item.account_no">
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control" name="iban" [(ngModel)]="item.iban">
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="btn btn-default" (click)="removeBankAccount(i)">
+                                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <button type="button" class="btn btn-link mt-2" (click)="addNewBankAccount()">
+                                    <i class="fa fa-plus" aria-hidden="true"></i> Add new account</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top:15px;">
+                <div class="col-sm-12">
+                    <div class="card no-border">
+                        <div class="card-header">
+                            CREDIT CARDS:
+                            <strong class="text-danger">{{credit_cards.length}}</strong>
+                            <span *ngIf="credit_cards.length > 1">Records</span>
+                            <span *ngIf="credit_cards.length <= 1">Record</span>
+                            <div class="wrap-keyboard right-toggle-button text-danger mr-2 wrap-icon" (click)="flagCreditCard = !flagCreditCard">
+                                <span class="fa" [ngClass]="{'fa-minus': flagCreditCard,'fa-plus': !flagCreditCard}"></span>
+                            </div>
+                        </div>
+                        <div class="card-body no-padding">
+                            <div *ngIf="flagCreditCard">
+                                <div class="table-responsive list">
+                                    <table class="table table-bordered table-order">
+                                        <thead class="bg-white">
+                                            <tr>
+                                                <th> No </th>
+                                                <th> Card Type
+                                                    <span class="text-danger">(*)</span>
+                                                </th>
+                                                <th> Card Name
+                                                    <span class="text-danger">(*)</span>
+                                                </th>
+                                                <th> Card Number
+                                                    <span class="text-danger">(*)</span>
+                                                </th>
+                                                <th> Cvv
+                                                    <span class="text-danger">(*)</span>
+                                                </th>
+                                                <th> Expiration Month
+                                                    <span class="text-danger">(*)</span>
+                                                </th>
+                                                <th> Expiration Year
+                                                    <span class="text-danger">(*)</span>
+                                                </th>
+                                                <th> Action </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of credit_cards; let i = index" [ngClass]="{'hidden':item.is_deleted}">
+                                                <td>{{i+1}}</td>
+                                                <td>
+                                                    <select class="form-control" name="type" [(ngModel)]="item.type">
+                                                        <option value="null" selected="true">--Select--</option>
+                                                        <option *ngFor="let i of item.listCard" [ngValue]="i.id">{{i.name}}</option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control" name="name" [(ngModel)]="item.name">
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control" name="no" [(ngModel)]="item.no">
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control" name="cvv" [(ngModel)]="item.cvv">
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control" name="expiration_month" [(ngModel)]="item.expiration_month">
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control" name="expiration_year" [(ngModel)]="item.expiration_year">
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="btn btn-default" (click)="removeCreditCard(i)">
+                                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <button type="button" class="btn btn-link mt-2" (click)="addNewCreditCard()">
+                                    <i class="fa fa-plus" aria-hidden="true"></i> Add new account</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+    
+    
+    
+            <!-- <div class="row" style="margin-top:15px;" *ngIf="false">
+                <div class="col-sm-12">
+                    <div class="card no-border">
                     <div class="card-header">
-                        BANK ACCOUNTS:
-                        <strong class="text-danger">{{bank_accounts.length}}</strong>
-                        <span *ngIf="bank_accounts.length > 1">Records</span>
-                        <span *ngIf="bank_accounts.length <= 1">Record</span>
-                        <div class="wrap-keyboard right-toggle-button text-danger mr-2 wrap-icon" (click)="flagAccount = !flagAccount">
-                            <span class="fa" [ngClass]="{'fa-minus': flagAccount,'fa-plus': !flagAccount}"></span>
+                        BANK CARDS:
+                            <strong class="text-danger">{{bank_card.length}}</strong>
+                            <span *ngIf="bank_card.length > 1">Records</span>
+                            <span *ngIf="bank_card.length <= 1">Record</span>
+                        <div class="wrap-keyboard right-toggle-button text-danger mr-2 wrap-icon" (click)="flagCard = !flagCard">
+                            <span class="fa" [ngClass]="{'fa-minus': flagCard,'fa-plus': !flagCard}"></span>
                         </div>
                     </div>
                     <div class="card-body no-padding">
-                        <div *ngIf="flagAccount">
-                            <div class="table-responsive list">
-                                <table class="table table-bordered table-order">
-                                    <thead class="bg-white">
-                                        <tr>
-                                            <th> No </th>
-                                            <th> Bank Name
-                                                <span class="text-danger">(*)</span>
-                                            </th>
-                                            <th> SWIFT </th>
-                                            <th> Branch
-                                                <span class="text-danger">(*)</span>
-                                            </th>
-                                            <th> Address </th>
-                                            <th> Account Name
-                                                <span class="text-danger">(*)</span>
-                                            </th>
-                                            <th> Account No
-                                                <span class="text-danger">(*)</span>
-                                            </th>
-                                            <th> IBAN </th>
-                                            <th> Action </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let item of bank_accounts; let i = index">
-                                            <td>{{i+1}}</td>
-                                            <td>
-                                                <select class="form-control" name="bank_id" [(ngModel)]="item.bank_id" (change)="changeBank(item)">
-                                                    <option value="null" selected="true">--Select--</option>
-                                                    <option *ngFor="let i of item.listBank" [ngValue]="i.id">{{i.name}}</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <input type="text" readonly class="form-control-plaintext" name="bank_swift" [(ngModel)]="item.bank_swift">
-                                            </td>
-                                            <td>
-                                                <select class="form-control" name="branch_id" [(ngModel)]="item.branch_id" (change)="changeBranch(item)">
-                                                    <option value="null" selected="true">--Select--</option>
-                                                    <option *ngFor="let i of item.listBranch" [ngValue]="i.id">{{i.branch_name}}</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <input type="text" readonly class="form-control-plaintext" name="full_address" [(ngModel)]="item.full_address">
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" name="account_name" [(ngModel)]="item.account_name">
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" name="account_no" (keypress)="isNumberKeyC($event)" [(ngModel)]="item.account_no">
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" name="iban" [(ngModel)]="item.iban">
-                                            </td>
-                                            <td>
-                                                <button type="button" class="btn btn-default" (click)="removeBankAccount(i)">
-                                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <button type="button" class="btn btn-link mt-2" (click)="addNewBankAccount()">
-                                <i class="fa fa-plus" aria-hidden="true"></i> Add new account</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row" style="margin-top:15px;">
-            <div class="col-sm-12">
-                <div class="card no-border">
-                    <div class="card-header">
-                        CREDIT CARDS:
-                        <strong class="text-danger">{{credit_cards.length}}</strong>
-                        <span *ngIf="credit_cards.length > 1">Records</span>
-                        <span *ngIf="credit_cards.length <= 1">Record</span>
-                        <div class="wrap-keyboard right-toggle-button text-danger mr-2 wrap-icon" (click)="flagCreditCard = !flagCreditCard">
-                            <span class="fa" [ngClass]="{'fa-minus': flagCreditCard,'fa-plus': !flagCreditCard}"></span>
-                        </div>
-                    </div>
-                    <div class="card-body no-padding">
-                        <div *ngIf="flagCreditCard">
-                            <div class="table-responsive list">
-                                <table class="table table-bordered table-order">
-                                    <thead class="bg-white">
-                                        <tr>
-                                            <th> No </th>
-                                            <th> Card Type
-                                                <span class="text-danger">(*)</span>
-                                            </th>
-                                            <th> Card Name
-                                                <span class="text-danger">(*)</span>
-                                            </th>
-                                            <th> Card Number
-                                                <span class="text-danger">(*)</span>
-                                            </th>
-                                            <th> Cvv
-                                                <span class="text-danger">(*)</span>
-                                            </th>
-                                            <th> Expiration Month
-                                                <span class="text-danger">(*)</span>
-                                            </th>
-                                            <th> Expiration Year
-                                                <span class="text-danger">(*)</span>
-                                            </th>
-                                            <th> Action </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let item of credit_cards; let i = index" [ngClass]="{'hidden':item.is_deleted}">
-                                            <td>{{i+1}}</td>
-                                            <td>
-                                                <select class="form-control" name="type" [(ngModel)]="item.type">
-                                                    <option value="null" selected="true">--Select--</option>
-                                                    <option *ngFor="let i of item.listCard" [ngValue]="i.id">{{i.name}}</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" name="name" [(ngModel)]="item.name">
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" name="no" [(ngModel)]="item.no">
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" name="cvv" [(ngModel)]="item.cvv">
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" name="expiration_month" [(ngModel)]="item.expiration_month">
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" name="expiration_year" [(ngModel)]="item.expiration_year">
-                                            </td>
-                                            <td>
-                                                <button type="button" class="btn btn-default" (click)="removeCreditCard(i)">
-                                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <button type="button" class="btn btn-link mt-2" (click)="addNewCreditCard()">
-                                <i class="fa fa-plus" aria-hidden="true"></i> Add new account</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
-
-
-
-        <!-- <div class="row" style="margin-top:15px;" *ngIf="false">
-            <div class="col-sm-12">
-                <div class="card no-border">
-                <div class="card-header">
-                    BANK CARDS:
-                        <strong class="text-danger">{{bank_card.length}}</strong>
-                        <span *ngIf="bank_card.length > 1">Records</span>
-                        <span *ngIf="bank_card.length <= 1">Record</span>
-                    <div class="wrap-keyboard right-toggle-button text-danger mr-2 wrap-icon" (click)="flagCard = !flagCard">
-                        <span class="fa" [ngClass]="{'fa-minus': flagCard,'fa-plus': !flagCard}"></span>
-                    </div>
-                </div>
-                <div class="card-body no-padding">
-                <div *ngIf="flagCard">
-                    <div class="table-responsive list">
-                        <table class="table table-bordered table-order">
-                            <thead class="bg-white">
-                                <tr>
-                                    <th> No </th>
-                                    <th> Card Type </th>
-                                    <th> Card No </th>
-                                    <th> Holder Name </th>
-                                    <th> Expiry Date </th>
-                                    <th> Action </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let item of bank_card; let i = index">
-                                    <td>{{i+1}}</td>
-                                    <td>
-                                        <select class="form-control" name="card_type" [(ngModel)]="item.card_type">
-                                            <option value="null" selected="true">--Select--</option>
-                                            <option *ngFor="let i of item.listCardType" [ngValue]="i.id">{{i.name}}</option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" name="card_no" [(ngModel)]="item.card_no">
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" name="holder" [(ngModel)]="item.holder">
-                                    </td>
-                                    <td>
-                                        <div class="input-group">
-                                            <input class="form-control" placeholder="yyyy-mm-dd" name="expiry_dt" [(ngModel)]="item.expiry_dt" ngbDatepicker #d="ngbDatepicker">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
-                                                    <i class="fa fa-calendar" aria-hidden="true"></i>
-                                                </button>
+                    <div *ngIf="flagCard">
+                        <div class="table-responsive list">
+                            <table class="table table-bordered table-order">
+                                <thead class="bg-white">
+                                    <tr>
+                                        <th> No </th>
+                                        <th> Card Type </th>
+                                        <th> Card No </th>
+                                        <th> Holder Name </th>
+                                        <th> Expiry Date </th>
+                                        <th> Action </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of bank_card; let i = index">
+                                        <td>{{i+1}}</td>
+                                        <td>
+                                            <select class="form-control" name="card_type" [(ngModel)]="item.card_type">
+                                                <option value="null" selected="true">--Select--</option>
+                                                <option *ngFor="let i of item.listCardType" [ngValue]="i.id">{{i.name}}</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" name="card_no" [(ngModel)]="item.card_no">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" name="holder" [(ngModel)]="item.holder">
+                                        </td>
+                                        <td>
+                                            <div class="input-group">
+                                                <input class="form-control" placeholder="yyyy-mm-dd" name="expiry_dt" [(ngModel)]="item.expiry_dt" ngbDatepicker #d="ngbDatepicker">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                                    </button>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-default" (click)="removeBankCard(i)">
-                                            <i class="fa fa-times" aria-hidden="true"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-default" (click)="removeBankCard(i)">
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <button type="button" class="btn btn-link mt-2" (click)="addNewBankCard()">
+                            <i class="fa fa-plus" aria-hidden="true"></i> Add new bank card</button>
                     </div>
-                    <button type="button" class="btn btn-link mt-2" (click)="addNewBankCard()">
-                        <i class="fa fa-plus" aria-hidden="true"></i> Add new bank card</button>
-                </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        </div> -->
-
-
-
-        <div class="row" style="margin-top:15px;" *ngIf="generalForm.value.buyer_type == 'CP'">
-            <div class="col-sm-12">
-                <div class="card no-border">
-                    <div class="card-header">
-                        CONTACTS:
-                        <strong class="text-danger">{{contacts.length}}</strong>
-                        <span *ngIf="contacts.length > 1">Records</span>
-                        <span *ngIf="contacts.length <= 1">Record</span>
-                        <div class="wrap-keyboard right-toggle-button text-danger mr-2 wrap-icon" (click)="flagContact = !flagContact">
-                            <span class="fa" [ngClass]="{'fa-minus': flagContact,'fa-plus': !flagContact}"></span>
-                        </div>
-                    </div>
-                    <div class="card-body no-padding">
-                        <div *ngIf="flagContact">
-                            <div class="table-responsive list">
-                                <table class="table table-bordered table-order">
-                                    <thead class="bg-white">
-                                        <tr>
-                                            <th> No </th>
-                                            <th> Name
-                                                <span class="text-danger">(*)</span>
-                                            </th>
-                                            <th> Title </th>
-                                            <th> Phone </th>
-                                            <th> Fax </th>
-                                            <th> Email
-                                                <span class="text-danger">(*)</span>
-                                            </th>
-                                            <th> Username</th>
-                                            <th> Password</th>
-                                            <th> Action </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let item of contacts; let i = index">
-                                            <td>{{i+1}}</td>
-                                            <td>
-                                                <input type="text" class="form-control" name="full_name" [(ngModel)]="item.name">
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" name="title" [(ngModel)]="item.title">
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" name="phone" [(ngModel)]="item.phone">
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" name="fax" [(ngModel)]="item.fax">
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" name="email" [(ngModel)]="item.email">
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" name="username" [(ngModel)]="item.username">
-                                            </td>
-                                            <td>
-                                                <input type="password" class="form-control" name="pwd" [(ngModel)]="item.password">
-                                            </td>
-                                            <td>
-                                                <button type="button" class="btn btn-default" (click)="removeContact(i)">
-                                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+            </div> -->
+    
+    
+    
+            <div class="row" style="margin-top:15px;" *ngIf="generalForm.value.buyer_type == 'CP'">
+                <div class="col-sm-12">
+                    <div class="card no-border">
+                        <div class="card-header">
+                            CONTACTS:
+                            <strong class="text-danger">{{contacts.length}}</strong>
+                            <span *ngIf="contacts.length > 1">Records</span>
+                            <span *ngIf="contacts.length <= 1">Record</span>
+                            <div class="wrap-keyboard right-toggle-button text-danger mr-2 wrap-icon" (click)="flagContact = !flagContact">
+                                <span class="fa" [ngClass]="{'fa-minus': flagContact,'fa-plus': !flagContact}"></span>
                             </div>
-                            <button type="button" class="btn btn-link mt-2" (click)="addNewContact()">
-                                <i class="fa fa-plus" aria-hidden="true"></i> Add new contact</button>
+                        </div>
+                        <div class="card-body no-padding">
+                            <div *ngIf="flagContact">
+                                <div class="table-responsive list">
+                                    <table class="table table-bordered table-order">
+                                        <thead class="bg-white">
+                                            <tr>
+                                                <th> No </th>
+                                                <th> Name
+                                                    <span class="text-danger">(*)</span>
+                                                </th>
+                                                <th> Title </th>
+                                                <th> Phone </th>
+                                                <th> Fax </th>
+                                                <th> Email
+                                                    <span class="text-danger">(*)</span>
+                                                </th>
+                                                <th> Username</th>
+                                                <th> Password</th>
+                                                <th> Action </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of contacts; let i = index">
+                                                <td>{{i+1}}</td>
+                                                <td>
+                                                    <input type="text" class="form-control" name="full_name" [(ngModel)]="item.name">
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control" name="title" [(ngModel)]="item.title">
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control" name="phone" [(ngModel)]="item.phone">
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control" name="fax" [(ngModel)]="item.fax">
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control" name="email" [(ngModel)]="item.email">
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control" name="username" [(ngModel)]="item.username">
+                                                </td>
+                                                <td>
+                                                    <input type="password" class="form-control" name="pwd" [(ngModel)]="item.password">
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="btn btn-default" (click)="removeContact(i)">
+                                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <button type="button" class="btn btn-link mt-2" (click)="addNewContact()">
+                                    <i class="fa fa-plus" aria-hidden="true"></i> Add new contact</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-
-
-
-        <div class="block-content block-content-full text-right" style="margin-top:15px;">
-            <button type="button" class="btn btn-default" [routerLink]="['/customer']">Cancel</button>
-            <button type="button" [disabled]="!generalForm.valid" class="btn btn-outline-primary" (click)="createCustomer()">Save</button>
-        </div>
-    </section>
-</div>
+    
+    
+    
+    
+            <div class="block-content block-content-full text-right" style="margin-top:15px;">
+                <button type="button" class="btn btn-default" [routerLink]="['/customer']">Cancel</button>
+                <button type="button" [disabled]="!generalForm.valid" class="btn btn-outline-primary" (click)="createCustomer()">Save</button>
+            </div>
+        </section>
+    </div>
