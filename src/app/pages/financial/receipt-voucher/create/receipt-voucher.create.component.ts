@@ -287,7 +287,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
                 this.data['payer'] = res.data;
                 const existed = (this.listMaster['customer'] || []).find(item => item.id === this.data['payer'].company_id);
                 if (!existed) {
-                    this.listMaster['customer'] = [{ id: this.data['payer'].company_id, company_name: this.data['payer'].company_name }, ...this.listMaster['customer']];
+                    this.listMaster['customer'] = [{ id: this.data['payer'].company_id, company_name: this.data['payer'].company_name , name: this.data['payer'].company_name}, ...this.listMaster['customer']];
                 }
                 this.refresh();
             } catch (e) {
@@ -461,8 +461,15 @@ export class ReceiptVoucherCreateComponent implements OnInit {
                 this.toastr.success(res.message);
                 // if (type === 3 && this.isInstallQuickbook) {
                 //     this.finacialService.syncReceiptVoucherToQuickbook(res.data['id']).subscribe(
-                //         _res => {},
-                //         err => {}
+                //         _res => {
+                //             try {
+                //                 const result = JSON.parse(_res['_body']);
+                //                 this.toastr.success(`Receipt Voucher ${result.data[0].entity.DocNumber} has been sync to Quickbooks successfully.`);
+                //             } catch (err) {}
+                //         },
+                //         err => {
+                //             this.toastr.error(`Cannot sync Receipt Voucher to Quickbooks.`);
+                //         }
                 //     );
                 // }
                 if (!is_continue) {

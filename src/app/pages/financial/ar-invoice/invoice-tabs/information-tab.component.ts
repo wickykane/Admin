@@ -125,8 +125,15 @@ export class InvoiceInformationTabComponent implements OnInit {
                 this.toastr.success(res.message);
                 if (status === 4 && this.isInstallQuickbook) {
                     this.financialService.syncInvoiceToQuickbook(id).subscribe(
-                        _res => {},
-                        err => {}
+                        _res => {
+                            try {
+                                const result = JSON.parse(_res['_body']);
+                                this.toastr.success(`Invoice ${result.data[0].entity.DocNumber} has been sync to Quickbooks successfully.`);
+                            } catch (err) {}
+                        },
+                        err => {
+                            this.toastr.error(`Cannot sync invoice to Quickbooks.`);
+                        }
                     );
                 }
                 if (+id === 11) {
