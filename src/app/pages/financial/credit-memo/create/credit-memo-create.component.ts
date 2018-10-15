@@ -90,6 +90,7 @@ export class CreditMemoCreateComponent implements OnInit {
 
     public searchKey = new Subject<any>(); // Lazy load filter
 
+    public isInstallQuickbook = false;
     /**
      * Init Data
      */
@@ -135,6 +136,7 @@ export class CreditMemoCreateComponent implements OnInit {
 
         // List Master
         this.orderService.getOrderReference().subscribe(res => { Object.assign(this.listMaster, res.data); });
+        this.getQuickbookSettings();
         await this.getListPaymentMethod();
         await this.getListPaymentTerm();
         await this.getListAccountGL();
@@ -166,6 +168,14 @@ export class CreditMemoCreateComponent implements OnInit {
      */
     refresh() {
         this.cd.detectChanges();
+    }
+
+    getQuickbookSettings() {
+        this.financialService.getSettingInfoQuickbook().subscribe(
+            res => {
+                this.isInstallQuickbook = res.data.state === 'authorized' ? true : false;
+            }, err => {}
+        );
     }
 
     getListPaymentMethod() {
@@ -552,7 +562,7 @@ export class CreditMemoCreateComponent implements OnInit {
                 if (res.status) {
                     this.toastr.success(res.message);
                     this.data['id'] = res.data.id;
-                    if ( type === 3) {
+                    if ( type === 3 && this.isInstallQuickbook) {
                         this.financialService.syncCreditToQuickbook(this.data['id']).subscribe(
                             _res => {},
                             err => {}

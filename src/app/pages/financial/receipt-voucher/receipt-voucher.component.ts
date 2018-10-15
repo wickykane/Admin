@@ -34,7 +34,7 @@ export class ReceiptVoucherComponent implements OnInit {
     public user: any;
     public onoffFilter: any;
     public data = {};
-
+    public isInstallQuickbook = false;
     searchForm: FormGroup;
     public searchKey = new Subject<any>(); // Lazy load filter
 
@@ -93,6 +93,7 @@ export class ReceiptVoucherComponent implements OnInit {
         this.listMaster['dateType'] = [{ id: 'payment_date', name: 'Payment Date' }, { id: 'created_at', name: 'Created On' }, { id: 'updated_at', name: 'Updated On' }];
         this.listMaster['electType'] = [{ id: 0, name: 'No' }, { id: 1, name: 'Yes' }];
         // Function Init
+        this.getQuickbookSettings();
         this.getList();
         this.getCountStatus();
         this.getListReferenceData();
@@ -117,6 +118,13 @@ export class ReceiptVoucherComponent implements OnInit {
     /**
      * Internal Function
      */
+    getQuickbookSettings() {
+        this.financialService.getSettingInfoQuickbook().subscribe(
+            res => {
+                this.isInstallQuickbook = res.data.state === 'authorized' ? true : false;
+            }, err => {}
+        );
+    }
     getCountStatus() {
         this.receiptVoucherService.countVoucherStatus().subscribe(res => {
             this.listMaster['list-status'] = res.data;
@@ -231,12 +239,12 @@ export class ReceiptVoucherComponent implements OnInit {
         this.receiptVoucherService.updateReceiptVoucherStatus(params).subscribe(res => {
             try {
                 this.toastr.success(res.message);
-                if (status === 3) {
-                    this.financialService.syncReceiptVoucherToQuickbook(id).subscribe(
-                        _res => {},
-                        err => {}
-                    );
-                }
+                // if (status === 3 && this.isInstallQuickbook) {
+                //     this.financialService.syncReceiptVoucherToQuickbook(id).subscribe(
+                //         _res => {},
+                //         err => {}
+                //     );
+                // }
                 this.getList();
                 this.getCountStatus();
             } catch (e) {
