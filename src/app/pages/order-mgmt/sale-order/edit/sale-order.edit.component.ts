@@ -917,7 +917,7 @@ export class SaleOrderEditComponent implements OnInit {
                 params = {
                     'items': products,
                     'is_draft_order': 1,
-                    'order_sts_id': 1
+                    'order_sts_id': this.data['disable'] ? null : 1
                 };
                 break;
         }
