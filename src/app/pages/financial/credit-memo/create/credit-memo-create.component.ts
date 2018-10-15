@@ -564,8 +564,15 @@ export class CreditMemoCreateComponent implements OnInit {
                     this.data['id'] = res.data.id;
                     if ( type === 3 && this.isInstallQuickbook) {
                         this.financialService.syncCreditToQuickbook(this.data['id']).subscribe(
-                            _res => {},
-                            err => {}
+                            _res => {
+                                try {
+                                    const result = JSON.parse(_res['_body']);
+                                    this.toastr.success(`Credit Memo ${result.data[0].entity.DocNumber} has been sync to Quickbooks successfully.`);
+                                } catch (err) {}
+                            },
+                            err => {
+                                this.toastr.error(`Cannot sync Credit Memo to Quickbooks.`);
+                            }
                         );
                     }
                     if (!is_continue) {

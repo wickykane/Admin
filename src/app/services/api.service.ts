@@ -63,10 +63,9 @@ export class ApiService {
     private _customServerError(err) {
         if (err.error instanceof ErrorEvent) {
             return new ErrorObservable(JSON.parse(err._body));
-        }
-        else{
-            if(err.error.data.return_reason){
-                return new ErrorObservable(err.error)
+        } else {
+            if (err.error.data.return_reason) {
+                return new ErrorObservable(err.error);
             }
         }
         return new ErrorObservable(err.error);
@@ -98,6 +97,19 @@ export class ApiService {
             .pipe(
                 catchError(this._customServerError)
             );
+    }
+    /**
+     * This function makes post request without loading spinner
+     * @param path
+     * @param params
+     */
+    postBackground(path, params: object = {}): Observable<any> {
+        return this.http.post(`${environment.api_url}${path}`, JSON.stringify(params), this.headerJson());
+            // .map(res => JSON.parse(res['_body']));
+            // .do(data => data)  // debug
+            // .pipe(
+            //     catchError(this._serverError)
+            // );
     }
     put(path, params: object = {}): Observable<any> {
         return this.httpClient.put(`${environment.api_url}${path}`, JSON.stringify(params), this.headerOptionDefault())

@@ -331,7 +331,12 @@ export class LedgerComponent implements OnInit {
   syncToQuickbook() {
     if (this.isInstallQuickbook) {
         this.ledgerService.syncLedgerAccountToQuickbook().subscribe(
-            res => {},
+            _res => {
+                try {
+                    const result = JSON.parse(_res['_body']);
+                    this.toastr.success(`Ledger Account has been sync to Quickbooks successfully.`);
+                } catch (err) {}
+            },
             err => {}
         );
     }
