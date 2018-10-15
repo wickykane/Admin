@@ -401,7 +401,7 @@ export class RmaCreateComponent implements OnInit {
 
 
                 // Set item and update
-                this.list.returnItem = (data.items || []);
+                this.list.returnItem = data.items.filter((x => x.is_item));
                 this.list.returnItem.forEach(item => {
                     item['reason'] = this.listMaster['return_reason'];
                     item['return_quantity'] = 1;
