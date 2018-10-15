@@ -1,0 +1,94 @@
+<div class="block anchor-scroll block-order">
+    <div class="block-content pd-bottom bg-gray-light short-width">
+        <div class="row">
+            <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
+                <div class="block-search">
+                    <label for="purchase_quote_cd" class="control-label">Subsidiary</label>
+                    <ng-select [multiple]="true" [items]="listMaster['type']" bindLabel="name" bindValue="id" formControlName="type">
+                    </ng-select>
+                </div>
+                <div class="block-search">
+                    <label for="purchase_quote_cd" class="control-label">Year</label>
+                    <ng-select [multiple]="true" [items]="listMaster['type']" bindLabel="name" bindValue="id" formControlName="type">
+                    </ng-select>
+                </div>
+
+            </form>
+            <div class="block-btn-search">
+                <label class="control-label">&nbsp;</label>
+                <div class="group-btn-search">
+                    <button type="button" class="btn-default-custom" (click)="tableService.searchAction()">Search</button>
+                    <button type="button" class="btn-default-custom" (click)="tableService.resetAction(this.searchForm)">Reset</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mg-top-10">
+            <div class="col-md-4">
+                <label class="control-label font-weight-bold">Total Debit</label>
+                <span>123</span>
+            </div>
+            <div class="col-md-4">
+                    <label class="control-label font-weight-bold">Total Credit</label>
+                    <span>123</span>
+                </div>
+                <div class="col-md-4">
+                        <label class="control-label font-weight-bold">Total Balance</label>
+                        <span>123</span>
+                    </div>
+    </div>
+    <div class="row mg-top-10">
+        <div class="col-12">
+            <div class="card no-border">
+                <div class="card-header">
+                    <strong>Line Items</strong>
+                </div>
+                <div class="card-body no-padding">
+                    <div class="scroll-container table-responsive list">
+                        <table class='table table-bordered table-order'>
+                            <thead class="bg-white">
+                                <tr>
+                                    <th translate>Return Order No</th>
+                                    <th translate>Return Type</th>
+                                    <th translate>Customer</th>
+                                    <th translate>Request Date</th>
+                                    <th translate>Status</th>
+                                    <th translate>Sales Order No</th>
+                                    <th translate>Warehouse</th>
+                                    <th translate>Total Return QTY</th>
+                                    <th translate>Total Accepted QTY</th>
+                                    <th translate>Return Time</th>
+                                    <th translate>Salesperson</th>
+                                    <th translate>Last Updated On</th>
+                                    <th translate>Last Updated By</th>
+                                </tr>
+                            </thead>
+                            <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
+                                <tr>
+                                    <td>{{item.code}}</td>
+                                    <td>{{item.cus_po}}</td>
+                                    <td>{{item.quote_no}}</td>
+                                    <td>{{item.buyer_name}}</td>
+                                    <td>{{item.sale_person_name}}</td>
+                                    <td></td>
+                                    <td>{{item.order_date | date:'MM/dd/yyy'}}</td>
+                                    <td>{{item.delivery_date | date:'MM/dd/yyyy'}}</td>
+                                    <td>{{item.total_price | currency}}</td>
+                                    <td> </td>
+                                    <td> </td>
+                                    <td> </td>
+                                    <td> </td>
+                                </tr>
+                            </tbody>
+                            <tbody *ngIf="list.items.length == 0">
+                                <tr>
+                                    <td colspan="100%" class="text-center" translate>No data.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
