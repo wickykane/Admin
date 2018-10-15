@@ -6,6 +6,7 @@ import { CommonShareModule } from '../../shared/index';
 import { ItemService } from './item.service';
 
 import { AddressModalContent } from './address.modal';
+import { BackdropModalContent } from './backdrop.modal';
 import { ConfirmModalContent } from './confirm.modal';
 import { ItemMiscModalContent } from './item-misc.modal';
 import { ItemQuoteModalContent } from './item-quote.modal';
@@ -37,16 +38,16 @@ import { UPSConfigurationModalComponent } from './ups-configuration.modal';
         CommonShareModule,
         RouterModule
     ],
-    declarations: [QuoteModalContent, ItemMiscModalContent, ItemModalContent, AddressModalContent, ConfirmModalContent,
+    declarations: [QuoteModalContent, ItemMiscModalContent, ItemModalContent, AddressModalContent, ConfirmModalContent, BackdropModalContent,
         PromotionModalContent, SiteModalComponent, StateFilterModalComponent, FreeShippingOptionsModalComponent, FlatRateOptionsModalComponent, OrderSaleQuoteModalContent,
         ItemQuoteModalContent, CustomRateOptionsModalComponent, PickupOptionsModalComponent,
         InvoiceModalContent, OrderHistoryModalContent, UPSConfigurationModalComponent, SEFLConfigurationModalComponent],
     providers: [TableService, ItemService],
-    exports: [QuoteModalContent, ItemMiscModalContent, ItemModalContent, AddressModalContent, ConfirmModalContent, ItemQuoteModalContent,
+    exports: [QuoteModalContent, ItemMiscModalContent, ItemModalContent, AddressModalContent, ConfirmModalContent, BackdropModalContent, ItemQuoteModalContent,
         PromotionModalContent, SiteModalComponent, StateFilterModalComponent, FreeShippingOptionsModalComponent, FlatRateOptionsModalComponent, OrderSaleQuoteModalContent,
         InvoiceModalContent, CustomRateOptionsModalComponent, OrderHistoryModalContent, PickupOptionsModalComponent, UPSConfigurationModalComponent, SEFLConfigurationModalComponent],
     entryComponents: [QuoteModalContent, ItemMiscModalContent, ItemModalContent, AddressModalContent, ItemQuoteModalContent,
-        ConfirmModalContent, PromotionModalContent, SiteModalComponent, StateFilterModalComponent, FreeShippingOptionsModalComponent, FlatRateOptionsModalComponent,
+        ConfirmModalContent, BackdropModalContent, PromotionModalContent, SiteModalComponent, StateFilterModalComponent, FreeShippingOptionsModalComponent, FlatRateOptionsModalComponent,
         OrderSaleQuoteModalContent, InvoiceModalContent, OrderHistoryModalContent, CustomRateOptionsModalComponent, PickupOptionsModalComponent, UPSConfigurationModalComponent, SEFLConfigurationModalComponent]
 
 
