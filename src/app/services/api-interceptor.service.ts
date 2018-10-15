@@ -24,7 +24,14 @@ export class ApiInterceptorService {
           window.location.href = `${environment.nab_url}/#/login`;
         } else {
           try {
-            this.toastr.error(err.error.message);
+            if (err.status === 424 && err.url.includes('quick-books/sync-account?force=true')) { // This is for sync Ledger Account to Quickbooks
+                const firstFailedAccount = err.error.data.find(account => account.success === false);
+                if (firstFailedAccount !== undefined) {
+                    this.toastr.error(`Cannot sync Ledger Account "${firstFailedAccount.entity.Name}" to Quickbooks.`);
+                }
+            } else {
+                this.toastr.error(err.error.message);
+            }
           } catch (e) { }
         }
       }

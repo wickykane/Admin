@@ -276,8 +276,15 @@ export class DebitMemoListComponent implements OnInit {
                     this.toastr.success(res.message);
                     if (newStatus === 3 && this.isInstallQuickbook) {
                         this.financialService.syncDebitToQuickbook(debitId).subscribe(
-                            _res => {},
-                            err => {}
+                            _res => {
+                                try {
+                                    const result = JSON.parse(_res['_body']);
+                                    this.toastr.success(`Debit Memo ${result.data[0].entity.DocNumber} has been sync to Quickbooks successfully.`);
+                                } catch (err) {}
+                            },
+                            err => {
+                                this.toastr.error(`Cannot sync Debit Memo to Quickbooks.`);
+                            }
                         );
                     }
                     this.getListDebitMemo();

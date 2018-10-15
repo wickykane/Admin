@@ -30,7 +30,7 @@
                         <ng-select class="infinity-scroll-select" style="width: 110px;" [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" [items]="listMaster['customer']" bindLabel="name" bindValue="id" formControlName="customer_id">
                             <ng-template ng-option-tmp let-item="item">
                                 <span [innerHTML]="item.company_name"></span>
-                            </ng-template>
+                            </ng-template>\
                         </ng-select>
                     </div>
                     <div class="block-search">

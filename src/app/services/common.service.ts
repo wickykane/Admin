@@ -56,8 +56,8 @@ export class CommonService {
         const url = 'order/reference-data';
         return this.apiService.get(url);
     }
-    changeStatus(id){
-        const url = 'shipping-zone/change-status/'+id;
+    changeStatus(id) {
+        const url = 'shipping-zone/change-status/' + id;
         return this.apiService.get(url);
     }
 }

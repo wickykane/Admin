@@ -269,7 +269,7 @@ export class SaleOrderEditComponent implements OnInit {
                     const idList = result.data.rows.map(item => item.id);
                     this.listMaster['customer'] = result.data.rows;
                     if (idList.indexOf(res.data.buyer_id) === -1) {
-                        this.listMaster['customer'].push({ id: res.data.buyer_id, company_name: res.data.buyer_name });
+                        this.listMaster['customer'].push({ id: res.data.buyer_id, company_name: res.data.buyer_name, name: res.data.buyer_name });
                     }
                     this.data['total_page'] = result.data.total_page;
                     this.refresh();
@@ -345,6 +345,7 @@ export class SaleOrderEditComponent implements OnInit {
         this.addr_select = Object.create(this.copy_addr);
         if (buyer_id) {
             this.getDetailCustomerById(buyer_id, flag);
+            this.getActiveSaleQuote(buyer_id);
         }
         if (!flag) {
             // this.list.items = [];
@@ -440,10 +441,12 @@ export class SaleOrderEditComponent implements OnInit {
         }
 
         // Check disable method options
-        if (!enable || !this.data['disable']) {
+        if (!enable) {
             this.generalForm.controls['ship_method_option'].disable();
         } else {
-            this.generalForm.controls['ship_method_option'].enable();
+            if (!this.data['disable']) {
+                this.generalForm.controls['ship_method_option'].enable();
+            }
         }
 
 
@@ -694,6 +697,11 @@ export class SaleOrderEditComponent implements OnInit {
             this.updateTotal();
             this.order_info['original_ship_cost'] = res.data.price;
             this.refresh();
+        });
+    }
+    getActiveSaleQuote(id) {
+        this.orderService.getQuantityActiveQuote(id).subscribe(res => {
+            this.data['qty_quote'] = res.data;
         });
     }
 

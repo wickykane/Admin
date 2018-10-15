@@ -354,7 +354,7 @@ export class DebitMemoEditComponent implements OnInit {
                         const idList = result.data.rows.map(item => item.id);
                         this.listMaster['customers'] = result.data.rows;
                         if (res.data.company_id && idList.indexOf(res.data.company_id) === -1) {
-                            this.listMaster['customers'].push({ id: res.data.company_id, company_name: res.data.company_name });
+                            this.listMaster['customers'].push({ id: res.data.company_id, name: res.data.company_name, company_name: res.data.company_name });
                         }
                         this.data['total_page'] = result.data.total_page;
                     });
@@ -677,8 +677,15 @@ export class DebitMemoEditComponent implements OnInit {
                     this.toastr.success(res.message);
                     if ( status === 3 && this.isInstallQuickbook) {
                         this.financialService.syncDebitToQuickbook(this.debitId).subscribe(
-                            _res => {},
-                            err => {}
+                            _res => {
+                                try {
+                                    const result = JSON.parse(_res['_body']);
+                                    this.toastr.success(`Debit Memo ${result.data[0].entity.DocNumber} has been sync to Quickbooks successfully.`);
+                                } catch (err) {}
+                            },
+                            err => {
+                                this.toastr.error(`Cannot sync Debit Memo to Quickbooks.`);
+                            }
                         );
                     }
                     this.handleSaveSuccessfully(status, this.debitId);
