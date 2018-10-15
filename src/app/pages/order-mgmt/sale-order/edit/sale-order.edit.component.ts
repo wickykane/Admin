@@ -875,7 +875,7 @@ export class SaleOrderEditComponent implements OnInit {
         this.orderService.updateStatusOrder(id, 7).subscribe(res => {
             this.toastr.success(res.message);
             setTimeout(() => {
-                this.router.navigate(['/order-management/sale-order']);
+                this.router.navigate(['/order-management/sale-order/detail/', this.route.snapshot.paramMap.get('id')]);
             }, 500);
         });
     }
@@ -927,7 +927,7 @@ export class SaleOrderEditComponent implements OnInit {
                 // if (res.status) {
                 this.toastr.success(res.message);
                 setTimeout(() => {
-                    this.router.navigate(['/order-management/sale-order']);
+                    this.router.navigate(['/order-management/sale-order/detail/', this.route.snapshot.paramMap.get('id')]);
                 }, 500);
                 // } else {
                 //     this.toastr.error(res.message);
