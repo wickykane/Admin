@@ -6,20 +6,19 @@ import { KeyboardBaseService } from './../../../../shared/helper/keyServiceBase'
 export class DebitMemoCreateKeyService extends KeyboardBaseService {
 
     keyConfig = {
-        company_id: {
+        buyer_id: {
             element: null,
+            focus: true,
             ng_select: true,
         },
-        contact_user_id: {
-            element: null,
-        },
-        customer_po: {
-            element: null,
-        },
-        type: {
-            element: null,
-        },
     };
+
+    saveKeys() {
+        this.keys = this.getKeys();
+        this.context.data['tableKey'] = this.context.table.getKeys();
+        this.resetKeys();
+        this.context.table.resetKeys();
+    }
 
     initKey() {
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+backspace', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
@@ -40,6 +39,7 @@ export class DebitMemoCreateKeyService extends KeyboardBaseService {
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+i', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             (document.activeElement as HTMLInputElement).blur();
             if (this.context.debitMemoForm.controls.order_id.valid) {
+                this.saveKeys();
                 setTimeout(() => {
                     this.context.openModalAddItemsOrder();
                 });
@@ -52,6 +52,7 @@ export class DebitMemoCreateKeyService extends KeyboardBaseService {
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+m', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             (document.activeElement as HTMLInputElement).blur();
             if (this.context.debitMemoForm.controls.order_id.valid) {
+                this.saveKeys();
                 setTimeout(() => {
                     this.context.openModalAddMiscItems();
                 });

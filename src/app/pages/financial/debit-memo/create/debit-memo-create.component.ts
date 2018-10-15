@@ -30,7 +30,7 @@ import * as moment from 'moment';
     styleUrls: ['./debit-memo-create.component.scss'],
     animations: [routerTransition()],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [DebitMemoCreateKeyService, HotkeysService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }]
+    providers: [DebitMemoCreateKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }]
 })
 export class DebitMemoCreateComponent implements OnInit {
 
@@ -500,6 +500,10 @@ export class DebitMemoCreateComponent implements OnInit {
         };
         modalRef.componentInstance.setIgnoredItems = params;
         modalRef.result.then(res => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
             if (res) {
                 res.forEach(selectedItem => {
                     const itemIndex = this.listDeletedLineItem.findIndex(item => item.order_detail_id === selectedItem.order_detail_id);
@@ -511,7 +515,12 @@ export class DebitMemoCreateComponent implements OnInit {
                 this.getUniqueTaxItemLine();
                 this.refresh();
             }
-        }, dismiss => { });
+        }, dismiss => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
+        });
     }
 
     openModalAddMiscItems() {
@@ -524,6 +533,10 @@ export class DebitMemoCreateComponent implements OnInit {
         };
         modalRef.componentInstance.setIgnoredItems = params;
         modalRef.result.then(res => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
             if (res) {
                 res.forEach(selectedItem => {
                     const itemIndex = this.listDeletedLineItem.findIndex(item => item.misc_id === selectedItem.misc_id);
@@ -535,7 +548,12 @@ export class DebitMemoCreateComponent implements OnInit {
                 this.getUniqueTaxItemLine();
                 this.refresh();
             }
-        }, dismiss => { });
+        }, dismiss => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
+        });
     }
 
     onClickSave(saveMethod) {

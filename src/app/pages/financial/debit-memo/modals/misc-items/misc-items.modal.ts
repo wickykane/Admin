@@ -17,7 +17,7 @@ declare var jQuery: any;
     selector: 'app-misc-items-modal-content',
     templateUrl: './misc-items.modal.html',
     styleUrls: ['./misc-items.modal.scss'],
-    providers: [DebitMemoService, TableService]
+    providers: [DebitMemoService, TableService, HotkeysService]
 })
 // tslint:disable-next-line:component-class-suffix
 export class MiscItemsDebitModalContent implements OnInit, OnDestroy {
@@ -140,7 +140,7 @@ export class MiscItemsDebitModalContent implements OnInit, OnDestroy {
             return e;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Focus Search'));
 
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+q', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             event.preventDefault();
             this.getListItems();
             const e: ExtendedKeyboardEvent = event;
@@ -148,7 +148,7 @@ export class MiscItemsDebitModalContent implements OnInit, OnDestroy {
             return e;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Search'));
 
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+w', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+r', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             event.preventDefault();
             this.searchForm.reset();
             this.getListItems();
@@ -157,7 +157,7 @@ export class MiscItemsDebitModalContent implements OnInit, OnDestroy {
             return e;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset'));
 
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+e', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+t', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             this.selectTable();
             const e: ExtendedKeyboardEvent = event;
             e.returnValue = false; // Prevent bubbling
