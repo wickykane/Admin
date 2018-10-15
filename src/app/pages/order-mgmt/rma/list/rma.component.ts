@@ -8,6 +8,7 @@ import { routerTransition } from '../../../../router.animations';
 import { TableService } from '../../../../services/table.service';
 import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
 import { cdArrowTable } from '../../../../shared/index';
+import { BackdropModalContent } from '../../../../shared/modals/backdrop.modal';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 
 import { HotkeysService } from 'angular2-hotkeys';
@@ -248,6 +249,42 @@ export class RmaComponent implements OnInit {
         const params = { return_order_id: id, status_id: status };
         this.service.updateStatus(params).subscribe(res => {
             try {
+
+                if (status === 5) {
+                    if (!res.status && res.message === 'show popup') {
+                      this.checkStatusOrder(id);
+                    }
+                } else {
+                    this.toastr.success(res.message);
+                    this.getList();
+                    this.getRMAReference();
+                }
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
+
+    checkStatusOrder(id) {
+      const modalRef = this.modalService.open(BackdropModalContent, { size: 'lg', windowClass: 'modal-md', backdrop: 'static', keyboard: false });
+      modalRef.result.then( res => {
+          if (res) {
+            this.service.updateChange(id).subscribe(result => {
+                try {
+                    this.confirmModal(id, 2, '');
+                } catch (e) {
+                    console.log(e);
+                }
+            });
+          }
+      }, dismiss => { });
+      modalRef.componentInstance.message = 'The sales order status is delivering. The return order will be canceled now. You can create the return until the goods delivered to customer.';
+      modalRef.componentInstance.yesButtonText = 'OK';
+    }
+
+    completeStatus(id) {
+        this.service.completeStatus(id).subscribe(res => {
+            try {
                 this.toastr.success(res.message);
                 this.getList();
                 this.getRMAReference();
@@ -257,27 +294,15 @@ export class RmaComponent implements OnInit {
         });
     }
 
-    completeStatus(id) {
-      this.service.completeStatus(id).subscribe(res => {
-          try {
-              this.toastr.success(res.message);
-              this.getList();
-              this.getRMAReference();
-          } catch (e) {
-              console.log(e);
-          }
-      });
-    }
-
     confirmModal(id, status, status_item) {
         const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
         modalRef.result.then(res => {
             if (res) {
-              if (status !== 7) {
-                this.updateStatus(id, status);
-              } else {
-                this.completeStatus(id);
-              }
+                if (status !== 7) {
+                    this.updateStatus(id, status);
+                } else {
+                    this.completeStatus(id);
+                }
             }
         }, dismiss => { });
         switch (status) {
