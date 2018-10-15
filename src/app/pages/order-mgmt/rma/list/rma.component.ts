@@ -36,7 +36,7 @@ export class RmaComponent implements OnInit {
         'AP': 'Are you sure that you want to approve and send this return order to warehouse?',
         'RJ': 'Are you sure that you want to reject current order?',
         'RC': 'Are you sure that you want to revise this return order?',
-        'CC_AR': 'Are you sure that you want to cancel this order and inform to warehouse?'
+        'CP': 'Are you sure that you want to complete this return order?'
     };
 
     public statusConfig = {
@@ -134,12 +134,12 @@ export class RmaComponent implements OnInit {
     }
 
     createRMA() {
-      this.router.navigate(['/order-management/return-order/create']);
+        this.router.navigate(['/order-management/return-order/create']);
     }
 
     detailRMA() {
-      const id = this.list.items[this.selectedIndex].id;
-      this.router.navigate(['/order-management/return-order/detail', id]);
+        const id = this.list.items[this.selectedIndex].id;
+        this.router.navigate(['/order-management/return-order/detail', id]);
     }
 
     detailOrder() {
@@ -257,27 +257,43 @@ export class RmaComponent implements OnInit {
         });
     }
 
+    completeStatus(id) {
+      this.service.completeStatus(id).subscribe(res => {
+          try {
+              this.toastr.success(res.message);
+              this.getList();
+              this.getRMAReference();
+          } catch (e) {
+              console.log(e);
+          }
+      });
+    }
+
     confirmModal(id, status, status_item) {
         const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
         modalRef.result.then(res => {
             if (res) {
+              if (status !== 7) {
                 this.updateStatus(id, status);
+              } else {
+                this.completeStatus(id);
+              }
             }
         }, dismiss => { });
         switch (status) {
             case 2:
                 // cancel
-                this.selected_message = (status_item < 3) ? this.messageConfig.CC : this.messageConfig.CC_AR ;
+                this.selected_message = this.messageConfig.CC;
                 break;
             case 3:
                 this.selected_message = this.messageConfig.SB;
                 break;
-            case 4:
-            // this.selected_message = this.messageConfig.reject;
-            // break;
             case 5:
-            this.selected_message = this.messageConfig.AP;
-            break;
+                this.selected_message = this.messageConfig.AP;
+                break;
+            case 7:
+                this.selected_message = this.messageConfig.CP;
+                break;
         }
         modalRef.componentInstance.message = this.selected_message;
         modalRef.componentInstance.yesButtonText = 'Yes';
