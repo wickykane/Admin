@@ -29,7 +29,7 @@ export class CustomerCustomerBalanceTabComponent implements OnInit {
 
     public listMaster = {};
 
-    public list = [];
+    public list: any;
 
     searchForm: FormGroup;
 
