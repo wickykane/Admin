@@ -345,6 +345,7 @@ export class SaleOrderEditComponent implements OnInit {
         this.addr_select = Object.create(this.copy_addr);
         if (buyer_id) {
             this.getDetailCustomerById(buyer_id, flag);
+            this.getActiveSaleQuote(buyer_id);
         }
         if (!flag) {
             // this.list.items = [];
@@ -696,6 +697,11 @@ export class SaleOrderEditComponent implements OnInit {
             this.updateTotal();
             this.order_info['original_ship_cost'] = res.data.price;
             this.refresh();
+        });
+    }
+    getActiveSaleQuote(id) {
+        this.orderService.getQuantityActiveQuote(id).subscribe(res => {
+            this.data['qty_quote'] = res.data;
         });
     }
 
