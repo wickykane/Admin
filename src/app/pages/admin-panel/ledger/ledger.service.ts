@@ -70,4 +70,12 @@ export class LedgerService {
         return this.apiService.delete(url);
     }
 
+    syncLedgerAccountToQuickbook() {
+        const url = 'quick-books/sync-account?force=true';
+        return this.apiService.post(url);
+    }
+    getSettingInfoQuickbook() {
+        const url = 'quick-books/oauth2/settings';
+        return this.apiService.get(url);
+    }
 }

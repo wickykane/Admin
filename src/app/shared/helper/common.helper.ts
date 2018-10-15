@@ -10,9 +10,9 @@ export class Helper {
     }
 
     keyBoardConst() {
-        const isIEOrEdge = /msie\s|trident\/|edge\//i.test(window.navigator.userAgent);
+        const isIEOrEdge = /msie\s|trident\//i.test(window.navigator.userAgent);
         if (isIEOrEdge) {
-            return 'shift';
+            return 'ctrl+alt';
         } else {
             return 'alt';
         }

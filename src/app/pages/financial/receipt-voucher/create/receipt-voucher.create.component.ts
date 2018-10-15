@@ -67,6 +67,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
 
     public searchKey = new Subject<any>(); // Lazy load filter
     public checkAllItem;
+    public isInstallQuickbook = false;
 
     /**
      * Init Data
@@ -122,7 +123,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
 
         // List Master
         this.getListReference();
-
+        this.getQuickbookSettings();
         // Lazy Load filter
         this.data['page'] = 1;
         const params = { page: this.data['page'], length: 100 };
@@ -171,6 +172,14 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             });
             this.getListInvoiceAndMemo(data.inv_num, data.tot_amt);
         });
+    }
+
+    getQuickbookSettings() {
+        this.finacialService.getSettingInfoQuickbook().subscribe(
+            res => {
+                this.isInstallQuickbook = res.data.state === 'authorized' ? true : false;
+            }, err => {}
+        );
     }
 
     refresh() {
@@ -450,12 +459,12 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         this.voucherService.createVoucher(params).subscribe(res => {
             try {
                 this.toastr.success(res.message);
-                if (type === 3) {
-                    this.finacialService.syncReceiptVoucherToQuickbook(res.data['id']).subscribe(
-                        _res => {},
-                        err => {}
-                    );
-                }
+                // if (type === 3 && this.isInstallQuickbook) {
+                //     this.finacialService.syncReceiptVoucherToQuickbook(res.data['id']).subscribe(
+                //         _res => {},
+                //         err => {}
+                //     );
+                // }
                 if (!is_continue) {
                     this.data['voucher_id'] = res.data['id'];
                     setTimeout(() => {
