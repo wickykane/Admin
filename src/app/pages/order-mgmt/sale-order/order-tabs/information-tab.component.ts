@@ -216,9 +216,10 @@ export class SaleOrderInformationTabComponent implements OnInit {
         this.orderService.approveOrd(order_id).subscribe(res => {
             // if (res.status) {
             this.toastr.success(res.message);
-            setTimeout(() => {
-                this.router.navigate(['/order-management/sale-order']);
-            }, 500);
+            this.getList();
+            // setTimeout(() => {
+            //     this.router.navigate(['/order-management/sale-order']);
+            // }, 500);
             // } else {
             //     this.toastr.error(res.message);
             // }
@@ -230,9 +231,10 @@ export class SaleOrderInformationTabComponent implements OnInit {
         this.orderService.updateStatusOrder(order_id, status).subscribe(res => {
             // if (res.status) {
             this.toastr.success(res.message);
-            setTimeout(() => {
-                this.router.navigate(['/order-management/sale-order']);
-            }, 500);
+            this.getList();
+            // setTimeout(() => {
+            //     this.router.navigate(['/order-management/sale-order']);
+            // }, 500);
             // } else {
             //     this.toastr.error(res.message);
             // }
