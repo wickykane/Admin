@@ -354,7 +354,7 @@ export class DebitMemoEditComponent implements OnInit {
                         const idList = result.data.rows.map(item => item.id);
                         this.listMaster['customers'] = result.data.rows;
                         if (res.data.company_id && idList.indexOf(res.data.company_id) === -1) {
-                            this.listMaster['customers'].push({ id: res.data.company_id, company_name: res.data.company_name });
+                            this.listMaster['customers'].push({ id: res.data.company_id, name: res.data.company_name, company_name: res.data.company_name });
                         }
                         this.data['total_page'] = result.data.total_page;
                     });

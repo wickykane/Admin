@@ -240,7 +240,7 @@ export class InvoiceEditComponent implements OnInit {
                     this.listMaster['customer'] = result.data.rows;
                     this.changeCustomer(1);
                     // if (res.data.buyer_id && idList.indexOf(res.data.buyer_id) === -1) {
-                    //     this.listMaster['customer'].push({ id: res.data.buyer_id, company_name: res.data.buyer_name });
+                    //     this.listMaster['customer'].push({ id: res.data.buyer_id, company_name: res.data.buyer_name , name: res.data.buyer_name});
                     // }
                     this.data['total_page'] = result.data.total_page;
                     this.refresh();
@@ -378,7 +378,7 @@ export class InvoiceEditComponent implements OnInit {
                 this.customer = res.data;
                 const idList = (this.listMaster['customer'] || []).map(item => item.id);
                 if (res.data.company_id && idList.indexOf(res.data.company_id) === -1) {
-                    this.listMaster['customer'] = [...this.listMaster['customer'], { id: res.data.company_id, company_name: res.data.company_name }];
+                    this.listMaster['customer'] = [...this.listMaster['customer'], { id: res.data.company_id, company_name: res.data.company_name ,   name: res.data.company_name }];
                 }
 
                 if (res.data.buyer_type === 'PS' && res.data.contact[0]) {

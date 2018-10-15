@@ -239,7 +239,7 @@ export class SaleQuotationEditComponent implements OnInit {
                     const idList = result.data.rows.map(item => item.id);
                     this.listMaster['customer'] = result.data.rows;
                     if (res.data.buyer_id && idList.indexOf(res.data.buyer_id) === -1) {
-                        this.listMaster['customer'].push({ id: res.data.buyer_id, company_name: res.data.buyer_name });
+                        this.listMaster['customer'].push({ id: res.data.buyer_id, company_name: res.data.buyer_name , name: res.data.buyer_name});
                     }
                     this.data['total_page'] = result.data.total_page;
                     this.refresh();

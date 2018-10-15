@@ -287,7 +287,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
                 this.data['payer'] = res.data;
                 const existed = (this.listMaster['customer'] || []).find(item => item.id === this.data['payer'].company_id);
                 if (!existed) {
-                    this.listMaster['customer'] = [{ id: this.data['payer'].company_id, company_name: this.data['payer'].company_name }, ...this.listMaster['customer']];
+                    this.listMaster['customer'] = [{ id: this.data['payer'].company_id, company_name: this.data['payer'].company_name , name: this.data['payer'].company_name}, ...this.listMaster['customer']];
                 }
                 this.refresh();
             } catch (e) {
