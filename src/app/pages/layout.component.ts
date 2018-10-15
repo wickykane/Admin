@@ -9,5 +9,11 @@ import { Spinkit } from 'ng-http-loader/spinkits';
 export class LayoutComponent implements OnInit {
     constructor() {}
     public spinkit = Spinkit;
-    ngOnInit() {}
+    ngOnInit() {
+        const element = document.getElementById('page-loading');
+        if (element) {
+            element.parentNode.removeChild(element);
+        }
+
+    }
 }

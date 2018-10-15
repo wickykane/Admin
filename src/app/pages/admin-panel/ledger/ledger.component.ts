@@ -53,7 +53,7 @@ export class LedgerComponent implements OnInit {
     prefix: '',
     integerLimit: 6
   });
-
+  public isInstallQuickbook = false;
 
   constructor(
     private cd: ChangeDetectorRef,
@@ -95,6 +95,7 @@ export class LedgerComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getQuickbookSettings();
     this.getAccountTree();
     this.listMaster['expands'] = [];
     this.listMaster['status'] = [
@@ -252,6 +253,13 @@ export class LedgerComponent implements OnInit {
    * Internal Function
    */
 
+    getQuickbookSettings() {
+        this.ledgerService.getSettingInfoQuickbook().subscribe(
+            res => {
+                this.isInstallQuickbook = res.data.state === 'authorized' ? true : false;
+            }, err => {}
+        );
+    }
   getList() {
     const params = { ...this.searchForm.value };
     Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
@@ -320,4 +328,12 @@ export class LedgerComponent implements OnInit {
       dismiss => { });
   }
 
+  syncToQuickbook() {
+    if (this.isInstallQuickbook) {
+        this.ledgerService.syncLedgerAccountToQuickbook().subscribe(
+            res => {},
+            err => {}
+        );
+    }
+  }
 }

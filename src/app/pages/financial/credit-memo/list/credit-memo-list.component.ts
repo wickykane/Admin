@@ -38,6 +38,8 @@ export class CreditMemoListComponent implements OnInit {
 
     searchForm: FormGroup;
 
+    public isInstallQuickbook = false;
+
     public messageConfig = {
         '2': 'Are you sure that you want to submit this credit memo?',
         '5': 'Are you sure that you want to cancel this credit memo?',
@@ -90,6 +92,7 @@ export class CreditMemoListComponent implements OnInit {
         //  Init Fn
         this.listMaster['dateType'] = [{ id: 'issue_date', name: 'Issue Date' }, { id: 'updated_dt', name: 'Updated Date' }];
         this.getList();
+        this.getQuickbookSettings();
         this.getListStatus();
         this.user = JSON.parse(localStorage.getItem('currentUser'));
     }
@@ -127,6 +130,15 @@ export class CreditMemoListComponent implements OnInit {
             }
         });
     }
+
+    getQuickbookSettings() {
+        this.financialService.getSettingInfoQuickbook().subscribe(
+            res => {
+                this.isInstallQuickbook = res.data.state === 'authorized' ? true : false;
+            }, err => {}
+        );
+    }
+
     getCountStatus() {
         this.creditMemoService.countCountStatus().subscribe(res => {
             res.data.map(item => {
@@ -192,7 +204,7 @@ export class CreditMemoListComponent implements OnInit {
         this.creditMemoService.updateCreditStatus(params).subscribe(res => {
             try {
                 this.toastr.success(res.message);
-                if (status === 3) {
+                if (status === 3 && this.isInstallQuickbook) {
                     this.financialService.syncCreditToQuickbook(id).subscribe(
                         _res => {},
                         err => {}

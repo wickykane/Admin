@@ -11,7 +11,7 @@
             <form class="form-horizontal form-search" [formGroup]="searchForm">
                 <div class="block-search">
                     <label for="so" class="control-label">Quote No</label>
-                    <input [keyConfig]="data['key_config']" appKeyNavigate="no" type="text" name="so" formControlName="no" class="form-control">
+                    <input [keyConfig]="data['key_config']" appKeyNavigate="quote_no" type="text" name="so" formControlName="quote_no" class="form-control">
                 </div>
                 <div class="block-search">
                     <label for="so" class="control-label">Part No</label>
@@ -20,7 +20,7 @@
                 <div class="block-search">
                     <label for="so" class="control-label">Quote Date</label>
                     <div clickOutside (clickOutside)="d.close()" class="input-group">
-                        <input [maxDate]="searchForm.value.date_to | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="d" formControlName="qt_dt" ngbDatepicker #d="ngbDatepicker">
+                        <input class="form-control" placeholder="mm/dd/yyyy" name="d" formControlName="quote_dt" ngbDatepicker #d="ngbDatepicker">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
                                 <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -66,20 +66,20 @@
                         </label>
                     </td>
                     <td>
-                        <a class="text-primary" target="_blank" [routerLink]="['order-management/sale-quotation/detail/', item.id]" href="javascript: void(0)"> {{item.no}}</a>
+                        <a class="text-primary" target="_blank" [routerLink]="['order-management/sale-quotation/detail/', item.id]" href="javascript: void(0)"> {{item.quote_no}}</a>
                     </td>
-                    <td>{{item.qty}}</td>
-                    <td>{{item.amount | currency}}</td>
-                    <td>{{item.qt_dt | date: 'MM/DD/YYYY'}}</td>
-                    <td>{{ item.status}}</td>
-                    <td>{{ item.salesperson}}</td>
+                    <td>{{item.total_item}}</td>
+                    <td>{{item.total_price | currency}}</td>
+                    <td>{{item.quote_date | date: 'MM/dd/yyyy'}}</td>
+                    <td>{{ item.sts}}</td>
+                    <td>{{ item.sale_person_name}}</td>
                 </tr>
                 <tr *ngIf="list.items.length === 0">
                     <td colspan="100%" class="text-center">No data.</td>
                 </tr>
             </table>
         </div>
-        <div class="row normal-pagination" *ngIf="list.items.length > 0">
+        <!-- <div class="row normal-pagination" *ngIf="list.items.length > 0">
             <div class="col-md-6">
                 <div class="text-left">
                     <div class="col-md-6" style="padding-left: 0px;">
@@ -96,7 +96,7 @@
                         [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
                 </div>
             </div>
-        </div>
+        </div> -->
 
     </div>
 

@@ -71,6 +71,7 @@ export class DebitMemoCreateComponent implements OnInit {
 
     public debitMemoForm: FormGroup;
     public currentUser = {};
+    public isInstallQuickbook = false;
     //#endregion initialize variables
 
     //#region contructor
@@ -144,7 +145,7 @@ export class DebitMemoCreateComponent implements OnInit {
         this.getListPaymentTerms();
         this.getListSalePerson();
         this.getListApprover();
-
+        this.getQuickbookSettings();
         this.debitMemoForm.controls.issue_date.setValue(this.todayDate);
         this.currentDt = (new Date()).toISOString().slice(0, 10);
     }
@@ -153,6 +154,14 @@ export class DebitMemoCreateComponent implements OnInit {
     //#region load master data
     refresh() {
         this.cd.detectChanges();
+    }
+
+    getQuickbookSettings() {
+        this.financialService.getSettingInfoQuickbook().subscribe(
+            res => {
+                this.isInstallQuickbook = res.data.state === 'authorized' ? true : false;
+            }, err => {}
+        );
     }
 
     getDebitMemoNo() {
@@ -607,7 +616,7 @@ export class DebitMemoCreateComponent implements OnInit {
             res => {
                 try {
                     this.toastr.success(res.message);
-                    if ( status === 3) {
+                    if ( status === 3 && this.isInstallQuickbook) {
                         this.financialService.syncDebitToQuickbook(res.data['id']).subscribe(
                             _res => {},
                             err => {}

@@ -13,9 +13,6 @@ export class SaleOrderViewKeyService extends KeyboardBaseService {
     };
 
     initKey() {
-        if (this.context.parent.data['shortcut']) {
-            return;
-        }
         this._hotkeysService.add(new Hotkey('alt+backspace', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             this.context.cancel();

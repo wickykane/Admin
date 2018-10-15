@@ -48,7 +48,7 @@ export class ReceiptVoucherEditComponent implements OnInit {
     public listMaster = {};
     public selectedIndex = 0;
     public data = {};
-
+    public isInstallQuickbook = false;
     public messageConfig = {
         '2': 'Are you sure that you want to submit this receipt voucher?',
         '3': 'Are you sure that you want to Save & Validate this receipt voucher?',
@@ -121,7 +121,7 @@ export class ReceiptVoucherEditComponent implements OnInit {
         this.data['voucher_id'] = this.route.snapshot.params.id;
         // List Master
         this.getListReference();
-
+        this.getQuickbookSettings();
         this.generalForm.patchValue({
             approver_id: user.id,
             updated_by: user.full_name,
@@ -153,6 +153,14 @@ export class ReceiptVoucherEditComponent implements OnInit {
      */
     refresh() {
         this.cd.detectChanges();
+    }
+
+    getQuickbookSettings() {
+        this.financialService.getSettingInfoQuickbook().subscribe(
+            res => {
+                this.isInstallQuickbook = res.data.state === 'authorized' ? true : false;
+            }, err => {}
+        );
     }
 
     getVoucherDetail() {
@@ -441,12 +449,12 @@ export class ReceiptVoucherEditComponent implements OnInit {
             try {
                 this.data['voucher_id'] = res.data['id'];
                 this.toastr.success(res.message);
-                if (type === 3) {
-                    this.financialService.syncReceiptVoucherToQuickbook(res.data['id']).subscribe(
-                        _res => {},
-                        err => {}
-                    );
-                }
+                // if (type === 3 && this.isInstallQuickbook) {
+                //     this.financialService.syncReceiptVoucherToQuickbook(res.data['id']).subscribe(
+                //         _res => {},
+                //         err => {}
+                //     );
+                // }
                 if (!is_continue) {
                     setTimeout(() => {
                         this.router.navigate(['/financial/receipt-voucher/view/' + this.data['voucher_id']]);

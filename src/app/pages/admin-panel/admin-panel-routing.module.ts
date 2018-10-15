@@ -23,6 +23,7 @@ import { PaymentMethodsCreateComponent } from './payment-methods/create/payment-
 import { PaymentMethodsListComponent } from './payment-methods/list/payment-methods-list.component';
 import { PayTermCreateComponent } from './payterm/payterm-create.component';
 import { PaymentTermComponent } from './payterm/payterm.component';
+import { QuickbookOverviewComponent } from './quickbook-auth/overview/overview.component';
 import { ReturnReasonCreateComponent } from './return-reason/return-reason-create.component';
 import { ReturnReasonComponent } from './return-reason/return-reason.component';
 import { SalesTaxAuthComponent } from './sales-tax-auth/sales-tax-auth.component';
@@ -215,6 +216,10 @@ const routes: Routes = [
     {
         path: 'sales-tax-auth',
         component: SalesTaxAuthComponent
+    },
+    {
+        path: 'quickbook-overview',
+        component: QuickbookOverviewComponent
     }
 ];
 

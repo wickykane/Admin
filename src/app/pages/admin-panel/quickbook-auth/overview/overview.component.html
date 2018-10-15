@@ -1,0 +1,36 @@
+<div [@routerTransition]>
+    <app-page-header [heading]="'QUICKBOOKS ONLINE INTEGRATION'" [icon]="'fa-th-list'"></app-page-header>
+
+    <div class="block row overview">
+        <div class="col-md-9 content">
+            <div class="row title">
+                <h4>Overview Information</h4>
+            </div>
+            <div class="row text">
+                <p>{{overviewContent}}</p>
+            </div>
+            <div class="row type-list">
+                <div class="col-md-5">
+                    <div class="row col-md-9 type-title">
+                        <div class="col-md-8">Transaction Type</div>
+                        <div class="col-md-4">Sync Time</div>
+                    </div>
+                    <div class="row col-md-9 type-item" *ngFor="let type of transactionTypes">
+                        <div class="col-md-8">{{type.type}}</div>
+                        <div class="col-md-4">{{type.time}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row text" *ngIf="settingInfo.state != 'authorized'">
+                <p>Please click on "Install Quickbook Online" to link SEL2B to a Quickbook Online Account</p>
+            </div>
+        </div>
+        <div class="col-md-3 logo">
+            <div class="main-logo">
+                <img src="assets/img/quickbooks_logo.png" alt="QuickBooks" />
+            </div>
+            <button *ngIf="settingInfo.state != 'authorized'" class="action" (click)="onClickInstall()">Install Quickbooks Online</button>
+            <button *ngIf="settingInfo.state == 'authorized'" class="action" (click)="onClickUninstall()">Uninstall Quickbooks Online</button>
+        </div>
+    </div>
+</div>

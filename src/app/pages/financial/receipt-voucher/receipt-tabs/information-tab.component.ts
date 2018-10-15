@@ -59,7 +59,7 @@ export class ReceiptInformationTabComponent implements OnInit {
         approver_id: null,
         price_received: null
     };
-
+    public isInstallQuickbook = false;
 
     constructor(
         public toastr: ToastrService,
@@ -74,6 +74,7 @@ export class ReceiptInformationTabComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.getQuickbookSettings();
         this.getDetailVoucher();
     }
 
@@ -123,6 +124,14 @@ export class ReceiptInformationTabComponent implements OnInit {
             }
         });
     }
+
+    getQuickbookSettings() {
+        this.financialService.getSettingInfoQuickbook().subscribe(
+            res => {
+                this.isInstallQuickbook = res.data.state === 'authorized' ? true : false;
+            }, err => {}
+        );
+    }
     checkFieldRequired(params) {
         console.log(params);
         Object.keys(params).forEach((key) => {
@@ -138,12 +147,12 @@ export class ReceiptInformationTabComponent implements OnInit {
         this.receiptVoucherService.updateReceiptVoucherStatus(params).subscribe(res => {
             try {
                 this.toastr.success(res.message);
-                if (status === 3) {
-                    this.financialService.syncReceiptVoucherToQuickbook(id).subscribe(
-                        _res => {},
-                        err => {}
-                    );
-                }
+                // if (status === 3 && this.isInstallQuickbook) {
+                //     this.financialService.syncReceiptVoucherToQuickbook(id).subscribe(
+                //         _res => {},
+                //         err => {}
+                //     );
+                // }
                 this.getDetailVoucher();
             } catch (e) {
                 console.log(e);

@@ -21,7 +21,7 @@
                                                 <ng-select class="infinity-scroll-select"  [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="company_id" [typeahead]="searchKey"
                                                     (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true"
                                                     style="width: 100px; margin-left: 2px;" (change)="changeCustomer()"
-                                                    [items]="listMaster['customer']" bindLabel="company_name" bindValue="id"
+                                                    [items]="listMaster['customer']" bindLabel="name" bindValue="id"
                                                     formControlName="company_id">
                                                     <ng-template ng-option-tmp let-item="item">
                                                         <span  [innerHTML]="item.company_name"></span>
@@ -218,8 +218,7 @@
                                                 <label class='col-6'>Arrival Date</label>
                                                 <div class='col-6 text-danger'>
                                                     <div clickOutside (clickOutside)="d2.close()" class="input-group">
-                                                        <input class="form-control" [maxDate]="currentDt | dateObj"
-                                                            placeholder="mm/dd/yyyy" name="arrival_date"
+                                                        <input class="form-control" placeholder="mm/dd/yyyy" name="arrival_date"
                                                             formControlName="arrival_date" ngbDatepicker #d2="ngbDatepicker">
                                                         <div class="input-group-append">
                                                             <button class="btn btn-outline-secondary" (click)="d2.toggle()"
@@ -409,7 +408,7 @@
                                         <td>{{item.uom_name}}</td>
                                         <td class="text-center">{{item.qty_allow}}</td>
                                         <td class="text-center">
-                                            <input numberDirective [isDecimal]="false" [min]="0" [max]="item.qty_allow"
+                                            <input numberDirective [isDecimal]="true" [min]="1" [max]="item.qty_allow"
                                                 style="width: 100px;" class="form-control input-sm" type="number"
                                                 [(ngModel)]="item.return_quantity" (changeValue)="calcTotal()">
                                         </td>
@@ -483,7 +482,7 @@
                                         <td>{{item.condition_name}}</td>
                                         <td>{{item.uom_name}}</td>
                                         <td class="text-center">
-                                            <input numberDirective [isDecimal]="false" [min]="1" style="width: 100px;"
+                                            <input numberDirective [isDecimal]="true" [min]="1" style="width: 100px;"
                                                 class="form-control input-sm" type="number" [(ngModel)]="item.replace_quantity"
                                                 (changeValue)="updateTotal()">
                                         </td>
