@@ -2,9 +2,9 @@
     <div class="block-content pd-bottom bg-gray-light short-width">
         <div class="row">
             <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
-                <div class="block-search">
+                <div class="block-search" *ngIf="listReference['subsidiary'].length>0">
                     <label for="purchase_quote_cd" class="control-label">Subsidiary</label>
-                    <ng-select [multiple]="true" [items]="listReference['subsidiary']" bindLabel="name" bindValue="id" formControlName="subsidiary">
+                    <ng-select [items]="listReference['subsidiary']" bindLabel="name" bindValue="id" formControlName="subsidiary">
                     </ng-select>
                 </div>
                 <div class="block-search">
@@ -47,7 +47,7 @@
                     <strong>Line Items</strong>
                 </div>
                 <div class="card-body no-padding">
-                    <div class="scroll-container table-responsive list">
+                    <div class="table-responsive list">
                         <table class='table table-bordered table-order'>
                             <thead class="bg-white">
                                 <tr>
