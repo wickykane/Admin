@@ -11,11 +11,12 @@ import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
 import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
 
-import { DebitMemoCreateKeyService } from '../create/keys.create.control';
+import { DebitMemoEditKeyService } from './keys.edit.controls';
 
 import { ItemsOrderDebitModalContent } from '../modals/items-order/items-order.modal';
 import { MiscItemsDebitModalContent } from '../modals/misc-items/misc-items.modal';
 
+import { cdArrowTable } from '../../../../shared';
 import { FinancialService } from '../../financial.service';
 import { DebitMemoService } from '../debit-memo.service';
 
@@ -29,12 +30,14 @@ import * as moment from 'moment';
     styleUrls: ['./debit-memo-edit.component.scss'],
     animations: [routerTransition()],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [DebitMemoCreateKeyService, HotkeysService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }]
+    providers: [DebitMemoEditKeyService, HotkeysService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }]
 })
 export class DebitMemoEditComponent implements OnInit {
 
     //#region initialize variables
     @ViewChild('fieldNote') noteText: ElementRef;
+    @ViewChild(cdArrowTable) table: cdArrowTable;
+    public selectedIndex = 0;
 
     public listMaster = {
         customers: [],
@@ -86,7 +89,7 @@ export class DebitMemoEditComponent implements OnInit {
         private cd: ChangeDetectorRef,
         private modalService: NgbModal,
         private _hotkeysService: HotkeysService,
-        public keyService: DebitMemoCreateKeyService,
+        public keyService: DebitMemoEditKeyService,
         public tableService: TableService,
         public debitService: DebitMemoService,
         public financialService: FinancialService,
@@ -654,6 +657,18 @@ export class DebitMemoEditComponent implements OnInit {
                 window.history.back();
             }
         }, dismiss => { });
+    }
+
+    selectTable() {
+        this.selectedIndex = 0;
+        this.table.scrollToTable();
+        setTimeout(() => {
+            const button = this.table.element.nativeElement.querySelectorAll('td button');
+            if (button && button[this.selectedIndex]) {
+                button[this.selectedIndex].focus();
+            }
+        });
+        this.refresh();
     }
     //#endregion handle onSelect/ onClick
 
