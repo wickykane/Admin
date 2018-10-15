@@ -311,7 +311,7 @@ export class RmaCreateComponent implements OnInit {
         if (check[0]['pod_sign_off_date']) {
             const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
             modalRef.result.then(res => {
-                this.router.navigate(['/financial/invoice/edit', check[0]['id']]);
+                this.router.navigate(['/financial/invoice/view', check[0]['id']]);
             }, dismiss => {
                 this.generalForm.patchValue({ invoice_id: null });
             });

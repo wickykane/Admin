@@ -5,6 +5,7 @@ import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/n
 import * as _ from 'lodash';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
+import { BackdropModalContent } from '../../../../shared/modals/backdrop.modal';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { RMAService } from '../rma.service';
 import { TableService } from './../../../../services/table.service';
@@ -126,11 +127,26 @@ export class ReturnOrderInformationTabComponent implements OnInit {
                 this.list.returnItem = res.data.items || [];
                 this.list.replaceItem = res.data.items_replace || [];
 
+                if (!this.detail['is_change']) {
+                  this.checkStatusOrder();
+                }
+
 
             } catch (e) {
                 console.log(e);
             }
         });
+    }
+
+    checkStatusOrder() {
+      const modalRef = this.modalService.open(BackdropModalContent, { size: 'lg', windowClass: 'modal-md', backdrop: 'static', keyboard: false });
+      modalRef.result.then( res => {
+          if (res) {
+              console.log(res);
+          }
+      }, dismiss => { });
+      modalRef.componentInstance.message = 'There are changes of the sales order. The system will refresh for up to date.';
+      modalRef.componentInstance.yesButtonText = 'OK';
     }
 
     backList() {
