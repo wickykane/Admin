@@ -296,6 +296,7 @@ export class RmaCreateComponent implements OnInit {
             this.getOrderInformation(orderId);
             this.getListLineItems(orderId);
             this.getListInvoice(orderId);
+            this.checkDateTime();
         }
         this.refresh();
 
@@ -320,24 +321,29 @@ export class RmaCreateComponent implements OnInit {
             modalRef.componentInstance.noButtonText = 'No';
         }
 
-        const params = {
-            order_id: this.generalForm.value.order_id,
-            invoice_id: this.generalForm.value.invoice_id,
-            request_date: moment(this.generalForm.value.request_date).format('MM/DD/YYYY')
-        };
+        this.checkDateTime();
 
-        this.service.checkDateTime(params).subscribe(
-            res => {
-                try {
-                    this.generalForm.patchValue({ return_time: res.data.return_time, delivery_date: res.data.delivery_date });
-                    this.refresh();
-                } catch (err) {
-                    console.log(err);
-                }
-            }, err => {
-                console.log(err);
-            }
-        );
+    }
+
+    checkDateTime() {
+      const params = {
+          order_id: this.generalForm.value.order_id,
+          invoice_id: this.generalForm.value.invoice_id || null,
+          request_date: moment(this.generalForm.value.request_date).format('MM/DD/YYYY')
+      };
+
+      this.service.checkDateTime(params).subscribe(
+          res => {
+              try {
+                  this.generalForm.patchValue({ return_time: res.data.return_time, delivery_date: res.data.delivery_date });
+                  this.refresh();
+              } catch (err) {
+                  console.log(err);
+              }
+          }, err => {
+              console.log(err);
+          }
+      );
     }
 
     getListOrder(company_id) {
