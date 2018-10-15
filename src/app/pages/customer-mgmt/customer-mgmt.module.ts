@@ -9,6 +9,7 @@ import { CustomerComponent } from './customer/customer.component';
 import { CustomerAccountTabComponent } from './customer/information-tab/account-tab.component';
 import { CustomerAddressTabComponent } from './customer/information-tab/address-tab.component';
 import { CustomerContactTabComponent } from './customer/information-tab/contact-tab.component';
+import { CustomerCustomerBalanceTabComponent } from './customer/information-tab/customer-balance-tab.component';
 import { CustomerInvoiceTabComponent } from './customer/information-tab/invoice-tab.component';
 import { CustomerReceiptVoucherTabComponent } from './customer/information-tab/receipt-voucher-tab.component';
 
@@ -41,7 +42,7 @@ import { ItemModalModule } from '../../shared/modals/item.module';
   declarations: [CustomerComponent, CustomerCreateComponent, CustomerViewComponent,
     CustomerAddressTabComponent, CustomerContactTabComponent, CustomerEditComponent, CustomerSiteTabComponent, CustomerQuoteTabComponent,
     CustomerSaleOrderTabComponent, CustomerInvoiceTabComponent, CustomerShipmentTabComponent, CustomerPaymentTabComponent,
-    CustomerRMATabComponent, CustomerAccountTabComponent, CustomerReceiptVoucherTabComponent],
+    CustomerRMATabComponent, CustomerAccountTabComponent, CustomerReceiptVoucherTabComponent, CustomerCustomerBalanceTabComponent],
   providers: [TableService, CustomerService, Helper, CommonService ],
   entryComponents: []
 })
