@@ -164,4 +164,12 @@ export class CustomerService {
         const url = 'buyer/payment-methods';
         return this.API.get(url);
     }
+    getListCustomerBalanceReference() {
+        const url = 'customer-balance/get-reference';
+        return this.API.get(url);
+    }
+    getListCustomerBalance(id, params) {
+        const url = 'customer-balance/get-list?company_id=' + id;
+        return this.API.get(url, params);
+    }
 }
