@@ -559,8 +559,15 @@ export class InvoiceCreateComponent implements OnInit {
                     this.data['invoice_id'] = res.data;
                     if (type === 4 && this.isInstallQuickbook) {
                         this.financialService.syncInvoiceToQuickbook(this.data['invoice_id']).subscribe(
-                            _res => {},
-                            err => {}
+                            _res => {
+                                try {
+                                    const result = JSON.parse(_res['_body']);
+                                    this.toastr.success(`Invoice ${result.data[0].entity.DocNumber} has been sync to Quickbooks successfully.`);
+                                } catch (err) {}
+                            },
+                            err => {
+                                this.toastr.error(`Cannot sync invoice to Quickbooks.`);
+                            }
                         );
                         this.router.navigate(['/financial/receipt-voucher/create'], { queryParams: { invoice_id: this.data['invoice_id'] } });
                         return;
