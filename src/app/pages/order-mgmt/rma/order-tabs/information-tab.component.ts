@@ -144,7 +144,7 @@ export class ReturnOrderInformationTabComponent implements OnInit {
           if (res) {
             this.service.updateChange(id).subscribe(result => {
                 try {
-                    this.toastr.success(res.message);
+                    this.toastr.success('The system is refreshed successfully');
                     this.router.navigate(['/order-management/return-order/detail', id]);
                 } catch (e) {
                     console.log(e);
