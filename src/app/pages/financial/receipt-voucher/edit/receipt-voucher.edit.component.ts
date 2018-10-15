@@ -275,7 +275,7 @@ export class ReceiptVoucherEditComponent implements OnInit {
         this.orderService.getDetailCompany(company_id).subscribe(res => {
             try {
                 this.data['payer'] = res.data;
-                this.listMaster['customer'] = [{ id: this.data['payer'].company_id, company_name: this.data['payer'].company_name }, ...this.listMaster['customer']];
+                this.listMaster['customer'] = [{ id: this.data['payer'].company_id, company_name: this.data['payer'].company_name , name: this.data['payer'].company_name}, ...this.listMaster['customer']];
                 this.refresh();
             } catch (e) {
                 console.log(e);
