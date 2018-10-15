@@ -5,6 +5,7 @@ import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/n
 import * as _ from 'lodash';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
+import { BackdropModalContent } from '../../../../shared/modals/backdrop.modal';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { RMAService } from '../rma.service';
 import { TableService } from './../../../../services/table.service';
@@ -126,11 +127,33 @@ export class ReturnOrderInformationTabComponent implements OnInit {
                 this.list.returnItem = res.data.items || [];
                 this.list.replaceItem = res.data.items_replace || [];
 
+                if (this.detail['is_change']) {
+                  this.checkStatusOrder(this.detail['id']);
+                }
+
 
             } catch (e) {
                 console.log(e);
             }
         });
+    }
+
+    checkStatusOrder(id) {
+      const modalRef = this.modalService.open(BackdropModalContent, { size: 'lg', windowClass: 'modal-md', backdrop: 'static', keyboard: false });
+      modalRef.result.then( res => {
+          if (res) {
+            this.service.updateChange(id).subscribe(result => {
+                try {
+                    this.toastr.success(res.message);
+                    this.router.navigate(['/order-management/return-order/detail', id]);
+                } catch (e) {
+                    console.log(e);
+                }
+            });
+          }
+      }, dismiss => { });
+      modalRef.componentInstance.message = 'There are changes of the sales order. The system will refresh for up to date.';
+      modalRef.componentInstance.yesButtonText = 'OK';
     }
 
     backList() {
@@ -184,12 +207,35 @@ export class ReturnOrderInformationTabComponent implements OnInit {
         const params = { return_order_id: id, status_id: status };
         this.service.updateStatus(params).subscribe(res => {
             try {
-                this.toastr.success(res.message);
-                this.router.navigate(['/order-management/return-order']);
+                if (status === 5) {
+                    if (!res.status && res.message === 'show popup') {
+                      this.cancelOrder(id);
+                    }
+                } else {
+                  this.toastr.success(res.message);
+                  this.router.navigate(['/order-management/return-order']);
+                }
             } catch (e) {
                 console.log(e);
             }
         });
+    }
+
+    cancelOrder(id) {
+      const modalRef = this.modalService.open(BackdropModalContent, { size: 'lg', windowClass: 'modal-md', backdrop: 'static', keyboard: false });
+      modalRef.result.then( res => {
+          if (res) {
+            this.service.updateChange(id).subscribe(result => {
+                try {
+                    this.confirmModal(id, 2, '');
+                } catch (e) {
+                    console.log(e);
+                }
+            });
+          }
+      }, dismiss => { });
+      modalRef.componentInstance.message = 'The sales order status is delivering. The return order will be canceled now. You can create the return until the goods delivered to customer.';
+      modalRef.componentInstance.yesButtonText = 'OK';
     }
 
     cancel() {
