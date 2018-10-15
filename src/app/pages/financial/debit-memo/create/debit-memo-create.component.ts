@@ -16,6 +16,7 @@ import { DebitMemoCreateKeyService } from './keys.create.control';
 import { ItemsOrderDebitModalContent } from '../modals/items-order/items-order.modal';
 import { MiscItemsDebitModalContent } from '../modals/misc-items/misc-items.modal';
 
+import { cdArrowTable } from '../../../../shared';
 import { FinancialService } from '../../financial.service';
 import { DebitMemoService } from '../debit-memo.service';
 
@@ -35,6 +36,8 @@ export class DebitMemoCreateComponent implements OnInit {
 
     //#region initialize variables
     @ViewChild('fieldNote') noteText: ElementRef;
+    @ViewChild(cdArrowTable) table: cdArrowTable;
+    public selectedIndex = 0;
 
     public listMaster = {
         customers: [],
@@ -595,6 +598,18 @@ export class DebitMemoCreateComponent implements OnInit {
                 window.history.back();
             }
         }, dismiss => { });
+    }
+
+    selectTable() {
+        this.selectedIndex = 0;
+        this.table.scrollToTable();
+        setTimeout(() => {
+            const button = this.table.element.nativeElement.querySelectorAll('td button');
+            if (button && button[this.selectedIndex]) {
+                button[this.selectedIndex].focus();
+            }
+        });
+        this.refresh();
     }
     //#endregion handle onSelect/ onClick
 

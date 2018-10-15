@@ -22,31 +22,82 @@ export class DebitMemoCreateKeyService extends KeyboardBaseService {
     };
 
     initKey() {
-        this._hotkeysService.add(new Hotkey('f1', (event: KeyboardEvent): any => {
-            event.preventDefault();
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+backspace', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            (document.activeElement as HTMLElement).blur();
+            this.context.onClickBack();
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Back'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+t', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            this.context.selectTable();
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Select Table'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+i', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            (document.activeElement as HTMLInputElement).blur();
+            if (this.context.debitMemoForm.controls.order_id.valid) {
+                setTimeout(() => {
+                    this.context.openModalAddItemsOrder();
+                });
+            }
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Add Item'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+m', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            (document.activeElement as HTMLInputElement).blur();
+            if (this.context.debitMemoForm.controls.order_id.valid) {
+                setTimeout(() => {
+                    this.context.openModalAddMiscItems();
+                });
+            }
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Add Misc'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+del', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            const item = this.context.listLineItems[this.context.selectedIndex];
+            this.context.onDeleteLineItem(item, this.context.selectedIndex);
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Delete Item'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+a', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            (document.activeElement as HTMLElement).blur();
             this.context.onClickSave('draft');
-            return event;
-        }, undefined, 'Save as Draft'));
-        this._hotkeysService.add(new Hotkey('f2', (event: KeyboardEvent): any => {
-            event.preventDefault();
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save as Draft'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            (document.activeElement as HTMLElement).blur();
+            this.context.onClickSave('validate');
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save & Validate'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            (document.activeElement as HTMLElement).blur();
             this.context.onClickSave('submit');
-            return event;
-        }, undefined, 'Save & Submit'));
-        if (this.context.debitId === null || this.context.debitId === undefined) {
-            this._hotkeysService.add(new Hotkey('f3', (event: KeyboardEvent): any => {
-                event.preventDefault();
-                this.context.onClickSave('create');
-                return event;
-            }, undefined, 'Save & Create New'));
-            this._hotkeysService.add(new Hotkey('f6', (event: KeyboardEvent): any => {
-                event.preventDefault();
-                return event;
-            }, undefined, 'Cancel'));
-        }
-        this._hotkeysService.add(new Hotkey('f7', (event: KeyboardEvent): any => {
-            event.preventDefault();
-            this.context.onAddNote();
-            return event;
-        }, undefined, 'Add Note'));
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save & Submit'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+c', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            this.context.onClickSave('create');
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save & Create New'));
     }
 }
