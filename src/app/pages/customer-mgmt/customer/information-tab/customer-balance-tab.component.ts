@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, V
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CustomerService } from '../../customer.service';
 
+import { NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import { TableService } from '../../../../services/table.service';
 
 
@@ -22,15 +23,13 @@ export class CustomerCustomerBalanceTabComponent implements OnInit {
     @Input() set customerId(id) {
         if (id) {
             this._customerId = id;
-            // this.getList();
+            this.getList();
         }
     }
 
     public listMaster = {};
 
-    public list = {
-        items: []
-    };
+    public list = [];
 
     searchForm: FormGroup;
 
@@ -38,62 +37,61 @@ export class CustomerCustomerBalanceTabComponent implements OnInit {
         public fb: FormBuilder,
         private vRef: ViewContainerRef,
         public tableService: TableService,
-        private customerService: CustomerService, private cd: ChangeDetectorRef) {
+        private customerService: CustomerService, private cd: ChangeDetectorRef,
+        private modalService: NgbModal) {
 
         this.searchForm = fb.group({
-            'code': [null],
-            'cus_po': [null],
-            'sale_quote_num': [null],
-            'type': [null],
-            'sts': [null],
-            'buyer_name': [null],
-            'date_type': [null],
-            'date_to': [null],
-            'date_from': [null],
+            'subsidiary': [null],
+            'year': [null]
         });
 
         //  Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
-        // this.getListReference();
     }
 
     ngOnInit() {
-
+        this.getListReference();
     }
 
     /**
      * Internal Function
      */
 
-     refresh() {
-         this.cd.detectChanges();
-     }
+    refresh() {
+        this.cd.detectChanges();
+    }
 
-     getListReference() {
+    getListReference() {
         this.customerService.getListCustomerBalanceReference().subscribe(res => {
             try {
                 console.log(res);
-                // this.listReference = res.data;
-                this.refresh();
-            } catch (e) {
-                console.log(e);
-            }
-        });
-     }
-    getList() {
-        const params = {...this.tableService.getParams(), ...this.searchForm.value};
-        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
-
-        this.customerService.getListInvoice(this._customerId, params).subscribe(res => {
-            try {
-                this.list.items = [] || res.data.rows;
-                this.tableService.matchPagingOption(res.data);
+                this.listReference = res.data;
                 this.refresh();
             } catch (e) {
                 console.log(e);
             }
         });
     }
+    getList() {
+        const params = { ...this.searchForm.value };
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
 
+        this.customerService.getListCustomerBalance(this._customerId, params).subscribe(res => {
+            try {
+                this.list =  res.data;
+                console.log(this.list);
+                // this.tableService.matchPagingOption(res.data);
+                this.refresh();
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
+    checkRelated(item) {
+        return Array.isArray(item);
+       }
+       openVerticallyCentered(contenlink) {
+        this.modalService.open(contenlink, { centered: true });
+      }
 }
