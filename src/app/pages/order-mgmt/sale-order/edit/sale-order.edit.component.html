@@ -18,8 +18,7 @@
                                             <span class="text-danger">(*)</span>
                                             <div>
                                                 <ng-select [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="buyer_id" [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('buyer_id').errors?.required) || false   }" class="infinity-scroll-select" [typeahead]="searchKey"
-                                                    (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 100px; margin-left: 2px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="name" bindValue="id"
-                                                    formControlName="buyer_id">
+                                                    (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 100px; margin-left: 2px;" (change)="changeCustomer()" [items]="listMaster['customer']" bindLabel="name" bindValue="id" formControlName="buyer_id">
                                                     <ng-template ng-option-tmp let-item="item">
                                                         <span [innerHTML]="item.company_name"></span>
                                                     </ng-template>
@@ -598,8 +597,8 @@
         <div class="row">
             <div class="col-md-12 mg-top-15 text-right">
                 <button type="button" class="btn btn-outline-info" (click)="createOrder('draft')" translate>Save</button>
-                <button type="button" class="btn btn-outline-success" (click)="confirmModal('validate')" translate>Save & Validate</button>
-                <button type="button" class="btn btn-outline-danger" (click)="confirmModal('create')" translate>Save & Submit</button>
+                <button *ngIf="!data['disable']" type="button" class="btn btn-outline-success" (click)="confirmModal('validate')" translate>Save & Validate</button>
+                <button *ngIf="!data['disable']" type="button" class="btn btn-outline-danger" (click)="confirmModal('create')" translate>Save & Submit</button>
                 <button type="button" class="btn btn-outline-secondary" (click)="confirmModal('cancel')" translate>Cancel Order</button>
                 <button type="button" class="btn btn-default" (click)="confirmModal(0)" translate>Back To List</button>
             </div>
