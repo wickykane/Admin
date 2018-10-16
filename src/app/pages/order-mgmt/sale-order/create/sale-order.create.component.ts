@@ -714,7 +714,7 @@ export class SaleOrderCreateComponent implements OnInit {
             try {
                 this.toastr.success(res.message);
                 setTimeout(() => {
-                    this.router.navigate(['/order-management/sale-order']);
+                    this.router.navigate(['/order-management/sale-quotation/detail', res.data.id]);
                 }, 500);
             } catch (e) {
                 console.log(e);
@@ -763,7 +763,7 @@ export class SaleOrderCreateComponent implements OnInit {
                 // if (res.status) {
                 this.toastr.success(res.message);
                 setTimeout(() => {
-                    this.router.navigate(['/order-management/sale-order']);
+                    this.router.navigate(['/order-management/sale-order/detail/', res.data.id]);
                 }, 500);
                 // } else {
                 //     this.toastr.error(res.message);
