@@ -1,24 +1,24 @@
 <div [@routerTransition]>
     <app-page-header [heading]="'VIEW DEBIT MEMO'" [icon]="'fa-th-list'"></app-page-header>
-    <!-- <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut> -->
+    <app-shortcut [listShortcut]="data['shortcut']"></app-shortcut>
     <section class="main-container block-order-detail">
-        <ngb-tabset class="tabs-order">
-            <ngb-tab title="Information">
+        <ngb-tabset #tabSet class="tabs-order">
+            <ngb-tab id='0' title="Information">
                 <ng-template ngbTabContent>
                     <app-debit-info-tab [debitInfo]="debitDetail" (changeStatusSuccessfully)="getDebitDetail()"></app-debit-info-tab>
                 </ng-template>
             </ngb-tab>
-            <ngb-tab title="Receipt Voucher">
-                    <ng-template ngbTabContent>
-                        <app-receipt-voucher-tab [orderId]="debitId"></app-receipt-voucher-tab>
-                    </ng-template>
-                </ngb-tab>
-            <ngb-tab title="Payment">
+            <ngb-tab id='1' title="Receipt Voucher">
+                <ng-template ngbTabContent>
+                    <app-receipt-voucher-tab [orderId]="debitId"></app-receipt-voucher-tab>
+                </ng-template>
+            </ngb-tab>
+            <ngb-tab id='2' title="Payment">
                 <ng-template ngbTabContent>
                     <!-- <app-order-invoice-tab [orderId]="orderId"></app-order-invoice-tab> -->
                 </ng-template>
             </ngb-tab>
-            <ngb-tab title="History">
+            <ngb-tab id='3' title="History">
                 <ng-template ngbTabContent>
                     <app-debit-history-tab [orderId]="debitId"></app-debit-history-tab>
                 </ng-template>
