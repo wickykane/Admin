@@ -306,6 +306,6 @@ export class DebitMemoListComponent implements OnInit {
 
     selectTable() {
         this.selectedIndex = 0;
-        this.table.element.nativeElement.querySelector('td img').focus();
+        this.table.element.nativeElement.querySelector('td a').focus();
     }
 }

@@ -125,7 +125,7 @@ export class ItemsOrderDebitModalContent implements OnInit, OnDestroy {
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             event.preventDefault();
-            this.getListItems();
+            this.onSearchList();
             const e: ExtendedKeyboardEvent = event;
             e.returnValue = false; // Prevent bubbling
             return e;
@@ -134,7 +134,7 @@ export class ItemsOrderDebitModalContent implements OnInit, OnDestroy {
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+r', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             event.preventDefault();
             this.searchForm.reset();
-            this.getListItems();
+            this.onSearchList();
             const e: ExtendedKeyboardEvent = event;
             e.returnValue = false; // Prevent bubbling
             return e;

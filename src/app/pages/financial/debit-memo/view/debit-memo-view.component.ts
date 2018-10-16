@@ -15,6 +15,7 @@ import { DebitMemoViewKeyService } from './keys.view.controls';
 @Component({
     selector: 'app-debit-memo-view',
     templateUrl: './debit-memo-view.component.html',
+    styleUrls: ['./debit-memo-view.component.scss'],
     animations: [routerTransition()],
     providers: [DebitMemoService, DebitMemoViewKeyService]
 })
