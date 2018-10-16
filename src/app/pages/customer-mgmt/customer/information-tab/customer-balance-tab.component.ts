@@ -92,6 +92,6 @@ export class CustomerCustomerBalanceTabComponent implements OnInit {
         return Array.isArray(item);
        }
        openVerticallyCentered(contenlink) {
-        this.modalService.open(contenlink, { centered: true });
+        this.modalService.open(contenlink);
       }
 }

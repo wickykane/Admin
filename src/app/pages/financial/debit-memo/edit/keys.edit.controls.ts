@@ -3,7 +3,7 @@ import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { KeyboardBaseService } from './../../../../shared/helper/keyServiceBase';
 
 @Injectable()
-export class DebitMemoCreateKeyService extends KeyboardBaseService {
+export class DebitMemoEditKeyService extends KeyboardBaseService {
 
     keyConfig = {
         company_id: {
@@ -94,11 +94,11 @@ export class DebitMemoCreateKeyService extends KeyboardBaseService {
             return e;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save & Submit'));
 
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+c', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
-            this.context.onClickSave('create');
-            const e: ExtendedKeyboardEvent = event;
-            e.returnValue = false; // Prevent bubbling
-            return e;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save & Create New'));
+        // this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+c', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+        //     this.context.onClickSave('create');
+        //     const e: ExtendedKeyboardEvent = event;
+        //     e.returnValue = false; // Prevent bubbling
+        //     return e;
+        // }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save & Create New'));
     }
 }

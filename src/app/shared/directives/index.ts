@@ -7,3 +7,4 @@ export * from './clickOutside.directive';
 export * from './number.directive';
 export * from './onlynumber.directive';
 export * from './keyNavigate.directive';
+export * from './trim.directive';

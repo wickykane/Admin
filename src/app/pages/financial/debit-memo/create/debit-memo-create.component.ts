@@ -16,6 +16,7 @@ import { DebitMemoCreateKeyService } from './keys.create.control';
 import { ItemsOrderDebitModalContent } from '../modals/items-order/items-order.modal';
 import { MiscItemsDebitModalContent } from '../modals/misc-items/misc-items.modal';
 
+import { cdArrowTable } from '../../../../shared';
 import { FinancialService } from '../../financial.service';
 import { DebitMemoService } from '../debit-memo.service';
 
@@ -29,12 +30,14 @@ import * as moment from 'moment';
     styleUrls: ['./debit-memo-create.component.scss'],
     animations: [routerTransition()],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [DebitMemoCreateKeyService, HotkeysService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }]
+    providers: [DebitMemoCreateKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }]
 })
 export class DebitMemoCreateComponent implements OnInit {
 
     //#region initialize variables
     @ViewChild('fieldNote') noteText: ElementRef;
+    @ViewChild(cdArrowTable) table: cdArrowTable;
+    public selectedIndex = 0;
 
     public listMaster = {
         customers: [],
@@ -497,6 +500,10 @@ export class DebitMemoCreateComponent implements OnInit {
         };
         modalRef.componentInstance.setIgnoredItems = params;
         modalRef.result.then(res => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
             if (res) {
                 res.forEach(selectedItem => {
                     const itemIndex = this.listDeletedLineItem.findIndex(item => item.order_detail_id === selectedItem.order_detail_id);
@@ -508,7 +515,12 @@ export class DebitMemoCreateComponent implements OnInit {
                 this.getUniqueTaxItemLine();
                 this.refresh();
             }
-        }, dismiss => { });
+        }, dismiss => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
+        });
     }
 
     openModalAddMiscItems() {
@@ -521,6 +533,10 @@ export class DebitMemoCreateComponent implements OnInit {
         };
         modalRef.componentInstance.setIgnoredItems = params;
         modalRef.result.then(res => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
             if (res) {
                 res.forEach(selectedItem => {
                     const itemIndex = this.listDeletedLineItem.findIndex(item => item.misc_id === selectedItem.misc_id);
@@ -532,7 +548,12 @@ export class DebitMemoCreateComponent implements OnInit {
                 this.getUniqueTaxItemLine();
                 this.refresh();
             }
-        }, dismiss => { });
+        }, dismiss => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
+        });
     }
 
     onClickSave(saveMethod) {
@@ -595,6 +616,18 @@ export class DebitMemoCreateComponent implements OnInit {
                 window.history.back();
             }
         }, dismiss => { });
+    }
+
+    selectTable() {
+        this.selectedIndex = 0;
+        this.table.scrollToTable();
+        setTimeout(() => {
+            const button = this.table.element.nativeElement.querySelectorAll('td button');
+            if (button && button[this.selectedIndex]) {
+                button[this.selectedIndex].focus();
+            }
+        });
+        this.refresh();
     }
     //#endregion handle onSelect/ onClick
 

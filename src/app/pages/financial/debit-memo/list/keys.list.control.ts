@@ -3,70 +3,64 @@ import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { KeyboardBaseService } from './../../../../shared/helper/keyServiceBase';
 @Injectable()
 export class DebitMemoListKeyService extends KeyboardBaseService  {
+
     initKey() {
-        this._hotkeysService.add(new Hotkey('f1', (event: KeyboardEvent): any => {
-            event.preventDefault();
-            this.context.addNewDebitMemo();
-            return event;
-        }, undefined, 'Create New DR'));
-        this._hotkeysService.add(new Hotkey('f2', (event: KeyboardEvent): any => {
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+f1', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             this.context.onStartSearch();
-            return event;
-        }, undefined, 'Start Search'));
-        this._hotkeysService.add(new Hotkey('f3', (event: KeyboardEvent): any => {
+            return;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Focus Search'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+n', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            this.context.addNewDebitMemo();
+            return;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Create Debit Memo'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+e', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             this.context.tableService.searchAction();
-            event.returnValue = false;
-            return event;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Execute Search'));
-        this._hotkeysService.add(new Hotkey('f4', (event: KeyboardEvent): any => {
+            return;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Search'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+r', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             this.context.tableService.resetAction(this.context.searchForm);
-            event.returnValue = false;
-            return event;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset Search'));
-        this._hotkeysService.add(new Hotkey('f5', (event: KeyboardEvent): any => {
-            event.preventDefault();
-            if (this.context.listDebitMemo.length) {
-                this.context.onChangeDebitStatus(this.context.listDebitMemo[this.context.selectedIndex]['id'], 2);
-            }
-            return event;
-        }, undefined, 'Submit'));
-        this._hotkeysService.add(new Hotkey('f6', (event: KeyboardEvent): any => {
-            event.preventDefault();
-            if (this.context.listDebitMemo.length) {
-                this.context.onChangeDebitStatus(this.context.listDebitMemo[this.context.selectedIndex]['id'], 3);
-            }
-            return event;
-        }, undefined, 'Approve'));
-        this._hotkeysService.add(new Hotkey('f7', (event: KeyboardEvent): any => {
-            event.preventDefault();
-            if (this.context.listDebitMemo.length) {
-                this.context.onChangeDebitStatus(this.context.listDebitMemo[this.context.selectedIndex]['id'], 5);
-            }
-            return event;
-        }, undefined, 'Cancel'));
-        this._hotkeysService.add(new Hotkey('f8', (event: KeyboardEvent): any => {
-            event.preventDefault();
-            if (this.context.listDebitMemo.length) {
-                this.context.onChangeDebitStatus(this.context.listDebitMemo[this.context.selectedIndex]['id'], 4);
-            }
-            return event;
-        }, undefined, 'Reject'));
-        this._hotkeysService.add(new Hotkey('f9', (event: KeyboardEvent): any => {
-            event.preventDefault();
-            if (this.context.listDebitMemo.length) {
-                this.context.onChangeDebitStatus(this.context.listDebitMemo[this.context.selectedIndex]['id'], 1);
-            }
-            return event;
-        }, undefined, 'Re-open'));
-        this._hotkeysService.add(new Hotkey('f10', (event: KeyboardEvent): any => {
+            return;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             if (this.context.listDebitMemo.length) {
                 this.context.onViewDebitMemo(this.context.listDebitMemo[this.context.selectedIndex]['id']);
             }
-            return event;
-        }, undefined, 'View'));
+            return;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'View'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+pageup', (event: KeyboardEvent): boolean => {
+            this.context.tableService.pagination.page--;
+            if (this.context.tableService.pagination.page < 1) {
+                this.context.tableService.pagination.page = 1;
+                return;
+            }
+            this.context.tableService.changePage(this.context.tableService.pagination.page);
+            return;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Next page'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+pagedown', (event: KeyboardEvent): boolean => {
+            this.context.tableService.pagination.page++;
+            if (this.context.tableService.pagination.page > this.context.tableService.pagination.total_page) {
+                this.context.tableService.pagination.page = this.context.tableService.pagination.total_page;
+                return;
+            }
+            this.context.tableService.changePage(this.context.tableService.pagination.page);
+            return;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Previous page'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+t', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            this.context.selectTable();
+            return;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Select Table'));
     }
 }
