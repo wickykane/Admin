@@ -11,7 +11,7 @@ import { NgControl, NgModel } from '@angular/forms';
     providers: [NgModel],
 })
 export class TrimDirective {
-    constructor(private ngModel: NgModel, @Optional() // Add this decorator
+    constructor(private ngModel: NgModel, @Optional()
     @Self() private formControl: NgControl) { }
 
     onBlur($event) {
