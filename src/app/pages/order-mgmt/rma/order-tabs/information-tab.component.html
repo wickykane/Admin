@@ -2,7 +2,7 @@
 <!-- <app-page-header [heading]="'DETAIL RETURN ORDERS'"></app-page-header> -->
 <!-- <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut> -->
 <div class="bd-example text-right">
-    <button  *ngIf="_orderDetail.sts == 1" ngbTooltip="Approve" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail.id, 5)"><i class="fa fa-check" aria-hidden="true"></i> Approve</button>
+    <button  *ngIf="_orderDetail.sts == 1" ngbTooltip="Send to WH" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail.id, 5)"><i class="fa fa-check" aria-hidden="true"></i> Approve</button>
     <button *ngIf="_orderDetail.sts == 7" ngbTooltip="Complete" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail.id, 7)"><i class="fa fa-share-square-o"></i> Edit</button>
     <button *ngIf="_orderDetail.sts == 1" ngbTooltip="Cancel" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail.id, 2)"><i class="fa fa-times-circle"></i> Cancel</button>
     <button *ngIf="_orderDetail.sts == 1" ngbTooltip="Edit" class="btn btn-outline-dark" [routerLink]="['edit', _orderDetail.id]"><i class="fa fa-pencil"></i> Edit</button>
@@ -345,7 +345,11 @@
                           <span>{{item.amount_after_receipt | currency}}</span>
                         </td>
                         <td>
-                          {{item.return_reason_des}}
+                          <span *ngIf="!item.return_reason_accept">{{item.return_reason_des}}</span>
+                          <button *ngIf="item.return_reason_accept" type="button" class="btn btn-outline-secondary mr-2" placement="top"
+                                ngbPopover="{{item.return_reason_accept}}" popoverTitle="Return Reason">
+                          View Details
+                        </button>
                         </td>
                         <td class="text-center">
                           <label class="css-input css-checkbox css-checkbox-default">
