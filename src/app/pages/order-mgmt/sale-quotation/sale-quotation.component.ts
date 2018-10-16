@@ -207,7 +207,7 @@ export class SaleQuotationComponent implements OnInit {
         this.selectedIndex = 0;
         this.table.element.nativeElement.querySelector('td a').focus();
     }
-    
+
     confirmModal(id, status) {
         const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
         modalRef.result.then(res => {
