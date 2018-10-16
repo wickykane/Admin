@@ -144,8 +144,8 @@
                                 <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                                     <tr>
                                         <td class="text-center">
-                                            <img *ngIf="item.sts_code!='CP'" src="assets/img/qbicon-gray.png" width="20px" height="20px">
-                                            <!-- <img *ngIf="item.sts_code!='CP'" src="assets/img/qbicons.png" width="20px" height="20px"> -->
+                                            <img *ngIf="!item.qbo_sync" src="assets/img/qbicon-gray.png" width="20px" height="20px">
+                                            <img *ngIf="item.qbo_sync" src="assets/img/qbicons.png" width="20px" height="20px">
                                             <!-- <a *ngIf="item.sts_code=='CP'" href="https://sandbox.qbo.intuit.com/app/sales" target="_blank">
                                                 <img placement="top" ngbTooltip="Sent Invoice To QuickBooks {{item.updated_at}}" src="../../assets/img/qbicons.png" width="20px" height="20px">
                                             </a> -->

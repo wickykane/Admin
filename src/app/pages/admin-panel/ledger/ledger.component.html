@@ -215,8 +215,8 @@
                                                             </span>
                                                         </td>
                                                         <td class="text-center">
-                                                            <img *ngIf="!item.sync" src="assets/img/qbicon-gray.png" width="20px" height="20px">
-                                                            <img *ngIf="item.sync" src="assets/img/qbicon.png" width="20px" height="20px">
+                                                            <img *ngIf="!item.qbo_sync" src="assets/img/qbicon-gray.png" width="20px" height="20px">
+                                                            <img *ngIf="item.qbo_sync" src="assets/img/qbicons.png" width="20px" height="20px">
                                                         </td>
                                                         <td>
                                                             <a class="btn btn-default" (click)="newAccount(item)" title="Edit">
