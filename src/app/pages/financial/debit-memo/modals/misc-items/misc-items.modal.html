@@ -1,92 +1,100 @@
 <div class="modal-header">
-        <span class="modal-title">SELECT MISCELLANCEOUS ITEMS </span>
-        <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss([])">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div class="modal-body">
-        <div class="search-block block-content pd-bottom tab-content bg-gray-light">
-            <div class="row">
-                <form class="form-horizontal form-search" [formGroup]="searchForm" (ngSubmit)="getListItems()">
-                    <div class="block-search">
-                        <label for="so" class="control-label">Item No</label>
-                        <input type="text" name="so" formControlName="no" class="form-control">
-                    </div>
-                    <div class="block-search">
-                        <label for="so" class="control-label">Description</label>
-                        <input type="text" name="so" formControlName="des" class="form-control">
-                    </div>
-                    <!-- <div class="block-search">
+    <span class="modal-title">SELECT MISCELLANCEOUS ITEMS </span>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss([])">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <app-shortcut [listShortcut]='_hotkeysService.hotkeys'></app-shortcut>
+    <div class="search-block block-content pd-bottom tab-content bg-gray-light">
+        <div class="row">
+            <form class="form-horizontal form-search" [formGroup]="searchForm" (ngSubmit)="getListItems()">
+                <div class="block-search">
+                    <label for="so" class="control-label">Item No</label>
+                    <input [keyConfig]="data['key_config']" appKeyNavigate="no" type="text" name="so" formControlName="no" class="form-control">
+                </div>
+                <div class="block-search">
+                    <label for="so" class="control-label">Description</label>
+                    <input type="text" name="so" formControlName="des" class="form-control">
+                </div>
+                <!-- <div class="block-search">
                         <label for="so" class="control-label">Item Type</label>
                         <input type="text" name="so" class="form-control">
                     </div> -->
-                    <div class="block-btn-search">
-                        <label class="control-label">&nbsp;</label>
-                        <div>
-                            <button type="submit" class="btn btn-primary">Search</button>
-                            <button type="button" class="btn btn-default" (click)="searchForm.reset(); getListItems()">Reset</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class="block-content pd-top mt-2">
-            <div class="table-responsive">
-                <table class="table table-striped table-vcenter table-hover custom-table">
-                    <thead class="bg-white">
-                        <tr>
-                            <th>
-                                <label class="css-input css-checkbox css-checkbox-default">
-                                    <input class="cb-all" type="checkbox" [(ngModel)]="isCheckedAll" (change)="checkAll($event)">
-                                    <span></span>
-                                </label>
-                            </th>
-                            <th>Item No</th>
-                            <th>Description</th>
-                            <th>Condition</th>
-                            <th>G/L Account</th>
-                            <th>UOM</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of listItems">
-                            <td>
-                                <label class="css-input css-checkbox css-checkbox-default">
-                                    <input class="cb-element" type="checkbox" [(ngModel)]="item.is_checked" (change)="isAllChecked()">
-                                    <span></span>
-                                </label>
-                            </td>
-                            <td>{{item.no}}</td>
-                            <td>{{item.des}}</td>
-                            <td>{{item.item_condition_name}}</td>
-                            <td>{{item.income_account_name}}</td>
-                            <td>{{item.uom}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="row normal-pagination mg-top-10" *ngIf="listItems.length > 0">
-            <div class="col-md-6 padding-lr-0">
-                <div class="text-left">
-                    <div class="col-md-6" style="padding-left: 0px;">
-                        <span style="float: left; padding-right: 10px;">{{listItems.length}}/{{tableService.pagination.total_record}} items</span>
-                        <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length" (change)="tableService.changeLength()">
-                            <option *ngFor="let option of tableService.itemPerPageOptions" [ngValue]="option">{{option}}</option>
-                        </select>
+                <div class="block-btn-search">
+                    <label class="control-label">&nbsp;</label>
+                    <div>
+                        <button type="submit" class="btn btn-primary">Search</button>
+                        <button type="button" class="btn btn-default" (click)="searchForm.reset(); getListItems()">Reset</button>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-6 padding-lr-0">
-                <div class="text-right">
-                    <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length"
-                        [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page"
-                        [maxSize]="tableService.maxSize" [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+            </form>
+        </div>
+    </div>
+    <div class="block-content pd-top mt-2">
+        <div class="table-responsive">
+            <table class="table table-striped table-vcenter table-hover custom-table"
+            cdArrowTable [collection]="listItems" [(selectedIndex)]="selectedIndex">
+                <thead class="bg-white">
+                    <tr>
+                        <th>
+                            <label class="css-input css-checkbox css-checkbox-default">
+                                <input class="cb-all" type="checkbox" [(ngModel)]="isCheckedAll" (change)="checkAll($event)">
+                                <span></span>
+                            </label>
+                        </th>
+                        <th>Item No</th>
+                        <th>Description</th>
+                        <th>Condition</th>
+                        <th>G/L Account</th>
+                        <th>UOM</th>
+                    </tr>
+                </thead>
+                <tr *ngIf="listItems.length === 0">
+                    <td colspan="100%" class="text-center">No data.</td>
+                </tr>
+                <tbody>
+                    <tr *ngFor="let item of listItems; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
+                        <td>
+                            <label class="css-input css-checkbox css-checkbox-default">
+                                <input class="cb-element" type="checkbox" [(ngModel)]="item.is_checked" (change)="isAllChecked()">
+                                <span></span>
+                            </label>
+                        </td>
+                        <td>{{item.no}}</td>
+                        <td>{{item.des}}</td>
+                        <td>{{item.item_condition_name}}</td>
+                        <td>{{item.income_account_name}}</td>
+                        <td>{{item.uom}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row normal-pagination mg-top-10" *ngIf="listItems.length > 0">
+        <div class="col-md-6 padding-lr-0">
+            <div class="text-left">
+                <div class="col-md-6" style="padding-left: 0px;">
+                    <span style="float: left; padding-right: 10px;">{{listItems.length}}/{{tableService.pagination.total_record}}
+                        items</span>
+                    <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length"
+                        (change)="tableService.changeLength()">
+                        <option *ngFor="let option of tableService.itemPerPageOptions" [ngValue]="option">{{option}}</option>
+                    </select>
                 </div>
+            </div>
+        </div>
+        <div class="col-md-6 padding-lr-0">
+            <div class="text-right">
+                <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)"
+                    [pageSize]="tableService.pagination.length" [collectionSize]="tableService.pagination.total_record || 120"
+                    [(page)]="tableService.pagination.page" [maxSize]="tableService.maxSize" [rotate]="true"
+                    [boundaryLinks]="true"></ngb-pagination>
             </div>
         </div>
     </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-outline-primary" (click)="onAddItem()">Add</button>
-        <button type="button" class="btn btn-outline-dark" (click)="activeModal.close()">Close</button>
-    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-outline-primary" (click)="onAddItem()">Add</button>
+    <button type="button" class="btn btn-outline-dark" (click)="activeModal.close()">Close</button>
+</div>

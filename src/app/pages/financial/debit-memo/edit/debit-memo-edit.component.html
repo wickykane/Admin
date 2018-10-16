@@ -320,7 +320,8 @@
                     </div>
                     <div class="card-body no-padding">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-order">
+                            <table class="table table-bordered table-order"
+                            cdArrowTable [collection]="listLineItems" [(selectedIndex)]="selectedIndex">
                                 <thead>
                                     <tr>
                                         <th style="width:70px" translate><b>Action</b></th>
@@ -336,13 +337,13 @@
                                         <th><b>G/L Account</b></th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr *ngIf="!listLineItems.length">
-                                        <td colspan="100%" class="text-center" translate>No data.</td>
-                                    </tr>
-                                    <tr *ngFor="let item of listLineItems; let i = index" [hidden]="item.deleted">
+                                <tr *ngIf="!listLineItems.length">
+                                    <td colspan="100%" class="text-center" translate>No data.</td>
+                                </tr>
+                                <tbody *ngFor="let item of listLineItems; let i = index" [hidden]="item.deleted">
+                                    <tr [ngClass]="{'row-selected': i == selectedIndex}">
                                         <td class="text-center">
-                                            <button class="btn btn-xs" type="button" (click)="onDeleteLineItem(item, i)">
+                                            <button class="btn btn-danger btn-xs" type="button" (click)="onDeleteLineItem(item, i)">
                                                 <i class="fa fa-trash"></i>
                                             </button>
                                         </td>
