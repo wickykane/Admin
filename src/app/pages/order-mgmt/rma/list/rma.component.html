@@ -127,7 +127,7 @@
                                         <td>{{item.updated_by}}</td>
                                         <td class="text-nowrap">
                                             <a *ngIf="item.sts_id == 7" ngbTooltip="Complete" class="btn btn-default" (click)="confirmModal(item.id, 7)"><i class="fa fa-share-square-o"></i></a>
-                                            <a  *ngIf="item.sts_id == 1" ngbTooltip="Approve" class="btn btn-default" (click)="confirmModal(item.id, 5)"><i class="fa fa-check" aria-hidden="true"></i></a>
+                                            <a  *ngIf="item.sts_id == 1" ngbTooltip="Send to WH" class="btn btn-default" (click)="confirmModal(item.id, 5)"><i class="fa fa-check" aria-hidden="true"></i></a>
                                             <a *ngIf="item.sts_id == 1" ngbTooltip="Cancel" class="btn btn-default" (click)="confirmModal(item.id, 2)"><i class="fa fa-times-circle"></i></a>
                                             <!-- <a ngbTooltip="Revise" class="btn btn-default" (click)="confirmModal(item.id, 'RV')"><i class="fa fa-pencil-square"></i></a> -->
                                             <a *ngIf="item.sts_id == 1" ngbTooltip="Edit" class="btn btn-default" [routerLink]="['edit', item.id]"><i class="fa fa-pencil"></i></a>

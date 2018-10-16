@@ -17,7 +17,7 @@ import { SaleOrderKeyService } from './keys.control';
     selector: 'app-sale-order',
     templateUrl: './sale-order.component.html',
     styleUrls: ['./sale-order.component.scss'],
-    providers: [SaleOrderKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }],
+    providers: [TableService, SaleOrderKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }],
     animations: [routerTransition()],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
