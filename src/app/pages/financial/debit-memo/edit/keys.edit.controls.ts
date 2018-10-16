@@ -6,7 +6,7 @@ import { KeyboardBaseService } from './../../../../shared/helper/keyServiceBase'
 export class DebitMemoEditKeyService extends KeyboardBaseService {
 
     keyConfig = {
-        buyer_id: {
+        company_id: {
             element: null,
             focus: true,
             ng_select: true,

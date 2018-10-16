@@ -376,10 +376,10 @@
                             </table>
                         </div>
                         <div class="col-12 no-padding" *ngIf="debitMemoForm.controls.order_id.valid">
-                            <button class="btn btn-link" (click)="openModalAddItemsOrder()" translate>
+                            <button class="btn btn-link" (click)="keyService.saveKeys(); openModalAddItemsOrder()" translate>
                                 <i class="fa fa-plus"></i> Item From Order
                             </button>
-                            <button class="btn btn-link" (click)="openModalAddMiscItems()" translate>
+                            <button class="btn btn-link" (click)="keyService.saveKeys(); openModalAddMiscItems()" translate>
                                 <i class="fa fa-plus"></i> Misc Item
                             </button>
                         </div>
