@@ -1,4 +1,4 @@
-import { Directive } from '@angular/core';
+import { Directive, Optional, Self } from '@angular/core';
 import { NgControl, NgModel } from '@angular/forms';
 
 @Directive({
@@ -11,7 +11,8 @@ import { NgControl, NgModel } from '@angular/forms';
     providers: [NgModel],
 })
 export class TrimDirective {
-    constructor(private ngModel: NgModel, private formControl: NgControl) { }
+    constructor(private ngModel: NgModel, @Optional() // Add this decorator
+    @Self() private formControl: NgControl) { }
 
     onBlur($event) {
         const value = ($event.target.value || '').trim();
