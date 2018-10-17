@@ -170,6 +170,12 @@ export class ReceiptVoucherCreateComponent implements OnInit {
                 payment_method: 27,
                 gl_account: 162,
             });
+
+            this.generalForm.get('check_no').clearValidators();
+            this.generalForm.get('check_no').updateValueAndValidity();
+            this.generalForm.get('price_received').clearValidators();
+            this.generalForm.get('price_received').updateValueAndValidity();
+
             this.getListInvoiceAndMemo(data.inv_num, data.tot_amt);
         });
     }
@@ -234,7 +240,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             }
         });
         this.voucherService.getListInvoiceAndMemo(params).subscribe(res => {
-            this.data['invoice_id'] = null;
+            // this.data['invoice_id'] = null;
             this.list.items = res.data.rows || [];
             this.tableService.matchPagingOption(res.data);
             if (code) {

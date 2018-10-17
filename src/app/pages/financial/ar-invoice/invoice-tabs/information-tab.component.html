@@ -11,7 +11,7 @@
         <button class="btn btn-outline-dark" (click)="printPDF(_invoiceId, detail['inv_num'] )"><i class="fa fa-download" aria-hidden="true"></i> Print</button>
         <button *ngIf="[3,4,6,7,8].indexOf(detail['invoice_status_id']) != -1" class="btn btn-outline-dark" (click)="sendMail(_invoiceId)"><i class="fa fa-envelope-o" aria-hidden="true"></i> Send Mail</button>
 
-        <button *ngIf="!detail['shipping_method']?.own_carrier && !detail['pod_sign_off_date'] && [4,5,6,8].indexOf(detail['invoice_status_id']) != -1" class="btn btn-outline-info" (click)="updatePOD()"><i class="fa fa-calendar" aria-hidden="true"></i> Update POD Date</button>
+        <button *ngIf="[4,5,6,8].indexOf(detail['invoice_status_id']) != -1" class="btn btn-outline-info" (click)="updatePOD()"><i class="fa fa-calendar" aria-hidden="true"></i> Update POD Date</button>
 
         <!-- <button *ngIf="detail['invoice_status_id'] == 3" class="btn btn-outline-dark" (click)="confirmModal(_invoiceId, 1)"><i class="fa fa-external-link-square" aria-hidden="true"></i> Reopen</button> -->
     </div>
@@ -49,7 +49,7 @@
                                             <label class='col-6 control-label'>Invoice Status</label>
                                             <div class='col-6'>
                                                 <span class="badge badge-info bg-blue" *ngIf="detail['invoice_status_id'] == 1">{{detail['invoice_status_name']}}</span>
-                                                <span class="badge badge-warning bg-texas-rose" *ngIf="detail['invoice_status_id'] == 2">{{detail['invoice_status_name']}}</span>
+                                                <span class="badge badge-warning bg-texas-rose" *ngIf="detail['invoice_status_id'] == 2 || detail['invoice_status_id'] == 11 ">{{detail['invoice_status_name']}}</span>
                                                 <span class="badge badge-danger bg-magenta" *ngIf="detail['invoice_status_id'] == 3">{{detail['invoice_status_name']}}</span>
                                                 <span class="badge badge-success bg-strong-green" *ngIf="detail['invoice_status_id'] == 4">{{detail['invoice_status_name']}}</span>
                                                 <span class="badge badge-primary bg-darkblue" *ngIf="detail['invoice_status_id'] == 5">{{detail['invoice_status_name']}}</span>
@@ -287,7 +287,7 @@
                                     <label class="control-label col-6" translate>POD Sign Off Date</label>
                                     <div class="col-6">
                                         <span *ngIf=" (detail['pod_sign_off_date'] || detail['shipping_method']?.ship_date)">
-                                                {{ (detail['pod_sign_off_date'] || detail['shipping_method']?.ship_date)  | date:'MM/dd/yyyy HH:mm' }}
+                                                {{ (detail['pod_sign_off_date'] || detail['shipping_method']?.ship_date)  | date:'MM/dd/yyyy' }}
                                         </span>
                                     </div>
                                 </div>

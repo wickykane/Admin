@@ -114,7 +114,7 @@ export class InvoiceInformationTabComponent implements OnInit {
         this.financialService.getSettingInfoQuickbook().subscribe(
             res => {
                 this.isInstallQuickbook = res.data.state === 'authorized' ? true : false;
-            }, err => {}
+            }, err => { }
         );
     }
 
@@ -129,7 +129,7 @@ export class InvoiceInformationTabComponent implements OnInit {
                             try {
                                 const result = JSON.parse(_res['_body']);
                                 this.toastr.success(`Invoice ${result.data[0].entity.DocNumber} has been sync to Quickbooks successfully.`);
-                            } catch (err) {}
+                            } catch (err) { }
                         },
                         err => {
                             this.toastr.error(`Cannot sync invoice to Quickbooks.`);
@@ -171,8 +171,26 @@ export class InvoiceInformationTabComponent implements OnInit {
             });
         }
     }
-
     updatePOD() {
+        const date = this.detail['pod_sign_off_date'];
+        if (date) {
+            const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
+            modalRef.result.then(res => {
+                if (res) {
+                    this.updatePODPopUp();
+                }
+            }, dismiss => {
+
+            });
+            modalRef.componentInstance.message = 'There is POD Date in the Invoice. Do you want to update it?';
+            modalRef.componentInstance.yesButtonText = 'Yes';
+            modalRef.componentInstance.noButtonText = 'No';
+        } else {
+            this.updatePODPopUp();
+        }
+    }
+
+    updatePODPopUp() {
         const modalRef = this.modalService.open(PODModalComponent, { size: 'sm' });
         modalRef.result.then(res => {
             if (res) {
