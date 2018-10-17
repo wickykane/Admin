@@ -92,7 +92,7 @@ export class ItemListComponent implements OnInit {
      * Master Data
      */
     refresh() {
-        this.cd.detectChanges();
+         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
 
     selectTable() {

@@ -91,7 +91,7 @@ export class ItemModalContent implements OnInit, OnDestroy {
     }
 
     refresh() {
-        this.cd.detectChanges();
+         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
 
     getListReference() {

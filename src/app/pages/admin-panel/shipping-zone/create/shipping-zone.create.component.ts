@@ -136,7 +136,7 @@ export class ShippingZoneCreateComponent implements OnInit {
         this.getListMasterData();
     }
     refresh() {
-        this.cd.detectChanges();
+         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
     getListMasterData() {
         this.shippingZoneService.getMasterData().subscribe(res => {

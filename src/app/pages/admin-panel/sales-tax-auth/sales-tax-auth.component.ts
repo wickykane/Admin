@@ -132,7 +132,7 @@ export class SalesTaxAuthComponent implements OnInit {
      */
     //#region load list master
     refresh() {
-        this.cd.detectChanges();
+         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
 
     getListCountryDropDown() {
