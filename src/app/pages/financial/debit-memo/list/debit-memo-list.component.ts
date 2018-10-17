@@ -99,7 +99,7 @@ export class DebitMemoListComponent implements OnInit {
     }
 
     refresh() {
-        this.cd.detectChanges();
+         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
 
     getQuickbookSettings() {

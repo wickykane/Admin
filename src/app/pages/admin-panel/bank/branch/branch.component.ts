@@ -62,7 +62,7 @@ export class BranchComponent implements OnInit {
    * Table Event
    */
   refresh() {
-    this.cd.detectChanges();
+     if (!this.cd['destroyed']) { this.cd.detectChanges(); }
   }
 
   selectData(index) {
