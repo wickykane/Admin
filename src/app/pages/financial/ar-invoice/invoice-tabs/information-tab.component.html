@@ -49,7 +49,7 @@
                                             <label class='col-6 control-label'>Invoice Status</label>
                                             <div class='col-6'>
                                                 <span class="badge badge-info bg-blue" *ngIf="detail['invoice_status_id'] == 1">{{detail['invoice_status_name']}}</span>
-                                                <span class="badge badge-warning bg-texas-rose" *ngIf="detail['invoice_status_id'] == 2">{{detail['invoice_status_name']}}</span>
+                                                <span class="badge badge-warning bg-texas-rose" *ngIf="detail['invoice_status_id'] == 2 || detail['invoice_status_id'] == 11 ">{{detail['invoice_status_name']}}</span>
                                                 <span class="badge badge-danger bg-magenta" *ngIf="detail['invoice_status_id'] == 3">{{detail['invoice_status_name']}}</span>
                                                 <span class="badge badge-success bg-strong-green" *ngIf="detail['invoice_status_id'] == 4">{{detail['invoice_status_name']}}</span>
                                                 <span class="badge badge-primary bg-darkblue" *ngIf="detail['invoice_status_id'] == 5">{{detail['invoice_status_name']}}</span>

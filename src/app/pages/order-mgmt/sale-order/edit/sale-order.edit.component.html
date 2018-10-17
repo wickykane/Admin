@@ -596,7 +596,7 @@
                 <button type="button" class="btn btn-outline-info" (click)="createOrder('draft')" translate>Save</button>
                 <button *ngIf="!data['disable']" type="button" class="btn btn-outline-success" (click)="confirmModal('validate')" translate>Save & Validate</button>
                 <button *ngIf="!data['disable']" type="button" class="btn btn-outline-danger" (click)="confirmModal('create')" translate>Save & Submit</button>
-                <button type="button" class="btn btn-outline-secondary" (click)="confirmModal('cancel')" translate>Cancel Order</button>
+                <button *ngIf="!data['disable']" type="button" class="btn btn-outline-secondary" (click)="confirmModal('cancel')" translate>Cancel Order</button>
                 <button type="button" class="btn btn-default" (click)="confirmModal(0)" translate>Back To List</button>
             </div>
         </div>
