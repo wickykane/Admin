@@ -296,6 +296,7 @@ export class RmaCreateComponent implements OnInit {
             this.getOrderInformation(orderId);
             this.getListLineItems(orderId);
             this.getListInvoice(orderId);
+            this.checkDateTime();
         }
         this.refresh();
 
@@ -311,7 +312,7 @@ export class RmaCreateComponent implements OnInit {
         if (check[0]['pod_sign_off_date']) {
             const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
             modalRef.result.then(res => {
-                this.router.navigate(['/financial/invoice/edit', check[0]['id']]);
+                this.router.navigate(['/financial/invoice/view', check[0]['id']]);
             }, dismiss => {
                 this.generalForm.patchValue({ invoice_id: null });
             });
@@ -320,24 +321,29 @@ export class RmaCreateComponent implements OnInit {
             modalRef.componentInstance.noButtonText = 'No';
         }
 
-        const params = {
-            order_id: this.generalForm.value.order_id,
-            invoice_id: this.generalForm.value.invoice_id,
-            request_date: moment(this.generalForm.value.request_date).format('MM/DD/YYYY')
-        };
+        this.checkDateTime();
 
-        this.service.checkDateTime(params).subscribe(
-            res => {
-                try {
-                    this.generalForm.patchValue({ return_time: res.data.return_time, delivery_date: res.data.delivery_date });
-                    this.refresh();
-                } catch (err) {
-                    console.log(err);
-                }
-            }, err => {
-                console.log(err);
-            }
-        );
+    }
+
+    checkDateTime() {
+      const params = {
+          order_id: this.generalForm.value.order_id,
+          invoice_id: this.generalForm.value.invoice_id || null,
+          request_date: moment(this.generalForm.value.request_date).format('MM/DD/YYYY')
+      };
+
+      this.service.checkDateTime(params).subscribe(
+          res => {
+              try {
+                  this.generalForm.patchValue({ return_time: res.data.return_time, delivery_date: res.data.delivery_date });
+                  this.refresh();
+              } catch (err) {
+                  console.log(err);
+              }
+          }, err => {
+              console.log(err);
+          }
+      );
     }
 
     getListOrder(company_id) {
@@ -395,7 +401,7 @@ export class RmaCreateComponent implements OnInit {
 
 
                 // Set item and update
-                this.list.returnItem = (data.items || []);
+                this.list.returnItem = data.items.filter((x => x.is_item));
                 this.list.returnItem.forEach(item => {
                     item['reason'] = this.listMaster['return_reason'];
                     item['return_quantity'] = 1;

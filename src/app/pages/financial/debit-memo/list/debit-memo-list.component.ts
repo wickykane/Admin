@@ -20,6 +20,7 @@ import { DebitMemoService } from '../debit-memo.service';
 import { HotkeysService } from 'angular2-hotkeys';
 import { SendMailDebitModalContent } from '../modals/send-email/send-mail.modal';
 
+import { cdArrowTable } from '../../../../shared';
 @Component({
     selector: 'app-debit-memo-list',
     templateUrl: './debit-memo-list.component.html',
@@ -31,6 +32,7 @@ import { SendMailDebitModalContent } from '../modals/send-email/send-mail.modal'
 export class DebitMemoListComponent implements OnInit {
 
     @ViewChild('drNo') drNoInput: ElementRef;
+    @ViewChild(cdArrowTable) table: cdArrowTable;
 
     public listMaster = {
         'count-status': []
@@ -238,6 +240,10 @@ export class DebitMemoListComponent implements OnInit {
         }, no => { });
     }
 
+    addNewDebitMemo() {
+        this.router.navigate(['/financial/debit-memo/create']);
+    }
+
     onViewDebitMemo(debitId) {
         this.router.navigate(['/financial/debit-memo/view', debitId]);
     }
@@ -276,8 +282,15 @@ export class DebitMemoListComponent implements OnInit {
                     this.toastr.success(res.message);
                     if (newStatus === 3 && this.isInstallQuickbook) {
                         this.financialService.syncDebitToQuickbook(debitId).subscribe(
-                            _res => {},
-                            err => {}
+                            _res => {
+                                try {
+                                    const result = JSON.parse(_res['_body']);
+                                    this.toastr.success(`Debit Memo ${result.data[0].entity.DocNumber} has been sync to Quickbooks successfully.`);
+                                } catch (err) {}
+                            },
+                            err => {
+                                this.toastr.error(`Cannot sync Debit Memo to Quickbooks.`);
+                            }
                         );
                     }
                     this.getListDebitMemo();
@@ -289,5 +302,10 @@ export class DebitMemoListComponent implements OnInit {
                 console.log(err);
             }
         );
+    }
+
+    selectTable() {
+        this.selectedIndex = 0;
+        this.table.element.nativeElement.querySelector('td a').focus();
     }
 }

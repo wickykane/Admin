@@ -345,6 +345,7 @@ export class SaleOrderEditComponent implements OnInit {
         this.addr_select = Object.create(this.copy_addr);
         if (buyer_id) {
             this.getDetailCustomerById(buyer_id, flag);
+            this.getActiveSaleQuote(buyer_id);
         }
         if (!flag) {
             // this.list.items = [];
@@ -698,6 +699,11 @@ export class SaleOrderEditComponent implements OnInit {
             this.refresh();
         });
     }
+    getActiveSaleQuote(id) {
+        this.orderService.getQuantityActiveQuote(id).subscribe(res => {
+            this.data['qty_quote'] = res.data;
+        });
+    }
 
     addNewItem() {
         const modalRef = this.modalService.open(ItemModalContent, { size: 'lg' });
@@ -869,7 +875,7 @@ export class SaleOrderEditComponent implements OnInit {
         this.orderService.updateStatusOrder(id, 7).subscribe(res => {
             this.toastr.success(res.message);
             setTimeout(() => {
-                this.router.navigate(['/order-management/sale-order']);
+                this.router.navigate(['/order-management/sale-order/detail/', this.route.snapshot.paramMap.get('id')]);
             }, 500);
         });
     }
@@ -911,7 +917,7 @@ export class SaleOrderEditComponent implements OnInit {
                 params = {
                     'items': products,
                     'is_draft_order': 1,
-                    'order_sts_id': 1
+                    'order_sts_id': this.data['disable'] ? null : 1
                 };
                 break;
         }
@@ -921,7 +927,7 @@ export class SaleOrderEditComponent implements OnInit {
                 // if (res.status) {
                 this.toastr.success(res.message);
                 setTimeout(() => {
-                    this.router.navigate(['/order-management/sale-order']);
+                    this.router.navigate(['/order-management/sale-order/detail/', this.route.snapshot.paramMap.get('id')]);
                 }, 500);
                 // } else {
                 //     this.toastr.error(res.message);

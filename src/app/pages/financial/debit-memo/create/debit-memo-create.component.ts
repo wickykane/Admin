@@ -16,6 +16,7 @@ import { DebitMemoCreateKeyService } from './keys.create.control';
 import { ItemsOrderDebitModalContent } from '../modals/items-order/items-order.modal';
 import { MiscItemsDebitModalContent } from '../modals/misc-items/misc-items.modal';
 
+import { cdArrowTable } from '../../../../shared';
 import { FinancialService } from '../../financial.service';
 import { DebitMemoService } from '../debit-memo.service';
 
@@ -29,12 +30,14 @@ import * as moment from 'moment';
     styleUrls: ['./debit-memo-create.component.scss'],
     animations: [routerTransition()],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [DebitMemoCreateKeyService, HotkeysService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }]
+    providers: [DebitMemoCreateKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }]
 })
 export class DebitMemoCreateComponent implements OnInit {
 
     //#region initialize variables
     @ViewChild('fieldNote') noteText: ElementRef;
+    @ViewChild(cdArrowTable) table: cdArrowTable;
+    public selectedIndex = 0;
 
     public listMaster = {
         customers: [],
@@ -497,6 +500,10 @@ export class DebitMemoCreateComponent implements OnInit {
         };
         modalRef.componentInstance.setIgnoredItems = params;
         modalRef.result.then(res => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
             if (res) {
                 res.forEach(selectedItem => {
                     const itemIndex = this.listDeletedLineItem.findIndex(item => item.order_detail_id === selectedItem.order_detail_id);
@@ -508,7 +515,12 @@ export class DebitMemoCreateComponent implements OnInit {
                 this.getUniqueTaxItemLine();
                 this.refresh();
             }
-        }, dismiss => { });
+        }, dismiss => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
+        });
     }
 
     openModalAddMiscItems() {
@@ -521,6 +533,10 @@ export class DebitMemoCreateComponent implements OnInit {
         };
         modalRef.componentInstance.setIgnoredItems = params;
         modalRef.result.then(res => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
             if (res) {
                 res.forEach(selectedItem => {
                     const itemIndex = this.listDeletedLineItem.findIndex(item => item.misc_id === selectedItem.misc_id);
@@ -532,7 +548,12 @@ export class DebitMemoCreateComponent implements OnInit {
                 this.getUniqueTaxItemLine();
                 this.refresh();
             }
-        }, dismiss => { });
+        }, dismiss => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
+        });
     }
 
     onClickSave(saveMethod) {
@@ -596,6 +617,18 @@ export class DebitMemoCreateComponent implements OnInit {
             }
         }, dismiss => { });
     }
+
+    selectTable() {
+        this.selectedIndex = 0;
+        this.table.scrollToTable();
+        setTimeout(() => {
+            const button = this.table.element.nativeElement.querySelectorAll('td button');
+            if (button && button[this.selectedIndex]) {
+                button[this.selectedIndex].focus();
+            }
+        });
+        this.refresh();
+    }
     //#endregion handle onSelect/ onClick
 
     //#region call api submit
@@ -618,8 +651,15 @@ export class DebitMemoCreateComponent implements OnInit {
                     this.toastr.success(res.message);
                     if ( status === 3 && this.isInstallQuickbook) {
                         this.financialService.syncDebitToQuickbook(res.data['id']).subscribe(
-                            _res => {},
-                            err => {}
+                            _res => {
+                                try {
+                                    const result = JSON.parse(_res['_body']);
+                                    this.toastr.success(`Debit Memo ${result.data[0].entity.DocNumber} has been sync to Quickbooks successfully.`);
+                                } catch (err) {}
+                            },
+                            err => {
+                                this.toastr.error(`Cannot sync Debit Memo to Quickbooks.`);
+                            }
                         );
                     }
                     this.handleSaveSuccessfully(status, res.data['id']);

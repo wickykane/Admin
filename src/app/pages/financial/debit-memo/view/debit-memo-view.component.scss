@@ -1,66 +1,9 @@
-.information-tab {
-    margin-top: 10px;
-    border: 1px solid #dee2e6;
-    border-top: none;
+.btn-print-order {
+    position: absolute;
+    top: 41px;
+    right: 15px;
 }
 
-.scroll-container {
-    table {
-        thead tr {
-            display: table;
-            width: 100%;
-            table-layout: fixed;
-        }
-
-        tbody {
-            display: block;
-            max-height: 145px;
-            overflow-y: auto;
-            overflow-x: hidden;
-            tr {
-                display: table;
-                table-layout: fixed;
-                width: calc( 100% + 16px);
-            }
-        }
-      
-    }
-}
-
-.table-custom {
-    thead th {
-        padding: 5px 10px;
-        border: none;
-        background-color: #d2d2d2;
-        word-break: break-word;
-    }
-    tbody td {
-        padding: 10px;
-        word-break: break-word;        
-    }
-}
-
-.address-tab {
-    padding: 15px 15px 0 15px;
-    .block-search {
-        max-width: 125px;
-    }
-}
-
-.customer-infomation {
-    padding: 15px;
-    padding-bottom: 5px;
-    background-color: #ededed;
-    label {
-        font-weight: bold;
-    }
-    &.bolder {
-        background-color: #dbdbdb;
-    }
-}
-.margin-full-0{
-    margin: 0 !important;
-}
 .block>.nav-tabs>li.active>a,
 .block>.nav-tabs>li.active>a:focus,
 .block>.nav-tabs>li.active>a:hover {
@@ -145,47 +88,47 @@
 
 .dashboard-content .dashboard-stat.darkblue,  .bg-darkblue  {
     background-color: #7197EA;
-    color: #fff !important;    
+    color: #fff !important;
 }
 
 .dashboard-content .dashboard-stat.red, .bg-red {
     background-color: #E74F5B;
-    color: #fff !important;    
+    color: #fff !important;
 }
 
 .dashboard-content .dashboard-stat.lemon, .bg-lemon {
     background-color: #C2C262;
-    color: #fff !important;    
+    color: #fff !important;
 }
 
 .dashboard-content .dashboard-stat.green, .bg-green {
     background-color: #32c5d2;
-    color: #fff !important;    
+    color: #fff !important;
 }
 
 .dashboard-content .dashboard-stat.magenta, .bg-magenta {
     background-color: #A48AD4;
-    color: #fff !important;    
+    color: #fff !important;
 }
 
 .dashboard-content .dashboard-stat.strong-green, .bg-strong-green {
     background-color: #45C37A;
-    color: #fff !important;    
+    color: #fff !important;
 }
 
 .dashboard-content .dashboard-stat.bright-grey, .bg-bright-grey {
     background-color: #999999;
-    color: #fff !important;    
+    color: #fff !important;
 }
 
 .dashboard-content .dashboard-stat.rock-blue, .bg-rock-blue {
     background-color: #949FB1;
-    color: #fff !important;    
+    color: #fff !important;
 }
 
 .dashboard-content .dashboard-stat.texas-rose, .bg-texas-rose {
     background-color: #FDB45C;
-    color: #fff !important;    
+    color: #fff !important;
 }
 
 .dashboard-content .dashboard-stat {
@@ -527,7 +470,6 @@
         max-width: 120px;
         margin-left: 5px;
         display: inline-block;
-        vertical-align: middle;
     }
 }
 
@@ -581,22 +523,3 @@
         }
     }
 }
-
-.order-summary-body {
-    .control-label + div {
-        padding: 0 !important;
-    }
-}
-.customer-balance-custom-border{
- border: 1px solid #cccccc;
-}
-.text-red {
-    color: red;
-  }
-.text-green{
-    color: green;
-}
-.text-blue {
-    color: #007bff !important;
-    cursor: pointer;
-  }

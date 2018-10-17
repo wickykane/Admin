@@ -140,16 +140,14 @@
                                 <tbody *ngFor="let debit of listDebitMemo; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                                     <tr>
                                         <td class="text-center">
-                                            <img *ngIf="debit.sts_code != 'CP'" src="assets/img/qbicon-gray.png" width="20px" height="20px">
-                                            <!-- <img *ngIf="item.sts_code!='CP'" src="assets/img/qbicons.png" width="20px" height="20px"> -->
+                                            <img *ngIf="!debit.qbo_sync" src="assets/img/qbicon-gray.png" width="20px" height="20px">
+                                            <img *ngIf="debit.qbo_sync" src="assets/img/qbicons.png" width="20px" height="20px">
                                             <!-- <a *ngIf="debit.sts_code == 'CP'" href="https://sandbox.qbo.intuit.com/app/sales" target="_blank">
                                                 <img placement="top" ngbTooltip="Sent Invoice To QuickBooks {{debit.updated_at}}"
                                                     src="../../assets/img/qbicons.png" width="20px" height="20px">
                                             </a> -->
                                         </td>
-                                        <td>
-                                            <a class="text-primary" (click)="onViewDebitMemo(debit.id)">{{debit.no}}</a>
-                                        </td>
+                                        <td><a class="text-primary" (click)="onViewDebitMemo(debit.id)">{{debit.no}}</a></td>
                                         <td class="text-center">{{debit.issue_date | date:'MM/dd/yyyy'}}</td>
                                         <td>{{debit.company_name}}</td>
                                         <td>{{debit.doc_no}}</td>

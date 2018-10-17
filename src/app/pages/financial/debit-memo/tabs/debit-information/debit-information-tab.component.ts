@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -12,6 +12,10 @@ import { environment } from '../../../../../../environments/environment';
 import { FinancialService } from '../../../financial.service';
 import { DebitMemoService } from '../../debit-memo.service';
 
+import { HotkeysService } from 'angular2-hotkeys';
+import { DebitMemoViewComponent } from '../../view/debit-memo-view.component';
+import { DebitMemoViewKeyService } from '../../view/keys.view.controls';
+
 @Component({
     selector: 'app-debit-info-tab',
     templateUrl: './debit-information-tab.component.html',
@@ -21,6 +25,7 @@ import { DebitMemoService } from '../../debit-memo.service';
 export class DebitInformationTabComponent implements OnInit {
 
     public debitData = {};
+    public data = {};
 
     @Input() set debitInfo(debit) {
         if (debit) {
@@ -44,8 +49,15 @@ export class DebitInformationTabComponent implements OnInit {
         private modalService: NgbModal,
         public tableService: TableService,
         public debitService: DebitMemoService,
+        private _hotkeysService: HotkeysService,
+        public keyService: DebitMemoViewKeyService,
         public financialService: FinancialService,
+        @Inject(DebitMemoViewComponent) private parent: DebitMemoViewComponent,
         private http: HttpClient) {
+        //  Init Key
+        if (!this.parent.data['shortcut']) {
+            this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
+        }
     }
 
     ngOnInit() {
@@ -54,6 +66,10 @@ export class DebitInformationTabComponent implements OnInit {
         // this.getUniqueTaxItemLine();
         // this.listTaxs = this.debitData['tax_info'];
         // console.log(this.listTaxs);
+        this.data['tab'] = {
+            active: 0,
+        };
+        this.changeShortcut();
     }
 
     getUniqueTaxItemLine() {
@@ -127,8 +143,15 @@ export class DebitInformationTabComponent implements OnInit {
                     this.toastr.success(res.message);
                     if (newStatus === 3 && this.isInstallQuickbook) {
                         this.financialService.syncDebitToQuickbook(this.debitData['id']).subscribe(
-                            _res => {},
-                            err => {}
+                            _res => {
+                                try {
+                                    const result = JSON.parse(_res['_body']);
+                                    this.toastr.success(`Debit Memo ${result.data[0].entity.DocNumber} has been sync to Quickbooks successfully.`);
+                                } catch (err) {}
+                            },
+                            err => {
+                                this.toastr.error(`Cannot sync Debit Memo to Quickbooks.`);
+                            }
                         );
                     }
                     this.changeStatusSuccessfully.emit();
@@ -156,6 +179,23 @@ export class DebitInformationTabComponent implements OnInit {
     }
 
     onClickBack() {
+        this.router.navigate(['/financial/debit-memo']);
+    }
+
+    changeShortcut() {
+        setTimeout(() => {
+            this.parent.data['shortcut'] = this.keyService.getKeys();
+        });
+    }
+
+    changeTab(step) {
+        this.data['tab'].active = +this.parent.tabSet.activeId;
+        this.data['tab'].active += step;
+        this.data['tab'].active = Math.min(Math.max(this.data['tab'].active, 0), 7);
+        this.parent.selectTab(String(this.data['tab'].active));
+    }
+
+    cancel() {
         this.router.navigate(['/financial/debit-memo']);
     }
 }
