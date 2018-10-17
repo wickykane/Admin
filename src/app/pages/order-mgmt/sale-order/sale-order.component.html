@@ -162,12 +162,13 @@
                                         <td class="text-center">{{item.last_update_on | date:'MM/dd/yyyy'}}</td>
                                         <td class="text-center">{{item.last_update_by }}</td>
                                         <td class="text-nowrap">
-                                            <a href="javascript:void(0)" ngbTooltip="Submit" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" (click)="confirmModal(item.id, 'SM')"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></a>
-                                            <a href="javascript:void(0)" ngbTooltip="Approve" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="confirmModal(item.id, 'AP')"><i class="fa fa-check-square" aria-hidden="true"></i></a>
-                                            <a href="javascript:void(0)" ngbTooltip="Reject" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="confirmModal(item.id, 'RJ')"><i class="fa fa-ban"></i></a>
-                                            <a href="javascript:void(0)" ngbTooltip="Cancel" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" (click)="confirmModal(item.id, 'CC')"><i class="fa fa-times-circle"></i></a>
-                                            <a href="javascript:void(0)" ngbTooltip="Re Open" *ngIf="item['sts_code'] == 'RJ'" class="btn btn-default" (click)="confirmModal(item.id, 'RO')"><i class="fa fa-repeat"></i></a>
-                                            <a href="javascript:void(0)" ngbTooltip="Copy" class="btn btn-default" (click)="confirmModal(item.id, 'CLONE')"><i class="fa fa-clone"></i></a>
+                                            <a href="javascript:void(0)" ngbTooltip="Submit" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" (click)="confirmModal(item, 'SM')"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></a>
+                                            <a href="javascript:void(0)" ngbTooltip="Approve" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="confirmModal(item, 'AP')"><i class="fa fa-check-square" aria-hidden="true"></i></a>
+                                            <a href="javascript:void(0)" ngbTooltip="Reject" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" (click)="confirmModal(item, 'RJ')"><i class="fa fa-ban"></i></a>
+                                            <a href="javascript:void(0)" ngbTooltip="Cancel" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" (click)="confirmModal(item, 'CC')"><i class="fa fa-times-circle"></i></a>
+                                            <a href="javascript:void(0)" ngbTooltip="Re Open" *ngIf="item['sts_code'] == 'RJ'" class="btn btn-default" (click)="confirmModal(item, 'RO')"><i class="fa fa-repeat"></i></a>
+                                            <a href="javascript:void(0)" ngbTooltip="Create RMA" *ngIf="item['sts_code'] == 'RS'" class="btn btn-default" (click)="confirmModal(item, 'RS')"><i class="fa fa-file"></i></a>
+                                            <a href="javascript:void(0)" ngbTooltip="Copy" class="btn btn-default" (click)="confirmModal(item, 'CLONE')"><i class="fa fa-clone"></i></a>
 
                                             <a href="javascript:void(0)" ngbTooltip="Edit" *ngIf="item['sts_code'] == 'NW' || item['sts_code'] == 'RV' || !item['total_paid'] && (item['sts_code'] == 'AP' || item['sts_code'] == 'IP' || item['sts_code'] == 'PP' || item['sts_code'] == 'RS') " class="btn btn-default" (click)="edit(item)"><i class="fa fa-pencil-square"></i></a>
                                             <a ngbTooltip="View" class="btn btn-default" [routerLink]="['/order-management/sale-order/detail', item.id]"><i class="fa fa-eye"></i></a>

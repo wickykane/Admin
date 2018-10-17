@@ -95,6 +95,7 @@ export class RmaCreateComponent implements OnInit {
 
     public currentDt;
     public requiredInv = false;
+    public navigateData;
 
     public messageConfig = {
         'SB': 'Are you sure that you want to submit this return order to approver?', // Submit
@@ -149,6 +150,7 @@ export class RmaCreateComponent implements OnInit {
     }
 
     ngOnInit() {
+
         const user = JSON.parse(localStorage.getItem('currentUser'));
 
         this.service.getOrderReference().subscribe(res => {
@@ -185,6 +187,14 @@ export class RmaCreateComponent implements OnInit {
             this.data['page'] = 1;
             this.searchCustomer(key);
         });
+
+        this.navigateData = this.router.getNavigatedData() || [];
+        if (this.navigateData.length > 0) {
+            this.generalForm.patchValue({ company_id: this.navigateData[0]['buyer_id']});
+            this.changeCustomer();
+            this.generalForm.patchValue({ order_id: this.navigateData[0]['order_id']});
+            this.changeSalesOrder();
+        }
 
         this.refresh();
     }

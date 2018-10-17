@@ -263,6 +263,8 @@ export class RmaComponent implements OnInit {
                 if (status === 5) {
                     if (!res.status && res.message === 'show popup') {
                         this.checkStatusOrder(id);
+                    } else {
+                      this.toastr.success(res.message);
                     }
                 } else {
                     this.toastr.success(res.message);
