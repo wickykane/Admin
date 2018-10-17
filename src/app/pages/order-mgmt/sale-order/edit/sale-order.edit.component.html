@@ -411,7 +411,7 @@
                                 <tbody *ngFor="let item of list['items']; let $index = index;">
                                     <tr [ngClass]="{'row-selected': $index == selectedIndex}">
                                         <td class="text-center">
-                                            <button class="btn btn-danger btn-xs" type="button" (click)="deleteAction(item.sku, item.item_condition_id)">
+                                            <button [disabled]="data['disable']" class="btn btn-danger btn-xs" type="button" (click)="deleteAction(item.sku, item.item_condition_id)">
                                                 <i class="fa fa-trash"></i>
                                             </button>
                                         </td>
@@ -426,21 +426,18 @@
                                             {{wh.qty_available}}
                                         </td>
                                         <td>
-                                            <input numberDirective [min]="0" [disabled]="item.misc_id || data['user'].user_type !== 1 && data['editable_sts'].indexOf(data['order_data']?.order_sts_short_name) !== -1" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity"
-                                                (changeValue)="updateTotal()">
+                                            <input numberDirective [min]="0" [disabled]="item.misc_id || data['disable']" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (changeValue)="updateTotal()">
                                         </td>
                                         <td>
                                             <div>
                                                 <span>$</span>
                                                 <div style="display:inline-block;width:80%">
-                                                    <input [disabled]="!item.misc_id && data['user'].user_type !== 1 && data['editable_sts'].indexOf(data['order_data']?.order_sts_short_name) !== -1" [isDecimal]="true" numberDirective [min]="0" class="form-control input-sm" type="number" [(ngModel)]="item.sale_price"
-                                                        (changeValue)="updateTotal();changeFromSource(item)">
+                                                    <input [isDecimal]="true" numberDirective [min]="0" class="form-control input-sm" type="number" [(ngModel)]="item.sale_price" (changeValue)="updateTotal();changeFromSource(item)">
                                                 </div>
                                             </div>
                                         </td>
                                         <td>
-                                            <input [disabled]="!item.misc_id && data['user'].user_type !== 1 && data['editable_sts'].indexOf(data['order_data']?.order_sts_short_name) !== -1" [isDecimal]="true" numberDirective [min]="0" [max]="100" class="form-control input-sm" type="number" [(ngModel)]="item.discount_percent"
-                                                (changeValue)="updateTotal();changeFromSource(item)">
+                                            <input [isDecimal]="true" numberDirective [min]="0" [max]="100" class="form-control input-sm" type="number" [(ngModel)]="item.discount_percent" (changeValue)="updateTotal();changeFromSource(item)">
                                         </td>
                                         <td>
                                             <input readonly [isDecimal]="true" numberDirective [min]="0" [max]="100" class="form-control input-sm" type="number" [(ngModel)]="item.tax_percent" (changeValue)="updateTotal();changeFromSource(item)">
@@ -459,7 +456,7 @@
                             </table>
                         </div>
                         <div class="col-12 no-padding">
-                            <button [disabled]="data['user']?.user_type !== 1 && data['editable_sts'].indexOf(data['order_data']?.order_sts_short_name) !== -1" (click)="keyService.saveKeys(); addNewItem()" class="btn btn-link" translate>
+                            <button [disabled]="data['disable']" (click)="keyService.saveKeys(); addNewItem()" class="btn btn-link" translate>
                   <i class="fa fa-plus"></i>Add New Item</button>
                             <button (click)="keyService.saveKeys(); addNewMiscItem()" class="btn btn-link">
                   <i class="fa fa-plus"></i>Misc Item</button>
@@ -599,7 +596,7 @@
                 <button type="button" class="btn btn-outline-info" (click)="createOrder('draft')" translate>Save</button>
                 <button *ngIf="!data['disable']" type="button" class="btn btn-outline-success" (click)="confirmModal('validate')" translate>Save & Validate</button>
                 <button *ngIf="!data['disable']" type="button" class="btn btn-outline-danger" (click)="confirmModal('create')" translate>Save & Submit</button>
-                <button type="button" class="btn btn-outline-secondary" (click)="confirmModal('cancel')" translate>Cancel Order</button>
+                <button *ngIf="!data['disable']" type="button" class="btn btn-outline-secondary" (click)="confirmModal('cancel')" translate>Cancel Order</button>
                 <button type="button" class="btn btn-default" (click)="confirmModal(0)" translate>Back To List</button>
             </div>
         </div>

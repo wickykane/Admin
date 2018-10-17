@@ -347,7 +347,7 @@ export class InvoiceCreateComponent implements OnInit {
         this.financialService.getSettingInfoQuickbook().subscribe(
             res => {
                 this.isInstallQuickbook = res.data.state === 'authorized' ? true : false;
-            }, err => {}
+            }, err => { }
         );
     }
 
@@ -563,14 +563,18 @@ export class InvoiceCreateComponent implements OnInit {
                                 try {
                                     const result = JSON.parse(_res['_body']);
                                     this.toastr.success(`Invoice ${result.data[0].entity.DocNumber} has been sync to Quickbooks successfully.`);
-                                } catch (err) {}
+                                } catch (err) { }
                             },
                             err => {
                                 this.toastr.error(`Cannot sync invoice to Quickbooks.`);
                             }
                         );
-                        this.router.navigate(['/financial/receipt-voucher/create'], { queryParams: { invoice_id: this.data['invoice_id'] } });
-                        return;
+
+                        if (!this.data['only_validate']) {
+                            this.router.navigate(['/financial/receipt-voucher/create'], { queryParams: { invoice_id: this.data['invoice_id'] } });
+                            return;
+                        }
+
                     }
                     if (!is_continue) {
                         setTimeout(() => {
