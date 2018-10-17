@@ -177,7 +177,7 @@ export class ItemMiscModalContent implements OnInit, OnDestroy {
             }
             this.tableService.changePage(this.tableService.pagination.page);
             return;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Next page'));
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Previous page'));
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+pagedown', (event: KeyboardEvent): boolean => {
             this.tableService.pagination.page++;
@@ -187,7 +187,7 @@ export class ItemMiscModalContent implements OnInit, OnDestroy {
             }
             this.tableService.changePage(this.tableService.pagination.page);
             return;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Previous page'));
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Next page'));
     }
 
     resetKeys() {
