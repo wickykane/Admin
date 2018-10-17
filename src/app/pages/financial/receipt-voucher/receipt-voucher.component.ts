@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from './../../../services/table.service';
 import { ReceiptVoucherService } from './receipt-voucher.service';
 
+import { cdArrowTable } from '../../../shared';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -56,7 +57,7 @@ export class ReceiptVoucherComponent implements OnInit {
         // 'SC': { color: 'lemon', name: 'Completed', img: './assets/images/icon/full_delivered.png' },
         'ER': { color: 'lemon', name: 'Refund Due' },
     };
-
+    @ViewChild(cdArrowTable) table: cdArrowTable;
     constructor(public router: Router,
         public fb: FormBuilder,
         public toastr: ToastrService,
@@ -87,7 +88,6 @@ export class ReceiptVoucherComponent implements OnInit {
         this.tableService.context = this;
         //  Init Key
         this.receiptKeyService.watchContext.next({ context: this, service: this._hotkeysService });
-
     }
 
     ngOnInit() {
@@ -251,19 +251,19 @@ export class ReceiptVoucherComponent implements OnInit {
         this.receiptVoucherService.updateReceiptVoucherStatus(params).subscribe(res => {
             try {
                 this.toastr.success(res.message);
-                // if (status === 3 && this.isInstallQuickbook) {
-                //     this.financialService.syncReceiptVoucherToQuickbook(id).subscribe(
-                //         _res => {
-                //             try {
-                //                 const result = JSON.parse(_res['_body']);
-                //                 this.toastr.success(`Receipt Voucher ${result.data[0].entity.DocNumber} has been sync to Quickbooks successfully.`);
-                //             } catch (err) {}
-                //         },
-                //         err => {
-                //             this.toastr.error(`Cannot sync Receipt Voucher to Quickbooks.`);
-                //         }
-                //     );
-                // }
+                if (status === 3 && this.isInstallQuickbook) {
+                    this.financialService.syncReceiptVoucherToQuickbook(id).subscribe(
+                        _res => {
+                            try {
+                                const result = JSON.parse(_res['_body']);
+                                this.toastr.success(`Receipt Voucher ${result.data[0].entity.DocNumber} has been sync to Quickbooks successfully.`);
+                            } catch (err) {}
+                        },
+                        err => {
+                            this.toastr.error(`Cannot sync Receipt Voucher to Quickbooks.`);
+                        }
+                    );
+                }
                 this.getList();
                 this.getCountStatus();
             } catch (e) {
@@ -282,5 +282,15 @@ export class ReceiptVoucherComponent implements OnInit {
         modalRef.componentInstance.yesButtonText = 'Yes';
         modalRef.componentInstance.noButtonText = 'No';
     }
-
+    createReceiptVoucher() {
+        this.router.navigate(['/financial/receipt-voucher/create']);
+    }
+    viewReceiptVoucher() {
+        const id = this.list.items[this.selectedIndex].id;
+        this.router.navigate(['/financial/receipt-voucher/view', id]);
+    }
+    selectTable() {
+        this.selectedIndex = 0;
+        this.table.element.nativeElement.querySelector('td a').focus();
+    }
 }

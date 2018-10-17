@@ -30,7 +30,7 @@ export class ReceiptVoucherDetailComponent implements OnInit {
     /**
      * Init Data
      */
-
+    @ViewChild('tabSet') tabSet;
     constructor(public sanitizer: DomSanitizer,
         private modalService: NgbModal,
         public toastr: ToastrService,
@@ -40,7 +40,7 @@ export class ReceiptVoucherDetailComponent implements OnInit {
         private _hotkeysService: HotkeysService,
         private route: ActivatedRoute) {
         //  Init Key
-        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
+        // this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {
@@ -54,5 +54,7 @@ export class ReceiptVoucherDetailComponent implements OnInit {
     back() {
         this.router.navigate(['/financial/receipt-voucher/']);
     }
-
+    selectTab(id) {
+        this.tabSet.select(id);
+    }
 }

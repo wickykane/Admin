@@ -16,7 +16,7 @@
                 <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
                     <div class="block-search">
                         <label for="cd" class="control-label">Credit Memo No</label>
-                        <input type="text" name="cd" formControlName="credit_memo_num" class="form-control" id="cd" placeholder="">
+                        <input #drNo type="text" name="cd" formControlName="credit_memo_num" class="form-control" id="cd" placeholder="">
                     </div>
                     <div class="block-search">
                         <label for="customer_name" class="control-label">Customer Name</label>
@@ -64,8 +64,8 @@
                 <div class="block-btn-search">
                     <label class="control-label">&nbsp;</label>
                     <div class="group-btn-search">
-                        <button type="button" class="btn btn-primary" (click)="tableService.searchAction()">Search</button>
-                        <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchForm)">Reset</button>
+                        <button type="button" class="btn-default-custom" (click)="tableService.searchAction()">Search</button>
+                        <button type="button" class="btn-default-custom" (click)="tableService.resetAction(this.searchForm)">Reset</button>
                     </div>
                 </div>
             </div>
@@ -75,7 +75,7 @@
                 <div class="card no-border">
                     <div class="card-header">
                         <strong>Line Items</strong>
-                        <button [routerLink]="['create']" style="margin:0; float:right" class="btn btn-link"> <i class="fa fa-plus text-success"></i>
+                        <button (click)="addNewCreditMemo()" style="margin:0; float:right" class="btn btn-link"> <i class="fa fa-plus text-success"></i>
                             Create Credit Memo</button>
                     </div>
                     <div class="card-body no-padding">
@@ -131,31 +131,31 @@
                                         <td class="text-center">{{item.updated_at | date:'MM/dd/yyyy' }}</td>
                                         <td class="text-center">{{item.updated_by}}</td>
                                         <td>
-                                            <a class="btn btn-default " ngbTooltip="View" (click)="viewCredit(item.id)">
+                                            <a href="javascript: void(0)" class="btn btn-default " ngbTooltip="View" (click)="viewCredit(item.id)">
                                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default " ngbTooltip="Edit" (click)="editCredit(item.id)" *ngIf="item.sts_code == 'NW'">
+                                            <a href="javascript: void(0)" class="btn btn-default " ngbTooltip="Edit" (click)="editCredit(item.id)" *ngIf="item.sts_code == 'NW'">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
-                                            <a ngbTooltip="Submit" *ngIf="item.sts_code == 'NW'" class="btn btn-default" (click)="confirmModal(item.id, 2)"><i
+                                            <a href="javascript: void(0)" ngbTooltip="Submit" *ngIf="item.sts_code == 'NW'" class="btn btn-default" (click)="confirmModal(item.id, 2)"><i
                                                     class="fa fa-caret-square-o-right" aria-hidden="true"></i></a>
-                                            <a class="btn btn-default" ngbTooltip="Cancel" (click)="confirmModal(item.id, 5)" *ngIf="item.sts_code == 'NW'">
+                                            <a href="javascript: void(0)" class="btn btn-default" ngbTooltip="Cancel" (click)="confirmModal(item.id, 5)" *ngIf="item.sts_code == 'NW'">
                                                 <i class="fa fa-ban" aria-hidden="true"></i>
                                             </a>
-                                            <a ngbTooltip="Approve" *ngIf="item['sts_code'] == 'SB'" class="btn btn-default" (click)="confirmModal(item.id, 3)"><i
+                                            <a href="javascript: void(0)" ngbTooltip="Approve" *ngIf="item['sts_code'] == 'SB'" class="btn btn-default" (click)="confirmModal(item.id, 3)"><i
                                                     class="fa fa-check"></i></a>
-                                            <a ngbTooltip="Reject" *ngIf="item['sts_code'] == 'SB'" class="btn btn-default" (click)="confirmModal(item.id, 4)"><i
+                                            <a href="javascript: void(0)" ngbTooltip="Reject" *ngIf="item['sts_code'] == 'SB'" class="btn btn-default" (click)="confirmModal(item.id, 4)"><i
                                                     class="fa fa-ban" aria-hidden="true"></i></a>
-                                            <a ngbTooltip="Pay" *ngIf="['SB','AP','RD'].indexOf(item['sts_code']) != -1" class="btn btn-default"><i
+                                            <a href="javascript: void(0)" ngbTooltip="Pay" *ngIf="['SB','AP','RD'].indexOf(item['sts_code']) != -1" class="btn btn-default"><i
                                                     class="fa fa-money" aria-hidden="true"></i></a>
-                                            <a class="btn btn-default" ngbTooltip="Print" (click)="printPDF(item.id)">
+                                            <a href="javascript: void(0)" class="btn btn-default" ngbTooltip="Print" (click)="printPDF(item.id)">
                                                 <i class="fa fa-download" aria-hidden="true"></i>
                                             </a>
-                                            <a ngbTooltip="Re Open" *ngIf="item['sts_code'] == 'RJ'" class="btn btn-default" (click)="confirmModal(item.id, 'RE-OPEN')"><i
+                                            <a href="javascript: void(0)" ngbTooltip="Re Open" *ngIf="item['sts_code'] == 'RJ'" class="btn btn-default" (click)="confirmModal(item.id, 'RE-OPEN')"><i
                                                     class="fa fa-clone" aria-hidden="true"></i></a>
-                                            <a ngbTooltip="Send Mail" *ngIf="['SB','AP','RJ','CC','RD','RF'].indexOf(item['sts_code']) != -1" class="btn btn-default" (click)="sendMail(item.id)"><i class="fa fa-envelope-o"
+                                            <a href="javascript: void(0)" ngbTooltip="Send Mail" *ngIf="['SB','AP','RJ','CC','RD','RF'].indexOf(item['sts_code']) != -1" class="btn btn-default" (click)="sendMail(item.id)"><i class="fa fa-envelope-o"
                                                     aria-hidden="true"></i></a>
-                                            <a ngbTooltip="Apply to Invoice" *ngIf="['AP','RD'].indexOf(item['sts_code']) != -1" class="btn btn-default" [routerLink]="['apply-credit', item.id]"><i
+                                            <a href="javascript: void(0)" ngbTooltip="Apply to Invoice" *ngIf="['AP','RD'].indexOf(item['sts_code']) != -1" class="btn btn-default" [routerLink]="['apply-credit', item.id]"><i
                                                     class="fa fa-clipboard" aria-hidden="true"></i></a>
                                         </td>
                                     </tr>
