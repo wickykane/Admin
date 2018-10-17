@@ -218,7 +218,8 @@ export class SaleOrderComponent implements OnInit {
     newRMA(item) {
         const data = {
           buyer_id: item.buyer_id,
-          order_id: item.id
+          order_id: item.id,
+          buyer_name: item.buyer_name
         };
         this.router.navigateByData({ url: ['order-management/return-order/create'], data: [data] });
     }

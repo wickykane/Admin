@@ -4,6 +4,7 @@ import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectComponent } from '@ng-select/ng-select';
+import { cdArrowTable } from '../../../../shared';
 
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs/Subject';
@@ -72,6 +73,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
     /**
      * Init Data
      */
+    @ViewChild(cdArrowTable) table: cdArrowTable;
     constructor(
         private vRef: ViewContainerRef,
         private fb: FormBuilder,
@@ -599,5 +601,16 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             this.data['total_page'] = res.data.total_page;
             this.refresh();
         });
+    }
+    selectTable() {
+        this.selectedIndex = 0;
+        this.table.scrollToTable();
+        setTimeout(() => {
+            const button = this.table.element.nativeElement.querySelectorAll('td button');
+            if (button && button[this.selectedIndex]) {
+                button[this.selectedIndex].focus();
+            }
+        });
+        this.refresh();
     }
 }

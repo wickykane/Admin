@@ -8,6 +8,7 @@ import { NgSelectComponent } from '@ng-select/ng-select';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs/Subject';
 import { routerTransition } from '../../../../router.animations';
+import { cdArrowTable } from '../../../../shared';
 
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
@@ -67,6 +68,7 @@ export class ReceiptVoucherEditComponent implements OnInit {
     public searchKey = new Subject<any>(); // Lazy load filter
     public checkAllItem;
 
+    @ViewChild(cdArrowTable) table: cdArrowTable;
     /**
      * Init Data
      */
@@ -571,5 +573,16 @@ export class ReceiptVoucherEditComponent implements OnInit {
             this.data['total_page'] = res.data.total_page;
             this.refresh();
         });
+    }
+    selectTable() {
+        this.selectedIndex = 0;
+        this.table.scrollToTable();
+        setTimeout(() => {
+            const button = this.table.element.nativeElement.querySelectorAll('td button');
+            if (button && button[this.selectedIndex]) {
+                button[this.selectedIndex].focus();
+            }
+        });
+        this.refresh();
     }
 }

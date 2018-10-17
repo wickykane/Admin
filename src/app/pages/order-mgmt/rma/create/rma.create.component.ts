@@ -194,6 +194,19 @@ export class RmaCreateComponent implements OnInit {
             this.changeCustomer();
             this.generalForm.patchValue({ order_id: this.navigateData[0]['order_id']});
             this.changeSalesOrder();
+
+            const p = { page: this.data['page'], length: 100 };
+            this.service.getAllCustomer(p).subscribe(result => {
+                const idList = result.data.rows.map(item => item.id);
+                this.listMaster['customer'] = result.data.rows;
+                if (idList.indexOf(this.generalForm.value.company_id) === -1) {
+                    this.listMaster['customer'].push({ id: this.generalForm.value.company_id, company_name: this.navigateData[0]['buyer_name'], name: this.navigateData[0]['buyer_name'] });
+                }
+                this.data['total_page'] = result.data.total_page;
+                this.refresh();
+            });
+            this.refresh();
+
         }
 
         this.refresh();
