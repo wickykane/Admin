@@ -35,6 +35,7 @@ export class SaleOrderComponent implements OnInit {
         'AP': 'Are you sure that you want to approve current order?',
         'RJ': 'Are you sure that you want to reject current order?',
         'RO': 'Are you sure that you want to re-open current order?',
+        'RS': 'Are you sure that you want to create a RMA for the order?'
     };
 
     public statusConfig = {
@@ -108,7 +109,7 @@ export class SaleOrderComponent implements OnInit {
      * Table Event
      */
     refresh() {
-         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
+        if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
 
     selectData(index) {
@@ -180,28 +181,31 @@ export class SaleOrderComponent implements OnInit {
         });
     }
 
-    confirmModal(id, status) {
+    confirmModal(item, status) {
         const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
         modalRef.result.then(res => {
             if (res) {
                 switch (status) {
                     case 'SM':
-                        this.updateStatusOrder(id, 6);
+                        this.updateStatusOrder(item.id, 6);
                         break;
                     case 'AP':
-                        this.updateStatusOrder(id, 5);
+                        this.updateStatusOrder(item.id, 5);
                         break;
                     case 'RJ':
-                        this.updateStatusOrder(id, 11);
+                        this.updateStatusOrder(item.id, 11);
                         break;
                     case 'CC':
-                        this.updateStatusOrder(id, 7);
+                        this.updateStatusOrder(item.id, 7);
                         break;
                     case 'RO':
-                        this.updateStatusOrder(id, 1);
+                        this.updateStatusOrder(item.id, 1);
                         break;
                     case 'CLONE':
-                        this.cloneNewOrder(id);
+                        this.cloneNewOrder(item.id);
+                        break;
+                    case 'RS':
+                        this.newRMA(item);
                         break;
                 }
             }
@@ -209,6 +213,14 @@ export class SaleOrderComponent implements OnInit {
         modalRef.componentInstance.message = this.messageConfig[status];
         modalRef.componentInstance.yesButtonText = 'Yes';
         modalRef.componentInstance.noButtonText = 'No';
+    }
+
+    newRMA(item) {
+        const data = {
+          buyer_id: item.buyer_id,
+          order_id: item.id
+        };
+        this.router.navigateByData({ url: ['order-management/return-order/create'], data: [data] });
     }
 
     cloneNewOrder(id) {

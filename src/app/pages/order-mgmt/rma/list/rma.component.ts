@@ -51,6 +51,16 @@ export class RmaComponent implements OnInit {
         'CC': { color: 'red', name: 'Canceled', img: './assets/images/icon/cancel.png' },
     };
 
+    public completeStatusConfig = {
+        'type1_complete': 'has already been shipped to customer. The system will create a credit memo based on the returned items once the return process completed. Do you want to continue?',
+        'type1_nocomplete_no_invoice': 'Are you sure that you want to complete the return order?',
+        'type1_nocomplete_invoice_1': 'has an open invoiced. The system will cancel it for you to create manually a new one from the updated sales order once the return process completed. Do you want to continue?',
+        'type1_nocomplete_invoice_2': ' has a paid invoiced. The system will create a credit memo based on the returned items. Do you want to continue?',
+        'type2': 'After completing the return process, the system will create a replacement sales order for you. Do you want to continue?',
+        'type3': 'After completing the return process, the system will create a replacement sales order for you. Do you want to continue?',
+        'type4': 'has already been shipped to customer. The system will create a credit memo based on the returned items once the return process completed. Do you want to continue?'
+    };
+
     public listMaster = {};
     public selectedIndex = 0;
     public countStatus = [];
@@ -252,7 +262,9 @@ export class RmaComponent implements OnInit {
 
                 if (status === 5) {
                     if (!res.status && res.message === 'show popup') {
-                      this.checkStatusOrder(id);
+                        this.checkStatusOrder(id);
+                    } else {
+                      this.toastr.success(res.message);
                     }
                 } else {
                     this.toastr.success(res.message);
@@ -266,42 +278,114 @@ export class RmaComponent implements OnInit {
     }
 
     checkStatusOrder(id) {
-      const modalRef = this.modalService.open(BackdropModalContent, { size: 'lg', windowClass: 'modal-md', backdrop: 'static', keyboard: false });
-      modalRef.result.then( res => {
-          if (res) {
-            this.service.updateChange(id).subscribe(result => {
-                try {
-                    this.confirmModal(id, 2, '');
-                } catch (e) {
-                    console.log(e);
-                }
-            });
-          }
-      }, dismiss => { });
-      modalRef.componentInstance.message = 'The sales order status is delivering. The return order will be canceled now. You can create the return until the goods delivered to customer.';
-      modalRef.componentInstance.yesButtonText = 'OK';
-    }
-
-    completeStatus(id) {
-        this.service.completeStatus(id).subscribe(res => {
-            try {
-                this.toastr.success(res.message);
-                this.getList();
-                this.getRMAReference();
-            } catch (e) {
-                console.log(e);
+        const modalRef = this.modalService.open(BackdropModalContent, { size: 'lg', windowClass: 'modal-md', backdrop: 'static', keyboard: false });
+        modalRef.result.then(res => {
+            if (res) {
+                this.service.updateChange(id).subscribe(result => {
+                    try {
+                        this.confirmModal(id, 2, '');
+                    } catch (e) {
+                        console.log(e);
+                    }
+                });
             }
-        });
+        }, dismiss => { });
+        modalRef.componentInstance.message = 'The sales order status is delivering. The return order will be canceled now. You can create the return until the goods delivered to customer.';
+        modalRef.componentInstance.yesButtonText = 'OK';
     }
 
-    confirmModal(id, status, status_item) {
+    completeStatus(item) {
+        // truyen return_type_id , order_id cua row
+        // kiem tra return_type_id
+        // neu = 1 thi href qua credit memo view theo data reponse
+        // neu = 3 thi href qua sale order view theo data reponse
+        // neu = 2 hoac 4 thi href qua sale order view theo order id
+        let message = '';
+        switch (item.return_type_id) {
+            case 1:
+                // Return
+                if (item.order_status_id === 4) {
+                    message = this.completeStatusConfig['type1_complete'];
+                } else {
+                    if (item.invoice_id) {
+                        if (item.invoice_status_id === 1 || item.invoice_status_id === 4) {
+                            message = this.completeStatusConfig['type1_nocomplete_invoice_1'];
+                        }
+                        if (item.invoice_status_id === 5 || item.invoice_status_id === 6) {
+                            message = this.completeStatusConfig['type1_nocomplete_invoice_2'];
+                        }
+                    } else {
+                        message = this.completeStatusConfig['type1_nocomplete_no_invoice'];
+                    }
+                }
+
+                if (message) {
+                }
+                break;
+            case 2:
+                // Replace same items
+                message = this.completeStatusConfig['type2'];
+                if (message) {
+                }
+                break;
+            case 3:
+                // Replace different items
+                message = this.completeStatusConfig['type3'];
+                if (message) {
+                }
+                break;
+            case 4:
+                // Repair
+                message = this.completeStatusConfig['type4'];
+                break;
+        }
+
+        if (message) {
+          this.messageForCompleteStatus(item, message);
+        }
+    }
+
+    messageForCompleteStatus(item, message) {
+        const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
+        modalRef.result.then(res => {
+            if (res) {
+                this.service.completeStatus(item.id).subscribe(result => {
+                    try {
+                      this.toastr.success(res.message);
+                      if (item.return_type_id === 1 && (item.invoice_status_id === 5 || item.invoice_status_id === 6)) {
+                          setTimeout(() => {
+                              this.router.navigate(['/financial/credit-memo/view/' + result.credit_id]);
+                          }, 500);
+                      }
+
+                      if (item.return_type_id === 4) {
+                        setTimeout(() => {
+                            this.router.navigate(['/order-management/sale-order/detail', item.order_id]);
+                        }, 500);
+                      } else {
+                          setTimeout(() => {
+                              this.router.navigate(['/order-management/sale-order/detail', result.order_id]);
+                          }, 500);
+                      }
+                    } catch (e) {
+                        console.log(e);
+                    }
+                });
+            }
+        }, dismiss => { });
+        modalRef.componentInstance.message = message;
+        modalRef.componentInstance.yesButtonText = 'Yes';
+        modalRef.componentInstance.noButtonText = 'No';
+    }
+
+    confirmModal(item, status, status_item) {
         const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
         modalRef.result.then(res => {
             if (res) {
                 if (status !== 7) {
-                    this.updateStatus(id, status);
+                    this.updateStatus(item.id, status);
                 } else {
-                    this.completeStatus(id);
+                    this.completeStatus(item);
                 }
             }
         }, dismiss => { });
@@ -316,9 +400,7 @@ export class RmaComponent implements OnInit {
             case 5:
                 this.selected_message = this.messageConfig.AP;
                 break;
-            case 7:
-                this.selected_message = this.messageConfig.CP;
-                break;
+
         }
         modalRef.componentInstance.message = this.selected_message;
         modalRef.componentInstance.yesButtonText = 'Yes';
