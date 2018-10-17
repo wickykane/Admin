@@ -474,7 +474,7 @@
                      <div *ngFor="let item of detail['before_tax']" class="form-group row">
                          <label class='col-5 control-label'>+ TAX ({{item.key}}%):</label>
                          <div class='col-6 offset-md-1 padding-lr-10'>
-                             <input class="form-control" readonly="true" [(ngModel)]="item.value" class="form-control" value="0" type="number">
+                             <input [isDecimal]="true" numberDirective class="form-control" readonly="true" [(ngModel)]="item.value" class="form-control" value="0" type="number">
                          </div>
                      </div>
                      <div class="form-group row margin-lr-0 text-light bg-danger">
@@ -522,7 +522,7 @@
                      <div *ngFor="let item of detail['after_tax']" class="form-group row">
                          <label class='col-5 control-label'>+ TAX ({{item.key}}%):</label>
                          <div class='col-6 offset-md-1 padding-lr-10'>
-                             <input class="form-control" readonly="true" [(ngModel)]="item.value" class="form-control" value="0" type="number">
+                             <input [isDecimal]="true" numberDirective  class="form-control" readonly="true" [(ngModel)]="item.value" class="form-control" value="0" type="number">
                          </div>
                      </div>
                      <div class="form-group row margin-lr-0 text-light bg-danger">
