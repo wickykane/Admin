@@ -21,7 +21,7 @@ import { OrderService } from '../../../order-mgmt/order-mgmt.service';
 import { FinancialService } from '../../financial.service';
 import { CreditMemoService } from './../credit-memo.service';
 
-
+import { cdArrowTable } from '../../../../shared';
 @Component({
     selector: 'app-create-credit-memo',
     templateUrl: './credit-memo-create.component.html',
@@ -35,6 +35,7 @@ export class CreditMemoCreateComponent implements OnInit {
     /**
      * Variable Declaration
      */
+    @ViewChild(cdArrowTable) table: cdArrowTable;
 
     public generalForm: FormGroup;
     public listMaster = {};
@@ -168,6 +169,18 @@ export class CreditMemoCreateComponent implements OnInit {
      */
     refresh() {
          if (!this.cd['destroyed']) { this.cd.detectChanges(); }
+    }
+
+    selectTable() {
+        this.selectedIndex = 0;
+        this.table.scrollToTable();
+        setTimeout(() => {
+            const button = this.table.element.nativeElement.querySelectorAll('td button');
+            if (button && button[this.selectedIndex]) {
+                button[this.selectedIndex].focus();
+            }
+        });
+        this.refresh();
     }
 
     getQuickbookSettings() {
@@ -431,8 +444,13 @@ export class CreditMemoCreateComponent implements OnInit {
         if (this.items_removed.length === 0) {
             return;
         }
+        this.keyService.saveKeys();
         const modalRef = this.modalService.open(CreditItemModalContent, { size: 'lg' });
         modalRef.result.then(res => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
@@ -460,13 +478,23 @@ export class CreditMemoCreateComponent implements OnInit {
 
                 this.updateTotal();
             }
-        }, dismiss => { });
+        }, dismiss => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
+        });
         modalRef.componentInstance.items_removed = { item_id: this.items_removed, document_type: this.generalForm.value.document_type, document_id: this.generalForm.value.document_id };
     }
 
     addNewMiscItem() {
+        this.keyService.saveKeys();
         const modalRef = this.modalService.open(CreditItemMiscModalContent, { size: 'lg' });
         modalRef.result.then(res => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
@@ -498,7 +526,12 @@ export class CreditMemoCreateComponent implements OnInit {
 
                 this.updateTotal();
             }
-        }, dismiss => { });
+        }, dismiss => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
+        });
     }
 
     resetCredit() {
