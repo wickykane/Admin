@@ -32,7 +32,7 @@ export class BankModalComponent implements OnInit {
   }
 
   refresh() {
-      this.cd.detectChanges();
+       if (!this.cd['destroyed']) { this.cd.detectChanges(); }
   }
 
   getDetailBank(id) {

@@ -83,7 +83,7 @@ export class CreateComponent implements OnInit {
     }
 
     refresh() {
-        this.cd.detectChanges();
+         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
 
     toNumber(str) {
