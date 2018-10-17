@@ -449,19 +449,19 @@ export class ReceiptVoucherEditComponent implements OnInit {
             try {
                 this.data['voucher_id'] = res.data['id'];
                 this.toastr.success(res.message);
-                // if (type === 3 && this.isInstallQuickbook) {
-                //     this.financialService.syncReceiptVoucherToQuickbook(res.data['id']).subscribe(
-                //         _res => {
-                //             try {
-                //                 const result = JSON.parse(_res['_body']);
-                //                 this.toastr.success(`Receipt Voucher ${result.data[0].entity.DocNumber} has been sync to Quickbooks successfully.`);
-                //             } catch (err) {}
-                //         },
-                //         err => {
-                //             this.toastr.error(`Cannot sync Receipt Voucher to Quickbooks.`);
-                //         }
-                //     );
-                // }
+                if (type === 3 && this.isInstallQuickbook) {
+                    this.financialService.syncReceiptVoucherToQuickbook(res.data['id']).subscribe(
+                        _res => {
+                            try {
+                                const result = JSON.parse(_res['_body']);
+                                this.toastr.success(`Receipt Voucher ${result.data[0].entity.DocNumber} has been sync to Quickbooks successfully.`);
+                            } catch (err) {}
+                        },
+                        err => {
+                            this.toastr.error(`Cannot sync Receipt Voucher to Quickbooks.`);
+                        }
+                    );
+                }
                 if (!is_continue) {
                     setTimeout(() => {
                         this.router.navigate(['/financial/receipt-voucher/view/' + this.data['voucher_id']]);
