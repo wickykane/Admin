@@ -42,7 +42,7 @@ export class MassPriceViewComponent implements OnInit {
     }
 
     refresh() {
-        this.cd.detectChanges();
+         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
     /**
      * Mater Data

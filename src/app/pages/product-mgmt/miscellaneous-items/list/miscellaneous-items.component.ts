@@ -80,7 +80,7 @@ export class MiscellaneousItemsComponent implements OnInit {
     }
 
     refresh() {
-        this.cd.detectChanges();
+         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
     /**
      * Table Event
