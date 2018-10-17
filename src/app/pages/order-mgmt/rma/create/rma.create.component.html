@@ -384,7 +384,7 @@
                                         <td>{{item.uom_name}}</td>
                                         <td class="text-center">{{item.qty_allow}}</td>
                                         <td class="text-center">
-                                            <input numberDirective [isDecimal]="true" [min]="1" [max]="item.qty_allow" style="width: 100px;" class="form-control input-sm" type="number" [(ngModel)]="item.return_quantity" (changeValue)="calcTotal()">
+                                            <input numberDirective [min]="1" [max]="item.qty_allow" style="width: 100px;" class="form-control input-sm" type="number" [(ngModel)]="item.return_quantity" (changeValue)="calcTotal()">
                                         </td>
                                         <td class="text-center">
                                             <span>{{item.sale_price |currency}}</span>
@@ -456,7 +456,7 @@
                                         <td>{{item.condition_name}}</td>
                                         <td>{{item.uom_name}}</td>
                                         <td class="text-center">
-                                            <input numberDirective [isDecimal]="true" [min]="1" style="width: 100px;" class="form-control input-sm" type="number" [(ngModel)]="item.replace_quantity" (changeValue)="updateTotal()">
+                                            <input numberDirective [min]="1" style="width: 100px;" class="form-control input-sm" type="number" [(ngModel)]="item.replace_quantity" (changeValue)="updateTotal()">
                                         </td>
                                         <td>
                                             <span>{{item.sale_price}}</span>
