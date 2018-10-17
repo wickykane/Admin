@@ -98,7 +98,7 @@ export class PartListComponent implements OnInit {
     }
 
     refresh() {
-        this.cd.detectChanges();
+         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
 
     getListReference() {

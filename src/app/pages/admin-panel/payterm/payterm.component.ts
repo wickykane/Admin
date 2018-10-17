@@ -63,7 +63,7 @@ export class PaymentTermComponent implements OnInit {
    * Table Event
    */
   refresh() {
-    this.cd.detectChanges();
+     if (!this.cd['destroyed']) { this.cd.detectChanges(); }
   }
 
   selectData(index) {

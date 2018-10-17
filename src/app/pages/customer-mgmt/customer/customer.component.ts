@@ -85,7 +85,7 @@ export class CustomerComponent implements OnInit {
     }
 
     refresh() {
-       this.cd.detectChanges();
+        if (!this.cd['destroyed']) { this.cd.detectChanges(); }
      }
     /**
      * Internal Function

@@ -68,7 +68,7 @@ export class CustomerInvoiceTabComponent implements OnInit {
      * Internal Function
      */
      refresh() {
-         this.cd.detectChanges();
+          if (!this.cd['destroyed']) { this.cd.detectChanges(); }
      }
      onDateTypeChanged() {
         this.searchForm.patchValue({
