@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from './../../../services/table.service';
@@ -23,7 +23,8 @@ import { ReceiptKeyService } from './keys.list.control';
     templateUrl: './receipt-voucher.component.html',
     styleUrls: ['./receipt-voucher.component.scss'],
     animations: [routerTransition()],
-    providers: [OrderService, ReceiptKeyService, HotkeysService, TableService, ReceiptVoucherService]
+    providers: [OrderService, ReceiptKeyService, HotkeysService, TableService, ReceiptVoucherService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ReceiptVoucherComponent implements OnInit {
     public listMaster = {};
@@ -68,6 +69,7 @@ export class ReceiptVoucherComponent implements OnInit {
         public financialService: FinancialService,
         private orderService: OrderService,
         private http: HttpClient,
+        private cd: ChangeDetectorRef,
         private renderer: Renderer) {
 
         this.searchForm = fb.group({
@@ -103,6 +105,7 @@ export class ReceiptVoucherComponent implements OnInit {
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
         this.searchKey.debounceTime(300).subscribe(key => {
             this.data['page'] = 1;
@@ -112,6 +115,10 @@ export class ReceiptVoucherComponent implements OnInit {
     /**
      * Table Event
      */
+    refresh() {
+        if (!this.cd['destroyed']) { this.cd.detectChanges(); }
+    }
+
     selectData(index) {
         console.log(index);
     }
@@ -122,6 +129,7 @@ export class ReceiptVoucherComponent implements OnInit {
         this.financialService.getSettingInfoQuickbook().subscribe(
             res => {
                 this.isInstallQuickbook = res.data.state === 'authorized' ? true : false;
+                this.refresh();
             }, err => { }
         );
     }
@@ -138,23 +146,24 @@ export class ReceiptVoucherComponent implements OnInit {
             this.listMaster['count-status'] = Object.keys(this.statusConfig).map(key => {
                 return this.statusConfig[key];
             });
+            this.refresh();
         });
     }
 
     getListReferenceData() {
         this.receiptVoucherService.getPaymentMethodOption().subscribe(res => {
             this.listMaster['paymentMethod'] = res.data.payment_method;
-            console.log(this.listMaster['paymentMethod']);
+            this.refresh();
         });
     }
 
     filter(status) {
         const params = { status };
-        console.log(params);
         this.receiptVoucherService.getListReceiptVoucher(params).subscribe(res => {
             try {
                 this.list.items = res.data.rows;
                 this.tableService.matchPagingOption(res.data);
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
@@ -170,6 +179,7 @@ export class ReceiptVoucherComponent implements OnInit {
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
     }
 
@@ -185,6 +195,7 @@ export class ReceiptVoucherComponent implements OnInit {
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = this.listMaster['customer'].concat(res.data.rows);
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
     }
 
@@ -206,6 +217,7 @@ export class ReceiptVoucherComponent implements OnInit {
             try {
                 this.list.items = res.data.rows;
                 this.tableService.matchPagingOption(res.data);
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }

@@ -59,7 +59,7 @@ export class WarehouseEditComponent implements OnInit {
     }
 
     refresh() {
-        this.cd.detectChanges();
+         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
 
     getDetailWarehouse(id) {

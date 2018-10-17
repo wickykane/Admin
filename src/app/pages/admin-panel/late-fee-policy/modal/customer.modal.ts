@@ -64,7 +64,7 @@ export class CustomerModalContent implements OnInit {
 
     // Table event
     refresh() {
-        this.cd.detectChanges();
+         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
 
     selectData(index) {

@@ -18,7 +18,6 @@ export class PODModalComponent implements OnInit {
     constructor(public activeModal: NgbActiveModal, public toastr: ToastrService, private fb: FormBuilder, private financialService: FinancialService) {
         this.generalForm = fb.group({
             'date': [null, Validators.required],
-            'time': [null, Validators.required],
         });
     }
 
@@ -27,7 +26,7 @@ export class PODModalComponent implements OnInit {
 
     ok() {
         const params = {
-            date: moment(this.generalForm.value.date + ' ' + this.generalForm.value.time).format('MM/DD/YYYY HH:mm'),
+            date: moment(this.generalForm.value.date).format('MM/DD/YYYY'),
         };
 
         this.financialService.updatePOD(this.invoiceId, params).subscribe(res => {
