@@ -98,7 +98,8 @@ export class RmaCreateComponent implements OnInit {
 
     public messageConfig = {
         'SB': 'Are you sure that you want to submit this return order to approver?', // Submit
-        'AR': 'Are you sure that you approve and send this return order to Warehouse for receipt?', // waiting receive
+        'AR1': 'Are you sure that you want to approve the cancelation and send to warehouse for put back?',
+        'AR2': 'Are you sure that you approve and send this return order to Warehouse for receipt?',
         'back': 'The data you have entered may not be saved, are you sure that you want to leave?'
     };
 
@@ -294,7 +295,6 @@ export class RmaCreateComponent implements OnInit {
 
         if (orderId !== null && orderId !== undefined) {
             this.getOrderInformation(orderId);
-            this.getListLineItems(orderId);
             this.getListInvoice(orderId);
             this.checkDateTime();
         }
@@ -351,6 +351,10 @@ export class RmaCreateComponent implements OnInit {
             res => {
                 try {
                     this.listMaster['list_order'] = res.data;
+                    if (this.listMaster['list_order'].length <= 0) {
+                        this.generalForm.patchValue({'order_id': ''});
+                        this.generalForm.patchValue({'invoice_id': ''});
+                    }
                     this.refresh();
                 } catch (err) {
                     console.log(err);
@@ -366,6 +370,13 @@ export class RmaCreateComponent implements OnInit {
             res => {
                 try {
                     this.listMaster['list_invoice'] = res.data;
+
+                    if (this.listMaster['list_invoice'].length > 0) {
+                        this.generalForm.patchValue({'invoice_id': this.listMaster['list_invoice'][0]['id']});
+                        this.checkInvoice();
+                    } else {
+                      this.generalForm.patchValue({'invoice_id': ''});
+                    }
                     this.refresh();
                 } catch (err) {
                     console.log(err);
@@ -391,12 +402,14 @@ export class RmaCreateComponent implements OnInit {
                     this.requiredInv = true;
                     this.generalForm.get('invoice_id').setValidators([Validators.required]);
                     this.generalForm.get('invoice_id').updateValueAndValidity();
+                    this.generalForm.controls.ship_via.enable();
                 }
 
                 if (data.order_sts_short_name === 'AP' || data.order_sts_short_name === 'IP' || data.order_sts_short_name === 'PP' || data.order_sts_short_name === 'RS') {
                     this.requiredInv = false;
                     this.generalForm.get('invoice_id').clearValidators();
                     this.generalForm.get('invoice_id').updateValueAndValidity();
+                    this.generalForm.controls.ship_via.disable();
                 }
 
 
@@ -415,23 +428,6 @@ export class RmaCreateComponent implements OnInit {
             }
         });
     }
-
-
-    getListLineItems(orderId) {
-        // this.service.getListLineItems(orderId).subscribe(
-        //     res => {
-        //         try {
-        //             this.list.returnItem = [...res.data];
-        //             this.refresh();
-        //         } catch (err) {
-        //             console.log(err);
-        //         }
-        //     }, err => {
-        //         console.log(err);
-        //     }
-        // );
-    }
-
 
     changeType() {
 
@@ -639,7 +635,7 @@ export class RmaCreateComponent implements OnInit {
                     this.createOrder(type);
                 }
             }, dismiss => { });
-            modalRef.componentInstance.message = this.messageConfig[type];
+            modalRef.componentInstance.message = this.requiredInv ? this.messageConfig['AR2'] : this.messageConfig['AR1'];
             modalRef.componentInstance.yesButtonText = 'Yes';
             modalRef.componentInstance.noButtonText = 'No';
         } else {
