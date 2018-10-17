@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableService} from './../../../../../services/table.service';
@@ -9,14 +9,20 @@ import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ToastrService } from 'ngx-toastr';
 
+import { cdArrowTable } from '../../../../../shared/index';
+
+import { Hotkey, HotkeysService } from 'angular2-hotkeys';
+import { Helper } from '../../../../../shared/helper/common.helper';
+declare var jQuery: any;
 @Component({
     selector: 'app-item-misc-modal-content',
-    templateUrl: './item-misc.modal.html'
+    templateUrl: './item-misc.modal.html',
+    providers: [HotkeysService]
 })
 // tslint:disable-next-line:component-class-suffix
-export class CreditItemMiscModalContent implements OnInit {
+export class CreditItemMiscModalContent implements OnInit, OnDestroy {
     @Input() company_id;
-
+    @ViewChild(cdArrowTable) table: cdArrowTable;
     /**
      * Variable Declaration
      */
@@ -37,6 +43,8 @@ export class CreditItemMiscModalContent implements OnInit {
         public itemService: ItemService,
         public fb: FormBuilder,
         public toastr: ToastrService,
+        private helper: Helper,
+        public _hotkeysService: HotkeysService,
         public tableService: TableService) {
         this.searchForm = fb.group({
             'no': [null],
@@ -54,6 +62,7 @@ export class CreditItemMiscModalContent implements OnInit {
     ngOnInit() {
         this.getListType();
         this.getList();
+        this.initKeyBoard();
     }
 
 
@@ -70,6 +79,16 @@ export class CreditItemMiscModalContent implements OnInit {
     isAllChecked() {
         this.checkAllItem = this.list.items.every(_ => _.is_checked);
         this.list.checklist = this.list.items.filter(_ => _.is_checked);
+    }
+
+    selectTable() {
+        this.selectedIndex = 0;
+        jQuery('.modal').focus();
+        this.table.scrollToTable('.modal-open .modal');
+    }
+
+    onAddItem() {
+        this.activeModal.close(this.list.checklist);
     }
 
     /**
@@ -98,5 +117,88 @@ export class CreditItemMiscModalContent implements OnInit {
         this.itemService.getMiscType().subscribe(res => {
             this.listMaster['type'] = res.data;
         });
+    }
+
+    // Keyboard
+
+    initKeyBoard() {
+        this.data['key_config'] = {
+            no: {
+                element: null,
+                focus: true,
+            },
+        };
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+f1', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            event.preventDefault();
+            if (this.data['key_config'].no.element) {
+                this.data['key_config'].no.element.nativeElement.focus();
+            }
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Focus Search'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            event.preventDefault();
+            this.tableService.searchAction();
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Search'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+r', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            event.preventDefault();
+            this.tableService.resetAction(this.searchForm);
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+t', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            this.selectTable();
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Select Table'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+o', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            event.preventDefault();
+            this.onAddItem();
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'OK'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+pageup', (event: KeyboardEvent): boolean => {
+            this.tableService.pagination.page--;
+            if (this.tableService.pagination.page < 1) {
+                this.tableService.pagination.page = 1;
+                return;
+            }
+            this.tableService.changePage(this.tableService.pagination.page);
+            return;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Previous page'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+pagedown', (event: KeyboardEvent): boolean => {
+            this.tableService.pagination.page++;
+            if (this.tableService.pagination.page > this.tableService.pagination.total_page) {
+                this.tableService.pagination.page = this.tableService.pagination.total_page;
+                return;
+            }
+            this.tableService.changePage(this.tableService.pagination.page);
+            return;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Next page'));
+    }
+
+    resetKeys() {
+        const keys = Array.from(this._hotkeysService.hotkeys);
+        keys.map(key => {
+            this._hotkeysService.remove(key);
+        });
+    }
+
+    ngOnDestroy(): void {
+        this.resetKeys();
     }
 }
