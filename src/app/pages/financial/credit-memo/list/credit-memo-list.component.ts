@@ -15,6 +15,7 @@ import { FinancialService } from '../../financial.service';
 import { CreditMemoService } from '../credit-memo.service';
 import { CreditMailModalComponent } from '../modals/send-email/mail.modal';
 
+import { cdArrowTable } from '../../../../shared';
 @Component({
     selector: 'app-credit-memo-list',
     templateUrl: './credit-memo-list.component.html',
@@ -27,6 +28,8 @@ export class CreditMemoListComponent implements OnInit {
     /**
      * letiable Declaration
      */
+    @ViewChild('drNo') drNoInput: ElementRef;
+    @ViewChild(cdArrowTable) table: cdArrowTable;
 
     public listMaster = {};
     public selectedIndex = 0;
@@ -108,6 +111,11 @@ export class CreditMemoListComponent implements OnInit {
     refresh() {
         this.cd.detectChanges();
     }
+
+    onStartSearch() {
+        this.renderer.invokeElementMethod(this.drNoInput.nativeElement, 'focus');
+    }
+
     filter(sts) {
         const params = { sts };
         this.creditMemoService.getListCreditMemo(params).subscribe(res => {
@@ -251,6 +259,11 @@ export class CreditMemoListComponent implements OnInit {
         modalRef.componentInstance.yesButtonText = 'Yes';
         modalRef.componentInstance.noButtonText = 'No';
     }
+
+    addNewCreditMemo() {
+        this.router.navigate(['/financial/credit-memo/create']);
+    }
+
     viewCredit(id?) {
         if (id) {
             this.router.navigate(['/financial/credit-memo/view', id]);
@@ -272,6 +285,11 @@ export class CreditMemoListComponent implements OnInit {
                 this.router.navigate(['/financial/credit-memo/edit', selectedcreditId]);
             }
         }
+    }
+
+    selectTable() {
+        this.selectedIndex = 0;
+        this.table.element.nativeElement.querySelector('td a').focus();
     }
 }
 
