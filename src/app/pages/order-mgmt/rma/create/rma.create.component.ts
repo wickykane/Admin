@@ -374,10 +374,10 @@ export class RmaCreateComponent implements OnInit {
             res => {
                 try {
                     this.listMaster['list_order'] = res.data;
-                    if (this.listMaster['list_order'].length <= 0) {
+                    // if (this.listMaster['list_order'].length <= 0) {
                         this.generalForm.patchValue({'order_id': ''});
                         this.generalForm.patchValue({'invoice_id': ''});
-                    }
+                    // }
                     this.refresh();
                 } catch (err) {
                     console.log(err);

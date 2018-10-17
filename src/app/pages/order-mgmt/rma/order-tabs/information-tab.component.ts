@@ -225,20 +225,14 @@ export class ReturnOrderInformationTabComponent implements OnInit {
                     }
                 }
 
-                if (message) {
-                }
                 break;
             case 2:
                 // Replace same items
                 message = this.completeStatusConfig['type2'];
-                if (message) {
-                }
                 break;
             case 3:
                 // Replace different items
                 message = this.completeStatusConfig['type3'];
-                if (message) {
-                }
                 break;
             case 4:
                 // Repair
