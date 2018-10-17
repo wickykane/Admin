@@ -229,7 +229,7 @@ export class InvoiceEditComponent implements OnInit {
             try {
                 const data = res.data;
                 this.data['invoice'] = data;
-                this.generalForm.patchValue({ ...data, approver_id: data.aprvr_id});
+                this.generalForm.patchValue({ ...data, approver_id: data.aprvr_id });
                 this.list.items = data.inv_detail;
                 this.updateTotal();
 
@@ -255,7 +255,7 @@ export class InvoiceEditComponent implements OnInit {
         this.financialService.getSettingInfoQuickbook().subscribe(
             res => {
                 this.isInstallQuickbook = res.data.state === 'authorized' ? true : false;
-            }, err => {}
+            }, err => { }
         );
     }
 
@@ -378,7 +378,7 @@ export class InvoiceEditComponent implements OnInit {
                 this.customer = res.data;
                 const idList = (this.listMaster['customer'] || []).map(item => item.id);
                 if (res.data.company_id && idList.indexOf(res.data.company_id) === -1) {
-                    this.listMaster['customer'] = [...this.listMaster['customer'], { id: res.data.company_id, company_name: res.data.company_name ,   name: res.data.company_name }];
+                    this.listMaster['customer'] = [...this.listMaster['customer'], { id: res.data.company_id, company_name: res.data.company_name, name: res.data.company_name }];
                 }
 
                 if (res.data.buyer_type === 'PS' && res.data.contact[0]) {
@@ -620,12 +620,17 @@ export class InvoiceEditComponent implements OnInit {
                                 try {
                                     const result = JSON.parse(_res['_body']);
                                     this.toastr.success(`Invoice ${result.data[0].entity.DocNumber} has been sync to Quickbooks successfully.`);
-                                } catch (err) {}
+                                } catch (err) { }
                             },
                             err => {
                                 this.toastr.error(`Cannot sync invoice to Quickbooks.`);
                             }
                         );
+
+                        if (!this.data['only_validate']) {
+                            this.router.navigate(['/financial/receipt-voucher/create'], { queryParams: { invoice_id: this.data['id'] } });
+                            return;
+                        }
                     }
                     if (!is_continue) {
                         setTimeout(() => {
