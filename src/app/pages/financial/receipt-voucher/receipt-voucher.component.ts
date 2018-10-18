@@ -1,9 +1,10 @@
-import { Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from './../../../services/table.service';
 import { ReceiptVoucherService } from './receipt-voucher.service';
 
+import { cdArrowTable } from '../../../shared';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -22,7 +23,8 @@ import { ReceiptKeyService } from './keys.list.control';
     templateUrl: './receipt-voucher.component.html',
     styleUrls: ['./receipt-voucher.component.scss'],
     animations: [routerTransition()],
-    providers: [OrderService, ReceiptKeyService, HotkeysService, TableService, ReceiptVoucherService]
+    providers: [OrderService, ReceiptKeyService, HotkeysService, TableService, ReceiptVoucherService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ReceiptVoucherComponent implements OnInit {
     public listMaster = {};
@@ -55,7 +57,7 @@ export class ReceiptVoucherComponent implements OnInit {
         // 'SC': { color: 'lemon', name: 'Completed', img: './assets/images/icon/full_delivered.png' },
         'ER': { color: 'lemon', name: 'Refund Due' },
     };
-
+    @ViewChild(cdArrowTable) table: cdArrowTable;
     constructor(public router: Router,
         public fb: FormBuilder,
         public toastr: ToastrService,
@@ -67,6 +69,7 @@ export class ReceiptVoucherComponent implements OnInit {
         public financialService: FinancialService,
         private orderService: OrderService,
         private http: HttpClient,
+        private cd: ChangeDetectorRef,
         private renderer: Renderer) {
 
         this.searchForm = fb.group({
@@ -85,7 +88,6 @@ export class ReceiptVoucherComponent implements OnInit {
         this.tableService.context = this;
         //  Init Key
         this.receiptKeyService.watchContext.next({ context: this, service: this._hotkeysService });
-
     }
 
     ngOnInit() {
@@ -103,6 +105,7 @@ export class ReceiptVoucherComponent implements OnInit {
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
         this.searchKey.debounceTime(300).subscribe(key => {
             this.data['page'] = 1;
@@ -112,6 +115,10 @@ export class ReceiptVoucherComponent implements OnInit {
     /**
      * Table Event
      */
+    refresh() {
+        if (!this.cd['destroyed']) { this.cd.detectChanges(); }
+    }
+
     selectData(index) {
         console.log(index);
     }
@@ -122,7 +129,8 @@ export class ReceiptVoucherComponent implements OnInit {
         this.financialService.getSettingInfoQuickbook().subscribe(
             res => {
                 this.isInstallQuickbook = res.data.state === 'authorized' ? true : false;
-            }, err => {}
+                this.refresh();
+            }, err => { }
         );
     }
     getCountStatus() {
@@ -138,23 +146,24 @@ export class ReceiptVoucherComponent implements OnInit {
             this.listMaster['count-status'] = Object.keys(this.statusConfig).map(key => {
                 return this.statusConfig[key];
             });
+            this.refresh();
         });
     }
 
     getListReferenceData() {
         this.receiptVoucherService.getPaymentMethodOption().subscribe(res => {
-           this.listMaster['paymentMethod'] = res.data.payment_method;
-           console.log(this.listMaster['paymentMethod']);
+            this.listMaster['paymentMethod'] = res.data.payment_method;
+            this.refresh();
         });
     }
 
     filter(status) {
         const params = { status };
-        console.log(params);
         this.receiptVoucherService.getListReceiptVoucher(params).subscribe(res => {
             try {
                 this.list.items = res.data.rows;
                 this.tableService.matchPagingOption(res.data);
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
@@ -170,6 +179,7 @@ export class ReceiptVoucherComponent implements OnInit {
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
     }
 
@@ -185,6 +195,7 @@ export class ReceiptVoucherComponent implements OnInit {
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = this.listMaster['customer'].concat(res.data.rows);
             this.data['total_page'] = res.data.total_page;
+            this.refresh();
         });
     }
 
@@ -206,6 +217,7 @@ export class ReceiptVoucherComponent implements OnInit {
             try {
                 this.list.items = res.data.rows;
                 this.tableService.matchPagingOption(res.data);
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
@@ -239,19 +251,19 @@ export class ReceiptVoucherComponent implements OnInit {
         this.receiptVoucherService.updateReceiptVoucherStatus(params).subscribe(res => {
             try {
                 this.toastr.success(res.message);
-                // if (status === 3 && this.isInstallQuickbook) {
-                //     this.financialService.syncReceiptVoucherToQuickbook(id).subscribe(
-                //         _res => {
-                //             try {
-                //                 const result = JSON.parse(_res['_body']);
-                //                 this.toastr.success(`Receipt Voucher ${result.data[0].entity.DocNumber} has been sync to Quickbooks successfully.`);
-                //             } catch (err) {}
-                //         },
-                //         err => {
-                //             this.toastr.error(`Cannot sync Receipt Voucher to Quickbooks.`);
-                //         }
-                //     );
-                // }
+                if (status === 3 && this.isInstallQuickbook) {
+                    this.financialService.syncReceiptVoucherToQuickbook(id).subscribe(
+                        _res => {
+                            try {
+                                const result = JSON.parse(_res['_body']);
+                                this.toastr.success(`Receipt Voucher ${result.data[0].entity.DocNumber} has been sync to Quickbooks successfully.`);
+                            } catch (err) {}
+                        },
+                        err => {
+                            this.toastr.error(`Cannot sync Receipt Voucher to Quickbooks.`);
+                        }
+                    );
+                }
                 this.getList();
                 this.getCountStatus();
             } catch (e) {
@@ -270,5 +282,15 @@ export class ReceiptVoucherComponent implements OnInit {
         modalRef.componentInstance.yesButtonText = 'Yes';
         modalRef.componentInstance.noButtonText = 'No';
     }
-
+    createReceiptVoucher() {
+        this.router.navigate(['/financial/receipt-voucher/create']);
+    }
+    viewReceiptVoucher() {
+        const id = this.list.items[this.selectedIndex].id;
+        this.router.navigate(['/financial/receipt-voucher/view', id]);
+    }
+    selectTable() {
+        this.selectedIndex = 0;
+        this.table.element.nativeElement.querySelector('td a').focus();
+    }
 }

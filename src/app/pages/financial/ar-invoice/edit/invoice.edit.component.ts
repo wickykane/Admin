@@ -184,7 +184,7 @@ export class InvoiceEditComponent implements OnInit {
      * Mater Data
      */
     refresh() {
-        this.cd.detectChanges();
+         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
 
     resetChangeData() {

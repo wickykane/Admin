@@ -55,7 +55,7 @@ export class WarehouseCreateComponent implements OnInit {
     }
 
     refresh() {
-        this.cd.detectChanges();
+         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
 
     changeCountry() {

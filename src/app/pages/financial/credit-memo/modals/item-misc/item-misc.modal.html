@@ -5,12 +5,13 @@
     </button>
 </div>
 <div class="modal-body">
+    <app-shortcut [listShortcut]='_hotkeysService.hotkeys'></app-shortcut>
     <div class="search-block block-content pd-bottom tab-content bg-gray-light">
         <div class="row">
             <form class="form-horizontal form-search" [formGroup]="searchForm">
                 <div class="block-search">
                     <label for="so" class="control-label">Item No</label>
-                    <input type="text" name="so" formControlName="no" class="form-control">
+                    <input [keyConfig]="data['key_config']" appKeyNavigate="no" type="text" name="so" formControlName="no" class="form-control">
                 </div>
                 <div class="block-search">
                     <label for="so" class="control-label">Description</label>
@@ -94,6 +95,6 @@
 
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-outline-primary" (click)="activeModal.close(list.checklist)">Add</button>
+    <button type="button" class="btn btn-outline-primary" (click)="onAddItem()">Add</button>
     <button type="button" class="btn btn-outline-dark" (click)="activeModal.close([])">Cancel</button>
 </div>

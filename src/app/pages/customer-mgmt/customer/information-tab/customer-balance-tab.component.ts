@@ -59,7 +59,7 @@ export class CustomerCustomerBalanceTabComponent implements OnInit {
      */
 
     refresh() {
-        this.cd.detectChanges();
+         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
 
     getListReference() {

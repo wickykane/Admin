@@ -58,7 +58,7 @@ export class DiscountCategoryCreateComponent implements OnInit {
         this.addNewLine();
     }
     refresh() {
-        this.cd.detectChanges();
+         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
     /**
      * Mater Data

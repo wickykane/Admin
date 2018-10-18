@@ -1,7 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReceiptVoucherService } from '../receipt-voucher.service';
 import { TableService } from './../../../../services/table.service';
+
+import { ReceiptVoucherDetailComponent } from '../view/receipt-voucher.view.component';
+
+import { HotkeysService } from 'angular2-hotkeys';
+import { ReceiptDetailKeyService } from '../view/keys.view.control';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -70,12 +75,22 @@ export class ReceiptInformationTabComponent implements OnInit {
         private modalService: NgbModal,
         private receiptVoucherService: ReceiptVoucherService,
         private financialService: FinancialService,
-        public tableService: TableService) {
+        public tableService: TableService,
+        private _hotkeysService: HotkeysService,
+        public keyService: ReceiptDetailKeyService,
+        @Inject(ReceiptVoucherDetailComponent) private parent: ReceiptVoucherDetailComponent) {
+            if (!this.parent.data['shortcut']) {
+                this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
+            }
     }
 
     ngOnInit() {
         this.getQuickbookSettings();
         this.getDetailVoucher();
+        this.data['tab'] = {
+            active: 0,
+        };
+        this.changeShortcut();
     }
 
     /**
@@ -147,19 +162,19 @@ export class ReceiptInformationTabComponent implements OnInit {
         this.receiptVoucherService.updateReceiptVoucherStatus(params).subscribe(res => {
             try {
                 this.toastr.success(res.message);
-                // if (status === 3 && this.isInstallQuickbook) {
-                //     this.financialService.syncReceiptVoucherToQuickbook(id).subscribe(
-                //         _res => {
-                //             try {
-                //                 const result = JSON.parse(_res['_body']);
-                //                 this.toastr.success(`Receipt Voucher ${result.data[0].entity.DocNumber} has been sync to Quickbooks successfully.`);
-                //             } catch (err) {}
-                //         },
-                //         err => {
-                //             this.toastr.error(`Cannot sync Receipt Voucher to Quickbooks.`);
-                //         }
-                //     );
-                // }
+                if (status === 3 && this.isInstallQuickbook) {
+                    this.financialService.syncReceiptVoucherToQuickbook(id).subscribe(
+                        _res => {
+                            try {
+                                const result = JSON.parse(_res['_body']);
+                                this.toastr.success(`Receipt Voucher ${result.data[0].entity.DocNumber} has been sync to Quickbooks successfully.`);
+                            } catch (err) {}
+                        },
+                        err => {
+                            this.toastr.error(`Cannot sync Receipt Voucher to Quickbooks.`);
+                        }
+                    );
+                }
                 this.getDetailVoucher();
             } catch (e) {
                 console.log(e);
@@ -206,5 +221,18 @@ export class ReceiptInformationTabComponent implements OnInit {
         modalRef.componentInstance.yesButtonText = 'Yes';
         modalRef.componentInstance.noButtonText = 'No';
     }
-
+    changeTab(step) {
+        this.data['tab'].active = +this.parent.tabSet.activeId;
+        this.data['tab'].active += step;
+        this.data['tab'].active = Math.min(Math.max(this.data['tab'].active, 0), 7);
+        this.parent.selectTab(String(this.data['tab'].active));
+    }
+    changeShortcut() {
+        setTimeout(() => {
+            this.parent.data['shortcut'] = this.keyService.getKeys();
+        });
+    }
+    back() {
+        this.router.navigate(['/financial/receipt-voucher/']);
+    }
 }

@@ -58,7 +58,7 @@ export class RMAKeyService extends KeyboardBaseService {
           }
           this.context.tableService.changePage(this.context.tableService.pagination.page);
           return;
-      }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Next page'));
+      }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Previous page'));
 
       this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+pagedown', (event: KeyboardEvent): boolean => {
           this.context.tableService.pagination.page++;
@@ -68,7 +68,7 @@ export class RMAKeyService extends KeyboardBaseService {
           }
           this.context.tableService.changePage(this.context.tableService.pagination.page);
           return;
-      }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Previous page'));
+      }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Next page'));
 
       this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+t', (event: KeyboardEvent): boolean => {
           event.preventDefault();

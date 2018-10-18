@@ -155,7 +155,7 @@ export class DebitMemoEditComponent implements OnInit {
 
     //#region load master data
     refresh() {
-        this.cd.detectChanges();
+         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
 
     getQuickbookSettings() {

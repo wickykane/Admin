@@ -60,7 +60,7 @@ export class PayTermCreateComponent implements OnInit {
         this.changeIncentive();
     }
     refresh() {
-        this.cd.detectChanges();
+         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
     payloadData() {
         if (this.generalForm.get('id').value) {

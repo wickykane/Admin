@@ -88,7 +88,7 @@ export class PaymentMethodsCreateComponent implements OnInit {
      * Internal Function
      */
     refresh() {
-        this.cd.detectChanges();
+         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
 
     getListMaster(paymentMethodId) {
