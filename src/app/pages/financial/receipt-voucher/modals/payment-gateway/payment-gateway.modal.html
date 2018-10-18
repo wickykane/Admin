@@ -8,8 +8,8 @@
     <div class="modal-body" style="padding-bottom:10px;">
         <div class="block-order">
             <div class="row block-info">
-                <div class="col-md-6">
-                    <div class="card">
+                <div class="col-md-6 d-flex">
+                    <div class="card w-100">
                         <div class="card-header">
                             <strong>Payment Information</strong>
                         </div>
@@ -28,7 +28,7 @@
                                         <label for="" translate class="col-md-5">Card Number  <span class="text-danger">(*)</span>
                                         </label>
                                         <div class="col-md-7">
-                                            <input [ngClass]="{'border border-danger': (data['showError'] && this.generalForm.get('card_number').errors?.required) || false   }" class="form-control" placeholder="0000-0000-0000-0000" type="text" numberDirective formControlName="card_number">
+                                            <input  [textMask]="{mask: mask}" [ngClass]="{'border border-danger': (data['showError'] && this.generalForm.get('card_number').errors?.required) || false   }" class="form-control" placeholder="0000-0000-0000-0000" type="text"  formControlName="card_number">
                                         </div>
                                     </div>
                                     <div class="form-group row col-sm-12">
@@ -85,8 +85,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="card">
+                <div class="col-md-6 d-flex">
+                    <div class="card w-100">
                         <div class="card-header">
                             <strong>Billing Information</strong>
                         </div>
