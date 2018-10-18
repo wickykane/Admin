@@ -136,7 +136,7 @@ export class ShippingZoneCreateComponent implements OnInit {
         this.getListMasterData();
     }
     refresh() {
-         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
+        if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
     getListMasterData() {
         this.shippingZoneService.getMasterData().subscribe(res => {
@@ -205,12 +205,12 @@ export class ShippingZoneCreateComponent implements OnInit {
     }
 
     filterState(key) {
-        this.selectedCountry.state = this.filterbyfieldName(this.tempListState, "name", key);
+        this.selectedCountry.state = this.filterbyfieldName(this.tempListState, 'name', key);
     }
 
     onCheckCountryState(country) {
         this.stateFilter = '';
-        this.selectedCountry = Object.assign([],country);
+        this.selectedCountry = Object.assign([], country);
         this.tempListState = country.state;
         this.checkState();
     }
@@ -298,12 +298,11 @@ export class ShippingZoneCreateComponent implements OnInit {
         for (var i = 0; i < listCountry.length; i++) {
             var listId = [];
             for (var j = 0; j < listCountry[i].state.length; j++) {
-                if (listCountry[i].state[j].selected) {
+                if (listCountry[i].state[j].selected && !listCountry[i].state[j].disable) {
                     listId.push(listCountry[i].state[j].id);
                 }
 
             }
-            console.log(listId);
             listCountry[i].state = listId;
             delete listCountry[i].selected;
             delete listCountry[i].index;
@@ -364,7 +363,7 @@ export class ShippingZoneCreateComponent implements OnInit {
             if (subItem.id == 1) {
                 items.forEach(item => {
                     if (item.id == 2 || item.id == 3) {
-                         item.checked = false;
+                        item.checked = false;
                     }
                 });
 
@@ -423,7 +422,7 @@ export class ShippingZoneCreateComponent implements OnInit {
     calculateStateLength(item) {
         var count = 0;
         item.forEach(res => {
-            if (res.selected) {
+            if (res.selected && !res.disable) {
                 count++;
             }
         });
@@ -431,22 +430,24 @@ export class ShippingZoneCreateComponent implements OnInit {
     }
     checkState() {
         if (this.selectedCountry) {
-        for (var i = 0; i < this.selectedCountry.state.length; i++) {
-            if (this.selectedCountry.state[i].selected) {
-                if (i == this.selectedCountry.state.length - 1) {
-                    return this.selectAll = true;
+            for (var i = 0; i < this.selectedCountry.state.length; i++) {
+                if (this.selectedCountry.state[i].selected) {
+                    if (i == this.selectedCountry.state.length - 1) {
+                        return this.selectAll = true;
+                    }
+                }
+                else {
+                    return this.selectAll = false;
                 }
             }
-            else {
-                return this.selectAll = false;
-            }
         }
-    }
     }
     selectState() {
         if (this.selectedCountry) {
             this.tempListState.forEach(item => {
-                return item.selected = this.selectAll;
+                if (!item.disable) {
+                    return item.selected = this.selectAll;
+                }
             });
         }
     }
