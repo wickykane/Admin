@@ -606,7 +606,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         this.selectedIndex = 0;
         this.table.scrollToTable();
         setTimeout(() => {
-            const button = this.table.element.nativeElement.querySelectorAll('td button');
+            const button = this.table.element.nativeElement.querySelectorAll('td');
             if (button && button[this.selectedIndex]) {
                 button[this.selectedIndex].focus();
             }
