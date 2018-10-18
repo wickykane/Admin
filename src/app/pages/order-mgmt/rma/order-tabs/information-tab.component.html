@@ -354,7 +354,7 @@
                               <li *ngFor="let item of item.return_reason_accept.after">{{item.receive_date}} {{item.data}}</li>
                             </ul>
                           </ng-template>
-                          <button *ngIf="item.return_reason_accept" type="button" class="btn btn-outline-secondary mr-2" #p="ngbPopover" (document:click)="p.close()" (click)="$event.stopPropagation()" [ngbPopover]="popContent" popoverTitle="Return Reason" >
+                          <button *ngIf="item.return_reason_accept" type="button" class="btn btn-outline-secondary mr-2" triggers="click:blur" [ngbPopover]="popContent" popoverTitle="Return Reason" >
                           View Details
                         </button>
                         </td>
