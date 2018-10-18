@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CreditMemoService } from '../credit-memo.service';
 import { TableService } from './../../../../services/table.service';
@@ -12,6 +12,9 @@ import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { FinancialService } from '../../financial.service';
 import { CreditMailModalComponent } from '../modals/send-email/mail.modal';
 
+import { HotkeysService } from 'angular2-hotkeys';
+import { CreditMemoDetailComponent } from '../view/credit-memo-view.component';
+import { CreditDetailKeyService } from '../view/keys.view.control';
 @Component({
     selector: 'app-credit-info-tab',
     templateUrl: './information-tab.component.html',
@@ -30,7 +33,7 @@ export class CreditInformationTabComponent implements OnInit {
             this._creditId = id;
         }
     }
-    data = {};
+    public data = {};
 
     public messageConfig = {
         '2': 'Are you sure that you want to submit this credit memo?',
@@ -60,13 +63,24 @@ export class CreditInformationTabComponent implements OnInit {
         private creditMemoService: CreditMemoService,
         public financialService: FinancialService,
         public tableService: TableService,
+        private _hotkeysService: HotkeysService,
+        public keyService: CreditDetailKeyService,
+        @Inject(CreditMemoDetailComponent) private parent: CreditMemoDetailComponent,
         private http: HttpClient) {
+            //  Init Key
+        if (!this.parent.data['shortcut']) {
+            this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
+        }
     }
 
     ngOnInit() {
         this.getList();
         this.getQuickbookSettings();
         this.detail['taxs'] = [];
+        this.data['tab'] = {
+            active: 0,
+        };
+        this.changeShortcut();
     }
 
     /**
@@ -204,4 +218,20 @@ export class CreditInformationTabComponent implements OnInit {
         modalRef.componentInstance.noButtonText = 'No';
     }
 
+    changeShortcut() {
+        setTimeout(() => {
+            this.parent.data['shortcut'] = this.keyService.getKeys();
+        });
+    }
+
+    changeTab(step) {
+        this.data['tab'].active = +this.parent.tabSet.activeId;
+        this.data['tab'].active += step;
+        this.data['tab'].active = Math.min(Math.max(this.data['tab'].active, 0), 7);
+        this.parent.selectTab(String(this.data['tab'].active));
+    }
+
+    back() {
+        this.router.navigate(['/financial/credit-memo']);
+    }
 }

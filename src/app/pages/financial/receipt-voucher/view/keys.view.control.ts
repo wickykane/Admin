@@ -1,58 +1,33 @@
 import { Injectable } from '@angular/core';
-import { Hotkey, HotkeysService } from 'angular2-hotkeys';
-// tslint:disable-next-line:import-blacklist
-import { Subject } from 'rxjs/Rx';
+import { Hotkey } from 'angular2-hotkeys';
+import { KeyboardBaseService } from './../../../../shared/helper/keyServiceBase';
 
 @Injectable()
-export class ReceiptDetailKeyService {
-    public context: any;
-    public _hotkeysService;
-    public watchContext = new Subject<any>();
-
-    private keyConfig = {
-        company_id: {
+export class ReceiptDetailKeyService extends KeyboardBaseService {
+    keyConfig = {
+        back_button: {
             element: null,
-            prev: 'contact_user_id',
-            next: 'customer_po',
-        },
-        contact_user_id: {
-            element: null,
-            prev: 'company_id',
-            next: 'contact_user_id',
-        },
-        customer_po: {
-            element: null,
-            prev: 'company_id',
-            next: 'type',
-        },
-        type: {
-            element: null,
-            prev: 'customer_po',
-            next: 'type',
+            focus: true,
         },
     };
 
-    constructor() {
-        this.watchContext.subscribe(res => {
-            this.context = res.context;
-            this._hotkeysService = res.service;
-            this.initKey();
-        });
-    }
-
-    getKeys() {
-        return Array.from(this._hotkeysService.hotkeys);
-    }
-
-    getKeyConfig() {
-        return this.keyConfig;
-    }
-
     initKey() {
-        // this._hotkeysService.add(new Hotkey('alt+n', (event: KeyboardEvent): boolean => {
-        //     event.preventDefault();
-        //     this.context.createOrder();
-        //     return;
-        // }, undefined, 'Create Quotation'));
+        this._hotkeysService.add(new Hotkey('alt+backspace', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            this.context.back();
+            return;
+        }, undefined, 'Back'));
+
+        this._hotkeysService.add(new Hotkey('alt+pagedown', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            this.context.changeTab(1);
+            return;
+        }, undefined, 'Next Tab'));
+
+        this._hotkeysService.add(new Hotkey('alt+pageup', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            this.context.changeTab(-1);
+            return;
+        }, undefined, 'Prev Tab'));
     }
 }

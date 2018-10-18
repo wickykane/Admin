@@ -8,7 +8,7 @@ import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
 import { FinancialService } from '../../financial.service';
-import { InvoiceDetailKeyService } from './keys.view.control';
+import { CreditDetailKeyService } from './keys.view.control';
 
 
 @Component({
@@ -16,7 +16,7 @@ import { InvoiceDetailKeyService } from './keys.view.control';
     templateUrl: './credit-memo-view.component.html',
     styleUrls: ['../credit-memo.component.scss'],
     animations: [routerTransition()],
-    providers: [HotkeysService, InvoiceDetailKeyService]
+    providers: [HotkeysService, CreditDetailKeyService]
 })
 
 export class CreditMemoDetailComponent implements OnInit {
@@ -24,6 +24,7 @@ export class CreditMemoDetailComponent implements OnInit {
      * Variable Declaration
      */
 
+    @ViewChild('tabSet') tabSet;
     public data = {};
     public creditId;
 
@@ -37,11 +38,9 @@ export class CreditMemoDetailComponent implements OnInit {
         public toastr: ToastrService,
         private router: Router,
         private financialService: FinancialService,
-        public keyService: InvoiceDetailKeyService,
+        public keyService: CreditDetailKeyService,
         private _hotkeysService: HotkeysService,
         private route: ActivatedRoute) {
-        //  Init Key
-        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {
@@ -51,9 +50,12 @@ export class CreditMemoDetailComponent implements OnInit {
     /**
      * Mater Data
      */
+    selectTab(id) {
+        this.tabSet.select(id);
+    }
 
     back() {
-        this.router.navigate(['/financial/credit-memo/']);
+        this.router.navigate(['/financial/credit-memo']);
     }
 
 }

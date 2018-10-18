@@ -27,19 +27,19 @@
                             </thead>
                             <tbody *ngFor="let item of list.items">
                                 <tr>
-                                    <td>{{item.code}}</td>
-                                    <td>{{item.cus_po}}</td>
-                                    <td>{{item.quote_no}}</td>
-                                    <td>{{item.buyer_name}}</td>
+                                    <td>{{item.cd}}</td>
+                                    <td>{{item.return_type}}</td>
+                                    <td>{{item.company_name}}</td>
+                                    <td>{{item.request_date |date:'MM/dd/yyyy'}}</td>
+                                    <td><span *ngIf="item.sts_name">{{item.sts_name['name']}}</span></td>
+                                    <td>{{item.order_code}}</td>
+                                    <td>{{item.warehouse_name}}</td>
+                                    <td class="text-center">{{item.total_return_qty}}</td>
+                                    <td class="text-center">{{item.total_accepted_qty}}</td>
+                                    <td class="text-center">{{item.return_time}}</td>
                                     <td>{{item.sale_person_name}}</td>
-                                    <td></td>
-                                    <td>{{item.order_date | date:'MM/dd/yyy'}}</td>
-                                    <td>{{item.delivery_date | date:'MM/dd/yyyy'}}</td>
-                                    <td>{{item.total_price | currency}}</td>
-                                    <td> </td>
-                                    <td> </td>
-                                    <td> </td>
-                                    <td> </td>
+                                    <td>{{item.updated_at |date:'MM/dd/yyyy'}}</td>
+                                    <td>{{item.updated_by}}</td>
                                 </tr>
                             </tbody>
                             <tbody *ngIf="list.items.length == 0">

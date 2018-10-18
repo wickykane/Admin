@@ -16,6 +16,7 @@ export class PaymentGatewayModalComponent implements OnInit {
     // Resolve Data
     public generalForm: FormGroup;
     public listMaster = {};
+    public mask = [/\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
     @Input() data;
     public modalTitle;
 
@@ -95,7 +96,7 @@ export class PaymentGatewayModalComponent implements OnInit {
         if (!this.generalForm.valid) {
             return;
         } else {
-            this.activeModal.close({ ...this.data['billing'], ...this.generalForm.value });
+            this.activeModal.close({ ...this.data['billing'], ...this.generalForm.value, card_number: this.generalForm.value.card_number.replace(/\D+/g, '') });
         }
         // this.receiptVoucherService.sendMail(this.invoiceId, params).subscribe(res => {
         //     this.toastr.success(res.message);

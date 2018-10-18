@@ -2,9 +2,9 @@
 <!-- <app-page-header [heading]="'DETAIL RETURN ORDERS'"></app-page-header> -->
 <!-- <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut> -->
 <div class="bd-example text-right">
-    <button  *ngIf="_orderDetail.sts == 1" ngbTooltip="Send to WH" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail.id, 5)"><i class="fa fa-check" aria-hidden="true"></i> Approve</button>
-    <button *ngIf="_orderDetail.sts == 7" ngbTooltip="Complete" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail.id, 7)"><i class="fa fa-share-square-o"></i> Edit</button>
-    <button *ngIf="_orderDetail.sts == 1" ngbTooltip="Cancel" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail.id, 2)"><i class="fa fa-times-circle"></i> Cancel</button>
+    <button  *ngIf="_orderDetail.sts == 1" ngbTooltip="Send to WH" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail, 5)"><i class="fa fa-check" aria-hidden="true"></i> Approve</button>
+    <button *ngIf="_orderDetail.sts == 7" ngbTooltip="Complete" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail, 7)"><i class="fa fa-share-square-o"></i> Edit</button>
+    <button *ngIf="_orderDetail.sts == 1" ngbTooltip="Cancel" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail, 2)"><i class="fa fa-times-circle"></i> Cancel</button>
     <button *ngIf="_orderDetail.sts == 1" ngbTooltip="Edit" class="btn btn-outline-dark" [routerLink]="['edit', _orderDetail.id]"><i class="fa fa-pencil"></i> Edit</button>
 
 </div>
@@ -474,7 +474,7 @@
                      <div *ngFor="let item of detail['before_tax']" class="form-group row">
                          <label class='col-5 control-label'>+ TAX ({{item.key}}%):</label>
                          <div class='col-6 offset-md-1 padding-lr-10'>
-                             <input class="form-control" readonly="true" [(ngModel)]="item.value" class="form-control" value="0" type="number">
+                             <input [isDecimal]="true" numberDirective class="form-control" readonly="true" [(ngModel)]="item.value" class="form-control" value="0" type="number">
                          </div>
                      </div>
                      <div class="form-group row margin-lr-0 text-light bg-danger">
@@ -522,7 +522,7 @@
                      <div *ngFor="let item of detail['after_tax']" class="form-group row">
                          <label class='col-5 control-label'>+ TAX ({{item.key}}%):</label>
                          <div class='col-6 offset-md-1 padding-lr-10'>
-                             <input class="form-control" readonly="true" [(ngModel)]="item.value" class="form-control" value="0" type="number">
+                             <input [isDecimal]="true" numberDirective  class="form-control" readonly="true" [(ngModel)]="item.value" class="form-control" value="0" type="number">
                          </div>
                      </div>
                      <div class="form-group row margin-lr-0 text-light bg-danger">
