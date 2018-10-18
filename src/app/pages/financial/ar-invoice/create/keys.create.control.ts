@@ -45,7 +45,7 @@ export class InvoiceCreateKeyService extends KeyboardBaseService {
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+a', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             (document.activeElement as HTMLElement).blur();
-            this.context.confirmCreateOrder('draft');
+            this.context.createInvoice(1, 1);
             const e: ExtendedKeyboardEvent = event;
             e.returnValue = false; // Prevent bubbling
             return e;
