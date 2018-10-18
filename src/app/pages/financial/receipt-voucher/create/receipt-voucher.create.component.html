@@ -238,7 +238,7 @@
                                 </tbody>
                                 <ng-container *ngIf="list['items'].length > 0">
                                     <tbody *ngFor="let item of list['items']; let $index = index;">
-                                        <tr>
+                                        <tr [ngClass]="{'row-selected': $index == selectedIndex}">
                                             <!-- <td class="text-center">
                                                 <label class="css-input css-checkbox css-checkbox-default">
                                                     <input class="cb-element" type="checkbox" [(ngModel)]="item.is_checked" (change)="isAllChecked()">
