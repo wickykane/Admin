@@ -5,11 +5,11 @@ import { KeyboardBaseService } from './../../../../shared/helper/keyServiceBase'
 @Injectable()
 export class InvoiceEditKeyService extends KeyboardBaseService {
     keyConfig = {
-        buyer_id: {
+        company_id: {
             element: null,
             focus: true,
             ng_select: true,
-        },
+        }
     };
 
     saveKeys() {
@@ -44,12 +44,31 @@ export class InvoiceEditKeyService extends KeyboardBaseService {
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+a', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             (document.activeElement as HTMLElement).blur();
-            this.context.createVoucher(1, 1);
+            this.context.updateVoucher(1, 1);
             const e: ExtendedKeyboardEvent = event;
             e.returnValue = false; // Prevent bubbling
             return e;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save as Draft'));
-
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            (document.activeElement as HTMLElement).blur();
+            if (!this.context.generalForm.value.electronic) {
+                this.context.confirmModal((this.context.data['summary']
+                    ? this.context.data['summary'].change > 0 : false && !this.context.generalForm.value.electronic && this.context.generalForm.value.payment_method !== 5) ? 'overpayment' : 2);
+            }
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save & Submit'));
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            (document.activeElement as HTMLElement).blur();
+            if (!this.context.generalForm.value.electronic) {
+                this.context.confirmModal((this.context.data['summary']
+                    ? this.context.data['summary'].change > 0 : false && !this.context.generalForm.value.electronic && this.context.generalForm.value.payment_method !== 5) ? 'overpayment-approve' : 3);
+            }
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save & Validate'));
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+p', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             (document.activeElement as HTMLElement).blur();
                 this.context.confirmElectricModal();

@@ -50,7 +50,7 @@ export class cdArrowTable implements OnDestroy {
     scrollToTable(selector?) {
         try {
             const top = this.element.nativeElement.offsetTop - 100;
-            jQuery(selector || 'html, body').animate({
+            jQuery(selector || 'html, body, .table-responsive').animate({
                 scrollTop: top
             }, 500);
         } catch (e) {
