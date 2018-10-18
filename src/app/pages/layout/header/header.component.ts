@@ -54,7 +54,6 @@ export class HeaderComponent implements OnInit {
             };
             this.http.get(url, httpOptions).subscribe(res => {
                 this.infoUser = res['data']['user'];
-                res['data']['user']['user_type'] = 2;
                 this.storageService.setData('user', res['data']['user']);
                 localStorage.setItem('currentUser', JSON.stringify(res['data']['user']));
                 resolve(true);
