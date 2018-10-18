@@ -346,8 +346,15 @@
                         </td>
                         <td>
                           <span *ngIf="!item.return_reason_accept">{{item.return_reason_des}}</span>
-                          <button *ngIf="item.return_reason_accept" type="button" class="btn btn-outline-secondary mr-2" placement="top"
-                                ngbPopover="{{item.return_reason_accept}}" popoverTitle="Return Reason">
+                          <ng-template #popContent>
+                            <p> <strong>Initial</strong> </p>
+                            <p> {{item.return_reason_accept.inital.data}}</p>
+                            <p> <strong>After Receipt</strong> </p>
+                            <ul>
+                              <li *ngFor="let item of item.return_reason_accept.after">{{item.data}}</li>
+                            </ul>
+                          </ng-template>
+                          <button *ngIf="item.return_reason_accept" type="button" class="btn btn-outline-secondary mr-2" [ngbPopover]="popContent" popoverTitle="Return Reason">
                           View Details
                         </button>
                         </td>
