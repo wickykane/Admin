@@ -472,7 +472,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
                         _res => {
                             try {
                                 const result = JSON.parse(_res['_body']);
-                                this.toastr.success(`Receipt Voucher ${result.data[0].entity.DocNumber} has been sync to Quickbooks successfully.`);
+                                this.toastr.success(`Receipt Voucher ${result.data[0].entity.PaymentRefNum} has been sync to Quickbooks successfully.`);
                             } catch (err) {}
                         },
                         err => {
