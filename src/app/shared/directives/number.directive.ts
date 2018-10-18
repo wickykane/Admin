@@ -56,7 +56,7 @@ export class NumberDirective implements OnInit {
     onKeyDown(event) {
         const e = event;
         const selected = getSelection().toString();
-        if ([46, 8, 9, 27, 13, 110].indexOf(e.keyCode) !== -1 ||
+        if ([46, 8, 9, 27, 13].indexOf(e.keyCode) !== -1 ||
             // Allow: Ctrl+A
             (e.keyCode === 65 && e.ctrlKey === true) ||
             // Allow: Ctrl+C
