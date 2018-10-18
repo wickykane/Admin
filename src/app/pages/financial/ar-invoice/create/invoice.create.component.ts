@@ -9,19 +9,20 @@ import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs/Subject';
 import { routerTransition } from '../../../../router.animations';
 
+import { HotkeysService } from 'angular2-hotkeys';
+import * as _ from 'lodash';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
+// tslint:disable-next-line:ordered-imports
+import { cdArrowTable } from '../../../../shared/index';
+import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { ItemModalContent } from '../../../../shared/modals/item.modal';
 import { OrderHistoryModalContent } from '../../../../shared/modals/order-history.modal';
 import { PromotionModalContent } from '../../../../shared/modals/promotion.modal';
-import { ItemMiscModalContent } from './../../../../shared/modals/item-misc.modal';
-import { InvoiceCreateKeyService } from './keys.create.control';
-
-import { HotkeysService } from 'angular2-hotkeys';
-import * as _ from 'lodash';
-import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { OrderService } from '../../../order-mgmt/order-mgmt.service';
+import { ItemMiscModalContent } from './../../../../shared/modals/item-misc.modal';
 import { FinancialService } from './../../financial.service';
+import { InvoiceCreateKeyService } from './keys.create.control';
 
 
 @Component({
@@ -90,7 +91,7 @@ export class InvoiceCreateComponent implements OnInit {
     };
 
     public searchKey = new Subject<any>(); // Lazy load filter
-
+    @ViewChild('cdTable') table: cdArrowTable;
     /**
      * Init Data
      */
@@ -621,7 +622,19 @@ export class InvoiceCreateComponent implements OnInit {
             this.refresh();
         });
     }
-
+    backList() {
+        const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
+        modalRef.result.then(res => {
+            if (res) {
+                setTimeout(() => {
+                    this.router.navigate(['/financial/invoice']);
+                }, 500);
+            }
+        }, dismiss => { });
+        modalRef.componentInstance.message = this.messageConfig['back'];
+        modalRef.componentInstance.yesButtonText = 'Yes';
+        modalRef.componentInstance.noButtonText = 'No';
+    }
     searchCustomer(key) {
         this.data['searchKey'] = key;
         const params = { page: this.data['page'], length: 100 };
