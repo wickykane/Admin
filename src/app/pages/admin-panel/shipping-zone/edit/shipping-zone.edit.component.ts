@@ -152,7 +152,7 @@ export class ShippingZoneEditComponent implements OnInit {
             }
             this.getFormById(this.id);
             this.refresh();
-        })
+        });
     }
     selectOldCountry(isSelect, item) {
         item.state = this.listMasterData['state'][item.country_code];
@@ -265,7 +265,7 @@ export class ShippingZoneEditComponent implements OnInit {
         item.state = this.listMasterData['state'][item.country_code];
         for (var i = 0; i < item.state.length; i++) {
             for (var j = 0; j < itemById.state.length; j++) {
-                if (item.state[i].name == itemById.state[j].name) {
+                if (item.state[i].name == itemById.state[j].name || item.state[i].disable) {
                     item.state[i].selected = true;
                 }
             }
@@ -299,7 +299,7 @@ export class ShippingZoneEditComponent implements OnInit {
 
     onCheckCountryState(country) {
         this.stateFilter = '';
-        this.selectedCountry = Object.assign([],country);
+        this.selectedCountry = Object.assign([], country);
         this.tempListState = country.state;
         this.checkState();
     }
@@ -387,7 +387,7 @@ export class ShippingZoneEditComponent implements OnInit {
         for (var i = 0; i < listCountry.length; i++) {
             var listId = [];
             for (var j = 0; j < listCountry[i].state.length; j++) {
-                if (listCountry[i].state[j].selected) {
+                if (listCountry[i].state[j].selected && !listCountry[i].state[j].disable) {
                     listId.push(listCountry[i].state[j].id);
                 }
 
@@ -453,7 +453,7 @@ export class ShippingZoneEditComponent implements OnInit {
             if (subItem.id == 1) {
                 items.forEach(item => {
                     if (item.id == 2 || item.id == 3) {
-                         item.checked = false;
+                        item.checked = false;
                     }
                 });
 
@@ -512,7 +512,7 @@ export class ShippingZoneEditComponent implements OnInit {
     calculateStateLength(item) {
         var count = 0;
         item.forEach(res => {
-            if (res.selected) {
+            if (res.selected && !res.disable) {
                 count++;
             }
         });
@@ -520,22 +520,24 @@ export class ShippingZoneEditComponent implements OnInit {
     }
     checkState() {
         if (this.selectedCountry) {
-        for (var i = 0; i < this.selectedCountry.state.length; i++) {
-            if (this.selectedCountry.state[i].selected) {
-                if (i == this.selectedCountry.state.length - 1) {
-                    return this.selectAll = true;
+            for (var i = 0; i < this.selectedCountry.state.length; i++) {
+                if (this.selectedCountry.state[i].selected) {
+                    if (i == this.selectedCountry.state.length - 1) {
+                        return this.selectAll = true;
+                    }
+                }
+                else {
+                    return this.selectAll = false;
                 }
             }
-            else {
-                return this.selectAll = false;
-            }
         }
-    }
     }
     selectState() {
         if (this.selectedCountry) {
             this.selectedCountry.state.forEach(item => {
-                return item.selected = this.selectAll;
+                if (!item.disable) {
+                    return item.selected = this.selectAll;
+                }
             });
         }
     }
