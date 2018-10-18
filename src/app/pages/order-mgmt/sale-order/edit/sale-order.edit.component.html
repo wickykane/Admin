@@ -411,7 +411,7 @@
                                 <tbody *ngFor="let item of list['items']; let $index = index;">
                                     <tr [ngClass]="{'row-selected': $index == selectedIndex}">
                                         <td class="text-center">
-                                            <button [disabled]="data['disable']" class="btn btn-danger btn-xs" type="button" (click)="deleteAction(item.sku, item.item_condition_id)">
+                                            <button [disabled]="!item.misc_id && data['disable']" class="btn btn-danger btn-xs" type="button" (click)="deleteAction(item.sku, item.item_condition_id)">
                                                 <i class="fa fa-trash"></i>
                                             </button>
                                         </td>
