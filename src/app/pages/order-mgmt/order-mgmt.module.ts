@@ -1,6 +1,6 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
-
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { OrderMgmtRoutingModule } from './order-mgmt-routing.module';
 
@@ -58,7 +58,8 @@ import { RmaDetailComponent } from './rma/view/rma.view.component';
         CommonShareModule,
         OrderMgmtRoutingModule,
         PageHeaderModule,
-        ItemModalModule
+        ItemModalModule,
+        NgbModule
     ],
     declarations: [
         SaleOrderComponent,

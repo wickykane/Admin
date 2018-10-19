@@ -472,7 +472,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
                         _res => {
                             try {
                                 const result = JSON.parse(_res['_body']);
-                                this.toastr.success(`Receipt Voucher ${result.data[0].entity.DocNumber} has been sync to Quickbooks successfully.`);
+                                this.toastr.success(`Receipt Voucher ${result.data[0].entity.PaymentRefNum} has been sync to Quickbooks successfully.`);
                             } catch (err) {}
                         },
                         err => {
@@ -606,7 +606,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         this.selectedIndex = 0;
         this.table.scrollToTable();
         setTimeout(() => {
-            const button = this.table.element.nativeElement.querySelectorAll('td button');
+            const button = this.table.element.nativeElement.querySelectorAll('td');
             if (button && button[this.selectedIndex]) {
                 button[this.selectedIndex].focus();
             }

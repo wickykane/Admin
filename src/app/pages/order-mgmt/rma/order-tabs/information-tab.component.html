@@ -308,7 +308,7 @@
                         <th translate>Return Reason</th>
                         <th translate>Warranty</th>
                         <th translate>Status</th>
-                        <th translate>Receipt Date</th>
+                        <!-- <th translate>Receipt Date</th> -->
                      </tr>
                   </thead>
                   <tr *ngIf="list.returnItem.length === 0">
@@ -346,8 +346,15 @@
                         </td>
                         <td>
                           <span *ngIf="!item.return_reason_accept">{{item.return_reason_des}}</span>
-                          <button *ngIf="item.return_reason_accept" type="button" class="btn btn-outline-secondary mr-2" placement="top"
-                                ngbPopover="{{item.return_reason_accept}}" popoverTitle="Return Reason">
+                          <ng-template #popContent>
+                            <p> <strong>Initial</strong> </p>
+                            <p> {{item.return_reason_accept.inital.data}}</p>
+                            <p> <strong>After Receipt</strong> </p>
+                            <ul>
+                              <li *ngFor="let item of item.return_reason_accept.after">{{item.receive_date}} {{item.data}}</li>
+                            </ul>
+                          </ng-template>
+                          <button *ngIf="item.return_reason_accept" type="button" class="btn btn-outline-secondary mr-2" triggers="click:blur" [ngbPopover]="popContent" popoverTitle="Return Reason" >
                           View Details
                         </button>
                         </td>
@@ -360,9 +367,9 @@
                         <td class="text-center">
                              {{item.sts_name}}
                         </td>
-                        <td class="text-center">
+                        <!-- <td class="text-center">
                              {{item.receipt_date}}
-                        </td>
+                        </td> -->
                      </tr>
                   </tbody>
                   </table>
@@ -375,6 +382,7 @@
          </div>
       </div>
    </div>
+
    <div class="row mg-top-10" *ngIf="detail['order_return_type'] == 3">
       <div class="col-12 padding-lr-5">
          <div class="card no-border">
