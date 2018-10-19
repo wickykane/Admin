@@ -2,7 +2,14 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { KeyboardBaseService } from './../../../../shared/helper/keyServiceBase';
 @Injectable()
-export class DebitMemoListKeyService extends KeyboardBaseService  {
+export class DebitMemoListKeyService extends KeyboardBaseService {
+
+    keyConfig = {
+        code: {
+            element: null,
+            focus: true,
+        }
+    };
 
     initKey() {
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+f1', (event: KeyboardEvent): boolean => {
