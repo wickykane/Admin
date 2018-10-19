@@ -1,6 +1,7 @@
 <div class='address-tab'>
     <div class="bd-example text-right">
-        <button class="btn btn-outline-secondary" (click)="onClickBack()">
+        <button class="btn btn-outline-secondary" (click)="onClickBack()"
+        [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="back_button">
             <i class="fa fa-share-square" aria-hidden="true"></i> Back
         </button>
         <button class="btn btn-outline-primary"

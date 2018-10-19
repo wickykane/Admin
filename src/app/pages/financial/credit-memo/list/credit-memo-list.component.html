@@ -16,7 +16,8 @@
                 <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
                     <div class="block-search">
                         <label for="cd" class="control-label">Credit Memo No</label>
-                        <input #drNo type="text" name="cd" formControlName="credit_memo_num" class="form-control" id="cd" placeholder="">
+                        <input #drNo [keyConfig]="creditMemoListKeyService.getKeyConfig()" appKeyNavigate="code"
+                        type="text" name="cd" formControlName="credit_memo_num" class="form-control" id="cd" placeholder="">
                     </div>
                     <div class="block-search">
                         <label for="customer_name" class="control-label">Customer Name</label>
