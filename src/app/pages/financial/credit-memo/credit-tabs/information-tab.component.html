@@ -1,6 +1,6 @@
 <div class='address-tab'>
     <div class="bd-example text-right">
-        <button class="btn btn-outline-secondary" [routerLink]="['/financial/credit-memo']"><i class="fa fa-share-square" ></i> Back</button>
+        <button [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="back_button" class="btn btn-outline-secondary" [routerLink]="['/financial/credit-memo']"><i class="fa fa-share-square" ></i> Back</button>
         <button *ngIf="detail['sts_code'] == 'NW'" class="btn btn-outline-primary" [routerLink]="['/financial/credit-memo/edit', _creditId]"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit</button>
         <button *ngIf="detail['sts_code'] == 'NW'" class="btn btn-outline-warning" (click)="confirmModal(_creditId, 2)"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i> Submit</button>
         <button *ngIf="detail['sts_code'] == 'NW'" class="btn btn-outline-danger" (click)="confirmModal(_creditId, 5)"><i class="fa fa-times-circle" aria-hidden="true"></i> Cancel</button>
@@ -58,7 +58,7 @@
                                                 <span class="badge badge-danger bg-red" *ngIf="detail['sts_code'] == 'CC'">{{detail['sts']}}</span>
                                                 <span class="badge badge-primary bg-lemon" *ngIf="detail['sts_code'] == 'RD'">{{detail['sts']}}</span>
                                                 <span class="badge badge-primary bg-bright-grey" *ngIf="detail['sts_code'] == 'RF'">{{detail['sts']}}</span>
-                                            </div>                                           
+                                            </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class='col-6 control-label'>Salesperson</label>
