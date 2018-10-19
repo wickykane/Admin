@@ -226,4 +226,7 @@ export class InvoiceInformationTabComponent implements OnInit {
         this.data['tab'].active = Math.min(Math.max(this.data['tab'].active, 0), 7);
         this.parent.selectTab(String(this.data['tab'].active));
     }
+    reback() {
+        this.router.navigate(['/financial/invoice/']);
+    }
 }
