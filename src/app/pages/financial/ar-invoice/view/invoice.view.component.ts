@@ -7,8 +7,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
-import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
-import { InvoiceModalContent } from '../../../../shared/modals/invoice.modal';
 import { FinancialService } from '../../financial.service';
 import { InvoiceDetailKeyService } from './keys.view.control';
 
@@ -28,12 +26,11 @@ export class InvoiceDetailComponent implements OnInit {
 
     public data = {};
     public invoiceId;
-    @ViewChild('tabSet') tabSet;
 
     /**
      * Init Data
      */
-
+    @ViewChild('tabSet') tabSet;
     constructor(public sanitizer: DomSanitizer,
         private modalService: NgbModal,
         public toastr: ToastrService,
@@ -42,13 +39,13 @@ export class InvoiceDetailComponent implements OnInit {
         public keyService: InvoiceDetailKeyService,
         private _hotkeysService: HotkeysService,
         private route: ActivatedRoute) {
-        //  Init Key
-        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
+        // //  Init Key
+       // this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {
-        this.data['id'] = this.route.snapshot.paramMap.get('id');
-        this.invoiceId = this.data['id'];
+        this.invoiceId = this.route.snapshot.paramMap.get('id');
+        // this.invoiceId = this.data['id'];
     }
     /**
      * Mater Data

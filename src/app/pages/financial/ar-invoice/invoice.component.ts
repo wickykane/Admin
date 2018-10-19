@@ -12,10 +12,10 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
+import { cdArrowTable } from '../../../shared/index';
 import { OrderService } from '../../order-mgmt/order-mgmt.service';
 import { InvoiceKeyService } from './keys.list.control';
 import { MailModalComponent } from './modals/mail.modal';
-
 
 @Component({
     selector: 'app-invoice',
@@ -60,7 +60,7 @@ export class InvoiceComponent implements OnInit {
         'Overdue': { color: 'bright-grey', name: 'Overdue', id: 8 },
         'Revised': { color: 'texas-rose', name: 'Revised', id: 11 },
     };
-
+    @ViewChild(cdArrowTable) table: cdArrowTable;
     constructor(public router: Router,
         public fb: FormBuilder,
         private cd: ChangeDetectorRef,
@@ -332,6 +332,10 @@ export class InvoiceComponent implements OnInit {
             newWindow.document.title = inv_num;
             newWindow.focus();
         });
+    }
+     selectTable() {
+        this.selectedIndex = 0;
+        this.table.element.nativeElement.querySelector('td a').focus();
     }
 
     cancelInvoice(item?) {
