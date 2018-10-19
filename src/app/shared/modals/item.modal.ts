@@ -298,7 +298,7 @@ export class ItemModalContent implements OnInit, OnDestroy {
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             event.preventDefault();
-            this.tableService.searchAction();
+            this.tableService.searchActionWithFilter();
             const e: ExtendedKeyboardEvent = event;
             e.returnValue = false; // Prevent bubbling
             return e;
@@ -306,7 +306,8 @@ export class ItemModalContent implements OnInit, OnDestroy {
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+r', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             event.preventDefault();
-            this.tableService.resetAction();
+            this.tableService.resetAction(this.searchForm);
+            this.tableService.resetAction(this.filterForm);
             const e: ExtendedKeyboardEvent = event;
             e.returnValue = false; // Prevent bubbling
             return e;
