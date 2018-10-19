@@ -48,8 +48,8 @@
                             <div class="block-btn-search">
                                 <label class="control-label">&nbsp;</label>
                                 <div>
-                                    <button type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Search</button>
-                                    <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchForm)" translate>Reset</button>
+                                    <button type="button" class="btn btn-primary" (click)="tableService.searchActionWithFilter()" translate>Search</button>
+                                    <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchForm); tableService.resetAction(this.filterForm)" translate>Reset</button>
                                 </div>
                             </div>
                         </form>
@@ -80,7 +80,7 @@
                             <div class="block-btn-search">
                                 <label class="control-label">&nbsp;</label>
                                 <div>
-                                    <button type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Search</button>
+                                    <button type="button" class="btn btn-primary" (click)="tableService.searchActionWithFilter()" translate>Search</button>
                                     <button type="button" class="btn btn-default" (click)="tableService.resetAction(searchForm); tableService.resetAction(filterForm)" translate>Reset</button>
                                 </div>
                             </div>
@@ -97,7 +97,7 @@
                             <div class="block-btn-search">
                                 <label class="control-label">&nbsp;</label>
                                 <div>
-                                    <button type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Search</button>
+                                    <button type="button" class="btn btn-primary" (click)="tableService.searchActionWithFilter()" translate>Search</button>
                                     <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchForm)" translate>Reset</button>
                                 </div>
                             </div>
@@ -150,7 +150,7 @@
                 <div class="block-btn-search col-2">
                     <label class="control-label">&nbsp;</label>
                     <div>
-                        <button type="button" class="btn btn-primary" (click)="tableService.searchAction()" translate>Search</button>
+                        <button type="button" class="btn btn-primary" (click)="tableService.searchActionWithFilter()" translate>Search</button>
                         <button type="button" class="btn btn-default" (click)="tableService.resetAction(filterForm)" translate>Reset</button>
                     </div>
                 </div>
