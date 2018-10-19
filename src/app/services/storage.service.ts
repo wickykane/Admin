@@ -20,4 +20,13 @@ export class StorageService {
         const index = Object.keys(ROUTE_PERMISSION).find(_key => key.indexOf(_key) !== -1);
         return (index) ? ROUTE_PERMISSION[index] : {};
     }
+
+    getRoutePermission(route) {
+        const routePermission = { ...this.getPermission(route) };
+        const userPermission = this.getValue('permission');
+        Object.keys(routePermission).forEach(item => {
+            routePermission[item] = (userPermission.indexOf(routePermission[item]) !== -1);
+        });
+        return routePermission;
+    }
 }

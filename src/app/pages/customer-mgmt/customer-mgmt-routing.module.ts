@@ -12,10 +12,10 @@ const routes: Routes = [
     {
         path: '',
         children: [
-            { path: '', component: CustomerComponent },
-            { path: 'create', component: CustomerCreateComponent, canActivate: [MasterGuard] },
-            { path: 'view/:id', component: CustomerViewComponent },
-            { path: 'edit/:id', component: CustomerEditComponent, canActivate: [MasterGuard] }
+            { path: '', component: CustomerComponent, canActivate: [MasterGuard], },
+            { path: 'create', component: CustomerCreateComponent, canActivate: [MasterGuard], },
+            { path: 'view/:id', component: CustomerViewComponent, canActivate: [MasterGuard], },
+            { path: 'edit/:id', component: CustomerEditComponent, canActivate: [MasterGuard], }
         ]
     }
 ];

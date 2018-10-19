@@ -55,12 +55,13 @@ export class MasterGuard implements CanActivate {
 
     getUserPermission() {
         return new Promise((resolve, reject) => {
-            const url = environment.api_url + 'auth/wms-user';
+            const url = environment.commom_url + 'authentication/users/user-cache';
             const httpOptions = {
                 headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.jwtService.getToken() }),
             };
             this.http.get(url, httpOptions).subscribe(res => {
-                this.storage.setData('permission', ['VIEW_CUSTOMER']);
+                const listPerm = res['data'].permissions || [];
+                this.storage.setData('permission', listPerm);
                 resolve(true);
             }, err => {
                 reject(false);
