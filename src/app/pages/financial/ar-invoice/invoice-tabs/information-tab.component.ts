@@ -6,12 +6,14 @@ import { TableService } from './../../../../services/table.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../../../../environments/environment';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { MailModalComponent } from '../modals/mail.modal';
 import { PODModalComponent } from '../modals/POD/pod.modal';
 import { InvoiceDetailComponent } from '../view/invoice.view.component';
+import { InvoiceDetailKeyService } from '../view/keys.view.control';
 
 @Component({
     selector: 'app-invoice-info-tab',
@@ -60,14 +62,24 @@ export class InvoiceInformationTabComponent implements OnInit {
         private router: Router,
         private http: HttpClient,
         private modalService: NgbModal,
+        private _hotkeysService: HotkeysService,
+        public keyService: InvoiceDetailKeyService,
         private financialService: FinancialService,
         @Inject(InvoiceDetailComponent) private parent: InvoiceDetailComponent,
         public tableService: TableService) {
+            //  Init Key
+        if (!this.parent.data['shortcut']) {
+            this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
+        }
     }
 
     ngOnInit() {
         this.getQuickbookSettings();
         this.getList();
+        this.data['tab'] = {
+            active: 0,
+        };
+        this.changeShortcut();
         this.invoice_info['taxs'] = [];
     }
 
@@ -202,5 +214,16 @@ export class InvoiceInformationTabComponent implements OnInit {
 
     selectTab(id) {
         this.parent.selectTab(id);
+    }
+    changeShortcut() {
+        setTimeout(() => {
+            this.parent.data['shortcut'] = this.keyService.getKeys();
+        });
+    }
+    changeTab(step) {
+        this.data['tab'].active = +this.parent.tabSet.activeId;
+        this.data['tab'].active += step;
+        this.data['tab'].active = Math.min(Math.max(this.data['tab'].active, 0), 7);
+        this.parent.selectTab(String(this.data['tab'].active));
     }
 }
