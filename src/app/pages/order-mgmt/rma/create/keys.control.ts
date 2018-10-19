@@ -22,19 +22,14 @@ export class RMACreateKeyService extends KeyboardBaseService {
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Back'));
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+t', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
-
-
             this.context.selectTable();
-
             const e: ExtendedKeyboardEvent = event;
             e.returnValue = false; // Prevent bubbling
             return e;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Select Return Table'));
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+y', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
-
             this.context.selectTable2();
-
             const e: ExtendedKeyboardEvent = event;
             e.returnValue = false; // Prevent bubbling
             return e;
@@ -43,10 +38,10 @@ export class RMACreateKeyService extends KeyboardBaseService {
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+i', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             (document.activeElement as HTMLInputElement).blur();
             this.keys = this.getKeys();
-            this.context.data['tableKey'] = this.context.table.getKeys();
+            this.context.data['tableKey'] = this.context.table2.getKeys();
+            this.resetKeys();
+            this.context.table2.resetKeys();
             setTimeout(() => {
-                this.resetKeys();
-                this.context.table.resetKeys();
                 this.context.addNewItem();
             });
 
@@ -55,13 +50,14 @@ export class RMACreateKeyService extends KeyboardBaseService {
             return e;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Add Replace Item'));
 
+
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+r', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             (document.activeElement as HTMLInputElement).blur();
             this.keys = this.getKeys();
             this.context.data['tableKey'] = this.context.table.getKeys();
+            this.resetKeys();
+            this.context.table.resetKeys();
             setTimeout(() => {
-                this.resetKeys();
-                this.context.table.resetKeys();
                 this.context.openModalAddItemsOrder();
             });
 
