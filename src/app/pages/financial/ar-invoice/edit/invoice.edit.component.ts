@@ -9,19 +9,19 @@ import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs/Subject';
 import { routerTransition } from '../../../../router.animations';
 
+import { HotkeysService } from 'angular2-hotkeys';
+import * as _ from 'lodash';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
+import { cdArrowTable } from '../../../../shared/index';
+import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { ItemModalContent } from '../../../../shared/modals/item.modal';
 import { OrderHistoryModalContent } from '../../../../shared/modals/order-history.modal';
 import { PromotionModalContent } from '../../../../shared/modals/promotion.modal';
-import { ItemMiscModalContent } from './../../../../shared/modals/item-misc.modal';
-import { InvoiceEditKeyService } from './keys.edit.control';
-
-import { HotkeysService } from 'angular2-hotkeys';
-import * as _ from 'lodash';
-import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { OrderService } from '../../../order-mgmt/order-mgmt.service';
+import { ItemMiscModalContent } from './../../../../shared/modals/item-misc.modal';
 import { FinancialService } from './../../financial.service';
+import { InvoiceEditKeyService } from './keys.edit.control';
 
 
 @Component({
@@ -94,6 +94,7 @@ export class InvoiceEditComponent implements OnInit {
     /**
      * Init Data
      */
+    @ViewChild(cdArrowTable) table: cdArrowTable;
     constructor(
         private vRef: ViewContainerRef,
         private fb: FormBuilder,
@@ -689,5 +690,9 @@ export class InvoiceEditComponent implements OnInit {
             this.data['total_page'] = res.data.total_page;
             this.refresh();
         });
+    }
+    selectTable() {
+        this.selectedIndex = 0;
+        this.table.element.nativeElement.querySelector('td a').focus();
     }
 }
