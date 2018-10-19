@@ -3,22 +3,22 @@
     <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
     <section class="main-container block-order-detail">
         <ngb-tabset #tabSet class="tabs-order full-width">
-            <ngb-tab title="Information">
+            <ngb-tab id='0'title="Information">
                 <ng-template ngbTabContent>
                     <app-invoice-info-tab [invoiceId]="invoiceId"></app-invoice-info-tab>
                 </ng-template>
             </ngb-tab>
-            <ngb-tab title="Receipt Voucher">
+            <ngb-tab id='1' title="Receipt Voucher">
                 <ng-template ngbTabContent>
                     <app-invoice-receipt-voucher-tab [invoiceId]="invoiceId"></app-invoice-receipt-voucher-tab>
                 </ng-template>
             </ngb-tab>
-            <ngb-tab id="credit" title="Credit Memo">
+            <ngb-tab id='2' title="Credit Memo">
                 <ng-template ngbTabContent>
                     <app-invoice-credit-memo-tab [invoiceId]="invoiceId"></app-invoice-credit-memo-tab>
                 </ng-template>
             </ngb-tab>
-            <ngb-tab id="debit" title="Debit Memo">
+            <ngb-tab id='3' title="Debit Memo">
                 <ng-template ngbTabContent>
                     <app-invoice-debit-memo-tab [invoiceId]="invoiceId"></app-invoice-debit-memo-tab>
                 </ng-template>
@@ -28,12 +28,12 @@
                     <app-invoice-payment-tab></app-invoice-payment-tab>
                 </ng-template>
             </ngb-tab> -->
-            <ngb-tab title="Document">
+            <ngb-tab id='4' title="Document">
                 <ng-template ngbTabContent>
                     <app-invoice-document-tab></app-invoice-document-tab>
                 </ng-template>
             </ngb-tab>
-            <ngb-tab title="History">
+            <ngb-tab id='5' title="History">
                 <ng-template ngbTabContent>
                     <app-invoice-history-tab [invoiceId]="invoiceId"></app-invoice-history-tab>
                 </ng-template>

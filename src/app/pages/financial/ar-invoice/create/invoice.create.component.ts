@@ -622,19 +622,6 @@ export class InvoiceCreateComponent implements OnInit {
             this.refresh();
         });
     }
-    backList() {
-        const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
-        modalRef.result.then(res => {
-            if (res) {
-                setTimeout(() => {
-                    this.router.navigate(['/financial/invoice']);
-                }, 500);
-            }
-        }, dismiss => { });
-        modalRef.componentInstance.message = this.messageConfig['back'];
-        modalRef.componentInstance.yesButtonText = 'Yes';
-        modalRef.componentInstance.noButtonText = 'No';
-    }
     searchCustomer(key) {
         this.data['searchKey'] = key;
         const params = { page: this.data['page'], length: 100 };
@@ -646,5 +633,16 @@ export class InvoiceCreateComponent implements OnInit {
             this.data['total_page'] = res.data.total_page;
             this.refresh();
         });
+    }
+    selectTable() {
+        this.selectedIndex = 0;
+        this.table.scrollToTable();
+        setTimeout(() => {
+            const button = this.table.element.nativeElement.querySelectorAll('td button');
+            if (button && button[this.selectedIndex]) {
+                button[this.selectedIndex].focus();
+            }
+        });
+        this.refresh();
     }
 }

@@ -21,7 +21,7 @@ export class InvoiceCreateKeyService extends KeyboardBaseService {
     initKey() {
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+backspace', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             (document.activeElement as HTMLElement).blur();
-            this.context.back();
+            this.context.confirmModal(0);
             const e: ExtendedKeyboardEvent = event;
             e.returnValue = false; // Prevent bubbling
             return e;
@@ -34,15 +34,6 @@ export class InvoiceCreateKeyService extends KeyboardBaseService {
         //     return e;
         // }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Select Table'));
 
-
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+del', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
-            const item = this.context.list['items'][this.context.selectedIndex];
-            this.context.deleteAction(item.sku, item.item_condition_id);
-            const e: ExtendedKeyboardEvent = event;
-            e.returnValue = false; // Prevent bubbling
-            return e;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Delete Item'));
-
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+a', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             (document.activeElement as HTMLElement).blur();
             this.context.createInvoice(1, 1);
@@ -54,7 +45,7 @@ export class InvoiceCreateKeyService extends KeyboardBaseService {
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             (document.activeElement as HTMLElement).blur();
             if (this.context.generalForm.valid) {
-                this.context.confirmCreateOrder('validate');
+                this.context.data['only_validate'] = true; this.context.confirmModal(4);
             }
             const e: ExtendedKeyboardEvent = event;
             e.returnValue = false; // Prevent bubbling
@@ -64,42 +55,29 @@ export class InvoiceCreateKeyService extends KeyboardBaseService {
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             (document.activeElement as HTMLElement).blur();
             if (this.context.generalForm.valid) {
-                this.context.confirmCreateOrder('create');
+                this.context.data['only_validate'] = false; this.context.confirmModal(4);
             }
             const e: ExtendedKeyboardEvent = event;
             e.returnValue = false; // Prevent bubbling
             return e;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save & Submit'));
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Validate & Receive Payment'));
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+q', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             if (this.context.generalForm.valid) {
-                this.context.confirmCreateOrder('quote');
+                this.context.confirmModal(2);
             }
             const e: ExtendedKeyboardEvent = event;
             e.returnValue = false; // Prevent bubbling
             return e;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save as Quote'));
-
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save & Submit For Approval'));
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+c', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
-            this.context.calcTaxShipping();
+                this.context.createInvoice(1, 1, 1); this.context.resetInvoice();
             const e: ExtendedKeyboardEvent = event;
             e.returnValue = false; // Prevent bubbling
             return e;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Calc Tax & Shipping'));
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save & Create New Invoice'));
 
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+b', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
-            if (this.context.generalForm.value.buyer_id) {
-                (document.activeElement as HTMLElement).blur();
-                this.saveKeys();
-                setTimeout(() => {
-                    this.context.showListQuote();
-                });
-            }
-            const e: ExtendedKeyboardEvent = event;
-            e.returnValue = false; // Prevent bubbling
-            return e;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Active Quotes'));
     }
 
 }
