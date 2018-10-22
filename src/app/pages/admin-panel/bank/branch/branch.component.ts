@@ -141,23 +141,33 @@ export class BranchComponent implements OnInit {
   }
 
   // Modal
-  editBranch(branchId, flag?) {
-    const modalRef = this.modalService.open(BranchModalComponent, { windowClass: 'md-modal' });
-    modalRef.componentInstance.modalTitle = (flag) ? 'EDIT BRANCH' : 'CREATE NEW BRANCH';
-    modalRef.componentInstance.branchId = branchId;
-    modalRef.componentInstance.bankId = this.data['bank_id'];
-    modalRef.componentInstance.bankData = this.data['bankData'] || {};
+    editBranch(branchId, flag?) {
+        this.keyService.saveKeys();
+        const modalRef = this.modalService.open(BranchModalComponent, { windowClass: 'md-modal' });
+        modalRef.componentInstance.modalTitle = (flag) ? 'EDIT BRANCH' : 'CREATE NEW BRANCH';
+        modalRef.componentInstance.branchId = branchId;
+        modalRef.componentInstance.bankId = this.data['bank_id'];
+        modalRef.componentInstance.bankData = this.data['bankData'] || {};
 
-    modalRef.result.then(data => {
-      const params = { ...data };
-      if (!flag) {
-        this.createBranch(params);
-      } else {
-        this.updateBranch(this.data['bank_id'], branchId, params);
-      }
-    },
-      dismiss => { });
-  }
+        modalRef.result.then(data => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
+            const params = { ...data };
+            if (!flag) {
+                this.createBranch(params);
+            } else {
+                this.updateBranch(this.data['bank_id'], branchId, params);
+            }
+        },
+        dismiss => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
+        });
+    }
 
   selectTable() {
       this.selectedIndex = 0;
