@@ -79,7 +79,9 @@ export class CarrierCreateKeyService extends KeyboardBaseService {
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+del', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             const item = this.context.listBankAccount[this.context.selectedIndex];
-            this.context.removeBankAccount(this.context.selectedIndex, item);
+            if (item) {
+                this.context.removeBankAccount(this.context.selectedIndex, item);
+            }
             const e: ExtendedKeyboardEvent = event;
             e.returnValue = false; // Prevent bubbling
             return e;

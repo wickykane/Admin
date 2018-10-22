@@ -41,7 +41,9 @@ export class CarrierKeyService extends KeyboardBaseService {
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             const item = this.context.list.items[this.context.selectedIndex];
-            this.context.router.navigate(['/admin-panel/carrier/edit/', item.id]);
+            if (item) {
+                this.context.router.navigate(['/admin-panel/carrier/edit/', item.id]);
+            }
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Edit'));
 
