@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { MasterGuard } from '../shared';
 import { PageDenyComponent } from './404/deny.component';
 import { LayoutComponent } from './layout.component';
 
@@ -18,7 +19,8 @@ const routes: Routes = [
             { path: 'customer', loadChildren: '../pages/customer-mgmt/customer-mgmt.module#CustomerMgmtModule' },
             { path: 'financial', loadChildren: '../pages/financial/financial.module#FinancialModule' }
 
-        ]
+        ],
+        canActivate: [MasterGuard]
     }
 ];
 
