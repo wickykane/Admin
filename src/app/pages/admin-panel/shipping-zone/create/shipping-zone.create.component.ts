@@ -1,16 +1,19 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewContainerRef, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
 import { Form, FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ToastrService } from 'ngx-toastr';
 import { ShippingZoneService } from '../shipping-zone.service';
-import { RMACreateKeyService } from './keys.control';
+import { ShippingZoneCreateKeyService } from './keys.control';
 
+import { HotkeysService } from 'angular2-hotkeys';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { routerTransition } from '../../../../router.animations';
 import { CommonService } from './../../../../services/common.service';
+
+import { cdArrowTable } from '../../../../shared';
 
 import * as moment from 'moment';
 import { CustomRateOptionsModalComponent } from '../../../../shared/modals/custom-rate-options.modal';
@@ -25,7 +28,7 @@ import { UPSConfigurationModalComponent } from '../../../../shared/modals/ups-co
     templateUrl: './shipping-zone.create.component.html',
     styleUrls: ['../shipping-zone.component.scss', './shipping-zone.create.component.scss'],
     animations: [routerTransition()],
-    providers: [DatePipe, RMACreateKeyService, CommonService],
+    providers: [DatePipe, ShippingZoneCreateKeyService, CommonService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
@@ -44,6 +47,8 @@ export class ShippingZoneCreateComponent implements OnInit {
     public countryFilter = '';
     public stateFilter = '';
     public listSelectCountry = [];
+    public selectedIndex = 0;
+    public tempShippingList = [];
     public freeShippingList = {
         'free_shipping_item': 0,
         'limit_order_over': 0,
@@ -59,60 +64,62 @@ export class ShippingZoneCreateComponent implements OnInit {
     {
         'id': '0',
         'name': 'Inactive'
-    }]
+    }];
     public flatRateList = {
-        "name": '',
-        "type": '1',
-        "shipping_fee": '0.00',
-        "fee_type": '1',
-        "handling_fee": '0.00',
-        "id": "2"
+        'name': '',
+        'type': '1',
+        'shipping_fee': '0.00',
+        'fee_type': '1',
+        'handling_fee': '0.00',
+        'id': '2'
     };
     public customRateList = {
-        "name": '',
-        "type": '',
-        "shipping_fee": '',
-        "fee_type": '1',
-        "handling_fee": '0.00',
-        "id": "3",
-        "charge_shipping": "1",
-        "ranges": [{ 'lbs_from': '0', 'lbs_to': '20.00', 'shipping_fee': '8.00' }]
+        'name': '',
+        'type': '',
+        'shipping_fee': '',
+        'fee_type': '1',
+        'handling_fee': '0.00',
+        'id': '3',
+        'charge_shipping': '1',
+        'ranges': [{ 'lbs_from': '0', 'lbs_to': '20.00', 'shipping_fee': '8.00' }]
     };
     public pickupList = {
-        "name": '',
-        "handling_fee": '0.00',
-        "id": "4",
+        'name': '',
+        'handling_fee': '0.00',
+        'id': '4',
         'warehouse': '1',
     };
     public upsList = {
-        "id": '5',
-        "access_key": "",
-        "user_id": "",
-        "password": "",
-        "rates": false,
-        "account_number": "",
-        "ups_customer": "00",
-        "fee_type": "1",
-        "handling_fee": "0",
-        "markup_type": "1",
-        "markup_type_value": "0",
-    }
+        'id': '5',
+        'access_key': '',
+        'user_id': '',
+        'password': '',
+        'rates': false,
+        'account_number': '',
+        'ups_customer': '00',
+        'fee_type': '1',
+        'handling_fee': '0',
+        'markup_type': '1',
+        'markup_type_value': '0',
+    };
     public seflList = {
-        "account": '',
-        "username": '',
-        "password": '',
-        "markup_type_value": '0.00',
-        "markup_type": '1',
-        "fee_type": '1',
-        "handling_fee": '0.00',
+        'account': '',
+        'username': '',
+        'password': '',
+        'markup_type_value': '0.00',
+        'markup_type': '1',
+        'fee_type': '1',
+        'handling_fee': '0.00',
         'id': '6'
-    }
+    };
     public selectedCountry = null;
 
     public pickupStoreList = [];
+
+    @ViewChild(cdArrowTable) table: cdArrowTable;
     constructor(
         private cd: ChangeDetectorRef,
-        public keyService: RMACreateKeyService,
+        public keyService: ShippingZoneCreateKeyService,
         private vRef: ViewContainerRef,
         private fb: FormBuilder,
         public toastr: ToastrService,
@@ -121,6 +128,7 @@ export class ShippingZoneCreateComponent implements OnInit {
         private modalService: NgbModal,
         private shippingZoneService: ShippingZoneService,
         private commonService: CommonService,
+        private _hotkeysService: HotkeysService,
         private dt: DatePipe) {
         this.generalForm = fb.group({
             'name': [''],
@@ -129,7 +137,7 @@ export class ShippingZoneCreateComponent implements OnInit {
         });
 
         //  Init Key
-        this.keyService.watchContext.next(this);
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {
@@ -144,21 +152,21 @@ export class ShippingZoneCreateComponent implements OnInit {
             this.listCountry = res.data['country'];
             this.tempListCountry = this.listCountry.slice(0);
             this.unSelectCountry();
-            this.listShipping = res.data["shipping_quotes_type"];
+            this.listShipping = res.data['shipping_quotes_type'];
             for (var i = 0; i < this.listShipping.length; i++) {
                 for (var j = 0; j < this.listShipping[i].data.length; j++) {
                     this.listShipping[i].data[j].checked = false;
                 }
             }
             this.refresh();
-        })
+        });
     }
     filterCountry(key) {
         this.listCountry = this.filterbyfieldName(this.tempListCountry, 'name', key);
     }
     filterbyfieldName(arr: any[], fieldname: string, value: any): any[] {
-        var isSearch = (data: any): boolean => {
-            var isAll = false;
+        const isSearch = (data: any): boolean => {
+            let isAll = false;
             if (typeof data === 'object' && typeof data[fieldname] !== 'undefined') {
                 isAll = isSearch(data[fieldname]);
             } else {
@@ -177,22 +185,20 @@ export class ShippingZoneCreateComponent implements OnInit {
         if (item.state) {
             item.state.forEach(res => {
                 return res.selected = true;
-            })
-        }
-        else {
+            });
+        } else {
             item.state = [];
         }
         if (isSelect) {
             this.listSelectCountry.push(item);
-        }
-        else {
+        } else {
             if (this.selectedCountry != null) {
                 if (this.selectedCountry.country_id === item.country_id) {
                     this.selectedCountry = null;
                 }
             }
             this.listSelectCountry.forEach((res, index) => {
-                if (res.country_id == item.country_id) {
+                if (res.country_id === item.country_id) {
                     this.listSelectCountry.splice(index, 1);
                 }
             });
@@ -210,34 +216,34 @@ export class ShippingZoneCreateComponent implements OnInit {
 
     onCheckCountryState(country) {
         this.stateFilter = '';
-        this.selectedCountry = Object.assign([], country);
+        this.selectedCountry = Object.assign([], ...country);
         this.tempListState = country.state;
         this.checkState();
     }
 
     openShippingModal(id) {
         var modalRef: any;
-        if (id == "1") {
+        if (id == '1') {
             modalRef = this.modalService.open(FreeShippingOptionsModalComponent);
             modalRef.componentInstance.condition = this.listMasterData['condition'];
             modalRef.componentInstance.id = id;
             modalRef.componentInstance.shippingList = this.freeShippingList;
         }
-        if (id == "2") {
+        if (id == '2') {
             modalRef = this.modalService.open(FlatRateOptionsModalComponent);
             modalRef.componentInstance.typeList = this.listMasterData['type'];
             modalRef.componentInstance.typeFreeList = this.listMasterData['type_free'];
             modalRef.componentInstance.id = id;
             modalRef.componentInstance.flatRateList = this.flatRateList;
         }
-        if (id == "3") {
+        if (id == '3') {
             modalRef = this.modalService.open(CustomRateOptionsModalComponent, { size: 'lg' });
             modalRef.componentInstance.typeList = this.listMasterData['charge_shipping'];
             modalRef.componentInstance.typeFreeList = this.listMasterData['type_free'];
             modalRef.componentInstance.id = id;
             modalRef.componentInstance.customRateList = this.customRateList;
         }
-        if (id == "4") {
+        if (id ==='4') {
             modalRef = this.modalService.open(PickupOptionsModalComponent, { size: 'lg' });
             modalRef.componentInstance.wareHouseList = this.listMasterData['warehouse'];
             modalRef.componentInstance.weekDaysList = this.listMasterData['day_of_week'];
@@ -245,11 +251,8 @@ export class ShippingZoneCreateComponent implements OnInit {
             modalRef.componentInstance.id = id;
             modalRef.componentInstance.pickupList = this.pickupList;
         }
-        if (id == "5") {
+        if (id == '5') {
             modalRef = this.modalService.open(UPSConfigurationModalComponent);
-            // modalRef.componentInstance.wareHouseList = this.listMasterData['warehouse'];
-            // modalRef.componentInstance.weekDaysList = this.listMasterData['day_of_week'];
-            // modalRef.componentInstance.dayHoursList = this.listMasterData['hours_of_day'];
             modalRef.componentInstance.id = id;
             modalRef.componentInstance.pickupModalList = this.upsList;
             modalRef.componentInstance.typeFreeList = this.listMasterData['type_free'];
@@ -257,11 +260,8 @@ export class ShippingZoneCreateComponent implements OnInit {
             modalRef.componentInstance.customer_classificationList = this.listMasterData['customer_classification'];
 
         }
-        if (id == "6") {
+        if (id == '6') {
             modalRef = this.modalService.open(SEFLConfigurationModalComponent);
-            // modalRef.componentInstance.wareHouseList = this.listMasterData['warehouse'];
-            // modalRef.componentInstance.weekDaysList = this.listMasterData['day_of_week'];
-            // modalRef.componentInstance.dayHoursList = this.listMasterData['hours_of_day'];
             modalRef.componentInstance.id = id;
             modalRef.componentInstance.seflModalList = this.seflList;
             modalRef.componentInstance.typeFreeList = this.listMasterData['type_free'];
@@ -451,6 +451,8 @@ export class ShippingZoneCreateComponent implements OnInit {
             });
         }
     }
-
+    back() {
+        this.router.navigate(['/admin-panel/shipping-zone']);
+    }
 }
 

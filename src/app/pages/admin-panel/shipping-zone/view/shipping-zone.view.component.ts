@@ -19,6 +19,9 @@ import { FreeShippingOptionsModalComponent } from '../../../../shared/modals/fre
 import { FlatRateOptionsModalComponent } from '../../../../shared/modals/flat-rate-options.modal';
 import { CustomRateOptionsModalComponent } from '../../../../shared/modals/custom-rate-options.modal';
 import { PickupOptionsModalComponent } from '../../../../shared/modals/pickup-options.modal';
+
+import { ShippingZoneViewKeyService } from './keys.control';
+import { HotkeysService } from 'angular2-hotkeys';
 @Component({
     selector: 'app-view-shipping-zone',
     templateUrl: './shipping-zone.view.component.html',
@@ -120,13 +123,15 @@ export class ShippingZoneViewComponent implements OnInit {
         private modalService: NgbModal,
         private shippingZoneService: ShippingZoneService,
         private commonService: CommonService,
-        private dt: DatePipe) {
+        private dt: DatePipe,
+        public keyService: ShippingZoneViewKeyService,
+        private _hotkeysService: HotkeysService) {
         this.generalForm = fb.group({
             'name': [''],
             'status': ['1']
 
         });
-
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
         //  Init Key
     }
 
@@ -509,6 +514,9 @@ export class ShippingZoneViewComponent implements OnInit {
                 return item.selected = this.selectAll;
             });
         }
+    }
+    back() {
+        this.router.navigate(['/admin-panel/shipping-zone']);
     }
 }
 

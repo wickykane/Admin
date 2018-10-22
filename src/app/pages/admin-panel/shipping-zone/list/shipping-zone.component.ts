@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -6,7 +6,11 @@ import { routerTransition } from '../../../../router.animations';
 import { TableService } from '../../../../services/table.service';
 import { ShippingZoneService } from '../shipping-zone.service';
 import { ShippingZoneKeyService } from './keys.control';
+
+import { HotkeysService } from 'angular2-hotkeys';
 import { CommonService } from './../../../../services/common.service';
+
+import { cdArrowTable } from '../../../../shared';
 @Component({
     selector: 'app-shipping-zone',
     templateUrl: './shipping-zone.component.html',
@@ -34,6 +38,8 @@ export class ShippingZoneComponent implements OnInit {
     public countryList: any;
     searchForm: FormGroup;
 
+    @ViewChild(cdArrowTable) table: cdArrowTable;
+
     constructor(public router: Router,
         public fb: FormBuilder,
         private cd: ChangeDetectorRef,
@@ -42,7 +48,8 @@ export class ShippingZoneComponent implements OnInit {
         public tableService: TableService,
         private shippingZoneService: ShippingZoneService,
         public keyService: ShippingZoneKeyService,
-        private commonService: CommonService
+        private commonService: CommonService,
+        private _hotkeysService: HotkeysService,
     ) {
 
         this.searchForm = fb.group({
@@ -55,7 +62,7 @@ export class ShippingZoneComponent implements OnInit {
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
         //  Init Key
-        this.keyService.watchContext.next(this);
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {
@@ -120,5 +127,9 @@ export class ShippingZoneComponent implements OnInit {
     }
     openViewPage(id) {
         this.router.navigate(['/admin-panel/shipping-zone/view/' + id]);
+    }
+    selectTable() {
+        this.selectedIndex = 0;
+        this.table.element.nativeElement.querySelector('td').focus();
     }
 }

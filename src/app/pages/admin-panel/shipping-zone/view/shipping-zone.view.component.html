@@ -1,6 +1,6 @@
 <div [@routerTransition]>
     <app-page-header [heading]="'VIEW SHIPPING ZONE'"></app-page-header>
-    <!-- <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut> -->
+    <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
 
     <section class="rma-page block main-container block-order">
         <div class="row block-info">
@@ -70,7 +70,7 @@
                                         </label>
                                         <div class="col-7">
                                             <form [formGroup]="generalForm">
-                                                <input type="text" class="form-control" disabled style="width: 100%" placeholder="Start searching for a country" (ngModelChange)="filterCountry($event)"
+                                                <input type="text" [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="filter" class="form-control" disabled style="width: 100%" placeholder="Start searching for a country" (ngModelChange)="filterCountry($event)"
                                                     [ngModel]="countryFilter" [ngModelOptions]="{standalone: true}">
                                             </form>
                                         </div>

@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewContainerRef, ViewEncapsulation } from '@angular/core';
-import { Form, FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { Form, FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -11,6 +11,7 @@ import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { routerTransition } from '../../../../router.animations';
 import { CommonService } from './../../../../services/common.service';
 
+import { HotkeysService } from 'angular2-hotkeys';
 import * as moment from 'moment';
 import { StateFilterModalComponent } from '../../../../shared/modals/stateFilter.modal';
 import { UPSConfigurationModalComponent } from '../../../../shared/modals/ups-configuration.modal';
@@ -18,13 +19,15 @@ import { SEFLConfigurationModalComponent } from '../../../../shared/modals/sefl-
 import { FreeShippingOptionsModalComponent } from '../../../../shared/modals/free-shipping-options.modal';
 import { FlatRateOptionsModalComponent } from '../../../../shared/modals/flat-rate-options.modal';
 import { CustomRateOptionsModalComponent } from '../../../../shared/modals/custom-rate-options.modal';
+
+import { ShippingZoneEditKeyService } from './keys.control';
 import { PickupOptionsModalComponent } from '../../../../shared/modals/pickup-options.modal';
 @Component({
     selector: 'app-edit-shipping-zone',
     templateUrl: './shipping-zone.edit.component.html',
     styleUrls: ['../shipping-zone.component.scss', '../create/shipping-zone.create.component.scss'],
     animations: [routerTransition()],
-    providers: [DatePipe, CommonService],
+    providers: [DatePipe, ShippingZoneEditKeyService, CommonService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
@@ -121,13 +124,15 @@ export class ShippingZoneEditComponent implements OnInit {
         private modalService: NgbModal,
         private shippingZoneService: ShippingZoneService,
         private commonService: CommonService,
-        private dt: DatePipe) {
+        private dt: DatePipe,
+        public keyService: ShippingZoneEditKeyService,
+        private _hotkeysService: HotkeysService) {
         this.generalForm = fb.group({
             'name': [''],
             'status': ['1']
 
         });
-
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
         //  Init Key
     }
 
@@ -540,6 +545,9 @@ export class ShippingZoneEditComponent implements OnInit {
                 }
             });
         }
+    }
+    back() {
+        this.router.navigate(['/admin-panel/shipping-zone']);
     }
 }
 

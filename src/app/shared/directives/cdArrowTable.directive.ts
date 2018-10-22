@@ -23,6 +23,7 @@ export class cdArrowTable implements OnDestroy {
     }
 
     @Input() set selectedIndex(value: any) {
+        console.log(value);
         this._selectedIndex = value;
     }
 

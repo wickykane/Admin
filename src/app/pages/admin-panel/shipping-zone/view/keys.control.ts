@@ -2,7 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { KeyboardBaseService } from './../../../../shared/helper/keyServiceBase';
 @Injectable()
-export class ShippingZoneCreateKeyService extends KeyboardBaseService {
+export class ShippingZoneViewKeyService extends KeyboardBaseService {
     keyConfig = {
         name: {
             element: null,
@@ -36,15 +36,6 @@ export class ShippingZoneCreateKeyService extends KeyboardBaseService {
             }
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Focus Search'));
-
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
-            if (this.context.generalForm.valid) {
-                this.context.save();
-            }
-            const e: ExtendedKeyboardEvent = event;
-            e.returnValue = false; // Prevent bubbling
-            return e;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save'));
 
 
     }
