@@ -398,7 +398,7 @@ export class RmaCreateComponent implements OnInit {
                         this.generalForm.patchValue({'invoice_id': this.listMaster['list_invoice'][0]['id']});
                         this.checkInvoice();
                     } else {
-                      this.generalForm.patchValue({'invoice_id': ''});
+                      this.generalForm.patchValue({'invoice_id': null});
                     }
                     this.refresh();
                 } catch (err) {
