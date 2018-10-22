@@ -1,14 +1,18 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Hotkey } from 'angular2-hotkeys';
-import { KeyboardBaseService } from './../../../shared/helper/keyServiceBase';
+import { KeyboardBaseService } from './../../../../shared/helper/keyServiceBase';
 @Injectable()
-export class BankKeyService extends KeyboardBaseService {
+export class BranchKeyService extends KeyboardBaseService {
 
     keyConfig = {
-        code: {
+        name: {
             element: null,
-            focus: true,
+            focus: false,
         },
+        back_button: {
+            element: null,
+            focus: true
+        }
     };
 
     saveKeys() {
@@ -19,10 +23,15 @@ export class BankKeyService extends KeyboardBaseService {
     }
 
     initKey() {
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+backspace', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            this.context.router.navigate(['/admin-panel/bank']);
+            return;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Back'));
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+f1', (event: KeyboardEvent): boolean => {
             event.preventDefault();
-            if (this.keyConfig.code.element) {
-                this.keyConfig.code.element.nativeElement.focus();
+            if (this.keyConfig.name.element) {
+                this.keyConfig.name.element.nativeElement.focus();
             }
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Focus Search'));
@@ -39,18 +48,14 @@ export class BankKeyService extends KeyboardBaseService {
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset'));
 
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+n', (event: KeyboardEvent): boolean => {
-            event.preventDefault();
-            this.context.editBank();
-            return;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'New Bank'));
-
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             const item = this.context.list.items[this.context.selectedIndex];
-            this.context.router.navigate([`/admin-panel/bank/${item.id}/branch`]);
+            if (item) {
+                this.context.editBranch(item.id, 1);
+            }
             return;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'View'));
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Edit'));
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+pageup', (event: KeyboardEvent): boolean => {
             this.context.tableService.pagination.page--;
