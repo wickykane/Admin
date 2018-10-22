@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { PageDenyComponent } from './404/deny.component';
 import { LayoutComponent } from './layout.component';
 
 const routes: Routes = [
@@ -8,6 +9,7 @@ const routes: Routes = [
         component: LayoutComponent,
         children: [
             { path: '', redirectTo: 'guide' },
+            { path: 'deny', component: PageDenyComponent},
             { path: 'dashboard', loadChildren: '../pages/dashboard/dashboard.module#DashboardModule' },
             { path: 'admin-panel', loadChildren: '../pages/admin-panel/admin-panel.module#AdminPanelModule' },
             { path: 'guide', loadChildren: '../pages/guide/guide.module#GuideModule' },
