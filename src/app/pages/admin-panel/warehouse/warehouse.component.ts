@@ -6,7 +6,7 @@ import { routerTransition } from '../../../router.animations';
 import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { TableService } from '../../../services/index';
-import { WarehouseListKeyService } from './lit-keys.control';
+import { WarehouseListKeyService } from './list-keys.control';
 import { WarehouseService } from './warehouse.service';
 
 import { cdArrowTable } from '../../../shared';

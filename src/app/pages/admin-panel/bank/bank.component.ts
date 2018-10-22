@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 import { TableService } from '../../../services/index';
@@ -10,6 +11,7 @@ import { BankService } from './bank.service';
 import { BankModalComponent } from './modal/bank.modal';
 import { BranchModalComponent } from './modal/branch.modal';
 
+import { cdArrowTable } from '../../../shared';
 import { BankKeyService } from './keys.control';
 
 @Component({
@@ -25,6 +27,7 @@ export class BankComponent implements OnInit {
   /**
    *  Variable
    */
+  @ViewChild(cdArrowTable) table: cdArrowTable;
   public searchForm: FormGroup;
   public listMaster = {};
   public selectedIndex = 0;
@@ -42,6 +45,7 @@ export class BankComponent implements OnInit {
     private bankService: BankService,
     private modalService: NgbModal,
     private toastr: ToastrService,
+    private _hotkeysService: HotkeysService,
     public keyService: BankKeyService, ) {
     this.searchForm = fb.group({
       'code': [null],
@@ -53,7 +57,7 @@ export class BankComponent implements OnInit {
     this.tableService.getListFnName = 'getList';
     this.tableService.context = this;
     //  Init Key
-    this.keyService.watchContext.next(this);
+    this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
   }
 
   ngOnInit() {
@@ -170,4 +174,9 @@ export class BankComponent implements OnInit {
       }
     });
   }
+
+    selectTable() {
+        this.selectedIndex = 0;
+        this.table.element.nativeElement.querySelector('td a').focus();
+    }
 }
