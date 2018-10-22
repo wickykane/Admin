@@ -1,5 +1,6 @@
 <div [@routerTransition]>
     <app-page-header [heading]="'CREATE NEW DISCOUNT BY CATEGORY'" [icon]="'fa-th-list'"></app-page-header>
+    <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
     <section class="rma-page block">
         <div class="bd-example text-right mg-t-15">
             <button class="btn btn-outline-dark" [routerLink]="['/admin-panel/discount-category']">Back To List</button>
@@ -26,7 +27,7 @@
                                 <label for="description" class="col-sm-4 col-form-label">Description
                                 </label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" name="description" formControlName="description">
+                                    <input type="text" class="form-control" name="description" formControlName="description" [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="description">
                                 </div>
                             </div>
                         </div>

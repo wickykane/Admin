@@ -7,15 +7,17 @@ import { TableService } from './../../../services/table.service';
 // Services
 import { Form, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { HotkeysService } from 'angular2-hotkeys';
 import * as _ from 'lodash';
 import { DiscountCategoryService } from './discount-category.service';
+import { DiscountCategoryCreateKeyService } from './keys.create.control';
 
 
 
 @Component({
     selector: 'app-discount-category-edit',
     templateUrl: './discount-category.edit.component.html',
-    providers: [DiscountCategoryService],
+    providers: [DiscountCategoryService, DiscountCategoryCreateKeyService],
     styleUrls: ['./discount-category-create.component.scss'],
     animations: [routerTransition()],
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -43,6 +45,8 @@ export class DiscountCategoryEditComponent implements OnInit {
         private discountCategoryService: DiscountCategoryService,
         public toastr: ToastrService,
         private router: Router,
+        private _hotkeysService: HotkeysService,
+        public keyService: DiscountCategoryCreateKeyService,
         public route: ActivatedRoute) {
 
         this.generalForm = fb.group({
@@ -50,6 +54,8 @@ export class DiscountCategoryEditComponent implements OnInit {
             'description': [null],
             'ac': [null],
         });
+        //  Init Key
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {
@@ -310,5 +316,8 @@ export class DiscountCategoryEditComponent implements OnInit {
                 this.toastr.error(err);
             });
 
+    }
+    reback() {
+        this.router.navigate(['/admin-panel/discount-category/']);
     }
 }

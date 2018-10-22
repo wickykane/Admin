@@ -32,17 +32,17 @@ export class LateFeePolicyDetailKeyService implements OnDestroy {
 
     initKey() {
         this.resetKeys();
-        if (this.context['currentStatus'] !== 2) {
-            this._hotkeysService.add(new Hotkey('shift+e', (event: KeyboardEvent): boolean => {
-                event.preventDefault();
-                this.context.editLateFeePolicy();
-                return;
-            }, undefined, 'Edit Policy'));
-        }
-        this._hotkeysService.add(new Hotkey('esc', (event: KeyboardEvent): boolean => {
+        this._hotkeysService.add(new Hotkey('alt+backspace', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             this.context.backToList();
             return;
-        }, undefined, 'Cancel'));
+        }, undefined, 'Back'));
+        this._hotkeysService.add(new Hotkey('alt+s', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            if (!this.context.generalForm.valid || !this.context.isValidLateFeePolicy()) {
+                this.context.payloadData();
+            }
+            return;
+        }, undefined, 'Save'));
     }
 }

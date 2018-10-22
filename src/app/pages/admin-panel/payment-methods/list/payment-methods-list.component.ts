@@ -1,15 +1,16 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TableService } from './../../../../services/table.service';
-
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
+import { cdArrowTable } from '../../../../shared';
+import { TableService } from './../../../../services/table.service';
 
 import { PaymentMethodsKeyService } from '../keys.control';
 import { PaymentMethodsService } from '../payment-method.service';
 
+import { HotkeysService } from 'angular2-hotkeys';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 
 @Component({
@@ -41,10 +42,11 @@ export class PaymentMethodsListComponent implements OnInit {
             }
         ]
     };
+    public selectedIndex = 0;
     public searchForm: FormGroup;
     public paymentMethods = [];
     public isCheckedAllPaymentMethod = false;
-
+    @ViewChild(cdArrowTable) table: cdArrowTable;
     constructor(
         private cd: ChangeDetectorRef,
         public router: Router,
@@ -52,6 +54,7 @@ export class PaymentMethodsListComponent implements OnInit {
         public toastr: ToastrService,
         public tableService: TableService,
         public keyService: PaymentMethodsKeyService,
+        private _hotkeysService: HotkeysService,
         public ngbModal: NgbModal,
         public paymentMethodService: PaymentMethodsService
     ) {
@@ -63,7 +66,7 @@ export class PaymentMethodsListComponent implements OnInit {
         this.tableService.getListFnName = 'getListPaymentMethods';
         this.tableService.context = this;
         //  Init Key
-        this.keyService.watchContext.next(this);
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {
@@ -200,5 +203,9 @@ export class PaymentMethodsListComponent implements OnInit {
                 );
             }
         });
+    }
+    selectTable() {
+        this.selectedIndex = 0;
+        this.table.element.nativeElement.querySelector('td a').focus();
     }
 }
