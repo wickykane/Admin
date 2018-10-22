@@ -1,6 +1,7 @@
 <div [@routerTransition]>
     <app-page-header *ngIf="!paymentMethodId" [heading]="'Add New Payment Method'" [icon]="'fa-th-list'"></app-page-header>
     <app-page-header *ngIf="paymentMethodId" [heading]="'Edit Payment Method'" [icon]="'fa-th-list'"></app-page-header>
+    <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
     <form [formGroup]="paymentForm">
         <div class="form-search full-width form-horizontal">
             <div class="row create-section">
@@ -9,7 +10,7 @@
                         <label>
                             <b>Select Payment Method Type (*)</b>
                         </label>
-                        <select class="form-control" formControlName="type" (change)="clearFieldWhenChangeType($event.target.value)">
+                        <select [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="type" class="form-control" formControlName="type" (change)="clearFieldWhenChangeType($event.target.value)">
                             <option value="null" disabled>--Select--</option>
                             <option *ngFor="let type of listMaster.paymentTypes" [value]="type.key">{{type.name}}</option>
                         </select>

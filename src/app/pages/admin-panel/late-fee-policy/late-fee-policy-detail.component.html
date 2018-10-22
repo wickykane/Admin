@@ -1,7 +1,7 @@
 <div [@routerTransition]>
     <app-page-header [heading]="headerTitle" [icon]="'fa-th-list'" *ngIf="isCreate"></app-page-header>
     <app-page-header [heading]="headerTitle" [icon]="'fa-th-list'" *ngIf="!isCreate"></app-page-header>
-    <app-shortcut [listShortcut]='keyService.getKeys()' *ngIf="isView"></app-shortcut>
+    <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
     <form class="rma-page block" [formGroup]="generalForm">
         <div class="bd-example text-right mg-t-15">
             <button class="btn btn-outline-dark" [routerLink]="['/admin-panel/late-fee-policy']">Back To List</button>

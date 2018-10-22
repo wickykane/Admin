@@ -59,10 +59,10 @@
                                             <span class="label label-draft" *ngIf="item.ac == 2">{{convertStatus(item.ac, 'status')}}</span>
                                         </td>
                                         <td>
-                                            <a class="btn btn-default" (click)="viewLateFeePolicy(item.id)" title="View Late Fee Policy">
+                                            <a href="javascript: void(0)" class="btn btn-default" (click)="viewLateFeePolicy(item.id)" title="View Late Fee Policy">
                                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default" *ngIf="item.ac != 2" (click)="editLateFeePolicy(item.id)" title="Edit Late Fee Policy">
+                                            <a href="javascript: void(0)" class="btn btn-default" *ngIf="item.ac != 2" (click)="editLateFeePolicy(item.id)" title="Edit Late Fee Policy">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
                                         </td>

@@ -7,14 +7,16 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
 
+import { HotkeysService } from 'angular2-hotkeys';
 import { PaymentMethodsService } from '../payment-method.service';
+import { PaymentMethodCreateKeyService } from './key.create.control';
 
 @Component({
     selector: 'app-payment-method-create',
     templateUrl: './payment-method-create.component.html',
     styleUrls: ['./payment-method-create.component.scss'],
     animations: [routerTransition()],
-    providers: [PaymentMethodsService],
+    providers: [PaymentMethodsService, PaymentMethodCreateKeyService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PaymentMethodsCreateComponent implements OnInit {
@@ -55,6 +57,8 @@ export class PaymentMethodsCreateComponent implements OnInit {
         public route: ActivatedRoute,
         public fb: FormBuilder,
         public toastr: ToastrService,
+        private _hotkeysService: HotkeysService,
+        public keyService: PaymentMethodCreateKeyService,
         public paymentMethodService: PaymentMethodsService
     ) {
         this.paymentForm = fb.group({
@@ -71,6 +75,7 @@ export class PaymentMethodsCreateComponent implements OnInit {
             // username: [null, Validators.required],
             // password: [null, Validators.required]
         });
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {
@@ -306,5 +311,8 @@ export class PaymentMethodsCreateComponent implements OnInit {
         } catch (err) {
             console.log(err);
         }
+    }
+    reback() {
+        this.router.navigate(['/admin-panel/payment-methods/']);
     }
 }
