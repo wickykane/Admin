@@ -106,12 +106,12 @@ export class RmaComponent implements OnInit {
 
     ngOnInit() {
         //  Init Fn
+        this.getList();
         this.listMaster['dateType'] = [{ id: 'order_dt', name: 'Order Date' }, { id: 'delivery_dt', name: 'Delivery Date' }];
         this.listMaster['type'] = [{ id: 'PKU', name: 'Pickup ' }, { id: 'NO', name: 'Regular Order' }, { id: 'ONL', name: 'Ecommerce' }, { id: 'XD', name: 'X-Docks' }];
 
         this.getRMAReference();
         // this.countOrderStatus();
-        this.getList();
 
         // Lazy Load filter
         this.data['page'] = 1;
@@ -252,7 +252,6 @@ export class RmaComponent implements OnInit {
                 // console.log(e);
             }
         });
-        this.refresh();
     }
 
     updateStatus(id, status) {
@@ -269,7 +268,7 @@ export class RmaComponent implements OnInit {
                 } else {
                     this.toastr.success(res.message);
                     this.getList();
-                    this.getRMAReference();
+                    // this.getRMAReference();
                 }
             } catch (e) {
                 console.log(e);
