@@ -14,7 +14,7 @@ export class InvoiceDetailKeyService extends KeyboardBaseService {
     initKey() {
         this._hotkeysService.add(new Hotkey('alt+backspace', (event: KeyboardEvent): boolean => {
             event.preventDefault();
-            this.context.back();
+            this.context.reback();
             return;
         }, undefined, 'Back'));
 

@@ -40,7 +40,7 @@ export class InvoiceDetailComponent implements OnInit {
         private _hotkeysService: HotkeysService,
         private route: ActivatedRoute) {
         // //  Init Key
-       // this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
+    // this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {
@@ -50,12 +50,10 @@ export class InvoiceDetailComponent implements OnInit {
     /**
      * Mater Data
      */
-
-    back() {
-        this.router.navigate(['/financial/invoice/']);
-    }
-
     selectTab(id) {
         this.tabSet.select(id);
+    }
+    reback() {
+        this.router.navigate(['/financial/invoice/']);
     }
 }

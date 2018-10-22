@@ -4,6 +4,13 @@ import { KeyboardBaseService } from './../../../../shared/helper/keyServiceBase'
 @Injectable()
 export class CreditMemoListKeyService extends KeyboardBaseService {
 
+    keyConfig = {
+        code: {
+            element: null,
+            focus: true,
+        }
+    };
+
     initKey() {
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+f1', (event: KeyboardEvent): boolean => {
             event.preventDefault();

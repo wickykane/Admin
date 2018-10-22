@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -19,7 +19,7 @@ declare var jQuery: any;
     providers: [RMAService, HotkeysService]
 })
 // tslint:disable-next-line:component-class-suffix
-export class ItemsOrderModalContent implements OnInit {
+export class ItemsOrderModalContent implements OnInit, OnDestroy {
 
     public listIgnoredItems = [];
     selectedIndex = 0;
@@ -34,6 +34,13 @@ export class ItemsOrderModalContent implements OnInit {
     public listItemSelected = [];
     public isCheckedAll = false;
     public searchForm: FormGroup;
+
+    public filter = {
+        sku: '',
+        des: ''
+    };
+    public data = {};
+
     @ViewChild(cdArrowTable) table: cdArrowTable;
 
     constructor(
@@ -44,16 +51,33 @@ export class ItemsOrderModalContent implements OnInit {
         public _hotkeysService: HotkeysService,
         public helper: Helper) {
         this.searchForm = fb.group({
-            no: [null],
+            sku: [null],
             des: [null]
         });
     }
 
     ngOnInit() {
-      this.initKeyBoard();
+        this.initKeyBoard();
     }
 
     initKeyBoard() {
+
+      this.data['key_config'] = {
+          sku: {
+              element: null,
+              focus: true,
+          }
+      };
+
+      this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+f1', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+          event.preventDefault();
+          if (this.data['key_config'].sku.element) {
+              this.data['key_config'].sku.element.nativeElement.focus();
+          }
+          const e: ExtendedKeyboardEvent = event;
+          e.returnValue = false; // Prevent bubbling
+          return e;
+      }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Focus Search'));
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+t', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             this.selectTable();
@@ -61,6 +85,20 @@ export class ItemsOrderModalContent implements OnInit {
             e.returnValue = false; // Prevent bubbling
             return e;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Select Table'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            this.searchList();
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Search'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+r', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            this.resetList();
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset'));
 
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+a', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
@@ -88,16 +126,20 @@ export class ItemsOrderModalContent implements OnInit {
         });
     }
 
+    ngOnDestroy(): void {
+        this.resetKeys();
+    }
+
 
     selectData(index) {
-      this.listItems[index].is_checked = !this.listItems[index].is_checked;
-      this.isAllChecked();
+        this.listItems[index].is_checked = !this.listItems[index].is_checked;
+        this.isAllChecked();
     }
 
     selectTable() {
-      this.selectedIndex = 0;
-      jQuery('.modal').focus();
-      this.table.scrollToTable('.modal-open .modal');
+        this.selectedIndex = 0;
+        jQuery('.modal').focus();
+        this.table.scrollToTable('.modal-open .modal');
     }
 
     onSearchList() {
@@ -105,8 +147,8 @@ export class ItemsOrderModalContent implements OnInit {
     }
 
     getListItems() {
-          this.listItems = this.listIgnoredItems;
-          this.listItems.map(item => item.is_checked = false);
+        this.listItems = this.listIgnoredItems;
+        this.listItems.map(item => item.is_checked = false);
     }
 
     checkAll(ev) {
@@ -120,7 +162,21 @@ export class ItemsOrderModalContent implements OnInit {
     }
 
     onAddItem() {
-
         this.activeModal.close(this.listItemSelected);
+    }
+
+    searchList() {
+      this.filter = {
+        sku: this.searchForm.value.sku,
+        des: this.searchForm.value.des,
+      };
+    }
+
+    resetList() {
+      this.searchForm.reset();
+      this.filter = {
+        sku: '',
+        des: ''
+      };
     }
 }
