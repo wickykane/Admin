@@ -398,8 +398,9 @@
                                             </td>
                                             <td> {{ item.qty }}</td>
                                             <td>
-                                                <input [disabled]="item.misc_id" [isDecimal]="true" numberDirective [max]="item.qty || 0 " [min]="0" [disabled]="item.misc_id" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.qty_inv" (changeValue)="updateTotal()">
+                                                <input disabled [isDecimal]="true" numberDirective [max]="item.qty || 0 " [min]="0" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.qty_inv" (changeValue)="updateTotal()">
                                             </td>
+                                            <!-- [disabled]="item.misc_id" -->
                                             <td>
                                                 {{ item.price | currency }}
                                             </td>
