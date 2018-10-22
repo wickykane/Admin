@@ -11,6 +11,13 @@ export class BankKeyService extends KeyboardBaseService {
         },
     };
 
+    saveKeys() {
+        this.keys = this.getKeys();
+        this.context.data['tableKey'] = this.context.table.getKeys();
+        this.resetKeys();
+        this.context.table.resetKeys();
+    }
+
     initKey() {
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+f1', (event: KeyboardEvent): boolean => {
             event.preventDefault();

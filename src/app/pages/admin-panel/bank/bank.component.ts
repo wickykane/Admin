@@ -138,29 +138,48 @@ export class BankComponent implements OnInit {
 
   // Modal
   editBank(flag?) {
+    this.keyService.saveKeys();
     const modalRef = this.modalService.open(BankModalComponent, { windowClass: 'md-modal' });
     modalRef.componentInstance.modalTitle = (flag) ? 'EDIT BANK' : 'CREATE NEW BANK';
     modalRef.componentInstance.isEdit = flag;
     modalRef.componentInstance.item = flag || {};
     modalRef.result.then(data => {
-      const params = { ...data };
-      if (!flag) {
-        this.createBank(params);
-      } else {
-        this.updateBank(flag.id, params);
-      }
+        if (this.keyService.keys.length > 0) {
+            this.keyService.reInitKey();
+            this.table.reInitKey(this.data['tableKey']);
+        }
+        const params = { ...data };
+        if (!flag) {
+            this.createBank(params);
+        } else {
+            this.updateBank(flag.id, params);
+        }
     },
-      dismiss => { });
+      dismiss => {
+        if (this.keyService.keys.length > 0) {
+            this.keyService.reInitKey();
+            this.table.reInitKey(this.data['tableKey']);
+        }});
   }
 
   addBranch(item) {
+    this.keyService.saveKeys();
     const modalRef = this.modalService.open(BranchModalComponent, { windowClass: 'md-modal' });
     modalRef.componentInstance.modalTitle = 'CREATE NEW BRANCH';
     modalRef.componentInstance.bankData = item || {};
     modalRef.result.then(data => {
-      this.createBranch(item.id, data);
+        if (this.keyService.keys.length > 0) {
+            this.keyService.reInitKey();
+            this.table.reInitKey(this.data['tableKey']);
+        }
+        this.createBranch(item.id, data);
     },
-      dismiss => { });
+      dismiss => {
+        if (this.keyService.keys.length > 0) {
+            this.keyService.reInitKey();
+            this.table.reInitKey(this.data['tableKey']);
+        }
+    });
   }
 
   createBranch(bankId, params) {
