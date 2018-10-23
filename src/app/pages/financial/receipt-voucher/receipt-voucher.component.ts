@@ -12,6 +12,7 @@ import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs/Subject';
 import { routerTransition } from '../../../router.animations';
+import { StorageService } from '../../../services/storage.service';
 import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
 import { OrderService } from '../../order-mgmt/order-mgmt.service';
 import { FinancialService } from '../financial.service';
@@ -70,7 +71,8 @@ export class ReceiptVoucherComponent implements OnInit {
         private orderService: OrderService,
         private http: HttpClient,
         private cd: ChangeDetectorRef,
-        private renderer: Renderer) {
+        private renderer: Renderer,
+        private storage: StorageService) {
 
         this.searchForm = fb.group({
             'receipt_no': [null],
@@ -111,6 +113,7 @@ export class ReceiptVoucherComponent implements OnInit {
             this.data['page'] = 1;
             this.searchCustomer(key);
         });
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
     }
     /**
      * Table Event
