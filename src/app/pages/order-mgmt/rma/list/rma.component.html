@@ -112,26 +112,26 @@
                                 </thead>
                                 <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                                     <tr>
-                                        <td><a class="text-primary" [routerLink]="['detail', item.id]">{{item.cd}}</a></td>
-                                        <td>{{item.return_type}}</td>
-                                        <td>{{item.company_name}}</td>
-                                        <td>{{item.request_date |date:'MM/dd/yyyy'}}</td>
-                                        <td><span *ngIf="item.sts_name">{{item.sts_name['name']}}</span></td>
-                                        <td><a class="text-primary" [routerLink]="['/order-management/sale-order/detail', item.order_id]">{{item.order_code}}</a></td>
-                                        <td>{{item.warehouse_name}}</td>
-                                        <td class="text-center">{{item.total_return_qty}}</td>
-                                        <td class="text-center">{{item.total_accepted_qty}}</td>
-                                        <td class="text-center">{{item.return_time}}</td>
-                                        <td>{{item.sale_person_name}}</td>
-                                        <td>{{item.updated_at |date:'MM/dd/yyyy'}}</td>
-                                        <td>{{item.updated_by}}</td>
+                                        <td><a class="text-primary" [routerLink]="['detail', item['id']]">{{item['cd']}}</a></td>
+                                        <td>{{item['return_type']}}</td>
+                                        <td>{{item['company_name']}}</td>
+                                        <td>{{item['request_date'] |date:'MM/dd/yyyy'}}</td>
+                                        <td><span *ngIf="item['sts_name']">{{item['sts_name']['name']}}</span></td>
+                                        <td><a class="text-primary" [routerLink]="['/order-management/sale-order/detail', item['order_id']]">{{item['order_code']}}</a></td>
+                                        <td>{{item['warehouse_name']}}</td>
+                                        <td class="text-center">{{item['total_return_qty']}}</td>
+                                        <td class="text-center">{{item['total_accepted_qty']}}</td>
+                                        <td class="text-center">{{item['return_time']}}</td>
+                                        <td>{{item['sale_person_name']}}</td>
+                                        <td>{{item['updated_at'] |date:'MM/dd/yyyy'}}</td>
+                                        <td>{{item['updated_by']}}</td>
                                         <td class="text-nowrap">
-                                            <a *ngIf="item.sts_id == 7" ngbTooltip="Complete" class="btn btn-default" (click)="confirmModal(item, 7)"><i class="fa fa-share-square-o"></i></a>
-                                            <a  *ngIf="item.sts_id == 1" ngbTooltip="Send to WH" class="btn btn-default" (click)="confirmModal(item, 5)"><i class="fa fa-check" aria-hidden="true"></i></a>
-                                            <a *ngIf="item.sts_id == 1" ngbTooltip="Cancel" class="btn btn-default" (click)="confirmModal(item, 2)"><i class="fa fa-times-circle"></i></a>
+                                            <a *ngIf="item['sts_id'] == 7" ngbTooltip="Complete" class="btn btn-default" (click)="confirmModal(item, 7)"><i class="fa fa-share-square-o"></i></a>
+                                            <a  *ngIf="item['sts_id'] == 1" ngbTooltip="Send to WH" class="btn btn-default" (click)="confirmModal(item, 5)"><i class="fa fa-check" aria-hidden="true"></i></a>
+                                            <a *ngIf="item['sts_id'] == 1" ngbTooltip="Cancel" class="btn btn-default" (click)="confirmModal(item, 2)"><i class="fa fa-times-circle"></i></a>
                                             <!-- <a ngbTooltip="Revise" class="btn btn-default" (click)="confirmModal(item, 'RV')"><i class="fa fa-pencil-square"></i></a> -->
-                                            <a *ngIf="item.sts_id == 1" ngbTooltip="Edit" class="btn btn-default" [routerLink]="['edit', item.id]"><i class="fa fa-pencil"></i></a>
-                                            <a  ngbTooltip="View" class="btn btn-default" [routerLink]="['detail', item.id]"><i class="fa fa-eye"></i></a>
+                                            <!-- <a *ngIf="item['sts_id'] == 1" ngbTooltip="Edit" class="btn btn-default" [routerLink]="['edit', item['id']]"><i class="fa fa-pencil"></i></a> -->
+                                            <a  ngbTooltip="View" class="btn btn-default" [routerLink]="['detail', item['id']]"><i class="fa fa-eye"></i></a>
                                         </td>
                                     </tr>
                                 </tbody>
