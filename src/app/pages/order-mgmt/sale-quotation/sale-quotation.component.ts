@@ -8,6 +8,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
+import { StorageService } from '../../../services/storage.service';
 import { cdArrowTable } from '../../../shared/index';
 import { OrderService } from '../order-mgmt.service';
 import { ConfirmModalContent } from './../../../shared/modals/confirm.modal';
@@ -69,6 +70,7 @@ export class SaleQuotationComponent implements OnInit {
         private modalService: NgbModal,
         private _hotkeysService: HotkeysService,
         public keyService: SaleQuoteKeyService,
+        private storage: StorageService,
         private renderer: Renderer) {
 
         this.searchForm = fb.group({
@@ -95,6 +97,7 @@ export class SaleQuotationComponent implements OnInit {
         this.getList();
         this.getListStatus();
         this.user = JSON.parse(localStorage.getItem('currentUser'));
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
     }
     /**
      * Table Event

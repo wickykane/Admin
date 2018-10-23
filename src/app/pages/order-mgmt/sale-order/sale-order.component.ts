@@ -8,6 +8,7 @@ import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/n
 import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
+import { StorageService } from '../../../services/storage.service';
 import { cdArrowTable } from '../../../shared';
 import { NgbDateCustomParserFormatter } from '../../../shared/helper/dateformat';
 import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
@@ -74,6 +75,7 @@ export class SaleOrderComponent implements OnInit {
         public keyService: SaleOrderKeyService,
         private modalService: NgbModal,
         public tableService: TableService,
+        private storage: StorageService,
         private orderService: OrderService) {
 
         this.searchForm = fb.group({
@@ -104,6 +106,7 @@ export class SaleOrderComponent implements OnInit {
         this.getList();
         this.getListStatus();
         this.countOrderStatus();
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
     }
     /**
      * Table Event

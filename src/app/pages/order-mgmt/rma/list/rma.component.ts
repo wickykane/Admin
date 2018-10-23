@@ -14,6 +14,7 @@ import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { HotkeysService } from 'angular2-hotkeys';
 // tslint:disable-next-line:import-blacklist
 import { Subject } from 'rxjs';
+import { StorageService } from '../../../../services/storage.service';
 import { RMAService } from '../rma.service';
 import { RMAKeyService } from './keys.control';
 
@@ -81,6 +82,7 @@ export class RmaComponent implements OnInit {
         private vRef: ViewContainerRef,
         public keyService: RMAKeyService,
         private modalService: NgbModal,
+        private storage: StorageService,
         public tableService: TableService,
         private service: RMAService,
         private _hotkeysService: HotkeysService) {
@@ -125,7 +127,7 @@ export class RmaComponent implements OnInit {
             this.data['page'] = 1;
             this.searchCustomer(key);
         });
-
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
         this.refresh();
     }
     /**
