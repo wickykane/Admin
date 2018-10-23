@@ -108,6 +108,8 @@ export class WarehouseComponent implements OnInit {
 
     selectTable() {
         this.selectedIndex = 0;
-        this.table.element.nativeElement.querySelector('td a').focus();
+        if (this.table.element.nativeElement.querySelector('td a')) {
+            this.table.element.nativeElement.querySelector('td a').focus();
+        }
     }
 }

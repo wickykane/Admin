@@ -53,6 +53,7 @@
                                             <a *ngIf="listMaster['permission'].view" href="javascript:void(0)" class="btn btn-default" [routerLink]="['/admin-panel/warehouse/view/',item.id]" title="View Warehouse">
                                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                             </a>
+                                            <a *ngIf="!listMaster['permission'].view" href="javascript:void(0)"></a>
                                         </td>
                                     </tr>
                                 </tbody>

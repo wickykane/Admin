@@ -37,7 +37,8 @@
                         <strong>Line Items</strong>
                         <!-- <button [routerLink]="['create']" style="margin:0; float:right" class="btn btn-link">
                             <i class="fa fa-plus text-success"></i> Create Sales Quote</button> -->
-                            <button [routerLink]="['/admin-panel/carrier/create']" style="margin:0; float:right" class="btn btn-link"><i class="fa fa-plus text-success"></i> Add New Carrier</button>
+                            <button *ngIf="listMaster['permission'].create" [routerLink]="['/admin-panel/carrier/create']"
+                            style="margin:0; float:right" class="btn btn-link"><i class="fa fa-plus text-success"></i> Add New Carrier</button>
                     </div>
                     <div class="card-body no-padding">
                         <div class="table-responsive list">
@@ -82,9 +83,10 @@
                                             {{ item.crtd_by_name }}
                                         </td>
                                         <td>
-                                            <a href="javascript:void(0)" class="btn btn-default " title="Edit" [routerLink]="['/admin-panel/carrier/edit/' + item.id]">
+                                            <a *ngIf="listMaster['permission'].edit" href="javascript:void(0)" class="btn btn-default " title="Edit" [routerLink]="['/admin-panel/carrier/edit/' + item.id]">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
+                                            <a *ngIf="!listMaster['permission'].edit" href="javascript:void(0)"></a>
                                         </td>
                                     </tr>
                                     <tr *ngIf="!list.items.length" class="text-center">
