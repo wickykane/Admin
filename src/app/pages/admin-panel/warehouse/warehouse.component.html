@@ -33,12 +33,12 @@
                                         <td>{{item.address}}</td>
                                         <td>
                                             <label class="switch" placement="top" ngbTooltip="Click to Active or Inactive">
-                                                <input href="javascript:void(0)" type="checkbox" [(ngModel)]="item.ac" (change)="changeStatus(item.id,item.ac)" (ngModelChange)="item.ac = $event ? 1 : 0">
+                                                <input [disabled]="!listMaster['permission'].enable" href="javascript:void(0)" type="checkbox" [(ngModel)]="item.ac" (change)="changeStatus(item.id,item.ac)" (ngModelChange)="item.ac = $event ? 1 : 0">
                                                 <div class="slider round"></div>
                                             </label>
                                         </td>
                                         <td class="text-center">
-                                            <a class="btn btn-default" *ngIf="item.is_shipping_origin" (click)="setShipping(item.id)" title="Set Shipping">
+                                            <a class="btn btn-default" *ngIf="item.is_shipping_origin" (click)="listMaster['permission'].ship && setShipping(item.id)" title="Set Shipping">
                                                 <span class="text-success">
                                                     <i class="fa fa-check"></i>
                                                 </span>
@@ -50,7 +50,7 @@
                                         <td>{{item.updated_dt}}</td>
                                         <td>{{item.updated_by}}</td>
                                         <td>
-                                            <a href="javascript:void(0)" class="btn btn-default" [routerLink]="['/admin-panel/warehouse/edit/',item.id]" title="View Warehouse">
+                                            <a *ngIf="listMaster['permission'].view" href="javascript:void(0)" class="btn btn-default" [routerLink]="['/admin-panel/warehouse/view/',item.id]" title="View Warehouse">
                                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                             </a>
                                         </td>

@@ -99,14 +99,22 @@ const routes: Routes = [
     },
     {
         path: 'warehouse',
+        canActivate: [MasterGuard],
         component: WarehouseComponent
     },
     {
         path: 'warehouse/create',
+        canActivate: [MasterGuard],
         component: WarehouseCreateComponent
     },
     {
         path: 'warehouse/edit/:id',
+        canActivate: [MasterGuard],
+        component: WarehouseEditComponent
+    },
+    {
+        path: 'warehouse/view/:id',
+        canActivate: [MasterGuard],
         component: WarehouseEditComponent
     },
     {

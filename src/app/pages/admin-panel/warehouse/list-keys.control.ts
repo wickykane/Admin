@@ -5,14 +5,16 @@ import { KeyboardBaseService } from './../../../shared/helper/keyServiceBase';
 export class WarehouseListKeyService extends KeyboardBaseService {
 
     initKey() {
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent): boolean => {
-            event.preventDefault();
-            const item = this.context.list.items[this.context.selectedIndex];
-            if (item) {
-                this.context.router.navigate(['/admin-panel/warehouse/edit/', item.id]);
-            }
-            return;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'View'));
+        if (this.context.listMaster['permission'].view) {
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent): boolean => {
+                event.preventDefault();
+                const item = this.context.list.items[this.context.selectedIndex];
+                    if (item) {
+                        this.context.router.navigate(['/admin-panel/warehouse/view/', item.id]);
+                    }
+                return;
+            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'View'));
+        }
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+pageup', (event: KeyboardEvent): boolean => {
             this.context.tableService.pagination.page--;
