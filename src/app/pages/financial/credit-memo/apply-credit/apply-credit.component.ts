@@ -134,6 +134,7 @@ export class CreditMemoApplyComponent implements OnInit {
                 this.copy_list = res.data.rows;
                 this.tableService.matchPagingOption(res.data);
                 this.updateBalance();
+                this.queryInvoiceByWH();
             } catch (e) {
                 console.log(e);
             }

@@ -132,7 +132,7 @@
                                 <div class="col-11 body" style="height: 169px;overflow-y: scroll;">
                                     <div class="form-group row" *ngFor="let state of selectedCountry['state'];let i = index">
                                             <label class='col-11'>
-                                            <input type="checkbox" [(ngModel)]="state.selected" (change)="checkState()" [disabled]="state.disable"> {{state.name}}
+                                            <input type="checkbox" [(ngModel)]="state.selected" (change)="checkState()" [disabled]="state.disable"> {{state.name}} <span *ngIf="state.disable==true">(already in another shipping zone)</span>
                                         </label>
                                     </div>
                                 </div>
