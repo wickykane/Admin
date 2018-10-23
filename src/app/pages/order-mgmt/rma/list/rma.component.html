@@ -87,7 +87,7 @@
                 <div class="card no-border">
                     <div class="card-header">
                         <strong>Line Items</strong>
-                        <button [routerLink]="['create']" style="margin:0; float:right" class="btn btn-link"> <i class="fa fa-plus text-success"></i> Add new</button>
+                        <button *ngIf="listMaster['permission'].create" [routerLink]="['create']" style="margin:0; float:right" class="btn btn-link"> <i class="fa fa-plus text-success"></i> Add new</button>
                     </div>
                     <div class="card-body no-padding">
                         <div class="table-responsive list">
@@ -126,12 +126,12 @@
                                         <td>{{item['updated_at'] |date:'MM/dd/yyyy'}}</td>
                                         <td>{{item['updated_by']}}</td>
                                         <td class="text-nowrap">
-                                            <a *ngIf="item['sts_id'] == 7" ngbTooltip="Complete" class="btn btn-default" (click)="confirmModal(item, 7)"><i class="fa fa-share-square-o"></i></a>
-                                            <a  *ngIf="item['sts_id'] == 1" ngbTooltip="Send to WH" class="btn btn-default" (click)="confirmModal(item, 5)"><i class="fa fa-check" aria-hidden="true"></i></a>
-                                            <a *ngIf="item['sts_id'] == 1" ngbTooltip="Cancel" class="btn btn-default" (click)="confirmModal(item, 2)"><i class="fa fa-times-circle"></i></a>
+                                            <a *ngIf="item['sts_id'] == 7 && listMaster['permission'].complete" ngbTooltip="Complete" class="btn btn-default" (click)="confirmModal(item, 7)"><i class="fa fa-share-square-o"></i></a>
+                                            <a  *ngIf="item['sts_id'] == 1 && listMaster['permission'].send" ngbTooltip="Send to WH" class="btn btn-default" (click)="confirmModal(item, 5)"><i class="fa fa-check" aria-hidden="true"></i></a>
+                                            <a *ngIf="item['sts_id'] == 1 && listMaster['permission'].cancel" ngbTooltip="Cancel" class="btn btn-default" (click)="confirmModal(item, 2)"><i class="fa fa-times-circle"></i></a>
                                             <!-- <a ngbTooltip="Revise" class="btn btn-default" (click)="confirmModal(item, 'RV')"><i class="fa fa-pencil-square"></i></a> -->
                                             <!-- <a *ngIf="item['sts_id'] == 1" ngbTooltip="Edit" class="btn btn-default" [routerLink]="['edit', item['id']]"><i class="fa fa-pencil"></i></a> -->
-                                            <a  ngbTooltip="View" class="btn btn-default" [routerLink]="['detail', item['id']]"><i class="fa fa-eye"></i></a>
+                                            <a  *ngIf="listMaster['permission'].view" ngbTooltip="View" class="btn btn-default" [routerLink]="['detail', item['id']]"><i class="fa fa-eye"></i></a>
                                         </td>
                                     </tr>
                                 </tbody>

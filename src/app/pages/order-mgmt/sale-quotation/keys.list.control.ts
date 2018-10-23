@@ -31,12 +31,13 @@ export class SaleQuoteKeyService extends KeyboardBaseService {
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Focus Search'));
 
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+n', (event: KeyboardEvent): boolean => {
-            event.preventDefault();
-            this.context.createQuote();
-            return;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Create Sales Quote'));
-
+        if (this.context.listMaster['permission'].create) {
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+n', (event: KeyboardEvent): boolean => {
+                event.preventDefault();
+                this.context.createQuote();
+                return;
+            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Create Sales Quote'));
+        }
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+e', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             this.context.tableService.searchAction();
@@ -49,11 +50,13 @@ export class SaleQuoteKeyService extends KeyboardBaseService {
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset'));
 
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent): boolean => {
-            event.preventDefault();
-            this.context.viewQuote();
-            return;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'View'));
+        if (this.context.listMaster['permission'].view) {
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent): boolean => {
+                event.preventDefault();
+                this.context.viewQuote();
+                return;
+            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'View'));
+        }
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+pageup', (event: KeyboardEvent): boolean => {
             this.context.tableService.pagination.page--;
