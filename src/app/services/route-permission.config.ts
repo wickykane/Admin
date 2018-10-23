@@ -48,7 +48,7 @@ export const ROUTE_PERMISSION = {
         reject: 'sel2bAcceptRejectSaleOrder',
         cancel: 'sel2bCancelSaleOrder',
         reopen: 'sel2bReopenSaleOrder',
-        genInvoice: 'sel2bGenerateInvoiceSaleOrder',
+        genInvoice: 'sel2bCreateARInvoice',
         list: 'sel2bViewMenuSaleOrder',
     },
     'return-order': {
