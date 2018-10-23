@@ -91,10 +91,12 @@ const routes: Routes = [
     },
     {
         path: 'payment-term/create',
+        canActivate: [MasterGuard],
         component: PayTermCreateComponent
     },
     {
         path: 'payment-term/edit/:id',
+        canActivate: [MasterGuard],
         component: PayTermCreateComponent
     },
     {
