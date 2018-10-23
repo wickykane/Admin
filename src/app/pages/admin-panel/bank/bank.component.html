@@ -8,7 +8,8 @@
                     <form class="row form-horizontal form-search filter-order-group" role="form" [formGroup]="searchForm">
                         <div class="col-md-4">
                             <label for="code" class="control-label">Code</label>
-                            <input type="text" name="code" formControlName="code" class="form-control" id="code" placeholder="">
+                            <input [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="code"
+                            type="text" name="code" formControlName="code" class="form-control" id="code" placeholder="">
                         </div>
                         <div class="col-md-4">
                             <label for="name" class="control-label">Name</label>
@@ -70,18 +71,18 @@
                                         <td>{{item.full_name}}</td>
                                         <td>{{item.updated_at ? (item.updated_at | date:'MM/dd/yyyy') : ''}}</td>
                                         <td>
-                                            <a class="btn btn-default" (click)="editBank(item)" title="Edit Bank">
+                                            <a href="javascript:void(0)" class="btn btn-default" (click)="editBank(item)" title="Edit Bank">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
 
-                                            <a class="btn btn-default " (click)="addBranch(item)" title="Add Branch">
+                                            <a href="javascript:void(0)" class="btn btn-default " (click)="addBranch(item)" title="Add Branch">
                                                 <i class="fa fa-plus-circle" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default" [routerLink]="[item.id, 'branch']" title="View Branch">
+                                            <a href="javascript:void(0)" class="btn btn-default" [routerLink]="[item.id, 'branch']" title="View Branch">
                                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                             </a>
 
-                                            <a class="btn btn-default" (click)="deleteBank(item.id)" title="Delete Bank">
+                                            <a href="javascript:void(0)" class="btn btn-default" (click)="deleteBank(item.id)" title="Delete Bank">
                                                 <i class="fa fa-trash" aria-hidden="true"></i>
                                             </a>
                                         </td>

@@ -3,7 +3,8 @@
     <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
     <section class="rma-page block">
         <div class="bd-example text-right">
-            <button class="btn btn-outline-dark" [routerLink]="['/admin-panel/carrier']">Back To List</button>
+            <button [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="back_button"
+            class="btn btn-outline-dark" [routerLink]="['/admin-panel/carrier']">Back To List</button>
         </div>
         <div class="custom-border card height-100 mg-bt-15 mg-t-15">
             <div class="card-header">
@@ -22,7 +23,8 @@
                             <label> Carrier Name
                                 <span class="text-danger">(*)</span>
                             </label>
-                            <input type="text" class="form-control" formControlName="name">
+                            <input [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="name"
+                            type="text" class="form-control" formControlName="name">
                         </div>
                         <div class="col-sm-2 form-group">
                             <label> Contact Person</label>
@@ -78,7 +80,8 @@
                         <form class="row" [formGroup]="primaryAddress">
                             <div class="col-sm-6 form-group">
                                 <label>Email</label>
-                                <input type="text" class="form-control" formControlName="email">
+                                <input [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="primary_email"
+                                type="text" class="form-control" formControlName="email">
                             </div>
                             <div class="col-sm-6 form-group">
                                 <label> Country
@@ -135,7 +138,8 @@
                         <form class="row" [formGroup]="billingAddress">
                             <div class="col-sm-6 form-group">
                                 <label>Email</label>
-                                <input type="text" class="form-control" formControlName="email">
+                                <input [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="billing_email"
+                                type="text" class="form-control" formControlName="email">
                             </div>
                             <div class="col-sm-6 form-group">
                                 <label> Country
@@ -190,7 +194,7 @@
                     </div>
                     <div class="card-body no-padding">
                         <div class="customer-content-toggle table-responsive mg-bt-15">
-                            <table class="table table-bordered table-order">
+                            <table class="table table-bordered table-order" cdArrowTable [collection]="listBankAccount" [(selectedIndex)]="selectedIndex">
                                 <thead>
                                     <tr>
                                         <th> No </th>
@@ -205,10 +209,10 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let item of listBankAccount; let i=index">
+                                    <tr *ngFor="let item of listBankAccount; let i=index" [ngClass]="{'row-selected': i == selectedIndex}">
                                         <td class="">{{ i + 1 }}</td>
                                         <td>
-                                            <select class="form-control" [(ngModel)]="item.bank_id" (change)="bankChange($event.target.value, item)">
+                                            <select href="javascript:void(0)" class="form-control" [(ngModel)]="item.bank_id" (change)="bankChange($event.target.value, item)">
                                                 <option [value]="null" disabled>--Select--</option>
                                                 <option *ngFor="let bank of listMaster['bank']" [value]="bank.id">
                                                     {{ bank.name }}
@@ -219,7 +223,7 @@
                                             {{ item.swift }}
                                         </td>
                                         <td>
-                                            <select class="form-control" [(ngModel)]="item.bank_branch_id" (change)="branchChange($event.target.value, item)">
+                                            <select href="javascript:void(0)" class="form-control" [(ngModel)]="item.bank_branch_id" (change)="branchChange($event.target.value, item)">
                                                 <option [value]="null" disabled>--Select--</option>
                                                 <option *ngFor="let branch of item['list_branch']" [value]="branch.id">
                                                     {{ branch.branch_name }}
@@ -230,18 +234,18 @@
                                             {{ item.address }}
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" [(ngModel)]="item.account_name">
+                                            <input href="javascript:void(0)" type="text" class="form-control" [(ngModel)]="item.account_name">
                                         </td>
                                         <td>
-                                            <input type="number" class="form-control" [(ngModel)]="item.account_number">
+                                            <input href="javascript:void(0)" type="number" class="form-control" [(ngModel)]="item.account_number">
                                         </td>
                                         <td>
-                                            <input type="number" class="form-control" [(ngModel)]="item.iban">
+                                            <input href="javascript:void(0)" type="number" class="form-control" [(ngModel)]="item.iban">
                                         </td>
                                         <td class="text-center">
-                                            <button type="button" class="btn btn-default" (click)="removeBankAccount(i, item)">
+                                            <a href="javascript:void(0)" type="button" class="btn btn-default" (click)="removeBankAccount(i, item)">
                                                 <i class="fa fa-times" aria-hidden="true"></i>
-                                            </button>
+                                            </a>
                                         </td>
                                     </tr>
                                     <tr *ngIf="!listBankAccount.length" class="text-center">

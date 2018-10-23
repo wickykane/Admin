@@ -1,13 +1,13 @@
 <div class='address-tab'>
     <div class="bd-example text-right">
         <button [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="back_button"  class="btn btn-outline-secondary" [routerLink]="['/order-management/sale-quotation']"><i class="fa fa-share-square" ></i> Back</button>
-        <button *ngIf="detail['sale_quote_status_id'] == 1" class="btn btn-outline-primary" [routerLink]="['/order-management/sale-quotation/edit', _orderId]"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit</button>
-        <button *ngIf="detail['sale_quote_status_id'] == 1" class="btn btn-outline-warning" (click)="confirmModal(_orderId,'SM')"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i> Submit</button>
-        <button *ngIf="detail['sale_quote_status_id'] == 1" class="btn btn-outline-danger" (click)="confirmModal(_orderId, 'CC')"><i class="fa fa-times-circle" aria-hidden="true"></i> Cancel</button>
-        <button *ngIf="detail['sale_quote_status_id'] == 2" class="btn btn-outline-success" (click)="confirmModal(_orderId,'AM')"><i class="fa fa-check-square"></i> Approve</button>
-        <button *ngIf="detail['sale_quote_status_id'] == 2" class="btn btn-outline-danger" (click)="confirmModal(_orderId,'RM')"><i class="fa fa-ban" aria-hidden="true"></i> Reject</button>
-        <button class="btn btn-outline-info" (click)="confirmModal(_orderId,'CLONE')"><i class="fa fa-clone"></i> Copy</button>
-        <button *ngIf="detail['sale_quote_status_id'] == 4" class="btn btn-outline-dark" (click)="confirmModal(_orderId, 'SC')"><i class="fa fa-exchange" aria-hidden="true"></i> Convert to SO</button>
+        <button *ngIf="detail['sale_quote_status_id'] == 1 && data['permission'].edit" class="btn btn-outline-primary" [routerLink]="['/order-management/sale-quotation/edit', _orderId]"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit</button>
+        <button *ngIf="detail['sale_quote_status_id'] == 1 && data['permission'].submit" class="btn btn-outline-warning" (click)="confirmModal(_orderId,'SM')"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i> Submit</button>
+        <button *ngIf="detail['sale_quote_status_id'] == 1 && data['permission'].cancel" class="btn btn-outline-danger" (click)="confirmModal(_orderId, 'CC')"><i class="fa fa-times-circle" aria-hidden="true"></i> Cancel</button>
+        <button *ngIf="detail['sale_quote_status_id'] == 2 && data['permission'].approve" class="btn btn-outline-success" (click)="confirmModal(_orderId,'AM')"><i class="fa fa-check-square"></i> Approve</button>
+        <button *ngIf="detail['sale_quote_status_id'] == 2 && data['permission'].reject" class="btn btn-outline-danger" (click)="confirmModal(_orderId,'RM')"><i class="fa fa-ban" aria-hidden="true"></i> Reject</button>
+        <button *ngIf="data['permission'].copy" class="btn btn-outline-info" (click)="confirmModal(_orderId,'CLONE')"><i class="fa fa-clone"></i> Copy</button>
+        <button *ngIf="detail['sale_quote_status_id'] == 4 && data['permission'].convert" class="btn btn-outline-dark" (click)="confirmModal(_orderId, 'SC')"><i class="fa fa-exchange" aria-hidden="true"></i> Convert to SO</button>
 
     </div>
     <section class="rma-page block main-container block-order">

@@ -1,10 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
 import { TableService } from '../../../../services/table.service';
+import { cdArrowTable } from '../../../../shared';
 import { CarrierService } from '../carrier.service';
 import {CarrierKeyService} from './keys.control';
 
@@ -17,11 +19,14 @@ import {CarrierKeyService} from './keys.control';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ListComponent implements OnInit {
+
+    @ViewChild(cdArrowTable) table: cdArrowTable;
     public list = {
         items: []
     };
     public user: any;
     public listMaster = {};
+    public selectedIndex = 0;
     searchForm: FormGroup;
 
     constructor(public router: Router,
@@ -30,6 +35,7 @@ export class ListComponent implements OnInit {
         public toastr: ToastrService,
         private vRef: ViewContainerRef,
         public tableService: TableService,
+        private _hotkeysService: HotkeysService,
         public keyService: CarrierKeyService,
         private cs: CarrierService) {
 
@@ -41,7 +47,7 @@ export class ListComponent implements OnInit {
         //  Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
-        this.keyService.watchContext.next(this);
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {
@@ -64,4 +70,8 @@ export class ListComponent implements OnInit {
         });
     }
 
+    selectTable() {
+        this.selectedIndex = 0;
+        this.table.element.nativeElement.querySelector('td a').focus();
+    }
 }

@@ -28,12 +28,11 @@ export class MenuComponent implements OnInit {
 
     }
 
+    routePerm = (route) => {
+        return (this.storage.getRoutePermission(route) || {}).list;
+    }
+
     ngOnInit() {
-        const routePermission = { ...ROUTE_PERMISSION['menu'] };
-        const userPermission = this.storage.getValue('permission');
-        Object.keys(routePermission).forEach(item => {
-            routePermission[item] = (userPermission.indexOf(item) !== -1) ? true : false;
-        });
         this.initKeyMenu();
         this.MENU_CONSTANT = [
             {
@@ -55,20 +54,20 @@ export class MenuComponent implements OnInit {
                     {
                         link: '/order-management/sale-quotation',
                         name: 'Sales <u>Q</u>uotation',
-                        permission: routePermission['sel2bViewMenuSaleQuotation']
+                        permission: this.routePerm('/order-management/sale-quotation')
                     },
                     {
                         link: '/order-management/sale-order',
                         name: 'Sales <u>O</u>rders',
-                        permission: routePermission['sel2bViewMenuSaleOrder']
+                        permission: this.routePerm('/order-management/sale-order')
                     },
                     {
                         link: '/order-management/return-order',
                         name: 'Return Orders',
-                        permission: routePermission['sel2bViewMenuReturnOrder']
+                        permission: this.routePerm('/order-management/return-order')
                     }
                 ],
-                permission: routePermission['sel2bViewMenuSaleQuotation'] || routePermission['sel2bViewMenuSaleOrder'] || routePermission['sel2bViewMenuReturnOrder']
+                permission: this.routePerm('/order-management/sale-quotation') ||  this.routePerm('/order-management/sale-order') || this.routePerm('/order-management/return-order')
             },
             {
                 flag: 'customer',
@@ -80,11 +79,11 @@ export class MenuComponent implements OnInit {
                     {
                         link: '/customer',
                         name: 'Customer',
-                        permission: routePermission['sel2bViewMenuCustomer']
+                        permission: this.routePerm('/customer')
                     }
 
                 ],
-                permission: routePermission['sel2bViewMenuCustomer']
+                permission: this.routePerm('/customer')
             },
             {
                 flag: 'product',
@@ -96,20 +95,20 @@ export class MenuComponent implements OnInit {
                     {
                         link: '/product-management/part-list',
                         name: '<u>P</u>art Management ',
-                        permission: routePermission['sel2bViewMenuPartManagement']
+                        permission: this.routePerm('/product-management/part-list')
                     },
                     {
                         link: '/product-management/item-list',
                         name: '<u>I</u>nventory Items',
-                        permission: routePermission['sel2bViewMenuInventory']
+                        permission: this.routePerm('/product-management/item-list')
                     },
                     {
                         link: '/product-management/miscellaneous-list',
                         name: 'Miscellaneous Items',
-                        permission: routePermission['sel2bViewMenuMiscellaneousItem']
+                        permission: this.routePerm('/product-management/miscellaneous-list')
                     }
                 ],
-                permission: routePermission['sel2bViewMenuPartManagement'] || routePermission['sel2bViewMenuInventory'] || routePermission['sel2bViewMenuMiscellaneousItem']
+                permission: this.routePerm('/product-management/part-list') ||  this.routePerm('/product-management/item-list') || this.routePerm('/product-management/miscellaneous-list')
             },
             {
                 flag: 'financial',
@@ -121,25 +120,25 @@ export class MenuComponent implements OnInit {
                     {
                         link: '/financial/invoice',
                         name: 'AR Invoice',
-                        permission: routePermission['sel2bViewMenuARInvoice']
+                        permission: this.routePerm('/financial/invoice')
                     },
                     {
                         link: '/financial/receipt-voucher',
                         name: 'Receipt Voucher ',
-                        permission: routePermission['sel2bViewMenuReceiptVoucher']
+                        permission: this.routePerm('/financial/receipt-voucher')
                     },
                     {
                         link: '/financial/credit-memo',
                         name: 'Credit Memo',
-                        permission: routePermission['sel2bViewMenuCreditMemo']
+                        permission: this.routePerm('/financial/credit-memo')
                     },
                     {
                         link: '/financial/debit-memo',
                         name: 'Debit Memo',
-                        permission: routePermission['sel2bViewMenuDebitMemo']
+                        permission: this.routePerm('/financial/debit-memo')
                     }
                 ],
-                permission: routePermission['sel2bViewMenuARInvoice'] || routePermission['sel2bViewMenuReceiptVoucher'] || routePermission['sel2bViewMenuCreditMemo'] || routePermission['sel2bViewMenuDebitMemo']
+                permission: this.routePerm('/financial/invoice') ||  this.routePerm('/financial/receipt-voucher') || this.routePerm('/financial/credit-memo') || this.routePerm('/financial/debit-memo')
             },
             // {
             //     flag: 'rma',
