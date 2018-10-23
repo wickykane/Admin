@@ -5,22 +5,22 @@
             <h5>GENERAL</h5>
             <ul>
                 <!-- <li><a href="">Company Details</a></li> -->
-                <li><a [routerLink]="['/admin-panel/warehouse']">Warehouses Details</a></li>
-                <li><a [routerLink]="['/admin-panel/carrier']">Carrier</a></li>
-                <li><a [routerLink]="['/admin-panel/bank']">Banks</a></li>
+                <li *ngIf="routePermission['sel2bViewMenuWarehouse']"><a [routerLink]="['/admin-panel/warehouse']">Warehouses Details</a></li>
+                <li *ngIf="routePermission['sel2bViewMenuCarrier']"><a [routerLink]="['/admin-panel/carrier']">Carrier</a></li>
+                <li *ngIf="routePermission['sel2bViewMenuBank']"><a [routerLink]="['/admin-panel/bank']">Banks</a></li>
                 <!-- <li><a [routerLink]="['/admin-panel/insurance']">Insurance </a></li> -->
-                <li><a [routerLink]="['/admin-panel/payment-term']">Payment Term</a></li>
-                <li><a [routerLink]="['/admin-panel/return-reason']">Return Reason</a></li>
-                <li><a [routerLink]="['/admin-panel/discount-category']">Discount by Category </a></li>
+                <li *ngIf="routePermission['sel2bViewMenuPaymentTerm']"><a [routerLink]="['/admin-panel/payment-term']">Payment Term</a></li>
+                <li *ngIf="routePermission['sel2bViewMenuReturnReason']"><a [routerLink]="['/admin-panel/return-reason']">Return Reason</a></li>
+                <li *ngIf="routePermission['sel2bViewMenuDiscountCategory']"><a [routerLink]="['/admin-panel/discount-category']">Discount by Category </a></li>
                 <!-- <li><a [routerLink]="['/admin-panel/discount']">Discount & Return Rate Setup </a></li> -->
-                <li><a [routerLink]="['/admin-panel/late-fee-policy']">Late Fee Policy </a></li>
+                <li *ngIf="routePermission['sel2bViewMenuLateFeePolicy']"><a [routerLink]="['/admin-panel/late-fee-policy']">Late Fee Policy </a></li>
                 <!-- <li><a [routerLink]="['/admin-panel/epi-policy']">Early Payment Incentive Policy </a></li> -->
-                <li><a [routerLink]="['/admin-panel/invoice-config']">Invoice Chasing Configuration</a></li>
-                <li><a [routerLink]="['/admin-panel/ledger']">General Ledger - Account Setup</a></li>
-                <li><a [routerLink]="['/admin-panel/payment-methods']">Payment Methods</a></li>
+                <li *ngIf="routePermission['sel2bViewMenuInvoiceChasingConfiguration']"><a [routerLink]="['/admin-panel/invoice-config']">Invoice Chasing Configuration</a></li>
+                <li *ngIf="routePermission['sel2bViewMenuGeneralLedgerAccountSetup']"><a [routerLink]="['/admin-panel/ledger']">General Ledger - Account Setup</a></li>
+                <li *ngIf="routePermission['sel2bViewMenuPaymentMethod']"><a [routerLink]="['/admin-panel/payment-methods']">Payment Methods</a></li>
                 <!-- <li><a [routerLink]="['/admin-panel/tax-types']">Tax Types</a></li> -->
-                <li><a [routerLink]="['/admin-panel/sales-tax-auth']">Sales Tax Authority</a></li>
-                <li><a [routerLink]="['/admin-panel/shipping-zone']">Shipping Zone</a></li>
+                <li *ngIf="routePermission['sel2bViewMenuSalesTaxAuthority']"><a [routerLink]="['/admin-panel/sales-tax-auth']">Sales Tax Authority</a></li>
+                <li *ngIf="routePermission['sel2bViewMenuShippingZone']"><a [routerLink]="['/admin-panel/shipping-zone']">Shipping Zone</a></li>
             </ul>
         </div>
         <div class="col-md-2">
@@ -59,7 +59,7 @@
         <div class="col-md-2">
             <h5>SYSTEMS INTEGRATION</h5>
             <ul>
-                <li><a [routerLink]="['/admin-panel/quickbook-overview']">QuickBooks</a></li>
+                <li *ngIf="routePermission['sel2bViewMenuQuickBooks']"><a [routerLink]="['/admin-panel/quickbook-overview']">QuickBooks</a></li>
                 <li><a href="">CRM</a></li>
                 <li><a href="">Priority ERP</a></li>
                 <li><a href="">WMS</a></li>

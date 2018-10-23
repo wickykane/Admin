@@ -1,9 +1,10 @@
 <div [@routerTransition]>
     <app-page-header [heading]="'CREATE NEW PAYMENT TERM'" [icon]="'fa-th-list'"></app-page-header>
-    <!-- <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut> -->
+    <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
     <section class="rma-page block">
         <div class="bd-example text-right mg-t-15">
-            <button class="btn btn-outline-dark" [routerLink]="['/admin-panel/payment-term']">Back To List</button>
+            <button [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="back_button"
+            class="btn btn-outline-dark" [routerLink]="['/admin-panel/payment-term']">Back To List</button>
         </div>
         <div class="custom-border card height-100 mg-bt-15 mg-t-15">
             <div class="card-header">
@@ -22,7 +23,8 @@
                             <label> Description
                                 <span class="text-danger">(*)</span>
                             </label>
-                            <input type="text" name="" class="form-control" formControlName="des" [readonly]="isEdit">
+                            <input [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="des"
+                            type="text" name="" class="form-control" formControlName="des" [readonly]="isEdit">
                         </div>
                         <div class="col-sm-2 form-group">
                             <label> Terms Day

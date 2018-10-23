@@ -1,8 +1,8 @@
 <div [@routerTransition]>
     <app-page-header [heading]="'INVOICE CHASING CONFIGURATION'" [icon]="'fa-th-list'"></app-page-header>
-    <!-- <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut> -->
+    <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
     <section class="rma-page block">
-        <div class="custom-border card height-100 mg-bt-15 mg-t-15">
+        <form class="custom-border card height-100 mg-bt-15 mg-t-15" [formGroup]="applyForForm">
             <div class="card-header">
                 <strong>Apply Chasing For (*)</strong>
             </div>
@@ -11,14 +11,16 @@
                     <div class="row">
                         <div class="col-lg-2 col-xl-2 form-group">
                             <label class="css-input css-checkbox css-checkbox-default">
-                                <input class="cb-element" type="radio" value="1" [(ngModel)]="applyChaseOption">
+                                <input name='disabled' class="cb-element" type="checkbox"
+                                formControlName="disabled" (click)="onChangeApplyFor('disabled', 'all')">
                                 <span></span>
                                 Disable Chasing
                             </label>
                         </div>
                         <div class="col-lg-2 col-xl-2 form-group">
                             <label class="css-input css-checkbox css-checkbox-default">
-                                <input class="cb-element" type="radio" value="2" [(ngModel)]="applyChaseOption">
+                                <input name='all' class="cb-element" type="checkbox"
+                                formControlName="all" (click)="onChangeApplyFor('all', 'disabled')">
                                 <span></span>
                                 All Customers
                             </label>
@@ -26,7 +28,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
         <form class="row" [formGroup]="invoiceForm">
             <div class="col-sm-4">
                 <div class="custom-border card height-100">
@@ -47,7 +49,8 @@
                                     <b>Email Template</b>
                                 </label>
                                 <div class="group-btn-search">
-                                    <button type="button" class="btn btn-primary" (click)="editEmailTemplate('BEFORE')">Edit</button>
+                                    <button [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="before_edit"
+                                    type="button" class="btn btn-primary" (click)="editEmailTemplate('BEFORE')">Edit</button>
                                 </div>
                             </div>
                             <div class="row due-date-section">

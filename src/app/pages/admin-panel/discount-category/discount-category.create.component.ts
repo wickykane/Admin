@@ -2,20 +2,21 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, CUSTOM_ELEMENTS_
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
-import { TableService } from './../../../services/table.service';
 
 // Services
 import { Form, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { HotkeysService } from 'angular2-hotkeys';
 import * as _ from 'lodash';
 import { DiscountCategoryService } from './discount-category.service';
+import { DiscountCategoryCreateKeyService } from './keys.create.control';
 
 
 
 @Component({
     selector: 'app-discount-category-create',
     templateUrl: './discount-category.create.component.html',
-    providers: [DiscountCategoryService],
+    providers: [DiscountCategoryService, DiscountCategoryCreateKeyService],
     styleUrls: ['./discount-category-create.component.scss'],
     animations: [routerTransition()],
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -37,7 +38,13 @@ export class DiscountCategoryCreateComponent implements OnInit {
     /**
      * Init Data
      */
-    constructor(private vRef: ViewContainerRef, private fb: FormBuilder, private discountCategoryService: DiscountCategoryService, public toastr: ToastrService, private router: Router,
+    constructor(private vRef: ViewContainerRef,
+        private fb: FormBuilder,
+        private discountCategoryService: DiscountCategoryService,
+        public toastr: ToastrService,
+        private router: Router,
+        private _hotkeysService: HotkeysService,
+        public keyService: DiscountCategoryCreateKeyService,
         private cd: ChangeDetectorRef) {
 
         this.generalForm = fb.group({
@@ -48,6 +55,8 @@ export class DiscountCategoryCreateComponent implements OnInit {
             'create_by': 'Khiet Pham',
             'create_dt': new Date().toLocaleDateString()
         });
+         //  Init Key
+         this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {
@@ -290,5 +299,8 @@ export class DiscountCategoryCreateComponent implements OnInit {
             }
         });
 
+    }
+    reback() {
+        this.router.navigate(['/admin-panel/discount-category/']);
     }
 }

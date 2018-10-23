@@ -15,7 +15,7 @@
         tbody {
             display: block;
             max-height: 145px;
-            overflow-y: auto;
+            overflow-y: scroll;
             overflow-x: hidden;
             tr {
                 display: table;
