@@ -208,7 +208,7 @@ export class SaleQuotationComponent implements OnInit {
 
     selectTable() {
         this.selectedIndex = 0;
-        this.table.element.nativeElement.querySelector('td a').focus();
+        this.table.element.nativeElement.querySelector('td a').focus(); this.refresh();
     }
 
     confirmModal(id, status) {

@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { routerTransition } from '../../../../router.animations';
@@ -9,6 +10,7 @@ import { CommonService } from '../../../../services/common.service';
 import { CarrierService } from '../carrier.service';
 import { CarrierCreateKeyService } from './keys.control';
 
+import { cdArrowTable } from '../../../../shared';
 
 @Component({
     selector: 'app-carrier-create',
@@ -27,6 +29,9 @@ export class CreateComponent implements OnInit {
     listBankAccount = [];
     id: any = null;
 
+    @ViewChild(cdArrowTable) table: cdArrowTable;
+    public selectedIndex = 0;
+
     constructor(
         private cd: ChangeDetectorRef,
         public router: Router,
@@ -36,6 +41,7 @@ export class CreateComponent implements OnInit {
         private activeRouter: ActivatedRoute,
         private cos: CommonService,
         private cs: CarrierService,
+        private _hotkeysService: HotkeysService,
         public keyService: CarrierCreateKeyService
     ) {
         this.generalForm = fb.group({
@@ -49,7 +55,6 @@ export class CreateComponent implements OnInit {
             'own_carrier': false,
             'dt_of_crtn': new Date()
         });
-        this.keyService.watchContext.next(this);
 
         const addrConfig = {
             'id': [null],
@@ -66,6 +71,7 @@ export class CreateComponent implements OnInit {
 
         this.primaryAddress = fb.group(addrConfig);
         this.billingAddress = fb.group(addrConfig);
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {
@@ -88,6 +94,11 @@ export class CreateComponent implements OnInit {
 
     toNumber(str) {
       return Number(str);
+    }
+
+    selectTable() {
+        this.selectedIndex = 0;
+        this.table.element.nativeElement.querySelector('td a').focus();
     }
 
     setData(data) {

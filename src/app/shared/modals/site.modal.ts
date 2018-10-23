@@ -64,16 +64,16 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             'site_code': [null, Validators.required],
             'site_name': [null, Validators.required],
             'registration_no': [null],
-            'phone': [''],
+            'phone': ['', Validators.required],
             'fax': [''],
             'credit_limit': [null],
             'credit_sts': 2,
             'sale_person_id': [null],
             'payment_make': [1, Validators.required],
-            'site_id':[null],
-            'taxable':[null],
-            'payment_method_id':[null],
-            'payment_term_id':[null]
+            'site_id': [null],
+            'taxable': [null],
+            'payment_method_id': [null],
+            'payment_term_id': [null]
         });
 
         this.hotkeyCtrlRight = hotkeysService.add(new Hotkey('alt+r', (event: KeyboardEvent): boolean => {
@@ -109,13 +109,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             this.addresses = this.item.addresses;
             this.bank_accounts = this.item.bank_accounts;
             this.credit_cards = this.item.credit_cards;
-            if(this.item['site_id']!==undefined){
-                this.isEdit = true;
-            }
-            else{
-                this.isEdit = false;
-            }
-
+            (this.item['site_id'] !== undefined) ?   (this.isEdit = true) :  (this.isEdit = false);
             // this.orderAddress(this.addresses);
         } else {
             let code = this.info.code;
@@ -126,7 +120,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             this.generalForm.patchValue({ payment_method_id: this.info.payment_method_id });
             this.generalForm.patchValue({ payment_term_id: this.info.payment_term_id });
             this.generalForm.patchValue({ taxable: this.info.taxable });
-            this.changePayment({target:{value:this.generalForm.value.payment_make}});
+            this.changePayment({target: {value: this.generalForm.value.payment_make}});
         }
         this.checkAddress();
     }
@@ -134,16 +128,16 @@ export class SiteModalComponent implements OnInit, OnDestroy {
     getListPaymentTerm() {
         this.customerService.getListPaymentTerm().subscribe(res => {
             this.paymentTermList = res.data;
-        })
+        });
     }
     getListPaymentMethod() {
         this.customerService.getListPaymentMethod().subscribe(res => {
             this.paymentMethodList = res.data;
-        })
+        });
     }
     private orderAddress(address) {
-        var tmp = [];
-        var arr = [4, 3, 1, 2];
+        const  tmp = [];
+        const  arr = [4, 3, 1, 2];
         arr.forEach(v => {
             for (let i = 0; i < address.length; i++) {
                 if (address[i].type == v) {

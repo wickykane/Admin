@@ -6,6 +6,7 @@
     </button>
     </div>
     <div class="modal-body" style="padding-bottom:10px;">
+        <app-shortcut [listShortcut]='_hotkeysService.hotkeys'></app-shortcut>
         <form [formGroup]="bankForm" class="form-horizontal" role="form">
             <div class="row">
                 <div class="form-group col-sm-12" *ngIf="isEdit">
@@ -16,7 +17,8 @@
                 <div class="form-group col-sm-12">
                     <label for="" class="control-label" translate>Bank Name</label>
                     <span class="text-danger">(*) </span>
-                    <input type="text" formControlName="name" class="form-control">
+                    <input [keyConfig]="data['key_config']" appKeyNavigate="name"
+                    type="text" formControlName="name" class="form-control">
                 </div>
 
                 <div class="form-group col-sm-12">
