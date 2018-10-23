@@ -128,16 +128,9 @@ export class SaleQuotationComponent implements OnInit {
     }
 
     filter(status) {
-        const params = { sts: status };
-        this.orderService.getListSalesQuotation(params).subscribe(res => {
-            try {
-                this.list.items = res.data.rows;
-                this.tableService.matchPagingOption(res.data);
-                this.refresh();
-            } catch (e) {
-                console.log(e);
-            }
-        });
+        this.listMaster['filter'] = { sts: status };
+        this.tableService.pagination['page'] = 1;
+        this.getList();
     }
 
     getCountStatus() {
@@ -158,7 +151,7 @@ export class SaleQuotationComponent implements OnInit {
 
     getList() {
         this.getCountStatus();
-        const params = { ...this.tableService.getParams(), ...this.searchForm.value };
+        const params = { ...this.tableService.getParams(), ...this.searchForm.value, ...this.listMaster['filter'] || {} };
 
         Object.keys(params).forEach((key) => {
             if (params[key] instanceof Array) {

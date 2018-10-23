@@ -158,16 +158,9 @@ export class ReceiptVoucherComponent implements OnInit {
     }
 
     filter(status) {
-        const params = { status };
-        this.receiptVoucherService.getListReceiptVoucher(params).subscribe(res => {
-            try {
-                this.list.items = res.data.rows;
-                this.tableService.matchPagingOption(res.data);
-                this.refresh();
-            } catch (e) {
-                console.log(e);
-            }
-        });
+        this.listMaster['filter'] = { status };
+        this.tableService.pagination['page'] = 1;
+        this.getList();
     }
 
     searchCustomer(key) {
@@ -200,8 +193,7 @@ export class ReceiptVoucherComponent implements OnInit {
     }
 
     getList() {
-        console.log(this.searchForm.value);
-        const params = { ...this.tableService.getParams(), ...this.searchForm.value };
+        const params = { ...this.tableService.getParams(), ...this.searchForm.value, ...this.listMaster['filter'] || {} };
         Object.keys(params).forEach((key) => {
             if (params[key] instanceof Array) {
                 params[key] = params[key].join(',');
@@ -257,7 +249,7 @@ export class ReceiptVoucherComponent implements OnInit {
                             try {
                                 const result = JSON.parse(_res['_body']);
                                 this.toastr.success(`Receipt Voucher ${result.data[0].entity.PaymentRefNum} has been sync to Quickbooks successfully.`);
-                            } catch (err) {}
+                            } catch (err) { }
                         },
                         err => {
                             this.toastr.error(`Cannot sync Receipt Voucher to Quickbooks.`);
