@@ -39,7 +39,7 @@
                 <div class="card no-border">
                     <div class="card-header">
                         <strong>Return Reasons</strong>
-                        <button (click)="createReturnReason()" style="margin:0; float:right" class="btn btn-link">
+                        <button *ngIf="listMaster['permission'].create" (click)="createReturnReason()" style="margin:0; float:right" class="btn btn-link">
                             <i class="fa fa-plus text-success"></i> New Return Reason</button>
                     </div>
                     <div class="card-body no-padding">
@@ -66,12 +66,13 @@
                                         <td class="text-center">{{item.crtd_by_name}}</td>
                                         <td class="text-center">{{item.updated_dt}}</td>
                                         <td>
-                                            <a href="javascript:void(0)" class="btn btn-default" (click)="editReturnReason(item.id)" title="Edit Return Reason">
+                                            <a *ngIf="listMaster['permission'].edit" href="javascript:void(0)" class="btn btn-default" (click)="editReturnReason(item.id)" title="Edit Return Reason">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
-                                            <a href="javascript:void(0)" class="btn btn-default" (click)="deleteReason(item.id)" title="Delete Return Reason">
+                                            <a *ngIf="listMaster['permission'].delete" href="javascript:void(0)" class="btn btn-default" (click)="deleteReason(item.id)" title="Delete Return Reason">
                                                 <i class="fa fa-trash" aria-hidden="true"></i>
                                             </a>
+                                            <a *ngIf="!listMaster['permission'].delete && !listMaster['permission'].edit" href="javascript:void(0)"></a>
                                         </td>
                                     </tr>
                                 </tbody>

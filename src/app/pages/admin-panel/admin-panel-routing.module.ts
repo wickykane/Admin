@@ -125,10 +125,12 @@ const routes: Routes = [
     },
     {
         path: 'return-reason/create',
+        canActivate: [MasterGuard],
         component: ReturnReasonCreateComponent
     },
     {
         path: 'return-reason/edit/:id',
+        canActivate: [MasterGuard],
         component: ReturnReasonCreateComponent
     },
     {
