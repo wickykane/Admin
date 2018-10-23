@@ -1,5 +1,6 @@
 <div [@routerTransition]>
     <app-page-header [heading]="'SALES TAX AUTHORITY'" [icon]="'fa-th-list'"></app-page-header>
+    <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
     <div class="form-search full-width form-horizontal">
         <div class="row create-section">
             <div class="create-section-list" [ngClass]="{'col-lg-3 col-xl-3' : ( !currentForm || currentForm === 'country'), 'col-lg-2 col-xl-2' : currentForm === 'state' }">
