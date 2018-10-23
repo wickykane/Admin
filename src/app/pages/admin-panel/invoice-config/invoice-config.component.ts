@@ -126,13 +126,21 @@ export class InvoiceConfigComponent implements OnInit {
     }
 
     editEmailTemplate(duration) {
+        this.keyService.saveKeys();
         const modalRef = this.modalService.open(EmailTemplateModalContent, {
             size: 'lg'
         });
         modalRef.componentInstance.duration = duration;
         modalRef.result.then(res => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+            }
             // this.getInvoiceChaseInfo();
-        }, dismiss => {});
+        }, dismiss => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+            }
+        });
     }
 
     getInvoiceChaseInfo() {
