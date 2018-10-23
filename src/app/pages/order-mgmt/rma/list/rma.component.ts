@@ -132,7 +132,7 @@ export class RmaComponent implements OnInit {
      * Table Event
      */
     refresh() {
-         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
+        if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
 
     selectData(index) {
@@ -162,16 +162,9 @@ export class RmaComponent implements OnInit {
      */
 
     filter(status) {
-        const params = { sts_id: status };
-        this.service.getListRMA(params).subscribe(res => {
-            try {
-                this.list.items = res.data.rows;
-                this.tableService.matchPagingOption(res.data);
-                this.refresh();
-            } catch (e) {
-                console.log(e);
-            }
-        });
+        this.listMaster['filter'] = { sts_id: status };
+        this.tableService.pagination['page'] = 1;
+        this.getList();
     }
 
     getRMAReference() {
@@ -228,8 +221,7 @@ export class RmaComponent implements OnInit {
     }
 
     getList() {
-        const params = { ...this.tableService.getParams(), ...this.searchForm.value };
-
+        const params = { ...this.tableService.getParams(), ...this.searchForm.value, ...this.listMaster['filter'] || {} };
         Object.keys(params).forEach((key) => {
             if (params[key] instanceof Array) {
                 params[key] = params[key].join(',');
@@ -263,7 +255,7 @@ export class RmaComponent implements OnInit {
                     if (!res.status && res.message === 'show popup') {
                         this.checkStatusOrder(id);
                     } else {
-                      this.toastr.success(res.message);
+                        this.toastr.success(res.message);
                     }
                 } else {
                     this.toastr.success(res.message);
@@ -334,7 +326,7 @@ export class RmaComponent implements OnInit {
         }
 
         if (message) {
-          this.messageForCompleteStatus(item, message);
+            this.messageForCompleteStatus(item, message);
         }
     }
 
@@ -344,22 +336,22 @@ export class RmaComponent implements OnInit {
             if (res) {
                 this.service.completeStatus(item.id).subscribe(result => {
                     try {
-                      this.toastr.success(res.message);
-                      if (item.return_type_id === 1 && (item.invoice_status_id === 5 || item.invoice_status_id === 6)) {
-                          setTimeout(() => {
-                              this.router.navigate(['/financial/credit-memo/view/' + result.credit_id]);
-                          }, 500);
-                      }
+                        this.toastr.success(res.message);
+                        if (item.return_type_id === 1 && (item.invoice_status_id === 5 || item.invoice_status_id === 6)) {
+                            setTimeout(() => {
+                                this.router.navigate(['/financial/credit-memo/view/' + result.credit_id]);
+                            }, 500);
+                        }
 
-                      if (item.return_type_id === 4) {
-                        setTimeout(() => {
-                            this.router.navigate(['/order-management/sale-order/detail', item.order_id]);
-                        }, 500);
-                      } else {
-                          setTimeout(() => {
-                              this.router.navigate(['/order-management/sale-order/detail', result.order_id]);
-                          }, 500);
-                      }
+                        if (item.return_type_id === 4) {
+                            setTimeout(() => {
+                                this.router.navigate(['/order-management/sale-order/detail', item.order_id]);
+                            }, 500);
+                        } else {
+                            setTimeout(() => {
+                                this.router.navigate(['/order-management/sale-order/detail', result.order_id]);
+                            }, 500);
+                        }
                     } catch (e) {
                         console.log(e);
                     }
