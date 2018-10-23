@@ -5,6 +5,7 @@ import { NguCarousel } from '@ngu/carousel';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../../../environments/environment';
 import { routerTransition } from '../../../router.animations';
+import { StorageService } from '../../../services/storage.service';
 
 import {
     NgxGalleryAnimation,
@@ -85,7 +86,8 @@ export class PartDetailComponent implements OnInit {
         public itemKeyService: PartKeyService,
         private productService: ProductService,
         public toastr: ToastrService,
-        private cd: ChangeDetectorRef
+        private cd: ChangeDetectorRef,
+        private storage: StorageService
     ) {
         this.generalForm = fb.group({
             is_quotable: [null],
@@ -124,6 +126,7 @@ export class PartDetailComponent implements OnInit {
                 thumbnailActions: [{ icon: 'black fa fa-times-circle', onClick: this.deleteImage.bind(this), titleText: 'Delete' }]
             }
         ];
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
     }
 
     refresh() {

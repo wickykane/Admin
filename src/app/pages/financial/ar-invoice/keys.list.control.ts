@@ -19,6 +19,7 @@ export class InvoiceKeyService extends KeyboardBaseService {
     };
 
     initKey() {
+
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+f1', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             if (this.keyConfig.inv_num.element) {
@@ -27,11 +28,13 @@ export class InvoiceKeyService extends KeyboardBaseService {
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Focus Search'));
 
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+n', (event: KeyboardEvent): boolean => {
-            event.preventDefault();
-            this.context.createInvoice();
-            return;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Create AR Invoice'));
+        if (this.context.listMaster['permission'].create) {
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+n', (event: KeyboardEvent): boolean => {
+                event.preventDefault();
+                this.context.createInvoice();
+                return;
+            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Create AR Invoice'));       }
+
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+e', (event: KeyboardEvent): boolean => {
             event.preventDefault();
@@ -45,11 +48,13 @@ export class InvoiceKeyService extends KeyboardBaseService {
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset'));
 
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent): boolean => {
-            event.preventDefault();
-            this.context.viewInvoice();
-            return;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'View'));
+        if (this.context.listMaster['permission'].view) {
+          this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent): boolean => {
+              event.preventDefault();
+              this.context.viewInvoice();
+              return;
+          }, ['INPUT', 'SELECT', 'TEXTAREA'], 'View'));
+        }
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+pageup', (event: KeyboardEvent): boolean => {
             this.context.tableService.pagination.page--;

@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../../../../environments/environment';
+import { StorageService } from '../../../../services/storage.service';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { FinancialService } from '../../financial.service';
 import { CreditMailModalComponent } from '../modals/send-email/mail.modal';
@@ -53,6 +54,7 @@ export class CreditInformationTabComponent implements OnInit {
     };
 
     public isInstallQuickbook = false;
+    public listMaster = {};
 
     constructor(
         public toastr: ToastrService,
@@ -65,6 +67,7 @@ export class CreditInformationTabComponent implements OnInit {
         public tableService: TableService,
         private _hotkeysService: HotkeysService,
         public keyService: CreditDetailKeyService,
+        private storage: StorageService,
         @Inject(CreditMemoDetailComponent) private parent: CreditMemoDetailComponent,
         private http: HttpClient) {
             //  Init Key
@@ -81,6 +84,7 @@ export class CreditInformationTabComponent implements OnInit {
             active: 0,
         };
         this.changeShortcut();
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
     }
 
     /**

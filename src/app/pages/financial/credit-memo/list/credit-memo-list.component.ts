@@ -10,6 +10,7 @@ import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../../../../environments/environment';
 import { routerTransition } from '../../../../router.animations';
+import { StorageService } from '../../../../services/storage.service';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { FinancialService } from '../../financial.service';
 import { CreditMemoService } from '../credit-memo.service';
@@ -72,7 +73,8 @@ export class CreditMemoListComponent implements OnInit {
         public creditMemoListKeyService: CreditMemoListKeyService,
         private http: HttpClient,
         private cd: ChangeDetectorRef,
-        private renderer: Renderer) {
+        private renderer: Renderer,
+        private storage: StorageService) {
 
         this.searchForm = fb.group({
             'credit_memo_num': [null],
@@ -98,6 +100,7 @@ export class CreditMemoListComponent implements OnInit {
         this.getQuickbookSettings();
         this.getListStatus();
         this.user = JSON.parse(localStorage.getItem('currentUser'));
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
     }
     /**
      * Table Event
@@ -292,5 +295,3 @@ export class CreditMemoListComponent implements OnInit {
         this.table.element.nativeElement.querySelector('td a').focus(); this.refresh();
     }
 }
-
-

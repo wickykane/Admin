@@ -10,6 +10,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NgbDateParserFormatter, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
+import { StorageService } from '../../../../services/storage.service';
 import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
 
 import { DebitMemoListKeyService } from './keys.list.control';
@@ -70,7 +71,8 @@ export class DebitMemoListComponent implements OnInit {
         public debitMemoService: DebitMemoService,
         public financialService: FinancialService,
         private http: HttpClient,
-        private renderer: Renderer) {
+        private renderer: Renderer,
+        private storage: StorageService) {
 
         this.searchForm = fb.group({
             no: [null],
@@ -96,6 +98,7 @@ export class DebitMemoListComponent implements OnInit {
         this.getDebitStatusList();
         this.getListDebitMemo();
         this.getCountStatus();
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
     }
 
     refresh() {
