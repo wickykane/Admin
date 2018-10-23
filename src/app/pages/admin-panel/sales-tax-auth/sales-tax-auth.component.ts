@@ -13,12 +13,15 @@ import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
 import { SalesTaxAuthService } from './sales-tax-auth.service';
 
 import * as moment from 'moment';
+
+import { HotkeysService } from 'angular2-hotkeys';
+import { SaleTaxKeyService } from './keys.control';
 @Component({
     selector: 'app-sales-tax-auth',
     templateUrl: './sales-tax-auth.component.html',
     styleUrls: ['./sales-tax-auth.component.scss'],
     animations: [routerTransition()],
-    providers: [SalesTaxAuthService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }],
+    providers: [SalesTaxAuthService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }, SaleTaxKeyService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SalesTaxAuthComponent implements OnInit {
@@ -90,7 +93,9 @@ export class SalesTaxAuthComponent implements OnInit {
         public toastr: ToastrService,
         public tableService: TableService,
         public modalService: NgbModal,
-        public salesTaxAuthService: SalesTaxAuthService
+        public salesTaxAuthService: SalesTaxAuthService,
+        private _hotkeysService: HotkeysService,
+        public keyService: SaleTaxKeyService
     ) {
         this.countryGeneralForm = fb.group({
             country_id: [null, Validators.required],
@@ -113,6 +118,7 @@ export class SalesTaxAuthComponent implements OnInit {
             effective_date: [null, Validators.required],
             gl_account_id: [null, Validators.required]
         });
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
     //#endregion constructor
 
@@ -132,7 +138,7 @@ export class SalesTaxAuthComponent implements OnInit {
      */
     //#region load list master
     refresh() {
-         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
+        if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
 
     getListCountryDropDown() {
@@ -327,6 +333,7 @@ export class SalesTaxAuthComponent implements OnInit {
                 this.selectedCountryTax = {};
             }
         }
+        this.cd.detectChanges();
     }
 
     onSelectCountryTax(countryTax) {
@@ -538,4 +545,7 @@ export class SalesTaxAuthComponent implements OnInit {
         this.isClickedSave = false;
     }
     //#endregion utility functions
+    back() {
+        this.router.navigate(['/admin-panel']);
+    }
 }
