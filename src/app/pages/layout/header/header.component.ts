@@ -2,8 +2,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { StorageService } from '../../../services/storage.service';
 import { JwtService } from '../../../shared';
 import { environment } from './../../../../environments/environment';
+
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
@@ -13,7 +15,7 @@ export class HeaderComponent implements OnInit {
     pushRightClass = 'push-right';
     infoUser: any = {};
 
-    constructor(private http: HttpClient, private translate: TranslateService, public router: Router, private jwtService: JwtService) {
+    constructor(private storageService: StorageService, private http: HttpClient, private translate: TranslateService, public router: Router, private jwtService: JwtService) {
 
         this.translate.addLangs(['en', 'fr', 'ur', 'es', 'it', 'fa', 'de', 'zh-CHS']);
         this.translate.setDefaultLang('en');
@@ -31,25 +33,35 @@ export class HeaderComponent implements OnInit {
         });
     }
 
-    ngOnInit() {
-        const  user = (localStorage.getItem('currentUser'));
-        if (user) {
-            this.infoUser = JSON.parse(user);
-        } else {
-            if (this.jwtService.getToken()) { this.getUserDetail(); }
+    async ngOnInit() {
+        // const user = (localStorage.getItem('currentUser'));
+        // if (user) {
+        //     this.infoUser = JSON.parse(user);
+        // } else {
+        //     if (this.jwtService.getToken()) { this.getUserDetail(); }
+        // }
+        if (this.jwtService.getToken()) {
+            await this.getUserDetail();
         }
 
     }
 
     getUserDetail() {
-        const url = environment.api_url + 'auth/wms-user';
-        const httpOptions = {
-            headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.jwtService.getToken() }),
-        };
-        this.http.get(url, httpOptions).subscribe(res => {
-            this.infoUser = res['data']['user'];
-            localStorage.setItem('currentUser', JSON.stringify(res['data']['user']));
+        return new Promise((resolve, reject) => {
+            const url = environment.api_url + 'auth/wms-user';
+            const httpOptions = {
+                headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.jwtService.getToken() }),
+            };
+            this.http.get(url, httpOptions).subscribe(res => {
+                this.infoUser = res['data']['user'];
+                this.storageService.setData('user', res['data']['user']);
+                localStorage.setItem('currentUser', JSON.stringify(res['data']['user']));
+                resolve(true);
+            }, err => {
+                reject(false);
+            });
         });
+
     }
 
 

@@ -3,19 +3,19 @@
         <div class="top-content">
             <ul class="nav-main main-menu">
                 <ng-container *ngFor="let item of MENU_CONSTANT">
-                    <li *ngIf="!item.sub">
+                    <li *ngIf="!item.sub && item.permission">
                         <a [routerLink]="[item.link]" [routerLinkActive]="['active']">
                             <i *ngIf="item.icon" class="{{item.icon}}"></i>
                             <span class="topbar-mini-hide" [innerHTML]="item.main_name"></span>
                         </a>
                     </li>
-                    <li [routerLinkActive]="['open']" *ngIf="item.sub" [ngClass]="{'open': showMenu === item.flag}" (click)="addExpandClass(item.flag, $event)">
+                    <li [routerLinkActive]="['open']" *ngIf="item.sub && item.permission" [ngClass]="{'open': showMenu === item.flag}" (click)="addExpandClass(item.flag, $event)">
                         <a class="nav-submenu">
                             <span class="topbar-mini-hide" [innerHTML]='item.main_name'></span>
                         </a>
                         <ul class="dropdown-content">
                             <li *ngFor="let it of item.child">
-                                <a routerLink="{{it.link}}" [routerLinkActive]="['active']">
+                                <a *ngIf="it.permission" routerLink="{{it.link}}" [routerLinkActive]="['active']">
                                     <span class="topbar-mini-hide" [innerHTML]='it.name'></span>
                                 </a>
                             </li>

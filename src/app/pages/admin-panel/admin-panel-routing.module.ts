@@ -38,6 +38,8 @@ import { WarehouseComponent } from './warehouse/warehouse.component';
 import { WorkFlowComponent } from './work-flow/work-flow.component';
 import { WorkFlowEditComponent } from './work-flow/work-flow.edit.component';
 
+import { MasterGuard } from '../../shared';
+
 const routes: Routes = [
     {
         path: '',
@@ -71,11 +73,12 @@ const routes: Routes = [
         path: 'bank',
         children: [
             { path: ':id/branch', component: BranchComponent },
-            { path: '', component: BankComponent }
-        ]
+            { path: '', component: BankComponent}
+        ],
     },
     {
         path: 'carrier',
+        canActivate: [MasterGuard],
         loadChildren: './carrier/carrier.module#CarrierModule'
     },
     {

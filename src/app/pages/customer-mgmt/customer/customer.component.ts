@@ -7,9 +7,10 @@ import { TableService } from './../../../services/table.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
-import { cdArrowTable } from '../../../shared/index';
-// tslint:disable-next-line:ordered-imports
+
 import { routerTransition } from '../../../router.animations';
+import { StorageService } from '../../../services/storage.service';
+import { cdArrowTable } from '../../../shared/index';
 import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
 import { CustomerKeyService } from './keys.customer.control';
 
@@ -48,6 +49,7 @@ export class CustomerComponent implements OnInit {
         private customerService: CustomerService,
         public keyService: CustomerKeyService,
         private _hotkeysService: HotkeysService,
+        private storage: StorageService,
         private cd: ChangeDetectorRef) {
 
         this.searchForm = fb.group({
@@ -77,6 +79,7 @@ export class CustomerComponent implements OnInit {
         }];
 
         this.user = JSON.parse(localStorage.getItem('currentUser'));
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
     }
     /**
      * Table Event
@@ -87,7 +90,7 @@ export class CustomerComponent implements OnInit {
 
     refresh() {
         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
-     }
+    }
     /**
      * Internal Function
      */
@@ -125,12 +128,12 @@ export class CustomerComponent implements OnInit {
         this.table.element.nativeElement.querySelector('td a').focus();
     }
     getList() {
-        const params = {...this.tableService.getParams(), ...this.searchForm.value};
+        const params = { ...this.tableService.getParams(), ...this.searchForm.value };
         console.log(params);
         Object.keys(params).forEach((key) => {
-            if (key !== 'email' && (params[key] === null || params[key] === '' )) {
-                 delete params[key];
-                }
+            if (key !== 'email' && (params[key] === null || params[key] === '')) {
+                delete params[key];
+            }
             if (params['email'] === null || params['email'] === '' || String(params['email']).trim() === '') {
                 delete params['email'];
             }

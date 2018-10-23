@@ -6,14 +6,16 @@ import { CustomerEditComponent } from './customer/customer-edit.component';
 import { CustomerViewComponent } from './customer/customer-view.component';
 import { CustomerComponent } from './customer/customer.component';
 
+import { MasterGuard } from '../../shared';
+
 const routes: Routes = [
     {
         path: '',
-        children : [
-            { path: '', component: CustomerComponent },
-            { path: 'create', component: CustomerCreateComponent },
-            { path: 'view/:id', component: CustomerViewComponent },
-            { path: 'edit/:id', component: CustomerEditComponent }
+        children: [
+            { path: '', component: CustomerComponent, canActivate: [MasterGuard], },
+            { path: 'create', component: CustomerCreateComponent, canActivate: [MasterGuard], },
+            { path: 'view/:id', component: CustomerViewComponent, canActivate: [MasterGuard], },
+            { path: 'edit/:id', component: CustomerEditComponent, canActivate: [MasterGuard], }
         ]
     }
 ];
