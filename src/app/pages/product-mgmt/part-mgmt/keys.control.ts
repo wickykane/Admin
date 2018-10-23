@@ -151,14 +151,16 @@ export class PartKeyService extends KeyboardBaseService {
                 return;
             }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset Filter'));
 
-            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+m', (event: KeyboardEvent): boolean => {
+            if (this.context.listMaster['permission'].edit) {
+              this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+m', (event: KeyboardEvent): boolean => {
                 event.preventDefault();
                 this.context.router.navigate(['/product-management/mass-price']);
                 return;
-            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Mass Update Price'));
+              }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Mass Update Price'));
+            }
         }
 
-        if (page === 'detail') {
+        if (page === 'detail' && this.context.listMaster['permission'].view) {
             this._hotkeysService.add(new Hotkey('alt+backspace', (event: KeyboardEvent): boolean => {
                 event.preventDefault();
                 this.context.router.navigate(['/product-management/part-list']);
@@ -172,7 +174,7 @@ export class PartKeyService extends KeyboardBaseService {
             }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Edit'));
         }
 
-        if (page === 'edit') {
+        if (page === 'edit' && this.context.listMaster['permission'].edit) {
             this._hotkeysService.add(new Hotkey('alt+backspace', (event: KeyboardEvent): boolean => {
                 event.preventDefault();
                 this.context.router.navigate(['/product-management/part-list']);

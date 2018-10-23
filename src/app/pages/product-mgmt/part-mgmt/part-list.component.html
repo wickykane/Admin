@@ -145,7 +145,7 @@
             <div class="card no-border">
                 <div class="card-header">
                     <strong>Line Items</strong>
-                    <button routerLink="/product-management/mass-price" style="margin:0; float:right" class="btn btn-link">Mass Update Price</button>
+                    <button *ngIf="listMaster['permission'].edit" routerLink="/product-management/mass-price" style="margin:0; float:right" class="btn btn-link">Mass Update Price</button>
                 </div>
                 <div class="card-body no-padding">
                     <div class="table-responsive list">
@@ -196,10 +196,10 @@
                                     <td>{{item.cost_price|currency:'$'}}</td>
                                     <td>{{item.sale_price|currency:'$'}}</td>
                                     <td>
-                                        <a class="btn btn-default" [routerLink]="['/product-management/part-list/detail/', item.item_id]">
+                                        <a *ngIf="listMaster['permission'].view" class="btn btn-default" [routerLink]="['/product-management/part-list/detail/', item.item_id]">
                                             <i class="fa fa-eye" aria-hidden="true"></i>
                                         </a>
-                                        <a class="btn btn-default" [routerLink]="['/product-management/part-list/edit/', item.item_id]">
+                                        <a *ngIf="listMaster['permission'].edit" class="btn btn-default" [routerLink]="['/product-management/part-list/edit/', item.item_id]">
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                         </a>
                                     </td>

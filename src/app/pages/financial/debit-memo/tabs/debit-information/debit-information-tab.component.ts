@@ -9,6 +9,7 @@ import { TableService } from './../../../../../services/table.service';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../../../../environments/environment';
+import { StorageService } from '../../../../../services/storage.service';
 import { FinancialService } from '../../../financial.service';
 import { DebitMemoService } from '../../debit-memo.service';
 
@@ -40,6 +41,7 @@ export class DebitInformationTabComponent implements OnInit {
     public currentuser = {};
 
     public isInstallQuickbook = false;
+    public listMaster = {};
 
     constructor(
         public toastr: ToastrService,
@@ -52,6 +54,7 @@ export class DebitInformationTabComponent implements OnInit {
         private _hotkeysService: HotkeysService,
         public keyService: DebitMemoViewKeyService,
         public financialService: FinancialService,
+        private storage: StorageService,
         @Inject(DebitMemoViewComponent) private parent: DebitMemoViewComponent,
         private http: HttpClient) {
         //  Init Key
@@ -70,6 +73,7 @@ export class DebitInformationTabComponent implements OnInit {
             active: 0,
         };
         this.changeShortcut();
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
     }
 
     getUniqueTaxItemLine() {

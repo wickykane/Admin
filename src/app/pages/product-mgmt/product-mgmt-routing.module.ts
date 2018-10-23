@@ -6,6 +6,7 @@ import { PartDetailComponent } from './part-mgmt/part-detail.component';
 import { PartEditComponent } from './part-mgmt/part-edit.component';
 import { PartListComponent } from './part-mgmt/part-list.component';
 
+import { MasterGuard } from '../../shared';
 import { ProductMgmtComponent } from './product-mgmt.component';
 
 import { MassPriceComponent } from './mass-price/mass-price.component';
@@ -15,34 +16,40 @@ import { MiscellaneousItemsComponent } from './miscellaneous-items/list/miscella
 const routes: Routes = [
     {
         path: '',
-        component: ProductMgmtComponent
+        component: ProductMgmtComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'item-list',
-        component: ItemListComponent
+        component: ItemListComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'part-list',
-        component: PartListComponent
+        component: PartListComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'miscellaneous-list',
-        component: MiscellaneousItemsComponent
+        component: MiscellaneousItemsComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'part-list/detail/:id',
-        component: PartDetailComponent
+        component: PartDetailComponent,
+        canActivate: [MasterGuard]
     },
      {
         path: 'part-list/edit/:id',
-        component: PartEditComponent
+        component: PartEditComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'mass-price',
         children: [
-            { path: '', component: MassPriceComponent },
-            { path: 'create', component: MassPriceCreateComponent },
-            { path: 'detail/:id', component: MassPriceViewComponent }
+            { path: '', component: MassPriceComponent, canActivate: [MasterGuard] },
+            { path: 'create', component: MassPriceCreateComponent, canActivate: [MasterGuard] },
+            { path: 'detail/:id', component: MassPriceViewComponent, canActivate: [MasterGuard] }
         ]
     }
 ];
