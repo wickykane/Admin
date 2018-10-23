@@ -119,20 +119,13 @@ export class InvoiceComponent implements OnInit {
      * Internal Function
      */
     refresh() {
-         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
+        if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
 
     filter(status) {
-        const params = { status };
-        this.financialService.getListInvoice(params).subscribe(res => {
-            try {
-                this.list.items = res.data.rows;
-                this.tableService.matchPagingOption(res.data);
-                this.refresh();
-            } catch (e) {
-                console.log(e);
-            }
-        });
+        this.listMaster['filter'] = { status };
+        this.tableService.pagination['page'] = 1;
+        this.getList();
     }
 
     getListStatus() {
@@ -161,7 +154,7 @@ export class InvoiceComponent implements OnInit {
         this.financialService.getSettingInfoQuickbook().subscribe(
             res => {
                 this.isInstallQuickbook = res.data.state === 'authorized' ? true : false;
-            }, err => {}
+            }, err => { }
         );
     }
 
@@ -179,7 +172,7 @@ export class InvoiceComponent implements OnInit {
                             try {
                                 const result = JSON.parse(_res['_body']);
                                 this.toastr.success(`Invoice ${result.data[0].entity.DocNumber} has been sync to Quickbooks successfully.`);
-                            } catch (err) {}
+                            } catch (err) { }
                         },
                         err => {
                             this.toastr.error(`Cannot sync invoice to Quickbooks.`);
@@ -238,7 +231,8 @@ export class InvoiceComponent implements OnInit {
     }
 
     getList() {
-        const params = { ...this.tableService.getParams(), ...this.searchForm.value };
+        const params = { ...this.tableService.getParams(), ...this.searchForm.value, ...this.listMaster['filter'] || {} };
+
         Object.keys(params).forEach((key) => {
             if (params[key] instanceof Array) {
                 params[key] = params[key].join(',');
@@ -333,7 +327,7 @@ export class InvoiceComponent implements OnInit {
             newWindow.focus();
         });
     }
-     selectTable() {
+    selectTable() {
         this.selectedIndex = 0;
         this.table.element.nativeElement.querySelector('td a').focus();
     }
