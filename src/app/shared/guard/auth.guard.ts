@@ -45,6 +45,7 @@ export class MasterGuard implements CanActivate {
         view: ['view', 'detail'],
         edit: ['edit'],
         create: ['create'],
+        others: ['invoice-config']
     };
 
     checkPermission(route) {

@@ -15,6 +15,7 @@ const routes: Routes = [
         children: [
             {
                 path: '',
+                canActivate: [MasterGuard],
                 component: ListComponent,
                 data: {
                     title: ''

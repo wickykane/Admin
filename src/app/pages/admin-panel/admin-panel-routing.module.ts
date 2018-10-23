@@ -87,6 +87,7 @@ const routes: Routes = [
     },
     {
         path: 'payment-term',
+        canActivate: [MasterGuard],
         component: PaymentTermComponent
     },
     {
@@ -121,6 +122,7 @@ const routes: Routes = [
     },
     {
         path: 'return-reason',
+        canActivate: [MasterGuard],
         component: ReturnReasonComponent
     },
     {
@@ -206,6 +208,7 @@ const routes: Routes = [
     },
     {
         path: 'invoice-config',
+        canActivate: [MasterGuard],
         component: InvoiceConfigComponent
     },
     {
