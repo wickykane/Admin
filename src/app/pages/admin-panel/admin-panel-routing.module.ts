@@ -72,7 +72,7 @@ const routes: Routes = [
     {
         path: 'bank',
         children: [
-            { path: ':id/branch', component: BranchComponent },
+            { path: ':id/branch', canActivate: [MasterGuard], component: BranchComponent },
             { path: '', component: BankComponent}
         ],
     },

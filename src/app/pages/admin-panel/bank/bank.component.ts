@@ -14,6 +14,7 @@ import { BranchModalComponent } from './modal/branch.modal';
 import { cdArrowTable } from '../../../shared';
 import { BankKeyService } from './keys.control';
 
+import { StorageService } from '../../../services/storage.service';
 @Component({
   selector: 'app-bank',
   providers: [BankService, BankKeyService],
@@ -46,6 +47,7 @@ export class BankComponent implements OnInit {
     private modalService: NgbModal,
     private toastr: ToastrService,
     private _hotkeysService: HotkeysService,
+    private storage: StorageService,
     public keyService: BankKeyService, ) {
     this.searchForm = fb.group({
       'code': [null],
@@ -61,6 +63,7 @@ export class BankComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
     this.getList();
   }
 
@@ -196,6 +199,8 @@ export class BankComponent implements OnInit {
 
     selectTable() {
         this.selectedIndex = 0;
-        this.table.element.nativeElement.querySelector('td a').focus();
+        if (this.table.element.nativeElement.querySelector('td a')) {
+            this.table.element.nativeElement.querySelector('td a').focus();
+        }
     }
 }

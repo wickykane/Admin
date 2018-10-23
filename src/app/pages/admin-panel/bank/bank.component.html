@@ -39,7 +39,7 @@
                     <div class="card-header">
                         <strong>Line Items</strong>
                         <!-- <button [routerLink]="['create']" style="margin:0; float:right" class="btn btn-link"> <i class="fa fa-plus text-success"></i> Create Sales Quote</button> -->
-                        <button (click)="editBank()" style="margin:0; float:right" class="btn btn-link">
+                        <button *ngIf="listMaster['permission'].create" (click)="editBank()" style="margin:0; float:right" class="btn btn-link">
                             <i class="fa fa-plus text-success"></i>New Bank</button>
                     </div>
                     <div class="card-body no-padding">
@@ -71,20 +71,21 @@
                                         <td>{{item.full_name}}</td>
                                         <td>{{item.updated_at ? (item.updated_at | date:'MM/dd/yyyy') : ''}}</td>
                                         <td>
-                                            <a href="javascript:void(0)" class="btn btn-default" (click)="editBank(item)" title="Edit Bank">
+                                            <a *ngIf="listMaster['permission'].edit" href="javascript:void(0)" class="btn btn-default" (click)="editBank(item)" title="Edit Bank">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
 
-                                            <a href="javascript:void(0)" class="btn btn-default " (click)="addBranch(item)" title="Add Branch">
+                                            <a *ngIf="listMaster['permission'].edit" href="javascript:void(0)" class="btn btn-default " (click)="addBranch(item)" title="Add Branch">
                                                 <i class="fa fa-plus-circle" aria-hidden="true"></i>
                                             </a>
-                                            <a href="javascript:void(0)" class="btn btn-default" [routerLink]="[item.id, 'branch']" title="View Branch">
+                                            <a *ngIf="listMaster['permission'].view" href="javascript:void(0)" class="btn btn-default" [routerLink]="[item.id, 'branch']" title="View Branch">
                                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                             </a>
 
-                                            <a href="javascript:void(0)" class="btn btn-default" (click)="deleteBank(item.id)" title="Delete Bank">
+                                            <a *ngIf="listMaster['permission'].delete" href="javascript:void(0)" class="btn btn-default" (click)="deleteBank(item.id)" title="Delete Bank">
                                                 <i class="fa fa-trash" aria-hidden="true"></i>
                                             </a>
+                                            <a *ngIf="!listMaster['permission'].view && !listMaster['permission'].edit && !listMaster['permission'].delete" href="javascript:void(0)"></a>
                                         </td>
                                     </tr>
                                 </tbody>
