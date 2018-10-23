@@ -2,15 +2,16 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnIni
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
-import { ReturnReasonKeyService} from './keys.control';
+import { ReturnReasonCreateKeyService} from './create-keys.control';
 import { ReturnReasonService } from './return-reason.service';
 
 @Component({
     selector: 'app-reason-create',
     templateUrl: './return-reason-create.component.html',
-    providers: [ReturnReasonService, ReturnReasonKeyService],
+    providers: [ReturnReasonService, ReturnReasonCreateKeyService],
     styleUrls: ['./return-reason-create.component.scss'],
     animations: [routerTransition()],
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -24,7 +25,8 @@ export class ReturnReasonCreateComponent implements OnInit {
         public route: ActivatedRoute,
         public fb: FormBuilder,
         public toastr: ToastrService,
-        public keyService: ReturnReasonKeyService,
+        private _hotkeysService: HotkeysService,
+        public keyService: ReturnReasonCreateKeyService,
         private returnReasonService: ReturnReasonService) {
         this.generalForm = fb.group({
             'id': [null],
@@ -33,7 +35,7 @@ export class ReturnReasonCreateComponent implements OnInit {
             'exclude_rr_calc': [0],
             'sts': ['AT', Validators.required]
         });
-        this.keyService.watchContext.next(this);
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {

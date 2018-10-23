@@ -5,13 +5,14 @@
     </button>
 </div>
 <div class="modal-body search-block">
-    <ngb-tabset class="tab-header" type="pills">
-        <ngb-tab id="editor" title="Email Editor">
+    <app-shortcut [listShortcut]="data['shortcut']"></app-shortcut>
+    <ngb-tabset #tabSet class="tab-header" type="pills">
+        <ngb-tab id='edit' title="Email Editor">
             <ng-template ngbTabContent>
                 <app-tab-email-editor [template]="emailTemplate" [tags]="fieldTags" (emailTemplateChange)="getEmailTemplate($event)"></app-tab-email-editor>
             </ng-template>
         </ngb-tab>
-        <ngb-tab id="preview" title="Email Preview">
+        <ngb-tab id='preview' title="Email Preview">
             <ng-template ngbTabContent>
                 <app-tab-email-preview [template]="emailTemplateForDisplay" [tags]="fieldTags"></app-tab-email-preview>
             </ng-template>

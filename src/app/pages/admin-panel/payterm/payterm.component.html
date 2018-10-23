@@ -8,7 +8,8 @@
                     <form class="row form-horizontal form-search filter-order-group" role="form" [formGroup]="searchForm">
                         <div class="col-md-6 block-search">
                             <label for="name" class="control-label">Description</label>
-                            <input type="text" name="des" formControlName="des" class="form-control" id="name" placeholder="">
+                            <input [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="des"
+                            type="text" name="des" formControlName="des" class="form-control" id="name" placeholder="">
                         </div>
                         <div class="col-md-6 block-search">
                             <label for="code" class="control-label">Status</label>
@@ -70,7 +71,7 @@
                                         <td>{{item.full_name}}</td>
                                         <td>{{item.update_dt}}</td>
                                         <td>
-                                            <a *ngIf="!item.is_sys" class="btn btn-default" (click)="editPayment(item.id)" title="Edit Payment Term">
+                                            <a href="javascript:void(0)" *ngIf="!item.is_sys" class="btn btn-default" (click)="editPayment(item.id)" title="Edit Payment Term">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
                                             <!-- <a class="btn btn-default" (click)="deletePayment(item.id)" title="Delete Payment Term">
