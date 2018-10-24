@@ -25,11 +25,11 @@
                     </div>
                     <div class="block-search">
                         <label for="contract_no" class="control-label">Customer</label>
-                        <ng-select class="infinity-scroll-select"  [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 100px; margin-left: 2px;" [items]="listMaster['customer']" bindLabel="name" bindValue="id" formControlName="company_id">
-                           <ng-template ng-option-tmp let-item="item">
-                               <span  [innerHTML]="item.company_name"></span>
-                           </ng-template>
-                       </ng-select>
+                        <ng-select class="infinity-scroll-select" [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 100px; margin-left: 2px;" [items]="listMaster['customer']" bindLabel="name" bindValue="id" formControlName="company_id">
+                            <ng-template ng-option-tmp let-item="item">
+                                <span [innerHTML]="item.company_name"></span>
+                            </ng-template>
+                        </ng-select>
                     </div>
                     <div class="block-search">
                         <label for="warehouse_id" class="control-label">Warehouse</label>
@@ -116,7 +116,16 @@
                                         <td>{{item['return_type']}}</td>
                                         <td>{{item['company_name']}}</td>
                                         <td>{{item['request_date'] |date:'MM/dd/yyyy'}}</td>
-                                        <td><span *ngIf="item['sts_name']">{{item['sts_name']['name']}}</span></td>
+                                        <td>
+                                            <ng-container *ngIf="item['sts_name']">
+                                                <span *ngIf="item['sts_name']['cd'] == 'NW'" class="label blue">{{item['sts_name']['name']}}</span>
+                                                <span *ngIf="item['sts_name']['cd'] == 'AR'" class="label rock-blue">{{item['sts_name']['name']}}</span>
+                                                <span *ngIf="item['sts_name']['cd'] == 'IR'" class="label green">{{item['sts_name']['name']}}</span>
+                                                <span *ngIf="item['sts_name']['cd'] == 'RC'" class="label darkblue">{{item['sts_name']['name']}}</span>
+                                                <span *ngIf="item['sts_name']['cd'] == 'CP'" class="label lemon">{{item['sts_name']['name']}}</span>
+                                                <span *ngIf="item['sts_name']['cd'] == 'CC'" class="label red">{{item['sts_name']['name']}}</span>
+                                            </ng-container>
+                                        </td>
                                         <td><a class="text-primary" [routerLink]="['/order-management/sale-order/detail', item['order_id']]">{{item['order_code']}}</a></td>
                                         <td>{{item['warehouse_name']}}</td>
                                         <td class="text-center">{{item['total_return_qty']}}</td>
