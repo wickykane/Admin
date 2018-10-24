@@ -23,12 +23,10 @@ export class AdminPanelComponent implements OnInit {
         ) {}
 
     ngOnInit(): void {
-      console.log(this.storage);
-      this.routePermission = { ...ROUTE_PERMISSION['menu'] };
-      const userPermission = this.storage.getValue('permission');
-      Object.keys(this.routePermission).forEach(item => {
-          this.routePermission[item] = (userPermission.indexOf(item) !== -1) ? true : false;
-      });
+    }
+
+    routePerm = (route) => {
+        return (this.storage.getRoutePermission(route) || {}).list;
     }
 
 

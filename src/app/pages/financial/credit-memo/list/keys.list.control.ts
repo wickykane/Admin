@@ -18,11 +18,13 @@ export class CreditMemoListKeyService extends KeyboardBaseService {
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Focus Search'));
 
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+n', (event: KeyboardEvent): boolean => {
+        if (this.context.listMaster['permission'].create) {
+          this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+n', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             this.context.addNewCreditMemo();
             return;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Create Debit Memo'));
+          }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Create Debit Memo'));
+        }
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+e', (event: KeyboardEvent): boolean => {
             event.preventDefault();
@@ -36,13 +38,15 @@ export class CreditMemoListKeyService extends KeyboardBaseService {
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset'));
 
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent): boolean => {
+        if (this.context.listMaster['permission'].view) {
+          this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             if (this.context.list.items.length) {
-                this.context.viewCredit(this.context.list.items[this.context.selectedIndex]['id']);
+              this.context.viewCredit(this.context.list.items[this.context.selectedIndex]['id']);
             }
             return;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'View'));
+          }, ['INPUT', 'SELECT', 'TEXTAREA'], 'View'));
+        }
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+pageup', (event: KeyboardEvent): boolean => {
             this.context.tableService.pagination.page--;

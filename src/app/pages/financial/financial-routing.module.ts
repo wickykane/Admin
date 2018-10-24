@@ -23,42 +23,44 @@ import {ReceiptVoucherEditComponent} from './receipt-voucher/edit/receipt-vouche
 import {ReceiptVoucherComponent} from './receipt-voucher/receipt-voucher.component';
 import {ReceiptVoucherDetailComponent} from './receipt-voucher/view/receipt-voucher.view.component';
 
+import { MasterGuard } from '../../shared';
+
 const routes: Routes = [
     {
         path: 'invoice',
         children: [
-            { path: '', component: InvoiceComponent },
-            { path: 'create', component: InvoiceCreateComponent },
-            { path: 'view/:id', component: InvoiceDetailComponent },
-            { path: 'edit/:id', component: InvoiceEditComponent }
+            { path: '', component: InvoiceComponent, canActivate: [MasterGuard] },
+            { path: 'create', component: InvoiceCreateComponent, canActivate: [MasterGuard] },
+            { path: 'view/:id', component: InvoiceDetailComponent, canActivate: [MasterGuard] },
+            { path: 'edit/:id', component: InvoiceEditComponent, canActivate: [MasterGuard] },
         ]
     },
     {
         path: 'receipt-voucher',
         children: [
-            { path: '', component: ReceiptVoucherComponent },
-            { path: 'create', component: ReceiptVoucherCreateComponent },
-            { path: 'view/:id', component: ReceiptVoucherDetailComponent },
-            { path: 'edit/:id', component: ReceiptVoucherEditComponent }
+            { path: '', component: ReceiptVoucherComponent, canActivate: [MasterGuard] },
+            { path: 'create', component: ReceiptVoucherCreateComponent, canActivate: [MasterGuard] },
+            { path: 'view/:id', component: ReceiptVoucherDetailComponent, canActivate: [MasterGuard] },
+            { path: 'edit/:id', component: ReceiptVoucherEditComponent, canActivate: [MasterGuard] },
         ]
     },
     {
         path: 'credit-memo',
         children: [
-            { path: '', component: CreditMemoListComponent },
-            { path: 'create', component: CreditMemoCreateComponent },
-            { path: 'edit/:id', component: CreditMemoEditComponent },
-            { path: 'view/:id', component: CreditMemoDetailComponent },
-            { path: 'apply-credit/:id', component: CreditMemoApplyComponent}
+            { path: '', component: CreditMemoListComponent, canActivate: [MasterGuard] },
+            { path: 'create', component: CreditMemoCreateComponent, canActivate: [MasterGuard] },
+            { path: 'edit/:id', component: CreditMemoEditComponent, canActivate: [MasterGuard] },
+            { path: 'view/:id', component: CreditMemoDetailComponent, canActivate: [MasterGuard] },
+            { path: 'apply-credit/:id', component: CreditMemoApplyComponent, canActivate: [MasterGuard] },
         ]
     },
     {
         path: 'debit-memo',
         children: [
-            { path: '', component: DebitMemoListComponent },
-            { path: 'create', component: DebitMemoCreateComponent },
-            { path: 'edit/:id', component: DebitMemoEditComponent },
-            { path: 'view/:id', component: DebitMemoViewComponent }
+            { path: '', component: DebitMemoListComponent, canActivate: [MasterGuard] },
+            { path: 'create', component: DebitMemoCreateComponent, canActivate: [MasterGuard] },
+            { path: 'edit/:id', component: DebitMemoEditComponent, canActivate: [MasterGuard] },
+            { path: 'view/:id', component: DebitMemoViewComponent, canActivate: [MasterGuard] },
         ]
     }
 ];

@@ -9,6 +9,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../../../../environments/environment';
+import { StorageService } from '../../../../services/storage.service';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { MailModalComponent } from '../modals/mail.modal';
 import { PODModalComponent } from '../modals/POD/pod.modal';
@@ -54,6 +55,8 @@ export class InvoiceInformationTabComponent implements OnInit {
         'items': [],
     };
 
+    public listMaster = {};
+
 
     constructor(
         public toastr: ToastrService,
@@ -65,6 +68,7 @@ export class InvoiceInformationTabComponent implements OnInit {
         private _hotkeysService: HotkeysService,
         public keyService: InvoiceDetailKeyService,
         private financialService: FinancialService,
+        private storage: StorageService,
         @Inject(InvoiceDetailComponent) private parent: InvoiceDetailComponent,
         public tableService: TableService) {
             //  Init Key
@@ -81,6 +85,7 @@ export class InvoiceInformationTabComponent implements OnInit {
         };
         this.changeShortcut();
         this.invoice_info['taxs'] = [];
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
     }
 
     /**

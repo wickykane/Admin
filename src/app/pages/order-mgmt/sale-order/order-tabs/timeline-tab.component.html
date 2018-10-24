@@ -7,13 +7,13 @@
             <div class="timeline-badge primary"></div>
             <div class="timeline-panel">
               <div class="timeline-heading">
-                <h4 class="timeline-title"><i class="fa fa-calendar"></i> {{item.log_date}}</h4>
+                <h4 class="timeline-title"><i class="fa fa-calendar"></i> {{item.log_date|date:'MM/dd/yyyy'}}</h4>
               </div>
               <ul>
                 <li class="timeline-body" *ngFor="let it of item.log_data">
                   <p>
                     <span class="text-left">{{it.log_user_name}}</span>
-                    <span class="text-right" style="padding-left:50px;"><small class="text-muted">{{it.log_date}}</small></span>
+                    <span class="text-right" style="padding-left:50px;"><small class="text-muted">{{it.log_date|date:'MM/dd/yyyy hh:mm:ss'}}</small></span>
                   </p>
                   <p>{{it.log_content}}</p>
                 </li>

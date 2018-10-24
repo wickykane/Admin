@@ -76,8 +76,9 @@ export class MasterGuard implements CanActivate {
 
         const permission = this.storage.getValue('permission');
         const routePermission = this.storage.getPermission(state.url);
-        const currentPageType = this.checkPermission(state.url);
-        if (currentPageType && routePermission) {
+        const currentPageType = this.checkPermission(state.url) || 'list';
+
+        if (currentPageType && Object.keys(routePermission).length !== 0) {
             if (permission.indexOf(routePermission[currentPageType]) === -1) {
                 this.router.navigate(['/deny']);
                 return false;

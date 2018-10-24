@@ -76,7 +76,7 @@
                 <div class="card no-border">
                     <div class="card-header">
                         <strong>Line Items</strong>
-                        <button (click)="addNewCreditMemo()" style="margin:0; float:right" class="btn btn-link"> <i class="fa fa-plus text-success"></i>
+                        <button *ngIf="listMaster['permission'].create" (click)="addNewCreditMemo()" style="margin:0; float:right" class="btn btn-link"> <i class="fa fa-plus text-success"></i>
                             Create Credit Memo</button>
                     </div>
                     <div class="card-body no-padding">
@@ -108,7 +108,7 @@
                                             </a> -->
                                         </td>
                                         <td>
-                                            <a class="text-primary" [routerLink]="['view', item.id]">{{item.cd}}</a>
+                                            <a *ngIf="listMaster['permission'].view" class="text-primary" [routerLink]="['view', item.id]">{{item.cd}}</a>
                                         </td>
                                         <td class="text-center">{{item.issue_date | date:'MM/dd/yyyy' }}</td>
                                         <td>{{item.customer_name}}</td>
@@ -132,31 +132,31 @@
                                         <td class="text-center">{{item.updated_at | date:'MM/dd/yyyy' }}</td>
                                         <td class="text-center">{{item.updated_by}}</td>
                                         <td>
-                                            <a href="javascript: void(0)" class="btn btn-default " ngbTooltip="View" (click)="viewCredit(item.id)">
+                                            <a *ngIf="listMaster['permission'].view" href="javascript: void(0)" class="btn btn-default " ngbTooltip="View" (click)="viewCredit(item.id)">
                                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                             </a>
-                                            <a href="javascript: void(0)" class="btn btn-default " ngbTooltip="Edit" (click)="editCredit(item.id)" *ngIf="item.sts_code == 'NW'">
+                                            <a href="javascript: void(0)" class="btn btn-default " ngbTooltip="Edit" (click)="editCredit(item.id)" *ngIf="(item.sts_code == 'NW') && listMaster['permission'].edit">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
-                                            <a href="javascript: void(0)" ngbTooltip="Submit" *ngIf="item.sts_code == 'NW'" class="btn btn-default" (click)="confirmModal(item.id, 2)"><i
+                                            <a href="javascript: void(0)" ngbTooltip="Submit" *ngIf="(item.sts_code == 'NW') && listMaster['permission'].submit" class="btn btn-default" (click)="confirmModal(item.id, 2)"><i
                                                     class="fa fa-caret-square-o-right" aria-hidden="true"></i></a>
-                                            <a href="javascript: void(0)" class="btn btn-default" ngbTooltip="Cancel" (click)="confirmModal(item.id, 5)" *ngIf="item.sts_code == 'NW'">
+                                            <a href="javascript: void(0)" class="btn btn-default" ngbTooltip="Cancel" (click)="confirmModal(item.id, 5)" *ngIf="(item.sts_code == 'NW') && listMaster['permission'].cancel">
                                                 <i class="fa fa-ban" aria-hidden="true"></i>
                                             </a>
-                                            <a href="javascript: void(0)" ngbTooltip="Approve" *ngIf="item['sts_code'] == 'SB'" class="btn btn-default" (click)="confirmModal(item.id, 3)"><i
+                                            <a href="javascript: void(0)" ngbTooltip="Approve" *ngIf="(item['sts_code'] == 'SB') && listMaster['permission'].approve" class="btn btn-default" (click)="confirmModal(item.id, 3)"><i
                                                     class="fa fa-check"></i></a>
-                                            <a href="javascript: void(0)" ngbTooltip="Reject" *ngIf="item['sts_code'] == 'SB'" class="btn btn-default" (click)="confirmModal(item.id, 4)"><i
+                                            <a href="javascript: void(0)" ngbTooltip="Reject" *ngIf="(item['sts_code'] == 'SB') && listMaster['permission'].reject" class="btn btn-default" (click)="confirmModal(item.id, 4)"><i
                                                     class="fa fa-ban" aria-hidden="true"></i></a>
-                                            <a href="javascript: void(0)" ngbTooltip="Pay" *ngIf="['SB','AP','RD'].indexOf(item['sts_code']) != -1" class="btn btn-default"><i
+                                            <a href="javascript: void(0)" ngbTooltip="Pay" *ngIf="(['SB','AP','RD'].indexOf(item['sts_code']) != -1) && listMaster['permission'].pay" class="btn btn-default"><i
                                                     class="fa fa-money" aria-hidden="true"></i></a>
-                                            <a href="javascript: void(0)" class="btn btn-default" ngbTooltip="Print" (click)="printPDF(item.id)">
+                                            <a *ngIf="listMaster['permission'].print" href="javascript: void(0)" class="btn btn-default" ngbTooltip="Print" (click)="printPDF(item.id)">
                                                 <i class="fa fa-download" aria-hidden="true"></i>
                                             </a>
-                                            <a href="javascript: void(0)" ngbTooltip="Re Open" *ngIf="item['sts_code'] == 'RJ'" class="btn btn-default" (click)="confirmModal(item.id, 'RE-OPEN')"><i
+                                            <a href="javascript: void(0)" ngbTooltip="Re Open" *ngIf="(item['sts_code'] == 'RJ') && listMaster['permission'].reopen" class="btn btn-default" (click)="confirmModal(item.id, 'RE-OPEN')"><i
                                                     class="fa fa-clone" aria-hidden="true"></i></a>
-                                            <a href="javascript: void(0)" ngbTooltip="Send Mail" *ngIf="['SB','AP','RJ','CC','RD','RF'].indexOf(item['sts_code']) != -1" class="btn btn-default" (click)="sendMail(item.id)"><i class="fa fa-envelope-o"
+                                            <a href="javascript: void(0)" ngbTooltip="Send Mail" *ngIf="(['SB','AP','RJ','CC','RD','RF'].indexOf(item['sts_code']) != -1) && listMaster['permission'].mail" class="btn btn-default" (click)="sendMail(item.id)"><i class="fa fa-envelope-o"
                                                     aria-hidden="true"></i></a>
-                                            <a href="javascript: void(0)" ngbTooltip="Apply to Invoice" *ngIf="['AP','RD'].indexOf(item['sts_code']) != -1" class="btn btn-default" [routerLink]="['apply-credit', item.id]"><i
+                                            <a href="javascript: void(0)" ngbTooltip="Apply to Invoice" *ngIf="(['AP','RD'].indexOf(item['sts_code']) != -1) && listMaster['permission'].apply" class="btn btn-default" [routerLink]="['apply-credit', item.id]"><i
                                                     class="fa fa-clipboard" aria-hidden="true"></i></a>
                                         </td>
                                     </tr>

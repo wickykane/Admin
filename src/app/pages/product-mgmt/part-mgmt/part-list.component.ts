@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbTab } from '@ng-bootstrap/ng-bootstrap';
 import { HotkeysService } from 'angular2-hotkeys';
 import * as  _ from 'lodash';
+import { StorageService } from '../../../services/storage.service';
 import { cdArrowTable } from '../../../shared';
 import { ProductService } from '../product-mgmt.service';
 import { TableService } from './../../../services/table.service';
@@ -46,6 +47,7 @@ export class PartListComponent implements OnInit {
         private productService: ProductService,
         private cd: ChangeDetectorRef,
         public _hotkeysService: HotkeysService,
+        private storage: StorageService
     ) {
         this.searchForm = fb.group({
             cd: [null],
@@ -80,6 +82,7 @@ export class PartListComponent implements OnInit {
 
     ngOnInit() {
         this.getListReference();
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
     }
     /**
      * Master Data

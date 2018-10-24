@@ -5,6 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
 import { CommonService } from '../../../../services/common.service';
+import { StorageService } from '../../../../services/storage.service';
 import { cdArrowTable } from '../../../../shared/index';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { MiscellaneousItemsKeyService } from '../keys.control';
@@ -53,7 +54,8 @@ export class MiscellaneousItemsComponent implements OnInit {
         private commonService: CommonService,
         private productService: ProductService,
         private modalService: NgbModal,
-        private cd: ChangeDetectorRef
+        private cd: ChangeDetectorRef,
+        private storage: StorageService
     ) {
 
         this.searchForm = fb.group({
@@ -77,6 +79,7 @@ export class MiscellaneousItemsComponent implements OnInit {
         // this.getListMaster();
 
         this.user = JSON.parse(localStorage.getItem('currentUser'));
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
     }
 
     refresh() {
