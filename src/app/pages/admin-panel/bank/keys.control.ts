@@ -52,7 +52,7 @@ export class BankKeyService extends KeyboardBaseService {
                 event.preventDefault();
                 const item = this.context.list.items[this.context.selectedIndex];
                 if (item) {
-                    this.context.router.navigate([`/admin-panel/bank/${item.id}/branch`]);
+                    this.context.router.navigate([`/admin-panel/bank/view/${item.id}`]);
                 }
                 return;
             }, ['INPUT', 'SELECT', 'TEXTAREA'], 'View'));

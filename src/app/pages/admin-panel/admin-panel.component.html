@@ -15,7 +15,7 @@
                 <!-- <li><a [routerLink]="['/admin-panel/discount']">Discount & Return Rate Setup </a></li> -->
                 <li *ngIf="routePermission['sel2bViewMenuLateFeePolicy']"><a [routerLink]="['/admin-panel/late-fee-policy']">Late Fee Policy </a></li>
                 <!-- <li><a [routerLink]="['/admin-panel/epi-policy']">Early Payment Incentive Policy </a></li> -->
-                <li *ngIf="routePermission['sel2bViewMenuInvoiceChasingConfiguration']"><a [routerLink]="['/admin-panel/invoice-config']">Invoice Chasing Configuration</a></li>
+                <li *ngIf="routePermission['sel2bViewMenuInvoiceChasingConfiguration']"><a [routerLink]="['/admin-panel/chasing-config/edit']">Invoice Chasing Configuration</a></li>
                 <li *ngIf="routePermission['sel2bViewMenuGeneralLedgerAccountSetup']"><a [routerLink]="['/admin-panel/ledger']">General Ledger - Account Setup</a></li>
                 <li *ngIf="routePermission['sel2bViewMenuPaymentMethod']"><a [routerLink]="['/admin-panel/payment-methods']">Payment Methods</a></li>
                 <!-- <li><a [routerLink]="['/admin-panel/tax-types']">Tax Types</a></li> -->

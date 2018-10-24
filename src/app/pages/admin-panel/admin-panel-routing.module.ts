@@ -72,8 +72,8 @@ const routes: Routes = [
     {
         path: 'bank',
         children: [
-            { path: ':id/branch', canActivate: [MasterGuard], component: BranchComponent },
-            { path: '', component: BankComponent}
+            { path: '', component: BankComponent},
+            { path: 'view/:id', canActivate: [MasterGuard], component: BranchComponent }
         ],
     },
     {
@@ -207,9 +207,10 @@ const routes: Routes = [
         component: EPIPolicyDetailComponent
     },
     {
-        path: 'invoice-config',
-        canActivate: [MasterGuard],
-        component: InvoiceConfigComponent
+        path: 'chasing-config',
+        children: [
+            { path: 'edit', canActivate: [MasterGuard], component: InvoiceConfigComponent }
+        ],
     },
     {
         path: 'ledger',

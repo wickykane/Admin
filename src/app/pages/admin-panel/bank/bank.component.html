@@ -78,7 +78,7 @@
                                             <a *ngIf="listMaster['permission'].edit" href="javascript:void(0)" class="btn btn-default " (click)="addBranch(item)" title="Add Branch">
                                                 <i class="fa fa-plus-circle" aria-hidden="true"></i>
                                             </a>
-                                            <a *ngIf="listMaster['permission'].view" href="javascript:void(0)" class="btn btn-default" [routerLink]="[item.id, 'branch']" title="View Branch">
+                                            <a *ngIf="listMaster['permission'].view" href="javascript:void(0)" class="btn btn-default" [routerLink]="['view', item.id]" title="View Branch">
                                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                             </a>
 
