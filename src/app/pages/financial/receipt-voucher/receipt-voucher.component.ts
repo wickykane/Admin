@@ -283,6 +283,7 @@ export class ReceiptVoucherComponent implements OnInit {
     }
     selectTable() {
         this.selectedIndex = 0;
-        this.table.element.nativeElement.querySelector('td a').focus(); this.refresh();
+        this.table.element.nativeElement.querySelector('td a').focus();
+        this.refresh();
     }
 }
