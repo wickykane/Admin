@@ -371,26 +371,28 @@ export class InvoiceCreateComponent implements OnInit {
     }
 
     getOrderDetail(id) {
-        this.orderService.getOrderDetail(id).subscribe(res => {
+        if (id) {
+            this.orderService.getOrderDetail(id).subscribe(res => {
 
-            const event = res.data;
-            this.list.items = event.items.map(item => {
-                item.qty_inv = item.qty_remain;
-                item.qty = item.qty_remain;
-                item.price = item.sale_price;
-                return item;
+                const event = res.data;
+                this.list.items = event.items.map(item => {
+                    item.qty_inv = item.qty_remain;
+                    item.qty = item.qty_remain;
+                    item.price = item.sale_price;
+                    return item;
+                });
+
+                this.data['order_detail'] = { ...event, sales_person: event.sale_person_id, sale_person_name: event.sale_person_name, ship_rate: event.ship_method_rate };
+                this.data['shipping_address'] = event.shipping_address;
+                this.data['shipping_method'] = event.shipping_method;
+
+                this.generalForm.patchValue({
+                    ...this.data['order_detail'], inv_dt: this.generalForm.value.inv_dt,
+                });
+                this.selectAddress('billing');
+                this.updateTotal();
             });
-
-            this.data['order_detail'] = { ...event, sales_person: event.sale_person_id, sale_person_name: event.sale_person_name, ship_rate: event.ship_method_rate };
-            this.data['shipping_address'] = event.shipping_address;
-            this.data['shipping_method'] = event.shipping_method;
-
-            this.generalForm.patchValue({
-                ...this.data['order_detail'], inv_dt: this.generalForm.value.inv_dt,
-            });
-            this.selectAddress('billing');
-            this.updateTotal();
-        });
+        }
     }
     changeCustomer(flag?) {
         const company_id = this.generalForm.value.company_id;
@@ -418,9 +420,7 @@ export class InvoiceCreateComponent implements OnInit {
                     break;
                 case 'billing':
                     const billing_id = this.generalForm.value.billing_id;
-                    if (billing_id) {
-                        this.addr_select.billing = this.findDataById(billing_id, this.customer.billing);
-                    }
+                    this.addr_select.billing = (billing_id) ? this.findDataById(billing_id, this.customer.billing) : {};
                     break;
             }
             this.refresh();

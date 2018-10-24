@@ -16,8 +16,7 @@
                 <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
                     <div class="block-search">
                         <label for="sale_quote_num" class="control-label">DR No</label>
-                        <input #drNo [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="code"
-                        autofocus="true" type="text" name="inv_num" formControlName="no" class="form-control" placeholder="">
+                        <input #drNo [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="code" autofocus="true" type="text" name="inv_num" formControlName="no" class="form-control" placeholder="">
                     </div>
                     <div class="block-search">
                         <label for="buyer_name" class="control-label" translate>Customer</label>
@@ -169,34 +168,34 @@
                                         <td class="text-center">{{debit.updated_at | date:'MM/dd/yyyy'}}</td>
                                         <td>{{debit.updated_by}}</td>
                                         <td class="text-left">
-                                            <a class="btn btn-default " *ngIf="debit.sts === 1" ngbTooltip="Edit" (click)="onEditDebitMemo(debit.id)">
+                                            <a href="javascript:void(0)" class="btn btn-default " *ngIf="debit.sts === 1" ngbTooltip="Edit" (click)="onEditDebitMemo(debit.id)">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default " *ngIf="debit.sts === 1" ngbTooltip="Submit" (click)="onChangeDebitStatus(debit.id, 2)">
+                                            <a href="javascript:void(0)" class="btn btn-default " *ngIf="debit.sts === 1" ngbTooltip="Submit" (click)="onChangeDebitStatus(debit.id, 2)">
                                                 <i class="fa fa-caret-square-o-right" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default " *ngIf="debit.sts === 2 && (currentuser['id'] == debit.approver_id)" ngbTooltip="Approve" (click)="onChangeDebitStatus(debit.id, 3)">
+                                            <a href="javascript:void(0)" class="btn btn-default " *ngIf="debit.sts === 2 && (currentuser['id'] == debit.approver_id)" ngbTooltip="Approve" (click)="onChangeDebitStatus(debit.id, 3)">
                                                 <i class="fa fa-check" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default " *ngIf="debit.sts === 2 && (currentuser['id'] == debit.approver_id)" ngbTooltip="Reject" (click)="onChangeDebitStatus(debit.id, 4)">
+                                            <a href="javascript:void(0)" class="btn btn-default " *ngIf="debit.sts === 2 && (currentuser['id'] == debit.approver_id)" ngbTooltip="Reject" (click)="onChangeDebitStatus(debit.id, 4)">
                                                 <i class="fa fa-ban" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default " ngbTooltip="View" (click)="onViewDebitMemo(debit.id)">
+                                            <a href="javascript:void(0)" class="btn btn-default " ngbTooltip="View" (click)="onViewDebitMemo(debit.id)">
                                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default" ngbTooltip="Print" (click)="onPrintDebitMemo(debit.id, debit.no)">
+                                            <a href="javascript:void(0)" class="btn btn-default" ngbTooltip="Print" (click)="onPrintDebitMemo(debit.id, debit.no)">
                                                 <i class="fa fa-download" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default" *ngIf="debit.sts === 1" ngbTooltip="Cancel" (click)="onChangeDebitStatus(debit.id, 5)">
+                                            <a href="javascript:void(0)" class="btn btn-default" *ngIf="debit.sts === 1" ngbTooltip="Cancel" (click)="onChangeDebitStatus(debit.id, 5)">
                                                 <i class="fa fa-times-circle" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default" *ngIf="debit.sts === 4" ngbTooltip="Reopen" (click)="onChangeDebitStatus(debit.id, 1)">
+                                            <a href="javascript:void(0)" class="btn btn-default" *ngIf="debit.sts === 4" ngbTooltip="Reopen" (click)="onChangeDebitStatus(debit.id, 1)">
                                                 <i class="fa fa-clone" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default" *ngIf="debit.sts === 3 || debit.sts === 8" ngbTooltip="Receive Payment" (click)="onReceivePaymentDebitMemo()">
+                                            <a href="javascript:void(0)" class="btn btn-default" *ngIf="debit.sts === 3 || debit.sts === 8" ngbTooltip="Receive Payment" (click)="onReceivePaymentDebitMemo()">
                                                 <i class="fa fa-money" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default" *ngIf="debit.sts != 1 && debit.sts != 4 && debit.sts != 5" ngbTooltip="Send Mail" (click)="onSendMail(debit.id)">
+                                            <a href="javascript:void(0)" class="btn btn-default" *ngIf="debit.sts != 1 && debit.sts != 4 && debit.sts != 5" ngbTooltip="Send Mail" (click)="onSendMail(debit.id)">
                                                 <i class="fa fa-envelope-o" aria-hidden="true"></i>
                                             </a>
                                         </td>

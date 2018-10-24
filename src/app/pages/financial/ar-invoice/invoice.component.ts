@@ -330,6 +330,7 @@ export class InvoiceComponent implements OnInit {
     selectTable() {
         this.selectedIndex = 0;
         this.table.element.nativeElement.querySelector('td a').focus();
+        this.refresh();
     }
 
     cancelInvoice(item?) {
