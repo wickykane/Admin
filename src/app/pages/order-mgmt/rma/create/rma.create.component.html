@@ -49,7 +49,7 @@
                                                 </label>
                                                 <div class='col-6 text-danger'>
                                                     <div clickOutside (clickOutside)="d1.close()" class="input-group">
-                                                        <input class="form-control" [maxDate]="currentDt | dateObj" placeholder="mm/dd/yyyy" name="request_date" formControlName="request_date" ngbDatepicker #d1="ngbDatepicker">
+                                                        <input readonly class="form-control" [maxDate]="currentDt | dateObj" placeholder="mm/dd/yyyy" name="request_date" formControlName="request_date" ngbDatepicker #d1="ngbDatepicker">
                                                         <div class="input-group-append">
                                                             <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
                                                                 <i class="fa fa-calendar" aria-hidden="true"></i>
