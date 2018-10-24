@@ -1,6 +1,6 @@
 <div [@routerTransition]>
-    <app-page-header [heading]="'CREATE NEW PAYMENT TERM'" [icon]="'fa-th-list'"></app-page-header>
-    <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
+    <app-page-header [heading]="((isEdit)? 'EDIT': 'CREATE NEW ') + ' PAYMENT TERM'" [icon]="'fa-th-list'"></app-page-header>
+    <!-- <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut> -->
     <section class="rma-page block">
         <div class="bd-example text-right mg-t-15">
             <button [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="back_button"
@@ -70,7 +70,7 @@
                             </label>
                             <!-- <input type="text" name="" class="form-control" formControlName="dsct_value" [textMask]="{mask: numberMaskObjectDecimal()}" [readonly]="isEdit" > -->
                             <div class="input-group">
-                                <input type="text" name="" class="form-control" formControlName="dsct_value" [textMask]="{mask: numberMaskObjectDecimal()}" [readonly]="isEdit">
+                                <input type="text" name="" class="form-control" formControlName="dsct_value" [isDecimal]="true" numberDirective [min]="0" [max]="(generalForm.value.dsct_type == 1)? 100: undefined" [readonly]="isEdit">
                                 <div class="input-group-append">
                                     <span class="input-group-text" *ngIf="this.generalForm.get('dsct_type').value == 1">%</span>
                                     <span class="input-group-text" *ngIf="this.generalForm.get('dsct_type').value == 2">$</span>

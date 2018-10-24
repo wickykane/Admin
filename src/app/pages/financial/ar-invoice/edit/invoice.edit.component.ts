@@ -296,12 +296,12 @@ export class InvoiceEditComponent implements OnInit {
         this.financialService.getOrderByCustomerId(params).subscribe(res => {
             try {
                 this.listMaster['sales_order'] = res.data;
-                if (flag) {
-                    const order = this.listMaster['sales_order'].find(item => +item.order.id === this.generalForm.value.order_id);
-                    if (order) {
-                        this.changeSalesOrder(order, flag);
-                    }
-                }
+                // if (flag) {
+                //     const order = this.listMaster['sales_order'].find(item => +item.id === this.generalForm.value.order_id);
+                //     if (order) {
+                //         this.changeSalesOrder(order, flag);
+                //     }
+                // }
                 this.refresh();
             } catch (e) {
                 console.log(e);
@@ -427,38 +427,36 @@ export class InvoiceEditComponent implements OnInit {
     }
 
     getOrderDetail(id, flag?) {
-        this.orderService.getOrderDetail(id).subscribe(res => {
-            const event = res.data;
+        if (id) {
+            this.orderService.getOrderDetail(id).subscribe(res => {
+                const event = res.data;
 
-            if (!flag) {
-                this.list.items = event.items.map(item => {
-                    item.qty_inv = item.qty_remain;
-                    item.qty = item.qty_remain;
-                    item.price = item.sale_price;
-                    return item;
-                });
-                this.refresh();
-            }
+                if (!flag) {
+                    this.list.items = event.items.map(item => {
+                        item.qty_inv = item.qty_remain;
+                        item.qty = item.qty_remain;
+                        item.price = item.sale_price;
+                        return item;
+                    });
+                    this.refresh();
+                }
 
-            this.data['order_detail'] = { ...event, sales_person: event.sale_person_id, sale_person_name: event.sale_person_name, ship_rate: event.ship_method_rate };
-            this.data['shipping_address'] = event.shipping_address;
-            this.data['shipping_method'] = event.shipping_method;
+                this.data['order_detail'] = { ...event, sales_person: event.sale_person_id, sale_person_name: event.sale_person_name, ship_rate: event.ship_method_rate };
+                this.data['shipping_address'] = event.shipping_address;
+                this.data['shipping_method'] = event.shipping_method;
 
-            if (!flag) {
-                this.generalForm.patchValue({
-                    ...this.data['order_detail'], inv_dt: this.generalForm.value.inv_dt,
-                });
-            } else {
-                this.generalForm.patchValue({
-                    approver_id: event.order.aprvr_id,
-                    sales_person: event.order.sale_person_id,
-                });
-            }
+                if (!flag) {
+                    this.generalForm.patchValue({
+                        ...this.data['order_detail'], inv_dt: this.generalForm.value.inv_dt,
+                    });
+                }
 
-            this.selectAddress('billing');
-            this.updateTotal();
+                this.selectAddress('billing');
+                this.updateTotal();
 
-        });
+            });
+        }
+
     }
 
 
@@ -488,9 +486,7 @@ export class InvoiceEditComponent implements OnInit {
                     break;
                 case 'billing':
                     const billing_id = this.generalForm.value.billing_id;
-                    if (billing_id) {
-                        this.addr_select.billing = this.findDataById(billing_id, this.customer.billing);
-                    }
+                    this.addr_select.billing = (billing_id) ? this.findDataById(billing_id, this.customer.billing) : {};
                     break;
             }
             this.refresh();
@@ -613,7 +609,6 @@ export class InvoiceEditComponent implements OnInit {
     createInvoice(type, is_draft?, is_continue?) {
         const items = this.list.items.map(item => {
             item.is_item = (item.misc_id) ? 0 : 1;
-            item.order_detail_id = item.id;
             return item;
         });
 

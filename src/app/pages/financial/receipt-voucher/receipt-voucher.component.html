@@ -145,19 +145,19 @@
                                         <td>{{item.updated_at|date:'MM/dd/yyyy'}}</td>
                                         <td>{{item.updated_by}}</td>
                                         <td>
-                                            <a *ngIf="listMaster['permission'].view" class="btn btn-default" ngbTooltip="View" (click)="viewReceipt(item.id)">
+                                            <a  href="javascript:void(0)" class="btn btn-default" ngbTooltip="View" (click)="viewReceipt(item.id)">
                                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default " ngbTooltip="Edit" (click)="editReceipt(item.id)" *ngIf="(item.sts_code == 'NW' || item.sts_code == 'ER') && listMaster['permission'].edit">
+                                            <a  href="javascript:void(0)" class="btn btn-default " ngbTooltip="Edit" (click)="editReceipt(item.id)" *ngIf="item.sts_code == 'NW' || item.sts_code == 'ER'">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
-                                            <a ngbTooltip="Submit" *ngIf="(item.sts_code == 'NW' && item.electronic != 'Yes') && listMaster['permission'].submit" class="btn btn-default" (click)="confirmModal(item.id, 2)"><i class="fa fa-caret-square-o-right"
+                                            <a  href="javascript:void(0)" ngbTooltip="Submit" *ngIf="item.sts_code == 'NW' && item.electronic != 'Yes'" class="btn btn-default" (click)="confirmModal(item.id, 2)"><i class="fa fa-caret-square-o-right"
                                                     aria-hidden="true"></i></a>
-                                            <a class="btn btn-default" ngbTooltip="Cancel" (click)="confirmModal(item.id, 6)" *ngIf="(item.sts_code == 'NW') && listMaster['permission'].cancel">
+                                            <a  href="javascript:void(0)" class="btn btn-default" ngbTooltip="Cancel" (click)="confirmModal(item.id, 6)" *ngIf="item.sts_code == 'NW'">
                                                 <i class="fa fa-times-circle" aria-hidden="true"></i>
                                             </a>
-                                            <a ngbTooltip="Approve" *ngIf="(item.sts_code == 'SB' && item.electronic != 'Yes') && listMaster['permission'].approve" class="btn btn-default" (click)="confirmModal(item.id, 3)"><i class="fa fa-check"></i></a>
-                                            <a ngbTooltip="Reject" *ngIf="(item.sts_code == 'SB' && item.electronic != 'Yes') && listMaster['permission'].reject" class="btn btn-default" (click)="confirmModal(item.id, 4)"><i class="fa fa-ban" aria-hidden="true"></i></a>
+                                            <a  href="javascript:void(0)" ngbTooltip="Approve" *ngIf="item.sts_code == 'SB' && item.electronic != 'Yes'" class="btn btn-default" (click)="confirmModal(item.id, 3)"><i class="fa fa-check"></i></a>
+                                            <a  href="javascript:void(0)" ngbTooltip="Reject" *ngIf="item.sts_code == 'SB' && item.electronic != 'Yes'" class="btn btn-default" (click)="confirmModal(item.id, 4)"><i class="fa fa-ban" aria-hidden="true"></i></a>
                                             <!-- <a class="btn btn-default" ngbTooltip="Print" (click)="printPDF(item.id, item.inv_num)">
                                                 <i class="fa fa-download" aria-hidden="true"></i>
                                             </a> -->
