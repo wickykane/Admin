@@ -69,8 +69,13 @@
                         <div class="col-md-6 customer-infomation">
                               <div class="form-group row">
                                  <label class='col-6'>Status</label>
-                                 <div class='col-6 text-success'>
-                                    <strong>{{detail['sts_name']}}</strong>
+                                 <div class='col-6'>
+                                        <span *ngIf="detail['sts'] == 1" class="label blue">{{detail['sts_name']}}</span>
+                                        <span *ngIf="detail['sts'] == 5" class="label rock-blue">{{detail['sts_name']}}</span>
+                                        <span *ngIf="detail['sts'] == 6" class="label green">{{detail['sts_name']}}</span>
+                                        <span *ngIf="detail['sts'] == 7" class="label darkblue">{{detail['sts_name']}}</span>
+                                        <span *ngIf="detail['sts'] == 8" class="label lemon">{{detail['sts_name']}}</span>
+                                        <span *ngIf="detail['sts'] == 2" class="label red">{{detail['sts_name']}}</span>
                                  </div>
                               </div>
                               <div class="form-group row">
