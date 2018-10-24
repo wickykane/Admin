@@ -87,7 +87,7 @@
                     </ng-select> -->
                     <ng-select [items]="listMaster['parents']" formControlName="parent_id" bindLabel="des" bindValue="id">
                         <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
-                            <span [ngClass]="{'pl-3': item.level == 1, 'pl-5': item.level == 2}">{{ item.des }}</span>
+                            <span [ngClass]="{'pl-3': item.level == 1, 'pl-5': item.level == 2}">{{ item.cd }}-{{ item.des }}</span>
                         </ng-template>
                     </ng-select>
                 </div>
