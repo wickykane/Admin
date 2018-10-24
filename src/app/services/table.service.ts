@@ -105,6 +105,10 @@ export class TableService {
             form.reset();
         }
         this.pagination['page'] = 1;
+        // Quick Filter
+        if (this.context.listMaster && this.context.listMaster['filter']) {
+            this.context.listMaster['filter'] = {};
+        }
         return this.context[this.getListFnName]();
     }
 
