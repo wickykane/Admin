@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
 import { Form, FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -8,7 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ShippingZoneService } from '../shipping-zone.service';
 import { ShippingZoneCreateKeyService } from './keys.control';
 
-import { HotkeysService } from 'angular2-hotkeys';
+import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { routerTransition } from '../../../../router.animations';
 import { CommonService } from './../../../../services/common.service';
@@ -47,7 +47,11 @@ export class ShippingZoneCreateComponent implements OnInit {
     public countryFilter = '';
     public stateFilter = '';
     public listSelectCountry = [];
-    public selectedIndex = 0;
+    public selectedIndex = {
+        0: 0,
+        1: undefined
+    };
+    public data: any = {};
     public tempShippingList = [];
     public freeShippingList = {
         'free_shipping_item': 0,
@@ -115,8 +119,9 @@ export class ShippingZoneCreateComponent implements OnInit {
     public selectedCountry = null;
 
     public pickupStoreList = [];
-
+    public checkTable = false;
     @ViewChild(cdArrowTable) table: cdArrowTable;
+    @ViewChild('tableDiv') tableDiv: ElementRef;
     constructor(
         private cd: ChangeDetectorRef,
         public keyService: ShippingZoneCreateKeyService,
@@ -222,6 +227,7 @@ export class ShippingZoneCreateComponent implements OnInit {
     }
 
     openShippingModal(id) {
+        this.keyService.saveKeys();
         var modalRef: any;
         if (id == '1') {
             modalRef = this.modalService.open(FreeShippingOptionsModalComponent);
@@ -243,7 +249,7 @@ export class ShippingZoneCreateComponent implements OnInit {
             modalRef.componentInstance.id = id;
             modalRef.componentInstance.customRateList = this.customRateList;
         }
-        if (id ==='4') {
+        if (id =='4') {
             modalRef = this.modalService.open(PickupOptionsModalComponent, { size: 'lg' });
             modalRef.componentInstance.wareHouseList = this.listMasterData['warehouse'];
             modalRef.componentInstance.weekDaysList = this.listMasterData['day_of_week'];
@@ -269,6 +275,10 @@ export class ShippingZoneCreateComponent implements OnInit {
         }
         modalRef.componentInstance.isEdit = false;
         modalRef.result.then(res => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
             if (res['id']) {
                 if (res['id'] == '1') {
                     this.freeShippingList = res['data'];
@@ -289,8 +299,13 @@ export class ShippingZoneCreateComponent implements OnInit {
                     this.seflList = res['data'];
                 }
             }
-
-        });
+            this.refresh();
+        }, (reason) => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
+          });
     }
     save() {
 
@@ -453,6 +468,22 @@ export class ShippingZoneCreateComponent implements OnInit {
     }
     back() {
         this.router.navigate(['/admin-panel/shipping-zone']);
+    }
+    selectTable() {
+        this.selectedIndex[0] = 0;
+        this.selectedIndex[1] = undefined;
+        this.checkTable = false;
+        this.table.scrollToBottom();
+        // this.table.element.nativeElement.focus();
+        setTimeout(() => {
+            // this.table.element.nativeElement.focus();
+            if (!this.checkTable) {
+                if (this.table.element.nativeElement.querySelectorAll('.row-selected input')) {
+                    this.tableDiv.nativeElement.focus();
+                }
+                }
+        });
+        this.refresh();
     }
 }
 

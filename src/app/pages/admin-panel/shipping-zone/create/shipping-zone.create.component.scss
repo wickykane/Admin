@@ -508,3 +508,6 @@
         }
     }
 }
+.card-body:focus {
+    outline:transparent !important;
+}

@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewContainerRef, ViewEncapsulation } from '@angular/core';
-import { Form, FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
+import { Form, FormBuilder, FormGroup} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -21,13 +21,16 @@ import { CustomRateOptionsModalComponent } from '../../../../shared/modals/custo
 import { PickupOptionsModalComponent } from '../../../../shared/modals/pickup-options.modal';
 
 import { ShippingZoneViewKeyService } from './keys.control';
+
 import { HotkeysService } from 'angular2-hotkeys';
+
+import { cdArrowTable } from '../../../../shared';
 @Component({
     selector: 'app-view-shipping-zone',
     templateUrl: './shipping-zone.view.component.html',
     styleUrls: ['../shipping-zone.component.scss'],
     animations: [routerTransition()],
-    providers: [DatePipe, CommonService],
+    providers: [DatePipe, ShippingZoneViewKeyService, CommonService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
@@ -45,7 +48,7 @@ export class ShippingZoneViewComponent implements OnInit {
     public countryFilter = '';
     public listSelectCountry = [];
     public id: any;
-    public cd:any;
+    public cd: any;
     public selectedCountry = null;
     public tempListState = [];
     public freeShippingList = {
@@ -63,7 +66,7 @@ export class ShippingZoneViewComponent implements OnInit {
     {
         'id': '0',
         'name': 'Inactive'
-    }]
+    }];
     public flatRateList = {
         "name": '',
         "type": '1',
@@ -100,7 +103,7 @@ export class ShippingZoneViewComponent implements OnInit {
         "handling_fee": "0",
         "markup_type": "1",
         "markup_type_value": "0",
-    }
+    };
     public seflList = {
         "account": '',
         "username": '',
@@ -110,9 +113,16 @@ export class ShippingZoneViewComponent implements OnInit {
         "fee_type": '1',
         "handling_fee": '0.00',
         'id': '6'
-    }
-
+    };
+    public selectedIndex = {
+        0: 0,
+        1: undefined
+    };
     public pickupStoreList = [];
+    public checkTable = false;
+    public data: any = {};
+    @ViewChild(cdArrowTable) table: cdArrowTable;
+    @ViewChild('tableDiv') tableDiv: ElementRef;
     constructor(
         private cdr: ChangeDetectorRef,
         private vRef: ViewContainerRef,
@@ -306,6 +316,7 @@ export class ShippingZoneViewComponent implements OnInit {
     }
 
     openShippingModal(id) {
+        this.keyService.saveKeys();
         var modalRef: any;
         if (id == "1") {
             modalRef = this.modalService.open(FreeShippingOptionsModalComponent);
@@ -365,6 +376,10 @@ export class ShippingZoneViewComponent implements OnInit {
         }
         modalRef.componentInstance.isEdit = false;
         modalRef.result.then(res => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
             if (res['id']) {
                 if (res['id'] == '1') {
                     this.freeShippingList = res['data'];
@@ -386,7 +401,12 @@ export class ShippingZoneViewComponent implements OnInit {
                 }
             }
 
-        });
+        }, (reason) => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
+          });
     }
     save() {
 
@@ -517,6 +537,22 @@ export class ShippingZoneViewComponent implements OnInit {
     }
     back() {
         this.router.navigate(['/admin-panel/shipping-zone']);
+    }
+    selectTable() {
+        this.selectedIndex[0] = 0;
+        this.selectedIndex[1] = undefined;
+        this.checkTable = false;
+        this.table.scrollToBottom();
+        // this.table.element.nativeElement.focus();
+        setTimeout(() => {
+            // this.table.element.nativeElement.focus();
+            if (!this.checkTable) {
+                if (this.table.element.nativeElement.querySelectorAll('.row-selected input')) {
+                    this.tableDiv.nativeElement.focus();
+                }
+                }
+        });
+        this.refresh();
     }
 }
 

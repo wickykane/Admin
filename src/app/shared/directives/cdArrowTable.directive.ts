@@ -23,7 +23,6 @@ export class cdArrowTable implements OnDestroy {
     }
 
     @Input() set selectedIndex(value: any) {
-        console.log(value);
         this._selectedIndex = value;
     }
 
@@ -58,6 +57,16 @@ export class cdArrowTable implements OnDestroy {
             console.log(e);
         }
     }
+    scrollToBottom(selector?) {
+        try {
+            const bottom = 1000;
+            jQuery(selector || 'html, body, .table-responsive').animate({
+                scrollTop: bottom
+            }, 500);
+        } catch (e) {
+            console.log(e);
+        }
+    }
 
     focusElement() {
         const button = this.element.nativeElement.querySelectorAll('tr td:first-child a') && this.element.nativeElement.querySelectorAll('tr td:first-child a')[this._selectedIndex]
@@ -80,6 +89,7 @@ export class cdArrowTable implements OnDestroy {
         }, undefined, 'Up'));
 
         this._hotkeysService.add(new Hotkey('down', (event: KeyboardEvent): boolean => {
+           console.log(this._collection, this._selectedIndex);
             if (this._collection.length === 0 || this._selectedIndex === this._collection.length - 1 || this.disabledKey) {
                 return;
             }
