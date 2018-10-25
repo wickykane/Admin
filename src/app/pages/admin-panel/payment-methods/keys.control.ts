@@ -19,11 +19,12 @@ export class PaymentMethodsKeyService extends KeyboardBaseService {
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Focus Search'));
         if (this.context.listMaster['permission'].create) {
-            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+n', (event: KeyboardEvent): boolean =>  {
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+n', (event: KeyboardEvent): boolean => {
                 event.preventDefault();
                 this.context.addNewPaymentMethod();
                 return;
-            }, undefined, 'Create New'));
+            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Create New'));
+
         }
         // this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+e', (event: KeyboardEvent): boolean =>  {
         //     event.preventDefault();

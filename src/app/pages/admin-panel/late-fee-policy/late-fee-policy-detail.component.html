@@ -59,7 +59,8 @@
                     </div>
                     <div class="card-body no-padding">
                         <div class="customer-content-toggle table-responsive list-customers mg-bt-15">
-                            <table class="table table-bordered table-order table-style table-bg">
+                            <table class="table table-bordered table-order table-style table-bg"
+                            cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                                 <thead>
                                     <tr>
                                         <th *ngIf="!isView && list.items.length > 0">
