@@ -18,13 +18,13 @@ export class ShippingZoneKeyService extends KeyboardBaseService {
             }
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Focus Search'));
-
+        if (this.context.listMaster['permission'].create) {
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+n', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             this.context.createShippingZone();
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Create Shipping Zone'));
-
+    }
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+e', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             this.context.tableService.searchAction();
@@ -36,14 +36,14 @@ export class ShippingZoneKeyService extends KeyboardBaseService {
             this.context.tableService.resetAction(this.context.searchForm);
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset'));
-
+        if (this.context.listMaster['permission'].view) {
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             const id = this.context.list.items[this.context.selectedIndex].id;
             this.context.openViewPage(id);
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'View'));
-
+    }
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+pageup', (event: KeyboardEvent): boolean => {
             this.context.tableService.pagination.page--;
             if (this.context.tableService.pagination.page < 1) {
