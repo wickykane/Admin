@@ -12,7 +12,7 @@
 
 
         <button ngbTooltip="Edit" *ngIf="_orderDetail['order_sts_short_name'] == 'NW' || _orderDetail['order_sts_short_name'] == 'RV' || !detail['total_paid'] && (_orderDetail['order_sts_short_name'] == 'AP' || _orderDetail['order_sts_short_name'] == 'IP' || _orderDetail['order_sts_short_name'] == 'PP' || _orderDetail['order_sts_short_name'] == 'RS') " class="btn btn-outline-dark" (click)="edit()"><i class="fa fa-pencil-square"></i> Edit</button>
-        <button ngbTooltip="Generate Invoice" (click)="generateInvoice()" *ngIf="['AP', 'IP', 'PP', 'RS'].indexOf(_orderDetail['order_sts_short_name']) != -1" class="btn btn-outline-dark"><i class="fa fa-plus"></i> Generate Invoice</button>
+        <button ngbTooltip="Generate Invoice" (click)="generateInvoice()" *ngIf="data['enableInvoice'] && ['AP', 'IP', 'PP', 'RS'].indexOf(_orderDetail['order_sts_short_name']) != -1" class="btn btn-outline-dark"><i class="fa fa-plus"></i> Generate Invoice</button>
 
     </div>
     <section class="rma-page block main-container block-order">
