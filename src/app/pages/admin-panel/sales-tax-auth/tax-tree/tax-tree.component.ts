@@ -9,6 +9,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class TaxTreeComponent implements OnInit {
 
     @Input() taxAuthorityCountries;
+    @Input() listPermission = {};
 
     @Output() selectedCountry = new EventEmitter();
     @Output() selectedState = new EventEmitter();

@@ -15,6 +15,7 @@ import { SalesTaxAuthService } from './sales-tax-auth.service';
 import * as moment from 'moment';
 
 import { HotkeysService } from 'angular2-hotkeys';
+import { StorageService } from '../../../services/storage.service';
 import { SaleTaxKeyService } from './keys.control';
 @Component({
     selector: 'app-sales-tax-auth',
@@ -94,6 +95,7 @@ export class SalesTaxAuthComponent implements OnInit {
         public tableService: TableService,
         public modalService: NgbModal,
         public salesTaxAuthService: SalesTaxAuthService,
+        private storage: StorageService,
         private _hotkeysService: HotkeysService,
         public keyService: SaleTaxKeyService
     ) {
@@ -124,6 +126,7 @@ export class SalesTaxAuthComponent implements OnInit {
 
     //#region lifecycle hook
     ngOnInit() {
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
         this.getListSalesTaxAuthority();
         this.getListCountryDropDown();
         this.getTaxAuthorityTypes();
@@ -385,17 +388,18 @@ export class SalesTaxAuthComponent implements OnInit {
     }
 
     onSaveTaxAuthority() {
+        this.stateRateForm.controls['effective_date'].setErrors(null);
         this.isClickedSave = true;
-        if (this.isCreateNew && this.currentForm === 'country' && this.validateCountryGeneralForm()) {
+        if (this.listMaster['permission'].create && this.isCreateNew && this.currentForm === 'country' && this.validateCountryGeneralForm()) {
             this.onCreateCountryTaxAuthority();
         }
-        if (this.isCreateNew && this.currentForm === 'state' && this.validateStateGeneralForm() && this.validateStateRateForm()) {
+        if (this.listMaster['permission'].create && this.isCreateNew && this.currentForm === 'state' && this.validateStateGeneralForm() && this.validateStateRateForm()) {
             this.onCreateStateTaxAuthority();
         }
-        if (!this.isCreateNew && this.currentForm === 'country' && this.validateCountryGeneralForm()) {
+        if (this.listMaster['permission'].edit && !this.isCreateNew && this.currentForm === 'country' && this.validateCountryGeneralForm()) {
             this.onUpdateCountryTaxAuthority();
         }
-        if (!this.isCreateNew && this.currentForm === 'state' && this.validateStateGeneralForm() && this.validateStateRateForm()) {
+        if (this.listMaster['permission'].edit && !this.isCreateNew && this.currentForm === 'state' && this.validateStateGeneralForm() && this.validateStateRateForm()) {
             this.onUpdateStateTaxAuthority();
         }
     }

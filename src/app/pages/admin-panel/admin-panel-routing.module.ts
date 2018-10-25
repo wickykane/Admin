@@ -244,6 +244,7 @@ const routes: Routes = [
     },
     {
         path: 'sales-tax-auth',
+        canActivate: [MasterGuard],
         component: SalesTaxAuthComponent
     },
     {
