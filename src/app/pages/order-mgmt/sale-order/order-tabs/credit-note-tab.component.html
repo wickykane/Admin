@@ -25,11 +25,16 @@
                             <tbody *ngFor="let item of list.items">
                                 <tr>
                                     <td>
-                                        {{item.cd}}
+                                        <a class="text-primary" [routerLink]="['/financial/credit-memo/view', item.id] "> {{item.cd}}</a>                                       
                                     </td>
                                     <td class="text-center">{{item.issue_date | date:'MM/dd/yyyy' }}</td>
                                     <td>{{item.customer_name}}</td>
-                                    <td class="text-center">{{item.document_cd}}</td>
+                                    <td class="text-center">
+                                            <a *ngIf="item.document_type==1" class="text-primary" [routerLink]="['/financial/invoice/view', item.document_id] "> {{item.document_cd}}</a>   
+                                            <a *ngIf="item.document_type==2" class="text-primary" [routerLink]="['/order-management/return-order/detail', item.document_id] "> {{item.document_cd}}</a>   
+                                            <a *ngIf="item.document_type==3" class="text-primary" [routerLink]="['/financial/receipt-voucher/view', item.document_id] "> {{item.document_cd}}</a>  
+                                        
+                                    </td>
                                     <td class="text-center">
                                         {{item.total_price | currency}}
                                     </td>
