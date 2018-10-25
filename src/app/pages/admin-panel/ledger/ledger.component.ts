@@ -324,15 +324,25 @@ export class LedgerComponent implements OnInit {
 
   // Modal
   newAccount(flag?) {
+    this.keyService.saveKeys();
     const modalRef = this.modalService.open(AccountModalComponent, { windowClass: 'md-modal' });
     modalRef.componentInstance.modalTitle = (flag) ? flag.des : 'Add New Account';
     modalRef.componentInstance.isEdit = flag;
     modalRef.componentInstance.item = flag || {};
     modalRef.componentInstance.parent = this.data['selectedAccount'];
     modalRef.result.then(data => {
+      if (this.keyService.keys.length > 0) {
+        this.keyService.reInitKey();
+        this.table.reInitKey(this.data['tableKey']);
+    }
       this.getList();
     },
-      dismiss => { });
+      dismiss => {
+        if (this.keyService.keys.length > 0) {
+          this.keyService.reInitKey();
+          this.table.reInitKey(this.data['tableKey']);
+      }
+       });
   }
 
   syncToQuickbook() {

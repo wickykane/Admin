@@ -25,7 +25,7 @@ export class LedgerModalKeyService extends KeyboardBaseService {
 
 
     initKey() {
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+backspace', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+c', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             (document.activeElement as HTMLElement).blur();
             this.context.cancel();
             const e: ExtendedKeyboardEvent = event;
@@ -34,7 +34,7 @@ export class LedgerModalKeyService extends KeyboardBaseService {
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Cancel'));
 
 
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+c', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             if (!(!this.context.accountForm.valid || this.context.accountForm.value.is_sub_acc && !this.context.accountForm.value.parent_id)) {
                 this.context.ok();
             }
