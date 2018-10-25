@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewContainerRef, ViewEncapsulation } from '@angular/core';
-import { Form, FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
+import { Form, FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -11,6 +11,7 @@ import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { routerTransition } from '../../../../router.animations';
 import { CommonService } from './../../../../services/common.service';
 
+import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import * as moment from 'moment';
 import { StateFilterModalComponent } from '../../../../shared/modals/stateFilter.modal';
 import { UPSConfigurationModalComponent } from '../../../../shared/modals/ups-configuration.modal';
@@ -18,13 +19,17 @@ import { SEFLConfigurationModalComponent } from '../../../../shared/modals/sefl-
 import { FreeShippingOptionsModalComponent } from '../../../../shared/modals/free-shipping-options.modal';
 import { FlatRateOptionsModalComponent } from '../../../../shared/modals/flat-rate-options.modal';
 import { CustomRateOptionsModalComponent } from '../../../../shared/modals/custom-rate-options.modal';
+
+import { ShippingZoneEditKeyService } from './keys.control';
 import { PickupOptionsModalComponent } from '../../../../shared/modals/pickup-options.modal';
+
+import { cdArrowTable } from '../../../../shared';
 @Component({
     selector: 'app-edit-shipping-zone',
     templateUrl: './shipping-zone.edit.component.html',
     styleUrls: ['../shipping-zone.component.scss', '../create/shipping-zone.create.component.scss'],
     animations: [routerTransition()],
-    providers: [DatePipe, CommonService],
+    providers: [DatePipe, ShippingZoneEditKeyService, CommonService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
@@ -107,10 +112,19 @@ export class ShippingZoneEditComponent implements OnInit {
         "fee_type": '1',
         "handling_fee": '0.00',
         'id': '6'
-    }
+    };
     public selectedCountry = null;
+    public selectedIndex = {
+        0: 0,
+        1: undefined
+    };
+    public data: any = {};
 
     public pickupStoreList = [];
+
+    public checkTable = false;
+    @ViewChild(cdArrowTable) table: cdArrowTable;
+    @ViewChild('tableDiv') tableDiv: ElementRef;
     constructor(
         private cdr: ChangeDetectorRef,
         private vRef: ViewContainerRef,
@@ -121,13 +135,15 @@ export class ShippingZoneEditComponent implements OnInit {
         private modalService: NgbModal,
         private shippingZoneService: ShippingZoneService,
         private commonService: CommonService,
-        private dt: DatePipe) {
+        private dt: DatePipe,
+        public keyService: ShippingZoneEditKeyService,
+        private _hotkeysService: HotkeysService) {
         this.generalForm = fb.group({
             'name': [''],
             'status': ['1']
 
         });
-
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
         //  Init Key
     }
 
@@ -305,6 +321,7 @@ export class ShippingZoneEditComponent implements OnInit {
     }
 
     openShippingModal(id) {
+        this.keyService.saveKeys();
         var modalRef: any;
         if (id == "1") {
             modalRef = this.modalService.open(FreeShippingOptionsModalComponent);
@@ -358,6 +375,10 @@ export class ShippingZoneEditComponent implements OnInit {
         }
         modalRef.componentInstance.isEdit = false;
         modalRef.result.then(res => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
             if (res['id']) {
                 if (res['id'] == '1') {
                     this.freeShippingList = res['data'];
@@ -379,7 +400,12 @@ export class ShippingZoneEditComponent implements OnInit {
                 }
             }
 
-        });
+        }, (reason) => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
+          });
     }
     save() {
 
@@ -540,6 +566,25 @@ export class ShippingZoneEditComponent implements OnInit {
                 }
             });
         }
+    }
+    back() {
+        this.router.navigate(['/admin-panel/shipping-zone']);
+    }
+    selectTable() {
+        this.selectedIndex[0] = 0;
+        this.selectedIndex[1] = undefined;
+        this.checkTable = false;
+        this.table.scrollToBottom();
+        // this.table.element.nativeElement.focus();
+        setTimeout(() => {
+            // this.table.element.nativeElement.focus();
+            if (!this.checkTable) {
+                if (this.table.element.nativeElement.querySelectorAll('.row-selected input')) {
+                    this.tableDiv.nativeElement.focus();
+                }
+                }
+        });
+        this.refresh();
     }
 }
 

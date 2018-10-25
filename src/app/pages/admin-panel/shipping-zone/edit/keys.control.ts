@@ -2,17 +2,17 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { KeyboardBaseService } from './../../../../shared/helper/keyServiceBase';
 @Injectable()
-export class ShippingZoneCreateKeyService extends KeyboardBaseService {
+export class ShippingZoneEditKeyService extends KeyboardBaseService {
     keyConfig = {
         name: {
             element: null,
             focus: true,
         },
-        filter: {
+        filter : {
             element: null,
             focus: false,
         },
-        checked: {
+        checked : {
             element: null,
             focus: false,
         },
@@ -76,29 +76,29 @@ export class ShippingZoneCreateKeyService extends KeyboardBaseService {
             }
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Edit'));
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+u', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             if (this.context.generalForm.valid) {
                 this.context.save();
             }
             const e: ExtendedKeyboardEvent = event;
             e.returnValue = false; // Prevent bubbling
             return e;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save'));
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Update'));
         this._hotkeysService.add(new Hotkey('down', (event: KeyboardEvent): boolean => {
-            if (this.context.listShipping[0].data.length === (this.context.selectedIndex[0] + 1)) {
-                this.context.selectedIndex[0] = undefined;
-                this.context.selectedIndex[1] = -1;
-                this.context.checkTable = true;
-                this.context.cd.detectChanges();
+            if (this.context.listShipping[0].data.length === (this.context.selectedIndex[0] + 1 )) {
+                    this.context.selectedIndex[0] = undefined;
+                    this.context.selectedIndex[1] = -1;
+                    this.context.checkTable = true;
+                    this.context.cdr.detectChanges();
             }
             return;
         }, undefined, 'Down'));
         this._hotkeysService.add(new Hotkey('up', (event: KeyboardEvent): boolean => {
             if (this.context.selectedIndex[1] === 0) {
-                this.context.selectedIndex[0] = this.context.listShipping[0].data.length;
-                this.context.selectedIndex[1] = undefined;
-                this.context.checkTable = false;
-                this.context.cd.detectChanges();
+                    this.context.selectedIndex[0] = this.context.listShipping[0].data.length;
+                    this.context.selectedIndex[1] = undefined;
+                    this.context.checkTable = false;
+                    this.context.cdr.detectChanges();
             }
             return;
         }, undefined, 'Up'));

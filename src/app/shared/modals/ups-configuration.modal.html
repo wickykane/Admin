@@ -5,6 +5,7 @@
     </button>
 </div>
 <div class="modal-body">
+        <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
     <ngb-tabset #tabSet>
         <ngb-tab title="Connection">
             <ng-template ngbTabContent>
@@ -20,7 +21,7 @@
                                     </label>
 
                                     <div class="col-sm-12">
-                                        <input type="text" formControlName="access_key" id="access_key" name="access_key" class="form-control">
+                                        <input autofocus type="text" formControlName="access_key" id="access_key" name="access_key" class="form-control">
                                     </div>
                                     <span class="col-md-12" style="color: red" *ngIf="generalForm.controls.access_key.touched&&generalForm.controls.access_key.errors?.required">
                                         (!) This field cannot be blank.
