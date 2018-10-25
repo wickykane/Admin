@@ -173,31 +173,33 @@ export class ReturnOrderInformationTabComponent implements OnInit {
 
 
     confirmModal(item, status, status_item) {
-        const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
-        modalRef.result.then(res => {
-            if (res) {
-                if (status !== 7) {
-                    this.updateStatus(item, status);
-                } else {
-                    this.completeStatus(item);
-                }
-            }
-        }, dismiss => { });
-        switch (status) {
-            case 2:
-                // cancel
-                this.selected_message = this.messageConfig.CC;
-                break;
-            case 3:
-                this.selected_message = this.messageConfig.SB;
-                break;
-            case 5:
-                this.selected_message = this.messageConfig.AP;
-                break;
-        }
-        modalRef.componentInstance.message = this.selected_message;
-        modalRef.componentInstance.yesButtonText = 'Yes';
-        modalRef.componentInstance.noButtonText = 'No';
+      if (status !== 7) {
+          const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
+          modalRef.result.then(res => {
+              if (res) {
+                  this.updateStatus(item.id, status);
+                  this.completeStatus(item);
+              }
+          }, dismiss => { });
+          switch (status) {
+              case 2:
+                  // cancel
+                  this.selected_message = this.messageConfig.CC;
+                  break;
+              case 3:
+                  this.selected_message = this.messageConfig.SB;
+                  break;
+              case 5:
+                  this.selected_message = this.messageConfig.AP;
+                  break;
+
+          }
+          modalRef.componentInstance.message = this.selected_message;
+          modalRef.componentInstance.yesButtonText = 'Yes';
+          modalRef.componentInstance.noButtonText = 'No';
+      } else {
+          this.completeStatus(item);
+      }
     }
 
     completeStatus(item) {
@@ -211,14 +213,14 @@ export class ReturnOrderInformationTabComponent implements OnInit {
             case 1:
                 // Return
                 if (item.order_status_id === 4) {
-                    message = this.completeStatusConfig['type1_complete'];
+                    message = 'The ' + item.order_code + this.completeStatusConfig['type1_complete'];
                 } else {
                     if (item.invoice_id) {
                         if (item.invoice_status_id === 1 || item.invoice_status_id === 4) {
-                            message = this.completeStatusConfig['type1_nocomplete_invoice_1'];
+                            message = 'The ' + item.order_code + this.completeStatusConfig['type1_nocomplete_invoice_1'];
                         }
                         if (item.invoice_status_id === 5 || item.invoice_status_id === 6) {
-                            message = this.completeStatusConfig['type1_nocomplete_invoice_2'];
+                            message = 'The ' + item.order_code + this.completeStatusConfig['type1_nocomplete_invoice_2'];
                         }
                     } else {
                         message = this.completeStatusConfig['type1_nocomplete_no_invoice'];
@@ -236,7 +238,7 @@ export class ReturnOrderInformationTabComponent implements OnInit {
                 break;
             case 4:
                 // Repair
-                message = this.completeStatusConfig['type4'];
+                message = 'The ' + item.order_code + this.completeStatusConfig['type4'];
                 break;
         }
 
@@ -251,10 +253,10 @@ export class ReturnOrderInformationTabComponent implements OnInit {
             if (res) {
                 this.service.completeStatus(item.id).subscribe(result => {
                     try {
-                        this.toastr.success(res.message);
+                        this.toastr.success(result.message);
                         if (item.return_type_id === 1 && (item.invoice_status_id === 5 || item.invoice_status_id === 6)) {
                             setTimeout(() => {
-                                this.router.navigate(['/financial/credit-memo/view/' + result.credit_id]);
+                                this.router.navigate(['/financial/credit-memo/view/' + result.id]);
                             }, 500);
                         }
 
@@ -264,7 +266,7 @@ export class ReturnOrderInformationTabComponent implements OnInit {
                           }, 500);
                         } else {
                             setTimeout(() => {
-                                this.router.navigate(['/order-management/sale-order/detail', result.order_id]);
+                                this.router.navigate(['/order-management/sale-order/detail', result.id]);
                             }, 500);
                         }
                     } catch (e) {
