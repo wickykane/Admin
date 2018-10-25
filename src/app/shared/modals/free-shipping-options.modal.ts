@@ -11,10 +11,11 @@ import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { CommonService } from '../../services/common.service';
-
+import { ShippingZoneModalKeyService } from './keys.control';
 @Component({
     selector: 'app-free-shipping-options-modal',
-    templateUrl: './free-shipping-options.modal.html'
+    templateUrl: './free-shipping-options.modal.html',
+    providers: [ShippingZoneModalKeyService],
 })
 export class FreeShippingOptionsModalComponent implements OnInit, OnDestroy {
 
@@ -33,7 +34,8 @@ export class FreeShippingOptionsModalComponent implements OnInit, OnDestroy {
         private modalService: NgbModal,
         private hotkeysService: HotkeysService,
         private commonService: CommonService,
-        public activeModal: NgbActiveModal) {
+        public activeModal: NgbActiveModal,
+        public keyService: ShippingZoneModalKeyService) {
 
         this.generalForm = fb.group({
             'free_shipping_item': [0],
@@ -45,7 +47,7 @@ export class FreeShippingOptionsModalComponent implements OnInit, OnDestroy {
             'lbs_from': [],
             'lbs_to': [null]
         });
-
+        this.keyService.watchContext.next({ context: this, service: this.hotkeysService });
 
 
     }

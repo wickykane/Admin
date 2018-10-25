@@ -10,10 +10,11 @@ import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { CommonService } from '../../services/common.service';
-
+import { ShippingZoneModalKeyService } from './keys.control';
 @Component({
     selector: 'app-custom-rate-options-modal',
-    templateUrl: './custom-rate-options.modal.html'
+    templateUrl: './custom-rate-options.modal.html',
+    providers: [ShippingZoneModalKeyService],
 })
 export class CustomRateOptionsModalComponent implements OnInit, OnDestroy {
 
@@ -33,7 +34,8 @@ export class CustomRateOptionsModalComponent implements OnInit, OnDestroy {
         private modalService: NgbModal,
         private hotkeysService: HotkeysService,
         private commonService: CommonService,
-        public activeModal: NgbActiveModal) {
+        public activeModal: NgbActiveModal,
+        public keyService: ShippingZoneModalKeyService) {
 
         this.generalForm = fb.group({
             'name': ['', Validators.required],
@@ -45,6 +47,7 @@ export class CustomRateOptionsModalComponent implements OnInit, OnDestroy {
             'charge_shipping': '',
             // 'ranges':[this.fb.array([])]
         });
+        this.keyService.watchContext.next({ context: this, service: this.hotkeysService });
 
 
 
