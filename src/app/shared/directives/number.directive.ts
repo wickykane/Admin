@@ -16,7 +16,7 @@ export class NumberDirective implements OnInit {
 
     @Input() isDecimal;
     @Input() set max(value) {
-        this._max = (value >= 0) ? value : Number.POSITIVE_INFINITY;
+        this._max = (value >= 0) ? Number(value.toFixed(2)) : Number.POSITIVE_INFINITY;
     }
 
     @Input() set min(value) {
