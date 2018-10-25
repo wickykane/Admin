@@ -28,21 +28,17 @@ export class PaymentMethodCreateKeyService extends KeyboardBaseService {
             this.context.reback();
             return;
         }, undefined, 'Back'));
-
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent): boolean =>  {
-            event.preventDefault();
-            this.context.savePaymentMethod();
-            return;
-        }, undefined, 'Save'));
-
-        // this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
-        //     (document.activeElement as HTMLElement).blur();
-        //     if (!this.context.generalForm.invalid || !this.context.myForm.invalid) {
-        //         this.context.createDiscountCategory();
-        //     }
-        //     const e: ExtendedKeyboardEvent = event;
-        //     e.returnValue = false; // Prevent bubbling
-        //     return e;
-        // }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save'));
+        if (this.context.listMaster['permission'].create) {
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent): boolean =>  {
+                event.preventDefault();
+                this.context.savePaymentMethod();
+                return;
+            }, undefined, this.context.paymentMethodId === null ||  this.context.paymentMethodId === undefined ?  'Create' : 'Save'));
+        }
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+t', (event: KeyboardEvent): boolean =>  {
+                event.preventDefault();
+                this.context.testConnection();
+                return;
+            }, undefined, 'Test Connection'));
     }
 }
