@@ -10,10 +10,11 @@ import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { CommonService } from '../../services/common.service';
-
+import { ShippingZoneModalKeyService } from './keys.control';
 @Component({
     selector: 'app-sefl-options-modal',
-    templateUrl: './sefl-configuration.modal.html'
+    templateUrl: './sefl-configuration.modal.html',
+    providers: [ShippingZoneModalKeyService],
 })
 export class SEFLConfigurationModalComponent implements OnInit, OnDestroy {
 
@@ -35,7 +36,8 @@ export class SEFLConfigurationModalComponent implements OnInit, OnDestroy {
         private modalService: NgbModal,
         private hotkeysService: HotkeysService,
         private commonService: CommonService,
-        public activeModal: NgbActiveModal) {
+        public activeModal: NgbActiveModal,
+        public keyService: ShippingZoneModalKeyService) {
 
         this.generalForm = fb.group({
             "account": ['', Validators.required],
@@ -48,7 +50,7 @@ export class SEFLConfigurationModalComponent implements OnInit, OnDestroy {
             'id': '6'
             // 'ranges':[this.fb.array([])]
         });
-
+        this.keyService.watchContext.next({ context: this, service: this.hotkeysService });
 
 
     }

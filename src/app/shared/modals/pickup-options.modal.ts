@@ -10,11 +10,11 @@ import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { CommonService } from '../../services/common.service';
-import { invalid } from '../../../../node_modules/moment';
-
+import { ShippingZoneModalKeyService } from './keys.control';
 @Component({
     selector: 'app-pickup-options-modal',
-    templateUrl: './pickup-options.modal.html'
+    templateUrl: './pickup-options.modal.html',
+    providers: [ShippingZoneModalKeyService],
 })
 export class PickupOptionsModalComponent implements OnInit, OnDestroy {
 
@@ -42,7 +42,8 @@ export class PickupOptionsModalComponent implements OnInit, OnDestroy {
         private modalService: NgbModal,
         private hotkeysService: HotkeysService,
         private commonService: CommonService,
-        public activeModal: NgbActiveModal) {
+        public activeModal: NgbActiveModal,
+        public keyService: ShippingZoneModalKeyService) {
         this.generalForm = fb.group({
             'name': ['', Validators.required],
             'warehouse': [''],
@@ -50,7 +51,7 @@ export class PickupOptionsModalComponent implements OnInit, OnDestroy {
             'id': '4',
             // 'ranges':[this.fb.array([])]
         });
-
+        this.keyService.watchContext.next({ context: this, service: this.hotkeysService });
 
 
     }
