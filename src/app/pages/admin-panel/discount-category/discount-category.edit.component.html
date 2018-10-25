@@ -152,7 +152,7 @@
         </div>
         <div class="block-content block-content-full text-center" style="margin-top:15px;">
             <button type="button" class="btn btn-default" [routerLink]="['/admin-panel/discount-category']">Cancel</button>
-            <button type="button" [disabled]="(generalForm.invalid) || (data['products'].length <= 0) || myForm.invalid" class="btn btn-outline-primary" (click)="createDiscountCategory()">Save</button>
+            <button *ngIf="listMaster['permission'].create" type="button" [disabled]="(generalForm.invalid) || (data['products'].length <= 0) || myForm.invalid" class="btn btn-outline-primary" (click)="createDiscountCategory()">Save</button>
         </div>
     </section>
 </div>

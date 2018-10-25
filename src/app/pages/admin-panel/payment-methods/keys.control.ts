@@ -3,16 +3,6 @@ import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { KeyboardBaseService } from './../../../shared/helper/keyServiceBase';
 @Injectable()
 export class PaymentMethodsKeyService extends KeyboardBaseService {
-    // resetKeys() {
-    //     const keys = this.getKeys();
-    //     for (const key of keys) {
-    //         this._hotkeysService.remove(key);
-    //     }
-    // }
-
-    // getKeys() {
-    //     return Array.from(this._hotkeysService.hotkeys);
-    // }
     keyConfig = {
         description: {
             element: null,
@@ -21,7 +11,6 @@ export class PaymentMethodsKeyService extends KeyboardBaseService {
     };
 
     initKey() {
-        // this.resetKeys();
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+f1', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             if (this.keyConfig.description.element) {
@@ -29,12 +18,13 @@ export class PaymentMethodsKeyService extends KeyboardBaseService {
             }
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Focus Search'));
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+n', (event: KeyboardEvent): boolean =>  {
-            event.preventDefault();
-            this.context.addNewPaymentMethod();
-            return;
-        }, undefined, 'Create New'));
-
+        if (this.context.listMaster['permission'].create) {
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+n', (event: KeyboardEvent): boolean =>  {
+                event.preventDefault();
+                this.context.addNewPaymentMethod();
+                return;
+            }, undefined, 'Create New'));
+        }
         // this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+e', (event: KeyboardEvent): boolean =>  {
         //     event.preventDefault();
         //     this.context.editPaymentMethod(this.context.paymentMethodId);

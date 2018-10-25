@@ -32,7 +32,7 @@
                 <div class="card no-border">
                     <div class="card-header">
                         <strong>Late Fee Policies</strong>
-                        <button (click)="createLateFeePolicy()" style="margin:0; float:right" class="btn btn-link">
+                        <button *ngIf="listMaster['permission'].create" (click)="createLateFeePolicy()" style="margin:0; float:right" class="btn btn-link">
                             <i class="fa fa-plus text-success"></i> Add Policy</button>
                     </div>
                     <div class="card-body no-padding">
@@ -59,10 +59,10 @@
                                             <span class="label label-draft" *ngIf="item.ac == 2">{{convertStatus(item.ac, 'status')}}</span>
                                         </td>
                                         <td>
-                                            <a href="javascript: void(0)" class="btn btn-default" (click)="viewLateFeePolicy(item.id)" title="View Late Fee Policy">
+                                            <a *ngIf="listMaster['permission'].view" href="javascript: void(0)" class="btn btn-default" (click)="viewLateFeePolicy(item.id)" title="View Late Fee Policy">
                                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                             </a>
-                                            <a href="javascript: void(0)" class="btn btn-default" *ngIf="item.ac != 2" (click)="editLateFeePolicy(item.id)" title="Edit Late Fee Policy">
+                                            <a href="javascript: void(0)" class="btn btn-default" *ngIf="item.ac != 2 && listMaster['permission'].edit" (click)="editLateFeePolicy(item.id)" title="Edit">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
                                         </td>

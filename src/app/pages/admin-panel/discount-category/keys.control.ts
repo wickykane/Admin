@@ -24,18 +24,21 @@ export class DiscountCategoryKeyService extends KeyboardBaseService {
 
     initKey() {
         // this.resetKeys();
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+n', (event: KeyboardEvent): boolean =>  {
-            event.preventDefault();
-            this.context.createDiscountCategory();
-            return;
-        }, undefined, 'Create New'));
+        if (this.context.listMaster['permission'].create) {
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+n', (event: KeyboardEvent): boolean =>  {
+                event.preventDefault();
+                this.context.createDiscountCategory();
+                return;
+            }, undefined, 'Create New'));
+        }
 
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+e', (event: KeyboardEvent): boolean =>  {
-            event.preventDefault();
-            this.context.editDiscountCategory();
-            return;
-        }, undefined, 'Edit'));
-
+        if (this.context.listMaster['permission'].edit) {
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+e', (event: KeyboardEvent): boolean =>  {
+                event.preventDefault();
+                this.context.editDiscountCategory();
+                return;
+            }, undefined, 'Edit'));
+        }
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+pagedown', (event: KeyboardEvent): boolean => {
             this.context.tableService.pagination.page++;
             if (this.context.tableService.pagination.page > this.context.tableService.pagination.total_page) {

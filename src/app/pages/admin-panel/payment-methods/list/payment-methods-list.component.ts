@@ -5,12 +5,14 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
 import { cdArrowTable } from '../../../../shared';
-import { TableService } from './../../../../services/table.service';
+// import { TableService } from './../../../../services/table.service';
 
 import { PaymentMethodsKeyService } from '../keys.control';
 import { PaymentMethodsService } from '../payment-method.service';
 
 import { HotkeysService } from 'angular2-hotkeys';
+import { TableService } from '../../../../services/index';
+import { StorageService } from '../../../../services/storage.service';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 
 @Component({
@@ -53,25 +55,31 @@ export class PaymentMethodsListComponent implements OnInit {
         public fb: FormBuilder,
         public toastr: ToastrService,
         public tableService: TableService,
+        private storage: StorageService,
         public keyService: PaymentMethodsKeyService,
         private _hotkeysService: HotkeysService,
         public ngbModal: NgbModal,
-        public paymentMethodService: PaymentMethodsService
+        public paymentMethodService: PaymentMethodsService,
+
     ) {
         this.searchForm = fb.group({
             name: [null],
             type: [null],
             ac: [null]
         });
-        this.tableService.getListFnName = 'getListPaymentMethods';
+
+        this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
-        //  Init Key
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
         this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
+
     }
 
     ngOnInit() {
         this.getPaymentTypes();
         this.getListPaymentMethods();
+
+
     }
     /**
      * Table Event
