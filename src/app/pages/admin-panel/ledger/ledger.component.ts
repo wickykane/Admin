@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -12,6 +12,8 @@ import { AccountModalComponent } from './modal/account.modal';
 
 import { LedgerKeyService } from './keys.control';
 
+import { HotkeysService } from 'angular2-hotkeys';
+import { cdArrowTable } from '../../../shared';
 @Component({
   selector: 'app-ledger',
   providers: [LedgerService, LedgerKeyService],
@@ -54,7 +56,8 @@ export class LedgerComponent implements OnInit {
     integerLimit: 6
   });
   public isInstallQuickbook = false;
-
+  @ViewChild('tabSet') tabSet;
+  @ViewChild(cdArrowTable) table: cdArrowTable;
   constructor(
     private cd: ChangeDetectorRef,
     private fb: FormBuilder,
@@ -64,6 +67,7 @@ export class LedgerComponent implements OnInit {
     private modalService: NgbModal,
     private toastr: ToastrService,
     public keyService: LedgerKeyService,
+    private _hotkeysService: HotkeysService
   ) {
 
     this.generalForm = fb.group({
@@ -91,7 +95,7 @@ export class LedgerComponent implements OnInit {
     this.tableService.context = this;
 
     //  Init Key
-    this.keyService.watchContext.next(this);
+    this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
   }
 
   ngOnInit() {
@@ -209,6 +213,7 @@ export class LedgerComponent implements OnInit {
         this.refresh();
       });
     }
+    this.cd.detectChanges();
   }
 
   saveDetailAccountType() {
@@ -240,6 +245,7 @@ export class LedgerComponent implements OnInit {
         this.refresh();
       });
     }
+    this.cd.detectChanges();
   }
 
   /**
@@ -296,6 +302,7 @@ export class LedgerComponent implements OnInit {
 
   cancel() {
     this.data['show'] = (this.data['show'] === this.screen.NEW_DETAIL_TYPE) ? this.screen.VIEW_ACCOUNT_TYPE : null;
+    this.cd.detectChanges();
   }
 
   deleteAccount(id) {
@@ -317,15 +324,25 @@ export class LedgerComponent implements OnInit {
 
   // Modal
   newAccount(flag?) {
+    this.keyService.saveKeys();
     const modalRef = this.modalService.open(AccountModalComponent, { windowClass: 'md-modal' });
     modalRef.componentInstance.modalTitle = (flag) ? flag.des : 'Add New Account';
     modalRef.componentInstance.isEdit = flag;
     modalRef.componentInstance.item = flag || {};
     modalRef.componentInstance.parent = this.data['selectedAccount'];
     modalRef.result.then(data => {
+      if (this.keyService.keys.length > 0) {
+        this.keyService.reInitKey();
+        this.table.reInitKey(this.data['tableKey']);
+    }
       this.getList();
     },
-      dismiss => { });
+      dismiss => {
+        if (this.keyService.keys.length > 0) {
+          this.keyService.reInitKey();
+          this.table.reInitKey(this.data['tableKey']);
+      }
+       });
   }
 
   syncToQuickbook() {
@@ -341,4 +358,19 @@ export class LedgerComponent implements OnInit {
         );
     }
   }
+  back() {
+    this.router.navigate(['/admin-panel']);
+}
+selectTab(step) {
+  let active = 0;
+  active = +this.tabSet.activeId;
+  active += step;
+  active = Math.min(Math.max(active, 0), 7);
+  this.tabSet.select(String(active));
+  this.cd.detectChanges();
+}
+selectTable() {
+  this.selectedIndex = 0;
+  this.table.element.nativeElement.querySelector('td').focus(); this.refresh();
+}
 }

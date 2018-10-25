@@ -3,12 +3,14 @@ import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { LedgerService } from '../ledger.service';
+import { LedgerModalKeyService } from './keys.control';
 
+import { HotkeysService } from 'angular2-hotkeys';
 @Component({
   selector: 'app-account-modal',
   templateUrl: './account.modal.html',
   styleUrls: ['../ledger.component.scss'],
-  providers: [LedgerService],
+  providers: [LedgerService, LedgerModalKeyService],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AccountModalComponent implements OnInit {
@@ -23,7 +25,9 @@ export class AccountModalComponent implements OnInit {
   public selectedParent = {};
 
   constructor(private toastr: ToastrService, private ledgerService: LedgerService, public activeModal: NgbActiveModal, private fb: FormBuilder,
-    private cd: ChangeDetectorRef) {
+    private cd: ChangeDetectorRef,
+    public keyService: LedgerModalKeyService,
+    private _hotkeysService: HotkeysService) {
     this.accountForm = fb.group({
       'type': [null],
       'detail_type': [null],
@@ -34,6 +38,7 @@ export class AccountModalComponent implements OnInit {
       'parent_id': [null],
       'ac': [1, Validators.required],
     });
+    this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
   }
 
   ngOnInit() {
