@@ -66,7 +66,7 @@ export class SendSampleModalContent implements OnInit, OnDestroy {
             const e: ExtendedKeyboardEvent = event;
             e.returnValue = false; // Prevent bubbling
             return e;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Search'));
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Send'));
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+backspace', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             event.preventDefault();
