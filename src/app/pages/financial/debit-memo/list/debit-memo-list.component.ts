@@ -10,6 +10,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NgbDateParserFormatter, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
+import { StorageService } from '../../../../services/storage.service';
 import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
 
 import { DebitMemoListKeyService } from './keys.list.control';
@@ -70,7 +71,8 @@ export class DebitMemoListComponent implements OnInit {
         public debitMemoService: DebitMemoService,
         public financialService: FinancialService,
         private http: HttpClient,
-        private renderer: Renderer) {
+        private renderer: Renderer,
+        private storage: StorageService) {
 
         this.searchForm = fb.group({
             no: [null],
@@ -96,17 +98,18 @@ export class DebitMemoListComponent implements OnInit {
         this.getDebitStatusList();
         this.getListDebitMemo();
         this.getCountStatus();
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
     }
 
     refresh() {
-         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
+        if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
 
     getQuickbookSettings() {
         this.financialService.getSettingInfoQuickbook().subscribe(
             res => {
                 this.isInstallQuickbook = res.data.state === 'authorized' ? true : false;
-            }, err => {}
+            }, err => { }
         );
     }
 
@@ -141,7 +144,7 @@ export class DebitMemoListComponent implements OnInit {
     }
 
     getListDebitMemo() {
-        const params = { ...this.tableService.getParams(), ...this.searchForm.value };
+        const params = { ...this.tableService.getParams(), ...this.searchForm.value, ...this.listMaster['filter'] || {} };
         if (params['date_type']) {
             params['due_date_from'] = params['date_from'];
             params['due_date_to'] = params['date_to'];
@@ -175,17 +178,9 @@ export class DebitMemoListComponent implements OnInit {
     }
 
     filter(status) {
-        const params = { sts: status };
-        this.debitMemoService.getListDebitMemo(params).subscribe(res => {
-            try {
-                this.listDebitMemo = res.data.rows;
-                this.selectedIndex = 0;
-                this.tableService.matchPagingOption(res.data);
-                this.refresh();
-            } catch (e) {
-                console.log(e);
-            }
-        });
+        this.listMaster['filter'] = { sts: status };
+        this.tableService.pagination['page'] = 1;
+        this.getListDebitMemo();
     }
 
     moreFilter() {
@@ -286,7 +281,7 @@ export class DebitMemoListComponent implements OnInit {
                                 try {
                                     const result = JSON.parse(_res['_body']);
                                     this.toastr.success(`Debit Memo ${result.data[0].entity.DocNumber} has been sync to Quickbooks successfully.`);
-                                } catch (err) {}
+                                } catch (err) { }
                             },
                             err => {
                                 this.toastr.error(`Cannot sync Debit Memo to Quickbooks.`);
@@ -306,6 +301,6 @@ export class DebitMemoListComponent implements OnInit {
 
     selectTable() {
         this.selectedIndex = 0;
-        this.table.element.nativeElement.querySelector('td a').focus();
+        this.table.element.nativeElement.querySelector('td a').focus(); this.refresh();
     }
 }

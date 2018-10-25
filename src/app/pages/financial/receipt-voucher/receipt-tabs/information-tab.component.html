@@ -2,15 +2,14 @@
     <div class="bd-example text-right">
         <button class="btn btn-outline-secondary" [routerLink]="['/financial/receipt-voucher']"><i class="fa fa-share-square"></i>
             Back</button>
-        <button *ngIf="detail['status'] == 1 || detail['status'] == 5" class="btn btn-outline-primary" [routerLink]="['/financial/receipt-voucher/edit', _receiptId]"><i
-                class="fa fa-pencil-square" aria-hidden="true"></i> Edit</button>
-        <button *ngIf="detail['status'] == 1 && !detail['electronic']" class="btn btn-outline-warning" (click)="confirmModal(_receiptId, 2)"><i
+        <button *ngIf="(detail['status'] == 1 || detail['status'] == 5) && listMaster['permission'].edit" class="btn btn-outline-primary" [routerLink]="['/financial/receipt-voucher/edit', _receiptId]"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit</button>
+        <button *ngIf="(detail['status'] == 1 && !detail['electronic']) && listMaster['permission'].submit" class="btn btn-outline-warning" (click)="confirmModal(_receiptId, 2)"><i
                 class="fa fa-caret-square-o-right" aria-hidden="true"></i> Submit</button>
-        <button *ngIf="detail['status'] == 1" class="btn btn-outline-danger" (click)="confirmModal(_receiptId, 6)"><i
+        <button *ngIf="(detail['status'] == 1) && listMaster['permission'].cancel" class="btn btn-outline-danger" (click)="confirmModal(_receiptId, 6)"><i
                 class="fa fa-times-circle" aria-hidden="true"></i> Cancel</button>
-        <button *ngIf="detail['status'] == 2 && !detail['electronic']" class="btn btn-outline-success" (click)="confirmModal(_receiptId, 3)"><i
+        <button *ngIf="(detail['status'] == 2 && !detail['electronic']) && listMaster['permission'].approve" class="btn btn-outline-success" (click)="confirmModal(_receiptId, 3)"><i
                 class="fa fa-check-square"></i> Approve</button>
-        <button *ngIf="detail['status'] == 2 && !detail['electronic']" class="btn btn-outline-danger" (click)="confirmModal(_receiptId, 4)"><i
+        <button *ngIf="(detail['status'] == 2 && !detail['electronic']) && listMaster['permission'].reject" class="btn btn-outline-danger" (click)="confirmModal(_receiptId, 4)"><i
                 class="fa fa-ban" aria-hidden="true"></i> Reject</button>
         <!-- <button *ngIf="[4,8].indexOf(detail['status']) != -1" class="btn btn-outline-dark"><i class="fa fa-money" aria-hidden="true"></i> Pay</button> -->
         <!-- <button class="btn btn-outline-dark" (click)="printPDF(_receiptId, detail['inv_num'] )"><i class="fa fa-download"

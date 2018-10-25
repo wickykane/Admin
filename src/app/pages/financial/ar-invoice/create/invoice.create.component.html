@@ -109,7 +109,7 @@
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
-                                                    <ng-select (change)="changeSalesOrder($event)" [items]="listMaster['sales_order']" bindLabel="order.code" bindValue="order.id" formControlName="order_id">
+                                                    <ng-select (change)="changeSalesOrder($event)" [items]="listMaster['sales_order']" bindLabel="code" bindValue="id" formControlName="order_id">
                                                     </ng-select>
                                                 </div>
                                             </div>
@@ -263,7 +263,7 @@
                                                 <!-- <span class="text-danger">(*)</span> -->
                                             </label>
                                             <div class="col-7">
-                                                {{ data['shipping_address']?.label}}
+                                                {{ data['shipping_address']?.name}}
                                             </div>
                                         </div>
                                     </div>
@@ -324,7 +324,7 @@
                                                 <label class='col-6'>Ship Via
                                                 </label>
                                                 <div class='col-6'>
-                                                    {{ data['shipping_method']?.carrier_name }}
+                                                    {{ data['order_detail']?.carrier_name }}
                                                 </div>
                                             </div>
 
@@ -332,7 +332,7 @@
                                                 <label class='col-6'>Option
                                                 </label>
                                                 <div class='col-6'>
-                                                    {{ data['shipping_method']?.options_name }}
+                                                    {{ data['order_detail']?.shipping_method_option_name }}
                                                 </div>
                                             </div>
 
@@ -340,7 +340,7 @@
                                                 <label class='col-6'>Ship Rate
                                                 </label>
                                                 <div class='col-6'>
-                                                    {{ data['shipping_method']?.ship_rate_name }}
+                                                    {{ data['order_detail']?.shipping_method_rate_name }}
                                                 </div>
                                             </div>
                                         </form>

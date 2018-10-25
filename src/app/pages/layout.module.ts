@@ -5,12 +5,14 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { HeaderComponent } from '../pages/layout/header/header.component';
 import { SidebarComponent } from '../pages/layout/sidebar/sidebar.component';
+import { CommonShareModule, MasterGuard } from '../shared';
 import { LayoutRoutingModule } from './layout-routing.module';
 import { LayoutComponent } from './layout.component';
 import { FooterComponent } from './layout/footer/footer.component';
 import { MenuComponent } from './layout/menu/menu.component';
 
-import { CommonShareModule } from '../shared';
+import { StorageService } from '../services/storage.service';
+import { PageDenyComponent } from './404/deny.component';
 
 
 
@@ -22,6 +24,7 @@ import { CommonShareModule } from '../shared';
         TranslateModule,
         NgbDropdownModule.forRoot(),
     ],
-    declarations: [LayoutComponent, SidebarComponent, HeaderComponent, MenuComponent, FooterComponent]
+    declarations: [PageDenyComponent, LayoutComponent, SidebarComponent, HeaderComponent, MenuComponent, FooterComponent],
+    providers: [StorageService, MasterGuard]
 })
-export class LayoutModule {}
+export class LayoutModule { }

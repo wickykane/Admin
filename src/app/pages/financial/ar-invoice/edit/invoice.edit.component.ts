@@ -185,7 +185,7 @@ export class InvoiceEditComponent implements OnInit {
      * Mater Data
      */
     refresh() {
-         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
+        if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
 
     resetChangeData() {
@@ -230,6 +230,15 @@ export class InvoiceEditComponent implements OnInit {
             try {
                 const data = res.data;
                 this.data['invoice'] = data;
+                this.data['shipping_address'] = data['shipping_address'];
+
+                this.data['order_detail'] = {};
+                this.data['order_detail'].sale_person_name = data.sale_person_name;
+                this.data['order_detail'].warehouse_name = data.warehouse_name;
+                this.data['order_detail'].carrier_name = data['shipping_method'].carrier_name;
+                this.data['order_detail'].shipping_method_option_name = data['shipping_method'].options_name;
+                this.data['order_detail'].shipping_method_rate_name = data['shipping_method'].ship_rate_name;
+
                 this.generalForm.patchValue({ ...data, approver_id: data.aprvr_id });
                 this.list.items = data.inv_detail;
                 this.updateTotal();
@@ -287,12 +296,12 @@ export class InvoiceEditComponent implements OnInit {
         this.financialService.getOrderByCustomerId(params).subscribe(res => {
             try {
                 this.listMaster['sales_order'] = res.data;
-                if (flag) {
-                    const order = this.listMaster['sales_order'].find(item => +item.order.id === this.generalForm.value.order_id);
-                    if (order) {
-                        this.changeSalesOrder(order, flag);
-                    }
-                }
+                // if (flag) {
+                //     const order = this.listMaster['sales_order'].find(item => +item.id === this.generalForm.value.order_id);
+                //     if (order) {
+                //         this.changeSalesOrder(order, flag);
+                //     }
+                // }
                 this.refresh();
             } catch (e) {
                 console.log(e);
@@ -414,32 +423,42 @@ export class InvoiceEditComponent implements OnInit {
     }
 
     changeSalesOrder(event, flag?) {
-        if (!flag) {
-            this.list.items = event.detail.map(item => {
-                item.qty_inv = item.qty;
-                return item;
-            });
-            this.refresh();
-        }
-
-        this.data['order_detail'] = { ...event.order, sales_person: event.order.sale_person_id, sale_person_name: event.sale_person_name, ship_rate: event.order.ship_method_rate };
-        this.data['shipping_address'] = event.shipping_address;
-        this.data['shipping_method'] = event.shipping_method;
-
-        if (!flag) {
-            this.generalForm.patchValue({
-                ...this.data['order_detail'], inv_dt: this.generalForm.value.inv_dt,
-            });
-        } else {
-            this.generalForm.patchValue({
-                approver_id: event.order.aprvr_id,
-                sales_person: event.order.sale_person_id,
-            });
-        }
-
-        this.selectAddress('billing');
-        this.updateTotal();
+        this.getOrderDetail(this.generalForm.value.order_id, flag);
     }
+
+    getOrderDetail(id, flag?) {
+        if (id) {
+            this.orderService.getOrderDetail(id).subscribe(res => {
+                const event = res.data;
+
+                if (!flag) {
+                    this.list.items = event.items.map(item => {
+                        item.qty_inv = item.qty_remain;
+                        item.qty = item.qty_remain;
+                        item.price = item.sale_price;
+                        return item;
+                    });
+                    this.refresh();
+                }
+
+                this.data['order_detail'] = { ...event, sales_person: event.sale_person_id, sale_person_name: event.sale_person_name, ship_rate: event.ship_method_rate };
+                this.data['shipping_address'] = event.shipping_address;
+                this.data['shipping_method'] = event.shipping_method;
+
+                if (!flag) {
+                    this.generalForm.patchValue({
+                        ...this.data['order_detail'], inv_dt: this.generalForm.value.inv_dt,
+                    });
+                }
+
+                this.selectAddress('billing');
+                this.updateTotal();
+
+            });
+        }
+
+    }
+
 
     changeCustomer(flag?) {
         const company_id = this.generalForm.value.company_id;
@@ -467,9 +486,7 @@ export class InvoiceEditComponent implements OnInit {
                     break;
                 case 'billing':
                     const billing_id = this.generalForm.value.billing_id;
-                    if (billing_id) {
-                        this.addr_select.billing = this.findDataById(billing_id, this.customer.billing);
-                    }
+                    this.addr_select.billing = (billing_id) ? this.findDataById(billing_id, this.customer.billing) : {};
                     break;
             }
             this.refresh();
@@ -592,7 +609,6 @@ export class InvoiceEditComponent implements OnInit {
     createInvoice(type, is_draft?, is_continue?) {
         const items = this.list.items.map(item => {
             item.is_item = (item.misc_id) ? 0 : 1;
-            item.order_detail_id = item.id;
             return item;
         });
 

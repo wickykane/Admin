@@ -12,6 +12,7 @@ import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs/Subject';
 import { routerTransition } from '../../../router.animations';
+import { StorageService } from '../../../services/storage.service';
 import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
 import { OrderService } from '../../order-mgmt/order-mgmt.service';
 import { FinancialService } from '../financial.service';
@@ -70,7 +71,8 @@ export class ReceiptVoucherComponent implements OnInit {
         private orderService: OrderService,
         private http: HttpClient,
         private cd: ChangeDetectorRef,
-        private renderer: Renderer) {
+        private renderer: Renderer,
+        private storage: StorageService) {
 
         this.searchForm = fb.group({
             'receipt_no': [null],
@@ -111,6 +113,7 @@ export class ReceiptVoucherComponent implements OnInit {
             this.data['page'] = 1;
             this.searchCustomer(key);
         });
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
     }
     /**
      * Table Event
@@ -158,16 +161,9 @@ export class ReceiptVoucherComponent implements OnInit {
     }
 
     filter(status) {
-        const params = { status };
-        this.receiptVoucherService.getListReceiptVoucher(params).subscribe(res => {
-            try {
-                this.list.items = res.data.rows;
-                this.tableService.matchPagingOption(res.data);
-                this.refresh();
-            } catch (e) {
-                console.log(e);
-            }
-        });
+        this.listMaster['filter'] = { status };
+        this.tableService.pagination['page'] = 1;
+        this.getList();
     }
 
     searchCustomer(key) {
@@ -200,8 +196,7 @@ export class ReceiptVoucherComponent implements OnInit {
     }
 
     getList() {
-        console.log(this.searchForm.value);
-        const params = { ...this.tableService.getParams(), ...this.searchForm.value };
+        const params = { ...this.tableService.getParams(), ...this.searchForm.value, ...this.listMaster['filter'] || {} };
         Object.keys(params).forEach((key) => {
             if (params[key] instanceof Array) {
                 params[key] = params[key].join(',');
@@ -257,7 +252,7 @@ export class ReceiptVoucherComponent implements OnInit {
                             try {
                                 const result = JSON.parse(_res['_body']);
                                 this.toastr.success(`Receipt Voucher ${result.data[0].entity.PaymentRefNum} has been sync to Quickbooks successfully.`);
-                            } catch (err) {}
+                            } catch (err) { }
                         },
                         err => {
                             this.toastr.error(`Cannot sync Receipt Voucher to Quickbooks.`);
@@ -292,5 +287,6 @@ export class ReceiptVoucherComponent implements OnInit {
     selectTable() {
         this.selectedIndex = 0;
         this.table.element.nativeElement.querySelector('td a').focus();
+        this.refresh();
     }
 }

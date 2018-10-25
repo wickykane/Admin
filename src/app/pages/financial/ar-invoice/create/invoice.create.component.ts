@@ -184,7 +184,7 @@ export class InvoiceCreateComponent implements OnInit {
      * Mater Data
      */
     refresh() {
-         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
+        if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
 
     resetChangeData() {
@@ -367,20 +367,32 @@ export class InvoiceCreateComponent implements OnInit {
     }
 
     changeSalesOrder(event) {
-        this.list.items = event.detail.map(item => {
-            item.qty_inv = item.qty;
-            return item;
-        });
+        this.getOrderDetail(this.generalForm.value.order_id);
+    }
 
-        this.data['order_detail'] = { ...event.order, sales_person: event.order.sale_person_id, sale_person_name: event.sale_person_name, ship_rate: event.order.ship_method_rate };
-        this.data['shipping_address'] = event.shipping_address;
-        this.data['shipping_method'] = event.shipping_method;
+    getOrderDetail(id) {
+        if (id) {
+            this.orderService.getOrderDetail(id).subscribe(res => {
 
-        this.generalForm.patchValue({
-            ...this.data['order_detail'], inv_dt: this.generalForm.value.inv_dt,
-        });
-        this.selectAddress('billing');
-        this.updateTotal();
+                const event = res.data;
+                this.list.items = event.items.map(item => {
+                    item.qty_inv = item.qty_remain;
+                    item.qty = item.qty_remain;
+                    item.price = item.sale_price;
+                    return item;
+                });
+
+                this.data['order_detail'] = { ...event, sales_person: event.sale_person_id, sale_person_name: event.sale_person_name, ship_rate: event.ship_method_rate };
+                this.data['shipping_address'] = event.shipping_address;
+                this.data['shipping_method'] = event.shipping_method;
+
+                this.generalForm.patchValue({
+                    ...this.data['order_detail'], inv_dt: this.generalForm.value.inv_dt,
+                });
+                this.selectAddress('billing');
+                this.updateTotal();
+            });
+        }
     }
 
     changeCustomer(flag?) {
@@ -409,9 +421,7 @@ export class InvoiceCreateComponent implements OnInit {
                     break;
                 case 'billing':
                     const billing_id = this.generalForm.value.billing_id;
-                    if (billing_id) {
-                        this.addr_select.billing = this.findDataById(billing_id, this.customer.billing);
-                    }
+                    this.addr_select.billing = (billing_id) ? this.findDataById(billing_id, this.customer.billing) : {};
                     break;
             }
             this.refresh();
@@ -534,7 +544,6 @@ export class InvoiceCreateComponent implements OnInit {
     createInvoice(type, is_draft?, is_continue?) {
         const items = this.list.items.map(item => {
             item.is_item = (item.misc_id) ? 0 : 1;
-            item.order_detail_id = item.id;
             return item;
         });
 

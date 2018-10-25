@@ -8,6 +8,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
+import { StorageService } from '../../../services/storage.service';
 import { cdArrowTable } from '../../../shared/index';
 import { OrderService } from '../order-mgmt.service';
 import { ConfirmModalContent } from './../../../shared/modals/confirm.modal';
@@ -69,6 +70,7 @@ export class SaleQuotationComponent implements OnInit {
         private modalService: NgbModal,
         private _hotkeysService: HotkeysService,
         public keyService: SaleQuoteKeyService,
+        private storage: StorageService,
         private renderer: Renderer) {
 
         this.searchForm = fb.group({
@@ -95,6 +97,7 @@ export class SaleQuotationComponent implements OnInit {
         this.getList();
         this.getListStatus();
         this.user = JSON.parse(localStorage.getItem('currentUser'));
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
     }
     /**
      * Table Event
@@ -125,16 +128,9 @@ export class SaleQuotationComponent implements OnInit {
     }
 
     filter(status) {
-        const params = { sts: status };
-        this.orderService.getListSalesQuotation(params).subscribe(res => {
-            try {
-                this.list.items = res.data.rows;
-                this.tableService.matchPagingOption(res.data);
-                this.refresh();
-            } catch (e) {
-                console.log(e);
-            }
-        });
+        this.listMaster['filter'] = { sts: status };
+        this.tableService.pagination['page'] = 1;
+        this.getList();
     }
 
     getCountStatus() {
@@ -155,7 +151,7 @@ export class SaleQuotationComponent implements OnInit {
 
     getList() {
         this.getCountStatus();
-        const params = { ...this.tableService.getParams(), ...this.searchForm.value };
+        const params = { ...this.tableService.getParams(), ...this.searchForm.value, ...this.listMaster['filter'] || {} };
 
         Object.keys(params).forEach((key) => {
             if (params[key] instanceof Array) {
@@ -205,7 +201,7 @@ export class SaleQuotationComponent implements OnInit {
 
     selectTable() {
         this.selectedIndex = 0;
-        this.table.element.nativeElement.querySelector('td a').focus();
+        this.table.element.nativeElement.querySelector('td a').focus(); this.refresh();
     }
 
     confirmModal(id, status) {

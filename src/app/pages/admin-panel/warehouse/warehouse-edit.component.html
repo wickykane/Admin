@@ -1,9 +1,11 @@
 <div [@routerTransition]>
     <app-page-header [heading]="'VIEW WAREHOUSE'" [icon]="'fa-th-list'"></app-page-header>
+    <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
     <section class="main-container block-order-detail">
         <div class='address-tab'>
             <div class="bd-example text-right">
-                <button class="btn btn-outline-dark" [routerLink]="['/admin-panel/warehouse/']">Back To List</button>
+                <button [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="back_button"
+                class="btn btn-outline-dark" [routerLink]="['/admin-panel/warehouse/']">Back To List</button>
             </div>
             <section class="rma-page block main-container block-order">
                 <div class="row block-info">

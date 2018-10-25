@@ -2,12 +2,15 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
+import { CommonService } from '../../../services/index';
+import { ROUTE_PERMISSION } from '../../../services/route-permission.config';
+import { StorageService } from '../../../services/storage.service';
 
 @Component({
     selector: 'app-menu',
     templateUrl: './menu.component.html',
     styleUrls: ['./menu.component.scss'],
-    providers: [HotkeysService],
+    providers: [HotkeysService, CommonService],
 })
 export class MenuComponent implements OnInit {
     MENU_CONSTANT = [];
@@ -18,8 +21,16 @@ export class MenuComponent implements OnInit {
         private translate: TranslateService,
         public router: Router,
         public _hotkeysService: HotkeysService,
-        private elRef: ElementRef
-    ) { }
+        private elRef: ElementRef,
+        public commonService: CommonService,
+        private storage: StorageService,
+    ) {
+
+    }
+
+    routePerm = (route) => {
+        return (this.storage.getRoutePermission(route) || {}).list;
+    }
 
     ngOnInit() {
         this.initKeyMenu();
@@ -30,7 +41,8 @@ export class MenuComponent implements OnInit {
                 main_name: '',
                 icon: 'fa fa-home',
                 sub: false,
-                child: []
+                child: [],
+                permission: true
             },
             {
                 flag: 'order',
@@ -41,17 +53,21 @@ export class MenuComponent implements OnInit {
                 child: [
                     {
                         link: '/order-management/sale-quotation',
-                        name: 'Sales <u>Q</u>uotation'
+                        name: 'Sales <u>Q</u>uotation',
+                        permission: this.routePerm('/order-management/sale-quotation')
                     },
                     {
                         link: '/order-management/sale-order',
-                        name: 'Sales <u>O</u>rders'
+                        name: 'Sales <u>O</u>rders',
+                        permission: this.routePerm('/order-management/sale-order')
                     },
                     {
                         link: '/order-management/return-order',
-                        name: 'Return Orders'
+                        name: 'Return Orders',
+                        permission: this.routePerm('/order-management/return-order')
                     }
-                ]
+                ],
+                permission: this.routePerm('/order-management/sale-quotation') ||  this.routePerm('/order-management/sale-order') || this.routePerm('/order-management/return-order')
             },
             {
                 flag: 'customer',
@@ -62,10 +78,12 @@ export class MenuComponent implements OnInit {
                 child: [
                     {
                         link: '/customer',
-                        name: 'Customer'
+                        name: 'Customer',
+                        permission: this.routePerm('/customer')
                     }
 
-                ]
+                ],
+                permission: this.routePerm('/customer')
             },
             {
                 flag: 'product',
@@ -76,17 +94,21 @@ export class MenuComponent implements OnInit {
                 child: [
                     {
                         link: '/product-management/part-list',
-                        name: '<u>P</u>art Management '
+                        name: '<u>P</u>art Management ',
+                        permission: this.routePerm('/product-management/part-list')
                     },
                     {
                         link: '/product-management/item-list',
-                        name: '<u>I</u>nventory Items'
+                        name: '<u>I</u>nventory Items',
+                        permission: this.routePerm('/product-management/item-list')
                     },
                     {
                         link: '/product-management/miscellaneous-list',
-                        name: 'Miscellaneous Items'
+                        name: 'Miscellaneous Items',
+                        permission: this.routePerm('/product-management/miscellaneous-list')
                     }
-                ]
+                ],
+                permission: this.routePerm('/product-management/part-list') ||  this.routePerm('/product-management/item-list') || this.routePerm('/product-management/miscellaneous-list')
             },
             {
                 flag: 'financial',
@@ -97,21 +119,26 @@ export class MenuComponent implements OnInit {
                 child: [
                     {
                         link: '/financial/invoice',
-                        name: 'AR Invoice'
+                        name: 'AR Invoice',
+                        permission: this.routePerm('/financial/invoice')
                     },
                     {
                         link: '/financial/receipt-voucher',
-                        name: 'Receipt Voucher '
+                        name: 'Receipt Voucher ',
+                        permission: this.routePerm('/financial/receipt-voucher')
                     },
                     {
                         link: '/financial/credit-memo',
-                        name: 'Credit Memo'
+                        name: 'Credit Memo',
+                        permission: this.routePerm('/financial/credit-memo')
                     },
                     {
                         link: '/financial/debit-memo',
-                        name: 'Debit Memo'
+                        name: 'Debit Memo',
+                        permission: this.routePerm('/financial/debit-memo')
                     }
-                ]
+                ],
+                permission: this.routePerm('/financial/invoice') ||  this.routePerm('/financial/receipt-voucher') || this.routePerm('/financial/credit-memo') || this.routePerm('/financial/debit-memo')
             },
             // {
             //     flag: 'rma',
@@ -127,7 +154,8 @@ export class MenuComponent implements OnInit {
                 main_name: 'Admin Panel',
                 icon: '',
                 sub: false,
-                child: []
+                child: [],
+                permission: true
             }
             // ,
             // {

@@ -5,6 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HotkeysService } from 'angular2-hotkeys';
 import * as _ from 'lodash';
 import { ToastrService } from 'ngx-toastr';
+import { StorageService } from '../../../../services/storage.service';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { OrderService } from '../../../order-mgmt/order-mgmt.service';
 import { SaleQuoteDetailKeyService } from '../view/keys.detail.control';
@@ -65,6 +66,7 @@ export class QuoteInformationTabComponent implements OnInit {
         private modalService: NgbModal,
         public tableService: TableService,
         private orderService: OrderService,
+        private storage: StorageService,
         public keyService: SaleQuoteDetailKeyService,
         private _hotkeysService: HotkeysService,
         @Inject(SaleQuotationDetailComponent) private parent: SaleQuotationDetailComponent,
@@ -82,6 +84,7 @@ export class QuoteInformationTabComponent implements OnInit {
             active: 0,
         };
         this.changeShortcut();
+        this.data['permission'] = this.storage.getRoutePermission(this.router.url);
     }
 
     /**

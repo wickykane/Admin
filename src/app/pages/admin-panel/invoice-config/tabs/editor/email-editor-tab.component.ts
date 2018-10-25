@@ -1,4 +1,8 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+
+import { HotkeysService } from 'angular2-hotkeys';
+import { EmailTemplateModalContent } from '../../modals/email-template/email-template.modal';
+import { EmailTemplateKeyService } from '../../modals/email-template/keys.control';
 @Component({
     selector: 'app-tab-email-editor',
     templateUrl: './email-editor-tab.component.html',
@@ -23,10 +27,20 @@ export class EmailEditorTabComponent implements OnInit, OnDestroy {
     public isFocusingBody = false;
 
     public showContextMenu = false;
+    public data = {};
 
-    constructor() {}
+    constructor(
+        private _hotkeysService: HotkeysService,
+        public keyService: EmailTemplateKeyService,
+        @Inject(EmailTemplateModalContent) private parent: EmailTemplateModalContent) {
+        //  Init Key
+        if (!this.parent.data['shortcut']) {
+            this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
+        }
+    }
 
     ngOnInit() {
+        this.changeShortcut();
     }
 
     ngOnDestroy() {
@@ -92,5 +106,15 @@ export class EmailEditorTabComponent implements OnInit, OnDestroy {
 
         this.template.email_tpl.subject = input.value;
         input.scrollTop = scrollPos;
+    }
+
+    changeShortcut() {
+        setTimeout(() => {
+            this.parent.data['shortcut'] = this.keyService.getKeys();
+        });
+    }
+
+    clickInsert() {
+        this.showContextMenu = !this.showContextMenu;
     }
 }

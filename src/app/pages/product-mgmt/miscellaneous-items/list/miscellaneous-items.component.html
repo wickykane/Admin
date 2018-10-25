@@ -44,7 +44,7 @@
                 <div class="card no-border">
                     <div class="card-header">
                         <strong>Line Items</strong>
-                        <button (click)="openModal(true,false)" style="margin:0; float:right" class="btn btn-link">
+                        <button *ngIf="listMaster['permission'].create" (click)="openModal(true,false)" style="margin:0; float:right" class="btn btn-link">
                             <i class="fa fa-plus text-success"></i> Add New</button>
                     </div>
                     <div class="card-body no-padding">
@@ -70,7 +70,7 @@
                                         <td>{{item.uom}}</td>
                                         <td>{{item.account_name}}</td>
                                         <td>
-                                            <label class="switch checkbox-green">
+                                            <label *ngIf="listMaster['permission'].edit" class="switch checkbox-green">
                                                 <input type="checkbox" disabled [(ngModel)]="item.sts">
                                                 <span class="slider round"></span>
                                             </label>
@@ -81,13 +81,13 @@
                                             </label>
                                         </td>
                                         <td>
-                                            <a class="btn btn-default" title="View" (click)="openModal(false,true,item)">
+                                            <a *ngIf="listMaster['permission'].view" class="btn btn-default" title="View" (click)="openModal(false,true,item)">
                                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default" title="Edit" (click)="openModal(false,false,item)">
+                                            <a *ngIf="listMaster['permission'].edit" class="btn btn-default" title="Edit" (click)="openModal(false,false,item)">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default icon-blue" *ngIf="item.is_sys==0 && item.used==0" title="Delete" (click)='delete(item.id)'>
+                                            <a class="btn btn-default icon-blue" *ngIf="item.is_sys == 0 && item.used == 0 && listMaster['permission'].delete" title="Delete" (click)='delete(item.id)'>
                                                 <i class="fa fa-trash-o" aria-hidden="true"></i>
                                             </a>
                                         </td>

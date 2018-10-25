@@ -38,6 +38,8 @@ import { WarehouseComponent } from './warehouse/warehouse.component';
 import { WorkFlowComponent } from './work-flow/work-flow.component';
 import { WorkFlowEditComponent } from './work-flow/work-flow.edit.component';
 
+import { MasterGuard } from '../../shared';
+
 const routes: Routes = [
     {
         path: '',
@@ -71,11 +73,12 @@ const routes: Routes = [
         path: 'bank',
         children: [
             { path: ':id/branch', component: BranchComponent },
-            { path: '', component: BankComponent }
-        ]
+            { path: '', component: BankComponent}
+        ],
     },
     {
         path: 'carrier',
+        canActivate: [MasterGuard],
         loadChildren: './carrier/carrier.module#CarrierModule'
     },
     {
@@ -120,15 +123,18 @@ const routes: Routes = [
     },
     {
         path: 'discount-category',
-        component: DiscountCategoryComponent
+        component: DiscountCategoryComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'discount-category/create',
-        component: DiscountCategoryCreateComponent
+        component: DiscountCategoryCreateComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'discount-category/edit/:id',
-        component: DiscountCategoryEditComponent
+        component: DiscountCategoryEditComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'insurance',
@@ -159,19 +165,23 @@ const routes: Routes = [
     },
     {
         path: 'late-fee-policy',
-        component: LateFeePolicyComponent
+        component: LateFeePolicyComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'late-fee-policy/create',
-        component: LateFeePolicyDetailComponent
+        component: LateFeePolicyDetailComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'late-fee-policy/view/:id',
-        component: LateFeePolicyDetailComponent
+        component: LateFeePolicyDetailComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'late-fee-policy/edit/:id',
-        component: LateFeePolicyDetailComponent
+        component: LateFeePolicyDetailComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'epi-policy',
@@ -199,15 +209,18 @@ const routes: Routes = [
     },
     {
         path: 'payment-methods',
-        component: PaymentMethodsListComponent
+        component: PaymentMethodsListComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'payment-methods/create',
-        component: PaymentMethodsCreateComponent
+        component: PaymentMethodsCreateComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'payment-methods/edit/:id',
-        component: PaymentMethodsCreateComponent
+        component: PaymentMethodsCreateComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'tax-types',

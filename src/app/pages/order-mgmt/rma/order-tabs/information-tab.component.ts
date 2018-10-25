@@ -11,6 +11,7 @@ import { RMAService } from '../rma.service';
 import { TableService } from './../../../../services/table.service';
 
 import { HotkeysService } from 'angular2-hotkeys';
+import { StorageService } from '../../../../services/storage.service';
 import { RMAViewKeyService } from '../view/keys.control';
 
 
@@ -28,6 +29,7 @@ export class ReturnOrderInformationTabComponent implements OnInit {
      */
 
     public _orderId;
+    public data = {};
     public _orderDetail;
     @Input() set orderId(id) {
         if (id) {
@@ -110,6 +112,7 @@ export class ReturnOrderInformationTabComponent implements OnInit {
         private modalService: NgbModal,
         public tableService: TableService,
         private service: RMAService,
+        private storage: StorageService,
         public keyService: RMAViewKeyService,
         private _hotkeysService: HotkeysService) {
 
@@ -117,6 +120,7 @@ export class ReturnOrderInformationTabComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.data['permission'] = this.storage.getRoutePermission(this.router.url);
         this.getList();
 
     }

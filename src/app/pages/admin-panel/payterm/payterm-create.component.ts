@@ -6,13 +6,13 @@ import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
-import { PayTermKeyService } from './keys.control';
+import { PaymentTermCreateKeyService } from './create-keys.controls';
 import { PaymentTermService } from './payterm.service';
 
 @Component({
     selector: 'app-payterm-create',
     templateUrl: './payterm-create.component.html',
-    providers: [PaymentTermService, PayTermKeyService],
+    providers: [PaymentTermService, PaymentTermCreateKeyService],
     styleUrls: ['./payterm-create.component.scss'],
     animations: [routerTransition()],
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -27,7 +27,7 @@ export class PayTermCreateComponent implements OnInit {
         public route: ActivatedRoute,
         public fb: FormBuilder,
         public toastr: ToastrService,
-        public keyService: PayTermKeyService,
+        public keyService: PaymentTermCreateKeyService,
         private _hotkeysService: HotkeysService,
         private paytermService: PaymentTermService) {
         this.generalForm = fb.group({

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -7,11 +7,14 @@ import { InvoiceConfigService } from '../../invoice-chasing-config.service';
 
 import { SendSampleModalContent } from '../send-sample/send-sample.modal';
 
+import { HotkeysService } from 'angular2-hotkeys';
+import { EmailTemplateKeyService } from './keys.control';
+
 declare var jQuery: any;
 @Component({
     selector: 'app-email-template-modal-content',
     templateUrl: './email-template.modal.html',
-    providers: [InvoiceConfigService],
+    providers: [InvoiceConfigService, EmailTemplateKeyService, NgbModal],
     styleUrls: ['./email-template.modal.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -34,12 +37,16 @@ export class EmailTemplateModalContent implements OnInit {
     public fieldTags = [];
 
     private id = null;
+    @ViewChild('tabSet') tabSet;
+    public data = {};
 
     constructor(
         private cd: ChangeDetectorRef,
         public activeModal: NgbActiveModal,
         private modalService: NgbModal,
         private toastr: ToastrService,
+        private keyService: EmailTemplateKeyService,
+        private _hotkeysService: HotkeysService,
         private invoiceService: InvoiceConfigService
     ) {}
 
@@ -128,9 +135,13 @@ export class EmailTemplateModalContent implements OnInit {
     }
 
     sendSampleEmail() {
+        this.keyService.saveKeys();
         const modalRef = this.modalService.open(SendSampleModalContent, { size: 'sm' });
         modalRef.result.then(
             res => {
+                if (this.keyService.keys.length > 0) {
+                    this.keyService.reInitKey();
+                }
                 jQuery('body').addClass('modal-open');
                 if (res && res.receiver) {
                     const params = {
@@ -157,6 +168,9 @@ export class EmailTemplateModalContent implements OnInit {
                 }
             },
             dismiss => {
+                if (this.keyService.keys.length > 0) {
+                    this.keyService.reInitKey();
+                }
                 jQuery('body').addClass('modal-open');
             }
         );
@@ -165,5 +179,9 @@ export class EmailTemplateModalContent implements OnInit {
     getEmailTemplate(event) {
         this.emailTemplate = event;
         this.emailTemplateForDisplay = event.email_tpl;
+    }
+
+    selectTab(id) {
+        this.tabSet.select(id);
     }
 }

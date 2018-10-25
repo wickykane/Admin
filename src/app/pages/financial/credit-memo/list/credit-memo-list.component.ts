@@ -10,6 +10,7 @@ import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../../../../environments/environment';
 import { routerTransition } from '../../../../router.animations';
+import { StorageService } from '../../../../services/storage.service';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { FinancialService } from '../../financial.service';
 import { CreditMemoService } from '../credit-memo.service';
@@ -72,7 +73,8 @@ export class CreditMemoListComponent implements OnInit {
         public creditMemoListKeyService: CreditMemoListKeyService,
         private http: HttpClient,
         private cd: ChangeDetectorRef,
-        private renderer: Renderer) {
+        private renderer: Renderer,
+        private storage: StorageService) {
 
         this.searchForm = fb.group({
             'credit_memo_num': [null],
@@ -98,6 +100,7 @@ export class CreditMemoListComponent implements OnInit {
         this.getQuickbookSettings();
         this.getListStatus();
         this.user = JSON.parse(localStorage.getItem('currentUser'));
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
     }
     /**
      * Table Event
@@ -109,25 +112,19 @@ export class CreditMemoListComponent implements OnInit {
      * Internal Function
      */
     refresh() {
-         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
+        if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
 
     onStartSearch() {
         this.renderer.invokeElementMethod(this.drNoInput.nativeElement, 'focus');
     }
 
-    filter(sts) {
-        const params = { sts };
-        this.creditMemoService.getListCreditMemo(params).subscribe(res => {
-            try {
-                this.list.items = res.data.rows;
-                this.tableService.matchPagingOption(res.data);
-                this.refresh();
-            } catch (e) {
-                console.log(e);
-            }
-        });
+    filter(status) {
+        this.listMaster['filter'] = { sts: status };
+        this.tableService.pagination['page'] = 1;
+        this.getList();
     }
+
     getListStatus() {
         this.creditMemoService.getListStatusCredit().subscribe(res => {
             try {
@@ -143,7 +140,7 @@ export class CreditMemoListComponent implements OnInit {
         this.financialService.getSettingInfoQuickbook().subscribe(
             res => {
                 this.isInstallQuickbook = res.data.state === 'authorized' ? true : false;
-            }, err => {}
+            }, err => { }
         );
     }
 
@@ -165,7 +162,7 @@ export class CreditMemoListComponent implements OnInit {
 
     getList() {
         this.getCountStatus();
-        const params = { ...this.tableService.getParams(), ...this.searchForm.value };
+        const params = { ...this.tableService.getParams(), ...this.searchForm.value, ...this.listMaster['filter'] || {} };
 
         Object.keys(params).forEach((key) => {
             if (params[key] instanceof Array) {
@@ -218,7 +215,7 @@ export class CreditMemoListComponent implements OnInit {
                             try {
                                 const result = JSON.parse(_res['_body']);
                                 this.toastr.success(`Credit Memo ${result.data[0].entity.DocNumber} has been sync to Quickbooks successfully.`);
-                            } catch (err) {}
+                            } catch (err) { }
                         },
                         err => {
                             this.toastr.error(`Cannot sync Credit Memo to Quickbooks.`);
@@ -289,8 +286,6 @@ export class CreditMemoListComponent implements OnInit {
 
     selectTable() {
         this.selectedIndex = 0;
-        this.table.element.nativeElement.querySelector('td a').focus();
+        this.table.element.nativeElement.querySelector('td a').focus(); this.refresh();
     }
 }
-
-

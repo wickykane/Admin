@@ -7,7 +7,7 @@
                 <div class="card no-border">
                     <div class="card-header">
                         <strong>Line Items</strong>
-                        <button (click)="createDiscountCategory()" style="margin:0; float:right" class="btn btn-link">
+                        <button *ngIf="listMaster['permission'].create" (click)="createDiscountCategory()" style="margin:0; float:right" class="btn btn-link">
                             <i class="fa fa-plus text-success"></i> Add New</button>
                     </div>
                     <div class="card-body no-padding">
@@ -37,7 +37,7 @@
                                         <td class="text-center">{{item.created_dt}}</td>
                                         <td class="text-center">{{item.updated_dt}}</td>
                                         <td>
-                                          <button type="button" class="btn btn-link" [routerLink]="['/admin-panel/discount-category/edit/', item.id]">
+                                          <button *ngIf="listMaster['permission'].edit" type="button" class="btn btn-link" [routerLink]="['/admin-panel/discount-category/edit/', item.id]">
                                               <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                           </button>
                                         </td>

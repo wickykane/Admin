@@ -8,6 +8,7 @@ import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/n
 import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
+import { StorageService } from '../../../services/storage.service';
 import { cdArrowTable } from '../../../shared';
 import { NgbDateCustomParserFormatter } from '../../../shared/helper/dateformat';
 import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
@@ -74,6 +75,7 @@ export class SaleOrderComponent implements OnInit {
         public keyService: SaleOrderKeyService,
         private modalService: NgbModal,
         public tableService: TableService,
+        private storage: StorageService,
         private orderService: OrderService) {
 
         this.searchForm = fb.group({
@@ -104,6 +106,7 @@ export class SaleOrderComponent implements OnInit {
         this.getList();
         this.getListStatus();
         this.countOrderStatus();
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
     }
     /**
      * Table Event
@@ -120,16 +123,9 @@ export class SaleOrderComponent implements OnInit {
      */
 
     filter(status) {
-        const params = { sts: status };
-        this.orderService.getListOrder(params).subscribe(res => {
-            try {
-                this.list.items = res.data.rows;
-                this.tableService.matchPagingOption(res.data);
-                this.refresh();
-            } catch (e) {
-                console.log(e);
-            }
-        });
+        this.listMaster['filter'] = { sts: status };
+        this.tableService.pagination['page'] = 1;
+        this.getList();
     }
 
     countOrderStatus() {
@@ -157,7 +153,7 @@ export class SaleOrderComponent implements OnInit {
     }
 
     getList() {
-        const params = { ...this.tableService.getParams(), ...this.searchForm.value };
+        const params = { ...this.tableService.getParams(), ...this.searchForm.value, ...this.listMaster['filter'] || {} };
 
         Object.keys(params).forEach((key) => {
             if (params[key] instanceof Array) {
@@ -270,6 +266,6 @@ export class SaleOrderComponent implements OnInit {
 
     selectTable() {
         this.selectedIndex = 0;
-        this.table.element.nativeElement.querySelector('td a').focus();
+        this.table.element.nativeElement.querySelector('td a').focus(); this.refresh();
     }
 }

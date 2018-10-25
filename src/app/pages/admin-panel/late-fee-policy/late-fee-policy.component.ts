@@ -1,11 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 import { TableService } from '../../../services/index';
-import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
+import { StorageService } from '../../../services/storage.service';
+import { cdArrowTable } from '../../../shared';
 import { LateFeePolicyListKeyService } from './keys.list.control';
 import { LateFeePolicyService } from './late-fee-policy.service';
 
@@ -29,7 +30,7 @@ export class LateFeePolicyComponent implements OnInit {
         items: []
     };
     public data = {};
-
+    @ViewChild(cdArrowTable) table: cdArrowTable;
     constructor(
         private cd: ChangeDetectorRef,
         private fb: FormBuilder,
@@ -38,6 +39,7 @@ export class LateFeePolicyComponent implements OnInit {
         private router: Router,
         private lateFeePolicyService: LateFeePolicyService,
         public keyService: LateFeePolicyListKeyService,
+        private storage: StorageService,
         private modalService: NgbModal,
         private toastr: ToastrService) {
         this.searchForm = fb.group({
@@ -47,6 +49,7 @@ export class LateFeePolicyComponent implements OnInit {
         // Assign get list function name, override variable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
         this.keyService.watchContext.next(this);
     }
 
@@ -61,6 +64,7 @@ export class LateFeePolicyComponent implements OnInit {
             { id: 2, value: 'Closed' }
         ];
         this.getList();
+
     }
 
     /**
@@ -123,6 +127,10 @@ export class LateFeePolicyComponent implements OnInit {
     convertStatus(id, key) {
         const stt = this.listMaster[key].find(item => item.id === id);
         return stt.value;
+    }
+    selectTable() {
+        this.selectedIndex = 0;
+        this.table.element.nativeElement.querySelector('td a').focus();
     }
 
 }

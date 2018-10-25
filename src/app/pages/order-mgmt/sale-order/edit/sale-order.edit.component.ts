@@ -234,6 +234,7 @@ export class SaleOrderEditComponent implements OnInit {
             try {
 
                 const data = res.data;
+                console.log(data);
                 this.data['order_data'] = data;
                 this.generalForm.patchValue(data);
                 this.generalForm.patchValue({
@@ -241,7 +242,6 @@ export class SaleOrderEditComponent implements OnInit {
                     ship_method_rate: +data.ship_method_rate,
                     ship_method_option: data.ship_method_option,
                 });
-
 
                 // Set item and update
                 this.list.items = (data.items || []);

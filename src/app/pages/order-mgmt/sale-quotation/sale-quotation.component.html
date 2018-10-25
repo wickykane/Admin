@@ -90,7 +90,7 @@
                 <div class="card no-border">
                     <div class="card-header">
                         <strong>Line Items</strong>
-                        <button [routerLink]="['create']" style="margin:0; float:right" class="btn btn-link"> <i class="fa fa-plus text-success"></i> Create Sales Quote</button>
+                        <button *ngIf="listMaster['permission'].create" [routerLink]="['create']" style="margin:0; float:right" class="btn btn-link"> <i class="fa fa-plus text-success"></i> Create Sales Quote</button>
                     </div>
                     <div class="card-body no-padding">
                         <div class="table-responsive list">
@@ -142,14 +142,14 @@
                                             <span ng-if="item.expiry_date!=null">{{item.last_update_by}}</span>
                                         </td>
                                         <td>
-                                            <a ngbTooltip="Edit" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" [routerLink]="['/order-management/sale-quotation/edit', item.id]"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-                                            <a ngbTooltip="Submit" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" href="javascript:void(0)" (click)="confirmModal(item.id, 'SM')"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></a>
-                                            <a ngbTooltip="Cancel" *ngIf="item['sts_code'] == 'NW'" class="btn btn-default" href="javascript:void(0)" (click)="confirmModal(item.id, 'CC')"><i class="fa fa-times-circle" aria-hidden="true"></i></a>
-                                            <a ngbTooltip="Approve" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" href="javascript:void(0)" (click)="confirmModal(item.id, 'AM')"><i class="fa fa-check"></i></a>
-                                            <a ngbTooltip="Reject" *ngIf="item['sts_code'] == 'SM'" class="btn btn-default" href="javascript:void(0)" (click)="confirmModal(item.id, 'RM')"><i class="fa fa-ban" aria-hidden="true"></i></a>
-                                            <a ngbTooltip="Copy" class="btn btn-default" href="javascript:void(0)" (click)="confirmModal(item.id, 'CLONE')"><i class="fa fa-clone"></i></a>
-                                            <a ngbTooltip="View" class="btn btn-default" [routerLink]="['/order-management/sale-quotation/detail', item.id]"><i class="fa fa-eye" aria-hidden="true"></i></a>
-                                            <a ngbTooltip="Convert to SO" *ngIf="item['sts_code'] == 'AM'" href="javascript:void(0)" class="btn btn-default" (click)="confirmModal(item.id, 'SC')"><i class="fa fa-exchange" aria-hidden="true"></i></a>
+                                            <a ngbTooltip="Edit" *ngIf="item['sts_code'] == 'NW' && listMaster['permission'].edit" class="btn btn-default" [routerLink]="['/order-management/sale-quotation/edit', item.id]"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                            <a ngbTooltip="Submit" *ngIf="item['sts_code'] == 'NW' && listMaster['permission'].submit" class="btn btn-default" href="javascript:void(0)" (click)="confirmModal(item.id, 'SM')"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></a>
+                                            <a ngbTooltip="Cancel" *ngIf="item['sts_code'] == 'NW' && listMaster['permission'].cancel" class="btn btn-default" href="javascript:void(0)" (click)="confirmModal(item.id, 'CC')"><i class="fa fa-times-circle" aria-hidden="true"></i></a>
+                                            <a ngbTooltip="Approve" *ngIf="item['sts_code'] == 'SM' && listMaster['permission'].approve" class="btn btn-default" href="javascript:void(0)" (click)="confirmModal(item.id, 'AM')"><i class="fa fa-check"></i></a>
+                                            <a ngbTooltip="Reject" *ngIf="item['sts_code'] == 'SM' && listMaster['permission'].reject" class="btn btn-default" href="javascript:void(0)" (click)="confirmModal(item.id, 'RM')"><i class="fa fa-ban" aria-hidden="true"></i></a>
+                                            <a ngbTooltip="Copy" *ngIf="listMaster['permission'].copy" class="btn btn-default" href="javascript:void(0)" (click)="confirmModal(item.id, 'CLONE')"><i class="fa fa-clone"></i></a>
+                                            <a ngbTooltip="View" *ngIf="listMaster['permission'].view" class="btn btn-default" [routerLink]="['/order-management/sale-quotation/detail', item.id]"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                            <a ngbTooltip="Convert to SO" *ngIf="item['sts_code'] == 'AM' && listMaster['permission'].convert" href="javascript:void(0)" class="btn btn-default" (click)="confirmModal(item.id, 'SC')"><i class="fa fa-exchange" aria-hidden="true"></i></a>
                                         </td>
                                     </tr>
 

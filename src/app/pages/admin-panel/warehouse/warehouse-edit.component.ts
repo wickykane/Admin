@@ -3,15 +3,18 @@ import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { routerTransition } from '../../../router.animations';
 
+import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { CommonService } from '../../../services/common.service';
 import { WarehouseService } from './warehouse.service';
+
+import { WarehouseEditKeyService } from './edit-keys.control';
 
 @Component({
     selector: 'app-warehouse-edit',
     templateUrl: './warehouse-edit.component.html',
     styleUrls: ['./warehouse.component.scss'],
-    providers: [WarehouseService, ToastrService],
+    providers: [WarehouseService, ToastrService, WarehouseEditKeyService],
     animations: [routerTransition()],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -29,6 +32,8 @@ export class WarehouseEditComponent implements OnInit {
         public route: ActivatedRoute,
         public toastr: ToastrService,
         private commonService: CommonService,
+        private _hotkeysService: HotkeysService,
+        public keyService: WarehouseEditKeyService,
         private warehouseService: WarehouseService
     ) {
         this.generalForm = fb.group({
@@ -49,6 +54,7 @@ export class WarehouseEditComponent implements OnInit {
             ctt_email: [null],
             ctt_phone: [null]
         });
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {
