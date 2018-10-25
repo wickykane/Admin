@@ -205,7 +205,8 @@ const routes: Routes = [
     },
     {
         path: 'ledger',
-        component: LedgerComponent
+        component: LedgerComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'payment-methods',
