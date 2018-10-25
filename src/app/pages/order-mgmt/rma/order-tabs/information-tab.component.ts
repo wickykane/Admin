@@ -91,13 +91,13 @@ export class ReturnOrderInformationTabComponent implements OnInit {
     };
 
     public completeStatusConfig = {
-        'type1_complete': 'has already been shipped to customer. The system will create a credit memo based on the returned items once the return process completed. Do you want to continue?',
+        'type1_complete': ' has already been shipped to customer. The system will create a credit memo based on the returned items once the return process completed. Do you want to continue?',
         'type1_nocomplete_no_invoice': 'Are you sure that you want to complete the return order?',
-        'type1_nocomplete_invoice_1': 'has an open invoiced. The system will cancel it for you to create manually a new one from the updated sales order once the return process completed. Do you want to continue?',
+        'type1_nocomplete_invoice_1': ' has an open invoiced. The system will cancel it for you to create manually a new one from the updated sales order once the return process completed. Do you want to continue?',
         'type1_nocomplete_invoice_2': ' has a paid invoiced. The system will create a credit memo based on the returned items. Do you want to continue?',
         'type2': 'After completing the return process, the system will create a replacement sales order for you. Do you want to continue?',
         'type3': 'After completing the return process, the system will create a replacement sales order for you. Do you want to continue?',
-        'type4': 'has already been shipped to customer. The system will create a credit memo based on the returned items once the return process completed. Do you want to continue?'
+        'type4': ' has already been shipped to customer. The system will create a credit memo based on the returned items once the return process completed. Do you want to continue?'
     };
 
     public selected_message = '';
@@ -118,7 +118,7 @@ export class ReturnOrderInformationTabComponent implements OnInit {
 
     ngOnInit() {
         this.getList();
-
+        console.log(this._orderDetail);
     }
 
     /**
@@ -172,34 +172,33 @@ export class ReturnOrderInformationTabComponent implements OnInit {
     }
 
 
-    confirmModal(item, status, status_item) {
-      if (status !== 7) {
-          const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
-          modalRef.result.then(res => {
-              if (res) {
-                  this.updateStatus(item.id, status);
-                  this.completeStatus(item);
-              }
-          }, dismiss => { });
-          switch (status) {
-              case 2:
-                  // cancel
-                  this.selected_message = this.messageConfig.CC;
-                  break;
-              case 3:
-                  this.selected_message = this.messageConfig.SB;
-                  break;
-              case 5:
-                  this.selected_message = this.messageConfig.AP;
-                  break;
+    confirmModal(item, status) {
+        if (status !== 7) {
+            const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
+            modalRef.result.then(res => {
+                if (res) {
+                    this.updateStatus(item.id, status);
+                }
+            }, dismiss => { });
+            switch (status) {
+                case 2:
+                    // cancel
+                    this.selected_message = this.messageConfig.CC;
+                    break;
+                case 3:
+                    this.selected_message = this.messageConfig.SB;
+                    break;
+                case 5:
+                    this.selected_message = this.messageConfig.AP;
+                    break;
 
-          }
-          modalRef.componentInstance.message = this.selected_message;
-          modalRef.componentInstance.yesButtonText = 'Yes';
-          modalRef.componentInstance.noButtonText = 'No';
-      } else {
-          this.completeStatus(item);
-      }
+            }
+            modalRef.componentInstance.message = this.selected_message;
+            modalRef.componentInstance.yesButtonText = 'Yes';
+            modalRef.componentInstance.noButtonText = 'No';
+        } else {
+            this.completeStatus(item);
+        }
     }
 
     completeStatus(item) {
@@ -209,7 +208,7 @@ export class ReturnOrderInformationTabComponent implements OnInit {
         // neu = 3 thi href qua sale order view theo data reponse
         // neu = 2 hoac 4 thi href qua sale order view theo order id
         let message = '';
-        switch (item.return_type_id) {
+        switch (item.order_return_type) {
             case 1:
                 // Return
                 if (item.order_status_id === 4) {
@@ -243,7 +242,7 @@ export class ReturnOrderInformationTabComponent implements OnInit {
         }
 
         if (message) {
-          this.messageForCompleteStatus(item, message);
+            this.messageForCompleteStatus(item, message);
         }
     }
 
@@ -254,20 +253,23 @@ export class ReturnOrderInformationTabComponent implements OnInit {
                 this.service.completeStatus(item.id).subscribe(result => {
                     try {
                         this.toastr.success(result.message);
-                        if (item.return_type_id === 1 && (item.invoice_status_id === 5 || item.invoice_status_id === 6)) {
-                            setTimeout(() => {
-                                this.router.navigate(['/financial/credit-memo/view/' + result.id]);
-                            }, 500);
+                        if (item.order_return_type === 1) {
+                            if (result.data) {
+                                setTimeout(() => {
+                                    this.router.navigate(['/financial/credit-memo/view/' + result.data['id']]);
+                                }, 300);
+                            }
                         }
 
-                        if (item.return_type_id === 4) {
-                          setTimeout(() => {
-                              this.router.navigate(['/order-management/sale-order/detail', item.order_id]);
-                          }, 500);
-                        } else {
+                        if (item.order_return_type === 4) {
                             setTimeout(() => {
-                                this.router.navigate(['/order-management/sale-order/detail', result.id]);
-                            }, 500);
+                                this.router.navigate(['/order-management/sale-order/detail', item.order_id]);
+                            }, 300);
+                        }
+                        if (item.order_return_type === 2 || item.order_return_type === 3) {
+                            setTimeout(() => {
+                                this.router.navigate(['/order-management/sale-order/detail', result.data['id']]);
+                            }, 300);
                         }
                     } catch (e) {
                         console.log(e);
@@ -304,7 +306,7 @@ export class ReturnOrderInformationTabComponent implements OnInit {
             if (res) {
                 this.service.updateChange(item.id).subscribe(result => {
                     try {
-                        this.confirmModal(item.id, 2, '');
+                        this.confirmModal(item.id, 2);
                     } catch (e) {
                         console.log(e);
                     }

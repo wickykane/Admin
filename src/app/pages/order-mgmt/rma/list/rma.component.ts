@@ -54,7 +54,7 @@ export class RmaComponent implements OnInit {
     public completeStatusConfig = {
         'type1_complete': ' has already been shipped to customer. The system will create a credit memo based on the returned items once the return process completed. Do you want to continue?',
         'type1_nocomplete_no_invoice': 'Are you sure that you want to complete the return order?',
-        'type1_nocomplete_invoice_1':  'has an open invoiced. The system will cancel it for you to create manually a new one from the updated sales order once the return process completed. Do you want to continue?',
+        'type1_nocomplete_invoice_1': 'has an open invoiced. The system will cancel it for you to create manually a new one from the updated sales order once the return process completed. Do you want to continue?',
         'type1_nocomplete_invoice_2': ' has a paid invoiced. The system will create a credit memo based on the returned items. Do you want to continue?',
         'type2': 'After completing the return process, the system will create a replacement sales order for you. Do you want to continue?',
         'type3': 'After completing the return process, the system will create a replacement sales order for you. Do you want to continue?',
@@ -338,20 +338,23 @@ export class RmaComponent implements OnInit {
                 this.service.completeStatus(item.id).subscribe(result => {
                     try {
                         this.toastr.success(result.message);
-                        if (item.return_type_id === 1 && (item.invoice_status_id === 5 || item.invoice_status_id === 6)) {
-                            setTimeout(() => {
-                                this.router.navigate(['/financial/credit-memo/view/' + result.id]);
-                            }, 500);
+                        if (item.return_type_id === 1) {
+                            if (result.data) {
+                                setTimeout(() => {
+                                    this.router.navigate(['/financial/credit-memo/view/' + result.data['id']]);
+                                }, 300);
+                            }
                         }
 
                         if (item.return_type_id === 4) {
                             setTimeout(() => {
                                 this.router.navigate(['/order-management/sale-order/detail', item.order_id]);
-                            }, 500);
-                        } else {
+                            }, 300);
+                        }
+                        if (item.order_return_type === 2 || item.order_return_type === 3) {
                             setTimeout(() => {
-                                this.router.navigate(['/order-management/sale-order/detail', result.id]);
-                            }, 500);
+                                this.router.navigate(['/order-management/sale-order/detail', result.data['id']]);
+                            }, 300);
                         }
                     } catch (e) {
                         console.log(e);
@@ -370,7 +373,6 @@ export class RmaComponent implements OnInit {
             modalRef.result.then(res => {
                 if (res) {
                     this.updateStatus(item.id, status);
-                    this.completeStatus(item);
                 }
             }, dismiss => { });
             switch (status) {
