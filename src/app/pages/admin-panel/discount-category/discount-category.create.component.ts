@@ -8,6 +8,7 @@ import { Form, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validat
 import { BrowserModule } from '@angular/platform-browser';
 import { HotkeysService } from 'angular2-hotkeys';
 import * as _ from 'lodash';
+import { StorageService } from '../../../services/storage.service';
 import { DiscountCategoryService } from './discount-category.service';
 import { DiscountCategoryCreateKeyService } from './keys.create.control';
 
@@ -45,6 +46,7 @@ export class DiscountCategoryCreateComponent implements OnInit {
         private router: Router,
         private _hotkeysService: HotkeysService,
         public keyService: DiscountCategoryCreateKeyService,
+        private storage: StorageService,
         private cd: ChangeDetectorRef) {
 
         this.generalForm = fb.group({
@@ -56,6 +58,7 @@ export class DiscountCategoryCreateComponent implements OnInit {
             'create_dt': new Date().toLocaleDateString()
         });
          //  Init Key
+         this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
          this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 

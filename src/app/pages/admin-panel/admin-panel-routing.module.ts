@@ -123,15 +123,18 @@ const routes: Routes = [
     },
     {
         path: 'discount-category',
-        component: DiscountCategoryComponent
+        component: DiscountCategoryComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'discount-category/create',
-        component: DiscountCategoryCreateComponent
+        component: DiscountCategoryCreateComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'discount-category/edit/:id',
-        component: DiscountCategoryEditComponent
+        component: DiscountCategoryEditComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'insurance',
@@ -162,19 +165,23 @@ const routes: Routes = [
     },
     {
         path: 'late-fee-policy',
-        component: LateFeePolicyComponent
+        component: LateFeePolicyComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'late-fee-policy/create',
-        component: LateFeePolicyDetailComponent
+        component: LateFeePolicyDetailComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'late-fee-policy/view/:id',
-        component: LateFeePolicyDetailComponent
+        component: LateFeePolicyDetailComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'late-fee-policy/edit/:id',
-        component: LateFeePolicyDetailComponent
+        component: LateFeePolicyDetailComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'epi-policy',
@@ -202,15 +209,18 @@ const routes: Routes = [
     },
     {
         path: 'payment-methods',
-        component: PaymentMethodsListComponent
+        component: PaymentMethodsListComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'payment-methods/create',
-        component: PaymentMethodsCreateComponent
+        component: PaymentMethodsCreateComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'payment-methods/edit/:id',
-        component: PaymentMethodsCreateComponent
+        component: PaymentMethodsCreateComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'tax-types',

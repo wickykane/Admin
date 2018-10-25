@@ -4,6 +4,7 @@ import { HotkeysService } from 'angular2-hotkeys';
 import { routerTransition } from '../../../router.animations';
 // Services
 import { TableService } from '../../../services/index';
+import { StorageService } from '../../../services/storage.service';
 import { cdArrowTable } from '../../../shared';
 import { DiscountCategoryService } from './discount-category.service';
 import { DiscountCategoryKeyService } from './keys.control';
@@ -33,6 +34,7 @@ export class DiscountCategoryComponent implements OnInit {
         private _hotkeysService: HotkeysService,
         public keyService: DiscountCategoryKeyService,
         public tableService: TableService,
+        private storage: StorageService,
         private discountCategoryService: DiscountCategoryService
     ) {
         //  Assign get list function name, override letiable here
@@ -40,6 +42,7 @@ export class DiscountCategoryComponent implements OnInit {
         this.tableService.context = this;
         // this.keyService.watchContext.next(this);
          //  Init Key
+         this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
          this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 

@@ -32,21 +32,27 @@ export class LateFeePolicyListKeyService implements OnDestroy {
 
     initKey() {
         this.resetKeys();
-        this._hotkeysService.add(new Hotkey('alt+n', (event: KeyboardEvent): boolean => {
-            event.preventDefault();
-            this.context.createLateFeePolicy();
-            return;
-        }, undefined, 'Create Policy'));
-        this._hotkeysService.add(new Hotkey('alt+e', (event: KeyboardEvent): boolean => {
-            event.preventDefault();
-            this.context.editLateFeePolicy();
-            return;
-        }, undefined, 'Edit Policy'));
-        this._hotkeysService.add(new Hotkey('alt+v', (event: KeyboardEvent): boolean => {
-            event.preventDefault();
-            this.context.viewLateFeePolicy();
-            return;
-        }, undefined, 'View Policy'));
+        if (this.context.listMaster['permission'].create) {
+            this._hotkeysService.add(new Hotkey('alt+n', (event: KeyboardEvent): boolean => {
+                event.preventDefault();
+                this.context.createLateFeePolicy();
+                return;
+            }, undefined, 'Create Policy'));
+        }
+        if (this.context.listMaster['permission'].edit) {
+            this._hotkeysService.add(new Hotkey('alt+e', (event: KeyboardEvent): boolean => {
+                event.preventDefault();
+                this.context.editLateFeePolicy();
+                return;
+            }, undefined, 'Edit Policy'));
+        }
+        if (this.context.listMaster['permission'].view) {
+            this._hotkeysService.add(new Hotkey('alt+v', (event: KeyboardEvent): boolean => {
+                event.preventDefault();
+                this.context.viewLateFeePolicy();
+                return;
+            }, undefined, 'View Policy'));
+        }
         this._hotkeysService.add(new Hotkey('alt+s', (event: KeyboardEvent): any => {
             event.preventDefault();
             this.context.tableService.searchAction();
