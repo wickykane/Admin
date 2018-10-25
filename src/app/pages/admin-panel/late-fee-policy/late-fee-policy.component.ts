@@ -5,6 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 import { TableService } from '../../../services/index';
+import { StorageService } from '../../../services/storage.service';
 import { cdArrowTable } from '../../../shared';
 import { LateFeePolicyListKeyService } from './keys.list.control';
 import { LateFeePolicyService } from './late-fee-policy.service';
@@ -38,6 +39,7 @@ export class LateFeePolicyComponent implements OnInit {
         private router: Router,
         private lateFeePolicyService: LateFeePolicyService,
         public keyService: LateFeePolicyListKeyService,
+        private storage: StorageService,
         private modalService: NgbModal,
         private toastr: ToastrService) {
         this.searchForm = fb.group({
@@ -47,6 +49,7 @@ export class LateFeePolicyComponent implements OnInit {
         // Assign get list function name, override variable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
         this.keyService.watchContext.next(this);
     }
 
@@ -61,6 +64,7 @@ export class LateFeePolicyComponent implements OnInit {
             { id: 2, value: 'Closed' }
         ];
         this.getList();
+
     }
 
     /**

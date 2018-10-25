@@ -92,7 +92,7 @@
                                         <td>{{convertCustomerType(item.buyer_type)}}</td>
                                         <td>{{ item.code }}</td>
                                         <td>{{item.name}}</td>
-                                        <td *ngIf="!isView" class="text-center">
+                                        <td *ngIf="!isView " class="text-center">
                                             <a class="btn btn-default" title="Remove customer" (click)="deleteAction(item.id)">
                                                 <i class="fa fa-trash" aria-hidden="true"></i>
                                             </a>
@@ -171,8 +171,8 @@
             </div>
         </div>
         <div class="block-content block-content-full text-center" style="margin-top:15px;">
-            <button class="btn btn btn-outline-primary" (click)="payloadData()" [disabled]="!generalForm.valid || !isValidLateFeePolicy()" *ngIf="!isView">Save</button>
-            <button class="btn btn btn-outline-primary" (click)="editLateFeePolicy(generalForm.value['id'])" *ngIf="isView && (currentStatus != 2)">Edit</button>
+            <button class="btn btn btn-outline-primary" (click)="payloadData()" [disabled]="!generalForm.valid || !isValidLateFeePolicy()" *ngIf="!isView && listMaster['permission'].create">Save</button>
+            <button class="btn btn btn-outline-primary" (click)="editLateFeePolicy(generalForm.value['id'])" *ngIf="isView && (currentStatus != 2) && listMaster['permission'].edit">Edit</button>
             <button class="btn btn-default" type="button" (click)="backToList()">Cancel</button>
         </div>
     </form>

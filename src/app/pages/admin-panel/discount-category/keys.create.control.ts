@@ -28,21 +28,17 @@ export class DiscountCategoryCreateKeyService extends KeyboardBaseService {
             this.context.reback();
             return;
         }, undefined, 'Back'));
+        if (this.context.listMaster['permission'].create) {
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+                (document.activeElement as HTMLElement).blur();
+                if (!this.context.generalForm.invalid || !this.context.myForm.invalid) {
+                    this.context.createDiscountCategory();
+                }
+                const e: ExtendedKeyboardEvent = event;
+                e.returnValue = false; // Prevent bubbling
+                return e;
+            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save'));
 
-        // this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+n', (event: KeyboardEvent): boolean =>  {
-        //     event.preventDefault();
-        //     this.context.addNewLine();
-        //     return;
-        // }, undefined, 'New Line'));
-
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
-            (document.activeElement as HTMLElement).blur();
-            if (!this.context.generalForm.invalid || !this.context.myForm.invalid) {
-                this.context.createDiscountCategory();
-            }
-            const e: ExtendedKeyboardEvent = event;
-            e.returnValue = false; // Prevent bubbling
-            return e;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save'));
+        }
     }
 }

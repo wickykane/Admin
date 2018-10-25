@@ -6,6 +6,7 @@ import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
+import { StorageService } from '../../../services/storage.service';
 import { LateFeePolicyDetailKeyService } from './keys.detail.control';
 import { LateFeePolicyService } from './late-fee-policy.service';
 import { CustomerModalContent } from './modal/customer.modal';
@@ -42,6 +43,7 @@ export class LateFeePolicyDetailComponent implements OnInit {
         public toastr: ToastrService,
         private modalService: NgbModal,
         public keyService: LateFeePolicyDetailKeyService,
+        private storage: StorageService,
         private lateFeePolicyService: LateFeePolicyService) {
         this.generalForm = fb.group({
             'id': [null],
@@ -56,6 +58,7 @@ export class LateFeePolicyDetailComponent implements OnInit {
             'late_due_dt': [null],
             'company': [null],
         });
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
         this.keyService.watchContext.next(this);
     }
 
