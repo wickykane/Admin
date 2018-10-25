@@ -248,6 +248,7 @@ const routes: Routes = [
     },
     {
         path: 'quickbook-overview',
+        canActivate: [MasterGuard],
         component: QuickbookOverviewComponent
     }
 ];
