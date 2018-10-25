@@ -157,14 +157,13 @@
 
                         <ngb-tab id='1' title="List of Accounts">
                             <ng-template ngbTabContent>
-                                    <app-shortcut [listShortcut]='subKeyService.getKeys()'></app-shortcut>
                                 <div>
                                     <div class="block-content pd-bottom bg-gray-light short-width">
                                         <div class="row">
                                             <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
                                                 <div class="block-search">
                                                     <label for="name" class="control-label">Account No</label>
-                                                    <input type="text" name="no" formControlName="cd" class="form-control" id="name" placeholder="">
+                                                    <input autofocus type="text" name="no" formControlName="cd" class="form-control" id="name" placeholder="">
                                                 </div>
                                                 <div class="block-search">
                                                     <label for="name" class="control-label">Description</label>

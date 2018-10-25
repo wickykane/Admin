@@ -9,6 +9,11 @@ export class LedgerKeyService extends KeyboardBaseService {
             focus: true,
             ng_select: true,
         },
+        account_no: {
+            element: null,
+            focus: true,
+            ng_select: true,
+        }
     };
 
     saveKeys() {
@@ -113,6 +118,56 @@ export class LedgerKeyService extends KeyboardBaseService {
             this.context.selectTab(-1);
             return;
         }, undefined, 'Prev Tab'));
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+n', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            console.log(this.context.tabSet);
+            if (this.context.tabSet.activeId === '1') {
+                this.context.newAccount();
+            }
+            return;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Create Account'));
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+f', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            if (this.keyConfig.account_no.element) {
+                this.keyConfig.account_no.element.nativeElement.focus();
+            }
+            return;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Focus Search'));
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+e', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            this.context.getList();
+            return;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Search'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+r', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            this.context.tableService.resetAction(this.context.searchForm);
+            return;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            const index = this.context.selectedIndex;
+            const item = this.context.list.items[index];
+            this.context.newAccount(item);
+            return;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Edit'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+w', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            this.context.detailOrder();
+            const index = this.context.selectedIndex;
+            const item = this.context.list.items[index];
+            this.context.deleteAccount(item.id);
+            return;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Delete'));
+
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+t', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            this.context.selectTable();
+            return;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Select Table'));
 
     }
 }

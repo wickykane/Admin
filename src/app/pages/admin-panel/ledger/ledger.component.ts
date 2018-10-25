@@ -11,12 +11,12 @@ import { LedgerService } from './ledger.service';
 import { AccountModalComponent } from './modal/account.modal';
 
 import { LedgerKeyService } from './keys.control';
-import { LedgerSubKeyService } from './subKeys.control';
 
 import { HotkeysService } from 'angular2-hotkeys';
+import { cdArrowTable } from '../../../shared';
 @Component({
   selector: 'app-ledger',
-  providers: [LedgerService, LedgerKeyService, LedgerSubKeyService],
+  providers: [LedgerService, LedgerKeyService],
   templateUrl: 'ledger.component.html',
   styleUrls: ['ledger.component.scss'],
   animations: [routerTransition()],
@@ -57,6 +57,7 @@ export class LedgerComponent implements OnInit {
   });
   public isInstallQuickbook = false;
   @ViewChild('tabSet') tabSet;
+  @ViewChild(cdArrowTable) table: cdArrowTable;
   constructor(
     private cd: ChangeDetectorRef,
     private fb: FormBuilder,
@@ -66,7 +67,6 @@ export class LedgerComponent implements OnInit {
     private modalService: NgbModal,
     private toastr: ToastrService,
     public keyService: LedgerKeyService,
-    public subKeyService: LedgerSubKeyService,
     private _hotkeysService: HotkeysService
   ) {
 
@@ -96,10 +96,6 @@ export class LedgerComponent implements OnInit {
 
     //  Init Key
     this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
-    // this.subKeyService.watchContext.next({ context: this, service: this._hotkeysService });
-    // this.subKeyService.resetKeys();
-    // this.subKeyService.initKey();
-    console.log(this.subKeyService.getKeys());
   }
 
   ngOnInit() {
@@ -363,5 +359,8 @@ selectTab(step) {
   this.tabSet.select(String(active));
   this.cd.detectChanges();
 }
-
+selectTable() {
+  this.selectedIndex = 0;
+  this.table.element.nativeElement.querySelector('td').focus(); this.refresh();
+}
 }
