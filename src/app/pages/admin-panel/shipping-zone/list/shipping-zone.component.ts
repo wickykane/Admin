@@ -11,6 +11,8 @@ import { HotkeysService } from 'angular2-hotkeys';
 import { CommonService } from './../../../../services/common.service';
 
 import { cdArrowTable } from '../../../../shared';
+
+import { StorageService } from '../../../../services/storage.service';
 @Component({
     selector: 'app-shipping-zone',
     templateUrl: './shipping-zone.component.html',
@@ -50,6 +52,7 @@ export class ShippingZoneComponent implements OnInit {
         public keyService: ShippingZoneKeyService,
         private commonService: CommonService,
         private _hotkeysService: HotkeysService,
+        private storage: StorageService
     ) {
 
         this.searchForm = fb.group({
@@ -72,6 +75,8 @@ export class ShippingZoneComponent implements OnInit {
         // this.getListMaster();
         this.getListCountry();
         this.user = JSON.parse(localStorage.getItem('currentUser'));
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
+        console.log(this.listMaster['permission']);
     }
 
     refresh() {
