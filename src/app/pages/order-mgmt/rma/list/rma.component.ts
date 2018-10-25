@@ -351,7 +351,7 @@ export class RmaComponent implements OnInit {
                                 this.router.navigate(['/order-management/sale-order/detail', item.order_id]);
                             }, 300);
                         }
-                        if (item.order_return_type === 2 || item.order_return_type === 3) {
+                        if (item.return_type_id === 2 || item.return_type_id === 3) {
                             setTimeout(() => {
                                 this.router.navigate(['/order-management/sale-order/detail', result.data['id']]);
                             }, 300);
