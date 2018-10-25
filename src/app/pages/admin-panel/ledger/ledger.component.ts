@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -11,10 +11,12 @@ import { LedgerService } from './ledger.service';
 import { AccountModalComponent } from './modal/account.modal';
 
 import { LedgerKeyService } from './keys.control';
+import { LedgerSubKeyService } from './subKeys.control';
 
+import { HotkeysService } from 'angular2-hotkeys';
 @Component({
   selector: 'app-ledger',
-  providers: [LedgerService, LedgerKeyService],
+  providers: [LedgerService, LedgerKeyService, LedgerSubKeyService],
   templateUrl: 'ledger.component.html',
   styleUrls: ['ledger.component.scss'],
   animations: [routerTransition()],
@@ -54,7 +56,7 @@ export class LedgerComponent implements OnInit {
     integerLimit: 6
   });
   public isInstallQuickbook = false;
-
+  @ViewChild('tabSet') tabSet;
   constructor(
     private cd: ChangeDetectorRef,
     private fb: FormBuilder,
@@ -64,6 +66,8 @@ export class LedgerComponent implements OnInit {
     private modalService: NgbModal,
     private toastr: ToastrService,
     public keyService: LedgerKeyService,
+    public subKeyService: LedgerSubKeyService,
+    private _hotkeysService: HotkeysService
   ) {
 
     this.generalForm = fb.group({
@@ -91,7 +95,11 @@ export class LedgerComponent implements OnInit {
     this.tableService.context = this;
 
     //  Init Key
-    this.keyService.watchContext.next(this);
+    this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
+    // this.subKeyService.watchContext.next({ context: this, service: this._hotkeysService });
+    // this.subKeyService.resetKeys();
+    // this.subKeyService.initKey();
+    console.log(this.subKeyService.getKeys());
   }
 
   ngOnInit() {
@@ -209,6 +217,7 @@ export class LedgerComponent implements OnInit {
         this.refresh();
       });
     }
+    this.cd.detectChanges();
   }
 
   saveDetailAccountType() {
@@ -240,6 +249,7 @@ export class LedgerComponent implements OnInit {
         this.refresh();
       });
     }
+    this.cd.detectChanges();
   }
 
   /**
@@ -296,6 +306,7 @@ export class LedgerComponent implements OnInit {
 
   cancel() {
     this.data['show'] = (this.data['show'] === this.screen.NEW_DETAIL_TYPE) ? this.screen.VIEW_ACCOUNT_TYPE : null;
+    this.cd.detectChanges();
   }
 
   deleteAccount(id) {
@@ -341,4 +352,16 @@ export class LedgerComponent implements OnInit {
         );
     }
   }
+  back() {
+    this.router.navigate(['/admin-panel']);
+}
+selectTab(step) {
+  let active = 0;
+  active = +this.tabSet.activeId;
+  active += step;
+  active = Math.min(Math.max(active, 0), 7);
+  this.tabSet.select(String(active));
+  this.cd.detectChanges();
+}
+
 }
