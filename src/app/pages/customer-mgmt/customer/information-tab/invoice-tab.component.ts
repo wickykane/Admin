@@ -8,6 +8,7 @@ import { TableService } from './../../../../services/table.service';
     selector: 'app-customer-invoice-tab',
     templateUrl: './invoice-tab.component.html',
     styleUrls: ['./information-tab.component.scss'],
+    providers: [TableService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomerInvoiceTabComponent implements OnInit {
