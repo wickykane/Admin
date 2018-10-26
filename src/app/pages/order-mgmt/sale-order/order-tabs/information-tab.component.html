@@ -478,7 +478,7 @@
                                         <div class="form-group row">
                                             <label class='col-7'>Total Return COGS</label>
                                             <div class='col-5'>
-                                                {{detail['total_return_cogs'] || 0}}
+                                                {{ (+detail['total_return_cogs'] || 0).toFixed(2) }}
                                             </div>
                                         </div>
                                     </div>
