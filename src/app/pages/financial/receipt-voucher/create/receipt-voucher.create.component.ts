@@ -247,7 +247,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             this.tableService.matchPagingOption(res.data);
             if (code) {
                 const index = this.list.items.findIndex(item => item.code === code);
-                this.list.items[index].applied_amt = tot_amt;
+                this.list.items[index].applied_amt = this.list.items[index].balance_price;
             }
             this.updateTotal();
             this.refresh();
