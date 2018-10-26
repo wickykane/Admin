@@ -1,57 +1,64 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { Hotkey, HotkeysService } from 'angular2-hotkeys';
-// tslint:disable-next-line:import-blacklist
-import { Subject } from 'rxjs/Rx';
+import { Hotkey } from 'angular2-hotkeys';
+import { KeyboardBaseService } from './../../../shared/helper/keyServiceBase';
 
 @Injectable()
-export class LateFeePolicyDetailKeyService implements OnDestroy {
-    public context: any;
-    public watchContext = new Subject<any>();
+export class LateFeePolicyDetailKeyService extends KeyboardBaseService {
 
-    constructor(private _hotkeysService: HotkeysService) {
-        this.watchContext.subscribe(res => {
-            this.context = res;
-            this.initKey();
-        });
-    }
-
-    ngOnDestroy() {
+    saveKeys() {
+        this.keys = this.getKeys();
+        this.context.data['tableKey'] = this.context.table.getKeys();
         this.resetKeys();
-    }
-
-    resetKeys() {
-        const keys = this.getKeys();
-        for (const key of keys) {
-            this._hotkeysService.remove(key);
-        }
-    }
-
-    getKeys() {
-        return Array.from(this._hotkeysService.hotkeys);
+        this.context.table.resetKeys();
     }
 
     initKey() {
-        this.resetKeys();
-        this._hotkeysService.add(new Hotkey('alt+backspace', (event: KeyboardEvent): boolean => {
-            event.preventDefault();
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+backspace', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            (document.activeElement as HTMLElement).blur();
             this.context.backToList();
-            return;
-        }, undefined, 'Back'));
-        if (this.context.listMaster['permission'].edit && this.context.isView && (this.context.currentStatus !== 2)) {
-            this._hotkeysService.add(new Hotkey('alt+e', (event: KeyboardEvent): boolean => {
-                event.preventDefault();
-                this.context.editLateFeePolicy(this.context.generalForm.value['id']);
-                return;
-            }, undefined, 'Edit'));
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Back'));
+        if (!this.context.isView) {
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+i', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+                (document.activeElement as HTMLInputElement).blur();
+                this.context.addNewCustomer();
+                const e: ExtendedKeyboardEvent = event;
+                e.returnValue = false; // Prevent bubbling
+                return e;
+            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Add Item'));
         }
+
+        if (this.context.listMaster['permission'].edit && this.context.isView && (this.context.currentStatus !== 2)) {
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+e', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+                (document.activeElement as HTMLElement).blur();
+                this.context.editLateFeePolicy(this.context.generalForm.value['id']);
+                const e: ExtendedKeyboardEvent = event;
+                e.returnValue = false; // Prevent bubbling
+                return e;
+            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Edit'));
+        }
+
         if (this.context.listMaster['permission'].create && !this.context.isView) {
-            this._hotkeysService.add(new Hotkey('alt+s', (event: KeyboardEvent): boolean => {
-                event.preventDefault();
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+                (document.activeElement as HTMLElement).blur();
                 if (this.context.generalForm.valid || this.context.isValidLateFeePolicy()) {
                     this.context.payloadData();
                 }
-                return;
-            }, undefined, 'Save'));
+                const e: ExtendedKeyboardEvent = event;
+                e.returnValue = false; // Prevent bubbling
+                return e;
+            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save'));
+        }
+        if (!this.context.isView) {
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+del', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            // const item = this.context.list['items'][this.context.selectedIndex];
+                this.context.removeSelectedCustomers();
+                const e: ExtendedKeyboardEvent = event;
+                e.returnValue = false; // Prevent bubbling
+                return e;
+            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Delete selected'));
         }
     }
 }

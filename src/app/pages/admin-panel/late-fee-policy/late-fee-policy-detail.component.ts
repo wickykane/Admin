@@ -1,12 +1,14 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 
+import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 import { StorageService } from '../../../services/storage.service';
+import { cdArrowTable } from '../../../shared';
 import { LateFeePolicyDetailKeyService } from './keys.detail.control';
 import { LateFeePolicyService } from './late-fee-policy.service';
 import { CustomerModalContent } from './modal/customer.modal';
@@ -21,7 +23,7 @@ import { TerminatePolicyModalContent } from './modal/terminate-policy.modal';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LateFeePolicyDetailComponent implements OnInit {
-
+    @ViewChild(cdArrowTable) table: cdArrowTable;
     generalForm: FormGroup;
     public listMaster = {};
     public list = {
@@ -35,7 +37,7 @@ export class LateFeePolicyDetailComponent implements OnInit {
     public isCreate = false;
     public isView = false;
     public isEdit = false;
-
+    public data = {};
     constructor(public router: Router,
         private cd: ChangeDetectorRef,
         public route: ActivatedRoute,
@@ -44,6 +46,7 @@ export class LateFeePolicyDetailComponent implements OnInit {
         private modalService: NgbModal,
         public keyService: LateFeePolicyDetailKeyService,
         private storage: StorageService,
+        private _hotkeysService: HotkeysService,
         private lateFeePolicyService: LateFeePolicyService) {
         this.generalForm = fb.group({
             'id': [null],
@@ -59,7 +62,7 @@ export class LateFeePolicyDetailComponent implements OnInit {
             'company': [null],
         });
         this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
-        this.keyService.watchContext.next(this);
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {
@@ -269,7 +272,6 @@ export class LateFeePolicyDetailComponent implements OnInit {
                 if (res.data.detail) {
                     this.list.items = res.data.detail;
                 }
-                this.keyService.watchContext.next(this);
                 this.refresh();
             }, err => {
                 console.log(err.message);
@@ -294,8 +296,13 @@ export class LateFeePolicyDetailComponent implements OnInit {
     }
 
     addNewCustomer() {
+        this.keyService.saveKeys();
         const modalRef = this.modalService.open(CustomerModalContent, { size: 'lg' });
         modalRef.result.then(res => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
@@ -310,7 +317,12 @@ export class LateFeePolicyDetailComponent implements OnInit {
                     return listAdded.indexOf(item.id) < 0;
                 }));
             }
-        }, dismiss => { });
+        }, dismiss => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
+         });
     }
 
     convertCustomerType(code) {
