@@ -276,10 +276,10 @@
                                             <i class="text-success fa fa-check"></i>
                                         </td>
                                         <td class="text-center">{{item.qty}}</td>
-                                        <td class="text-center">${{item.price}}</td>
+                                        <td class="text-center">{{item.price | number:'1.2' | currency }}</td>
                                         <td class="text-center">{{item.discount_percent || 0}}%</td>
                                         <td class="text-center">{{item.tax_percent || 0}}%</td>
-                                        <td class="text-center">${{item.total_price}}</td>
+                                        <td class="text-center">{{item.total_price | number:'1.2' | currency}}</td>
                                         <td class="text-center">{{item.income_account_name}}</td>
                                     </tr>
                                 </tbody>
