@@ -148,7 +148,7 @@ export class ItemMiscModalContent implements OnInit, OnDestroy {
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+r', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             event.preventDefault();
-            this.tableService.resetAction();
+            this.tableService.resetAction(this.searchForm);
             const e: ExtendedKeyboardEvent = event;
             e.returnValue = false; // Prevent bubbling
             return e;
