@@ -24,6 +24,7 @@ export class CustomerRMATabComponent implements OnInit {
     }
 
     public listMaster = {};
+    public selectedIndex = 0;
 
     public list = {
         items: []
@@ -66,6 +67,11 @@ export class CustomerRMATabComponent implements OnInit {
     refresh() {
         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
+
+    selectData(index) {
+        console.log(index);
+    }
+
 
     getRMAReference() {
 
