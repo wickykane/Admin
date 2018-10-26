@@ -3,7 +3,6 @@ import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CustomerService } from '../../customer.service';
 import { TableService } from './../../../../services/table.service';
 
-
 @Component({
     selector: 'app-customer-rma-tab',
     templateUrl: './rma-tab.component.html',
@@ -25,6 +24,7 @@ export class CustomerRMATabComponent implements OnInit {
     }
 
     public listMaster = {};
+    public selectedIndex = 0;
 
     public list = {
         items: []
@@ -39,15 +39,16 @@ export class CustomerRMATabComponent implements OnInit {
         private customerService: CustomerService, private cd: ChangeDetectorRef) {
 
         this.searchForm = fb.group({
-            'code': [null],
+            'cd': [null],
             'cus_po': [null],
             'sale_quote_num': [null],
-            'type': [null],
-            'sts': [null],
+            'return_type_id': [null],
+            'sts_id': [null],
             'buyer_name': [null],
             'date_type': [null],
             'date_to': [null],
             'date_from': [null],
+            'warehouse_id': [null]
         });
 
         //  Assign get list function name, override letiable here
@@ -55,23 +56,44 @@ export class CustomerRMATabComponent implements OnInit {
         this.tableService.context = this;
     }
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.getRMAReference();
+    }
 
     /**
      * Internal Function
      */
 
-     refresh() {
-          if (!this.cd['destroyed']) { this.cd.detectChanges(); }
-     }
+    refresh() {
+        if (!this.cd['destroyed']) { this.cd.detectChanges(); }
+    }
+
+    selectData(index) {
+        console.log(index);
+    }
+
+
+    getRMAReference() {
+
+        this.customerService.getOrderReference().subscribe(res => {
+            this.listMaster['warehouses'] = res.data.warehouses || []; this.refresh();
+        });
+        this.customerService.getRMAReference().subscribe(res => {
+            this.listMaster['return_status'] = res.data.return_status || [];
+
+            this.listMaster['return_type'] = res.data.return_type || [];
+            this.refresh();
+        });
+
+    }
 
     getList() {
-        const params = {...this.tableService.getParams(), ...this.searchForm.value};
-        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
+        const params = { ...this.tableService.getParams(), ...this.searchForm.value };
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
 
-        this.customerService.getListInvoice(this._customerId, params).subscribe(res => {
+        this.customerService.getListRMA(this._customerId, params).subscribe(res => {
             try {
-                this.list.items = [] || res.data.rows;
+                this.list.items = res.data.rows || [];
                 this.tableService.matchPagingOption(res.data);
                 this.refresh();
             } catch (e) {
