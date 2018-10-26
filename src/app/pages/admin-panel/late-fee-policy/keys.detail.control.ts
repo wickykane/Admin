@@ -53,8 +53,10 @@ export class LateFeePolicyDetailKeyService extends KeyboardBaseService {
         }
         if (!this.context.isView) {
             this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+del', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
-            // const item = this.context.list['items'][this.context.selectedIndex];
-                this.context.removeSelectedCustomers();
+                (document.activeElement as HTMLElement).blur();
+                if (this.context.list.checklist.length !== 0) {
+                    this.context.removeSelectedCustomers();
+                }
                 const e: ExtendedKeyboardEvent = event;
                 e.returnValue = false; // Prevent bubbling
                 return e;
