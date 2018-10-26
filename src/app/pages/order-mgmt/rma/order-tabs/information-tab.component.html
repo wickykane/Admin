@@ -313,7 +313,7 @@
                         <th translate>Return Reason</th>
                         <th translate>Warranty</th>
                         <th translate>Status</th>
-                        <!-- <th translate>Receipt Date</th> -->
+                        <th translate>Receipt Date</th>
                      </tr>
                   </thead>
                   <tr *ngIf="list.returnItem.length === 0">
@@ -356,7 +356,7 @@
                             <p> {{item.return_reason_accept.inital.data}}</p>
                             <p> <strong>After Receipt</strong> </p>
                             <ul>
-                              <li *ngFor="let item of item.return_reason_accept.after">{{item.receive_date}} {{item.data}}</li>
+                              <li *ngFor="let item of item.return_reason_accept.after">{{item.data}}</li>
                             </ul>
                           </ng-template>
                           <button *ngIf="item.return_reason_accept" type="button" class="btn btn-outline-secondary mr-2" triggers="click:blur" [ngbPopover]="popContent" popoverTitle="Return Reason" >
@@ -372,9 +372,17 @@
                         <td class="text-center">
                              {{item.sts_name}}
                         </td>
-                        <!-- <td class="text-center">
-                             {{item.receipt_date}}
-                        </td> -->
+                        <td class="text-center">
+                             <ng-template #popContents>
+                               <p> <strong>SKU No - Receipt Date Details</strong> </p>
+                               <ul>
+                                 <li *ngFor="let item of item.receipt_date.after">{{item.receive_date}} - {{item.data}}</li>
+                               </ul>
+                             </ng-template>
+                             <button *ngIf="item.receipt_date" type="button" class="btn btn-outline-secondary mr-2" triggers="click:blur" [ngbPopover]="popContents" popoverTitle="Receipt Date" >
+                             View Details
+                           </button>
+                        </td>
                      </tr>
                   </tbody>
                   </table>
