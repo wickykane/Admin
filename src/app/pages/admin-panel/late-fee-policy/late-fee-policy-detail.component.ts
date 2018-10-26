@@ -266,7 +266,6 @@ export class LateFeePolicyDetailComponent implements OnInit {
                 if (res.data.detail) {
                     this.list.items = res.data.detail;
                 }
-                this.keyService.watchContext.next(this);
                 this.refresh();
             }, err => {
                 console.log(err.message);
@@ -306,6 +305,7 @@ export class LateFeePolicyDetailComponent implements OnInit {
                 this.list.items = this.list.items.concat(res.filter((item) => {
                     return listAdded.indexOf(item.id) < 0;
                 }));
+                this.refresh();
             }
         }, dismiss => { });
     }
