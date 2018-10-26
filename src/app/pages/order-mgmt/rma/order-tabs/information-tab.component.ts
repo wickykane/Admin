@@ -97,7 +97,7 @@ export class ReturnOrderInformationTabComponent implements OnInit {
         'type1_nocomplete_invoice_2': ' has a paid invoiced. The system will create a credit memo based on the returned items. Do you want to continue?',
         'type2': 'After completing the return process, the system will create a replacement sales order for you. Do you want to continue?',
         'type3': 'After completing the return process, the system will create a replacement sales order for you. Do you want to continue?',
-        'type4': ' has already been shipped to customer. The system will create a credit memo based on the returned items once the return process completed. Do you want to continue?'
+        'type4': 'Are you sure that you want to complete the return process ?'
     };
 
     public selected_message = '';
