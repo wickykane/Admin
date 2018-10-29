@@ -1,26 +1,36 @@
-import { Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
-import { CommonService } from '../../../services/common.service';
-import { CustomerService } from '../customer.service';
+import { CommonService } from '../../../../services/common.service';
+import { CustomerService } from '../../customer.service';
+import { CustomerCreateKeyService } from './keys.control';
 
 //  modal
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { SiteModalComponent } from '../../../shared/modals/site.modal';
+import { SiteModalComponent } from '../../../../shared/modals/site.modal';
 
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
-import { routerTransition } from '../../../router.animations';
-import { Helper } from '../../../shared/index';
+import { routerTransition } from '../../../../router.animations';
+import { Helper } from '../../../../shared/index';
 
 @Component({
     selector: 'app-customer-create',
     templateUrl: './customer-create.component.html',
-    styleUrls: ['./customer.component.scss'],
+    styleUrls: ['../customer.component.scss'],
+    providers: [CustomerCreateKeyService],
     animations: [routerTransition()]
 })
 export class CustomerCreateComponent implements OnInit, OnDestroy {
+
+    @ViewChild('addressTable') addressTable: ElementRef;
+    @ViewChild('siteTable') siteTable: ElementRef;
+    @ViewChild('contactTable') contactTable: ElementRef;
+
+    public selectedAddressIndex = 0;
+    public selectedSiteIndex = 0;
+    public selectedContactIndex = 0;
 
     generalForm: FormGroup;
 
@@ -50,13 +60,16 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     hotkeyCtrlRight: Hotkey | Hotkey[];
     public paymentMethodList: any = [];
     public paymentTermList: any = [];
-    constructor(public fb: FormBuilder,
+
+    constructor(
+        public fb: FormBuilder,
         public router: Router,
         public toastr: ToastrService,
         public vRef: ViewContainerRef,
         private customerService: CustomerService,
         private modalService: NgbModal,
         private hotkeysService: HotkeysService,
+        public keyService: CustomerCreateKeyService,
         private commonService: CommonService,
         public helper: Helper) {
         this.generalForm = fb.group({
@@ -94,6 +107,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
             this.flagAddress = true;
             return false; //  Prevent bubbling
         }));
+        this.keyService.watchContext.next({ context: this, service: this.hotkeysService });
     }
 
     ngOnInit() {
@@ -114,7 +128,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     getListCreditCard() {
         this.customerService.getCreditCard().subscribe(res => {
             this.getListCreditCard = res.data;
-            this.credit_cards.forEach(card => { card.listCard = res.data });
+            this.credit_cards.forEach(card => { card.listCard = res.data; });
         });
     }
     getListPaymentTerm() {
@@ -182,12 +196,12 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     //  add new row credi
     addNewCreditCard() {
         this.credit_cards.push({
-            "type": null,
-            "no": "",
-            "name": "",
-            "expiration_month": null,
-            "expiration_year": null,
-            "cvv": null,
+            'type': null,
+            'no': '',
+            'name': '',
+            'expiration_month': null,
+            'expiration_year': null,
+            'cvv': null,
             listCard: this.getListCreditCard
         });
     }
@@ -274,17 +288,18 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     }
 
     dupAddress(type) {
-        if (type == 3 || type == 4) {
-            var p = this.addresses[0];
-            var k = Object.keys(p);
+        if (type === 3 || type === 4) {
+            const p = this.addresses[0];
+            const k = Object.keys(p);
             for (let i = 1; i < this.addresses.length; i++) {
-                k.map(key => { key != 'type' && key != 'listType' && (this.addresses[i][key] = p[key]) });
+                k.map(key => {
+                    return key !== 'type' && key !== 'listType' && (this.addresses[i][key] = p[key]);
+                });
             }
-        }
-        else {
-            var tmp = {};
+        } else {
+            let tmp = {};
             for (let i = 1; i < this.addresses.length; i++) {
-                if (this.addresses[i].type == type) {
+                if (this.addresses[i].type === type) {
                     tmp = JSON.parse(JSON.stringify(this.addresses[i]));
                     break;
                 }
@@ -294,41 +309,39 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         }
     }
     checkAddress() {
-        var count1 = 0;
-        var count2 = 0;
+        let count1 = 0;
+        let count2 = 0;
         console.log(this.addresses);
         this.addresses.forEach(item => {
-            if (item.type == 1) {
+            if (item.type === 1) {
                 count1++;
             }
-            if (item.type == 2) {
+            if (item.type === 2) {
                 count2++;
             }
         });
         if (count1 > 1) {
             this.addresses.forEach(item => {
-                if (item.type == 1) {
+                if (item.type === 1) {
                     item.hidden = false;
                 }
             });
-        }
-        else{
+        } else {
             this.addresses.forEach(item => {
-                if (item.type == 1) {
+                if (item.type === 1) {
                     item.hidden = true;
                 }
             });
         }
         if (count2 > 1) {
             this.addresses.forEach(item => {
-                if (item.type == 2) {
+                if (item.type === 2) {
                     item.hidden = false;
                 }
             });
-        }
-        else{
+        } else {
             this.addresses.forEach(item => {
-                if (item.type == 2) {
+                if (item.type === 2) {
                     item.hidden = true;
                 }
             });
@@ -374,64 +387,73 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     checkIsDefault($event, idx) {
         for (let i = 0; i < this.addresses.length; i++) {
             const item = this.addresses[i];
-            if (idx != i && item.type == this.addresses[idx].type) {
+            if (idx !== i && item.type === this.addresses[idx].type) {
                 item.is_default = false;
             }
         }
     }
     isNumberKey(evt) {
 
-        var e = evt || window.event; // for trans-browser compatibility
-        var charCode = e.which || e.keyCode;
-        if (charCode == 46) {
-            if (evt.target.value.indexOf('.') == -1)
+        const e = evt || window.event; // for trans-browser compatibility
+        const charCode = e.which || e.keyCode;
+        if (charCode === 46) {
+            if (evt.target.value.indexOf('.') === -1) {
                 return true;
+            }
             return false;
         }
-        if (charCode > 31 && (charCode < 47 || charCode > 57))
+        if (charCode > 31 && (charCode < 47 || charCode > 57)) {
             return false;
-        if (e.shiftKey) return false;
+        }
+        if (e.shiftKey) {
+            return false;
+        }
         return true;
     }
     isNumberKeyC(evt) {
 
-        var e = evt || window.event; // for trans-browser compatibility
-        var charCode = e.which || e.keyCode;
-        if (charCode > 31 && (charCode < 47 || charCode > 57))
+        const e = evt || window.event; // for trans-browser compatibility
+        const charCode = e.which || e.keyCode;
+        if (charCode > 31 && (charCode < 47 || charCode > 57)) {
             return false;
-        if (e.shiftKey) return false;
+        }
+        if (e.shiftKey) {
+            return false;
+        }
         return true;
     }
     //  add new Site
 
     addNewSite(item?, index?) {
-        var k = ['name', 'country_code', 'address_1', 'city', 'state_id', 'zip_code'];
+        const k = ['name', 'country_code', 'address_1', 'city', 'state_id', 'zip_code'];
+        // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < this.addresses.length; i++) {
+            // tslint:disable-next-line:prefer-for-of
             for (let j = 0; j < k.length; j++) {
                 if (!this.addresses[i][k[j]]) {
                     return this.toastr.error('Please fulfill all the addresses before creating the site.');
                 }
-            };
+            }
         }
-        var countCode, textCode;
+        let countCode;
+        let textStringCode;
         this.customerService.generateSiteCode().subscribe(res => {
             try {
                 console.log('start');
                 countCode = Number(res.data.CP.no);
-                textCode = res.data.CP.text;
+                textStringCode = res.data.CP.text;
                 const modalRef = this.modalService.open(SiteModalComponent, { size: 'lg' });
                 modalRef.componentInstance.item = item;
                 modalRef.componentInstance.index = index;
                 modalRef.componentInstance.paddr = JSON.parse(JSON.stringify(this.addresses));
                 modalRef.componentInstance.isEdit = false;
-                modalRef.result.then(res => {
-                    if (res['index'] != undefined) {
-                        this.sites[res.index] = res.params;
-                    }
-                    else {
-                        if (!this.helper.isEmptyObject(res)) {
-                            if (!this.helper.isEmptyObject(res)) {
-                                this.sites.push(res);
+                modalRef.result.then( _res => {
+                    if (_res['index'] !== undefined) {
+                        this.sites[_res.index] = _res.params;
+                    } else {
+                        if (!this.helper.isEmptyObject(_res)) {
+                            if (!this.helper.isEmptyObject(_res)) {
+                                this.sites.push(_res);
                             }
                             console.log(this.sites);
                         }
@@ -441,7 +463,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
                 modalRef.componentInstance.info = {
                     parent_company_name: this.generalForm.value.company_name,
                     code: countCode,
-                    textCode: textCode,
+                    textCode: textStringCode,
                     payment_method_id: this.generalForm.value.payment_method_id,
                     payment_term_id: this.generalForm.value.payment_term_id,
                     taxable: this.generalForm.value.taxable
@@ -450,7 +472,6 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
 
             }
         });
-
     }
 
     removeSite(index) {
@@ -505,10 +526,10 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
             }
 
             if ((params['credit_limit'] + ' ').indexOf('.') >= 0) {
-                return this.toastr.error("The credit limit is invalid data");
+                return this.toastr.error('The credit limit is invalid data');
             }
             if ((params['credit_limit'] + ' ').indexOf('.') >= 0) {
-                return this.toastr.error("The credit limit is invalid data");
+                return this.toastr.error('The credit limit is invalid data');
             }
             // var isFieldRequired = false;
             // if((params['first_name'] == null|| params['first_name'] == '' &&params['buyer_type'] == 'PS')){
@@ -619,5 +640,20 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         //         });
         // }
 
+    }
+
+    selectAddressTable() {
+        this.selectedAddressIndex = 0;
+        this.addressTable.nativeElement.querySelector('td a').focus();
+    }
+
+    selectSiteTable() {
+        this.selectedSiteIndex = 0;
+        this.siteTable.nativeElement.querySelector('td a').focus();
+    }
+
+    selectContactTable() {
+        this.selectedContactIndex = 0;
+        this.contactTable.nativeElement.querySelector('td a').focus();
     }
 }

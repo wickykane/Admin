@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { CustomerManagementRoutingModule } from './customer-mgmt-routing.module';
-import { CustomerEditComponent } from './customer/customer-edit.component';
+import { CustomerEditComponent } from './customer/edit/customer-edit.component';
 
-import { CustomerCreateComponent } from './customer/customer-create.component';
+import { CustomerCreateComponent } from './customer/create/customer-create.component';
 import { CustomerViewComponent } from './customer/customer-view.component';
 import { CustomerComponent } from './customer/customer.component';
 import { CustomerAccountTabComponent } from './customer/information-tab/account-tab.component';
