@@ -1,9 +1,10 @@
 import { state } from '@angular/animations';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonService } from '../../../../services/common.service';
 import { CustomerService } from '../../customer.service';
+import { CustomerEditKeyService } from './keys.control';
 
 //  modal
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -20,9 +21,18 @@ import { Helper } from '../../../../shared/index';
     templateUrl: './customer-edit.component.html',
     styleUrls: ['../customer.component.scss'],
     animations: [routerTransition()],
+    providers: [CustomerEditKeyService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomerEditComponent implements OnInit, OnDestroy {
+
+    @ViewChild('addressTable') addressTable: ElementRef;
+    @ViewChild('siteTable') siteTable: ElementRef;
+    @ViewChild('contactTable') contactTable: ElementRef;
+
+    public selectedAddressIndex = 0;
+    public selectedSiteIndex = 0;
+    public selectedContactIndex = 0;
 
     generalForm: FormGroup;
 
@@ -75,6 +85,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         public route: ActivatedRoute,
         private modalService: NgbModal,
         private hotkeysService: HotkeysService,
+        public keyService: CustomerEditKeyService,
         private commonService: CommonService,
         public helper: Helper,
         private cd: ChangeDetectorRef) {
@@ -114,8 +125,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             this.flagAddress = true;
             return false; //  Prevent bubbling
         }));
-
-
+        this.keyService.watchContext.next({ context: this, service: this.hotkeysService });
     }
 
     ngOnInit() {
@@ -167,6 +177,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                 this.refresh();
             } catch (e) {
                 console.log(e);
+                this.refresh();
             }
         });
     }
@@ -410,10 +421,12 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             listCountry: this.listCountry,
             listState: [], allow_remove: true
         });
+        this.refresh();
     }
 
     removeAddress(index) {
         this.addresses.splice(index, 1);
+        this.refresh();
     }
 
     //  add new row bank account
@@ -457,14 +470,17 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     //  add new row contact
     addNewContact() {
         this.contacts.push({});
+        this.refresh();
     }
 
     removeContact(index) {
         if (this.contacts[index].hasOwnProperty('id')) {
             this.contacts[index].is_deleted = true;
+            this.refresh();
             return;
         }
         this.contacts.splice(index, 1);
+        this.refresh();
     }
 
     //  add new Site
@@ -515,6 +531,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
 
     removeSite(index) {
         this.sites.splice(index, 1);
+        this.refresh();
     }
 
     checkIsDefault($event, idx) {
@@ -576,4 +593,21 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
 
     }
 
+    selectAddressTable() {
+        this.selectedAddressIndex = 0;
+        this.addressTable.nativeElement.querySelector('td a').focus();
+        this.refresh();
+    }
+
+    selectSiteTable() {
+        this.selectedSiteIndex = 0;
+        this.siteTable.nativeElement.querySelector('td a').focus();
+        this.refresh();
+    }
+
+    selectContactTable() {
+        this.selectedContactIndex = 0;
+        this.contactTable.nativeElement.querySelector('td a').focus();
+        this.refresh();
+    }
 }
