@@ -234,7 +234,8 @@
                         <span *ngIf="addresses.length > 1">Records</span>
                         <span *ngIf="addresses.length <= 1">Record</span>
 
-                        <div class="wrap-keyboard right-toggle-button text-danger mr-2 wrap-icon" (click)="flagAddress = !flagAddress">
+                        <div class="wrap-keyboard right-toggle-button text-danger mr-2 wrap-icon"
+                            (click)="flagAddress = !flagAddress; flagAddress && (flagContact = flagSite = false)">
                             <span class="fa" [ngClass]="{'fa-minus': flagAddress,'fa-plus': !flagAddress}"></span>
                         </div>
                     </div>
@@ -336,7 +337,8 @@
                         <strong class="text-danger">{{sites.length}}</strong>
                         <span *ngIf="sites.length > 1">Records</span>
                         <span *ngIf="sites.length <= 1">Record</span>
-                        <div class="wrap-keyboard right-toggle-button text-danger mr-2 wrap-icon" (click)="flagSite = !flagSite">
+                        <div class="wrap-keyboard right-toggle-button text-danger mr-2 wrap-icon"
+                            (click)="flagSite = !flagSite; flagSite && (flagAddress = flagContact = false)">
                             <span class="fa" [ngClass]="{'fa-minus': flagSite,'fa-plus': !flagSite}"></span>
                         </div>
                     </div>
@@ -578,7 +580,8 @@
                         <strong class="text-danger">{{contacts.length}}</strong>
                         <span *ngIf="contacts.length > 1">Records</span>
                         <span *ngIf="contacts.length <= 1">Record</span>
-                        <div class="wrap-keyboard right-toggle-button text-danger mr-2 wrap-icon" (click)="flagContact = !flagContact">
+                        <div class="wrap-keyboard right-toggle-button text-danger mr-2 wrap-icon"
+                            (click)="flagContact = !flagContact; flagContact && (flagAddress = flagSite = false)">
                             <span class="fa" [ngClass]="{'fa-minus': flagContact,'fa-plus': !flagContact}"></span>
                         </div>
                     </div>

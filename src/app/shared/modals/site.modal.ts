@@ -603,9 +603,11 @@ export class SiteModalComponent implements OnInit, OnDestroy {
                 if (!this.flagAddress) {
                     this.flagAddress = true;
                     setTimeout( () => {
+                        this.flagContact = false;
                         this.selectAddressTable();
-                    }, 500);
+                    }, 100);
                 } else {
+                    this.flagContact = false;
                     this.selectAddressTable();
                 }
             }
@@ -617,6 +619,9 @@ export class SiteModalComponent implements OnInit, OnDestroy {
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+2', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             (document.activeElement as HTMLInputElement).blur();
             this.flagAddress = !this.flagAddress;
+            if (this.flagAddress) {
+                this.flagContact = false;
+            }
             const e: ExtendedKeyboardEvent = event;
             e.returnValue = false; // Prevent bubbling
             return e;
@@ -640,9 +645,11 @@ export class SiteModalComponent implements OnInit, OnDestroy {
                 if (!this.flagContact) {
                     this.flagContact = true;
                     setTimeout( () => {
+                        this.flagAddress = false;
                         this.selectContactTable();
-                    }, 500);
+                    }, 100);
                 } else {
+                    this.flagAddress = false;
                     this.selectContactTable();
                 }
             }
@@ -654,6 +661,9 @@ export class SiteModalComponent implements OnInit, OnDestroy {
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+8', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             (document.activeElement as HTMLInputElement).blur();
             this.flagContact = !this.flagContact;
+            if (this.flagContact) {
+                this.flagAddress = false;
+            }
             const e: ExtendedKeyboardEvent = event;
             e.returnValue = false; // Prevent bubbling
             return e;

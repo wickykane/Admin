@@ -45,9 +45,11 @@ export class CustomerCreateKeyService extends KeyboardBaseService {
                 if (!this.context.flagAddress) {
                     this.context.flagAddress = true;
                     setTimeout( () => {
+                        this.context.flagSite = this.context.flagContact = false;
                         this.context.selectAddressTable();
-                    }, 500);
+                    }, 100);
                 } else {
+                    this.context.flagSite = this.context.flagContact = false;
                     this.context.selectAddressTable();
                 }
             }
@@ -59,6 +61,9 @@ export class CustomerCreateKeyService extends KeyboardBaseService {
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+2', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             (document.activeElement as HTMLInputElement).blur();
             this.context.flagAddress = !this.context.flagAddress;
+            if (this.context.flagAddress) {
+                this.context.flagSite = this.context.flagContact = false;
+            }
             const e: ExtendedKeyboardEvent = event;
             e.returnValue = false; // Prevent bubbling
             return e;
@@ -82,9 +87,11 @@ export class CustomerCreateKeyService extends KeyboardBaseService {
                 if (!this.context.flagSite) {
                     this.context.flagSite = true;
                     setTimeout( () => {
+                        this.context.flagAddress = this.context.flagContact = false;
                         this.context.selectSiteTable();
-                    }, 500);
+                    }, 100);
                 } else {
+                    this.context.flagAddress = this.context.flagContact = false;
                     this.context.selectSiteTable();
                 }
             }
@@ -97,6 +104,9 @@ export class CustomerCreateKeyService extends KeyboardBaseService {
             (document.activeElement as HTMLInputElement).blur();
             if (this.context.generalForm.value.buyer_type === 'CP') {
                 this.context.flagSite = !this.context.flagSite;
+                if (this.context.flagSite) {
+                    this.context.flagAddress = this.context.flagContact = false;
+                }
             }
             const e: ExtendedKeyboardEvent = event;
             e.returnValue = false; // Prevent bubbling
@@ -121,9 +131,11 @@ export class CustomerCreateKeyService extends KeyboardBaseService {
                 if (!this.context.flagContact) {
                     this.context.flagContact = true;
                     setTimeout( () => {
+                        this.context.flagSite = this.context.flagAddress = false;
                         this.context.selectContactTable();
-                    }, 500);
+                    }, 100);
                 } else {
+                    this.context.flagSite = this.context.flagAddress = false;
                     this.context.selectContactTable();
                 }
             }
@@ -136,6 +148,9 @@ export class CustomerCreateKeyService extends KeyboardBaseService {
             (document.activeElement as HTMLInputElement).blur();
             if (this.context.generalForm.value.buyer_type === 'CP') {
                 this.context.flagContact = !this.context.flagContact;
+                if (this.context.flagContact) {
+                    this.context.flagSite = this.context.flagAddress = false;
+                }
             }
             const e: ExtendedKeyboardEvent = event;
             e.returnValue = false; // Prevent bubbling
