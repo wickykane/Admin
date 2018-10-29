@@ -22,7 +22,7 @@
                             <label> Description
                                 <span class="text-danger">(*)</span>
                             </label>
-                            <input type="text" name="" class="form-control" formControlName="des" [readonly]="isEdit">
+                            <input patternDirective="^[a-zA-Z0-9\s]*$" type="text" name="" class="form-control" formControlName="des" [readonly]="isEdit">
                         </div>
                         <div class="col-sm-2 form-group">
                             <label> Terms Day
