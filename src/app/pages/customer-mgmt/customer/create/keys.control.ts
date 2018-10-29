@@ -14,6 +14,13 @@ export class CustomerCreateKeyService extends KeyboardBaseService {
         }
     };
 
+    saveKeys() {
+        this.keys = this.getKeys();
+        this.context.data['tableKey'] = this.context.table.getKeys();
+        this.resetKeys();
+        this.context.table.resetKeys();
+    }
+
     initKey() {
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+backspace', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             this.context.router.navigate(['/customer']);

@@ -16,6 +16,7 @@ import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
 import { Helper } from '../../../../shared/index';
 
+import { cdArrowTable } from '../../../../shared';
 @Component({
     selector: 'app-customer-edit',
     templateUrl: './customer-edit.component.html',
@@ -29,10 +30,12 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     @ViewChild('addressTable') addressTable: ElementRef;
     @ViewChild('siteTable') siteTable: ElementRef;
     @ViewChild('contactTable') contactTable: ElementRef;
+    @ViewChild(cdArrowTable) table: cdArrowTable;
 
     public selectedAddressIndex = 0;
     public selectedSiteIndex = 0;
     public selectedContactIndex = 0;
+    public data = {};
 
     generalForm: FormGroup;
 
@@ -121,10 +124,10 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
 
         });
 
-        this.hotkeyCtrlRight = hotkeysService.add(new Hotkey('alt+r', (event: KeyboardEvent): boolean => {
-            this.flagAddress = true;
-            return false; //  Prevent bubbling
-        }));
+        // this.hotkeyCtrlRight = hotkeysService.add(new Hotkey('alt+r', (event: KeyboardEvent): boolean => {
+        //     this.flagAddress = true;
+        //     return false; //  Prevent bubbling
+        // }));
         this.keyService.watchContext.next({ context: this, service: this.hotkeysService });
     }
 
@@ -499,6 +502,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         let textStringCode;
         this.customerService.generateSiteCode().subscribe(res => {
             try {
+                this.keyService.saveKeys();
                 countCode = Number(res.data.CP.no);
                 textStringCode = res.data.CP.text;
                 const modalRef = this.modalService.open(SiteModalComponent, { size: 'lg' });
@@ -508,6 +512,10 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                 modalRef.componentInstance.isEdit = true;
                 this.refresh();
                 modalRef.result.then(_res => {
+                    if (this.keyService.keys.length > 0) {
+                        this.keyService.reInitKey();
+                        this.table.reInitKey(this.data['tableKey']);
+                    }
                     if (_res['index'] !== undefined) {
                         this.sites[_res.index] = _res.params;
                     } else {
@@ -516,6 +524,11 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                         if (!this.helper.isEmptyObject(_res)) {
                             this.sites.push(_res);
                         }
+                    }
+                }, dismiss => {
+                    if (this.keyService.keys.length > 0) {
+                        this.keyService.reInitKey();
+                        this.table.reInitKey(this.data['tableKey']);
                     }
                 });
                 modalRef.componentInstance.info = {
