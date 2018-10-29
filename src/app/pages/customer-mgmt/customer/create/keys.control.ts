@@ -47,7 +47,7 @@ export class CustomerCreateKeyService extends KeyboardBaseService {
                     setTimeout( () => {
                         this.context.flagSite = this.context.flagContact = false;
                         this.context.selectAddressTable();
-                    }, 100);
+                    }, 0);
                 } else {
                     this.context.flagSite = this.context.flagContact = false;
                     this.context.selectAddressTable();
@@ -89,7 +89,7 @@ export class CustomerCreateKeyService extends KeyboardBaseService {
                     setTimeout( () => {
                         this.context.flagAddress = this.context.flagContact = false;
                         this.context.selectSiteTable();
-                    }, 100);
+                    }, 0);
                 } else {
                     this.context.flagAddress = this.context.flagContact = false;
                     this.context.selectSiteTable();
@@ -133,7 +133,7 @@ export class CustomerCreateKeyService extends KeyboardBaseService {
                     setTimeout( () => {
                         this.context.flagSite = this.context.flagAddress = false;
                         this.context.selectContactTable();
-                    }, 100);
+                    }, 0);
                 } else {
                     this.context.flagSite = this.context.flagAddress = false;
                     this.context.selectContactTable();

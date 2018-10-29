@@ -605,7 +605,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
                     setTimeout( () => {
                         this.flagContact = false;
                         this.selectAddressTable();
-                    }, 100);
+                    }, 0);
                 } else {
                     this.flagContact = false;
                     this.selectAddressTable();
@@ -647,7 +647,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
                     setTimeout( () => {
                         this.flagAddress = false;
                         this.selectContactTable();
-                    }, 100);
+                    }, 0);
                 } else {
                     this.flagAddress = false;
                     this.selectContactTable();
