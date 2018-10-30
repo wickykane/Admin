@@ -42,7 +42,8 @@ export class CreditMemoApplyComponent implements OnInit {
         remain_amount: 0,
         total_current_balance: 0,
         total_balance_due: 0,
-        total_amount: 0
+        total_amount: 0,
+        total_tot_price: 0
     };
     searchForm: FormGroup;
     public generalForm: FormGroup;
@@ -173,6 +174,7 @@ export class CreditMemoApplyComponent implements OnInit {
                 item.balance_due = (item.amount !== undefined) ? (item.original_amount - item.amount) : 0;
                 this.main_info.total_current_balance += item.original_amount;
                 this.main_info.total_balance_due += item.balance_due;
+                this.main_info.total_tot_price += item.tot_price;
                 this.main_info.total_amount += item.amount || 0;
                 return item;
             });
