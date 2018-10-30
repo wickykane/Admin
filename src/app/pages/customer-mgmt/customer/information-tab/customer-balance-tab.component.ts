@@ -56,12 +56,11 @@ export class CustomerCustomerBalanceTabComponent implements OnInit, OnDestroy {
         //  Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
-
+        this.initKeyBoard();
     }
 
     ngOnInit() {
         this.getListReference();
-        this.initKeyBoard();
     }
 
     /**
@@ -112,11 +111,11 @@ export class CustomerCustomerBalanceTabComponent implements OnInit, OnDestroy {
     }
       initKeyBoard() {
         this.data['key_config'] = {
-            year: {
+            subsidiary: {
                 element: null,
                 focus: true,
             },
-            subsidiary: {
+            year: {
                 element: null,
                 focus: true,
             },
@@ -163,25 +162,6 @@ export class CustomerCustomerBalanceTabComponent implements OnInit, OnDestroy {
             this.tableService.resetAction(this.searchForm);
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset'));
-        this._hotkeysServiceBalance.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+left', (event: KeyboardEvent): boolean => {
-            this.tableService.pagination.page--;
-            if (this.tableService.pagination.page < 1) {
-                this.tableService.pagination.page = 1;
-                return;
-            }
-            this.tableService.changePage(this.tableService.pagination.page);
-            return;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Previous page'));
-
-        this._hotkeysServiceBalance.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+right', (event: KeyboardEvent): boolean => {
-            this.tableService.pagination.page++;
-            if (this.tableService.pagination.page > this.tableService.pagination.total_page) {
-                this.tableService.pagination.page = this.tableService.pagination.total_page;
-                return;
-            }
-            this.tableService.changePage(this.tableService.pagination.page);
-            return;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Next page'));
     }
     resetKeys() {
         const keys = Array.from(this._hotkeysServiceBalance.hotkeys);
