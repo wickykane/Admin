@@ -163,7 +163,7 @@
                                             <td>{{item.payment_term_name}}</td>
                                             <td>{{item.status_name}}</td>
                                             <td>{{item.original_amount | currency}}</td>
-                                            <td>{{item.original_amount | currency}}</td>
+                                            <td>{{item.tot_price | currency}}</td>
                                             <td>{{item.balance_due|currency}}</td>
                                             <td>
                                                 <input [isDecimal]="true" numberDirective [min]="0" [max]="item.original_amount"
@@ -178,7 +178,7 @@
                                     <tr>
                                         <td colspan="6"></td>
                                         <td>{{main_info.total_current_balance | currency}}</td>
-                                        <td></td>
+                                        <td>{{main_info.tot_price|currency}}</td>
                                         <td>{{main_info.total_amount|currency}}</td>
                                         <td></td>
                                         <td></td>
