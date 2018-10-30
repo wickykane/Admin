@@ -241,12 +241,12 @@
                     </div>
                     <div class="card-body no-padding">
                         <div *ngIf="flagAddress">
-                            <div class="table-responsive list">
+                            <div class="table-responsive list table-fixed-header">
                                 <table class="table table-bordered table-order" #addressTable cdArrowTable
                                     [collection]="addresses" [(selectedIndex)]="selectedAddressIndex">
                                     <thead class="bg-white">
                                         <tr>
-                                            <th> No </th>
+                                            <th class="tb-w-35"> No </th>
                                             <th> Type </th>
                                             <th> Name
                                                 <span class="text-danger">(*)</span>
@@ -267,13 +267,13 @@
                                             <th> Zip Code
                                                 <span class="text-danger">(*)</span>
                                             </th>
-                                            <th> Default </th>
-                                            <th> Action </th>
+                                            <th class="tb-w-70"> Default </th>
+                                            <th class="tb-w-70"> Action </th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody [ngClass]="{'limit-height': addresses.length && addresses.length > 5}">
                                         <tr *ngFor="let item of addresses; let i = index" [ngClass]="{'row-selected': i == selectedAddressIndex}">
-                                            <td>{{i+1}}</td>
+                                            <td class="tb-w-35">{{i+1}}</td>
                                             <td>
                                                 <select class="form-control" name="type" [disabled]="!item.allow_remove" [(ngModel)]="item.type">
                                                     <option value="null" selected="true">--Select--</option>
@@ -307,11 +307,11 @@
                                             <td>
                                                 <input type="text" class="form-control" name="zip_code" [(ngModel)]="item.zip_code">
                                             </td>
-                                            <td>
+                                            <td class="text-center tb-w-70">
                                                 <input type="checkbox" name="is_default" (change)="checkIsDefault($event, i)" [(ngModel)]="item.is_default" [disabled]="item.type==3 || item.type==4">
                                             </td>
-                                            <td class="text-center">
-                                                <a href="javascript:void(0)" type="button" class="btn btn-default" (click)="removeAddress(i)" *ngIf="item.allow_remove">
+                                            <td class="text-center tb-w-70">
+                                                <a href="javascript:void(0)" class="btn btn-default" (click)="removeAddress(i)" *ngIf="item.allow_remove">
                                                     <i class="fa fa-times" aria-hidden="true"></i>
                                                 </a>
                                                 <a href="javascript:void(0)" *ngIf="!item.allow_remove"></a>
@@ -344,12 +344,12 @@
                     </div>
                     <div class="card-body no-padding">
                         <div *ngIf="flagSite">
-                            <div class="table-responsive list">
+                            <div class="table-responsive list table-fixed-header">
                                 <table class="table table-bordered table-order" #siteTable cdArrowTable
                                     [collection]="sites" [(selectedIndex)]="selectedSiteIndex">
                                     <thead class="bg-white">
                                         <tr>
-                                            <th> No </th>
+                                            <th class="tb-w-35"> No </th>
                                             <th> Site Code </th>
                                             <th> Site Name </th>
                                             <th> Country </th>
@@ -358,12 +358,12 @@
                                             <th> City </th>
                                             <th> State </th>
                                             <th> Zip Code </th>
-                                            <th> Action </th>
+                                            <th class="tb-w-70"> Action </th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody [ngClass]="{'limit-height': sites.length && sites.length > 5}">
                                         <tr *ngFor="let item of sites; let i = index" [ngClass]="{'row-selected': i == selectedSiteIndex}">
-                                            <td>{{i+1}}</td>
+                                            <td class="tb-w-35">{{i+1}}</td>
                                             <td>
                                                 {{item.site_code}}
                                             </td>
@@ -388,12 +388,12 @@
                                             <td>
                                                 {{item.addresses[0]?.zip_code}}
                                             </td>
-                                            <td class="text-center">
-                                                <a href="javascript:void(0)" type="button" class="btn btn-default" (click)="addNewSite(item,i)">
+                                            <td class="text-center tb-w-70">
+                                                <a href="javascript:void(0)" class="btn btn-default" (click)="addNewSite(item,i)">
                                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                                 </a>
                                                 <a href="javascript:void(0)" *ngIf="item.site_id == undefined"
-                                                    type="button" class="btn btn-default" (click)="(item.id == null) && removeSite(i)">
+                                                    class="btn btn-default" (click)="(item.id == null) && removeSite(i)">
                                                     <i class="fa fa-times" aria-hidden="true"></i>
                                                 </a>
                                             </td>
@@ -587,12 +587,12 @@
                     </div>
                     <div class="card-body no-padding">
                         <div *ngIf="flagContact">
-                            <div class="table-responsive list">
+                            <div class="table-responsive list table-fixed-header">
                                 <table class="table table-bordered table-order" cdArrowTable #contactTable
                                     [collection]="contacts" [(selectedIndex)]="selectedContactIndex">
                                     <thead class="bg-white">
                                         <tr>
-                                            <th> No </th>
+                                            <th class="tb-w-35"> No </th>
                                             <th> Name
                                                 <span class="text-danger">(*)</span>
                                             </th>
@@ -604,12 +604,12 @@
                                             </th>
                                             <th> Username </th>
                                             <th> Password </th>
-                                            <th> Action </th>
+                                            <th class="tb-w-70"> Action </th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody [ngClass]="{'limit-height': contacts.length && contacts.length > 5}">
                                         <tr *ngFor="let item of contacts; let i = index" [ngClass]="{'row-selected': i == selectedContactIndex}">
-                                            <td>{{i+1}}</td>
+                                            <td class="tb-w-35">{{i+1}}</td>
                                             <td>
                                                 <input type="text" class="form-control" name="name" [(ngModel)]="item.name">
                                             </td>
@@ -631,8 +631,8 @@
                                             <td>
                                                 <input type="password" class="form-control" name="password" [(ngModel)]="item.password">
                                             </td>
-                                            <td class="text-center">
-                                                <a href="javascript:void(0)" type="button" class="btn btn-default" (click)="removeContact(i)">
+                                            <td class="text-center tb-w-70">
+                                                <a href="javascript:void(0)" class="btn btn-default" (click)="removeContact(i)">
                                                     <i class="fa fa-times" aria-hidden="true"></i>
                                                 </a>
                                             </td>
