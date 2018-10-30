@@ -376,10 +376,10 @@
                              <ng-template #popContents>
                                <p> <strong>SKU No - Receipt Date Details</strong> </p>
                                <ul>
-                                 <li *ngFor="let item of item.receipt_date.after">{{item.receive_date}} - {{item.data}}</li>
+                                 <li *ngFor="let item of item.return_reason_accept.after">{{item.receive_date}} - {{item.data}}</li>
                                </ul>
                              </ng-template>
-                             <button *ngIf="item.receipt_date" type="button" class="btn btn-outline-secondary mr-2" triggers="click:blur" [ngbPopover]="popContents" popoverTitle="Receipt Date" >
+                             <button *ngIf="item.return_reason_accept" type="button" class="btn btn-outline-secondary mr-2" triggers="click:blur" [ngbPopover]="popContents" popoverTitle="Receipt Date"  container="body">
                              View Details
                            </button>
                         </td>
