@@ -32,11 +32,11 @@
 
             <div class="col-4">
                 <label class="control-label font-weight-bold">Total Debit</label>
-                <span>{{list.total[0]?.total_debit | currency}}</span>
+                <span>{{list.total[0].total_debit | currency}}</span>
             </div>
             <div class="col-4">
                 <label class="control-label font-weight-bold">Total Credit</label>
-                <span>{{list.total[0]?.total_credit | currency}}</span>
+                <span>{{list.total[0].total_credit | currency}}</span>
             </div>
             <div class="col-4">
                 <label class="control-label font-weight-bold">Total Balance</label>
@@ -78,7 +78,7 @@
                                     <td></td>
                                     <td></td>
                                 </tr>
-                                <tr *ngFor="let subItem of  item.items; let i1 = index;" [ngClass]="{'row-selected': i1 == selectedIndex}">
+                                <tr *ngFor="let subItem of  item.items; let i1 = index;">
                                         <td>&nbsp;</td>
                                         <td>{{subItem.date_created | date:'MM/dd/yyyy'}}</td>
                                         <td>{{subItem.issue_date | date:'MM/dd/yyyy'}}</td>

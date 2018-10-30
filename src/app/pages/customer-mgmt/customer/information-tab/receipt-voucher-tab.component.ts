@@ -67,7 +67,9 @@ export class CustomerReceiptVoucherTabComponent implements OnInit, OnDestroy {
     ngOnInit() {
       this.getList();
     }
-
+    selectData(index) {
+        console.log(index);
+    }
     /**
      * Internal Function
      */

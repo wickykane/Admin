@@ -11,7 +11,7 @@
                 </div>
                 <div class="card-body no-padding">
                     <div class="scroll-container table-responsive list">
-                        <table class="table table-bordered table-order" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
+                        <table class="table table-bordered table-order" cdArrowTable [collection]="list.accounts" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                             <thead class="bg-white">
                                 <tr>
                                     <th>No</th>
@@ -44,7 +44,7 @@
 
                     <h5 class="text-uppercase font-weight-bold">Cards</h5>
                     <div class="scroll-container table-responsive list">
-                        <table class='table table-bordered table-order' cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
+                        <table class='table table-bordered table-order' cdArrowTable [collection]="list.cards" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                             <thead class="bg-white">
                                 <tr>
                                     <th>No</th>
@@ -55,7 +55,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let item of list.cards">
+                                <tr *ngFor="let item of list.cards; let i = index" [ngClass]="{'row-selected': i == selectedIndex}">
                                     <td>{{ item.id }}</td>
                                     <td>{{ getCardType(item.card_type)}}</td>
                                     <td>{{ item.account_no }}</td>

@@ -64,7 +64,9 @@ export class CustomerQuoteTabComponent implements OnInit, OnDestroy {
     /**
      * Internal Function
      */
-
+    selectData(index) {
+        console.log(index);
+    }
      refresh() {
           if (!this.cd['destroyed']) { this.cd.detectChanges(); }
      }

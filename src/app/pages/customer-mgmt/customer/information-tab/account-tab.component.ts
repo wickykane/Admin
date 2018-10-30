@@ -42,7 +42,9 @@ export class CustomerAccountTabComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.getListCreditCard();
     }
-
+    selectData(index) {
+        console.log(index);
+    }
     refresh() {
          if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }

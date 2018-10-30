@@ -61,7 +61,9 @@ export class CustomerPaymentTabComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {}
-
+    selectData(index) {
+        console.log(index);
+    }
     /**
      * Internal Function
      */
