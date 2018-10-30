@@ -1,10 +1,10 @@
 <div [@routerTransition]>
     <app-page-header [heading]="'EDIT CUSTOMER'" [icon]="'fa-th-list'"></app-page-header>
-    <!-- <app-shortcut [listShortcut]='editCustomerKeyService.getKeys()'></app-shortcut> -->
+    <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
 
     <div style="margin: 15px 0">
-        <a class="btn btn-outline-info" routerLink="/customer">
-            <i class="fa fa-arrow-left"></i> Back</a>
+        <button [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="back_button"
+            class="btn btn-outline-dark" [routerLink]="['/customer']">Back To List</button>
     </div>
     <section class="rma-page block main-container block-order">
 
@@ -38,7 +38,8 @@
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class="col-sm-8">
-                                                    <input type="text" class="form-control" name="phone" formControlName="phone">
+                                                    <input [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="phone"
+                                                        type="text" class="form-control" name="phone" formControlName="phone">
                                                 </div>
                                             </div>
                                         </div>
@@ -233,14 +234,16 @@
                         <span *ngIf="addresses.length > 1">Records</span>
                         <span *ngIf="addresses.length <= 1">Record</span>
 
-                        <div class="wrap-keyboard right-toggle-button text-danger mr-2 wrap-icon" (click)="flagAddress = !flagAddress">
+                        <div class="wrap-keyboard right-toggle-button text-danger mr-2 wrap-icon"
+                            (click)="flagAddress = !flagAddress; flagAddress && (flagContact = flagSite = false)">
                             <span class="fa" [ngClass]="{'fa-minus': flagAddress,'fa-plus': !flagAddress}"></span>
                         </div>
                     </div>
                     <div class="card-body no-padding">
                         <div *ngIf="flagAddress">
                             <div class="table-responsive list">
-                                <table class="table table-bordered table-order">
+                                <table class="table table-bordered table-order" #addressTable cdArrowTable
+                                    [collection]="addresses" [(selectedIndex)]="selectedAddressIndex">
                                     <thead class="bg-white">
                                         <tr>
                                             <th> No </th>
@@ -269,7 +272,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr *ngFor="let item of addresses; let i = index">
+                                        <tr *ngFor="let item of addresses; let i = index" [ngClass]="{'row-selected': i == selectedAddressIndex}">
                                             <td>{{i+1}}</td>
                                             <td>
                                                 <select class="form-control" name="type" [disabled]="!item.allow_remove" [(ngModel)]="item.type">
@@ -307,10 +310,11 @@
                                             <td>
                                                 <input type="checkbox" name="is_default" (change)="checkIsDefault($event, i)" [(ngModel)]="item.is_default" [disabled]="item.type==3 || item.type==4">
                                             </td>
-                                            <td>
-                                                <button type="button" class="btn btn-default" (click)="removeAddress(i)" *ngIf="item.allow_remove">
+                                            <td class="text-center">
+                                                <a href="javascript:void(0)" type="button" class="btn btn-default" (click)="removeAddress(i)" *ngIf="item.allow_remove">
                                                     <i class="fa fa-times" aria-hidden="true"></i>
-                                                </button>
+                                                </a>
+                                                <a href="javascript:void(0)" *ngIf="!item.allow_remove"></a>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -333,14 +337,16 @@
                         <strong class="text-danger">{{sites.length}}</strong>
                         <span *ngIf="sites.length > 1">Records</span>
                         <span *ngIf="sites.length <= 1">Record</span>
-                        <div class="wrap-keyboard right-toggle-button text-danger mr-2 wrap-icon" (click)="flagSite = !flagSite">
+                        <div class="wrap-keyboard right-toggle-button text-danger mr-2 wrap-icon"
+                            (click)="flagSite = !flagSite; flagSite && (flagAddress = flagContact = false)">
                             <span class="fa" [ngClass]="{'fa-minus': flagSite,'fa-plus': !flagSite}"></span>
                         </div>
                     </div>
                     <div class="card-body no-padding">
                         <div *ngIf="flagSite">
                             <div class="table-responsive list">
-                                <table class="table table-bordered table-order">
+                                <table class="table table-bordered table-order" #siteTable cdArrowTable
+                                    [collection]="sites" [(selectedIndex)]="selectedSiteIndex">
                                     <thead class="bg-white">
                                         <tr>
                                             <th> No </th>
@@ -356,7 +362,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr *ngFor="let item of sites; let i = index">
+                                        <tr *ngFor="let item of sites; let i = index" [ngClass]="{'row-selected': i == selectedSiteIndex}">
                                             <td>{{i+1}}</td>
                                             <td>
                                                 {{item.site_code}}
@@ -365,30 +371,31 @@
                                                 {{item.site_name }}
                                             </td>
                                             <td>
-                                                {{item.addresses[0].country_name}}
+                                                {{item.addresses[0]?.country_name}}
                                             </td>
                                             <td>
-                                                {{item.addresses[0].address_1}}
+                                                {{item.addresses[0]?.address_1}}
                                             </td>
                                             <td>
-                                                {{item.addresses[0].address_2}}
+                                                {{item.addresses[0]?.address_2}}
                                             </td>
                                             <td>
-                                                {{item.addresses[0].city}}
+                                                {{item.addresses[0]?.city}}
                                             </td>
                                             <td>
-                                                {{item.addresses[0].state_name}}
+                                                {{item.addresses[0]?.state_name}}
                                             </td>
                                             <td>
-                                                {{item.addresses[0].zip_code}}
+                                                {{item.addresses[0]?.zip_code}}
                                             </td>
-                                            <td>
-                                                <button type="button" class="btn btn-default" (click)="addNewSite(item,i)">
+                                            <td class="text-center">
+                                                <a href="javascript:void(0)" type="button" class="btn btn-default" (click)="addNewSite(item,i)">
                                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                                </button>
-                                                <button *ngIf="item.site_id == undefined" [disabled]="item.id != null" type="button" class="btn btn-default" (click)="removeSite(i)">
+                                                </a>
+                                                <a href="javascript:void(0)" *ngIf="item.site_id == undefined"
+                                                    type="button" class="btn btn-default" (click)="(item.id == null) && removeSite(i)">
                                                     <i class="fa fa-times" aria-hidden="true"></i>
-                                                </button>
+                                                </a>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -573,14 +580,16 @@
                         <strong class="text-danger">{{contacts.length}}</strong>
                         <span *ngIf="contacts.length > 1">Records</span>
                         <span *ngIf="contacts.length <= 1">Record</span>
-                        <div class="wrap-keyboard right-toggle-button text-danger mr-2 wrap-icon" (click)="flagContact = !flagContact">
+                        <div class="wrap-keyboard right-toggle-button text-danger mr-2 wrap-icon"
+                            (click)="flagContact = !flagContact; flagContact && (flagAddress = flagSite = false)">
                             <span class="fa" [ngClass]="{'fa-minus': flagContact,'fa-plus': !flagContact}"></span>
                         </div>
                     </div>
                     <div class="card-body no-padding">
                         <div *ngIf="flagContact">
                             <div class="table-responsive list">
-                                <table class="table table-bordered table-order">
+                                <table class="table table-bordered table-order" cdArrowTable #contactTable
+                                    [collection]="contacts" [(selectedIndex)]="selectedContactIndex">
                                     <thead class="bg-white">
                                         <tr>
                                             <th> No </th>
@@ -599,7 +608,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr *ngFor="let item of contacts; let i = index">
+                                        <tr *ngFor="let item of contacts; let i = index" [ngClass]="{'row-selected': i == selectedContactIndex}">
                                             <td>{{i+1}}</td>
                                             <td>
                                                 <input type="text" class="form-control" name="name" [(ngModel)]="item.name">
@@ -622,10 +631,10 @@
                                             <td>
                                                 <input type="password" class="form-control" name="password" [(ngModel)]="item.password">
                                             </td>
-                                            <td>
-                                                <button type="button" class="btn btn-default" (click)="removeContact(i)">
+                                            <td class="text-center">
+                                                <a href="javascript:void(0)" type="button" class="btn btn-default" (click)="removeContact(i)">
                                                     <i class="fa fa-times" aria-hidden="true"></i>
-                                                </button>
+                                                </a>
                                             </td>
                                         </tr>
                                     </tbody>
