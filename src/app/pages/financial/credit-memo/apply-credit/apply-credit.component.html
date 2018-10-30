@@ -136,6 +136,7 @@
                                         <th style="width:200px" translate>Payment Term</th>
                                         <th class="text-nowrap" style="width:100px" translate> Status</th>
                                         <th class="text-center" style="width:150px" translate>Current Balance</th>
+                                        <th class="text-center" style="width:150px" translate>Total Amount</th>
                                         <th style="width:150px" translate>Balance Due</th>
                                         <th translate style="width:150px">Amount Applied</th>
                                         <th></th>
@@ -162,6 +163,7 @@
                                             <td>{{item.payment_term_name}}</td>
                                             <td>{{item.status_name}}</td>
                                             <td>{{item.original_amount | currency}}</td>
+                                            <td>{{item.original_amount | currency}}</td>
                                             <td>{{item.balance_due|currency}}</td>
                                             <td>
                                                 <input [isDecimal]="true" numberDirective [min]="0" [max]="item.original_amount"
@@ -176,8 +178,9 @@
                                     <tr>
                                         <td colspan="6"></td>
                                         <td>{{main_info.total_current_balance | currency}}</td>
-                                        <td>{{main_info.total_balance_due|currency}}</td>
+                                        <td></td>
                                         <td>{{main_info.total_amount|currency}}</td>
+                                        <td></td>
                                         <td></td>
                                     </tr>
                                 </tbody>
@@ -216,19 +219,6 @@
                             Payment
                             Incentive is active, you will remove the discount opportunity.
                         </p>
-                        <!-- <div class="col-12 no-padding">
-                            <button (click)="clearPayment()" class="btn btn-link" translate>
-                                <i class="fa fa-plus"></i>Clear Payment
-                            </button>
-                        </div>
-                        <div class="col-12 no-padding">
-                            <p class="text-danger">(*) For the Invoice document, the Original Balance is including the
-                                early
-                                payment incentive if any.</p>
-                            <p class="text-danger">(**) If you enter a partial payment for an invoice on which an Early
-                                Payment
-                                Incentive is active, you will remove the discount opportunity.</p>
-                        </div> -->
                     </div>
                 </div>
             </div>

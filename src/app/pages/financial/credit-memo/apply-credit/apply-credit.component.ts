@@ -185,7 +185,7 @@ export class CreditMemoApplyComponent implements OnInit {
         const items = this.list.checklist.map(item => {
             return item;
         });
-        const params = { ...this.main_info, ...{ apply_detail: items } };
+        const params = { ...this.main_info, ...this.generalForm.value, ...{ apply_detail: items } };
         this.creditMemoService.applyCreditForInvoice(this.data['id'], params).subscribe(res => {
             try {
                 if (res.status) {
