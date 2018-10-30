@@ -45,9 +45,9 @@ export class CustomerCustomerBalanceTabComponent implements OnInit, OnDestroy {
         public tableService: TableService,
         public _hotkeysServiceBalance: HotkeysService,
         private helper: Helper,
-        private customerService: CustomerService, private cd: ChangeDetectorRef,
+        private customerService: CustomerService,
+        private cd: ChangeDetectorRef,
         private modalService: NgbModal) {
-        this.initKeyBoard();
         this.searchForm = fb.group({
             'subsidiary': [null],
             'year': [null]
@@ -56,11 +56,12 @@ export class CustomerCustomerBalanceTabComponent implements OnInit, OnDestroy {
         //  Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
-        this.initKeyBoard();
+
     }
 
     ngOnInit() {
         this.getListReference();
+        this.initKeyBoard();
     }
 
     /**
