@@ -1,10 +1,13 @@
 <div class="block anchor-scroll block-order">
         <div class="block-content pd-bottom bg-gray-light short-width">
+                <div class="row px-3" style="background-color: white">
+                    <app-shortcut [listShortcut]='_hotkeysServiceRMA.hotkeys'></app-shortcut>
+                </div> 
                 <div class="row">
                     <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
                         <div class="block-search">
                             <label for="cd" class="control-label" translate>Order No</label>
-                            <input type="text" name="cd" formControlName="code" class="form-control" id="cd" placeholder="" capitalize>
+                            <input [keyConfig]="data['key_config']" appKeyNavigate="code" type="text" name="cd" formControlName="code" class="form-control" id="cd" placeholder="" capitalize>
                         </div>
                         <div class="block-search">
                             <label for="purchase_quote_cd" class="control-label">Return Type</label>
@@ -74,7 +77,7 @@
                 </div>
                 <div class="card-body no-padding">
                     <div class="scroll-container table-responsive list">
-                        <table class='table table-bordered table-order'>
+                        <table class='table table-bordered table-order' cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                             <thead class="bg-white">
                                     <tr>
                                             <th translate>Return Order No</th>

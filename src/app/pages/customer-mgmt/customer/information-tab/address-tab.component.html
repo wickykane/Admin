@@ -1,13 +1,15 @@
 <div class="block anchor-scroll block-order">
 <div class="row mg-top-10">
     <div class="col-12">
+         <app-shortcut [listShortcut]='_hotkeysServiceAddress.hotkeys'></app-shortcut>
         <div class="card no-border">
             <div class="card-header">
                 <strong>Line Items</strong>
             </div>
             <div class='card-body no-padding'>
                 <div class='scroll-container table-responsive list'>
-                    <table class="table table-bordered table-order">
+                    <table class="table table-bordered table-order"
+                     cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                         <thead class="bg-white">
                             <tr>
                                 <th>No</th>

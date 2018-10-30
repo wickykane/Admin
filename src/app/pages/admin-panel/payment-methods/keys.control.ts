@@ -26,11 +26,16 @@ export class PaymentMethodsKeyService extends KeyboardBaseService {
             }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Create New'));
 
         }
-        // this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+e', (event: KeyboardEvent): boolean =>  {
-        //     event.preventDefault();
-        //     this.context.editPaymentMethod(this.context.paymentMethodId);
-        //     return;
-        // }, undefined, 'Edit'));
+
+        if (this.context.listMaster['permission'].edit) {
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+del', (event: KeyboardEvent): boolean => {
+                event.preventDefault();
+                this.context.deletePaymentMethod(this.context.paymentMethod);
+                return;
+            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Delete'));
+
+        }
+
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+e', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             this.context.tableService.searchAction();

@@ -6,7 +6,7 @@
         </h3>
     </div>
 
-    <!-- <app-shortcut [listShortcut]='customerKeyService.getKeys()'></app-shortcut> -->
+    <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
     <section class='rma-page block main-container block-order'>
         <div class="row informaion">
             <div class="col-md-12">
@@ -125,61 +125,61 @@
         </div>
         <div class="information-tab">
             <ngb-tabset #tabSet>
-                <ngb-tab title="ADDRESSES">
+                <ngb-tab id='0' title="ADDRESSES">
                     <ng-template ngbTabContent>
                         <app-customer-address-tab [listData]="customer['address']"></app-customer-address-tab>
                     </ng-template>
                 </ngb-tab>
 
-                <ngb-tab *ngIf="customer['company_type']=='CP'" title="CONTACTS">
+                <ngb-tab id='1' *ngIf="customer['company_type']=='CP'" title="CONTACTS">
                     <ng-template ngbTabContent>
                         <app-customer-contact-tab [listData]="customer['user']"></app-customer-contact-tab>
                     </ng-template>
                 </ngb-tab>
 
-                <ngb-tab *ngIf="customer['company_type']=='CP' && customer['sites']?.length > 0" title="SITES">
+                <ngb-tab id='2' *ngIf="customer['company_type']=='CP' && customer['sites']?.length > 0" title="SITES">
                     <ng-template ngbTabContent>
                         <app-customer-site-tab [listData]="customer['sites']"></app-customer-site-tab>
                     </ng-template>
                 </ngb-tab>
 
-                <ngb-tab id="quote" title="QUOTES">
+                <ngb-tab [id]="customer['company_type']=='CP' ? '3' : '1'"  title="QUOTES">
                     <ng-template ngbTabContent>
                         <app-customer-quote-tab [customerId]="customerId"></app-customer-quote-tab>
                     </ng-template>
                 </ngb-tab>
 
-                <ngb-tab id="so" title="SALES ORDERS">
+                <ngb-tab [id]="customer['company_type']=='CP' ? '4' : '2'" title="SALES ORDERS">
                     <ng-template ngbTabContent>
                         <app-customer-sale-order-tab [customerId]="customerId"></app-customer-sale-order-tab>
                     </ng-template>
                 </ngb-tab>
 
-                <ngb-tab title="INVOICES">
+                <ngb-tab [id]="customer['company_type']=='CP' ? '5' : '3'" title="INVOICES">
                     <ng-template ngbTabContent>
                         <app-customer-invoice-tab [customerId]="customerId"></app-customer-invoice-tab>
                     </ng-template>
                 </ngb-tab>
 
-                <ngb-tab title="RECEIPT VOUCHER">
+                <ngb-tab [id]="customer['company_type']=='CP' ? '6' : '4'" title="RECEIPT VOUCHER">
                     <ng-template ngbTabContent>
                         <app-customer-receipt-voucher-tab [customerId]="customerId"></app-customer-receipt-voucher-tab>
                     </ng-template>
                 </ngb-tab>
 
-                <ngb-tab title="SHIPMENTS">
+                <ngb-tab [id]="customer['company_type']=='CP' ? '7' : '5'" title="SHIPMENTS">
                     <ng-template ngbTabContent>
                         <app-customer-shipment-tab [customerId]="customerId"></app-customer-shipment-tab>
                     </ng-template>
                 </ngb-tab>
 
-                <ngb-tab title="PAYMENTS">
+                <ngb-tab [id]="customer['company_type']=='CP' ? '8' : '6'" title="PAYMENTS">
                     <ng-template ngbTabContent>
                         <app-customer-payment-tab [customerId]="customerId"></app-customer-payment-tab>
                     </ng-template>
                 </ngb-tab>
 
-                <ngb-tab title="RMA">
+                <ngb-tab [id]="customer['company_type']=='CP' ? '9' : '7'" title="RMA">
                     <ng-template ngbTabContent>
                         <app-customer-rma-tab [customerId]="customerId"></app-customer-rma-tab>
                     </ng-template>
@@ -191,12 +191,12 @@
                     </ng-template>
                 </ngb-tab> -->
 
-                <ngb-tab title="DOCUMENTS">
+                <ngb-tab [id]="customer['company_type']=='CP' ? '10' : '8'" title="DOCUMENTS">
                     <ng-template ngbTabContent>
 
                     </ng-template>
                 </ngb-tab>
-                <ngb-tab title="Customer Balance">
+                <ngb-tab [id]="customer['company_type']=='CP' ? '11' : '9'" title="Customer Balance">
                     <ng-template ngbTabContent>
                         <app-customer-customer-balance-tab [customerId]="customerId"></app-customer-customer-balance-tab>
                     </ng-template>
