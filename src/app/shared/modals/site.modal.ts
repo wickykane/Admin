@@ -68,7 +68,7 @@ export class SiteModalComponent implements OnInit, OnDestroy {
         private itemService: ItemService,
         private customerService: CustomerService,
         private modalService: NgbModal,
-        private _hotkeysService: HotkeysService,
+        public _hotkeysService: HotkeysService,
         private commonService: CommonService,
         public activeModal: NgbActiveModal) {
 
