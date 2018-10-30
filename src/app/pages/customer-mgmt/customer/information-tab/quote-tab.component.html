@@ -95,7 +95,8 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let item of list.items; let i = index;">                                   
+                                <tr *ngFor="let item of list.items; let i = index; " [ngClass]="{'row-selected': i == selectedIndex}">
+                                                                   
                                     <td><a class="text-primary" [routerLink]="['/order-management/sale-quotation/detail',item.id]">{{ item.quote_no }}</a></td>
                                     <td>{{ item.quote_date }}</td>
                                     <td>{{ item.sale_person_name }}</td>

@@ -78,7 +78,7 @@
                                     <td></td>
                                     <td></td>
                                 </tr>
-                                <tr *ngFor="let subItem of  item.items; let i1 = index;" [ngClass]="{'row-selected': i1 == selectedIndex}">
+                                <tr *ngFor="let subItem of  item.items; let i1 = index;">
                                         <td>&nbsp;</td>
                                         <td>{{subItem.date_created | date:'MM/dd/yyyy'}}</td>
                                         <td>{{subItem.issue_date | date:'MM/dd/yyyy'}}</td>
