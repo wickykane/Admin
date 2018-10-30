@@ -1,19 +1,20 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild, ViewContainerRef
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CustomerService } from '../customer.service';
-
+import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
+import { cdArrowTable } from '../../../shared';
+import { CustomerService } from '../customer.service';
 import { TableService } from './../../../services/table.service';
-// import { CustomerKeyService } from './keys.customer.control';
+import { CustomerKeyViewService } from './keys.view.control';
 
 @Component({
     selector: 'app-customer-view',
     templateUrl: './customer-view.component.html',
     styleUrls: ['./customer.component.scss'],
     animations: [routerTransition()],
-    // providers: [CustomerKeyService],
+    providers: [CustomerKeyViewService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
@@ -23,32 +24,28 @@ export class CustomerViewComponent implements OnInit {
     public customerId;
     public listMaster = {};
     public addresses = [];
-
-
+    data = {};
+    public selectedIndex = 0;
+    @ViewChild(cdArrowTable) table: cdArrowTable;
     @ViewChild('tabSet') tabSet;
-
     constructor(
         public router: Router,
         public tableService: TableService,
         public route: ActivatedRoute,
         public toastr: ToastrService,
-        // public customerKeyService: CustomerKeyService,
+        public keyService: CustomerKeyViewService,
         private customerService: CustomerService,
+        private _hotkeysService: HotkeysService,
         private cd: ChangeDetectorRef) {
-        //  Init Key
-        // this.customerKeyService.watchContext.next(this);
     }
 
     ngOnInit() {
+        this.data['tab'] = {
+            active: 0,
+        };
+
         this.route.params.subscribe(params => this.getDetailCustomer(params.id));
-    }
-
-    refresh() {
-         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
-    }
-
-    selectTab(id) {
-        this.tabSet.select(id);
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     getDetailCustomer(id) {
@@ -77,9 +74,35 @@ export class CustomerViewComponent implements OnInit {
             }
         });
     }
+
     setAddressType(address, type, is_cp) {
         const listTypeAddress = ['', 'Head Office', 'Billing', 'Shipping'];
         is_cp && (address.address_type = listTypeAddress[type]);
         !is_cp && (address.address_type = type > 1 ? listTypeAddress[type] : 'Primary');
     }
+    // selectTable() {
+    //     this.selectedIndex = 0;
+    //     this.table.element.nativeElement.querySelector('td').focus();
+    // }
+    back() {
+        this.router.navigate(['/customer/']);
+    }
+    edit(id) {
+        this.router.navigate(['/customer/edit', id]);
+    }
+    selectTab(id) {
+        console.log(id);
+        this.tabSet.select(id);
+        this.refresh();
+    }
+    changeTab(step) {
+        this.data['tab'].active = +this.tabSet.activeId;
+        this.data['tab'].active += step;
+        this.data['tab'].active = Math.min(Math.max(this.data['tab'].active, 0), 11);
+        this.selectTab(String(this.data['tab'].active));
+    }
+    refresh() {
+        if (!this.cd['destroyed']) { this.cd.detectChanges(); }
+   }
+
 }

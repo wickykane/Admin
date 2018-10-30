@@ -15,7 +15,7 @@ export class DebitMemoViewKeyService extends KeyboardBaseService {
     initKey() {
         this._hotkeysService.add(new Hotkey('alt+backspace', (event: KeyboardEvent): boolean => {
             event.preventDefault();
-            this.context.cancel();
+            this.context.back();
             return;
         }, undefined, 'Back'));
 

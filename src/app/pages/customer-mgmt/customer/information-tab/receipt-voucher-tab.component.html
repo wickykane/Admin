@@ -1,10 +1,13 @@
 <div class="block anchor-scroll block-order">
         <div class="block-content pd-bottom bg-gray-light short-width">
+                <div class="row px-3" style="background-color: white">
+                     <app-shortcut [listShortcut]='_hotkeysServiceReceipt.hotkeys'></app-shortcut>
+                </div>  
                 <div class="row">
                     <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
                         <div class="block-search">
                             <label for="sale_quote_num" class="control-label">Receipt No</label>
-                            <input autofocus="true" type="text" name="receipt_no" formControlName="receipt_no" class="form-control" placeholder="">
+                            <input [keyConfig]="data['key_config']" appKeyNavigate="receipt_no" autofocus="true" type="text" name="receipt_no" formControlName="receipt_no" class="form-control" placeholder="">
                         </div>
                         <div class="block-search">
                             <label for="payment_method" class="control-label" translate>Payment Method</label>
@@ -75,7 +78,7 @@
                 </div>
                 <div class="card-body no-padding">
                     <div class="scroll-container table-responsive list">
-                        <table class='table table-bordered table-order'>
+                        <table class='table table-bordered table-order' cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                             <thead class="bg-white">
                                 <tr>
                                     <th>Voucher</th>

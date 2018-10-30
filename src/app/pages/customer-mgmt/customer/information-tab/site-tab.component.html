@@ -1,6 +1,9 @@
 <div class='address-tab'>
     <div class='scroll-container'>
-        <table class='table table-custom  margin-full-0'>
+        <div class="row px-3" style="background-color: white">
+            <app-shortcut [listShortcut]='_hotkeysServiceSite.hotkeys'></app-shortcut>
+        </div>
+        <table class='table table-custom  margin-full-0' cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
             <thead>
                 <tr>
                     <th>No</th>
