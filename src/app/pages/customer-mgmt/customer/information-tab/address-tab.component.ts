@@ -34,7 +34,7 @@ export class CustomerAddressTabComponent implements OnInit, OnDestroy {
         public router: Router,
         private customerService: CustomerService,
         private cd: ChangeDetectorRef,
-        private _hotkeysServiceAddress: HotkeysService,
+        public _hotkeysServiceAddress: HotkeysService,
         private helper: Helper,
         public tableService: TableService,
         public keyService: CustomerKeyViewService
@@ -60,7 +60,9 @@ export class CustomerAddressTabComponent implements OnInit, OnDestroy {
         this.initKeyBoard();
         // this.changeShortcut();
     }
-
+    selectData(index) {
+        console.log(index);
+    }
     selectTable() {
         this.selectedIndex = 0;
         this.table.element.nativeElement.querySelector('tr td').focus();

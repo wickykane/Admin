@@ -44,7 +44,9 @@ export class CustomerContactTabComponent implements OnInit, OnDestroy {
     /**
      * Internal Function
      */
-
+    selectData(index) {
+        console.log(index);
+    }
     hideCharacter(text) {
         if (!text) {
             return text;

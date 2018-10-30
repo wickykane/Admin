@@ -38,7 +38,9 @@ export class CustomerSiteTabComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {}
-
+    selectData(index) {
+        console.log(index);
+    }
     refresh() {
          if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }

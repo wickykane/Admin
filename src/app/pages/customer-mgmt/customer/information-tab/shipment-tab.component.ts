@@ -68,7 +68,9 @@ export class CustomerShipmentTabComponent implements OnInit, OnDestroy {
      refresh() {
           if (!this.cd['destroyed']) { this.cd.detectChanges(); }
      }
-
+     selectData(index) {
+        console.log(index);
+    }
     getList() {
         const params = {...this.tableService.getParams(), ...this.searchForm.value};
         Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
