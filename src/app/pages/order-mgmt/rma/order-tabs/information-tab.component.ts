@@ -282,13 +282,15 @@ export class ReturnOrderInformationTabComponent implements OnInit {
         modalRef.componentInstance.noButtonText = 'No';
     }
 
-    updateStatus(item, status) {
-        const params = { return_order_id: item.id, status_id: status };
+    updateStatus(id, status) {
+      console.log(id);
+        const params = { return_order_id: id, status_id: status };
+        console.log(params);
         this.service.updateStatus(params).subscribe(res => {
             try {
                 if (status === 5) {
                     if (!res.status && res.message === 'show popup') {
-                        this.cancelOrder(item);
+                        this.cancelOrder(id);
                     }
                 } else {
                     this.toastr.success(res.message);
@@ -300,13 +302,13 @@ export class ReturnOrderInformationTabComponent implements OnInit {
         });
     }
 
-    cancelOrder(item) {
+    cancelOrder(id) {
         const modalRef = this.modalService.open(BackdropModalContent, { size: 'lg', windowClass: 'modal-md', backdrop: 'static', keyboard: false });
         modalRef.result.then(res => {
             if (res) {
-                this.service.updateChange(item.id).subscribe(result => {
+                this.service.updateChange(id).subscribe(result => {
                     try {
-                        this.confirmModal(item.id, 2);
+                        this.confirmModal(id, 2);
                     } catch (e) {
                         console.log(e);
                     }
