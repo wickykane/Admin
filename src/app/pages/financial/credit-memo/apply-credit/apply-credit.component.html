@@ -135,8 +135,8 @@
                                         <th style="width:150px" translate>Issue Date</th>
                                         <th style="width:200px" translate>Payment Term</th>
                                         <th class="text-nowrap" style="width:100px" translate> Status</th>
-                                        <th class="text-center" style="width:150px" translate>Current Balance</th>
                                         <th class="text-center" style="width:150px" translate>Total Amount</th>
+                                        <th class="text-center" style="width:150px" translate>Current Balance</th>                                        
                                         <th style="width:150px" translate>Balance Due</th>
                                         <th translate style="width:150px">Amount Applied</th>
                                         <th></th>
@@ -162,8 +162,8 @@
                                             <td class="text-center">{{item.issue_date |date:'MM/dd/yyyy'}}</td>
                                             <td>{{item.payment_term_name}}</td>
                                             <td>{{item.status_name}}</td>
-                                            <td>{{item.original_amount | currency}}</td>
                                             <td>{{item.tot_price | currency}}</td>
+                                            <td>{{item.original_amount | currency}}</td>                                            
                                             <td>{{item.balance_due|currency}}</td>
                                             <td>
                                                 <input [isDecimal]="true" numberDirective [min]="0" [max]="item.original_amount"
@@ -177,10 +177,10 @@
                                 <tbody *ngIf="list['items'].length != 0">
                                     <tr>
                                         <td colspan="6"></td>
-                                        <td>{{main_info.total_current_balance | currency}}</td>
                                         <td>{{main_info.total_tot_price|currency}}</td>
-                                        <td>{{main_info.total_amount|currency}}</td>
+                                        <td>{{main_info.total_current_balance | currency}}</td>                                        
                                         <td></td>
+                                        <td>{{main_info.total_amount|currency}}</td>
                                         <td></td>
                                     </tr>
                                 </tbody>
