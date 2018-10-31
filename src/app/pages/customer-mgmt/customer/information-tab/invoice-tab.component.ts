@@ -160,7 +160,7 @@ export class CustomerInvoiceTabComponent implements OnInit, OnDestroy {
             this.selectTable();
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Select Table'));
-        this._hotkeysServiceInvoice.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+left', (event: KeyboardEvent): boolean => {
+        this._hotkeysServiceInvoice.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+u', (event: KeyboardEvent): boolean => {
             this.tableService.pagination.page--;
             if (this.tableService.pagination.page < 1) {
                 this.tableService.pagination.page = 1;
@@ -170,7 +170,7 @@ export class CustomerInvoiceTabComponent implements OnInit, OnDestroy {
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Previous page'));
 
-        this._hotkeysServiceInvoice.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+right', (event: KeyboardEvent): boolean => {
+        this._hotkeysServiceInvoice.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+d', (event: KeyboardEvent): boolean => {
             this.tableService.pagination.page++;
             if (this.tableService.pagination.page > this.tableService.pagination.total_page) {
                 this.tableService.pagination.page = this.tableService.pagination.total_page;

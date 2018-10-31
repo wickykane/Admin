@@ -1,39 +1,51 @@
-<div class='address-tab'>
-    <div class='scroll-container'>
-        <div class="row px-3" style="background-color: white">
-            <app-shortcut [listShortcut]='_hotkeysServiceSite.hotkeys'></app-shortcut>
-        </div>
-        <table class='table table-custom  margin-full-0' cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Site Code</th>
-                    <th>Site Name</th>
-                    <th>Address 1</th>
-                    <th>Address 2</th>
-                    <th>City</th>
-                    <th>State</th>
-                    <th>Zip Code</th>
-                    <th>Country</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of list.items; let i = index" [ngClass]="{'row-selected': i == selectedIndex}">
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.code }}</td>
-                    <td>{{ item.name }}</td>
-                    <td>{{ item.address_line }}</td>
-                    <td>{{ item.address_line2 }}</td>
-                    <td>{{ item.city_name }}</td>
-                    <td>{{ item.state_name }}</td>
-                    <td>{{ item.zip_code }}</td>
-                    <td>{{ item.country_name }}</td>
-                </tr>
-                <tr *ngIf="list.items.length == 0">
-                    <td class="text-center" colspan="100%">No data.</td>
-                </tr>
-            </tbody>
-        </table>
+<div class="block anchor-scroll block-order">
+    <div class="row px-3" style="background-color: white">
+        <app-shortcut [listShortcut]='_hotkeysServiceSite.hotkeys'></app-shortcut>
     </div>
-
+    <div class="row mg-top-10">
+            <div class="col-12">
+                <div class="card no-border">                   
+                    <div class="card-body no-padding">
+                            <div class="card-header">
+                                <strong>Line Items</strong>
+                            </div>
+                            <div class='scroll-container table-responsive list'>       
+                                <table class='table table-bordered table-order' cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
+                                    <thead class="bg-white">
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Site Code</th>
+                                            <th>Site Name</th>
+                                            <th>Address 1</th>
+                                            <th>Address 2</th>
+                                            <th>City</th>
+                                            <th>State</th>
+                                            <th>Zip Code</th>
+                                            <th>Country</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of list.items; let i = index" [ngClass]="{'row-selected': i == selectedIndex}">
+                                            <td>{{ item.id }}</td>
+                                            <td>{{ item.code }}</td>
+                                            <td>{{ item.name }}</td>
+                                            <td>{{ item.address_line }}</td>
+                                            <td>{{ item.address_line2 }}</td>
+                                            <td>{{ item.city_name }}</td>
+                                            <td>{{ item.state_name }}</td>
+                                            <td>{{ item.zip_code }}</td>
+                                            <td>{{ item.country_name }}</td>
+                                        </tr>
+                                        <tr *ngIf="list.items.length == 0">
+                                            <td class="text-center" colspan="100%">No data.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    
+                </div>
+            </div>
+        </div>
+   
 </div>
