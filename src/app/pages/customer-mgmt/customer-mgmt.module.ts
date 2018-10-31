@@ -13,6 +13,8 @@ import { CustomerInvoiceTabComponent } from './customer/information-tab/invoice/
 import { CustomerReceiptVoucherTabComponent } from './customer/information-tab/receipt-voucher/receipt-voucher-tab.component';
 import { CustomerViewComponent } from './customer/view/customer-view.component';
 
+import { CustomerCreditMemoTabComponent } from './customer/information-tab/credit-memo/credit-memo-tab.component';
+import { CustomerDebitMemoTabComponent } from './customer/information-tab/debit-memo/debit-memo-tab.component';
 import { CustomerPaymentTabComponent } from './customer/information-tab/payment/payment-tab.component';
 import { CustomerQuoteTabComponent } from './customer/information-tab/quote/quote-tab.component';
 import { CustomerRMATabComponent } from './customer/information-tab/rma/rma-tab.component';
@@ -42,7 +44,8 @@ import { ItemModalModule } from '../../shared/modals/item.module';
   declarations: [CustomerComponent, CustomerCreateComponent, CustomerViewComponent,
     CustomerAddressTabComponent, CustomerContactTabComponent, CustomerEditComponent, CustomerSiteTabComponent, CustomerQuoteTabComponent,
     CustomerSaleOrderTabComponent, CustomerInvoiceTabComponent, CustomerShipmentTabComponent, CustomerPaymentTabComponent,
-    CustomerRMATabComponent, CustomerAccountTabComponent, CustomerReceiptVoucherTabComponent, CustomerCustomerBalanceTabComponent],
+    CustomerRMATabComponent, CustomerAccountTabComponent, CustomerReceiptVoucherTabComponent, CustomerCustomerBalanceTabComponent,
+    CustomerCreditMemoTabComponent, CustomerDebitMemoTabComponent],
   providers: [TableService, CustomerService, Helper, CommonService ],
   entryComponents: []
 })
