@@ -440,7 +440,7 @@
                                                 <span>{{item.amount | currency}}</span>
                                             </td>
                                             <td>
-                                                {{ item.income_account_name }}
+                                                <span *ngIf="item.income_account_id"> {{ item.income_account_code }}-{{ item.income_account_name }}</span> 
                                             </td>
                                             <td class="text-center">
                                                 <span>
