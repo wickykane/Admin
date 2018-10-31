@@ -1,15 +1,15 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
-import { TableService } from '../../../../services/table.service';
-import { cdArrowTable } from '../../../../shared';
-import { Helper } from '../../../../shared/helper/common.helper';
-import { CustomerService } from '../../customer.service';
+import { TableService } from '../../../../../services/table.service';
+import { cdArrowTable } from '../../../../../shared';
+import { Helper } from '../../../../../shared/helper/common.helper';
+import { CustomerService } from '../../../customer.service';
 
 
 @Component({
     selector: 'app-customer-account-tab',
     templateUrl: './account-tab.component.html',
-    styleUrls: ['./information-tab.component.scss'],
+    styleUrls: ['../information-tab.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomerAccountTabComponent implements OnInit, OnDestroy {

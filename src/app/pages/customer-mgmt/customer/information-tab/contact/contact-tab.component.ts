@@ -1,16 +1,16 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
-import { TableService } from '../../../../services/table.service';
-import { cdArrowTable } from '../../../../shared';
-import { Helper } from '../../../../shared/helper/common.helper';
-import { CustomerService } from '../../customer.service';
+import { TableService } from '../../../../../services/table.service';
+import { cdArrowTable } from '../../../../../shared';
+import { Helper } from '../../../../../shared/helper/common.helper';
+import { CustomerService } from '../../../customer.service';
 
 
 @Component({
     selector: 'app-customer-contact-tab',
     templateUrl: './contact-tab.component.html',
-    styleUrls: ['./information-tab.component.scss'],
+    styleUrls: ['../information-tab.component.scss'],
     providers: [HotkeysService]
 })
 export class CustomerContactTabComponent implements OnInit, OnDestroy {

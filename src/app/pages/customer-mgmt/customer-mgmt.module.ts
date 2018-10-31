@@ -4,21 +4,21 @@ import { CustomerManagementRoutingModule } from './customer-mgmt-routing.module'
 import { CustomerEditComponent } from './customer/edit/customer-edit.component';
 
 import { CustomerCreateComponent } from './customer/create/customer-create.component';
-import { CustomerViewComponent } from './customer/customer-view.component';
 import { CustomerComponent } from './customer/customer.component';
-import { CustomerAccountTabComponent } from './customer/information-tab/account-tab.component';
-import { CustomerAddressTabComponent } from './customer/information-tab/address-tab.component';
-import { CustomerContactTabComponent } from './customer/information-tab/contact-tab.component';
-import { CustomerCustomerBalanceTabComponent } from './customer/information-tab/customer-balance-tab.component';
-import { CustomerInvoiceTabComponent } from './customer/information-tab/invoice-tab.component';
-import { CustomerReceiptVoucherTabComponent } from './customer/information-tab/receipt-voucher-tab.component';
+import { CustomerAccountTabComponent } from './customer/information-tab/account/account-tab.component';
+import { CustomerAddressTabComponent } from './customer/information-tab/address/address-tab.component';
+import { CustomerContactTabComponent } from './customer/information-tab/contact/contact-tab.component';
+import { CustomerCustomerBalanceTabComponent } from './customer/information-tab/customer-balance/customer-balance-tab.component';
+import { CustomerInvoiceTabComponent } from './customer/information-tab/invoice/invoice-tab.component';
+import { CustomerReceiptVoucherTabComponent } from './customer/information-tab/receipt-voucher/receipt-voucher-tab.component';
+import { CustomerViewComponent } from './customer/view/customer-view.component';
 
-import { CustomerPaymentTabComponent } from './customer/information-tab/payment-tab.component';
-import { CustomerQuoteTabComponent } from './customer/information-tab/quote-tab.component';
-import { CustomerRMATabComponent } from './customer/information-tab/rma-tab.component';
-import { CustomerSaleOrderTabComponent } from './customer/information-tab/sale-order-tab.component';
-import { CustomerShipmentTabComponent } from './customer/information-tab/shipment-tab.component';
-import { CustomerSiteTabComponent } from './customer/information-tab/site-tab.component';
+import { CustomerPaymentTabComponent } from './customer/information-tab/payment/payment-tab.component';
+import { CustomerQuoteTabComponent } from './customer/information-tab/quote/quote-tab.component';
+import { CustomerRMATabComponent } from './customer/information-tab/rma/rma-tab.component';
+import { CustomerSaleOrderTabComponent } from './customer/information-tab/sale-order/sale-order-tab.component';
+import { CustomerShipmentTabComponent } from './customer/information-tab/shipment/shipment-tab.component';
+import { CustomerSiteTabComponent } from './customer/information-tab/site/site-tab.component';
 
 
 import { CommonService } from '../../services/common.service';

@@ -1,17 +1,17 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
-import { TableService } from '../../../../services/table.service';
-import { cdArrowTable } from '../../../../shared';
-import { Helper } from '../../../../shared/helper/common.helper';
-import { CustomerService } from '../../customer.service';
-import { CustomerViewComponent } from '../customer-view.component';
-import { CustomerKeyViewService } from '../keys.view.control';
+import { TableService } from '../../../../../services/table.service';
+import { cdArrowTable } from '../../../../../shared';
+import { Helper } from '../../../../../shared/helper/common.helper';
+import { CustomerService } from '../../../customer.service';
+import { CustomerViewComponent } from '../../view/customer-view.component';
+import { CustomerKeyViewService } from '../../view/keys.view.control';
 
 @Component({
     selector: 'app-customer-address-tab',
     templateUrl: './address-tab.component.html',
-    styleUrls: ['./information-tab.component.scss'],
+    styleUrls: ['../information-tab.component.scss'],
     providers: [HotkeysService, CustomerKeyViewService],
    changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -41,19 +41,17 @@ export class CustomerAddressTabComponent implements OnInit, OnDestroy {
         ) { }
     ngOnInit() {
         this.customerService.getRoute().subscribe(res => {
-            let t = setInterval(() => {
-                for (let i = 0; i < this.list.items.length; i++) {
-                    if (this.list.items[i].route_id > 0) {
+            const t = setInterval(() => {
+                this.list.items.forEach((item) => {
+                    if (item.route_id > 0) {
                         clearInterval(t);
-                        console.log(this.list.items[i]);
-                        for (let j = 0; j < res.data.length; j++) {
-                            if (res.data[j].id == this.list.items[i].route_id) {
-                                this.list.items[i]['route_name'] = res.data[j].route_gatetime;
-                                console.log(res.data[j].route_gatetime);
+                        res.data.forEach((data) => {
+                            if (data.id === item.route_id) {
+                                item['route_name'] = data.route_gatetime;
                             }
-                        }
+                        });
                     }
-                }
+                });
             }, 500);
             this.refresh();
         });
