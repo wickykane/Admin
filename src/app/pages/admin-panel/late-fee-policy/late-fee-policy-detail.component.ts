@@ -104,7 +104,7 @@ export class LateFeePolicyDetailComponent implements OnInit {
             { code: 'CP', name: 'Company' },
             { code: 'PS', name: 'Personal' }
         ];
-        this.initLateFeeRules();
+        // this.initLateFeeRules();
     }
 
     refresh() {
@@ -149,27 +149,30 @@ export class LateFeePolicyDetailComponent implements OnInit {
         });
     }
 
-    initLateFeeRules() {
-        if (this.generalForm.value['recuring_fee_status'] === false) {
-            this.generalForm.controls['recuring_fee'].disable();
-            this.generalForm.controls['pay_value'].disable();
-            this.generalForm.controls['pay_type'].disable();
-            this.generalForm.controls['late_due_dt'].disable();
-        } else {
-            this.generalForm.controls['recuring_fee'].enable();
-            this.generalForm.controls['pay_value'].enable();
-            this.generalForm.controls['pay_type'].enable();
-            this.generalForm.controls['late_due_dt'].enable();
-        }
-    }
+    // initLateFeeRules() {
+    //     if (this.generalForm.value['recuring_fee_status'] === false) {
+    //         this.generalForm.controls['recuring_fee'].disable();
+    //         this.generalForm.controls['pay_value'].disable();
+    //         this.generalForm.controls['pay_type'].disable();
+    //         this.generalForm.controls['late_due_dt'].disable();
+    //     } else {
+    //         this.generalForm.controls['recuring_fee'].enable();
+    //         this.generalForm.controls['pay_value'].enable();
+    //         this.generalForm.controls['pay_type'].enable();
+    //         this.generalForm.controls['late_due_dt'].enable();
+    //     }
+    // }
 
     switchRule(event) {
         this.generalForm.controls['recuring_fee_status'].setValue(!this.generalForm.value['recuring_fee_status']);
         this.applyRecurringFee = !this.applyRecurringFee;
-        this.initLateFeeRules();
+        // this.initLateFeeRules();
     }
 
     payloadData() {
+        if (this.generalForm.get('recuring_fee').value == '0' && this.applyRecurringFee === true) {
+            return this.toastr.error('Recurring fee must be greater than 0');
+        }
         if (this.generalForm.get('id').value && this.isEdit) {
             if (this.currentStatus !== 2 && this.generalForm.value['ac'] === 2) {
                 this.openTerminateLFPModal();
@@ -261,7 +264,7 @@ export class LateFeePolicyDetailComponent implements OnInit {
                         this.applyRecurringFee = false;
                     }
                     this.headerTitle = this.generalForm.value['code'] + ': ' + this.generalForm.value['des'];
-                    this.initLateFeeRules();
+                    // this.initLateFeeRules();
                 }
                 if (res.data.detail) {
                     this.list.items = res.data.detail;
@@ -325,7 +328,7 @@ export class LateFeePolicyDetailComponent implements OnInit {
             allowDecimal: false,
             includeThousandsSeparator: false,
             prefix: '',
-            integerLimit: max || null
+            integerLimit: max || null,
         });
     }
 
@@ -337,5 +340,4 @@ export class LateFeePolicyDetailComponent implements OnInit {
             integerLimit: max || null
         });
     }
-
 }
