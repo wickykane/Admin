@@ -1,16 +1,16 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
-import { cdArrowTable } from '../../../../shared';
-import { Helper } from '../../../../shared/helper/common.helper';
-import { CustomerService } from '../../customer.service';
-import { CustomerKeyViewService } from '../keys.view.control';
-import { TableService } from './../../../../services/table.service';
+import { cdArrowTable } from '../../../../../shared';
+import { Helper } from '../../../../../shared/helper/common.helper';
+import { CustomerService } from '../../../customer.service';
+import { CustomerKeyViewService } from '../../view/keys.view.control';
+import { TableService } from './../../../../../services/table.service';
 
 @Component({
     selector: 'app-customer-site-tab',
     templateUrl: './site-tab.component.html',
-    styleUrls: ['./information-tab.component.scss'],
+    styleUrls: ['../information-tab.component.scss'],
     providers: [HotkeysService, CustomerKeyViewService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

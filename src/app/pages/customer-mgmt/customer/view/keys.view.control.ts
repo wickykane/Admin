@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Hotkey } from 'angular2-hotkeys';
-import { KeyboardBaseService } from '../../../shared/helper/keyServiceBase';
+import { KeyboardBaseService } from '../../../../shared/helper/keyServiceBase';
 
 @Injectable()
 export class CustomerKeyViewService extends KeyboardBaseService {

@@ -1,19 +1,19 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CustomerService } from '../../customer.service';
+import { CustomerService } from '../../../customer.service';
 
 import { NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
-import { TableService } from '../../../../services/table.service';
-import { cdArrowTable } from '../../../../shared';
-import { Helper } from '../../../../shared/helper/common.helper';
-import { CustomerKeyViewService } from '../keys.view.control';
+import { TableService } from '../../../../../services/table.service';
+import { cdArrowTable } from '../../../../../shared';
+import { Helper } from '../../../../../shared/helper/common.helper';
+import { CustomerKeyViewService } from '../../view/keys.view.control';
 
 
 @Component({
     selector: 'app-customer-customer-balance-tab',
     templateUrl: './customer-balance-tab.component.html',
-    styleUrls: ['./information-tab.component.scss'],
+    styleUrls: ['../information-tab.component.scss'],
     providers: [HotkeysService, CustomerKeyViewService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
