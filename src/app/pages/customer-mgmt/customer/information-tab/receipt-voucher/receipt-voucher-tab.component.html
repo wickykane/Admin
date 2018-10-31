@@ -18,6 +18,16 @@
                     </select>
                 </div>
                 <div class="block-search">
+                    <label for="customer_id" class="control-label" translate>Payer</label>
+                    <ng-select class="infinity-scroll-select" style="width: 110px;" [typeahead]="searchKey"
+                    (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" [items]="listMaster['customer']"
+                    bindLabel="name" bindValue="id" formControlName="customer_id">
+                        <ng-template ng-option-tmp let-item="item">
+                            <span [innerHTML]="item.company_name"></span>
+                        </ng-template>\
+                    </ng-select>
+                </div>
+                <div class="block-search">
                     <label for="sts" class="control-label">Status</label>
                     <ng-select class="ng-select-filter" [multiple]="true" [items]="this.listMaster['list-status']"
                         bindLabel="name" bindValue="id" formControlName="status">

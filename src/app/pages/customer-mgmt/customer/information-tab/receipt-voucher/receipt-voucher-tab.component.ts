@@ -8,12 +8,15 @@ import { CustomerKeyViewService } from '../../view/keys.view.control';
 import { TableService } from './../../../../../services/table.service';
 
 import { ReceiptVoucherService } from '../../../../financial/receipt-voucher/receipt-voucher.service';
+import { OrderService } from '../../../../order-mgmt/order-mgmt.service';
+
+import { Subject } from 'rxjs/Subject';
 
 @Component({
     selector: 'app-customer-receipt-voucher-tab',
     templateUrl: './receipt-voucher-tab.component.html',
     styleUrls: ['../information-tab.component.scss'],
-    providers: [HotkeysService, CustomerKeyViewService, ReceiptVoucherService],
+    providers: [HotkeysService, CustomerKeyViewService, ReceiptVoucherService, OrderService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomerReceiptVoucherTabComponent implements OnInit, OnDestroy {
@@ -40,6 +43,7 @@ export class CustomerReceiptVoucherTabComponent implements OnInit, OnDestroy {
     public data = {};
     public selectedIndex = 0;
     @ViewChild(cdArrowTable) table: cdArrowTable;
+    public searchKey = new Subject<any>(); // Lazy load filter
     constructor(
         public fb: FormBuilder,
         private vRef: ViewContainerRef,
@@ -48,6 +52,7 @@ export class CustomerReceiptVoucherTabComponent implements OnInit, OnDestroy {
         public _hotkeysServiceReceipt: HotkeysService,
         private helper: Helper,
         private receiptVoucherService: ReceiptVoucherService,
+        private orderService: OrderService,
         private cd: ChangeDetectorRef) {
 
         this.searchForm = fb.group({
@@ -79,7 +84,49 @@ export class CustomerReceiptVoucherTabComponent implements OnInit, OnDestroy {
         ];
         this.getListStatus();
         this.getListReferenceData();
+        // Lazy Load filter
+        this.data['page'] = 1;
+        const params = { page: this.data['page'], length: 100 };
+        this.orderService.getAllCustomer(params).subscribe(res => {
+            this.listMaster['customer'] = res.data.rows;
+            this.data['total_page'] = res.data.total_page;
+            this.refresh();
+        });
+        this.searchKey.debounceTime(300).subscribe(key => {
+            this.data['page'] = 1;
+            this.searchCustomer(key);
+        });
     }
+
+    searchCustomer(key) {
+        this.data['searchKey'] = key;
+        const params = { page: this.data['page'], length: 100 };
+        if (key) {
+            params['company_name'] = key;
+        }
+        this.orderService.getAllCustomer(params).subscribe(res => {
+            this.listMaster['customer'] = res.data.rows;
+            this.data['total_page'] = res.data.total_page;
+            this.refresh();
+        });
+    }
+
+    fetchMoreCustomer(data?) {
+        this.data['page']++;
+        if (this.data['page'] > this.data['total_page']) {
+            return;
+        }
+        const params = { page: this.data['page'], length: 100 };
+        if (this.data['searchKey']) {
+            params['company_name'] = this.data['searchKey'];
+        }
+        this.orderService.getAllCustomer(params).subscribe(res => {
+            this.listMaster['customer'] = this.listMaster['customer'].concat(res.data.rows);
+            this.data['total_page'] = res.data.total_page;
+            this.refresh();
+        });
+    }
+
     selectData(index) {
         console.log(index);
     }

@@ -172,4 +172,8 @@ export class CustomerService {
         const url = 'customer-balance/get-list?company_id=' + id;
         return this.API.get(url, params);
     }
+    getListCreditMemo(id, params) {
+        const url = 'buyer/credit-memo/' + id;
+        return this.API.get(url, params);
+    }
 }

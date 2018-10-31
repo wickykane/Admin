@@ -17,6 +17,16 @@
                     </ng-select>
                 </div>
                 <div class="block-search">
+                    <label for="contract_no" class="control-label">Customer</label>
+                    <ng-select class="infinity-scroll-select" [typeahead]="searchKey"
+                    (scrollToEnd)="fetchMoreCustomer($event)"[virtualScroll]="true" style="width: 100px; margin-left: 2px;"
+                    [items]="listMaster['customer']" bindLabel="name" bindValue="id" formControlName="company_id">
+                        <ng-template ng-option-tmp let-item="item">
+                            <span [innerHTML]="item.company_name"></span>
+                        </ng-template>
+                    </ng-select>
+                </div>
+                <div class="block-search">
                     <label for="warehouse_id" class="control-label">Warehouse</label>
                     <ng-select [multiple]="true" [items]="listMaster['warehouses']" bindLabel="name" bindValue="id"
                         formControlName="warehouse_id">
@@ -66,6 +76,7 @@
                 <div class="group-btn-search">
                     <button type="button" class="btn-default-custom" (click)="tableService.searchAction()">Search</button>
                     <button type="button" class="btn-default-custom" (click)="tableService.resetAction(this.searchForm)">Reset</button>
+                    <button type="button" class="btn-default-custom">Export</button>
                 </div>
             </div>
         </div>
