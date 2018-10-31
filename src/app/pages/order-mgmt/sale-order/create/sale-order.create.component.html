@@ -434,7 +434,7 @@
                                             {{wh.qty_available}}
                                         </td>
                                         <td>
-                                            <input numberDirective [min]="0" [disabled]="item.misc_id" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (changeValue)="updateTotal()">
+                                            <input numberDirective [min]="1" [disabled]="item.misc_id" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (changeValue)="updateTotal()">
                                         </td>
                                         <td>
                                             <div>

@@ -404,7 +404,7 @@
                                 <ng-container *ngIf="list['items'].length > 0">
                                     <tbody *ngFor="let item of list['items']; let $index = index;">
                                         <tr [ngClass]="{'row-selected': $index == selectedIndex}">
-                                            <td class="text-center"> 
+                                            <td class="text-center">
                                                 <button class="btn btn-danger btn-xs" type="button" (click)="deleteAction(item.item_id || item.misc_id, item.item_condition_id)">
                                                         <i class="fa fa-trash"></i>
                                                     </button>
@@ -420,7 +420,7 @@
                                                 <i *ngIf="item.is_shipping_free" class="text-success fa fa-check"></i>
                                             </td>
                                             <td>
-                                                <input numberDirective [min]="0" [disabled]="item.misc_id" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (changeValue)="updateTotal()">
+                                                <input numberDirective [min]="1" [disabled]="item.misc_id" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (changeValue)="updateTotal()">
                                             </td>
                                             <td>
                                                 <div>
