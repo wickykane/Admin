@@ -15,7 +15,7 @@
                             <input type="text" name="des" formControlName="des" class="form-control" id="name" placeholder="">
                         </div>
                         <div class="col-md-4 block-search">
-                            <label for="name" class="control-label" style="width: 100px">Exclude Reason</label>
+                            <label for="name" class="control-label" style="width: 100px">Exclude RR Calculation</label>
                             <select class="form-control" formControlName="exclude_rr_calc" name="status">
                                 <option *ngFor="let item of listMaster['Reason']" [ngValue]="item.key">{{item.value}}</option>
                             </select>
@@ -49,7 +49,7 @@
                                     <tr>
                                         <th>Code</th>
                                         <th>Description</th>
-                                        <th>Exclude Reason</th>
+                                        <th>Exclude RR Calculation</th>
                                         <th>Status</th>
                                         <th>Last Updated By</th>
                                         <th>Last Updated On</th>
