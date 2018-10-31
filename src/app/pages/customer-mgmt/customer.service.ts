@@ -88,8 +88,8 @@ export class CustomerService {
         return this.API.get(url, params);
     }
 
-    getListRMA(params) {
-        const url = 'buyer/index';
+    getListRMA(id, params) {
+        const url = 'buyer/return-order/' + id;
         return this.API.get(url, params);
     }
 

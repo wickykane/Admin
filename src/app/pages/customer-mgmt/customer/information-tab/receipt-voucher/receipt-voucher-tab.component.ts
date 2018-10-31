@@ -79,7 +79,6 @@ export class CustomerReceiptVoucherTabComponent implements OnInit, OnDestroy {
         ];
         this.getListStatus();
         this.getListReferenceData();
-        this.getList();
     }
     selectData(index) {
         console.log(index);
