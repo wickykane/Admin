@@ -168,7 +168,7 @@ export class CreditMemoApplyComponent implements OnInit {
 
     }
     updateBalance() {
-        this.main_info.total_amount = this.main_info.total_balance_due = this.main_info.total_current_balance = 0;
+        this.main_info.total_amount = this.main_info.total_balance_due = this.main_info.total_current_balance  = this.main_info.total_tot_price = 0;
         if (this.list.items.length > 0) {
             this.list.items.map(item => {
                 item.balance_due = (item.amount !== undefined) ? (item.original_amount - item.amount) : 0;
