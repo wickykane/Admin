@@ -134,6 +134,39 @@
                 </div>
             </div>
         </div>
+        <div class="row mg-top-10" *ngIf="detail.credit_memo!=null">
+            <div class="col-8 padding-lr-5">
+                <div class="card no-border">
+                    <div class="card-header">
+                        <strong>Credit Memo</strong>
+                    </div>
+                    <div class="card-body no-padding">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-order">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" style="width:150px" translate>No</th>
+                                        <th class="text-center" translate>Document No</th>
+                                        <th class="text-center" translate>Issue Date</th>
+                                        <th class="text-nowrap text-center" translate>Total Amount</th>
+                                        <th class="text-center" translate>Applied Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngFor="let item of detail.list_credit; let $index = index;">
+                                    <tr>
+                                        <td>{{$index+1}}</td>
+                                        <td>{{item.cd}}</td>
+                                        <td class="text-center">{{item.issue_date |date:'MM/dd/yyyy'}}</td>
+                                        <td>{{item.total_amount|currency }}</td>
+                                        <td>{{item.apply_amount|currency}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="row mg-top-10">
             <div class="col-12 padding-lr-5">
