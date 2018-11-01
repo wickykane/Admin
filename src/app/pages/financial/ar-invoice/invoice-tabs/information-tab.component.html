@@ -4,8 +4,8 @@
         <button *ngIf="detail['invoice_status_id'] == 1 || detail['invoice_status_id'] == 11" class="btn btn-outline-primary" [routerLink]="['/financial/invoice/edit', _invoiceId]"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit</button>
         <button *ngIf="detail['invoice_status_id'] == 1 || detail['invoice_status_id'] == 11" class="btn btn-outline-warning" (click)="confirmModal(_invoiceId, 2)"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i> Submit</button>
         <button *ngIf="detail['invoice_status_id'] == 2" class="btn btn-outline-warning" (click)="confirmModal(_invoiceId, 11)"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i> Revise</button>
-        <button *ngIf="detail['invoice_status_id'] == 2" class="btn btn-outline-success" (click)="confirmModal(_invoiceId, 4)"><i class="fa fa-check-square"></i> Approve</button>
-        <button *ngIf="[1,2,4].indexOf(detail['invoice_status_id']) != -1" class="btn btn-outline-danger" (click)="confirmModal(_invoiceId, 7)"><i class="fa fa-times-circle" aria-hidden="true"></i> Cancel</button>
+        <button *ngIf="detail['invoice_status_id'] == 2 || detail['invoice_status_id'] == 11" class="btn btn-outline-success" (click)="confirmModal(_invoiceId, 4)"><i class="fa fa-check-square"></i> Approve</button>
+        <button *ngIf="[1,2,4,11].indexOf(detail['invoice_status_id']) != -1" class="btn btn-outline-danger" (click)="confirmModal(_invoiceId, 7)"><i class="fa fa-times-circle" aria-hidden="true"></i> Cancel</button>
         <!-- <button *ngIf="detail['invoice_status_id'] == 2" class="btn btn-outline-danger" (click)="confirmModal(_invoiceId, 3)"><i class="fa fa-ban" aria-hidden="true"></i> Reject</button> -->
         <button *ngIf="[4, 5, 8].indexOf(detail['invoice_status_id']) != -1" class="btn btn-outline-dark"><i class="fa fa-money" aria-hidden="true"></i> Pay</button>
         <button class="btn btn-outline-dark" (click)="printPDF(_invoiceId, detail['inv_num'] )"><i class="fa fa-download" aria-hidden="true"></i> Print</button>
