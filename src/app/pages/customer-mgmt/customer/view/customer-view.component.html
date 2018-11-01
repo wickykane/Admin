@@ -201,6 +201,11 @@
                         <app-customer-customer-balance-tab [customerId]="customerId"></app-customer-customer-balance-tab>
                     </ng-template>
                 </ngb-tab>
+                <ngb-tab [id]="customer['company_type']=='CP' ? '12' : '10'" title="DEBIT MEMOS">
+                    <ng-template ngbTabContent>
+                        <app-customer-debit-memo-tab [customerId]="customerId"></app-customer-debit-memo-tab>
+                    </ng-template>
+                </ngb-tab>
             </ngb-tabset>
         </div>
     </section>

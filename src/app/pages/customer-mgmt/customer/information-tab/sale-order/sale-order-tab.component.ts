@@ -89,7 +89,7 @@ export class CustomerSaleOrderTabComponent implements OnInit, OnDestroy {
     }
 
     getList() {
-        const params = {...this.searchForm.value};
+        const params = {...this.tableService.getParams(), ...this.searchForm.value};
         Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
         this.customerService.getListSO(this._customerId, params).subscribe(res => {
@@ -101,6 +101,9 @@ export class CustomerSaleOrderTabComponent implements OnInit, OnDestroy {
                 console.log(e);
             }
         });
+    }
+    exportData() {
+        console.log('Excel for Sale Order');
     }
     selectTable() {
         this.selectedIndex = 0;
@@ -142,6 +145,12 @@ export class CustomerSaleOrderTabComponent implements OnInit, OnDestroy {
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset'));
 
+        this._hotkeysServiceSaleOder.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+x', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            this.exportData();
+            return;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Export'));
+
         this._hotkeysServiceSaleOder.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+t', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             this.selectTable();
@@ -158,7 +167,7 @@ export class CustomerSaleOrderTabComponent implements OnInit, OnDestroy {
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Previous page'));
 
-        this._hotkeysServiceSaleOder.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+d', (event: KeyboardEvent): boolean => {
+        this._hotkeysServiceSaleOder.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+y', (event: KeyboardEvent): boolean => {
             this.tableService.pagination.page++;
             if (this.tableService.pagination.page > this.tableService.pagination.total_page) {
                 this.tableService.pagination.page = this.tableService.pagination.total_page;
