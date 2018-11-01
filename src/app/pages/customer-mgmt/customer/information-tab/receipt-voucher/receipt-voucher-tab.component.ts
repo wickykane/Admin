@@ -75,8 +75,8 @@ export class CustomerReceiptVoucherTabComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.listMaster['dateType'] = [
             { id: 'payment_date', name: 'Payment Date' },
-            { id: 'created_at', name: 'Created On' },
-            { id: 'updated_at', name: 'Updated On' }
+            { id: 'created_on', name: 'Created On' },
+            { id: 'updated_on', name: 'Updated On' }
         ];
         this.listMaster['electType'] = [
             { id: 0, name: 'No' },
