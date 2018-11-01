@@ -474,7 +474,7 @@
                                             <div>
                                                 <span>$</span>
                                                 <div style="display:inline-block;width:80%">
-                                                    <input  [disabled]="!item.misc_id && data['disable']" [isDecimal]="true" numberDirective [min]="0" class="form-control input-sm"
+                                                    <input  [disabled]="!item.misc_id" [isDecimal]="true" numberDirective [min]="0" class="form-control input-sm"
                                                         type="number" [(ngModel)]="item.sale_price" (changeValue)="updateTotal();changeFromSource(item)">
                                                 </div>
                                             </div>
