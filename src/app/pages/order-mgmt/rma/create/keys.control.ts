@@ -76,7 +76,7 @@ export class RMACreateKeyService extends KeyboardBaseService {
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Delete Replace Item'));
 
 
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+d', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+-', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             const item = this.context.list['returnItem'][this.context.selectedIndex];
             this.context.deleteLineItem(item, this.context.selectedIndex);
             const e: ExtendedKeyboardEvent = event;
