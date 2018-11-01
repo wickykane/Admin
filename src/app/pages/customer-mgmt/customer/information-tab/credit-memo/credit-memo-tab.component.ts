@@ -49,9 +49,9 @@ export class CustomerCreditMemoTabComponent implements OnInit, OnDestroy {
         private creditMemoService: CreditMemoService,
         private cd: ChangeDetectorRef) {
         this.searchForm = fb.group({
-            'credit_memo_num': [null],
+            'credit_no': [null],
             'customer_name': [null],
-            'sts': [null],
+            'status': [null],
             'date_type': [null],
             'date_from': [null],
             'date_to': [null]

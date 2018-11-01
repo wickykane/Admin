@@ -8,16 +8,16 @@
                 <div class="block-search">
                     <label for="cd" class="control-label">Credit Memo No</label>
                     <input #drNo [keyConfig]="data['key_config']" appKeyNavigate="credit_no" type="text" name="cd"
-                        formControlName="credit_memo_num" class="form-control" id="cd" placeholder="">
+                        formControlName="credit_no" class="form-control" id="cd" placeholder="">
                 </div>
                 <div class="block-search">
                     <label for="customer_name" class="control-label">Customer Name</label>
                     <input type="text" name="customer_name" formControlName="customer_name" class="form-control" id="customer_name" placeholder="">
                 </div>
                 <div class="block-search">
-                    <label for="buyer_type" class="control-label">Status</label>
+                    <label for="status" class="control-label">Status</label>
                     <ng-select [multiple]="true" [items]="listMaster['listStatus']" bindLabel="name" bindValue="id"
-                        formControlName="sts">
+                        formControlName="status">
                     </ng-select>
                 </div>
                 <div class="block-search">

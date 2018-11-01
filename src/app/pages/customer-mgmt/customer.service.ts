@@ -88,8 +88,18 @@ export class CustomerService {
         return this.API.get(url, params);
     }
 
+    exportPayment(id, params) {
+        const url = 'buyer/payment/' + id + '?export=1';
+        return this.API.get(url, params);
+    }
+
     getListRMA(id, params) {
         const url = 'buyer/return-order/' + id;
+        return this.API.get(url, params);
+    }
+
+    exportRMA(id, params) {
+        const url = 'buyer/return-order/' + id + '?export=1';
         return this.API.get(url, params);
     }
 
@@ -174,6 +184,10 @@ export class CustomerService {
     }
     getListCreditMemo(id, params) {
         const url = 'buyer/credit-memo/' + id;
+        return this.API.get(url, params);
+    }
+    exportCreditMemo(id, params) {
+        const url = 'buyer/credit-memo/' + id + '?export=1';
         return this.API.get(url, params);
     }
 }

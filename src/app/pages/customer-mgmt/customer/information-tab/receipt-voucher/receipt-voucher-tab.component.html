@@ -7,8 +7,8 @@
             <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
                 <div class="block-search">
                     <label for="sale_quote_num" class="control-label">Receipt No</label>
-                    <input [keyConfig]="data['key_config']" appKeyNavigate="receipt_no" autofocus="true" type="text"
-                        name="receipt_no" formControlName="receipt_no" class="form-control" placeholder="">
+                    <input [keyConfig]="data['key_config']" appKeyNavigate="voucher_no" autofocus="true" type="text"
+                        name="voucher_no" formControlName="voucher_no" class="form-control" placeholder="">
                 </div>
                 <div class="block-search">
                     <label for="payment_method" class="control-label" translate>Payment Method</label>
@@ -18,10 +18,10 @@
                     </select>
                 </div>
                 <div class="block-search">
-                    <label for="customer_id" class="control-label" translate>Payer</label>
+                    <label for="payer" class="control-label" translate>Payer</label>
                     <ng-select class="infinity-scroll-select" style="width: 110px;" [typeahead]="searchKey"
                     (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" [items]="listMaster['customer']"
-                    bindLabel="name" bindValue="id" formControlName="customer_id">
+                    bindLabel="name" bindValue="id" formControlName="payer">
                         <ng-template ng-option-tmp let-item="item">
                             <span [innerHTML]="item.company_name"></span>
                         </ng-template>\

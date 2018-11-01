@@ -56,9 +56,9 @@ export class CustomerReceiptVoucherTabComponent implements OnInit, OnDestroy {
         private cd: ChangeDetectorRef) {
 
         this.searchForm = fb.group({
-            'receipt_no': [null],
+            'voucher_no': [null],
             'payment_method': [null],
-            'customer_id': [null],
+            'payer': [null],
             'electronic': [null],
             'status': [null],
             'date_type': [null],
@@ -174,7 +174,7 @@ export class CustomerReceiptVoucherTabComponent implements OnInit, OnDestroy {
 
     initKeyBoard() {
         this.data['key_config'] = {
-            receipt_no: {
+            voucher_no: {
                 element: null,
                 focus: true,
             },
@@ -182,8 +182,8 @@ export class CustomerReceiptVoucherTabComponent implements OnInit, OnDestroy {
 
         this._hotkeysServiceReceipt.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+f1', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             event.preventDefault();
-            if (this.data['key_config'].receipt_no.element) {
-                this.data['key_config'].receipt_no.element.nativeElement.focus();
+            if (this.data['key_config'].voucher_no.element) {
+                this.data['key_config'].voucher_no.element.nativeElement.focus();
             }
             const e: ExtendedKeyboardEvent = event;
             e.returnValue = false; // Prevent bubbling
