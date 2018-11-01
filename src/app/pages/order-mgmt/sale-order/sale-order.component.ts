@@ -210,9 +210,9 @@ export class SaleOrderComponent implements OnInit {
 
     newRMA(item) {
         const data = {
-          buyer_id: item.buyer_id,
-          order_id: item.id,
-          buyer_name: item.buyer_name
+            buyer_id: item.buyer_id,
+            order_id: item.id,
+            buyer_name: item.buyer_name
         };
         this.router.navigateByData({ url: ['order-management/return-order/create'], data: [data] });
     }
@@ -235,12 +235,9 @@ export class SaleOrderComponent implements OnInit {
     }
 
     edit(item) {
-        if (item.edit_message) {
-            this.toastr.error(item.edit_message);
-        } else {
-            const id = item.id;
-            this.router.navigate(['/order-management/sale-order/edit', id]);
-        }
+        this.orderService.checkOrderEditable(item.id).subscribe(res => { 
+                this.router.navigate(['/order-management/sale-order/edit', item.id]);
+        });
     }
 
     putApproveOrder(order_id) {

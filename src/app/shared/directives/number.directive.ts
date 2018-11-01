@@ -1,6 +1,7 @@
 import { DecimalPipe } from '@angular/common';
 import { Directive, ElementRef, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { NgControl, NgModel } from '@angular/forms';
+import * as _ from 'lodash';
 
 @Directive({
     // tslint:disable-next-line:directive-selector
@@ -16,7 +17,7 @@ export class NumberDirective implements OnInit {
 
     @Input() isDecimal;
     @Input() set max(value) {
-        this._max = (value >= 0) ? Number(value.toFixed(2)) : Number.POSITIVE_INFINITY;
+        this._max = (value >= 0) ? _.round(value, 2) : Number.POSITIVE_INFINITY;
     }
 
     @Input() set min(value) {

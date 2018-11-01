@@ -124,7 +124,7 @@ export class SaleOrderInformationTabComponent implements OnInit {
      */
     checkGenerateInvoice() {
         this.orderService.generateInvoice(this._orderId, 1).subscribe(res => {
-           this.data['enableInvoice'] = res.data;
+            this.data['enableInvoice'] = res.data;
         });
     }
     changeShortcut() {
@@ -266,11 +266,9 @@ export class SaleOrderInformationTabComponent implements OnInit {
     }
 
     edit() {
-        if (this.detail['edit_message']) {
-            this.toastr.error(this.detail['edit_message']);
-        } else {
+        this.orderService.checkOrderEditable(this._orderId).subscribe(res => {
             this.router.navigate(['/order-management/sale-order/edit', this._orderId]);
-        }
+        });
     }
 
     generateInvoice() {

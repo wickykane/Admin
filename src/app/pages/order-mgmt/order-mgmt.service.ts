@@ -311,7 +311,7 @@ export class OrderService {
         return this.API.post(url);
     }
     checkOrderEditable(id) {
-        const url = ['sale-quote', 'detail', id].join('/');
+        const url = 'order/checkEdit/' + id;
         return this.API.get(url);
     }
     getQuantityActiveQuote(id) {
