@@ -24,7 +24,7 @@ export class CustomerCustomerBalanceTabComponent implements OnInit, OnDestroy {
      */
 
     public _customerId;
-    public listReference: any;
+    public listReference: any = {};
     @Input() set customerId(id) {
         if (id) {
             this._customerId = id;
@@ -33,7 +33,10 @@ export class CustomerCustomerBalanceTabComponent implements OnInit, OnDestroy {
     }
 
     public listMaster = {};
-    public list: any;
+    public list: any = {
+        content: [],
+        total: []
+    };
 
     searchForm: FormGroup;
     public data = {};
@@ -76,8 +79,7 @@ export class CustomerCustomerBalanceTabComponent implements OnInit, OnDestroy {
     getListReference() {
         this.customerService.getListCustomerBalanceReference().subscribe(res => {
             try {
-                console.log(res);
-                this.listReference = res.data;
+                this.listReference = res.data || {};
                 this.refresh();
             } catch (e) {
                 console.log(e);
@@ -90,7 +92,7 @@ export class CustomerCustomerBalanceTabComponent implements OnInit, OnDestroy {
 
         this.customerService.getListCustomerBalance(this._customerId, params).subscribe(res => {
             try {
-                this.list =  res.data;
+                this.list =  res.data || this.list;
                 console.log(this.list);
                 // this.tableService.matchPagingOption(res.data);
                 this.refresh();
@@ -98,6 +100,9 @@ export class CustomerCustomerBalanceTabComponent implements OnInit, OnDestroy {
                 console.log(e);
             }
         });
+    }
+    exportData() {
+        console.log('Export data');
     }
     checkRelated(item) {
         return Array.isArray(item);
@@ -162,6 +167,11 @@ export class CustomerCustomerBalanceTabComponent implements OnInit, OnDestroy {
             this.tableService.resetAction(this.searchForm);
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset'));
+        this._hotkeysServiceBalance.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+x', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            this.exportData();
+            return;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Export'));
     }
     resetKeys() {
         const keys = Array.from(this._hotkeysServiceBalance.hotkeys);

@@ -166,6 +166,10 @@ export class CustomerReceiptVoucherTabComponent implements OnInit, OnDestroy {
         });
     }
 
+    exportData() {
+        console.log('Export data');
+    }
+
     selectTable() {
         this.selectedIndex = 0;
         this.table.element.nativeElement.querySelector('td a').focus();
@@ -206,6 +210,11 @@ export class CustomerReceiptVoucherTabComponent implements OnInit, OnDestroy {
             this.tableService.resetAction(this.searchForm);
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset'));
+        this._hotkeysServiceReceipt.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+x', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            this.exportData();
+            return;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Export'));
         this._hotkeysServiceReceipt.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+u', (event: KeyboardEvent): boolean => {
             this.tableService.pagination.page--;
             if (this.tableService.pagination.page < 1) {
