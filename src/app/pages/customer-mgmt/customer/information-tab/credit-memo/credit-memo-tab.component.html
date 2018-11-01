@@ -1,2 +1,154 @@
 <div class="block anchor-scroll block-order">
+    <div class="block-content pd-bottom bg-gray-light short-width">
+        <div class="row px-3" style="background-color: white">
+            <app-shortcut [listShortcut]='_hotkeysService.hotkeys'></app-shortcut>
+        </div>
+        <div class="row">
+            <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
+                <div class="block-search">
+                    <label for="cd" class="control-label">Credit Memo No</label>
+                    <input #drNo [keyConfig]="data['key_config']" appKeyNavigate="credit_no" type="text" name="cd"
+                        formControlName="credit_no" class="form-control" id="cd" placeholder="">
+                </div>
+                <div class="block-search">
+                    <label for="customer_name" class="control-label">Customer Name</label>
+                    <input type="text" name="customer_name" formControlName="customer_name" class="form-control" id="customer_name" placeholder="">
+                </div>
+                <div class="block-search">
+                    <label for="status" class="control-label">Status</label>
+                    <ng-select [multiple]="true" [items]="listMaster['listStatus']" bindLabel="name" bindValue="id"
+                        formControlName="status">
+                    </ng-select>
+                </div>
+                <div class="block-search">
+                    <label for="type" class="control-label" translate>Date Type</label>
+                    <select class="form-control" formControlName="date_type">
+                        <option value="null" selected="true">--Select--</option>
+                        <option *ngFor="let item of listMaster['dateType']" [ngValue]="item.id">{{item.name}}</option>
+                    </select>
+                </div>
+                <div class="block-search">
+                    <label for="" class="control-label" translate>From</label>
+                    <div class="date-group">
+                        <div clickOutside (clickOutside)="d1.close()" class="input-group">
+                            <input [maxDate]="searchForm.value.date_to | dateObj" class="form-control" placeholder="mm/dd/yyyy"
+                                name="dp" formControlName="date_from" ngbDatepicker #d1="ngbDatepicker">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="block-search">
+                    <label for="" class="control-label" translate>To</label>
+                    <div class="date-group">
+                        <div clickOutside (clickOutside)="dt2.close()" class="input-group">
+                            <input [minDate]="searchForm.value.date_from | dateObj" class="form-control" placeholder="mm/dd/yyyy"
+                                name="dp" formControlName="date_to" ngbDatepicker #dt2="ngbDatepicker">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" (click)="dt2.toggle()" type="button">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="block-btn-search">
+                <label class="control-label">&nbsp;</label>
+                <div class="group-btn-search">
+                    <button type="button" class="btn-default-custom" (click)="tableService.searchAction()">Search</button>
+                    <button type="button" class="btn-default-custom" (click)="tableService.resetAction(this.searchForm)">Reset</button>
+                    <button type="button" class="btn-default-custom" (click)="exportData()">Export</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mg-top-10">
+        <div class="col-12">
+            <div class="card no-border">
+                <div class="card-header">
+                    <strong>Line Items</strong>
+                </div>
+                <div class="card-body no-padding">
+                    <div class="scroll-container table-responsive list">
+                        <table class='table table-bordered table-order' cdArrowTable [collection]="list.items"
+                            [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
+                            <thead class="bg-white">
+                                <tr>
+                                    <th translate>Credit Memo No</th>
+                                    <th translate translate>Issue Date</th>
+                                    <th translate>Customer</th>
+                                    <th translate translate>Related Document</th>
+                                    <th translate translate>Total Amount</th>
+                                    <th translate translate>Balance Amount</th>
+                                    <th class="text-center" translate>Status</th>
+                                    <th class="text-center" translate>Age</th>
+                                    <th class="text-center" translate>Last Updated Date</th>
+                                    <th class="text-center" translate>Last Updated By</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
+                                    <td>
+                                        <a class="text-primary" [routerLink]="['/financial/credit-memo/view', item.id]">{{item.cd}}</a>
+                                    </td>
+                                    <td class="text-center">{{item.issue_date | date:'MM/dd/yyyy' }}</td>
+                                    <td>{{item.customer_name}}</td>
+                                    <td class="text-center">{{item.document_cd}}</td>
+                                    <td class="text-center">
+                                        {{item.total_price | currency}}
+                                    </td>
+                                    <td class="text-center">
+                                        {{item.balance_price | currency}}
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge badge-info bg-blue" *ngIf="item.sts_code == 'NW'">{{item.sts}}</span>
+                                        <span class="badge badge-warning bg-texas-rose" *ngIf="item.sts_code == 'SB'">{{item.sts}}</span>
+                                        <span class="badge badge-danger bg-magenta" *ngIf="item.sts_code == 'RJ'">{{item.sts}}</span>
+                                        <span class="badge badge-success bg-strong-green" *ngIf="item.sts_code == 'AP'">{{item.sts}}</span>
+                                        <span class="badge badge-danger bg-red" *ngIf="item.sts_code == 'CC'">{{item.sts}}</span>
+                                        <span class="badge badge-primary bg-lemon" *ngIf="item.sts_code == 'RD'">{{item.sts}}</span>
+                                        <span class="badge badge-primary bg-bright-grey" *ngIf="item.sts_code == 'RF'">{{item.sts}}</span>
+                                    </td>
+                                    <td class="text-center">{{item.age }}</td>
+                                    <td class="text-center">{{item.updated_at | date:'MM/dd/yyyy' }}</td>
+                                    <td class="text-center">{{item.updated_by}}</td>
+                                </tr>
+                            </tbody>
+                            <tbody *ngIf="list.items.length == 0">
+                                <tr>
+                                    <td colspan="100%" class="text-center" translate>No data.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row normal-pagination mg-top-10" *ngIf="list.items.length > 0">
+        <div class="col-md-6 padding-lr-0">
+            <div class="text-left">
+                <div class="col-md-6" style="padding-left: 0px;">
+                    <span style="float: left; padding-right: 10px;">{{list.items.length}}/{{tableService.pagination.total_record}}
+                        items </span>
+                    <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length"
+                        (change)="tableService.changeLength()">
+                        <option *ngFor="let option of tableService.itemPerPageOptions" [ngValue]="option">{{option}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 padding-lr-0">
+            <div class="text-right">
+                <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)"
+                    [pageSize]="tableService.pagination.length" [collectionSize]="tableService.pagination.total_record || 120"
+                    [(page)]="tableService.pagination.page" [maxSize]="tableService.maxSize" [rotate]="true"
+                    [boundaryLinks]="true"></ngb-pagination>
+            </div>
+        </div>
+    </div>
 </div>
