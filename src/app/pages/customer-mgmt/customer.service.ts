@@ -88,9 +88,9 @@ export class CustomerService {
         return this.API.get(url, params);
     }
 
-    exportPayment(id, params) {
-        const url = 'buyer/payment/' + id + '?export=1';
-        return this.API.get(url, params);
+    exportReceiptVoucher(id) {
+        const url = 'buyer/export-receipt-voucher/' + id;
+        return this.API.get(url);
     }
 
     getListRMA(id, params) {
@@ -186,8 +186,8 @@ export class CustomerService {
         const url = 'buyer/credit-memo/' + id;
         return this.API.get(url, params);
     }
-    exportCreditMemo(id, params) {
-        const url = 'buyer/credit-memo/' + id + '?export=1';
-        return this.API.get(url, params);
+    exportCreditMemo(id) {
+        const url = 'buyer/export-credit-memo/' + id;
+        return this.API.get(url);
     }
 }
