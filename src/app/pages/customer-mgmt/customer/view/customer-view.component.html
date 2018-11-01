@@ -196,9 +196,14 @@
 
                     </ng-template>
                 </ngb-tab>
-                <ngb-tab [id]="customer['company_type']=='CP' ? '11' : '9'" title="Customer Balance">
+                <ngb-tab [id]="customer['company_type']=='CP' ? '11' : '9'" title="CUSTOMER BALANCE">
                     <ng-template ngbTabContent>
                         <app-customer-customer-balance-tab [customerId]="customerId"></app-customer-customer-balance-tab>
+                    </ng-template>
+                </ngb-tab>
+                <ngb-tab [id]="customer['company_type']=='CP' ? '13' : '10'" title="CREDIT MEMO">
+                    <ng-template ngbTabContent>
+                        <app-customer-credit-memo-tab [customerId]="customerId"></app-customer-credit-memo-tab>
                     </ng-template>
                 </ngb-tab>
             </ngb-tabset>

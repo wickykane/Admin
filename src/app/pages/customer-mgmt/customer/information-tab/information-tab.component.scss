@@ -23,7 +23,51 @@
                 width: calc( 100% + 16px);
             }
         }
-      
+
+    }
+
+    .label.blue {
+        background-color: #70BAEB;
+    }
+
+    .label.darkblue {
+        background-color: #7197EA;
+    }
+
+    .label.red {
+        background-color: #E74F5B;
+    }
+
+    .label.lemon {
+        background-color: #C2C262;
+    }
+
+    .label.green {
+        background-color: #32c5d2;
+    }
+
+    .label.magenta {
+        background-color: #A48AD4;
+    }
+
+    .label.strong-green {
+        background-color: #45C37A;
+    }
+
+    .label.bright-grey {
+        background-color: #999999;
+    }
+
+    .label.rock-blue {
+        background-color: #0D8BD2;
+    }
+
+    .label.texas-rose {
+        background-color: #FDB45C;
+    }
+
+    .label.pink {
+        background-color: #E491A3;
     }
 }
 
@@ -36,7 +80,7 @@
     }
     tbody td {
         padding: 10px;
-        word-break: break-word;        
+        word-break: break-word;
     }
 }
 
@@ -145,47 +189,47 @@
 
 .dashboard-content .dashboard-stat.darkblue,  .bg-darkblue  {
     background-color: #7197EA;
-    color: #fff !important;    
+    color: #fff !important;
 }
 
 .dashboard-content .dashboard-stat.red, .bg-red {
     background-color: #E74F5B;
-    color: #fff !important;    
+    color: #fff !important;
 }
 
 .dashboard-content .dashboard-stat.lemon, .bg-lemon {
     background-color: #C2C262;
-    color: #fff !important;    
+    color: #fff !important;
 }
 
 .dashboard-content .dashboard-stat.green, .bg-green {
     background-color: #32c5d2;
-    color: #fff !important;    
+    color: #fff !important;
 }
 
 .dashboard-content .dashboard-stat.magenta, .bg-magenta {
     background-color: #A48AD4;
-    color: #fff !important;    
+    color: #fff !important;
 }
 
 .dashboard-content .dashboard-stat.strong-green, .bg-strong-green {
     background-color: #45C37A;
-    color: #fff !important;    
+    color: #fff !important;
 }
 
 .dashboard-content .dashboard-stat.bright-grey, .bg-bright-grey {
     background-color: #999999;
-    color: #fff !important;    
+    color: #fff !important;
 }
 
 .dashboard-content .dashboard-stat.rock-blue, .bg-rock-blue {
     background-color: #949FB1;
-    color: #fff !important;    
+    color: #fff !important;
 }
 
 .dashboard-content .dashboard-stat.texas-rose, .bg-texas-rose {
     background-color: #FDB45C;
-    color: #fff !important;    
+    color: #fff !important;
 }
 
 .dashboard-content .dashboard-stat {
