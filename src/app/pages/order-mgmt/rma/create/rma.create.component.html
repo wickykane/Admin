@@ -59,6 +59,17 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row">
+                                                <label class='col-6'>Return Type
+                                                    <span class="text-danger">(*)</span>
+                                                </label>
+                                                <div class='col-6'>
+                                                    <select (change)="changeType()" class="form-control" name="order_return_type" formControlName="order_return_type">
+                                                        <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
+                                                        <option *ngFor="let item of listMaster['type']" [ngValue]="item.key">{{item.value}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
                                                 <label class='col-6'>Sales Order No <span class="text-danger">(*)</span></label>
                                                 <div class='col-6 '>
                                                     <ng-select class="infinity-scroll-select" [virtualScroll]="true" (change)="changeSalesOrder()" [items]="listMaster['list_order']" bindLabel="code" bindValue="id" formControlName="order_id" required>
@@ -80,12 +91,6 @@
                                                             </ng-template>
                                                         </ng-select>
                                                     </form>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class='col-6'>Status</label>
-                                                <div class='col-6 text-success'>
-                                                    <strong>1-NEW</strong>
                                                 </div>
                                             </div>
                                         </form>
@@ -124,6 +129,12 @@
                                                     </select>
                                                 </div>
                                             </div>
+                                            <div class="form-group row">
+                                                <label class='col-6'>Status</label>
+                                                <div class='col-6 text-success'>
+                                                    <strong>1-NEW</strong>
+                                                </div>
+                                            </div>
                                         </form>
                                     </div>
                                 </div>
@@ -143,17 +154,6 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <form [formGroup]="generalForm">
-                                            <div class="form-group row">
-                                                <label class='col-6'>Return Type
-                                                    <span class="text-danger">(*)</span>
-                                                </label>
-                                                <div class='col-6'>
-                                                    <select (change)="changeType()" class="form-control" name="order_return_type" formControlName="order_return_type">
-                                                        <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
-                                                        <option *ngFor="let item of listMaster['type']" [ngValue]="item.key">{{item.value}}</option>
-                                                    </select>
-                                                </div>
-                                            </div>
                                             <div class="form-group row">
                                                 <label class='col-6'>Return Warehouse
                                                     <span class="text-danger">(*)</span>

@@ -36,9 +36,9 @@ export class RMAService {
         return this.API.get(url);
     }
 
-    listOrderByCompany(compnay_id) {
-        const url = 'return-order/list-order-by-company/' + compnay_id;
-        return this.API.get(url);
+    listOrderByCompany(params) {
+        const url = 'return-order/list-order-by-company';
+        return this.API.post(url, params);
     }
 
     listInvoiceByOrder(order_id) {
