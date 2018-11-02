@@ -56,7 +56,7 @@
                         <label>
                             <b>Display Name (*)</b>
                         </label>
-                        <input type="text" maxlength="50" class="form-control" formControlName="name" (blur)="checkDuplicateDisplayName()">
+                        <input patternDirective="^[a-zA-Z0-9\s]*$" type="text" maxlength="50" class="form-control" formControlName="name" (blur)="checkDuplicateDisplayName()">
                         <span class="show-tooltip" ngbTooltip="The text in this box will be used to describe this payment method on your store front site.">
                             <i class="fa fa-question-circle"></i>
                         </span>

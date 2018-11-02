@@ -126,6 +126,10 @@ export class ReceiptInformationTabComponent implements OnInit {
         this.receiptVoucherService.getDetailReceiptVoucher(this._receiptId).subscribe(res => {
             try {
                 this.detail = res.data;
+                this.detail['list_credit'] = [];
+                if (this.detail.credit_memo !== null) {
+                    this.detail['list_credit'].push(res.data.credit_memo);
+                }
                 this.key_required =  {
                     company_id: res.data.company_id,
                     payment_date: res.data.payment_date,

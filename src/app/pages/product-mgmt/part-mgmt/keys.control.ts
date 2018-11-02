@@ -56,7 +56,7 @@ export class PartKeyService extends KeyboardBaseService {
                 return;
             }, ['INPUT', 'SELECT', 'TEXTAREA'], 'VIN'));
 
-            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+h', (event: KeyboardEvent): boolean => {
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+e', (event: KeyboardEvent): boolean => {
                 event.preventDefault();
                 (document.activeElement as HTMLInputElement).blur();
                 this.context.selectTab('vehicle');
@@ -138,14 +138,7 @@ export class PartKeyService extends KeyboardBaseService {
                 return;
             }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset'));
 
-            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+f', (event: KeyboardEvent): boolean => {
-                event.preventDefault();
-                this.context.tableService.searchActionWithFilter();
-                return;
-            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Filter'));
-
-
-            this._hotkeysService.add(new Hotkey('alt+shift+r', (event: KeyboardEvent): boolean => {
+            this._hotkeysService.add(new Hotkey('alt+2', (event: KeyboardEvent): boolean => {
                 event.preventDefault();
                 this.context.tableService.resetAction(this.context.filterForm);
                 return;

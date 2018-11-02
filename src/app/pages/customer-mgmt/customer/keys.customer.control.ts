@@ -31,7 +31,7 @@ export class CustomerKeyService extends KeyboardBaseService {
             }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Create New Customer'));
         }
 
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+e', (event: KeyboardEvent): boolean => {
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             this.context.tableService.searchAction();
             return;
