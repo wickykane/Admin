@@ -11,8 +11,8 @@
         <!-- <button ngbTooltip="Create Return Order" *ngIf="_orderDetail['order_sts_short_name'] == 'RS'" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail, 'RS')"><i class="fa fa-file"></i> Create Return Order</button> -->
 
 
-        <button ngbTooltip="Edit" *ngIf="data['permission'].edit && (_orderDetail['order_sts_short_name'] == 'NW' || _orderDetail['order_sts_short_name'] == 'RV' || (_orderDetail['order_sts_short_name'] == 'AP' || _orderDetail['order_sts_short_name'] == 'IP' || _orderDetail['order_sts_short_name'] == 'PP' || _orderDetail['order_sts_short_name'] == 'RS') )" class="btn btn-outline-dark" (click)="edit()"><i class="fa fa-pencil-square"></i> Edit</button>
-        <button ngbTooltip="Generate Invoice" (click)="generateInvoice()" *ngIf="data['permission'].genInvoice && ['AP', 'IP', 'PP', 'RS'].indexOf(_orderDetail['order_sts_short_name']) != -1" class="btn btn-outline-dark"><i class="fa fa-plus"></i> Generate Invoice</button>
+        <button ngbTooltip="Edit" *ngIf="data['permission'].edit && (_orderDetail['order_sts_short_name'] == 'NW' || _orderDetail['order_sts_short_name'] == 'RV' || !detail['total_paid'] && (_orderDetail['order_sts_short_name'] == 'AP' || _orderDetail['order_sts_short_name'] == 'IP' || _orderDetail['order_sts_short_name'] == 'PP' || _orderDetail['order_sts_short_name'] == 'RS')) " class="btn btn-outline-dark" (click)="edit()"><i class="fa fa-pencil-square"></i> Edit</button>
+        <button ngbTooltip="Generate Invoice" (click)="generateInvoice()" *ngIf="data['permission'].genInvoice && data['enableInvoice'] && ['AP', 'IP', 'PP', 'RS'].indexOf(_orderDetail['order_sts_short_name']) != -1" class="btn btn-outline-dark"><i class="fa fa-plus"></i> Generate Invoice</button>
 
     </div>
     <section class="rma-page block main-container block-order">
@@ -412,7 +412,7 @@
                                             <span>{{item.total_price | currency}}</span>
                                         </td>
                                         <td>
-                                            {{ item.income_account_name }}
+                                            <span *ngIf="item.income_account_id">{{ item.income_account_code }} - {{ item.income_account_name }}</span>
                                         </td>
                                         <td class="text-center">
                                             <span>
@@ -478,7 +478,7 @@
                                         <div class="form-group row">
                                             <label class='col-7'>Total Return COGS</label>
                                             <div class='col-5'>
-                                                {{detail['total_return_cogs'] || 0}}
+                                                {{ (+detail['total_return_cogs'] || 0).toFixed(2) }}
                                             </div>
                                         </div>
                                     </div>

@@ -494,7 +494,7 @@ export class SaleQuotationCreateComponent implements OnInit {
                 });
 
                 res.forEach((item) => {
-                    if (item.sale_price) { item.sale_price = Number(item.sale_price); }
+                    item.sale_price = 0;
                     item.source_id = 2;
                     item.source_name = 'Manual';
                     item.quantity = 1;

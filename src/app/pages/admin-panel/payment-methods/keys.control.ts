@@ -19,17 +19,23 @@ export class PaymentMethodsKeyService extends KeyboardBaseService {
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Focus Search'));
         if (this.context.listMaster['permission'].create) {
-            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+n', (event: KeyboardEvent): boolean =>  {
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+n', (event: KeyboardEvent): boolean => {
                 event.preventDefault();
                 this.context.addNewPaymentMethod();
                 return;
-            }, undefined, 'Create New'));
+            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Create New'));
+
         }
-        // this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+e', (event: KeyboardEvent): boolean =>  {
-        //     event.preventDefault();
-        //     this.context.editPaymentMethod(this.context.paymentMethodId);
-        //     return;
-        // }, undefined, 'Edit'));
+
+        if (this.context.listMaster['permission'].edit) {
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+del', (event: KeyboardEvent): boolean => {
+                event.preventDefault();
+                this.context.deletePaymentMethod(this.context.paymentMethod);
+                return;
+            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Delete'));
+
+        }
+
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+e', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             this.context.tableService.searchAction();

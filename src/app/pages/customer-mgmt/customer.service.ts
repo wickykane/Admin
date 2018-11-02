@@ -15,6 +15,16 @@ export class CustomerService {
         const url = 'company_type/all';
         return this.API.get(url);
     }
+
+    getOrderReference() {
+        const url = 'order/reference-data';
+        return this.API.get(url);
+    }
+
+    getRMAReference() {
+        const url = 'return-order/reference';
+        return this.API.get(url);
+    }
     /**
      * Buyer
      */
@@ -64,17 +74,17 @@ export class CustomerService {
     }
 
     getListQuote(id, params) {
-        const url = 'buyer/sale-quote/' + id;
+        const url = 'buyer/' + id + '/sale-quotes' ;
         return this.API.get(url, params);
     }
 
     getListSO(id, params) {
-        const url = 'buyer/sales-orders/' + id;
+        const url = 'buyer/' + id + '/sale-orders';
         return this.API.get(url, params);
     }
 
     getListInvoice(id, params) {
-        const url = 'buyer/invoice/' + id;
+        const url = 'buyer/' + id + '/invoices';
         return this.API.get(url, params);
     }
 
@@ -88,13 +98,31 @@ export class CustomerService {
         return this.API.get(url, params);
     }
 
-    getListRMA(params) {
+    exportReceiptVoucher(id) {
+        const url = 'buyer/export-receipt-voucher/' + id;
+        return this.API.get(url);
+    }
+
+    getListRMA(id, params) {
+        const url = 'buyer/return-order/' + id;
+        return this.API.get(url, params);
+    }
+
+    exportRMA(id, params) {
+        const url = 'buyer/return-order/' + id + '?export=1';
+        return this.API.get(url, params);
+    }
+    exportOrder(id) {
+        const url = 'buyer/export-order/' + id;
+        return this.API.get(url);
+    }
+    getListAccount(params) {
         const url = 'buyer/index';
         return this.API.get(url, params);
     }
 
-    getListAccount(params) {
-        const url = 'buyer/index';
+    getListDebit(id, params) {
+        const url =  'buyer/' + id + '/debit-memos';
         return this.API.get(url, params);
     }
 
@@ -171,5 +199,13 @@ export class CustomerService {
     getListCustomerBalance(id, params) {
         const url = 'customer-balance/get-list?company_id=' + id;
         return this.API.get(url, params);
+    }
+    getListCreditMemo(id, params) {
+        const url = 'buyer/credit-memo/' + id;
+        return this.API.get(url, params);
+    }
+    exportCreditMemo(id) {
+        const url = 'buyer/export-credit-memo/' + id;
+        return this.API.get(url);
     }
 }

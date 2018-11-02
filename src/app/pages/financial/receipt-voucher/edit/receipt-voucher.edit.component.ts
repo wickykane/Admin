@@ -406,7 +406,7 @@ export class ReceiptVoucherEditComponent implements OnInit {
 
 
 
-        this.data['summary'].change = this.generalForm.value.price_received - this.data['summary'].total;
+        this.data['summary'].change = (this.generalForm.value.price_received - this.data['summary'].total).toFixed(2);
         this.generalForm.patchValue({ remain_amt: this.data['summary'].change });
         this.refresh();
 

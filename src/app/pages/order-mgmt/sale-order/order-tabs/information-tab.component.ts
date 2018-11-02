@@ -113,6 +113,7 @@ export class SaleOrderInformationTabComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.checkGenerateInvoice();
         this.getList();
         this.data['tab'] = {
             active: 0,
@@ -124,6 +125,11 @@ export class SaleOrderInformationTabComponent implements OnInit {
     /**
      * Internal Function
      */
+    checkGenerateInvoice() {
+        this.orderService.generateInvoice(this._orderId, 1).subscribe(res => {
+            this.data['enableInvoice'] = res.data;
+        });
+    }
     changeShortcut() {
         setTimeout(() => {
             this.parent.data['shortcut'] = this.keyService.getKeys();
@@ -210,9 +216,9 @@ export class SaleOrderInformationTabComponent implements OnInit {
 
     newRMA(item) {
         const data = {
-          buyer_id: item.buyer_id,
-          order_id: item.id,
-          buyer_name: item.buyer_name
+            buyer_id: item.buyer_id,
+            order_id: item.id,
+            buyer_name: item.buyer_name
         };
         this.router.navigateByData({ url: ['order-management/return-order/create'], data: [data] });
     }
@@ -263,11 +269,9 @@ export class SaleOrderInformationTabComponent implements OnInit {
     }
 
     edit() {
-        if (this.detail['edit_message']) {
-            this.toastr.error(this.detail['edit_message']);
-        } else {
+        this.orderService.checkOrderEditable(this._orderId).subscribe(res => {
             this.router.navigate(['/order-management/sale-order/edit', this._orderId]);
-        }
+        });
     }
 
     generateInvoice() {

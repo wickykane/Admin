@@ -8,6 +8,7 @@ import { TableService } from './../../../../services/table.service';
     selector: 'app-customer-invoice-tab',
     templateUrl: './invoice-tab.component.html',
     styleUrls: ['./information-tab.component.scss'],
+    providers: [TableService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomerInvoiceTabComponent implements OnInit {
@@ -83,7 +84,7 @@ export class CustomerInvoiceTabComponent implements OnInit {
         const params = {...this.tableService.getParams(), ...this.searchForm.value};
         Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
-        this.customerService.getListInvoice(this.customerId, params).subscribe(res => {
+        this.customerService.getListInvoice(this._customerId, params).subscribe(res => {
             try {
                 this.list.items = res.data.rows;
                 this.tableService.matchPagingOption(res.data);
