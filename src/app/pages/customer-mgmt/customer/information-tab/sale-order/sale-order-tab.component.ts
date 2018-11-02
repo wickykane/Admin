@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
-import { cdArrowTable } from '../../../../../shared';
+import { environment } from '../../../../../../environments/environment';
+import { cdArrowTable, JwtService } from '../../../../../shared';
 import { Helper } from '../../../../../shared/helper/common.helper';
 import { OrderService } from '../../../../order-mgmt/order-mgmt.service';
 import { CustomerService } from '../../../customer.service';
@@ -45,6 +46,7 @@ export class CustomerSaleOrderTabComponent implements OnInit, OnDestroy {
         public tableService: TableService,
         private customerService: CustomerService,
         public _hotkeysServiceSaleOder: HotkeysService,
+        private jwtService: JwtService,
         private helper: Helper,
         private orderService: OrderService, private cd: ChangeDetectorRef) {
 
@@ -67,6 +69,8 @@ export class CustomerSaleOrderTabComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.listMaster['dateType'] = [{ id: 'order_dt', name: 'Order Date' }, { id: 'delivery_dt', name: 'Delivery Date' }];
+        this.listMaster['type'] = [{ id: 'PKU', name: 'Pickup ' }, { id: 'NO', name: 'Regular Order' }, { id: 'ONL', name: 'Ecommerce' }, { id: 'XD', name: 'X-Docks' }];
         this.getListStatus();
         this.initKeyBoard();
     }
@@ -83,14 +87,24 @@ export class CustomerSaleOrderTabComponent implements OnInit, OnDestroy {
 
     getListStatus() {
         this.orderService.getListStatus().subscribe(res => {
-            this.listMaster['status'] = res.results;
+            this.listMaster['status'] = res.data;
             this.refresh();
         });
     }
 
     getList() {
-        const params = {...this.searchForm.value};
-        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
+        const params = { ...this.tableService.getParams(), ...this.searchForm.value, ...this.listMaster['filter'] || {} };
+
+        Object.keys(params).forEach((key) => {
+            if (params[key] instanceof Array) {
+                params[key] = params[key].join(',');
+            }
+            // tslint:disable-next-line:no-unused-expression
+            (params[key] === null || params[key] === '') && delete params[key];
+        });
+
+        params.order = 'id';
+        params.sort = 'desc';
 
         this.customerService.getListSO(this._customerId, params).subscribe(res => {
             try {
@@ -100,6 +114,23 @@ export class CustomerSaleOrderTabComponent implements OnInit, OnDestroy {
             } catch (e) {
                 console.log(e);
             }
+        });
+    }
+
+    exportData() {
+        const anchor = document.createElement('a');
+        const path = 'buyer/export-order/';
+        const file = `${environment.api_url}${path}${this._customerId}`;
+        const headers = new Headers();
+        headers.append('Authorization', 'Bearer ' + this.jwtService.getToken());
+        fetch(file, { headers })
+            .then(response => response.blob())
+            .then(blobby => {
+                const objectUrl = window.URL.createObjectURL(blobby);
+            anchor.href = objectUrl;
+            anchor.download = 'sale_orders.xls';
+            anchor.click();
+            window.URL.revokeObjectURL(objectUrl);
         });
     }
     selectTable() {
@@ -142,6 +173,12 @@ export class CustomerSaleOrderTabComponent implements OnInit, OnDestroy {
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset'));
 
+        this._hotkeysServiceSaleOder.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+x', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            this.exportData();
+            return;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Export'));
+
         this._hotkeysServiceSaleOder.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+t', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             this.selectTable();
@@ -158,7 +195,7 @@ export class CustomerSaleOrderTabComponent implements OnInit, OnDestroy {
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Previous page'));
 
-        this._hotkeysServiceSaleOder.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+d', (event: KeyboardEvent): boolean => {
+        this._hotkeysServiceSaleOder.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+y', (event: KeyboardEvent): boolean => {
             this.tableService.pagination.page++;
             if (this.tableService.pagination.page > this.tableService.pagination.total_page) {
                 this.tableService.pagination.page = this.tableService.pagination.total_page;

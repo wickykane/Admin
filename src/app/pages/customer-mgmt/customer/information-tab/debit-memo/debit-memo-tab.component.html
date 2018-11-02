@@ -1,2 +1,156 @@
 <div class="block anchor-scroll block-order">
-</div>
+        <div class="block-content pd-bottom bg-gray-light short-width">
+                <div class="row px-3" style="background-color: white">
+                    <app-shortcut [listShortcut]='_hotkeysServiceDebit.hotkeys'></app-shortcut>
+                </div>           
+               <div class="row">               
+                <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
+                        <div class="block-search">
+                                <label for="sale_quote_num" class="control-label">DR No</label>
+                                <input #drNo [keyConfig]="data['key_config']" appKeyNavigate="no" autofocus="true" type="text" name="no" formControlName="no" class="form-control" placeholder="">
+                            </div>
+                            <div class="block-search">
+                                <label for="buyer_name" class="control-label" translate>Customer</label>
+                                <input type="text" name="cus_name" formControlName="company_name" class="form-control" placeholder="">
+                            </div>
+                            <div class="block-search">
+                                <label for="sts" class="control-label">Status</label>
+                                <ng-select [multiple]="true" [items]="listMaster['status']" bindLabel="name" bindValue="id" formControlName="sts">
+                                </ng-select>
+                            </div>
+                            <div class="block-search">
+                                <label for="type" class="control-label" translate>Date Type</label>
+                                <select class="form-control" formControlName="date_type">
+                                    <option *ngFor="let item of listMaster['dateType']" [ngValue]="item.id">{{item.name}}</option>
+                                </select>
+                            </div>
+                            <div class="block-search">
+                                <label for="" class="control-label" translate>From</label>
+                                <div class="date-group">
+                                    <div clickOutside (clickOutside)="d1.close()" class="input-group">
+                                        <input [maxDate]="searchForm.value.date_to | dateObj" class="form-control" (keydown)="$event.preventDefault()" autocomplete="off" formControlName="date_from" placeholder="mm/dd/yyyy" name="dp" ngbDatepicker #d1="ngbDatepicker">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
+                                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="block-search">
+                                <label for="" class="control-label" translate>To</label>
+                                <div class="date-group">
+                                    <div clickOutside (clickOutside)="dt2.close()" class="input-group">
+                                        <input [minDate]="searchForm.value.date_from | dateObj" class="form-control" (keydown)="$event.preventDefault()" autocomplete="off" formControlName="date_to" placeholder="mm/dd/yyyy" name="dp" ngbDatepicker #dt2="ngbDatepicker">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" (click)="dt2.toggle()" type="button">
+                                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+        
+                            </div>    
+                </form>
+                <div class="block-btn-search">
+                    <label class="control-label">&nbsp;</label>
+                    <div class="group-btn-search">
+                        <button type="button" class="btn-default-custom" (click)="tableService.searchAction()">Search</button>
+                        <button type="button" class="btn-default-custom" (click)="tableService.resetAction(this.searchForm)">Reset</button>
+                        <button type="button" class="btn-default-custom" (click)="exportData()">Export</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mg-top-10">
+            <div class="col-12">
+                <div class="card no-border">
+                    <div class="card-header">
+                        <strong>Line Items</strong>
+                    </div>
+                    <div class="card-body no-padding">
+                        <div class="scroll-container table-responsive list">
+                            <table class='table table-bordered table-order' cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
+                                    <thead class="bg-white">
+                                        <tr>  
+                                            <th style="width:50px"></th>             
+                                            <th>Debit Memo No</th>
+                                            <th>Issue Date</th>
+                                            <th>Customer Name</th>
+                                            <th>Related Document</th>
+                                            <th>Due Date</th>
+                                            <th>Total Due</th>
+                                            <th>Balance Due</th>
+                                            <th>Status</th>
+                                            <th>Aged Overdue</th>
+                                            <th>Last Updated Date</th>
+                                            <th>Last Updated By</th>                                           
+                                        </tr>
+                                    </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of list.items; let i = index" [ngClass]="{'row-selected': i == selectedIndex}">
+                                        <td class="text-center" style="width:50px">
+                                            <img *ngIf="!item.qbo_sync" src="assets/img/qbicon-gray.png" width="20px" height="20px">
+                                            <img *ngIf="item.qbo_sync" src="assets/img/qbicons.png" width="20px" height="20px">
+                                            <!-- <a *ngIf="item.sts_code=='CP'" href="https://sandbox.qbo.intuit.com/app/sales" target="_blank">
+                                                <img placement="top" ngbTooltip="Sent Invoice To QuickBooks {{item.updated_at}}" src="../../assets/img/qbicons.png" width="20px" height="20px">
+                                            </a> -->
+                                        </td>
+                                        <td>
+                                            <a class="text-primary" [routerLink]="['/financial/debit-memo/view',item.id]">{{item.no}}</a>
+                                        </td>
+                                        <td class="text-center">{{item.issue_date | date:'MM/dd/yyyy'}}</td>
+                                        <td>{{item.company_name}}</td>
+                                        <td>{{item.doc_no}}</td>
+                                        <td class="text-center">{{item.due_date | date:'MM/dd/yyyy'}}</td>
+                                        <td>{{item.total_price | currency}}</td>
+                                        <td>{{item.balance_price | currency}}</td>
+                                        <td class="text-center">
+                                            <span class="badge badge-info bg-blue" *ngIf="item.sts == 1">{{item.sts_name}}</span>
+                                            <span class="badge badge-warning bg-texas-rose" *ngIf="item.sts == 2">{{item.sts_name}}</span>
+                                            <span class="badge badge-danger bg-strong-green" *ngIf="item.sts == 3">{{item.sts_name}}</span>
+                                            <span class="badge badge-success bg-magenta" *ngIf="item.sts == 4">{{item.sts_name}}</span>
+                                            <span class="badge badge-primary bg-red" *ngIf="item.sts == 5">{{item.sts_name}}</span>
+                                            <span class="badge badge-primary bg-darkblue" *ngIf="item.sts == 6">{{item.sts_name}}</span>
+                                            <span class="badge badge-danger bg-lemon" *ngIf="item.sts == 7">{{item.sts_name}}</span>
+                                            <span class="badge badge-primary bg-bright-grey" *ngIf="item.sts == 8">{{item.sts_name}}</span>
+                                        </td>
+                                        <td>{{item.aged}}</td>
+                                        <td class="text-center">{{item.updated_at | date:'MM/dd/yyyy'}}</td>
+                                        <td>{{item.updated_by}}</td>
+                                    </tr>                                    
+                                </tbody>
+                                <tbody *ngIf="list.items.length == 0">
+                                    <tr>
+                                        <td colspan="100%" class="text-center" translate>No data.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row normal-pagination mg-top-10" *ngIf="list.items.length > 0">
+            <div class="col-md-6">
+                <div class="text-left">
+                    <div class="col-md-6" style="padding-left: 0px;">
+                        <span style="float: left; padding-right: 10px;">{{list.items.length}}/{{tableService.pagination.total_record}}
+                            items </span>
+                        <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length"
+                            (change)="tableService.changeLength()">
+                            <option *ngFor="let option of tableService.itemPerPageOptions" [ngValue]="option">{{option}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="text-right">
+                    <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)"
+                        [pageSize]="tableService.pagination.length" [collectionSize]="tableService.pagination.total_record || 120"
+                        [(page)]="tableService.pagination.page" [maxSize]="tableService.maxSize" [rotate]="true"
+                        [boundaryLinks]="true"></ngb-pagination>
+                </div>
+            </div>
+        </div>
+    </div>

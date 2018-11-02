@@ -1,8 +1,10 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
-import { cdArrowTable } from '../../../../../shared';
+import { environment } from '../../../../../../environments/environment';
+import { cdArrowTable, JwtService } from '../../../../../shared';
 import { Helper } from '../../../../../shared/helper/common.helper';
+import { OrderService } from '../../../../order-mgmt/order-mgmt.service';
 import { CustomerService } from '../../../customer.service';
 import { CustomerKeyViewService } from '../../view/keys.view.control';
 import { TableService } from './../../../../../services/table.service';
@@ -11,7 +13,7 @@ import { TableService } from './../../../../../services/table.service';
     selector: 'app-customer-quote-tab',
     templateUrl: './quote-tab.component.html',
     styleUrls: ['../information-tab.component.scss'],
-    providers: [HotkeysService, CustomerKeyViewService],
+    providers: [HotkeysService, CustomerKeyViewService, OrderService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomerQuoteTabComponent implements OnInit, OnDestroy {
@@ -40,7 +42,9 @@ export class CustomerQuoteTabComponent implements OnInit, OnDestroy {
         public fb: FormBuilder,
         private vRef: ViewContainerRef,
         public tableService: TableService,
+        private orderService: OrderService,
         public _hotkeysServiceQuote: HotkeysService,
+        private jwtService: JwtService,
         private helper: Helper,
         private customerService: CustomerService, private cd: ChangeDetectorRef) {
 
@@ -59,32 +63,71 @@ export class CustomerQuoteTabComponent implements OnInit, OnDestroy {
         this.initKeyBoard();
     }
 
-    ngOnInit() { }
+    ngOnInit() {
+        this.listMaster['listFilter'] = [{ value: false, name: 'Date Filter' }];
+        this.listMaster['dateType'] = [{ id: 'quote_dt', name: 'Quote Date' }, { id: 'expiry_dt', name: 'Expiry Date' }, { id: 'delivery_dt', name: 'Delivery Date' }];
+        this.getListStatus();
+    }
 
     /**
      * Internal Function
      */
+    getListStatus() {
+        this.orderService.getListSaleQuotationStatus().subscribe(res => {
+            try {
+                this.listMaster['listStatus'] = res.data;
+                this.refresh();
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }
     selectData(index) {
         console.log(index);
     }
      refresh() {
           if (!this.cd['destroyed']) { this.cd.detectChanges(); }
      }
+     getList() {
+        const params = { ...this.tableService.getParams(), ...this.searchForm.value, ...this.listMaster['filter'] || {} };
 
-    getList() {
-        const params = {...this.tableService.getParams(), ...this.searchForm.value};
-        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
+        Object.keys(params).forEach((key) => {
+            if (params[key] instanceof Array) {
+                params[key] = params[key].join(',');
+            }
+            // tslint:disable-next-line:no-unused-expression
+            (params[key] === null || params[key] === '') && delete params[key];
+        });
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
 
         this.customerService.getListQuote(this._customerId, params).subscribe(res => {
             try {
                 this.list.items = res.data.rows;
-                 this.tableService.matchPagingOption(res.data);
-                 this.refresh();
+                this.tableService.matchPagingOption(res.data);
+                this.refresh();
             } catch (e) {
                 console.log(e);
             }
         });
     }
+
+    exportData() {
+        const anchor = document.createElement('a');
+        const path = 'buyer/export-quote/';
+        const file = `${environment.api_url}${path}${this._customerId}`;
+        const headers = new Headers();
+        headers.append('Authorization', 'Bearer ' + this.jwtService.getToken());
+        fetch(file, { headers })
+            .then(response => response.blob())
+            .then(blobby => {
+                const objectUrl = window.URL.createObjectURL(blobby);
+            anchor.href = objectUrl;
+            anchor.download = 'quotes.xls';
+            anchor.click();
+        window.URL.revokeObjectURL(objectUrl);
+         });
+    }
+
     selectTable() {
         this.selectedIndex = 0;
         this.table.element.nativeElement.querySelector('td a').focus();
@@ -128,6 +171,12 @@ export class CustomerQuoteTabComponent implements OnInit, OnDestroy {
             this.tableService.resetAction(this.searchForm);
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset'));
+        this._hotkeysServiceQuote.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+x', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            this.exportData();
+            return;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Export'));
+
         this._hotkeysServiceQuote.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+u', (event: KeyboardEvent): boolean => {
             this.tableService.pagination.page--;
             if (this.tableService.pagination.page < 1) {
@@ -138,7 +187,7 @@ export class CustomerQuoteTabComponent implements OnInit, OnDestroy {
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Previous page'));
 
-        this._hotkeysServiceQuote.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+d', (event: KeyboardEvent): boolean => {
+        this._hotkeysServiceQuote.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+y', (event: KeyboardEvent): boolean => {
             this.tableService.pagination.page++;
             if (this.tableService.pagination.page > this.tableService.pagination.total_page) {
                 this.tableService.pagination.page = this.tableService.pagination.total_page;
