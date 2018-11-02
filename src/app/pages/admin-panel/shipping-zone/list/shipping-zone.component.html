@@ -49,7 +49,7 @@
                 <div class="card no-border">
                     <div class="card-header">
                         <strong>Line Items</strong>
-                        <button [routerLink]="['/admin-panel/shipping-zone/create']" style="margin:0; float:right" class="btn btn-link">
+                        <button *ngIf="listMaster['permission'].create" [routerLink]="['/admin-panel/shipping-zone/create']" style="margin:0; float:right" class="btn btn-link">
                             <i class="fa fa-plus text-success"></i>Add New</button>
                         <!-- <button [routerLink]="['/admin-panel/shipping-zone/create']" (click)="createShippingZone" style="margin: 10px 0;" class="btn btn-primary">Add New</button> -->
                     </div>
@@ -83,10 +83,10 @@
                                             </label>
                                         </td>
                                         <td>
-                                            <a class="btn btn-default" title="View" (click)="openViewPage(item.id)">
+                                            <a *ngIf="listMaster['permission'].view" class="btn btn-default" title="View" (click)="openViewPage(item.id)">
                                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default" title="Edit" (click)="openPage(item.id)">
+                                            <a *ngIf="listMaster['permission'].edit" class="btn btn-default" title="Edit" (click)="openPage(item.id)">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
                                         </td>

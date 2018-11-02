@@ -83,6 +83,7 @@ const routes: Routes = [
     },
     {
         path: 'shipping-zone',
+        canActivate: [MasterGuard],
         loadChildren: './shipping-zone/shipping-zone.module#ShippingZoneModule'
     },
     {
