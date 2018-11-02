@@ -83,6 +83,7 @@ const routes: Routes = [
     },
     {
         path: 'shipping-zone',
+        canActivate: [MasterGuard],
         loadChildren: './shipping-zone/shipping-zone.module#ShippingZoneModule'
     },
     {
@@ -221,7 +222,8 @@ const routes: Routes = [
     },
     {
         path: 'ledger',
-        component: LedgerComponent
+        component: LedgerComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'payment-methods',

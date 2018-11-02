@@ -32,9 +32,7 @@ export class LedgerKeyService extends KeyboardBaseService {
             e.returnValue = false; // Prevent bubbling
             return e;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Back'));
-        // <button [disabled]="!data['selectedAccount'] || data['selectedAccount'] && data['selectedAccount'].level !== 0" (click)="actionInvoke(screen.NEW_ACCOUNT_TYPE)" class="btn btn-custom btn-orange">Add Account Type</button>
-        // <button class="btn btn-custom btn-green" (click)="syncToQuickbook()">Sync to QB</button>
-        // <button [disabled]="!data['selectedAccount'] || data['selectedAccount'] && data['selectedAccount'].level !== 1" (click)="actionInvoke(screen.NEW_DETAIL_TYPE)" class="btn btn-custom btn-dark">Add Detail Type</button>
+        if (this.context.listMaster['permission'].create) {
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+a', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             (document.activeElement as HTMLInputElement).blur();
             if (!(!this.context.data['selectedAccount'] || this.context.data['selectedAccount'] && this.context.data['selectedAccount'].level !== 0)) {
@@ -44,6 +42,8 @@ export class LedgerKeyService extends KeyboardBaseService {
             e.returnValue = false; // Prevent bubbling
             return e;
         }, ['INPUT', 'SELECT', 'TEXTAREA', 'BUTTON'], 'Add Account Type'));
+    }
+    if (this.context.listMaster['permission'].sync) {
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+q', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             (document.activeElement as HTMLInputElement).blur();
             this.context.syncToQuickbook();
@@ -51,6 +51,8 @@ export class LedgerKeyService extends KeyboardBaseService {
             e.returnValue = false; // Prevent bubbling
             return e;
         }, ['INPUT', 'SELECT', 'TEXTAREA', 'BUTTON'], 'Sync To QB'));
+    }
+    if (this.context.listMaster['permission'].create) {
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+a', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             (document.activeElement as HTMLInputElement).blur();
             if (!(!this.context.data['selectedAccount'] || this.context.data['selectedAccount'] && this.context.data['selectedAccount'].level !== 1)) {
@@ -60,23 +62,7 @@ export class LedgerKeyService extends KeyboardBaseService {
             e.returnValue = false; // Prevent bubbling
             return e;
         }, ['INPUT', 'SELECT', 'TEXTAREA', 'BUTTON'], 'Add Detail Type'));
-        // this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+c', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
-        //     (document.activeElement as HTMLInputElement).blur();
-        //     this.context.onClickNew('country');
-        //     const e: ExtendedKeyboardEvent = event;
-        //     e.returnValue = false; // Prevent bubbling
-        //     return e;
-        // }, ['INPUT', 'SELECT', 'TEXTAREA', 'BUTTON'], 'Create New Country'));
-
-        // this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+d', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
-        //     (document.activeElement as HTMLInputElement).blur();
-        //     if (this.context.selectedCountryTax['display_name']) {
-        //         this.context.onClickNew('state');
-        //     }
-        //     const e: ExtendedKeyboardEvent = event;
-        //     e.returnValue = false; // Prevent bubbling
-        //     return e;
-        // }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Create New State'));
+    }
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+c', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             if (this.context.data['show']) {
@@ -86,7 +72,7 @@ export class LedgerKeyService extends KeyboardBaseService {
             e.returnValue = false; // Prevent bubbling
             return e;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Cancel'));
-
+        if (this.context.listMaster['permission'].edit) {
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             (document.activeElement as HTMLElement).blur();
             console.log(this.context.data['show'], this.context.screen, this.context.generalForm.valid);
@@ -107,6 +93,7 @@ export class LedgerKeyService extends KeyboardBaseService {
             e.returnValue = false; // Prevent bubbling
             return e;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save'));
+    }
         this._hotkeysService.add(new Hotkey('alt+pagedown', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             this.context.selectTab(1);
@@ -144,7 +131,7 @@ export class LedgerKeyService extends KeyboardBaseService {
             this.context.tableService.resetAction(this.context.searchForm);
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset'));
-
+        if (this.context.listMaster['permission'].edit) {
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             const index = this.context.selectedIndex;
@@ -152,7 +139,8 @@ export class LedgerKeyService extends KeyboardBaseService {
             this.context.newAccount(item);
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Edit'));
-
+    }
+    if (this.context.listMaster['permission'].edit) {
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+w', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             this.context.detailOrder();
@@ -161,7 +149,7 @@ export class LedgerKeyService extends KeyboardBaseService {
             this.context.deleteAccount(item.id);
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Delete'));
-
+    }
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+t', (event: KeyboardEvent): boolean => {
             event.preventDefault();

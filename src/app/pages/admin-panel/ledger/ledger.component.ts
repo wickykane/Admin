@@ -14,6 +14,8 @@ import { LedgerKeyService } from './keys.control';
 
 import { HotkeysService } from 'angular2-hotkeys';
 import { cdArrowTable } from '../../../shared';
+
+import { StorageService } from '../../../services/storage.service';
 @Component({
   selector: 'app-ledger',
   providers: [LedgerService, LedgerKeyService],
@@ -67,7 +69,8 @@ export class LedgerComponent implements OnInit {
     private modalService: NgbModal,
     private toastr: ToastrService,
     public keyService: LedgerKeyService,
-    private _hotkeysService: HotkeysService
+    private _hotkeysService: HotkeysService,
+    private storage: StorageService,
   ) {
 
     this.generalForm = fb.group({
@@ -106,6 +109,7 @@ export class LedgerComponent implements OnInit {
       { id: 0, value: 'Inactive' },
       { id: 1, value: 'Active' },
     ];
+    this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
   }
   refresh() {
        if (!this.cd['destroyed']) { this.cd.detectChanges(); }
@@ -161,6 +165,8 @@ export class LedgerComponent implements OnInit {
   }
 
   selectItem(data) {
+    if (this.listMaster['permission'].view) {
+
     this.data['selectedAccount'] = data;
     if (data.level === 0) {
       this.data['show'] = null;
@@ -175,6 +181,7 @@ export class LedgerComponent implements OnInit {
       this.getDetailAccountTypeById(data.id);
       this.getList();
     }
+  }
   }
 
   actionInvoke(type) {
