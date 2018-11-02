@@ -133,6 +133,39 @@
                 </div>
             </div>
         </div>
+        <div class="row mg-top-10" *ngIf="detail.credit_memo!=null">
+            <div class="col-8 padding-lr-5">
+                <div class="card no-border">
+                    <div class="card-header">
+                        <strong>Credit Memo</strong>
+                    </div>
+                    <div class="card-body no-padding">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-order">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" style="width:150px" translate>No</th>
+                                        <th class="text-center" translate>Document No</th>
+                                        <th class="text-center" translate>Issue Date</th>
+                                        <th class="text-nowrap text-center" translate>Total Amount</th>
+                                        <th class="text-center" translate>Applied Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngFor="let item of detail.list_credit; let $index = index;">
+                                    <tr>
+                                        <td>{{$index+1}}</td>
+                                        <td>{{item.cd}}</td>
+                                        <td class="text-center">{{item.issue_date |date:'MM/dd/yyyy'}}</td>
+                                        <td>{{item.total_amount|currency }}</td>
+                                        <td>{{item.apply_amount|currency}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="row mg-top-10">
             <div class="col-12 padding-lr-5">
@@ -195,7 +228,7 @@
                     <div class="card-body p-17">
                         <div class="row">
                             <div class="col-12">
-                                <div class="form-group row">
+                                <div class="form-group row" *ngIf="detail.credit_memo==null">
                                     <label class='col-5 control-label'>
                                         <strong class="text-warning">Amount Received</strong>
                                     </label>
@@ -205,36 +238,39 @@
                                 </div>
                                 <div class="form-group row">
                                     <label class='col-5 control-label'>
-                                        <strong class="text-warning">Apply Amount</strong>
+                                        <strong class="text-warning">Applied Amount</strong>
                                     </label>
                                     <div class='col-6 offset-md-1 padding-lr-10'>
                                         <strong class="text-primary">{{detail['price_apply'] | currency}}</strong>
                                     </div>
                                 </div>
-                                <div class="form-group row" *ngIf="detail['payment_method_id'] !=5">
-                                    <label class='col-5 control-label'>
-                                        <strong class="text-warning">Remaining Amount</strong>
-                                    </label>
-                                    <div class='col-6 offset-md-1 padding-lr-10'>
-                                        <strong class="text-primary">{{detail['price_remaining'] | currency}}</strong>
+                                <div *ngIf="detail.credit_memo==null">
+                                    <div class="form-group row" *ngIf="detail['payment_method_id'] !=5">
+                                        <label class='col-5 control-label'>
+                                            <strong class="text-warning">Remaining Amount</strong>
+                                        </label>
+                                        <div class='col-6 offset-md-1 padding-lr-10'>
+                                            <strong class="text-primary">{{detail['price_remaining'] | currency}}</strong>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row" *ngIf="detail['payment_method_id']==5">
+                                        <label class='col-5 control-label'>
+                                            <strong class="text-warning">Change</strong>
+                                        </label>
+                                        <div class='col-6 offset-md-1 padding-lr-10'>
+                                            <strong class="text-primary">{{detail['price_change'] | currency}}</strong>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row" *ngIf="detail['payment_method_id'] !=5">
+                                        <label class='col-5 control-label'>
+                                            <strong class="text-warning">Amount to Credit</strong>
+                                        </label>
+                                        <div class='col-6 offset-md-1 padding-lr-10'>
+                                            <strong class="text-primary">{{detail['price_to_credit'] | currency}}</strong>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="form-group row" *ngIf="detail['payment_method_id']==5">
-                                    <label class='col-5 control-label'>
-                                        <strong class="text-warning">Change</strong>
-                                    </label>
-                                    <div class='col-6 offset-md-1 padding-lr-10'>
-                                        <strong class="text-primary">{{detail['price_change'] | currency}}</strong>
-                                    </div>
-                                </div>
-                                <div class="form-group row" *ngIf="detail['payment_method_id'] !=5">
-                                    <label class='col-5 control-label'>
-                                        <strong class="text-warning">Amount to Credit</strong>
-                                    </label>
-                                    <div class='col-6 offset-md-1 padding-lr-10'>
-                                        <strong class="text-primary">{{detail['price_to_credit'] | currency}}</strong>
-                                    </div>
-                                </div>
+                                
                             </div>
                         </div>
                     </div>

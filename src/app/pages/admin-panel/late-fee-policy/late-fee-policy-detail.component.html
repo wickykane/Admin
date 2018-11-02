@@ -121,31 +121,11 @@
                 <strong>LATE FEE RULES</strong>
             </div>
             <div class="card-body">
-                <div class="recurring-fee-toggle">
-                    <div class="recurring-fee-lbl">Recurring fee</div>
-                    <a class="btn btn-default recurring-fee-icon" title="Number of days to wait to generate continuously the late payment charges invoice if the customer still not fully pay the invoice">
-                        <i class="fa fa-question-circle" aria-hidden="true"></i>
-                    </a>
-                    <div class="toggle-button" [ngClass]="{'disabled': isView}">
-                        <!-- <label class="switch" data-toggle="tooltip" data-content="" data-trigger="hover" style="margin-bottom: 0px;">
-                            <input (click)="switchRule()" type="checkbox" formControlName="recuring_fee_status">
-                            <div class="slider round"></div>
-                        </label> -->
-                        <label class="switch" placement="top" style="margin-bottom: 0px;">
-                            <input type="checkbox" [ngModel]="applyRecurringFee" [ngModelOptions]="{standalone: true}" (ngModelChange)="switchRule($event)">
-                            <div class="slider round"></div>
-                        </label>
-                    </div>
-                    <input [textMask]="{mask: integerMaskObject()}" type="text" class="recurring-fee-input" formControlName="recuring_fee" *ngIf="!isView && generalForm.value['recuring_fee_status']">
-                    <div class="recurring-fee-text" *ngIf="isView && generalForm.value['recuring_fee_status']">
-                        {{generalForm.value['recuring_fee']}}
-                    </div>
-                    <div class="recurring-fee-text" *ngIf="generalForm.value['recuring_fee_status']">day(s)</div>
-                </div>
-                <div class="mg-top-15" *ngIf="generalForm.value['recuring_fee_status']">
+
+                <div class="mg-top-15" >
                     Rule
                 </div>
-                <div class="rule mg-top-15" *ngIf="generalForm.value['recuring_fee_status']">
+                <div class="rule mg-top-15">
                     <div class="recurring-fee-text">
                         <span>Apply a</span>
                     </div>
@@ -168,6 +148,27 @@
                         {{generalForm.value['late_due_dt']}}
                     </div>
                     <div class="recurring-fee-text">days after the due date</div>
+                </div>
+                <div class="recurring-fee-toggle mg-top-15">
+                    <div class="recurring-fee-lbl">Recurring fee</div>
+                    <a class="btn btn-default recurring-fee-icon" title="Number of days to wait to generate continuously the late payment charges invoice if the customer still not fully pay the invoice">
+                        <i class="fa fa-question-circle" aria-hidden="true"></i>
+                    </a>
+                    <div class="toggle-button" [ngClass]="{'disabled': isView}">
+                        <!-- <label class="switch" data-toggle="tooltip" data-content="" data-trigger="hover" style="margin-bottom: 0px;">
+                            <input (click)="switchRule()" type="checkbox" formControlName="recuring_fee_status">
+                            <div class="slider round"></div>
+                        </label> -->
+                        <label class="switch" placement="top" style="margin-bottom: 0px;">
+                            <input type="checkbox" [ngModel]="applyRecurringFee" [ngModelOptions]="{standalone: true}" (ngModelChange)="switchRule($event)">
+                            <div class="slider round"></div>
+                        </label>
+                    </div>
+                    <input [textMask]="{mask: integerMaskObject()}"  type="text" class="recurring-fee-input" formControlName="recuring_fee" *ngIf="!isView && generalForm.value['recuring_fee_status']">
+                    <div class="recurring-fee-text" *ngIf="isView && generalForm.value['recuring_fee_status']">
+                        {{generalForm.value['recuring_fee']}}
+                    </div>
+                    <div class="recurring-fee-text" *ngIf="generalForm.value['recuring_fee_status']">day(s)</div>
                 </div>
             </div>
         </div>

@@ -15,6 +15,16 @@ export class CustomerService {
         const url = 'company_type/all';
         return this.API.get(url);
     }
+
+    getOrderReference() {
+        const url = 'order/reference-data';
+        return this.API.get(url);
+    }
+
+    getRMAReference() {
+        const url = 'return-order/reference';
+        return this.API.get(url);
+    }
     /**
      * Buyer
      */

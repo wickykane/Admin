@@ -53,13 +53,13 @@ export class RmaComponent implements OnInit {
     };
 
     public completeStatusConfig = {
-        'type1_complete': 'has already been shipped to customer. The system will create a credit memo based on the returned items once the return process completed. Do you want to continue?',
+        'type1_complete': ' has already been shipped to customer. The system will create a credit memo based on the returned items once the return process completed. Do you want to continue?',
         'type1_nocomplete_no_invoice': 'Are you sure that you want to complete the return order?',
-        'type1_nocomplete_invoice_1': 'has an open invoiced. The system will cancel it for you to create manually a new one from the updated sales order once the return process completed. Do you want to continue?',
+        'type1_nocomplete_invoice_1': ' has an open invoiced. The system will cancel it for you to create manually a new one from the updated sales order once the return process completed. Do you want to continue?',
         'type1_nocomplete_invoice_2': ' has a paid invoiced. The system will create a credit memo based on the returned items. Do you want to continue?',
         'type2': 'After completing the return process, the system will create a replacement sales order for you. Do you want to continue?',
         'type3': 'After completing the return process, the system will create a replacement sales order for you. Do you want to continue?',
-        'type4': 'has already been shipped to customer. The system will create a credit memo based on the returned items once the return process completed. Do you want to continue?'
+        'type4': 'Are you sure that you want to complete the return process ?'
     };
 
     public listMaster = {};
@@ -294,18 +294,19 @@ export class RmaComponent implements OnInit {
         // neu = 3 thi href qua sale order view theo data reponse
         // neu = 2 hoac 4 thi href qua sale order view theo order id
         let message = '';
+        console.log(item);
         switch (item.return_type_id) {
             case 1:
                 // Return
                 if (item.order_status_id === 4) {
-                    message = this.completeStatusConfig['type1_complete'];
+                    message = 'The ' + item.order_code + this.completeStatusConfig['type1_complete'];
                 } else {
                     if (item.invoice_id) {
                         if (item.invoice_status_id === 1 || item.invoice_status_id === 4) {
-                            message = this.completeStatusConfig['type1_nocomplete_invoice_1'];
+                            message = 'The ' + item.order_code + this.completeStatusConfig['type1_nocomplete_invoice_1'];
                         }
                         if (item.invoice_status_id === 5 || item.invoice_status_id === 6) {
-                            message = this.completeStatusConfig['type1_nocomplete_invoice_2'];
+                            message = 'The ' + item.order_code + this.completeStatusConfig['type1_nocomplete_invoice_2'];
                         }
                     } else {
                         message = this.completeStatusConfig['type1_nocomplete_no_invoice'];
@@ -323,7 +324,7 @@ export class RmaComponent implements OnInit {
                 break;
             case 4:
                 // Repair
-                message = this.completeStatusConfig['type4'];
+                message = 'The ' + item.order_code + this.completeStatusConfig['type4'];
                 break;
         }
 
@@ -338,21 +339,24 @@ export class RmaComponent implements OnInit {
             if (res) {
                 this.service.completeStatus(item.id).subscribe(result => {
                     try {
-                        this.toastr.success(res.message);
-                        if (item.return_type_id === 1 && (item.invoice_status_id === 5 || item.invoice_status_id === 6)) {
-                            setTimeout(() => {
-                                this.router.navigate(['/financial/credit-memo/view/' + result.credit_id]);
-                            }, 500);
+                        this.toastr.success(result.message);
+                        if (item.return_type_id === 1) {
+                            if (result.data) {
+                                setTimeout(() => {
+                                    this.router.navigate(['/financial/credit-memo/view/' + result.data['id']]);
+                                }, 300);
+                            }
                         }
 
                         if (item.return_type_id === 4) {
                             setTimeout(() => {
                                 this.router.navigate(['/order-management/sale-order/detail', item.order_id]);
-                            }, 500);
-                        } else {
+                            }, 300);
+                        }
+                        if (item.return_type_id === 2 || item.return_type_id === 3) {
                             setTimeout(() => {
-                                this.router.navigate(['/order-management/sale-order/detail', result.order_id]);
-                            }, 500);
+                                this.router.navigate(['/order-management/sale-order/detail', result.data['id']]);
+                            }, 300);
                         }
                     } catch (e) {
                         console.log(e);
@@ -366,32 +370,33 @@ export class RmaComponent implements OnInit {
     }
 
     confirmModal(item, status, status_item) {
-        const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
-        modalRef.result.then(res => {
-            if (res) {
-                if (status !== 7) {
+        if (status !== 7) {
+            const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
+            modalRef.result.then(res => {
+                if (res) {
                     this.updateStatus(item.id, status);
-                } else {
-                    this.completeStatus(item);
                 }
-            }
-        }, dismiss => { });
-        switch (status) {
-            case 2:
-                // cancel
-                this.selected_message = this.messageConfig.CC;
-                break;
-            case 3:
-                this.selected_message = this.messageConfig.SB;
-                break;
-            case 5:
-                this.selected_message = this.messageConfig.AP;
-                break;
+            }, dismiss => { });
+            switch (status) {
+                case 2:
+                    // cancel
+                    this.selected_message = this.messageConfig.CC;
+                    break;
+                case 3:
+                    this.selected_message = this.messageConfig.SB;
+                    break;
+                case 5:
+                    this.selected_message = this.messageConfig.AP;
+                    break;
 
+            }
+            modalRef.componentInstance.message = this.selected_message;
+            modalRef.componentInstance.yesButtonText = 'Yes';
+            modalRef.componentInstance.noButtonText = 'No';
+        } else {
+            this.completeStatus(item);
         }
-        modalRef.componentInstance.message = this.selected_message;
-        modalRef.componentInstance.yesButtonText = 'Yes';
-        modalRef.componentInstance.noButtonText = 'No';
+
     }
 
 }

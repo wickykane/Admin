@@ -81,6 +81,50 @@
     // margin-left: -5px;
 }
 
+.label.blue {
+    background-color: #70BAEB;
+}
+
+.label.darkblue {
+    background-color: #7197EA;
+}
+
+.label.red {
+    background-color: #E74F5B;
+}
+
+.label.lemon {
+    background-color: #C2C262;
+}
+
+.label.green {
+    background-color: #32c5d2;
+}
+
+.label.magenta {
+    background-color: #A48AD4;
+}
+
+.label.strong-green {
+    background-color: #45C37A;
+}
+
+.label.bright-grey {
+    background-color: #999999;
+}
+
+.label.rock-blue {
+    background-color: #0D8BD2;
+}
+
+.label.texas-rose {
+    background-color: #FDB45C;
+}
+
+.label.pink {
+    background-color: #E491A3;
+}
+
 .dashboard-content .dashboard-stat.blue {
     background-color: #70BAEB;
 }
@@ -470,7 +514,7 @@
     .status-item {
         position: relative;
         display: inline-block;
-        width: 110px;
+        width: 120px;
         height: 60px;
         text-align: center;
         color: #ffffff;
