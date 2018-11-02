@@ -78,3 +78,5 @@ export class ShippingZoneKeyService extends KeyboardBaseService {
             }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Select Table'));
         }
     }
+
+  }
