@@ -1,0 +1,48 @@
+<div class="block anchor-scroll block-order">
+    <div class="row mg-top-10">
+       
+        <div class="col-12">
+            <!-- <div class="row px-3" style="background-color: white"> -->
+                <app-shortcut [listShortcut]='_hotkeysServiceContact.hotkeys'></app-shortcut>
+            <!-- </div> -->
+            <div class="card no-border">
+                <div class="card-header">
+                    <strong>Line Items</strong>
+                </div>
+                <div class='card-body no-padding'>
+                    <div class='scroll-container table-responsive list'>
+                        <table class="table table-bordered table-order" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
+                            <thead class="bg-white">
+                                <tr>
+                                    <th>No</th>
+                                    <th>Name</th>
+                                    <th>Title</th>
+                                    <th>Phone</th>
+                                    <th>Fax</th>
+                                    <th>Email</th>
+                                    <th>Username</th>
+                                    <th>Password</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of list.items; let i = index" [ngClass]="{'row-selected': i == selectedIndex}">
+                                    <td>{{ item.id }}</td>
+                                    <td>{{ item.full_name }}</td>
+                                    <td>{{ item.title }}</td>
+                                    <td>{{ item.phone }}</td>
+                                    <td>{{ item.fax }}</td>
+                                    <td>{{ item.email }}</td>
+                                    <td>{{ item.username }}</td>
+                                    <td>{{ 'xxxxxx' }}</td>
+                                </tr>
+                                <tr *ngIf="list.items.length == 0">
+                                    <td class="text-center" colspan="100%">No data.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

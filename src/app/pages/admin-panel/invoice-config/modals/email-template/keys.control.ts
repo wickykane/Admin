@@ -17,6 +17,10 @@ export class EmailTemplateKeyService extends KeyboardBaseService {
         insert: {
             element: null,
             focus: false
+        },
+        firstField: {
+            element: null,
+            focus: false
         }
     };
 
@@ -34,9 +38,10 @@ export class EmailTemplateKeyService extends KeyboardBaseService {
 
         this._hotkeysService.add(new Hotkey('alt+i', (event: KeyboardEvent): boolean => {
             event.preventDefault();
-            if (this.keyConfig.insert.element) {
-                this.keyConfig.insert.element.nativeElement.focus();
-            }
+            // if (this.keyConfig.insert.element) {
+            //     this.keyConfig.insert.element.nativeElement.focus();
+            // }
+            this.context.clickInsert();
             return;
         }, undefined, 'Insert Field'));
 

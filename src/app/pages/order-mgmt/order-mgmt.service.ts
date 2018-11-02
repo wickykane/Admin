@@ -306,12 +306,12 @@ export class OrderService {
         const url = 'sale-quote/count-status';
         return this.API.get(url);
     }
-    generateInvoice(id) {
-        const url = 'order/generateInvoice/' + id;
+    generateInvoice(id, is_check?) {
+        const url = 'order/generateInvoice/' + id + ((is_check) ? '?check=1' : '');
         return this.API.post(url);
     }
     checkOrderEditable(id) {
-        const url = ['sale-quote', 'detail', id].join('/');
+        const url = 'order/checkEdit/' + id;
         return this.API.get(url);
     }
     getQuantityActiveQuote(id) {

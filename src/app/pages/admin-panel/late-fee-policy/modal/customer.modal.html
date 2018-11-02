@@ -5,12 +5,13 @@
     </button>
 </div>
 <div class="modal-body">
+    <app-shortcut [listShortcut]='_hotkeysService.hotkeys'></app-shortcut>
     <div class="block-content pd-bottom bg-gray-light short-width">
         <div class="row">
             <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
                 <div class="block-search">
                     <label for="cus_name" class="control-label">Customer Name</label>
-                    <input type="text" name="cus_name" formControlName="cus_name" class="form-control" id="cus_name" placeholder="" focus-element="focusAuto" capitalize>
+                    <input [keyConfig]="data['key_config']" appKeyNavigate="cus_name" type="text" name="cus_name" formControlName="cus_name" class="form-control" id="cus_name" placeholder="" focus-element="focusAuto" capitalize>
                 </div>
                 <div class="block-search">
                     <label for="cus_code" class="control-label">Customer Code</label>

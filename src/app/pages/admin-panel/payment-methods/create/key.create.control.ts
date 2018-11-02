@@ -23,22 +23,30 @@ export class PaymentMethodCreateKeyService extends KeyboardBaseService {
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Focus Search'));
 
         // this.resetKeys();
-        this._hotkeysService.add(new Hotkey('alt+backspace', (event: KeyboardEvent): boolean => {
-            event.preventDefault();
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+backspace', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            (document.activeElement as HTMLElement).blur();
             this.context.reback();
-            return;
-        }, undefined, 'Back'));
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Back'));
+
         if (this.context.listMaster['permission'].create) {
-            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent): boolean =>  {
-                event.preventDefault();
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+                (document.activeElement as HTMLElement).blur();
                 this.context.savePaymentMethod();
-                return;
-            }, undefined, this.context.paymentMethodId === null ||  this.context.paymentMethodId === undefined ?  'Create' : 'Save'));
+                const e: ExtendedKeyboardEvent = event;
+                e.returnValue = false; // Prevent bubbling
+                return e;
+            }, ['INPUT', 'SELECT', 'TEXTAREA'], (this.context.paymentMethodId === null ||  this.context.paymentMethodId === undefined) ?  'Create' : 'Save'));
         }
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+t', (event: KeyboardEvent): boolean =>  {
-                event.preventDefault();
-                this.context.testConnection();
-                return;
-            }, undefined, 'Test Connection'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+t', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            (document.activeElement as HTMLElement).blur();
+            this.context.testConnection();
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Test Connection'));
     }
 }

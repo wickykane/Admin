@@ -15,6 +15,16 @@ export class CustomerService {
         const url = 'company_type/all';
         return this.API.get(url);
     }
+
+    getOrderReference() {
+        const url = 'order/reference-data';
+        return this.API.get(url);
+    }
+
+    getRMAReference() {
+        const url = 'return-order/reference';
+        return this.API.get(url);
+    }
     /**
      * Buyer
      */
@@ -88,8 +98,18 @@ export class CustomerService {
         return this.API.get(url, params);
     }
 
-    getListRMA(params) {
-        const url = 'buyer/index';
+    exportPayment(id, params) {
+        const url = 'buyer/payment/' + id + '?export=1';
+        return this.API.get(url, params);
+    }
+
+    getListRMA(id, params) {
+        const url = 'buyer/return-order/' + id;
+        return this.API.get(url, params);
+    }
+
+    exportRMA(id, params) {
+        const url = 'buyer/return-order/' + id + '?export=1';
         return this.API.get(url, params);
     }
 
@@ -170,6 +190,14 @@ export class CustomerService {
     }
     getListCustomerBalance(id, params) {
         const url = 'customer-balance/get-list?company_id=' + id;
+        return this.API.get(url, params);
+    }
+    getListCreditMemo(id, params) {
+        const url = 'buyer/credit-memo/' + id;
+        return this.API.get(url, params);
+    }
+    exportCreditMemo(id, params) {
+        const url = 'buyer/credit-memo/' + id + '?export=1';
         return this.API.get(url, params);
     }
 }

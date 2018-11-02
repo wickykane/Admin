@@ -842,7 +842,7 @@ ngu-carousel {
     .ng-option {
         white-space: normal !important;
         word-break: break-all;
-    }    
+    }
 }
 
 .ng-dropdown-panel {
@@ -994,10 +994,10 @@ ngu-carousel {
 .text-warning {
     color: #ff9b23 !important;
 }
- input[type=number].custom-input::-webkit-inner-spin-button, 
-input[type=number].custom-input::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
-  margin: 0; 
+ input[type=number].custom-input::-webkit-inner-spin-button,
+input[type=number].custom-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 // .custom-modal-header {
 //     background-color: #2196f3;
@@ -1015,4 +1015,60 @@ input[type=number].custom-input::-webkit-outer-spin-button {
 .col-form-label {
     padding-top: 0px !important;
     margin-bottom: 8px !important;
+}
+
+.table-fixed-header {
+    tbody {
+        display: block;
+        overflow: auto;
+    }
+    thead {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+    }
+    tbody tr {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+    }
+    thead {
+        // width: calc( 100% - 1em )
+    }
+
+    ::-webkit-scrollbar {
+        width: 1px;
+    }
+
+    .limit-height {
+        height: 165px;
+    }
+
+    .tb-w-30 {
+        width: 30px;
+    }
+    .tb-w-35 {
+        width: 35px;
+    }
+    .tb-w-40 {
+        width: 40px;
+    }
+    .tb-w-45 {
+        width: 45px;
+    }
+    .tb-w-50 {
+        width: 50px;
+    }
+    .tb-w-55 {
+        width: 55px;
+    }
+    .tb-w-60 {
+        width: 60px;
+    }
+    .tb-w-65 {
+        width: 65px;
+    }
+    .tb-w-70 {
+        width: 70px;
+    }
 }

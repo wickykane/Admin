@@ -182,10 +182,12 @@ export class CreateComponent implements OnInit {
 
     removeBankAccount(index, item) {
         this.listBankAccount.splice(index, 1);
+        this.refresh();
     }
 
     addNewBank() {
         this.listBankAccount.push({bank_id: null, bank_branch_id: null});
+        this.refresh();
     }
 
     copyAddress() {

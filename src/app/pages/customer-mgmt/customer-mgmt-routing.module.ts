@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { CustomerCreateComponent } from './customer/customer-create.component';
-import { CustomerEditComponent } from './customer/customer-edit.component';
-import { CustomerViewComponent } from './customer/customer-view.component';
+import { CustomerCreateComponent } from './customer/create/customer-create.component';
 import { CustomerComponent } from './customer/customer.component';
+import { CustomerEditComponent } from './customer/edit/customer-edit.component';
+import { CustomerViewComponent } from './customer/view/customer-view.component';
 
 import { MasterGuard } from '../../shared';
 

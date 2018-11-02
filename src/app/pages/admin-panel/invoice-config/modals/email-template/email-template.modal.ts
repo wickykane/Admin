@@ -183,5 +183,6 @@ export class EmailTemplateModalContent implements OnInit {
 
     selectTab(id) {
         this.tabSet.select(id);
+        this.refresh();
     }
 }
