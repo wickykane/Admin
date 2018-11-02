@@ -102,7 +102,10 @@ export class CustomerService {
         const url = 'buyer/return-order/' + id + '?export=1';
         return this.API.get(url, params);
     }
-
+    exportOrder(id) {
+        const url = 'buyer/export-order/' + id;
+        return this.API.get(url);
+    }
     getListAccount(params) {
         const url = 'buyer/index';
         return this.API.get(url, params);

@@ -111,7 +111,7 @@
                             <tr *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                                 <td><a class="text-primary" [routerLink]="['/order-management/sale-order/detail',item.id]">{{item.code}}</a></td>
                                 <td>{{item.cus_po}}</td>
-                                <td>{{item.quote_no}}</td>
+                                <td><a class="text-primary" [routerLink]="['/order-management/sale-quotation/detail',item.id]">{{item.quote_no}}</a></td>
                                 <td>{{item.buyer_name}}</td>
                                 <td class="text-center">
                                     <span *ngIf="item.type == 'PKU'">Pickup</span>

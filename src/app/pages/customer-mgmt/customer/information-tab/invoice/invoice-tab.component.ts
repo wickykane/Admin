@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
-import { cdArrowTable } from '../../../../../shared';
+import { environment } from '../../../../../../environments/environment';
+import { cdArrowTable, JwtService } from '../../../../../shared';
 import { Helper } from '../../../../../shared/helper/common.helper';
 import { FinancialService } from '../../../../financial/financial.service';
 import { CustomerService } from '../../../customer.service';
@@ -58,6 +59,7 @@ export class CustomerInvoiceTabComponent implements OnInit, OnDestroy {
         private financialService: FinancialService,
         private customerService: CustomerService,
         public _hotkeysServiceInvoice: HotkeysService,
+        private jwtService: JwtService,
         private helper: Helper,
         private cd: ChangeDetectorRef) {
 
@@ -81,15 +83,13 @@ export class CustomerInvoiceTabComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+    this.listMaster['listFilter'] = [{ value: false, name: 'Date Filter' }];
     this.listMaster['dateType'] = [{ id: 0, name: 'Invoice Date' }, { id: 1, name: 'Due Date' }];
-    this.getList();
+    this.listMaster['inv_type'] = [
+        { id: 1, name: 'Sales Order' }
+    ];
     this.getCountStatus();
     this.getListStatus();
-    }
-    filter(status) {
-        this.listMaster['filter'] = { status };
-        this.tableService.pagination['page'] = 1;
-        this.getList();
     }
     getListStatus() {
         this.financialService.getInvoiceStatus().subscribe(res => {
@@ -114,10 +114,7 @@ export class CustomerInvoiceTabComponent implements OnInit, OnDestroy {
             'inv_due_dt_to': null
         });
     }
-    // selectTable() {
-    //     this.selectedIndex = 0;
-    //     this.table.element.nativeElement.querySelector('td').focus();
-    // }
+
     getList() {
         const params = { ...this.tableService.getParams(), ...this.searchForm.value, ...this.listMaster['filter'] || {} };
 
@@ -142,22 +139,7 @@ export class CustomerInvoiceTabComponent implements OnInit, OnDestroy {
             }
         });
     }
-    // getList() {
-    //     const params = {...this.tableService.getParams(), ...this.searchForm.value};
-    //     Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
 
-    //     this.customerService.getListInvoice(this._customerId, params).subscribe(res => {
-    //         try {
-    //             this.list.items = res.data.rows;
-    //             console.log(this.list.items);
-    //             this.tableService.matchPagingOption(res.data);
-    //             this.refresh();
-    //         } catch (e) {
-    //             console.log(e);
-    //         }
-    //      });
-    //     this.refresh();
-    // }
     getCountStatus() {
         this.financialService.countInvoiceStatus().subscribe(res => {
             res.data.map(item => {
@@ -178,7 +160,20 @@ export class CustomerInvoiceTabComponent implements OnInit, OnDestroy {
     }
 
     exportData() {
-        console.log('Excel for Invoice');
+        const anchor = document.createElement('a');
+        const path = 'buyer/export-invoice/';
+        const file = `${environment.api_url}${path}${this._customerId}`;
+        const headers = new Headers();
+        headers.append('Authorization', 'Bearer ' + this.jwtService.getToken());
+        fetch(file, { headers })
+            .then(response => response.blob())
+            .then(blobby => {
+                const objectUrl = window.URL.createObjectURL(blobby);
+            anchor.href = objectUrl;
+            anchor.download = 'invoices.xls';
+            anchor.click();
+            window.URL.revokeObjectURL(objectUrl);
+        });
     }
     selectTable() {
         this.selectedIndex = 0;
