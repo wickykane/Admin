@@ -10,6 +10,8 @@ import { TableService } from './../../../../../services/table.service';
 
 // tslint:disable-next-line:import-blacklist
 import { Subject } from 'rxjs';
+import { environment } from '../../../../../../environments/environment';
+import { JwtService } from '../../../../../shared/guard/jwt.service';
 
 @Component({
     selector: 'app-customer-rma-tab',
@@ -45,6 +47,7 @@ export class CustomerRMATabComponent implements OnInit, OnDestroy {
 
     public searchKey = new Subject<any>();
     constructor(
+        private jwtService: JwtService,
         public fb: FormBuilder,
         private vRef: ViewContainerRef,
         public tableService: TableService,
@@ -150,7 +153,20 @@ export class CustomerRMATabComponent implements OnInit, OnDestroy {
     }
 
     exportData() {
-        console.log('Export data');
+        const anchor = document.createElement('a');
+        const path = 'buyer/export-return-order/';
+        const file = `${environment.api_url}${path}${this._customerId}`;
+        const headers = new Headers();
+        headers.append('Authorization', 'Bearer ' + this.jwtService.getToken());
+        fetch(file, { headers })
+            .then(response => response.blob())
+            .then(blobby => {
+            const objectUrl = window.URL.createObjectURL(blobby);
+            anchor.href = objectUrl;
+            anchor.download = 'return_order_export.xls';
+            anchor.click();
+            window.URL.revokeObjectURL(objectUrl);
+        });
     }
 
     selectTable() {
