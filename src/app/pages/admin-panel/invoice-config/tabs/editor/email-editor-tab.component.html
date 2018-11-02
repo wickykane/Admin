@@ -2,9 +2,12 @@
     <button [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="insert"
     class="btn btn-primary" (click)="showContextMenu = !showContextMenu" clickOutside (clickOutside)="showContextMenu = false">Insert Field</button>
     <div class="show-more" *ngIf="showContextMenu">
-        <ul>
-            <li *ngFor="let field of tags">
+        <ul [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="firstField">
+            <li *ngFor="let field of tags; let i = index">
                 <label>
+                    <!-- <a href="javascript:void(0)" (click)="onSelectField(field)" *ngIf="i == 0"
+                    [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="firstField">{{field.value}}</a>
+                    <a href="javascript:void(0)" (click)="onSelectField(field)" *ngIf="i != 0">{{field.value}}</a> -->
                     <a href="javascript:void(0)" (click)="onSelectField(field)">{{field.value}}</a>
                 </label>
             </li>

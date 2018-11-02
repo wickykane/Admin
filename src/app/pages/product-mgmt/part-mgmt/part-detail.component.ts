@@ -90,11 +90,11 @@ export class PartDetailComponent implements OnInit {
         private storage: StorageService
     ) {
         this.generalForm = fb.group({
-            is_quotable: [null],
-            is_show_price: [null],
+            is_quotable: [{ value: null, disabled: true }],
+            is_show_price: [{ value: null, disabled: true }],
             sell_price: [{ value: null, disabled: true }],
-            freight_class: [{ disabled: true }, Validators.required],
-            is_taxable: [null, Validators.required],
+            freight_class: [{ value: null, disabled: true }],
+            is_taxable: [{ value: null, disabled: true }],
             inventory_account_id: [{ value: null, disabled: true }],
             income_account_id: [{ value: null, disabled: true }],
             expense_account_id: [{ value: null, disabled: true }],
@@ -138,8 +138,13 @@ export class PartDetailComponent implements OnInit {
         this.productService.getAccountType().subscribe(
             res => {
                 try {
-                    this.listMaster['account'] = res.data;
-                    this.refresh();
+                  const accountList = res['data'];
+                  const tempAccountList = [];
+                  accountList.forEach(item => {
+                      tempAccountList.push({ 'name': item.name, 'level': item.level, 'disabled': true }, ...item.children);
+                  });
+                  this.listMaster['account'] = tempAccountList;
+                  this.refresh();
                 } catch (e) {
                     console.log(e);
                 }

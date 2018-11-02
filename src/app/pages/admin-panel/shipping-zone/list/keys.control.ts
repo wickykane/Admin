@@ -25,7 +25,7 @@ export class ShippingZoneKeyService extends KeyboardBaseService {
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Create Shipping Zone'));
 
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+e', (event: KeyboardEvent): boolean => {
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             this.context.tableService.searchAction();
             return;
@@ -37,6 +37,12 @@ export class ShippingZoneKeyService extends KeyboardBaseService {
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset'));
 
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+e', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            const id = this.context.list.items[this.context.selectedIndex].id;
+            this.context.openPage(id);
+            return;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Edit'));
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             const id = this.context.list.items[this.context.selectedIndex].id;

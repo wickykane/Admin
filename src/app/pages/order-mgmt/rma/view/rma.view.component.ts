@@ -23,9 +23,7 @@ export class RmaDetailComponent implements OnInit {
 
   data = {};
   public orderId;
-  public orderDetail = {
-    order_sts_short_name: ''
-  };
+  public orderDetail = {};
 
 
   /**

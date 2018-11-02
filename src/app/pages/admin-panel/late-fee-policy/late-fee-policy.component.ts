@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChil
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 import { TableService } from '../../../services/index';
@@ -40,6 +41,7 @@ export class LateFeePolicyComponent implements OnInit {
         private lateFeePolicyService: LateFeePolicyService,
         public keyService: LateFeePolicyListKeyService,
         private storage: StorageService,
+        private _hotkeysService: HotkeysService,
         private modalService: NgbModal,
         private toastr: ToastrService) {
         this.searchForm = fb.group({
@@ -50,7 +52,7 @@ export class LateFeePolicyComponent implements OnInit {
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
         this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
-        this.keyService.watchContext.next(this);
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {

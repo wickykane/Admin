@@ -404,7 +404,7 @@
                                 <ng-container *ngIf="list['items'].length > 0">
                                     <tbody *ngFor="let item of list['items']; let $index = index;">
                                         <tr [ngClass]="{'row-selected': $index == selectedIndex}">
-                                            <td class="text-center"> 
+                                            <td class="text-center">
                                                 <button class="btn btn-danger btn-xs" type="button" (click)="deleteAction(item.item_id || item.misc_id, item.item_condition_id)">
                                                         <i class="fa fa-trash"></i>
                                                     </button>
@@ -420,13 +420,13 @@
                                                 <i *ngIf="item.is_shipping_free" class="text-success fa fa-check"></i>
                                             </td>
                                             <td>
-                                                <input numberDirective [min]="0" [disabled]="item.misc_id" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (changeValue)="updateTotal()">
+                                                <input numberDirective [min]="1" [disabled]="item.misc_id" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (changeValue)="updateTotal()">
                                             </td>
                                             <td>
                                                 <div>
                                                     <span>$</span>
                                                     <div style="display:inline-block;width:80%">
-                                                        <input [isDecimal]="true" numberDirective [min]="0"  class="form-control input-sm" type="number" [(ngModel)]="item.sale_price" (changeValue)="updateTotal();changeFromSource(item)">
+                                                        <input [disabled]="!item.misc_id" [isDecimal]="true" numberDirective [min]="0"  class="form-control input-sm" type="number" [(ngModel)]="item.sale_price" (changeValue)="updateTotal();changeFromSource(item)">
                                                     </div>
                                                 </div>
                                             </td>
@@ -440,7 +440,7 @@
                                                 <span>{{item.amount | currency}}</span>
                                             </td>
                                             <td>
-                                                {{ item.income_account_name }}
+                                                <span *ngIf="item.income_account_id"> {{ item.income_account_code }}-{{ item.income_account_name }}</span> 
                                             </td>
                                             <td class="text-center">
                                                 <span>

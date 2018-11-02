@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 
 import { HotkeysService } from 'angular2-hotkeys';
 import { EmailTemplateModalContent } from '../../modals/email-template/email-template.modal';
@@ -6,7 +6,8 @@ import { EmailTemplateKeyService } from '../../modals/email-template/keys.contro
 @Component({
     selector: 'app-tab-email-editor',
     templateUrl: './email-editor-tab.component.html',
-    styleUrls: ['./email-editor-tab.component.scss']
+    styleUrls: ['./email-editor-tab.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EmailEditorTabComponent implements OnInit, OnDestroy {
 
@@ -30,6 +31,7 @@ export class EmailEditorTabComponent implements OnInit, OnDestroy {
     public data = {};
 
     constructor(
+        private cd: ChangeDetectorRef,
         private _hotkeysService: HotkeysService,
         public keyService: EmailTemplateKeyService,
         @Inject(EmailTemplateModalContent) private parent: EmailTemplateModalContent) {
@@ -45,6 +47,10 @@ export class EmailEditorTabComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.emailTemplateChange.emit(this.template);
+    }
+
+    refresh() {
+        if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
 
     onSelectField(field) {
@@ -116,5 +122,10 @@ export class EmailEditorTabComponent implements OnInit, OnDestroy {
 
     clickInsert() {
         this.showContextMenu = !this.showContextMenu;
+        this.refresh();
+        if (this.keyService.keyConfig.firstField.element) {
+            this.keyService.keyConfig.firstField.element.nativeElement.querySelector('label a').focus();
+            this.refresh();
+        }
     }
 }

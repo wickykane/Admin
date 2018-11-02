@@ -1,11 +1,11 @@
 <div [@routerTransition]>
-    <!-- <app-page-header [heading]="'DETAIL RETURN ORDERS'"></app-page-header> -->
-    <!-- <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut> -->
-    <div class="bd-example text-right">
-        <button *ngIf="_orderDetail.sts == 1 && data['permission'].send" ngbTooltip="Send to WH" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail, 5)"><i class="fa fa-check" aria-hidden="true"></i> Approve</button>
-        <button *ngIf="_orderDetail.sts == 7 && data['permission'].complete " ngbTooltip="Complete" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail, 7)"><i class="fa fa-share-square-o"></i> Edit</button>
-        <button *ngIf="_orderDetail.sts == 1 && data['permission'].cancel" ngbTooltip="Cancel" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail, 2)"><i class="fa fa-times-circle"></i> Cancel</button>
-        <!-- <button *ngIf="_orderDetail.sts == 1" ngbTooltip="Edit" class="btn btn-outline-dark" [routerLink]="['edit', _orderDetail.id]"><i class="fa fa-pencil"></i> Edit</button> -->
+<!-- <app-page-header [heading]="'DETAIL RETURN ORDERS'"></app-page-header> -->
+<!-- <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut> -->
+<div class="bd-example text-right">
+    <button  *ngIf="detail['sts'] == 1 && data['permission'].send" ngbTooltip="Send to WH" class="btn btn-outline-dark" (click)="confirmModal(detail, 5)"><i class="fa fa-check" aria-hidden="true"></i> Approve</button>
+    <button *ngIf="detail['sts'] == 7 && data['permission'].complete" ngbTooltip="Complete" class="btn btn-outline-dark" (click)="confirmModal(detail, 7)"><i class="fa fa-share-square-o"></i> Complete</button>
+    <button *ngIf="detail['sts'] == 1 && data['permission'].cancel" ngbTooltip="Cancel" class="btn btn-outline-dark" (click)="confirmModal(detail, 2)"><i class="fa fa-times-circle"></i> Cancel</button>
+    <!-- <button *ngIf="detail['sts'] == 1" ngbTooltip="Edit" class="btn btn-outline-dark" [routerLink]="['edit', detail.id]"><i class="fa fa-pencil"></i> Edit</button> -->
 
     </div>
     <section class="rma-page block main-container block-order">
@@ -49,32 +49,37 @@
                                         <div class="form-group row">
                                             <label class='col-6'>Invoice No
                               </label>
-                                            <div class='col-6 '>
-                                                {{detail['invoice_code']}}
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class='col-6'>Salesperson</label>
-                                            <div class='col-6'>
-                                                {{detail['sale_person_name']}}
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class='col-6'>Approver</label>
-                                            <div class='col-6'>
-                                                {{detail['approver_name']}}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 customer-infomation">
-                                        <div class="form-group row">
-                                            <label class='col-6'>Status</label>
-                                            <div class='col-6 text-success'>
-                                                <strong>{{detail['sts_name']}}</strong>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class='col-6'>Return Time
+                              <div class='col-6 '>
+                                {{detail['invoice_code']}}
+                              </div>
+                           </div>
+                           <div class="form-group row">
+                            <label class='col-6'>Salesperson</label>
+                            <div class='col-6'>
+                              {{detail['sale_person_name']}}
+                            </div>
+                         </div>
+                         <div class="form-group row">
+                            <label class='col-6'>Approver</label>
+                            <div class='col-6'>
+                              {{detail['approver_name']}}
+                            </div>
+                         </div>
+                        </div>
+                        <div class="col-md-6 customer-infomation">
+                              <div class="form-group row">
+                                 <label class='col-6'>Status</label>
+                                 <div class='col-6'>
+                                        <span *ngIf="detail['sts'] == 1" class="label blue">{{detail['sts_name']}}</span>
+                                        <span *ngIf="detail['sts'] == 5" class="label rock-blue">{{detail['sts_name']}}</span>
+                                        <span *ngIf="detail['sts'] == 6" class="label green">{{detail['sts_name']}}</span>
+                                        <span *ngIf="detail['sts'] == 7" class="label darkblue">{{detail['sts_name']}}</span>
+                                        <span *ngIf="detail['sts'] == 8" class="label lemon">{{detail['sts_name']}}</span>
+                                        <span *ngIf="detail['sts'] == 2" class="label red">{{detail['sts_name']}}</span>
+                                 </div>
+                              </div>
+                              <div class="form-group row">
+                                 <label class='col-6'>Return Time
                                  </label>
                                             <div class='col-6 text-primary'>
                                                 {{detail['return_time']}}
@@ -281,80 +286,73 @@
 
                 </div>
             </div>
-        </div>
-        <div class="row mg-top-10">
-            <div class="col-12 padding-lr-5">
-                <div class="card no-border">
-                    <div class="card-header">
-                        <strong>Return Items</strong>
-                    </div>
-                    <div class="card-body no-padding">
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-order">
-                                <thead>
-                                    <tr>
-                                        <!-- <th style="width:70px" translate>Action</th> -->
-                                        <th style="width:100px" translate>Item No</th>
-                                        <th translate>Description</th>
-                                        <th translate>Condition</th>
-                                        <th translate>UOM</th>
-                                        <th translate>Returned QTY</th>
-                                        <th class="text-nowrap" style="width:100px" translate>Accepted QTY</th>
-                                        <th class="text-center" style="width:100px" translate>Unit Price</th>
-                                        <th style="width:100px" translate>Disc %</th>
-                                        <th style="width:100px" translate>Tax %</th>
-                                        <th translate>Amount Before Receipt</th>
-                                        <th translate>Amount After Receipt</th>
-                                        <th translate>Return Reason</th>
-                                        <th translate>Warranty</th>
-                                        <th translate>Status</th>
-                                        <!-- <th translate>Receipt Date</th> -->
-                                    </tr>
-                                </thead>
-                                <tr *ngIf="list.returnItem.length === 0">
-                                    <td colspan="100%" class="text-center" translate>No data.</td>
-                                </tr>
-                                <tbody *ngFor="let item of list.returnItem; let $index = index;">
-                                    <tr>
-                                        <!-- <td class="text-center">
+            <div class="card-body no-padding">
+               <div class="table-responsive">
+                  <table class="table table-bordered table-order">
+                  <thead>
+                     <tr>
+                        <!-- <th style="width:70px" translate>Action</th> -->
+                        <th style="width:100px" translate>Item No</th>
+                        <th translate>Description</th>
+                        <th translate>Condition</th>
+                        <th translate>UOM</th>
+                        <th translate>Returned QTY</th>
+                        <th class="text-nowrap" style="width:100px" translate>Accepted QTY</th>
+                        <th class="text-center" style="width:100px" translate>Unit Price</th>
+                        <th style="width:100px" translate>Disc %</th>
+                        <th style="width:100px" translate>Tax %</th>
+                        <th translate>Amount Before Receipt</th>
+                        <th translate>Amount After Receipt</th>
+                        <th translate>Return Reason</th>
+                        <th translate>Warranty</th>
+                        <th translate>Status</th>
+                        <th translate>Receipt Date</th>
+                     </tr>
+                  </thead>
+                  <tr *ngIf="list.returnItem.length === 0">
+                     <td colspan="100%" class="text-center" translate>No data.</td>
+                     </tr>
+                  <tbody *ngFor="let item of list.returnItem; let $index = index;">
+                     <tr>
+                       <!-- <td class="text-center">
                            <button class="btn btn-xs" type="button" (click)="deleteLineItem(item, i)">
                                <i class="fa fa-trash"></i>
                            </button>
                        </td> -->
-                                        <td>{{item.sku}}</td>
-                                        <td>{{item.des}}</td>
-                                        <td>{{item.condition_name}}</td>
-                                        <td>{{item.uom_name}}</td>
-                                        <td class="text-center">{{item.return_quantity}}</td>
-                                        <td class="text-center">
-                                            {{item.accept_quantity}}
-                                        </td>
-                                        <td class="text-center">
-                                            <span>{{item.sale_price | currency}}</span>
-                                        </td>
-                                        <td class="text-center">
-                                            <span>{{item.discount_percent}}</span>
-                                        </td>
-                                        <td class="text-center">
-                                            <span>{{item.tax_percent}}</span>
-                                        </td>
-                                        <td class="text-center">
-                                            <span>{{item.amount_before_receipt | currency}}</span>
-                                        </td>
-                                        <td class="text-center">
-                                            <span>{{item.amount_after_receipt | currency}}</span>
-                                        </td>
-                                        <td>
-                                            <span *ngIf="!item.return_reason_accept">{{item.return_reason_des}}</span>
-                                            <ng-template #popContent>
-                                                <p> <strong>Initial</strong> </p>
-                                                <p> {{item.return_reason_accept.inital.data}}</p>
-                                                <p> <strong>After Receipt</strong> </p>
-                                                <ul>
-                                                    <li *ngFor="let item of item.return_reason_accept.after">{{item.receive_date}} {{item.data}}</li>
-                                                </ul>
-                                            </ng-template>
-                                            <button *ngIf="item.return_reason_accept" type="button" class="btn btn-outline-secondary mr-2" triggers="click:blur" [ngbPopover]="popContent" popoverTitle="Return Reason">
+                        <td>{{item.sku}}</td>
+                        <td>{{item.des}}</td>
+                        <td>{{item.condition_name}}</td>
+                        <td>{{item.uom_name}}</td>
+                        <td class="text-center">{{item.return_quantity}}</td>
+                        <td class="text-center">
+                            {{item.accept_quantity}}
+                        </td>
+                        <td class="text-center">
+                            <span>{{item.sale_price | currency}}</span>
+                        </td>
+                        <td class="text-center">
+                          <span>{{item.discount_percent}}</span>
+                        </td>
+                        <td class="text-center">
+                          <span>{{item.tax_percent}}</span>
+                        </td>
+                        <td class="text-center">
+                           <span>{{item.amount_before_receipt | currency}}</span>
+                        </td>
+                        <td class="text-center">
+                          <span>{{item.amount_after_receipt | currency}}</span>
+                        </td>
+                        <td>
+                          <span *ngIf="!item.return_reason_accept">{{item.return_reason_des}}</span>
+                          <ng-template #popContent>
+                            <p> <strong>Initial</strong> </p>
+                            <p> {{item.return_reason_accept.inital.data}}</p>
+                            <p> <strong>After Receipt</strong> </p>
+                            <ul>
+                              <li *ngFor="let item of item.return_reason_accept.after">{{item.data}}</li>
+                            </ul>
+                          </ng-template>
+                          <button *ngIf="item.return_reason_accept" type="button" class="btn btn-outline-secondary mr-2" triggers="click:blur" [ngbPopover]="popContent" popoverTitle="Return Reason" >
                           View Details
                         </button>
                                         </td>
@@ -363,18 +361,27 @@
                             <input disabled class="cb-element" type="checkbox" [(ngModel)]="item.warranty">
                             <span></span>
                           </label>
-                                        </td>
-                                        <td class="text-center">
-                                            {{item.sts_name}}
-                                        </td>
-                                        <!-- <td class="text-center">
-                             {{item.receipt_date}}
-                        </td> -->
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- <div class="col-12 no-padding">
+                        </td>
+                        <td class="text-center">
+                             {{item.sts_name}}
+                        </td>
+                        <td class="text-center">
+                            <span *ngIf="detail['is_cancel']">{{detail['receive_date']}}</span>
+                             <ng-template #popContents>
+                               <p> <strong>SKU No - Receipt Date Details</strong> </p>
+                               <ul>
+                                 <li *ngFor="let item of item.return_reason_accept.after">{{item.receive_date}} - {{item.data}}</li>
+                               </ul>
+                             </ng-template>
+                             <button *ngIf="(item.return_reason_accept) && (!detail['is_cancel'])" type="button" class="btn btn-outline-secondary mr-2" triggers="click:blur" [ngbPopover]="popContents" popoverTitle="Receipt Date"  container="body">
+                             View Details
+                           </button>
+                        </td>
+                     </tr>
+                  </tbody>
+                  </table>
+               </div>
+               <!-- <div class="col-12 no-padding">
                   <button (click)="openModalAddItemsOrder()" class="btn btn-link" translate>
                   <i class="fa fa-plus"></i>Add Item</button>
                </div> -->

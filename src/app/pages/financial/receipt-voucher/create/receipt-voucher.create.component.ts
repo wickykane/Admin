@@ -247,7 +247,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             this.tableService.matchPagingOption(res.data);
             if (code) {
                 const index = this.list.items.findIndex(item => item.code === code);
-                this.list.items[index].applied_amt = tot_amt;
+                this.list.items[index].applied_amt = this.list.items[index].balance_price;
             }
             this.updateTotal();
             this.refresh();
@@ -425,7 +425,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         });
         this.data['summary'].balance_due_total = this.data['summary'].balance_total - this.data['summary'].applied_amt_total;
 
-        this.data['summary'].change = this.generalForm.value.price_received - this.data['summary'].total;
+        this.data['summary'].change = (this.generalForm.value.price_received - this.data['summary'].total).toFixed(2);
         this.generalForm.patchValue({ remain_amt: this.data['summary'].change });
         this.refresh();
     }
@@ -493,6 +493,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
     }
 
     confirmModal(type, is_draft?) {
+        console.log(this.data['summary'].change );
         const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
         modalRef.result.then(res => {
             if (res) {

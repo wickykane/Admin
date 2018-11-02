@@ -188,7 +188,7 @@ export class ItemListComponent implements OnInit {
     }
 
     getList() {
-        const params = { ...this.tableService.getParams(), ...this.searchForm.value, ...this.filterForm.value };
+        const params = { ...this.tableService.getParams(), ...this.searchForm.value, ...this.filterForm.value, warehouse: this.data['warehouse'] };
         // Change filter array
         try {
             Object.keys(this.filterForm.value).map(key => {

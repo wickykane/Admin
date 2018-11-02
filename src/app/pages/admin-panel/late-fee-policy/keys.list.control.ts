@@ -1,71 +1,60 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
-// tslint:disable-next-line:import-blacklist
-import { Subject } from 'rxjs/Rx';
+import { KeyboardBaseService } from '../../../shared/helper/keyServiceBase';
+
 
 @Injectable()
-export class LateFeePolicyListKeyService implements OnDestroy {
-    public context: any;
-    public watchContext = new Subject<any>();
+export class LateFeePolicyListKeyService extends KeyboardBaseService {
 
-    constructor(private _hotkeysService: HotkeysService) {
-        this.watchContext.subscribe(res => {
-            this.context = res;
-            this.initKey();
-        });
-    }
-
-    ngOnDestroy() {
+    saveKeys() {
+        this.keys = this.getKeys();
+        this.context.data['tableKey'] = this.context.table.getKeys();
         this.resetKeys();
-    }
-
-    resetKeys() {
-        const keys = this.getKeys();
-        for (const key of keys) {
-            this._hotkeysService.remove(key);
-        }
-    }
-
-    getKeys() {
-        return Array.from(this._hotkeysService.hotkeys);
+        this.context.table.resetKeys();
     }
 
     initKey() {
-        this.resetKeys();
         if (this.context.listMaster['permission'].create) {
-            this._hotkeysService.add(new Hotkey('alt+n', (event: KeyboardEvent): boolean => {
-                event.preventDefault();
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+n', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+                (document.activeElement as HTMLElement).blur();
                 this.context.createLateFeePolicy();
-                return;
-            }, undefined, 'Create Policy'));
+                const e: ExtendedKeyboardEvent = event;
+                e.returnValue = false; // Prevent bubbling
+                return e;
+            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Create Policy'));
         }
         if (this.context.listMaster['permission'].edit) {
-            this._hotkeysService.add(new Hotkey('alt+e', (event: KeyboardEvent): boolean => {
-                event.preventDefault();
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+e', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+                (document.activeElement as HTMLElement).blur();
                 this.context.editLateFeePolicy();
-                return;
-            }, undefined, 'Edit Policy'));
+                const e: ExtendedKeyboardEvent = event;
+                e.returnValue = false; // Prevent bubbling
+                return e;
+            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Edit Policy'));
         }
         if (this.context.listMaster['permission'].view) {
-            this._hotkeysService.add(new Hotkey('alt+v', (event: KeyboardEvent): boolean => {
-                event.preventDefault();
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+                (document.activeElement as HTMLElement).blur();
                 this.context.viewLateFeePolicy();
-                return;
-            }, undefined, 'View Policy'));
+                const e: ExtendedKeyboardEvent = event;
+                e.returnValue = false; // Prevent bubbling
+                return e;
+            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'View Policy'));
         }
-        this._hotkeysService.add(new Hotkey('alt+s', (event: KeyboardEvent): any => {
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             this.context.tableService.searchAction();
-            event.returnValue = false;
-            return event;
+            return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Search'));
-        this._hotkeysService.add(new Hotkey('alt+r', (event: KeyboardEvent): any => {
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+r', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             this.context.tableService.resetAction(this.context.searchForm);
-            event.returnValue = false;
-            return event;
+            return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset'));
-        this._hotkeysService.add(new Hotkey('alt+t', (event: KeyboardEvent): any => {
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+t', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             this.context.selectTable();
             return;
