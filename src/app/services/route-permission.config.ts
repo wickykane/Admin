@@ -161,8 +161,8 @@ export const ROUTE_PERMISSION = {
         create: 'sel2bCreateLateFeePolicy',
         list: 'sel2bViewMenuLateFeePolicy',
     },
-    'invoice-config': {
-        view: 'sel2bInvoiceChasingConfiguration',
+    'chasing-config': {
+        edit: 'sel2bInvoiceChasingConfiguration',
         list: 'sel2bViewMenuInvoiceChasingConfiguration',
     },
     'ledger': {

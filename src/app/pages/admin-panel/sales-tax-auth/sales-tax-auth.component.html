@@ -5,11 +5,13 @@
         <div class="row create-section">
             <div class="create-section-list" [ngClass]="{'col-lg-3 col-xl-3' : ( !currentForm || currentForm === 'country'), 'col-lg-2 col-xl-2' : currentForm === 'state' }">
                 <div class="btn-list">
-                    <button class="btn btn-primary" type="button" (click)="onClickNew('country')"> + New Country</button>
-                    <button class="btn btn-primary" type="button" (click)="onClickNew('state')" [disabled]="!selectedCountryTax['display_name']"> + New State</button>
+                    <button class="btn btn-primary" type="button" *ngIf="listMaster['permission'].create"
+                    (click)="onClickNew('country')"> + New Country</button>
+                    <button class="btn btn-primary" type="button" *ngIf="listMaster['permission'].create"
+                    (click)="onClickNew('state')" [disabled]="!selectedCountryTax['display_name']"> + New State</button>
                 </div>
                 <div class="country-list">
-                    <app-tax-tree [taxAuthorityCountries]="listSalesTax" (selectedCountry)="onSelectCountryTax($event)" (selectedState)="onSelectStateTax($event)"></app-tax-tree>
+                    <app-tax-tree [listPermission]="listMaster['permission']" [taxAuthorityCountries]="listSalesTax" (selectedCountry)="onSelectCountryTax($event)" (selectedState)="onSelectStateTax($event)"></app-tax-tree>
                 </div>
             </div>
             <div class="col-lg-9 col-xl-9 create-section-data" *ngIf="currentForm === 'country'">
@@ -253,10 +255,13 @@
     </div>
     <div class="row">
         <div class="col-md-12 mg-top-15 text-center">
-            <button *ngIf="currentForm" class="btn btn-default" type="button" (click)="onClickReset()">
+            <button *ngIf="currentForm && (listMaster['permission'].create || listMaster['permission'].edit || listMaster['permission'].view)"
+                class="btn btn-default" type="button" (click)="onClickReset()">
                 {{ selectedStateTax.id ? 'CANCEL' : 'RESET'}}
             </button>
-            <button *ngIf="currentForm" class="btn btn-primary" type="button" (click)="onSaveTaxAuthority()">{{ isCreateNew ? 'CREATE' : 'SAVE' }}</button>
+            <button *ngIf="currentForm && (listMaster['permission'].create || listMaster['permission'].edit)"
+                class="btn btn-primary" type="button" (click)="onSaveTaxAuthority()">
+                {{ isCreateNew ? 'CREATE' : 'SAVE' }}</button>
         </div>
     </div>
 </div>

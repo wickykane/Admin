@@ -72,8 +72,8 @@ const routes: Routes = [
     {
         path: 'bank',
         children: [
-            { path: ':id/branch', component: BranchComponent },
-            { path: '', component: BankComponent}
+            { path: '', component: BankComponent},
+            { path: 'view/:id', canActivate: [MasterGuard], component: BranchComponent }
         ],
     },
     {
@@ -88,38 +88,52 @@ const routes: Routes = [
     },
     {
         path: 'payment-term',
+        canActivate: [MasterGuard],
         component: PaymentTermComponent
     },
     {
         path: 'payment-term/create',
+        canActivate: [MasterGuard],
         component: PayTermCreateComponent
     },
     {
         path: 'payment-term/edit/:id',
+        canActivate: [MasterGuard],
         component: PayTermCreateComponent
     },
     {
         path: 'warehouse',
+        canActivate: [MasterGuard],
         component: WarehouseComponent
     },
     {
         path: 'warehouse/create',
+        canActivate: [MasterGuard],
         component: WarehouseCreateComponent
     },
     {
         path: 'warehouse/edit/:id',
+        canActivate: [MasterGuard],
+        component: WarehouseEditComponent
+    },
+    {
+        path: 'warehouse/view/:id',
+        canActivate: [MasterGuard],
         component: WarehouseEditComponent
     },
     {
         path: 'return-reason',
+        canActivate: [MasterGuard],
         component: ReturnReasonComponent
     },
     {
         path: 'return-reason/create',
+        canActivate: [MasterGuard],
         component: ReturnReasonCreateComponent
     },
     {
         path: 'return-reason/edit/:id',
+        canActivate: [MasterGuard],
         component: ReturnReasonCreateComponent
     },
     {
@@ -201,8 +215,10 @@ const routes: Routes = [
         component: EPIPolicyDetailComponent
     },
     {
-        path: 'invoice-config',
-        component: InvoiceConfigComponent
+        path: 'chasing-config',
+        children: [
+            { path: 'edit', canActivate: [MasterGuard], component: InvoiceConfigComponent }
+        ],
     },
     {
         path: 'ledger',
@@ -230,10 +246,12 @@ const routes: Routes = [
     },
     {
         path: 'sales-tax-auth',
+        canActivate: [MasterGuard],
         component: SalesTaxAuthComponent
     },
     {
         path: 'quickbook-overview',
+        canActivate: [MasterGuard],
         component: QuickbookOverviewComponent
     }
 ];

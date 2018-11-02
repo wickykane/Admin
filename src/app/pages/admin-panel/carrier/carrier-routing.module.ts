@@ -4,6 +4,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { CreateComponent } from './create/create.component';
 import { ListComponent } from './list/list.component';
 
+import { MasterGuard } from '../../../shared';
+
 const routes: Routes = [
     {
         path: '',
@@ -13,6 +15,7 @@ const routes: Routes = [
         children: [
             {
                 path: '',
+                canActivate: [MasterGuard],
                 component: ListComponent,
                 data: {
                     title: ''
@@ -20,6 +23,7 @@ const routes: Routes = [
             },
             {
                 path: 'create',
+                canActivate: [MasterGuard],
                 component: CreateComponent,
                 data: {
                     title: ''
@@ -27,6 +31,7 @@ const routes: Routes = [
             },
             {
                 path: 'edit/:id',
+                canActivate: [MasterGuard],
                 component: CreateComponent,
                 data: {
                     title: ''

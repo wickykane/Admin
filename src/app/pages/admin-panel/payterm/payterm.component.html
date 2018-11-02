@@ -36,7 +36,7 @@
                 <div class="card no-border">
                     <div class="card-header">
                         <strong>Payment Terms</strong>
-                        <button (click)="createPaymentTerm()" style="margin:0; float:right" class="btn btn-link">
+                        <button *ngIf="listMaster['permission'].create" (click)="createPaymentTerm()" style="margin:0; float:right" class="btn btn-link">
                             <i class="fa fa-plus text-success"></i> New Payment Term</button>
                     </div>
                     <div class="card-body no-padding">
@@ -71,9 +71,10 @@
                                         <td>{{item.full_name}}</td>
                                         <td>{{item.update_dt}}</td>
                                         <td>
-                                            <a href="javascript:void(0)" *ngIf="!item.is_sys" class="btn btn-default" (click)="editPayment(item.id)" title="Edit Payment Term">
+                                            <a *ngIf="listMaster['permission'].edit && !item.is_sys" href="javascript:void(0)" class="btn btn-default" (click)="editPayment(item.id)" title="Edit Payment Term">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
+                                            <a *ngIf="!listMaster['permission'].edit" href="javascript:void(0)"></a>
                                             <!-- <a class="btn btn-default" (click)="deletePayment(item.id)" title="Delete Payment Term">
                                                 <i class="fa fa-trash" aria-hidden="true"></i>
                                             </a> -->

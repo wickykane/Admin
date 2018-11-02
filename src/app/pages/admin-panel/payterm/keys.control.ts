@@ -31,20 +31,24 @@ export class PayTermKeyService extends KeyboardBaseService {
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset'));
 
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+n', (event: KeyboardEvent): boolean => {
-            event.preventDefault();
-            this.context.createPaymentTerm();
-            return;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'New Payment Term'));
+        if (this.context.listMaster['permission'].create) {
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+n', (event: KeyboardEvent): boolean => {
+                event.preventDefault();
+                this.context.createPaymentTerm();
+                return;
+            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'New Payment Term'));
+        }
 
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent): boolean => {
-            event.preventDefault();
-            const item = this.context.list.items[this.context.selectedIndex];
-            if (item) {
-                this.context.editPayment(item.id);
-            }
-            return;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Edit'));
+        if (this.context.listMaster['permission'].edit) {
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent): boolean => {
+                event.preventDefault();
+                const item = this.context.list.items[this.context.selectedIndex];
+                if (item) {
+                    this.context.editPayment(item.id);
+                }
+                return;
+            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Edit'));
+        }
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+pageup', (event: KeyboardEvent): boolean => {
             this.context.tableService.pagination.page--;

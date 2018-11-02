@@ -9,6 +9,7 @@ import { TableService } from '../../../services/index';
 import { WarehouseListKeyService } from './list-keys.control';
 import { WarehouseService } from './warehouse.service';
 
+import { StorageService } from '../../../services/storage.service';
 import { cdArrowTable } from '../../../shared';
 @Component({
     selector: 'app-warehouse',
@@ -37,6 +38,7 @@ export class WarehouseComponent implements OnInit {
         public toastr: ToastrService,
         private _hotkeysService: HotkeysService,
         public keyService: WarehouseListKeyService,
+        private storage: StorageService,
         private warehouseService: WarehouseService
     ) {
         //  Assign get list function name, override letiable here
@@ -52,6 +54,7 @@ export class WarehouseComponent implements OnInit {
     ngOnInit() {
         this.getList();
         this.user = JSON.parse(localStorage.getItem('currentUser'));
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
     }
 
     refresh() {
@@ -105,6 +108,8 @@ export class WarehouseComponent implements OnInit {
 
     selectTable() {
         this.selectedIndex = 0;
-        this.table.element.nativeElement.querySelector('td a').focus();
+        if (this.table.element.nativeElement.querySelector('td a')) {
+            this.table.element.nativeElement.querySelector('td a').focus();
+        }
     }
 }
