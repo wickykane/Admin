@@ -5,32 +5,32 @@
             <i class="fa fa-share-square" aria-hidden="true"></i> Back
         </button>
         <button class="btn btn-outline-primary"
-            *ngIf="debitData['sts'] === 1" (click)="onClickEdit()">
+            *ngIf="(debitData['sts'] === 1) && listMaster['permission'].edit" (click)="onClickEdit()">
             <i class="fa fa-pencil-square" aria-hidden="true"></i> Edit
         </button>
         <button class="btn btn-outline-warning"
-            *ngIf="debitData['sts'] === 1" (click)="onChangeDebitStatus(2)">
+            *ngIf="(debitData['sts'] === 1) && listMaster['permission'].submit" (click)="onChangeDebitStatus(2)">
             <i class="fa fa-caret-square-o-right" aria-hidden="true"></i> Submit
         </button>
         <button class="btn btn-outline-danger"
-            *ngIf="debitData['sts'] === 1" (click)="onChangeDebitStatus(5)">
+            *ngIf="(debitData['sts'] === 1) && listMaster['permission'].cancel" (click)="onChangeDebitStatus(5)">
             <i class="fa fa-times-circle" aria-hidden="true"></i> Cancel
         </button>
-        <button class="btn btn-outline-success" *ngIf="debitData['sts'] === 2 && (currentuser['id'] == debitData['approver_id'])"
+        <button class="btn btn-outline-success" *ngIf="debitData['sts'] === 2 && (currentuser['id'] == debitData['approver_id']) && listMaster['permission'].approve"
             (click)="onChangeDebitStatus(3)"><i class="fa fa-check-square" aria-hidden="true"></i> Approve
         </button>
-        <button class="btn btn-outline-danger" *ngIf="debitData['sts'] === 2 && (currentuser['id'] == debitData['approver_id'])"
+        <button class="btn btn-outline-danger" *ngIf="debitData['sts'] === 2 && (currentuser['id'] == debitData['approver_id']) && listMaster['permission'].reject"
             (click)="onChangeDebitStatus(4)"><i class="fa fa-ban" aria-hidden="true"></i> Reject
         </button>
         <button class="btn btn-outline-dark"
-            *ngIf="debitData['sts'] === 3 || debitData['sts'] === 8">
+            *ngIf="(debitData['sts'] === 3 || debitData['sts'] === 8) && listMaster['permission'].pay">
             <i class="fa fa-money" aria-hidden="true"></i> Pay
         </button>
         <button class="btn btn-outline-dark"
-            *ngIf="debitData['sts'] === 4" (click)="onChangeDebitStatus(1)">
+            *ngIf="(debitData['sts'] === 4) && listMaster['permission'].reopen" (click)="onChangeDebitStatus(1)">
             <i class="fa fa-clone" aria-hidden="true"></i> Re-open
         </button>
-        <button class="btn btn-outline-dark" (click)="onPrintDebitMemo()">
+        <button *ngIf="listMaster['permission'].print" class="btn btn-outline-dark" (click)="onPrintDebitMemo()">
             <i class="fa fa-donwload" aria-hidden="true"></i> Print
         </button>
     </div>
@@ -67,7 +67,7 @@
                                             <div class='col-6'>{{debitData['sts_name']}}</div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class='col-6 control-label'>Saleperson</label>
+                                            <label class='col-6 control-label'>Salesperson</label>
                                             <div class='col-6'>{{debitData['sale_person_name']}}</div>
                                         </div>
                                         <div class="form-group row">

@@ -394,6 +394,7 @@ export class InvoiceCreateComponent implements OnInit {
             });
         }
     }
+
     changeCustomer(flag?) {
         const company_id = this.generalForm.value.company_id;
         if (company_id) {

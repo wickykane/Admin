@@ -7,7 +7,8 @@
                 <form class="form-horizontal form-search filter-order-group" role="form" [formGroup]="searchForm">
                     <div class="block-search">
                         <label for="name" class="control-label">Name</label>
-                        <input type="text" name="name" formControlName="branch_name" class="form-control" id="name" placeholder="">
+                        <input [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="name"
+                        type="text" name="name" formControlName="branch_name" class="form-control" id="name" placeholder="">
                     </div>
                 </form>
                 <div class="block btn-search">
@@ -21,7 +22,8 @@
         <div class="row mg-top-10">
             <div class="col-12">
                 <div style="margin: 15px 0">
-                    <a class="btn btn-outline-info" [routerLink]="['/admin-panel/bank']">
+                    <a *ngIf="listMaster['permission'].edit" [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="back_button"
+                    class="btn btn-outline-info" [routerLink]="['/admin-panel/bank']">
                         <i class="fa fa-arrow-left"></i> Back</a>
                 </div>
                 <div class="card no-border">
@@ -60,12 +62,13 @@
                                         <td>{{item.state_name}}</td>
                                         <td>{{item.zip_code}}</td>
                                         <td>
-                                            <a class="btn btn-default " (click)="editBranch(item.id, 1)" title="Edit Branch">
+                                            <a *ngIf="listMaster['permission'].edit" href="javascript:void(0)" class="btn btn-default " (click)="editBranch(item.id, 1)" title="Edit Branch">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default" (click)="deleteBranch(data['bank_id'], item.id)" title="Delete Branch">
+                                            <a *ngIf="listMaster['permission'].edit" href="javascript:void(0)" class="btn btn-default" (click)="deleteBranch(data['bank_id'], item.id)" title="Delete Branch">
                                                 <i class="fa fa-trash" aria-hidden="true"></i>
                                             </a>
+                                            <a *ngIf="!listMaster['permission'].edit" href="javascript:void(0)"></a>
                                         </td>
                                     </tr>
                                 </tbody>

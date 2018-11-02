@@ -2,17 +2,17 @@
     <div class="bd-example text-right">
         <button [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="back_button" class="btn btn-outline-dark" (click)="cancel()">Back To List</button>
 
-        <button ngbTooltip="Submit" *ngIf="_orderDetail['order_sts_short_name'] == 'NW'" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail, 'SM')"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i> Submit</button>
-        <button ngbTooltip="Approve" *ngIf="_orderDetail['order_sts_short_name'] == 'SM'" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail, 'AP')"><i class="fa fa-check-square" aria-hidden="true"></i> Approve</button>
-        <button ngbTooltip="Reject" *ngIf="_orderDetail['order_sts_short_name'] == 'SM'" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail, 'RJ')"><i class="fa fa-ban"></i> Reject</button>
-        <button ngbTooltip="Cancel" *ngIf="_orderDetail['order_sts_short_name'] == 'NW'" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail, 'CC')"><i class="fa fa-times-circle"></i> Cancel</button>
-        <button ngbTooltip="Re Open" *ngIf="_orderDetail['order_sts_short_name'] == 'RJ'" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail, 'RO')"><i class="fa fa-repeat"></i> Re-Open</button>
-        <button ngbTooltip="Copy" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail, 'CLONE')"><i class="fa fa-clone"></i> Copy</button>
+        <button ngbTooltip="Submit" *ngIf="_orderDetail['order_sts_short_name'] == 'NW' && data['permission'].submit" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail, 'SM')"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i> Submit</button>
+        <button ngbTooltip="Approve" *ngIf="_orderDetail['order_sts_short_name'] == 'SM' && data['permission'].approve" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail, 'AP')"><i class="fa fa-check-square" aria-hidden="true"></i> Approve</button>
+        <button ngbTooltip="Reject" *ngIf="_orderDetail['order_sts_short_name'] == 'SM' && data['permission'].reject" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail, 'RJ')"><i class="fa fa-ban"></i> Reject</button>
+        <button ngbTooltip="Cancel" *ngIf="_orderDetail['order_sts_short_name'] == 'NW' && data['permission'].cancel" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail, 'CC')"><i class="fa fa-times-circle"></i> Cancel</button>
+        <button ngbTooltip="Re Open" *ngIf="_orderDetail['order_sts_short_name'] == 'RJ' && data['permission'].reopen" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail, 'RO')"><i class="fa fa-repeat"></i> Re-Open</button>
+        <button ngbTooltip="Copy" *ngIf="data['permission'].copy" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail, 'CLONE')"><i class="fa fa-clone"></i> Copy</button>
         <!-- <button ngbTooltip="Create Return Order" *ngIf="_orderDetail['order_sts_short_name'] == 'RS'" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail, 'RS')"><i class="fa fa-file"></i> Create Return Order</button> -->
 
 
-        <button ngbTooltip="Edit" *ngIf="_orderDetail['order_sts_short_name'] == 'NW' || _orderDetail['order_sts_short_name'] == 'RV' || !detail['total_paid'] && (_orderDetail['order_sts_short_name'] == 'AP' || _orderDetail['order_sts_short_name'] == 'IP' || _orderDetail['order_sts_short_name'] == 'PP' || _orderDetail['order_sts_short_name'] == 'RS') " class="btn btn-outline-dark" (click)="edit()"><i class="fa fa-pencil-square"></i> Edit</button>
-        <button ngbTooltip="Generate Invoice" (click)="generateInvoice()" *ngIf="data['enableInvoice'] && ['AP', 'IP', 'PP', 'RS'].indexOf(_orderDetail['order_sts_short_name']) != -1" class="btn btn-outline-dark"><i class="fa fa-plus"></i> Generate Invoice</button>
+        <button ngbTooltip="Edit" *ngIf="data['permission'].edit && (_orderDetail['order_sts_short_name'] == 'NW' || _orderDetail['order_sts_short_name'] == 'RV' || !detail['total_paid'] && (_orderDetail['order_sts_short_name'] == 'AP' || _orderDetail['order_sts_short_name'] == 'IP' || _orderDetail['order_sts_short_name'] == 'PP' || _orderDetail['order_sts_short_name'] == 'RS')) " class="btn btn-outline-dark" (click)="edit()"><i class="fa fa-pencil-square"></i> Edit</button>
+        <button ngbTooltip="Generate Invoice" (click)="generateInvoice()" *ngIf="data['permission'].genInvoice && data['enableInvoice'] && ['AP', 'IP', 'PP', 'RS'].indexOf(_orderDetail['order_sts_short_name']) != -1" class="btn btn-outline-dark"><i class="fa fa-plus"></i> Generate Invoice</button>
 
     </div>
     <section class="rma-page block main-container block-order">
@@ -412,7 +412,7 @@
                                             <span>{{item.total_price | currency}}</span>
                                         </td>
                                         <td>
-                                            {{ item.income_account_name }}
+                                            <span *ngIf="item.income_account_id">{{ item.income_account_code }} - {{ item.income_account_name }}</span>
                                         </td>
                                         <td class="text-center">
                                             <span>

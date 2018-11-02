@@ -23,13 +23,15 @@ export class CustomerKeyService extends KeyboardBaseService {
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Focus Search'));
 
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+n', (event: KeyboardEvent): boolean => {
-            event.preventDefault();
-            this.context.createCustomer();
-            return;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Create New Customer'));
+        if (this.context.listMaster['permission'].create) {
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+n', (event: KeyboardEvent): boolean => {
+                event.preventDefault();
+                this.context.createCustomer();
+                return;
+            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Create New Customer'));
+        }
 
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+e', (event: KeyboardEvent): boolean => {
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             this.context.tableService.searchAction();
             return;
@@ -41,11 +43,14 @@ export class CustomerKeyService extends KeyboardBaseService {
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset'));
 
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent): boolean => {
-            event.preventDefault();
-            this.context.viewCustomer();
-            return;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'View'));
+        if (this.context.listMaster['permission'].view) {
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent): boolean => {
+                event.preventDefault();
+                this.context.viewCustomer();
+                return;
+            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'View'));
+        }
+
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+e', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             this.context.editCustomer();

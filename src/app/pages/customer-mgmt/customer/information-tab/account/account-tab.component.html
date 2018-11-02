@@ -1,0 +1,75 @@
+<div class="block anchor-scroll block-order">
+    <div class="row px-3" style="background-color: white">
+        <app-shortcut [listShortcut]='_hotkeysServiceAccount.hotkeys'></app-shortcut>
+    </div>    
+    <h5 class="text-uppercase font-weight-bold">Bank Accounts</h5>
+    <div class="row mg-top-10">
+        <div class="col-12">
+            <div class="card no-border">
+                <div class="card-header">
+                    <strong>Line Items</strong>
+                </div>
+                <div class="card-body no-padding">
+                    <div class="scroll-container table-responsive list">
+                        <table class="table table-bordered table-order" cdArrowTable [collection]="list.accounts" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
+                            <thead class="bg-white">
+                                <tr>
+                                    <th>No</th>
+                                    <th>Bank Name</th>
+                                    <th>SWIFT</th>
+                                    <th>Branch</th>
+                                    <th>Address</th>
+                                    <th>Account Name</th>
+                                    <th>Account No</th>
+                                    <th>IBAN</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of list.accounts">
+                                    <td>{{ item.id }}</td>
+                                    <td>{{ item.bank_name }}</td>
+                                    <td>{{ item.bank_swift }}</td>
+                                    <td>{{ item.branch_name }}</td>
+                                    <td>{{ item.full_address }}</td>
+                                    <td>{{ item.account_name }}</td>
+                                    <td>{{ item.account_no }}</td>
+                                    <td>{{ item.iban }}</td>
+                                </tr>
+                                <tr *ngIf="list.accounts.length == 0">
+                                    <td colspan="100%" class="text-center">No data.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h5 class="text-uppercase font-weight-bold">Cards</h5>
+                    <div class="scroll-container table-responsive list">
+                        <table class='table table-bordered table-order' cdArrowTable [collection]="list.cards" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
+                            <thead class="bg-white">
+                                <tr>
+                                    <th>No</th>
+                                    <th>Card Type</th>
+                                    <th>Card No</th>
+                                    <th>Holder Name</th>
+                                    <th>Expiry Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of list.cards; let i = index" [ngClass]="{'row-selected': i == selectedIndex}">
+                                    <td>{{ item.id }}</td>
+                                    <td>{{ getCardType(item.card_type)}}</td>
+                                    <td>{{ item.account_no }}</td>
+                                    <td>{{ item.account_name }}</td>
+                                    <td>{{ item.expiration_month + '/' + item.expiration_year}}</td>
+                                </tr>
+                                <tr *ngIf="list.cards.length == 0">
+                                    <td colspan="100%" class="text-center">No data.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

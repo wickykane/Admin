@@ -9,7 +9,7 @@
                     <form class="row form-horizontal form-search filter-order-group" role="form" [formGroup]="searchForm">
                         <div class="col-md-4">
                             <label for="name" class="control-label">Zone Name</label>
-                            <input type="text" name="name" formControlName="zone_name" class="form-control" id="rma_no" placeholder="" focus-element="focusAuto"
+                            <input [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="zone_name" type="text" name="name" formControlName="zone_name" class="form-control" id="rma_no" placeholder="" focus-element="focusAuto"
                                 capitalize>
                         </div>
                         <div class="col-md-4">
@@ -49,13 +49,14 @@
                 <div class="card no-border">
                     <div class="card-header">
                         <strong>Line Items</strong>
-                        <button [routerLink]="['/admin-panel/shipping-zone/create']" style="margin:0; float:right" class="btn btn-link">
+                        <button *ngIf="listMaster['permission'].create" [routerLink]="['/admin-panel/shipping-zone/create']" style="margin:0; float:right" class="btn btn-link">
                             <i class="fa fa-plus text-success"></i>Add New</button>
                         <!-- <button [routerLink]="['/admin-panel/shipping-zone/create']" (click)="createShippingZone" style="margin: 10px 0;" class="btn btn-primary">Add New</button> -->
                     </div>
                     <div class="card-body no-padding">
                         <div class="table-responsive list">
-                            <table class="table table-bordered table-order">
+                            <table class="table table-bordered table-order" cdArrowTable [collection]="list.items"
+                            [(selectedIndex)]="selectedIndex">
                                 <thead class="bg-white">
                                     <tr>
                                         <th>Zone No</th>
@@ -66,7 +67,7 @@
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody *ngFor="let item of  list.items; let i = index;">
+                                <tbody *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                                     <tr>
                                         <td class="text-center">{{item.cd}}</td>
                                         <td class="">
@@ -82,10 +83,10 @@
                                             </label>
                                         </td>
                                         <td>
-                                            <a class="btn btn-default" title="View" (click)="openViewPage(item.id)">
+                                            <a *ngIf="listMaster['permission'].view" class="btn btn-default" title="View" (click)="openViewPage(item.id)">
                                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-default" title="Edit" (click)="openPage(item.id)">
+                                            <a *ngIf="listMaster['permission'].edit" class="btn btn-default" title="Edit" (click)="openPage(item.id)">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
                                         </td>

@@ -1,9 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HotkeysService } from 'angular2-hotkeys';
 import { routerTransition } from '../../../router.animations';
-
 // Services
 import { TableService } from '../../../services/index';
+import { StorageService } from '../../../services/storage.service';
+import { cdArrowTable } from '../../../shared';
 import { DiscountCategoryService } from './discount-category.service';
 import { DiscountCategoryKeyService } from './keys.control';
 
@@ -24,19 +26,24 @@ export class DiscountCategoryComponent implements OnInit {
     public listMaster = {};
     public selectedIndex = 0;
 
-
+    @ViewChild(cdArrowTable) table: cdArrowTable;
     constructor(
         private cd: ChangeDetectorRef,
         private activeRouter: ActivatedRoute,
         private router: Router,
+        private _hotkeysService: HotkeysService,
         public keyService: DiscountCategoryKeyService,
         public tableService: TableService,
+        private storage: StorageService,
         private discountCategoryService: DiscountCategoryService
     ) {
         //  Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
-        this.keyService.watchContext.next(this);
+        // this.keyService.watchContext.next(this);
+         //  Init Key
+         this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
+         this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {
@@ -75,5 +82,13 @@ export class DiscountCategoryComponent implements OnInit {
 
     createDiscountCategory() {
         this.router.navigate(['/admin-panel/discount-category/create']);
+    }
+    editDiscountCategory() {
+        const id = this.list.items[this.selectedIndex].id;
+        this.router.navigate(['/admin-panel/discount-category/edit', id]);
+    }
+    selectTable() {
+        this.selectedIndex = 0;
+        this.table.element.nativeElement.querySelector('td button').focus();
     }
 }

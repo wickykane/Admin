@@ -1,60 +1,80 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { Hotkey, HotkeysService } from 'angular2-hotkeys';
-// tslint:disable-next-line:import-blacklist
-import { Subject } from 'rxjs/Rx';
+import { Hotkey } from 'angular2-hotkeys';
+import { KeyboardBaseService } from '../../../../shared/helper/keyServiceBase';
 @Injectable()
-export class ShippingZoneKeyService implements OnDestroy {
-    public context: any;
-    public watchContext = new Subject<any>();
-
-    constructor(private _hotkeysService: HotkeysService) {
-        this.watchContext.subscribe(res => {
-            this.context = res;
-            this.initKey();
-        });
-    }
-
-    ngOnDestroy() {
-        this.resetKeys();
-    }
-
-    resetKeys() {
-        const keys = this.getKeys();
-        console.log(keys);
-        for (const key of keys) {
-            this._hotkeysService.remove(key);
+export class ShippingZoneKeyService extends KeyboardBaseService {
+    keyConfig = {
+        zone_name: {
+            element: null,
+            focus: true,
         }
-    }
-
-    getKeys() {
-        return Array.from(this._hotkeysService.hotkeys);
-    }
+    };
 
     initKey() {
-        this.resetKeys();
-        this._hotkeysService.add(new Hotkey('f1', (event: KeyboardEvent): any => {
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+f1', (event: KeyboardEvent): boolean => {
             event.preventDefault();
-            this.context.createShippingZone();
-            return ;
-        }, undefined, 'Add New Zone'));
-        this._hotkeysService.add(new Hotkey('f2', (event: KeyboardEvent): any => {
-            event.preventDefault();
-            this.context.tableService.searchAction();
-            event.returnValue = false;
-            return event;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Start Search'));
-        this._hotkeysService.add(new Hotkey('f3', (event: KeyboardEvent): any => {
-            event.preventDefault();
-            this.context.tableService.searchAction();
-            event.returnValue = false;
-            return event;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Execute Search'));
-        this._hotkeysService.add(new Hotkey('f4', (event: KeyboardEvent): any => {
-            event.preventDefault();
-            this.context.tableService.resetAction(this.context.searchForm);
-            event.returnValue = false;
-            return event;
-        }, ['INPUT', 'INPUT', 'SELECT'], 'Reset Search'));
+            if (this.keyConfig.zone_name.element) {
+                this.keyConfig.zone_name.element.nativeElement.focus();
+            }
+            return;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Focus Search'));
+        if (this.context.listMaster['permission'].create) {
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+n', (event: KeyboardEvent): boolean => {
+                event.preventDefault();
+                this.context.createShippingZone();
+                return;
+            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Create Shipping Zone'));
 
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent): boolean => {
+                event.preventDefault();
+                this.context.tableService.searchAction();
+                return;
+            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Search'));
+
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+r', (event: KeyboardEvent): boolean => {
+                event.preventDefault();
+                this.context.tableService.resetAction(this.context.searchForm);
+                return;
+            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset'));
+            if (this.context.listMaster['permission'].view) {
+
+                this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+e', (event: KeyboardEvent): boolean => {
+                    event.preventDefault();
+                    const id = this.context.list.items[this.context.selectedIndex].id;
+                    this.context.openPage(id);
+                    return;
+                }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Edit'));
+                this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent): boolean => {
+                    event.preventDefault();
+                    const id = this.context.list.items[this.context.selectedIndex].id;
+                    this.context.openViewPage(id);
+                    return;
+                }, ['INPUT', 'SELECT', 'TEXTAREA'], 'View'));
+            }
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+pageup', (event: KeyboardEvent): boolean => {
+                this.context.tableService.pagination.page--;
+                if (this.context.tableService.pagination.page < 1) {
+                    this.context.tableService.pagination.page = 1;
+                    return;
+                }
+                this.context.tableService.changePage(this.context.tableService.pagination.page);
+                return;
+            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Previous page'));
+
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+pagedown', (event: KeyboardEvent): boolean => {
+                this.context.tableService.pagination.page++;
+                if (this.context.tableService.pagination.page > this.context.tableService.pagination.total_page) {
+                    this.context.tableService.pagination.page = this.context.tableService.pagination.total_page;
+                    return;
+                }
+                this.context.tableService.changePage(this.context.tableService.pagination.page);
+                return;
+            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Next page'));
+
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+t', (event: KeyboardEvent): boolean => {
+                event.preventDefault();
+                this.context.selectTable();
+                return;
+            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Select Table'));
+        }
     }
-}

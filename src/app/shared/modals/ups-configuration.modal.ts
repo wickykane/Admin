@@ -10,10 +10,11 @@ import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { CommonService } from '../../services/common.service';
-
+import { ShippingZoneModalKeyService } from './keys.control';
 @Component({
     selector: 'app-ups-options-modal',
-    templateUrl: './ups-configuration.modal.html'
+    templateUrl: './ups-configuration.modal.html',
+    providers: [ShippingZoneModalKeyService],
 })
 export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
 
@@ -37,7 +38,8 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
         private modalService: NgbModal,
         private hotkeysService: HotkeysService,
         private commonService: CommonService,
-        public activeModal: NgbActiveModal) {
+        public activeModal: NgbActiveModal,
+        public keyService: ShippingZoneModalKeyService) {
 
         this.generalForm = fb.group({
             "access_key": ['', Validators.required],
@@ -53,7 +55,7 @@ export class UPSConfigurationModalComponent implements OnInit, OnDestroy {
             "id": "5"
             // 'ranges':[this.fb.array([])]
         });
-
+        this.keyService.watchContext.next({ context: this, service: this.hotkeysService });
 
 
     }

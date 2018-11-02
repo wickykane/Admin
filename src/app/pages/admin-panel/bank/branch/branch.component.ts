@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
 import { TableService } from '../../../../services/index';
@@ -9,10 +10,13 @@ import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { BankService } from '../bank.service';
 import { BranchModalComponent } from '../modal/branch.modal';
 
-import { BankKeyService } from '../keys.control';
+import { cdArrowTable } from '../../../../shared';
+import { BranchKeyService } from './branch-keys.control';
+
+import { StorageService } from '../../../../services/storage.service';
 @Component({
   selector: 'app-branch',
-  providers: [BankService, BankKeyService],
+  providers: [BankService, BranchKeyService],
   templateUrl: 'branch.component.html',
   styleUrls: ['../bank.component.scss'],
   animations: [routerTransition()],
@@ -23,6 +27,7 @@ export class BranchComponent implements OnInit {
   /**
    *  Variable
    */
+  @ViewChild(cdArrowTable) table: cdArrowTable;
   public searchForm: FormGroup;
   public listMaster = {};
   public selectedIndex = 0;
@@ -40,7 +45,9 @@ export class BranchComponent implements OnInit {
     private bankService: BankService,
     private modalService: NgbModal,
     private toastr: ToastrService,
-    public keyService: BankKeyService) {
+    private _hotkeysService: HotkeysService,
+    private storage: StorageService,
+    public keyService: BranchKeyService) {
     this.searchForm = fb.group({
       'branch_name': [null],
     });
@@ -49,10 +56,11 @@ export class BranchComponent implements OnInit {
     this.tableService.getListFnName = 'getList';
     this.tableService.context = this;
     //  Init Key
-    this.keyService.watchContext.next(this);
+    this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
   }
 
   ngOnInit() {
+    this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
     this.data['bank_id'] = this.activeRouter.snapshot.params['id'];
     this.getBankDetail(this.data['bank_id']);
     this.getList();
@@ -137,21 +145,38 @@ export class BranchComponent implements OnInit {
   }
 
   // Modal
-  editBranch(branchId, flag?) {
-    const modalRef = this.modalService.open(BranchModalComponent, { windowClass: 'md-modal' });
-    modalRef.componentInstance.modalTitle = (flag) ? 'EDIT BRANCH' : 'CREATE NEW BRANCH';
-    modalRef.componentInstance.branchId = branchId;
-    modalRef.componentInstance.bankId = this.data['bank_id'];
-    modalRef.componentInstance.bankData = this.data['bankData'] || {};
+    editBranch(branchId, flag?) {
+        this.keyService.saveKeys();
+        const modalRef = this.modalService.open(BranchModalComponent, { windowClass: 'md-modal' });
+        modalRef.componentInstance.modalTitle = (flag) ? 'EDIT BRANCH' : 'CREATE NEW BRANCH';
+        modalRef.componentInstance.branchId = branchId;
+        modalRef.componentInstance.bankId = this.data['bank_id'];
+        modalRef.componentInstance.bankData = this.data['bankData'] || {};
 
-    modalRef.result.then(data => {
-      const params = { ...data };
-      if (!flag) {
-        this.createBranch(params);
-      } else {
-        this.updateBranch(this.data['bank_id'], branchId, params);
+        modalRef.result.then(data => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
+            const params = { ...data };
+            if (!flag) {
+                this.createBranch(params);
+            } else {
+                this.updateBranch(this.data['bank_id'], branchId, params);
+            }
+        },
+        dismiss => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
+        });
+    }
+
+  selectTable() {
+      this.selectedIndex = 0;
+      if (this.table.element.nativeElement.querySelector('td a')) {
+        this.table.element.nativeElement.querySelector('td a').focus();
       }
-    },
-      dismiss => { });
   }
 }

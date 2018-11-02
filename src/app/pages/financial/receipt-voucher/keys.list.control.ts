@@ -49,11 +49,13 @@ export class ReceiptKeyService extends KeyboardBaseService {
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Focus Search'));
 
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+n', (event: KeyboardEvent): boolean => {
-            event.preventDefault();
-            this.context.createReceiptVoucher();
-            return;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Create Receipt Voucher'));
+          if (this.context.listMaster['permission'].create) {
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+n', (event: KeyboardEvent): boolean => {
+              event.preventDefault();
+              this.context.createReceiptVoucher();
+              return;
+            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Create Receipt Voucher'));
+          }
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+e', (event: KeyboardEvent): boolean => {
             event.preventDefault();
@@ -67,11 +69,13 @@ export class ReceiptKeyService extends KeyboardBaseService {
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset'));
 
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent): boolean => {
-            event.preventDefault();
-            this.context.viewReceiptVoucher();
-            return;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'View'));
+          if (this.context.listMaster['permission'].view) {
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent): boolean => {
+              event.preventDefault();
+              this.context.viewReceiptVoucher();
+              return;
+            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'View'));
+          }
 
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+pagedown', (event: KeyboardEvent): boolean => {

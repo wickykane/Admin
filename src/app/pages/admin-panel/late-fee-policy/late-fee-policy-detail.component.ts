@@ -1,11 +1,14 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 
+import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
+import { StorageService } from '../../../services/storage.service';
+import { cdArrowTable } from '../../../shared';
 import { LateFeePolicyDetailKeyService } from './keys.detail.control';
 import { LateFeePolicyService } from './late-fee-policy.service';
 import { CustomerModalContent } from './modal/customer.modal';
@@ -20,7 +23,7 @@ import { TerminatePolicyModalContent } from './modal/terminate-policy.modal';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LateFeePolicyDetailComponent implements OnInit {
-
+    @ViewChild(cdArrowTable) table: cdArrowTable;
     generalForm: FormGroup;
     public listMaster = {};
     public list = {
@@ -34,7 +37,7 @@ export class LateFeePolicyDetailComponent implements OnInit {
     public isCreate = false;
     public isView = false;
     public isEdit = false;
-
+    public data = {};
     constructor(public router: Router,
         private cd: ChangeDetectorRef,
         public route: ActivatedRoute,
@@ -42,6 +45,8 @@ export class LateFeePolicyDetailComponent implements OnInit {
         public toastr: ToastrService,
         private modalService: NgbModal,
         public keyService: LateFeePolicyDetailKeyService,
+        private storage: StorageService,
+        private _hotkeysService: HotkeysService,
         private lateFeePolicyService: LateFeePolicyService) {
         this.generalForm = fb.group({
             'id': [null],
@@ -51,12 +56,13 @@ export class LateFeePolicyDetailComponent implements OnInit {
             'ac': [null, Validators.required],
             'recuring_fee': [null],
             'recuring_fee_status': [false],
-            'pay_type': [null],
-            'pay_value': [null],
-            'late_due_dt': [null],
+            'pay_type': [null, Validators.required],
+            'pay_value': [null, Validators.required],
+            'late_due_dt': [null, Validators.required],
             'company': [null],
         });
-        this.keyService.watchContext.next(this);
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {
@@ -104,11 +110,11 @@ export class LateFeePolicyDetailComponent implements OnInit {
             { code: 'CP', name: 'Company' },
             { code: 'PS', name: 'Personal' }
         ];
-        this.initLateFeeRules();
+        // this.initLateFeeRules();
     }
 
     refresh() {
-         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
+        if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
 
     checkAll(ev) {
@@ -149,27 +155,33 @@ export class LateFeePolicyDetailComponent implements OnInit {
         });
     }
 
-    initLateFeeRules() {
-        if (this.generalForm.value['recuring_fee_status'] === false) {
-            this.generalForm.controls['recuring_fee'].disable();
-            this.generalForm.controls['pay_value'].disable();
-            this.generalForm.controls['pay_type'].disable();
-            this.generalForm.controls['late_due_dt'].disable();
-        } else {
-            this.generalForm.controls['recuring_fee'].enable();
-            this.generalForm.controls['pay_value'].enable();
-            this.generalForm.controls['pay_type'].enable();
-            this.generalForm.controls['late_due_dt'].enable();
-        }
-    }
+    // initLateFeeRules() {
+    //     if (this.generalForm.value['recuring_fee_status'] === false) {
+    //         this.generalForm.controls['recuring_fee'].disable();
+    //         this.generalForm.controls['pay_value'].disable();
+    //         this.generalForm.controls['pay_type'].disable();
+    //         this.generalForm.controls['late_due_dt'].disable();
+    //     } else {
+    //         this.generalForm.controls['recuring_fee'].enable();
+    //         this.generalForm.controls['pay_value'].enable();
+    //         this.generalForm.controls['pay_type'].enable();
+    //         this.generalForm.controls['late_due_dt'].enable();
+    //     }
+    // }
 
     switchRule(event) {
         this.generalForm.controls['recuring_fee_status'].setValue(!this.generalForm.value['recuring_fee_status']);
         this.applyRecurringFee = !this.applyRecurringFee;
-        this.initLateFeeRules();
+        // this.initLateFeeRules();
     }
 
     payloadData() {
+        if (this.generalForm.get('recuring_fee').value == '0' && this.applyRecurringFee === true) {
+            return this.toastr.error('Recurring fee must be greater than 0');
+        }
+        if (this.generalForm.get('pay_value').value <= 0 || this.generalForm.get('pay_value').value > 100 && this.generalForm.get('pay_type').value == '1') {
+            return this.toastr.error('Late fee must be greater than 0 or less than 100 % ');
+        }
         if (this.generalForm.get('id').value && this.isEdit) {
             if (this.currentStatus !== 2 && this.generalForm.value['ac'] === 2) {
                 this.openTerminateLFPModal();
@@ -261,7 +273,7 @@ export class LateFeePolicyDetailComponent implements OnInit {
                         this.applyRecurringFee = false;
                     }
                     this.headerTitle = this.generalForm.value['code'] + ': ' + this.generalForm.value['des'];
-                    this.initLateFeeRules();
+                    // this.initLateFeeRules();
                 }
                 if (res.data.detail) {
                     this.list.items = res.data.detail;
@@ -290,8 +302,13 @@ export class LateFeePolicyDetailComponent implements OnInit {
     }
 
     addNewCustomer() {
+        this.keyService.saveKeys();
         const modalRef = this.modalService.open(CustomerModalContent, { size: 'lg' });
         modalRef.result.then(res => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
             if (res instanceof Array && res.length > 0) {
                 const listAdded = [];
                 (this.list.items).forEach((item) => {
@@ -307,7 +324,12 @@ export class LateFeePolicyDetailComponent implements OnInit {
                 }));
                 this.refresh();
             }
-        }, dismiss => { });
+        }, dismiss => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+                this.table.reInitKey(this.data['tableKey']);
+            }
+         });
     }
 
     convertCustomerType(code) {
@@ -325,7 +347,7 @@ export class LateFeePolicyDetailComponent implements OnInit {
             allowDecimal: false,
             includeThousandsSeparator: false,
             prefix: '',
-            integerLimit: max || null
+            integerLimit: max || null,
         });
     }
 
@@ -337,5 +359,4 @@ export class LateFeePolicyDetailComponent implements OnInit {
             integerLimit: max || null
         });
     }
-
 }

@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 import { TableService } from '../../../services/index';
@@ -10,8 +11,10 @@ import { BankService } from './bank.service';
 import { BankModalComponent } from './modal/bank.modal';
 import { BranchModalComponent } from './modal/branch.modal';
 
+import { cdArrowTable } from '../../../shared';
 import { BankKeyService } from './keys.control';
 
+import { StorageService } from '../../../services/storage.service';
 @Component({
   selector: 'app-bank',
   providers: [BankService, BankKeyService],
@@ -25,6 +28,7 @@ export class BankComponent implements OnInit {
   /**
    *  Variable
    */
+  @ViewChild(cdArrowTable) table: cdArrowTable;
   public searchForm: FormGroup;
   public listMaster = {};
   public selectedIndex = 0;
@@ -42,6 +46,8 @@ export class BankComponent implements OnInit {
     private bankService: BankService,
     private modalService: NgbModal,
     private toastr: ToastrService,
+    private _hotkeysService: HotkeysService,
+    private storage: StorageService,
     public keyService: BankKeyService, ) {
     this.searchForm = fb.group({
       'code': [null],
@@ -53,10 +59,11 @@ export class BankComponent implements OnInit {
     this.tableService.getListFnName = 'getList';
     this.tableService.context = this;
     //  Init Key
-    this.keyService.watchContext.next(this);
+    this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
   }
 
   ngOnInit() {
+    this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
     this.getList();
   }
 
@@ -134,29 +141,48 @@ export class BankComponent implements OnInit {
 
   // Modal
   editBank(flag?) {
+    this.keyService.saveKeys();
     const modalRef = this.modalService.open(BankModalComponent, { windowClass: 'md-modal' });
     modalRef.componentInstance.modalTitle = (flag) ? 'EDIT BANK' : 'CREATE NEW BANK';
     modalRef.componentInstance.isEdit = flag;
     modalRef.componentInstance.item = flag || {};
     modalRef.result.then(data => {
-      const params = { ...data };
-      if (!flag) {
-        this.createBank(params);
-      } else {
-        this.updateBank(flag.id, params);
-      }
+        if (this.keyService.keys.length > 0) {
+            this.keyService.reInitKey();
+            this.table.reInitKey(this.data['tableKey']);
+        }
+        const params = { ...data };
+        if (!flag) {
+            this.createBank(params);
+        } else {
+            this.updateBank(flag.id, params);
+        }
     },
-      dismiss => { });
+      dismiss => {
+        if (this.keyService.keys.length > 0) {
+            this.keyService.reInitKey();
+            this.table.reInitKey(this.data['tableKey']);
+        }});
   }
 
   addBranch(item) {
+    this.keyService.saveKeys();
     const modalRef = this.modalService.open(BranchModalComponent, { windowClass: 'md-modal' });
     modalRef.componentInstance.modalTitle = 'CREATE NEW BRANCH';
     modalRef.componentInstance.bankData = item || {};
     modalRef.result.then(data => {
-      this.createBranch(item.id, data);
+        if (this.keyService.keys.length > 0) {
+            this.keyService.reInitKey();
+            this.table.reInitKey(this.data['tableKey']);
+        }
+        this.createBranch(item.id, data);
     },
-      dismiss => { });
+      dismiss => {
+        if (this.keyService.keys.length > 0) {
+            this.keyService.reInitKey();
+            this.table.reInitKey(this.data['tableKey']);
+        }
+    });
   }
 
   createBranch(bankId, params) {
@@ -170,4 +196,11 @@ export class BankComponent implements OnInit {
       }
     });
   }
+
+    selectTable() {
+        this.selectedIndex = 0;
+        if (this.table.element.nativeElement.querySelector('td a')) {
+            this.table.element.nativeElement.querySelector('td a').focus();
+        }
+    }
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -9,6 +9,9 @@ import { TableService } from '../../../services/index';
 import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
 import { PayTermKeyService } from './keys.control';
 import { PaymentTermService } from './payterm.service';
+
+import { StorageService } from '../../../services/storage.service';
+import { cdArrowTable } from '../../../shared';
 
 @Component({
   selector: 'app-payterm',
@@ -23,6 +26,7 @@ export class PaymentTermComponent implements OnInit {
   /**
    *  Variable
    */
+    @ViewChild(cdArrowTable) table: cdArrowTable;
   public searchForm: FormGroup;
   public listMaster = {};
   public selectedIndex = 0;
@@ -42,6 +46,7 @@ export class PaymentTermComponent implements OnInit {
     public keyService: PayTermKeyService,
     private _hotkeysService: HotkeysService,
     private modalService: NgbModal,
+    private storage: StorageService,
     private toastr: ToastrService) {
     this.searchForm = fb.group({
       'ac': [null],
@@ -55,6 +60,7 @@ export class PaymentTermComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
     this.listMaster['status'] = [{ key: '0', value: 'In Active' }, { key: '1', value: 'Active' }];
     this.getList();
   }
@@ -115,4 +121,10 @@ export class PaymentTermComponent implements OnInit {
   //   return stt.value;
   // }
 
+    selectTable() {
+        this.selectedIndex = 0;
+        if (this.table.element.nativeElement.querySelector('td a')) {
+            this.table.element.nativeElement.querySelector('td a').focus();
+        }
+    }
 }

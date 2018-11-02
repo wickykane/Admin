@@ -6,13 +6,13 @@ import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
-import { PayTermKeyService } from './keys.control';
+import { PaymentTermCreateKeyService } from './create-keys.controls';
 import { PaymentTermService } from './payterm.service';
 
 @Component({
     selector: 'app-payterm-create',
     templateUrl: './payterm-create.component.html',
-    providers: [PaymentTermService, PayTermKeyService],
+    providers: [PaymentTermService, PaymentTermCreateKeyService],
     styleUrls: ['./payterm-create.component.scss'],
     animations: [routerTransition()],
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -27,7 +27,7 @@ export class PayTermCreateComponent implements OnInit {
         public route: ActivatedRoute,
         public fb: FormBuilder,
         public toastr: ToastrService,
-        public keyService: PayTermKeyService,
+        public keyService: PaymentTermCreateKeyService,
         private _hotkeysService: HotkeysService,
         private paytermService: PaymentTermService) {
         this.generalForm = fb.group({
@@ -60,7 +60,7 @@ export class PayTermCreateComponent implements OnInit {
         this.changeIncentive();
     }
     refresh() {
-         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
+        if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
     payloadData() {
         if (this.generalForm.get('id').value) {
@@ -77,6 +77,10 @@ export class PayTermCreateComponent implements OnInit {
     }
     createPaymentTerm() {
         const params = this.generalForm.value;
+        if (!+params.dsct_value && params.early_pmt_incentive) {
+            this.toastr.error('Discount Value must greater than 0.');
+            return;
+        }
         params.early_pmt_incentive = (params.early_pmt_incentive) ? 1 : 0;
         delete params.id;
         this.paytermService.createPayment(params).subscribe(res => {
@@ -133,6 +137,10 @@ export class PayTermCreateComponent implements OnInit {
     }
     updatePaymentTerm(id) {
         const params = this.generalForm.value;
+        if (!+params.dsct_value && params.early_pmt_incentive) {
+            this.toastr.error('Discount Value must greater than 0.');
+            return;
+        }
         params.early_pmt_incentive = (params.early_pmt_incentive) ? 1 : 0;
         this.paytermService.updatePayment(id, params).subscribe(res => {
             this.toastr.success(res.message);

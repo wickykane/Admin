@@ -12,6 +12,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
+import { StorageService } from '../../../services/storage.service';
 import { cdArrowTable } from '../../../shared/index';
 import { OrderService } from '../../order-mgmt/order-mgmt.service';
 import { InvoiceKeyService } from './keys.list.control';
@@ -71,7 +72,8 @@ export class InvoiceComponent implements OnInit {
         private _hotkeysService: HotkeysService,
         public invoiceKeyService: InvoiceKeyService,
         private http: HttpClient,
-        private renderer: Renderer) {
+        private renderer: Renderer,
+        private storage: StorageService) {
 
         this.searchForm = fb.group({
             'inv_num': [null],
@@ -108,6 +110,7 @@ export class InvoiceComponent implements OnInit {
         this.getCountStatus();
         this.getListStatus();
         this.user = JSON.parse(localStorage.getItem('currentUser'));
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
     }
     /**
      * Table Event

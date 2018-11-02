@@ -1,8 +1,9 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
 import { NotFoundRoutingModule } from './not-found-routing.module';
 import { PageNotFoundComponent } from './not-found.component';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
@@ -10,4 +11,4 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         ReactiveFormsModule],
     declarations: [PageNotFoundComponent]
 })
-export class NotFoundModule {}
+export class NotFoundModule { }

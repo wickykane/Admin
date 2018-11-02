@@ -1,13 +1,16 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
 import { TableService } from '../../../../services/table.service';
+import { cdArrowTable } from '../../../../shared';
 import { CarrierService } from '../carrier.service';
 import {CarrierKeyService} from './keys.control';
 
+import { StorageService } from '../../../../services/storage.service';
 @Component({
     selector: 'app-carrier-list',
     templateUrl: './list.component.html',
@@ -17,11 +20,14 @@ import {CarrierKeyService} from './keys.control';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ListComponent implements OnInit {
+
+    @ViewChild(cdArrowTable) table: cdArrowTable;
     public list = {
         items: []
     };
     public user: any;
     public listMaster = {};
+    public selectedIndex = 0;
     searchForm: FormGroup;
 
     constructor(public router: Router,
@@ -30,7 +36,9 @@ export class ListComponent implements OnInit {
         public toastr: ToastrService,
         private vRef: ViewContainerRef,
         public tableService: TableService,
+        private _hotkeysService: HotkeysService,
         public keyService: CarrierKeyService,
+        private storage: StorageService,
         private cs: CarrierService) {
 
         this.searchForm = fb.group({
@@ -41,7 +49,8 @@ export class ListComponent implements OnInit {
         //  Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
-        this.keyService.watchContext.next(this);
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
     }
 
     ngOnInit() {
@@ -64,4 +73,10 @@ export class ListComponent implements OnInit {
         });
     }
 
+    selectTable() {
+        this.selectedIndex = 0;
+        if (this.table.element.nativeElement.querySelector('td a')) {
+            this.table.element.nativeElement.querySelector('td a').focus();
+        }
+    }
 }

@@ -11,6 +11,7 @@ import { RMAService } from '../rma.service';
 import { TableService } from './../../../../services/table.service';
 
 import { HotkeysService } from 'angular2-hotkeys';
+import { StorageService } from '../../../../services/storage.service';
 import { RMAViewKeyService } from '../view/keys.control';
 
 
@@ -28,6 +29,7 @@ export class ReturnOrderInformationTabComponent implements OnInit {
      */
 
     public _orderId;
+    public data = {};
     public _orderDetail;
     @Input() set orderId(id) {
         if (id) {
@@ -110,6 +112,7 @@ export class ReturnOrderInformationTabComponent implements OnInit {
         private modalService: NgbModal,
         public tableService: TableService,
         private service: RMAService,
+        private storage: StorageService,
         public keyService: RMAViewKeyService,
         private _hotkeysService: HotkeysService) {
 
@@ -117,6 +120,7 @@ export class ReturnOrderInformationTabComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.data['permission'] = this.storage.getRoutePermission(this.router.url);
         this.getList();
         console.log(this._orderDetail);
     }
@@ -155,7 +159,7 @@ export class ReturnOrderInformationTabComponent implements OnInit {
             if (res) {
                 this.service.updateChange(id).subscribe(result => {
                     try {
-                        this.toastr.success('The system is refreshed successfully');
+                        this.toastr.success('The return order has been updated latest information successfully');
                         this.router.navigate(['/order-management/return-order/detail', id]);
                     } catch (e) {
                         console.log(e);
@@ -282,13 +286,15 @@ export class ReturnOrderInformationTabComponent implements OnInit {
         modalRef.componentInstance.noButtonText = 'No';
     }
 
-    updateStatus(item, status) {
-        const params = { return_order_id: item.id, status_id: status };
+    updateStatus(id, status) {
+      console.log(id);
+        const params = { return_order_id: id, status_id: status };
+        console.log(params);
         this.service.updateStatus(params).subscribe(res => {
             try {
                 if (status === 5) {
                     if (!res.status && res.message === 'show popup') {
-                        this.cancelOrder(item);
+                        this.cancelOrder(id);
                     }
                 } else {
                     this.toastr.success(res.message);
@@ -300,13 +306,13 @@ export class ReturnOrderInformationTabComponent implements OnInit {
         });
     }
 
-    cancelOrder(item) {
+    cancelOrder(id) {
         const modalRef = this.modalService.open(BackdropModalContent, { size: 'lg', windowClass: 'modal-md', backdrop: 'static', keyboard: false });
         modalRef.result.then(res => {
             if (res) {
-                this.service.updateChange(item.id).subscribe(result => {
+                this.service.updateChange(id).subscribe(result => {
                     try {
-                        this.confirmModal(item.id, 2);
+                        this.confirmModal(id, 2);
                     } catch (e) {
                         console.log(e);
                     }

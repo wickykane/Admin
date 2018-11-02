@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 import { TableService } from '../../../services/index';
@@ -9,6 +10,8 @@ import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
 import { ReturnReasonKeyService } from './keys.control';
 import { ReturnReasonService } from './return-reason.service';
 
+import { StorageService } from '../../../services/storage.service';
+import { cdArrowTable } from '../../../shared';
 @Component({
   selector: 'app-return-reason',
   providers: [ReturnReasonService, ReturnReasonKeyService],
@@ -22,6 +25,7 @@ export class ReturnReasonComponent implements OnInit {
   /**
    *  Variable
    */
+    @ViewChild(cdArrowTable) table: cdArrowTable;
   public searchForm: FormGroup;
   public listMaster = {};
   public selectedIndex = 0;
@@ -37,8 +41,10 @@ export class ReturnReasonComponent implements OnInit {
     private activeRouter: ActivatedRoute,
     private router: Router,
     private returnReasonService: ReturnReasonService,
+    private _hotkeysService: HotkeysService,
     public keyService: ReturnReasonKeyService,
     private modalService: NgbModal,
+    private storage: StorageService,
     private toastr: ToastrService) {
     this.searchForm = fb.group({
       'cd': [null],
@@ -50,11 +56,12 @@ export class ReturnReasonComponent implements OnInit {
     this.tableService.getListFnName = 'getList';
     this.tableService.context = this;
     //  Init Key
-    this.keyService.watchContext.next(this);
+    this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
   }
 
 
   ngOnInit() {
+    this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
     this.listMaster['status'] = [{ key: 'IA', value: 'In Active' }, { key: 'AT', value: 'Active' }];
     this.listMaster['Reason'] = [{ key: '0', value: 'No' }, { key: '1', value: 'Yes' }];
     this.getList();
@@ -117,4 +124,10 @@ export class ReturnReasonComponent implements OnInit {
     return stt.value;
   }
 
+    selectTable() {
+        this.selectedIndex = 0;
+        if (this.table.element.nativeElement.querySelector('td a')) {
+            this.table.element.nativeElement.querySelector('td a').focus();
+        }
+    }
 }

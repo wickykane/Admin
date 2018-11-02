@@ -1,20 +1,28 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { routerTransition } from '../../../router.animations';
 
 // Services
+import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { TableService } from '../../../services/index';
+import { WarehouseListKeyService } from './list-keys.control';
 import { WarehouseService } from './warehouse.service';
 
+import { StorageService } from '../../../services/storage.service';
+import { cdArrowTable } from '../../../shared';
 @Component({
     selector: 'app-warehouse',
     templateUrl: './warehouse.component.html',
     styleUrls: ['./warehouse.component.scss'],
-    providers: [WarehouseService],
+    providers: [WarehouseService, WarehouseListKeyService],
     animations: [routerTransition()],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WarehouseComponent implements OnInit {
+
+    @ViewChild(cdArrowTable) table: cdArrowTable;
+
     public list = {
         items: []
     };
@@ -24,14 +32,19 @@ export class WarehouseComponent implements OnInit {
     public selectedIndex = 0;
 
     constructor(
+        private router: Router,
         private cd: ChangeDetectorRef,
         public tableService: TableService,
         public toastr: ToastrService,
+        private _hotkeysService: HotkeysService,
+        public keyService: WarehouseListKeyService,
+        private storage: StorageService,
         private warehouseService: WarehouseService
     ) {
         //  Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     selectData(index) {
@@ -41,6 +54,7 @@ export class WarehouseComponent implements OnInit {
     ngOnInit() {
         this.getList();
         this.user = JSON.parse(localStorage.getItem('currentUser'));
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
     }
 
     refresh() {
@@ -90,5 +104,12 @@ export class WarehouseComponent implements OnInit {
                 console.log(e);
             }
         });
+    }
+
+    selectTable() {
+        this.selectedIndex = 0;
+        if (this.table.element.nativeElement.querySelector('td a')) {
+            this.table.element.nativeElement.querySelector('td a').focus();
+        }
     }
 }

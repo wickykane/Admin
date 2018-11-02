@@ -2,17 +2,20 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
 
+import { StorageService } from '../../../../services/storage.service';
 import { QuickbookService } from '../quickbook.service';
+import { QuickbookKeyService } from './keys.control';
 
 @Component({
     selector: 'app-quickbook-overview',
     templateUrl: './overview.component.html',
     styleUrls: ['./overview.component.scss'],
     animations: [routerTransition()],
-    providers: [QuickbookService]
+    providers: [QuickbookService, QuickbookKeyService]
 })
 export class QuickbookOverviewComponent implements OnInit {
 
@@ -31,13 +34,17 @@ export class QuickbookOverviewComponent implements OnInit {
         auth_url: '',
         state: ''
     };
+    public listMaster = {};
 
     constructor(
         public router: Router,
         private route: ActivatedRoute,
         public toastr: ToastrService,
         public ngbModal: NgbModal,
-        public quickbookService: QuickbookService
+        private _hotkeysService: HotkeysService,
+        public keyService: QuickbookKeyService,
+        public quickbookService: QuickbookService,
+        private storage: StorageService
     ) {
         this.transactionTypes = [
             { type: 'Invoice', time: 'Immediate'},
@@ -50,6 +57,7 @@ export class QuickbookOverviewComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
         this.getSettingInfo();
         this.authorInfo = {
             code: this.route.snapshot.queryParams['code'],
@@ -64,6 +72,7 @@ export class QuickbookOverviewComponent implements OnInit {
         this.quickbookService.getSettingInfoQuickbook().subscribe(
             res => {
                 this.settingInfo = res.data;
+                this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
             }, err => {}
         );
     }

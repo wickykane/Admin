@@ -38,6 +38,8 @@ import { WarehouseComponent } from './warehouse/warehouse.component';
 import { WorkFlowComponent } from './work-flow/work-flow.component';
 import { WorkFlowEditComponent } from './work-flow/work-flow.edit.component';
 
+import { MasterGuard } from '../../shared';
+
 const routes: Routes = [
     {
         path: '',
@@ -70,65 +72,84 @@ const routes: Routes = [
     {
         path: 'bank',
         children: [
-            { path: ':id/branch', component: BranchComponent },
-            { path: '', component: BankComponent }
-        ]
+            { path: '', component: BankComponent},
+            { path: 'view/:id', canActivate: [MasterGuard], component: BranchComponent }
+        ],
     },
     {
         path: 'carrier',
+        canActivate: [MasterGuard],
         loadChildren: './carrier/carrier.module#CarrierModule'
     },
     {
         path: 'shipping-zone',
+        canActivate: [MasterGuard],
         loadChildren: './shipping-zone/shipping-zone.module#ShippingZoneModule'
     },
     {
         path: 'payment-term',
+        canActivate: [MasterGuard],
         component: PaymentTermComponent
     },
     {
         path: 'payment-term/create',
+        canActivate: [MasterGuard],
         component: PayTermCreateComponent
     },
     {
         path: 'payment-term/edit/:id',
+        canActivate: [MasterGuard],
         component: PayTermCreateComponent
     },
     {
         path: 'warehouse',
+        canActivate: [MasterGuard],
         component: WarehouseComponent
     },
     {
         path: 'warehouse/create',
+        canActivate: [MasterGuard],
         component: WarehouseCreateComponent
     },
     {
         path: 'warehouse/edit/:id',
+        canActivate: [MasterGuard],
+        component: WarehouseEditComponent
+    },
+    {
+        path: 'warehouse/view/:id',
+        canActivate: [MasterGuard],
         component: WarehouseEditComponent
     },
     {
         path: 'return-reason',
+        canActivate: [MasterGuard],
         component: ReturnReasonComponent
     },
     {
         path: 'return-reason/create',
+        canActivate: [MasterGuard],
         component: ReturnReasonCreateComponent
     },
     {
         path: 'return-reason/edit/:id',
+        canActivate: [MasterGuard],
         component: ReturnReasonCreateComponent
     },
     {
         path: 'discount-category',
-        component: DiscountCategoryComponent
+        component: DiscountCategoryComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'discount-category/create',
-        component: DiscountCategoryCreateComponent
+        component: DiscountCategoryCreateComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'discount-category/edit/:id',
-        component: DiscountCategoryEditComponent
+        component: DiscountCategoryEditComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'insurance',
@@ -159,19 +180,23 @@ const routes: Routes = [
     },
     {
         path: 'late-fee-policy',
-        component: LateFeePolicyComponent
+        component: LateFeePolicyComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'late-fee-policy/create',
-        component: LateFeePolicyDetailComponent
+        component: LateFeePolicyDetailComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'late-fee-policy/view/:id',
-        component: LateFeePolicyDetailComponent
+        component: LateFeePolicyDetailComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'late-fee-policy/edit/:id',
-        component: LateFeePolicyDetailComponent
+        component: LateFeePolicyDetailComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'epi-policy',
@@ -190,24 +215,30 @@ const routes: Routes = [
         component: EPIPolicyDetailComponent
     },
     {
-        path: 'invoice-config',
-        component: InvoiceConfigComponent
+        path: 'chasing-config',
+        children: [
+            { path: 'edit', canActivate: [MasterGuard], component: InvoiceConfigComponent }
+        ],
     },
     {
         path: 'ledger',
-        component: LedgerComponent
+        component: LedgerComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'payment-methods',
-        component: PaymentMethodsListComponent
+        component: PaymentMethodsListComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'payment-methods/create',
-        component: PaymentMethodsCreateComponent
+        component: PaymentMethodsCreateComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'payment-methods/edit/:id',
-        component: PaymentMethodsCreateComponent
+        component: PaymentMethodsCreateComponent,
+        canActivate: [MasterGuard]
     },
     {
         path: 'tax-types',
@@ -215,10 +246,12 @@ const routes: Routes = [
     },
     {
         path: 'sales-tax-auth',
+        canActivate: [MasterGuard],
         component: SalesTaxAuthComponent
     },
     {
         path: 'quickbook-overview',
+        canActivate: [MasterGuard],
         component: QuickbookOverviewComponent
     }
 ];

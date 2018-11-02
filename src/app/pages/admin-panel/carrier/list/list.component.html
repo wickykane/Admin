@@ -8,7 +8,8 @@
                     <form class="row form-horizontal form-search filter-order-group" role="form" [formGroup]="searchForm">
                         <div class="col-md-6">
                             <label class="control-label">Name</label>
-                            <input type="text" formControlName="name" class="form-control">
+                            <input [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="name"
+                            type="text" formControlName="name" class="form-control">
                         </div>
                         <div class="col-md-6">
                             <label class="control-label">Email</label>
@@ -36,11 +37,12 @@
                         <strong>Line Items</strong>
                         <!-- <button [routerLink]="['create']" style="margin:0; float:right" class="btn btn-link">
                             <i class="fa fa-plus text-success"></i> Create Sales Quote</button> -->
-                            <button [routerLink]="['/admin-panel/carrier/create']" style="margin:0; float:right" class="btn btn-link"><i class="fa fa-plus text-success"></i> Add New Carrier</button>
+                            <button *ngIf="listMaster['permission'].create" [routerLink]="['/admin-panel/carrier/create']"
+                            style="margin:0; float:right" class="btn btn-link"><i class="fa fa-plus text-success"></i> Add New Carrier</button>
                     </div>
                     <div class="card-body no-padding">
                         <div class="table-responsive list">
-                            <table class="table table-bordered table-order" cdArrowTable [collection]="list.items">
+                            <table class="table table-bordered table-order" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex">
                                 <thead class="bg-white">
                                     <tr>
                                         <th>ID</th>
@@ -54,7 +56,7 @@
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody *ngFor="let item of list.items;">
+                                <tbody *ngFor="let item of list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
                                     <tr>
                                         <td>
                                             {{ item.id }}
@@ -81,9 +83,10 @@
                                             {{ item.crtd_by_name }}
                                         </td>
                                         <td>
-                                            <a class="btn btn-default " title="Edit" [routerLink]="['/admin-panel/carrier/edit/' + item.id]">
+                                            <a *ngIf="listMaster['permission'].edit" href="javascript:void(0)" class="btn btn-default " title="Edit" [routerLink]="['/admin-panel/carrier/edit/' + item.id]">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
+                                            <a *ngIf="!listMaster['permission'].edit" href="javascript:void(0)"></a>
                                         </td>
                                     </tr>
                                     <tr *ngIf="!list.items.length" class="text-center">

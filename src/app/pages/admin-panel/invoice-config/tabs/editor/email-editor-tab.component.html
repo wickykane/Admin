@@ -1,10 +1,14 @@
 <div class="top-left-bar">
-    <button class="btn btn-primary" (click)="showContextMenu = !showContextMenu" clickOutside (clickOutside)="showContextMenu = false">Insert Field</button>
+    <button [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="insert"
+    class="btn btn-primary" (click)="showContextMenu = !showContextMenu" clickOutside (clickOutside)="showContextMenu = false">Insert Field</button>
     <div class="show-more" *ngIf="showContextMenu">
-        <ul>
-            <li *ngFor="let field of tags">
+        <ul [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="firstField">
+            <li *ngFor="let field of tags; let i = index">
                 <label>
-                    <a (click)="onSelectField(field)">{{field.value}}</a>
+                    <!-- <a href="javascript:void(0)" (click)="onSelectField(field)" *ngIf="i == 0"
+                    [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="firstField">{{field.value}}</a>
+                    <a href="javascript:void(0)" (click)="onSelectField(field)" *ngIf="i != 0">{{field.value}}</a> -->
+                    <a href="javascript:void(0)" (click)="onSelectField(field)">{{field.value}}</a>
                 </label>
             </li>
         </ul>
@@ -19,7 +23,8 @@
         <div class="content subject">
             <!-- <ckeditor [(ngModel)]="template.email_tpl.subject" debounce="500" [config]="{height: '50', toolbar: []}"
                 #subjectEditor (focus)="isFocusingSubject = true; isFocusingBody = false"></ckeditor> -->
-            <input type="text" #subjectEditor [(ngModel)]="template.email_tpl.subject" (focus)="onFocusSubject()">
+            <input [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="subject"
+            type="text" #subjectEditor [(ngModel)]="template.email_tpl.subject" (focus)="onFocusSubject()">
         </div>
     </div>
 </div>

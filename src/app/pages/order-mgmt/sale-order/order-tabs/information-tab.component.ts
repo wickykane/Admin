@@ -5,6 +5,7 @@ import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/n
 import { HotkeysService } from 'angular2-hotkeys';
 import * as _ from 'lodash';
 import { ToastrService } from 'ngx-toastr';
+import { StorageService } from '../../../../services/storage.service';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { OrderService } from '../../../order-mgmt/order-mgmt.service';
 import { SaleOrderDetailComponent } from '../view/sale-order.detail.component';
@@ -101,6 +102,7 @@ export class SaleOrderInformationTabComponent implements OnInit {
         private modalService: NgbModal,
         private _hotkeysService: HotkeysService,
         public keyService: SaleOrderViewKeyService,
+        private storage: StorageService,
         public tableService: TableService,
         @Inject(SaleOrderDetailComponent) private parent: SaleOrderDetailComponent,
         private orderService: OrderService) {
@@ -117,6 +119,7 @@ export class SaleOrderInformationTabComponent implements OnInit {
             active: 0,
         };
         this.changeShortcut();
+        this.data['permission'] = this.storage.getRoutePermission(this.router.url);
     }
 
     /**
@@ -124,7 +127,7 @@ export class SaleOrderInformationTabComponent implements OnInit {
      */
     checkGenerateInvoice() {
         this.orderService.generateInvoice(this._orderId, 1).subscribe(res => {
-           this.data['enableInvoice'] = res.data;
+            this.data['enableInvoice'] = res.data;
         });
     }
     changeShortcut() {
@@ -266,11 +269,9 @@ export class SaleOrderInformationTabComponent implements OnInit {
     }
 
     edit() {
-        if (this.detail['edit_message']) {
-            this.toastr.error(this.detail['edit_message']);
-        } else {
+        this.orderService.checkOrderEditable(this._orderId).subscribe(res => {
             this.router.navigate(['/order-management/sale-order/edit', this._orderId]);
-        }
+        });
     }
 
     generateInvoice() {

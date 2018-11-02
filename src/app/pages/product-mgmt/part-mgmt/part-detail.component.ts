@@ -5,6 +5,7 @@ import { NguCarousel } from '@ngu/carousel';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../../../environments/environment';
 import { routerTransition } from '../../../router.animations';
+import { StorageService } from '../../../services/storage.service';
 
 import {
     NgxGalleryAnimation,
@@ -85,14 +86,15 @@ export class PartDetailComponent implements OnInit {
         public itemKeyService: PartKeyService,
         private productService: ProductService,
         public toastr: ToastrService,
-        private cd: ChangeDetectorRef
+        private cd: ChangeDetectorRef,
+        private storage: StorageService
     ) {
         this.generalForm = fb.group({
-            is_quotable: [null],
-            is_show_price: [null],
+            is_quotable: [{ value: null, disabled: true }],
+            is_show_price: [{ value: null, disabled: true }],
             sell_price: [{ value: null, disabled: true }],
-            freight_class: [{ disabled: true }, Validators.required],
-            is_taxable: [null, Validators.required],
+            freight_class: [{ value: null, disabled: true }],
+            is_taxable: [{ value: null, disabled: true }],
             inventory_account_id: [{ value: null, disabled: true }],
             income_account_id: [{ value: null, disabled: true }],
             expense_account_id: [{ value: null, disabled: true }],
@@ -124,6 +126,7 @@ export class PartDetailComponent implements OnInit {
                 thumbnailActions: [{ icon: 'black fa fa-times-circle', onClick: this.deleteImage.bind(this), titleText: 'Delete' }]
             }
         ];
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
     }
 
     refresh() {
@@ -135,8 +138,13 @@ export class PartDetailComponent implements OnInit {
         this.productService.getAccountType().subscribe(
             res => {
                 try {
-                    this.listMaster['account'] = res.data;
-                    this.refresh();
+                  const accountList = res['data'];
+                  const tempAccountList = [];
+                  accountList.forEach(item => {
+                      tempAccountList.push({ 'name': item.name, 'level': item.level, 'disabled': true }, ...item.children);
+                  });
+                  this.listMaster['account'] = tempAccountList;
+                  this.refresh();
                 } catch (e) {
                     console.log(e);
                 }

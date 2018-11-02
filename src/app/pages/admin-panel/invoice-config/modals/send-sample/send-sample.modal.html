@@ -5,10 +5,12 @@
     </button>
 </div>
 <div class="modal-body search-block">
+    <app-shortcut [listShortcut]='_hotkeysService.hotkeys'></app-shortcut>
     <div class="row">
         <div class="col-sm-12 form-group">
             <label> Send Sample Email:</label>
-            <input type="email" class="form-control" placeholder="example@gmail.com" [(ngModel)]="receiverEmail">
+            <input [keyConfig]="data['key_config']" appKeyNavigate="mail"
+            type="email" class="form-control" placeholder="example@gmail.com" [(ngModel)]="receiverEmail">
         </div>
     </div>
 </div>
