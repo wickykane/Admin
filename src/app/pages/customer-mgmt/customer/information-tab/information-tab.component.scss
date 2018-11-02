@@ -11,7 +11,6 @@
             width: 100%;
             table-layout: fixed;
         }
-
         tbody {
             display: block;
             max-height: 145px;
@@ -20,52 +19,40 @@
             tr {
                 display: table;
                 table-layout: fixed;
-                width: calc( 100% + 16px);
+                width: calc(100% + 16px);
             }
         }
-
     }
-
     .label.blue {
         background-color: #70BAEB;
     }
-
     .label.darkblue {
         background-color: #7197EA;
     }
-
     .label.red {
         background-color: #E74F5B;
     }
-
     .label.lemon {
         background-color: #C2C262;
     }
-
     .label.green {
         background-color: #32c5d2;
     }
-
     .label.magenta {
         background-color: #A48AD4;
     }
-
     .label.strong-green {
         background-color: #45C37A;
     }
-
     .label.bright-grey {
         background-color: #999999;
     }
-
     .label.rock-blue {
         background-color: #0D8BD2;
     }
-
     .label.texas-rose {
         background-color: #FDB45C;
     }
-
     .label.pink {
         background-color: #E491A3;
     }
@@ -85,15 +72,14 @@
 }
 
 .address-tab {
-    padding: 15px 15px 0 15px;
+    padding: 15px 15px 0;
     .block-search {
         max-width: 125px;
     }
 }
 
 .customer-infomation {
-    padding: 15px;
-    padding-bottom: 5px;
+    padding: 15px 15px 5px;
     background-color: #ededed;
     label {
         font-weight: bold;
@@ -102,9 +88,11 @@
         background-color: #dbdbdb;
     }
 }
-.margin-full-0{
+
+.margin-full-0 {
     margin: 0 !important;
 }
+
 .block>.nav-tabs>li.active>a,
 .block>.nav-tabs>li.active>a:focus,
 .block>.nav-tabs>li.active>a:hover {
@@ -182,52 +170,62 @@
     // margin-left: -5px;
 }
 
-.dashboard-content .dashboard-stat.blue, .bg-blue {
+.bg-blue,
+.dashboard-content .dashboard-stat.blue {
     background-color: #70BAEB !important;
     color: #fff !important;
 }
 
-.dashboard-content .dashboard-stat.darkblue,  .bg-darkblue  {
+.bg-darkblue,
+.dashboard-content .dashboard-stat.darkblue {
     background-color: #7197EA;
     color: #fff !important;
 }
 
-.dashboard-content .dashboard-stat.red, .bg-red {
+.bg-red,
+.dashboard-content .dashboard-stat.red {
     background-color: #E74F5B;
     color: #fff !important;
 }
 
-.dashboard-content .dashboard-stat.lemon, .bg-lemon {
+.bg-lemon,
+.dashboard-content .dashboard-stat.lemon {
     background-color: #C2C262;
     color: #fff !important;
 }
 
-.dashboard-content .dashboard-stat.green, .bg-green {
+.bg-green,
+.dashboard-content .dashboard-stat.green {
     background-color: #32c5d2;
     color: #fff !important;
 }
 
-.dashboard-content .dashboard-stat.magenta, .bg-magenta {
+.bg-magenta,
+.dashboard-content .dashboard-stat.magenta {
     background-color: #A48AD4;
     color: #fff !important;
 }
 
-.dashboard-content .dashboard-stat.strong-green, .bg-strong-green {
+.bg-strong-green,
+.dashboard-content .dashboard-stat.strong-green {
     background-color: #45C37A;
     color: #fff !important;
 }
 
-.dashboard-content .dashboard-stat.bright-grey, .bg-bright-grey {
+.bg-bright-grey,
+.dashboard-content .dashboard-stat.bright-grey {
     background-color: #999999;
     color: #fff !important;
 }
 
-.dashboard-content .dashboard-stat.rock-blue, .bg-rock-blue {
+.bg-rock-blue,
+.dashboard-content .dashboard-stat.rock-blue {
     background-color: #949FB1;
     color: #fff !important;
 }
 
-.dashboard-content .dashboard-stat.texas-rose, .bg-texas-rose {
+.bg-texas-rose,
+.dashboard-content .dashboard-stat.texas-rose {
     background-color: #FDB45C;
     color: #fff !important;
 }
@@ -345,7 +343,7 @@
         height: 100%;
     }
     .form-group {
-        margin-bottom: 0px;
+        margin-bottom: 0;
         font-size: 11px;
     }
     .padding-lr-10 {
@@ -357,8 +355,8 @@
         padding-right: 5px;
     }
     .padding-lr-0 {
-        padding-left: 0px;
-        padding-right: 0px;
+        padding-left: 0;
+        padding-right: 0;
     }
     .margin-lr-0 {
         margin-left: 0;
@@ -367,14 +365,14 @@
         margin-right: -8px;
     }
     .no-padding {
-        padding: 0
+        padding: 0;
     }
     .height-100 {
         height: 100%;
     }
     .card {
         .card-header {
-            padding: 5px 0px 5px 10px;
+            padding: 5px 0 5px 10px;
             color: #000;
             background: rgb(252, 252, 252);
             /* Old browsers */
@@ -403,7 +401,7 @@
             }
         }
         .card-body.no-padding {
-            padding: 0
+            padding: 0;
         }
     }
     .no-border {
@@ -411,8 +409,8 @@
         border-top: 1px solid rgba(0, 0, 0, 0.125);
         // border-bottom: 1px solid rgba(0, 0, 0, 0.125);
         .card-header {
-            border-left:  1px solid rgba(0, 0, 0, 0.125);
-            border-right:  1px solid rgba(0, 0, 0, 0.125);
+            border-left: 1px solid rgba(0, 0, 0, 0.125);
+            border-right: 1px solid rgba(0, 0, 0, 0.125);
         }
     }
 }
@@ -422,11 +420,13 @@
         padding: 0 27px;
     }
 }
+
 .p-17 {
     .col-12 {
         padding: 0 17px;
     }
 }
+
 .p-l-0 {
     padding-left: 0;
 }
@@ -452,10 +452,10 @@
 }
 
 .main-container {
-    padding: 0px 10px;
+    padding: 0 10px;
     .padding-child-5 {
-        & > div {
-            padding-left: 0px;
+        &>div {
+            padding-left: 0;
             padding-right: 5px;
         }
     }
@@ -468,7 +468,7 @@
             margin-right: 5px;
             padding-bottom: 5px;
             font-size: 11px;
-            & > div {
+            &>div {
                 padding-left: 5px;
                 padding-right: 5px;
             }
@@ -477,7 +477,8 @@
             .form-control {
                 font-size: 11px !important;
             }
-            input, select {
+            input,
+            select {
                 padding-left: 2px;
             }
             label {
@@ -556,7 +557,7 @@
 }
 
 .filter-order-group {
-    & > div {
+    &>div {
         padding-right: 0 !important;
     }
     .control-label {
@@ -567,7 +568,10 @@
         flex: 0 0 19.666667%;
         max-width: 19.666667%;
     }
-    .control-label + input, select, .ng-select, .date-group {
+    .control-label+input,
+    .date-group,
+    .ng-select,
+    select {
         max-width: 120px;
         margin-left: 5px;
         display: inline-block;
@@ -600,7 +604,6 @@
 .status-ctn {
     margin: 0;
     padding: 0;
-
     .status-item {
         position: relative;
         display: inline-block;
@@ -610,14 +613,12 @@
         color: #ffffff;
         font-weight: bold;
         margin-right: 5px;
-
         .status-count {
             position: absolute;
             right: 10px;
             top: 5px;
             font-size: 20px;
         }
-
         .status-lbl {
             position: absolute;
             right: 10px;
@@ -627,20 +628,68 @@
 }
 
 .order-summary-body {
-    .control-label + div {
+    .control-label+div {
         padding: 0 !important;
     }
 }
-.customer-balance-custom-border{
- border: 1px solid #cccccc;
+
+.customer-balance-custom-border {
+    border: 1px solid #cccccc;
 }
+
 .text-red {
     color: red;
-  }
-.text-green{
+}
+
+.text-green {
     color: green;
 }
+
 .text-blue {
     color: #007bff !important;
     cursor: pointer;
-  }
+}
+
+.label.blue {
+    background-color: #70BAEB;
+}
+
+.label.darkblue {
+    background-color: #7197EA;
+}
+
+.label.red {
+    background-color: #E74F5B;
+}
+
+.label.lemon {
+    background-color: #C2C262;
+}
+
+.label.green {
+    background-color: #32c5d2;
+}
+
+.label.magenta {
+    background-color: #A48AD4;
+}
+
+.label.strong-green {
+    background-color: #45C37A;
+}
+
+.label.bright-grey {
+    background-color: #999999;
+}
+
+.label.rock-blue {
+    background-color: #0D8BD2;
+}
+
+.label.texas-rose {
+    background-color: #FDB45C;
+}
+
+.label.pink {
+    background-color: #E491A3;
+}

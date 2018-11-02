@@ -183,10 +183,17 @@
                                             <a  href="javascript:void(0)" class="btn btn-default " ngbTooltip="Edit" (click)="editInvoice(item.id)" *ngIf="(item.invoice_status_id == 1 || item.invoice_status_id == 11) && listMaster['permission'].edit">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
+<<<<<<< HEAD
                                             <a href="javascript:void(0)" ngbTooltip="Submit" *ngIf="(item.invoice_status_id == 1 || item.invoice_status_id == 11) && listMaster['permission'].submit" class="btn btn-default" (click)="confirmModal(item.id, 2)"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></a>
                                             <a href="javascript:void(0)" ngbTooltip="Revise" *ngIf="(item.invoice_status_id == 2) && listMaster['permission'].revise" class="btn btn-default" (click)="confirmModal(item.id, 11)"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></a>
                                             <a href="javascript:void(0)" ngbTooltip="Approve" *ngIf="(item['invoice_status_id'] == 2) && listMaster['permission'].approve" class="btn btn-default" (click)="confirmModal(item.id, 4)"><i class="fa fa-check"></i></a>
                                             <a href="javascript:void(0)" class="btn btn-default" ngbTooltip="Cancel" (click)="confirmModal(item.id, 7)" *ngIf="([1,2,4].indexOf(item.invoice_status_id) != -1) && listMaster['permission'].cancel">
+=======
+                                            <a href="javascript:void(0)" ngbTooltip="Submit" *ngIf="item.invoice_status_id == 1 || item.invoice_status_id == 11 " class="btn btn-default" (click)="confirmModal(item.id, 2)"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></a>
+                                            <a href="javascript:void(0)" ngbTooltip="Revise" *ngIf="item.invoice_status_id == 2" class="btn btn-default" (click)="confirmModal(item.id, 11)"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></a>
+                                            <a href="javascript:void(0)" ngbTooltip="Approve" *ngIf="item['invoice_status_id'] == 2 || item.invoice_status_id == 11" class="btn btn-default" (click)="confirmModal(item.id, 4)"><i class="fa fa-check"></i></a>
+                                            <a href="javascript:void(0)" class="btn btn-default" ngbTooltip="Cancel" (click)="confirmModal(item.id, 7)" *ngIf="[1,2,4,11].indexOf(item.invoice_status_id) != -1">
+>>>>>>> a84983f8f3fe6e0fd538400ad0b6256f118f2110
                                                 <i class="fa fa-times-circle" aria-hidden="true"></i>
                                             </a>
                                             <!-- <a ngbTooltip="Reject" *ngIf="item['invoice_status_id'] == 2" class="btn btn-default" (click)="confirmModal(item.id, 3)"><i class="fa fa-ban" aria-hidden="true"></i></a> -->

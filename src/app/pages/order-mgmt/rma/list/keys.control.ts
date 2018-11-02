@@ -19,6 +19,7 @@ export class RMAKeyService extends KeyboardBaseService {
         },
     };
 
+<<<<<<< HEAD
     initKey() {
         if (this.context.listMaster['permission'].create) {
             this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+n', (event: KeyboardEvent): boolean => {
@@ -32,6 +33,22 @@ export class RMAKeyService extends KeyboardBaseService {
             this.context.tableService.searchAction();
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Search'));
+=======
+  initKey() {
+    this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+f1', (event: KeyboardEvent): boolean => {
+        event.preventDefault();
+        if (this.keyConfig.cd.element) {
+            this.keyConfig.cd.element.nativeElement.focus();
+        }
+        return;
+    }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Focus Search'));
+
+      this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+n', (event: KeyboardEvent): boolean => {
+          event.preventDefault();
+          this.context.createRMA();
+          return;
+      }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Create Return Order'));
+>>>>>>> a84983f8f3fe6e0fd538400ad0b6256f118f2110
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+r', (event: KeyboardEvent): boolean => {
             event.preventDefault();

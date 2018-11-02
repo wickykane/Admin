@@ -434,13 +434,13 @@
                                             {{wh.qty_available}}
                                         </td>
                                         <td>
-                                            <input numberDirective [min]="0" [disabled]="item.misc_id" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (changeValue)="updateTotal()">
+                                            <input numberDirective [min]="1" [disabled]="item.misc_id" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (changeValue)="updateTotal()">
                                         </td>
                                         <td>
                                             <div>
                                                 <span>$</span>
                                                 <div style="display:inline-block;width:80%">
-                                                    <input [isDecimal]="true" numberDirective [min]="0" class="form-control input-sm" type="number" [(ngModel)]="item.sale_price" (changeValue)="updateTotal();changeFromSource(item)">
+                                                    <input [isDecimal]="true" [disabled]="!item['is_misc']" numberDirective [min]="0" class="form-control input-sm" type="number" [(ngModel)]="item.sale_price" (changeValue)="updateTotal();changeFromSource(item)">
                                                 </div>
                                             </div>
                                         </td>
@@ -454,7 +454,7 @@
                                             <span>{{item.amount | currency}}</span>
                                         </td>
                                         <td>
-                                            {{ item.income_account_name }}
+                                            <span *ngIf="item.income_account_id">{{ item.income_account_code }} - {{ item.income_account_name }}</span>
                                         </td>
                                         <td class="text-center">
                                             <span>
