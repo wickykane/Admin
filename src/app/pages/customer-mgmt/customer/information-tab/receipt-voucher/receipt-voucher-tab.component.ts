@@ -7,10 +7,12 @@ import { CustomerService } from '../../../customer.service';
 import { CustomerKeyViewService } from '../../view/keys.view.control';
 import { TableService } from './../../../../../services/table.service';
 
+import { environment } from '../../../../../../environments/environment';
 import { ReceiptVoucherService } from '../../../../financial/receipt-voucher/receipt-voucher.service';
 import { OrderService } from '../../../../order-mgmt/order-mgmt.service';
 
 import { Subject } from 'rxjs/Subject';
+import { JwtService } from '../../../../../shared/guard/jwt.service';
 
 @Component({
     selector: 'app-customer-receipt-voucher-tab',
@@ -45,6 +47,7 @@ export class CustomerReceiptVoucherTabComponent implements OnInit, OnDestroy {
     @ViewChild(cdArrowTable) table: cdArrowTable;
     public searchKey = new Subject<any>(); // Lazy load filter
     constructor(
+        private jwtService: JwtService,
         public fb: FormBuilder,
         private vRef: ViewContainerRef,
         private customerService: CustomerService,
@@ -167,7 +170,20 @@ export class CustomerReceiptVoucherTabComponent implements OnInit, OnDestroy {
     }
 
     exportData() {
-        console.log('Export data');
+        const anchor = document.createElement('a');
+        const path = 'buyer/export-receipt-voucher/';
+        const file = `${environment.api_url}${path}${this._customerId}`;
+        const headers = new Headers();
+        headers.append('Authorization', 'Bearer ' + this.jwtService.getToken());
+        fetch(file, { headers })
+            .then(response => response.blob())
+            .then(blobby => {
+            const objectUrl = window.URL.createObjectURL(blobby);
+            anchor.href = objectUrl;
+            anchor.download = 'receipt_voucher_export.xls';
+            anchor.click();
+            window.URL.revokeObjectURL(objectUrl);
+        });
     }
 
     selectTable() {
