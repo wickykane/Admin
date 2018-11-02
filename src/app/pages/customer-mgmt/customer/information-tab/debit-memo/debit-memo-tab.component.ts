@@ -108,6 +108,9 @@ export class CustomerDebitMemoTabComponent implements OnInit, OnDestroy {
             }
         );
     }
+    selectData(index) {
+        console.log(index);
+    }
 
     refresh() {
         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
