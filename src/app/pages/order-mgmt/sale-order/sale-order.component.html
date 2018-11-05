@@ -16,35 +16,29 @@
                 <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
                     <div class="block-search">
                         <label for="cd" class="control-label" translate>SO #</label>
-                        <input [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="code" type="text" name="cd"
-                            formControlName="code" class="form-control" id="cd" placeholder="" capitalize>
+                        <input [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="code" type="text" name="cd" formControlName="code" class="form-control" id="cd" placeholder="" capitalize>
                     </div>
                     <div class="block-search">
                         <label for="purchase_quote_cd" class="control-label">Cust PO #</label>
-                        <input type="text" name="purchase_quote_cd" formControlName="cus_po" class="form-control" id="purchase_quote_cd"
-                            placeholder="">
+                        <input type="text" name="purchase_quote_cd" formControlName="cus_po" class="form-control" id="purchase_quote_cd" placeholder="">
                     </div>
                     <div class="block-search">
                         <label for="contract_no" class="control-label">Sales Quote #</label>
-                        <input type="text" name="contract_no" formControlName="quote_no" class="form-control" id="contract_no"
-                            placeholder="">
+                        <input type="text" name="contract_no" formControlName="quote_no" class="form-control" id="contract_no" placeholder="">
                     </div>
                     <div class="block-search">
                         <label for="part" class="control-label">Type</label>
-                        <ng-select [multiple]="true" [items]="listMaster['type']" bindLabel="name" bindValue="id"
-                            formControlName="type">
+                        <ng-select [multiple]="true" [items]="listMaster['type']" bindLabel="name" bindValue="id" formControlName="type">
                         </ng-select>
                     </div>
                     <div class="block-search">
                         <label for="po_status_id" class="control-label">Status</label>
-                        <ng-select [multiple]="true" [items]="listMaster['status']" bindLabel="name" bindValue="id"
-                            formControlName="sts">
+                        <ng-select [multiple]="true" [items]="listMaster['status']" bindLabel="name" bindValue="id" formControlName="sts">
                         </ng-select>
                     </div>
                     <div class="block-search">
                         <label for="cd" class="control-label" translate>Customer</label>
-                        <input type="text" name="cd" formControlName="buyer_name" class="form-control" id="cd"
-                            placeholder="" capitalize>
+                        <input type="text" name="cd" formControlName="buyer_name" class="form-control" id="cd" placeholder="" capitalize>
                     </div>
                     <div class="block-search">
                         <label for="type" class="control-label" translate>Date Type</label>
@@ -56,8 +50,7 @@
                     <div class="block-search">
                         <label for="" class="control-label" translate> From</label>
                         <div clickOutside (clickOutside)="d.close()" class="input-group">
-                            <input [maxDate]="searchForm.value.date_to | dateObj" class="form-control" placeholder="mm/dd/yyyy"
-                                name="d" formControlName="date_from" ngbDatepicker #d="ngbDatepicker">
+                            <input [maxDate]="searchForm.value.date_to | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="d" formControlName="date_from" ngbDatepicker #d="ngbDatepicker">
                             <div class="input-group-append">
                                 <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
                                     <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -68,8 +61,7 @@
                     <div class="block-search">
                         <label for="" class="control-label" translate> To</label>
                         <div clickOutside (clickOutside)="dt.close()" class="input-group">
-                            <input [minDate]="searchForm.value.date_from | dateObj" class="form-control" placeholder="mm/dd/yyyy"
-                                name="dt" formControlName="date_to" ngbDatepicker #dt="ngbDatepicker">
+                            <input [minDate]="searchForm.value.date_from | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dt" formControlName="date_to" ngbDatepicker #dt="ngbDatepicker">
                             <div class="input-group-append">
                                 <button class="btn btn-outline-secondary" (click)="dt.toggle()" type="button">
                                     <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -98,8 +90,7 @@
                     </div>
                     <div class="card-body no-padding">
                         <div class="table-responsive list">
-                            <table class="table table-bordered table-order" cdArrowTable [collection]="list.items"
-                                [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
+                            <table class="table table-bordered table-order" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                                 <thead class="bg-white">
                                     <tr>
                                         <!-- <th style="width:50px"></th> -->
@@ -165,12 +156,13 @@
                                             <a href="javascript:void(0)" ngbTooltip="Submit" *ngIf="item['sts_code'] == 'NW' && listMaster['permission'].submit" class="btn btn-default" (click)="confirmModal(item, 'SM')"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i></a>
                                             <a href="javascript:void(0)" ngbTooltip="Approve" *ngIf="item['sts_code'] == 'SM' && listMaster['permission'].approve" class="btn btn-default" (click)="confirmModal(item, 'AP')"><i class="fa fa-check-square" aria-hidden="true"></i></a>
                                             <a href="javascript:void(0)" ngbTooltip="Reject" *ngIf="item['sts_code'] == 'SM' && listMaster['permission'].reject" class="btn btn-default" (click)="confirmModal(item, 'RJ')"><i class="fa fa-ban"></i></a>
-                                            <a href="javascript:void(0)" ngbTooltip="Cancel" *ngIf="item['sts_code'] == 'NW' && listMaster['permission'].cancel" class="btn btn-default" (click)="confirmModal(item, 'CC')"><i class="fa fa-times-circle"></i></a>
+                                            <a href="javascript:void(0)" ngbTooltip="Cancel" *ngIf="['AP', 'IP', 'PP', 'RS'].indexOf(item['sts_code'])  != -1 && listMaster['permission'].cancel" class="btn btn-default" (click)="confirmModal(item, 'CC')"><i class="fa fa-times-circle"></i></a>
                                             <a href="javascript:void(0)" ngbTooltip="Re Open" *ngIf="item['sts_code'] == 'RJ' && listMaster['permission'].reopen" class="btn btn-default" (click)="confirmModal(item, 'RO')"><i class="fa fa-repeat"></i></a>
                                             <!-- <a href="javascript:void(0)" ngbTooltip="Create Return Order" *ngIf="item['sts_code'] == 'RS'" class="btn btn-default" (click)="confirmModal(item, 'RS')"><i class="fa fa-file"></i></a> -->
                                             <a href="javascript:void(0)" ngbTooltip="Copy" class="btn btn-default" *ngIf="listMaster['permission'].copy" (click)="confirmModal(item, 'CLONE')"><i class="fa fa-clone"></i></a>
 
-                                            <a href="javascript:void(0)" ngbTooltip="Edit" *ngIf="listMaster['permission'].edit && (item['sts_code'] == 'NW' || item['sts_code'] == 'RV' || !item['total_paid'] && (item['sts_code'] == 'AP' || item['sts_code'] == 'IP' || item['sts_code'] == 'PP' || item['sts_code'] == 'RS')) " class="btn btn-default" (click)="edit(item)"><i class="fa fa-pencil-square"></i></a>
+                                            <a href="javascript:void(0)" ngbTooltip="Edit" *ngIf="listMaster['permission'].edit && (item['sts_code'] == 'NW' || item['sts_code'] == 'RV' || !item['total_paid'] && (item['sts_code'] == 'AP' || item['sts_code'] == 'IP' || item['sts_code'] == 'PP' || item['sts_code'] == 'RS')) "
+                                                class="btn btn-default" (click)="edit(item)"><i class="fa fa-pencil-square"></i></a>
                                             <a ngbTooltip="View" class="btn btn-default" [routerLink]="['/order-management/sale-order/detail', item.id]"><i class="fa fa-eye"></i></a>
                                         </td>
                                     </tr>
@@ -196,8 +188,7 @@
                     <div class="col-md-6" style="padding-left: 0px;">
                         <span style="float: left; padding-right: 10px;">{{list.items.length}}/{{tableService.pagination.total_record}}
                             items </span>
-                        <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length"
-                            (change)="tableService.changeLength()">
+                        <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length" (change)="tableService.changeLength()">
                             <option *ngFor="let option of tableService.itemPerPageOptions" [ngValue]="option">{{option}}</option>
                         </select>
                     </div>
@@ -205,10 +196,8 @@
             </div>
             <div class="col-md-6 padding-lr-0">
                 <div class="text-right">
-                    <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)"
-                        [pageSize]="tableService.pagination.length" [collectionSize]="tableService.pagination.total_record || 120"
-                        [(page)]="tableService.pagination.page" [maxSize]="tableService.maxSize" [rotate]="true"
-                        [boundaryLinks]="true"></ngb-pagination>
+                    <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length" [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page" [maxSize]="tableService.maxSize"
+                        [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
                 </div>
             </div>
         </div>

@@ -11,7 +11,7 @@
         <button *ngIf="listMaster['permission'].print" class="btn btn-outline-dark" (click)="printPDF(_invoiceId, detail['inv_num'] )"><i class="fa fa-download" aria-hidden="true"></i> Print</button>
         <button *ngIf="([3,4,6,7,8].indexOf(detail['invoice_status_id']) != -1) && listMaster['permission'].mail" class="btn btn-outline-dark" (click)="sendMail(_invoiceId)"><i class="fa fa-envelope-o" aria-hidden="true"></i> Send Mail</button>
 
-        <button *ngIf="[4,5,6,8].indexOf(detail['invoice_status_id']) != -1" class="btn btn-outline-info" (click)="updatePOD()"><i class="fa fa-calendar" aria-hidden="true"></i> Update POD Date</button>
+        <button *ngIf="data['updatePOD'] && listMaster['permission'].updatePOD && [4,5,6,8].indexOf(detail['invoice_status_id']) != -1" class="btn btn-outline-info" (click)="updatePOD()"><i class="fa fa-calendar" aria-hidden="true"></i> Update POD Date</button>
 
         <!-- <button *ngIf="detail['invoice_status_id'] == 3" class="btn btn-outline-dark" (click)="confirmModal(_invoiceId, 1)"><i class="fa fa-external-link-square" aria-hidden="true"></i> Reopen</button> -->
     </div>

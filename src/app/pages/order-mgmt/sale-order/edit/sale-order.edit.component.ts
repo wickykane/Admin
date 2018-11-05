@@ -110,7 +110,7 @@ export class SaleOrderEditComponent implements OnInit {
         'create': 'Are you sure that you want to save & submit this order to approver?',
         'validate': 'Are you sure that you want to validate this order?',
         'error': 'This sales order is missing some mandatory fields, please fulfill them before submit',
-        'cancel': 'Are you sure that you want to cancel current sales order?',
+        'cancel': 'Are you sure to fully cancel this sales order?',
         'default': 'The data you have entered may not be saved, are you sure that you want to leave?',
     };
 
@@ -604,6 +604,8 @@ export class SaleOrderEditComponent implements OnInit {
             this.order_info.order_summary['total_cogs'] = (this.order_info.order_summary['total_cogs'] || 0) + (+item.cost_price || 0) * (item.quantity || 0);
             this.order_info.order_summary['total_vol'] = (this.order_info.order_summary['total_vol'] || 0) + (+item.vol || 0) * (item.quantity || 0);
             this.order_info.order_summary['total_weight'] = +((this.order_info.order_summary['total_weight'] || 0) + (+item.wt || 0) * (item.quantity || 0)).toFixed(2);
+            this.order_info.order_summary['total_remain'] = (this.order_info.order_summary['total_remain'] || 0) + (+item.qty_remain);
+            this.order_info.order_summary['total_cancel'] = (this.order_info.order_summary['total_cancel'] || 0) + (+item.qty_cancel);
         });
         this.list.items.forEach(item => {
             item.amount = (+item.quantity * (+item.sale_price || 0)) * (100 - (+item.discount_percent || 0)) / 100;

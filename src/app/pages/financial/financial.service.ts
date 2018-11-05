@@ -159,4 +159,8 @@ export class FinancialService {
         const url = 'quick-books/oauth2/settings';
         return this.API.get(url);
     }
+    checkPOD(id) {
+        const url = 'ar-invoice/check-update-pod/' + id;
+        return this.API.get(url);
+    }
 }

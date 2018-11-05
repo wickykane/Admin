@@ -78,6 +78,7 @@ export class InvoiceInformationTabComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.ediablePOD();
         this.getQuickbookSettings();
         this.getList();
         this.data['tab'] = {
@@ -188,6 +189,11 @@ export class InvoiceInformationTabComponent implements OnInit {
             });
         }
     }
+    ediablePOD() {
+        this.financialService.checkPOD(this._invoiceId).subscribe(res => {
+            this.data['updatePOD'] = res.data;
+        });
+    }
     updatePOD() {
         const date = this.detail['pod_sign_off_date'];
         if (date) {
@@ -199,7 +205,7 @@ export class InvoiceInformationTabComponent implements OnInit {
             }, dismiss => {
 
             });
-            modalRef.componentInstance.message = 'There is POD Date in the Invoice. Do you want to update it?';
+            modalRef.componentInstance.message = 'This invoice already had a POD Sign-off Date, are you sure that you want to update it?';
             modalRef.componentInstance.yesButtonText = 'Yes';
             modalRef.componentInstance.noButtonText = 'No';
         } else {
