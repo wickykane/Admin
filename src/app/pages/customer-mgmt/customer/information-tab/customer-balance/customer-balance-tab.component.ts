@@ -106,7 +106,7 @@ export class CustomerCustomerBalanceTabComponent implements OnInit, OnDestroy {
     }
     exportData() {
         const anchor = document.createElement('a');
-        const path = 'buyer/export-customer-balance/';
+        const path = 'buyer/export-cus-balance/';
         const file = `${environment.api_url}${path}${this._customerId}`;
         const headers = new Headers();
         headers.append('Authorization', 'Bearer ' + this.jwtService.getToken());
