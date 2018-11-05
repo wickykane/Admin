@@ -11,19 +11,50 @@
             width: 100%;
             table-layout: fixed;
         }
-
         tbody {
             display: block;
             max-height: 145px;
-            overflow-y: auto;
+            overflow-y: scroll;
             overflow-x: hidden;
-
             tr {
                 display: table;
                 table-layout: fixed;
                 width: calc(100% + 16px);
             }
         }
+    }
+    .label.blue {
+        background-color: #70BAEB;
+    }
+    .label.darkblue {
+        background-color: #7197EA;
+    }
+    .label.red {
+        background-color: #E74F5B;
+    }
+    .label.lemon {
+        background-color: #C2C262;
+    }
+    .label.green {
+        background-color: #32c5d2;
+    }
+    .label.magenta {
+        background-color: #A48AD4;
+    }
+    .label.strong-green {
+        background-color: #45C37A;
+    }
+    .label.bright-grey {
+        background-color: #999999;
+    }
+    .label.rock-blue {
+        background-color: #0D8BD2;
+    }
+    .label.texas-rose {
+        background-color: #FDB45C;
+    }
+    .label.pink {
+        background-color: #E491A3;
     }
 }
 
@@ -34,7 +65,6 @@
         background-color: #d2d2d2;
         word-break: break-word;
     }
-
     tbody td {
         padding: 10px;
         word-break: break-word;
@@ -43,7 +73,6 @@
 
 .address-tab {
     padding: 15px 15px 0;
-
     .block-search {
         max-width: 125px;
     }
@@ -52,11 +81,9 @@
 .customer-infomation {
     padding: 15px 15px 5px;
     background-color: #ededed;
-
     label {
         font-weight: bold;
     }
-
     &.bolder {
         background-color: #dbdbdb;
     }
@@ -66,9 +93,9 @@
     margin: 0 !important;
 }
 
-.block > .nav-tabs > li.active > a,
-.block > .nav-tabs > li.active > a:focus,
-.block > .nav-tabs > li.active > a:hover {
+.block>.nav-tabs>li.active>a,
+.block>.nav-tabs>li.active>a:focus,
+.block>.nav-tabs>li.active>a:hover {
     color: #3e73c3;
     background-color: #fff;
     border-color: transparent;
@@ -207,7 +234,6 @@
     display: block;
     margin-bottom: 0;
     overflow: hidden;
-
     img {
         position: absolute;
         bottom: 0;
@@ -233,7 +259,7 @@
     line-height: 35px;
 }
 
-.dashboard-content .dashboard-stat .visual > i {
+.dashboard-content .dashboard-stat .visual>i {
     color: #FFF;
     opacity: 0.1;
     filter: alpha(opacity=10);
@@ -268,8 +294,8 @@
     letter-spacing: 0;
     font-weight: 300;
 }
-//new style
 
+//new style
 .mg-top-15 {
     margin-top: 15px;
 }
@@ -289,7 +315,6 @@
         display: block;
         position: relative;
         padding-top: 15px;
-
         h5.title-border {
             display: block;
             position: absolute;
@@ -300,63 +325,51 @@
             padding: 0 4px;
         }
     }
-
     .table-responsive {
         height: auto;
         max-height: 150px;
         overflow-y: auto;
     }
-
     .table-responsive.list {
         height: auto;
         max-height: 250px;
         overflow-y: auto;
     }
-
     table.table-bg {
         background: #ededed;
     }
-
     .full-block {
         width: 100%;
         height: 100%;
     }
-
     .form-group {
         margin-bottom: 0;
         font-size: 11px;
     }
-
     .padding-lr-10 {
         padding-left: 10px;
         padding-right: 10px;
     }
-
     .padding-lr-5 {
         padding-left: 5px;
         padding-right: 5px;
     }
-
     .padding-lr-0 {
         padding-left: 0;
         padding-right: 0;
     }
-
     .margin-lr-0 {
         margin-left: 0;
         margin-right: 0;
         margin-left: -8px;
         margin-right: -8px;
     }
-
     .no-padding {
         padding: 0;
     }
-
     .height-100 {
         height: 100%;
     }
-
     .card {
         .card-header {
             padding: 5px 0 5px 10px;
@@ -371,32 +384,26 @@
             /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
             // filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#eaeaea',GradientType=0 ); /* IE6-9 */
         }
-
         .card-body {
             padding: 5px;
-
             .table-order {
                 font-size: 11px;
                 margin-bottom: 0;
-
                 th {
                     padding: 5px;
                     color: #630606;
                     font-weight: bold;
                     text-align: center;
                 }
-
                 td {
                     padding: 5px;
                 }
             }
         }
-
         .card-body.no-padding {
             padding: 0;
         }
     }
-
     .no-border {
         border: none;
         border-top: 1px solid rgba(0, 0, 0, 0.125);
@@ -446,46 +453,38 @@
 
 .main-container {
     padding: 0 10px;
-
     .padding-child-5 {
-        & > div {
+        &>div {
             padding-left: 0;
             padding-right: 5px;
         }
     }
-
     .information {
         margin-right: -5px;
     }
-
     .block-info {
         .form-search {
             margin-left: 5px;
             margin-right: 5px;
             padding-bottom: 5px;
             font-size: 11px;
-
-            & > div {
+            &>div {
                 padding-left: 5px;
                 padding-right: 5px;
             }
         }
-
         .form-group {
             .form-control {
                 font-size: 11px !important;
             }
-
             input,
             select {
                 padding-left: 2px;
             }
-
             label {
                 padding-right: 0;
                 padding-left: 5px;
                 font-weight: bold;
-
                 &+div {
                     padding-left: 0;
                     padding-right: 5px;
@@ -493,15 +492,12 @@
             }
         }
     }
-
     .information-tab {
         margin-top: 10px;
     }
-
     .customer-infomation {
         // background-color: #ededed;
         border-left: 1px dashed #ccc;
-
         &.bolder {
             // background-color: #dbdbdb;
         }
@@ -516,23 +512,19 @@
     border: none;
     background: none;
     width: 400px;
-
     tbody {
         tr {
             padding: 10px 0;
             border: none;
             text-align: right;
-
             td {
                 border: none;
                 padding: 3px 5px;
                 text-align: right;
-
                 input {
                     text-align: right;
                 }
             }
-
             td:first-child {
                 width: 150px;
                 text-align: right;
@@ -540,10 +532,8 @@
                 font-weight: 600;
             }
         }
-
         tr:last-child {
             color: #fff;
-
             td:last-child {
                 background: #FF0000;
                 text-align: right;
@@ -567,21 +557,18 @@
 }
 
 .filter-order-group {
-    & > div {
+    &>div {
         padding-right: 0 !important;
     }
-
     .control-label {
         width: 72px;
         text-align: left;
     }
-
     .col-md-2 {
         flex: 0 0 19.666667%;
         max-width: 19.666667%;
     }
-
-    .control-label + input,
+    .control-label+input,
     .date-group,
     .ng-select,
     select {
@@ -596,14 +583,11 @@
     right: 15px;
     display: block;
     position: absolute;
-
     .list-btn-custom {
         list-style: none;
-
         li {
             display: inline-block;
             margin-left: 10px;
-
             button {
                 i {
                     margin-right: 10px;
@@ -620,7 +604,6 @@
 .status-ctn {
     margin: 0;
     padding: 0;
-
     .status-item {
         position: relative;
         display: inline-block;
@@ -630,14 +613,12 @@
         color: #ffffff;
         font-weight: bold;
         margin-right: 5px;
-
         .status-count {
             position: absolute;
             right: 10px;
             top: 5px;
             font-size: 20px;
         }
-
         .status-lbl {
             position: absolute;
             right: 10px;
@@ -647,7 +628,7 @@
 }
 
 .order-summary-body {
-    .control-label + div {
+    .control-label+div {
         padding: 0 !important;
     }
 }

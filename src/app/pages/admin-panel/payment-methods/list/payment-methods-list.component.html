@@ -1,7 +1,6 @@
 <div [@routerTransition]>
     <app-page-header [heading]="'LIST OF PAYMENT METHODS'" [icon]="'fa-th-list'"></app-page-header>
     <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
-
     <div class="block anchor-scroll block-order">
         <div class="block-content pd-bottom padding-lr-0 mt-2">
             <div class="row">
@@ -9,7 +8,7 @@
                     <form class="row form-horizontal form-search filter-order-group" role="form" [formGroup]="searchForm">
                         <div class="col-md-4 block-search">
                             <label class="control-label">Description</label>
-                            <input type="text" class="form-control" formControlName="name">
+                            <input type="text" class="form-control" formControlName="name" [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="description">
                         </div>
                         <div class="col-md-4 block-search">
                             <label class="control-label">Type</label>
@@ -42,12 +41,12 @@
                 <div class="card no-border">
                     <div class="card-header">
                         <strong>Payment Method</strong>
-                        <button [routerLink]="['create']" style="margin:0; float:right" class="btn btn-link">
+                        <button *ngIf="listMaster['permission'].create" [routerLink]="['create']" style="margin:0; float:right" class="btn btn-link">
                             <i class="fa fa-plus text-success"></i> Add New</button>
                     </div>
                     <div class="card-body no-padding">
                         <div class="table-responsive list">
-                            <table class="table table-bordered table-order">
+                            <table class="table table-bordered table-order" cdArrowTable [collection]="paymentMethods" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                                 <thead class="bg-white">
                                     <tr>
                                         <th>
@@ -89,10 +88,10 @@
                                             <i *ngIf="paymentMethod.used" class="fa fa-check" aria-hidden="true"></i>
                                         </td>
                                         <td class="text-left">
-                                            <a class="btn btn-primary-outline" (click)="editPaymentMethod(paymentMethod.id)">
+                                            <a *ngIf="listMaster['permission'].edit" href="javascript: void(0)" class="btn btn-primary-outline" (click)="editPaymentMethod(paymentMethod.id)">
                                                 <i class="fa fa-pencil" aria-hidden="true"></i>
                                             </a>
-                                            <a class="btn btn-primary-outline" [hidden]="paymentMethod.used" (click)="deletePaymentMethod(paymentMethod)">
+                                            <a *ngIf="listMaster['permission'].delete" href="javascript: void(0)"  class="btn btn-primary-outline" [hidden]="paymentMethod.used" (click)="deletePaymentMethod(paymentMethod)">
                                                 <i class="fa fa-trash" aria-hidden="true"></i>
                                             </a>
                                         </td>

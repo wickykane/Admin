@@ -10,10 +10,11 @@ import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { CommonService } from '../../services/common.service';
-
+import { ShippingZoneModalKeyService } from './keys.control';
 @Component({
     selector: 'app-flat-rate-options-modal',
-    templateUrl: './flat-rate-options.modal.html'
+    templateUrl: './flat-rate-options.modal.html',
+    providers: [ShippingZoneModalKeyService],
 })
 export class FlatRateOptionsModalComponent implements OnInit, OnDestroy {
 
@@ -31,7 +32,8 @@ export class FlatRateOptionsModalComponent implements OnInit, OnDestroy {
         private modalService: NgbModal,
         private hotkeysService: HotkeysService,
         private commonService: CommonService,
-        public activeModal: NgbActiveModal) {
+        public activeModal: NgbActiveModal,
+        public keyService: ShippingZoneModalKeyService) {
 
         this.generalForm = fb.group({
             'name': ['', Validators.required],
@@ -42,7 +44,7 @@ export class FlatRateOptionsModalComponent implements OnInit, OnDestroy {
             'id': '2'
         });
 
-
+        this.keyService.watchContext.next({ context: this, service: this.hotkeysService });
 
     }
 

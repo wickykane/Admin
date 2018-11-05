@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../../../../environments/environment';
+import { StorageService } from '../../../../services/storage.service';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { FinancialService } from '../../financial.service';
 import { ReceiptMailModalComponent } from '../modals/mail.modal';
@@ -65,6 +66,7 @@ export class ReceiptInformationTabComponent implements OnInit {
         price_received: null
     };
     public isInstallQuickbook = false;
+    public listMaster = {};
 
     constructor(
         public toastr: ToastrService,
@@ -78,6 +80,7 @@ export class ReceiptInformationTabComponent implements OnInit {
         public tableService: TableService,
         private _hotkeysService: HotkeysService,
         public keyService: ReceiptDetailKeyService,
+        private storage: StorageService,
         @Inject(ReceiptVoucherDetailComponent) private parent: ReceiptVoucherDetailComponent) {
             if (!this.parent.data['shortcut']) {
                 this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
@@ -91,6 +94,7 @@ export class ReceiptInformationTabComponent implements OnInit {
             active: 0,
         };
         this.changeShortcut();
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
     }
 
     /**

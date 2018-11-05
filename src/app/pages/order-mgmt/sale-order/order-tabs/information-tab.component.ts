@@ -5,6 +5,7 @@ import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/n
 import { HotkeysService } from 'angular2-hotkeys';
 import * as _ from 'lodash';
 import { ToastrService } from 'ngx-toastr';
+import { StorageService } from '../../../../services/storage.service';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { OrderService } from '../../../order-mgmt/order-mgmt.service';
 import { SaleOrderDetailComponent } from '../view/sale-order.detail.component';
@@ -101,6 +102,7 @@ export class SaleOrderInformationTabComponent implements OnInit {
         private modalService: NgbModal,
         private _hotkeysService: HotkeysService,
         public keyService: SaleOrderViewKeyService,
+        private storage: StorageService,
         public tableService: TableService,
         @Inject(SaleOrderDetailComponent) private parent: SaleOrderDetailComponent,
         private orderService: OrderService) {
@@ -117,6 +119,7 @@ export class SaleOrderInformationTabComponent implements OnInit {
             active: 0,
         };
         this.changeShortcut();
+        this.data['permission'] = this.storage.getRoutePermission(this.router.url);
     }
 
     /**

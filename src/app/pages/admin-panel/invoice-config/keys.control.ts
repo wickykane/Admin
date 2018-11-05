@@ -1,48 +1,91 @@
-import { Injectable, OnDestroy } from '@angular/core';
-import { Hotkey, HotkeysService } from 'angular2-hotkeys';
-// tslint:disable-next-line:import-blacklist
-import { Subject } from 'rxjs/Rx';
+import { Injectable } from '@angular/core';
+import { Hotkey } from 'angular2-hotkeys';
+import { KeyboardBaseService } from './../../../shared/helper/keyServiceBase';
 @Injectable()
-export class InvoiceConfigKeyService implements OnDestroy {
-    public context: any;
-    public watchContext = new Subject<any>();
-
-    constructor(private _hotkeysService: HotkeysService) {
-        this.watchContext.subscribe(res => {
-            this.context = res;
-            this.initKey();
-        });
-    }
-
-    ngOnDestroy() {
-        this.resetKeys();
-    }
-
-    resetKeys() {
-        const keys = this.getKeys();
-        for (const key of keys) {
-            this._hotkeysService.remove(key);
+export class InvoiceConfigKeyService extends KeyboardBaseService {
+    keyConfig = {
+        before_edit: {
+            element: null,
+            focus: false,
         }
-    }
+    };
 
-    getKeys() {
-        return Array.from(this._hotkeysService.hotkeys);
+    saveKeys() {
+        this.keys = this.getKeys();
+        // this.context.data['tableKey'] = this.context.table.getKeys();
+        this.resetKeys();
+        // this.context.table.resetKeys();
     }
 
     initKey() {
-        this.resetKeys();
-        this._hotkeysService.add(new Hotkey('ctrl+f', (event: KeyboardEvent): any => {
-            event.preventDefault();
-            // this.context.tableService.searchAction();
-            event.returnValue = false;
-            return event;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Search'));
-        this._hotkeysService.add(new Hotkey('ctrl+r', (event: KeyboardEvent): any => {
-            event.preventDefault();
-            // this.context.tableService.resetAction(this.context.searchForm);
-            event.returnValue = false;
-            return event;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset'));
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+f1', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            (document.activeElement as HTMLElement).blur();
+            this.context.applyChaseOption = '1';
+            this.context.checkApplyChasing();
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Disable Chasing'));
 
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+f2', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            (document.activeElement as HTMLElement).blur();
+            this.context.applyChaseOption = '2';
+            this.context.checkApplyChasing();
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Apply For All Customer'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+f3', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            (document.activeElement as HTMLElement).blur();
+            this.context.invoiceForm.controls['beforeOn'].setValue(!this.context.invoiceForm.value['beforeOn']);
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Turn On/Off Before Due Date'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+f5', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            (document.activeElement as HTMLElement).blur();
+            this.context.invoiceForm.controls['onDueDateOn'].setValue(!this.context.invoiceForm.value['onDueDateOn']);
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Turn On/Off On Due Date'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+f6', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            (document.activeElement as HTMLElement).blur();
+            this.context.invoiceForm.controls['afterDueDateOn'].setValue(!this.context.invoiceForm.value['afterDueDateOn']);
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Turn On/Off After Due Date'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+f', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            (document.activeElement as HTMLElement).blur();
+            if (this.keyConfig.before_edit.element) {
+                this.keyConfig.before_edit.element.nativeElement.focus();
+            }
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Focus'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            (document.activeElement as HTMLElement).blur();
+            if (!this.context.isProcessingRequest) {
+                this.context.onSave();
+            }
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save'));
+
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+backspace', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            (document.activeElement as HTMLElement).blur();
+            this.context.router.navigate(['/admin-panel']);
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Cancel'));
     }
 }

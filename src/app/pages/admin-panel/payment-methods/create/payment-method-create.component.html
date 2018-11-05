@@ -1,6 +1,7 @@
 <div [@routerTransition]>
     <app-page-header *ngIf="!paymentMethodId" [heading]="'Add New Payment Method'" [icon]="'fa-th-list'"></app-page-header>
     <app-page-header *ngIf="paymentMethodId" [heading]="'Edit Payment Method'" [icon]="'fa-th-list'"></app-page-header>
+    <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
     <form [formGroup]="paymentForm">
         <div class="form-search full-width form-horizontal">
             <div class="row create-section">
@@ -9,7 +10,7 @@
                         <label>
                             <b>Select Payment Method Type (*)</b>
                         </label>
-                        <select class="form-control" formControlName="type" (change)="clearFieldWhenChangeType($event.target.value)">
+                        <select [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="type" class="form-control" formControlName="type" (change)="clearFieldWhenChangeType($event.target.value)">
                             <option value="null" disabled>--Select--</option>
                             <option *ngFor="let type of listMaster.paymentTypes" [value]="type.key">{{type.name}}</option>
                         </select>
@@ -245,10 +246,10 @@
     <div class="row">
         <div class="col-md-12 mg-top-15 text-center">
             <button class="btn btn-default" type="button" [routerLink]="['/admin-panel/payment-methods']">CANCEL</button>
-            <button class="btn btn-primary" type="button" (click)="savePaymentMethod()">
+            <button *ngIf="listMaster['permission'].create" class="btn btn-primary" type="button" (click)="savePaymentMethod()">
                 {{ paymentMethodId === null || paymentMethodId === undefined ?  'CREATE' : 'SAVE' }}
             </button>
-            <button *ngIf="this.paymentForm.value.type == 2 && this.paymentForm.value.processor_type"
+            <button *ngIf="this.paymentForm.value.type == 2 && this.paymentForm.value.processor_type" 
                 class="btn btn-success" type="button" (click)="testConnection()">TEST CONNECTION</button>
         </div>
     </div>

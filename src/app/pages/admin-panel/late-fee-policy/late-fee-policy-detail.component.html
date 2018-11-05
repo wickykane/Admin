@@ -1,7 +1,7 @@
 <div [@routerTransition]>
     <app-page-header [heading]="headerTitle" [icon]="'fa-th-list'" *ngIf="isCreate"></app-page-header>
     <app-page-header [heading]="headerTitle" [icon]="'fa-th-list'" *ngIf="!isCreate"></app-page-header>
-    <app-shortcut [listShortcut]='keyService.getKeys()' *ngIf="isView"></app-shortcut>
+    <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
     <form class="rma-page block" [formGroup]="generalForm">
         <div class="bd-example text-right mg-t-15">
             <button class="btn btn-outline-dark" [routerLink]="['/admin-panel/late-fee-policy']">Back To List</button>
@@ -59,7 +59,8 @@
                     </div>
                     <div class="card-body no-padding">
                         <div class="customer-content-toggle table-responsive list-customers mg-bt-15">
-                            <table class="table table-bordered table-order table-style table-bg">
+                            <table class="table table-bordered table-order table-style table-bg"
+                            cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                                 <thead>
                                     <tr>
                                         <th *ngIf="!isView && list.items.length > 0">
@@ -92,7 +93,7 @@
                                         <td>{{convertCustomerType(item.buyer_type)}}</td>
                                         <td>{{ item.code }}</td>
                                         <td>{{item.name}}</td>
-                                        <td *ngIf="!isView" class="text-center">
+                                        <td *ngIf="!isView " class="text-center">
                                             <a class="btn btn-default" title="Remove customer" (click)="deleteAction(item.id)">
                                                 <i class="fa fa-trash" aria-hidden="true"></i>
                                             </a>
@@ -172,8 +173,8 @@
             </div>
         </div>
         <div class="block-content block-content-full text-center" style="margin-top:15px;">
-            <button class="btn btn btn-outline-primary" (click)="payloadData()" [disabled]="!generalForm.valid || !isValidLateFeePolicy()" *ngIf="!isView">Save</button>
-            <button class="btn btn btn-outline-primary" (click)="editLateFeePolicy(generalForm.value['id'])" *ngIf="isView && (currentStatus != 2)">Edit</button>
+            <button class="btn btn btn-outline-primary" (click)="payloadData()" [disabled]="!generalForm.valid || !isValidLateFeePolicy()" *ngIf="!isView && listMaster['permission'].create">Save</button>
+            <button class="btn btn btn-outline-primary" (click)="editLateFeePolicy(generalForm.value['id'])" *ngIf="isView && (currentStatus != 2) && listMaster['permission'].edit">Edit</button>
             <button class="btn btn-default" type="button" (click)="backToList()">Cancel</button>
         </div>
     </form>

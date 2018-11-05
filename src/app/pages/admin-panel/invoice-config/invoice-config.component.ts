@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../router.animations';
 import { InvoiceConfigService } from './invoice-chasing-config.service';
@@ -21,6 +23,7 @@ export class InvoiceConfigComponent implements OnInit {
      *  Variable
      */
     public invoiceForm: FormGroup;
+    public applyForForm: FormGroup;
 
     public listMaster = {
         reminderOptions: [
@@ -75,13 +78,19 @@ export class InvoiceConfigComponent implements OnInit {
     public isProcessingRequest = false;
 
     constructor(
+        public router: Router,
         private cd: ChangeDetectorRef,
         private fb: FormBuilder,
         private toastr: ToastrService,
         private modalService: NgbModal,
+        private _hotkeysService: HotkeysService,
         private invoiceService: InvoiceConfigService,
         public keyService: InvoiceConfigKeyService
     ) {
+        this.applyForForm = fb.group({
+            disabled: [false],
+            all: [false]
+        });
         this.invoiceForm = fb.group({
             beforeOn: [false],
             beforeRemind: [0],
@@ -90,7 +99,7 @@ export class InvoiceConfigComponent implements OnInit {
             afterRemindFrequency: [null],
             afterRemindValue: [null]
         });
-        this.keyService.watchContext.next(this);
+        this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
 
     ngOnInit() {
@@ -117,13 +126,21 @@ export class InvoiceConfigComponent implements OnInit {
     }
 
     editEmailTemplate(duration) {
+        this.keyService.saveKeys();
         const modalRef = this.modalService.open(EmailTemplateModalContent, {
             size: 'lg'
         });
         modalRef.componentInstance.duration = duration;
         modalRef.result.then(res => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+            }
             // this.getInvoiceChaseInfo();
-        }, dismiss => {});
+        }, dismiss => {
+            if (this.keyService.keys.length > 0) {
+                this.keyService.reInitKey();
+            }
+        });
     }
 
     getInvoiceChaseInfo() {
@@ -136,6 +153,7 @@ export class InvoiceConfigComponent implements OnInit {
                     this.applyChaseOption = res.data.rows[index][
                         'config_value'
                     ].toString();
+                    this.checkApplyChasing();
                     // Before Due Date
                     index = res.data.rows.findIndex(item => item.config_key === 'before_due_date');
                     this.invoiceForm.controls['beforeOn'].setValue(
@@ -231,5 +249,21 @@ export class InvoiceConfigComponent implements OnInit {
                 this.isProcessingRequest = false;
             }, 1000);
         }
+    }
+
+    checkApplyChasing() {
+        if (this.applyChaseOption === '1') {
+            this.applyForForm.controls['disabled'].setValue(true);
+            this.applyForForm.controls['all'].setValue(false);
+        } else {
+            this.applyForForm.controls['disabled'].setValue(false);
+            this.applyForForm.controls['all'].setValue(true);
+        }
+    }
+
+    onChangeApplyFor(trueField, falseField) {
+        this.applyForForm.controls[trueField].setValue(true);
+        this.applyForForm.controls[falseField].setValue(false);
+        this.applyChaseOption = trueField === 'disabled' ? '1' : '2';
     }
 }

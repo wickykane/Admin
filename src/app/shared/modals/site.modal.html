@@ -7,6 +7,7 @@
 <div class="modal-body">
     <!-- <fieldset class="custom-border">
         <legend class="custom-border">GENERAL INFORMATION</legend> -->
+    <app-shortcut [listShortcut]='_hotkeysService.hotkeys'></app-shortcut>
     <section class="rma-page block main-container block-order">
         <div class="row block-info">
             <div class="col-md-12">
@@ -32,7 +33,8 @@
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class="col-sm-7">
-                                                    <input type="text" class="form-control" name="code" [disabled]="true" formControlName="site_code">
+                                                    <input [keyConfig]="data['key_config']" appKeyNavigate="code"
+                                                        type="text" class="form-control" name="code" [disabled]="true" formControlName="site_code">
                                                 </div>
                                             </div>
                                             <div class="w-100"></div>
@@ -151,17 +153,19 @@
                         <span *ngIf="addresses.length > 1">Records</span>
                         <span *ngIf="addresses.length <= 1">Record</span>
 
-                        <div class="wrap-keyboard right-toggle-button text-danger mr-2 wrap-icon" (click)="flagAddress = !flagAddress">
+                        <div class="wrap-keyboard right-toggle-button text-danger mr-2 wrap-icon"
+                            (click)="flagAddress = !flagAddress; flagAddress && (flagContact = false)">
                             <span class="fa" [ngClass]="{'fa-minus': flagAddress,'fa-plus': !flagAddress}"></span>
                         </div>
                     </div>
                     <div class="card-body no-padding">
                         <div *ngIf="flagAddress">
-                            <div class="table-responsive list">
-                                <table class="table table-bordered table-order">
+                            <div class="table-responsive list table-fixed-header">
+                                <table class="table table-bordered table-order" #addressTableModal cdArrowTable
+                                    [collection]="addresses" [(selectedIndex)]="selectedAddressIndex">
                                     <thead class="bg-white">
                                         <tr>
-                                            <th> No </th>
+                                            <th class="tb-w-30"> No </th>
                                             <th> Type</th>
                                             <th> Name
                                                 <span class="text-danger">(*)</span>
@@ -182,13 +186,13 @@
                                             <th> Zip Code
                                                 <span class="text-danger">(*)</span>
                                             </th>
-                                            <th>Default</th>
-                                            <th> Action </th>
+                                            <th class="tb-w-50">Default</th>
+                                            <th class="tb-w-70"> Action </th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr *ngFor="let item of addresses; let i = index">
-                                            <td>{{i+1}}</td>
+                                    <tbody [ngClass]="{'limit-height': addresses.length && addresses.length > 5}">
+                                        <tr *ngFor="let item of addresses; let i = index" [ngClass]="{'row-selected': i == selectedAddressIndex}">
+                                            <td class="tb-w-30">{{i+1}}</td>
                                             <td>
                                                 <select class="form-control" name="type" (change)="checkIsDefault($event, i);updatePayment(item.type);checkAddress()" [(ngModel)]="item.type">
                                                     <option value="null" selected="true">--Select--</option>
@@ -222,18 +226,18 @@
                                             <td>
                                                 <input type="text" class="form-control" name="zip_code" (change)="updatePayment(item.type)" [(ngModel)]="item.zip_code">
                                             </td>
-                                            <td>
+                                            <td class="text-center tb-w-50">
                                                 <input type="checkbox" name="is_default" (change)="checkIsDefault($event, i);updatePayment(item.type)" [(ngModel)]="item.is_default"
                                                     [disabled]="item.type==3 || item.type==4">
                                             </td>
-                                            <td>
-                                                <button type="button" [disabled]="item.type==3||item.type==4" [hidden]="item.hidden!==undefined?item.hidden:true" class="btn btn-default"
-                                                    (click)="removeAddress(i)">
+                                            <td class="text-center tb-w-70">
+                                                <a href="javascript:void(0)" [hidden]="item.hidden!==undefined?item.hidden:true" class="btn btn-default"
+                                                    (click)="item.type !==3 && item.type !==4 && removeAddress(i)">
                                                     <i class="fa fa-times" aria-hidden="true"></i>
-                                                </button>
-                                                <button type="button" class="btn btn-default" (click)="dupAddress(item.type)">
+                                                </a>
+                                                <a href="javascript:void(0)" class="btn btn-default" (click)="dupAddress(item.type)">
                                                     <i class="fa fa-clone" aria-hidden="true"></i>
-                                                </button>
+                                                </a>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -495,17 +499,19 @@
                         <strong class="text-danger">{{contacts.length}}</strong>
                         <span *ngIf="contacts.length > 1">Records</span>
                         <span *ngIf="contacts.length <= 1">Record</span>
-                        <div class="wrap-keyboard right-toggle-button text-danger mr-2 wrap-icon" (click)="flagContact = !flagContact">
+                        <div class="wrap-keyboard right-toggle-button text-danger mr-2 wrap-icon"
+                            (click)="flagContact = !flagContact; flagContact && (flagAddress = false)">
                             <span class="fa" [ngClass]="{'fa-minus': flagContact,'fa-plus': !flagContact}"></span>
                         </div>
                     </div>
                     <div class="card-body no-padding">
                         <div *ngIf="flagContact">
-                            <div class="table-responsive list">
-                                <table class="table table-bordered table-order">
+                            <div class="table-responsive list table-fixed-header">
+                                <table class="table table-bordered table-order" cdArrowTable #contactTableModal
+                                    [collection]="contacts" [(selectedIndex)]="selectedContactIndex">
                                     <thead class="bg-white">
                                         <tr>
-                                            <th> No </th>
+                                            <th class="tb-w-30"> No </th>
                                             <th> Name
                                                 <span class="text-danger">(*)</span>
                                             </th>
@@ -517,12 +523,12 @@
                                             </th>
                                             <th> Username</th>
                                             <th> Password </th>
-                                            <th> Action </th>
+                                            <th class="tb-w-50"> Action </th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr *ngFor="let item of contacts; let i = index">
-                                            <td>{{i+1}}</td>
+                                    <tbody [ngClass]="{'limit-height': contacts.length && contacts.length > 5}">
+                                        <tr *ngFor="let item of contacts; let i = index" [ngClass]="{'row-selected': i == selectedContactIndex}">
+                                            <td class="tb-w-30">{{i+1}}</td>
                                             <td>
                                                 <input type="text" class="form-control" name="full_name" [(ngModel)]="item.name">
                                             </td>
@@ -544,10 +550,10 @@
                                             <td>
                                                 <input type="password" class="form-control" name="pwd" [(ngModel)]="item.password">
                                             </td>
-                                            <td>
-                                                <button type="button" class="btn btn-default" (click)="removeContact(i)">
+                                            <td class="text-center tb-w-50">
+                                                <a href="javascript:void(0)" class="btn btn-default" (click)="removeContact(i)">
                                                     <i class="fa fa-times" aria-hidden="true"></i>
-                                                </button>
+                                                </a>
                                             </td>
                                         </tr>
                                     </tbody>

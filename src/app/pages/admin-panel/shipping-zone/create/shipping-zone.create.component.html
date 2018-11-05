@@ -1,6 +1,6 @@
 <div [@routerTransition]>
         <app-page-header [heading]="'CREATE NEW SHIPPING ZONE'"></app-page-header>
-        <!-- <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut> -->
+        <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut>
     
         <section class="rma-page block main-container block-order">
             <div class="row block-info">
@@ -31,7 +31,7 @@
                                                 </label>
     
                                                 <div class="col-7">
-                                                    <input type="text" class="form-control" formControlName="name" maxlength="200" style="width: 100%">
+                                                    <input [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="name" type="text" class="form-control" formControlName="name" maxlength="200" style="width: 100%">
                                                 </div>
                                             </div>
                                         </div>
@@ -74,7 +74,7 @@
                                                 </label>
                                                 <div class="col-7">
                                                     <form [formGroup]="generalForm">
-                                                        <input type="text" class="form-control" style="width: 100%" placeholder="Start searching for a country" (ngModelChange)="filterCountry($event)"
+                                                        <input type="text"  [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="filter" class="form-control" style="width: 100%" placeholder="Start searching for a country" (ngModelChange)="filterCountry($event)"
                                                             [ngModel]="countryFilter" [ngModelOptions]="{standalone: true}">
                                                     </form>
                                                 </div>
@@ -157,18 +157,18 @@
                         <div class="card-header">
                             <strong>SETUP SHIPPING QUOTES</strong>
                         </div>
-                        <div class="card-body">
-                        <div class="col-md-12" *ngFor="let item of listShipping">
+                        <div class="card-body" tabIndex="1" #tableDiv>
+                        <div class="col-md-12" *ngFor="let item of listShipping;let i1 = index" cdArrowTable [collection]="item.data" [(selectedIndex)]="selectedIndex[i1]">
                             <div class="row">
                                 <div class="col-md-6">
                                     <h6 class="title-border text-blue" translate style="margin-top: 10px"><i class="fa fa-caret-right"></i> {{item.name}}</h6>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-12">
-                                    <div class="header">
+                                <div class="col-md-12" >
+                                    <div class="header"  >
                                         <div class="col-12 title mb-2 border-bottom-custom" *ngFor="let subItem of item.data;trackBy: trackByFn;let i2 =index">
-                                            <div class="form-group row">
+                                            <div class="form-group row" [ngClass]="{'row-selected': i2 == selectedIndex[i1]}">
                                                 <label class="control-label col-4" for="shipping_to" translate><strong>{{subItem.name}}</strong>
     
                                                 </label>

@@ -1,0 +1,138 @@
+<div class="block anchor-scroll block-order">
+        <div class="block-content pd-bottom bg-gray-light short-width">
+                <div class="row px-3" style="background-color: white">
+                    <app-shortcut [listShortcut]='_hotkeysServiceQuote.hotkeys'></app-shortcut>
+                </div>
+                <div class="row">                   
+                    <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
+                        <div class="block-search">
+                            <label for="sale_quote_num" class="control-label">Sales Quote #</label>
+                            <input type="text" name="sale_quote_num" formControlName="quote_no" class="form-control" placeholder="" [keyConfig]="data['key_config']" appKeyNavigate="quote_no">
+                        </div>
+                        <div class="block-search">
+                            <label for="sts" class="control-label">Status</label>
+                            <ng-select class="ng-select-filter" [multiple]="true" [items]="listMaster['listStatus']" bindLabel="name" bindValue="id" formControlName="sts">
+                            </ng-select>
+                        </div>
+                        <div class="block-search">
+                            <label for="buyer_name" class="control-label" translate>Customer</label>
+                            <input type="text" name="buyer_name" formControlName="buyer_name" class="form-control" placeholder="">
+                        </div>
+    
+                        <!-- <ng-container *ngIf="listMaster['listFilter'][0].value"> -->
+                        <div class="block-search">
+                            <label for="type" class="control-label" translate>Date Type</label>
+                            <select class="form-control" formControlName="date_type">
+                                    <option value="null" selected="true">--Select--</option>
+                                    <option *ngFor="let item of listMaster['dateType']" [ngValue]="item.id">{{item.name}}</option>
+                                </select>
+                        </div>
+                        <div class="block-search">
+                            <label for="" class="control-label" translate>From</label>
+                            <div class="date-group">
+                                <div clickOutside (clickOutside)="d1.close()" class="input-group">
+                                    <input [maxDate]="searchForm.value.date_to | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="date_from" ngbDatepicker #d1="ngbDatepicker">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
+                                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="block-search">
+                            <label for="" class="control-label" translate>To</label>
+                            <div class="date-group">
+                                <div clickOutside (clickOutside)="dt2.close()" class="input-group">
+                                    <input [minDate]="searchForm.value.date_from | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="date_to" ngbDatepicker #dt2="ngbDatepicker">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" (click)="dt2.toggle()" type="button">
+                                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- </ng-container> -->
+                    </form>
+                    <div class="block-btn-search">
+                        <label class="control-label">&nbsp;</label>
+                        <div class="group-btn-search">
+                            <!-- <button type="button" class="btn-default-custom" (click)="moreFilter()">More Filter</button>
+                                <div class="show-more" [hidden]="!onoffFilter">
+                                    <ul class="mt-2">
+                                        <li *ngFor="let item of listMaster['listFilter']; let i = index;">
+                                            <label for="{{i}}">
+                                                <input #inp type="checkbox" value="item.value" [(ngModel)]="item.value"> {{item.name}}
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </div> -->
+                            <button type="button" class="btn-default-custom" (click)="tableService.searchAction()">Search</button>
+                            <button type="button" class="btn-default-custom" (click)="tableService.resetAction(this.searchForm)">Reset</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    <div class="row mg-top-10">
+        <div class="col-12">
+            <div class="card no-border">
+                <div class="card-header">
+                    <strong>Line Items</strong>
+                </div>
+                <div class="card-body no-padding">
+                    <div class="scroll-container table-responsive list">
+                        <table class='table table-bordered table-order' cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
+                            <thead class="bg-white">
+                                <tr>                                  
+                                    <th>Quote No</th>
+                                    <th>Quote Date</th>
+                                    <th>Salesperson</th>
+                                    <th>Approver</th>
+                                    <th>Expiry date</th>
+                                    <th>Total Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of list.items; let i = index; " [ngClass]="{'row-selected': i == selectedIndex}">
+                                                                   
+                                    <td><a class="text-primary" [routerLink]="['/order-management/sale-quotation/detail',item.id]">{{ item.quote_no }}</a></td>
+                                    <td>{{ item.quote_date }}</td>
+                                    <td>{{ item.sale_person_name }}</td>
+                                    <td>{{ item.approver_name }}</td>
+                                    <td>{{ item.expire_dt }}</td>
+                                    <td>{{ item.total_price | currency }}</td>
+                                    <td>{{ item.status_name }}</td>
+                                </tr>
+                                <tr *ngIf="list.items.length == 0">
+                                    <td class="text-center" colspan="100%">No data.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row normal-pagination mg-top-10" *ngIf="list.items.length > 0">
+        <div class="col-md-6">
+            <div class="text-left">
+                <div class="col-md-6" style="padding-left: 0px;">
+                    <span style="float: left; padding-right: 10px;">{{list.items.length}}/{{tableService.pagination.total_record}} items </span>
+                    <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length" (change)="tableService.changeLength()">
+                        <option *ngFor="let option of tableService.itemPerPageOptions" [ngValue]="option">{{option}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="text-right">
+                <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length"
+                    [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page"
+                    [maxSize]="tableService.maxSize" [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+            </div>
+        </div>
+    </div>
+</div>

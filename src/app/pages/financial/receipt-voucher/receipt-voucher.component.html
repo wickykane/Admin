@@ -92,7 +92,7 @@
                 <div class="card no-border">
                     <div class="card-header">
                         <strong>Line Items</strong>
-                        <button [routerLink]="['create']" style="margin:0; float:right" class="btn btn-link"> <i class="fa fa-plus text-success"></i>
+                        <button *ngIf="listMaster['permission'].create" [routerLink]="['create']" style="margin:0; float:right" class="btn btn-link"> <i class="fa fa-plus text-success"></i>
                             Create Receipt Voucher</button>
                     </div>
                     <div class="card-body no-padding">
@@ -125,7 +125,7 @@
                                             </a> -->
                                         </td>
                                         <td>
-                                            <a class="text-primary" [routerLink]="['view', item.id]">{{item.cd}}</a>
+                                            <a *ngIf="listMaster['permission'].view" class="text-primary" [routerLink]="['view', item.id]">{{item.cd}}</a>
                                         </td>
                                         <td>{{item.company_name}}</td>
                                         <td>{{item.payment_date|date:'MM/dd/yyyy'}}</td>
