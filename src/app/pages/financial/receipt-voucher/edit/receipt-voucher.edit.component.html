@@ -112,8 +112,9 @@
                                                     </label>
                                                     <div class='col-6'>
                                                         <div class="input-group">
-                                                            <input numberDirective [isDecimal]="true" (changeValue)="updateTotal()" [min]="0" [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('price_received').errors?.required) || false   }" type="number" class="form-control"
-                                                                formControlName="price_received">
+                                                            <input numberDirective [isDecimal]="true" (blur)="fillAppliedAmountToAllItem()" [min]="0"
+                                                            [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('price_received').errors?.required) || false }"
+                                                            type="number" class="form-control" formControlName="price_received">
                                                             <div class="input-group-append">
                                                                 <span class="input-group-text" id="basic-addon2">$</span>
                                                             </div>
@@ -212,13 +213,13 @@
                             <table class="table table-bordered table-order" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                                 <thead>
                                     <tr>
-                                        <!-- <th>
+                                        <th>
                                             <label class="css-input css-checkbox css-checkbox-default">
                                                 <input class="cb-all" type="checkbox" [(ngModel)]="checkAllItem" (change)="checkAll($event)">
                                                 <span></span>
                                             </label>
-                                        </th> -->
-                                        <th translate>No.</th>
+                                        </th>
+                                        <!-- <th translate>No.</th> -->
                                         <th style="width:150px" translate>Document No</th>
                                         <th translate>Issue Date</th>
                                         <th translate>Due Date</th>
@@ -239,15 +240,15 @@
                                 <ng-container *ngIf="list['items'].length > 0">
                                     <tbody *ngFor="let item of list['items']; let $index = index;">
                                         <tr [ngClass]="{'row-selected': $index == selectedIndex}">
-                                            <!-- <td class="text-center">
+                                            <td class="text-center">
                                                 <label class="css-input css-checkbox css-checkbox-default">
-                                                    <input class="cb-element" type="checkbox" [(ngModel)]="item.is_checked" (change)="isAllChecked()">
+                                                    <input class="cb-element" type="checkbox" [(ngModel)]="item.is_checked" (change)="isAllChecked($index)">
                                                     <span></span>
                                                 </label>
-                                            </td> -->
-                                            <td>
-                                                {{$index + 1}}
                                             </td>
+                                            <!-- <td>
+                                                {{$index + 1}}
+                                            </td> -->
                                             <td><a class="text-primary" target="_blank" [routerLink]="[(item.doc_type == 1)?'/financial/invoice/view': '/financial/debit-memo/view', item.id || item.line_item_id]">{{item.code }}</a></td>
                                             <td>{{item.issue_date }}</td>
                                             <td>{{item.due_date }}</td>
@@ -262,8 +263,14 @@
                                             </td>
                                             <td>{{ (item.balance_price - item.applied_amt)| currency }}</td>
                                             <td>
-                                                <input (changeValue)='updateTotal(item)' [isDecimal]="true" numberDirective [min]="0" [max]="(item.balance_price > data['remain'] && !generalForm.value.electronic)? data['remain']: item.balance_price" class="form-control input-sm" type="number" [(ngModel)]="item.applied_amt">
+                                                <input (blur)='fillAppliedAmountToAllItem($index)' [isDecimal]="true" numberDirective [min]="0"
+                                                class="form-control input-sm" type="number" [(ngModel)]="item.applied_amt" [disabled]="!item.is_checked">
                                             </td>
+                                            <!-- <td>
+                                                <input (changeValue)='updateTotal(item)' [isDecimal]="true" numberDirective [min]="0"
+                                                [max]="(item.balance_price > data['remain'] && !generalForm.value.electronic)? data['remain']: item.balance_price"
+                                                class="form-control input-sm" type="number" [(ngModel)]="item.applied_amt">
+                                            </td> -->
                                         </tr>
                                     </tbody>
                                     <tbody>
