@@ -190,9 +190,9 @@ export class RmaCreateComponent implements OnInit {
 
         this.navigateData = this.router.getNavigatedData() || [];
         if (this.navigateData.length > 0) {
-            this.generalForm.patchValue({ company_id: this.navigateData[0]['buyer_id']});
+            this.generalForm.patchValue({ company_id: this.navigateData[0]['buyer_id'] });
             this.changeCustomer();
-            this.generalForm.patchValue({ order_id: this.navigateData[0]['order_id']});
+            this.generalForm.patchValue({ order_id: this.navigateData[0]['order_id'] });
             this.changeSalesOrder();
 
             const p = { page: this.data['page'], length: 100 };
@@ -215,7 +215,7 @@ export class RmaCreateComponent implements OnInit {
      * Mater Data
      */
     refresh() {
-         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
+        if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
 
     selectData(data) { }
@@ -305,7 +305,9 @@ export class RmaCreateComponent implements OnInit {
         const company_id = this.generalForm.value.company_id;
         if (company_id) {
             this.getDetailCustomerById(company_id);
-            this.getListOrder(company_id);
+            if (this.generalForm.value.order_return_type) {
+                this.getListOrder();
+            }
         }
 
     }
@@ -349,34 +351,38 @@ export class RmaCreateComponent implements OnInit {
     }
 
     checkDateTime() {
-      const params = {
-          order_id: this.generalForm.value.order_id,
-          invoice_id: this.generalForm.value.invoice_id || null,
-          request_date: moment(this.generalForm.value.request_date).format('MM/DD/YYYY')
-      };
+        const params = {
+            order_id: this.generalForm.value.order_id,
+            invoice_id: this.generalForm.value.invoice_id || null,
+            request_date: moment(this.generalForm.value.request_date).format('MM/DD/YYYY')
+        };
 
-      this.service.checkDateTime(params).subscribe(
-          res => {
-              try {
-                  this.generalForm.patchValue({ return_time: res.data.return_time, delivery_date: res.data.delivery_date });
-                  this.refresh();
-              } catch (err) {
-                  console.log(err);
-              }
-          }, err => {
-              console.log(err);
-          }
-      );
+        this.service.checkDateTime(params).subscribe(
+            res => {
+                try {
+                    this.generalForm.patchValue({ return_time: res.data.return_time, delivery_date: res.data.delivery_date });
+                    this.refresh();
+                } catch (err) {
+                    console.log(err);
+                }
+            }, err => {
+                console.log(err);
+            }
+        );
     }
 
-    getListOrder(company_id) {
-        this.service.listOrderByCompany(company_id).subscribe(
+    getListOrder() {
+        const params = {
+            company_id: this.generalForm.value.company_id,
+            return_type: this.generalForm.value.order_return_type
+        };
+        this.service.listOrderByCompany(params).subscribe(
             res => {
                 try {
                     this.listMaster['list_order'] = res.data;
                     // if (this.listMaster['list_order'].length <= 0) {
-                        this.generalForm.patchValue({'order_id': null});
-                        this.generalForm.patchValue({'invoice_id': null});
+                    this.generalForm.patchValue({ 'order_id': null });
+                    this.generalForm.patchValue({ 'invoice_id': null });
                     // }
                     this.refresh();
                 } catch (err) {
@@ -395,10 +401,10 @@ export class RmaCreateComponent implements OnInit {
                     this.listMaster['list_invoice'] = res.data;
 
                     if (this.listMaster['list_invoice'].length > 0) {
-                        this.generalForm.patchValue({'invoice_id': this.listMaster['list_invoice'][0]['id']});
+                        this.generalForm.patchValue({ 'invoice_id': this.listMaster['list_invoice'][0]['id'] });
                         this.checkInvoice();
                     } else {
-                      this.generalForm.patchValue({'invoice_id': null});
+                        this.generalForm.patchValue({ 'invoice_id': null });
                     }
                     this.refresh();
                 } catch (err) {
@@ -453,7 +459,9 @@ export class RmaCreateComponent implements OnInit {
     }
 
     changeType() {
-
+      if (this.generalForm.value.company_id) {
+          this.getListOrder();
+      }
     }
 
     selectAddress(type, flag?) {

@@ -44,7 +44,7 @@ export class MasterGuard implements CanActivate {
     private config = {
         view: ['view', 'detail'],
         edit: ['edit'],
-        create: ['create'],
+        create: ['create']
     };
 
     checkPermission(route) {

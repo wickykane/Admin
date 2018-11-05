@@ -74,17 +74,17 @@ export class CustomerService {
     }
 
     getListQuote(id, params) {
-        const url = 'buyer/sale-quote/' + id;
+        const url = 'buyer/' + id + '/sale-quotes' ;
         return this.API.get(url, params);
     }
 
     getListSO(id, params) {
-        const url = 'buyer/sales-orders/' + id;
+        const url = 'buyer/' + id + '/sale-orders';
         return this.API.get(url, params);
     }
 
     getListInvoice(id, params) {
-        const url = 'buyer/invoice/' + id;
+        const url = 'buyer/' + id + '/invoices';
         return this.API.get(url, params);
     }
 
@@ -98,9 +98,9 @@ export class CustomerService {
         return this.API.get(url, params);
     }
 
-    exportPayment(id, params) {
-        const url = 'buyer/payment/' + id + '?export=1';
-        return this.API.get(url, params);
+    exportReceiptVoucher(id) {
+        const url = 'buyer/export-receipt-voucher/' + id;
+        return this.API.get(url);
     }
 
     getListRMA(id, params) {
@@ -112,9 +112,17 @@ export class CustomerService {
         const url = 'buyer/return-order/' + id + '?export=1';
         return this.API.get(url, params);
     }
-
+    exportOrder(id) {
+        const url = 'buyer/export-order/' + id;
+        return this.API.get(url);
+    }
     getListAccount(params) {
         const url = 'buyer/index';
+        return this.API.get(url, params);
+    }
+
+    getListDebit(id, params) {
+        const url =  'buyer/' + id + '/debit-memos';
         return this.API.get(url, params);
     }
 
@@ -196,8 +204,8 @@ export class CustomerService {
         const url = 'buyer/credit-memo/' + id;
         return this.API.get(url, params);
     }
-    exportCreditMemo(id, params) {
-        const url = 'buyer/credit-memo/' + id + '?export=1';
-        return this.API.get(url, params);
+    exportCreditMemo(id) {
+        const url = 'buyer/export-credit-memo/' + id;
+        return this.API.get(url);
     }
 }

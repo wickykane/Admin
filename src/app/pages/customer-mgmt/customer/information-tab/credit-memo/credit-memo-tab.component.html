@@ -78,6 +78,7 @@
                             [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                             <thead class="bg-white">
                                 <tr>
+                                    <th style="width:50px"></th>
                                     <th translate>Credit Memo No</th>
                                     <th translate translate>Issue Date</th>
                                     <th translate>Customer</th>
@@ -92,6 +93,10 @@
                             </thead>
                             <tbody>
                                 <tr *ngFor="let item of list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
+                                    <td class="text-center" style="width:50px">
+                                        <img *ngIf="!item.qbo_sync" src="assets/img/qbicon-gray.png" width="20px" height="20px">
+                                        <img *ngIf="item.qbo_sync" src="assets/img/qbicons.png" width="20px" height="20px">
+                                    </td>
                                     <td>
                                         <a class="text-primary" [routerLink]="['/financial/credit-memo/view', item.id]">{{item.cd}}</a>
                                     </td>

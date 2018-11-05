@@ -1,8 +1,10 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
-import { cdArrowTable } from '../../../../../shared';
+import { environment } from '../../../../../../environments/environment';
+import { cdArrowTable, JwtService } from '../../../../../shared';
 import { Helper } from '../../../../../shared/helper/common.helper';
+import { FinancialService } from '../../../../financial/financial.service';
 import { CustomerService } from '../../../customer.service';
 import { CustomerKeyViewService } from '../../view/keys.view.control';
 import { TableService } from './../../../../../services/table.service';
@@ -11,7 +13,7 @@ import { TableService } from './../../../../../services/table.service';
     selector: 'app-customer-invoice-tab',
     templateUrl: './invoice-tab.component.html',
     styleUrls: ['../information-tab.component.scss'],
-    providers: [HotkeysService, CustomerKeyViewService, HotkeysService],
+    providers: [HotkeysService, CustomerKeyViewService, HotkeysService, FinancialService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomerInvoiceTabComponent implements OnInit, OnDestroy {
@@ -36,15 +38,28 @@ export class CustomerInvoiceTabComponent implements OnInit, OnDestroy {
     };
 
     searchForm: FormGroup;
+    public statusConfig = {
+        'New': { color: 'blue', name: 'New', id: 1, img: './assets/images/icon/new.png' },
+        'Submitted': { color: 'texas-rose', name: 'Submited', id: 2 },
+        // 'Rejected': { color: 'magenta', name: 'Rejected', id: 3 },
+        'Approved': { color: 'strong-green', name: 'Approved', id: 4, img: './assets/images/icon/approved.png' },
+        'Partially Paid': { color: 'darkblue', name: 'Partially Paid', id: 5, img: './assets/images/icon/partial_delivered.png' },
+        'Fully Paid': { color: 'lemon', name: 'Fully Paid', id: 6, img: './assets/images/icon/full_delivered.png' },
+        'Canceled': { color: 'red', name: 'Canceled', id: 7, img: './assets/images/icon/cancel.png' },
+        'Overdue': { color: 'bright-grey', name: 'Overdue', id: 8 },
+        'Revised': { color: 'texas-rose', name: 'Revised', id: 11 },
+    };
     @ViewChild(cdArrowTable) table: cdArrowTable;
-    @ViewChild('tabSet') tabSet;
+    // @ViewChild('tabSet') tabSet;
     constructor(
         public fb: FormBuilder,
         private vRef: ViewContainerRef,
         public tableService: TableService,
         public keyService: CustomerKeyViewService,
+        private financialService: FinancialService,
         private customerService: CustomerService,
         public _hotkeysServiceInvoice: HotkeysService,
+        private jwtService: JwtService,
         private helper: Helper,
         private cd: ChangeDetectorRef) {
 
@@ -68,10 +83,20 @@ export class CustomerInvoiceTabComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+    this.listMaster['listFilter'] = [{ value: false, name: 'Date Filter' }];
     this.listMaster['dateType'] = [{ id: 0, name: 'Invoice Date' }, { id: 1, name: 'Due Date' }];
-    this.getList();
+    this.listMaster['inv_type'] = [
+        { id: 1, name: 'Sales Order' }
+    ];
+    this.getCountStatus();
+    this.getListStatus();
     }
-
+    getListStatus() {
+        this.financialService.getInvoiceStatus().subscribe(res => {
+            this.listMaster['status'] = res.data.status;
+            this.refresh();
+        });
+    }
     /**
      * Internal Function
      */
@@ -89,33 +114,66 @@ export class CustomerInvoiceTabComponent implements OnInit, OnDestroy {
             'inv_due_dt_to': null
         });
     }
-    // selectTable() {
-    //     this.selectedIndex = 0;
-    //     this.table.element.nativeElement.querySelector('td').focus();
-    // }
+
     getList() {
-        const params = {...this.tableService.getParams(), ...this.searchForm.value};
-        Object.keys(params).forEach((key) => (params[key] === null || params[key] ===  '') && delete params[key]);
+        const params = { ...this.tableService.getParams(), ...this.searchForm.value, ...this.listMaster['filter'] || {} };
+
+        Object.keys(params).forEach((key) => {
+            if (params[key] instanceof Array) {
+                params[key] = params[key].join(',');
+            }
+            // tslint:disable-next-line:no-unused-expression
+            (params[key] === null || params[key] === '') && delete params[key];
+        });
+
+        params.order = 'id';
+        params.sort = 'desc';
 
         this.customerService.getListInvoice(this._customerId, params).subscribe(res => {
             try {
-                if (this.keyService.keys.length > 0) {
-                    this.keyService.reInitKey();
-                    this.table.reInitKey(this.data['tableKey']);
-                }
                 this.list.items = res.data.rows;
                 this.tableService.matchPagingOption(res.data);
                 this.refresh();
             } catch (e) {
                 console.log(e);
             }
-        }, dismiss => {
-            if (this.keyService.keys.length > 0) {
-                this.keyService.reInitKey();
-                this.table.reInitKey(this.data['tableKey']);
-            }
-         });
-        this.refresh();
+        });
+    }
+
+    getCountStatus() {
+        this.financialService.countInvoiceStatus().subscribe(res => {
+            res.data.map(item => {
+                if (this.statusConfig[item.name]) {
+                    this.statusConfig[item.name].count = item.count;
+                    this.statusConfig[item.name].status = this.statusConfig[item.name].id;
+                }
+            });
+            this.listMaster['count-status'] = Object.keys(this.statusConfig).map(key => {
+                return this.statusConfig[key];
+            });
+            this.refresh();
+        });
+    }
+    convertStatus(id, key) {
+        const stt = (this.listMaster[key] || []).find(item => item.id === id) || {};
+        return stt.name;
+    }
+
+    exportData() {
+        const anchor = document.createElement('a');
+        const path = 'buyer/export-invoice/';
+        const file = `${environment.api_url}${path}${this._customerId}`;
+        const headers = new Headers();
+        headers.append('Authorization', 'Bearer ' + this.jwtService.getToken());
+        fetch(file, { headers })
+            .then(response => response.blob())
+            .then(blobby => {
+                const objectUrl = window.URL.createObjectURL(blobby);
+            anchor.href = objectUrl;
+            anchor.download = 'invoices.xls';
+            anchor.click();
+            window.URL.revokeObjectURL(objectUrl);
+        });
     }
     selectTable() {
         this.selectedIndex = 0;
@@ -155,6 +213,11 @@ export class CustomerInvoiceTabComponent implements OnInit, OnDestroy {
             this.tableService.resetAction(this.searchForm);
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Reset'));
+        this._hotkeysServiceInvoice.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+x', (event: KeyboardEvent): boolean => {
+            event.preventDefault();
+            this.exportData();
+            return;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Export'));
         this._hotkeysServiceInvoice.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+t', (event: KeyboardEvent): boolean => {
             event.preventDefault();
             this.selectTable();
@@ -170,7 +233,7 @@ export class CustomerInvoiceTabComponent implements OnInit, OnDestroy {
             return;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Previous page'));
 
-        this._hotkeysServiceInvoice.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+d', (event: KeyboardEvent): boolean => {
+        this._hotkeysServiceInvoice.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+y', (event: KeyboardEvent): boolean => {
             this.tableService.pagination.page++;
             if (this.tableService.pagination.page > this.tableService.pagination.total_page) {
                 this.tableService.pagination.page = this.tableService.pagination.total_page;

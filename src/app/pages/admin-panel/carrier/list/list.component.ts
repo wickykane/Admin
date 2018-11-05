@@ -10,6 +10,7 @@ import { cdArrowTable } from '../../../../shared';
 import { CarrierService } from '../carrier.service';
 import {CarrierKeyService} from './keys.control';
 
+import { StorageService } from '../../../../services/storage.service';
 @Component({
     selector: 'app-carrier-list',
     templateUrl: './list.component.html',
@@ -37,6 +38,7 @@ export class ListComponent implements OnInit {
         public tableService: TableService,
         private _hotkeysService: HotkeysService,
         public keyService: CarrierKeyService,
+        private storage: StorageService,
         private cs: CarrierService) {
 
         this.searchForm = fb.group({
@@ -48,6 +50,7 @@ export class ListComponent implements OnInit {
         this.tableService.getListFnName = 'getList';
         this.tableService.context = this;
         this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
     }
 
     ngOnInit() {
@@ -72,6 +75,8 @@ export class ListComponent implements OnInit {
 
     selectTable() {
         this.selectedIndex = 0;
-        this.table.element.nativeElement.querySelector('td a').focus();
+        if (this.table.element.nativeElement.querySelector('td a')) {
+            this.table.element.nativeElement.querySelector('td a').focus();
+        }
     }
 }

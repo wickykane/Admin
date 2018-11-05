@@ -10,6 +10,7 @@ import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
 import { PayTermKeyService } from './keys.control';
 import { PaymentTermService } from './payterm.service';
 
+import { StorageService } from '../../../services/storage.service';
 import { cdArrowTable } from '../../../shared';
 
 @Component({
@@ -45,6 +46,7 @@ export class PaymentTermComponent implements OnInit {
     public keyService: PayTermKeyService,
     private _hotkeysService: HotkeysService,
     private modalService: NgbModal,
+    private storage: StorageService,
     private toastr: ToastrService) {
     this.searchForm = fb.group({
       'ac': [null],
@@ -58,6 +60,7 @@ export class PaymentTermComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
     this.listMaster['status'] = [{ key: '0', value: 'In Active' }, { key: '1', value: 'Active' }];
     this.getList();
   }
@@ -120,6 +123,8 @@ export class PaymentTermComponent implements OnInit {
 
     selectTable() {
         this.selectedIndex = 0;
-        this.table.element.nativeElement.querySelector('td a').focus();
+        if (this.table.element.nativeElement.querySelector('td a')) {
+            this.table.element.nativeElement.querySelector('td a').focus();
+        }
     }
 }

@@ -70,6 +70,7 @@
                                 </div> -->
                             <button type="button" class="btn-default-custom" (click)="tableService.searchAction()">Search</button>
                             <button type="button" class="btn-default-custom" (click)="tableService.resetAction(this.searchForm)">Reset</button>
+                            <button type="button" class="btn-default-custom" (click)="exportData()">Export</button>
                         </div>
                     </div>
                 </div>
@@ -85,27 +86,52 @@
                         <table class='table table-bordered table-order' cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                             <thead class="bg-white">
                                 <tr>                                  
-                                    <th>Quote No</th>
-                                    <th>Quote Date</th>
-                                    <th>Salesperson</th>
-                                    <th>Approver</th>
-                                    <th>Expiry date</th>
-                                    <th>Total Amount</th>
-                                    <th>Status</th>
+                                    <th translate>Sales Quote #</th>
+                                    <th translate>Customer</th>
+                                    <th translate>Salesperson</th>
+                                    <th translate>Approver</th>
+                                    <th class="text-center" translate>Quote date</th>
+                                    <th class="text-center" translate>Expiry date</th>
+                                    <th class="text-center" translate>Total</th>
+                                    <th class="text-center" translate>Status</th>
+                                    <th class="text-center" translate>Last Update On</th>
+                                    <th class="text-center" translate>Last Update By</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let item of list.items; let i = index; " [ngClass]="{'row-selected': i == selectedIndex}">
                                                                    
                                     <td><a class="text-primary" [routerLink]="['/order-management/sale-quotation/detail',item.id]">{{ item.quote_no }}</a></td>
-                                    <td>{{ item.quote_date }}</td>
-                                    <td>{{ item.sale_person_name }}</td>
-                                    <td>{{ item.approver_name }}</td>
-                                    <td>{{ item.expire_dt }}</td>
-                                    <td>{{ item.total_price | currency }}</td>
-                                    <td>{{ item.status_name }}</td>
-                                </tr>
-                                <tr *ngIf="list.items.length == 0">
+                                    <td>{{item.buyer_name}}</td>
+                                    <td class="text-center">{{item.sale_person_name}}</td>
+                                    <td class="text-center">{{item.approver_name}}</td>
+                                    <td class="text-center">{{item.quote_date | date:'MM/dd/yyyy' }}</td>
+                                    <td class="text-center">
+                                        <span ng-if="item.expiry_date!=null">{{item.expire_dt | date:'MM/dd/yyyy' }}</span>
+                                    </td>
+                                    <td class="text-center">
+                                        {{item.total_price | currency}}
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge badge-info bg-blue" *ngIf="item.sts_code == 'NW'">{{item.sts}}</span>
+                                        <span class="badge badge-warning bg-texas-rose" *ngIf="item.sts_code == 'SM'">{{item.sts}}</span>
+                                        <span class="badge badge-danger bg-magenta" *ngIf="item.sts_code == 'RM'">{{item.sts}}</span>
+                                        <span class="badge badge-success bg-strong-green" *ngIf="item.sts_code == 'AM'">{{item.sts}}</span>
+                                        <span class="badge badge-danger bg-red" *ngIf="item.sts_code == 'CC'">{{item.sts}}</span>
+                                        <span class="badge badge-primary bg-lemon" *ngIf="item.sts_code == 'SC'">{{item.sts}}</span>
+                                        <span class="badge badge-primary" *ngIf="item.sts_code == 'RO'">{{item.sts}}</span>
+                                        <span class="badge badge-primary bg-darkblue" *ngIf="item.sts_code == 'IU'">{{item.sts}}</span>
+                                        <span class="badge badge-primary bg-bright-grey" *ngIf="item.sts_code == 'EX'">{{item.sts}}</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span ng-if="item.expiry_date!=null">{{item.last_update_on | date:'MM/dd/yyyy' }}</span>
+                                    </td> <td class="text-center">
+                                        <span ng-if="item.expiry_date!=null">{{item.last_update_by}}</span>
+                                    </td>
+                                </tr>                                
+                            </tbody>
+                            <tbody *ngIf="list.items.length == 0">
+                                <tr >
                                     <td class="text-center" colspan="100%">No data.</td>
                                 </tr>
                             </tbody>

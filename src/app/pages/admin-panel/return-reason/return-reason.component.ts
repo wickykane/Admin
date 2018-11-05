@@ -10,6 +10,7 @@ import { ConfirmModalContent } from '../../../shared/modals/confirm.modal';
 import { ReturnReasonKeyService } from './keys.control';
 import { ReturnReasonService } from './return-reason.service';
 
+import { StorageService } from '../../../services/storage.service';
 import { cdArrowTable } from '../../../shared';
 @Component({
   selector: 'app-return-reason',
@@ -43,6 +44,7 @@ export class ReturnReasonComponent implements OnInit {
     private _hotkeysService: HotkeysService,
     public keyService: ReturnReasonKeyService,
     private modalService: NgbModal,
+    private storage: StorageService,
     private toastr: ToastrService) {
     this.searchForm = fb.group({
       'cd': [null],
@@ -59,6 +61,7 @@ export class ReturnReasonComponent implements OnInit {
 
 
   ngOnInit() {
+    this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
     this.listMaster['status'] = [{ key: 'IA', value: 'In Active' }, { key: 'AT', value: 'Active' }];
     this.listMaster['Reason'] = [{ key: '0', value: 'No' }, { key: '1', value: 'Yes' }];
     this.getList();
@@ -123,6 +126,8 @@ export class ReturnReasonComponent implements OnInit {
 
     selectTable() {
         this.selectedIndex = 0;
-        this.table.element.nativeElement.querySelector('td a').focus();
+        if (this.table.element.nativeElement.querySelector('td a')) {
+            this.table.element.nativeElement.querySelector('td a').focus();
+        }
     }
 }

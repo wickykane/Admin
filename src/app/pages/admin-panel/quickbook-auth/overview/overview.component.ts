@@ -6,6 +6,7 @@ import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
 
+import { StorageService } from '../../../../services/storage.service';
 import { QuickbookService } from '../quickbook.service';
 import { QuickbookKeyService } from './keys.control';
 
@@ -33,6 +34,7 @@ export class QuickbookOverviewComponent implements OnInit {
         auth_url: '',
         state: ''
     };
+    public listMaster = {};
 
     constructor(
         public router: Router,
@@ -41,7 +43,8 @@ export class QuickbookOverviewComponent implements OnInit {
         public ngbModal: NgbModal,
         private _hotkeysService: HotkeysService,
         public keyService: QuickbookKeyService,
-        public quickbookService: QuickbookService
+        public quickbookService: QuickbookService,
+        private storage: StorageService
     ) {
         this.transactionTypes = [
             { type: 'Invoice', time: 'Immediate'},
@@ -54,6 +57,7 @@ export class QuickbookOverviewComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
         this.getSettingInfo();
         this.authorInfo = {
             code: this.route.snapshot.queryParams['code'],

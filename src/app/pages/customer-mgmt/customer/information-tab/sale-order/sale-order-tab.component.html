@@ -76,6 +76,7 @@
                 <div class="group-btn-search">
                     <button type="button" class="btn-default-custom" (click)="tableService.searchAction()">Search</button>
                     <button type="button" class="btn-default-custom" (click)="tableService.resetAction(this.searchForm)">Reset</button>
+                    <button type="button" class="btn-default-custom" (click)="exportData()">Export</button>
                 </div>
             </div>
         </div>
@@ -98,17 +99,19 @@
                                     <th class="text-center " translate>Type</th>
                                     <th class="text-center" translate>Order date</th>
                                     <th translate>Status</th>
-                                    <th class="text-center" translate>Delivery date</th>
+                                    <!-- <th class="text-center" translate>Delivery date</th> -->
                                     <th class="text-center" translate>Total Amount</th>
                                     <th class="text-center" translate>Total Paid</th>
                                     <th class="text-center" translate>Total Refunded</th>
                                     <th translate>Salesperson</th>
+                                    <th class="text-center" translate>Last Update On</th>
+                                    <th class="text-center" translate>Last Update By</th>
                                 </tr>
                             </thead>
                             <tr *ngFor="let item of  list.items; let i = index;" [ngClass]="{'row-selected': i == selectedIndex}">
-                                <td>{{item.code}}</td>
+                                <td><a class="text-primary" [routerLink]="['/order-management/sale-order/detail',item.id]">{{item.code}}</a></td>
                                 <td>{{item.cus_po}}</td>
-                                <td>{{item.quote_no}}</td>
+                                <td><a class="text-primary" [routerLink]="['/order-management/sale-quotation/detail',item.id]">{{item.quote_no}}</a></td>
                                 <td>{{item.buyer_name}}</td>
                                 <td class="text-center">
                                     <span *ngIf="item.type == 'PKU'">Pickup</span>
@@ -117,25 +120,27 @@
                                     <span *ngIf="item.type == 'XD'">X-Docks</span>
                                 </td>
                                 <td class="text-center">{{item.order_date | date:'MM/dd/yyy'}}</td>
-                                <td>
-                                    <span class="label blue" *ngIf="item.sts_code == 'NW'">{{item.status_name}}</span>
-                                    <span class="label texas-rose" *ngIf="item.sts_code == 'SM'">{{item.status_name}}</span>
+                                <td class="text-center">
+                                    <span class="label blue" *ngIf="item.sts_code == 'NW'">{{item.sts}}</span>
+                                    <span class="label texas-rose" *ngIf="item.sts_code == 'SM'">{{item.sts}}</span>
                                     <!-- <span class="label texas-rose" *ngIf="item.sts_code == 'RV'">{{item.sts}}</span>                                             -->
-                                    <span class="label strong-green" *ngIf="item.sts_code == 'AP'">{{item.status_name}}</span>
-                                    <span class="label rock-blue" *ngIf="item.sts_code == 'IP'">{{item.status_name}}</span>
-                                    <span class="label green" *ngIf="item.sts_code == 'PP'">{{item.status_name}}</span>
-                                    <span class="label darkblue" *ngIf="item.sts_code == 'RS'">{{item.status_name}}</span>
-                                    <span class="label pink" *ngIf="item.sts_code == 'DL'">{{item.status_name}}</span>
-                                    <span class="label bright-grey" *ngIf="item.sts_code == 'PD'">{{item.status_name}}</span>
-                                    <span class="label lemon" *ngIf="item.sts_code == 'CP'">{{item.status_name}}</span>
-                                    <span class="label magenta" *ngIf="item.sts_code == 'RJ'">{{item.status_name}}</span>
-                                    <span class="label red" *ngIf="item.sts_code == 'CC'">{{item.status_name}}</span>
+                                    <span class="label strong-green" *ngIf="item.sts_code == 'AP'">{{item.sts}}</span>
+                                    <span class="label rock-blue" *ngIf="item.sts_code == 'IP'">{{item.sts}}</span>
+                                    <span class="label green" *ngIf="item.sts_code == 'PP'">{{item.sts}}</span>
+                                    <span class="label darkblue" *ngIf="item.sts_code == 'RS'">{{item.sts}}</span>
+                                    <span class="label pink" *ngIf="item.sts_code == 'DL'">{{item.sts}}</span>
+                                    <span class="label bright-grey" *ngIf="item.sts_code == 'PD'">{{item.sts}}</span>
+                                    <span class="label lemon" *ngIf="item.sts_code == 'CP'">{{item.sts}}</span>
+                                    <span class="label magenta" *ngIf="item.sts_code == 'RJ'">{{item.sts}}</span>
+                                    <span class="label red" *ngIf="item.sts_code == 'CC'">{{item.sts}}</span>
                                 </td>
-                                <td class="text-center">{{item.delivery_date | date:'MM/dd/yyyy'}}</td>
+                                <!-- <td class="text-center">{{item.delivery_date | date:'MM/dd/yyyy'}}</td> -->
                                 <td class="text-center">{{(item.total_price || 0) | currency}}</td>
                                 <td class="text-center">{{(item.total_paid || 0) | currency}}</td>
                                 <td class="text-center">{{(item.total_refunded || 0) | currency}}</td>
-                                <td>{{item.sale_person_name}}</td>
+                                <td class="text-center">{{item.sale_person_name}}</td>
+                                <td class="text-center">{{item.last_update_on | date:'MM/dd/yyyy'}}</td>
+                                <td class="text-center">{{item.last_update_by }}</td>
                             </tr>
                             <tr *ngIf="list.items.length == 0">
                                 <td colspan="100%" class="text-center" translate>No data.</td>
