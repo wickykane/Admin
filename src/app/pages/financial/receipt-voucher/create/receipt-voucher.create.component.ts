@@ -415,13 +415,15 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             total: 0,
             balance_total: 0,
             balance_due_total: 0,
-            applied_amt_total: 0
+            applied_amt_total: 0,
+            price_total: 0,
         };
 
         this.list.items.map(item => {
             this.data['summary'].total += (+item.applied_amt || 0);
             this.data['summary'].balance_total += (+item.balance_price || 0);
             this.data['summary'].applied_amt_total += (+item.applied_amt || 0);
+            this.data['summary'].price_total += (+item.total_price || 0);
         });
         this.data['summary'].balance_due_total = this.data['summary'].balance_total - this.data['summary'].applied_amt_total;
 
