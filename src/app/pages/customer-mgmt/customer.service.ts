@@ -139,7 +139,10 @@ export class CustomerService {
         const url = 'buyer/' + id + '/edit';
         return this.API.get(url);
     }
-
+    getListCarrier() {
+        const url = 'carrier';
+        return this.API.get(url);
+    }
     /**
      * CUSTOMER
      */

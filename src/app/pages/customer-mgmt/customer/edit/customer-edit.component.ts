@@ -8,14 +8,15 @@ import { CustomerEditKeyService } from './keys.control';
 
 //  modal
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { SiteModalComponent } from '../../../../shared/modals/site.modal';
-
 
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
 import { Helper } from '../../../../shared/index';
 
+import { TableService } from '../../../../services/table.service';
 import { cdArrowTable } from '../../../../shared';
 @Component({
     selector: 'app-customer-edit',
@@ -38,6 +39,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     public data = {};
 
     generalForm: FormGroup;
+    creditBalanceForm: FormGroup;
 
     public addresses: any = [];
     public bank_accounts: any = [];
@@ -57,7 +59,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     public flagAccount: boolean;
     public flagContact: boolean;
     public routeList = [];
-
+    public roleManager: number;
     public users: any = [];
     public listFile: any = [];
     public addressList: any = [];
@@ -74,12 +76,12 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     public textCode: string;
     public detail = {};
     public credit_cards = [];
-
+    public listCarier: any;
     hotkeyCtrlLeft: Hotkey | Hotkey[];
     hotkeyCtrlRight: Hotkey | Hotkey[];
     public paymentMethodList: any = [];
     public paymentTermList: any = [];
-
+    public balance: number;
     private hasDot = false;
     constructor(public fb: FormBuilder,
         public router: Router,
@@ -87,6 +89,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         private customerService: CustomerService,
         public route: ActivatedRoute,
         private modalService: NgbModal,
+        public tableService: TableService,
         private hotkeysService: HotkeysService,
         public keyService: CustomerEditKeyService,
         private commonService: CommonService,
@@ -102,9 +105,11 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             'bank_accounts': [null],
             'credit_cards': [null],
             'phone': [null,  Validators.required],
+            'ac': [null,  Validators.required],
             'fax': [null],
             'email': [null],
-            'credit_limit': [null],
+            'carrier_id': [null],
+            // 'credit_limit': [null],
             'credit_sts': 2,
             'sale_person_id': [null],
             'first_name': [null],
@@ -123,7 +128,15 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             'payment_term_id': [null]
 
         });
-
+        this.creditBalanceForm = fb.group({
+            'adj_current_balance': [null],
+            'new_credit_limit': [null],
+            'notify': false,
+            'credit_reason': [null],
+            // 'email': [null],
+        });
+        this.tableService.getListFnName = 'getList';
+        this.tableService.context = this;
         // this.hotkeyCtrlRight = hotkeysService.add(new Hotkey('alt+r', (event: KeyboardEvent): boolean => {
         //     this.flagAddress = true;
         //     return false; //  Prevent bubbling
@@ -135,11 +148,14 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         /**
          * Init Data
          */
+        const users = JSON.parse(localStorage.getItem('currentUser'));
+        this.roleManager = users.user_type;
         this.listTypeAddress = [{ id: 1, name: 'Billing' }, { id: 2, name: 'Shipping' }];
         this.route.params.subscribe(params => this.getDetailSupplier(params.id));
         this.getListCustomerType();
         this.getListSalePerson();
         this.getListCountryAdmin();
+        this.getListCarrier();
         this.customerService.getRoute().subscribe(res => { this.routeList = res.data; this.refresh(); });
     }
     getListCreditCard() {
@@ -155,6 +171,8 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             try {
                 this.detail = res.data;
                 this.generalForm.patchValue(this.detail);
+                this.creditBalanceForm.patchValue(this.detail);
+                this.balance = res.data.credit_balance;
                 this.sites = res.data['sites'];
                 // tslint:disable-next-line:prefer-for-of
                 for (let i = 0; i < this.sites.length; i++) {
@@ -205,7 +223,17 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             }
         });
     }
+    getListCarrier() {
+        this.customerService.getListCarrier().subscribe(res => {
+            try {
+                this.listCarier = res.data.rows;
+                this.tableService.matchPagingOption(res.data);
+                this.refresh();
+            } catch (e) {
 
+            }
+        });
+    }
     getListTypeAddress() {
         if (this.generalForm.value.buyer_type === 'CP') {
             const tmp = this.generalForm.value.code.split('-');
@@ -555,8 +583,65 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             }
         }
     }
+    checkStatus() {
+        if (this.generalForm.value.ac !== 1) {
+            if (this.generalForm.value.buyer_type === 'PS' || this.generalForm.value.buyer_type === 'CP') {
+                const modalRef = this.modalService.open(ConfirmModalContent);
+                modalRef.componentInstance.message = 'Are you sure that you want to deactivate this customer?';
+                modalRef.componentInstance.yesButtonText = 'YES';
+                modalRef.componentInstance.noButtonText = 'NO';
+                modalRef.result.then(yes => {
+                    if (yes) {
+                        this.updateCustomer();
+                    }
+                }, no => {});
+            }
+
+            if (this.generalForm.value.buyer_type === 'CP' && this.generalForm.value.is_parent === true) {
+                const modalRef = this.modalService.open(ConfirmModalContent);
+                modalRef.componentInstance.message = 'Are you sure that you want to deactivate this customer? All of its subsidiaries will be also deactivated.';
+                modalRef.componentInstance.yesButtonText = 'YES';
+                modalRef.componentInstance.noButtonText = 'NO';
+                modalRef.result.then(yes => {
+                    if (yes) {
+                        this.updateCustomer();
+                    }
+                }, no => { });
+            }
+        } else {
+            this.updateCustomer();
+        }
+
+    }
 
     updateCustomer() {
+        if (+this.creditBalanceForm.value.new_credit_limit < this.balance) {
+            const modalRef = this.modalService.open(ConfirmModalContent);
+            modalRef.componentInstance.message = 'The current balance is greater than the input credit limit. Please check.';
+            modalRef.componentInstance.yesButtonText = 'OK';
+            modalRef.result.then(yes => {
+                if (yes) {
+                    this.creditBalanceForm.controls.new_credit_limit.reset();
+                    return;
+                }
+            }, no => {
+                return;
+            });
+        }
+        if (+this.creditBalanceForm.value.adj_current_balance < this.balance) {
+            const modalRef = this.modalService.open(ConfirmModalContent);
+            modalRef.componentInstance.message = 'The current balance is not enough to minus with the input value in Adj. Current Balance field. Please check.';
+            modalRef.componentInstance.yesButtonText = 'OK';
+            modalRef.result.then(yes => {
+                if (yes) {
+                    this.creditBalanceForm.controls.adj_current_balance.reset();
+                    return;
+                }
+            }, no => {
+                return;
+             });
+        }
+        this.creditBalanceForm.value.notify = this.creditBalanceForm.value.notify ? 1 : 0;
         if (this.generalForm.value.buyer_type === 'CP') {
             this.contacts.forEach(obj => {
                 obj['password'] = obj.password;
@@ -573,9 +658,9 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             'bank_accounts': this.bank_accounts,
             'credit_cards': this.credit_cards
         });
-
         if (this.generalForm.valid) {
-            const params = { ...this.generalForm.value };
+            const params = { ...this.generalForm.value, ...this.creditBalanceForm.value };
+            console.log(params);
             if (params['buyer_type'] === 'CP') {
                 delete params['email'];
                 delete params['first_name'];
@@ -622,5 +707,16 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         this.selectedContactIndex = 0;
         this.contactTable.nativeElement.querySelector('td a').focus();
         this.refresh();
+    }
+
+    toggleCredit() {
+      const credit = this.creditBalanceForm.get('new_credit_limit');
+      const adj_current = this.creditBalanceForm.get('adj_current_balance');
+      credit.disabled ? credit.enable() : adj_current.disable();
+      }
+    toggleAdj() {
+        const credit = this.creditBalanceForm.get('new_credit_limit');
+        const adj_current = this.creditBalanceForm.get('adj_current_balance');
+        adj_current.disabled ? adj_current.enable() : credit.disable();
     }
 }
