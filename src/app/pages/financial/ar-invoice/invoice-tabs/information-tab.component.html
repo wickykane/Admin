@@ -424,7 +424,7 @@
                                     </div>
                                 </div>
 
-                                <div *ngIf="detail['policy_type']=='Early' || detail['policy_type']=='Late'" class="form-group row">
+                                <div *ngIf="detail['policy_type']=='Early'" class="form-group row">
                                     <label class="col-6 control-label ">
                                         <strong>Adjusted Total Due</strong>
                                     </label>
@@ -461,7 +461,7 @@
                                                 <strong>Late Fee Payment</strong>
                                             </label>
                                     <div class="col-6 padding-lr-10 text-primary">
-                                        <a (click)="selectTab('debit')" href="javascript: void(0)"><strong>{{(detail['policy_amt'] || 0) | currency}}</strong></a>
+                                        <a (click)="selectTab('debit')" href="javascript: void(0)"><strong>{{(detail['late_fee'] || 0) | currency}}</strong></a>
                                     </div>
                                     <span class="col-12 text-danger">{{detail['policy_des']}}</span>
                                 </div>
