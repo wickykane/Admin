@@ -74,7 +74,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     };
     public countCode: number;
     public textCode: string;
-    public detail = {};
+    public detail: any;
     public credit_cards = [];
     public listCarier: any;
     hotkeyCtrlLeft: Hotkey | Hotkey[];
