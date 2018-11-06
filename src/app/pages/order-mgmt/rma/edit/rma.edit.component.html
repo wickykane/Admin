@@ -17,7 +17,7 @@
                                             <label for="code" class="control-label" translate> <strong>Customer Name</strong>
                                             </label>
                                             <span class="text-danger">(*)</span>
-                                            <div>
+                                            <div >
                                                 <ng-select class="infinity-scroll-select" [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="company_id" [typeahead]="searchKey" (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="width: 100px; margin-left: 2px;" (change)="changeCustomer()"
                                                   [items]="listMaster['customer']" bindLabel="name" bindValue="id" formControlName="company_id">
                                                     <ng-template ng-option-tmp let-item="item">
@@ -25,6 +25,9 @@
                                                     </ng-template>
                                                 </ng-select>
                                             </div>
+                                            <!-- <div *ngIf="disableEdit">
+                                                <strong> {{data['order_data']['company_name']}}</strong>
+                                            </div> -->
                                         </div>
                                     </div>
                                     <div class="col-md-5">
@@ -51,7 +54,7 @@
                                                     <div clickOutside (clickOutside)="d1.close()" class="input-group">
                                                         <input readonly class="form-control" [maxDate]="currentDt | dateObj" placeholder="mm/dd/yyyy" name="request_date" formControlName="request_date" ngbDatepicker #d1="ngbDatepicker">
                                                         <div class="input-group-append">
-                                                            <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
+                                                            <button [disabled]="disableEdit" class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
                                                                 <i class="fa fa-calendar" aria-hidden="true"></i>
                                                             </button>
                                                         </div>
@@ -241,7 +244,7 @@
                                         <div class="form-group row">
                                             <label class="control-label col-5" translate>Address</label>
                                             <div class="col-7">
-                                                {{addr_select.billing.address_line}}
+                                                {{addr_select['billing']['address_line']}}
                                             </div>
                                         </div>
                                     </div>
@@ -249,7 +252,7 @@
                                         <div class="form-group row">
                                             <label class=" control-label col-5" translate>City / State</label>
                                             <div class="col-7">
-                                                {{addr_select.billing.city_name}}/ {{addr_select.billing.state_name}}
+                                                {{addr_select['billing']['city_name']}}/ {{addr_select['billing']['state_name']}}
                                             </div>
                                         </div>
                                     </div>
@@ -257,7 +260,7 @@
                                         <div class="form-group row">
                                             <label class="control-label col-5" translate>Zip</label>
                                             <div class="col-7">
-                                                {{addr_select.billing.zip_code}}
+                                                {{addr_select['billing']['zip_code']}}
                                             </div>
                                         </div>
                                     </div>
@@ -265,7 +268,7 @@
                                         <div class="form-group row">
                                             <label class="control-label col-5" translate>Country</label>
                                             <div class="col-7">
-                                                {{addr_select.billing.country_name}}
+                                                {{addr_select['billing']['country_name']}}
                                             </div>
                                         </div>
                                     </div>
@@ -299,7 +302,7 @@
                                         <div class="form-group row">
                                             <label class=" control-label col-5" translate>Address</label>
                                             <div class="col-7">
-                                                {{addr_select.shipping.address_line}}
+                                                {{addr_select['shipping']['address_line']}}
                                             </div>
                                         </div>
                                     </div>
@@ -307,7 +310,7 @@
                                         <div class="form-group row">
                                             <label class=" control-label col-5" translate>City / State</label>
                                             <div class="col-7">
-                                                {{addr_select.shipping.city_name}} / {{addr_select.shipping.state_name}}
+                                                {{addr_select['shipping']['city_name']}} / {{addr_select['shipping']['state_name']}}
                                             </div>
                                         </div>
                                     </div>
@@ -315,7 +318,7 @@
                                         <div class="form-group row">
                                             <label class=" control-label col-5" translate>Zip</label>
                                             <div class="col-7">
-                                                {{addr_select.shipping.zip_code}}
+                                                {{addr_select['shipping']['zip_code']}}
                                             </div>
                                         </div>
                                     </div>
@@ -323,7 +326,7 @@
                                         <div class="form-group row">
                                             <label class="control-label col-5" translate>Country</label>
                                             <div class="col-7">
-                                                {{addr_select.shipping.country_name}}
+                                                {{addr_select['shipping']['country_name']}}
                                             </div>
                                         </div>
                                     </div>
@@ -341,7 +344,7 @@
                     <div class="card-header">
                         <strong>Return Items</strong>
                     </div>
-                    <div class="card-body no-padding">
+                    <div class="card-body no-padding" *ngIf="!disableEdit">
                         <div class="table-responsive">
                             <table class="table table-bordered table-order return" #cdTable='cdArrowTable' [disabledKey]="data['cdTable'] == 'table'" cdArrowTable [collection]="list.returnItem" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                                 <thead>
@@ -417,9 +420,104 @@
                                 <i class="fa fa-plus"></i>Add Item</button>
                         </div>
                     </div>
+                    <div class="card-body no-padding" *ngIf="disableEdit">
+                       <div class="table-responsive">
+                          <table class="table table-bordered table-order">
+                          <thead>
+                             <tr>
+                                <th style="width:100px" translate>Item No</th>
+                                <th translate>Description</th>
+                                <th translate>Condition</th>
+                                <th translate>UOM</th>
+                                <th translate>Returned QTY</th>
+                                <th class="text-nowrap" style="width:100px" translate>Accepted QTY</th>
+                                <th class="text-center" style="width:100px" translate>Unit Price</th>
+                                <th style="width:100px" translate>Disc %</th>
+                                <th style="width:100px" translate>Tax %</th>
+                                <th translate>Amount</th>
+                                <th translate>Return Reason</th>
+                                <th translate>Warranty</th>
+                                <th translate>Status</th>
+                                <th translate>Receipt Date</th>
+                             </tr>
+                          </thead>
+                          <tr *ngIf="list.returnItem.length === 0">
+                             <td colspan="100%" class="text-center" translate>No data.</td>
+                             </tr>
+                          <tbody *ngFor="let item of list.returnItem; let $index = index;">
+                             <tr>
+                                <td>{{item.sku}}</td>
+                                <td>{{item.des}}</td>
+                                <td>{{item.condition_name}}</td>
+                                <td>{{item.uom_name}}</td>
+                                <td class="text-center">{{item.return_quantity}}</td>
+                                <td class="text-center">
+                                    {{item.accept_quantity}}
+                                </td>
+                                <td class="text-center">
+                                    <span *ngIf="item.sku != 'MIS-0000006'">{{item.price | currency}}</span>
+                                    <input *ngIf="item.sku =='MIS-0000006'" numberDirective [min]="1" style="width: 100px;" class="form-control input-sm" type="number" [(ngModel)]="item.price" (changeValue)="item.amount_before_receipt = item.price;calcTotal()">
+                                </td>
+                                <td class="text-center">
+                                  <span>{{item.discount_percent}}</span>
+                                </td>
+                                <td class="text-center">
+                                  <span>{{item.tax_percent}}</span>
+                                </td>
+                                <td class="text-center">
+                                   <span *ngIf="item.amount_after_receipt">{{item.amount_after_receipt | currency}}</span>
+                                   <span *ngIf="item.amount_before_receipt">{{item.amount_before_receipt | currency}}</span>
+                                </td>
+                                <td>
+                                  <span *ngIf="!item.return_reason_accept">{{item.return_reason_des}}</span>
+                                  <ng-template #popContent>
+                                    <p> <strong>Initial</strong> </p>
+                                    <p> {{item.return_reason_accept.inital.data}}</p>
+                                    <p> <strong>After Receipt</strong> </p>
+                                    <ul>
+                                      <li *ngFor="let item of item.return_reason_accept.after">{{item.data}}</li>
+                                    </ul>
+                                  </ng-template>
+                                  <button *ngIf="item.return_reason_accept" type="button" class="btn btn-outline-secondary mr-2" triggers="click:blur" [ngbPopover]="popContent" popoverTitle="Return Reason" >
+                                  View Details
+                                </button>
+                                                </td>
+                                                <td class="text-center">
+                                                    <label class="css-input css-checkbox css-checkbox-default">
+                                    <input disabled class="cb-element" type="checkbox" [(ngModel)]="item.warranty">
+                                    <span></span>
+                                  </label>
+                                </td>
+                                <td class="text-center">
+                                     {{item.sts_name}}
+                                </td>
+                                <td class="text-center">
+                                    <span *ngIf="data['order_data']['is_cancel']">{{data['order_data']['receive_date']}}</span>
+                                     <ng-template #popContents>
+                                       <p> <strong>SKU No - Receipt Date Details</strong> </p>
+                                       <ul>
+                                         <li *ngFor="let item of item.return_reason_accept.after">{{item.receive_date}} - {{item.data}}</li>
+                                       </ul>
+                                     </ng-template>
+                                     <button *ngIf="(item.return_reason_accept) && (!data['order_data']['is_cancel'])" type="button" class="btn btn-outline-secondary mr-2" triggers="click:blur" [ngbPopover]="popContents" popoverTitle="Receipt Date"  container="body">
+                                     View Details
+                                   </button>
+                                </td>
+                             </tr>
+                          </tbody>
+                          </table>
+                       </div>
+                       <div class="col-12 no-padding">
+                          <button (click)="addStockFee()" class="btn btn-link" translate>
+                           <ng-container *ngIf="!flagStockFee"><i class="fa fa-plus"></i> Add</ng-container>
+                           <ng-container *ngIf="flagStockFee"><i class="fa fa-minus"></i> Remove</ng-container>
+                            Restocking Fee</button>
+                       </div>
+                            </div>
                 </div>
             </div>
         </div>
+
         <div class="row mg-top-10" *ngIf="generalForm.value.order_return_type == 3">
             <div class="col-12 padding-lr-5">
                 <div class="card no-border">
@@ -533,6 +631,55 @@
                                     </label>
                                     <div class="col-6 offset-md-1 ">
                                         <strong>{{order_info.total | currency}}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card height-100">
+                    <div class="card-header">
+                        <strong>Total After WH Receipt</strong>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group row">
+                                    <label class='col-7 control-label'>Total Accepted Items</label>
+                                    <div class='col-5'>
+                                        <span class="text-success">{{ order_info_after.order_summary['total_item'] || 0}}</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class='col-7 control-label'>Total Returned COGS</label>
+                                    <div class='col-5'>
+                                        <span class="text-success">{{ (order_info_after.order_summary['total_cogs'] || 0) |
+                                            currency}}</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class='col-5 control-label'>
+                                        <strong class="text-warning">Sub Total</strong>
+                                    </label>
+                                    <div class='col-6 offset-md-1 padding-lr-10'>
+                                        <strong>{{order_info_after.sub_total | currency}}</strong>
+                                    </div>
+                                </div>
+
+                                <div *ngFor="let item of order_info_after['taxs']" class="form-group row">
+                                    <label class='col-5 control-label'>+ TAX ({{item.value}}%):</label>
+                                    <div class='col-6 offset-md-1 padding-lr-10'>
+                                        <input class="form-control" readonly="true" [(ngModel)]="item.amount" class="form-control" value="0" type="number">
+                                    </div>
+                                </div>
+                                <div class="form-group row margin-lr-0 text-light bg-danger">
+                                    <label class="col-5 control-label ">
+                                        <strong>Total Due:</strong>
+                                    </label>
+                                    <div class="col-6 offset-md-1 ">
+                                        <strong>{{order_info_after.total | currency}}</strong>
                                     </div>
                                 </div>
                             </div>

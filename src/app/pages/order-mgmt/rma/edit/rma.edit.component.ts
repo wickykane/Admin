@@ -17,6 +17,7 @@ import { HotkeysService } from 'angular2-hotkeys';
 import { Subject } from 'rxjs';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { cdArrowTable } from '../../../../shared/index';
+import { BackdropModalContent } from '../../../../shared/modals/backdrop.modal';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { ItemModalContent } from '../../../../shared/modals/item.modal';
 import { ItemsOrderModalContent } from '../modals/items-order.modal';
@@ -79,6 +80,13 @@ export class RmaEditComponent implements OnInit {
         taxs: []
     };
 
+    public order_info_after = {
+        total: 0,
+        sub_total: 0,
+        order_summary: {},
+        taxs: []
+    };
+
     public order_info_replace = {
         total: 0,
         sub_total: 0,
@@ -96,6 +104,9 @@ export class RmaEditComponent implements OnInit {
     public currentDt;
     public requiredInv = false;
     public navigateData;
+    public disableEdit = false;
+    public flagStockFee = false;
+    public itemStockFee = {};
 
     public messageConfig = {
         'SB': 'Are you sure that you want to submit this return order to approver?', // Submit
@@ -183,26 +194,6 @@ export class RmaEditComponent implements OnInit {
             this.searchCustomer(key);
         });
 
-        // this.navigateData = this.router.getNavigatedData() || [];
-        // if (this.navigateData.length > 0) {
-        //     this.generalForm.patchValue({ company_id: this.navigateData[0]['buyer_id'] });
-        //     this.changeCustomer();
-        //     this.generalForm.patchValue({ order_id: this.navigateData[0]['order_id'] });
-        //     this.changeSalesOrder();
-        //
-        //     const p = { page: this.data['page'], length: 100 };
-        //     this.service.getAllCustomer(p).subscribe(result => {
-        //         const idList = result.data.rows.map(item => item.id);
-        //         this.listMaster['customer'] = result.data.rows;
-        //         if (idList.indexOf(this.generalForm.value.company_id) === -1) {
-        //             this.listMaster['customer'].push({ id: this.generalForm.value.company_id, company_name: this.navigateData[0]['buyer_name'], name: this.navigateData[0]['buyer_name'] });
-        //         }
-        //         this.data['total_page'] = result.data.total_page;
-        //         this.refresh();
-        //     });
-        //     this.refresh();
-        //
-        // }
 
         this.refresh();
         this.getDetailRMA();
@@ -215,16 +206,23 @@ export class RmaEditComponent implements OnInit {
                 this.data['order_data'] = data;
                 this.generalForm.patchValue(data);
                 this.generalForm.patchValue({
-                  'warehouse': data.warehouse_name,
-                  'bill_to': data['billing_data']['id'] || null,
-                  'ship_to': data['shipping_data']['id'] || null,
-                  'note': data.des,
+                    'warehouse': data.warehouse_name,
+                    'bill_to': data['billing_data']['id'] || null,
+                    'ship_to': data['shipping_data']['id'] || null,
+                    'note': data.des,
                 });
 
-                // this.customer['shipping'] = res.data.shipping_data ? res.data.shipping_data : this.addr_select.shipping;
-                // this.customer['billing'] = res.data.billing_data ? res.data.billing_data : this.addr_select.billing;
-
                 this.list.returnItem = res.data.items || [];
+                this.list.returnItem = (res.data.items || []).map(item => {
+                    item.amount_after_receipt = +item.amount_after_receipt;
+                    item.amount_before_receipt = +item.amount_before_receipt;
+                    if (item.sku === 'MIS-0000006') {
+                        this.flagStockFee = true;
+                    }
+                    return item;
+                });
+
+
                 this.list.replaceItem = res.data.items_replace || [];
 
 
@@ -239,17 +237,136 @@ export class RmaEditComponent implements OnInit {
                     this.data['total_page'] = result.data.total_page;
                     this.refresh();
                 });
+
+                this.service.getOrderDetail(data['order_id']).subscribe(result => {
+                    try {
+                        const data1 = result.data;
+                        this.list.returnItem.forEach(item => {
+                            item['reason'] = this.listMaster['return_reason'];
+                        });
+
+                        // Set item and update
+                        this.calcTotal();
+
+                        this.refresh();
+                    } catch (e) {
+                        console.log(e);
+                    }
+                });
+
+                this.service.getDetailCompany(data['company_id']).subscribe(result => {
+                    try {
+                        this.customer = result.data;
+
+                        const default_billing = (this.customer.billing || []).find(item => item) || {};
+                        const default_shipping = (this.customer.shipping || []).find(item => item) || {};
+
+                        if (!_.isEmpty(default_billing)) {
+                            this.selectAddress('billing', true);
+                        }
+
+                        if (!_.isEmpty(default_shipping)) {
+                            this.selectAddress('shipping', true);
+                        }
+
+                        this.refresh();
+                        this.disableControl();
+
+                    } catch (e) {
+                        console.log(e);
+                    }
+                });
+
+                const p = {
+                    company_id: this.generalForm.value.company_id,
+                    return_type: this.generalForm.value.order_return_type
+                };
+                this.service.listOrderByCompany(p).subscribe(
+                    result => {
+                        try {
+                            this.listMaster['list_order'] = result.data;
+                            this.refresh();
+                        } catch (err) {
+                            console.log(err);
+                        }
+                    }, err => {
+                        console.log(err);
+                    }
+                );
+
+                this.service.listInvoiceByOrder(data['order_id']).subscribe(
+                    result => {
+                        try {
+                            this.listMaster['list_invoice'] = result.data;
+                            this.refresh();
+                        } catch (err) {
+                            console.log(err);
+                        }
+                    }, err => {
+                        console.log(err);
+                    }
+                );
+
+                if (data['status_message'] === 1) {
+                      this.updateStatus(2, data['order_data']['message']);
+                }
+
+
                 // Set item and update
                 this.updateTotal();
-                this.changeCustomer();
-                this.changeSalesOrder();
-                // this.disableControl();
                 this.refresh();
+
+
 
             } catch (e) {
                 console.log(e);
             }
         });
+    }
+
+    updateStatus(status, message) {
+      const modalRef = this.modalService.open(BackdropModalContent, { size: 'lg', windowClass: 'modal-md', backdrop: 'static', keyboard: false });
+      modalRef.result.then(res => {
+          if (res) {
+            const params = { return_order_id: this.route.snapshot.paramMap.get('id'), status_id: status };
+              this.service.updateStatus(params).subscribe(result => {
+                  try {
+                      this.toastr.success('The return order has been updated latest information successfully');
+                      this.router.navigate(['/order-management/return-order/detail', this.route.snapshot.paramMap.get('id')]);
+                  } catch (e) {
+                      console.log(e);
+                  }
+              });
+          }
+      }, dismiss => { });
+      modalRef.componentInstance.message = message;
+      modalRef.componentInstance.yesButtonText = 'OK';
+    }
+
+    checkStatusOrder(id) {
+        const modalRef = this.modalService.open(BackdropModalContent, { size: 'lg', windowClass: 'modal-md', backdrop: 'static', keyboard: false });
+        modalRef.result.then(res => {
+            if (res) {
+                this.service.updateChange(id).subscribe(result => {
+                    try {
+                        this.toastr.success('The return order has been updated latest information successfully');
+                        this.router.navigate(['/order-management/return-order/detail', id]);
+                    } catch (e) {
+                        console.log(e);
+                    }
+                });
+            }
+        }, dismiss => { });
+        modalRef.componentInstance.message = 'There are changes of the sales order. The system will refresh for up to date.';
+        modalRef.componentInstance.yesButtonText = 'OK';
+    }
+
+    disableControl() {
+        if (this.generalForm.value['sts_name'] !== 'New') {
+            this.generalForm.disable();
+            this.disableEdit = true;
+        }
+
     }
     /**
      * Mater Data
@@ -421,8 +538,8 @@ export class RmaEditComponent implements OnInit {
                 try {
                     this.listMaster['list_order'] = res.data;
                     // if (this.listMaster['list_order'].length <= 0) {
-                    this.generalForm.patchValue({ 'order_id': null });
-                    this.generalForm.patchValue({ 'invoice_id': null });
+                    // this.generalForm.patchValue({ 'order_id': null });
+                    // this.generalForm.patchValue({ 'invoice_id': null });
                     // }
                     this.refresh();
                 } catch (err) {
@@ -488,7 +605,6 @@ export class RmaEditComponent implements OnInit {
                     item['reason'] = this.listMaster['return_reason'];
                     item['return_quantity'] = 1;
                 });
-
                 this.calcTotal();
 
                 this.refresh();
@@ -511,13 +627,13 @@ export class RmaEditComponent implements OnInit {
                     const ship_id = this.generalForm.value.ship_to;
 
                     if (ship_id) {
-                        this.addr_select.shipping = this.findDataById(ship_id, this.customer.shipping);
+                        this.addr_select.shipping = this.findDataById(ship_id, this.customer.shipping) || this.addr_select.shipping;
                     }
                     break;
                 case 'billing':
                     const bill_to = this.generalForm.value.bill_to;
                     if (bill_to) {
-                        this.addr_select.billing = this.findDataById(bill_to, this.customer.billing);
+                        this.addr_select.billing = this.findDataById(bill_to, this.customer.billing) || this.addr_select.billing;
                     }
                     break;
             }
@@ -560,8 +676,25 @@ export class RmaEditComponent implements OnInit {
         });
     }
 
-    calcTotal() {
+    groupTaxAfter(items) {
+        this.order_info_after['taxs'] = [];
+        this.order_info_after['total_tax'] = 0;
+        const taxs = items.map(item => item.tax_percent || 0);
+        const unique = taxs.filter((i, index) => taxs.indexOf(i) === index);
+        unique.forEach((tax, index) => {
+            let taxAmount = 0;
+            items.filter(item => item.tax_percent === tax).map(i => {
+                taxAmount += (+i.tax_percent * +i.accept_quantity * ((+i.price || 0) * (100 - (+i.discount_percent || 0)) / 100) / 100);
+            });
+            this.order_info_after['total_tax'] = this.order_info_after['total_tax'] + +(taxAmount.toFixed(2));
+            this.order_info_after['taxs'].push({
+                value: tax, amount: taxAmount.toFixed(2)
+            });
+        });
+    }
 
+    calcTotal() {
+        // Before WH
         this.order_info.total = 0;
         this.order_info.sub_total = 0;
 
@@ -579,7 +712,27 @@ export class RmaEditComponent implements OnInit {
         });
 
         this.order_info.total = +this.order_info['total_tax'] + +this.order_info.sub_total;
+
+        // After WH
+        this.order_info_after.total = 0;
+        this.order_info_after.sub_total = 0;
+
+        this.groupTaxAfter(this.list.returnItem);
+        this.order_info_after.order_summary = {};
+        this.list.returnItem.forEach(item => {
+            this.order_info_after.order_summary['total_item'] = (this.order_info_after.order_summary['total_item'] || 0) + (+item.accept_quantity);
+            this.order_info_after.order_summary['total_cogs'] = (this.order_info_after.order_summary['total_cogs'] || 0) + (+item.price || 0) * (item.accept_quantity || 0);
+        });
+
+
+        this.list.returnItem.forEach(item => {
+            item.amount = ((+item.accept_quantity || 0) * (+item.price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
+            this.order_info_after.sub_total += item.amount;
+        });
+
+        this.order_info_after.total = +this.order_info_after['total_tax'] + +this.order_info_after.sub_total;
         this.refresh();
+
     }
 
     updateTotal() {
@@ -615,6 +768,30 @@ export class RmaEditComponent implements OnInit {
             return (item.sku + (item.item_condition_id || 'mis') !== (sku + (item_condition || 'mis')));
         });
         this.updateTotal();
+    }
+
+    addStockFee() {
+        this.flagStockFee = !this.flagStockFee;
+        this.itemStockFee = {
+            sku: 'MIS-0000006',
+            des: 'Restocking Fee',
+            condition_name: '',
+            uom_name: 'Each',
+            return_quantity: 1,
+            accept_quantity: 1,
+            price: 1,
+            amount_before_receipt: 1,
+            misc_id: 6
+        };
+        if (this.flagStockFee) {
+            this.list.returnItem.push(this.itemStockFee);
+        } else {
+            const itemIndex = this.list.returnItem.findIndex(it => it.sku === 'MIS-0000006');
+            this.list.returnItem.splice(itemIndex, 1);
+            this.itemStockFee = {};
+        }
+        this.calcTotal();
+
     }
 
     openModalAddItemsOrder() {
@@ -717,29 +894,29 @@ export class RmaEditComponent implements OnInit {
 
     createOrder(type) {
 
-        this.generalForm.patchValue({
-            request_date: moment(this.generalForm.value.request_date).format('MM/DD/YYYY'),
-            arrival_date: moment(this.generalForm.value.arrival_date).format('MM/DD/YYYY')
-        });
+        // this.generalForm.patchValue({
+        //     request_date: moment(this.generalForm.value.request_date).format('MM/DD/YYYY'),
+        //     arrival_date: moment(this.generalForm.value.arrival_date).format('MM/DD/YYYY')
+        // });
         let params = {};
         switch (type) {
             case 'SB':
                 params = {
-                    'items': this.list.returnItem,
+                    'items': this.data['order_data']['sts'] === 1 ? this.list.returnItem : this.itemStockFee,
                     'replace_items': this.list.replaceItem || null,
                     'status': 3
                 };
                 break;
             case 'AR':
                 params = {
-                    'items': this.list.returnItem,
+                    'items': this.data['order_data']['sts'] === 1 ? this.list.returnItem : this.itemStockFee,
                     'replace_items': this.list.replaceItem || null,
                     'status': 5
                 };
                 break;
             case 'NW':
                 params = {
-                    'items': this.list.returnItem,
+                    'items': this.data['order_data']['sts'] === 1 ? this.list.returnItem : this.itemStockFee,
                     'replace_items': this.list.replaceItem || null,
                     'status': 1
                 };
@@ -749,7 +926,7 @@ export class RmaEditComponent implements OnInit {
 
         console.log(params);
 
-        this.service.createReturnOrder(params).subscribe(res => {
+        this.service.updateReturnOrder(params, this.route.snapshot.paramMap.get('id')).subscribe(res => {
             try {
                 this.toastr.success(res.message);
                 setTimeout(() => {
