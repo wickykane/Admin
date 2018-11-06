@@ -308,7 +308,11 @@ export class RmaEditComponent implements OnInit {
                 );
 
                 if (data['status_message'] === 1) {
-                      this.updateStatus(2, data['order_data']['message']);
+                    this.updateStatus(2, data['order_data']['message']);
+                } else {
+                    if (data['is_change'] === 1) {
+                      this.checkStatusOrder(this.route.snapshot.paramMap.get('id'));
+                    }
                 }
 
 
@@ -325,22 +329,22 @@ export class RmaEditComponent implements OnInit {
     }
 
     updateStatus(status, message) {
-      const modalRef = this.modalService.open(BackdropModalContent, { size: 'lg', windowClass: 'modal-md', backdrop: 'static', keyboard: false });
-      modalRef.result.then(res => {
-          if (res) {
-            const params = { return_order_id: this.route.snapshot.paramMap.get('id'), status_id: status };
-              this.service.updateStatus(params).subscribe(result => {
-                  try {
-                      this.toastr.success('The return order has been updated latest information successfully');
-                      this.router.navigate(['/order-management/return-order/detail', this.route.snapshot.paramMap.get('id')]);
-                  } catch (e) {
-                      console.log(e);
-                  }
-              });
-          }
-      }, dismiss => { });
-      modalRef.componentInstance.message = message;
-      modalRef.componentInstance.yesButtonText = 'OK';
+        const modalRef = this.modalService.open(BackdropModalContent, { size: 'lg', windowClass: 'modal-md', backdrop: 'static', keyboard: false });
+        modalRef.result.then(res => {
+            if (res) {
+                const params = { return_order_id: this.route.snapshot.paramMap.get('id'), status_id: status };
+                this.service.updateStatus(params).subscribe(result => {
+                    try {
+                        this.toastr.success('The return order has been updated latest information successfully');
+                        this.router.navigate(['/order-management/return-order/detail', this.route.snapshot.paramMap.get('id')]);
+                    } catch (e) {
+                        console.log(e);
+                    }
+                });
+            }
+        }, dismiss => { });
+        modalRef.componentInstance.message = message;
+        modalRef.componentInstance.yesButtonText = 'OK';
     }
 
     checkStatusOrder(id) {
