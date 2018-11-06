@@ -628,7 +628,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                 return;
             });
         }
-        if (+this.creditBalanceForm.value.adj_current_balance < this.balance) {
+        if (+this.creditBalanceForm.value.adj_current_balance + this.balance < 0) {
             const modalRef = this.modalService.open(ConfirmModalContent);
             modalRef.componentInstance.message = 'The current balance is not enough to minus with the input value in Adj. Current Balance field. Please check.';
             modalRef.componentInstance.yesButtonText = 'OK';
