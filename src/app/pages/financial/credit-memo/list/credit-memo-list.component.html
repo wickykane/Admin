@@ -147,8 +147,8 @@
                                                     class="fa fa-check"></i></a>
                                             <a href="javascript: void(0)" ngbTooltip="Reject" *ngIf="(item['sts_code'] == 'SB') && listMaster['permission'].reject" class="btn btn-default" (click)="confirmModal(item.id, 4)"><i
                                                     class="fa fa-ban" aria-hidden="true"></i></a>
-                                            <a href="javascript: void(0)" ngbTooltip="Pay" *ngIf="(['SB','AP','RD'].indexOf(item['sts_code']) != -1) && listMaster['permission'].pay" class="btn btn-default"><i
-                                                    class="fa fa-money" aria-hidden="true"></i></a>
+                                            <!-- <a href="javascript: void(0)" ngbTooltip="Pay" *ngIf="(['SB','AP','RD'].indexOf(item['sts_code']) != -1) && listMaster['permission'].pay" class="btn btn-default"><i
+                                                    class="fa fa-money" aria-hidden="true"></i></a> -->
                                             <a *ngIf="listMaster['permission'].print" href="javascript: void(0)" class="btn btn-default" ngbTooltip="Print" (click)="printPDF(item.id)">
                                                 <i class="fa fa-download" aria-hidden="true"></i>
                                             </a>
