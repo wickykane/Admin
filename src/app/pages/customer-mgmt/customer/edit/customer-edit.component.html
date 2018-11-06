@@ -55,7 +55,7 @@
                                                 <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'CP' && generalForm.value.is_parent == false">
                                                     <label for="company_name" class="col-md-5 col-form-label">Parent Company</label>
                                                     <div class="col-md-7">
-                                                        <span>{{detail.parent_name}}</span>
+                                                        <span>{{detail?.parent_name}}</span>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'PS'">
@@ -250,7 +250,7 @@
                                             <div class="form-group row">
                                                 <label for="credit_limit" class="col-md-5 col-form-label">Credit Limit</label>
                                                 <div class="col-md-7">
-                                                    <label for="credit_limit" class="col-md-5 col-form-label text-success">{{detail.credit_limit | currency}}</label>
+                                                    <label for="credit_limit" class="col-md-5 col-form-label text-success">{{detail?.credit_limit | currency}}</label>
                                                 </div>
                                             </div>
                                         </div>
@@ -258,13 +258,13 @@
                                             <div class="form-group row">
                                                 <label for="current_balance" class="col-md-5 col-form-label">Current Balance</label>
                                                 <div class="col-md-7">
-                                                    <label for="current_balance" class="col-form-label text-success">{{detail.credit_balance | currency}}
+                                                    <label for="current_balance" class="col-form-label text-success">{{detail?.credit_balance | currency}}
                                                         <span class="text-primary">( view balance history)</span>
                                                     </label>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-12" *ngIf="roleManager == 1 && detail.is_parent != false ">
+                                        <div class="col-md-12" *ngIf="roleManager == 1 && detail?.is_parent !== false ">
                                             <div class="form-group row">
                                                 <label for="adj_current_balance" class="col-md-5 col-form-label">Adj. Current Balance(+/-)</label>
                                                 <div class="col-md-7">
@@ -273,7 +273,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-12" *ngIf="roleManager == 1 && detail.is_parent != false" >
+                                        <div class="col-md-12" *ngIf="roleManager == 1 && detail?.is_parent !== false" >
                                             <div class="form-group row">
                                                 <label for="new_credit_limit" class="col-md-5 col-form-label">Updat Credit Limit</label>
                                                 <div class="col-md-7">
@@ -281,7 +281,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-12" *ngIf="detail.is_parent != false">
+                                        <div class="col-md-12" *ngIf="detail?.is_parent !== false">
                                             <div class="form-group row">
                                                 <label for="credit_reason" class="col-md-5 col-form-label">Reason</label>
                                                 <div class="col-md-7">
@@ -289,7 +289,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-12"  *ngIf="detail.is_parent != false">
+                                        <div class="col-md-12"  *ngIf="detail?.is_parent !== false">
                                             <div class="form-group row">
                                                 <label for="notify" class="col-md-5 col-form-label">Notify customer by email</label>
                                                 <div class="col-md-7">                                                   
