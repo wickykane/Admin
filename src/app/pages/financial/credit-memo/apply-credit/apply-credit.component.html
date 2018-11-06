@@ -129,14 +129,19 @@
                             <table class="table table-bordered table-order">
                                 <thead>
                                     <tr>
-                                        <th translate style="width: 50px;"></th>
+                                        <th translate style="width: 50px;text-align:left">
+                                            <label class="css-input css-checkbox css-checkbox-default">
+                                                <input class="cb-element" type="checkbox" [(ngModel)]="checkAllItem"
+                                                    (change)="checkAll($event)">
+                                                <span></span>
+                                            </label></th>
                                         <th style="width:50px" translate>No</th>
                                         <th style="width:100px" translate>Document No</th>
                                         <th style="width:150px" translate>Issue Date</th>
                                         <th style="width:200px" translate>Payment Term</th>
                                         <th class="text-nowrap" style="width:100px" translate> Status</th>
                                         <th class="text-center" style="width:150px" translate>Total Amount</th>
-                                        <th class="text-center" style="width:150px" translate>Current Balance</th>                                        
+                                        <th class="text-center" style="width:150px" translate>Current Balance</th>
                                         <th style="width:150px" translate>Balance Due</th>
                                         <th translate style="width:150px">Amount Applied</th>
                                         <th></th>
@@ -163,7 +168,7 @@
                                             <td>{{item.payment_term_name}}</td>
                                             <td>{{item.status_name}}</td>
                                             <td>{{item.tot_price | currency}}</td>
-                                            <td>{{item.original_amount | currency}}</td>                                            
+                                            <td>{{item.original_amount | currency}}</td>
                                             <td>{{item.balance_due|currency}}</td>
                                             <td>
                                                 <input [isDecimal]="true" numberDirective [min]="0" [max]="item.original_amount"
@@ -178,7 +183,7 @@
                                     <tr>
                                         <td colspan="6"></td>
                                         <td>{{main_info.total_tot_price|currency}}</td>
-                                        <td>{{main_info.total_current_balance | currency}}</td>                                        
+                                        <td>{{main_info.total_current_balance | currency}}</td>
                                         <td></td>
                                         <td>{{main_info.total_amount|currency}}</td>
                                         <td></td>
@@ -225,7 +230,8 @@
         </div>
         <div class="row">
             <div class="col-md-12 mg-top-15 text-right">
-                <button type="button" class="btn btn-outline-info" (click)="createApplyCredit()" [disabled]="generalForm.invalid" translate>Apply Credit</button>
+                <button type="button" class="btn btn-outline-info" (click)="createApplyCredit()" [disabled]="generalForm.invalid"
+                    translate>Apply Credit</button>
                 <button type="button" class="btn btn-default" (click)="confirmModal()" translate>Cancel</button>
             </div>
         </div>
