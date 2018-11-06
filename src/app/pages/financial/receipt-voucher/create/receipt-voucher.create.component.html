@@ -20,7 +20,8 @@
                                                 </label>
                                                 <div class='col-6 text-primary'>
                                                     <ng-select class="infinity-scroll-select" [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('company_id').errors?.required) || false   }" [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="company_id" [typeahead]="searchKey"
-                                                        (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="min-width: 100%;" [items]="listMaster['customer']" bindLabel="name" bindValue="id" formControlName="company_id">
+                                                        (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="min-width: 100%;" [items]="listMaster['customer']" bindLabel="name" bindValue="id" formControlName="company_id"
+                                                        (change)="refreshSavedItems(false)">
                                                         <ng-template ng-option-tmp let-item="item">
                                                             <span [innerHTML]="item.company_name"></span>
                                                         </ng-template>
@@ -55,7 +56,8 @@
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
-                                                    <select [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('warehouse_id').errors?.required) || false   }" class="form-control" name="warehouse_id" formControlName="warehouse_id">
+                                                    <select [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('warehouse_id').errors?.required) || false   }"
+                                                        class="form-control" name="warehouse_id" formControlName="warehouse_id" (change)="refreshSavedItems(false)">
                                                         <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let item of listMaster['warehouses']" [ngValue]="item.id">{{item.name}}</option>
                                                     </select>
@@ -70,7 +72,8 @@
                                                         <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
-                                                    <select [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('electronic').errors?.required) || false   }" class="form-control" formControlName="electronic">
+                                                    <select [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('electronic').errors?.required) || false }"
+                                                        class="form-control" formControlName="electronic" (change)="refreshSavedItems(true)">
                                                         <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let item of listMaster['yes_no_options']" [ngValue]="item.value">{{item.label}}</option>
                                                     </select>
@@ -112,7 +115,7 @@
                                                     </label>
                                                     <div class='col-6'>
                                                         <div class="input-group">
-                                                            <input numberDirective [isDecimal]="true" (blur)="fillAppliedAmountToAllItem()" [min]="0"
+                                                            <input numberDirective [isDecimal]="true" (blur)="updateAmountReceived()" [min]="0"
                                                             [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('price_received').errors?.required) || false }"
                                                             type="number" class="form-control" formControlName="price_received">
                                                             <div class="input-group-append">
@@ -206,7 +209,7 @@
                         <div class="search-invoice">
                             <div>
                                 <i class="fa fa-search"></i>
-                                <input (keyup.enter)="getListInvoiceAndMemo()" (change)="data['invoice_id'] = null;" [(ngModel)]="data['search']" type="text" placeholder="Search Invoice & Debit Memo">
+                                <input (keyup.enter)="refreshSavedItems(false); getListInvoiceAndMemo()" (change)="data['invoice_id'] = null;" [(ngModel)]="data['search']" type="text" placeholder="Search Invoice & Debit Memo">
                             </div>
                         </div>
                         <div class="table-responsive">
@@ -263,7 +266,7 @@
                                             </td>
                                             <td>{{ (item.balance_price - item.applied_amt)| currency }}</td>
                                             <td>
-                                                <input (blur)='fillAppliedAmountToAllItem($index)' [isDecimal]="true" numberDirective [min]="0"
+                                                <input (blur)='fillAppliedAmountToAllItem($index, true)' [isDecimal]="true" numberDirective [min]="0"
                                                 class="form-control input-sm" type="number" [(ngModel)]="item.applied_amt" [disabled]="!item.is_checked">
                                             </td>
                                             <!-- <td>
@@ -353,7 +356,8 @@
                                         <strong>Applied Amount</strong>
                                     </label>
                                     <div class='col-6 offset-md-1 padding-lr-10'>
-                                        <strong class="text-success">{{(data['summary']?.total || 0) | currency}}</strong>
+                                        <!-- <strong class="text-success">{{(data['summary']?.total || 0) | currency}}</strong> -->
+                                        <strong class="text-success">{{(calculateTotalUsedAmount() || 0) | currency}}</strong>
                                     </div>
                                 </div>
                                 <div *ngIf="!generalForm.value.electronic && generalForm.value.payment_method == 5" class="form-group row">
@@ -370,7 +374,8 @@
                                                 <strong>Remaining Amount</strong>
                                             </label>
                                         <div class='col-6 offset-md-1 padding-lr-10'>
-                                            <strong>{{(data['summary']?.change ||0) | currency}}</strong>
+                                            <!-- <strong>{{(data['summary']?.change ||0) | currency}}</strong> -->
+                                            <strong>{{((savedItems['totalAmount'] - calculateTotalUsedAmount()) || 0) | currency}}</strong>
                                         </div>
                                     </div>
                                     <div class="form-group row">
