@@ -660,7 +660,6 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         });
         if (this.generalForm.valid) {
             const params = { ...this.generalForm.value, ...this.creditBalanceForm.value };
-            console.log(params);
             if (params['buyer_type'] === 'CP') {
                 delete params['email'];
                 delete params['first_name'];

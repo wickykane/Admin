@@ -4,19 +4,20 @@
     <div class="block anchor-scroll block-order">
         <div class="block-content pd-bottom padding-lr-0 mt-2">
             <div class="row">
-                <div class="col-lg-9 col-xl-7">
+                <div class="col-lg-9 col-xl-9">
                     <form class="row form-horizontal form-search filter-order-group" role="form" [formGroup]="searchForm">
                         <div class="col-md-4 block-search">
                             <label for="code" class="control-label">Code</label>
-                            <input [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="code"
-                            type="text" name="code" formControlName="cd" class="form-control" id="code" placeholder="">
+                            <input [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="code" type="text" name="code"
+                                formControlName="cd" class="form-control" id="code" placeholder="">
                         </div>
                         <div class="col-md-4 block-search">
                             <label for="name" class="control-label">Description</label>
-                            <input type="text" name="des" formControlName="des" class="form-control" id="name" placeholder="">
+                            <input type="text" name="des" formControlName="des" class="form-control" id="name"
+                                placeholder="">
                         </div>
                         <div class="col-md-4 block-search">
-                            <label for="name" class="control-label" style="width: 100px">Exclude RR Calculation</label>
+                            <label for="name" class="control-label" style="width: 140px">Exclude RR Calculation</label>
                             <select class="form-control" formControlName="exclude_rr_calc" name="status">
                                 <option *ngFor="let item of listMaster['Reason']" [ngValue]="item.key">{{item.value}}</option>
                             </select>
@@ -39,13 +40,14 @@
                 <div class="card no-border">
                     <div class="card-header">
                         <strong>Return Reasons</strong>
-                        <button *ngIf="listMaster['permission'].create" (click)="createReturnReason()" style="margin:0; float:right" class="btn btn-link">
+                        <button *ngIf="listMaster['permission'].create" (click)="createReturnReason()" style="margin:0; float:right"
+                            class="btn btn-link">
                             <i class="fa fa-plus text-success"></i> New Return Reason</button>
                     </div>
                     <div class="card-body no-padding">
                         <div class="table-responsive list">
-                            <table class="table table-bordered table-order"
-                            cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
+                            <table class="table table-bordered table-order" cdArrowTable [collection]="list.items"
+                                [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                                 <thead class="bg-white">
                                     <tr>
                                         <th>Code</th>
@@ -66,13 +68,16 @@
                                         <td class="text-center">{{item.crtd_by_name}}</td>
                                         <td class="text-center">{{item.updated_dt}}</td>
                                         <td>
-                                            <a *ngIf="listMaster['permission'].edit" href="javascript:void(0)" class="btn btn-default" (click)="editReturnReason(item.id)" title="Edit Return Reason">
+                                            <a *ngIf="listMaster['permission'].edit" href="javascript:void(0)" class="btn btn-default"
+                                                (click)="editReturnReason(item.id)" title="Edit Return Reason">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
-                                            <a *ngIf="listMaster['permission'].delete" href="javascript:void(0)" class="btn btn-default" (click)="deleteReason(item.id)" title="Delete Return Reason">
+                                            <a *ngIf="listMaster['permission'].delete" href="javascript:void(0)" class="btn btn-default"
+                                                (click)="deleteReason(item.id)" title="Delete Return Reason">
                                                 <i class="fa fa-trash" aria-hidden="true"></i>
                                             </a>
-                                            <a *ngIf="!listMaster['permission'].delete && !listMaster['permission'].edit" href="javascript:void(0)"></a>
+                                            <a *ngIf="!listMaster['permission'].delete && !listMaster['permission'].edit"
+                                                href="javascript:void(0)"></a>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -95,17 +100,21 @@
             <div class="col-md-6">
                 <div class="text-left">
                     <div class="col-md-6" style="padding-left: 0px;">
-                        <span style="float: left; padding-right: 10px;">{{list.items.length}}/{{tableService.pagination.total_record}} items </span>
-                        <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length" (change)="tableService.changeLength()">
-                      <option *ngFor="let option of tableService.itemPerPageOptions" [ngValue]="option">{{option}}</option>
-                  </select>
+                        <span style="float: left; padding-right: 10px;">{{list.items.length}}/{{tableService.pagination.total_record}}
+                            items </span>
+                        <select style="width: 50px; float: left;" class="form-control" [(ngModel)]="tableService.pagination.length"
+                            (change)="tableService.changeLength()">
+                            <option *ngFor="let option of tableService.itemPerPageOptions" [ngValue]="option">{{option}}</option>
+                        </select>
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="text-right">
-                    <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)" [pageSize]="tableService.pagination.length" [collectionSize]="tableService.pagination.total_record || 120" [(page)]="tableService.pagination.page" [maxSize]="tableService.maxSize"
-                        [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+                    <ngb-pagination class="d-flex justify-content-end" (pageChange)="tableService.changePage($event)"
+                        [pageSize]="tableService.pagination.length" [collectionSize]="tableService.pagination.total_record || 120"
+                        [(page)]="tableService.pagination.page" [maxSize]="tableService.maxSize" [rotate]="true"
+                        [boundaryLinks]="true"></ngb-pagination>
                 </div>
             </div>
         </div>

@@ -314,13 +314,51 @@ export class ReceiptVoucherCreateComponent implements OnInit {
     checkAll(ev) {
         this.list.items.forEach(x => x.is_checked = ev.target.checked);
         this.list.checklist = this.list.items.filter(item => item.is_checked);
+        this.fillAppliedAmountToAllItem();
         this.refresh();
     }
 
-    isAllChecked() {
+    isAllChecked(index) {
         this.checkAllItem = this.list.items.every(item => item.is_checked);
         this.list.checklist = this.list.items.filter(item => item.is_checked);
+        if (!this.list['items'][index].is_checked) {
+            this.list['items'][index]['applied_amt'] = 0;
+            this.fillAppliedAmountToAllItem(index);
+        } else {
+            this.fillAppliedAmountToAllItem();
+        }
         this.refresh();
+    }
+
+    fillAppliedAmountToAllItem(itemIndex?) {
+        let remainingPrice = parseFloat(this.generalForm.value['price_received']) || 0;
+        if (itemIndex !== undefined && itemIndex !== null) {
+            this.list.items[itemIndex]['applied_amt'] = Math.min(
+                this.list.items[itemIndex]['applied_amt'],
+                this.list.items[itemIndex]['balance_price'],
+                (remainingPrice - this.calculateUsedPrice(itemIndex)));
+            this.list.items[itemIndex]['applied_amt'] = parseFloat(this.list.items[itemIndex]['applied_amt'].toFixed(2));
+        }
+        this.list['items'].forEach( (item, index) => {
+            const isFillAllItems = (itemIndex === undefined || itemIndex === null);
+            const isFillFromIndex = (itemIndex !== undefined && itemIndex !== null && index > itemIndex);
+            if (isFillAllItems || isFillFromIndex) {
+                item['applied_amt'] = item.is_checked ? Math.min(item['balance_price'], remainingPrice) : 0;
+                item['applied_amt'] = parseFloat(item['applied_amt'].toFixed(2));
+            }
+            remainingPrice -= item['applied_amt'];
+            this.updateTotal(item);
+        });
+    }
+
+    calculateUsedPrice(itemIndex) {
+        let usedPrice = 0;
+        this.list['items'].forEach( (item, index) => {
+            if (index < itemIndex) {
+                usedPrice += item['applied_amt'];
+            }
+        });
+        return parseFloat(usedPrice.toFixed(2));
     }
 
     onChangePaymentMethod() {
@@ -415,13 +453,15 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             total: 0,
             balance_total: 0,
             balance_due_total: 0,
-            applied_amt_total: 0
+            applied_amt_total: 0,
+            price_total: 0,
         };
 
         this.list.items.map(item => {
             this.data['summary'].total += (+item.applied_amt || 0);
             this.data['summary'].balance_total += (+item.balance_price || 0);
             this.data['summary'].applied_amt_total += (+item.applied_amt || 0);
+            this.data['summary'].price_total += (+item.total_price || 0);
         });
         this.data['summary'].balance_due_total = this.data['summary'].balance_total - this.data['summary'].applied_amt_total;
 
