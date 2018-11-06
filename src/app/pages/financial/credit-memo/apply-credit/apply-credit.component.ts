@@ -144,11 +144,22 @@ export class CreditMemoApplyComponent implements OnInit {
     checkAll(ev) {
         this.list.items.forEach(x => x.is_checked = ev.target.checked);
         this.list.checklist = this.list.items.filter(_ => _.is_checked);
+        this.isAllChecked();
     }
 
     isAllChecked() {
         this.checkAllItem = this.list.items.every(_ => _.is_checked);
         this.list.checklist = this.list.items.filter(_ => _.is_checked);
+        let total_price = this.main_info['total_price'];
+        this.list.items.map(item => {
+            if (item.is_checked) {
+                item.amount = (total_price > item.original_amount) ? lodash.round(item.original_amount, 2) : lodash.round(total_price, 2);
+                total_price = total_price - item.amount;
+            } else {
+                item.amount = undefined;
+            }
+        });
+        this.updateBalance();
     }
     clearPayment() {
         if (this.list.items.length > 0) {
@@ -160,15 +171,15 @@ export class CreditMemoApplyComponent implements OnInit {
     queryInvoiceByWH() {
         const warehouse_id = this.generalForm.value.warehouse_id;
         console.log(warehouse_id);
-        if (this.copy_list.length  > 0 ) {
-            this.list.items = this.copy_list.filter( item => Number(item.warehouse_id) === Number( warehouse_id));
+        if (this.copy_list.length > 0) {
+            this.list.items = this.copy_list.filter(item => Number(item.warehouse_id) === Number(warehouse_id));
             this.list.checklist = [];
             this.updateBalance();
         }
 
     }
     updateBalance() {
-        this.main_info.total_amount = this.main_info.total_balance_due = this.main_info.total_current_balance  = this.main_info.total_tot_price = 0;
+        this.main_info.total_amount = this.main_info.total_balance_due = this.main_info.total_current_balance = this.main_info.total_tot_price = 0;
         if (this.list.items.length > 0) {
             this.list.items.map(item => {
                 item.balance_due = (item.amount !== undefined) ? (lodash.round(item.original_amount, 2) - lodash.round(item.amount, 2)) : 0;
