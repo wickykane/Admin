@@ -381,7 +381,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
 
     fillAppliedAmountToAllItem(itemIndex?, isChangePrice?) {
         this.savedItems['remainAmount'] = parseFloat(this.generalForm.value['price_received']) || 0;
-        const savedItemIndex = itemIndex ? this.savedItems['items'].findIndex(savedItem => savedItem.id === this.list.items[itemIndex]['id']) : null;
+        const savedItemIndex = (itemIndex !== undefined && itemIndex !== null) ? this.savedItems['items'].findIndex(savedItem => savedItem.id === this.list.items[itemIndex]['id']) : null;
 
         if (savedItemIndex !== -1 && savedItemIndex !== null) {
             if (isChangePrice) {
@@ -507,7 +507,8 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             }
             setTimeout(() => {
                 this.data['search'] = null;
-                this.getListInvoiceAndMemo();
+                // this.getListInvoiceAndMemo();
+                this.tableService.searchAction();
             });
         });
     }
@@ -520,7 +521,8 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             setTimeout(() => {
                 this.data['search'] = null;
                 this.getDetailCustomerById(id);
-                this.getListInvoiceAndMemo();
+                // this.getListInvoiceAndMemo();
+                this.tableService.searchAction();
             });
         });
     }
@@ -531,7 +533,8 @@ export class ReceiptVoucherCreateComponent implements OnInit {
                 return;
             }
             this.getListPaymentMethod(id);
-            this.getListInvoiceAndMemo();
+            // this.getListInvoiceAndMemo();
+            this.tableService.searchAction();
         });
     }
 

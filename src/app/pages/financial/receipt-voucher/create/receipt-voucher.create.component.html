@@ -209,7 +209,7 @@
                         <div class="search-invoice">
                             <div>
                                 <i class="fa fa-search"></i>
-                                <input (keyup.enter)="refreshSavedItems(false); getListInvoiceAndMemo()" (change)="data['invoice_id'] = null;" [(ngModel)]="data['search']" type="text" placeholder="Search Invoice & Debit Memo">
+                                <input (keyup.enter)="refreshSavedItems(false); tableService.searchAction()" (change)="data['invoice_id'] = null;" [(ngModel)]="data['search']" type="text" placeholder="Search Invoice & Debit Memo">
                             </div>
                         </div>
                         <div class="table-responsive">
