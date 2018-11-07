@@ -218,6 +218,8 @@ export class RmaEditComponent implements OnInit {
                     item.amount_before_receipt = +item.amount_before_receipt;
                     if (item.sku === 'MIS-0000006') {
                         this.flagStockFee = true;
+                        item.price = item.sale_price;
+                        item.amount_before_receipt = item.sale_price;
                     }
                     return item;
                 });
@@ -309,7 +311,8 @@ export class RmaEditComponent implements OnInit {
 
                 if (data['status_message'] === 1) {
                     this.updateStatus(2, data['order_data']['message']);
-                } else {
+                }
+                if (data['status_message'] === 0) {
                     if (data['is_change'] === 1) {
                       this.checkStatusOrder(this.route.snapshot.paramMap.get('id'));
                     }

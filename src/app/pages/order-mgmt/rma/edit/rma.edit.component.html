@@ -455,7 +455,7 @@
                                     {{item.accept_quantity}}
                                 </td>
                                 <td class="text-center">
-                                    <span *ngIf="item.sku != 'MIS-0000006'">{{item.price | currency}}</span>
+                                    <span *ngIf="item.sku != 'MIS-0000006'">{{item.sale_price | currency}}</span>
                                     <input *ngIf="item.sku =='MIS-0000006'" numberDirective [min]="1" style="width: 100px;" class="form-control input-sm" type="number" [(ngModel)]="item.price" (changeValue)="item.amount_before_receipt = item.price;calcTotal()">
                                 </td>
                                 <td class="text-center">
