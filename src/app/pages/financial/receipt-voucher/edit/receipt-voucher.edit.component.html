@@ -115,6 +115,8 @@
                                                             <input numberDirective [isDecimal]="true" (blur)="updateAmountReceived()" [min]="0"
                                                             [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('price_received').errors?.required) || false }"
                                                             type="number" class="form-control" formControlName="price_received">
+                                                            <input numberDirective [isDecimal]="true" (changeValue)="updateTotal()" [min]="0" [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('price_received').errors?.required) || false   }" type="number" class="form-control"
+                                                                formControlName="price_received">
                                                             <div class="input-group-append">
                                                                 <span class="input-group-text" id="basic-addon2">$</span>
                                                             </div>
@@ -242,7 +244,7 @@
                                         <tr [ngClass]="{'row-selected': $index == selectedIndex}">
                                             <td class="text-center">
                                                 <label class="css-input css-checkbox css-checkbox-default">
-                                                    <input class="cb-element" type="checkbox" [(ngModel)]="item.is_checked" (change)="isAllChecked($index)">
+                                                    <input class="cb-element" type="checkbox" [(ngModel)]="item.is_checked" (change)="isAllChecked()">
                                                     <span></span>
                                                 </label>
                                             </td>
@@ -266,11 +268,6 @@
                                                 <input (blur)='fillAppliedAmountToAllItem($index, true)' [isDecimal]="true" numberDirective [min]="0"
                                                 class="form-control input-sm" type="number" [(ngModel)]="item.applied_amt" [disabled]="!item.is_checked">
                                             </td>
-                                            <!-- <td>
-                                                <input (changeValue)='updateTotal(item)' [isDecimal]="true" numberDirective [min]="0"
-                                                [max]="(item.balance_price > data['remain'] && !generalForm.value.electronic)? data['remain']: item.balance_price"
-                                                class="form-control input-sm" type="number" [(ngModel)]="item.applied_amt">
-                                            </td> -->
                                         </tr>
                                     </tbody>
                                     <tbody>

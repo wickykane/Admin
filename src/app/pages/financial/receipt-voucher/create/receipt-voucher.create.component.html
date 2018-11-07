@@ -269,11 +269,6 @@
                                                 <input (blur)='fillAppliedAmountToAllItem($index, true)' [isDecimal]="true" numberDirective [min]="0"
                                                 class="form-control input-sm" type="number" [(ngModel)]="item.applied_amt" [disabled]="!item.is_checked">
                                             </td>
-                                            <!-- <td>
-                                                <input (changeValue)='fillAppliedAmountToAllItem($index)' [isDecimal]="true" numberDirective [min]="0"
-                                                [max]="(item.balance_price > data['remain'] && !generalForm.value.electronic)? data['remain']: item.balance_price"
-                                                class="form-control input-sm" type="number" [(ngModel)]="item.applied_amt">
-                                            </td> -->
                                         </tr>
                                     </tbody>
                                     <tbody>

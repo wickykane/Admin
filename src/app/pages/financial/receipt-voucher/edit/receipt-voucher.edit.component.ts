@@ -186,7 +186,6 @@ export class ReceiptVoucherEditComponent implements OnInit {
                 item.code = item.document_no;
                 item.status_name = item.status;
                 item.applied_amt = item.price_apply;
-                item.is_checked = item.applied_amt ? true : false;
                 item.payment_term_name = item.payment_term.des;
                 return item;
             });
@@ -455,6 +454,7 @@ export class ReceiptVoucherEditComponent implements OnInit {
                 item['applied_amt'] = this.savedItems['items'][index]['applied_amt'];
             }
         });
+        this.refresh();
     }
 
     onChangePaymentMethod(flag?) {

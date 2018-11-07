@@ -23,6 +23,8 @@ import { PromotionModalContent } from '../../../../shared/modals/promotion.modal
 import { QuoteModalContent } from '../../../../shared/modals/quote.modal';
 import { SaleOrderEditKeyService } from './keys.control';
 
+import { ROUTE_PERMISSION } from '../../../../services/route-permission.config';
+
 @Component({
     selector: 'app-edit-order',
     templateUrl: './sale-order.edit.component.html',
@@ -186,7 +188,18 @@ export class SaleOrderEditComponent implements OnInit {
      * Mater Data
      */
     refresh() {
-         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
+        if (!this.cd['destroyed']) { this.cd.detectChanges(); }
+    }
+
+    getListApprover() {
+        const params = {
+            permissions: ROUTE_PERMISSION['sale-order'].approve,
+        };
+        this.orderService.getListApprover(params).subscribe(res => {
+            this.listMaster['approver'] = res.data;
+            const defaultValue = (this.listMaster['approver'].find(item => item.id === this.generalForm.value.approver_id) || {}).id || null;
+            this.generalForm.patchValue({ approver_id: defaultValue });
+        });
     }
 
 
@@ -262,6 +275,8 @@ export class SaleOrderEditComponent implements OnInit {
                     this.listMaster = { ...this.listMaster, ..._res.data };
                     this.refresh();
                 });
+
+                this.getListApprover();
 
                 // Lazy Load filter
                 const params = { page: this.data['page'], length: 100 };

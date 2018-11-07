@@ -318,4 +318,8 @@ export class OrderService {
         const url = 'sale-quote/countListByCompanyId/' + id;
         return this.API.get(url);
     }
+    getListApprover(params) {
+        const url = 'user/search';
+        return this.API.post(url, params);
+    }
 }

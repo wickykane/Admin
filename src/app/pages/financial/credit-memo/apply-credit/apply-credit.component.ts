@@ -328,15 +328,15 @@ export class CreditMemoApplyComponent implements OnInit {
     queryInvoiceByWH() {
         const warehouse_id = this.generalForm.value.warehouse_id;
         console.log(warehouse_id);
-        if (this.copy_list.length > 0) {
-            this.list.items = this.copy_list.filter(item => Number(item.warehouse_id) === Number(warehouse_id));
+        if (this.copy_list.length  > 0 ) {
+            this.list.items = this.copy_list.filter( item => Number(item.warehouse_id) === Number( warehouse_id));
             this.list.checklist = [];
             this.updateBalance();
         }
 
     }
     updateBalance() {
-        this.main_info.total_amount = this.main_info.total_balance_due = this.main_info.total_current_balance = this.main_info.total_tot_price = 0;
+        this.main_info.total_amount = this.main_info.total_balance_due = this.main_info.total_current_balance  = this.main_info.total_tot_price = 0;
         if (this.list.items.length > 0) {
             this.list.items.map(item => {
                 item.balance_due = (item.amount !== undefined) ? (lodash.round(item.original_amount, 2) - lodash.round(item.amount, 2)) : 0;
