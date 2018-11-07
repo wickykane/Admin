@@ -183,7 +183,7 @@
                                             <a href="javascript:void(0)" class="btn btn-default " ngbTooltip="View" (click)="onViewDebitMemo(debit.id)">
                                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                             </a>
-                                            <a href="javascript:void(0)" class="btn btn-default" ngbTooltip="Print" (click)="onPrintDebitMemo(debit.id, debit.no)">
+                                            <a *ngIf="listMaster['permission'].print" href="javascript:void(0)" class="btn btn-default" ngbTooltip="Print" (click)="onPrintDebitMemo(debit.id, debit.no)">
                                                 <i class="fa fa-download" aria-hidden="true"></i>
                                             </a>
                                             <a href="javascript:void(0)" class="btn btn-default" *ngIf="debit.sts === 1" ngbTooltip="Cancel" (click)="onChangeDebitStatus(debit.id, 5)">
