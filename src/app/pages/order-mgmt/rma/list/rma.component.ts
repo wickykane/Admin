@@ -258,6 +258,7 @@ export class RmaComponent implements OnInit {
                         this.checkStatusOrder(id);
                     } else {
                         this.toastr.success(res.message);
+                        this.getList();
                     }
                 } else {
                     this.toastr.success(res.message);
