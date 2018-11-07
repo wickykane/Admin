@@ -115,8 +115,6 @@
                                                             <input numberDirective [isDecimal]="true" (blur)="updateAmountReceived()" [min]="0"
                                                             [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('price_received').errors?.required) || false }"
                                                             type="number" class="form-control" formControlName="price_received">
-                                                            <input numberDirective [isDecimal]="true" (changeValue)="updateTotal()" [min]="0" [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('price_received').errors?.required) || false   }" type="number" class="form-control"
-                                                                formControlName="price_received">
                                                             <div class="input-group-append">
                                                                 <span class="input-group-text" id="basic-addon2">$</span>
                                                             </div>
