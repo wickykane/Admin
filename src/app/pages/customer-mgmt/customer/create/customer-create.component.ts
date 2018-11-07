@@ -88,6 +88,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
             'fax': [null],
             'email': [null],
             'credit_limit': [null],
+            'ac': [null, Validators.required],
             // 'credit_sts': 2,
             'sale_person_id': [null],
             'first_name': [null],
