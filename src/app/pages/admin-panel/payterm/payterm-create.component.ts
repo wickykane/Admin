@@ -45,7 +45,6 @@ export class PayTermCreateComponent implements OnInit {
     }
 
     ngOnInit() {
-        console.log(this.checkDes);
         this.route.params.subscribe(params => {
             if (params.id) {
                 this.getDetailPaymentTerm(params.id);
