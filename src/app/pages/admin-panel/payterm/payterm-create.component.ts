@@ -18,7 +18,7 @@ import { PaymentTermService } from './payterm.service';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PayTermCreateComponent implements OnInit {
-
+    public checkDes = false;
     generalForm: FormGroup;
     public isEdit = false;
     public listMaster = {};
@@ -90,10 +90,13 @@ export class PayTermCreateComponent implements OnInit {
                 this.router.navigate(['/admin-panel/payment-term']);
             }, 100);
         }, err => {
+            if (err.message === 'Cannot input special character.') {
+                this.checkDes = true;
+                this.ngOnInit();
+            }
             console.log(err);
         });
     }
-
     changeIncentive(e?) {
         if (e) {
             if (e.target.checked) {
