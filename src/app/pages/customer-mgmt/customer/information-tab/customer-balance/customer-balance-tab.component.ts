@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CustomerService } from '../../../customer.service';
 
-import { NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { TableService } from '../../../../../services/table.service';
 import { cdArrowTable } from '../../../../../shared';
@@ -76,11 +76,11 @@ export class CustomerCustomerBalanceTabComponent implements OnInit, OnDestroy {
         console.log(index);
     }
     refresh() {
-         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
+        if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
 
     getListReference() {
-        this.customerService.getListCustomerBalanceReference().subscribe(res => {
+        this.customerService.getListCustomerBalanceReference(this._customerId).subscribe(res => {
             try {
                 this.listReference = res.data || {};
                 this.refresh();
@@ -95,7 +95,7 @@ export class CustomerCustomerBalanceTabComponent implements OnInit, OnDestroy {
 
         this.customerService.getListCustomerBalance(this._customerId, params).subscribe(res => {
             try {
-                this.list =  res.data || this.list;
+                this.list = res.data || this.list;
                 console.log(this.list);
                 // this.tableService.matchPagingOption(res.data);
                 this.refresh();
@@ -113,24 +113,24 @@ export class CustomerCustomerBalanceTabComponent implements OnInit, OnDestroy {
         fetch(file, { headers })
             .then(response => response.blob())
             .then(blobby => {
-            const objectUrl = window.URL.createObjectURL(blobby);
-            anchor.href = objectUrl;
-            anchor.download = 'customer_balance_export.xls';
-            anchor.click();
-            window.URL.revokeObjectURL(objectUrl);
-        });
+                const objectUrl = window.URL.createObjectURL(blobby);
+                anchor.href = objectUrl;
+                anchor.download = 'customer_balance_export.xls';
+                anchor.click();
+                window.URL.revokeObjectURL(objectUrl);
+            });
     }
     checkRelated(item) {
         return Array.isArray(item);
-       }
-       openVerticallyCentered(contenlink) {
+    }
+    openVerticallyCentered(contenlink) {
         this.modalService.open(contenlink);
-      }
-      selectTable() {
+    }
+    selectTable() {
         this.selectedIndex = 0;
         this.table.element.nativeElement.querySelector('td').focus();
     }
-      initKeyBoard() {
+    initKeyBoard() {
         this.data['key_config'] = {
             subsidiary: {
                 element: null,
@@ -197,6 +197,6 @@ export class CustomerCustomerBalanceTabComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-       this.resetKeys();
+        this.resetKeys();
     }
 }

@@ -74,7 +74,7 @@ export class CustomerService {
     }
 
     getListQuote(id, params) {
-        const url = 'buyer/' + id + '/sale-quotes' ;
+        const url = 'buyer/' + id + '/sale-quotes';
         return this.API.get(url, params);
     }
 
@@ -122,7 +122,7 @@ export class CustomerService {
     }
 
     getListDebit(id, params) {
-        const url =  'buyer/' + id + '/debit-memos';
+        const url = 'buyer/' + id + '/debit-memos';
         return this.API.get(url, params);
     }
 
@@ -195,8 +195,8 @@ export class CustomerService {
         const url = 'buyer/payment-methods';
         return this.API.get(url);
     }
-    getListCustomerBalanceReference() {
-        const url = 'customer-balance/get-reference';
+    getListCustomerBalanceReference(id) {
+        const url = 'customer-balance/get-reference/' + id;
         return this.API.get(url);
     }
     getListCustomerBalance(id, params) {
