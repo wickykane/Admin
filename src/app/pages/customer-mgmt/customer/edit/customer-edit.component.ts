@@ -157,6 +157,13 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         this.getListCountryAdmin();
         this.getListCarrier();
         this.customerService.getRoute().subscribe(res => { this.routeList = res.data; this.refresh(); });
+
+    }
+    get adj_current_balance() {
+        return this.creditBalanceForm.get('adj_current_balance');
+      }
+    get new_credit_limit() {
+    return this.creditBalanceForm.get('new_credit_limit');
     }
     getListCreditCard() {
         this.customerService.getCreditCard().subscribe(res => {
