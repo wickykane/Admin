@@ -314,51 +314,13 @@ export class ReceiptVoucherCreateComponent implements OnInit {
     checkAll(ev) {
         this.list.items.forEach(x => x.is_checked = ev.target.checked);
         this.list.checklist = this.list.items.filter(item => item.is_checked);
-        this.fillAppliedAmountToAllItem();
         this.refresh();
     }
 
-    isAllChecked(index) {
+    isAllChecked() {
         this.checkAllItem = this.list.items.every(item => item.is_checked);
         this.list.checklist = this.list.items.filter(item => item.is_checked);
-        if (!this.list['items'][index].is_checked) {
-            this.list['items'][index]['applied_amt'] = 0;
-            this.fillAppliedAmountToAllItem(index);
-        } else {
-            this.fillAppliedAmountToAllItem();
-        }
         this.refresh();
-    }
-
-    fillAppliedAmountToAllItem(itemIndex?) {
-        let remainingPrice = parseFloat(this.generalForm.value['price_received']) || 0;
-        if (itemIndex !== undefined && itemIndex !== null) {
-            this.list.items[itemIndex]['applied_amt'] = Math.min(
-                this.list.items[itemIndex]['applied_amt'],
-                this.list.items[itemIndex]['balance_price'],
-                (remainingPrice - this.calculateUsedPrice(itemIndex)));
-            this.list.items[itemIndex]['applied_amt'] = parseFloat(this.list.items[itemIndex]['applied_amt'].toFixed(2));
-        }
-        this.list['items'].forEach( (item, index) => {
-            const isFillAllItems = (itemIndex === undefined || itemIndex === null);
-            const isFillFromIndex = (itemIndex !== undefined && itemIndex !== null && index > itemIndex);
-            if (isFillAllItems || isFillFromIndex) {
-                item['applied_amt'] = item.is_checked ? Math.min(item['balance_price'], remainingPrice) : 0;
-                item['applied_amt'] = parseFloat(item['applied_amt'].toFixed(2));
-            }
-            remainingPrice -= item['applied_amt'];
-            this.updateTotal(item);
-        });
-    }
-
-    calculateUsedPrice(itemIndex) {
-        let usedPrice = 0;
-        this.list['items'].forEach( (item, index) => {
-            if (index < itemIndex) {
-                usedPrice += item['applied_amt'];
-            }
-        });
-        return parseFloat(usedPrice.toFixed(2));
     }
 
     onChangePaymentMethod() {

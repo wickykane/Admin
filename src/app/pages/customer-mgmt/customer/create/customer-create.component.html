@@ -155,20 +155,6 @@
                                             <div class="col-md-3">
                                                 <div class="col-md-12">
                                                     <div class="form-group row">
-                                                        <label for="status" class="col-md-5 col-form-label" >Status
-                                                            <span class="text-danger">(*)</span>
-                                                        </label>
-                                                        <div class="col-md-7">
-                                                            <select class="form-control" name="ac" formControlName="ac">
-                                                                <option value="null" selected="true">--Select--</option>
-                                                                <option value="1" selected="true">Active</option>
-                                                                <option value="0" selected="true">Inactive</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div> 
-                                                <div class="col-md-12">
-                                                    <div class="form-group row">
                                                         <label for="payment_term_id" class="col-md-5 col-form-label">Default Payment Terms </label>
                                                         <div class="col-md-7">
                                                             <select class="form-control" name="payment_term_id" formControlName="payment_term_id">
@@ -188,7 +174,15 @@
                                                             </select>
                                                         </div>
                                                     </div>
-                                                </div>                                               
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'CP'">
+                                                        <label for="registration" class="col-md-5 col-form-label">Registration No</label>
+                                                        <div class="col-md-7">
+                                                            <input type="text" class="form-control" name="registration" formControlName="registration_no">
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <div class="col-md-12">
                                                     <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'CP'">
                                                         <label for="sale_person_id" class="col-md-5 col-form-label">Salesperson</label>
@@ -202,7 +196,7 @@
                                                 </div>
                                             </div>
                                              <!-- End col-md-3-mid -->                                     
-                                            <div class="col-md-3">                                                
+                                            <div class="col-md-3">
                                                 <div class="col-md-12">
                                                     <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'CP'">
                                                         <label for="fax" class="col-md-5 col-form-label">Fax</label>
@@ -216,14 +210,6 @@
                                                         <label for="credit_limit" class="col-md-5 col-form-label">Credit Limit</label>
                                                         <div class="col-md-7">
                                                             <input type="text" (keypress)="isNumberKey($event)" class="form-control" name="credit_limit" formControlName="credit_limit">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-12">
-                                                    <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'CP'">
-                                                        <label for="registration" class="col-md-5 col-form-label">Registration No</label>
-                                                        <div class="col-md-7">
-                                                            <input type="text" class="form-control" name="registration" formControlName="registration_no">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -310,20 +296,6 @@
                                                 <!-- End-col-md3-left -->
                                                  <!-- End col-mid -->
                                                  <div class="col-md-3">
-                                                        <div class="col-md-12">
-                                                            <div class="form-group row">
-                                                                <label for="status" class="col-md-5 col-form-label" >Status
-                                                                    <span class="text-danger">(*)</span>
-                                                                </label>
-                                                                <div class="col-md-7">
-                                                                    <select class="form-control" name="ac" formControlName="ac">
-                                                                        <option value="null" selected="true">--Select--</option>
-                                                                        <option value="1" selected="true">Active</option>
-                                                                        <option value="0" selected="true">Inactive</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                        </div> 
                                                         <div class="col-md-12">
                                                             <div class="form-group row" *ngIf="generalForm.value.buyer_type == 'PS'">
                                                                 <label for="first_name" class="col-md-5 col-form-label">First Name
