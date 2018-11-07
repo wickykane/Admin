@@ -43,7 +43,7 @@
                                                     <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
-                                                    <select (change)="queryInvoiceByWH()" class="form-control" name="warehouse_id"
+                                                    <select (change)="onChangeWarehouse()" class="form-control" name="warehouse_id"
                                                         formControlName="warehouse_id">
                                                         <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let item of listMaster['warehouses']" [ngValue]="item.id">{{item.name}}</option>
@@ -119,8 +119,8 @@
                         <div class="block-btn-search">
                             <label class="control-label">&nbsp;</label>
                             <div class="group-btn-search">
-                                <button type="button" class="btn btn-primary" (click)="tableService.searchAction()">Search</button>
-                                <button type="button" class="btn btn-default" (click)="tableService.resetAction(this.searchForm)">Reset</button>
+                                <button type="button" class="btn btn-primary" (click)="onSearch()">Search</button>
+                                <button type="button" class="btn btn-default" (click)="onReset()">Reset</button>
                             </div>
                         </div>
                     </div>
@@ -158,7 +158,7 @@
                                             <td>
                                                 <label class="css-input css-checkbox css-checkbox-default">
                                                     <input class="cb-element" type="checkbox" [(ngModel)]="item.is_checked"
-                                                        (change)="isAllChecked()">
+                                                        (change)="isAllChecked($index)">
                                                     <span></span>
                                                 </label>
                                             </td>
@@ -171,10 +171,14 @@
                                             <td>{{item.original_amount | currency}}</td>
                                             <td>{{item.balance_due|currency}}</td>
                                             <td>
+                                                <input [isDecimal]="true" numberDirective [min]="0" class="form-control input-sm" [disabled]="!item.is_checked"
+                                                type="number" [(ngModel)]="item.amount" (blur)="fillAppliedAmountToAllItem($index, true)">
+                                            </td>
+                                            <!-- <td>
                                                 <input [isDecimal]="true" numberDirective [min]="0" [max]="item.original_amount"
                                                     class="form-control input-sm" type="number" [(ngModel)]="item.amount"
                                                     (changeValue)="updateBalance()">
-                                            </td>
+                                            </td> -->
                                             <td></td>
                                         </tr>
                                     </tbody>

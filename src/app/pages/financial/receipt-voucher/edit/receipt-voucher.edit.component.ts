@@ -598,7 +598,7 @@ export class ReceiptVoucherEditComponent implements OnInit {
         //     return item;
         // });
         const items = this.savedItems['items'].filter(i => i.applied_amt).map(item => {
-            item.line_item_id = item.id;
+            item.line_item_id = item.line_item_id || item.id;
             item.price_apply = item.applied_amt;
             return item;
         });
