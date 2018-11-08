@@ -36,6 +36,12 @@ export class CreditMemoApplyComponent implements OnInit {
     public listMaster = {};
     public selectedIndex = 0;
     public data = {};
+    public savedItems = {
+        totalAmount: 0,
+        usedAmount: 0,
+        remainAmount: 0,
+        items: []
+    };
     public main_info = {
         used_price: 0,
         original_amount: 0,
@@ -121,6 +127,7 @@ export class CreditMemoApplyComponent implements OnInit {
     }
     getList(id) {
         const params = { ...this.searchForm.value, ...this.tableService.getParams() };
+        params.warehouse_id = this.generalForm.value.warehouse_id;
         Object.keys(params).forEach((key) => {
             if (params[key] instanceof Array) {
                 params[key] = params[key].join(',');
@@ -132,10 +139,13 @@ export class CreditMemoApplyComponent implements OnInit {
 
         this.creditMemoService.getTableDataInvoiceById(id, params).subscribe(res => {
             try {
-                this.copy_list = res.data.rows;
+                // this.copy_list = res.data.rows;
+                this.list.items = res.data.rows;
                 this.tableService.matchPagingOption(res.data);
                 this.updateBalance();
-                this.queryInvoiceByWH();
+                // this.queryInvoiceByWH();
+                this.updateSavedItems();
+                this.updateAmountReceived(true);
             } catch (e) {
                 console.log(e);
             }
@@ -144,18 +154,176 @@ export class CreditMemoApplyComponent implements OnInit {
     checkAll(ev) {
         this.list.items.forEach(x => x.is_checked = ev.target.checked);
         this.list.checklist = this.list.items.filter(_ => _.is_checked);
+        this.updateCheckedSavedItems();
+        this.fillAppliedAmountToAllItem();
     }
 
-    isAllChecked() {
+    isAllChecked(index) {
         this.checkAllItem = this.list.items.every(_ => _.is_checked);
         this.list.checklist = this.list.items.filter(_ => _.is_checked);
+        this.updateCheckedSavedItems();
+        if (!this.list['items'][index].is_checked) {
+            const savedIndex = this.savedItems['items'].findIndex(savedItem => savedItem.id === this.list['items'][index].id);
+            this.savedItems['items'][savedIndex]['amount'] = 0;
+            this.list['items'][index]['amount'] = 0;
+            this.fillAppliedAmountToAllItem(index, false);
+        } else {
+            this.fillAppliedAmountToAllItem();
+        }
     }
+
+    refreshSavedItems(isClearAll) {
+        if (isClearAll) {
+            this.savedItems = {
+                totalAmount: 0,
+                usedAmount: 0,
+                remainAmount: 0,
+                items: []
+            };
+        } else {
+            this.savedItems['items'] = [];
+            this.savedItems['remainAmount'] = this.savedItems['totalAmount'];
+            this.savedItems['usedAmount'] = 0;
+        }
+    }
+
+    updateAmountReceived(isGetFromDetail?) {
+        const newAmount = parseFloat(this.main_info['total_price']) || 0;
+        if (this.savedItems['totalAmount'] !== newAmount) {
+            this.savedItems['totalAmount'] = newAmount;
+            this.savedItems['remainAmount'] = newAmount;
+            this.savedItems['usedAmount'] = 0;
+            if (!isGetFromDetail) {
+                this.fillAppliedAmountToAllItem();
+            } else {
+                this.savedItems['usedAmount'] = this.calculateTotalUsedAmount();
+                this.savedItems['remainAmount'] = this.savedItems['totalAmount'] - this.savedItems['usedAmount'];
+            }
+        }
+    }
+
+    fillAppliedAmountToAllItem(itemIndex?, isChangePrice?) {
+        this.savedItems['remainAmount'] = parseFloat(this.main_info['total_price']) || 0;
+        const savedItemIndex = (itemIndex !== undefined && itemIndex !== null) ? this.savedItems['items'].findIndex(savedItem => savedItem.id === this.list.items[itemIndex]['id']) : null;
+
+        if (savedItemIndex !== -1 && savedItemIndex !== null) {
+            if (isChangePrice) {
+                this.savedItems['items'][savedItemIndex]['amount'] = this.list['items'][itemIndex]['amount'];
+            }
+            // if (this.generalForm.value.electronic) {
+            //     this.list['items'][itemIndex]['amount'] = Math.min(this.list['items'][itemIndex]['original_amount'], this.list['items'][itemIndex]['remainAmount']);
+            //     this.savedItems['items'][savedItemIndex]['amount'] = this.list['items'][itemIndex]['amount'];
+            //     return;
+            // }
+            this.fillSelectedItem(savedItemIndex);
+        }
+        this.fillAppliedAmount(savedItemIndex);
+        this.updateCurrentItems();
+    }
+
+    fillAppliedAmount(savedItemIndex?) {
+        this.savedItems['usedAmount'] = 0;
+        this.savedItems['items'].forEach((savedItem, index) => {
+            const isFillAllItems = (savedItemIndex === undefined || savedItemIndex === null);
+            const isFillFromIndex = (savedItemIndex !== undefined && savedItemIndex !== null && index > savedItemIndex);
+            if (isFillAllItems || isFillFromIndex) {
+                savedItem['amount'] = savedItem.is_checked ? Math.min(savedItem['original_amount'], this.savedItems['remainAmount']) : 0;
+                savedItem['amount'] = parseFloat(savedItem['amount'].toFixed(2));
+            }
+            this.savedItems['usedAmount'] += savedItem['amount'];
+            this.savedItems['remainAmount'] = this.savedItems['totalAmount'] - this.savedItems['usedAmount'];
+            this.updateBalance();
+        });
+    }
+
+    fillSelectedItem(itemIndex) {
+        this.savedItems['items'][itemIndex]['amount'] = Math.min(
+            this.savedItems['items'][itemIndex]['amount'],
+            this.savedItems['items'][itemIndex]['original_amount'],
+            (this.savedItems['remainAmount'] - this.calculateUsedAmount(itemIndex)));
+        this.savedItems['items'][itemIndex]['amount'] = parseFloat(this.savedItems['items'][itemIndex]['amount'].toFixed(2));
+    }
+
+    calculateTotalUsedAmount() {
+        let usedPrice = 0;
+        this.savedItems['items'].forEach((item, index) => {
+            usedPrice += item['amount'];
+        });
+        return parseFloat(usedPrice.toFixed(2));
+    }
+
+    calculateUsedAmount(savedItemIndex) {
+        let usedPrice = 0;
+        this.savedItems['items'].forEach((item, index) => {
+            if (index < savedItemIndex) {
+                usedPrice += item['amount'];
+            }
+        });
+        return parseFloat(usedPrice.toFixed(2));
+    }
+
+    updateCheckedSavedItems() {
+        this.list.items.forEach(item => {
+            const index = this.savedItems['items'].findIndex(savedItem => savedItem.id === item.id);
+            if (index >= 0 && (item['is_checked'] !== this.savedItems['items'][index]['is_checked'])) {
+                this.savedItems['items'][index]['is_checked'] = item['is_checked'];
+            }
+        });
+    }
+
+    updateSavedItems() {
+        if (!this.savedItems['items'].length) {
+            this.savedItems['items'] = this.list.items;
+        } else {
+            this.list.items.forEach(item => {
+                const index = this.savedItems['items'].findIndex(savedItem => savedItem.id === item.id);
+                if (index < 0) {
+                    this.savedItems['items'].push(item);
+                } else {
+                    item['is_checked'] = this.savedItems['items'][index]['is_checked'] || false;
+                    item['amount'] = this.savedItems['items'][index]['amount'];
+                }
+            });
+        }
+        this.checkAllItem = this.list.items.every(item => item.is_checked);
+    }
+
+    updateCurrentItems() {
+        this.list.items.forEach(item => {
+            const index = this.savedItems['items'].findIndex(savedItem => savedItem.id === item.id);
+            if (index >= 0) {
+                item['is_checked'] = this.savedItems['items'][index]['is_checked'] || false;
+                item['amount'] = this.savedItems['items'][index]['amount'];
+            }
+        });
+    }
+
+    onChangeWarehouse() {
+        this.refreshSavedItems(true);
+        this.getList(this.main_info['company_id']);
+    }
+
+    onSearch() {
+        this.refreshSavedItems(true);
+        // this.getList(this.main_info['company_id']);
+        this.tableService.searchAction();
+    }
+
+    onReset() {
+        this.searchForm.reset();
+        this.refreshSavedItems(true);
+        // this.getList(this.main_info['company_id']);
+        this.tableService.resetAction(this.searchForm);
+    }
+
     clearPayment() {
+        this.refreshSavedItems(true);
         if (this.list.items.length > 0) {
             this.list.items.map(item => { item.amount = 0; item.is_checked = false; });
         }
         this.list.checklist = [];
         this.updateBalance();
+        this.checkAllItem = this.list.items.every(item => item.is_checked);
     }
     queryInvoiceByWH() {
         const warehouse_id = this.generalForm.value.warehouse_id;
@@ -184,7 +352,10 @@ export class CreditMemoApplyComponent implements OnInit {
 
     // Apply credit
     createApplyCredit() {
-        const items = this.list.checklist.map(item => {
+        // const items = this.list.checklist.map(item => {
+        //     return item;
+        // });
+        const items = this.savedItems['items'].filter(i => i.amount).map(item => {
             return item;
         });
         const params = { ...this.main_info, ...this.generalForm.value, ...{ apply_detail: items } };
