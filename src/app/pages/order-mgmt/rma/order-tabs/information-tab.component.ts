@@ -142,8 +142,14 @@ export class ReturnOrderInformationTabComponent implements OnInit {
                 this.list.returnItem = res.data.items || [];
                 this.list.replaceItem = res.data.items_replace || [];
 
-                if (this.detail['is_change']) {
-                    this.checkStatusOrder(this.detail['id']);
+
+                if (this.detail['status_message'] === 1) {
+                    this.cancelStatus(2, this.detail['message']);
+                }
+                if (this.detail['status_message'] === 0) {
+                    if (this.detail['is_change'] === 1) {
+                      this.checkStatusOrder(this.detail['id']);
+                    }
                 }
 
 
@@ -151,6 +157,25 @@ export class ReturnOrderInformationTabComponent implements OnInit {
                 console.log(e);
             }
         });
+    }
+
+    cancelStatus(status, message) {
+        const modalRef = this.modalService.open(BackdropModalContent, { size: 'lg', windowClass: 'modal-md', backdrop: 'static', keyboard: false });
+        modalRef.result.then(res => {
+            if (res) {
+                const params = { return_order_id: this.detail['id'], status_id: status };
+                this.service.updateStatus(params).subscribe(result => {
+                    try {
+                        this.toastr.success('The return order has been updated latest information successfully');
+                        this.router.navigate(['/order-management/return-order/detail', this.detail['id']]);
+                    } catch (e) {
+                        console.log(e);
+                    }
+                });
+            }
+        }, dismiss => { });
+        modalRef.componentInstance.message = message;
+        modalRef.componentInstance.yesButtonText = 'OK';
     }
 
     checkStatusOrder(id) {
