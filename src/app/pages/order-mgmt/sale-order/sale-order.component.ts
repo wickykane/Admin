@@ -31,7 +31,7 @@ export class SaleOrderComponent implements OnInit {
 
     public messageConfig = {
         'SM': 'Are you sure that you want to submit current order ?',
-        'CC': 'Are you sure that you want to cancel current order?',
+        'CC': 'Are you sure to fully cancel this sales order?',
         'CLONE': 'Are you sure that you want to copy current order?',
         'AP': 'Are you sure that you want to approve current order?',
         'RJ': 'Are you sure that you want to reject current order?',
@@ -238,8 +238,8 @@ export class SaleOrderComponent implements OnInit {
     }
 
     edit(item) {
-        this.orderService.checkOrderEditable(item.id).subscribe(res => { 
-                this.router.navigate(['/order-management/sale-order/edit', item.id]);
+        this.orderService.checkOrderEditable(item.id).subscribe(res => {
+            this.router.navigate(['/order-management/sale-order/edit', item.id]);
         });
     }
 
