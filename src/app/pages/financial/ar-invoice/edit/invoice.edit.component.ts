@@ -12,6 +12,7 @@ import { routerTransition } from '../../../../router.animations';
 import { HotkeysService } from 'angular2-hotkeys';
 import * as _ from 'lodash';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
+import { ROUTE_PERMISSION } from '../../../../services/route-permission.config';
 import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
 import { cdArrowTable } from '../../../../shared/index';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
@@ -178,6 +179,7 @@ export class InvoiceEditComponent implements OnInit {
         });
 
         this.getDetailInvoice();
+        this.getListApprover();
         this.refresh();
     }
 
@@ -187,7 +189,16 @@ export class InvoiceEditComponent implements OnInit {
     refresh() {
         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
-
+    getListApprover() {
+        const params = {
+            permissions: ROUTE_PERMISSION['invoice'].approve,
+        };
+        this.financialService.getListApprover(params).subscribe(res => {
+            this.listMaster['approver'] = res.data;
+            const defaultValue = (this.listMaster['approver'].find(item => item.id === this.generalForm.value.approver_id) || {}).id || null;
+            this.generalForm.patchValue({ approver_id: defaultValue });
+        });
+    }
     resetChangeData() {
         this.list.items = [];
         const oldForm = this.generalForm.value;

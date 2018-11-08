@@ -24,6 +24,8 @@ import { HotkeysService } from 'angular2-hotkeys';
 import * as  _ from 'lodash';
 import * as moment from 'moment';
 
+import { ROUTE_PERMISSION } from '../../../../services/route-permission.config';
+
 @Component({
     selector: 'app-debit-memo-create',
     templateUrl: './debit-memo-create.component.html',
@@ -258,18 +260,14 @@ export class DebitMemoCreateComponent implements OnInit {
     }
 
     getListApprover() {
-        this.debitService.getListApprovers().subscribe(
-            res => {
-                try {
-                    this.listMaster['approvers'] = res.data;
-                    this.refresh();
-                } catch (err) {
-                    console.log(err);
-                }
-            }, err => {
-                console.log(err);
-            }
-        );
+        const params = {
+            permissions: ROUTE_PERMISSION['debit-memo'].approve,
+        };
+        this.debitService.getListApprovers(params).subscribe(res => {
+            this.listMaster['approver'] = res.data;
+            const defaultValue = (this.listMaster['approver'].find(item => item.id === this.debitMemoForm.value.approver_id) || {}).id || null;
+            this.debitMemoForm.patchValue({ approver_id: defaultValue });
+        });
     }
 
     getOrderInformation(orderId) {
