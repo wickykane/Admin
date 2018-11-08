@@ -737,7 +737,7 @@
                     As Draft</button>
                 <!-- <button type="button" class="btn btn-outline-primary" (click)="confirmCreateOrder('SB')" [disabled]="!generalForm.valid"
                     translate>Save & Submit</button> -->
-                <button type="button" class="btn btn-outline-success" (click)="confirmCreateOrder('AR')" [disabled]="!generalForm.valid" translate>Save & Send to WH</button>
+                <button type="button" class="btn btn-outline-success" *ngIf="listMaster['permission'].send" (click)="confirmCreateOrder('AR')" [disabled]="!generalForm.valid" translate>Save & Send to WH</button>
                 <button type="button" class="btn btn-default" (click)="backList()" translate>Back to list</button>
             </div>
         </div>
