@@ -68,7 +68,7 @@ export class PaymentMethodsListComponent implements OnInit {
             ac: [null]
         });
 
-        this.tableService.getListFnName = 'getList';
+        this.tableService.getListFnName = 'getListPaymentMethods';
         this.tableService.context = this;
         this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
         this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
@@ -154,11 +154,13 @@ export class PaymentMethodsListComponent implements OnInit {
                 } catch (err) {
                     console.log(err);
                     payment.ac = payment.ac ? 0 : 1;
+                    this.refresh();
                 }
             },
             err => {
                 console.log(err);
                 payment.ac = payment.ac ? 0 : 1;
+                this.refresh();
             });
     }
 
