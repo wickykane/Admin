@@ -12,6 +12,8 @@ import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateform
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { OrderService } from '../../order-mgmt.service';
 
+import { StorageService } from '../../../../services/storage.service';
+
 // tslint:disable-next-line:import-blacklist
 import { Subject } from 'rxjs';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
@@ -129,6 +131,7 @@ export class SaleOrderCreateComponent implements OnInit {
         private orderService: OrderService,
         private _hotkeysService: HotkeysService,
         public keyService: SaleOrderCreateKeyService,
+        private storage: StorageService,
         private dt: DatePipe) {
         this.generalForm = fb.group({
             'buyer_id': [null, Validators.required],
@@ -157,6 +160,7 @@ export class SaleOrderCreateComponent implements OnInit {
 
     ngOnInit() {
         const user = JSON.parse(localStorage.getItem('currentUser'));
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
         this.orderService.getOrderReference().subscribe(res => {
             Object.assign(this.listMaster, res.data);
             this.listMaster['order_types'] = this.listMaster['order_types'].filter(item => item.code !== 'ONL');

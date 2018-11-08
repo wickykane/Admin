@@ -8,8 +8,9 @@ import { NgSelectComponent } from '@ng-select/ng-select';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs/Subject';
 import { routerTransition } from '../../../../router.animations';
-import { StorageService } from '../../../../services/storage.service';
 import { OrderService } from '../../order-mgmt.service';
+
+import { StorageService } from '../../../../services/storage.service';
 
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
@@ -160,9 +161,9 @@ export class SaleQuotationEditComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
         this.data['id'] = this.route.snapshot.paramMap.get('id');
         const user = JSON.parse(localStorage.getItem('currentUser'));
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
         this.listMaster['from_src'] = [{ id: 0, label: 'From Master' }, { id: 1, label: 'From Quote' }, { id: 2, label: 'Manual' }];
 
         this.orderService.getOrderReference().subscribe(res => { Object.assign(this.listMaster, res.data); this.refresh(); });

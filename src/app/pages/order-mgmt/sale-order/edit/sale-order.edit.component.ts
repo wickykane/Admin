@@ -11,6 +11,8 @@ import { routerTransition } from '../../../../router.animations';
 import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
 import { OrderService } from '../../order-mgmt.service';
 
+import { StorageService } from '../../../../services/storage.service';
+
 // tslint:disable-next-line:import-blacklist
 import { Subject } from 'rxjs';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
@@ -130,6 +132,7 @@ export class SaleOrderEditComponent implements OnInit {
         private orderService: OrderService,
         public keyService: SaleOrderEditKeyService,
         private _hotkeysService: HotkeysService,
+        private storage: StorageService,
         private dt: DatePipe) {
         this.generalForm = fb.group({
             'buyer_id': [null, Validators.required],
@@ -159,6 +162,7 @@ export class SaleOrderEditComponent implements OnInit {
 
     ngOnInit() {
         const user = JSON.parse(localStorage.getItem('currentUser'));
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
         this.data['editable_sts'] = ['AP', 'IP', 'PP', 'RS'];
         this.data['user'] = user;
         //  Item

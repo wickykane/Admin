@@ -25,12 +25,13 @@ import { OrderService } from '../../../order-mgmt/order-mgmt.service';
 import { FinancialService } from '../../financial.service';
 import { ReceiptVoucherService } from './../receipt-voucher.service';
 
+import { StorageService } from '../../../../services/storage.service';
 import { PaymentGatewayModalComponent } from '../modals/payment-gateway/payment-gateway.modal';
 import { TableService } from './../../../../services/table.service';
 
 import * as moment from 'moment';
-import { PaymentInformModalComponent } from '../modals/payment-inform/payment-inform.modal';
 import { ROUTE_PERMISSION } from '../../../../services/route-permission.config';
+import { PaymentInformModalComponent } from '../modals/payment-inform/payment-inform.modal';
 
 
 @Component({
@@ -93,6 +94,7 @@ export class ReceiptVoucherEditComponent implements OnInit {
         public tableService: TableService,
         private voucherService: ReceiptVoucherService,
         private financialService: FinancialService,
+        private storage: StorageService,
         private dt: DatePipe) {
         this.searchForm = fb.group({
             code: 1
@@ -126,6 +128,7 @@ export class ReceiptVoucherEditComponent implements OnInit {
 
     async ngOnInit() {
         const user = JSON.parse(localStorage.getItem('currentUser'));
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
         this.data['user'] = user;
         this.data['voucher_id'] = this.route.snapshot.params.id;
         // List Master

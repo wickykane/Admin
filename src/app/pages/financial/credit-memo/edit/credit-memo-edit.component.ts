@@ -23,8 +23,9 @@ import { OrderService } from '../../../order-mgmt/order-mgmt.service';
 import { FinancialService } from '../../financial.service';
 import { CreditMemoService } from './../credit-memo.service';
 
-import { cdArrowTable } from '../../../../shared';
 import { ROUTE_PERMISSION } from '../../../../services/route-permission.config';
+import { StorageService } from '../../../../services/storage.service';
+import { cdArrowTable } from '../../../../shared';
 @Component({
     selector: 'app-edit-credit-memo',
     templateUrl: './credit-memo-edit.component.html',
@@ -112,6 +113,7 @@ export class CreditMemoEditComponent implements OnInit {
         public keyService: CreditMemoEditKeyService,
         private creditMemoService: CreditMemoService,
         private financialService: FinancialService,
+        private storage: StorageService,
         private dt: DatePipe) {
         this.generalForm = fb.group({
             'cd': [null],
@@ -139,6 +141,7 @@ export class CreditMemoEditComponent implements OnInit {
     async ngOnInit() {
         this.data['id'] = this.route.snapshot.paramMap.get('id');
         const user = JSON.parse(localStorage.getItem('currentUser'));
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
 
         // List Master
         this.orderService.getOrderReference().subscribe(res => { Object.assign(this.listMaster, res.data); });

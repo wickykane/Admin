@@ -12,6 +12,8 @@ import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateform
 import { RMAService } from '../rma.service';
 import { RMACreateKeyService } from './keys.control';
 
+import { StorageService } from '../../../../services/storage.service';
+
 import { HotkeysService } from 'angular2-hotkeys';
 // tslint:disable-next-line:import-blacklist
 import { Subject } from 'rxjs';
@@ -124,6 +126,7 @@ export class RmaCreateComponent implements OnInit {
         private service: RMAService,
         public keyService: RMACreateKeyService,
         public _hotkeysService: HotkeysService,
+        private storage: StorageService,
         private dt: DatePipe) {
         this.generalForm = fb.group({
             'company_id': [null, Validators.required],
@@ -154,6 +157,7 @@ export class RmaCreateComponent implements OnInit {
     ngOnInit() {
 
         const user = JSON.parse(localStorage.getItem('currentUser'));
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
 
         const prams = {
             permissions: ROUTE_PERMISSION['customer'].view,

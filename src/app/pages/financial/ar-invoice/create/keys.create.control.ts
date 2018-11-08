@@ -42,25 +42,27 @@ export class InvoiceCreateKeyService extends KeyboardBaseService {
             return e;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save as Draft'));
 
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
-            (document.activeElement as HTMLElement).blur();
-            if (this.context.generalForm.valid) {
-                this.context.data['only_validate'] = true; this.context.confirmModal(4);
-            }
-            const e: ExtendedKeyboardEvent = event;
-            e.returnValue = false; // Prevent bubbling
-            return e;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save & Validate'));
+        if (this.context.listMaster['permission'].approve) {
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+                (document.activeElement as HTMLElement).blur();
+                if (this.context.generalForm.valid) {
+                    this.context.data['only_validate'] = true; this.context.confirmModal(4);
+                }
+                const e: ExtendedKeyboardEvent = event;
+                e.returnValue = false; // Prevent bubbling
+                return e;
+            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save & Validate'));
 
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
-            (document.activeElement as HTMLElement).blur();
-            if (this.context.generalForm.valid) {
-                this.context.data['only_validate'] = false; this.context.confirmModal(4);
-            }
-            const e: ExtendedKeyboardEvent = event;
-            e.returnValue = false; // Prevent bubbling
-            return e;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Validate & Receive Payment'));
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+                (document.activeElement as HTMLElement).blur();
+                if (this.context.generalForm.valid) {
+                    this.context.data['only_validate'] = false; this.context.confirmModal(4);
+                }
+                const e: ExtendedKeyboardEvent = event;
+                e.returnValue = false; // Prevent bubbling
+                return e;
+            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Validate & Receive Payment'));
+        }
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+q', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             if (this.context.generalForm.valid) {
