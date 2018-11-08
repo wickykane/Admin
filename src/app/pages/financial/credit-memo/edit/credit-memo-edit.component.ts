@@ -24,6 +24,7 @@ import { FinancialService } from '../../financial.service';
 import { CreditMemoService } from './../credit-memo.service';
 
 import { cdArrowTable } from '../../../../shared';
+import { ROUTE_PERMISSION } from '../../../../services/route-permission.config';
 @Component({
     selector: 'app-edit-credit-memo',
     templateUrl: './credit-memo-edit.component.html',
@@ -170,7 +171,16 @@ export class CreditMemoEditComponent implements OnInit {
         this.getDetailCreditMemo();
         this.updateTotal();
     }
-
+    getListApprover() {
+        const params = {
+            permissions: ROUTE_PERMISSION['credit-memo'].approve,
+        };
+        this.financialService.getListApprover(params).subscribe(res => {
+            this.listMaster['approver'] = res.data;
+            const defaultValue = (this.listMaster['approver'].find(item => item.id === this.generalForm.value.approver_id) || {}).id || null;
+            this.generalForm.patchValue({ approver_id: defaultValue });
+        });
+    }
     /**
      * Mater Data
      */
@@ -248,7 +258,7 @@ export class CreditMemoEditComponent implements OnInit {
                     this.generalForm.get('payment_method_id').disable(); // Disable If Store Credit
                     this.generalForm.get('payment_term_id').disable();
                 }
-
+                this.getListApprover();
                 // Lazy Load filter
                 const params = { page: this.data['page'], length: 100 };
                 this.orderService.getAllCustomer(params).subscribe(result => {

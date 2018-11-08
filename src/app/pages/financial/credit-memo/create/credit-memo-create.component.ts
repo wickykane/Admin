@@ -16,17 +16,17 @@ import { CreditMemoCreateKeyService } from './keys.create.control';
 
 import { HotkeysService } from 'angular2-hotkeys';
 import * as _ from 'lodash';
+import { ROUTE_PERMISSION } from '../../../../services/route-permission.config';
+import { cdArrowTable } from '../../../../shared';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { OrderService } from '../../../order-mgmt/order-mgmt.service';
 import { FinancialService } from '../../financial.service';
 import { CreditMemoService } from './../credit-memo.service';
-
-import { cdArrowTable } from '../../../../shared';
 @Component({
     selector: 'app-create-credit-memo',
     templateUrl: './credit-memo-create.component.html',
     styleUrls: ['../credit-memo.component.scss'],
-    providers: [OrderService, HotkeysService, CreditMemoCreateKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }],
+    providers: [FinancialService, OrderService, HotkeysService, CreditMemoCreateKeyService, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }],
     animations: [routerTransition()],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -142,7 +142,7 @@ export class CreditMemoCreateComponent implements OnInit {
         await this.getListPaymentTerm();
         await this.getListAccountGL();
         await this.getGenerateCode();
-
+        this. getListApprover();
         //  Item
         this.list.items = [];
         this.currentDt = (new Date()).toISOString().slice(0, 10);
@@ -163,7 +163,17 @@ export class CreditMemoCreateComponent implements OnInit {
         });
         this.refresh();
     }
-
+    getListApprover() {
+        const params = {
+            permissions: ROUTE_PERMISSION['credit-memo'].approve,
+        };
+        console.log(params);
+        this.financialService.getListApprover(params).subscribe(res => {
+            this.listMaster['approver'] = res.data;
+            const defaultValue = (this.listMaster['approver'].find(item => item.id === this.generalForm.value.approver_id) || {}).id || null;
+            this.generalForm.patchValue({ approver_id: defaultValue });
+        });
+    }
     /**
      * Mater Data
      */
