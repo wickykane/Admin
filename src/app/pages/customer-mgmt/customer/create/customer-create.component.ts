@@ -88,6 +88,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
             'fax': [null],
             'email': [null],
             'credit_limit': [null],
+            'ac': [null, Validators.required],
             // 'credit_sts': 2,
             'sale_person_id': [null],
             'first_name': [null],
@@ -543,6 +544,9 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
             }
             if ((params['credit_limit'] + ' ').indexOf('.') >= 0) {
                 return this.toastr.error('The credit limit is invalid data');
+            }
+            if (params['buyer_type'] === 'CP' && params['contacts'].length === 0) {
+                return this.toastr.error('The contact field is required.');
             }
             // var isFieldRequired = false;
             // if((params['first_name'] == null|| params['first_name'] == '' &&params['buyer_type'] == 'PS')){
