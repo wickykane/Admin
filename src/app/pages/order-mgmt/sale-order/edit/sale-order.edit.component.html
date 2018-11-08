@@ -405,6 +405,10 @@
                                         <th translate>Free Ship</th>
                                         <th translate style="width:100px">Avail QTY</th>
                                         <th class="text-nowrap" style="width:100px" translate>Order QTY</th>
+                                        <ng-container *ngIf="data['disable']">
+                                            <th class="text-nowrap" style="width:100px" translate>Cancel QTY</th>
+                                            <th class="text-nowrap" style="width:100px" translate>Remaining</th>
+                                        </ng-container>
                                         <th class="text-center" style="width:100px" translate>Unit Price</th>
                                         <th style="width:100px" translate>Disc %</th>
                                         <th style="width:100px" translate>Tax %</th>
@@ -436,6 +440,10 @@
                                         <td>
                                             <input numberDirective [min]="1" [disabled]="item.misc_id || data['disable']" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (changeValue)="updateTotal()">
                                         </td>
+                                        <ng-container *ngIf="data['disable']">
+                                            <td translate>{{ item.qty_cancel }}</td>
+                                            <td translate>{{ item.qty_remain }}</td>
+                                        </ng-container>
                                         <td>
                                             <div>
                                                 <span>$</span>
