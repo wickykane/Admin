@@ -16,6 +16,7 @@ import { HotkeysService } from 'angular2-hotkeys';
 // tslint:disable-next-line:import-blacklist
 import { Subject } from 'rxjs';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
+import { ROUTE_PERMISSION } from '../../../../services/route-permission.config';
 import { cdArrowTable } from '../../../../shared/index';
 import { BackdropModalContent } from '../../../../shared/modals/backdrop.modal';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
@@ -42,6 +43,7 @@ export class RmaEditComponent implements OnInit {
         carrier: [],
         customer: [],
         sale_mans: [],
+        approvers: [],
         ship_via: [],
         return_reason: [],
         list_invoice: []
@@ -167,6 +169,13 @@ export class RmaEditComponent implements OnInit {
 
         this.service.getOrderReference().subscribe(res => {
             this.listMaster['sale_mans'] = res.data.sale_mans || []; this.refresh();
+        });
+
+        const prams = {
+            permissions: ROUTE_PERMISSION['customer'].view,
+        };
+        this.service.getListApprover(prams).subscribe(res => {
+            this.listMaster['approvers'] = res.data;
         });
 
         this.service.getRMAMasterData().subscribe(res => {
@@ -309,11 +318,11 @@ export class RmaEditComponent implements OnInit {
                     }
                 );
 
-                if (data['status_message'] === 1) {
-                    this.updateStatus(2, data['order_data']['message']);
+                if (this.data['order_data']['status_message'] === 1) {
+                    this.updateStatus(2, this.data['order_data']['message']);
                 }
-                if (data['status_message'] === 0) {
-                    if (data['is_change'] === 1) {
+                if (this.data['order_data']['status_message'] === 0) {
+                    if (this.data['order_data']['is_change'] === 1) {
                       this.checkStatusOrder(this.route.snapshot.paramMap.get('id'));
                     }
                 }

@@ -91,4 +91,10 @@ export class RMAService {
         return this.API.post(url, params);
     }
 
+    getListApprover(params) {
+        const url = 'user/search';
+        return this.API.post(url, params);
+    }
+
+
 }

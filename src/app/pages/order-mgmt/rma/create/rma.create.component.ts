@@ -16,6 +16,7 @@ import { HotkeysService } from 'angular2-hotkeys';
 // tslint:disable-next-line:import-blacklist
 import { Subject } from 'rxjs';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
+import { ROUTE_PERMISSION } from '../../../../services/route-permission.config';
 import { cdArrowTable } from '../../../../shared/index';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { ItemModalContent } from '../../../../shared/modals/item.modal';
@@ -41,6 +42,7 @@ export class RmaCreateComponent implements OnInit {
         carrier: [],
         customer: [],
         sale_mans: [],
+        approvers: [],
         ship_via: [],
         return_reason: [],
         list_invoice: []
@@ -152,6 +154,14 @@ export class RmaCreateComponent implements OnInit {
     ngOnInit() {
 
         const user = JSON.parse(localStorage.getItem('currentUser'));
+
+        const prams = {
+            permissions: ROUTE_PERMISSION['customer'].view,
+        };
+        this.service.getListApprover(prams).subscribe(res => {
+            this.listMaster['approvers'] = res.data;
+        });
+
 
         this.service.getOrderReference().subscribe(res => {
             this.listMaster['sale_mans'] = res.data.sale_mans || []; this.refresh();
@@ -459,9 +469,9 @@ export class RmaCreateComponent implements OnInit {
     }
 
     changeType() {
-      if (this.generalForm.value.company_id) {
-          this.getListOrder();
-      }
+        if (this.generalForm.value.company_id) {
+            this.getListOrder();
+        }
     }
 
     selectAddress(type, flag?) {
