@@ -646,7 +646,7 @@
         <div class="row">
             <div class="col-md-12 mg-top-15 text-right">
                 <button type="button" class="btn btn-outline-info" (click)="createOrder('draft')" translate>Save</button>
-                <button *ngIf="!data['disable']" type="button" class="btn btn-outline-success" (click)="confirmModal('validate')"
+                <button *ngIf="!data['disable'] && listMaster['permission'].approve" type="button" class="btn btn-outline-success" (click)="confirmModal('validate')"
                     translate>Save & Validate</button>
                 <button *ngIf="!data['disable']" type="button" class="btn btn-outline-danger" (click)="confirmModal('create')"
                     translate>Save & Submit</button>
