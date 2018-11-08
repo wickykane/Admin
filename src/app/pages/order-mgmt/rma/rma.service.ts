@@ -56,6 +56,11 @@ export class RMAService {
         return this.API.post(url, params);
     }
 
+    updateReturnOrder(params, id) {
+        const url = 'return-order/update/' + id;
+        return this.API.put(url, params);
+    }
+
     getOrderReference() {
         const url = 'order/reference-data';
         return this.API.get(url);
