@@ -544,6 +544,9 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
             if ((params['credit_limit'] + ' ').indexOf('.') >= 0) {
                 return this.toastr.error('The credit limit is invalid data');
             }
+            if (params['buyer_type'] === 'CP' && params['contacts'].length === 0 ) {
+                return this.toastr.error('The contact khong duoc null');
+            }
             // var isFieldRequired = false;
             // if((params['first_name'] == null|| params['first_name'] == '' &&params['buyer_type'] == 'PS')){
             //     this.toastr.error("The first name is required");
