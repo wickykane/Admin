@@ -178,7 +178,7 @@
                                                 <div class='col-6'>
                                                     <select (change)="getQtyAvail()" class="form-control" name="approver_id" formControlName="approver_id">
                                                         <option [hidden]="true" [disabled]="false" [ngValue]="null">--Select--</option>
-                                                        <option *ngFor="let item of listMaster['sale_mans']" [ngValue]="item.id">{{item.full_name}}</option>
+                                                        <option *ngFor="let item of listMaster['approver']" [ngValue]="item.id">{{item.full_name}}</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -590,9 +590,9 @@
         <div class="row">
             <div class="col-md-12 mg-top-15 text-right">
                 <button type="button" class="btn btn-outline-warning" (click)="confirmCreateOrder('draft')" translate>Save
-                    As Draft</button>
-                <button type="button" class="btn btn-outline-info" (click)="confirmCreateOrder('validate')" [disabled]="!generalForm.valid" translate>Save & Validate</button>
+                    As Draft</button>                
                 <button type="button" class="btn btn-outline-primary" (click)="confirmCreateOrder('create')" [disabled]="!generalForm.valid" translate>Save & Submit</button>
+                <button type="button" class="btn btn-outline-info" (click)="confirmCreateOrder('validate')" [disabled]="!generalForm.valid" translate>Save & Validate</button>
                 <button type="button" class="btn btn-outline-success" (click)="confirmCreateOrder('quote')" [disabled]="!generalForm.valid" translate>Save As Quote</button>
                 <button type="button" class="btn btn-default" (click)="back()" translate>Back to list</button>
             </div>

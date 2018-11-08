@@ -22,6 +22,8 @@ import { OrderHistoryModalContent } from '../../../../shared/modals/order-histor
 import { QuoteModalContent } from '../../../../shared/modals/quote.modal';
 import { SaleOrderCreateKeyService } from './keys.control';
 
+import { ROUTE_PERMISSION } from '../../../../services/route-permission.config';
+
 
 @Component({
     selector: 'app-create-order',
@@ -163,7 +165,7 @@ export class SaleOrderCreateComponent implements OnInit {
         this.orderService.getSQReference().subscribe(res => {
             this.listMaster = { ...this.listMaster, ...res.data };
         });
-
+        this.getListApprover();
         //  Item
         this.list.items = this.router.getNavigatedData() || [];
         const currentDt = new Date();
@@ -198,9 +200,19 @@ export class SaleOrderCreateComponent implements OnInit {
      * Mater Data
      */
     refresh() {
-         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
+        if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
 
+    getListApprover() {
+        const params = {
+            permissions: ROUTE_PERMISSION['sale-order'].approve,
+        };
+        this.orderService.getListApprover(params).subscribe(res => {
+            this.listMaster['approver'] = res.data;
+            const defaultValue = (this.listMaster['approver'].find(item => item.id === this.generalForm.value.approver_id) || {}).id || null;
+            this.generalForm.patchValue({ approver_id: defaultValue });
+        });
+    }
 
     selectTable() {
         this.selectedIndex = 0;
@@ -486,7 +498,7 @@ export class SaleOrderCreateComponent implements OnInit {
         items.forEach(item => {
             this.order_info.order_summary['total_item'] = (this.order_info.order_summary['total_item'] || 0) + (+item.quantity);
             this.order_info.order_summary['total_cogs'] = (this.order_info.order_summary['total_cogs'] || 0) + (+item.cost_price || 0) * (item.quantity || 0);
-            this.order_info.order_summary['total_vol'] = (this.order_info.order_summary['total_vol'] || 0) + (+item.vol || 0) * (item.quantity || 0);
+            this.order_info.order_summary['total_vol'] = +((this.order_info.order_summary['total_vol'] || 0) + (+item.vol || 0) * (item.quantity || 0)).toFixed(2);
             this.order_info.order_summary['total_weight'] = +((this.order_info.order_summary['total_weight'] || 0) + (+item.wt || 0) * (item.quantity || 0)).toFixed(2);
         });
 

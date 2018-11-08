@@ -94,13 +94,14 @@ export class InvoiceInformationTabComponent implements OnInit {
      */
     printPDF(id, inv_num) {
         const path = 'ar-invoice/print-pdf/';
-        const url = `${environment.api_url}${path}${id}`;
-        const headers: HttpHeaders = new HttpHeaders();
+        let url = `${environment.api_url}${path}${id}`;
+        const headers: HttpHeaders = new HttpHeaders({ 'Authorization': 'Bearer ' + localStorage.getItem('id_token') });
         // Check if Pdf exist
         this.http.get(url, {
             headers,
             responseType: 'blob',
         }).subscribe(res => {
+            url = url.replace('print-pdf', 'print-pdf-inv');
             const newWindow = window.open(`assets/pdfjs/web/viewer.html?openFile=false&encrypt=true&fileName=${inv_num}.pdf&file=${btoa(url)}`, '_blank');
             newWindow.document.title = inv_num;
             newWindow.focus();

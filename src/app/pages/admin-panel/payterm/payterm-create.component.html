@@ -19,17 +19,20 @@
                             </label>
                             <input type="text" name="" class="form-control" formControlName="cd" readonly>
                         </div>
-                        <div class="col-sm-2 form-group">
+                        <div class="col-sm-2 form-group" >
                             <label> Description
                                 <span class="text-danger">(*)</span>
                             </label>
-                            <input [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="des" patternDirective="^[a-zA-Z0-9\s]*$" type="text" name="" class="form-control" formControlName="des" [readonly]="isEdit">
+                            <input [ngClass]="{'border-danger': checkDes == true}" [keyConfig]="keyService.getKeyConfig()"
+                                appKeyNavigate="des" patternDirective="^[a-zA-Z0-9\s]*$" type="text" name=""
+                                class="form-control" formControlName="des" [readonly]="isEdit && isUsed">
                         </div>
                         <div class="col-sm-2 form-group">
                             <label> Terms Day
                                 <span class="text-danger">(*)</span>
                             </label>
-                            <input  numberDirective  [min]="0"  type="text" name="" class="form-control" formControlName="term_day" maxlength="5" [readonly]="isEdit">
+                            <input  numberDirective  [min]="0"  type="text" name="" class="form-control"
+                                formControlName="term_day" maxlength="5" [readonly]="isEdit && isUsed">
                         </div>
                         <div class="col-sm-2 form-group">
                             <label> Status
@@ -53,13 +56,15 @@
                             <label> Discount Days
                                 <span class="text-danger">(*)</span>
                             </label>
-                            <input type="text" name="" class="form-control" formControlName="dsct_day" [textMask]="{mask: numberMaskObject()}" [readonly]="isEdit">
+                            <input type="text" name="" class="form-control" formControlName="dsct_day"
+                                [textMask]="{mask: numberMaskObject()}" [readonly]="isEdit && isUsed">
                         </div>
                         <div class="col-sm-2 form-group">
                             <label> Discount Type
                                 <span class="text-danger">(*)</span>
                             </label>
-                            <select class="form-control" formControlName="dsct_type" name="dsct_type" [attr.disabled]="isEdit==true ?'true':null" >
+                            <select class="form-control" formControlName="dsct_type" name="dsct_type"
+                                [attr.disabled]="(isEdit == true && isUsed ) ? 'true' : null" >
                                 <option *ngFor="let item of listMaster['early']" [ngValue]="item.key" >{{item.value}}</option>
                             </select>
                         </div>
@@ -69,7 +74,9 @@
                             </label>
                             <!-- <input type="text" name="" class="form-control" formControlName="dsct_value" [textMask]="{mask: numberMaskObjectDecimal()}" [readonly]="isEdit" > -->
                             <div class="input-group">
-                                <input type="text" name="" class="form-control" formControlName="dsct_value" [isDecimal]="true" numberDirective [min]="0" [max]="(generalForm.value.dsct_type == 1)? 100: undefined" [readonly]="isEdit">
+                                <input type="text" name="" class="form-control" formControlName="dsct_value" [isDecimal]="true"
+                                    numberDirective [min]="0" [max]="(generalForm.value.dsct_type == 1)? 100: undefined"
+                                    [readonly]="isEdit && isUsed">
                                 <div class="input-group-append">
                                     <span class="input-group-text" *ngIf="this.generalForm.get('dsct_type').value == 1">%</span>
                                     <span class="input-group-text" *ngIf="this.generalForm.get('dsct_type').value == 2">$</span>

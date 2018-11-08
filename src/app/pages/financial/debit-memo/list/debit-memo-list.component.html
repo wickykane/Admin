@@ -183,7 +183,7 @@
                                             <a href="javascript:void(0)" class="btn btn-default " ngbTooltip="View" (click)="onViewDebitMemo(debit.id)">
                                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                             </a>
-                                            <a href="javascript:void(0)" class="btn btn-default" ngbTooltip="Print" (click)="onPrintDebitMemo(debit.id, debit.no)">
+                                            <a *ngIf="listMaster['permission'].print" href="javascript:void(0)" class="btn btn-default" ngbTooltip="Print" (click)="onPrintDebitMemo(debit.id, debit.no)">
                                                 <i class="fa fa-download" aria-hidden="true"></i>
                                             </a>
                                             <a href="javascript:void(0)" class="btn btn-default" *ngIf="debit.sts === 1" ngbTooltip="Cancel" (click)="onChangeDebitStatus(debit.id, 5)">
@@ -192,9 +192,9 @@
                                             <a href="javascript:void(0)" class="btn btn-default" *ngIf="debit.sts === 4" ngbTooltip="Reopen" (click)="onChangeDebitStatus(debit.id, 1)">
                                                 <i class="fa fa-clone" aria-hidden="true"></i>
                                             </a>
-                                            <a href="javascript:void(0)" class="btn btn-default" *ngIf="debit.sts === 3 || debit.sts === 8" ngbTooltip="Receive Payment" (click)="onReceivePaymentDebitMemo()">
+                                            <!-- <a href="javascript:void(0)" class="btn btn-default" *ngIf="debit.sts === 3 || debit.sts === 8" ngbTooltip="Receive Payment" (click)="onReceivePaymentDebitMemo()">
                                                 <i class="fa fa-money" aria-hidden="true"></i>
-                                            </a>
+                                            </a> -->
                                             <a href="javascript:void(0)" class="btn btn-default" *ngIf="debit.sts != 1 && debit.sts != 4 && debit.sts != 5" ngbTooltip="Send Mail" (click)="onSendMail(debit.id)">
                                                 <i class="fa fa-envelope-o" aria-hidden="true"></i>
                                             </a>

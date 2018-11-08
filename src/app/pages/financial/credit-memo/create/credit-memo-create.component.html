@@ -324,7 +324,6 @@
                                         <form [formGroup]="generalForm">
                                             <div class="form-group row">
                                                 <label class='col-6'>Warehouse
-                                                    <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
                                                     {{ data['order_detail']?.warehouse_name }}
@@ -333,7 +332,6 @@
 
                                             <div class="form-group row">
                                                 <label class='col-6'>Ship Via
-                                                    <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
                                                     {{ data['shipping_method']?.carrier_name }}
@@ -342,7 +340,6 @@
 
                                             <div class="form-group row">
                                                 <label class='col-6'>Option
-                                                    <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
                                                     {{ data['shipping_method']?.options_name }}
@@ -351,7 +348,6 @@
 
                                             <div class="form-group row">
                                                 <label class='col-6'>Ship Rate
-                                                    <span class="text-danger">(*)</span>
                                                 </label>
                                                 <div class='col-6'>
                                                     {{ data['shipping_method']?.ship_rate_name }}
@@ -512,7 +508,6 @@
         </div>
         <div class="row">
             <div class="col-md-12 mg-top-15 text-right">
-                <button type="button" class="btn btn-default" (click)="confirmModal(0)" translate>Back To List</button>
                 <button type="button" class="btn btn-outline-info" (click)="createMemo(1, 1)" translate>Save As Draft</button>
                 <button type="button" class="btn btn-outline-success" (click)="confirmModal(3)" [disabled]="!generalForm.valid" translate>Save
                     & Validate</button>
@@ -520,6 +515,7 @@
                     & Submit</button>
                 <button type="button" class="btn btn-outline-dark" (click)="createMemo(1, 1,1); resetCredit()" translate>Save
                     & Create New Credit</button>
+                <button type="button" class="btn btn-default" (click)="confirmModal(0)" translate>Back To List</button>
             </div>
         </div>
     </section>

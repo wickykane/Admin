@@ -28,6 +28,7 @@ import { PaymentGatewayModalComponent } from '../modals/payment-gateway/payment-
 import { TableService } from './../../../../services/table.service';
 
 import * as moment from 'moment';
+import { ROUTE_PERMISSION } from '../../../../services/route-permission.config';
 import { PaymentInformModalComponent } from '../modals/payment-inform/payment-inform.modal';
 import { FinancialService } from './../../financial.service';
 
@@ -50,6 +51,12 @@ export class ReceiptVoucherCreateComponent implements OnInit {
     public listMaster = {};
     public selectedIndex = 0;
     public data = {};
+    public savedItems = {
+        totalAmount: 0,
+        usedAmount: 0,
+        remainAmount: 0,
+        items: []
+    };
 
     public messageConfig = {
         '2': 'Are you sure that you want to submit this receipt voucher?',
@@ -157,8 +164,18 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         if (this.data['invoice_id']) {
             this.getDetailInvoice();
         }
+        this.getListApprover();
     }
-
+    getListApprover() {
+        const params = {
+            permissions: ROUTE_PERMISSION['receipt-voucher'].approve,
+        };
+        this.finacialService.getListApprover(params).subscribe(res => {
+            this.listMaster['approver'] = res.data;
+            const defaultValue = (this.listMaster['approver'].find(item => item.id === this.generalForm.value.approver_id) || {}).id || null;
+            this.generalForm.patchValue({ approver_id: defaultValue });
+        });
+    }
     /**
      * Mater Data
      */
@@ -249,6 +266,20 @@ export class ReceiptVoucherCreateComponent implements OnInit {
                 const index = this.list.items.findIndex(item => item.code === code);
                 this.list.items[index].applied_amt = this.list.items[index].balance_price;
             }
+            if (!this.savedItems['items'].length) {
+                this.savedItems['items'] = this.list.items;
+            } else {
+                this.list.items.forEach(item => {
+                    const index = this.savedItems['items'].findIndex(savedItem => savedItem.id === item.id);
+                    if (index < 0) {
+                        this.savedItems['items'].push(item);
+                    } else {
+                        item['is_checked'] = this.savedItems['items'][index]['is_checked'] || false;
+                        item['applied_amt'] = this.savedItems['items'][index]['applied_amt'];
+                    }
+                });
+            }
+            this.checkAllItem = this.list.items.every(item => item.is_checked);
             this.updateTotal();
             this.refresh();
         });
@@ -314,13 +345,139 @@ export class ReceiptVoucherCreateComponent implements OnInit {
     checkAll(ev) {
         this.list.items.forEach(x => x.is_checked = ev.target.checked);
         this.list.checklist = this.list.items.filter(item => item.is_checked);
+        this.updateCheckedSavedItems();
+        this.fillAppliedAmountToAllItem();
         this.refresh();
     }
 
-    isAllChecked() {
+    isAllChecked(index) {
         this.checkAllItem = this.list.items.every(item => item.is_checked);
         this.list.checklist = this.list.items.filter(item => item.is_checked);
+        this.updateCheckedSavedItems();
+        if (!this.list['items'][index].is_checked) {
+            const savedIndex = this.savedItems['items'].findIndex(savedItem => savedItem.id === this.list['items'][index].id);
+            this.savedItems['items'][savedIndex]['applied_amt'] = 0;
+            this.list['items'][index]['applied_amt'] = 0;
+            this.fillAppliedAmountToAllItem(index, false);
+        } else {
+            this.fillAppliedAmountToAllItem();
+        }
         this.refresh();
+    }
+
+    refreshSavedItems(isClearAll) {
+        if (isClearAll) {
+            this.savedItems = {
+                totalAmount: 0,
+                usedAmount: 0,
+                remainAmount: 0,
+                items: []
+            };
+        } else {
+            this.savedItems['items'] = [];
+            this.savedItems['remainAmount'] = this.savedItems['totalAmount'];
+            this.savedItems['usedAmount'] = 0;
+        }
+    }
+
+    updateAmountReceived() {
+        const newAmount = parseFloat(this.generalForm.value['price_received']) || 0;
+        if (this.savedItems['totalAmount'] !== newAmount) {
+            this.savedItems['totalAmount'] = newAmount;
+            this.savedItems['remainAmount'] = newAmount;
+            this.savedItems['usedAmount'] = 0;
+            this.fillAppliedAmountToAllItem();
+        }
+    }
+
+    fillAppliedAmountToAllItem(itemIndex?, isChangePrice?) {
+        this.savedItems['remainAmount'] = parseFloat(this.generalForm.value['price_received']) || 0;
+        const savedItemIndex = (itemIndex !== undefined && itemIndex !== null) ? this.savedItems['items'].findIndex(savedItem => savedItem.id === this.list.items[itemIndex]['id']) : null;
+
+        if (savedItemIndex !== -1 && savedItemIndex !== null) {
+            if (isChangePrice) {
+                this.savedItems['items'][savedItemIndex]['applied_amt'] = this.list['items'][itemIndex]['applied_amt'];
+            }
+            if (this.generalForm.value.electronic) {
+                this.list['items'][itemIndex]['applied_amt'] = Math.min(this.list['items'][itemIndex]['balance_price'], this.list['items'][itemIndex]['remainAmount']);
+                this.savedItems['items'][savedItemIndex]['applied_amt'] = this.list['items'][itemIndex]['applied_amt'];
+                return;
+            }
+            this.fillSelectedItem(savedItemIndex);
+        }
+        this.fillAppliedAmount(savedItemIndex);
+        this.updateCurrentItems();
+    }
+
+    fillAppliedAmount(savedItemIndex?) {
+        this.savedItems['usedAmount'] = 0;
+        this.savedItems['items'].forEach((savedItem, index) => {
+            const isFillAllItems = (savedItemIndex === undefined || savedItemIndex === null);
+            const isFillFromIndex = (savedItemIndex !== undefined && savedItemIndex !== null && index > savedItemIndex);
+            if (isFillAllItems || isFillFromIndex) {
+                savedItem['applied_amt'] = savedItem.is_checked ? Math.min(savedItem['balance_price'], this.savedItems['remainAmount']) : 0;
+                savedItem['applied_amt'] = parseFloat(savedItem['applied_amt'].toFixed(2));
+            }
+            this.savedItems['usedAmount'] += savedItem['applied_amt'];
+            this.savedItems['remainAmount'] = this.savedItems['totalAmount'] - this.savedItems['usedAmount'];
+            this.updateTotal(savedItem);
+        });
+    }
+
+    fillSelectedItem(itemIndex) {
+        this.savedItems['items'][itemIndex]['applied_amt'] = Math.min(
+            this.savedItems['items'][itemIndex]['applied_amt'],
+            this.savedItems['items'][itemIndex]['balance_price'],
+            (this.savedItems['remainAmount'] - this.calculateUsedAmount(itemIndex)));
+        this.savedItems['items'][itemIndex]['applied_amt'] = parseFloat(this.savedItems['items'][itemIndex]['applied_amt'].toFixed(2));
+    }
+
+    calculateTotalUsedAmount() {
+        let usedPrice = 0;
+        this.savedItems['items'].forEach((item, index) => {
+            usedPrice += item['applied_amt'];
+        });
+        return parseFloat(usedPrice.toFixed(2));
+    }
+
+    calculateUsedAmount(savedItemIndex) {
+        let usedPrice = 0;
+        this.savedItems['items'].forEach((item, index) => {
+            if (index < savedItemIndex) {
+                usedPrice += item['applied_amt'];
+            }
+        });
+        return parseFloat(usedPrice.toFixed(2));
+    }
+
+    updateCheckedSavedItems() {
+        this.list.items.forEach(item => {
+            const index = this.savedItems['items'].findIndex(savedItem => savedItem.id === item.id);
+            if (index >= 0 && (item['is_checked'] !== this.savedItems['items'][index]['is_checked'])) {
+                this.savedItems['items'][index]['is_checked'] = item['is_checked'];
+            }
+        });
+    }
+
+    saveCurrentItems(itemIndex) {
+        this.list.items.forEach(item => {
+            const index = this.savedItems['items'].findIndex(savedItem => savedItem.id === item.id);
+            if (index < 0) {
+                this.savedItems['items'].push(item);
+            } else {
+                this.savedItems['items'][index] = item;
+            }
+        });
+    }
+
+    updateCurrentItems() {
+        this.list.items.forEach(item => {
+            const index = this.savedItems['items'].findIndex(savedItem => savedItem.id === item.id);
+            if (index >= 0) {
+                item['is_checked'] = this.savedItems['items'][index]['is_checked'] || false;
+                item['applied_amt'] = this.savedItems['items'][index]['applied_amt'];
+            }
+        });
     }
 
     onChangePaymentMethod() {
@@ -361,7 +518,8 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             }
             setTimeout(() => {
                 this.data['search'] = null;
-                this.getListInvoiceAndMemo();
+                // this.getListInvoiceAndMemo();
+                this.tableService.searchAction();
             });
         });
     }
@@ -374,7 +532,8 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             setTimeout(() => {
                 this.data['search'] = null;
                 this.getDetailCustomerById(id);
-                this.getListInvoiceAndMemo();
+                // this.getListInvoiceAndMemo();
+                this.tableService.searchAction();
             });
         });
     }
@@ -385,11 +544,13 @@ export class ReceiptVoucherCreateComponent implements OnInit {
                 return;
             }
             this.getListPaymentMethod(id);
-            this.getListInvoiceAndMemo();
+            // this.getListInvoiceAndMemo();
+            this.tableService.searchAction();
         });
     }
 
     clearPayment() {
+        this.refreshSavedItems(false);
         this.data['search'] = null;
         this.tableService.searchAction();
         // const checkedList = this.list.checklist.map(item => item.id);
@@ -415,13 +576,15 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             total: 0,
             balance_total: 0,
             balance_due_total: 0,
-            applied_amt_total: 0
+            applied_amt_total: 0,
+            price_total: 0,
         };
 
         this.list.items.map(item => {
             this.data['summary'].total += (+item.applied_amt || 0);
             this.data['summary'].balance_total += (+item.balance_price || 0);
             this.data['summary'].applied_amt_total += (+item.applied_amt || 0);
+            this.data['summary'].price_total += (+item.total_price || 0);
         });
         this.data['summary'].balance_due_total = this.data['summary'].balance_total - this.data['summary'].applied_amt_total;
 
@@ -450,7 +613,12 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             return;
         }
 
-        const items = this.list.items.filter(i => i.applied_amt).map(item => {
+        // const items = this.list.items.filter(i => i.applied_amt).map(item => {
+        //     item.line_item_id = item.id;
+        //     item.price_apply = item.applied_amt;
+        //     return item;
+        // });
+        const items = this.savedItems['items'].filter(i => i.applied_amt).map(item => {
             item.line_item_id = item.id;
             item.price_apply = item.applied_amt;
             return item;
