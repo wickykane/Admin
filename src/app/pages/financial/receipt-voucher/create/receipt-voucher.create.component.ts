@@ -24,6 +24,7 @@ import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { OrderService } from '../../../order-mgmt/order-mgmt.service';
 import { ReceiptVoucherService } from './../receipt-voucher.service';
 
+import { StorageService } from '../../../../services/storage.service';
 import { PaymentGatewayModalComponent } from '../modals/payment-gateway/payment-gateway.modal';
 import { TableService } from './../../../../services/table.service';
 
@@ -94,6 +95,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         public keyService: InvoiceCreateKeyService,
         public tableService: TableService,
         private finacialService: FinancialService,
+        private storage: StorageService,
         private voucherService: ReceiptVoucherService,
         private dt: DatePipe) {
         this.searchForm = fb.group({
@@ -128,6 +130,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
 
     async ngOnInit() {
         const user = JSON.parse(localStorage.getItem('currentUser'));
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
         this.data['user'] = user;
 
         // List Master
