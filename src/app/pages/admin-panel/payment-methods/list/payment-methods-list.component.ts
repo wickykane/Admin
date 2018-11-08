@@ -68,7 +68,7 @@ export class PaymentMethodsListComponent implements OnInit {
             ac: [null]
         });
 
-        this.tableService.getListFnName = 'getList';
+        this.tableService.getListFnName = 'getListPaymentMethods';
         this.tableService.context = this;
         this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
         this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
