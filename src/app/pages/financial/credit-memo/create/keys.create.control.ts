@@ -70,15 +70,17 @@ export class CreditMemoCreateKeyService extends KeyboardBaseService {
             return e;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save as Draft'));
 
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
-            (document.activeElement as HTMLElement).blur();
-            if (this.context.generalForm.valid) {
-                this.context.confirmModal(3);
-            }
-            const e: ExtendedKeyboardEvent = event;
-            e.returnValue = false; // Prevent bubbling
-            return e;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save & Validate'));
+        if (this.context.listMaster['permission'].approve) {
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+                (document.activeElement as HTMLElement).blur();
+                if (this.context.generalForm.valid) {
+                    this.context.confirmModal(3);
+                }
+                const e: ExtendedKeyboardEvent = event;
+                e.returnValue = false; // Prevent bubbling
+                return e;
+            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save & Validate'));
+        }
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             (document.activeElement as HTMLElement).blur();

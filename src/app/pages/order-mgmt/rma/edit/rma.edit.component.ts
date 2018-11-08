@@ -12,6 +12,8 @@ import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateform
 import { RMAService } from '../rma.service';
 import { RMAEditKeyService } from './keys.control';
 
+import { StorageService } from '../../../../services/storage.service';
+
 import { HotkeysService } from 'angular2-hotkeys';
 // tslint:disable-next-line:import-blacklist
 import { Subject } from 'rxjs';
@@ -134,6 +136,7 @@ export class RmaEditComponent implements OnInit {
         private modalService: NgbModal,
         private service: RMAService,
         public keyService: RMAEditKeyService,
+        private storage: StorageService,
         public _hotkeysService: HotkeysService,
         private dt: DatePipe) {
         this.generalForm = fb.group({
@@ -166,6 +169,7 @@ export class RmaEditComponent implements OnInit {
 
 
         const user = JSON.parse(localStorage.getItem('currentUser'));
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
 
         this.service.getOrderReference().subscribe(res => {
             this.listMaster['sale_mans'] = res.data.sale_mans || []; this.refresh();

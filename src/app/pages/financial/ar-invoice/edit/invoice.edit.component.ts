@@ -13,6 +13,7 @@ import { HotkeysService } from 'angular2-hotkeys';
 import * as _ from 'lodash';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { ROUTE_PERMISSION } from '../../../../services/route-permission.config';
+import { StorageService } from '../../../../services/storage.service';
 import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
 import { cdArrowTable } from '../../../../shared/index';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
@@ -108,6 +109,7 @@ export class InvoiceEditComponent implements OnInit {
         public keyService: InvoiceEditKeyService,
         private financialService: FinancialService,
         private cd: ChangeDetectorRef,
+        private storage: StorageService,
         private dt: DatePipe) {
         this.generalForm = fb.group({
             'approver_id': [null, Validators.required],
@@ -140,6 +142,7 @@ export class InvoiceEditComponent implements OnInit {
     async ngOnInit() {
         this.data['id'] = this.route.snapshot.paramMap.get('id');
         const user = JSON.parse(localStorage.getItem('currentUser'));
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
         // List Master
         this.getQuickbookSettings();
         this.orderService.getOrderReference().subscribe(res => { Object.assign(this.listMaster, res.data); this.refresh(); });

@@ -93,14 +93,16 @@ export class RMAEditKeyService extends KeyboardBaseService {
             return e;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save as Draft'));
 
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
-            if (this.context.generalForm.valid) {
-                this.context.confirmCreateOrder('AR');
-            }
-            const e: ExtendedKeyboardEvent = event;
-            e.returnValue = false; // Prevent bubbling
-            return e;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save & Send to WH'));
+        if (this.context.listMaster['permission'].send) {
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+                if (this.context.generalForm.valid) {
+                    this.context.confirmCreateOrder('AR');
+                }
+                const e: ExtendedKeyboardEvent = event;
+                e.returnValue = false; // Prevent bubbling
+                return e;
+            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save & Send to WH'));
+        }
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             if (this.context.generalForm.valid) {

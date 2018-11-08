@@ -509,7 +509,7 @@
         <div class="row">
             <div class="col-md-12 mg-top-15 text-right">
                 <button type="button" class="btn btn-outline-info" (click)="createMemo(1, 1)" translate>Save As Draft</button>
-                <button type="button" class="btn btn-outline-success" (click)="confirmModal(3)" [disabled]="!generalForm.valid" translate>Save
+                <button type="button" class="btn btn-outline-success" *ngIf="listMaster['permission'].approve" (click)="confirmModal(3)" [disabled]="!generalForm.valid" translate>Save
                     & Validate</button>
                 <button type="button" class="btn btn-outline-danger" (click)="confirmModal(2)" [disabled]="!generalForm.valid" translate>Save
                     & Submit</button>

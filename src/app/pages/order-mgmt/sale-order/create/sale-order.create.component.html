@@ -590,9 +590,9 @@
         <div class="row">
             <div class="col-md-12 mg-top-15 text-right">
                 <button type="button" class="btn btn-outline-warning" (click)="confirmCreateOrder('draft')" translate>Save
-                    As Draft</button>                
+                    As Draft</button>
                 <button type="button" class="btn btn-outline-primary" (click)="confirmCreateOrder('create')" [disabled]="!generalForm.valid" translate>Save & Submit</button>
-                <button type="button" class="btn btn-outline-info" (click)="confirmCreateOrder('validate')" [disabled]="!generalForm.valid" translate>Save & Validate</button>
+                <button type="button" class="btn btn-outline-info" *ngIf="listMaster['permission'].approve" (click)="confirmCreateOrder('validate')" [disabled]="!generalForm.valid" translate>Save & Validate</button>
                 <button type="button" class="btn btn-outline-success" (click)="confirmCreateOrder('quote')" [disabled]="!generalForm.valid" translate>Save As Quote</button>
                 <button type="button" class="btn btn-default" (click)="back()" translate>Back to list</button>
             </div>

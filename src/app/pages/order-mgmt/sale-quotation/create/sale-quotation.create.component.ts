@@ -8,8 +8,9 @@ import { NgSelectComponent } from '@ng-select/ng-select';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs/Subject';
 import { routerTransition } from '../../../../router.animations';
-import { StorageService } from '../../../../services/storage.service';
 import { OrderService } from '../../order-mgmt.service';
+
+import { StorageService } from '../../../../services/storage.service';
 
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
@@ -158,12 +159,11 @@ export class SaleQuotationCreateComponent implements OnInit {
     }
 
     ngOnInit() {
-
-        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
         this.data['id'] = this.route.snapshot.queryParams['quote_id'];
         this.data['is_copy'] = this.route.snapshot.queryParams['is_copy'] || 0;
 
         const user = JSON.parse(localStorage.getItem('currentUser'));
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
         this.listMaster['multi_ship'] = [{ id: 0, label: 'No' }, { id: 1, label: 'Yes' }];
         this.listMaster['from_src'] = [{ id: 0, label: 'From Master' }, { id: 1, label: 'From Quote' }, { id: 2, label: 'Manual' }];
 

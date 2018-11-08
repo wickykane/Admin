@@ -17,6 +17,7 @@ import { CreditMemoCreateKeyService } from './keys.create.control';
 import { HotkeysService } from 'angular2-hotkeys';
 import * as _ from 'lodash';
 import { ROUTE_PERMISSION } from '../../../../services/route-permission.config';
+import { StorageService } from '../../../../services/storage.service';
 import { cdArrowTable } from '../../../../shared';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { OrderService } from '../../../order-mgmt/order-mgmt.service';
@@ -108,6 +109,7 @@ export class CreditMemoCreateComponent implements OnInit {
         public keyService: CreditMemoCreateKeyService,
         private creditMemoService: CreditMemoService,
         private financialService: FinancialService,
+        private storage: StorageService,
         private dt: DatePipe) {
         this.generalForm = fb.group({
             'approver_id': [null, Validators.required],
@@ -134,6 +136,7 @@ export class CreditMemoCreateComponent implements OnInit {
 
     async ngOnInit() {
         const user = JSON.parse(localStorage.getItem('currentUser'));
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
 
         // List Master
         this.orderService.getOrderReference().subscribe(res => { Object.assign(this.listMaster, res.data); });

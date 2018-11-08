@@ -394,7 +394,7 @@
                 <button *ngIf="!data['voucher_id']" type="button" class="btn btn-outline-info" (click)="createVoucher(1, 1)" translate>Save As Draft</button>
                 <ng-container *ngIf="!generalForm.value.electronic">
                     <button type="button" class="btn btn-outline-danger" (click)="confirmModal((data['summary']?.change > 0 && !generalForm.value.electronic && generalForm.value.payment_method != 5)? 'overpayment': 2)" translate>Submit</button>
-                    <button type="button" class="btn btn-outline-success" (click)="confirmModal((data['summary']?.change > 0 && !generalForm.value.electronic && generalForm.value.payment_method != 5)? 'overpayment-approve': 3)" translate>Save & Validate</button>
+                    <button type="button" class="btn btn-outline-success" *ngIf="listMaster['permission'].approve" (click)="confirmModal((data['summary']?.change > 0 && !generalForm.value.electronic && generalForm.value.payment_method != 5)? 'overpayment-approve': 3)" translate>Save & Validate</button>
                 </ng-container>
                 <button *ngIf="generalForm.value.electronic" type="button" class="btn btn-outline-danger" (click)="confirmElectricModal()" translate>Save & Payment</button>
                 <button *ngIf="!data['voucher_id']" type="button" class="btn btn-outline-dark" (click)="createVoucher(1, 1, 1); resetVoucher();" translate>Save & Create New Receipt Voucher</button>
