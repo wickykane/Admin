@@ -10,6 +10,8 @@ import { Subject } from 'rxjs/Subject';
 import { routerTransition } from '../../../../router.animations';
 import { OrderService } from '../../order-mgmt.service';
 
+import { StorageService } from '../../../../services/storage.service';
+
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
 import { ItemModalContent } from '../../../../shared/modals/item.modal';
@@ -130,6 +132,7 @@ export class SaleQuotationEditComponent implements OnInit {
         private orderService: OrderService,
         private _hotkeysService: HotkeysService,
         public keyService: SaleQuoteEditKeyService,
+        private storage: StorageService,
         private cd: ChangeDetectorRef,
         private dt: DatePipe) {
         this.generalForm = fb.group({
@@ -160,6 +163,7 @@ export class SaleQuotationEditComponent implements OnInit {
     ngOnInit() {
         this.data['id'] = this.route.snapshot.paramMap.get('id');
         const user = JSON.parse(localStorage.getItem('currentUser'));
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
         this.listMaster['from_src'] = [{ id: 0, label: 'From Master' }, { id: 1, label: 'From Quote' }, { id: 2, label: 'Manual' }];
 
         this.orderService.getOrderReference().subscribe(res => { Object.assign(this.listMaster, res.data); this.refresh(); });

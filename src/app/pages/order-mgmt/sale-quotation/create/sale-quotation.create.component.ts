@@ -10,6 +10,8 @@ import { Subject } from 'rxjs/Subject';
 import { routerTransition } from '../../../../router.animations';
 import { OrderService } from '../../order-mgmt.service';
 
+import { StorageService } from '../../../../services/storage.service';
+
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
 import { ItemModalContent } from '../../../../shared/modals/item.modal';
@@ -130,6 +132,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         private orderService: OrderService,
         private _hotkeysService: HotkeysService,
         public keyService: SaleQuoteCreateKeyService,
+        private storage: StorageService,
         private cd: ChangeDetectorRef,
         private dt: DatePipe) {
         this.generalForm = fb.group({
@@ -160,6 +163,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         this.data['is_copy'] = this.route.snapshot.queryParams['is_copy'] || 0;
 
         const user = JSON.parse(localStorage.getItem('currentUser'));
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
         this.listMaster['multi_ship'] = [{ id: 0, label: 'No' }, { id: 1, label: 'Yes' }];
         this.listMaster['from_src'] = [{ id: 0, label: 'From Master' }, { id: 1, label: 'From Quote' }, { id: 2, label: 'Manual' }];
 
