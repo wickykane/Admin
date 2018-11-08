@@ -5,13 +5,14 @@
         <button ngbTooltip="Submit" *ngIf="_orderDetail['order_sts_short_name'] == 'NW' && data['permission'].submit" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail, 'SM')"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i> Submit</button>
         <button ngbTooltip="Approve" *ngIf="_orderDetail['order_sts_short_name'] == 'SM' && data['permission'].approve" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail, 'AP')"><i class="fa fa-check-square" aria-hidden="true"></i> Approve</button>
         <button ngbTooltip="Reject" *ngIf="_orderDetail['order_sts_short_name'] == 'SM' && data['permission'].reject" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail, 'RJ')"><i class="fa fa-ban"></i> Reject</button>
-        <button ngbTooltip="Cancel" *ngIf="_orderDetail['order_sts_short_name'] == 'NW' && data['permission'].cancel" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail, 'CC')"><i class="fa fa-times-circle"></i> Cancel</button>
+        <button ngbTooltip="Cancel" *ngIf="['NW', 'AP', 'IP', 'PP', 'RS'].indexOf(_orderDetail['order_sts_short_name']) != -1 && data['permission'].cancel" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail, 'CC')"><i class="fa fa-times-circle"></i> Cancel</button>
         <button ngbTooltip="Re Open" *ngIf="_orderDetail['order_sts_short_name'] == 'RJ' && data['permission'].reopen" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail, 'RO')"><i class="fa fa-repeat"></i> Re-Open</button>
         <button ngbTooltip="Copy" *ngIf="data['permission'].copy" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail, 'CLONE')"><i class="fa fa-clone"></i> Copy</button>
         <!-- <button ngbTooltip="Create Return Order" *ngIf="_orderDetail['order_sts_short_name'] == 'RS'" class="btn btn-outline-dark" (click)="confirmModal(_orderDetail, 'RS')"><i class="fa fa-file"></i> Create Return Order</button> -->
 
 
-        <button ngbTooltip="Edit" *ngIf="data['permission'].edit && (_orderDetail['order_sts_short_name'] == 'NW' || _orderDetail['order_sts_short_name'] == 'RV' || !detail['total_paid'] && (_orderDetail['order_sts_short_name'] == 'AP' || _orderDetail['order_sts_short_name'] == 'IP' || _orderDetail['order_sts_short_name'] == 'PP' || _orderDetail['order_sts_short_name'] == 'RS')) " class="btn btn-outline-dark" (click)="edit()"><i class="fa fa-pencil-square"></i> Edit</button>
+        <button ngbTooltip="Edit" *ngIf="data['permission'].edit && (_orderDetail['order_sts_short_name'] == 'NW' || _orderDetail['order_sts_short_name'] == 'RV' || !detail['total_paid'] && (_orderDetail['order_sts_short_name'] == 'AP' || _orderDetail['order_sts_short_name'] == 'IP' || _orderDetail['order_sts_short_name'] == 'PP' || _orderDetail['order_sts_short_name'] == 'RS')) "
+            class="btn btn-outline-dark" (click)="edit()"><i class="fa fa-pencil-square"></i> Edit</button>
         <button ngbTooltip="Generate Invoice" (click)="generateInvoice()" *ngIf="data['permission'].genInvoice && data['enableInvoice'] && ['AP', 'IP', 'PP', 'RS'].indexOf(_orderDetail['order_sts_short_name']) != -1" class="btn btn-outline-dark"><i class="fa fa-plus"></i> Generate Invoice</button>
 
     </div>
@@ -67,14 +68,25 @@
                                                 {{detail['type_name']}}
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6 customer-infomation bolder">
                                         <div class="form-group row">
                                             <label class='col-6'>Order Status</label>
                                             <div class='col-6'>
-                                                {{detail['order_sts_name']}}
+                                                <span class="label blue" *ngIf="detail['order_sts_short_name'] == 'NW'">{{detail['order_sts_name']}}</span>
+                                                <span class="label texas-rose" *ngIf="detail['order_sts_short_name'] == 'SM'">{{detail['order_sts_name']}}</span>
+                                                <!-- <span class="label texas-rose" *ngIf="detail['order_sts_short_name'] == 'RV'">{{detail['order_sts_name']}}</span>                                             -->
+                                                <span class="label strong-green" *ngIf="detail['order_sts_short_name'] == 'AP'">{{detail['order_sts_name']}}</span>
+                                                <span class="label rock-blue" *ngIf="detail['order_sts_short_name'] == 'IP'">{{detail['order_sts_name']}}</span>
+                                                <span class="label green" *ngIf="detail['order_sts_short_name'] == 'PP'">{{detail['order_sts_name']}}</span>
+                                                <span class="label darkblue" *ngIf="detail['order_sts_short_name'] == 'RS'">{{detail['order_sts_name']}}</span>
+                                                <span class="label pink" *ngIf="detail['order_sts_short_name'] == 'DL'">{{detail['order_sts_name']}}</span>
+                                                <span class="label bright-grey" *ngIf="detail['order_sts_short_name'] == 'PD'">{{detail['order_sts_name']}}</span>
+                                                <span class="label lemon" *ngIf="detail['order_sts_short_name'] == 'CP'">{{detail['order_sts_name']}}</span>
+                                                <span class="label magenta" *ngIf="detail['order_sts_short_name'] == 'RJ'">{{detail['order_sts_name']}}</span>
+                                                <span class="label red" *ngIf="detail['order_sts_short_name'] == 'CC'">{{detail['order_sts_name']}}</span>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="col-md-6 customer-infomation bolder">
                                         <div class="form-group row">
                                             <label class='col-6'>Payment Method</label>
                                             <div class='col-6'>
@@ -96,6 +108,12 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
+                                            <label class='col-6'>Approver</label>
+                                            <div class='col-6'>
+                                                {{detail['approver_name']}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
                                             <label class='col-6'>Last Update On</label>
                                             <div class='col-6'>
                                                 {{detail['updated_at']|date:'MM/dd/yyyy'}}
@@ -107,14 +125,7 @@
                                                 {{detail['last_update_by']}}
                                             </div>
                                         </div>
-                                        <div class="form-group row">
-                                            <label class='col-6'>Approver
 
-                                     </label>
-                                            <div class='col-6'>
-                                                {{detail['approver_name']}}
-                                            </div>
-                                        </div>
 
                                     </div>
                                 </div>
@@ -135,6 +146,14 @@
                                     <label class="control-label col-5" translate>Customer Name</label>
                                     <div class="col-7">
                                         {{detail['buyer_name']}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group row">
+                                    <label class="control-label col-5" translate>Tax Exemption</label>
+                                    <div class="col-7">
+                                        {{ detail['taxable'] ? 'No' : 'Yes'}}
                                     </div>
                                 </div>
                             </div>
@@ -435,7 +454,7 @@
                     </div>
                     <div class="card-body no-padding">
                         <div>
-                            <textarea readonly class="form-control border-0"  rows="11" style="resize:none; background-color: #fff;" [(ngModel)]="detail['description']"></textarea>
+                            <textarea readonly class="form-control border-0" rows="11" style="resize:none; background-color: #fff;" [(ngModel)]="detail['description']"></textarea>
                         </div>
                     </div>
                 </div>
