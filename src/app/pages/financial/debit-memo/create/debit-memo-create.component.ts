@@ -16,6 +16,7 @@ import { DebitMemoCreateKeyService } from './keys.create.control';
 import { ItemsOrderDebitModalContent } from '../modals/items-order/items-order.modal';
 import { MiscItemsDebitModalContent } from '../modals/misc-items/misc-items.modal';
 
+import { StorageService } from '../../../../services/storage.service';
 import { cdArrowTable } from '../../../../shared';
 import { FinancialService } from '../../financial.service';
 import { DebitMemoService } from '../debit-memo.service';
@@ -91,6 +92,7 @@ export class DebitMemoCreateComponent implements OnInit {
         public tableService: TableService,
         public debitService: DebitMemoService,
         public financialService: FinancialService,
+        private storage: StorageService,
         private renderer: Renderer) {
 
         this.debitMemoForm = fb.group({
@@ -134,6 +136,7 @@ export class DebitMemoCreateComponent implements OnInit {
     //#region lifecycle hook
     ngOnInit() {
         this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
         // Lazy Load filter
         this.data['page'] = 1;
         const params = { page: this.data['page'], length: 100 };
