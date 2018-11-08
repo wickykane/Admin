@@ -382,7 +382,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12 mg-top-15 text-center">
+            <div class="col-md-12 mg-top-15 text-right">
                 <button type="button" class="btn btn-outline-info" (click)="updateVoucher(1, 1)" translate>Save As Draft</button>
                 <ng-container *ngIf="!generalForm.value.electronic">
                     <button type="button" class="btn btn-outline-danger" (click)="confirmModal((data['summary']?.change > 0 && !generalForm.value.electronic && generalForm.value.payment_method != 5)? 'overpayment': 2)" translate>Submit</button>

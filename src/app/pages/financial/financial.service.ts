@@ -95,9 +95,9 @@ export class FinancialService {
         return this.API.get(url, params);
     }
 
-    getListApprover() {
-        const url = 'ar-invoice/get-list-user';
-        return this.API.get(url);
+    getListApprover(params) {
+        const url = 'user/search';
+        return this.API.post(url, params);
     }
     getEarlyPaymentValue(issue_dt, payment_term_id, total_due) {
         const url = `ar-invoice/set-early-payment-value?issue_dt=${issue_dt}&payment_term_id=${payment_term_id}&total_due=${total_due}`;
