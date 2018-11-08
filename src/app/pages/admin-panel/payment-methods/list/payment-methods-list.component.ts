@@ -154,11 +154,13 @@ export class PaymentMethodsListComponent implements OnInit {
                 } catch (err) {
                     console.log(err);
                     payment.ac = payment.ac ? 0 : 1;
+                    this.refresh();
                 }
             },
             err => {
                 console.log(err);
                 payment.ac = payment.ac ? 0 : 1;
+                this.refresh();
             });
     }
 
