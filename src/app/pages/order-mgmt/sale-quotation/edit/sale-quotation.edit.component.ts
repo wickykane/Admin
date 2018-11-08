@@ -8,6 +8,7 @@ import { NgSelectComponent } from '@ng-select/ng-select';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs/Subject';
 import { routerTransition } from '../../../../router.animations';
+import { StorageService } from '../../../../services/storage.service';
 import { OrderService } from '../../order-mgmt.service';
 
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
@@ -131,6 +132,7 @@ export class SaleQuotationEditComponent implements OnInit {
         private _hotkeysService: HotkeysService,
         public keyService: SaleQuoteEditKeyService,
         private cd: ChangeDetectorRef,
+        private storage: StorageService,
         private dt: DatePipe) {
         this.generalForm = fb.group({
             'approver_id': [null, Validators.required],
@@ -158,6 +160,7 @@ export class SaleQuotationEditComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
         this.data['id'] = this.route.snapshot.paramMap.get('id');
         const user = JSON.parse(localStorage.getItem('currentUser'));
         this.listMaster['from_src'] = [{ id: 0, label: 'From Master' }, { id: 1, label: 'From Quote' }, { id: 2, label: 'Manual' }];

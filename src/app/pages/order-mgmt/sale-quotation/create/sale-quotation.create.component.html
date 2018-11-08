@@ -440,7 +440,7 @@
                                                 <span>{{item.amount | currency}}</span>
                                             </td>
                                             <td>
-                                               <span *ngIf="item.income_account_id"> {{ item.income_account_code }}-{{ item.income_account_name }}</span> 
+                                               <span *ngIf="item.income_account_id"> {{ item.income_account_code }}-{{ item.income_account_name }}</span>
                                             </td>
                                             <td class="text-center">
                                                 <span>
@@ -574,7 +574,7 @@
         <div class="row">
             <div class="col-md-12 mg-top-15 text-right">
                 <button type="button" class="btn btn-outline-info" [disabled]="!generalForm.valid" (click)="createOrder(1, 1)" translate>Save As Draft</button>
-                <button type="button" class="btn btn-outline-success" (click)="confirmModal(4)" [disabled]="!generalForm.valid" translate>Save & Validate</button>
+                <button type="button" class="btn btn-outline-success" (click)="confirmModal(4)" [disabled]="!generalForm.valid && listMaster['permission'].approve" translate>Save & Validate</button>
                 <button type="button" class="btn btn-outline-danger" (click)="confirmModal(2)" [disabled]="!generalForm.valid" translate>Save & Submit For Approval</button>
                 <button type="button" class="btn btn-default" (click)="confirmModal(0)" translate>Back To List</button>
             </div>
