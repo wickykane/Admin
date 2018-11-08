@@ -80,7 +80,7 @@ export class CustomerCustomerBalanceTabComponent implements OnInit, OnDestroy {
     }
 
     getListReference() {
-        this.customerService.getListCustomerBalanceReference().subscribe(res => {
+        this.customerService.getListCustomerBalanceReference(this._customerId).subscribe(res => {
             try {
                 this.listReference = res.data || {};
                 this.refresh();
