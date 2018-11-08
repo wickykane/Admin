@@ -21,6 +21,7 @@ export class PayTermCreateComponent implements OnInit {
     public checkDes = false;
     generalForm: FormGroup;
     public isEdit = false;
+    public isUsed = false;
     public listMaster = {};
     constructor(public router: Router,
         private cd: ChangeDetectorRef,
@@ -49,7 +50,7 @@ export class PayTermCreateComponent implements OnInit {
             if (params.id) {
                 this.getDetailPaymentTerm(params.id);
                 this.isEdit = true;
-                this.generalForm.get('early_pmt_incentive').disable();
+                // this.generalForm.get('early_pmt_incentive').disable();
                 this.refresh();
             } else {
                 this.getGenerateCode();
@@ -131,6 +132,10 @@ export class PayTermCreateComponent implements OnInit {
         if (id) {
             this.paytermService.getDetailPayment(id).subscribe(res => {
                 this.generalForm.patchValue(res.data);
+                this.isUsed = res.data.used;
+                if (this.isUsed) {
+                    this.generalForm.get('early_pmt_incentive').disable();
+                }
                 this.changeIncentive();
                 this.refresh();
             }, err => {
