@@ -61,9 +61,9 @@ export class DebitMemoService {
         return this.API.get(url);
     }
 
-    getListApprovers() {
-        const url = 'debit/approvers';
-        return this.API.get(url);
+    getListApprovers(params) {
+        const url = 'user/search';
+        return this.API.post(url, params);
     }
 
     getOrderInformation(orderId) {

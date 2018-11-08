@@ -28,6 +28,7 @@ import { PaymentGatewayModalComponent } from '../modals/payment-gateway/payment-
 import { TableService } from './../../../../services/table.service';
 
 import * as moment from 'moment';
+import { ROUTE_PERMISSION } from '../../../../services/route-permission.config';
 import { PaymentInformModalComponent } from '../modals/payment-inform/payment-inform.modal';
 import { FinancialService } from './../../financial.service';
 
@@ -163,8 +164,18 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         if (this.data['invoice_id']) {
             this.getDetailInvoice();
         }
+        this.getListApprover();
     }
-
+    getListApprover() {
+        const params = {
+            permissions: ROUTE_PERMISSION['receipt-voucher'].approve,
+        };
+        this.finacialService.getListApprover(params).subscribe(res => {
+            this.listMaster['approver'] = res.data;
+            const defaultValue = (this.listMaster['approver'].find(item => item.id === this.generalForm.value.approver_id) || {}).id || null;
+            this.generalForm.patchValue({ approver_id: defaultValue });
+        });
+    }
     /**
      * Mater Data
      */
