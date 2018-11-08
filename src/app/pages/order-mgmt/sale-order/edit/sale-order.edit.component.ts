@@ -189,8 +189,6 @@ export class SaleOrderEditComponent implements OnInit {
      */
     refresh() {
         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
-<<<<<<< HEAD
-=======
     }
 
     getListApprover() {
@@ -202,7 +200,6 @@ export class SaleOrderEditComponent implements OnInit {
             const defaultValue = (this.listMaster['approver'].find(item => item.id === this.generalForm.value.approver_id) || {}).id || null;
             this.generalForm.patchValue({ approver_id: defaultValue });
         });
->>>>>>> f312179a0140a5fd8dde4559b07c3eebe9d03433
     }
 
 
@@ -264,7 +261,6 @@ export class SaleOrderEditComponent implements OnInit {
 
 
                 this.order_info['original_ship_cost'] = data.original_ship_cost;
-                this.updateTotal();
                 this.changeCustomer(1);
 
                 // Master Data
@@ -293,6 +289,7 @@ export class SaleOrderEditComponent implements OnInit {
                     this.refresh();
                 });
                 this.disableControl();
+                this.updateTotal();
                 this.refresh();
             } catch (e) {
                 console.log(e);
@@ -619,10 +616,11 @@ export class SaleOrderEditComponent implements OnInit {
         this.order_info.order_summary = {};
         items.forEach(item => {
             const remain_qty = (this.data['disable']) ? item.qty_remain : item.quantity;
+            console.log(remain_qty);
             this.order_info.order_summary['total_item'] = (this.order_info.order_summary['total_item'] || 0) + (+item.quantity);
-            this.order_info.order_summary['total_cogs'] = (this.order_info.order_summary['total_cogs'] || 0) + (+item.cost_price || 0) * (item.remain_qty || 0);
-            this.order_info.order_summary['total_vol'] = (this.order_info.order_summary['total_vol'] || 0) + (+item.vol || 0) * (item.remain_qty || 0);
-            this.order_info.order_summary['total_weight'] = +((this.order_info.order_summary['total_weight'] || 0) + (+item.wt || 0) * (item.remain_qty || 0)).toFixed(2);
+            this.order_info.order_summary['total_cogs'] = (this.order_info.order_summary['total_cogs'] || 0) + (+item.cost_price || 0) * (remain_qty || 0);
+            this.order_info.order_summary['total_vol'] = (this.order_info.order_summary['total_vol'] || 0) + (+item.vol || 0) * (remain_qty || 0);
+            this.order_info.order_summary['total_weight'] = +((this.order_info.order_summary['total_weight'] || 0) + (+item.wt || 0) * (remain_qty || 0)).toFixed(2);
             this.order_info.order_summary['total_remain'] = (this.order_info.order_summary['total_remain'] || 0) + (+item.qty_remain);
             this.order_info.order_summary['total_cancel'] = (this.order_info.order_summary['total_cancel'] || 0) + (+item.qty_cancel);
         });
