@@ -8,6 +8,7 @@ import { NgSelectComponent } from '@ng-select/ng-select';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs/Subject';
 import { routerTransition } from '../../../../router.animations';
+import { StorageService } from '../../../../services/storage.service';
 import { OrderService } from '../../order-mgmt.service';
 
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
@@ -131,6 +132,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         private _hotkeysService: HotkeysService,
         public keyService: SaleQuoteCreateKeyService,
         private cd: ChangeDetectorRef,
+        private storage: StorageService,
         private dt: DatePipe) {
         this.generalForm = fb.group({
             'approver_id': [null, Validators.required],
@@ -156,6 +158,8 @@ export class SaleQuotationCreateComponent implements OnInit {
     }
 
     ngOnInit() {
+
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
         this.data['id'] = this.route.snapshot.queryParams['quote_id'];
         this.data['is_copy'] = this.route.snapshot.queryParams['is_copy'] || 0;
 
@@ -209,7 +213,7 @@ export class SaleQuotationCreateComponent implements OnInit {
      * Mater Data
      */
     refresh() {
-         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
+        if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
 
     getDetailQuote() {
@@ -251,7 +255,7 @@ export class SaleQuotationCreateComponent implements OnInit {
                     const idList = result.data.rows.map(item => item.id);
                     this.listMaster['customer'] = result.data.rows;
                     if (res.data.buyer_id && idList.indexOf(res.data.buyer_id) === -1) {
-                        this.listMaster['customer'].push({ id: res.data.buyer_id, company_name: res.data.buyer_name , name: res.data.buyer_name});
+                        this.listMaster['customer'].push({ id: res.data.buyer_id, company_name: res.data.buyer_name, name: res.data.buyer_name });
                     }
                     this.data['total_page'] = result.data.total_page;
                 });
@@ -610,7 +614,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         this.generalForm.controls['description'].patchValue(stringNote);
     }
 
-    remove = function (index) {
+    remove = function(index) {
         this.data['programs'].splice(index, 1);
         this.refresh();
     };
