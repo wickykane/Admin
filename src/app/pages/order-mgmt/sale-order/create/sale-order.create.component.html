@@ -135,6 +135,12 @@
                                     <div class="col-md-4 customer-infomation bolder">
                                         <form [formGroup]="generalForm">
                                             <div class="form-group row">
+                                                <label class='col-6'>Tax Exemption</label>
+                                                <div class='col-6'>
+                                                  {{ customer.taxable ? 'No' : 'Yes'}}
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
                                                 <label class='col-6'>Payment Method<span class="text-danger">(*)</span></label>
                                                 <div class='col-6 text-primary'>
                                                     <select class="form-control" name="payment_method_id" formControlName="payment_method_id">
