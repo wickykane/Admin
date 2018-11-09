@@ -339,7 +339,7 @@
                                                 <div class='col-6'>
                                                     <select (change)="changeShipVia()" class="form-control" name="carrier_id" formControlName="carrier_id">
                                                         <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
-                                                        <option *ngFor="let item of listMaster['carriers']" [hidden]="item.id === 999 && generalForm.value.type != 'PKU'"
+                                                        <option *ngFor="let item of listMaster['carriers']" [hidden]="item.id === 999 && generalForm.value.type == 'NO'"
                                                             [ngValue]="item.id">{{item.name}}</option>
                                                     </select>
                                                 </div>
