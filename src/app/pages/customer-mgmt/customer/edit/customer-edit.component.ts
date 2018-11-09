@@ -622,7 +622,9 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     }
 
     updateCustomer() {
-        if (+this.creditBalanceForm.value.new_credit_limit < this.balance) {
+        if ((this.creditBalanceForm.value.new_credit_limit) && +this.creditBalanceForm.value.new_credit_limit < this.balance) {
+            console.log('balance' + this.balance);
+            console.log('credit' + this.creditBalanceForm.value.new_credit_limit);
             const modalRef = this.modalService.open(ConfirmModalContent);
             modalRef.componentInstance.message = 'The current balance is greater than the input credit limit. Please check.';
             modalRef.componentInstance.yesButtonText = 'OK';
@@ -635,7 +637,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                 return;
             });
         }
-        if (+this.creditBalanceForm.value.adj_current_balance + this.balance < 0) {
+        if ((this.creditBalanceForm.value.adj_current_balance) && +this.creditBalanceForm.value.adj_current_balance + this.balance < 0) {
             const modalRef = this.modalService.open(ConfirmModalContent);
             modalRef.componentInstance.message = 'The current balance is not enough to minus with the input value in Adj. Current Balance field. Please check.';
             modalRef.componentInstance.yesButtonText = 'OK';
@@ -676,6 +678,9 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                 delete params['pwd_cfrm'];
             } else {
                 delete params['company_name'];
+            }
+            if (params['buyer_type'] === 'CP' && params['contacts'].length === 0) {
+                return this.toastr.error('The contact field is required.');
             }
             this.customerService.updateCustomer(this.idCustomer, params).subscribe(
                 res => {
