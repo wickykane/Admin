@@ -267,8 +267,8 @@ export class DebitMemoCreateComponent implements OnInit {
             permissions: ROUTE_PERMISSION['debit-memo'].approve,
         };
         this.debitService.getListApprovers(params).subscribe(res => {
-            this.listMaster['approver'] = res.data;
-            const defaultValue = (this.listMaster['approver'].find(item => item.id === this.debitMemoForm.value.approver_id) || {}).id || null;
+            this.listMaster['approvers'] = res.data;
+            const defaultValue = (this.listMaster['approvers'].find(item => item.id === this.debitMemoForm.value.approver_id) || {}).id || null;
             this.debitMemoForm.patchValue({ approver_id: defaultValue });
         });
     }
