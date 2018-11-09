@@ -37,7 +37,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     public selectedSiteIndex = 0;
     public selectedContactIndex = 0;
     public data = {};
-
+    public isCheck = false;
     generalForm: FormGroup;
     creditBalanceForm: FormGroup;
 
@@ -623,30 +623,34 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
 
     updateCustomer() {
         if ((this.creditBalanceForm.value.new_credit_limit) && +this.creditBalanceForm.value.new_credit_limit < this.balance) {
-            console.log('balance' + this.balance);
-            console.log('credit' + this.creditBalanceForm.value.new_credit_limit);
+            this.isCheck = true;
             const modalRef = this.modalService.open(ConfirmModalContent);
             modalRef.componentInstance.message = 'The current balance is greater than the input credit limit. Please check.';
             modalRef.componentInstance.yesButtonText = 'OK';
             modalRef.result.then(yes => {
                 if (yes) {
                     this.creditBalanceForm.controls.new_credit_limit.reset();
+                    this.isCheck = false;
                     return;
                 }
             }, no => {
+                this.isCheck = false;
                 return;
             });
         }
         if ((this.creditBalanceForm.value.adj_current_balance) && +this.creditBalanceForm.value.adj_current_balance + this.balance < 0) {
+            this.isCheck = true;
             const modalRef = this.modalService.open(ConfirmModalContent);
             modalRef.componentInstance.message = 'The current balance is not enough to minus with the input value in Adj. Current Balance field. Please check.';
             modalRef.componentInstance.yesButtonText = 'OK';
             modalRef.result.then(yes => {
                 if (yes) {
                     this.creditBalanceForm.controls.adj_current_balance.reset();
+                    this.isCheck = false;
                     return;
                 }
             }, no => {
+                this.isCheck = false;
                 return;
              });
         }
@@ -667,7 +671,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             'bank_accounts': this.bank_accounts,
             'credit_cards': this.credit_cards
         });
-        if (this.generalForm.valid) {
+        if (this.generalForm.valid && this.isCheck === false ) {
             const params = { ...this.generalForm.value, ...this.creditBalanceForm.value };
             if (params['buyer_type'] === 'CP') {
                 delete params['email'];
