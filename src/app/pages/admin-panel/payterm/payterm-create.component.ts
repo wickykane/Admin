@@ -57,7 +57,8 @@ export class PayTermCreateComponent implements OnInit {
             }
         });
         this.listMaster['status'] = [{ key: 0, value: 'In Active' }, { key: 1, value: 'Active' }];
-        this.listMaster['early'] = [{ key: 1, value: 'Percent' }, { key: 2, value: 'Fixed Amount' }];
+        // this.listMaster['early'] = [{ key: 1, value: 'Percent' }, { key: 2, value: 'Fixed Amount' }];
+        this.listMaster['early'] = [{ key: 1, value: 'Percent' }];
         this.changeIncentive();
     }
     refresh() {
