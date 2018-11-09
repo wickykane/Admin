@@ -592,19 +592,9 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     }
     checkStatus() {
         if (this.generalForm.value.ac !== 1) {
-            if (this.generalForm.value.buyer_type === 'PS' || this.generalForm.value.buyer_type === 'CP') {
-                const modalRef = this.modalService.open(ConfirmModalContent);
-                modalRef.componentInstance.message = 'Are you sure that you want to deactivate this customer?';
-                modalRef.componentInstance.yesButtonText = 'YES';
-                modalRef.componentInstance.noButtonText = 'NO';
-                modalRef.result.then(yes => {
-                    if (yes) {
-                        this.updateCustomer();
-                    }
-                }, no => {});
-            }
-
+            let setStatus = false;
             if (this.generalForm.value.buyer_type === 'CP' && this.generalForm.value.is_parent === true) {
+                setStatus = true;
                 const modalRef = this.modalService.open(ConfirmModalContent);
                 modalRef.componentInstance.message = 'Are you sure that you want to deactivate this customer? All of its subsidiaries will be also deactivated.';
                 modalRef.componentInstance.yesButtonText = 'YES';
@@ -612,9 +602,27 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                 modalRef.result.then(yes => {
                     if (yes) {
                         this.updateCustomer();
+                        return;
                     }
-                }, no => { });
+                }, no => {
+                    return;
+                });
             }
+            if (this.generalForm.value.buyer_type === 'PS' || this.generalForm.value.buyer_type === 'CP' && setStatus === false) {
+                const modalRef = this.modalService.open(ConfirmModalContent);
+                modalRef.componentInstance.message = 'Are you sure that you want to deactivate this customer?';
+                modalRef.componentInstance.yesButtonText = 'YES';
+                modalRef.componentInstance.noButtonText = 'NO';
+                modalRef.result.then(yes => {
+                    if (yes) {
+                        this.updateCustomer();
+                        return;
+                    }
+                }, no => {
+                    return;
+                });
+            }
+
         } else {
             this.updateCustomer();
         }
