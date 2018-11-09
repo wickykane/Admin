@@ -390,8 +390,13 @@ export class InvoiceCreateComponent implements OnInit {
 
                 const event = res.data;
                 this.list.items = event.items.map(item => {
-                    item.qty_inv = item.qty_remain;
-                    item.qty = item.qty_remain;
+                    if  (item.is_item) {
+                        item.qty = item.qty_remain;
+                        item.qty_inv = item.qty_remain;
+                    } else {
+                        item.qty = item.quantity;
+                        item.qty_inv = item.quantity;
+                    }
                     item.price = item.sale_price;
                     return item;
                 });
