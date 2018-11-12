@@ -138,7 +138,7 @@ export class SaleOrderEditComponent implements OnInit {
             'buyer_id': [null, Validators.required],
             'customer_po': [null, Validators.required],
             'order_number': [null],
-            'type': ['NO', Validators.required],
+            'type': [null, Validators.required],
             'order_date': [null, Validators.required],
             'delivery_date': [null],
             'contact_user_id': [null],
@@ -368,6 +368,7 @@ export class SaleOrderEditComponent implements OnInit {
         }
         if (!flag) {
             // this.list.items = [];
+            this.generalForm.patchValue({type: 'NO'});
             this.updateTotal();
         }
         this.refresh();
