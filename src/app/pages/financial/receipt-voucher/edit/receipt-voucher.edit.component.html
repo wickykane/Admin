@@ -242,7 +242,7 @@
                                         <tr [ngClass]="{'row-selected': $index == selectedIndex}">
                                             <td class="text-center">
                                                 <label class="css-input css-checkbox css-checkbox-default">
-                                                    <input class="cb-element" type="checkbox" [(ngModel)]="item.is_checked" (change)="isAllChecked()">
+                                                    <input class="cb-element" type="checkbox" [(ngModel)]="item.is_checked" (change)="isAllChecked($index)">
                                                     <span></span>
                                                 </label>
                                             </td>
