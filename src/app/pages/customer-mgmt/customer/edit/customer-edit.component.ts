@@ -45,6 +45,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     public bank_accounts: any = [];
     // public bank_card: any = [];
     public contacts: any = [];
+    public remove_contacts: any = [];
     public sites: any = [];
     public company_child: any = [];
 
@@ -511,12 +512,14 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         this.refresh();
     }
 
-    removeContact(index) {
+    removeContact(index , item) {
         if (this.contacts[index].hasOwnProperty('id')) {
             this.contacts[index].is_deleted = true;
             this.refresh();
             return;
         }
+        const remove = {user_id: item};
+        this.remove_contacts.push(remove);
         this.contacts.splice(index, 1);
         this.refresh();
     }
@@ -677,10 +680,11 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             'contacts': this.contacts,
             'sites': this.sites,
             'bank_accounts': this.bank_accounts,
-            'credit_cards': this.credit_cards
+            'credit_cards': this.credit_cards,
         });
         if (this.generalForm.valid && this.isCheck === false ) {
-            const params = { ...this.generalForm.value, ...this.creditBalanceForm.value };
+            const params = { ...this.generalForm.value, ...this.creditBalanceForm.value, 'remove_contact': this.remove_contacts };
+            console.log('param', params);
             if (params['buyer_type'] === 'CP') {
                 delete params['email'];
                 delete params['first_name'];
@@ -691,6 +695,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             } else {
                 delete params['company_name'];
             }
+
             if (params['buyer_type'] === 'CP' && params['contacts'].length === 0) {
                 return this.toastr.error('The contact field is required.');
             }
