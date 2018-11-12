@@ -760,6 +760,7 @@ export class RmaEditComponent implements OnInit {
         // After WH
         this.order_info_after.total = 0;
         this.order_info_after.sub_total = 0;
+        let amount = 0;
 
         this.groupTaxAfter(this.list.returnItem);
         this.order_info_after.order_summary = {};
@@ -775,8 +776,12 @@ export class RmaEditComponent implements OnInit {
             if (item.sku !== 'MIS-0000006') {
                 item.amount = ((+item.accept_quantity || 0) * (+item.sale_price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
                 this.order_info_after.sub_total += item.amount;
+            } else {
+              amount += item.price;
             }
         });
+
+        this.order_info_after.sub_total = this.order_info_after.sub_total - amount;
 
         this.order_info_after.total = +this.order_info_after['total_tax'] + +this.order_info_after.sub_total;
         this.refresh();
