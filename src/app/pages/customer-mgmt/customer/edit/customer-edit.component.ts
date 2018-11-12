@@ -518,8 +518,8 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             this.refresh();
             return;
         }
-        const remove = {user_id: item};
-        this.remove_contacts.push(remove);
+        const remove = item;
+        this.remove_contacts.push(item);
         this.contacts.splice(index, 1);
         this.refresh();
     }
