@@ -383,8 +383,28 @@ export class RmaEditComponent implements OnInit {
 
     disableControl() {
         if (this.generalForm.value['sts_name'] !== 'New') {
-            this.generalForm.disable();
             this.disableEdit = true;
+
+            this.generalForm.get('company_id').disable();
+            this.generalForm.get('cd').disable();
+            this.generalForm.get('request_date').disable();
+            this.generalForm.get('order_id').disable();
+            this.generalForm.get('invoice_id').disable();
+            this.generalForm.get('return_time').disable();
+            this.generalForm.get('delivery_date').disable();
+            this.generalForm.get('sale_person_id').disable();
+            this.generalForm.get('approver_id').disable();
+            this.generalForm.get('order_return_type').disable();
+
+            this.generalForm.get('bill_to').disable();
+            this.generalForm.get('ship_to').disable();
+            this.generalForm.get('warehouse').disable();
+
+            this.generalForm.get('ship_via').disable();
+            this.generalForm.get('carrier').disable();
+            this.generalForm.get('carrier_id').disable();
+            this.generalForm.get('tracking_no').disable();
+
         }
 
     }

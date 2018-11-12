@@ -201,7 +201,7 @@ export class SaleOrderEditComponent implements OnInit {
         };
         this.orderService.getListApprover(params).subscribe(res => {
             this.listMaster['approver'] = res.data;
-            const defaultValue = (this.listMaster['approver'].find(item => item.id === this.generalForm.value.approver_id) || {}).id || null;
+            const defaultValue = (this.listMaster['approver'].find(item => item.id === this.generalForm.getRawValue().approver_id) || {}).id || null;
             this.generalForm.patchValue({ approver_id: defaultValue });
         });
     }
