@@ -150,7 +150,10 @@
                                         <td><a href="javascript: void(0)" *ngIf="listMaster['permission'].view" class="text-primary" (click)="onViewDebitMemo(debit.id)">{{debit.no}}</a></td>
                                         <td class="text-center">{{debit.issue_date | date:'MM/dd/yyyy'}}</td>
                                         <td>{{debit.company_name}}</td>
-                                        <td>{{debit.doc_no}}</td>
+                                        <td>
+                                            <a *ngIf="debit.invoice_id" class="text-primary" [routerLink]="['/financial/invoice/view', debit.invoice_id] ">{{debit.doc_no}}</a>
+                                            <a *ngIf="debit.order_id" class="text-primary" [routerLink]="['/order-management/sale-order/detail', debit.order_id] ">{{debit.doc_no}}</a>
+                                        </td>
                                         <td class="text-center">{{debit.due_date | date:'MM/dd/yyyy'}}</td>
                                         <td>{{debit.total_price | currency}}</td>
                                         <td>{{debit.balance_price | currency}}</td>

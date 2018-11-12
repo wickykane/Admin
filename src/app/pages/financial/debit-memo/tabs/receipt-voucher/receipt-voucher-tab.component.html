@@ -22,7 +22,9 @@
                                 </thead>
                                 <tbody *ngFor="let item of list.items">
                                         <tr>
-                                                <td>{{item.cd}}</td>
+                                                <td>
+                                                    <a class="text-primary" [routerLink]="['/financial/receipt-voucher/view', item.id] ">{{item.cd}}</a>
+                                                </td>
                                                 <td>{{item.company_name}}</td>
                                                 <td>{{item.payment_date|date:'MM/dd/yyyy'}}</td>
                                                 <td>{{item.payment_method}}</td>
