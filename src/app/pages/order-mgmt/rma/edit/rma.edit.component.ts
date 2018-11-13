@@ -213,7 +213,7 @@ export class RmaEditComponent implements OnInit {
     }
 
     getDetailRMA() {
-        this.service.getDetailRMA(this.route.snapshot.paramMap.get('id')).subscribe(res => {
+        this.service.getDetailRMA(this.route.snapshot.paramMap.get('id'), false).subscribe(res => {
             try {
                 const data = res.data;
                 this.data['order_data'] = data;
@@ -230,13 +230,6 @@ export class RmaEditComponent implements OnInit {
                     'arrival_date': data.arrival_date
                 });
 
-                // this.generalForm.patchValue({
-                //   ship_via: this.generalForm.getRawValue().ship_via,
-                //   carrier: this.generalForm.getRawValue().carrier,
-                //   carrier_id: this.generalForm.getRawValue().carrier_id,
-                //   tracking_no: this.generalForm.getRawValue().tracking_no,
-                //   arrival_date: this.generalForm.getRawValue().arrival_date
-                // });
 
                 this.list.returnItem = res.data.items || [];
                 this.list.returnItem = (res.data.items || []).map(item => {
@@ -266,13 +259,38 @@ export class RmaEditComponent implements OnInit {
                     this.refresh();
                 });
 
-                this.service.getOrderDetail(data['order_id']).subscribe(result => {
+                this.service.getOrderDetail(data['order_id'], this.route.snapshot.paramMap.get('id')).subscribe(result => {
                     try {
                         const data1 = result.data;
-                        this.list.returnItem.forEach(item => {
+                        data1.items = data1.items.filter((x => x.is_item));
+
+                        data1.items.forEach(item => {
                             item['reason'] = this.listMaster['return_reason'];
                         });
 
+                        const first = data1.items.filter(this.comparer(this.list.returnItem));
+                        const second = this.list.returnItem.filter(this.comparer(data1.items));
+
+                        this.list.returnItem_delete = first.concat(second);
+
+
+                        if (data1.order_sts_short_name === 'PD' || data1.order_sts_short_name === 'CP') {
+                            this.requiredInv = true;
+                            this.generalForm.get('invoice_id').setValidators([Validators.required]);
+                            this.generalForm.get('invoice_id').updateValueAndValidity();
+                            if (this.generalForm.getRawValue().sts_name === 'New') {
+                              this.generalForm.controls.ship_via.enable();
+                            }
+                        }
+
+                        if (data1.order_sts_short_name === 'AP' || data1.order_sts_short_name === 'IP' || data1.order_sts_short_name === 'PP' || data1.order_sts_short_name === 'RS') {
+                            this.requiredInv = false;
+                            this.generalForm.get('invoice_id').clearValidators();
+                            this.generalForm.get('invoice_id').updateValueAndValidity();
+                            if (this.generalForm.getRawValue().sts_name === 'New') {
+                              this.generalForm.controls.ship_via.disable();
+                            }
+                        }
                         // Set item and update
                         this.calcTotal();
 
@@ -358,6 +376,15 @@ export class RmaEditComponent implements OnInit {
         });
     }
 
+    comparer(otherArray) {
+        return (current) => {
+            return otherArray.filter((other) => {
+                return other.order_detail_id === current.order_detail_id;
+            }).length === 0;
+        };
+    }
+
+
     updateStatus(status, message) {
         const modalRef = this.modalService.open(BackdropModalContent, { size: 'lg', windowClass: 'modal-md', backdrop: 'static', keyboard: false });
         modalRef.result.then(res => {
@@ -397,7 +424,7 @@ export class RmaEditComponent implements OnInit {
 
     disableControl() {
 
-        if (this.generalForm.value['sts_name'] !== 'New') {
+        if (this.generalForm.getRawValue().sts_name !== 'New') {
             this.disableEdit = true;
 
             this.generalForm.get('company_id').disable();
@@ -630,7 +657,7 @@ export class RmaEditComponent implements OnInit {
 
     getOrderInformation(id) {
 
-        this.service.getOrderDetail(id).subscribe(res => {
+        this.service.getOrderDetail(id, this.route.snapshot.paramMap.get('id')).subscribe(res => {
             try {
                 const data = res.data;
                 this.generalForm.patchValue({
@@ -792,7 +819,7 @@ export class RmaEditComponent implements OnInit {
                 item.amount = ((+item.accept_quantity || 0) * (+item.sale_price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
                 this.order_info_after.sub_total += item.amount;
             } else {
-              amount += item.price;
+                amount += item.price;
             }
         });
 
