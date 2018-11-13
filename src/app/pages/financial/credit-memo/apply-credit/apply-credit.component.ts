@@ -228,7 +228,7 @@ export class CreditMemoApplyComponent implements OnInit {
             const isFillFromIndex = (savedItemIndex !== undefined && savedItemIndex !== null && index > savedItemIndex);
             if (isFillAllItems || isFillFromIndex) {
                 savedItem['amount'] = savedItem.is_checked ? Math.min(savedItem['original_amount'], this.savedItems['remainAmount']) : 0;
-                savedItem['amount'] = parseFloat(savedItem['amount'].toFixed(2));
+                savedItem['amount'] = lodash.round(savedItem['amount'], 2);
             }
             this.savedItems['usedAmount'] += savedItem['amount'];
             this.savedItems['remainAmount'] = this.savedItems['totalAmount'] - this.savedItems['usedAmount'];
@@ -241,7 +241,7 @@ export class CreditMemoApplyComponent implements OnInit {
             this.savedItems['items'][itemIndex]['amount'],
             this.savedItems['items'][itemIndex]['original_amount'],
             (this.savedItems['remainAmount'] - this.calculateUsedAmount(itemIndex)));
-        this.savedItems['items'][itemIndex]['amount'] = parseFloat(this.savedItems['items'][itemIndex]['amount'].toFixed(2));
+        this.savedItems['items'][itemIndex]['amount'] = lodash.round(this.savedItems['items'][itemIndex]['amount'], 2);
     }
 
     calculateTotalUsedAmount() {
@@ -249,7 +249,7 @@ export class CreditMemoApplyComponent implements OnInit {
         this.savedItems['items'].forEach((item, index) => {
             usedPrice += item['amount'];
         });
-        return parseFloat(usedPrice.toFixed(2));
+        return lodash.round(usedPrice, 2);
     }
 
     calculateUsedAmount(savedItemIndex) {
@@ -259,7 +259,7 @@ export class CreditMemoApplyComponent implements OnInit {
                 usedPrice += item['amount'];
             }
         });
-        return parseFloat(usedPrice.toFixed(2));
+        return lodash.round(usedPrice, 2);
     }
 
     updateCheckedSavedItems() {
