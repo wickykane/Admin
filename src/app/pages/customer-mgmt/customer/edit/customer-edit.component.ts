@@ -146,6 +146,19 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.generalForm.get('buyer_type').valueChanges.subscribe(
+            (buyer_type: string) => {
+                if (buyer_type === 'PS') {
+                    this.generalForm.get('email').setValidators([Validators.required]);
+                    this.generalForm.get('username').setValidators([Validators.required]);
+                    this.generalForm.get('password').setValidators([Validators.required]);
+                } else if (buyer_type === 'CP') {
+                    this.generalForm.get('email').setValidators([]);
+                    this.generalForm.get('username').setValidators([]);
+                    this.generalForm.get('password').setValidators([]);
+                }
+            }
+        );
         /**
          * Init Data
          */
@@ -165,6 +178,20 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
       }
     get new_credit_limit() {
     return this.creditBalanceForm.get('new_credit_limit');
+    }
+    onClickAdj(value) {
+        if (value) {
+            this.creditBalanceForm.controls.new_credit_limit.disable();
+        } else {
+            this.creditBalanceForm.controls.new_credit_limit.enable();
+        }
+    }
+    onClickCredit(value) {
+        if (value) {
+            this.creditBalanceForm.controls.adj_current_balance.disable();
+        } else {
+            this.creditBalanceForm.controls.adj_current_balance.enable();
+        }
     }
     getListCreditCard() {
         this.customerService.getCreditCard().subscribe(res => {
@@ -699,6 +726,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             if (params['buyer_type'] === 'CP' && params['contacts'].length === 0) {
                 return this.toastr.error('The contact field is required.');
             }
+            console.log('data: ', params);
             this.customerService.updateCustomer(this.idCustomer, params).subscribe(
                 res => {
                     try {
@@ -737,14 +765,9 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         this.refresh();
     }
 
-    toggleCredit() {
-      const credit = this.creditBalanceForm.get('new_credit_limit');
-      const adj_current = this.creditBalanceForm.get('adj_current_balance');
-      credit.disabled ? credit.enable() : adj_current.disable();
-      }
-    toggleAdj() {
-        const credit = this.creditBalanceForm.get('new_credit_limit');
-        const adj_current = this.creditBalanceForm.get('adj_current_balance');
-        adj_current.disabled ? adj_current.enable() : credit.disable();
-    }
+    // toggleCredit() {
+    //   const credit = this.creditBalanceForm.get('new_credit_limit');
+    //   const adj_current = this.creditBalanceForm.get('adj_current_balance');
+    //   credit.disabled ? credit.enable() : adj_current.disable();
+    //   }
 }
