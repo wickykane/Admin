@@ -151,10 +151,12 @@
                                             </a> -->
                                         </td>
                                         <td>
-                                            <a  *ngIf="listMaster['permission'].view" class="text-primary" [routerLink]="['view', item.id]">{{item.inv_num}}</a>
+                                            <a *ngIf="listMaster['permission'].view" class="text-primary" [routerLink]="['view', item.id]">{{item.inv_num}}</a>
                                         </td>
                                         <td>{{item.inv_dt}}</td>
-                                        <td>{{item.order_num}}</td>
+                                        <td>
+                                            <a class="text-primary" [routerLink]="['/order-management/sale-order/detail', item.order_id] ">{{item.order_num}}</a>
+                                        </td>
                                         <td>{{item.name}}</td>
                                         <td>{{item.due_dt}}</td>
                                         <td>{{item.total_amount|currency}}</td>

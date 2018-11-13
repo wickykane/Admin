@@ -56,7 +56,10 @@
                                         </div>
                                         <div class="form-group row">
                                             <label class='col-6 control-label'>Document No</label>
-                                            <div class='col-6'>{{debitData['doc_no']}}</div>
+                                            <div class='col-6'>
+                                                <a *ngIf="debitData['invoice_id']" class="text-primary" [routerLink]="['/financial/invoice/view', debitData['invoice_id']] ">{{debitData['doc_no']}}</a>
+                                                <a *ngIf="debitData['order_id']" class="text-primary" [routerLink]="['/order-management/sale-order/detail', debitData['order_id']] ">{{debitData['doc_no']}}</a>
+                                            </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class='col-6 control-label'>Issue Date</label>
