@@ -131,7 +131,7 @@ export class ReturnOrderInformationTabComponent implements OnInit {
 
     getList() {
 
-        this.service.getDetailRMA(this._orderId).subscribe(res => {
+        this.service.getDetailRMA(this._orderId, true).subscribe(res => {
             try {
                 this.detail = res.data;
                 this.stockValueChange.emit(res.data);
