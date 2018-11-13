@@ -381,6 +381,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             this.savedItems['items'][savedIndex]['applied_amt'] = 0;
             this.list['items'][index]['applied_amt'] = 0;
         }
+        this.updateTotal(this.savedItems['items'][savedIndex]);
     }
 
     refreshSavedItems(isClearAll) {
@@ -419,6 +420,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             if (this.generalForm.value.electronic) {
                 this.list['items'][itemIndex]['applied_amt'] = Math.min(this.list['items'][itemIndex]['balance_price'], this.list['items'][itemIndex]['applied_amt']);
                 this.savedItems['items'][savedItemIndex]['applied_amt'] = this.list['items'][itemIndex]['applied_amt'];
+                this.updateTotal(this.savedItems['items'][savedItemIndex]);
                 return;
             }
             this.fillSelectedItem(savedItemIndex);
