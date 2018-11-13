@@ -146,6 +146,20 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.generalForm.get('buyer_type').valueChanges.subscribe(
+
+            (buyer_type: string) => {
+                if (buyer_type === 'PS') {
+                    this.generalForm.get('email').setValidators([Validators.required]);
+                    this.generalForm.get('username').setValidators([Validators.required]);
+                    this.generalForm.get('password').setValidators([Validators.required]);
+                } else if (buyer_type === 'CP') {
+                    this.generalForm.get('email').setValidators([]);
+                    this.generalForm.get('username').setValidators([]);
+                    this.generalForm.get('password').setValidators([]);
+                }
+            }
+        );
         /**
          * Init Data
          */
@@ -699,6 +713,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             if (params['buyer_type'] === 'CP' && params['contacts'].length === 0) {
                 return this.toastr.error('The contact field is required.');
             }
+            console.log('data: ', params);
             this.customerService.updateCustomer(this.idCustomer, params).subscribe(
                 res => {
                     try {

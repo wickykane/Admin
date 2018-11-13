@@ -102,7 +102,14 @@
                                     </td>
                                     <td class="text-center">{{item.issue_date | date:'MM/dd/yyyy' }}</td>
                                     <td>{{item.customer_name}}</td>
-                                    <td class="text-center">{{item.document_cd}}</td>
+                                    <td>
+                                        <a *ngIf="item.doc_related_type == '1'" class="text-blue"
+                                            [routerLink]="['/financial/invoice/view/', item.doc_related_id]">{{item.document_cd}}</a>                        
+                                        <a *ngIf="item.doc_related_type == '2'"  class="text-blue"
+                                        [routerLink]="['/order-management/return-order/detail/', item.doc_related_id]">{{item.document_cd}}</a>
+                                        <a *ngIf="item.doc_related_type == '3'" class="text-blue"
+                                        [routerLink]="['/financial/receipt-voucher/view/', item.doc_related_id]">{{item.document_cd}}</a>                                        
+                                    </td>
                                     <td class="text-center">
                                         {{item.total_price | currency}}
                                     </td>
