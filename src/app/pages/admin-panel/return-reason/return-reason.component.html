@@ -54,6 +54,7 @@
                                         <th>Description</th>
                                         <th>Exclude RR Calculation</th>
                                         <th>Status</th>
+                                        <th>Used</th>
                                         <th>Last Updated By</th>
                                         <th>Last Updated On</th>
                                         <th>Action</th>
@@ -65,18 +66,21 @@
                                         <td>{{ item.des }}</td>
                                         <td class="text-center">{{item.exclude_rr_calc ==0 ? 'No' :'Yes'}}</td>
                                         <td class="text-center">{{convertStatus(item.sts)}}</td>
+                                        <td class="text-center">
+                                            <i *ngIf="item.used" class="fa fa-check" aria-hidden="true"></i>
+                                        </td>
                                         <td class="text-center">{{item.crtd_by_name}}</td>
                                         <td class="text-center">{{item.updated_dt}}</td>
                                         <td>
-                                            <a *ngIf="listMaster['permission'].edit && !item.is_sys" href="javascript:void(0)" class="btn btn-default"
+                                            <a *ngIf="listMaster['permission'].edit && !item.is_sys && !item.used" href="javascript:void(0)" class="btn btn-default"
                                                 (click)="editReturnReason(item.id)" title="Edit Return Reason">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
-                                            <a *ngIf="listMaster['permission'].delete && !item.is_sys" href="javascript:void(0)" class="btn btn-default"
+                                            <a *ngIf="listMaster['permission'].delete && !item.is_sys && !item.used" href="javascript:void(0)" class="btn btn-default"
                                                 (click)="deleteReason(item.id)" title="Delete Return Reason">
                                                 <i class="fa fa-trash" aria-hidden="true"></i>
                                             </a>
-                                            <a *ngIf="!listMaster['permission'].delete && !listMaster['permission'].edit && item.is_sys"
+                                            <a *ngIf="!listMaster['permission'].delete && !listMaster['permission'].edit && item.is_sys && item.used"
                                                 href="javascript:void(0)"></a>
                                         </td>
                                     </tr>
