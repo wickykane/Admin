@@ -26,7 +26,7 @@
                                 <tbody *ngFor="let item of list.items">
                                     <tr>
                                         <td>
-                                          {{item.no}}
+                                            <a class="text-primary" [routerLink]="['/financial/debit-memo/view', item.id] ">{{item.no}}</a>
                                         </td>
                                         <td>{{item.issue_date | date:'MM/dd/yyyy'}}</td>
                                         <td>{{item.company_name}}</td>
