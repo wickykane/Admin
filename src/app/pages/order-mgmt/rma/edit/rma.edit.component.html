@@ -204,7 +204,7 @@
                                                     <div clickOutside (clickOutside)="d2.close()" class="input-group">
                                                         <input class="form-control" placeholder="mm/dd/yyyy" name="arrival_date" formControlName="arrival_date" ngbDatepicker #d2="ngbDatepicker">
                                                         <div class="input-group-append">
-                                                            <button class="btn btn-outline-secondary" (click)="d2.toggle()" type="button">
+                                                            <button [disabled]="disableEdit" class="btn btn-outline-secondary" (click)="d2.toggle()" type="button">
                                                                 <i class="fa fa-calendar" aria-hidden="true"></i>
                                                             </button>
                                                         </div>
@@ -456,7 +456,7 @@
                                 </td>
                                 <td class="text-center">
                                     <span *ngIf="item.sku != 'MIS-0000006'">{{item.sale_price | currency}}</span>
-                                    <input *ngIf="item.sku =='MIS-0000006'" [isDecimal]="true" numberDirective [min]="1" style="width: 100px;" class="form-control input-sm" type="number" [(ngModel)]="item.price" (changeValue)="item.amount_before_receipt = item.price;calcTotal()">
+                                    <input *ngIf="item.sku =='MIS-0000006'" [isDecimal]="true" numberDirective [min]="0" style="width: 100px;" class="form-control input-sm" type="number" [(ngModel)]="item.price" (changeValue)="item.amount_before_receipt = item.price;calcTotal()">
                                 </td>
                                 <td class="text-center">
                                   <span>{{item.discount_percent}}</span>
@@ -518,7 +518,7 @@
             </div>
         </div>
 
-        <div class="row mg-top-10" *ngIf="generalForm.value.order_return_type == 3">
+        <div class="row mg-top-10" *ngIf="generalForm.getRawValue().order_return_type == 3">
             <div class="col-12 padding-lr-5">
                 <div class="card no-border">
                     <div class="card-header">
@@ -687,7 +687,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-2" *ngIf="generalForm.value.order_return_type == 3">
+            <div class="col-md-2" *ngIf="generalForm.getRawValue().order_return_type == 3">
                 <div class="card height-100">
                     <div class="card-header">
                         <strong>Total Replacement</strong>
