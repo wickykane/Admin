@@ -524,3 +524,18 @@
         }
     }
 }
+
+.table-responsive {
+    table {
+        tbody {
+            tr {
+                td {
+                    .fa-check:before {
+                        color: #28a745;
+                        font-size: 1.5em;
+                    }
+                }
+            }
+        }
+    }
+}

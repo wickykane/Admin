@@ -101,7 +101,13 @@
                                         </td>
                                         <td class="text-center">{{item.issue_date | date:'MM/dd/yyyy'}}</td>
                                         <td>{{item.company_name}}</td>
-                                        <td>{{item.doc_no}}</td>
+                                        <td>
+                                            <a *ngIf="item.invoice_id !== null" class="text-blue"
+                                            [routerLink]="['/financial/invoice/view/', item.invoice_id]">{{item.doc_no}}</a>                                            
+                                            <a *ngIf="item.order_id !== null" class="text-blue"
+                                            [routerLink]="['/order-management/sale-order/detail/', item.order_id]">{{item.doc_no}}</a>
+                                          
+                                        </td>
                                         <td class="text-center">{{item.due_date | date:'MM/dd/yyyy'}}</td>
                                         <td>{{item.total_price | currency}}</td>
                                         <td>{{item.balance_price | currency}}</td>
