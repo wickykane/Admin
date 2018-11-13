@@ -154,7 +154,9 @@
                                 <tbody *ngFor="let item of detail.list_credit; let $index = index;">
                                     <tr>
                                         <td>{{$index+1}}</td>
-                                        <td>{{item.cd}}</td>
+                                        <td>
+                                            <a class="text-primary" [routerLink]="['/financial/credit-memo/view', item.document_id] ">{{item.cd}}</a>
+                                        </td>
                                         <td class="text-center">{{item.issue_date |date:'MM/dd/yyyy'}}</td>
                                         <td>{{item.total_amount|currency }}</td>
                                         <td>{{item.apply_amount|currency}}</td>
@@ -194,7 +196,10 @@
                                 <tbody *ngFor="let item of detail.items; let $index = index;">
                                     <tr>
                                         <td>{{$index+1}}</td>
-                                        <td>{{item.document_no}}</td>
+                                        <td>
+                                            <a *ngIf="item.doc_type == 1" class="text-primary" [routerLink]="['/financial/invoice/view', item.item_id] ">{{item.document_no}}</a>
+                                            <a *ngIf="item.doc_type == 2" class="text-primary" [routerLink]="['/financial/debit-memo/view', item.item_id] ">{{item.document_no}}</a>
+                                        </td>
                                         <td class="text-center">{{item.issue_date|date:'MM/dd/yyyy'}}</td>
                                         <td>{{item.due_date|date:'MM/dd/yyyy' }}</td>
                                         <td>{{item.payment_term['des'] }}</td>
@@ -270,7 +275,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                             </div>
                         </div>
                     </div>

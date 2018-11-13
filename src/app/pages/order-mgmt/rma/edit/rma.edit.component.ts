@@ -223,7 +223,20 @@ export class RmaEditComponent implements OnInit {
                     'bill_to': data['billing_data']['id'] || null,
                     'ship_to': data['shipping_data']['id'] || null,
                     'note': data.des,
+                    'ship_via': data.ship_via,
+                    'carrier': data.carrier,
+                    'carrier_id': data.carrier_id,
+                    'tracking_no': data.tracking_no,
+                    'arrival_date': data.arrival_date
                 });
+
+                // this.generalForm.patchValue({
+                //   ship_via: this.generalForm.getRawValue().ship_via,
+                //   carrier: this.generalForm.getRawValue().carrier,
+                //   carrier_id: this.generalForm.getRawValue().carrier_id,
+                //   tracking_no: this.generalForm.getRawValue().tracking_no,
+                //   arrival_date: this.generalForm.getRawValue().arrival_date
+                // });
 
                 this.list.returnItem = res.data.items || [];
                 this.list.returnItem = (res.data.items || []).map(item => {
@@ -287,6 +300,7 @@ export class RmaEditComponent implements OnInit {
                         this.refresh();
                         this.disableControl();
 
+
                     } catch (e) {
                         console.log(e);
                     }
@@ -327,7 +341,7 @@ export class RmaEditComponent implements OnInit {
                 }
                 if (this.data['order_data']['status_message'] === 0) {
                     if (this.data['order_data']['is_change'] === 1) {
-                      this.checkStatusOrder(this.route.snapshot.paramMap.get('id'));
+                        this.checkStatusOrder(this.route.snapshot.paramMap.get('id'));
                     }
                 }
 
@@ -382,9 +396,30 @@ export class RmaEditComponent implements OnInit {
     }
 
     disableControl() {
+
         if (this.generalForm.value['sts_name'] !== 'New') {
-            this.generalForm.disable();
             this.disableEdit = true;
+
+            this.generalForm.get('company_id').disable();
+            this.generalForm.get('cd').disable();
+            this.generalForm.get('request_date').disable();
+            this.generalForm.get('order_id').disable();
+            this.generalForm.get('invoice_id').disable();
+            this.generalForm.get('return_time').disable();
+            this.generalForm.get('delivery_date').disable();
+            this.generalForm.get('sale_person_id').disable();
+            this.generalForm.get('approver_id').disable();
+            this.generalForm.get('order_return_type').disable();
+
+            this.generalForm.get('bill_to').disable();
+            this.generalForm.get('ship_to').disable();
+            this.generalForm.get('warehouse').disable();
+
+            this.generalForm.get('ship_via').disable();
+            this.generalForm.get('tracking_no').disable();
+            this.generalForm.get('carrier_id').disable();
+            this.generalForm.get('carrier').disable();
+            this.generalForm.get('arrival_date').disable();
         }
 
     }
@@ -704,7 +739,7 @@ export class RmaEditComponent implements OnInit {
         unique.forEach((tax, index) => {
             let taxAmount = 0;
             items.filter(item => item.tax_percent === tax).map(i => {
-                taxAmount += (+i.tax_percent * +i.accept_quantity * ((+i.price || 0) * (100 - (+i.discount_percent || 0)) / 100) / 100);
+                taxAmount += (+i.tax_percent * +i.accept_quantity * ((+i.sale_price || 0) * (100 - (+i.discount_percent || 0)) / 100) / 100);
             });
             this.order_info_after['total_tax'] = this.order_info_after['total_tax'] + +(taxAmount.toFixed(2));
             this.order_info_after['taxs'].push({
@@ -721,14 +756,18 @@ export class RmaEditComponent implements OnInit {
         this.groupTax(this.list.returnItem);
         this.order_info.order_summary = {};
         this.list.returnItem.forEach(item => {
-            this.order_info.order_summary['total_item'] = (this.order_info.order_summary['total_item'] || 0) + (+item.return_quantity);
-            this.order_info.order_summary['total_cogs'] = (this.order_info.order_summary['total_cogs'] || 0) + (+item.cost_price || 0) * (item.return_quantity || 0);
+            if (item.sku !== 'MIS-0000006') {
+                this.order_info.order_summary['total_item'] = (this.order_info.order_summary['total_item'] || 0) + (+item.return_quantity);
+                this.order_info.order_summary['total_cogs'] = (this.order_info.order_summary['total_cogs'] || 0) + (+item.cost_price || 0) * (item.return_quantity || 0);
+            }
         });
 
 
         this.list.returnItem.forEach(item => {
-            item.amount = ((+item.return_quantity || 0) * (+item.sale_price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
-            this.order_info.sub_total += item.amount;
+            if (item.sku !== 'MIS-0000006') {
+                item.amount = ((+item.return_quantity || 0) * (+item.sale_price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
+                this.order_info.sub_total += item.amount;
+            }
         });
 
         this.order_info.total = +this.order_info['total_tax'] + +this.order_info.sub_total;
@@ -736,19 +775,28 @@ export class RmaEditComponent implements OnInit {
         // After WH
         this.order_info_after.total = 0;
         this.order_info_after.sub_total = 0;
+        let amount = 0;
 
         this.groupTaxAfter(this.list.returnItem);
         this.order_info_after.order_summary = {};
         this.list.returnItem.forEach(item => {
-            this.order_info_after.order_summary['total_item'] = (this.order_info_after.order_summary['total_item'] || 0) + (+item.accept_quantity);
-            this.order_info_after.order_summary['total_cogs'] = (this.order_info_after.order_summary['total_cogs'] || 0) + (+item.price || 0) * (item.accept_quantity || 0);
+            if (item.sku !== 'MIS-0000006') {
+                this.order_info_after.order_summary['total_item'] = (this.order_info_after.order_summary['total_item'] || 0) + (+item.accept_quantity);
+                this.order_info_after.order_summary['total_cogs'] = (this.order_info_after.order_summary['total_cogs'] || 0) + (+item.cost_price || 0) * (item.accept_quantity || 0);
+            }
         });
 
 
         this.list.returnItem.forEach(item => {
-            item.amount = ((+item.accept_quantity || 0) * (+item.price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
-            this.order_info_after.sub_total += item.amount;
+            if (item.sku !== 'MIS-0000006') {
+                item.amount = ((+item.accept_quantity || 0) * (+item.sale_price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
+                this.order_info_after.sub_total += item.amount;
+            } else {
+              amount += item.price;
+            }
         });
+
+        this.order_info_after.sub_total = this.order_info_after.sub_total - amount;
 
         this.order_info_after.total = +this.order_info_after['total_tax'] + +this.order_info_after.sub_total;
         this.refresh();
@@ -938,7 +986,7 @@ export class RmaEditComponent implements OnInit {
                 params = {
                     'items': this.data['order_data']['sts'] === 1 ? this.list.returnItem : this.itemStockFee,
                     'replace_items': this.list.replaceItem || null,
-                    'status': 1
+                    // 'status': 1
                 };
                 break;
         }

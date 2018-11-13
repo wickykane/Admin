@@ -357,6 +357,11 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         this.checkAllItem = this.list.items.every(item => item.is_checked);
         this.list.checklist = this.list.items.filter(item => item.is_checked);
         this.updateCheckedSavedItems();
+        this.generalForm.value.electronic ? this.onCheckItemManual(index) : this.onCheckItemAutoFill(index);
+        this.refresh();
+    }
+
+    onCheckItemAutoFill(index) {
         if (!this.list['items'][index].is_checked) {
             const savedIndex = this.savedItems['items'].findIndex(savedItem => savedItem.id === this.list['items'][index].id);
             this.savedItems['items'][savedIndex]['applied_amt'] = 0;
@@ -365,7 +370,17 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         } else {
             this.fillAppliedAmountToAllItem();
         }
-        this.refresh();
+    }
+
+    onCheckItemManual(index) {
+        const savedIndex = this.savedItems['items'].findIndex(savedItem => savedItem.id === this.list['items'][index].id);
+        if (this.list['items'][index].is_checked) {
+            this.savedItems['items'][savedIndex]['applied_amt'] = this.savedItems['items'][savedIndex]['balance_price'];
+            this.list['items'][index]['applied_amt'] = this.list['items'][index]['balance_price'];
+        } else {
+            this.savedItems['items'][savedIndex]['applied_amt'] = 0;
+            this.list['items'][index]['applied_amt'] = 0;
+        }
     }
 
     refreshSavedItems(isClearAll) {
@@ -402,7 +417,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
                 this.savedItems['items'][savedItemIndex]['applied_amt'] = this.list['items'][itemIndex]['applied_amt'];
             }
             if (this.generalForm.value.electronic) {
-                this.list['items'][itemIndex]['applied_amt'] = Math.min(this.list['items'][itemIndex]['balance_price'], this.list['items'][itemIndex]['remainAmount']);
+                this.list['items'][itemIndex]['applied_amt'] = Math.min(this.list['items'][itemIndex]['balance_price'], this.list['items'][itemIndex]['applied_amt']);
                 this.savedItems['items'][savedItemIndex]['applied_amt'] = this.list['items'][itemIndex]['applied_amt'];
                 return;
             }
@@ -415,14 +430,18 @@ export class ReceiptVoucherCreateComponent implements OnInit {
     fillAppliedAmount(savedItemIndex?) {
         this.savedItems['usedAmount'] = 0;
         this.savedItems['items'].forEach((savedItem, index) => {
-            const isFillAllItems = (savedItemIndex === undefined || savedItemIndex === null);
-            const isFillFromIndex = (savedItemIndex !== undefined && savedItemIndex !== null && index > savedItemIndex);
-            if (isFillAllItems || isFillFromIndex) {
-                savedItem['applied_amt'] = savedItem.is_checked ? Math.min(savedItem['balance_price'], this.savedItems['remainAmount']) : 0;
-                savedItem['applied_amt'] = parseFloat(savedItem['applied_amt'].toFixed(2));
+            if (!this.generalForm.value.electronic) {
+                const isFillAllItems = (savedItemIndex === undefined || savedItemIndex === null);
+                const isFillFromIndex = (savedItemIndex !== undefined && savedItemIndex !== null && index > savedItemIndex);
+                if (isFillAllItems || isFillFromIndex) {
+                    savedItem['applied_amt'] = savedItem.is_checked ? Math.min(savedItem['balance_price'], this.savedItems['remainAmount']) : 0;
+                    savedItem['applied_amt'] = parseFloat(savedItem['applied_amt'].toFixed(2));
+                }
+                this.savedItems['usedAmount'] += savedItem['applied_amt'];
+                this.savedItems['remainAmount'] = this.savedItems['totalAmount'] - this.savedItems['usedAmount'];
+            } else {
+                savedItem['applied_amt'] = !savedItem.is_checked ? 0 : ( savedItem['applied_amt'] ? savedItem['applied_amt'] : savedItem['balance_price'] );
             }
-            this.savedItems['usedAmount'] += savedItem['applied_amt'];
-            this.savedItems['remainAmount'] = this.savedItems['totalAmount'] - this.savedItems['usedAmount'];
             this.updateTotal(savedItem);
         });
     }

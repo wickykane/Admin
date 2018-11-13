@@ -138,7 +138,7 @@ export class SaleOrderEditComponent implements OnInit {
             'buyer_id': [null, Validators.required],
             'customer_po': [null, Validators.required],
             'order_number': [null],
-            'type': ['NO', Validators.required],
+            'type': [null, Validators.required],
             'order_date': [null, Validators.required],
             'delivery_date': [null],
             'contact_user_id': [null],
@@ -201,7 +201,7 @@ export class SaleOrderEditComponent implements OnInit {
         };
         this.orderService.getListApprover(params).subscribe(res => {
             this.listMaster['approver'] = res.data;
-            const defaultValue = (this.listMaster['approver'].find(item => item.id === this.generalForm.value.approver_id) || {}).id || null;
+            const defaultValue = (this.listMaster['approver'].find(item => item.id === this.generalForm.getRawValue().approver_id) || {}).id || null;
             this.generalForm.patchValue({ approver_id: defaultValue });
         });
     }
@@ -368,6 +368,7 @@ export class SaleOrderEditComponent implements OnInit {
         }
         if (!flag) {
             // this.list.items = [];
+            this.generalForm.patchValue({type: 'NO'});
             this.updateTotal();
         }
         this.refresh();

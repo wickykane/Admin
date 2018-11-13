@@ -175,15 +175,15 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <ng-container *ngIf="generalForm.value.ship_via">
-                                                <div class="form-group row" *ngIf="generalForm.value.ship_via != 3">
+                                            <ng-container *ngIf="generalForm.getRawValue().ship_via">
+                                                <div class="form-group row" *ngIf="generalForm.getRawValue().ship_via != 3">
                                                     <label class='col-6'>Carrier
-                                                  <span class="text-danger" *ngIf="generalForm.value.ship_via == 2">(*)</span>
+                                                  <span class="text-danger" *ngIf="generalForm.getRawValue().ship_via == 2">(*)</span>
                                                 </label>
                                                     <div class='col-6'>
-                                                        <input type="text" class="form-control" formControlName="carrier" *ngIf="generalForm.value.ship_via == 1">
+                                                        <input type="text" class="form-control" formControlName="carrier" *ngIf="generalForm.getRawValue().ship_via == 1">
 
-                                                        <select (change)="changeShipVia()" class="form-control" name="carrier_id" formControlName="carrier_id" *ngIf="generalForm.value.ship_via == 2">
+                                                        <select (change)="changeShipVia()" class="form-control" name="carrier_id" formControlName="carrier_id" *ngIf="generalForm.getRawValue().ship_via == 2">
                                                   <option [hidden]="true" [disabled]="true" [ngValue]="null">--Select--</option>
                                                   <option *ngFor="let item of listMaster['carrier']" [ngValue]="item.id">{{item.name}}</option>
                                                 </select>
@@ -191,14 +191,14 @@
                                                 </div>
                                             </ng-container>
 
-                                            <div class="form-group row" *ngIf="generalForm.value.ship_via == 1">
+                                            <div class="form-group row" *ngIf="generalForm.getRawValue().ship_via == 1">
                                                 <label class='col-6'>Tracking No</label>
                                                 <div class='col-6'>
                                                     <input type="text" class="form-control" formControlName="tracking_no">
                                                 </div>
                                             </div>
 
-                                            <div class="form-group row" *ngIf="generalForm.value.ship_via == 3">
+                                            <div class="form-group row" *ngIf="generalForm.getRawValue().ship_via == 3">
                                                 <label class='col-6'>Arrival Date</label>
                                                 <div class='col-6 text-danger'>
                                                     <div clickOutside (clickOutside)="d2.close()" class="input-group">
@@ -456,7 +456,7 @@
                                 </td>
                                 <td class="text-center">
                                     <span *ngIf="item.sku != 'MIS-0000006'">{{item.sale_price | currency}}</span>
-                                    <input *ngIf="item.sku =='MIS-0000006'" numberDirective [min]="1" style="width: 100px;" class="form-control input-sm" type="number" [(ngModel)]="item.price" (changeValue)="item.amount_before_receipt = item.price;calcTotal()">
+                                    <input *ngIf="item.sku =='MIS-0000006'" [isDecimal]="true" numberDirective [min]="1" style="width: 100px;" class="form-control input-sm" type="number" [(ngModel)]="item.price" (changeValue)="item.amount_before_receipt = item.price;calcTotal()">
                                 </td>
                                 <td class="text-center">
                                   <span>{{item.discount_percent}}</span>
@@ -465,8 +465,8 @@
                                   <span>{{item.tax_percent}}</span>
                                 </td>
                                 <td class="text-center">
-                                   <span *ngIf="item.amount_after_receipt">{{item.amount_after_receipt | currency}}</span>
-                                   <span *ngIf="item.amount_before_receipt">{{item.amount_before_receipt | currency}}</span>
+                                   <span *ngIf="item.sku != 'MIS-0000006'">{{item.amount_before_receipt | currency}}</span>
+                                   <span *ngIf="item.sku == 'MIS-0000006'" class="text-danger">({{item.amount_before_receipt | currency}})</span>
                                 </td>
                                 <td>
                                   <span *ngIf="!item.return_reason_accept">{{item.return_reason_des}}</span>
@@ -733,11 +733,10 @@
         </div>
         <div class="row">
             <div class="col-md-12 mg-top-15 text-right">
-                <button type="button" class="btn btn-outline-warning" (click)="confirmCreateOrder('NW')" translate>Save
-                    As Draft</button>
+                <button type="button" class="btn btn-outline-warning" (click)="confirmCreateOrder('NW')" translate>Update</button>
                 <!-- <button type="button" class="btn btn-outline-primary" (click)="confirmCreateOrder('SB')" [disabled]="!generalForm.valid"
                     translate>Save & Submit</button> -->
-                <button type="button" class="btn btn-outline-success" *ngIf="listMaster['permission'].send" (click)="confirmCreateOrder('AR')" [disabled]="!generalForm.valid" translate>Save & Send to WH</button>
+                <!-- <button type="button" class="btn btn-outline-success" *ngIf="listMaster['permission'].send" (click)="confirmCreateOrder('AR')" [disabled]="!generalForm.valid" translate>Save & Send to WH</button> -->
                 <button type="button" class="btn btn-default" (click)="backList()" translate>Back to list</button>
             </div>
         </div>
