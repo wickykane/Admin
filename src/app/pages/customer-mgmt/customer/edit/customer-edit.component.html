@@ -497,7 +497,7 @@
                                             <div class="form-group row">
                                                 <label for="adj_current_balance" class="col-md-5 col-form-label">Adj. Current Balance(+/-)</label>
                                                 <div class="col-md-7">
-                                                    <input (click)="toggleAdj()" type="text" class="form-control" name="adj_current_balance" formControlName="adj_current_balance">
+                                                    <input (keyup)="onClickAdj($event.target.value)" type="text" class="form-control" name="adj_current_balance" formControlName="adj_current_balance">
                                                     <span class="text-danger">Ex: Enter 99 to add $99 and -99 to substract $99</span>
                                                 </div>
                                             </div>
@@ -506,11 +506,11 @@
                                             <div class="form-group row">
                                                 <label for="new_credit_limit" class="col-md-5 col-form-label">Updat Credit Limit</label>
                                                 <div class="col-md-7">
-                                                    <input type="text" (click)="toggleCredit()" class="form-control" name="new_credit_limit" formControlName="new_credit_limit">
+                                                    <input (keyup)="onClickCredit($event.target.value)" type="text" class="form-control" name="new_credit_limit" formControlName="new_credit_limit">
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-12" [ngClass] *ngIf="detail?.is_parent !== false && (adj_current_balance.dirty || new_credit_limit.dirty)">
+                                        <div class="col-md-12" *ngIf="detail?.is_parent !== false && (adj_current_balance.dirty || new_credit_limit.dirty)">
                                             <div class="form-group row">
                                                 <label for="credit_reason" class="col-md-5 col-form-label">Reason</label>
                                                 <div class="col-md-7">

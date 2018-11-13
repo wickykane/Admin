@@ -147,7 +147,6 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.generalForm.get('buyer_type').valueChanges.subscribe(
-
             (buyer_type: string) => {
                 if (buyer_type === 'PS') {
                     this.generalForm.get('email').setValidators([Validators.required]);
@@ -179,6 +178,20 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
       }
     get new_credit_limit() {
     return this.creditBalanceForm.get('new_credit_limit');
+    }
+    onClickAdj(value) {
+        if (value) {
+            this.creditBalanceForm.controls.new_credit_limit.disable();
+        } else {
+            this.creditBalanceForm.controls.new_credit_limit.enable();
+        }
+    }
+    onClickCredit(value) {
+        if (value) {
+            this.creditBalanceForm.controls.adj_current_balance.disable();
+        } else {
+            this.creditBalanceForm.controls.adj_current_balance.enable();
+        }
     }
     getListCreditCard() {
         this.customerService.getCreditCard().subscribe(res => {
@@ -752,14 +765,9 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         this.refresh();
     }
 
-    toggleCredit() {
-      const credit = this.creditBalanceForm.get('new_credit_limit');
-      const adj_current = this.creditBalanceForm.get('adj_current_balance');
-      credit.disabled ? credit.enable() : adj_current.disable();
-      }
-    toggleAdj() {
-        const credit = this.creditBalanceForm.get('new_credit_limit');
-        const adj_current = this.creditBalanceForm.get('adj_current_balance');
-        adj_current.disabled ? adj_current.enable() : credit.disable();
-    }
+    // toggleCredit() {
+    //   const credit = this.creditBalanceForm.get('new_credit_limit');
+    //   const adj_current = this.creditBalanceForm.get('adj_current_balance');
+    //   credit.disabled ? credit.enable() : adj_current.disable();
+    //   }
 }
