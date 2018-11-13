@@ -223,7 +223,20 @@ export class RmaEditComponent implements OnInit {
                     'bill_to': data['billing_data']['id'] || null,
                     'ship_to': data['shipping_data']['id'] || null,
                     'note': data.des,
+                    'ship_via': data.ship_via,
+                    'carrier': data.carrier,
+                    'carrier_id': data.carrier_id,
+                    'tracking_no': data.tracking_no,
+                    'arrival_date': data.arrival_date
                 });
+
+                // this.generalForm.patchValue({
+                //   ship_via: this.generalForm.getRawValue().ship_via,
+                //   carrier: this.generalForm.getRawValue().carrier,
+                //   carrier_id: this.generalForm.getRawValue().carrier_id,
+                //   tracking_no: this.generalForm.getRawValue().tracking_no,
+                //   arrival_date: this.generalForm.getRawValue().arrival_date
+                // });
 
                 this.list.returnItem = res.data.items || [];
                 this.list.returnItem = (res.data.items || []).map(item => {
@@ -286,6 +299,7 @@ export class RmaEditComponent implements OnInit {
 
                         this.refresh();
                         this.disableControl();
+
 
                     } catch (e) {
                         console.log(e);
@@ -382,6 +396,7 @@ export class RmaEditComponent implements OnInit {
     }
 
     disableControl() {
+
         if (this.generalForm.value['sts_name'] !== 'New') {
             this.disableEdit = true;
 
@@ -401,10 +416,10 @@ export class RmaEditComponent implements OnInit {
             this.generalForm.get('warehouse').disable();
 
             this.generalForm.get('ship_via').disable();
-            this.generalForm.get('carrier').disable();
-            this.generalForm.get('carrier_id').disable();
             this.generalForm.get('tracking_no').disable();
-
+            this.generalForm.get('carrier_id').disable();
+            this.generalForm.get('carrier').disable();
+            this.generalForm.get('arrival_date').disable();
         }
 
     }
@@ -760,6 +775,7 @@ export class RmaEditComponent implements OnInit {
         // After WH
         this.order_info_after.total = 0;
         this.order_info_after.sub_total = 0;
+        let amount = 0;
 
         this.groupTaxAfter(this.list.returnItem);
         this.order_info_after.order_summary = {};
@@ -775,8 +791,12 @@ export class RmaEditComponent implements OnInit {
             if (item.sku !== 'MIS-0000006') {
                 item.amount = ((+item.accept_quantity || 0) * (+item.sale_price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
                 this.order_info_after.sub_total += item.amount;
+            } else {
+              amount += item.price;
             }
         });
+
+        this.order_info_after.sub_total = this.order_info_after.sub_total - amount;
 
         this.order_info_after.total = +this.order_info_after['total_tax'] + +this.order_info_after.sub_total;
         this.refresh();
