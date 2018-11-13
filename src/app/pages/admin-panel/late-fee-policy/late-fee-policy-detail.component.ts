@@ -176,12 +176,21 @@ export class LateFeePolicyDetailComponent implements OnInit {
     }
 
     payloadData() {
-        if (this.generalForm.get('recuring_fee').value == '0' && this.applyRecurringFee === true) {
+        if (this.generalForm.get('recuring_fee').value === '0' && this.applyRecurringFee === true) {
             return this.toastr.error('Recurring fee must be greater than 0');
         }
-        if (this.generalForm.get('pay_value').value <= 0 || this.generalForm.get('pay_value').value > 100 && this.generalForm.get('pay_type').value == '1') {
-            return this.toastr.error('Late fee must be greater than 0 or less than 100 % ');
+
+        const payValue = parseFloat(this.generalForm.get('pay_value').value);
+        const payType = this.generalForm.get('pay_type').value.toString();
+        let errorMessage = '';
+        if (!payValue) {
+            errorMessage = (payType === '1') ? 'The input value must be between 0% and 100%.' : 'The input value must be greater than $0.00.';
+            return this.toastr.error(errorMessage);
+        } else if (payValue > 100 && payType === '1') {
+            errorMessage = 'The input value must be between 0% and 100%.';
+            return this.toastr.error(errorMessage);
         }
+
         if (this.generalForm.get('id').value && this.isEdit) {
             if (this.currentStatus !== 2 && this.generalForm.value['ac'] === 2) {
                 this.openTerminateLFPModal();
