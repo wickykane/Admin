@@ -39,7 +39,12 @@
                                         <div class="form-group row">
                                             <label class='col-6 control-label'>Document No</label>
                                             <div class='col-6'>
-                                                {{detail['document_name']}}
+                                                <a *ngIf="detail['document_type'] == '1'" class="text-primary"
+                                                [routerLink]="['/financial/invoice/view/', detail['document_id']]">{{detail['document_name']}}</a>                        
+                                                <a *ngIf="detail['document_type'] == '2'"  class="text-primary"
+                                                [routerLink]="['/order-management/return-order/detail/', detail['document_id']]">{{detail['document_name']}}</a>
+                                                <a *ngIf="detail['document_type'] == '3'" class="text-primary"
+                                                [routerLink]="['/financial/receipt-voucher/view/', detail['document_id']]">{{detail['document_name']}}</a>
                                             </div>
                                         </div>
                                         <div class="form-group row">
