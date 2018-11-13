@@ -108,15 +108,15 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             'phone': [null,  Validators.required],
             'ac': [null,  Validators.required],
             'fax': [null],
-            'email': [null, Validators.required],
+            'email': [null],
             'carrier_id': [null],
             // 'credit_limit': [null],
             'credit_sts': 2,
             'sale_person_id': [null],
             'first_name': [null],
             'last_name': [null],
-            'username': [null,  Validators.required],
-            'password': [null, Validators.required],
+            'username': [null],
+            'password': [null],
             'pwd_cfrm': [null],
             'company_name': [null],
             'primary': [null],
@@ -699,6 +699,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             if (params['buyer_type'] === 'CP' && params['contacts'].length === 0) {
                 return this.toastr.error('The contact field is required.');
             }
+            console.log('data: ', params);
             this.customerService.updateCustomer(this.idCustomer, params).subscribe(
                 res => {
                     try {
