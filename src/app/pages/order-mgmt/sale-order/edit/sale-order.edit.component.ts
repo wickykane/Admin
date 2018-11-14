@@ -624,7 +624,7 @@ export class SaleOrderEditComponent implements OnInit {
             console.log(remain_qty);
             this.order_info.order_summary['total_item'] = (this.order_info.order_summary['total_item'] || 0) + (+item.quantity);
             this.order_info.order_summary['total_cogs'] = (this.order_info.order_summary['total_cogs'] || 0) + (+item.cost_price || 0) * (remain_qty || 0);
-            this.order_info.order_summary['total_vol'] = (this.order_info.order_summary['total_vol'] || 0) + (+item.vol || 0) * (remain_qty || 0);
+            this.order_info.order_summary['total_vol'] = ((this.order_info.order_summary['total_vol'] || 0) + (+item.vol || 0) * (remain_qty || 0)).toFixed(2);
             this.order_info.order_summary['total_weight'] = +((this.order_info.order_summary['total_weight'] || 0) + (+item.wt || 0) * (remain_qty || 0)).toFixed(2);
             this.order_info.order_summary['total_remain'] = (this.order_info.order_summary['total_remain'] || 0) + (+item.qty_remain);
             this.order_info.order_summary['total_cancel'] = (this.order_info.order_summary['total_cancel'] || 0) + (+item.qty_cancel);

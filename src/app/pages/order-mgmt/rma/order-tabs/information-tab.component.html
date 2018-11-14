@@ -337,7 +337,8 @@
                                             {{item.accept_quantity}}
                                         </td>
                                         <td class="text-center">
-                                            <span>{{item.sale_price | currency}}</span>
+                                            <span *ngIf="item.sku != 'MIS-0000006'">{{item.sale_price | currency}}</span>
+                                            <span *ngIf="item.sku == 'MIS-0000006'" class="text-danger">({{item.sale_price | currency}})</span>
                                         </td>
                                         <td class="text-center">
                                           <span>{{item.discount_percent}}</span>
@@ -346,10 +347,12 @@
                                           <span>{{item.tax_percent}}</span>
                                         </td>
                                         <td class="text-center">
-                                           <span>{{item.amount_before_receipt | currency}}</span>
+                                           <span *ngIf="item.sku != 'MIS-0000006'">{{item.amount_before_receipt | currency}}</span>
+                                           <span *ngIf="item.sku == 'MIS-0000006'" class="text-danger">({{item.amount_before_receipt | currency}})</span>
                                         </td>
                                         <td class="text-center">
-                                          <span>{{item.amount_after_receipt | currency}}</span>
+                                          <span *ngIf="item.sku != 'MIS-0000006'">{{item.amount_after_receipt | currency}}</span>
+                                          <span *ngIf="item.sku == 'MIS-0000006'" class="text-danger">({{item.amount_after_receipt | currency}})</span>
                                         </td>
                                         <td>
                                           <span *ngIf="!item.return_reason_accept">{{item.return_reason_des}}</span>
