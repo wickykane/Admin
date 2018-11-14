@@ -324,7 +324,8 @@ export class CreditMemoApplyComponent implements OnInit {
         }
         this.list.checklist = [];
         this.updateBalance();
-        this.checkAllItem = this.list.items.every(item => item.is_checked);
+        this.updateSavedItems();
+        this.updateAmountReceived(true);
     }
     queryInvoiceByWH() {
         const warehouse_id = this.generalForm.value.warehouse_id;
