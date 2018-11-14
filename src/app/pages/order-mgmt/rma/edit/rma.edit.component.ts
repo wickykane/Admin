@@ -239,6 +239,7 @@ export class RmaEditComponent implements OnInit {
                         this.flagStockFee = true;
                         item.price = item.sale_price;
                         item.amount_before_receipt = item.sale_price;
+                        this.itemStockFee = item;
                     }
                     return item;
                 });
