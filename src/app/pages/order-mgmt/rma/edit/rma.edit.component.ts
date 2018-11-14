@@ -265,10 +265,6 @@ export class RmaEditComponent implements OnInit {
                         const data1 = result.data;
                         data1.items = data1.items.filter((x => x.is_item));
 
-                        data1.items.forEach(item => {
-                            item['reason'] = this.listMaster['return_reason'];
-                        });
-
                         const first = data1.items.filter(this.comparer(this.list.returnItem));
                         const second = this.list.returnItem.filter(this.comparer(data1.items));
 
@@ -280,7 +276,7 @@ export class RmaEditComponent implements OnInit {
                             this.generalForm.get('invoice_id').setValidators([Validators.required]);
                             this.generalForm.get('invoice_id').updateValueAndValidity();
                             if (this.generalForm.getRawValue().sts_name === 'New') {
-                              this.generalForm.controls.ship_via.enable();
+                                this.generalForm.controls.ship_via.enable();
                             }
                         }
 
@@ -289,9 +285,18 @@ export class RmaEditComponent implements OnInit {
                             this.generalForm.get('invoice_id').clearValidators();
                             this.generalForm.get('invoice_id').updateValueAndValidity();
                             if (this.generalForm.getRawValue().sts_name === 'New') {
-                              this.generalForm.controls.ship_via.disable();
+                                this.generalForm.controls.ship_via.disable();
                             }
                         }
+
+
+                        this.list.returnItem_delete.forEach(item => {
+                            item['reason'] = this.listMaster['return_reason'];
+                        });
+
+                        this.list.returnItem.forEach(item => {
+                            item['reason'] = this.listMaster['return_reason'];
+                        });
                         // Set item and update
                         this.calcTotal();
 
