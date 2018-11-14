@@ -123,6 +123,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         //  Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getListInvoiceAndMemo';
         this.tableService.context = this;
+        this.tableService.pagination.length = 1000;
 
         //  Init Key
         this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
@@ -264,7 +265,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         this.voucherService.getListInvoiceAndMemo(params).subscribe(res => {
             // this.data['invoice_id'] = null;
             this.list.items = res.data.rows || [];
-            this.tableService.matchPagingOption(res.data);
+            // this.tableService.matchPagingOption(res.data);
             if (code) {
                 const index = this.list.items.findIndex(item => item.code === code);
                 this.list.items[index].applied_amt = this.list.items[index].balance_price;

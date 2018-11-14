@@ -121,6 +121,7 @@ export class ReceiptVoucherEditComponent implements OnInit {
         //  Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getListInvoiceAndMemo';
         this.tableService.context = this;
+        this.tableService.pagination.length = 1000;
 
         //  Init Key
         this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
@@ -263,7 +264,7 @@ export class ReceiptVoucherEditComponent implements OnInit {
             });
             this.data['loadItem'] = true;
             this.updateSavedItems();
-            this.tableService.matchPagingOption(res.data);
+            // this.tableService.matchPagingOption(res.data);
             this.updateTotal();
             this.refresh();
         });
