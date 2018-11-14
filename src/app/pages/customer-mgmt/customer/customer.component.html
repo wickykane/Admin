@@ -80,7 +80,7 @@
                                         <td>{{item.total_balance | currency}}</td>
                                         <td>{{item.created_at}}</td>
                                         <td>
-                                            <span class="label label-default" *ngIf="item.sts == 0">{{item.status_name}}</span>
+                                            <span class="badge badge-secondary" *ngIf="item.sts == 0">{{item.status_name}}</span>
                                             <span class="label label-success" *ngIf="item.sts == 1">{{item.status_name}}</span>
 
                                         </td>
