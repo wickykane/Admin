@@ -12,7 +12,7 @@ export class RMAService {
     }
 
     getDetailRMA(id, flag) {
-        const str = flag ? '?is_edit=false' : '?is_edit=true';
+        const str = flag ? '?is_edit=0' : '?is_edit=1';
         const url = 'return-order/view/' + id + str;
         return this.API.get(url);
     }
