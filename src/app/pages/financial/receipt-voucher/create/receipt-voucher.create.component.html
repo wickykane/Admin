@@ -20,8 +20,7 @@
                                                 </label>
                                                 <div class='col-6 text-primary'>
                                                     <ng-select class="infinity-scroll-select" [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('company_id').errors?.required) || false   }" [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="company_id" [typeahead]="searchKey"
-                                                        (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="min-width: 100%;" [items]="listMaster['customer']" bindLabel="name" bindValue="id" formControlName="company_id"
-                                                        (change)="refreshSavedItems(false)">
+                                                        (scrollToEnd)="fetchMoreCustomer($event)" [virtualScroll]="true" style="min-width: 100%;" [items]="listMaster['customer']" bindLabel="name" bindValue="id" formControlName="company_id">
                                                         <ng-template ng-option-tmp let-item="item">
                                                             <span [innerHTML]="item.company_name"></span>
                                                         </ng-template>
@@ -57,7 +56,7 @@
                                                 </label>
                                                 <div class='col-6'>
                                                     <select [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('warehouse_id').errors?.required) || false   }"
-                                                        class="form-control" name="warehouse_id" formControlName="warehouse_id" (change)="refreshSavedItems(false)">
+                                                        class="form-control" name="warehouse_id" formControlName="warehouse_id">
                                                         <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let item of listMaster['warehouses']" [ngValue]="item.id">{{item.name}}</option>
                                                     </select>
@@ -73,7 +72,7 @@
                                                 </label>
                                                 <div class='col-6'>
                                                     <select [ngClass]="{'border border-danger': (this.data['showError'] && this.generalForm.get('electronic').errors?.required) || false }"
-                                                        class="form-control" formControlName="electronic" (change)="refreshSavedItems(true)">
+                                                        class="form-control" formControlName="electronic">
                                                         <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                                                         <option *ngFor="let item of listMaster['yes_no_options']" [ngValue]="item.value">{{item.label}}</option>
                                                     </select>
