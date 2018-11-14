@@ -86,6 +86,7 @@ export class CreditMemoApplyComponent implements OnInit {
         //  Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getDataApplyByCreditId';
         this.tableService.context = this;
+        this.tableService.pagination.length = 1000;
         this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
         this.searchForm = fb.group({
             'code': [null]
@@ -141,7 +142,7 @@ export class CreditMemoApplyComponent implements OnInit {
             try {
                 // this.copy_list = res.data.rows;
                 this.list.items = res.data.rows;
-                this.tableService.matchPagingOption(res.data);
+                // this.tableService.matchPagingOption(res.data);
                 this.updateBalance();
                 // this.queryInvoiceByWH();
                 this.updateSavedItems();
