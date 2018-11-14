@@ -11,8 +11,9 @@ export class RMAService {
         return this.API.get(url, params);
     }
 
-    getDetailRMA(id) {
-        const url = 'return-order/view/' + id;
+    getDetailRMA(id, flag) {
+        const str = flag ? '?is_edit=false' : '?is_edit=true';
+        const url = 'return-order/view/' + id + str;
         return this.API.get(url);
     }
 
@@ -66,8 +67,9 @@ export class RMAService {
         return this.API.get(url);
     }
 
-    getOrderDetail(id) {
-        const url = ['order', id].join('/');
+    getOrderDetail(id, return_id?) {
+        const str = return_id ? '?return_order_id=' + return_id : '';
+        const url = 'order/' + id + str;
         return this.API.get(url);
     }
     // change status return order
