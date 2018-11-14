@@ -123,6 +123,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         //  Assign get list function name, override letiable here
         this.tableService.getListFnName = 'getListInvoiceAndMemo';
         this.tableService.context = this;
+        this.tableService.pagination.length = 1000;
 
         //  Init Key
         this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
@@ -264,7 +265,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         this.voucherService.getListInvoiceAndMemo(params).subscribe(res => {
             // this.data['invoice_id'] = null;
             this.list.items = res.data.rows || [];
-            this.tableService.matchPagingOption(res.data);
+            // this.tableService.matchPagingOption(res.data);
             if (code) {
                 const index = this.list.items.findIndex(item => item.code === code);
                 this.list.items[index].applied_amt = this.list.items[index].balance_price;
@@ -437,12 +438,12 @@ export class ReceiptVoucherCreateComponent implements OnInit {
                 const isFillFromIndex = (savedItemIndex !== undefined && savedItemIndex !== null && index > savedItemIndex);
                 if (isFillAllItems || isFillFromIndex) {
                     savedItem['applied_amt'] = savedItem.is_checked ? Math.min(savedItem['balance_price'], this.savedItems['remainAmount']) : 0;
-                    savedItem['applied_amt'] = parseFloat(savedItem['applied_amt'].toFixed(2));
+                    savedItem['applied_amt'] = _.round(savedItem['applied_amt'], 2);
                 }
                 this.savedItems['usedAmount'] += savedItem['applied_amt'];
                 this.savedItems['remainAmount'] = this.savedItems['totalAmount'] - this.savedItems['usedAmount'];
             } else {
-                savedItem['applied_amt'] = !savedItem.is_checked ? 0 : ( savedItem['applied_amt'] ? savedItem['applied_amt'] : savedItem['balance_price'] );
+                savedItem['applied_amt'] = !savedItem.is_checked ? 0 : ( savedItem['applied_amt'] ? savedItem['applied_amt'] : _.round(savedItem['balance_price'], 2) );
             }
             this.updateTotal(savedItem);
         });
@@ -453,7 +454,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             this.savedItems['items'][itemIndex]['applied_amt'],
             this.savedItems['items'][itemIndex]['balance_price'],
             (this.savedItems['remainAmount'] - this.calculateUsedAmount(itemIndex)));
-        this.savedItems['items'][itemIndex]['applied_amt'] = parseFloat(this.savedItems['items'][itemIndex]['applied_amt'].toFixed(2));
+        this.savedItems['items'][itemIndex]['applied_amt'] = _.round(this.savedItems['items'][itemIndex]['applied_amt'], 2);
     }
 
     calculateTotalUsedAmount() {
@@ -461,7 +462,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         this.savedItems['items'].forEach((item, index) => {
             usedPrice += item['applied_amt'];
         });
-        return parseFloat(usedPrice.toFixed(2));
+        return _.round(usedPrice, 2);
     }
 
     calculateUsedAmount(savedItemIndex) {
@@ -471,7 +472,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
                 usedPrice += item['applied_amt'];
             }
         });
-        return parseFloat(usedPrice.toFixed(2));
+        return _.round(usedPrice, 2);
     }
 
     updateCheckedSavedItems() {
