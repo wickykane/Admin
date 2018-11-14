@@ -376,8 +376,8 @@ export class ReceiptVoucherCreateComponent implements OnInit {
     onCheckItemManual(index) {
         const savedIndex = this.savedItems['items'].findIndex(savedItem => savedItem.id === this.list['items'][index].id);
         if (this.list['items'][index].is_checked) {
-            this.savedItems['items'][savedIndex]['applied_amt'] = this.savedItems['items'][savedIndex]['balance_price'];
-            this.list['items'][index]['applied_amt'] = this.list['items'][index]['balance_price'];
+            this.savedItems['items'][savedIndex]['applied_amt'] = _.round(this.savedItems['items'][savedIndex]['balance_price'], 2);
+            this.list['items'][index]['applied_amt'] = _.round(this.list['items'][index]['balance_price'], 2);
         } else {
             this.savedItems['items'][savedIndex]['applied_amt'] = 0;
             this.list['items'][index]['applied_amt'] = 0;
