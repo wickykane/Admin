@@ -140,6 +140,28 @@ export class MenuComponent implements OnInit {
                 ],
                 permission: this.routePerm('/financial/invoice') ||  this.routePerm('/financial/receipt-voucher') || this.routePerm('/financial/credit-memo') || this.routePerm('/financial/debit-memo')
             },
+            {
+                flag: 'report',
+                link: '/',
+                main_name: 'Report',
+                icon: '',
+                sub: true,
+                child: [
+                    {
+                        link: '/report/sales',
+                        name: 'Sales',
+                        permission: true
+
+                    },
+                    {
+                        link: '/report/finance-report',
+                        name: 'Finance ',
+                        permission: true
+
+                    },
+                ],
+                permission: true
+            },
             // {
             //     flag: 'rma',
             //     link: '/rma',
