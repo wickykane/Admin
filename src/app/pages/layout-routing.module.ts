@@ -18,7 +18,7 @@ const routes: Routes = [
             { path: 'order-management', loadChildren: '../pages/order-mgmt/order-mgmt.module#OrderMgmtModule' },
             { path: 'customer', loadChildren: '../pages/customer-mgmt/customer-mgmt.module#CustomerMgmtModule' },
             { path: 'financial', loadChildren: '../pages/financial/financial.module#FinancialModule' },
-            { path: 'report', loadChildren: '../pages/reports-mgmt/reports.module#ReportslModule' },
+            { path: 'report', loadChildren: '../pages/reports-mgmt/reports.module#ReportsModule' },
 
         ],
         canActivate: [MasterGuard]

@@ -10,9 +10,12 @@ import { ReportsRoutingModule } from './reports-routing.module';
 
 import { CKEditorModule } from 'ng2-ckeditor';
 
+import { ReportFinanceListComponent } from './finance/list/list.component';
+import { CustomerOutstandingComponent } from './finance/reports/customer-outstanding/customer-outstanding.component';
+
 //  Modal
 import { ItemModalModule } from '../../shared/modals/item.module';
-import { ReportFinanceListComponent } from './finance/list/list.component';
+import { SendMailModalContent } from './finance/modals/send-mail/send-mail.modal';
 
 @NgModule({
     imports: [
@@ -28,9 +31,13 @@ import { ReportFinanceListComponent } from './finance/list/list.component';
         CKEditorModule,
     ],
     declarations: [
+        CustomerOutstandingComponent,
         ReportFinanceListComponent,
+        SendMailModalContent
     ],
     providers: [TableService, DatePipe, Helper, CommonService],
-    entryComponents: []
+    entryComponents: [
+        SendMailModalContent
+    ]
 })
-export class ReportslModule {}
+export class ReportsModule { }
