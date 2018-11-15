@@ -33,7 +33,7 @@
                     <div class="card-header">
                         <div class="text-right">
                             <div>
-                                <a class="btn btn-default" title="Send Mail">
+                                <a class="btn btn-default" title="Send Mail" (click)="onSendMail('Excel')">
                                     <i class="fa fa-envelope-o" aria-hidden="true"></i>
                                 </a>
                                 <a class="btn btn-default" title="Print">
@@ -49,12 +49,12 @@
                                 <ul>
                                     <li>
                                         <label>
-                                            <a (click)="onSendMail('Excel')">Export to Excel</a>
+                                            <a>Export to Excel</a>
                                         </label>
                                     </li>
                                     <li>
                                         <label>
-                                            <a (click)="onSendMail('PDF')">Export to PDF</a>
+                                            <a>Export to PDF</a>
                                         </label>
                                     </li>
                                 </ul>
@@ -163,7 +163,6 @@
                 </div>
             </div>
         </div>
-
         <div class="row mg-top-10" *ngIf="summaryData.length">
                 <div class="col-9">
                     <div class="card no-border">
@@ -202,7 +201,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+        </div>
     </div>
 </div>
 
