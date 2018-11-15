@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ChartsModule } from 'ng2-charts';
 
-import { TableService } from '../../services/index';
+import { CommonService, TableService } from '../../services/index';
 import { CommonShareModule, Helper, PageHeaderModule } from '../../shared/index';
 import { ReportsRoutingModule } from './reports-routing.module';
 
@@ -12,6 +12,7 @@ import { CKEditorModule } from 'ng2-ckeditor';
 
 //  Modal
 import { ItemModalModule } from '../../shared/modals/item.module';
+import { ReportFinanceListComponent } from './finance/list/list.component';
 
 @NgModule({
     imports: [
@@ -24,12 +25,12 @@ import { ItemModalModule } from '../../shared/modals/item.module';
         ReactiveFormsModule,
         ChartsModule,
         ItemModalModule,
-        CKEditorModule
+        CKEditorModule,
     ],
     declarations: [
+        ReportFinanceListComponent,
     ],
-    providers: [TableService, DatePipe, Helper],
-    entryComponents: [
-    ]
+    providers: [TableService, DatePipe, Helper, CommonService],
+    entryComponents: []
 })
-export class ReportslModule { }
+export class ReportslModule {}
