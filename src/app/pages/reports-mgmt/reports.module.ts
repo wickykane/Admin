@@ -10,6 +10,8 @@ import { ReportsRoutingModule } from './reports-routing.module';
 
 import { CKEditorModule } from 'ng2-ckeditor';
 
+import { CustomerOutstandingComponent } from './finance/reports/customer-outstanding/customer-outstanding.component';
+
 //  Modal
 import { ItemModalModule } from '../../shared/modals/item.module';
 
@@ -27,9 +29,10 @@ import { ItemModalModule } from '../../shared/modals/item.module';
         CKEditorModule
     ],
     declarations: [
+        CustomerOutstandingComponent
     ],
     providers: [TableService, DatePipe, Helper],
     entryComponents: [
     ]
 })
-export class ReportslModule { }
+export class ReportsModule { }
