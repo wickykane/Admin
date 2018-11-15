@@ -9,6 +9,8 @@ import { ToastrService } from 'ngx-toastr';
 
 import { routerTransition } from '../../../../../router.animations';
 
+import { SendMailModalContent } from '../../modals/send-mail/send-mail.modal';
+
 @Component({
     selector: 'app-customer-outstanding',
     templateUrl: './customer-outstanding.component.html',
@@ -29,14 +31,16 @@ export class CustomerOutstandingComponent implements OnInit {
     };
     public reportData = [];
     public summaryData = [];
+    public showContextMenu = false;
 
     public user: any;
-    reportForm: FormGroup;
+    public reportForm: FormGroup;
 
     constructor(public router: Router,
         public fb: FormBuilder,
         public toastr: ToastrService,
         public tableService: TableService,
+        public modalService: NgbModal,
         private cd: ChangeDetectorRef) {
         this.reportForm = fb.group({
             'period': [null],
@@ -235,5 +239,15 @@ export class CustomerOutstandingComponent implements OnInit {
     calculateTotalSummaryBalance() {
         const totalBalance = this.summaryData.reduce(((initialValue, item) => initialValue + item.balance), 0);
         return totalBalance;
+    }
+
+    onSendMail(type) {
+        const modalRef = this.modalService.open(SendMailModalContent, {
+            size: 'lg'
+        });
+        modalRef.componentInstance.type = type;
+        modalRef.result.then(res => {
+        }, dismiss => {
+        });
     }
 }

@@ -22,7 +22,7 @@
                     <label class="control-label">&nbsp;</label>
                     <div class="group-btn-search">
                         <button type="button" class="btn-default-custom" (click)="onRunReport()">Run Report</button>
-                        <button type="button" class="btn-default-custom">Back To Report List</button>
+                        <button type="button" class="btn-default-custom" [routerLink]="['/report/finance-report']">Back To Report List</button>
                     </div>
                 </div>
             </div>
@@ -39,9 +39,25 @@
                                 <a class="btn btn-default" title="Print">
                                     <i class="fa fa-print" aria-hidden="true"></i>
                                 </a>
-                                <a class="btn btn-default" title="Export">
+                                <a class="btn btn-default" title="Export"
+                                    (click)="showContextMenu = !showContextMenu"
+                                    clickOutside (clickOutside)="showContextMenu = false">
                                     <i class="fa fa-download" aria-hidden="true"></i>
                                 </a>
+                            </div>
+                            <div class="show-more" *ngIf="showContextMenu">
+                                <ul>
+                                    <li>
+                                        <label>
+                                            <a (click)="onSendMail('Excel')">Export to Excel</a>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <a (click)="onSendMail('PDF')">Export to PDF</a>
+                                        </label>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>

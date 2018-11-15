@@ -15,6 +15,7 @@ import { CustomerOutstandingComponent } from './finance/reports/customer-outstan
 
 //  Modal
 import { ItemModalModule } from '../../shared/modals/item.module';
+import { SendMailModalContent } from './finance/modals/send-mail/send-mail.modal';
 
 @NgModule({
     imports: [
@@ -31,9 +32,12 @@ import { ItemModalModule } from '../../shared/modals/item.module';
     ],
     declarations: [
         CustomerOutstandingComponent,
-        ReportFinanceListComponent
+        ReportFinanceListComponent,
+        SendMailModalContent
     ],
     providers: [TableService, DatePipe, Helper, CommonService],
-    entryComponents: []
+    entryComponents: [
+        SendMailModalContent
+    ]
 })
 export class ReportsModule { }
