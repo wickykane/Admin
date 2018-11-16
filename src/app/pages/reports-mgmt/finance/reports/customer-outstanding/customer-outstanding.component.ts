@@ -260,4 +260,8 @@ export class CustomerOutstandingComponent implements OnInit {
     downloadExcel() {
         window.open('https://docs.google.com/spreadsheets/d/1VTs6QVwx6QQeTt-IMvwXzcYUcYGX-8ER8tO0_-RYaxM/export?format=xlsx', '_blank');
     }
+
+    downloadPDF() {
+        window.open('https://drive.google.com/uc?export=download&id=1UyKUTfjHtPIjsnEcLRhJuoWoM3gpsmtz', '_blank');
+    }
 }
