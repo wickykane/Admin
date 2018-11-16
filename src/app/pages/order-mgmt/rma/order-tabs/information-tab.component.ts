@@ -167,7 +167,7 @@ export class ReturnOrderInformationTabComponent implements OnInit {
                 this.service.updateStatus(params).subscribe(result => {
                     try {
                         this.toastr.success('The return order has been updated latest information successfully');
-                        this.router.navigate(['/order-management/return-order/detail', this.detail['id']]);
+                        this.getList();
                     } catch (e) {
                         console.log(e);
                     }
