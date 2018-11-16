@@ -399,7 +399,7 @@ export class RmaEditComponent implements OnInit {
                 this.service.updateStatus(params).subscribe(result => {
                     try {
                         this.toastr.success('The return order has been updated latest information successfully');
-                        this.router.navigate(['/order-management/return-order/detail', this.route.snapshot.paramMap.get('id')]);
+                        this.getDetailRMA();
                     } catch (e) {
                         console.log(e);
                     }
