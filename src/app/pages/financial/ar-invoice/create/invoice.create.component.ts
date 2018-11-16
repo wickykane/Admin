@@ -599,11 +599,15 @@ export class InvoiceCreateComponent implements OnInit {
                             }
                         );
 
-                        if (!this.data['only_validate']) {
-                            this.router.navigate(['/financial/receipt-voucher/create'], { queryParams: { invoice_id: this.data['invoice_id'] } });
-                            return;
-                        }
+                        // if (!this.data['only_validate']) {
+                        //     this.router.navigate(['/financial/receipt-voucher/create'], { queryParams: { invoice_id: this.data['invoice_id'] } });
+                        //     return;
+                        // }
 
+                    }
+                    if (type === 4 && !this.data['only_validate']) {
+                        this.router.navigate(['/financial/receipt-voucher/create'], { queryParams: { invoice_id: this.data['invoice_id'] } });
+                        return;
                     }
                     if (!is_continue) {
                         setTimeout(() => {
