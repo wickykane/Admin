@@ -368,7 +368,7 @@ export class SaleOrderEditComponent implements OnInit {
         }
         if (!flag) {
             // this.list.items = [];
-            this.generalForm.patchValue({type: 'NO'});
+            this.generalForm.patchValue({ type: 'NO' });
             this.updateTotal();
         }
         this.refresh();
@@ -520,7 +520,7 @@ export class SaleOrderEditComponent implements OnInit {
         try {
             const length = this.customer.shipping.length;
             if (!item.hasOwnProperty('length')) {
-                item.length = function () {
+                item.length = function() {
                     return this.checkLengthRecord(item, list);
                 };
             }
@@ -600,8 +600,11 @@ export class SaleOrderEditComponent implements OnInit {
         unique.forEach((tax, index) => {
             let taxAmount = 0;
             items.filter(item => item.tax_percent === tax).map(i => {
-                // taxAmount += (+i.tax_percent * +i.quantity * (+i.sale_price || 0) / 100);
-                taxAmount += (+i.tax_percent * +i.quantity * ((+i.sale_price || 0) * (100 - (+i.discount_percent || 0)) / 100) / 100);
+                if (this.data['disable']) {
+                    taxAmount += (+i.tax_percent * +i.qty_remain * ((+i.sale_price || 0) * (100 - (+i.discount_percent || 0)) / 100) / 100);
+                } else {
+                    taxAmount += (+i.tax_percent * +i.quantity * ((+i.sale_price || 0) * (100 - (+i.discount_percent || 0)) / 100) / 100);
+                }
             });
 
             this.order_info['total_tax'] = this.order_info['total_tax'] + +(taxAmount.toFixed(2));
@@ -621,18 +624,25 @@ export class SaleOrderEditComponent implements OnInit {
         this.order_info.order_summary = {};
         items.forEach(item => {
             const remain_qty = (this.data['disable']) ? item.qty_remain : item.quantity;
-            console.log(remain_qty);
             this.order_info.order_summary['total_item'] = (this.order_info.order_summary['total_item'] || 0) + (+item.quantity);
             this.order_info.order_summary['total_cogs'] = (this.order_info.order_summary['total_cogs'] || 0) + (+item.cost_price || 0) * (remain_qty || 0);
-            this.order_info.order_summary['total_vol'] = ((this.order_info.order_summary['total_vol'] || 0) + (+item.vol || 0) * (remain_qty || 0)).toFixed(2);
+            this.order_info.order_summary['total_vol'] = +((this.order_info.order_summary['total_vol'] || 0) + (+item.vol || 0) * (+remain_qty || 0)).toFixed(2);
             this.order_info.order_summary['total_weight'] = +((this.order_info.order_summary['total_weight'] || 0) + (+item.wt || 0) * (remain_qty || 0)).toFixed(2);
             this.order_info.order_summary['total_remain'] = (this.order_info.order_summary['total_remain'] || 0) + (+item.qty_remain);
             this.order_info.order_summary['total_cancel'] = (this.order_info.order_summary['total_cancel'] || 0) + (+item.qty_cancel);
         });
-        this.list.items.forEach(item => {
-            item.amount = (+item.quantity * (+item.sale_price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
-            this.order_info.sub_total += item.amount;
-        });
+
+        if (this.data['disable']) {
+            this.list.items.forEach(item => {
+                item.amount = (+item.qty_remain * (+item.sale_price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
+                this.order_info.sub_total += item.amount;
+            });
+        } else {
+            this.list.items.forEach(item => {
+                item.amount = (+item.quantity * (+item.sale_price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
+                this.order_info.sub_total += item.amount;
+            });
+        }
 
         this.order_info.total = +this.order_info['total_tax'] + +this.order_info.sub_total;
 
@@ -865,7 +875,7 @@ export class SaleOrderEditComponent implements OnInit {
         this.generalForm.controls['note'].patchValue(stringNote);
     }
 
-    remove = function (index) {
+    remove = function(index) {
         this.data['programs'].splice(index, 1);
         this.refresh();
     };

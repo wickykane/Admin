@@ -658,10 +658,14 @@ export class InvoiceEditComponent implements OnInit {
                             }
                         );
 
-                        if (!this.data['only_validate']) {
-                            this.router.navigate(['/financial/receipt-voucher/create'], { queryParams: { invoice_id: this.data['id'] } });
-                            return;
-                        }
+                        // if (!this.data['only_validate']) {
+                        //     this.router.navigate(['/financial/receipt-voucher/create'], { queryParams: { invoice_id: this.data['id'] } });
+                        //     return;
+                        // }
+                    }
+                    if (type === 4 && !this.data['only_validate']) {
+                        this.router.navigate(['/financial/receipt-voucher/create'], { queryParams: { invoice_id: this.data['id'] } });
+                        return;
                     }
                     if (!is_continue) {
                         setTimeout(() => {
