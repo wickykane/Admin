@@ -148,7 +148,7 @@ export class MenuComponent implements OnInit {
                 sub: true,
                 child: [
                     {
-                        link: '/report/sales',
+                        link: '/report/sale-report',
                         name: 'Sales',
                         permission: true
 

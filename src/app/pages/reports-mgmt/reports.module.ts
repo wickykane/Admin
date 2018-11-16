@@ -16,6 +16,7 @@ import { CustomerOutstandingComponent } from './finance/reports/customer-outstan
 //  Modal
 import { ItemModalModule } from '../../shared/modals/item.module';
 import { SendMailModalContent } from './finance/modals/send-mail/send-mail.modal';
+import { SaleReportComponent } from './sales/sale.component';
 
 @NgModule({
     imports: [
@@ -31,6 +32,7 @@ import { SendMailModalContent } from './finance/modals/send-mail/send-mail.modal
         CKEditorModule,
     ],
     declarations: [
+        SaleReportComponent,
         CustomerOutstandingComponent,
         ReportFinanceListComponent,
         SendMailModalContent
