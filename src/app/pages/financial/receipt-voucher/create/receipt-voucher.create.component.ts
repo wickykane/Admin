@@ -244,6 +244,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
 
     getListInvoiceAndMemo(code?, tot_amt?) {
         if (this.data['invoice_id'] && !code) {
+            this.saveCurrentItems(true);
             return;
         }
         const params = {
@@ -269,6 +270,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             if (code) {
                 const index = this.list.items.findIndex(item => item.code === code);
                 this.list.items[index].applied_amt = this.list.items[index].balance_price;
+                this.list.items[index].is_checked = true;
             }
             if (!this.savedItems['items'].length) {
                 this.savedItems['items'] = this.list.items;
@@ -484,8 +486,12 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         });
     }
 
-    saveCurrentItems(itemIndex) {
+    saveCurrentItems(isResetItem?) {
         this.list.items.forEach(item => {
+            if (isResetItem) {
+                item.applied_amt = 0;
+                item.is_checked = false;
+            }
             const index = this.savedItems['items'].findIndex(savedItem => savedItem.id === item.id);
             if (index < 0) {
                 this.savedItems['items'].push(item);
@@ -493,6 +499,8 @@ export class ReceiptVoucherCreateComponent implements OnInit {
                 this.savedItems['items'][index] = item;
             }
         });
+        this.checkAllItem = this.list.items.every(item => item.is_checked);
+        this.updateTotal();
     }
 
     updateCurrentItems() {
@@ -542,6 +550,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
                 return;
             }
             setTimeout(() => {
+                this.refreshSavedItems(false);
                 this.data['search'] = null;
                 // this.getListInvoiceAndMemo();
                 this.tableService.searchAction();
@@ -555,6 +564,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
                 return;
             }
             setTimeout(() => {
+                this.refreshSavedItems(false);
                 this.data['search'] = null;
                 this.getDetailCustomerById(id);
                 // this.getListInvoiceAndMemo();
@@ -568,6 +578,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             if (!id && id !== 0) {
                 return;
             }
+            this.refreshSavedItems(true);
             this.getListPaymentMethod(id);
             // this.getListInvoiceAndMemo();
             this.tableService.searchAction();
