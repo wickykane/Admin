@@ -232,13 +232,19 @@ export class CustomerOutstandingComponent implements OnInit {
 
     calculateToTalBalance(customer) {
         const totalParentBalance = this.calculateBalance(customer.data);
-        const totalChildBalance = customer.child.reduce(((initialValue, childItem) => initialValue + this.calculateBalance(childItem.data)), 0);
+        const totalChildBalance = (customer.child && customer.child.length) ?
+            customer.child.reduce(((initialValue, childItem) => initialValue + this.calculateBalance(childItem.data)), 0) : 0;
         return totalParentBalance + totalChildBalance;
     }
 
     calculateTotalSummaryBalance() {
         const totalBalance = this.summaryData.reduce(((initialValue, item) => initialValue + item.balance), 0);
         return totalBalance;
+    }
+
+    calculateTotalBalanceReport() {
+        const totalBalanceReport = this.reportData.reduce(((initialValue, customer) => initialValue + this.calculateToTalBalance(customer)), 0);
+        return totalBalanceReport;
     }
 
     onSendMail(type) {
