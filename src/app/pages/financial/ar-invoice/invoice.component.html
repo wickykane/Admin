@@ -160,8 +160,8 @@
                                         <td>{{item.name}}</td>
                                         <td>{{item.due_dt}}</td>
                                         <td>{{item.total_amount|currency}}</td>
-                                        <td>{{item.incentive|currency}}</td>
-                                        <td>{{item.penalty|currency}}</td>
+                                        <td><span class="text-success">{{item.incentive|currency}}</span></td>
+                                        <td><span class="text-danger">{{item.penalty|currency}}</span></td>
                                         <td>{{item.balance_amount|currency}}</td>
                                         <td>
                                             <span class="badge badge-info bg-blue" *ngIf="item.invoice_status_id == 1">{{convertStatus(item.invoice_status_id, 'status')}}</span>
