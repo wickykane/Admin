@@ -409,7 +409,7 @@
                                         <th translate>Condition</th>
                                         <th translate>UOM</th>
                                         <th translate>Free Ship</th>
-                                        <th translate style="width:100px">Avail QTY</th>
+                                        <th translate style="width:100px" *ngIf="!data['disable']">Avail QTY</th>
                                         <th class="text-nowrap" style="width:100px" translate>Order QTY</th>
                                         <ng-container *ngIf="data['disable']">
                                             <th class="text-nowrap" style="width:100px" translate>Cancel QTY</th>
@@ -440,9 +440,11 @@
                                         <td class="text-center">
                                             <i *ngIf="item.is_shipping_free" class="text-success fa fa-check"></i>
                                         </td>
-                                        <td [ngClass]="{'d-none':  (wh.warehouse_id  || wh.id) != generalForm.getRawValue().warehouse_id}" *ngFor="let wh of item['warehouse']">
+                                        <ng-container *ngIf="!data['disable']">
+                                          <td [ngClass]="{'d-none':  (wh.warehouse_id  || wh.id) != generalForm.getRawValue().warehouse_id}" *ngFor="let wh of item['warehouse']">
                                             {{wh.qty_available}}
-                                        </td>
+                                          </td>                                
+                                        </ng-container>
                                         <td>
                                             <input numberDirective [min]="1" [disabled]="item.misc_id || data['disable']" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (changeValue)="updateTotal()">
                                         </td>
