@@ -27,8 +27,7 @@
                             </thead>
                             <tbody *ngFor="let item of list.items">
                                 <tr>
-                                    <td>{{item.inv_num}}
-                                    </td>
+                                    <td><a class="text-primary" [routerLink]="['/financial/invoice/view', item.id]">{{item.inv_num}}</a></td>
                                     <td>{{item.inv_dt}}</td>
                                     <td>{{item.order_num}}</td>
                                     <td>{{item.name}}</td>
