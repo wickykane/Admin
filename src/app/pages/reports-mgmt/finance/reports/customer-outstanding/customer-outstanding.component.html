@@ -76,7 +76,7 @@
                                         <th>Total Balance</th>
                                     </tr>
                                 </thead>
-                                <tbody *ngFor="let customer of reportData">
+                                <tbody *ngFor="let customer of reportData, let i = index">
                                     <tr>
                                         <td colspan="2" class="text-right">
                                             <a class="btn btn-default " title="Expand" (click)="customer.collapseRows = !customer.collapseRows;" *ngIf="!customer.collapseRows">
@@ -155,6 +155,11 @@
                                         <td colspan="2">&nbsp;</td>
                                         <td colspan="8" class="font-weight-bold font-bold">Total for {{customer.name}} with subs</td>
                                         <td class="font-bold">{{ calculateToTalBalance(customer) | currency}}</td>
+                                    </tr>
+                                    <tr class="border-left" *ngIf="reportData && reportData.length && (i == (reportData.length - 1))">
+                                        <td colspan="1">&nbsp;</td>
+                                        <td colspan="9" class="font-weight-bold font-bold">Total</td>
+                                        <td class="font-bold">{{ calculateTotalBalanceReport() | currency}}</td>
                                     </tr>
                                 </tbody>
                             </table>
