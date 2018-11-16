@@ -704,7 +704,6 @@ export class ReceiptVoucherCreateComponent implements OnInit {
     }
 
     confirmModal(type, is_draft?) {
-        console.log(this.data['summary'].change );
         const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
         modalRef.result.then(res => {
             if (res) {
