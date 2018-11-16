@@ -256,4 +256,8 @@ export class CustomerOutstandingComponent implements OnInit {
         }, dismiss => {
         });
     }
+
+    downloadExcel() {
+        window.open('https://docs.google.com/spreadsheets/d/1VTs6QVwx6QQeTt-IMvwXzcYUcYGX-8ER8tO0_-RYaxM/export?format=xlsx', '_blank');
+    }
 }
