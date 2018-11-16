@@ -1,28 +1,28 @@
 <div [@routerTransition]>
     <!-- <app-page-header [heading]="'Report'" [icon]="'fa-th-list'"></app-page-header> -->
-    <div class="container-fluid shadow-sm pt-2 rounded border-top sum-level">
+    <div class="col-md-4 shadow-sm pt-2 rounded border-top sum-level">
         <div class="row">
             <div class="col-md-12">
                 <label><i class="mr-1 fa fa-angle-down"></i>List of Reports </label>
             </div>
-            <div *ngIf="!hover && !questionClick" class="col-md-3 mt-1 mb-5">
-                <div class="py-2 col-12 shadow-sm form-inline">
+            <div *ngIf="!hover && !questionClick" class="col-md-12 mt-1 mb-5">
+                <div class="py-2 col-7 shadow-sm form-inline">
                     <label (mouseover)="onHover()">Customer outstanding with ageing report</label>
-                    <span (click)="questClick()"><i class="ml-1 fa fa-question-circle-o is_red"></i></span>
+                    <span><i class="ml-1 fa fa-question-circle-o is_red"></i></span>
                 </div>
             </div>
         </div>
         <div *ngIf="hover" class="row mt-1" style="background-color: #f7f8f9">
-            <div class="col-md-4 mt-3">
+            <div class="col-md-12 mt-3">
                 <span>
-                    Customer Balance Detail <i (click)="questClick()"class="ml-1 text-primary fa fa-question-circle-o is_red"></i>
+                    Customer Balance Detail <i (click)="questClick()"class="ml-1 text-primary fa fa-question-circle-o"></i>
                 </span>
                 <p class="mt-1">
-                    How much each customer owes you. Report shows individual invoices and debit memos with their aged overdue.
+                    <a [routerLink]="['/report/finance-report/customer-outstanding']">How much each customer owes you. Report shows individual invoices and debit memos with their aged overdue.</a>
                 </p>
             </div>
         </div>
-        <div *ngIf="questionClick" class="row">
+        <!-- <div *ngIf="questionClick" class="row">
             <div class="col-md-4 mt-3">
                 <span>
                     Customer outstanding with ageing report <i class="ml-1 fa fa-question-circle-o"></i>
@@ -31,7 +31,6 @@
                    <a [routerLink]="['/report/finance-report/customer-outstanding']">How much each customer owes you. Report shows individual invoices and debit memos with their aged overdue.</a>
                 </p>
             </div>
-        </div>
+        </div> -->
     </div>
-
 </div>

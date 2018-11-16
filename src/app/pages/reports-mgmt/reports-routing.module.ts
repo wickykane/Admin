@@ -4,8 +4,15 @@ import { MasterGuard } from '../../shared';
 import { ReportFinanceListComponent } from './finance/list/list.component';
 
 import { CustomerOutstandingComponent } from './finance/reports/customer-outstanding/customer-outstanding.component';
+import { SaleReportComponent } from './sales/sale.component';
 
 const routes: Routes = [
+    {
+        path: 'sale-report',
+        children: [
+            { path: '', component: SaleReportComponent, canActivate: [MasterGuard]},
+        ]
+    },
     {
         path: 'finance-report',
         children: [
