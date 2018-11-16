@@ -312,6 +312,13 @@ export class ReceiptVoucherCreateComponent implements OnInit {
             this.generalForm.updateValueAndValidity();
             this.refresh();
         }
+        if (flag === 'paymentMethodType') {
+            this.generalForm.patchValue({
+                payment_method: null
+            });
+            this.generalForm.updateValueAndValidity();
+            this.refresh();
+        }
     }
 
     getListPaymentMethod(id) {

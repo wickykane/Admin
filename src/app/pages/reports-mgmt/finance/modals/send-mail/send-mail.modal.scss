@@ -1,0 +1,68 @@
+.modal-footer {
+    border-top: none;
+}
+
+.top-left-bar {
+    margin: 15px 0px;
+    text-align: right;
+}
+
+.show-more {
+    width: auto;
+    border: 1px solid #ccc;
+    position: absolute;
+    background: #ffffff;
+    z-index: 5001;
+    padding: 10px 0px;
+    top: 0;
+    right: 0;
+    margin-top: 90px;
+    text-align: left;
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        li {
+            a {
+                padding: 0px 10px;
+            }
+        }
+    }
+}
+
+.email-content {
+    .content {
+        border: 1px solid #e0e0e0;
+        font-size: 1.2em;
+        min-height: 30px;
+        padding: 10px;
+
+        input {
+            border: none;
+            font-size: inherit;
+            height: 30px;
+            line-height: 30px;
+            padding: 0px 10px;
+            vertical-align: middle;
+            width: 100%;
+        }
+
+        textarea {
+            border: none;
+            font-size: inherit;
+            height: 300px;
+            width: 100%;
+        }
+    }
+
+    .subject {
+        padding: 0px;
+    }
+}
+
+.fa-check:before {
+    color: #28a745;
+    font-size: 1.5em;
+    margin-left: 10px;
+    margin-right: 10px;
+}

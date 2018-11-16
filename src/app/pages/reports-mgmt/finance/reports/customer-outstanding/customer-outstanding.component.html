@@ -1,0 +1,212 @@
+<div [@routerTransition]>
+    <app-page-header [heading]="'Cutsotmer Outstanding with Ageing Report'" [icon]="'fa-th-list'"></app-page-header>
+    <!-- <app-shortcut [listShortcut]='keyService.getKeys()'></app-shortcut> -->
+    <div class="block anchor-scroll block-order">
+        <div class="block-content pd-bottom bg-gray-light short-width">
+            <div class="row">
+                <form class="form-horizontal form-search" role="form" [formGroup]="reportForm">
+                    <div class="block-search">
+                        <label for="type" class="control-label" translate>Report Period</label>
+                        <select class="form-control" formControlName="period">
+                            <option *ngFor="let item of listMaster['reportPeriods']" [ngValue]="item.key">{{item.value}}</option>
+                        </select>
+                    </div>
+                    <div class="block-search">
+                        <label for="type" class="control-label" translate>Customer Type</label>
+                        <select class="form-control" formControlName="type">
+                            <option *ngFor="let item of listMaster['customerTypes']" [ngValue]="item.key">{{item.value}}</option>
+                        </select>
+                    </div>
+                </form>
+                <div class="block-btn-search">
+                    <label class="control-label">&nbsp;</label>
+                    <div class="group-btn-search">
+                        <button type="button" class="btn-default-custom" (click)="onRunReport()">Run Report</button>
+                        <button type="button" class="btn-default-custom" [routerLink]="['/report/finance-report']">Back To Report List</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mg-top-10" *ngIf="reportData.length">
+            <div class="col-12">
+                <div class="card no-border">
+                    <div class="card-header">
+                        <div class="text-right">
+                            <div>
+                                <a class="btn btn-default" title="Send Mail" (click)="onSendMail('Excel')">
+                                    <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                                </a>
+                                <a class="btn btn-default" title="Print">
+                                    <i class="fa fa-print" aria-hidden="true"></i>
+                                </a>
+                                <a class="btn btn-default" title="Export"
+                                    (click)="showContextMenu = !showContextMenu"
+                                    clickOutside (clickOutside)="showContextMenu = false">
+                                    <i class="fa fa-download" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                            <div class="show-more" *ngIf="showContextMenu">
+                                <ul>
+                                    <li>
+                                        <label>
+                                            <a>Export to Excel</a>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <a>Export to PDF</a>
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body no-padding">
+                        <div class="table-responsive list report-table">
+                            <table class='table table-bordered table-order'>
+                                <thead class="bg-white">
+                                    <tr>
+                                        <th colspan="4">Customer Name</th>
+                                        <th>Document Type</th>
+                                        <th>Document No</th>
+                                        <th>Issue Date</th>
+                                        <th>Due Date</th>
+                                        <th>Day of Outstanding</th>
+                                        <th>Total Amount</th>
+                                        <th>Total Balance</th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngFor="let customer of reportData, let i = index">
+                                    <tr>
+                                        <td colspan="2" class="text-right">
+                                            <a class="btn btn-default " title="Expand" (click)="customer.collapseRows = !customer.collapseRows;" *ngIf="!customer.collapseRows">
+                                                <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                                            </a>
+                                            <a class="btn btn-default " title="Collapse" (click)="customer.collapseRows = !customer.collapseRows;" *ngIf="customer.collapseRows">
+                                                <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                                            </a>
+                                        </td>
+                                        <td colspan="2">{{customer.name}}</td>
+                                        <ng-container *ngIf="customer.collapseRows">
+                                            <td colspan="7"></td>
+                                        </ng-container>
+                                        <ng-container *ngIf="!customer.collapseRows">
+                                            <td colspan="6"></td>
+                                            <td *ngIf="!customer['child'] || !customer['child'].length" class="font-bold">{{ calculateBalance(customer.data) | currency}}</td>
+                                            <td *ngIf="customer['child'] && customer['child'].length" class="font-bold">{{ calculateToTalBalance(customer) | currency}}</td>
+                                        </ng-container>
+                                    </tr>
+                                    <tr *ngFor="let data of customer.data" [hidden]="!customer.collapseRows">
+                                        <td colspan="4">&nbsp;</td>
+                                        <td>{{data.type}}</td>
+                                        <td>{{data.no}}</td>
+                                        <td>{{data.issue_date}}</td>
+                                        <td>{{data.due_date}}</td>
+                                        <td>{{data.day_of_outstanding}}</td>
+                                        <td>{{data.total_amount | currency}}</td>
+                                        <td>{{data.total_balance | currency}}</td>
+                                    </tr>
+                                    <tr class="border-left" [hidden]="!customer.collapseRows">
+                                        <td colspan="2">&nbsp;</td>
+                                        <td colspan="8" class="font-weight-bold font-bold">Total for {{customer.name}}</td>
+                                        <td class="font-bold">{{ calculateBalance(customer.data) | currency}}</td>
+                                    </tr>
+                                    <ng-container *ngIf="customer.collapseRows" style="padding-left: 20px">
+                                        <ng-container *ngFor="let child of customer['child']">
+                                            <tr>
+                                                <td>&nbsp;</td>
+                                                <td colspan="2" class="text-right">
+                                                    <a class="btn btn-default " title="Expand" (click)="child.collapseRows = !child.collapseRows;" *ngIf="!child.collapseRows">
+                                                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                                                    </a>
+                                                    <a class="btn btn-default " title="Collapse" (click)="child.collapseRows = !child.collapseRows;" *ngIf="child.collapseRows">
+                                                        <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                                                    </a>
+                                                </td>
+                                                <td>{{child.name}}</td>
+                                                <ng-container *ngIf="child.collapseRows">
+                                                    <td colspan="7"></td>
+                                                </ng-container>
+                                                <ng-container *ngIf="!child.collapseRows">
+                                                    <td colspan="6"></td>
+                                                    <td class="font-bold">{{ calculateBalance(child.data) | currency}}</td>
+                                                </ng-container>
+                                            </tr>
+                                            <tr *ngFor="let childData of child.data" [hidden]="!child.collapseRows">
+                                                <td>&nbsp;</td>
+                                                <td colspan="3">&nbsp;</td>
+                                                <td>{{childData.type}}</td>
+                                                <td>{{childData.no}}</td>
+                                                <td>{{childData.issue_date}}</td>
+                                                <td>{{childData.due_date}}</td>
+                                                <td>{{childData.day_of_outstanding}}</td>
+                                                <td>{{childData.total_amount | currency}}</td>
+                                                <td>{{childData.total_balance | currency}}</td>
+                                            </tr>
+                                            <tr class="border-left" [hidden]="!child.collapseRows">
+                                                <td>&nbsp;</td>
+                                                <td colspan="2">&nbsp;</td>
+                                                <td colspan="7" class="font-weight-bold font-bold">Total for {{child.name}}</td>
+                                                <td class="font-bold">{{ calculateBalance(child.data) | currency}}</td>
+                                            </tr>
+                                        </ng-container>
+                                    </ng-container>
+                                    <tr class="border-left" *ngIf="customer['child'] && customer['child'].length && customer.collapseRows">
+                                        <td colspan="2">&nbsp;</td>
+                                        <td colspan="8" class="font-weight-bold font-bold">Total for {{customer.name}} with subs</td>
+                                        <td class="font-bold">{{ calculateToTalBalance(customer) | currency}}</td>
+                                    </tr>
+                                    <tr class="border-left" *ngIf="reportData && reportData.length && (i == (reportData.length - 1))">
+                                        <td colspan="1">&nbsp;</td>
+                                        <td colspan="9" class="font-weight-bold font-bold">Total</td>
+                                        <td class="font-bold">{{ calculateTotalBalanceReport() | currency}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mg-top-10" *ngIf="summaryData.length">
+                <div class="col-9">
+                    <div class="card no-border">
+                        <div class="card-header">
+                            <strong class="text-blue">SUMMARY BY AGING</strong>
+                        </div>
+                        <div class="card-body no-padding">
+                            <div class="table-responsive list summary-table">
+                                <table class='table table-bordered table-order'>
+                                    <thead class="bg-white">
+                                        <tr>
+                                            <th class="font-bold">DOCUMENT TYPE</th>
+                                            <th class="font-bold">0-30 DAYS DUE</th>
+                                            <th class="font-bold">60-90 DAYS DUE</th>
+                                            <th class="font-bold">90-120 DAYS DUE</th>
+                                            <th class="font-bold"> > 120 DAYS DUE</th>
+                                            <th class="font-bold">BALANCE DUE</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of summaryData">
+                                            <td>{{ item.type}}</td>
+                                            <td class="text-right">{{ item.due30 | currency}}</td>
+                                            <td class="text-right">{{ item.due60 | currency}}</td>
+                                            <td class="text-right">{{ item.due90 | currency}}</td>
+                                            <td class="text-right">{{ item.due120 | currency}}</td>
+                                            <td class="text-right">{{ item.balance | currency}}</td>
+                                        </tr>
+                                        <tr class="border-left">
+                                            <td colspan="5" class="font-weight-bold text-red"><strong>TOTAL</strong></td>
+                                            <td class="text-red text-right"><strong>{{calculateTotalSummaryBalance() | currency}}</strong></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+
