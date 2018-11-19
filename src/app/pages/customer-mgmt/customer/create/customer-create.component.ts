@@ -542,6 +542,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
                 delete params['first_name'];
                 delete params['last_name'];
                 delete params['username'];
+                delete params['is_main'];
                 delete params['password'];
                 delete params['pwd_cfrm'];
             } else {
