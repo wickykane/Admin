@@ -98,6 +98,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
             'pwd_cfrm': [null],
             'company_name': [null],
             'primary': [null],
+            'is_main': [true],
             // 'credit_used': [null],
             // 'credit_balance': [null],
             'is_parent': [null],
@@ -351,7 +352,15 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
             });
         }
     }
-
+    // check Contact Ismain
+    checkIsMain($event, id) {
+        for (let i = 0; i < this.contacts.length; i++) {
+            const item = this.contacts[i];
+            if (id !== i) {
+                item.is_main = false;
+            }
+        }
+    }
     //  add new row address
     addNewAddress() {
         this.addresses.push({
@@ -533,6 +542,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
                 delete params['first_name'];
                 delete params['last_name'];
                 delete params['username'];
+                delete params['is_main'];
                 delete params['password'];
                 delete params['pwd_cfrm'];
             } else {
@@ -564,6 +574,13 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
             // if(isFieldRequired == true){
             //     return true;
             // }
+            // Check Main Contact is checked
+             if (params['contacts'].length > 0) {
+                const result = params['contacts'].filter(item => item.is_main === true);
+                if (result.length === 0) {
+                    return this.toastr.error('Please choose at least one main contact for the customer company.');
+                }
+            }
             this.customerService.createCustomer(params).subscribe(
                 res => {
                     console.log(res);
