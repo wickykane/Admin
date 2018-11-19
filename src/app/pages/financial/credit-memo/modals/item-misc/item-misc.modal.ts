@@ -96,7 +96,11 @@ export class CreditItemMiscModalContent implements OnInit, OnDestroy {
      */
 
     getList() {
-        const params = { ...this.tableService.getParams(), ...this.searchForm.value };
+        const params = {
+            ...this.tableService.getParams(),
+            ...this.searchForm.value,
+            is_popup: 1
+        };
         Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
 
         this.itemService.getMiscItems(params).subscribe(res => {
