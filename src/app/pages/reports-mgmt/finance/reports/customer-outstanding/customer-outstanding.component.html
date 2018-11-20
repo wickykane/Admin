@@ -92,24 +92,46 @@
                                         </ng-container>
                                         <ng-container *ngIf="customer.collapseRows">
                                             <td colspan="6"></td>
-                                            <td *ngIf="!customer['company_child'] || !customer['company_child'].length" class="font-bold">{{ calculateBalance(customer.content) | currency}}</td>
-                                            <td *ngIf="customer['company_child'] && customer['company_child'].length" class="font-bold">{{ calculateToTalBalance(customer) | currency}}</td>
+                                            <td *ngIf="!customer['company_child'] || !customer['company_child'].length"
+                                               [ngClass]="{'text-red': customer.summary.total < 0, 'font-bold': customer.summary.total > 0}">
+                                                <span *ngIf="customer.summary.total < 0">(</span>
+                                                {{ customer.summary.total < 0 ? ((customer.summary.total * -1) | currency) : (customer.summary.total | currency)}}
+                                                <span *ngIf="customer.summary.total < 0">)</span>
+                                            </td>
+                                            <td *ngIf="customer['company_child'] && customer['company_child'].length"
+                                                [ngClass]="{'text-red': customer.total_summary.total < 0, 'font-bold': customer.total_summary.total > 0}">
+                                                <span *ngIf="customer.total_summary.total < 0">(</span>
+                                                {{ customer.total_summary.total < 0 ? ((customer.total_summary.total * -1) | currency) : (customer.total_summary.total | currency)}}
+                                                <span *ngIf="customer.total_summary.total < 0">)</span>
+                                            </td>
                                         </ng-container>
                                     </tr>
                                     <tr *ngFor="let data of customer.content" [hidden]="customer.collapseRows">
                                         <td colspan="4">&nbsp;</td>
-                                        <td>{{data.doc_type}}</td>
+                                        <td>{{data.doc_name}}</td>
                                         <td>{{data.code}}</td>
                                         <td>{{data.issue_date ? (data.issue_date | date:'MM/dd/yyyy') : ''}}</td>
                                         <td>{{data.due_date ? (data.due_date | date:'MM/dd/yyyy') : ''}}</td>
                                         <td>{{data.day_of_outstanding}}</td>
-                                        <td>{{data.total_amount | currency}}</td>
-                                        <td>{{data.balance_amount | currency}}</td>
+                                        <td [ngClass]="{'text-red': data.doc_type == 3 && data.total_amount}">
+                                            <span *ngIf="data.doc_type == 3 && data.total_amount">(</span>
+                                            {{data.total_amount | currency}}
+                                            <span *ngIf="data.doc_type == 3 && data.total_amount">)</span>
+                                        </td>
+                                        <td [ngClass]="{'text-red': data.doc_type == 3 && data.balance_amount}">
+                                            <span *ngIf="data.doc_type == 3 && data.balance_amount">(</span>
+                                            {{data.balance_amount | currency}}
+                                            <span *ngIf="data.doc_type == 3 && data.balance_amount">)</span>
+                                        </td>
                                     </tr>
                                     <tr class="border-left" [hidden]="customer.collapseRows">
                                         <td colspan="2">&nbsp;</td>
                                         <td colspan="8" class="font-weight-bold font-bold">Total for {{customer.name}}</td>
-                                        <td class="font-bold">{{ calculateBalance(customer.content) | currency}}</td>
+                                        <td [ngClass]="{'text-red': customer.summary.total < 0, 'font-bold': customer.summary.total > 0}">
+                                            <span *ngIf="customer.summary.total < 0">(</span>
+                                            {{ customer.summary.total < 0 ? ((customer.summary.total * -1) | currency) : (customer.summary.total | currency)}}
+                                            <span *ngIf="customer.summary.total < 0">)</span>
+                                        </td>
                                     </tr>
                                     <ng-container *ngIf="!customer.collapseRows" style="padding-left: 20px">
                                         <ng-container *ngFor="let child of customer['company_child']">
@@ -129,37 +151,57 @@
                                                 </ng-container>
                                                 <ng-container *ngIf="child.collapseRows">
                                                     <td colspan="6"></td>
-                                                    <td class="font-bold">{{ calculateBalance(child.content) | currency}}</td>
+                                                    <td [ngClass]="{'text-red': child.summary.total < 0, 'font-bold': child.summary.total > 0}">
+                                                        <span *ngIf="child.summary.total < 0">(</span>
+                                                        {{ child.summary.total < 0 ? ((child.summary.total * -1) | currency) : (child.summary.total | currency)}}
+                                                        <span *ngIf="child.summary.total < 0">)</span>
+                                                    </td>
                                                 </ng-container>
                                             </tr>
                                             <tr *ngFor="let childData of child.content" [hidden]="child.collapseRows">
                                                 <td>&nbsp;</td>
                                                 <td colspan="3">&nbsp;</td>
-                                                <td>{{childData.doc_type}}</td>
+                                                <td>{{childData.doc_name}}</td>
                                                 <td>{{childData.code}}</td>
                                                 <td>{{childData.issue_date ? (childData.issue_date | date:'MM/dd/yyyy') : ''}}</td>
                                                 <td>{{childData.due_date ? (childData.due_date | date:'MM/dd/yyyy') : ''}}</td>
                                                 <td>{{childData.day_of_outstanding}}</td>
-                                                <td>{{childData.total_amount | currency}}</td>
-                                                <td>{{childData.balance_amount | currency}}</td>
+                                                <td [ngClass]="{'text-red': childData.doc_type == 3 && childData.total_amount}">
+                                                    <span *ngIf="childData.doc_type == 3 && childData.total_amount">(</span>
+                                                    {{childData.total_amount | currency}}
+                                                    <span *ngIf="childData.doc_type == 3 && childData.total_amount">)</span>
+                                                </td>
+                                                <td [ngClass]="{'text-red': childData.doc_type == 3 && childData.balance_amount}">
+                                                    <span *ngIf="childData.doc_type == 3 && childData.balance_amount">(</span>
+                                                    {{childData.balance_amount | currency}}
+                                                    <span *ngIf="childData.doc_type == 3 && childData.balance_amount">)</span>
+                                                </td>
                                             </tr>
                                             <tr class="border-left" [hidden]="child.collapseRows">
                                                 <td>&nbsp;</td>
                                                 <td colspan="2">&nbsp;</td>
                                                 <td colspan="7" class="font-weight-bold font-bold">Total for {{child.name}}</td>
-                                                <td class="font-bold">{{ calculateBalance(child.content) | currency}}</td>
+                                                <td [ngClass]="{'text-red': child.summary.total < 0, 'font-bold': child.summary.total > 0}">
+                                                    <span *ngIf="child.summary.total < 0">(</span>
+                                                    {{ child.summary.total < 0 ? ((child.summary.total * -1) | currency) : (child.summary.total | currency)}}
+                                                    <span *ngIf="child.summary.total < 0">)</span>
+                                                </td>
                                             </tr>
                                         </ng-container>
                                     </ng-container>
                                     <tr class="border-left" *ngIf="customer['company_child'] && customer['company_child'].length && !customer.collapseRows">
                                         <td colspan="2">&nbsp;</td>
                                         <td colspan="8" class="font-weight-bold font-bold">Total for {{customer.name}} with subs</td>
-                                        <td class="font-bold">{{ calculateToTalBalance(customer) | currency}}</td>
+                                        <td [ngClass]="{'text-red': customer.total_summary.total < 0, 'font-bold': customer.total_summary.total > 0}">
+                                            <span *ngIf="customer.total_summary.total < 0">(</span>
+                                            {{ customer.total_summary.total < 0 ? ((customer.total_summary.total * -1) | currency) : (customer.total_summary.total | currency)}}
+                                            <span *ngIf="customer.total_summary.total < 0">)</span>
+                                        </td>
                                     </tr>
                                     <tr class="border-left" *ngIf="reportData && reportData.length && (i == (reportData.length - 1))">
                                         <td colspan="1">&nbsp;</td>
                                         <td colspan="9" class="font-weight-bold text-red">TOTAL</td>
-                                        <td class="text-red font-weight-bold">{{ calculateTotalBalanceReport() | currency}}</td>
+                                        <td class="text-red font-weight-bold">{{ summaryData[3][6] | currency}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -189,18 +231,22 @@
                                     </tr>
                                 </thead>
                                 <tbody class="selected-row">
-                                    <tr *ngFor="let item of summaryData">
-                                        <td>{{ item.type}}</td>
-                                        <td class="text-right">{{ item.due30 | currency}}</td>
-                                        <td class="text-right">{{ item.due60 | currency}}</td>
-                                        <td class="text-right">{{ item.due60 | currency}}</td>
-                                        <td class="text-right">{{ item.due90 | currency}}</td>
-                                        <td class="text-right">{{ item.due120 | currency}}</td>
-                                        <td class="text-right">{{ item.balance | currency}}</td>
-                                    </tr>
-                                    <tr class="border-left">
-                                        <td colspan="6" class="font-weight-bold text-red"><strong>TOTAL</strong></td>
-                                        <td class="text-red text-right"><strong>{{calculateTotalSummaryBalance() | currency}}</strong></td>
+                                    <tr *ngFor="let items of summaryData">
+                                        <ng-container *ngFor="let data of items, let i = index">
+                                            <td class="text-left" *ngIf="i == 0" [ngClass]="{'font-weight-bold text-red': data == 'TOTAL'}">{{data}}</td>
+
+                                            <td class="text-right" *ngIf="i != 0 && i != 6" [ngClass]="{'text-red': items[0] == 'Credit Memo' && data}">
+                                                <span *ngIf="items[0] == 'Credit Memo' && data">(</span>
+                                                {{ data | currency}}
+                                                <span *ngIf="items[0] == 'Credit Memo' && data">)</span>
+                                            </td>
+
+                                            <td class="text-right" *ngIf="i == 6" [ngClass]="{'font-weight-bold': items[0] == 'TOTAL', 'text-red': items[0] == 'Credit Memo' || items[0] == 'TOTAL'}">
+                                                <span *ngIf="(items[0] == 'Credit Memo' && data) || (items[0] == 'TOTAL' && data < 0)">(</span>
+                                                {{ data < 0 ? ((data * -1) | currency) : (data | currency)}}
+                                                <span *ngIf="(items[0] == 'Credit Memo' && data) || (items[0] == 'TOTAL' && data < 0)">)</span>
+                                            </td>
+                                        </ng-container>
                                     </tr>
                                 </tbody>
                             </table>

@@ -13,6 +13,8 @@ import { SendMailModalContent } from '../../modals/send-mail/send-mail.modal';
 
 import { ReportsService } from '../../../reports.service';
 
+import * as _ from 'lodash';
+
 @Component({
     selector: 'app-customer-outstanding',
     templateUrl: './customer-outstanding.component.html',
@@ -82,8 +84,11 @@ export class CustomerOutstandingComponent implements OnInit {
         this.reportsService.getCustomerOutstandingReport(params).subscribe(
             res => {
                 try {
-                    this.reportData = res.data || [];
-                    this.getSummaryCompanyData();
+                    this.reportData = res.data.list || [];
+                    this.summaryData = [];
+                    if (res.data.summary.length) {
+                        res.data.summary.forEach(data => this.summaryData.push(_.values(data)));
+                    }
                     this.refresh();
                 } catch (err) {
                     console.log(err);
@@ -94,69 +99,52 @@ export class CustomerOutstandingComponent implements OnInit {
         );
     }
 
-    getSummaryCompanyData() {
-        this.summaryData = [
-            {
-                'type': 'Invoice',
-                'due30': 3000.00,
-                'due60': 0.00,
-                'due90': 0.00,
-                'due120': 0.00,
-                'balance': 3000.00
-            },
-            {
-                'type': 'Debit',
-                'due30': 0.00,
-                'due60': 0.00,
-                'due90': 0.00,
-                'due120': 1000.00,
-                'balance': 1000.00
-            },
-            {
-                'type': 'Credit',
-                'due30': 500.00,
-                'due60': 0.00,
-                'due90': 0.00,
-                'due120': 0.00,
-                'balance': 500.00
-            }
-        ];
-    }
-
-    calculateBalance(data) {
-        const totalBalance = data.reduce(
-            (
-                (initialValue, item) => initialValue + item.balance_amount * (item['doc_type'] === 'Credit Memo' ? -1 : 1)
-            ), 0
-        );
-        return totalBalance;
-    }
-
-    calculateToTalBalance(customer) {
-        const totalParentBalance = this.calculateBalance(customer.content);
-        const totalChildBalance = (customer.child && customer.child.length) ?
-            customer.child.reduce(((initialValue, childItem) => initialValue + this.calculateBalance(childItem.content)), 0) : 0;
-        return totalParentBalance + totalChildBalance;
-    }
-
-    calculateTotalSummaryBalance() {
-        const totalBalance = this.summaryData.reduce(((initialValue, item) => initialValue + item.balance), 0);
-        return totalBalance;
-    }
-
-    calculateTotalBalanceReport() {
-        const totalBalanceReport = this.reportData.reduce(((initialValue, customer) => initialValue + this.calculateToTalBalance(customer)), 0);
-        return totalBalanceReport;
-    }
-
     onSendMail(type) {
         const modalRef = this.modalService.open(SendMailModalContent, {
             size: 'lg'
         });
         modalRef.componentInstance.type = type;
-        modalRef.result.then(res => {
+        modalRef.result.then(result => {
+            if (result) {
+                const params = {};
+                this.reportsService.sendMailCustomerOutstanding(params).subscribe(
+                    res => {
+                        try {
+                            console.log(res);
+                        } catch (err) {
+                            console.log(err);
+                        }
+                    }
+                );
+            }
         }, dismiss => {
         });
+    }
+
+    exportExcel() {
+        const params = {};
+        this.reportsService.exportExcelCustomerOutstanding(params).subscribe(
+            res => {
+                try {
+                    console.log(res);
+                } catch (err) {
+                    console.log(err);
+                }
+            }
+        );
+    }
+
+    exportPDF() {
+        const params = {};
+        this.reportsService.exportPDFCustomerOutstanding(params).subscribe(
+            res => {
+                try {
+                    console.log(res);
+                } catch (err) {
+                    console.log(err);
+                }
+            }
+        );
     }
 
     downloadExcel() {
