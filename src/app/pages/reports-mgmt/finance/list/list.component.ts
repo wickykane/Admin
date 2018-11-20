@@ -12,6 +12,7 @@ export class ReportFinanceListComponent implements OnInit {
     public hover: any;
     public questionClick: any;
     constructor() {}
+    public isShowLink = false;
 
     ngOnInit() {}
     onHover() {

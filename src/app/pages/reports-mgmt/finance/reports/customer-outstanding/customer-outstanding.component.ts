@@ -11,12 +11,14 @@ import { routerTransition } from '../../../../../router.animations';
 
 import { SendMailModalContent } from '../../modals/send-mail/send-mail.modal';
 
+import { ReportsService } from '../../../reports.service';
+
 @Component({
     selector: 'app-customer-outstanding',
     templateUrl: './customer-outstanding.component.html',
     styleUrls: ['../reports.scss', './customer-outstanding.component.scss'],
     animations: [routerTransition()],
-    providers: [],
+    providers: [ReportsService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomerOutstandingComponent implements OnInit {
@@ -41,10 +43,11 @@ export class CustomerOutstandingComponent implements OnInit {
         public toastr: ToastrService,
         public tableService: TableService,
         public modalService: NgbModal,
+        private reportsService: ReportsService,
         private cd: ChangeDetectorRef) {
         this.reportForm = fb.group({
-            'period': [null],
-            'type': [null]
+            'year': [null],
+            'customer_type': [null]
         });
     }
 
@@ -58,103 +61,37 @@ export class CustomerOutstandingComponent implements OnInit {
     }
 
     getMasterData() {
-        this.listMaster['reportPeriods'] = [
-            { key: null, value: 'All Years' },
-            { key: '2018', value: '2018' },
-            { key: '2017', value: '2017' },
-            { key: '2016', value: '2016' }
-        ];
-        this.listMaster['customerTypes'] = [
-            { key: 'com', value: 'Company' },
-            { key: 'per', value: 'Personal' }
-        ];
+        this.reportsService.getCustomerOutstandingMasterData().subscribe(
+            res => {
+                try {
+                    this.listMaster['reportPeriods'] = [ ...[{ year: null }], ...res.data.year || [] ];
+                    this.listMaster['customerTypes'] = res.data.company_type || [];
+                    this.refresh();
+                } catch (err) {
+                    console.log(err);
+                }
+            }, err => {
+                console.log(err);
+            }
+        );
     }
 
-    getCompanyReportData() {
-        this.reportData = [
-            {
-                name: 'Khiet Pham Parent Company',
-                data: [
-                    {
-                        type: 'Invoice',
-                        no: 'INV-0101-0000001',
-                        issue_date: '01/01/2018',
-                        due_date: '01/01/2018',
-                        day_of_outstanding: '0',
-                        total_amount: '1000.00',
-                        total_balance: 1000.00
-                    },
-                    {
-                        type: 'Debit Memo',
-                        no: 'DR-0101-0000002',
-                        issue_date: '01/01/2017',
-                        due_date: '01/01/2017',
-                        day_of_outstanding: '365',
-                        total_amount: '1000.00',
-                        total_balance: 1000.00
-                    },
-                    {
-                        type: 'Credit Memo',
-                        no: 'CR-MMDD-0000001',
-                        issue_date: '01/01/2018',
-                        due_date: '',
-                        day_of_outstanding: '0',
-                        total_amount: '500.00',
-                        total_balance: 500.00
-                    }
-                ],
-                child: [
-                    {
-                        name: 'Khiet Pham Child',
-                        data: [
-                            {
-                                type: 'Invoice',
-                                no: 'INV-0101-0000002',
-                                issue_date: '01/01/2018',
-                                due_date: '01/01/2018',
-                                day_of_outstanding: '0',
-                                total_amount: '1000.00',
-                                total_balance: 1000.00
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                name: 'Khiet Pham Super Company',
-                data: [
-                    {
-                        type: 'Invoice',
-                        no: 'INV-0101-0000003',
-                        issue_date: '01/01/2018',
-                        due_date: '01/01/2018',
-                        day_of_outstanding: '0',
-                        total_amount: '1000.00',
-                        total_balance: 1000.00
-                    },
-                ],
-                child: []
+    getCustomerOutstandingReportData() {
+        const params = { ...this.reportForm.value };
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
+        this.reportsService.getCustomerOutstandingReport(params).subscribe(
+            res => {
+                try {
+                    this.reportData = res.data || [];
+                    this.getSummaryCompanyData();
+                    this.refresh();
+                } catch (err) {
+                    console.log(err);
+                }
+            }, err => {
+                console.log(err);
             }
-        ];
-    }
-
-    getPersonalReportData() {
-        this.reportData = [
-            {
-                name: 'Khiet Pham',
-                data: [
-                    {
-                        type: 'Invoice',
-                        no: 'INV-0101-0000003',
-                        issue_date: '01/01/2018',
-                        due_date: '01/01/2018',
-                        day_of_outstanding: '0',
-                        total_amount: '1000.00',
-                        total_balance: 1000.00
-                    },
-                ]
-            }
-        ];
+        );
     }
 
     getSummaryCompanyData() {
@@ -186,54 +123,19 @@ export class CustomerOutstandingComponent implements OnInit {
         ];
     }
 
-    getSummaryPersonalData() {
-        this.summaryData = [
-            {
-                'type': 'Invoice',
-                'due30': 1000.00,
-                'due60': 0.00,
-                'due90': 0.00,
-                'due120': 0.00,
-                'balance': 1000
-            },
-            {
-                'type': 'Debit',
-                'due30': 0.00,
-                'due60': 0.00,
-                'due90': 0.00,
-                'due120': 0.00,
-                'balance': 0.00
-            }
-        ];
-    }
-
-    onRunReport() {
-        switch (this.reportForm.value.type) {
-            case 'com': {
-                this.getCompanyReportData();
-                this.getSummaryCompanyData();
-                break;
-            }
-            case 'per': {
-                this.getPersonalReportData();
-                this.getSummaryPersonalData();
-                break;
-            }
-            default: {
-                break;
-            }
-        }
-    }
-
     calculateBalance(data) {
-        const totalBalance = data.reduce(((initialValue, item) => initialValue + item.total_balance), 0);
+        const totalBalance = data.reduce(
+            (
+                (initialValue, item) => initialValue + item.balance_amount * (item['doc_type'] === 'Credit Memo' ? -1 : 1)
+            ), 0
+        );
         return totalBalance;
     }
 
     calculateToTalBalance(customer) {
-        const totalParentBalance = this.calculateBalance(customer.data);
+        const totalParentBalance = this.calculateBalance(customer.content);
         const totalChildBalance = (customer.child && customer.child.length) ?
-            customer.child.reduce(((initialValue, childItem) => initialValue + this.calculateBalance(childItem.data)), 0) : 0;
+            customer.child.reduce(((initialValue, childItem) => initialValue + this.calculateBalance(childItem.content)), 0) : 0;
         return totalParentBalance + totalChildBalance;
     }
 
