@@ -82,6 +82,7 @@ import {
 import { AdminPanelService } from './admin-panel.service';
 
 import { CKEditorModule } from 'ng2-ckeditor';
+import { ReturnPolicyComponent } from './return-policy-setup/return-policy.component';
 
 @NgModule({
     imports: [
@@ -145,7 +146,8 @@ import { CKEditorModule } from 'ng2-ckeditor';
         TaxTypesModalComponent,
         SalesTaxAuthComponent,
         TaxTreeComponent,
-        QuickbookOverviewComponent
+        QuickbookOverviewComponent,
+        ReturnPolicyComponent
     ],
     entryComponents: [
         BankModalComponent,

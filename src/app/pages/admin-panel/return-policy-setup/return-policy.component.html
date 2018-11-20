@@ -1,0 +1,61 @@
+<div [@routerTransition]>
+    <app-page-header [heading]="'Return Policy Setup'" [icon]="'fa-th-list'"></app-page-header>
+    <section class="rma-page block">     
+        <form class="card height-100 mg-bt-15 mg-t-15 border-0" [formGroup]="policySetupForm">
+            <div class="col-md-4 pl-0">
+                <div class="custom-border card height-100">
+                    <div class="card-header">
+                        <strong>GENERAL INFOMATION</strong>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-search full-width form-horizontal">
+                            <div class="row due-date-section switcher">
+                                <div class="col-md-5 pl-1">
+                                    <label class="m-0 py-2" for="">Enable Restocking Fee(*)</label>
+                                </div>
+                                <div class="col-md-7 form-inline">
+                                    <label class="switch">
+                                        <input (change)="onChange()" type="checkbox" name="ac" formControlName="ac" [checked]="policySetupForm.value.ac === 1">
+                                        <span class="slider round"></span>
+                                    </label>
+                                    <!-- <label class="switch-val">{{policySetupForm.value.ac ? 'ON' : 'OFF'}}</label> -->
+                                </div> 
+                            </div>                           
+                        </div>
+                        <div class="form-search full-width form-horizontal" *ngIf="policySetupForm.value.ac ? true : false">
+                            <div class="row due-date-section switcher">
+                                <div class="col-md-5 pl-1">
+                                    <label class="m-0 py-2" for="">Based on(*)</label>
+                                </div>
+                                <div class="col-md-7">
+                                     <select class="form-control py-1" formControlName="base_on">
+                                        <option Value="null" selected="true">% of Amount of Accepted QTY</option>                                        
+                                    </select>
+                                    <!-- <ng-select [multiple]="false" [items]="" bindLabel="" bindValue=""
+                                        placeholder="--Select--" formControlName="">
+                                    </ng-select>   -->
+                                </div>
+                            </div>
+                           <div class="row due-date-section switcher mt-2">
+                                <div class="col-md-5 pl-1">
+                                    <label class="m-0 py-2" for="">Value(*)</label>
+                                </div>
+                                <div class="col-md-7 pr-0 form-inline">
+                                    <input type="number" name="value" formControlName="value" style=" width: 94%;">
+                                    <span class="pl-1">%</span>
+                                </div>
+                           </div>
+                        </div>
+                    </div>
+                </div>
+            </div>                 
+        </form>
+        <div class="row">
+            <div class="text-right col-md-4">
+                <button class="btn btn-outline-primary" (click)="onSavePolicy()" type="button">Save</button>
+                <button class="btn btn-default" type="button" [routerLink]="['/admin-panel']">Cancel</button>
+            </div>
+        </div>
+        
+    </section>
+</div>

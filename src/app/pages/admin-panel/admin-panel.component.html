@@ -21,6 +21,7 @@
                 <!-- <li><a [routerLink]="['/admin-panel/tax-types']">Tax Types</a></li> -->
                 <li *ngIf="routePerm('/admin-panel/sales-tax-auth')"><a [routerLink]="['/admin-panel/sales-tax-auth']">Sales Tax Authority</a></li>
                 <li *ngIf="routePerm('/admin-panel/shipping-zone')"><a [routerLink]="['/admin-panel/shipping-zone']">Shipping Zone</a></li>
+                <li><a [routerLink]="['/admin-panel/return-policy-setup']">Return Policy Setup</a></li>
             </ul>
         </div>
         <div class="col-md-2">
@@ -52,6 +53,7 @@
                 <li><a routerLink="work-flow">Workflow Management</a></li>
                 <li><a href="">Email Templates</a></li>
                 <li><a href="">Report Templates</a></li>
+               
             </ul>
         </div>
     </div>
