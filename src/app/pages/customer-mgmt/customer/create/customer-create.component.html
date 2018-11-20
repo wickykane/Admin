@@ -893,7 +893,7 @@
                                             </th>
                                             <th> Username</th>
                                             <th> Password</th>
-                                            <th> Main Contact  </th>
+                                            <th style="width:5rem">Main Contact</th>
                                             <th class="tb-w-70"> Action </th>
                                         </tr>
                                     </thead>
@@ -921,7 +921,7 @@
                                             <td>
                                                 <input type="password" class="form-control" name="pwd" [(ngModel)]="item.password">
                                             </td>
-                                            <td class="text-center">
+                                            <td class="text-center" style="width:5rem">
                                                 <input type="checkbox" name="is_main" (change)="checkIsMain($event, i)" [(ngModel)]="item.is_main">
                                             </td>                                            
                                             <td class="text-center tb-w-70">

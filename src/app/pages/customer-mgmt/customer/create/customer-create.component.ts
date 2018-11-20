@@ -356,7 +356,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     checkIsMain($event, id) {
         for (let i = 0; i < this.contacts.length; i++) {
             const item = this.contacts[i];
-            if (id !== i) {
+            if (id !== i && item.checked === false) {
                 item.is_main = false;
             }
         }
@@ -575,8 +575,9 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
             //     return true;
             // }
             // Check Main Contact is checked
-             if (params['contacts'].length > 0) {
-                const result = params['contacts'].filter(item => item.is_main === true);
+            if (params['contacts'].length > 0) {
+                const result = params['contacts'].filter(item => item.is_main === true || item.is_main === 1);
+                console.log('result ', result);
                 if (result.length === 0) {
                     return this.toastr.error('Please choose at least one main contact for the customer company.');
                 }
