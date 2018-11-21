@@ -77,3 +77,9 @@
         }
     }
 }
+
+.selected-row {
+    tr:hover {
+        background: #eaeaea !important;
+    }
+}
