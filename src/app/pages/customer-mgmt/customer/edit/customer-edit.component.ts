@@ -16,6 +16,7 @@ import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
 import { Helper } from '../../../../shared/index';
 
+import { StorageService } from '../../../../services/storage.service';
 import { TableService } from '../../../../services/table.service';
 import { cdArrowTable } from '../../../../shared';
 @Component({
@@ -94,6 +95,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         private hotkeysService: HotkeysService,
         public keyService: CustomerEditKeyService,
         private commonService: CommonService,
+        private storage: StorageService,
         public helper: Helper,
         private cd: ChangeDetectorRef) {
         this.generalForm = fb.group({
@@ -163,7 +165,6 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
          * Init Data
          */
         const users = JSON.parse(localStorage.getItem('currentUser'));
-        this.roleManager = users.user_type;
         this.listTypeAddress = [{ id: 1, name: 'Billing' }, { id: 2, name: 'Shipping' }];
         this.route.params.subscribe(params => this.getDetailSupplier(params.id));
         this.getListCustomerType();
@@ -171,7 +172,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         this.getListCountryAdmin();
         this.getListCarrier();
         this.customerService.getRoute().subscribe(res => { this.routeList = res.data; this.refresh(); });
-
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
     }
     get adj_current_balance() {
         return this.creditBalanceForm.get('adj_current_balance');

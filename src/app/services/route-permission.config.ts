@@ -5,6 +5,7 @@ export const ROUTE_PERMISSION = {
         create: 'sel2bCreateCustomer',
         edit: 'sel2bEditCustomer',
         list: 'sel2bViewMenuCustomer',
+        editstore: 'sel2bEditStoreCreditBalanceCustomer',
     },
     // Product Management
     'part-list': {
