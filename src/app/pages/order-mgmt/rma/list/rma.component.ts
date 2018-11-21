@@ -248,14 +248,14 @@ export class RmaComponent implements OnInit {
         });
     }
 
-    updateStatus(id, status) {
-        const params = { return_order_id: id, status_id: status };
+    updateStatus(item, status) {
+        const params = { return_order_id: item.id, status_id: status };
         this.service.updateStatus(params).subscribe(res => {
             try {
 
                 if (status === 5) {
-                    if (!res.status && res.message === 'show popup') {
-                        this.checkStatusOrder(id);
+                    if (res.message === 'show popup') {
+                        this.checkStatusOrder(item);
                     } else {
                         this.toastr.success(res.message);
                         this.getList();
@@ -271,13 +271,13 @@ export class RmaComponent implements OnInit {
         });
     }
 
-    checkStatusOrder(id) {
+    checkStatusOrder(item) {
         const modalRef = this.modalService.open(BackdropModalContent, { size: 'lg', windowClass: 'modal-md', backdrop: 'static', keyboard: false });
         modalRef.result.then(res => {
             if (res) {
-                this.service.updateChange(id).subscribe(result => {
+                this.service.updateChange(item.id).subscribe(result => {
                     try {
-                        this.confirmModal(id, 2, '');
+                        this.confirmModal(item, 2, '');
                     } catch (e) {
                         console.log(e);
                     }
@@ -375,7 +375,7 @@ export class RmaComponent implements OnInit {
             const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
             modalRef.result.then(res => {
                 if (res) {
-                    this.updateStatus(item.id, status);
+                    this.updateStatus(item, status);
                 }
             }, dismiss => { });
             switch (status) {

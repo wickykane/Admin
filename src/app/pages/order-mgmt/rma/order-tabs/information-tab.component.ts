@@ -318,7 +318,7 @@ export class ReturnOrderInformationTabComponent implements OnInit {
         this.service.updateStatus(params).subscribe(res => {
             try {
                 if (status === 5) {
-                    if (!res.status && res.message === 'show popup') {
+                    if (res.message === 'show popup') {
                         this.cancelOrder(id);
                     }
                 }

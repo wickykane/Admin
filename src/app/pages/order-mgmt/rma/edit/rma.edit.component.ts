@@ -847,8 +847,8 @@ export class RmaEditComponent implements OnInit {
 
         this.list.returnItem.forEach(item => {
             if (item.sku !== 'MIS-0000006') {
-                item.amount = ((+item.accept_quantity || 0) * (+item.sale_price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
-                this.order_info_after.sub_total += item.amount;
+                item.amount_accept = ((+item.accept_quantity || 0) * (+item.sale_price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
+                this.order_info_after.sub_total += item.amount_accept;
             } else {
                 amount += item.price;
             }
