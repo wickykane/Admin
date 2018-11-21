@@ -493,7 +493,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-12" *ngIf="roleManager == 1 && detail?.is_parent !== false ">
+                                        <div class="col-md-12" *ngIf="listMaster['permission'].editstore && detail?.is_parent !== false ">
                                             <div class="form-group row">
                                                 <label for="adj_current_balance" class="col-md-5 col-form-label">Adj. Current Balance(+/-)</label>
                                                 <div class="col-md-7">
@@ -502,7 +502,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-12" *ngIf="roleManager == 1 && detail?.is_parent !== false" >
+                                        <div class="col-md-12" *ngIf="listMaster['permission'].editstore && detail?.is_parent !== false" >
                                             <div class="form-group row">
                                                 <label for="new_credit_limit" class="col-md-5 col-form-label">Updat Credit Limit</label>
                                                 <div class="col-md-7">
