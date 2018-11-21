@@ -93,6 +93,7 @@ export class CreditMemoEditComponent implements OnInit {
         backItems: []
     };
     accountList: any;
+    public currentBuyerId = null;
 
     public searchKey = new Subject<any>(); // Lazy load filter
 
@@ -161,7 +162,8 @@ export class CreditMemoEditComponent implements OnInit {
 
         // Lazy Load filter
         this.data['page'] = 1;
-        const params = { page: this.data['page'], length: 100 };
+        const params = { page: this.data['page'], length: 100, buyer_id: this.currentBuyerId };
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
@@ -261,9 +263,11 @@ export class CreditMemoEditComponent implements OnInit {
                     this.generalForm.get('payment_method_id').disable(); // Disable If Store Credit
                     this.generalForm.get('payment_term_id').disable();
                 }
+                this.currentBuyerId = data.company_id;
                 this.getListApprover();
                 // Lazy Load filter
-                const params = { page: this.data['page'], length: 100 };
+                const params = { page: this.data['page'], length: 100, buyer_id: this.currentBuyerId };
+                Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
                 this.orderService.getAllCustomer(params).subscribe(result => {
                     const idList = result.data.rows.map(item => item.id);
                     this.listMaster['customer'] = result.data.rows;
@@ -713,10 +717,11 @@ export class CreditMemoEditComponent implements OnInit {
         if (this.data['page'] > this.data['total_page']) {
             return;
         }
-        const params = { page: this.data['page'], length: 100 };
+        const params = { page: this.data['page'], length: 100, buyer_id: this.currentBuyerId };
         if (this.data['searchKey']) {
             params['company_name'] = this.data['searchKey'];
         }
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = this.listMaster['customer'].concat(res.data.rows);
             this.data['total_page'] = res.data.total_page;
@@ -726,10 +731,11 @@ export class CreditMemoEditComponent implements OnInit {
 
     searchCustomer(key) {
         this.data['searchKey'] = key;
-        const params = { page: this.data['page'], length: 100 };
+        const params = { page: this.data['page'], length: 100, buyer_id: this.currentBuyerId };
         if (key) {
             params['company_name'] = key;
         }
+        Object.keys(params).forEach((_key) => (params[_key] === null || params[_key] === '') && delete params[_key]);
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;

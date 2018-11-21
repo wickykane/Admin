@@ -75,6 +75,7 @@ export class ReceiptVoucherEditComponent implements OnInit {
 
     public searchKey = new Subject<any>(); // Lazy load filter
     public checkAllItem;
+    public currentBuyerId = null;
 
     @ViewChild(cdArrowTable) table: cdArrowTable;
     /**
@@ -145,7 +146,8 @@ export class ReceiptVoucherEditComponent implements OnInit {
 
         // Lazy Load filter
         this.data['page'] = 1;
-        const params = { page: this.data['page'], length: 100 };
+        const params = { page: this.data['page'], length: 100, buyer_id: this.currentBuyerId };
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
@@ -206,10 +208,19 @@ export class ReceiptVoucherEditComponent implements OnInit {
                 item.is_checked = item.price_apply ? true : false;
                 return item;
             });
+            this.currentBuyerId = res.data.company_id;
             this.updateSavedItems();
             this.updateAmountReceived(true);
             // Init Change Event
-            this.onChangePayer(1);
+            // Lazy Load filter
+            const params = { page: this.data['page'], length: 100, buyer_id: this.currentBuyerId };
+            Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
+            this.orderService.getAllCustomer(params).subscribe(result => {
+                this.listMaster['customer'] = result.data.rows;
+                this.onChangePayer(1);
+                this.data['total_page'] = result.data.total_page;
+                this.refresh();
+            });
             this.onChangeWareHouse(1);
             await this.onChangePaymentMethodType(1);
             this.onChangePaymentMethod(1);
@@ -753,10 +764,11 @@ export class ReceiptVoucherEditComponent implements OnInit {
         if (this.data['page'] > this.data['total_page']) {
             return;
         }
-        const params = { page: this.data['page'], length: 100 };
+        const params = { page: this.data['page'], length: 100, buyer_id: this.currentBuyerId };
         if (this.data['searchKey']) {
             params['company_name'] = this.data['searchKey'];
         }
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = this.listMaster['customer'].concat(res.data.rows);
             this.data['total_page'] = res.data.total_page;
@@ -766,10 +778,11 @@ export class ReceiptVoucherEditComponent implements OnInit {
 
     searchCustomer(key) {
         this.data['searchKey'] = key;
-        const params = { page: this.data['page'], length: 100 };
+        const params = { page: this.data['page'], length: 100, buyer_id: this.currentBuyerId };
         if (key) {
             params['company_name'] = key;
         }
+        Object.keys(params).forEach((_key) => (params[_key] === null || params[_key] === '') && delete params[_key]);
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
