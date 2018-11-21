@@ -1,7 +1,7 @@
 <div [@routerTransition]>
     <app-page-header [heading]="'Return Policy Setup'" [icon]="'fa-th-list'"></app-page-header>
     <section class="rma-page block">     
-        <form class="card height-100 mg-bt-15 mg-t-15 border-0" [formGroup]="policySetupForm">
+        <form class="mt-1 border-0" [formGroup]="policySetupForm">
             <div class="col-md-4 pl-0">
                 <div class="custom-border card height-100">
                     <div class="card-header">
@@ -15,7 +15,7 @@
                                 </div>
                                 <div class="col-md-7 form-inline">
                                     <label class="switch">
-                                        <input (change)="onChange()" type="checkbox" name="ac" formControlName="ac" [checked]="policySetupForm.value.ac === 1">
+                                        <input type="checkbox" name="ac" formControlName="ac" [checked]="policySetupForm.value.ac === 1">
                                         <span class="slider round"></span>
                                     </label>
                                     <!-- <label class="switch-val">{{policySetupForm.value.ac ? 'ON' : 'OFF'}}</label> -->
@@ -50,12 +50,11 @@
                 </div>
             </div>                 
         </form>
-        <div class="row">
+        <div class="row mt-2 align-self-end">
             <div class="text-right col-md-4">
                 <button class="btn btn-outline-primary" (click)="onSavePolicy()" type="button">Save</button>
                 <button class="btn btn-default" type="button" [routerLink]="['/admin-panel']">Cancel</button>
             </div>
         </div>
-        
     </section>
 </div>

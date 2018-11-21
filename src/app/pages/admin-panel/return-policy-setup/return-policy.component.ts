@@ -35,9 +35,9 @@ export class ReturnPolicyComponent implements OnInit {
     refresh() {
         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
-    onChange() {
-        this.onSavePolicy();
-    }
+    // onChange() {
+    //    this.onSavePolicy();
+    // }
     onGetPolicy() {
         this.returnPolicy.getReturnPolicy().subscribe(res => {
             this.policySetupForm.patchValue(res.data);
