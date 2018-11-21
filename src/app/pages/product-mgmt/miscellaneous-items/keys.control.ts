@@ -30,7 +30,7 @@ export class MiscellaneousItemsKeyService extends KeyboardBaseService {
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Create Miscellaneous'));
       }
 
-      this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+e', (event: KeyboardEvent): boolean => {
+      this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent): boolean => {
           event.preventDefault();
           this.context.tableService.searchAction();
           return;
