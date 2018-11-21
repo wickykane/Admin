@@ -14,6 +14,7 @@
                     <div class="block-search">
                         <label for="type" class="control-label" translate>Customer Type</label>
                         <select class="form-control" formControlName="customer_type">
+                            <option  [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
                             <option *ngFor="let item of listMaster['customerTypes']" [ngValue]="item.code">{{item.name}}</option>
                         </select>
                     </div>
@@ -33,10 +34,10 @@
                     <div class="card-header">
                         <div class="text-right">
                             <div>
-                                <a class="btn btn-default" title="Send Mail" (click)="onSendMail('Excel')">
+                                <a class="btn btn-default" title="Send Mail" (click)="onSendMail()">
                                     <i class="fa fa-envelope-o" aria-hidden="true"></i>
                                 </a>
-                                <a class="btn btn-default" title="Print">
+                                <a class="btn btn-default" title="Print" (click)="exportDocument('pdf')">
                                     <i class="fa fa-print" aria-hidden="true"></i>
                                 </a>
                                 <a class="btn btn-default" title="Export"
@@ -49,12 +50,12 @@
                                 <ul>
                                     <li>
                                         <label>
-                                            <a (click)="downloadExcel()">Export to Excel</a>
+                                            <a (click)="exportDocument('excel')">Export to Excel</a>
                                         </label>
                                     </li>
                                     <li>
                                         <label>
-                                            <a (click)="downloadPDF()">Export to PDF</a>
+                                            <a (click)="exportDocument('pdf')">Export to PDF</a>
                                         </label>
                                     </li>
                                 </ul>

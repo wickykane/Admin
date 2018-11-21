@@ -17,17 +17,7 @@ export class ReportsService {
     }
 
     sendMailCustomerOutstanding(params) {
-        const url = '';
+        const url = 'customer-report/send-mail';
         return this.API.post(url, params);
-    }
-
-    exportExcelCustomerOutstanding(params) {
-        const url = '';
-        return this.API.get(url, params);
-    }
-
-    exportPDFCustomerOutstanding(params) {
-        const url = '';
-        return this.API.get(url, params);
     }
 }

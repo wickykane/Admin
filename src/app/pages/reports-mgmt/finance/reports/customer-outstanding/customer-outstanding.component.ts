@@ -13,6 +13,9 @@ import { SendMailModalContent } from '../../modals/send-mail/send-mail.modal';
 
 import { ReportsService } from '../../../reports.service';
 
+import { environment } from '../../../../../../environments/environment';
+import { JwtService } from '../../../../../shared/guard/jwt.service';
+
 import * as _ from 'lodash';
 
 @Component({
@@ -39,8 +42,13 @@ export class CustomerOutstandingComponent implements OnInit {
 
     public user: any;
     public reportForm: FormGroup;
+    public currentSelectedFormValue = {
+        year: null,
+        customer_type: null
+    };
 
     constructor(public router: Router,
+        private jwtService: JwtService,
         public fb: FormBuilder,
         public toastr: ToastrService,
         public tableService: TableService,
@@ -89,6 +97,7 @@ export class CustomerOutstandingComponent implements OnInit {
                     if (res.data.summary.length) {
                         res.data.summary.forEach(data => this.summaryData.push(_.values(data)));
                     }
+                    this.currentSelectedFormValue = { ...this.reportForm.value };
                     this.refresh();
                 } catch (err) {
                     console.log(err);
@@ -99,18 +108,18 @@ export class CustomerOutstandingComponent implements OnInit {
         );
     }
 
-    onSendMail(type) {
+    onSendMail() {
         const modalRef = this.modalService.open(SendMailModalContent, {
             size: 'lg'
         });
-        modalRef.componentInstance.type = type;
         modalRef.result.then(result => {
             if (result) {
-                const params = {};
+                const params = { ...result, ...this.currentSelectedFormValue };
+                params['type'] = params['type'] ? params['type'].toLowerCase() : null;
+                Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
                 this.reportsService.sendMailCustomerOutstanding(params).subscribe(
                     res => {
                         try {
-                            console.log(res);
                         } catch (err) {
                             console.log(err);
                         }
@@ -121,37 +130,22 @@ export class CustomerOutstandingComponent implements OnInit {
         });
     }
 
-    exportExcel() {
-        const params = {};
-        this.reportsService.exportExcelCustomerOutstanding(params).subscribe(
-            res => {
-                try {
-                    console.log(res);
-                } catch (err) {
-                    console.log(err);
-                }
-            }
-        );
-    }
-
-    exportPDF() {
-        const params = {};
-        this.reportsService.exportPDFCustomerOutstanding(params).subscribe(
-            res => {
-                try {
-                    console.log(res);
-                } catch (err) {
-                    console.log(err);
-                }
-            }
-        );
-    }
-
-    downloadExcel() {
-        window.open('https://docs.google.com/spreadsheets/d/1VTs6QVwx6QQeTt-IMvwXzcYUcYGX-8ER8tO0_-RYaxM/export?format=xlsx', '_blank');
-    }
-
-    downloadPDF() {
-        window.open('https://drive.google.com/uc?export=download&id=1UyKUTfjHtPIjsnEcLRhJuoWoM3gpsmtz', '_blank');
+    exportDocument(type) {
+        const anchor = document.createElement('a');
+        const path = 'customer-report/customer-exports';
+        let file = `${environment.api_url}${path}?type=${type}`;
+        file += this.currentSelectedFormValue.year ? `&year=${this.currentSelectedFormValue.year}` : '';
+        file += this.currentSelectedFormValue.customer_type ? `&customer_type=${this.currentSelectedFormValue.customer_type}` : '';
+        const headers = new Headers();
+        headers.append('Authorization', 'Bearer ' + this.jwtService.getToken());
+        fetch(file, { headers })
+            .then(response => response.blob())
+            .then(blobby => {
+            const objectUrl = window.URL.createObjectURL(blobby);
+            anchor.href = objectUrl;
+            anchor.download = `customer_outstanding_report.${type === 'excel' ? 'xls' : 'pdf'}`;
+            anchor.click();
+            window.URL.revokeObjectURL(objectUrl);
+        });
     }
 }
