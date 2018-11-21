@@ -321,6 +321,10 @@ export class ReturnOrderInformationTabComponent implements OnInit {
                     if (!res.status && res.message === 'show popup') {
                         this.cancelOrder(id);
                     }
+                }
+                if (status === 2) {
+                  this.toastr.success('Return Order’s status has been updated successfully');
+                  this.router.navigate(['/order-management/sale-order/detail', id]);
                 } else {
                     this.toastr.success(res.message);
                     this.router.navigate(['/order-management/return-order']);
