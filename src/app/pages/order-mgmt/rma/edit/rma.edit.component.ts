@@ -48,7 +48,8 @@ export class RmaEditComponent implements OnInit {
         approvers: [],
         ship_via: [],
         return_reason: [],
-        list_invoice: []
+        list_invoice: [],
+        percent_restocking_fee: 0
     };
     public selectedIndex = 0;
     public selectedIndex2 = 0;
@@ -116,7 +117,8 @@ export class RmaEditComponent implements OnInit {
         'SB': 'Are you sure that you want to submit this return order to approver?', // Submit
         'AR1': 'Are you sure that you want to approve the cancelation and send to warehouse for put back?',
         'AR2': 'Are you sure that you approve and send this return order to Warehouse for receipt?',
-        'back': 'The data you have entered may not be saved, are you sure that you want to leave?'
+        'back': 'The data you have entered may not be saved, are you sure that you want to leave?',
+        'CC': 'Are you sure that you want to cancel this return order?'
     };
 
     public searchKey = new Subject<any>(); // Lazy load filter
@@ -187,6 +189,8 @@ export class RmaEditComponent implements OnInit {
             this.listMaster['ship_via'] = res.data.ship_via || [];
             this.listMaster['return_reason'] = res.data.return_reason || [];
             this.listMaster['carrier'] = res.data.carrier || [];
+            this.listMaster['percent_restocking_fee'] = +(res.data.percent_restocking_fee) / 100;
+
             this.refresh();
         });
 
@@ -388,6 +392,27 @@ export class RmaEditComponent implements OnInit {
                 return other.order_detail_id === current.order_detail_id;
             }).length === 0;
         };
+    }
+
+    cancelRMA() {
+        const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
+        modalRef.result.then(res => {
+            if (res) {
+                const params = { return_order_id: this.route.snapshot.paramMap.get('id'), status_id: 2 };
+                this.service.updateStatus(params).subscribe(result => {
+                    try {
+                        this.toastr.success('Return Order’s status has been updated successfully');
+                        this.getDetailRMA();
+                    } catch (e) {
+                        console.log(e);
+                    }
+                });
+            }
+        }, dismiss => { });
+
+        modalRef.componentInstance.message = this.messageConfig.CC;
+        modalRef.componentInstance.yesButtonText = 'Yes';
+        modalRef.componentInstance.noButtonText = 'No';
     }
 
 
@@ -822,8 +847,8 @@ export class RmaEditComponent implements OnInit {
 
         this.list.returnItem.forEach(item => {
             if (item.sku !== 'MIS-0000006') {
-                item.amount = ((+item.accept_quantity || 0) * (+item.sale_price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
-                this.order_info_after.sub_total += item.amount;
+                item.amount_accept = ((+item.accept_quantity || 0) * (+item.sale_price || 0)) * (100 - (+item.discount_percent || 0)) / 100;
+                this.order_info_after.sub_total += item.amount_accept;
             } else {
                 amount += item.price;
             }
@@ -872,7 +897,15 @@ export class RmaEditComponent implements OnInit {
     }
 
     addStockFee() {
+        let fee = 0;
         this.flagStockFee = !this.flagStockFee;
+
+        this.list.returnItem.forEach(item => {
+            if (item.sku !== 'MIS-0000006') {
+                fee = (+item.sale_price || 0) * (item.accept_quantity || 0);
+            }
+        });
+
         this.itemStockFee = {
             sku: 'MIS-0000006',
             des: 'Restocking Fee',
@@ -880,8 +913,8 @@ export class RmaEditComponent implements OnInit {
             uom_name: 'Each',
             return_quantity: 1,
             accept_quantity: 1,
-            price: 1,
-            amount_before_receipt: 1,
+            price: +(fee * this.listMaster['percent_restocking_fee']),
+            amount_before_receipt: +(fee * this.listMaster['percent_restocking_fee']),
             misc_id: 6
         };
         if (this.flagStockFee) {

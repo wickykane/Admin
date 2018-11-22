@@ -4,7 +4,7 @@
 <div class="bd-example text-right">
     <button  *ngIf="detail['sts'] == 1 && data['permission'].send" ngbTooltip="Send to WH" class="btn btn-outline-dark" (click)="confirmModal(detail, 5)"><i class="fa fa-check" aria-hidden="true"></i> Approve</button>
     <button *ngIf="detail['sts'] == 7 && data['permission'].complete" ngbTooltip="Complete" class="btn btn-outline-dark" (click)="confirmModal(detail, 7)"><i class="fa fa-share-square-o"></i> Complete</button>
-    <button *ngIf="detail['sts'] == 1 && data['permission'].cancel" ngbTooltip="Cancel" class="btn btn-outline-dark" (click)="confirmModal(detail, 2)"><i class="fa fa-times-circle"></i> Cancel</button>
+    <button *ngIf="(detail['sts'] == 1 || detail['sts'] == 5) && data['permission'].cancel" ngbTooltip="Cancel" class="btn btn-outline-dark" (click)="confirmModal(detail, 2)"><i class="fa fa-times-circle"></i> Cancel</button>
     <button *ngIf="detail['sts'] != 2 && detail['sts'] != 8 && data['permission'].edit" ngbTooltip="Edit" class="btn btn-outline-dark" [routerLink]="['/order-management/return-order/edit', detail.id]"><i class="fa fa-pencil"></i> Edit</button>
 
     </div>
