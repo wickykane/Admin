@@ -112,6 +112,7 @@ export class RmaEditComponent implements OnInit {
     public disableEdit = false;
     public flagStockFee = false;
     public itemStockFee = {};
+    public currentBuyerId = null;
 
     public messageConfig = {
         'SB': 'Are you sure that you want to submit this return order to approver?', // Submit
@@ -200,7 +201,8 @@ export class RmaEditComponent implements OnInit {
 
         // Lazy Load filter
         this.data['page'] = 1;
-        const params = { page: this.data['page'], length: 100 };
+        const params = { page: this.data['page'], length: 100, buyer_id: this.currentBuyerId };
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
         this.service.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
@@ -233,6 +235,7 @@ export class RmaEditComponent implements OnInit {
                     'tracking_no': data.tracking_no,
                     'arrival_date': data.arrival_date
                 });
+                this.currentBuyerId = data.company_id;
 
 
                 this.list.returnItem = res.data.items || [];
@@ -253,7 +256,8 @@ export class RmaEditComponent implements OnInit {
 
 
                 // Lazy Load filter
-                const params = { page: this.data['page'], length: 100 };
+                const params = { page: this.data['page'], length: 100, buyer_id: this.currentBuyerId };
+                Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
                 this.service.getAllCustomer(params).subscribe(result => {
                     const idList = result.data.rows.map(item => item.id);
                     this.listMaster['customer'] = result.data.rows;
@@ -1077,10 +1081,11 @@ export class RmaEditComponent implements OnInit {
         if (this.data['page'] > this.data['total_page']) {
             return;
         }
-        const params = { page: this.data['page'], length: 100 };
+        const params = { page: this.data['page'], length: 100, buyer_id: this.currentBuyerId };
         if (this.data['searchKey']) {
             params['company_name'] = this.data['searchKey'];
         }
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
         this.service.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = this.listMaster['customer'].concat(res.data.rows);
             this.data['total_page'] = res.data.total_page;
@@ -1090,10 +1095,11 @@ export class RmaEditComponent implements OnInit {
 
     searchCustomer(key) {
         this.data['searchKey'] = key;
-        const params = { page: this.data['page'], length: 100 };
+        const params = { page: this.data['page'], length: 100, buyer_id: this.currentBuyerId };
         if (key) {
             params['company_name'] = key;
         }
+        Object.keys(params).forEach((_key) => (params[_key] === null || params[_key] === '') && delete params[_key]);
         this.service.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;

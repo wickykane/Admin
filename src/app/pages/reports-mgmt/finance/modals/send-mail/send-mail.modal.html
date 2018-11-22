@@ -20,7 +20,7 @@
                 <b>CC</b>
             </label>
             <div class="content subject">
-                <input type="text">
+                <input type="text" [(ngModel)]="mailContent.cc">
             </div>
         </div>
     </div>
@@ -31,7 +31,7 @@
                 <b>Subject</b>
             </label>
             <div class="content subject">
-                <input type="text">
+                <input type="text" [(ngModel)]="mailContent.subject">
             </div>
         </div>
     </div>
@@ -42,7 +42,7 @@
                 <b>Body</b>
             </label>
             <div class="content">
-                <ckeditor debounce="500" #bodyEditor></ckeditor>
+                <ckeditor debounce="500" #bodyEditor [(ngModel)]="mailContent.body"></ckeditor>
             </div>
         </div>
     </div>
@@ -52,7 +52,7 @@
                 <b>Report Type</b>
             </label>
             <div class="">
-                <select class="form-control" [(ngModel)]="type">
+                <select class="form-control" [(ngModel)]="mailContent.type">
                     <option *ngFor="let item of listMaster['reportTypes']" [ngValue]="item.value">{{item.value}}</option>
                 </select>
             </div>
@@ -60,6 +60,6 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-outline-primary" (click)="activeModal.dismiss()">SEND</button>
+    <button type="button" class="btn btn-outline-primary" (click)="onSendMail()">SEND</button>
     <button type="button" class="btn btn-default" (click)="activeModal.dismiss()">CANCEL</button>
 </div>

@@ -39,6 +39,7 @@ import { WorkFlowComponent } from './work-flow/work-flow.component';
 import { WorkFlowEditComponent } from './work-flow/work-flow.edit.component';
 
 import { MasterGuard } from '../../shared';
+import { ReturnPolicyComponent } from './return-policy-setup/return-policy.component';
 
 const routes: Routes = [
     {
@@ -248,6 +249,11 @@ const routes: Routes = [
         path: 'sales-tax-auth',
         canActivate: [MasterGuard],
         component: SalesTaxAuthComponent
+    },
+    {
+        path: 'return-policy-setup',
+        canActivate: [MasterGuard],
+        component: ReturnPolicyComponent
     },
     {
         path: 'quickbook-overview',

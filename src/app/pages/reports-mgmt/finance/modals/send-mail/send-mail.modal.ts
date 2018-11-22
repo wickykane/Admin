@@ -27,7 +27,12 @@ export class SendMailModalContent implements OnInit {
         ]
     };
 
-    @Input() type;
+    public mailContent = {
+        'cc': '',
+        'subject': '',
+        'body': '',
+        'type': 'PDF'
+    };
 
     constructor(
         private cd: ChangeDetectorRef,
@@ -38,5 +43,9 @@ export class SendMailModalContent implements OnInit {
     ) {}
 
     ngOnInit() {
+    }
+
+    onSendMail() {
+        this.activeModal.close(this.mailContent);
     }
 }

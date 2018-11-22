@@ -90,6 +90,7 @@ export class InvoiceEditComponent implements OnInit {
     };
 
     public isInstallQuickbook = false;
+    public currentBuyerId = null;
 
     public searchKey = new Subject<any>(); // Lazy load filter
 
@@ -170,7 +171,8 @@ export class InvoiceEditComponent implements OnInit {
 
         // Lazy Load filter
         this.data['page'] = 1;
-        const params = { page: this.data['page'], length: 100 };
+        const params = { page: this.data['page'], length: 100, buyer_id: this.currentBuyerId };
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
@@ -256,9 +258,11 @@ export class InvoiceEditComponent implements OnInit {
                 this.generalForm.patchValue({ ...data, approver_id: data.aprvr_id });
                 this.list.items = data.inv_detail;
                 this.updateTotal();
+                this.currentBuyerId = data.company_id;
 
                 // Lazy Load filter
-                const params = { page: this.data['page'], length: 100 };
+                const params = { page: this.data['page'], length: 100, buyer_id: this.currentBuyerId };
+                Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
                 this.orderService.getAllCustomer(params).subscribe(result => {
                     const idList = result.data.rows.map(item => item.id);
                     this.listMaster['customer'] = result.data.rows;
@@ -702,10 +706,11 @@ export class InvoiceEditComponent implements OnInit {
         if (this.data['page'] > this.data['total_page']) {
             return;
         }
-        const params = { page: this.data['page'], length: 100 };
+        const params = { page: this.data['page'], length: 100, buyer_id: this.currentBuyerId };
         if (this.data['searchKey']) {
             params['company_name'] = this.data['searchKey'];
         }
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = this.listMaster['customer'].concat(res.data.rows);
             this.data['total_page'] = res.data.total_page;
@@ -715,10 +720,11 @@ export class InvoiceEditComponent implements OnInit {
 
     searchCustomer(key) {
         this.data['searchKey'] = key;
-        const params = { page: this.data['page'], length: 100 };
+        const params = { page: this.data['page'], length: 100, buyer_id: this.currentBuyerId };
         if (key) {
             params['company_name'] = key;
         }
+        Object.keys(params).forEach((_key) => (params[_key] === null || params[_key] === '') && delete params[_key]);
         this.orderService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customer'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;

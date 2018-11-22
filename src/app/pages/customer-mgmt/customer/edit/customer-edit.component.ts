@@ -16,6 +16,7 @@ import { ToastrService } from 'ngx-toastr';
 import { routerTransition } from '../../../../router.animations';
 import { Helper } from '../../../../shared/index';
 
+import { StorageService } from '../../../../services/storage.service';
 import { TableService } from '../../../../services/table.service';
 import { cdArrowTable } from '../../../../shared';
 @Component({
@@ -94,6 +95,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         private hotkeysService: HotkeysService,
         public keyService: CustomerEditKeyService,
         private commonService: CommonService,
+        private storage: StorageService,
         public helper: Helper,
         private cd: ChangeDetectorRef) {
         this.generalForm = fb.group({
@@ -163,7 +165,6 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
          * Init Data
          */
         const users = JSON.parse(localStorage.getItem('currentUser'));
-        this.roleManager = users.user_type;
         this.listTypeAddress = [{ id: 1, name: 'Billing' }, { id: 2, name: 'Shipping' }];
         this.route.params.subscribe(params => this.getDetailSupplier(params.id));
         this.getListCustomerType();
@@ -171,7 +172,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         this.getListCountryAdmin();
         this.getListCarrier();
         this.customerService.getRoute().subscribe(res => { this.routeList = res.data; this.refresh(); });
-
+        this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
     }
     get adj_current_balance() {
         return this.creditBalanceForm.get('adj_current_balance');
@@ -620,6 +621,15 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             }
         }
     }
+    checkIsMain($event, id) {
+        for (let i = 0; i < this.contacts.length; i++) {
+            const item = this.contacts[i];
+            // console.log(this.contacts[id].checked );
+            if (id !== i && item.checked === false) {
+                item.is_main = false;
+            }
+        }
+    }
     checkStatus() {
         if (this.generalForm.value.ac !== 1) {
             let setStatus = false;
@@ -711,7 +721,6 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
         });
         if (this.generalForm.valid && this.isCheck === false ) {
             const params = { ...this.generalForm.value, ...this.creditBalanceForm.value, 'remove_contact': this.remove_contacts };
-            console.log('param', params);
             if (params['buyer_type'] === 'CP') {
                 delete params['email'];
                 delete params['first_name'];
@@ -726,7 +735,15 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
             if (params['buyer_type'] === 'CP' && params['contacts'].length === 0) {
                 return this.toastr.error('The contact field is required.');
             }
-            console.log('data: ', params);
+            // Check Main Contact is checked
+            if (params['contacts'].length > 0) {
+                const result = params['contacts'].filter(item => item.is_main === true || item.is_main === 1);
+                console.log('result ', result);
+                if (result.length === 0) {
+                    return this.toastr.error('Please choose at least one main contact for the customer company.');
+                }
+            }
+            console.log('params ', params);
             this.customerService.updateCustomer(this.idCustomer, params).subscribe(
                 res => {
                     try {

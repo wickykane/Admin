@@ -493,7 +493,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-12" *ngIf="roleManager == 1 && detail?.is_parent !== false ">
+                                        <div class="col-md-12" *ngIf="listMaster['permission'].editstore && detail?.is_parent !== false ">
                                             <div class="form-group row">
                                                 <label for="adj_current_balance" class="col-md-5 col-form-label">Adj. Current Balance(+/-)</label>
                                                 <div class="col-md-7">
@@ -502,7 +502,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-12" *ngIf="roleManager == 1 && detail?.is_parent !== false" >
+                                        <div class="col-md-12" *ngIf="listMaster['permission'].editstore && detail?.is_parent !== false" >
                                             <div class="form-group row">
                                                 <label for="new_credit_limit" class="col-md-5 col-form-label">Updat Credit Limit</label>
                                                 <div class="col-md-7">
@@ -928,6 +928,7 @@
                                             </th>
                                             <th> Username </th>
                                             <th> Password </th>
+                                            <th style="width:5rem"> Main Contact </th>
                                             <th class="tb-w-70"> Action </th>
                                         </tr>
                                     </thead>
@@ -955,6 +956,9 @@
                                             <td>
                                                 <input type="password" class="form-control" name="password" [(ngModel)]="item.password">
                                             </td>
+                                            <td class="text-center" style="width:5rem">
+                                                <input type="checkbox" class="form-control" (change)="checkIsMain($event, i)"  name="is_main"  [(ngModel)]="item.is_main">
+                                            </td>                                            
                                             <td class="text-center tb-w-70">
                                                 <a href="javascript:void(0)" class="btn btn-default" (click)="removeContact(i, item.user_id)">
                                                     <i class="fa fa-times" aria-hidden="true"></i>

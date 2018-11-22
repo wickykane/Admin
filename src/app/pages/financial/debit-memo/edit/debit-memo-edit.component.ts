@@ -81,6 +81,7 @@ export class DebitMemoEditComponent implements OnInit {
     public debitDetail = {};
     public currentUser = {};
     public isInstallQuickbook = false;
+    public currentBuyerId = null;
     //#endregion initialize variables
 
     //#region contructor
@@ -351,9 +352,11 @@ export class DebitMemoEditComponent implements OnInit {
                 try {
                     this.debitDetail = res.data;
                     this.debitMemoForm.patchValue(this.debitDetail);
+                    this.currentBuyerId = res.data.company_id;
 
                     // Lazy Load filter
-                    const params = { page: this.data['page'], length: 100 };
+                    const params = { page: this.data['page'], length: 100, buyer_id: this.currentBuyerId };
+                    Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
                     this.debitService.getAllCustomer(params).subscribe(result => {
                         const idList = result.data.rows.map(item => item.id);
                         this.listMaster['customers'] = result.data.rows;
@@ -403,10 +406,11 @@ export class DebitMemoEditComponent implements OnInit {
         if (this.data['page'] > this.data['total_page']) {
             return;
         }
-        const params = { page: this.data['page'], length: 100 };
+        const params = { page: this.data['page'], length: 100, buyer_id: this.currentBuyerId };
         if (this.data['searchKey']) {
             params['company_name'] = this.data['searchKey'];
         }
+        Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
         this.debitService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customers'] = this.listMaster['customers'].concat(res.data.rows);
             this.data['total_page'] = res.data.total_page;
@@ -416,10 +420,11 @@ export class DebitMemoEditComponent implements OnInit {
 
     searchCustomer(key) {
         this.data['searchKey'] = key;
-        const params = { page: this.data['page'], length: 100 };
+        const params = { page: this.data['page'], length: 100, buyer_id: this.currentBuyerId };
         if (key) {
             params['company_name'] = key;
         }
+        Object.keys(params).forEach((_key) => (params[_key] === null || params[_key] === '') && delete params[_key]);
         this.debitService.getAllCustomer(params).subscribe(res => {
             this.listMaster['customers'] = res.data.rows;
             this.data['total_page'] = res.data.total_page;
