@@ -443,7 +443,7 @@
                                         <ng-container *ngIf="!data['disable']">
                                           <td [ngClass]="{'d-none':  (wh.warehouse_id  || wh.id) != generalForm.getRawValue().warehouse_id}" *ngFor="let wh of item['warehouse']">
                                             {{wh.qty_available}}
-                                          </td>                                
+                                          </td>
                                         </ng-container>
                                         <td>
                                             <input numberDirective [min]="1" [disabled]="item.misc_id || data['disable']" style="width: 60px;" class="form-control input-sm" type="number" [(ngModel)]="item.quantity" (changeValue)="updateTotal()">
@@ -629,11 +629,11 @@
         </div>
         <div class="row">
             <div class="col-md-12 mg-top-15 text-right">
-                <button type="button" class="btn btn-outline-info" (click)="createOrder('draft')" translate>Save</button>
+                <button type="button" class="btn btn-outline-info" (click)="createOrder('draft')" translate>Update</button>
                 <button *ngIf="!data['disable'] && listMaster['permission'].approve" type="button" class="btn btn-outline-success" (click)="confirmModal('validate')"
                     translate>Save & Validate</button>
                 <button *ngIf="!data['disable']" type="button" class="btn btn-outline-danger" (click)="confirmModal('create')" translate>Save & Submit</button>
-                <button type="button" class="btn btn-outline-secondary" (click)="confirmModal('cancel')" translate>Cancel Order</button>
+                <button type="button" class="btn btn-outline-secondary" (click)="confirmModal('cancel')" translate>Cancel</button>
                 <button type="button" class="btn btn-default" (click)="confirmModal(0)" translate>Back To List</button>
             </div>
         </div>

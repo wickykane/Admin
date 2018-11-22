@@ -723,6 +723,8 @@ export class SaleOrderEditComponent implements OnInit {
                 item.is_misc = 1;
                 item.misc_id = item.id;
                 item.discount_percent = 0;
+                item.qty_cancel = 0;
+                item.qty_remain = 1;
                 item.warehouse = this.listMaster['warehouses'];
                 return item;
             });

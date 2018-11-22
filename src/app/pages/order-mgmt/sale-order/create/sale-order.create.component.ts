@@ -246,6 +246,7 @@ export class SaleOrderCreateComponent implements OnInit {
                 this.addr_select.contact = res.data.contact[0] || this.addr_select.contact;
                 this.generalForm.patchValue({ contact_user_id: this.addr_select.contact.id });
                 // }
+                this.generalForm.patchValue({ 'carrier_id': res.data.carrier_id || 4});
 
                 const default_billing = (this.customer.billing || []).find(item => item.set_default) || this.customer.billing[0] || {};
                 const default_shipping = (this.customer.shipping || []).find(item => item.set_default) || this.customer.shipping[0] || {};

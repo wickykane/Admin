@@ -507,11 +507,14 @@
                           </tbody>
                           </table>
                        </div>
-                       <div class="col-12 no-padding">
-                          <button (click)="addStockFee()" class="btn btn-link" translate>
-                           <ng-container *ngIf="!flagStockFee"><i class="fa fa-plus"></i> Add</ng-container>
-                           <ng-container *ngIf="flagStockFee"><i class="fa fa-minus"></i> Remove</ng-container>
-                            Restocking Fee</button>
+                       <div class="col-12 no-padding" *ngIf="data['order_data']">
+                         <ng-container *ngIf="data['order_data']['sts'] == 7">
+                           <button (click)="addStockFee()" class="btn btn-link" translate>
+                            <ng-container *ngIf="!flagStockFee"><i class="fa fa-plus"></i> Calculate</ng-container>
+                            <ng-container *ngIf="flagStockFee"><i class="fa fa-minus"></i> Remove</ng-container>
+                             Restocking Fee</button>
+                         </ng-container>
+
                        </div>
                             </div>
                 </div>
@@ -733,6 +736,9 @@
         </div>
         <div class="row">
             <div class="col-md-12 mg-top-15 text-right">
+                <ng-container *ngIf="data['order_data']">
+                  <button *ngIf="data['order_data']['sts'] == 1 || data['order_data']['sts'] == 5" type="button" class="btn btn-outline-danger" (click)="cancelRMA()" translate>Cancel</button>
+                </ng-container>
                 <button type="button" class="btn btn-outline-warning" (click)="confirmCreateOrder('NW')" translate>Update</button>
                 <!-- <button type="button" class="btn btn-outline-primary" (click)="confirmCreateOrder('SB')" [disabled]="!generalForm.valid"
                     translate>Save & Submit</button> -->

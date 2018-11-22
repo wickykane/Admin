@@ -40,7 +40,7 @@
                                             <label class='col-6 control-label'>Document No</label>
                                             <div class='col-6'>
                                                 <a *ngIf="detail['document_type'] == '1'" class="text-primary"
-                                                [routerLink]="['/financial/invoice/view/', detail['document_id']]">{{detail['document_name']}}</a>                        
+                                                [routerLink]="['/financial/invoice/view/', detail['document_id']]">{{detail['document_name']}}</a>
                                                 <a *ngIf="detail['document_type'] == '2'"  class="text-primary"
                                                 [routerLink]="['/order-management/return-order/detail/', detail['document_id']]">{{detail['document_name']}}</a>
                                                 <a *ngIf="detail['document_type'] == '3'" class="text-primary"
@@ -99,13 +99,13 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class='col-6 control-label'>Last Update On</label>
+                                            <label class='col-6 control-label'>Last Updated On</label>
                                             <div class='col-6'>
                                                 {{detail['last_update_on'] | date:'MM/dd/yyyy'}}
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class='col-6 control-label'>Last Update By</label>
+                                            <label class='col-6 control-label'>Last Updated By</label>
                                             <div class='col-6'>
                                                 {{ detail['last_update_by']}}
                                             </div>
@@ -167,7 +167,7 @@
                                 <div class="form-group row">
                                     <label class="control-label col-6" translate>Label</label>
                                     <div class="col-6">
-                                        {{ detail.billing['name']}}
+                                        {{ detail.billing['label']}}
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -217,7 +217,7 @@
                                 <div class="form-group row">
                                     <label class="control-label col-6" translate>Label</label>
                                     <div class="col-6">
-                                        {{ detail.shipping_address['name']}}
+                                        {{ detail.shipping_address['label']}}
                                     </div>
                                 </div>
                                 <div class="form-group row">
