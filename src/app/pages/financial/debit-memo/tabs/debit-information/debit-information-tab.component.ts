@@ -169,7 +169,7 @@ export class DebitInformationTabComponent implements OnInit {
     }
 
     onPrintDebitMemo() {
-        const path = `debit/${this.debitData['id']}/print`;
+        const path = `debit/${this.debitData['id']}/print-pdf`;
         const url = `${environment.api_url}${path}`;
         const headers: HttpHeaders = new HttpHeaders({ 'Authorization': 'Bearer ' + localStorage.getItem('id_token') });
         this.http.get(url, {
