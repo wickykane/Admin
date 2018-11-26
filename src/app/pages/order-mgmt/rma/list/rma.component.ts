@@ -284,7 +284,7 @@ export class RmaComponent implements OnInit {
                 });
             }
         }, dismiss => { });
-        modalRef.componentInstance.message = 'The sales order status is delivering. The return order will be canceled now. You can create the return until the goods delivered to customer.';
+        modalRef.componentInstance.message = 'The status of sales order ' + item.order_code + ' is delivering. The current return order will be canceled now. You can only create the return after the goods delivered to customer.';
         modalRef.componentInstance.yesButtonText = 'OK';
     }
 

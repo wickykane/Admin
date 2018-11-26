@@ -560,7 +560,7 @@
                                             <input numberDirective [min]="1" style="width: 100px;" class="form-control input-sm" type="number" [(ngModel)]="item.replace_quantity" (changeValue)="updateTotal()">
                                         </td>
                                         <td>
-                                            <span>{{item.sale_price}}</span>
+                                            <span>{{item.sale_price | currency}}</span>
                                         </td>
                                         <td class="text-center">
                                             <span>{{item.amount | currency}}</span>
