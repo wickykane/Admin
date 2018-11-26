@@ -714,7 +714,7 @@ export class SaleOrderEditComponent implements OnInit {
             'ship_rate': this.generalForm.getRawValue().ship_method_rate,
             'items': this.list.items.filter(item => !item.misc_id)
         };
-        this.orderService.getTaxShipping(params).subscribe(res => {
+        this.orderService.getTaxShipping(params, this.data['order_data']['order_sts_short_name']).subscribe(res => {
             res.data.mics = res.data.mics || [];
 
             const old_misc = this.list.items.filter(item => item.misc_id && [1, 2].indexOf(item.misc_id) === -1 && +item.source_id !== 3);
