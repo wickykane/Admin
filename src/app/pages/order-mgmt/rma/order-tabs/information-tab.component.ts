@@ -206,7 +206,7 @@ export class ReturnOrderInformationTabComponent implements OnInit {
             const modalRef = this.modalService.open(ConfirmModalContent, { size: 'lg', windowClass: 'modal-md' });
             modalRef.result.then(res => {
                 if (res) {
-                    this.updateStatus(item.id, status);
+                    this.updateStatus(item, status);
                 }
             }, dismiss => { });
             switch (status) {
@@ -311,20 +311,19 @@ export class ReturnOrderInformationTabComponent implements OnInit {
         modalRef.componentInstance.noButtonText = 'No';
     }
 
-    updateStatus(id, status) {
-      console.log(id);
-        const params = { return_order_id: id, status_id: status };
+    updateStatus(item, status) {
+        const params = { return_order_id: item.id, status_id: status };
         console.log(params);
         this.service.updateStatus(params).subscribe(res => {
             try {
                 if (status === 5) {
                     if (res.message === 'show popup') {
-                        this.cancelOrder(id);
+                        this.cancelOrder(item);
                     }
                 }
                 if (status === 2) {
                   this.toastr.success('Return Order’s status has been updated successfully');
-                  this.router.navigate(['/order-management/sale-order/detail', id]);
+                  this.router.navigate(['/order-management/sale-order/detail', item.id]);
                 } else {
                     this.toastr.success(res.message);
                     this.router.navigate(['/order-management/return-order']);
@@ -335,20 +334,20 @@ export class ReturnOrderInformationTabComponent implements OnInit {
         });
     }
 
-    cancelOrder(id) {
+    cancelOrder(item) {
         const modalRef = this.modalService.open(BackdropModalContent, { size: 'lg', windowClass: 'modal-md', backdrop: 'static', keyboard: false });
         modalRef.result.then(res => {
             if (res) {
-                this.service.updateChange(id).subscribe(result => {
+                this.service.updateChange(item.id).subscribe(result => {
                     try {
-                        this.confirmModal(id, 2);
+                        this.confirmModal(item, 2);
                     } catch (e) {
                         console.log(e);
                     }
                 });
             }
         }, dismiss => { });
-        modalRef.componentInstance.message = 'The sales order status is delivering. The return order will be canceled now. You can create the return until the goods delivered to customer.';
+        modalRef.componentInstance.message = 'The status of sales order ' + item.order_code + ' is delivering. The current return order will be canceled now. You can only create the return after the goods delivered to customer.';
         modalRef.componentInstance.yesButtonText = 'OK';
     }
 
