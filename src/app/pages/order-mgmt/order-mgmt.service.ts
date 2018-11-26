@@ -286,8 +286,9 @@ export class OrderService {
         const url = 'shipping-zone/configuration-by-address/' + id;
         return this.API.get(url);
     }
-    getTaxShipping(params) {
-        const url = 'shipping-zone/calc-tax-shipping';
+    getTaxShipping(params, sts?) {
+        const flag = sts !== 'NW' ? '?calBy=qty_remain' : '';
+        const url = 'shipping-zone/calc-tax-shipping' + flag;
         return this.API.post(url, params);
     }
     createQuoteOrder(params) {
