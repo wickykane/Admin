@@ -7,10 +7,10 @@
             </div>
             <div class="col-md-12 mt-1 mb-5">
                 <div class="py-2 col-8 shadow-sm form-inline is-hover" [ngClass]="{'col-12': isShowLink}">
-                    <label class="is-red">Customer outstanding with ageing report</label>
+                    <a [routerLink]="['/report/finance-report/customer-outstanding']" class="is-red">Customer outstanding with ageing report</a>
                     <span><i class="ml-1 fa fa-question-circle-o is-red" (click)="isShowLink = !isShowLink"></i></span>
                     <label class="mt-1" *ngIf="isShowLink">
-                        <a [routerLink]="['/report/finance-report/customer-outstanding']">How much each customer owes you. Report shows individual invoices and debit memos with their aged overdue.</a>
+                        <span>How much each customer owes you. Report shows individual invoices and debit memos with their aged overdue.</span>
                     </label>
                 </div>
             </div>
