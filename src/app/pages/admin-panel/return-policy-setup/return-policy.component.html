@@ -5,7 +5,7 @@
             <div class="col-md-4 pl-0">
                 <div class="custom-border card height-100">
                     <div class="card-header">
-                        <strong>GENERAL INFOMATION</strong>
+                        <strong>GENERAL INFORMATION</strong>
                     </div>
                     <div class="card-body">
                         <div class="form-search full-width form-horizontal">
@@ -41,7 +41,7 @@
                                     <label class="m-0 py-2" for="">Value(*)</label>
                                 </div>
                                 <div class="col-md-7 pr-0 form-inline">
-                                    <input type="number" name="value" formControlName="value" style=" width: 94%;">
+                                    <input pattern="[0-9]*" type="text" name="value" formControlName="value" style=" width: 94%;">
                                     <span class="pl-1">%</span>
                                 </div>
                            </div>
@@ -52,7 +52,7 @@
         </form>
         <div class="row mt-2 align-self-end">
             <div class="text-right col-md-4">
-                <button class="btn btn-outline-primary" (click)="onSavePolicy()" type="button">Save</button>
+                <button [disabled]="!policySetupForm.valid" class="btn btn-outline-primary" (click)="onSavePolicy()" type="button">Save</button>
                 <button class="btn btn-default" type="button" [routerLink]="['/admin-panel']">Cancel</button>
             </div>
         </div>

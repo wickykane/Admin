@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnChanges, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -29,10 +29,10 @@ import { StorageService } from '../../../../services/storage.service';
 import { PaymentGatewayModalComponent } from '../modals/payment-gateway/payment-gateway.modal';
 import { TableService } from './../../../../services/table.service';
 
+import { KeyCode } from '@ng-select/ng-select/ng-select/ng-select.types';
 import * as moment from 'moment';
 import { ROUTE_PERMISSION } from '../../../../services/route-permission.config';
 import { PaymentInformModalComponent } from '../modals/payment-inform/payment-inform.modal';
-
 
 @Component({
     selector: 'app-edit-receipt-voucher',
@@ -127,8 +127,18 @@ export class ReceiptVoucherEditComponent implements OnInit {
         //  Init Key
         this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
     }
-
+    // ngOnChanges() {
+    // }
     async ngOnInit() {
+        this.generalForm.get('electronic').valueChanges.subscribe(
+            (electronic: boolean) => {
+                if (electronic) {
+                    this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
+                } else if (!electronic) {
+                    this.keyService.watchContext.next({ context: this, service: this._hotkeysService });
+                }
+            }
+        );
         const user = JSON.parse(localStorage.getItem('currentUser'));
         this.listMaster['permission'] = this.storage.getRoutePermission(this.router.url);
         this.data['user'] = user;
@@ -333,6 +343,10 @@ export class ReceiptVoucherEditComponent implements OnInit {
     // Table event
     selectData(index) {
         console.log(index);
+        const button = this.table.element.nativeElement.querySelectorAll('td label input');
+        if (button && button[this.selectedIndex]) {
+            button[this.selectedIndex].click();
+        }
     }
 
     checkAll(ev) {
@@ -793,11 +807,14 @@ export class ReceiptVoucherEditComponent implements OnInit {
         this.selectedIndex = 0;
         this.table.scrollToTable();
         setTimeout(() => {
-            const button = this.table.element.nativeElement.querySelectorAll('td a');
+            const button = this.table.element.nativeElement.querySelectorAll('td');
             if (button && button[this.selectedIndex]) {
                 button[this.selectedIndex].focus();
             }
         });
         this.refresh();
     }
+  selectAll() {
+   this.table.element.nativeElement.querySelector('th label input').click();
+  }
 }

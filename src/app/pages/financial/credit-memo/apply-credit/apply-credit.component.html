@@ -112,7 +112,8 @@
                         <form class="form-horizontal form-search" role="form" [formGroup]="searchForm">
                             <div class="block-search">
                                 <label for="code" class="control-label">Code</label>
-                                <input type="text" name="code" formControlName="code" class="form-control" id="code"
+                                <input [keyConfig]="keyService.getKeyConfig()" appKeyNavigate="code"
+                                    type="text" name="code" formControlName="code" class="form-control" id="code"
                                     placeholder="" capitalize>
                             </div>
                         </form>
@@ -126,7 +127,7 @@
                     </div>
                     <div class="card-body no-padding">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-order">
+                            <table class="table table-bordered table-order" cdArrowTable [collection]="list.items" [(selectedIndex)]="selectedIndex" (onEnter)="selectData($event)">
                                 <thead>
                                     <tr>
                                         <th translate style="width: 50px;text-align:left">
@@ -154,8 +155,8 @@
                                     </tr>
                                 </tbody>
                                 <ng-container *ngIf="list['items'].length > 0">
-                                    <tbody *ngFor="let item of list['items']; let $index = index;" [ngClass]="{'row-selected': i == selectedIndex}">
-                                        <tr>
+                                    <tbody *ngFor="let item of list['items']; let $index = index;">
+                                        <tr [ngClass]="{'row-selected': $index == selectedIndex}">
                                             <td>
                                                 <label class="css-input css-checkbox css-checkbox-default">
                                                     <input class="cb-element" type="checkbox" [(ngModel)]="item.is_checked"
