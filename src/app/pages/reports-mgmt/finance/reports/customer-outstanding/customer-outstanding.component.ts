@@ -3,6 +3,8 @@ import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from './../../../../../services/table.service';
 
+import { Headers, Http, ResponseContentType } from '@angular/http';
+
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
@@ -48,6 +50,7 @@ export class CustomerOutstandingComponent implements OnInit {
     };
 
     constructor(public router: Router,
+        private http: Http,
         private jwtService: JwtService,
         public fb: FormBuilder,
         public toastr: ToastrService,
@@ -132,21 +135,39 @@ export class CustomerOutstandingComponent implements OnInit {
     }
 
     exportDocument(type) {
-        const anchor = document.createElement('a');
         const path = 'customer-report/customer-exports';
         let file = `${environment.api_url}${path}?type=${type}`;
         file += this.currentSelectedFormValue.year ? `&year=${this.currentSelectedFormValue.year}` : '';
         file += this.currentSelectedFormValue.customer_type ? `&customer_type=${this.currentSelectedFormValue.customer_type}` : '';
-        const headers = new Headers();
-        headers.append('Authorization', 'Bearer ' + this.jwtService.getToken());
-        fetch(file, { headers })
-            .then(response => response.blob())
-            .then(blobby => {
-            const objectUrl = window.URL.createObjectURL(blobby);
-            anchor.href = objectUrl;
-            anchor.download = `customer_outstanding_report.${type === 'excel' ? 'xls' : 'pdf'}`;
-            anchor.click();
-            window.URL.revokeObjectURL(objectUrl);
-        });
+        const fileName = `customer_outstanding_report.${type === 'excel' ? 'xls' : 'pdf'}`;
+        const _headers = new Headers({ 'Authorization': 'Bearer ' + this.jwtService.getToken() });
+        return this.http
+            .get(file, {
+                responseType: ResponseContentType.Blob,
+                headers: _headers
+            })
+            .map(res => {
+                return {
+                    filename: fileName,
+                    data: res.blob()
+                };
+            })
+            .subscribe(res => {
+                if (window.navigator && window.navigator.msSaveOrOpenBlob) { // for IE
+                    window.navigator.msSaveOrOpenBlob(res.data, res.filename);
+                } else { // for Non-IE (chrome, firefox etc.)
+                    const anchor = document.createElement('a');
+                    const objectUrl = window.URL.createObjectURL(res.data);
+                    anchor.href = objectUrl;
+                    anchor.download = fileName;
+                    anchor.click();
+                    window.URL.revokeObjectURL(objectUrl);
+                    anchor.remove(); // remove the element
+                }
+            }, error => {
+                console.log('download error:', JSON.stringify(error));
+            }, () => {
+                console.log('Completed file download.');
+            });
     }
 }
