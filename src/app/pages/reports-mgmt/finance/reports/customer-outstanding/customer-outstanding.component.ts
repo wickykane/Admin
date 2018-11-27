@@ -110,7 +110,8 @@ export class CustomerOutstandingComponent implements OnInit {
 
     onSendMail() {
         const modalRef = this.modalService.open(SendMailModalContent, {
-            size: 'lg'
+            size: 'lg',
+            windowClass: 'modal-md'
         });
         modalRef.result.then(result => {
             if (result) {

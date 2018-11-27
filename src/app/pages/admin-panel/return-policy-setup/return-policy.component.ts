@@ -25,7 +25,7 @@ export class ReturnPolicyComponent implements OnInit {
         this.policySetupForm = fb.group({
             ac: [0],
             base_on: [null],
-            value: [null],
+            value: [null, Validators.required ],
             id: [null],
         });
     }
@@ -47,8 +47,12 @@ export class ReturnPolicyComponent implements OnInit {
         this.policySetupForm.value.ac = this.policySetupForm.value.ac ? 1 : 0 ;
         const params = this.policySetupForm.value;
         this.returnPolicy.saveReturnPolicy(params).subscribe(res => {
-            this.toastr.success(res.message);
-            this.refresh();
+            try {
+                this.toastr.success(res.message);
+                this.refresh();
+            }  catch (e) {
+                this.toastr.error(e);
+            }
         }, err => {console.log(err); });
     }
 }

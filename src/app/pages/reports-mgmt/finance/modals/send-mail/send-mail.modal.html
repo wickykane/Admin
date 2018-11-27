@@ -4,8 +4,7 @@
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
-<div class="modal-body search-block">
-
+<!-- <div class="modal-body search-block">
     <div class="row email-content mb-3">
         <div class="col-md-12">
             <label class="title">
@@ -58,6 +57,40 @@
             </div>
         </div>
     </div>
+</div> -->
+<div class="modal-body" style="padding-bottom:10px;">
+    <form [formGroup]="mailForm" class="form-horizontal mail-form" role="form">
+        <div class="row">
+            <div class="form-group col-sm-12">
+                <div class="form-control">
+                    <b>To</b><i class="fa fa-check" aria-hidden="true"></i><b>All Customer in Report</b>
+                </div>
+            </div>
+            <div class="form-group col-sm-12">
+                <div class="form-control">
+                    <label for="" translate>CC: </label>
+                    <input type="text" formControlName="cc">
+                </div>
+            </div>
+            <div class="form-group col-sm-12">
+                <div class="form-control">
+                    <label for="" translate>Subject: </label>
+                    <input type="text" formControlName="subject">
+                </div>
+            </div>
+            <div class="form-group col-sm-12">
+                <textarea class="form-control" rows="10" formControlName="body"></textarea>
+            </div>
+            <div class="form-group col-sm-12">
+                <div class="form-control">
+                    <label class="" for="" translate>Report Type: </label>
+                    <select class="form-control" formControlName="type">
+                        <option *ngFor="let item of listMaster['reportTypes']" [ngValue]="item.value">{{item.value}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-outline-primary" (click)="onSendMail()">SEND</button>

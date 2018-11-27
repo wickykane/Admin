@@ -1,23 +1,22 @@
 import { DatePipe } from '@angular/common';
-import { Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectComponent } from '@ng-select/ng-select';
-
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs/Subject';
 import { routerTransition } from '../../../../router.animations';
-
-import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
-import { CreditMemoCreateKeyService } from './keys.control';
+import { cdArrowTable } from '../../../../shared';
 
 import { HotkeysService } from 'angular2-hotkeys';
 import * as lodash from 'lodash';
+import { NgbDateCustomParserFormatter } from '../../../../shared/helper/dateformat';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 import { OrderService } from '../../../order-mgmt/order-mgmt.service';
 import { TableService } from './../../../../services/table.service';
 import { CreditMemoService } from './../credit-memo.service';
+import { CreditMemoCreateKeyService } from './keys.control';
 
 
 @Component({
@@ -65,7 +64,7 @@ export class CreditMemoApplyComponent implements OnInit {
     public copy_list = [];
     public checkAllItem;
     accountList: any;
-
+    @ViewChild(cdArrowTable) table: cdArrowTable;
     /**
      * Init Data
      */
@@ -74,6 +73,7 @@ export class CreditMemoApplyComponent implements OnInit {
         private fb: FormBuilder,
         public toastr: ToastrService,
         private router: Router,
+        private cd: ChangeDetectorRef,
         private route: ActivatedRoute,
         private modalService: NgbModal,
         private orderService: OrderService,
@@ -107,10 +107,6 @@ export class CreditMemoApplyComponent implements OnInit {
         });
     }
     // Table event
-    selectData(index) {
-        console.log(index);
-    }
-
     getDataApplyByCreditId() {
         this.creditMemoService.getDataForApplyById(this.data['id']).subscribe(res => {
             try {
@@ -151,6 +147,13 @@ export class CreditMemoApplyComponent implements OnInit {
                 console.log(e);
             }
         });
+    }
+    selectData(ev) {
+        console.log(ev);
+        const button = this.table.element.nativeElement.querySelectorAll('td label input');
+        if (button && button[this.selectedIndex]) {
+            button[this.selectedIndex].click();
+        }
     }
     checkAll(ev) {
         this.list.items.forEach(x => x.is_checked = ev.target.checked);
@@ -403,6 +406,25 @@ export class CreditMemoApplyComponent implements OnInit {
             });
         });
     }
+    refresh() {
+        if (!this.cd['destroyed']) { this.cd.detectChanges(); }
+   }
 
-
+    back() {
+        this.router.navigate(['/financial/credit-memo']);
+    }
+    selectTable() {
+        this.selectedIndex = 0;
+        this.table.scrollToTable();
+        setTimeout(() => {
+            const button = this.table.element.nativeElement.querySelectorAll('td');
+            if (button && button[this.selectedIndex]) {
+                button[this.selectedIndex].focus();
+            }
+        });
+        this.refresh();
+    }
+    selectAll() {
+        this.table.element.nativeElement.querySelector('th label input').click();
+       }
 }

@@ -264,7 +264,7 @@
                                             <td>{{ (item.balance_price - item.applied_amt)| currency }}</td>
                                             <td>
                                                 <input (blur)='fillAppliedAmountToAllItem($index, true)' [isDecimal]="true" numberDirective [min]="0"
-                                                class="form-control input-sm" type="number" [(ngModel)]="item.applied_amt" [disabled]="!item.is_checked">
+                                                class="form-control input-sm input-check" type="number" [(ngModel)]="item.applied_amt" [disabled]="!item.is_checked">
                                             </td>
                                         </tr>
                                     </tbody>

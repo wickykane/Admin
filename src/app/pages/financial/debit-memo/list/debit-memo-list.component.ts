@@ -248,7 +248,7 @@ export class DebitMemoListComponent implements OnInit {
     }
 
     onPrintDebitMemo(debitId, debitNo) {
-        const path = `debit/${debitId}/print`;
+        const path = `debit/${debitId}/print-pdf`;
         const url = `${environment.api_url}${path}`;
         const headers: HttpHeaders = new HttpHeaders({ 'Authorization': 'Bearer ' + localStorage.getItem('id_token') });
         this.http.get(url, {

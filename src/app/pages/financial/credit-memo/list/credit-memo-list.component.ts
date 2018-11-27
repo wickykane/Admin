@@ -191,7 +191,7 @@ export class CreditMemoListComponent implements OnInit {
     }
 
     printPDF(id) {
-        const path = 'credit-memo/export-pdf/';
+        const path = 'credit-memo/export-print-pdf/';
         const url = `${environment.api_url}${path}${id}`;
         const headers: HttpHeaders = new HttpHeaders({ 'Authorization': 'Bearer ' + localStorage.getItem('id_token') });
         this.http.get(url, {
