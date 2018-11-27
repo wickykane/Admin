@@ -351,7 +351,8 @@ export class ReceiptVoucherCreateComponent implements OnInit {
      * Internal Function
      */
     // Table event
-    selectData() {
+    selectData(ev) {
+        console.log(ev);
         const button = this.table.element.nativeElement.querySelectorAll('td label input');
         if (button && button[this.selectedIndex]) {
             button[this.selectedIndex].click();
