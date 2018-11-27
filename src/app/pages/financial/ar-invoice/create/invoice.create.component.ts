@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -36,11 +36,12 @@ import { InvoiceCreateKeyService } from './keys.create.control';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class InvoiceCreateComponent implements OnInit {
+export class InvoiceCreateComponent implements OnInit, AfterViewInit {
     /**
      * Variable Declaration
      */
 
+    @ViewChild('invCustomer') invCustomerSelect: NgSelectComponent;
     public generalForm: FormGroup;
     public listMaster = {};
     public selectedIndex = 0;
@@ -108,6 +109,7 @@ export class InvoiceCreateComponent implements OnInit {
         private _hotkeysService: HotkeysService,
         public keyService: InvoiceCreateKeyService,
         private financialService: FinancialService,
+        private renderer: Renderer,
         private cd: ChangeDetectorRef,
         private dt: DatePipe,
         private storage: StorageService) {
@@ -183,6 +185,10 @@ export class InvoiceCreateComponent implements OnInit {
         });
         this.getListApprover();
         this.refresh();
+    }
+
+    ngAfterViewInit() {
+        this.invCustomerSelect.focus();
     }
 
     /**
