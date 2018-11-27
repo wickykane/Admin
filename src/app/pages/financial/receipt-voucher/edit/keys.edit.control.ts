@@ -34,6 +34,12 @@ export class InvoiceEditKeyService extends KeyboardBaseService {
             e.returnValue = false; // Prevent bubbling
             return e;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Select Table'));
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+y', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            this.context.selectAll();
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Check All'));
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+del', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             this.context.clearPayment();
@@ -49,18 +55,20 @@ export class InvoiceEditKeyService extends KeyboardBaseService {
             e.returnValue = false; // Prevent bubbling
             return e;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save as Draft'));
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
-            (document.activeElement as HTMLElement).blur();
-            if (!this.context.generalForm.value.electronic) {
-                this.context.confirmModal((this.context.data['summary']
-                    ? this.context.data['summary'].change > 0 : false && !this.context.generalForm.value.electronic && this.context.generalForm.value.payment_method !== 5) ? 'overpayment' : 2);
-            }
-            const e: ExtendedKeyboardEvent = event;
-            e.returnValue = false; // Prevent bubbling
-            return e;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save & Submit'));
+        if (!this.context.generalForm.value.electronic) {
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+s', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+                (document.activeElement as HTMLElement).blur();
+                if (!this.context.generalForm.value.electronic) {
+                    this.context.confirmModal((this.context.data['summary']
+                        ? this.context.data['summary'].change > 0 : false && !this.context.generalForm.value.electronic && this.context.generalForm.value.payment_method !== 5) ? 'overpayment' : 2);
+                }
+                const e: ExtendedKeyboardEvent = event;
+                e.returnValue = false; // Prevent bubbling
+                return e;
+            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save & Submit'));
+        }
 
-        if (this.context.listMaster['permission'].approve) {
+        if (this.context.listMaster['permission'].approve && !this.context.generalForm.value.electronic) {
             this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+v', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
                 (document.activeElement as HTMLElement).blur();
                 if (!this.context.generalForm.value.electronic) {
@@ -72,13 +80,14 @@ export class InvoiceEditKeyService extends KeyboardBaseService {
                 return e;
             }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save & Validate'));
         }
-
-        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+p', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
-            (document.activeElement as HTMLElement).blur();
-                this.context.confirmElectricModal();
-            const e: ExtendedKeyboardEvent = event;
-            e.returnValue = false; // Prevent bubbling
-            return e;
-        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save & Payment'));
+        if (this.context.generalForm.value.electronic) {
+            this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+p', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+                (document.activeElement as HTMLElement).blur();
+                    this.context.confirmElectricModal();
+                const e: ExtendedKeyboardEvent = event;
+                e.returnValue = false; // Prevent bubbling
+                return e;
+            }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Save & Payment'));
+        }
     }
 }

@@ -34,7 +34,12 @@ export class InvoiceCreateKeyService extends KeyboardBaseService {
             e.returnValue = false; // Prevent bubbling
             return e;
         }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Select Table'));
-
+        this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+y', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
+            this.context.selectAll();
+            const e: ExtendedKeyboardEvent = event;
+            e.returnValue = false; // Prevent bubbling
+            return e;
+        }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Check All'));
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+del', (event: KeyboardEvent, combo: string): ExtendedKeyboardEvent => {
             this.context.clearPayment();
             const e: ExtendedKeyboardEvent = event;
