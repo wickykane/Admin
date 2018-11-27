@@ -351,8 +351,12 @@ export class ReceiptVoucherCreateComponent implements OnInit {
      * Internal Function
      */
     // Table event
-    selectData(index) {
-        console.log(index);
+    selectData(ev) {
+        console.log(ev);
+        const button = this.table.element.nativeElement.querySelectorAll('td label input');
+        if (button && button[this.selectedIndex]) {
+            button[this.selectedIndex].click();
+        }
     }
 
     checkAll(ev) {
@@ -824,4 +828,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         });
         this.refresh();
     }
+    selectAll() {
+        this.table.element.nativeElement.querySelector('th label input').click();
+       }
 }
