@@ -141,7 +141,7 @@ export class RmaCreateComponent implements OnInit {
             'approver_id': [null, Validators.required],
             'order_return_type': [null, Validators.required],
             'warehouse': [null, Validators.required],
-            'ship_via': [null],
+            'ship_via': [null, Validators.required],
             'carrier': [null],
             'carrier_id': [null],
             'tracking_no': [null],
