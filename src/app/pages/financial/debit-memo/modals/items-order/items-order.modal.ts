@@ -63,7 +63,7 @@ export class ItemsOrderDebitModalContent implements OnInit, OnDestroy {
     }
 
     getListItems() {
-        const params = { ...this.searchForm.value};
+        const params = { ...this.searchForm.value };
         params['item_ids'] = this.listIgnoredItems.join();
         Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
         this.debitService.getListItemsFromOrder(this.orderId, params).subscribe(
@@ -77,6 +77,12 @@ export class ItemsOrderDebitModalContent implements OnInit, OnDestroy {
                 console.log(err);
             }
         );
+    }
+
+    // Table event
+    selectData(index) {
+        this.listItems[index].is_checked = !this.listItems[index].is_checked;
+        this.isAllChecked();
     }
 
     checkAll(ev) {
