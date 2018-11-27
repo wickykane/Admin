@@ -23,7 +23,7 @@ export class CreditMemoListKeyService extends KeyboardBaseService {
             event.preventDefault();
             this.context.addNewCreditMemo();
             return;
-          }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Create Debit Memo'));
+          }, ['INPUT', 'SELECT', 'TEXTAREA'], 'Create Credit Memo'));
         }
 
         this._hotkeysService.add(new Hotkey(`${this.helper.keyBoardConst()}` + '+e', (event: KeyboardEvent): boolean => {

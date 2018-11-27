@@ -74,7 +74,7 @@
                                                 <div class='col-6 text-danger'>
                                                     <div clickOutside (clickOutside)="d.close()" class="input-group">
                                                         <input [maxDate]="currentDt | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="issue_date"
-                                                            ngbDatepicker #d="ngbDatepicker" (keydown)="$event.preventDefault()" (dateSelect)="onChangeIssueDate()"
+                                                            ngbDatepicker #d="ngbDatepicker" (dateSelect)="onChangeIssueDate()"
                                                             [ngClass]="{'error-field': debitMemoForm.controls.issue_date.invalid && isClickedSave && !isSaveDraft && !isCreateNew}">
                                                         <div class="input-group-append">
                                                             <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">

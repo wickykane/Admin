@@ -64,7 +64,7 @@ export class MiscItemsDebitModalContent implements OnInit, OnDestroy {
     }
 
     getListItems() {
-        const params = { ...this.tableService.getParams(), ...this.searchForm.value};
+        const params = { ...this.tableService.getParams(), ...this.searchForm.value };
         // params['misc_ids_ignore'] = this.listIgnoredItems.join();
         Object.keys(params).forEach((key) => (params[key] === null || params[key] === '') && delete params[key]);
         this.debitService.getListItemsFromMisc(this.orderId, params).subscribe(
@@ -79,6 +79,12 @@ export class MiscItemsDebitModalContent implements OnInit, OnDestroy {
                 console.log(err);
             }
         );
+    }
+
+    // Table event
+    selectData(index) {
+        this.listItems[index].is_checked = !this.listItems[index].is_checked;
+        this.isAllChecked();
     }
 
     checkAll(ev) {
