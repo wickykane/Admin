@@ -68,7 +68,8 @@ export class CreditItemMiscModalContent implements OnInit, OnDestroy {
 
     // Table event
     selectData(index) {
-        console.log(index);
+        this.list.items[index].is_checked = !this.list.items[index].is_checked;
+        this.isAllChecked();
     }
 
     checkAll(ev) {

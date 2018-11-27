@@ -89,7 +89,6 @@ export class cdArrowTable implements OnDestroy {
         }, undefined, 'Up'));
 
         this._hotkeysService.add(new Hotkey('down', (event: KeyboardEvent): boolean => {
-           console.log(this._collection, this._selectedIndex);
             if (this._collection.length === 0 || this._selectedIndex === this._collection.length - 1 || this.disabledKey) {
                 return;
             }

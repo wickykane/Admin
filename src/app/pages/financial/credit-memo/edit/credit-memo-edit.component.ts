@@ -190,7 +190,7 @@ export class CreditMemoEditComponent implements OnInit {
      * Mater Data
      */
     refresh() {
-         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
+        if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
 
     selectTable() {
@@ -209,7 +209,7 @@ export class CreditMemoEditComponent implements OnInit {
         this.financialService.getSettingInfoQuickbook().subscribe(
             res => {
                 this.isInstallQuickbook = res.data.state === 'authorized' ? true : false;
-            }, err => {}
+            }, err => { }
         );
     }
 
@@ -272,7 +272,7 @@ export class CreditMemoEditComponent implements OnInit {
                     const idList = result.data.rows.map(item => item.id);
                     this.listMaster['customer'] = result.data.rows;
                     if (res.data.buyer_id && idList.indexOf(res.data.buyer_id) === -1) {
-                        this.listMaster['customer'].push({ id: res.data.buyer_id, company_name: res.data.buyer_name , name: res.data.buyer_name});
+                        this.listMaster['customer'].push({ id: res.data.buyer_id, company_name: res.data.buyer_name, name: res.data.buyer_name });
                     }
                     this.data['total_page'] = result.data.total_page;
                     this.refresh();
@@ -290,7 +290,7 @@ export class CreditMemoEditComponent implements OnInit {
                 this.customer = res.data;
                 const idList = (this.listMaster['customer'] || []).map(item => item.id);
                 if (res.data.company_id && idList.indexOf(res.data.company_id) === -1) {
-                    this.listMaster['customer'] = [...this.listMaster['customer'], { id: res.data.company_id, company_name: res.data.company_name ,   name: res.data.company_name }];
+                    this.listMaster['customer'] = [...this.listMaster['customer'], { id: res.data.company_id, company_name: res.data.company_name, name: res.data.company_name }];
                 }
 
                 if (res.data.buyer_type === 'PS' && res.data.contact[0]) {
@@ -485,6 +485,8 @@ export class CreditMemoEditComponent implements OnInit {
     }
 
     deleteAction(id, item_condition) {
+        const lastLength = this.list.items.length;
+
         this.list.items = this.list.items.filter((item) => {
             if (item.item_id === id && item.is_item === 1) {
                 this.items_removed.push(item.item_id);
@@ -492,6 +494,11 @@ export class CreditMemoEditComponent implements OnInit {
             }
             return ((item.item_id || item.misc_id) + (item.item_condition_id || 'mis') !== (id + (item_condition || 'mis')));
         });
+
+        // Reset Index
+        const idx = this.selectedIndex - (lastLength - this.list.items.length);
+        this.selectedIndex = (idx < 0) ? 0 : idx;
+
         this.updateTotal();
     }
 
@@ -503,7 +510,8 @@ export class CreditMemoEditComponent implements OnInit {
         unique.forEach((tax, index) => {
             let taxAmount = 0;
             items.filter(item => item.tax_percent === tax).map(i => {
-                taxAmount += (+i.tax_percent * +i.quantity * (+i.price || 0) / 100);
+                // taxAmount += (+i.tax_percent * +i.quantity * (+i.price || 0) / 100);
+                taxAmount += (+i.tax_percent * +i.quantity * ((+i.price || 0) * (100 - (+i.discount_percent || 0)) / 100) / 100);
             });
             this.order_info['total_tax'] = this.order_info['total_tax'] + +(taxAmount.toFixed(2));
             this.order_info['taxs'].push({
@@ -670,13 +678,13 @@ export class CreditMemoEditComponent implements OnInit {
                 if (res.status) {
                     this.toastr.success(res.message);
                     this.data['id'] = res.data.id;
-                    if ( type === 3 && this.isInstallQuickbook) {
+                    if (type === 3 && this.isInstallQuickbook) {
                         this.financialService.syncCreditToQuickbook(this.data['id']).subscribe(
                             _res => {
                                 try {
                                     const result = JSON.parse(_res['_body']);
                                     this.toastr.success(`Credit Memo ${result.data[0].entity.DocNumber} has been sync to Quickbooks successfully.`);
-                                } catch (err) {}
+                                } catch (err) { }
                             },
                             err => {
                                 this.toastr.error(`Cannot sync Credit Memo to Quickbooks.`);

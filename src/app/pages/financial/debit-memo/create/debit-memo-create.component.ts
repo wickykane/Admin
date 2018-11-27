@@ -161,14 +161,14 @@ export class DebitMemoCreateComponent implements OnInit {
 
     //#region load master data
     refresh() {
-         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
+        if (!this.cd['destroyed']) { this.cd.detectChanges(); }
     }
 
     getQuickbookSettings() {
         this.financialService.getSettingInfoQuickbook().subscribe(
             res => {
                 this.isInstallQuickbook = res.data.state === 'authorized' ? true : false;
-            }, err => {}
+            }, err => { }
         );
     }
 
@@ -459,10 +459,21 @@ export class DebitMemoCreateComponent implements OnInit {
     }
 
     onDeleteLineItem(deletedItem, index) {
+        if (!deletedItem) {
+            return;
+        }
+
         deletedItem.deleted = true;
+        const lastLength = this.listLineItems.length;
+
         this.listDeletedLineItem.push(deletedItem);
         this.listLineItems.splice(index, 1);
         this.getUniqueTaxItemLine();
+
+        // Reset Index
+        const idx = this.selectedIndex - (lastLength - this.listLineItems.length);
+        this.selectedIndex = (idx < 0) ? 0 : idx;
+
         this.refresh();
     }
 
@@ -650,13 +661,13 @@ export class DebitMemoCreateComponent implements OnInit {
             res => {
                 try {
                     this.toastr.success(res.message);
-                    if ( status === 3 && this.isInstallQuickbook) {
+                    if (status === 3 && this.isInstallQuickbook) {
                         this.financialService.syncDebitToQuickbook(res.data['id']).subscribe(
                             _res => {
                                 try {
                                     const result = JSON.parse(_res['_body']);
                                     this.toastr.success(`Debit Memo ${result.data[0].entity.DocNumber} has been sync to Quickbooks successfully.`);
-                                } catch (err) {}
+                                } catch (err) { }
                             },
                             err => {
                                 this.toastr.error(`Cannot sync Debit Memo to Quickbooks.`);
