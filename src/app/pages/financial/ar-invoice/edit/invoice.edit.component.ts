@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -35,7 +35,7 @@ import { InvoiceEditKeyService } from './keys.edit.control';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class InvoiceEditComponent implements OnInit {
+export class InvoiceEditComponent implements OnInit, AfterViewInit {
     /**
      * Variable Declaration
      */
@@ -98,6 +98,7 @@ export class InvoiceEditComponent implements OnInit {
      * Init Data
      */
     @ViewChild(cdArrowTable) table: cdArrowTable;
+    @ViewChild('invCustomer') invCustomerSelect: NgSelectComponent;
     constructor(
         private vRef: ViewContainerRef,
         private fb: FormBuilder,
@@ -186,6 +187,10 @@ export class InvoiceEditComponent implements OnInit {
         this.getDetailInvoice();
         this.getListApprover();
         this.refresh();
+    }
+
+    ngAfterViewInit() {
+        this.invCustomerSelect.focus();
     }
 
     /**
