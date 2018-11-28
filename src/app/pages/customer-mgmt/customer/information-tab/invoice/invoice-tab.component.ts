@@ -9,6 +9,7 @@ import { CustomerService } from '../../../customer.service';
 import { CustomerKeyViewService } from '../../view/keys.view.control';
 import { TableService } from './../../../../../services/table.service';
 
+import { CommonService } from '../../../../../services/common.service';
 @Component({
     selector: 'app-customer-invoice-tab',
     templateUrl: './invoice-tab.component.html',
@@ -52,6 +53,7 @@ export class CustomerInvoiceTabComponent implements OnInit, OnDestroy {
     @ViewChild(cdArrowTable) table: cdArrowTable;
     // @ViewChild('tabSet') tabSet;
     constructor(
+        private commonService: CommonService,
         public fb: FormBuilder,
         private vRef: ViewContainerRef,
         public tableService: TableService,
@@ -160,20 +162,10 @@ export class CustomerInvoiceTabComponent implements OnInit, OnDestroy {
     }
 
     exportData() {
-        const anchor = document.createElement('a');
         const path = 'buyer/export-invoice/';
         const file = `${environment.api_url}${path}${this._customerId}`;
-        const headers = new Headers();
-        headers.append('Authorization', 'Bearer ' + this.jwtService.getToken());
-        fetch(file, { headers })
-            .then(response => response.blob())
-            .then(blobby => {
-                const objectUrl = window.URL.createObjectURL(blobby);
-            anchor.href = objectUrl;
-            anchor.download = 'invoices.xls';
-            anchor.click();
-            window.URL.revokeObjectURL(objectUrl);
-        });
+        const fileName = 'invoices.xls';
+        this.commonService.exportDocument(file, fileName);
     }
     selectTable() {
         this.selectedIndex = 0;

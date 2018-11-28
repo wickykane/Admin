@@ -3,8 +3,6 @@ import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from './../../../../../services/table.service';
 
-import { Headers, Http, ResponseContentType } from '@angular/http';
-
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HotkeysService } from 'angular2-hotkeys';
 import { ToastrService } from 'ngx-toastr';
@@ -16,7 +14,8 @@ import { SendMailModalContent } from '../../modals/send-mail/send-mail.modal';
 import { ReportsService } from '../../../reports.service';
 
 import { environment } from '../../../../../../environments/environment';
-import { JwtService } from '../../../../../shared/guard/jwt.service';
+
+import { CommonService } from '../../../../../services/common.service';
 
 import * as _ from 'lodash';
 
@@ -50,8 +49,7 @@ export class CustomerOutstandingComponent implements OnInit {
     };
 
     constructor(public router: Router,
-        private http: Http,
-        private jwtService: JwtService,
+        private commonService: CommonService,
         public fb: FormBuilder,
         public toastr: ToastrService,
         public tableService: TableService,
@@ -140,34 +138,6 @@ export class CustomerOutstandingComponent implements OnInit {
         file += this.currentSelectedFormValue.year ? `&year=${this.currentSelectedFormValue.year}` : '';
         file += this.currentSelectedFormValue.customer_type ? `&customer_type=${this.currentSelectedFormValue.customer_type}` : '';
         const fileName = `customer_outstanding_report.${type === 'excel' ? 'xls' : 'pdf'}`;
-        const _headers = new Headers({ 'Authorization': 'Bearer ' + this.jwtService.getToken() });
-        return this.http
-            .get(file, {
-                responseType: ResponseContentType.Blob,
-                headers: _headers
-            })
-            .map(res => {
-                return {
-                    filename: fileName,
-                    data: res.blob()
-                };
-            })
-            .subscribe(res => {
-                if (window.navigator && window.navigator.msSaveOrOpenBlob) { // for IE
-                    window.navigator.msSaveOrOpenBlob(res.data, res.filename);
-                } else { // for Non-IE (chrome, firefox etc.)
-                    const anchor = document.createElement('a');
-                    const objectUrl = window.URL.createObjectURL(res.data);
-                    anchor.href = objectUrl;
-                    anchor.download = fileName;
-                    anchor.click();
-                    window.URL.revokeObjectURL(objectUrl);
-                    anchor.remove(); // remove the element
-                }
-            }, error => {
-                console.log('download error:', JSON.stringify(error));
-            }, () => {
-                console.log('Completed file download.');
-            });
+        this.commonService.exportDocument(file, fileName);
     }
 }
