@@ -209,6 +209,14 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             item.state_name = '';
         }
     }
+    checkIsMain($event, id) {
+        for (let i = 0; i < this.contacts.length; i++) {
+            const item = this.contacts[i];
+            if (id !== i && item.checked === false) {
+                item.is_main = false;
+            }
+        }
+    }
     changeBank(item) {
          this.listBank.map(x => {
             if (item.bank_id === x.id) {
@@ -367,7 +375,14 @@ export class SiteModalComponent implements OnInit, OnDestroy {
             //     await this.checkValidField(params);
             //     await this.closeModal(params);
             // })();
-            console.log(params);
+            if (params['contacts'].length > 0) {
+                const result = params['contacts'].filter(item => item.is_main === true || item.is_main === 1);
+                console.log('result ', result);
+                if (result.length === 0) {
+                    return this.toastr.error('Please choose at least one main contact for the customer company.');
+                }
+            }
+            console.log('checki: ', params);
             if (this.isEdit === false) {
                 delete params.site_id;
             }
