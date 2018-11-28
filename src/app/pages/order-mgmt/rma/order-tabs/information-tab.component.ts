@@ -148,7 +148,7 @@ export class ReturnOrderInformationTabComponent implements OnInit {
                 }
                 if (this.detail['status_message'] === 0) {
                     if (this.detail['is_change'] === 1) {
-                      this.checkStatusOrder(this.detail['id']);
+                        this.checkStatusOrder(this.detail['id']);
                     }
                 }
 
@@ -322,8 +322,8 @@ export class ReturnOrderInformationTabComponent implements OnInit {
                     }
                 }
                 if (status === 2) {
-                  this.toastr.success('Return Order’s status has been updated successfully');
-                  this.router.navigate(['/order-management/sale-order/detail', item.id]);
+                    this.toastr.success('Return Order’s status has been updated successfully');
+                    this.router.navigate(['/order-management/sale-order/detail', item.id]);
                 } else {
                     this.toastr.success(res.message);
                     this.router.navigate(['/order-management/return-order']);
@@ -340,7 +340,8 @@ export class ReturnOrderInformationTabComponent implements OnInit {
             if (res) {
                 this.service.updateChange(item.id).subscribe(result => {
                     try {
-                        this.confirmModal(item, 2);
+                        this.updateStatus(item, 2);
+                        // this.confirmModal(item, 2);
                     } catch (e) {
                         console.log(e);
                     }

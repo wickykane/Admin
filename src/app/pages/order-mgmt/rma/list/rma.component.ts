@@ -277,7 +277,8 @@ export class RmaComponent implements OnInit {
             if (res) {
                 this.service.updateChange(item.id).subscribe(result => {
                     try {
-                        this.confirmModal(item, 2, '');
+                        this.updateStatus(item, 2);
+                        // this.confirmModal(item, 2, '');
                     } catch (e) {
                         console.log(e);
                     }
