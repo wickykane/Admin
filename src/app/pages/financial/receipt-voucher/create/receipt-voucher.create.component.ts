@@ -482,7 +482,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         let usedPrice = 0;
         this.savedItems['items'].forEach((item, index) => {
             if (index < savedItemIndex) {
-                usedPrice += item['applied_amt'];
+                usedPrice += Number(item['applied_amt']);
             }
         });
         return _.round(usedPrice, 2);
