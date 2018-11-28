@@ -296,7 +296,6 @@ export class RmaComponent implements OnInit {
         // neu = 3 thi href qua sale order view theo data reponse
         // neu = 2 hoac 4 thi href qua sale order view theo order id
         let message = '';
-        console.log(item);
         switch (item.return_type_id) {
             case 1:
                 // Return

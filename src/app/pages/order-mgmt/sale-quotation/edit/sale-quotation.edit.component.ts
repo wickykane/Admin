@@ -606,7 +606,7 @@ export class SaleQuotationEditComponent implements OnInit {
             'ship_rate': this.generalForm.value.ship_rate,
             'items': this.list.items.filter(item => !item.misc_id)
         };
-        this.orderService.getTaxShipping(params).subscribe(res => {
+        this.orderService.getTaxShipping(params, 'NW').subscribe(res => {
             res.data.mics = res.data.mics || [];
             const old_misc = this.list.items.filter(item => item.misc_id && [1, 2].indexOf(item.misc_id) === -1 && +item.source_id !== 3);
             const items = res.data.items || this.list.items.filter(item => !item.misc_id);
