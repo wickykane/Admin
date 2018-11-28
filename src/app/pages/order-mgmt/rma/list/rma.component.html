@@ -126,7 +126,11 @@
                                                 <span *ngIf="item['sts_name']['cd'] == 'CC'" class="label red">{{item['sts_name']['name']}}</span>
                                             </ng-container>
                                         </td>
-                                        <td><a class="text-primary" [routerLink]="['/order-management/sale-order/detail', item['order_id']]">{{item['order_code']}}</a></td>
+                                        <td>
+                                          <ng-container *ngIf="item['order_id']">
+                                            <a class="text-primary" [routerLink]="['/order-management/sale-order/detail', item['order_id']]">{{item['order_code']}}</a>
+                                          </ng-container>
+                                        </td>
                                         <td>{{item['warehouse_name']}}</td>
                                         <td class="text-center">{{item['total_return_qty']}}</td>
                                         <td class="text-center">{{item['total_accepted_qty']}}</td>

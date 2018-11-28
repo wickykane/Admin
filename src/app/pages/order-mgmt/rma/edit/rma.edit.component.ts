@@ -268,105 +268,115 @@ export class RmaEditComponent implements OnInit {
                     this.refresh();
                 });
 
-                this.service.getOrderDetail(data['order_id'], this.route.snapshot.paramMap.get('id')).subscribe(result => {
-                    try {
-                        const data1 = result.data;
-                        data1.items = data1.items.filter((x => x.is_item));
-
-                        const first = data1.items.filter(this.comparer(this.list.returnItem));
-                        const second = this.list.returnItem.filter(this.comparer(data1.items));
-
-                        this.list.returnItem_delete = first.concat(second);
-
-
-                        if (data1.order_sts_short_name === 'PD' || data1.order_sts_short_name === 'CP') {
-                            this.requiredInv = true;
-                            this.generalForm.get('invoice_id').setValidators([Validators.required]);
-                            this.generalForm.get('invoice_id').updateValueAndValidity();
-                            if (this.generalForm.getRawValue().sts_name === 'New') {
-                                this.generalForm.controls.ship_via.enable();
-                            }
-                        }
-
-                        if (data1.order_sts_short_name === 'AP' || data1.order_sts_short_name === 'IP' || data1.order_sts_short_name === 'PP' || data1.order_sts_short_name === 'RS') {
-                            this.requiredInv = false;
-                            this.generalForm.get('invoice_id').clearValidators();
-                            this.generalForm.get('invoice_id').updateValueAndValidity();
-                            if (this.generalForm.getRawValue().sts_name === 'New') {
-                                this.generalForm.controls.ship_via.disable();
-                            }
-                        }
-
-
-                        this.list.returnItem_delete.forEach(item => {
-                            item['reason'] = this.listMaster['return_reason'];
-                        });
-
-                        this.list.returnItem.forEach(item => {
-                            item['reason'] = this.listMaster['return_reason'];
-                        });
-                        // Set item and update
-                        this.calcTotal();
-
-                        this.refresh();
-                    } catch (e) {
-                        console.log(e);
-                    }
-                });
-
-                this.service.getDetailCompany(data['company_id']).subscribe(result => {
-                    try {
-                        this.customer = result.data;
-
-                        const default_billing = (this.customer.billing || []).find(item => item) || {};
-                        const default_shipping = (this.customer.shipping || []).find(item => item) || {};
-
-                        if (!_.isEmpty(default_billing)) {
-                            this.selectAddress('billing', true);
-                        }
-
-                        if (!_.isEmpty(default_shipping)) {
-                            this.selectAddress('shipping', true);
-                        }
-
-                        this.refresh();
-                        this.disableControl();
-
-
-                    } catch (e) {
-                        console.log(e);
-                    }
-                });
-
-                const p = {
-                    company_id: this.generalForm.value.company_id,
-                    return_type: this.generalForm.value.order_return_type
-                };
-                this.service.listOrderByCompany(p).subscribe(
-                    result => {
+                if (data['order_id']) {
+                    this.service.getOrderDetail(data['order_id'], this.route.snapshot.paramMap.get('id')).subscribe(result => {
                         try {
-                            this.listMaster['list_order'] = result.data;
+                            const data1 = result.data;
+                            data1.items = data1.items.filter((x => x.is_item));
+
+                            const first = data1.items.filter(this.comparer(this.list.returnItem));
+                            const second = this.list.returnItem.filter(this.comparer(data1.items));
+
+                            this.list.returnItem_delete = first.concat(second);
+
+
+                            if (data1.order_sts_short_name === 'PD' || data1.order_sts_short_name === 'CP') {
+                                this.requiredInv = true;
+                                this.generalForm.get('invoice_id').setValidators([Validators.required]);
+                                this.generalForm.get('invoice_id').updateValueAndValidity();
+                                if (this.generalForm.getRawValue().sts_name === 'New') {
+                                    this.generalForm.controls.ship_via.enable();
+                                }
+                            }
+
+                            if (data1.order_sts_short_name === 'AP' || data1.order_sts_short_name === 'IP' || data1.order_sts_short_name === 'PP' || data1.order_sts_short_name === 'RS') {
+                                this.requiredInv = false;
+                                this.generalForm.get('invoice_id').clearValidators();
+                                this.generalForm.get('invoice_id').updateValueAndValidity();
+                                if (this.generalForm.getRawValue().sts_name === 'New') {
+                                    this.generalForm.controls.ship_via.disable();
+                                }
+                            }
+
+
+                            this.list.returnItem_delete.forEach(item => {
+                                item['reason'] = this.listMaster['return_reason'];
+                            });
+
+                            this.list.returnItem.forEach(item => {
+                                item['reason'] = this.listMaster['return_reason'];
+                            });
+                            // Set item and update
+                            this.calcTotal();
+
                             this.refresh();
-                        } catch (err) {
+                        } catch (e) {
+                            console.log(e);
+                        }
+                    });
+
+                    this.service.listInvoiceByOrder(data['order_id']).subscribe(
+                        result => {
+                            try {
+                                this.listMaster['list_invoice'] = result.data;
+                                this.refresh();
+                            } catch (err) {
+                                console.log(err);
+                            }
+                        }, err => {
                             console.log(err);
                         }
-                    }, err => {
-                        console.log(err);
-                    }
-                );
+                    );
+                }
 
-                this.service.listInvoiceByOrder(data['order_id']).subscribe(
-                    result => {
+
+
+
+
+                if (data['company_id']) {
+                    this.service.getDetailCompany(data['company_id']).subscribe(result => {
                         try {
-                            this.listMaster['list_invoice'] = result.data;
+                            this.customer = result.data;
+
+                            const default_billing = (this.customer.billing || []).find(item => item) || {};
+                            const default_shipping = (this.customer.shipping || []).find(item => item) || {};
+
+                            if (!_.isEmpty(default_billing)) {
+                                this.selectAddress('billing', true);
+                            }
+
+                            if (!_.isEmpty(default_shipping)) {
+                                this.selectAddress('shipping', true);
+                            }
+
                             this.refresh();
-                        } catch (err) {
+                            this.disableControl();
+
+
+                        } catch (e) {
+                            console.log(e);
+                        }
+                    });
+
+                    const p = {
+                        company_id: this.generalForm.getRawValue().company_id,
+                        return_type: this.generalForm.getRawValue().order_return_type
+                    };
+                    this.service.listOrderByCompany(p).subscribe(
+                        result => {
+                            try {
+                                this.listMaster['list_order'] = result.data;
+                                this.refresh();
+                            } catch (err) {
+                                console.log(err);
+                            }
+                        }, err => {
                             console.log(err);
                         }
-                    }, err => {
-                        console.log(err);
-                    }
-                );
+                    );
+                }
+
+
 
                 if (this.data['order_data']['status_message'] === 1) {
                     this.updateStatus(2, this.data['order_data']['message']);
@@ -647,8 +657,8 @@ export class RmaEditComponent implements OnInit {
 
     getListOrder() {
         const params = {
-            company_id: this.generalForm.value.company_id,
-            return_type: this.generalForm.value.order_return_type
+            company_id: this.generalForm.getRawValue().company_id,
+            return_type: this.generalForm.getRawValue().order_return_type
         };
         this.service.listOrderByCompany(params).subscribe(
             res => {
