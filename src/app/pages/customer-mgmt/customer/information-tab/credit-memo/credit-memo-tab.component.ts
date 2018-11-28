@@ -9,7 +9,7 @@ import { CustomerService } from '../../../customer.service';
 import { CreditMemoService } from '../../../../financial/credit-memo/credit-memo.service';
 
 import { environment } from '../../../../../../environments/environment';
-import { JwtService } from '../../../../../shared/guard/jwt.service';
+import { CommonService } from '../../../../../services/common.service';
 @Component({
     selector: 'app-customer-credit-memo-tab',
     templateUrl: './credit-memo-tab.component.html',
@@ -43,7 +43,7 @@ export class CustomerCreditMemoTabComponent implements OnInit, OnDestroy {
     @ViewChild(cdArrowTable) table: cdArrowTable;
 
     constructor(
-        private jwtService: JwtService,
+        private commonService: CommonService,
         public fb: FormBuilder,
         private vRef: ViewContainerRef,
         private customerService: CustomerService,
@@ -115,20 +115,10 @@ export class CustomerCreditMemoTabComponent implements OnInit, OnDestroy {
     }
 
     exportData() {
-        const anchor = document.createElement('a');
         const path = 'buyer/export-credit-memo/';
         const file = `${environment.api_url}${path}${this._customerId}`;
-        const headers = new Headers();
-        headers.append('Authorization', 'Bearer ' + this.jwtService.getToken());
-        fetch(file, { headers })
-            .then(response => response.blob())
-            .then(blobby => {
-            const objectUrl = window.URL.createObjectURL(blobby);
-            anchor.href = objectUrl;
-            anchor.download = 'credit_memo_export.xls';
-            anchor.click();
-            window.URL.revokeObjectURL(objectUrl);
-        });
+        const fileName = 'credit_memo_export.xls';
+        this.commonService.exportDocument(file, fileName);
     }
 
     selectTable() {
