@@ -24,6 +24,7 @@ import * as _ from 'lodash';
 import { cdArrowTable } from '../../../../shared/index';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 
+import { ROUTE_PERMISSION } from '../../../../services/route-permission.config';
 
 @Component({
     selector: 'app-create-quotation',
@@ -172,6 +173,7 @@ export class SaleQuotationCreateComponent implements OnInit {
             this.listMaster = { ...this.listMaster, ...res.data };
             this.refresh();
         });
+        this.getListApprover();
         this.orderService.generateSaleQuoteCode().subscribe(res => { this.generalForm.get('sale_quote_no').patchValue(res.data); });
 
         //  Item
@@ -214,6 +216,17 @@ export class SaleQuotationCreateComponent implements OnInit {
      */
     refresh() {
         if (!this.cd['destroyed']) { this.cd.detectChanges(); }
+    }
+
+    getListApprover() {
+        const params = {
+            permissions: ROUTE_PERMISSION['sale-quotation'].approve,
+        };
+        this.orderService.getListApprover(params).subscribe(res => {
+            this.listMaster['approvers'] = res.data;
+            const defaultValue = (this.listMaster['approver'].find(item => item.id === this.generalForm.value.approver_id) || {}).id || null;
+            this.generalForm.patchValue({ approver_id: defaultValue });
+        });
     }
 
     getDetailQuote() {

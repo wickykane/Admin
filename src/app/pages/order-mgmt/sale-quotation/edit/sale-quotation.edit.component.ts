@@ -25,6 +25,8 @@ import * as _ from 'lodash';
 import { cdArrowTable } from '../../../../shared/index';
 import { ConfirmModalContent } from '../../../../shared/modals/confirm.modal';
 
+import { ROUTE_PERMISSION } from '../../../../services/route-permission.config';
+
 @Component({
     selector: 'app-edit-quotation',
     templateUrl: './sale-quotation.edit.component.html',
@@ -196,6 +198,7 @@ export class SaleQuotationEditComponent implements OnInit {
 
         // Get Detail Quote
         this.getDetailQuote();
+        this.getListApprover();
         this.refresh();
     }
     /**
@@ -203,6 +206,17 @@ export class SaleQuotationEditComponent implements OnInit {
      */
     refresh() {
          if (!this.cd['destroyed']) { this.cd.detectChanges(); }
+    }
+
+    getListApprover() {
+        const params = {
+            permissions: ROUTE_PERMISSION['sale-quotation'].approve,
+        };
+        this.orderService.getListApprover(params).subscribe(res => {
+            this.listMaster['approver'] = res.data;
+            const defaultValue = (this.listMaster['approver'].find(item => item.id === this.generalForm.getRawValue().approver_id) || {}).id || null;
+            this.generalForm.patchValue({ approver_id: defaultValue });
+        });
     }
 
     getDetailQuote() {
