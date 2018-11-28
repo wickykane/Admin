@@ -21,6 +21,7 @@
                                     <th>Email</th>
                                     <th>Username</th>
                                     <th>Password</th>
+                                    <th style="width:5rem;">Main Contact</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -33,6 +34,9 @@
                                     <td>{{ item.email }}</td>
                                     <td>{{ item.username }}</td>
                                     <td>{{ 'xxxxxx' }}</td>
+                                    <td class="text-center" style="width:5rem;">
+                                        <input type="checkbox" [disabled]="true" [checked]="item.is_main === 1">
+                                    </td>
                                 </tr>
                                 <tr *ngIf="list.items.length == 0">
                                     <td class="text-center" colspan="100%">No data.</td>
