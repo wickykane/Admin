@@ -10,8 +10,8 @@ import { Helper } from '../../../../../shared/helper/common.helper';
 import { CustomerKeyViewService } from '../../view/keys.view.control';
 
 import { environment } from '../../../../../../environments/environment';
-import { JwtService } from '../../../../../shared/guard/jwt.service';
 
+import { CommonService } from '../../../../../services/common.service';
 @Component({
     selector: 'app-customer-customer-balance-tab',
     templateUrl: './customer-balance-tab.component.html',
@@ -45,7 +45,7 @@ export class CustomerCustomerBalanceTabComponent implements OnInit, OnDestroy {
     public selectedIndex = 0;
     @ViewChild(cdArrowTable) table: cdArrowTable;
     constructor(
-        private jwtService: JwtService,
+        private commonService: CommonService,
         public fb: FormBuilder,
         private vRef: ViewContainerRef,
         public tableService: TableService,
@@ -105,20 +105,10 @@ export class CustomerCustomerBalanceTabComponent implements OnInit, OnDestroy {
         });
     }
     exportData() {
-        const anchor = document.createElement('a');
         const path = 'buyer/export-cus-balance/';
         const file = `${environment.api_url}${path}${this._customerId}`;
-        const headers = new Headers();
-        headers.append('Authorization', 'Bearer ' + this.jwtService.getToken());
-        fetch(file, { headers })
-            .then(response => response.blob())
-            .then(blobby => {
-            const objectUrl = window.URL.createObjectURL(blobby);
-            anchor.href = objectUrl;
-            anchor.download = 'customer_balance_export.xls';
-            anchor.click();
-            window.URL.revokeObjectURL(objectUrl);
-        });
+        const fileName = 'customer_balance_export.xls';
+        this.commonService.exportDocument(file, fileName);
     }
     checkRelated(item) {
         return Array.isArray(item);

@@ -9,6 +9,7 @@ import { CustomerService } from '../../../customer.service';
 import { CustomerKeyViewService } from '../../view/keys.view.control';
 import { TableService } from './../../../../../services/table.service';
 
+import { CommonService } from '../../../../../services/common.service';
 @Component({
     selector: 'app-customer-quote-tab',
     templateUrl: './quote-tab.component.html',
@@ -39,6 +40,7 @@ export class CustomerQuoteTabComponent implements OnInit, OnDestroy {
     searchForm: FormGroup;
     @ViewChild(cdArrowTable) table: cdArrowTable;
     constructor(
+        private commonService: CommonService,
         public fb: FormBuilder,
         private vRef: ViewContainerRef,
         public tableService: TableService,
@@ -112,20 +114,10 @@ export class CustomerQuoteTabComponent implements OnInit, OnDestroy {
     }
 
     exportData() {
-        const anchor = document.createElement('a');
         const path = 'buyer/export-quote/';
         const file = `${environment.api_url}${path}${this._customerId}`;
-        const headers = new Headers();
-        headers.append('Authorization', 'Bearer ' + this.jwtService.getToken());
-        fetch(file, { headers })
-            .then(response => response.blob())
-            .then(blobby => {
-                const objectUrl = window.URL.createObjectURL(blobby);
-            anchor.href = objectUrl;
-            anchor.download = 'quotes.xls';
-            anchor.click();
-        window.URL.revokeObjectURL(objectUrl);
-         });
+        const fileName = 'quotes.xls';
+        this.commonService.exportDocument(file, fileName);
     }
 
     selectTable() {

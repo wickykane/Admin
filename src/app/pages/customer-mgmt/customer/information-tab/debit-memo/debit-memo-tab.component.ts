@@ -8,7 +8,7 @@ import { Helper } from '../../../../../shared/helper/common.helper';
 import { DebitMemoService } from '../../../../financial/debit-memo/debit-memo.service';
 import { CustomerService } from '../../../customer.service';
 
-
+import { CommonService } from '../../../../../services/common.service';
 @Component({
     selector: 'app-customer-debit-memo-tab',
     templateUrl: './debit-memo-tab.component.html',
@@ -33,6 +33,7 @@ export class CustomerDebitMemoTabComponent implements OnInit, OnDestroy {
     searchForm: FormGroup;
     @ViewChild(cdArrowTable) table: cdArrowTable;
     constructor(
+        private commonService: CommonService,
         public fb: FormBuilder,
         private customerService: CustomerService,
         public _hotkeysServiceDebit: HotkeysService,
@@ -120,20 +121,10 @@ export class CustomerDebitMemoTabComponent implements OnInit, OnDestroy {
         this.table.element.nativeElement.querySelector('td a').focus();
     }
     exportData() {
-        const anchor = document.createElement('a');
         const path = 'buyer/export-debit-memo/';
         const file = `${environment.api_url}${path}${this._customerId}`;
-        const headers = new Headers();
-        headers.append('Authorization', 'Bearer ' + this.jwtService.getToken());
-        fetch(file, { headers })
-            .then(response => response.blob())
-            .then(blobby => {
-                const objectUrl = window.URL.createObjectURL(blobby);
-            anchor.href = objectUrl;
-            anchor.download = 'debit_memos.xls';
-            anchor.click();
-            window.URL.revokeObjectURL(objectUrl);
-        });
+        const fileName = 'debit_memos.xls';
+        this.commonService.exportDocument(file, fileName);
     }
     initKeyBoard() {
         this.data['key_config'] = {
