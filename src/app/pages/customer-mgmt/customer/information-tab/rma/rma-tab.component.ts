@@ -11,8 +11,8 @@ import { TableService } from './../../../../../services/table.service';
 // tslint:disable-next-line:import-blacklist
 import { Subject } from 'rxjs';
 import { environment } from '../../../../../../environments/environment';
-import { JwtService } from '../../../../../shared/guard/jwt.service';
 
+import { CommonService } from '../../../../../services/common.service';
 @Component({
     selector: 'app-customer-rma-tab',
     templateUrl: './rma-tab.component.html',
@@ -47,7 +47,7 @@ export class CustomerRMATabComponent implements OnInit, OnDestroy {
 
     public searchKey = new Subject<any>();
     constructor(
-        private jwtService: JwtService,
+        private commonService: CommonService,
         public fb: FormBuilder,
         private vRef: ViewContainerRef,
         public tableService: TableService,
@@ -153,20 +153,10 @@ export class CustomerRMATabComponent implements OnInit, OnDestroy {
     }
 
     exportData() {
-        const anchor = document.createElement('a');
         const path = 'buyer/export-return-order/';
         const file = `${environment.api_url}${path}${this._customerId}`;
-        const headers = new Headers();
-        headers.append('Authorization', 'Bearer ' + this.jwtService.getToken());
-        fetch(file, { headers })
-            .then(response => response.blob())
-            .then(blobby => {
-            const objectUrl = window.URL.createObjectURL(blobby);
-            anchor.href = objectUrl;
-            anchor.download = 'return_order_export.xls';
-            anchor.click();
-            window.URL.revokeObjectURL(objectUrl);
-        });
+        const fileName = 'return_order_export.xls';
+        this.commonService.exportDocument(file, fileName);
     }
 
     selectTable() {

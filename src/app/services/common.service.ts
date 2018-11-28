@@ -1,9 +1,14 @@
 import { Injectable } from '@angular/core';
+import { Headers, Http, ResponseContentType } from '@angular/http';
 import { ApiService } from './api.service';
 
+import { JwtService } from '../shared/guard/jwt.service';
 @Injectable()
 export class CommonService {
-    constructor(private apiService: ApiService) { }
+    constructor(
+        private http: Http,
+        private jwtService: JwtService,
+        private apiService: ApiService) { }
     getListCountry() {
         const url = 'country/admin/get-all';
         return this.apiService.get(url);
@@ -59,5 +64,36 @@ export class CommonService {
     changeStatus(id) {
         const url = 'shipping-zone/change-status/' + id;
         return this.apiService.get(url);
+    }
+    exportDocument(file, fileName) {
+        const _headers = new Headers({ 'Authorization': 'Bearer ' + this.jwtService.getToken() });
+        return this.http
+            .get(file, {
+                responseType: ResponseContentType.Blob,
+                headers: _headers
+            })
+            .map(res => {
+                return {
+                    filename: fileName,
+                    data: res.blob()
+                };
+            })
+            .subscribe(res => {
+                if (window.navigator && window.navigator.msSaveOrOpenBlob) { // for IE
+                    window.navigator.msSaveOrOpenBlob(res.data, res.filename);
+                } else { // for Non-IE (chrome, firefox etc.)
+                    const anchor = document.createElement('a');
+                    const objectUrl = window.URL.createObjectURL(res.data);
+                    anchor.href = objectUrl;
+                    anchor.download = fileName;
+                    anchor.click();
+                    window.URL.revokeObjectURL(objectUrl);
+                    anchor.remove(); // remove the element
+                }
+            }, error => {
+                console.log('download error:', JSON.stringify(error));
+            }, () => {
+                console.log('Completed file download.');
+            });
     }
 }
