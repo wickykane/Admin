@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, Renderer, ViewChild, ViewContainerRef } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -40,7 +40,7 @@ export class InvoiceCreateComponent implements OnInit, AfterViewInit {
     /**
      * Variable Declaration
      */
-
+    @ViewChild('focus') el: ElementRef;
     @ViewChild('invCustomer') invCustomerSelect: NgSelectComponent;
     public generalForm: FormGroup;
     public listMaster = {};
@@ -186,11 +186,27 @@ export class InvoiceCreateComponent implements OnInit, AfterViewInit {
         this.getListApprover();
         this.refresh();
     }
-
     ngAfterViewInit() {
         this.invCustomerSelect.focus();
     }
-
+    focusDateIE() {
+        this.generalForm.get('inv_dt').valueChanges.subscribe(
+            (inv_dt: boolean) => {
+                if (inv_dt) {
+                    this.el.nativeElement.querySelector('input').focus();
+                }
+            }
+        );
+    }
+    // focusDate(e) {
+    //     console.log(this.el.nativeElement.querySelector('input'));
+    //     if (e.which === 9) {
+    //         console.log('check focus:');
+    //     }
+    //     e.preventDefault();
+    //     // this.el.nativeElement.querySelector('input').click();
+    //     // console.log(this.el.nativeElement.querySelector('input'));
+    // }
     /**
      * Mater Data
      */
