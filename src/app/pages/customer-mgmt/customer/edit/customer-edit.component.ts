@@ -736,7 +736,7 @@ export class CustomerEditComponent implements OnInit, OnDestroy {
                 return this.toastr.error('The contact field is required.');
             }
             // Check Main Contact is checked
-            if (params['contacts'].length > 0) {
+            if (this.generalForm.value.buyer_type === 'CP' && params['contacts'].length > 0) {
                 const result = params['contacts'].filter(item => item.is_main === true || item.is_main === 1);
                 console.log('result ', result);
                 if (result.length === 0) {

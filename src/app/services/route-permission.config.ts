@@ -6,6 +6,7 @@ export const ROUTE_PERMISSION = {
         edit: 'sel2bEditCustomer',
         list: 'sel2bViewMenuCustomer',
         editstore: 'sel2bEditStoreCreditBalanceCustomer',
+        active: 'sel2bActiveInactiveCustomer',
     },
     // Product Management
     'part-list': {
