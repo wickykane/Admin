@@ -224,7 +224,7 @@ export class SaleQuotationCreateComponent implements OnInit {
         };
         this.orderService.getListApprover(params).subscribe(res => {
             this.listMaster['approvers'] = res.data;
-            const defaultValue = (this.listMaster['approver'].find(item => item.id === this.generalForm.value.approver_id) || {}).id || null;
+            const defaultValue = (this.listMaster['approvers'].find(item => item.id === this.generalForm.value.approver_id) || {}).id || null;
             this.generalForm.patchValue({ approver_id: defaultValue });
         });
     }
