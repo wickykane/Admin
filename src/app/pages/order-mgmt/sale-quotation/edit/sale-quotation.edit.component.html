@@ -155,7 +155,7 @@
                                                 <div class='col-6'>
                                                     <select class="form-control" id="approver_id" name="approver_id" formControlName="approver_id">
                                                             <option [hidden]="true" [disabled]="true"  [ngValue]="null">--Select--</option>
-                                                            <option *ngFor="let item of listMaster['approver']" [ngValue]="item.id">{{item.full_name}}</option>
+                                                            <option *ngFor="let item of listMaster['approvers']" [ngValue]="item.id">{{item.full_name}}</option>
                                                         </select>
                                                 </div>
                                             </div>
