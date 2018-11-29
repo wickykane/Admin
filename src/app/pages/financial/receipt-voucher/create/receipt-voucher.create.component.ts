@@ -473,7 +473,8 @@ export class ReceiptVoucherCreateComponent implements OnInit {
     calculateTotalUsedAmount() {
         let usedPrice = 0;
         this.savedItems['items'].forEach((item, index) => {
-            usedPrice += Number(item['applied_amt']);
+            console.log(item);
+            usedPrice += Number(item['applied_amt']) || 0;
         });
         return _.round(usedPrice, 2);
     }
@@ -482,7 +483,7 @@ export class ReceiptVoucherCreateComponent implements OnInit {
         let usedPrice = 0;
         this.savedItems['items'].forEach((item, index) => {
             if (index < savedItemIndex) {
-                usedPrice += Number(item['applied_amt']);
+                usedPrice += Number(item['applied_amt']) || 0;
             }
         });
         return _.round(usedPrice, 2);
