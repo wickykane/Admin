@@ -93,11 +93,11 @@
                                                 <label class='col-6'>Invoice Date
                                                     <span class="text-danger">(*)</span>
                                                 </label>
-                                                <div class='col-6 text-primary'>
+                                                <div #focus class='col-6 text-primary'>
                                                     <div clickOutside (clickOutside)="invoicedate.close()" class="input-group">
                                                         <input [maxDate]="currentDt | dateObj" class="form-control" placeholder="mm/dd/yyyy" name="dp" formControlName="inv_dt" ngbDatepicker #invoicedate="ngbDatepicker">
-                                                        <div class="input-group-append">
-                                                            <button class="btn btn-outline-secondary" (click)="invoicedate.toggle()" type="button">
+                                                        <div class="input-group-append" (click)="focusDateIE()">
+                                                            <button  class="btn btn-outline-secondary" (click)="invoicedate.toggle()" type="button" >
                                                                 <i class="fa fa-calendar" aria-hidden="true"></i>
                                                             </button>
                                                         </div>
@@ -108,7 +108,7 @@
                                                 <label class='col-6'> Sales Order
                                                     <span class="text-danger">(*)</span>
                                                 </label>
-                                                <div class='col-6'>
+                                                <div  class='col-6'>
                                                     <ng-select (change)="changeSalesOrder($event)" [items]="listMaster['sales_order']" bindLabel="code" bindValue="id" formControlName="order_id">
                                                     </ng-select>
                                                 </div>
