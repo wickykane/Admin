@@ -213,8 +213,8 @@ export class SaleQuotationEditComponent implements OnInit {
             permissions: ROUTE_PERMISSION['sale-quotation'].approve,
         };
         this.orderService.getListApprover(params).subscribe(res => {
-            this.listMaster['approver'] = res.data;
-            const defaultValue = (this.listMaster['approver'].find(item => item.id === this.generalForm.getRawValue().approver_id) || {}).id || null;
+            this.listMaster['approvers'] = res.data;
+            const defaultValue = (this.listMaster['approvers'].find(item => item.id === this.generalForm.getRawValue().approver_id) || {}).id || null;
             this.generalForm.patchValue({ approver_id: defaultValue });
         });
     }

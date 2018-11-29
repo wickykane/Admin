@@ -113,6 +113,7 @@ export class DebitMemoCreateComponent implements OnInit {
 
             billing_id: [null, Validators.required],
             shipping_id: [null],
+            order_type: [null],
             // carrier_id: [null, Validators.required],
 
             sub_total_price: [0, Validators.required],
@@ -295,6 +296,7 @@ export class DebitMemoCreateComponent implements OnInit {
                     this.debitMemoForm.controls.shipping_id.setValue(res.data.ship_addr.id);
                     // this.debitMemoForm.controls.carrier_id.setValue(res.data.carrier.id);
 
+                    this.debitMemoForm.patchValue({'order_type': res.data.type});
                     if (res.data.type === 'PKU') {
                       this.debitMemoForm.get('shipping_id').clearValidators();
                       this.debitMemoForm.get('shipping_id').updateValueAndValidity();
