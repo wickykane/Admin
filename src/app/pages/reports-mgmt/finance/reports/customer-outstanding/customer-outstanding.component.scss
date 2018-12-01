@@ -1,4 +1,34 @@
 .report-table {
+    thead {
+        th {
+            border-bottom-width: 1px !important;
+        }
+    }
+    .report-row {
+        > td {
+            padding: 0 !important;
+            border: none;
+            table {
+                width: 100%;
+                thead {
+                    visibility: collapse;
+                    th {
+                       border: none;
+                    }
+                }
+                tbody {
+                    tr:last-child {
+                        td {
+                            border: none;
+                        }
+                    }
+                }
+                // td, th {
+                //     border: none;
+                // }
+            }
+        }
+    }
     table {
         thead {
             tr {

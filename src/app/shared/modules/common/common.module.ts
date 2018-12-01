@@ -14,11 +14,13 @@ import { NgbDateCustomParserFormatter } from '../../helper/dateformat';
 
 import { HotkeyModule } from 'angular2-hotkeys';
 
+import { VirtualScrollerModule } from 'ngx-virtual-scroller';
+
 @NgModule({
-    imports: [HotkeyModule.forRoot(), CommonModule, FormsModule, ReactiveFormsModule, NgbModule.forRoot(), TextMaskModule, NgSelectModule],
+    imports: [VirtualScrollerModule, HotkeyModule.forRoot(), CommonModule, FormsModule, ReactiveFormsModule, NgbModule.forRoot(), TextMaskModule, NgSelectModule],
     declarations: [PatternDirective, TrimDirective, KeyNavigateDirective, cdArrowTable, OnlyNumber, SortColumnDirective, UppercaseDirective, TrueFalseValueDirective,
         DateObjectPipe, ReturnFilterPipe, Select2Pipe, ShortcutComponent, NgStickyDirective, ClickOutsideDirective, NumberDirective],
-    exports: [HotkeyModule, PatternDirective, TrimDirective, NumberDirective, KeyNavigateDirective, cdArrowTable, OnlyNumber, SortColumnDirective, UppercaseDirective, DateObjectPipe, ReturnFilterPipe, TrueFalseValueDirective,
+    exports: [VirtualScrollerModule, HotkeyModule, PatternDirective, TrimDirective, NumberDirective, KeyNavigateDirective, cdArrowTable, OnlyNumber, SortColumnDirective, UppercaseDirective, DateObjectPipe, ReturnFilterPipe, TrueFalseValueDirective,
         FormsModule, ReactiveFormsModule, NgbModule, TextMaskModule, NgSelectModule, ShortcutComponent, NgStickyDirective, ClickOutsideDirective],
     providers: [{ provide: NgbDateAdapter, useClass: NgbUTCStringAdapter }, { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }]
 })

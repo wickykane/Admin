@@ -18,6 +18,7 @@ import { environment } from '../../../../../../environments/environment';
 import { CommonService } from '../../../../../services/common.service';
 
 import * as _ from 'lodash';
+import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
 
 @Component({
     selector: 'app-customer-outstanding',
@@ -48,6 +49,10 @@ export class CustomerOutstandingComponent implements OnInit {
         customer_type: null
     };
 
+    
+    @ViewChild(VirtualScrollerComponent)
+    private virtualScroller: VirtualScrollerComponent;
+    
     constructor(public router: Router,
         private commonService: CommonService,
         public fb: FormBuilder,
@@ -139,5 +144,12 @@ export class CustomerOutstandingComponent implements OnInit {
         file += this.currentSelectedFormValue.customer_type ? `&customer_type=${this.currentSelectedFormValue.customer_type}` : '';
         const fileName = `customer_outstanding_report.${type === 'excel' ? 'xls' : 'pdf'}`;
         this.commonService.exportDocument(file, fileName);
+    }
+
+    updateView() {
+        setTimeout(() => {
+            this.virtualScroller.refresh();
+            this.refresh();
+        })
     }
 }
